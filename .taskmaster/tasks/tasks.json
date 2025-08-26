@@ -1,0 +1,377 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Project Setup and Foundation",
+        "description": "Set up the Next.js project with TailwindCSS and basic project structure",
+        "details": "Initialize Next.js project with TypeScript, configure TailwindCSS, set up ESLint and Prettier, create basic folder structure for components, pages, and utilities",
+        "testStrategy": "Verify Next.js dev server starts, TailwindCSS compiles correctly, and basic routing works",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [],
+        "sprint": "Sprint 1",
+        "epic": "Project Foundation"
+      },
+      {
+        "id": 2,
+        "title": "Homepage Design and Layout",
+        "description": "Create the main homepage with featured challenges and category navigation",
+        "details": "Design and implement homepage with hero section, featured challenges grid, category cards (HTML, CSS, JS), and responsive navigation",
+        "testStrategy": "Test responsive design on different screen sizes, verify all links work, check accessibility",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "sprint": "Sprint 1",
+        "epic": "UI/UX & Navigation"
+      },
+      {
+        "id": 3,
+        "title": "Challenge Data Structure",
+        "description": "Define the data structure for challenges and create initial challenge content",
+        "details": "Create JSON schema for challenges including title, description, difficulty, category, starter code, test cases, and solutions. Create at least 10 challenges per category",
+        "testStrategy": "Validate JSON schema, test data loading, ensure all required fields are present",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "sprint": "Sprint 1",
+        "epic": "Challenge Library"
+      },
+      {
+        "id": 4,
+        "title": "Challenge Listing Page",
+        "description": "Create a page to display all challenges with filtering and search",
+        "details": "Implement challenge grid/list view with filters by category and difficulty, search functionality, and pagination",
+        "testStrategy": "Test filtering works correctly, search finds relevant challenges, pagination handles large datasets",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          3
+        ],
+        "sprint": "Sprint 1",
+        "epic": "Challenge Library"
+      },
+      {
+        "id": 5,
+        "title": "Challenge Detail Page",
+        "description": "Create individual challenge pages with problem statement and starter code",
+        "details": "Design challenge detail page with problem description, examples, starter code display, and navigation to editor",
+        "testStrategy": "Verify all challenge details display correctly, starter code is properly formatted, navigation works",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          3
+        ],
+        "sprint": "Sprint 1",
+        "epic": "Challenge Library"
+      },
+      {
+        "id": 6,
+        "title": "Admin Interface for Challenge Management",
+        "description": "Create admin interface to add, edit, and delete challenges",
+        "details": "Build admin panel with forms for challenge creation/editing, JSON/Markdown file management, and challenge preview",
+        "testStrategy": "Test CRUD operations, validate form inputs, ensure data persistence",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          3
+        ],
+        "sprint": "Sprint 1",
+        "epic": "Challenge Library"
+      },
+      {
+        "id": 7,
+        "title": "Monaco Editor Integration",
+        "description": "Integrate Monaco Editor for code editing with syntax highlighting",
+        "details": "Set up Monaco Editor with HTML, CSS, and JavaScript language support, configure themes and editor options",
+        "testStrategy": "Test syntax highlighting, autocomplete, error detection, and editor performance",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "sprint": "Sprint 2",
+        "epic": "In-Browser Code Editor"
+      },
+      {
+        "id": 8,
+        "title": "Live Preview Pane",
+        "description": "Create live preview functionality for HTML/CSS/JS code execution",
+        "details": "Implement iframe-based preview pane that updates in real-time as user types, handle HTML/CSS/JS execution safely",
+        "testStrategy": "Test live updates, verify code execution safety, check performance with large code blocks",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          7
+        ],
+        "sprint": "Sprint 2",
+        "epic": "In-Browser Code Editor"
+      },
+      {
+        "id": 9,
+        "title": "Test Case Execution System",
+        "description": "Implement system to run test cases against user code",
+        "details": "Create test runner that executes user code against predefined test cases, validate outputs, and provide feedback",
+        "testStrategy": "Test various code scenarios, error handling, timeout management, and result validation",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          8
+        ],
+        "sprint": "Sprint 2",
+        "epic": "In-Browser Code Editor"
+      },
+      {
+        "id": 10,
+        "title": "Code Reset Functionality",
+        "description": "Add reset button to restore starter code template",
+        "details": "Implement reset functionality that restores the original starter code when user clicks reset button",
+        "testStrategy": "Test reset functionality, verify original code is restored, check user confirmation if needed",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          7
+        ],
+        "sprint": "Sprint 2",
+        "epic": "In-Browser Code Editor"
+      },
+      {
+        "id": 11,
+        "title": "Starter Code Templates",
+        "description": "Create and manage starter code templates for each challenge",
+        "details": "Define starter code templates for different challenge types, ensure they load correctly in editor",
+        "testStrategy": "Verify templates load properly, test different challenge types, check code formatting",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          7
+        ],
+        "sprint": "Sprint 2",
+        "epic": "In-Browser Code Editor"
+      },
+      {
+        "id": 12,
+        "title": "Search Functionality",
+        "description": "Add search bar to find challenges by keyword",
+        "details": "Implement search functionality that searches through challenge titles, descriptions, and tags",
+        "testStrategy": "Test search accuracy, performance with large datasets, handle special characters and edge cases",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          4
+        ],
+        "sprint": "Sprint 2",
+        "epic": "UI/UX & Navigation"
+      },
+      {
+        "id": 13,
+        "title": "Solution Display System",
+        "description": "Create system to show official solutions after challenge completion",
+        "details": "Implement solution display that shows after user submits code, with proper formatting and explanation",
+        "testStrategy": "Test solution display timing, formatting, and user experience flow",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          9
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Solutions & Explanations"
+      },
+      {
+        "id": 14,
+        "title": "Solution Explanations",
+        "description": "Add detailed explanations for each challenge solution",
+        "details": "Create comprehensive explanations that describe why solutions work, best practices, and alternative approaches",
+        "testStrategy": "Review explanation quality, test readability, verify technical accuracy",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          3
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Solutions & Explanations"
+      },
+      {
+        "id": 15,
+        "title": "Solution Comparison View",
+        "description": "Create comparison view between user solution and official solution",
+        "details": "Implement side-by-side comparison of user code vs official solution with highlighting and analysis",
+        "testStrategy": "Test comparison accuracy, UI responsiveness, and user experience",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          13
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Solutions & Explanations"
+      },
+      {
+        "id": 16,
+        "title": "Responsive Design Implementation",
+        "description": "Ensure all pages work properly on mobile and tablet devices",
+        "details": "Implement responsive design for all components, optimize for touch interactions, test on various devices",
+        "testStrategy": "Test on multiple devices and screen sizes, verify touch interactions, check performance",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          2,
+          4,
+          5
+        ],
+        "sprint": "Sprint 3",
+        "epic": "UI/UX & Navigation"
+      },
+      {
+        "id": 17,
+        "title": "Dark/Light Mode Toggle",
+        "description": "Implement theme switching functionality",
+        "details": "Add dark/light mode toggle with persistent user preference, update all components for theme support",
+        "testStrategy": "Test theme switching, persistence across sessions, verify all components adapt properly",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          2
+        ],
+        "sprint": "Sprint 3",
+        "epic": "UI/UX & Navigation"
+      },
+      {
+        "id": 18,
+        "title": "Vercel Deployment Setup",
+        "description": "Deploy the application to Vercel",
+        "details": "Configure Vercel deployment, set up environment variables, optimize build process, and deploy to production",
+        "testStrategy": "Verify deployment success, test all functionality in production environment",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          16
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Deployment & Monitoring"
+      },
+      {
+        "id": 19,
+        "title": "CI/CD Pipeline Setup",
+        "description": "Set up automated deployment pipeline with GitHub Actions",
+        "details": "Create GitHub Actions workflow for automated testing and deployment, configure branch protection rules",
+        "testStrategy": "Test CI/CD pipeline, verify automated deployments work correctly",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          18
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Deployment & Monitoring"
+      },
+      {
+        "id": 20,
+        "title": "Sentry Error Monitoring Integration",
+        "description": "Integrate Sentry for error tracking and monitoring",
+        "details": "Set up Sentry SDK, configure error reporting, create error dashboards and alerts",
+        "testStrategy": "Test error reporting, verify alerts work, check dashboard functionality",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          18
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Deployment & Monitoring"
+      },
+      {
+        "id": 21,
+        "title": "Analytics and Usage Tracking",
+        "description": "Implement analytics to track user engagement and challenge completion",
+        "details": "Add analytics tracking for page visits, challenge attempts, completion rates, and user behavior patterns",
+        "testStrategy": "Verify analytics data collection, test privacy compliance, check data accuracy",
+        "status": "pending",
+        "priority": "low",
+        "dependencies": [
+          18
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Open Access"
+      },
+      {
+        "id": 22,
+        "title": "Performance Optimization",
+        "description": "Optimize application performance and loading times",
+        "details": "Implement code splitting, optimize images, add caching strategies, and improve Core Web Vitals",
+        "testStrategy": "Measure performance metrics, test loading times, verify optimization improvements",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          16
+        ],
+        "sprint": "Sprint 3",
+        "epic": "UI/UX & Navigation"
+      },
+      {
+        "id": 23,
+        "title": "Accessibility Audit and Improvements",
+        "description": "Ensure the application meets accessibility standards",
+        "details": "Conduct accessibility audit, implement ARIA labels, keyboard navigation, and screen reader support",
+        "testStrategy": "Test with screen readers, keyboard navigation, and accessibility tools",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          16
+        ],
+        "sprint": "Sprint 3",
+        "epic": "UI/UX & Navigation"
+      },
+      {
+        "id": 24,
+        "title": "Security Review and Implementation",
+        "description": "Review and implement security best practices",
+        "details": "Conduct security audit, implement CSP headers, sanitize user inputs, and secure code execution",
+        "testStrategy": "Run security scans, test input validation, verify code execution safety",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          8
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Deployment & Monitoring"
+      },
+      {
+        "id": 25,
+        "title": "Documentation and README",
+        "description": "Create comprehensive documentation for the project",
+        "details": "Write README with setup instructions, API documentation, contribution guidelines, and deployment guide",
+        "testStrategy": "Verify documentation accuracy, test setup instructions, check completeness",
+        "status": "pending",
+        "priority": "medium",
+        "dependencies": [
+          18
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Project Foundation"
+      },
+      {
+        "id": 26,
+        "title": "Frontend Learning Resources Integration",
+        "description": "Integrate comprehensive frontend bookmarks content as a learning resources section",
+        "details": "Create a new 'Resources' section with searchable, categorized learning resources. Organize bookmarks into categories (AI Tools, Security, Performance, CSS, JavaScript, React, etc.). Add filtering, search functionality, individual resource pages, and bookmarking features. Integrate with challenge system to link related resources to challenges. Add 'Learning Path' feature that suggests resources based on challenge difficulty.",
+        "testStrategy": "Test resource categorization, search functionality, filtering, bookmarking, and integration with challenges. Verify content accuracy and user experience.",
+        "status": "done",
+        "priority": "high",
+        "dependencies": [
+          4,
+          5
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Learning Resources"
+      }
+    ],
+    "metadata": {
+      "created": "2025-08-26T21:02:47.099Z",
+      "updated": "2025-08-26T22:23:37.335Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+# Task ID: 1
+# Title: Project Setup and Foundation
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Set up the Next.js project with TailwindCSS and basic project structure
+# Details:
+Initialize Next.js project with TypeScript, configure TailwindCSS, set up ESLint and Prettier, create basic folder structure for components, pages, and utilities
+
+# Test Strategy:
+Verify Next.js dev server starts, TailwindCSS compiles correctly, and basic routing works

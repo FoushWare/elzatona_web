@@ -1,0 +1,11 @@
+# Task ID: 12
+# Title: Search Functionality
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: Add search bar to find challenges by keyword
+# Details:
+Implement search functionality that searches through challenge titles, descriptions, and tags
+
+# Test Strategy:
+Test search accuracy, performance with large datasets, handle special characters and edge cases
