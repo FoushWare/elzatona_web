@@ -11,6 +11,7 @@ export default function Navigation() {
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/challenges", label: "Challenges" },
+    { href: "/questions", label: "Questions" },
     { href: "/resources", label: "Resources" },
     { href: "/learning-paths", label: "Learning Paths" },
   ];

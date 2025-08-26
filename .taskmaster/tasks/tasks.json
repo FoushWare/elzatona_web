@@ -366,6 +366,18 @@
         ],
         "sprint": "Sprint 3",
         "epic": "Learning Resources"
+      },
+      {
+        "id": 27,
+        "title": "Implement 'All Practice Questions' Page (greatfrontend.com/questions inspired)",
+        "description": "Create a dedicated page for 'All Practice Questions' similar to greatfrontend.com/questions",
+        "details": "This includes:\n- A main content area with a title, subtitle, and description\n- Feature highlights (e.g., 'Solved by ex-interviewers', 'Test cases', 'Code in browser')\n- A search bar with a 'Sort by' button\n- Content tabs for 'Coding', 'System design', and 'Quiz'\n- Sub-filters/categories for 'Coding' (e.g., 'JavaScript functions', 'User interface coding', 'Algorithmic coding')\n- Display question statistics (e.g., total questions, total hours)\n- A list of question cards, each showing title, description, tags (difficulty, type, frameworks), and completion status\n- A right sidebar for filtering by 'Topics' (e.g., OOP, Array, React Hooks) and 'Company' (e.g., Google, Amazon)\n- Ensure the page is responsive and integrates with existing navigation and styling",
+        "testStrategy": "Test responsive design, verify all filters work correctly, ensure search functionality works, test question card interactions",
+        "status": "todo",
+        "priority": "high",
+        "dependencies": [],
+        "sprint": "Sprint 2",
+        "epic": "Core Features"
       }
     ],
     "metadata": {
