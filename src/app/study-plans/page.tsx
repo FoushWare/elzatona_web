@@ -76,12 +76,23 @@ export default function StudyPlansPage() {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [activePlan, setActivePlan] = useState<string | null>(null);
   const [showCustomizeModal, setShowCustomizeModal] = useState(false);
+  const [showPlanPopup, setShowPlanPopup] = useState(false);
+  const [selectedPlanData, setSelectedPlanData] = useState<StudyPlan | null>(
+    null
+  );
   const [customization, setCustomization] = useState({
     dailyHours: 2,
     preferredTime: "morning",
     focusAreas: [] as string[],
     skipTopics: [] as string[],
   });
+
+  const handleQuickStart = (planId: string) => {
+    // Save plan to localStorage and redirect to plan detail page
+    localStorage.setItem("activePlan", planId);
+    localStorage.setItem(`planProgress_${planId}`, JSON.stringify([]));
+    window.location.href = `/study-plans/${planId}`;
+  };
 
   const plans: StudyPlan[] = [
     {
@@ -471,6 +482,14 @@ export default function StudyPlansPage() {
     localStorage.setItem("planStartDate", new Date().toISOString());
   };
 
+  const handleSelectPlan = (planId: string) => {
+    const plan = plans.find((p) => p.id === planId);
+    if (plan) {
+      setSelectedPlanData(plan);
+      setShowPlanPopup(true);
+    }
+  };
+
   const handleCustomizePlan = (planId: string) => {
     setSelectedPlan(planId);
     setShowCustomizeModal(true);
@@ -659,8 +678,20 @@ export default function StudyPlansPage() {
                 {/* Action Buttons */}
                 <div className="space-y-3">
                   <button
-                    onClick={() => handleStartPlan(plan.id)}
+                    onClick={() => handleQuickStart(plan.id)}
+                    className="w-full bg-purple-600 text-white py-3 px-4 rounded-md font-medium hover:bg-purple-700 transition-colors duration-200"
+                  >
+                    🚀 Quick Start
+                  </button>
+                  <button
+                    onClick={() => handleSelectPlan(plan.id)}
                     className="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
+                  >
+                    Select Plan
+                  </button>
+                  <button
+                    onClick={() => handleStartPlan(plan.id)}
+                    className="w-full bg-green-600 text-white py-3 px-4 rounded-md font-medium hover:bg-green-700 transition-colors duration-200"
                   >
                     Start Plan
                   </button>
@@ -777,6 +808,81 @@ export default function StudyPlansPage() {
                 >
                   Save & Start
                 </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Plan Selection Popup */}
+        {showPlanPopup && selectedPlanData && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg
+                    className="w-8 h-8 text-green-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  Plan Selected!
+                </h3>
+
+                <p className="text-gray-600 mb-6">
+                  You&apos;ve selected the{" "}
+                  <strong>{selectedPlanData.title}</strong>. This plan is
+                  designed to help you master frontend development concepts and
+                  prepare for technical interviews.
+                </p>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                  <h4 className="font-semibold text-blue-900 mb-2">
+                    Plan Details:
+                  </h4>
+                  <div className="text-sm text-blue-800 space-y-1">
+                    <div>
+                      • Duration: {selectedPlanData.duration.weeks} week
+                      {selectedPlanData.duration.weeks > 1 ? "s" : ""}
+                    </div>
+                    <div>
+                      • Total Hours: {selectedPlanData.duration.totalHours}{" "}
+                      hours
+                    </div>
+                    <div>
+                      • Difficulty:{" "}
+                      {getDifficultyBadge(selectedPlanData.difficulty)}
+                    </div>
+                    <div>
+                      • Daily Commitment: {selectedPlanData.estimatedTimePerDay}{" "}
+                      hour{selectedPlanData.estimatedTimePerDay > 1 ? "s" : ""}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => setShowPlanPopup(false)}
+                    className="flex-1 border border-gray-300 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-50 transition-colors"
+                  >
+                    Back to Plans
+                  </button>
+                  <Link
+                    href={`/study-plans/${selectedPlanData.id}`}
+                    className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 transition-colors text-center"
+                  >
+                    Continue Learning
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
