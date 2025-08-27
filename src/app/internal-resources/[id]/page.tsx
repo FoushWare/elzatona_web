@@ -204,7 +204,6 @@ export default function InternalResourceDetailPage() {
                 <pre className="text-sm">{currentQuestion.code}</pre>
               </div>
             )}
-          </div>
 
           {/* Answer Options */}
           <div className="space-y-3 mb-6">
