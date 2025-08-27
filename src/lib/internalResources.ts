@@ -31,7 +31,7 @@ export interface InternalResource {
   learningOutcomes: string[];
 }
 
-// JavaScript Questions Resource (similar to the example you showed)
+// JavaScript Questions Resource (comprehensive set)
 export const javascriptQuestions: InternalQuestion[] = [
   {
     id: "js-1",
@@ -145,6 +145,224 @@ const mouse = {
     category: "javascript",
     tags: ["objects", "bracket-notation", "dot-notation", "property-access"],
     relatedTopics: ["Object Properties", "Property Access", "Bracket vs Dot Notation"]
+  },
+  {
+    id: "js-6",
+    question: "What's the output?",
+    code: `let c = { greeting: 'Hey!' };
+let d;
+
+d = c;
+c.greeting = 'Hello';
+console.log(d.greeting);`,
+    options: {
+      A: "Hello",
+      B: "Hey!",
+      C: "undefined",
+      D: "ReferenceError",
+      E: "TypeError"
+    },
+    correctAnswer: "A",
+    explanation: "In JavaScript, all objects interact by reference when setting them equal to each other. First, variable c holds a value to an object. Later, we assign d with the same reference that c has to the object. When you change one object, you change all of them.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["objects", "reference", "assignment"],
+    relatedTopics: ["Object References", "Variable Assignment", "Object Mutability"]
+  },
+  {
+    id: "js-7",
+    question: "What's the output?",
+    code: `let a = 3;
+let b = new Number(3);
+let c = 3;
+
+console.log(a == b);
+console.log(a === b);
+console.log(b === c);`,
+    options: {
+      A: "true false true",
+      B: "false false true",
+      C: "true false false",
+      D: "false true true"
+    },
+    correctAnswer: "C",
+    explanation: "new Number() is a built-in function constructor. Although it looks like a number, it's not really a number: it has a bunch of extra features and is an object. When we use the == operator (Equality operator), it only checks whether it has the same value. They both have the value of 3, so it returns true. However, when we use the === operator (Strict equality operator), both value and type should be the same. It's not: new Number() is not a number, it's an object. Both return false.",
+    difficulty: "intermediate",
+    category: "javascript",
+    tags: ["equality", "strict-equality", "number-constructor"],
+    relatedTopics: ["Type Coercion", "Equality Operators", "Primitives vs Objects"]
+  },
+  {
+    id: "js-8",
+    question: "What's the output?",
+    code: `class Chameleon {
+  static colorChange(newColor) {
+    this.newColor = newColor;
+    return this.newColor;
+  }
+
+  constructor({ newColor = 'green' } = {}) {
+    this.newColor = newColor;
+  }
+}
+
+const freddie = new Chameleon({ newColor: 'purple' });
+console.log(freddie.colorChange('orange'));`,
+    options: {
+      A: "orange",
+      B: "purple",
+      C: "green",
+      D: "TypeError"
+    },
+    correctAnswer: "D",
+    explanation: "The colorChange function is static. Static methods are designed to live only on the constructor in which they are created, and cannot be passed down to any children or called upon class instances. Since freddie is an instance of class Chameleon, the function cannot be called upon it. A TypeError is thrown.",
+    difficulty: "advanced",
+    category: "javascript",
+    tags: ["classes", "static-methods", "this"],
+    relatedTopics: ["ES6 Classes", "Static Methods", "Method Context"]
+  },
+  {
+    id: "js-9",
+    question: "What's the output?",
+    code: `let greeting;
+greetign = {}; // Typo!
+console.log(greetign);`,
+    options: {
+      A: "{}",
+      B: "ReferenceError: greetign is not defined",
+      C: "undefined"
+    },
+    correctAnswer: "A",
+    explanation: "It logs the object, because we just created an empty object on the global object! When we mistyped greeting as greetign, the JS interpreter actually saw this as global.greetign = {} in Node.js, window.greetign = {}, frames.greetign = {} and self.greetign in browsers, self.greetign in web workers, globalThis.greetign in all environments. In order to avoid this, we can use 'use strict'. This makes sure that you have declared a variable before setting it equal to anything.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["global-object", "strict-mode", "variable-declaration"],
+    relatedTopics: ["Global Scope", "Strict Mode", "Variable Declaration"]
+  },
+  {
+    id: "js-10",
+    question: "What happens when we do this?",
+    code: `function bark() {
+  console.log('Woof!');
+}
+
+bark.animal = 'dog';`,
+    options: {
+      A: "Nothing, this is totally fine!",
+      B: "SyntaxError. You cannot add properties to a function this way.",
+      C: "'Woof' gets logged.",
+      D: "ReferenceError"
+    },
+    correctAnswer: "A",
+    explanation: "This is possible in JavaScript, because functions are objects! (Everything besides primitive types are objects) A function is a special type of object. The code you write yourself isn't the actual function. The function is an object with properties. This property is invocable.",
+    difficulty: "intermediate",
+    category: "javascript",
+    tags: ["functions", "objects", "properties"],
+    relatedTopics: ["Functions as Objects", "Object Properties", "JavaScript Types"]
+  },
+  {
+    id: "js-11",
+    question: "What's the output?",
+    code: `function Person(firstName, lastName) {
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+const member = new Person('Lydia', 'Hallie');
+Person.getFullName = function() {
+  return \`\${this.firstName} \${this.lastName}\`;
+};
+
+console.log(member.getFullName());`,
+    options: {
+      A: "TypeError",
+      B: "SyntaxError",
+      C: "Lydia Hallie",
+      D: "undefined undefined"
+    },
+    correctAnswer: "A",
+    explanation: "In JavaScript, functions are objects, and therefore, the method getFullName gets added to the constructor function object itself. For that reason, we can call Person.getFullName(), but member.getFullName throws a TypeError. If you want a method to be available to all object instances, you have to add it to the prototype property: Person.prototype.getFullName = function() { return \`\${this.firstName} \${this.lastName}\`; };",
+    difficulty: "intermediate",
+    category: "javascript",
+    tags: ["constructors", "prototype", "this"],
+    relatedTopics: ["Constructor Functions", "Prototype", "Object Methods"]
+  },
+  {
+    id: "js-12",
+    question: "What's the output?",
+    code: `function Person(firstName, lastName) {
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+const lydia = new Person('Lydia', 'Hallie');
+const sarah = Person('Sarah', 'Smith');
+
+console.log(lydia);
+console.log(sarah);`,
+    options: {
+      A: "Person {firstName: 'Lydia', lastName: 'Hallie'} and undefined",
+      B: "Person {firstName: 'Lydia', lastName: 'Hallie'} and Person {firstName: 'Sarah', lastName: 'Smith'}",
+      C: "Person {firstName: 'Lydia', lastName: 'Hallie'} and {}",
+      D: "Person {firstName: 'Lydia', lastName: 'Hallie'} and ReferenceError"
+    },
+    correctAnswer: "A",
+    explanation: "For sarah, we didn't use the new keyword. When using new, this refers to the new empty object we create. However, if you don't add new, this refers to the global object! We said that this.firstName equals 'Sarah' and this.lastName equals 'Smith'. What we actually did, is defining global.firstName = 'Sarah' and global.lastName = 'Smith'. sarah itself is left undefined, since we don't return a value from the Person function.",
+    difficulty: "intermediate",
+    category: "javascript",
+    tags: ["constructors", "new-keyword", "this", "global-object"],
+    relatedTopics: ["Constructor Functions", "New Keyword", "This Context"]
+  },
+  {
+    id: "js-13",
+    question: "What are the three phases of event propagation?",
+    options: {
+      A: "Target > Capturing > Bubbling",
+      B: "Bubbling > Target > Capturing",
+      C: "Target > Bubbling > Capturing",
+      D: "Capturing > Target > Bubbling"
+    },
+    correctAnswer: "D",
+    explanation: "During the capturing phase, the event goes through the ancestor elements down to the target element. It then reaches the target element, and bubbling begins.",
+    difficulty: "intermediate",
+    category: "javascript",
+    tags: ["event-propagation", "capturing", "bubbling", "target"],
+    relatedTopics: ["Event Handling", "DOM Events", "Event Propagation"]
+  },
+  {
+    id: "js-14",
+    question: "All object have prototypes.",
+    options: {
+      A: "true",
+      B: "false"
+    },
+    correctAnswer: "B",
+    explanation: "All objects have prototypes, except for the base object. The base object is the object created by the user, or an object that is created using the new keyword. The base object has access to some methods and properties, such as .toString. This is the reason why you can use built-in JavaScript methods! All of such methods are available on the prototype. Although JavaScript can't find it directly on your object, it goes down the prototype chain and finds it there, which makes it accessible for you.",
+    difficulty: "intermediate",
+    category: "javascript",
+    tags: ["prototype", "base-object", "prototype-chain"],
+    relatedTopics: ["Prototype Chain", "Object Inheritance", "Base Object"]
+  },
+  {
+    id: "js-15",
+    question: "What's the output?",
+    code: `function sum(a, b) {
+  return a + b;
+}
+
+sum(1, '2');`,
+    options: {
+      A: "NaN",
+      B: "TypeError",
+      C: "'12'",
+      D: "3"
+    },
+    correctAnswer: "C",
+    explanation: "JavaScript is a dynamically typed language: we don't specify what types certain variables are. Values can automatically be converted into another type without you knowing, which is called implicit type coercion. Coercion is converting from one type into another. In this example, JavaScript converts the number 1 into a string, in order for the function to make sense and return a value. During the addition of a numeric type (1) and a string type ('2'), the number is treated as a string. We can concatenate strings like 'Hello' + 'World', so what's happening here is '1' + '2' which returns '12'.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["type-coercion", "string-concatenation", "dynamic-typing"],
+    relatedTopics: ["Type Coercion", "Dynamic Typing", "String Concatenation"]
   }
 ];
 
