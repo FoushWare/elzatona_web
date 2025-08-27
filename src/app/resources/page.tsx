@@ -433,6 +433,40 @@ export default function ResourcesPage() {
             </nav>
           </div>
         )}
+
+        {/* Internal Resources Section */}
+        <div className="mt-16">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Self-Contained Learning Resources
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              No external links needed! Our internal resources provide
+              comprehensive learning content with interactive questions,
+              detailed explanations, and progress tracking.
+            </p>
+          </div>
+
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-8 border border-green-200">
+            <div className="text-center">
+              <div className="text-4xl mb-4">📚</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                JavaScript, React & CSS Interview Questions
+              </h3>
+              <p className="text-lg text-gray-600 mb-6">
+                Master frontend development with our carefully crafted
+                questions, complete with code examples, explanations, and
+                interactive learning.
+              </p>
+              <a
+                href="/internal-resources"
+                className="inline-block bg-green-600 text-white px-8 py-3 rounded-md font-medium hover:bg-green-700 transition-colors duration-200"
+              >
+                Explore Internal Resources
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ export default function Navigation() {
     { href: "/", label: "Home" },
     { href: "/challenges", label: "Challenges" },
     { href: "/questions", label: "Questions" },
+    { href: "/internal-resources", label: "Internal Resources" },
     { href: "/resources", label: "Resources" },
     { href: "/learning-paths", label: "Learning Paths" },
   ];
@@ -28,8 +29,8 @@ export default function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="text-xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
           >
             GreatFrontendHub

@@ -378,6 +378,31 @@
         "dependencies": [],
         "sprint": "Sprint 2",
         "epic": "Core Features"
+      },
+      {
+        "id": 29,
+        "title": "Internal Resource Content Creation",
+        "description": "Create internal, self-contained learning resources similar to the JavaScript questions example",
+        "details": "Transform some external resources into internal, comprehensive learning content that includes: 1) Structured question formats with multiple choice answers, 2) Detailed explanations and solutions, 3) Code examples and practical exercises, 4) Progressive difficulty levels, 5) Self-assessment capabilities, 6) Integration with the progress tracking system",
+        "status": "todo",
+        "priority": "high",
+        "dependencies": [],
+        "sprint": "Sprint 2",
+        "epic": "Content Creation"
+      },
+      {
+        "id": 28,
+        "title": "Learning Progress Tracker with Checklists",
+        "description": "Implement a comprehensive learning progress tracking system with checklists for interview preparation",
+        "details": "Create a progress tracker that allows users to: 1) Create and manage learning checklists for different topics (JavaScript, React, CSS, etc.), 2) Mark items as completed with progress tracking, 3) View overall learning progress and completion percentages, 4) Filter and organize learning items by category, difficulty, or status, 5) Export progress reports for interview preparation, 6) Set learning goals and track estimated vs actual time spent, 7) Get recommendations for what to learn next based on current progress",
+        "testStrategy": "Test checklist creation and management, verify progress tracking accuracy, test filtering and sorting, ensure data persistence, validate progress calculations and recommendations",
+        "status": "pending",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "sprint": "Sprint 3",
+        "epic": "Learning Management"
       }
     ],
     "metadata": {
