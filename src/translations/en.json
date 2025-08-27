@@ -33,7 +33,11 @@
     "advanced": "Advanced",
     "easy": "Easy",
     "medium": "Medium",
-    "hard": "Hard"
+    "hard": "Hard",
+    "comparison": "Comparison",
+    "features": "Features",
+    "hours": "hours",
+    "viewDetails": "View Details"
   },
   "navigation": {
     "home": "Home",
@@ -278,5 +282,227 @@
     "to": "to",
     "of": "of",
     "items": "items"
+  },
+  "studyPlans": {
+    "title": "Study Plans",
+    "subtitle": "Structured learning paths for your interview preparation",
+    "description": "Choose a study plan that fits your schedule and goals. Each plan is designed to help you master frontend development systematically.",
+    "oneWeek": {
+      "title": "1-Week Intensive Plan",
+      "subtitle": "2 hours daily • 14 hours total",
+      "description": "Fast-track your preparation with intensive daily practice. Perfect for last-minute interview preparation.",
+      "dailyGoal": "Daily Goal",
+      "totalHours": "Total Hours",
+      "topics": "Topics Covered",
+      "schedule": "Daily Schedule",
+      "day1": "Day 1: HTML & CSS Fundamentals",
+      "day2": "Day 2: JavaScript Basics",
+      "day3": "Day 3: DOM Manipulation",
+      "day4": "Day 4: React Fundamentals",
+      "day5": "Day 5: State Management",
+      "day6": "Day 6: API Integration",
+      "day7": "Day 7: Mock Interview Practice"
+    },
+    "oneMonth": {
+      "title": "1-Month Balanced Plan",
+      "subtitle": "6 hours weekly • 24 hours total",
+      "description": "Balanced approach with core concepts and practical exercises. Ideal for comprehensive preparation.",
+      "weeklyGoal": "Weekly Goal",
+      "totalHours": "Total Hours",
+      "topics": "Topics Covered",
+      "schedule": "Weekly Schedule",
+      "week1": "Week 1: Frontend Fundamentals",
+      "week2": "Week 2: JavaScript Deep Dive",
+      "week3": "Week 3: React & Modern Frameworks",
+      "week4": "Week 4: System Design & Optimization"
+    },
+    "threeMonths": {
+      "title": "3-Month Comprehensive Plan",
+      "subtitle": "3 hours weekly • 36 hours total",
+      "description": "Comprehensive preparation with deep dives into advanced topics. Perfect for thorough mastery.",
+      "weeklyGoal": "Weekly Goal",
+      "totalHours": "Total Hours",
+      "topics": "Topics Covered",
+      "schedule": "Monthly Schedule",
+      "month1": "Month 1: Core Fundamentals",
+      "month2": "Month 2: Advanced Concepts",
+      "month3": "Month 3: Expert Topics & Practice"
+    },
+    "features": {
+      "structuredLearning": "Structured Learning Path",
+      "progressTracking": "Progress Tracking",
+      "practiceExercises": "Practice Exercises",
+      "mockInterviews": "Mock Interviews",
+      "resourceLibrary": "Resource Library",
+      "communitySupport": "Community Support"
+    },
+    "startPlan": "Start This Plan",
+    "continuePlan": "Continue Plan",
+    "viewProgress": "View Progress",
+    "customizePlan": "Customize Plan"
+  },
+  "preparationGuides": {
+    "title": "Interview Preparation Guides",
+    "subtitle": "Strategic resources to ace your frontend interviews",
+    "description": "Comprehensive guides and strategies developed by experienced interviewers and industry experts.",
+    "frontendPlaybook": {
+      "title": "Frontend Interview Playbook",
+      "description": "Complete guide to frontend interview preparation with proven strategies and techniques.",
+      "sections": {
+        "overview": "Interview Overview",
+        "preparation": "Preparation Strategy",
+        "technical": "Technical Questions",
+        "systemDesign": "System Design",
+        "behavioral": "Behavioral Questions",
+        "mockInterviews": "Mock Interviews"
+      }
+    },
+    "gfe75": {
+      "title": "GFE75 - Essential Questions",
+      "description": "Curated list of 75 most important frontend questions that appear frequently in interviews.",
+      "categories": {
+        "javascript": "JavaScript (25 questions)",
+        "react": "React (20 questions)",
+        "css": "CSS (15 questions)",
+        "systemDesign": "System Design (15 questions)"
+      }
+    },
+    "blind75": {
+      "title": "Blind75 for Frontend",
+      "description": "Adaptation of Blind75 algorithm questions for frontend development and system design.",
+      "categories": {
+        "algorithms": "Algorithms (25 questions)",
+        "dataStructures": "Data Structures (25 questions)",
+        "systemDesign": "System Design (25 questions)"
+      }
+    },
+    "systemDesignPlaybook": {
+      "title": "Frontend System Design Playbook",
+      "description": "Comprehensive guide to frontend system design with architecture patterns and best practices.",
+      "topics": {
+        "architecture": "Architecture Patterns",
+        "scalability": "Scalability",
+        "performance": "Performance",
+        "security": "Security",
+        "testing": "Testing Strategies"
+      }
+    }
+  },
+  "questionBank": {
+    "title": "Practice Question Bank",
+    "subtitle": "500+ curated questions from top tech companies",
+    "description": "Comprehensive collection of frontend interview questions with detailed solutions and explanations.",
+    "stats": {
+      "totalQuestions": "Total Questions",
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "accuracy": "Accuracy Rate"
+    },
+    "categories": {
+      "javascript": "JavaScript Functions",
+      "ui": "User Interface Coding",
+      "algorithmic": "Algorithmic Coding",
+      "systemDesign": "System Design",
+      "quiz": "Quiz Questions"
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "companies": {
+      "google": "Google",
+      "amazon": "Amazon",
+      "apple": "Apple",
+      "microsoft": "Microsoft",
+      "meta": "Meta",
+      "netflix": "Netflix",
+      "airbnb": "Airbnb",
+      "uber": "Uber"
+    },
+    "topics": {
+      "oop": "Object-Oriented Programming",
+      "accessibility": "Accessibility",
+      "reactHooks": "React Hooks",
+      "networking": "Networking",
+      "array": "Array Manipulation",
+      "async": "Asynchronous Programming",
+      "bfs": "Breadth-First Search",
+      "binary": "Binary Operations",
+      "binarySearch": "Binary Search",
+      "bst": "Binary Search Tree",
+      "binaryTree": "Binary Tree",
+      "closure": "Closures",
+      "dfs": "Depth-First Search",
+      "dp": "Dynamic Programming",
+      "graph": "Graph Algorithms",
+      "greedy": "Greedy Algorithms",
+      "heap": "Heap Data Structure",
+      "intervals": "Interval Problems",
+      "linkedList": "Linked List",
+      "matrix": "Matrix Operations",
+      "queue": "Queue Data Structure",
+      "recursion": "Recursion",
+      "sorting": "Sorting Algorithms",
+      "stack": "Stack Data Structure",
+      "string": "String Manipulation",
+      "topological": "Topological Sort",
+      "tree": "Tree Data Structure",
+      "trie": "Trie Data Structure",
+      "webApis": "Web APIs"
+    },
+    "filters": {
+      "search": "Search questions...",
+      "sortBy": "Sort by",
+      "filterBy": "Filter by",
+      "clearFilters": "Clear Filters",
+      "applyFilters": "Apply Filters"
+    },
+    "questionCard": {
+      "difficulty": "Difficulty",
+      "category": "Category",
+      "company": "Company",
+      "completionRate": "Completion Rate",
+      "estimatedTime": "Estimated Time",
+      "startQuestion": "Start Question",
+      "viewSolution": "View Solution",
+      "markComplete": "Mark Complete"
+    }
+  },
+  "tasks": {
+    "title": "Project Tasks",
+    "subtitle": "Development roadmap and progress tracking",
+    "description": "Track the development progress of GreatFrontendHub features and improvements.",
+    "status": {
+      "todo": "To Do",
+      "inProgress": "In Progress",
+      "done": "Done",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "priority": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "epics": {
+      "projectFoundation": "Project Foundation",
+      "uiUxNavigation": "UI/UX & Navigation",
+      "challengeLibrary": "Challenge Library",
+      "inBrowserCodeEditor": "In-Browser Code Editor",
+      "solutionsExplanations": "Solutions & Explanations",
+      "deploymentMonitoring": "Deployment & Monitoring",
+      "openAccess": "Open Access",
+      "learningResources": "Learning Resources",
+      "coreFeatures": "Core Features",
+      "contentCreation": "Content Creation",
+      "learningManagement": "Learning Management"
+    },
+    "sprints": {
+      "sprint1": "Sprint 1",
+      "sprint2": "Sprint 2",
+      "sprint3": "Sprint 3",
+      "sprint4": "Sprint 4"
+    }
   }
 }

@@ -2,22 +2,53 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { useTranslation } from "@/hooks/useTranslation";
-import LanguageSwitcher from "./LanguageSwitcher";
+import { useState, useEffect, useRef } from "react";
+// import { useTranslation } from "@/hooks/useTranslation";
+// import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Navigation() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { t, isRTL } = useTranslation();
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  // const { t, isRTL } = useTranslation();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpenDropdown(null);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const navItems = [
-    { href: "/", label: t("navigation.home") },
-    { href: "/challenges", label: t("navigation.challenges") },
-    { href: "/questions", label: t("navigation.questions") },
-    { href: "/internal-resources", label: t("navigation.internalResources") },
-    { href: "/resources", label: t("navigation.resources") },
-    { href: "/learning-paths", label: t("navigation.learningPaths") },
+    { href: "/", label: "Home" },
+    {
+      label: "Practice",
+      items: [
+        { href: "/challenges", label: "Coding Challenges" },
+        { href: "/questions", label: "Practice Questions" },
+        { href: "/internal-resources", label: "Internal Resources" },
+      ],
+    },
+    {
+      label: "Learn",
+      items: [
+        { href: "/resources", label: "External Resources" },
+        { href: "/learning-paths", label: "Learning Paths" },
+        { href: "/study-plans", label: "Study Plans" },
+        { href: "/preparation-guides", label: "Preparation Guides" },
+      ],
+    },
   ];
 
   const isActive = (href: string) => {
@@ -30,7 +61,7 @@ export default function Navigation() {
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-sm border-b backdrop-blur-sm bg-white/95">
       <div className="container mx-auto px-4">
-        <div className={`flex items-center justify-between h-16 ${isRTL ? 'flex-row-reverse' : ''}`}>
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link
             href="/"
@@ -40,28 +71,83 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className={`hidden md:flex items-center ${isRTL ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
+          <div
+            ref={dropdownRef}
+            className="hidden md:flex items-center space-x-8"
+          >
             {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive(item.href)
-                    ? "text-blue-600 bg-blue-50 border border-blue-200"
-                    : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                }`}
-              >
-                {item.label}
-              </Link>
+              <div key={item.label} className="relative">
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      isActive(item.href)
+                        ? "text-blue-600 bg-blue-50 border border-blue-200"
+                        : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <div className="relative">
+                    <button
+                      onClick={() =>
+                        setOpenDropdown(
+                          openDropdown === item.label ? null : item.label
+                        )
+                      }
+                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${
+                        openDropdown === item.label
+                          ? "text-blue-600 bg-blue-50 border border-blue-200"
+                          : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      <svg
+                        className={`w-4 h-4 transition-transform ${
+                          openDropdown === item.label ? "rotate-180" : ""
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+
+                    {openDropdown === item.label && (
+                      <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                        <div className="py-1">
+                          {item.items?.map((subItem) => (
+                            <Link
+                              key={subItem.href}
+                              href={subItem.href}
+                              onClick={() => setOpenDropdown(null)}
+                              className={`block px-4 py-2 text-sm transition-colors ${
+                                isActive(subItem.href)
+                                  ? "text-blue-600 bg-blue-50"
+                                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                              }`}
+                            >
+                              {subItem.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             ))}
-            
-            {/* Language Switcher */}
-            <LanguageSwitcher />
           </div>
 
-          {/* Mobile menu button and language switcher */}
-          <div className={`md:hidden flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
-            <LanguageSwitcher />
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center space-x-2">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-gray-600 hover:text-blue-600 p-2 rounded-md"
@@ -98,18 +184,43 @@ export default function Navigation() {
           <div className="md:hidden border-t border-gray-200 bg-white">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    isActive(item.href)
-                      ? "text-blue-600 bg-blue-50 border border-blue-200"
-                      : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                  }`}
-                >
-                  {item.label}
-                </Link>
+                <div key={item.label}>
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                        isActive(item.href)
+                          ? "text-blue-600 bg-blue-50 border border-blue-200"
+                          : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <div>
+                      <div className="px-3 py-2 text-base font-medium text-gray-900 border-b border-gray-100">
+                        {item.label}
+                      </div>
+                      <div className="pl-4 space-y-1">
+                        {item.items?.map((subItem) => (
+                          <Link
+                            key={subItem.href}
+                            href={subItem.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`block px-3 py-2 rounded-md text-sm transition-colors ${
+                              isActive(subItem.href)
+                                ? "text-blue-600 bg-blue-50 border border-blue-200"
+                                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                            }`}
+                          >
+                            {subItem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           </div>

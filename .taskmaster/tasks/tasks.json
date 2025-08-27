@@ -403,6 +403,48 @@
         ],
         "sprint": "Sprint 3",
         "epic": "Learning Management"
+      },
+      {
+        "id": 30,
+        "title": "Comprehensive Study Plans System",
+        "description": "Create structured study plans for different time commitments and skill levels",
+        "details": "Implement three-tier study plan system: 1) 1-Week Plan (2 hours daily) - Intensive crash course covering fundamentals, 2) 1-Month Plan (6 hours weekly) - Balanced approach with core concepts and practice, 3) 3-Month Plan (3 hours weekly) - Comprehensive preparation with deep dives. Each plan should include: structured learning paths, daily/weekly milestones, progress tracking, recommended resources, practice exercises, and assessment checkpoints. Support both Arabic and English languages.",
+        "testStrategy": "Test plan generation, verify milestone tracking, ensure progress calculation accuracy, test multilingual support, validate time estimates and difficulty progression",
+        "status": "todo",
+        "priority": "high",
+        "dependencies": [
+          28
+        ],
+        "sprint": "Sprint 4",
+        "epic": "Learning Management"
+      },
+      {
+        "id": 31,
+        "title": "Interview Preparation Strategy Guides",
+        "description": "Create comprehensive preparation guides and strategy resources",
+        "details": "Develop strategic preparation resources including: 1) Frontend Interview Playbook - Complete guide to frontend interview preparation, 2) GFE75 - Curated list of 75 essential frontend questions, 3) Blind75 adaptation for frontend - Algorithm and system design questions, 4) Frontend System Design Playbook - Architecture and design patterns. Each guide should include: preparation timelines, topic breakdowns, practice strategies, common pitfalls, success tips, and real interview scenarios. Support both Arabic and English languages.",
+        "testStrategy": "Test guide accessibility, verify content accuracy, ensure multilingual support, validate strategy effectiveness, test integration with study plans",
+        "status": "todo",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "sprint": "Sprint 4",
+        "epic": "Content Creation"
+      },
+      {
+        "id": 32,
+        "title": "GreatFrontend.com Questions Database Integration",
+        "description": "Scrape and integrate comprehensive question bank from greatfrontend.com",
+        "details": "Use Firecrawl to extract 500+ practice questions from https://www.greatfrontend.com/questions including: question titles, descriptions, difficulty levels, categories (JavaScript functions, User interface coding, Algorithmic coding), frameworks/languages, completion statistics, and company associations. Organize questions by: topics (OOP, Accessibility, React Hooks, etc.), companies (Google, Amazon, Apple, etc.), difficulty levels, and importance. Create structured database with proper categorization and search functionality. Support both Arabic and English translations.",
+        "testStrategy": "Verify data extraction accuracy, test categorization system, ensure search functionality, validate multilingual support, test question filtering and sorting",
+        "status": "todo",
+        "priority": "high",
+        "dependencies": [
+          27
+        ],
+        "sprint": "Sprint 4",
+        "epic": "Content Creation"
       }
     ],
     "metadata": {
