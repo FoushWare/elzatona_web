@@ -52,7 +52,9 @@ export default function InternalResourceCard({
             <h3 className="text-xl font-semibold text-gray-900 mb-1">
               {resource.title}
             </h3>
-            <p className="text-gray-600 text-sm">{resource.description}</p>
+            <p className="text-gray-700 text-sm font-medium">
+              {resource.description}
+            </p>
           </div>
         </div>
         <span
@@ -65,13 +67,17 @@ export default function InternalResourceCard({
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-        <div>
-          <span className="text-gray-500">Questions:</span>
-          <span className="ml-2 font-medium">{resource.totalQuestions}</span>
+        <div className="bg-white bg-opacity-50 rounded-lg p-3">
+          <div className="text-gray-800 font-semibold mb-1">Questions</div>
+          <div className="text-2xl font-bold text-blue-600">
+            {resource.totalQuestions}
+          </div>
         </div>
-        <div>
-          <span className="text-gray-500">Time:</span>
-          <span className="ml-2 font-medium">{resource.estimatedTime} min</span>
+        <div className="bg-white bg-opacity-50 rounded-lg p-3">
+          <div className="text-gray-800 font-semibold mb-1">Time</div>
+          <div className="text-2xl font-bold text-green-600">
+            {resource.estimatedTime} min
+          </div>
         </div>
       </div>
 
@@ -123,7 +129,7 @@ export default function InternalResourceCard({
               {resource.learningOutcomes.map((outcome, index) => (
                 <li
                   key={index}
-                  className="text-sm text-gray-600 flex items-start"
+                  className="text-sm text-gray-700 font-medium flex items-start"
                 >
                   <span className="text-green-500 mr-2">✓</span>
                   {outcome}

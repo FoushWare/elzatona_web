@@ -177,11 +177,27 @@ export default function InternalResourceDetailPage() {
         </div>
 
         {/* Question */}
-        <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+        <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8 mb-8">
+          {/* Progress Bar */}
           <div className="mb-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
+                Question {currentQuestionIndex + 1} of {resource.questions.length}
+              </h3>
+              <span className="text-sm text-gray-600 font-medium">
+                {Math.round(((currentQuestionIndex + 1) / resource.questions.length) * 100)}% Complete
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+              <div 
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${((currentQuestionIndex + 1) / resource.questions.length) * 100}%` }}
+              ></div>
+            </div>
+            <h4 className="text-lg sm:text-xl font-semibold text-gray-900">
               {currentQuestion.question}
-            </h3>
+            </h4>
+          </div>
 
             {currentQuestion.code && (
               <div className="bg-gray-900 text-green-400 p-4 rounded-lg mb-6 overflow-x-auto">
@@ -197,7 +213,7 @@ export default function InternalResourceDetailPage() {
                 key={key}
                 onClick={() => handleAnswerSelect(key)}
                 disabled={hasAnswered}
-                className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
+                className={`w-full text-left p-3 sm:p-4 rounded-lg border-2 transition-all duration-200 ${
                   selectedAnswer === key
                     ? isCorrect
                       ? "border-green-500 bg-green-50"
@@ -209,9 +225,9 @@ export default function InternalResourceDetailPage() {
                     : "cursor-pointer hover:bg-gray-50"
                 }`}
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-start sm:items-center space-x-3">
                   <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                    className={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center ${
                       selectedAnswer === key
                         ? isCorrect
                           ? "border-green-500 bg-green-500 text-white"
@@ -220,13 +236,15 @@ export default function InternalResourceDetailPage() {
                     }`}
                   >
                     {selectedAnswer === key && (
-                      <span className="text-sm font-bold">
+                      <span className="text-xs sm:text-sm font-bold">
                         {isCorrect ? "✓" : "✗"}
                       </span>
                     )}
                   </div>
-                  <span className="font-medium text-gray-900">{key}.</span>
-                  <span className="text-gray-700">{value}</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
+                    <span className="font-medium text-gray-900 text-sm sm:text-base">{key}.</span>
+                    <span className="text-gray-700 text-sm sm:text-base break-words">{value}</span>
+                  </div>
                 </div>
               </button>
             ))}
@@ -241,24 +259,24 @@ export default function InternalResourceDetailPage() {
           )}
 
           {/* Action Buttons */}
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <button
               onClick={handlePreviousQuestion}
               disabled={isFirstQuestion}
-              className={`px-6 py-2 rounded-md font-medium ${
+              className={`w-full sm:w-auto px-4 sm:px-6 py-2 rounded-md font-medium text-sm sm:text-base ${
                 isFirstQuestion
                   ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                   : "bg-gray-600 text-white hover:bg-gray-700"
               }`}
             >
-              Previous
+              ← Previous
             </button>
 
-            <div className="flex space-x-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
               {hasAnswered && !showExplanation && (
                 <button
                   onClick={handleShowExplanation}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700"
+                  className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 text-sm sm:text-base"
                 >
                   Show Explanation
                 </button>
@@ -268,13 +286,13 @@ export default function InternalResourceDetailPage() {
                 <button
                   onClick={handleNextQuestion}
                   disabled={!hasAnswered}
-                  className={`px-6 py-2 rounded-md font-medium ${
+                  className={`w-full sm:w-auto px-4 sm:px-6 py-2 rounded-md font-medium text-sm sm:text-base ${
                     !hasAnswered
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-blue-600 text-white hover:bg-blue-700"
                   }`}
                 >
-                  Next Question
+                  Next Question →
                 </button>
               )}
 
@@ -284,9 +302,9 @@ export default function InternalResourceDetailPage() {
                     // Could navigate to results page or show summary
                     alert("Congratulations! You've completed all questions!");
                   }}
-                  className="px-6 py-2 bg-green-600 text-white rounded-md font-medium hover:bg-green-700"
+                  className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-green-600 text-white rounded-md font-medium hover:bg-green-700 text-sm sm:text-base"
                 >
-                  Complete
+                  Complete ✓
                 </button>
               )}
             </div>
