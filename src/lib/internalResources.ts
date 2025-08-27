@@ -29,6 +29,9 @@ export interface InternalResource {
   estimatedTime: number; // in minutes
   prerequisites: string[];
   learningOutcomes: string[];
+  videoUrl?: string; // YouTube video URL for learning
+  videoTitle?: string; // Title of the video
+  videoDescription?: string; // Description of what the video covers
 }
 
 // JavaScript Questions Resource (comprehensive set)
@@ -1172,7 +1175,10 @@ export const internalResources: InternalResource[] = [
       "Error handling and debugging techniques",
       "DOM manipulation and event handling",
       "Asynchronous JavaScript concepts"
-    ]
+    ],
+    videoUrl: "https://www.youtube.com/watch?v=PeL25__th3s&t=2s",
+    videoTitle: "JavaScript Fundamentals Tutorial",
+    videoDescription: "Comprehensive video tutorial covering JavaScript fundamentals including hoisting, scope, closures, and core concepts needed for Phase 1 practice questions."
   },
   {
     id: "general-frontend-phase-2",
@@ -1193,7 +1199,10 @@ export const internalResources: InternalResource[] = [
       "Web security fundamentals",
       "CDN implementation and optimization",
       "Micro-frontend architecture understanding"
-    ]
+    ],
+    videoUrl: "https://www.youtube.com/watch?v=ILaXhmTraQ4",
+    videoTitle: "Advanced Frontend Concepts Tutorial",
+    videoDescription: "In-depth tutorial covering intermediate to advanced frontend concepts including performance optimization, security, CDN, and micro-frontends for Phase 2 practice questions."
   },
 
   {
