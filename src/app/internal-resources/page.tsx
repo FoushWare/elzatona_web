@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { internalResources } from "@/lib/internalResources";
 import InternalResourceCard from "@/components/InternalResourceCard";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function InternalResourcesPage() {
+  const { t, isRTL } = useTranslation();
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterDifficulty, setFilterDifficulty] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -95,12 +97,10 @@ export default function InternalResourcesPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Internal Learning Resources
+            {t("internalResources.title")}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Master frontend development with our comprehensive, self-contained
-            learning resources. No external links needed - everything you need
-            is right here.
+            {t("internalResources.description")}
           </p>
         </div>
 
@@ -113,12 +113,12 @@ export default function InternalResourcesPage() {
                 htmlFor="search"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Search Resources
+                {t("common.search")}
               </label>
               <input
                 type="text"
                 id="search"
-                placeholder="Search by title, description, or tags..."
+                placeholder={t("internalResources.searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => handleFilterChange(e.target.value, 'search')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -131,7 +131,7 @@ export default function InternalResourcesPage() {
                 htmlFor="category"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Category
+                {t("internalResources.filterByCategory")}
               </label>
               <select
                 id="category"
@@ -142,7 +142,7 @@ export default function InternalResourcesPage() {
                 {categories.map((category) => (
                   <option key={category} value={category}>
                     {category === "all"
-                      ? "All Categories"
+                      ? t("common.all")
                       : category.charAt(0).toUpperCase() + category.slice(1)}
                   </option>
                 ))}
@@ -155,7 +155,7 @@ export default function InternalResourcesPage() {
                 htmlFor="difficulty"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Difficulty
+                {t("internalResources.filterByDifficulty")}
               </label>
               <select
                 id="difficulty"
@@ -166,9 +166,8 @@ export default function InternalResourcesPage() {
                 {difficulties.map((difficulty) => (
                   <option key={difficulty} value={difficulty}>
                     {difficulty === "all"
-                      ? "All Difficulties"
-                      : difficulty.charAt(0).toUpperCase() +
-                        difficulty.slice(1)}
+                      ? t("common.all")
+                      : t(`common.${difficulty}`)}
                   </option>
                 ))}
               </select>
@@ -182,7 +181,7 @@ export default function InternalResourcesPage() {
             <div className="text-3xl font-bold text-blue-600 mb-2">
               {internalResources.length}
             </div>
-            <div className="text-gray-600">Total Resources</div>
+            <div className="text-gray-600">{t("internalResources.stats.totalResources")}</div>
           </div>
           <div className="bg-white rounded-lg shadow-sm p-6 text-center">
             <div className="text-3xl font-bold text-green-600 mb-2">
@@ -191,7 +190,7 @@ export default function InternalResourcesPage() {
                 0
               )}
             </div>
-            <div className="text-gray-600">Total Questions</div>
+            <div className="text-gray-600">{t("internalResources.stats.totalQuestions")}</div>
           </div>
           <div className="bg-white rounded-lg shadow-sm p-6 text-center">
             <div className="text-3xl font-bold text-yellow-600 mb-2">
@@ -200,16 +199,16 @@ export default function InternalResourcesPage() {
                 0
               )}
             </div>
-            <div className="text-gray-600">Total Minutes</div>
+            <div className="text-gray-600">{t("internalResources.stats.totalMinutes")}</div>
           </div>
           <div className="bg-white rounded-lg shadow-sm p-6 text-center">
             <div className="text-3xl font-bold text-purple-600 mb-2">
               {filteredResources.length}
             </div>
-            <div className="text-gray-600">Filtered Results</div>
+            <div className="text-gray-600">{t("internalResources.stats.filteredResults")}</div>
             {totalPages > 1 && (
               <div className="text-sm text-gray-500 mt-1">
-                Page {currentPage} of {totalPages}
+                {t("internalResources.stats.page")} {currentPage} {t("internalResources.stats.of")} {totalPages}
               </div>
             )}
           </div>
@@ -229,7 +228,7 @@ export default function InternalResourcesPage() {
               <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4">
                 {/* Page Info */}
                 <div className="text-sm text-gray-700">
-                  Showing {startIndex + 1} to {Math.min(endIndex, filteredResources.length)} of {filteredResources.length} resources
+                  {t("internalResources.stats.showing")} {startIndex + 1} {t("internalResources.stats.to")} {Math.min(endIndex, filteredResources.length)} {t("internalResources.stats.of")} {filteredResources.length} {t("internalResources.stats.resources")}
                 </div>
 
                 {/* Pagination Controls */}
@@ -240,7 +239,7 @@ export default function InternalResourcesPage() {
                     disabled={currentPage === 1}
                     className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                   >
-                    Previous
+                    {t("pagination.previous")}
                   </button>
 
                   {/* Page Numbers */}
@@ -269,7 +268,7 @@ export default function InternalResourcesPage() {
                     disabled={currentPage === totalPages}
                     className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                   >
-                    Next
+                    {t("pagination.next")}
                   </button>
                 </div>
               </div>
@@ -279,11 +278,10 @@ export default function InternalResourcesPage() {
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">🔍</div>
             <h3 className="text-xl font-medium text-gray-900 mb-2">
-              No resources found
+              {t("internalResources.noResults")}
             </h3>
             <p className="text-gray-600">
-              Try adjusting your search criteria or filters to find what you're
-              looking for.
+              {t("internalResources.noResultsDescription")}
             </p>
           </div>
         )}
@@ -292,18 +290,17 @@ export default function InternalResourcesPage() {
         <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-white">
             <h2 className="text-3xl font-bold mb-4">
-              Ready to Master Frontend Development?
+              {t("internalResources.cta.title")}
             </h2>
             <p className="text-xl mb-6 opacity-90">
-              Start with our comprehensive learning resources and track your
-              progress as you go.
+              {t("internalResources.cta.description")}
             </p>
             <div className="flex justify-center space-x-4">
               <button className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors duration-200">
-                View Progress
+                {t("internalResources.cta.viewProgress")}
               </button>
               <button className="border-2 border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors duration-200">
-                Learn More
+                {t("internalResources.cta.learnMore")}
               </button>
             </div>
           </div>
