@@ -3,18 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useTranslation } from "@/hooks/useTranslation";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Navigation() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t, isRTL } = useTranslation();
 
   const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/challenges", label: "Challenges" },
-    { href: "/questions", label: "Questions" },
-    { href: "/internal-resources", label: "Internal Resources" },
-    { href: "/resources", label: "Resources" },
-    { href: "/learning-paths", label: "Learning Paths" },
+    { href: "/", label: t("navigation.home") },
+    { href: "/challenges", label: t("navigation.challenges") },
+    { href: "/questions", label: t("navigation.questions") },
+    { href: "/internal-resources", label: t("navigation.internalResources") },
+    { href: "/resources", label: t("navigation.resources") },
+    { href: "/learning-paths", label: t("navigation.learningPaths") },
   ];
 
   const isActive = (href: string) => {
@@ -27,7 +30,7 @@ export default function Navigation() {
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-sm border-b backdrop-blur-sm bg-white/95">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className={`flex items-center justify-between h-16 ${isRTL ? 'flex-row-reverse' : ''}`}>
           {/* Logo */}
           <Link
             href="/"
@@ -37,7 +40,7 @@ export default function Navigation() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className={`hidden md:flex items-center ${isRTL ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -51,10 +54,14 @@ export default function Navigation() {
                 {item.label}
               </Link>
             ))}
+            
+            {/* Language Switcher */}
+            <LanguageSwitcher />
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile menu button and language switcher */}
+          <div className={`md:hidden flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
+            <LanguageSwitcher />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-gray-600 hover:text-blue-600 p-2 rounded-md"
