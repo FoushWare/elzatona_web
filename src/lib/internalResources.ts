@@ -222,7 +222,7 @@ export const cssQuestions: InternalQuestion[] = [
 
 // General Frontend Questions Resource - Phase 1 (Fundamentals)
 export const generalFrontendPhase1Questions: InternalQuestion[] = [
-  // JavaScript Fundamentals
+  // JavaScript Fundamentals - Hoisting & Scope
   {
     id: "gf-p1-1",
     question: "What's the output?",
@@ -337,6 +337,452 @@ const mouse = {
     category: "javascript",
     tags: ["object-properties", "bracket-notation", "dot-notation"],
     relatedTopics: ["Object Properties", "Property Access", "JavaScript Objects"]
+  },
+  // Additional JavaScript Fundamentals
+  {
+    id: "gf-p1-6",
+    question: "What's the output?",
+    code: `let a = 3;
+let b = new Number(3);
+let c = 3;
+
+console.log(a == b);
+console.log(a === b);
+console.log(b === c);`,
+    options: {
+      A: "true false true",
+      B: "false false true",
+      C: "true false false",
+      D: "false true true"
+    },
+    correctAnswer: "C",
+    explanation: "new Number() is a built-in function constructor. Although it looks like a number, it's not really a number: it has a bunch of extra features and is an object. When we use the == operator, it only checks whether it has the same value. They both have the value of 3, so it returns true. However, when we use the === operator, both value and type should be the same. It's not: new Number() is not a number, it's an object. Both return false.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["type-coercion", "==-vs-===", "number-constructor"],
+    relatedTopics: ["Type Coercion", "Equality Operators", "Primitives vs Objects"]
+  },
+  {
+    id: "gf-p1-7",
+    question: "What's the output?",
+    code: `function getAge() {
+  'use strict';
+  age = 21;
+  console.log(age);
+}
+
+getAge();`,
+    options: {
+      A: "21",
+      B: "undefined",
+      C: "ReferenceError",
+      D: "TypeError"
+    },
+    correctAnswer: "C",
+    explanation: "With 'use strict', you can't reference undeclared variables. We never declared the variable age, and since we use 'use strict', it will throw a reference error. If we didn't use 'use strict', it would have worked, since the property age would have gotten added to the global object.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["strict-mode", "variable-declaration", "reference-error"],
+    relatedTopics: ["Strict Mode", "Variable Declaration", "Error Handling"]
+  },
+  {
+    id: "gf-p1-8",
+    question: "What's the output?",
+    code: `const sum = eval('10*10+5');`,
+    options: {
+      A: "105",
+      B: "105 as a string",
+      C: "TypeError",
+      D: "10*10+5"
+    },
+    correctAnswer: "A",
+    explanation: "eval evaluates code that's passed as a string. If it's an expression, like in this case, it evaluates the expression. The expression is 10 * 10 + 5. This returns the number 105.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["eval", "expression-evaluation"],
+    relatedTopics: ["eval Function", "Expression Evaluation", "Code Execution"]
+  },
+  {
+    id: "gf-p1-9",
+    question: "What's the output?",
+    code: `sessionStorage.setItem('cool_secret', 123);`,
+    options: {
+      A: "The data is stored forever",
+      B: "The data will be deleted when the tab is closed",
+      C: "The data will be deleted when the browser is closed",
+      D: "The data will be deleted when the computer is shut down"
+    },
+    correctAnswer: "B",
+    explanation: "The data stored in sessionStorage is removed after closing the tab. If you used localStorage, the data would've stayed there forever, unless for example localStorage.clear() is invoked.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["sessionStorage", "browser-storage", "data-persistence"],
+    relatedTopics: ["Browser Storage", "Session Storage", "Data Persistence"]
+  },
+  {
+    id: "gf-p1-10",
+    question: "What's the output?",
+    code: `var num = 8;
+var num = 10;
+
+console.log(num);`,
+    options: {
+      A: "8",
+      B: "10",
+      C: "SyntaxError",
+      D: "ReferenceError"
+    },
+    correctAnswer: "B",
+    explanation: "With the var keyword, you can declare multiple variables with the same name. The variable will then retain the latest value. You cannot do this with let or const since they're block-scoped.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["var", "variable-redeclaration", "hoisting"],
+    relatedTopics: ["Variable Declaration", "var vs let", "Variable Redeclaration"]
+  },
+  // Closures and Functions
+  {
+    id: "gf-p1-11",
+    question: "What's the output?",
+    code: `function sayHi() {
+  return (() => 0)();
+}
+
+console.log(typeof sayHi());`,
+    options: {
+      A: "object",
+      B: "number",
+      C: "function",
+      D: "undefined"
+    },
+    correctAnswer: "B",
+    explanation: "The sayHi function returns the returned value of the immediately invoked function expression (IIFE). This function returned 0, which is type 'number'. FYI: there are only 7 built-in types: null, undefined, boolean, number, string, object, and symbol. 'function' is not a type, since functions are objects, it's of type 'object'.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["iife", "arrow-functions", "typeof", "closures"],
+    relatedTopics: ["IIFE", "Arrow Functions", "Type Checking", "Closures"]
+  },
+  {
+    id: "gf-p1-12",
+    question: "What's the output?",
+    code: `(() => {
+  let x, y;
+  try {
+    throw new Error();
+  } catch (x) {
+    (x = 1), (y = 2);
+    console.log(x);
+  }
+  console.log(x);
+  console.log(y);
+})();`,
+    options: {
+      A: "1 undefined 2",
+      B: "undefined undefined undefined",
+      C: "1 1 2",
+      D: "1 undefined undefined"
+    },
+    correctAnswer: "A",
+    explanation: "The catch block receives the argument x. This is not the same x as the variable when we pass arguments. This variable x is block-scoped. Later, we set this block-scoped variable equal to 1, and set the value of the variable y. Now, we log the block-scoped variable x, which equals 1. Outside of the catch block, x is still undefined, and y is 2. When we want to console.log(x) outside of the catch block, it returns undefined, and y returns 2.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["try-catch", "block-scope", "variable-shadowing"],
+    relatedTopics: ["Error Handling", "Block Scope", "Variable Shadowing"]
+  },
+  {
+    id: "gf-p1-13",
+    question: "What's the output?",
+    code: `[[0, 1], [2, 3]].reduce(
+  (acc, cur) => {
+    return acc.concat(cur);
+  },
+  [1, 2],
+);`,
+    options: {
+      A: "[0, 1, 2, 3, 1, 2]",
+      B: "[6, 1, 2]",
+      C: "[1, 2, 0, 1, 2, 3]",
+      D: "[1, 2, 6]"
+    },
+    correctAnswer: "C",
+    explanation: "[1, 2] is our initial value. This is the value we start with, and the value of the very first acc. During the first round, acc is [1, 2], and cur is [0, 1]. We concatenate them, which results in [1, 2, 0, 1]. Then, [1, 2, 0, 1] is acc and [2, 3] is cur. We concatenate them, and get [1, 2, 0, 1, 2, 3].",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["reduce", "array-methods", "concatenation"],
+    relatedTopics: ["Array Methods", "reduce", "Array Concatenation"]
+  },
+  {
+    id: "gf-p1-14",
+    question: "What's the output?",
+    code: `[1, 2, 3].map(num => {
+  if (typeof num === 'number') return;
+  return num * 2;
+});`,
+    options: {
+      A: "[2, 4, 6]",
+      B: "[undefined, undefined, undefined]",
+      C: "[1, 2, 3]",
+      D: "[null, null, null]"
+    },
+    correctAnswer: "B",
+    explanation: "When mapping over the array, the element is equal to num in this case. The if condition checks if the value of num is of type 'number'. If it is, the function returns nothing. When a function doesn't return anything, it returns undefined. For every element in the array, the function block gets called, so for each element we return undefined.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["map", "return-statement", "undefined"],
+    relatedTopics: ["Array Methods", "map", "Return Values"]
+  },
+  {
+    id: "gf-p1-15",
+    question: "What's the output?",
+    code: `const set = new Set([1, 1, 2, 3, 4]);
+
+console.log(set);`,
+    options: {
+      A: "[1, 1, 2, 3, 4]",
+      B: "[1, 2, 3, 4]",
+      C: "{1, 1, 2, 3, 4}",
+      D: "{1, 2, 3, 4}"
+    },
+    correctAnswer: "D",
+    explanation: "The Set object lets you store unique values of any type, whether primitive values or object references. A value in the Set may only occur once; it is unique in the Set's collection. We passed the iterable [1, 1, 2, 3, 4] with a duplicate value 1. Since we cannot have two of the same values in a set, one of them gets deleted. This results in {1, 2, 3, 4}.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["set", "unique-values", "data-structures"],
+    relatedTopics: ["Set", "Data Structures", "Unique Values"]
+  },
+  // DOM and Events
+  {
+    id: "gf-p1-16",
+    question: "What's the output?",
+    code: `let c = { greeting: 'Hey!' };
+let d;
+
+d = c;
+c.greeting = 'Hello';
+console.log(d.greeting);`,
+    options: {
+      A: "Hello",
+      B: "Hey!",
+      C: "undefined",
+      D: "ReferenceError"
+    },
+    correctAnswer: "A",
+    explanation: "In JavaScript, all objects interact by reference when setting them equal to each other. First, variable c holds a value to an object. Later, we assign d with the same reference that c has to the object. When you change one object, you change all of them.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["object-reference", "mutation", "reference-types"],
+    relatedTopics: ["Object References", "Mutation", "Reference Types"]
+  },
+  {
+    id: "gf-p1-17",
+    question: "What's the output?",
+    code: `let a = 3;
+let b = new Number(3);
+let c = 3;
+
+console.log(a == b);
+console.log(a === b);
+console.log(b === c);`,
+    options: {
+      A: "true false true",
+      B: "false false true",
+      C: "true false false",
+      D: "false true true"
+    },
+    correctAnswer: "C",
+    explanation: "new Number() is a built-in function constructor. Although it looks like a number, it's not really a number: it has a bunch of extra features and is an object. When we use the == operator, it only checks whether it has the same value. They both have the value of 3, so it returns true. However, when we use the === operator, both value and type should be the same. It's not: new Number() is not a number, it's an object. Both return false.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["type-coercion", "==-vs-===", "number-constructor"],
+    relatedTopics: ["Type Coercion", "Equality Operators", "Primitives vs Objects"]
+  },
+  {
+    id: "gf-p1-18",
+    question: "What's the output?",
+    code: `function bark() {
+  console.log('Woof!');
+}
+
+bark.animal = 'dog';`,
+    options: {
+      A: "Nothing, this is totally fine!",
+      B: "SyntaxError. You cannot add properties to a function this way.",
+      C: "Woof!",
+      D: "ReferenceError"
+    },
+    correctAnswer: "A",
+    explanation: "This is possible in JavaScript, because functions are objects! (Everything besides primitive types are objects) A function is a special type of object. The code you write isn't the actual function. The function is an object with properties. This property is invokable.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["functions-as-objects", "properties", "function-objects"],
+    relatedTopics: ["Functions", "Objects", "Function Properties"]
+  },
+  {
+    id: "gf-p1-19",
+    question: "What's the output?",
+    code: `function Person(firstName, lastName) {
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+const member = new Person('Lydia', 'Hallie');
+Person.getFullName = function() {
+  return this.firstName + this.lastName;
+};
+
+console.log(member.getFullName());`,
+    options: {
+      A: "TypeError",
+      B: "SyntaxError",
+      C: "LydiaHallie",
+      D: "undefined undefined"
+    },
+    correctAnswer: "A",
+    explanation: "You cannot add properties to a constructor like you can with regular objects. If you want to add a feature to all objects at once, you have to use the prototype instead. So in this case, Person.prototype.getFullName = function() { return this.firstName + this.lastName; } would have made member.getFullName() work. Why is this beneficial? Say that we added this method to the constructor itself. Maybe not every Person instance needed this method. This would waste a lot of memory space, since they would still have that property, which takes up memory for each instance. Instead, if we add it to the prototype, we just have it at one spot in memory, yet they all have access to it!",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["constructors", "prototype", "object-oriented"],
+    relatedTopics: ["Constructors", "Prototype", "Object-Oriented Programming"]
+  },
+  {
+    id: "gf-p1-20",
+    question: "What's the output?",
+    code: `function Person(firstName, lastName) {
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+const lydia = new Person('Lydia', 'Hallie');
+const sarah = Person('Sarah', 'Smith');
+
+console.log(lydia);
+console.log(sarah);`,
+    options: {
+      A: "Person {firstName: 'Lydia', lastName: 'Hallie'} and undefined",
+      B: "Person {firstName: 'Lydia', lastName: 'Hallie'} and Person {firstName: 'Sarah', lastName: 'Smith'}",
+      C: "Person {firstName: 'Lydia', lastName: 'Hallie'} and {}",
+      D: "Person {firstName: 'Lydia', lastName: 'Hallie'} and ReferenceError"
+    },
+    correctAnswer: "A",
+    explanation: "For sarah, we didn't use the new keyword. When we use new, this refers to the new empty object we create. However, when you don't add new, this refers to the global object! We said that this.firstName equals 'Sarah' and this.lastName equals 'Smith'. What we actually did, is defining global.firstName = 'Sarah' and global.lastName = 'Smith'. sarah itself is left undefined, since we don't return a value from the Person function.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["new-keyword", "constructors", "this-context"],
+    relatedTopics: ["new Keyword", "Constructors", "this Context"]
+  },
+  // Async JavaScript
+  {
+    id: "gf-p1-21",
+    question: "What's the output?",
+    code: `const person = { name: 'Lydia' };
+
+function sayHi(age) {
+  console.log(this.name + ' is ' + age);
+}
+
+sayHi.call(person, 21);
+sayHi.bind(person, 21);`,
+    options: {
+      A: "undefined is 21 Lydia is 21",
+      B: "function function",
+      C: "Lydia is 21 Lydia is 21",
+      D: "Lydia is 21 function"
+    },
+    correctAnswer: "D",
+    explanation: "With both, we can pass the object to which we want the this keyword to refer to. However, .call is also executed immediately! .bind. returns a copy of the function, but with a bound context! It is not executed immediately.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["call", "bind", "this-context", "function-methods"],
+    relatedTopics: ["Function Methods", "call", "bind", "this Context"]
+  },
+  {
+    id: "gf-p1-22",
+    question: "What's the output?",
+    code: `function sayHi() {
+  return (() => 0)();
+}
+
+console.log(typeof sayHi());`,
+    options: {
+      A: "object",
+      B: "number",
+      C: "function",
+      D: "undefined"
+    },
+    correctAnswer: "B",
+    explanation: "The sayHi function returns the returned value of the immediately invoked function expression (IIFE). This function returned 0, which is type 'number'. FYI: there are only 7 built-in types: null, undefined, boolean, number, string, object, and symbol. 'function' is not a type, since functions are objects, it's of type 'object'.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["iife", "arrow-functions", "typeof", "closures"],
+    relatedTopics: ["IIFE", "Arrow Functions", "Type Checking", "Closures"]
+  },
+  {
+    id: "gf-p1-23",
+    question: "What's the output?",
+    code: `(() => {
+  let x, y;
+  try {
+    throw new Error();
+  } catch (x) {
+    (x = 1), (y = 2);
+    console.log(x);
+  }
+  console.log(x);
+  console.log(y);
+})();`,
+    options: {
+      A: "1 undefined 2",
+      B: "undefined undefined undefined",
+      C: "1 1 2",
+      D: "1 undefined undefined"
+    },
+    correctAnswer: "A",
+    explanation: "The catch block receives the argument x. This is not the same x as the variable when we pass arguments. This variable x is block-scoped. Later, we set this block-scoped variable equal to 1, and set the value of the variable y. Now, we log the block-scoped variable x, which equals 1. Outside of the catch block, x is still undefined, and y is 2. When we want to console.log(x) outside of the catch block, it returns undefined, and y returns 2.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["try-catch", "block-scope", "variable-shadowing"],
+    relatedTopics: ["Error Handling", "Block Scope", "Variable Shadowing"]
+  },
+  {
+    id: "gf-p1-24",
+    question: "What's the output?",
+    code: `[[0, 1], [2, 3]].reduce(
+  (acc, cur) => {
+    return acc.concat(cur);
+  },
+  [1, 2],
+);`,
+    options: {
+      A: "[0, 1, 2, 3, 1, 2]",
+      B: "[6, 1, 2]",
+      C: "[1, 2, 0, 1, 2, 3]",
+      D: "[1, 2, 6]"
+    },
+    correctAnswer: "C",
+    explanation: "[1, 2] is our initial value. This is the value we start with, and the value of the very first acc. During the first round, acc is [1, 2], and cur is [0, 1]. We concatenate them, which results in [1, 2, 0, 1]. Then, [1, 2, 0, 1] is acc and [2, 3] is cur. We concatenate them, and get [1, 2, 0, 1, 2, 3].",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["reduce", "array-methods", "concatenation"],
+    relatedTopics: ["Array Methods", "reduce", "Array Concatenation"]
+  },
+  {
+    id: "gf-p1-25",
+    question: "What's the output?",
+    code: `[1, 2, 3].map(num => {
+  if (typeof num === 'number') return;
+  return num * 2;
+});`,
+    options: {
+      A: "[2, 4, 6]",
+      B: "[undefined, undefined, undefined]",
+      C: "[1, 2, 3]",
+      D: "[null, null, null]"
+    },
+    correctAnswer: "B",
+    explanation: "When mapping over the array, the element is equal to num in this case. The if condition checks if the value of num is of type 'number'. If it is, the function returns nothing. When a function doesn't return anything, it returns undefined. For every element in the array, the function block gets called, so for each element we return undefined.",
+    difficulty: "beginner",
+    category: "javascript",
+    tags: ["map", "return-statement", "undefined"],
+    relatedTopics: ["Array Methods", "map", "Return Values"]
   }
 ];
 
@@ -708,20 +1154,24 @@ export const internalResources: InternalResource[] = [
   {
     id: "general-frontend-phase-1",
     title: "General Frontend Q&A - Phase 1",
-    description: "Fundamental JavaScript concepts including hoisting, scope, this keyword, type coercion, and object properties. Perfect for beginners and junior developers.",
+    description: "Comprehensive JavaScript fundamentals including hoisting, scope, this keyword, type coercion, object properties, closures, functions, DOM manipulation, and async concepts. Perfect for beginners and junior developers.",
     icon: "🌱",
     category: "general",
     difficulty: "beginner",
     questions: generalFrontendPhase1Questions,
     totalQuestions: generalFrontendPhase1Questions.length,
-    estimatedTime: 45,
+    estimatedTime: 225,
     prerequisites: ["Basic knowledge of HTML, CSS, and JavaScript"],
     learningOutcomes: [
-      "Understanding of JavaScript fundamentals",
-      "Knowledge of hoisting and scope",
+      "Deep understanding of JavaScript fundamentals",
+      "Knowledge of hoisting, scope, and closures",
       "Mastery of this keyword and arrow functions",
-      "Understanding of type coercion",
-      "Object property access patterns"
+      "Understanding of type coercion and equality",
+      "Object property access patterns and references",
+      "Array methods and functional programming concepts",
+      "Error handling and debugging techniques",
+      "DOM manipulation and event handling",
+      "Asynchronous JavaScript concepts"
     ]
   },
   {
@@ -749,13 +1199,13 @@ export const internalResources: InternalResource[] = [
   {
     id: "general-frontend-qa",
     title: "General Frontend Q&A - Complete",
-    description: "Comprehensive collection of 12+ frontend interview questions covering all phases from fundamentals to advanced concepts. Perfect for comprehensive interview preparation.",
+    description: "Comprehensive collection of 32+ frontend interview questions covering all phases from fundamentals to advanced concepts. Perfect for comprehensive interview preparation.",
     icon: "🎯",
     category: "general",
     difficulty: "intermediate",
     questions: generalFrontendQuestions,
     totalQuestions: generalFrontendQuestions.length,
-    estimatedTime: 150,
+    estimatedTime: 330,
     prerequisites: ["Basic knowledge of HTML, CSS, and JavaScript", "Understanding of web development concepts", "Familiarity with React"],
     learningOutcomes: [
       "Comprehensive understanding of frontend development",
