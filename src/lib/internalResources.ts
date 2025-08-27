@@ -340,7 +340,7 @@ const mouse = {
   }
 ];
 
-// General Frontend Questions Resource - Phase 2 (Intermediate Concepts)
+// General Frontend Questions Resource - Phase 2 (Intermediate + Advanced Concepts)
 export const generalFrontendPhase2Questions: InternalQuestion[] = [
   // Browser Storage
   {
@@ -499,6 +499,74 @@ function SafeComponent({ userInput }) {
     category: "javascript",
     tags: ["security", "xss", "input-sanitization", "web-security"],
     relatedTopics: ["Web Security", "Input Validation", "Cross-Site Scripting"]
+  },
+  // CDN (from Phase 3)
+  {
+    id: "gf-p2-6",
+    question: "Can you explain how a CDN works? What are pros and cons?",
+    code: `// Example of CDN usage in HTML
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css">
+
+// Example of CDN configuration in webpack
+module.exports = {
+  output: {
+    publicPath: process.env.NODE_ENV === 'production' 
+        ? 'https://cdn.example.com/' 
+  : '\\/'
+  }
+};`,
+    options: {
+      A: "CDN only caches images and videos",
+      B: "CDN is a network of distributed servers that cache static assets, improving load times and reducing server load",
+      C: "CDN only works for large files",
+      D: "CDN is only useful for international websites"
+    },
+    correctAnswer: "B",
+    explanation: "CDN (Content Delivery Network) = network of distributed servers caching your static assets (JS, CSS, images). Users fetch assets from the closest geographical edge location → lower latency, faster performance. Pros: Faster load times, less server load, good caching. Cons: Added cost/complexity, reliance on 3rd-party infra. Popular providers: AWS CloudFront, Cloudflare, Azure CDN.",
+    difficulty: "advanced",
+    category: "javascript",
+    tags: ["cdn", "performance", "caching", "infrastructure"],
+    relatedTopics: ["Content Delivery Networks", "Performance Optimization", "Infrastructure"]
+  },
+  // Micro-frontends (from Phase 3)
+  {
+    id: "gf-p2-7",
+    question: "What are micro-frontends and when would you use them?",
+    code: `// Example of micro-frontend shell application
+import React from 'react';
+
+// Load micro-frontends dynamically
+const ProductApp = React.lazy(() => import('product-app/ProductApp'));
+const CartApp = React.lazy(() => import('cart-app/CartApp'));
+
+function ShellApp() {
+  return (
+    <div>
+      <header>E-commerce Shell</header>
+      <main>
+        <Suspense fallback={<div>Loading...</div>}>
+          <ProductApp />
+        </Suspense>
+        <Suspense fallback={<div>Loading...</div>}>
+          <CartApp />
+        </Suspense>
+      </main>
+    </div>
+  );
+}`,
+    options: {
+      A: "Micro-frontends are just smaller React components",
+      B: "Micro-frontends split monolithic frontend into independent applications, useful for large teams and scaling deployments",
+      C: "Micro-frontends only work with React",
+      D: "Micro-frontends are always better than monolithic applications"
+    },
+    correctAnswer: "B",
+    explanation: "Micro-frontends = splitting a monolithic frontend into smaller, independent applications combined in a 'shell'. Each sub-app can be owned/deployed by separate teams. Use cases: Large teams (30+ engineers), scaling deployments, avoiding blocking between teams. Trade-off: Adds significant complexity (shared state, tooling, infra). Only worth it at scale.",
+    difficulty: "advanced",
+    category: "javascript",
+    tags: ["micro-frontends", "architecture", "scaling", "team-organization"],
+    relatedTopics: ["Frontend Architecture", "Team Scaling", "Application Architecture"]
   }
 ];
 
@@ -659,41 +727,25 @@ export const internalResources: InternalResource[] = [
   {
     id: "general-frontend-phase-2",
     title: "General Frontend Q&A - Phase 2",
-    description: "Intermediate frontend concepts including browser storage, performance optimization, image optimization, code quality, and security. Essential for mid-level developers.",
+    description: "Intermediate to advanced frontend concepts including browser storage, performance optimization, image optimization, code quality, security, CDN, and micro-frontends. Essential for mid-level to senior developers.",
     icon: "🚀",
     category: "general",
     difficulty: "intermediate",
     questions: generalFrontendPhase2Questions,
     totalQuestions: generalFrontendPhase2Questions.length,
-    estimatedTime: 60,
-    prerequisites: ["JavaScript fundamentals", "Basic understanding of web development", "Familiarity with browser APIs"],
+    estimatedTime: 105,
+    prerequisites: ["JavaScript fundamentals", "Basic understanding of web development", "Familiarity with browser APIs", "Experience with React"],
     learningOutcomes: [
       "Browser storage management",
       "Performance optimization techniques",
       "Image optimization strategies",
       "Code quality best practices",
-      "Web security fundamentals"
-    ]
-  },
-  {
-    id: "general-frontend-phase-3",
-    title: "General Frontend Q&A - Phase 3",
-    description: "Advanced frontend concepts including CDN, micro-frontends, and architecture patterns. Designed for senior developers and technical leads.",
-    icon: "🏗️",
-    category: "general",
-    difficulty: "advanced",
-    questions: generalFrontendPhase3Questions,
-    totalQuestions: generalFrontendPhase3Questions.length,
-    estimatedTime: 45,
-    prerequisites: ["Intermediate frontend knowledge", "Understanding of performance optimization", "Experience with large-scale applications"],
-    learningOutcomes: [
+      "Web security fundamentals",
       "CDN implementation and optimization",
-      "Micro-frontend architecture",
-      "Large-scale application design",
-      "Team scaling strategies",
-      "Advanced frontend patterns"
+      "Micro-frontend architecture understanding"
     ]
   },
+
   {
     id: "general-frontend-qa",
     title: "General Frontend Q&A - Complete",
