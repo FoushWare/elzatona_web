@@ -49,6 +49,7 @@ export default function Navigation() {
         { href: "/learning-paths", label: "Learning Paths" },
         { href: "/study-plans", label: "Study Plans" },
         { href: "/preparation-guides", label: "Preparation Guides" },
+        { href: "/git-tips", label: "Git Tips & Tricks" },
       ],
     },
   ];
