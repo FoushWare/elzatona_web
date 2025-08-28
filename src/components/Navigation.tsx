@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
+import DarkModeToggle from "./DarkModeToggle";
 // import { useTranslation } from "@/hooks/useTranslation";
 // import LanguageSwitcher from "./LanguageSwitcher";
 
@@ -60,7 +61,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-sm border-b backdrop-blur-sm bg-white/95">
+    <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 backdrop-blur-sm bg-white/95 dark:bg-gray-900/95">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -122,7 +123,7 @@ export default function Navigation() {
                     </button>
 
                     {openDropdown === item.label && (
-                      <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                      <div className="absolute top-full left-0 mt-1 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-50">
                         <div className="py-1">
                           {item.items?.map((subItem) => (
                             <Link
@@ -131,8 +132,8 @@ export default function Navigation() {
                               onClick={() => setOpenDropdown(null)}
                               className={`block px-4 py-2 text-sm transition-colors ${
                                 isActive(subItem.href)
-                                  ? "text-blue-600 bg-blue-50"
-                                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                                  ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20"
+                                  : "text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700"
                               }`}
                             >
                               {subItem.label}
@@ -147,11 +148,12 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center space-x-2">
+          {/* Dark Mode Toggle and Mobile menu button */}
+          <div className="flex items-center space-x-2">
+            <DarkModeToggle />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-600 hover:text-blue-600 p-2 rounded-md"
+              className="md:hidden text-gray-600 hover:text-blue-600 p-2 rounded-md"
               aria-label="Toggle mobile menu"
             >
               <svg
@@ -182,7 +184,7 @@ export default function Navigation() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 bg-white">
+          <div className="md:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
                 <div key={item.label}>
