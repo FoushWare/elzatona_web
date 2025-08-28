@@ -50,6 +50,7 @@ export default function Navigation() {
         { href: "/study-plans", label: "Study Plans" },
         { href: "/preparation-guides", label: "Preparation Guides" },
         { href: "/git-tips", label: "Git Tips & Tricks" },
+        { href: "/authentication-strategies", label: "Authentication Strategies" },
       ],
     },
   ];
