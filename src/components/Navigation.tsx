@@ -51,6 +51,7 @@ export default function Navigation() {
         { href: "/preparation-guides", label: "Preparation Guides" },
         { href: "/git-tips", label: "Git Tips & Tricks" },
         { href: "/authentication-strategies", label: "Authentication Strategies" },
+        { href: "/blog", label: "Blog & Articles" },
       ],
     },
   ];
