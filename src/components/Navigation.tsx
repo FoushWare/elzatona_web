@@ -37,6 +37,7 @@ export default function Navigation() {
       items: [
         { href: "/challenges", label: "Coding Challenges" },
         { href: "/questions", label: "Practice Questions" },
+        { href: "/practice-questions", label: "All Practice Questions" },
         { href: "/internal-resources", label: "Internal Resources" },
       ],
     },
