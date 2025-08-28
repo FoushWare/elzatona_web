@@ -796,7 +796,7 @@ export const generalFrontendPhase2Questions: InternalQuestion[] = [
     id: "gf-p2-1",
     question: "What is the difference between cookies, localStorage, and sessionStorage in the browser?",
     code: `// Cookie example
-document.cookie = "username=John; expires=Thu, 18 Dec 2023 12:00:00 UTC; path=\\/";
+document.cookie = "username=John; expires=Thu, 18 Dec 2023 12:00:00 UTC; path=/";
 
 // localStorage example
 localStorage.setItem('theme', 'dark');
@@ -867,7 +867,7 @@ import { useState, useEffect } from 'react'; // Only imports what's used
 
 // CSS for aspect ratio to prevent layout shifts
 .image-container {
-  aspect-ratio: 16\\/9;
+  aspect-ratio: 16/9;
   width: 100%;
 }`,
     options: {
