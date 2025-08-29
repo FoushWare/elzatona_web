@@ -1,20 +1,25 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import DarkModeToggle from "./DarkModeToggle";
-// import { useTranslation } from "@/hooks/useTranslation";
-// import LanguageSwitcher from "./LanguageSwitcher";
+import Link from "next/link";
+import { useDarkMode } from "@/hooks/useDarkMode";
 
 export default function Navigation() {
-  const pathname = usePathname();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  // const { t, isRTL } = useTranslation();
 
-  // Close dropdown when clicking outside
+  const handleDropdownToggle = (dropdownName: string) => {
+    setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
+  };
+
+  const closeDropdowns = () => {
+    setOpenDropdown(null);
+  };
+
+  // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -31,135 +36,198 @@ export default function Navigation() {
     };
   }, []);
 
-  const navItems = [
-    { href: "/", label: "Home" },
-    {
-      label: "Practice",
-      items: [
-        { href: "/coding", label: "Coding" },
-        { href: "/system-design", label: "System Design" },
-        { href: "/practice/fundamentals", label: "Frontend Fundamentals" },
-        { href: "/practice/advanced", label: "Advanced Topics" },
-      ],
-    },
-    {
-      label: "Learn",
-      items: [
-        { href: "/learning-paths", label: "📚 Learning Paths" },
-        { href: "/study-plans", label: "📅 Study Plans" },
-        { href: "/preparation-guides", label: "🎯 Preparation Guides" },
-        { href: "/resources", label: "📖 External Resources" },
-        { href: "/git-tips", label: "Git Tips & Tricks" },
-        {
-          href: "/authentication-strategies",
-          label: "Authentication Strategies",
-        },
-        { href: "/blog", label: "Blog & Articles" },
-      ],
-    },
-  ];
-
-  const isActive = (href: string) => {
-    if (href === "/") {
-      return pathname === "/";
+  // Handle scroll detection
+  useEffect(() => {
+    function handleScroll() {
+      setIsScrolled(window.scrollY > 0);
     }
-    return pathname.startsWith(href);
-  };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm">
-      <div className="container mx-auto px-4">
+    <nav
+      className={`sticky top-0 z-50 border-b border-blue-500/30 shadow-soft backdrop-blur-md transition-all duration-300 ${
+        isScrolled
+          ? "bg-blue-600/95 text-white shadow-medium"
+          : "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
+      }`}
+    >
+      <div className="container mx-auto px-4" ref={dropdownRef}>
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link
             href="/"
-            className="text-xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
+            className="text-xl font-bold transition-all duration-200 text-white hover:text-blue-100 hover:scale-100"
           >
-            GreatFrontendHub
+            <span className="text-blue-100">Frontend</span>
+            <span className="text-white">KodDev</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div
-            ref={dropdownRef}
-            className="hidden md:flex items-center space-x-8"
-          >
-            {navItems.map((item) => (
-              <div key={item.label} className="relative">
-                {item.href ? (
-                  <Link
-                    href={item.href}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive(item.href)
-                        ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
-                        : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <div className="relative">
-                    <button
-                      onClick={() =>
-                        setOpenDropdown(
-                          openDropdown === item.label ? null : item.label
-                        )
-                      }
-                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${
-                        openDropdown === item.label
-                          ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
-                          : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
-                      }`}
-                    >
-                      <span>{item.label}</span>
-                      <svg
-                        className={`w-4 h-4 transition-transform ${
-                          openDropdown === item.label ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
+          <div className="hidden md:flex items-center space-x-8">
+            <div className="relative">
+              <Link
+                href="/"
+                className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
+              >
+                Home
+              </Link>
+            </div>
 
-                    {openDropdown === item.label && (
-                      <div className="absolute top-full left-0 mt-1 w-56 bg-card rounded-md shadow-lg border border-border z-50">
-                        <div className="py-1">
-                          {item.items?.map((subItem) => (
-                            <Link
-                              key={subItem.href}
-                              href={subItem.href}
-                              onClick={() => setOpenDropdown(null)}
-                              className={`block px-4 py-2 text-sm transition-colors ${
-                                isActive(subItem.href)
-                                  ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20"
-                                  : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
-                              }`}
-                            >
-                              {subItem.label}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+            <div className="relative">
+              <button
+                onClick={() => handleDropdownToggle("practice")}
+                className="nav-link flex items-center space-x-1 text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
+              >
+                <span>Practice</span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${
+                    openDropdown === "practice" ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
+                </svg>
+              </button>
+              {openDropdown === "practice" && (
+                <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50">
+                  <div className="py-1">
+                    <Link
+                      href="/coding"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={closeDropdowns}
+                    >
+                      💻 Coding Challenges
+                    </Link>
+                    <Link
+                      href="/system-design"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={closeDropdowns}
+                    >
+                      🏗️ System Design
+                    </Link>
+                    <Link
+                      href="/practice/fundamentals"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={closeDropdowns}
+                    >
+                      📚 Fundamentals
+                    </Link>
+                    <Link
+                      href="/practice/advanced"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={closeDropdowns}
+                    >
+                      🚀 Advanced
+                    </Link>
                   </div>
-                )}
-              </div>
-            ))}
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <button
+                onClick={() => handleDropdownToggle("learn")}
+                className="nav-link flex items-center space-x-1 text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
+              >
+                <span>Learn</span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${
+                    openDropdown === "learn" ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
+                </svg>
+              </button>
+              {openDropdown === "learn" && (
+                <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50">
+                  <div className="py-1">
+                    <Link
+                      href="/learning-paths"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={closeDropdowns}
+                    >
+                      🗺️ Learning Paths
+                    </Link>
+                    <Link
+                      href="/study-plans"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={closeDropdowns}
+                    >
+                      📅 Study Plans
+                    </Link>
+                    <Link
+                      href="/preparation-guides"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={closeDropdowns}
+                    >
+                      📖 Preparation Guides
+                    </Link>
+                    <Link
+                      href="/resources"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={closeDropdowns}
+                    >
+                      📚 Resources
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Dark Mode Toggle and Mobile menu button */}
           <div className="flex items-center space-x-2">
-            <DarkModeToggle />
+            <div className="w-10 h-10 rounded-lg bg-muted animate-pulse"></div>
+
+            {/* Theme Toggle Button */}
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden text-muted-foreground hover:text-blue-600 p-2 rounded-md"
+              onClick={toggleDarkMode}
+              className="p-2 rounded-lg transition-all duration-200 focus-ring text-white hover:text-blue-100 hover:bg-blue-700/50 hover:scale-110"
+              aria-label="Toggle theme"
+            >
+              {isDarkMode ? (
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                </svg>
+              )}
+            </button>
+
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden p-2 rounded-md focus-ring text-white hover:text-blue-100 hover:bg-blue-700"
               aria-label="Toggle mobile menu"
             >
               <svg
@@ -168,69 +236,85 @@ export default function Navigation() {
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                {isMobileMenuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
               </svg>
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-border bg-background">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navItems.map((item) => (
-                <div key={item.label}>
-                  {item.href ? (
-                    <Link
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                        isActive(item.href)
-                          ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
-                          : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  ) : (
-                    <div>
-                      <div className="px-3 py-2 text-base font-medium text-foreground border-b border-border">
-                        {item.label}
-                      </div>
-                      <div className="pl-4 space-y-1">
-                        {item.items?.map((subItem) => (
-                          <Link
-                            key={subItem.href}
-                            href={subItem.href}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className={`block px-3 py-2 rounded-md text-sm transition-colors ${
-                              isActive(subItem.href)
-                                ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
-                                : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
-                            }`}
-                          >
-                            {subItem.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+        {/* Mobile menu */}
+        {isOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-blue-500/30 bg-blue-600/95 backdrop-blur-md">
+              <Link
+                href="/"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                <span className="text-blue-100">Frontend</span>
+                <span className="text-white">KodDev</span>
+              </Link>
+              <Link
+                href="/coding"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                💻 Coding Challenges
+              </Link>
+              <Link
+                href="/system-design"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                🏗️ System Design
+              </Link>
+              <Link
+                href="/practice/fundamentals"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                📚 Fundamentals
+              </Link>
+              <Link
+                href="/practice/advanced"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                🚀 Advanced
+              </Link>
+              <Link
+                href="/learning-paths"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                🗺️ Learning Paths
+              </Link>
+              <Link
+                href="/study-plans"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                📅 Study Plans
+              </Link>
+              <Link
+                href="/preparation-guides"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                📖 Preparation Guides
+              </Link>
+              <Link
+                href="/resources"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                📚 Resources
+              </Link>
             </div>
           </div>
         )}

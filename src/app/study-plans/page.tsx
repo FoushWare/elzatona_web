@@ -510,13 +510,13 @@ export default function StudyPlansPage() {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "beginner":
-        return "text-green-600 bg-green-100";
+        return "text-success bg-success/20";
       case "intermediate":
-        return "text-blue-600 bg-blue-100";
+        return "text-warning bg-warning/20";
       case "advanced":
-        return "text-red-600 bg-red-100";
+        return "text-destructive bg-destructive/20";
       default:
-        return "text-gray-600 bg-gray-100";
+        return "text-muted-foreground bg-muted";
     }
   };
 
@@ -534,15 +534,16 @@ export default function StudyPlansPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Interactive Study Plans
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Time-based learning schedules with daily tasks, progress tracking, and structured content
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Time-based learning schedules with daily tasks, progress tracking,
+            and structured content
           </p>
           <div className="mt-6 flex justify-center space-x-4">
             <Link
@@ -562,13 +563,13 @@ export default function StudyPlansPage() {
 
         {/* Active Plan Banner */}
         {activePlan && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+          <div className="bg-accent border border-border/40 rounded-lg p-4 mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-blue-900">
+                <h3 className="text-lg font-semibold text-foreground">
                   Active Plan: {plans.find((p) => p.id === activePlan)?.title}
                 </h3>
-                <p className="text-blue-700">
+                <p className="text-muted-foreground">
                   Started on{" "}
                   {new Date(
                     localStorage.getItem("planStartDate") || ""
@@ -577,7 +578,7 @@ export default function StudyPlansPage() {
               </div>
               <Link
                 href={`/study-plans/${activePlan}`}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                className="btn-primary px-4 py-2"
               >
                 Continue Learning
               </Link>
@@ -590,10 +591,10 @@ export default function StudyPlansPage() {
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`bg-white rounded-lg shadow-lg overflow-hidden border-2 transition-all duration-300 hover:shadow-xl ${
+              className={`card overflow-hidden border transition-all duration-300 hover:shadow-xl ${
                 selectedPlan === plan.id
-                  ? "border-blue-500 shadow-blue-100"
-                  : "border-gray-200 hover:border-gray-300"
+                  ? "border-primary/60 shadow-primary/20"
+                  : "border-border/40 hover:border-border/60"
               }`}
             >
               {/* Plan Header */}
@@ -627,18 +628,18 @@ export default function StudyPlansPage() {
 
               {/* Plan Content */}
               <div className="p-6">
-                <p className="text-gray-700 mb-6">{plan.description}</p>
+                <p className="text-muted-foreground mb-6">{plan.description}</p>
 
                 {/* Topics Preview */}
                 <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-3">
+                  <h4 className="font-semibold text-foreground mb-3">
                     Topics Covered
                   </h4>
                   <div className="space-y-2">
                     {plan.topics.slice(0, 3).map((topic) => (
                       <div
                         key={topic.id}
-                        className="flex items-center text-sm text-gray-700"
+                        className="flex items-center text-sm text-muted-foreground"
                       >
                         <svg
                           className="w-4 h-4 text-green-500 mr-2 flex-shrink-0"
@@ -655,7 +656,7 @@ export default function StudyPlansPage() {
                       </div>
                     ))}
                     {plan.topics.length > 3 && (
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-muted-foreground">
                         +{plan.topics.length - 3} more topics
                       </div>
                     )}
@@ -664,12 +665,14 @@ export default function StudyPlansPage() {
 
                 {/* Features */}
                 <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-3">Features</h4>
+                  <h4 className="font-semibold text-foreground mb-3">
+                    Features
+                  </h4>
                   <ul className="space-y-2">
                     {plan.features.slice(0, 3).map((feature, index) => (
                       <li
                         key={index}
-                        className="flex items-center text-sm text-gray-700"
+                        className="flex items-center text-sm text-muted-foreground"
                       >
                         <svg
                           className="w-4 h-4 text-green-500 mr-2 flex-shrink-0"
@@ -710,7 +713,7 @@ export default function StudyPlansPage() {
                   </button>
                   <button
                     onClick={() => handleCustomizePlan(plan.id)}
-                    className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-md font-medium hover:bg-gray-50 transition-colors duration-200"
+                    className="w-full btn-outline py-3 px-4 font-medium"
                   >
                     Customize Plan
                   </button>
@@ -722,17 +725,15 @@ export default function StudyPlansPage() {
 
         {/* Customization Modal */}
         {showCustomizeModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-              <h3 className="text-xl font-bold mb-4">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="card p-6 max-w-md w-full mx-4">
+              <h3 className="text-xl font-bold mb-4 text-foreground">
                 Customize Your Study Plan
               </h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Daily Study Hours
-                  </label>
+                  <label className="form-label">Daily Study Hours</label>
                   <input
                     type="number"
                     min="1"
@@ -744,14 +745,12 @@ export default function StudyPlansPage() {
                         dailyHours: parseInt(e.target.value),
                       })
                     }
-                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    className="form-input"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Preferred Study Time
-                  </label>
+                  <label className="form-label">Preferred Study Time</label>
                   <select
                     value={customization.preferredTime}
                     onChange={(e) =>
@@ -760,7 +759,7 @@ export default function StudyPlansPage() {
                         preferredTime: e.target.value,
                       })
                     }
-                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    className="form-input"
                   >
                     <option value="morning">Morning</option>
                     <option value="afternoon">Afternoon</option>
@@ -769,9 +768,7 @@ export default function StudyPlansPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Focus Areas (Optional)
-                  </label>
+                  <label className="form-label">Focus Areas (Optional)</label>
                   <div className="space-y-2">
                     {[
                       "JavaScript",
@@ -811,13 +808,13 @@ export default function StudyPlansPage() {
               <div className="flex space-x-3 mt-6">
                 <button
                   onClick={() => setShowCustomizeModal(false)}
-                  className="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-50"
+                  className="flex-1 btn-outline py-2 px-4"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSaveCustomization}
-                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+                  className="flex-1 btn-primary py-2 px-4"
                 >
                   Save & Start
                 </button>
@@ -828,12 +825,12 @@ export default function StudyPlansPage() {
 
         {/* Plan Selection Popup */}
         {showPlanPopup && selectedPlanData && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="card p-8 max-w-md w-full mx-4">
               <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg
-                    className="w-8 h-8 text-green-600"
+                    className="w-8 h-8 text-success"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -847,22 +844,22 @@ export default function StudyPlansPage() {
                   </svg>
                 </div>
 
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-2xl font-bold text-foreground mb-2">
                   Plan Selected!
                 </h3>
 
-                <p className="text-gray-600 mb-6">
+                <p className="text-muted-foreground mb-6">
                   You&apos;ve selected the{" "}
                   <strong>{selectedPlanData.title}</strong>. This plan is
                   designed to help you master frontend development concepts and
                   prepare for technical interviews.
                 </p>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                  <h4 className="font-semibold text-blue-900 mb-2">
+                <div className="bg-accent border border-border/40 rounded-lg p-4 mb-6">
+                  <h4 className="font-semibold text-foreground mb-2">
                     Plan Details:
                   </h4>
-                  <div className="text-sm text-blue-800 space-y-1">
+                  <div className="text-sm text-muted-foreground space-y-1">
                     <div>
                       • Duration: {selectedPlanData.duration.weeks} week
                       {selectedPlanData.duration.weeks > 1 ? "s" : ""}
@@ -885,13 +882,13 @@ export default function StudyPlansPage() {
                 <div className="flex space-x-3">
                   <button
                     onClick={() => setShowPlanPopup(false)}
-                    className="flex-1 border border-gray-300 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-50 transition-colors"
+                    className="flex-1 btn-outline py-3 px-4"
                   >
                     Back to Plans
                   </button>
                   <Link
                     href={`/study-plans/${selectedPlanData.id}`}
-                    className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 transition-colors text-center"
+                    className="flex-1 btn-primary py-3 px-4 text-center"
                   >
                     Continue Learning
                   </Link>
@@ -903,7 +900,7 @@ export default function StudyPlansPage() {
 
         {/* Call to Action */}
         <div className="text-center">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-white">
+          <div className="bg-gradient-to-r from-primary to-primary/80 rounded-lg p-8 text-primary-foreground">
             <h2 className="text-3xl font-bold mb-4">
               Ready to Start Learning?
             </h2>
@@ -914,13 +911,13 @@ export default function StudyPlansPage() {
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link
                 href="/questions"
-                className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors duration-200"
+                className="bg-background text-primary px-6 py-3 rounded-md font-medium hover:bg-background/90 transition-colors duration-200"
               >
                 Practice Questions
               </Link>
               <Link
                 href="/preparation-guides"
-                className="border-2 border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors duration-200"
+                className="border border-primary-foreground/60 text-primary-foreground px-6 py-3 rounded-md font-medium hover:bg-primary-foreground hover:text-primary transition-colors duration-200"
               >
                 Preparation Guides
               </Link>

@@ -29,8 +29,8 @@ export default function PreparationGuidesPage() {
         "Step-by-step strategies",
         "Mock interview scenarios",
         "Company-specific tips",
-        "Behavioral question guides"
-      ]
+        "Behavioral question guides",
+      ],
     },
     {
       id: "gfe75",
@@ -50,8 +50,8 @@ export default function PreparationGuidesPage() {
         "Detailed solutions",
         "Difficulty progression",
         "Time estimates",
-        "Success patterns"
-      ]
+        "Success patterns",
+      ],
     },
     {
       id: "blind75",
@@ -70,8 +70,8 @@ export default function PreparationGuidesPage() {
         "System design patterns",
         "Complexity analysis",
         "Optimization techniques",
-        "Real-world applications"
-      ]
+        "Real-world applications",
+      ],
     },
     {
       id: "system-design-playbook",
@@ -92,33 +92,28 @@ export default function PreparationGuidesPage() {
         "Performance optimization",
         "Security best practices",
         "Testing methodologies",
-        "Case studies"
-      ]
-    }
+        "Case studies",
+      ],
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             {t("preparationGuides.title")}
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Interview preparation strategies, question sets, and methodologies to ace your frontend interviews
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Interview preparation strategies, question sets, and methodologies
+            to ace your frontend interviews
           </p>
           <div className="mt-6 flex justify-center space-x-4">
-            <Link
-              href="/learning-paths"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-            >
+            <Link href="/learning-paths" className="btn-primary px-6 py-3">
               📚 Learning Paths
             </Link>
-            <Link
-              href="/study-plans"
-              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
-            >
+            <Link href="/study-plans" className="btn-primary px-6 py-3">
               📅 Study Plans
             </Link>
           </div>
@@ -129,10 +124,10 @@ export default function PreparationGuidesPage() {
           {guides.map((guide) => (
             <div
               key={guide.id}
-              className={`bg-white rounded-lg shadow-lg overflow-hidden border-2 transition-all duration-300 hover:shadow-xl ${
+              className={`card overflow-hidden border-2 transition-all duration-300 hover:shadow-xl ${
                 selectedGuide === guide.id
-                  ? "border-blue-500 shadow-blue-100"
-                  : "border-gray-200 hover:border-gray-300"
+                  ? "border-primary shadow-primary/20"
+                  : "border-border hover:border-border/80"
               }`}
             >
               {/* Guide Header */}
@@ -150,35 +145,49 @@ export default function PreparationGuidesPage() {
               <div className="p-6">
                 {/* Sections/Categories/Topics */}
                 <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-3">
-                    {guide.sections ? "Sections" : guide.categories ? "Categories" : "Topics"}
+                  <h4 className="font-semibold text-foreground mb-3">
+                    {guide.sections
+                      ? "Sections"
+                      : guide.categories
+                      ? "Categories"
+                      : "Topics"}
                   </h4>
                   <ul className="space-y-2">
-                    {(guide.sections || guide.categories || guide.topics)?.map((item, index) => (
-                      <li key={index} className="flex items-center text-sm text-gray-600">
-                        <svg
-                          className="w-4 h-4 text-blue-500 mr-2 flex-shrink-0"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
+                    {(guide.sections || guide.categories || guide.topics)?.map(
+                      (item, index) => (
+                        <li
+                          key={index}
+                          className="flex items-center text-sm text-muted-foreground"
                         >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        {item}
-                      </li>
-                    ))}
+                          <svg
+                            className="w-4 h-4 text-blue-500 mr-2 flex-shrink-0"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          {item}
+                        </li>
+                      )
+                    )}
                   </ul>
                 </div>
 
                 {/* Features */}
                 <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-3">Key Features</h4>
+                  <h4 className="font-semibold text-foreground mb-3">
+                    Key Features
+                  </h4>
                   <div className="grid grid-cols-2 gap-2">
                     {guide.features.map((feature, index) => (
-                      <div key={index} className="flex items-center text-sm text-gray-600">
+                      <div
+                        key={index}
+                        className="flex items-center text-sm text-muted-foreground"
+                      >
                         <span className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
                         {feature}
                       </div>
@@ -210,10 +219,11 @@ export default function PreparationGuidesPage() {
               {t("studyPlans.title")} + {t("preparationGuides.title")}
             </h2>
             <p className="text-xl text-gray-600">
-              Combine structured study plans with comprehensive preparation guides for maximum effectiveness
+              Combine structured study plans with comprehensive preparation
+              guides for maximum effectiveness
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center p-6 bg-gradient-to-br from-red-50 to-pink-50 rounded-lg">
               <div className="text-3xl mb-4">⚡</div>
@@ -230,7 +240,7 @@ export default function PreparationGuidesPage() {
                 {t("common.learnMore")}
               </Link>
             </div>
-            
+
             <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg">
               <div className="text-3xl mb-4">📅</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -246,7 +256,7 @@ export default function PreparationGuidesPage() {
                 {t("common.learnMore")}
               </Link>
             </div>
-            
+
             <div className="text-center p-6 bg-gradient-to-br from-green-50 to-teal-50 rounded-lg">
               <div className="text-3xl mb-4">🎯</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -268,14 +278,13 @@ export default function PreparationGuidesPage() {
         {/* Success Stories */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 mb-12 text-white">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4">
-              Success Stories
-            </h2>
+            <h2 className="text-3xl font-bold mb-4">Success Stories</h2>
             <p className="text-xl opacity-90">
-              Join thousands of developers who have successfully landed their dream jobs
+              Join thousands of developers who have successfully landed their
+              dream jobs
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="text-4xl mb-4">📈</div>
@@ -302,7 +311,8 @@ export default function PreparationGuidesPage() {
               Ready to Ace Your Interview?
             </h2>
             <p className="text-xl text-gray-600 mb-6">
-              Start your preparation journey today with our comprehensive guides and structured study plans
+              Start your preparation journey today with our comprehensive guides
+              and structured study plans
             </p>
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link

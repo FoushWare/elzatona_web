@@ -1,0 +1,1 @@
+# as i have interview and i am lazy i want to have feature that for everything in the website to have icon that can play text to speech to read the text for me and have also icon to play with solutin if there is a question and we provide solution for it
