@@ -542,9 +542,22 @@ export default function StudyPlansPage() {
             Interactive Study Plans
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Choose and customize your study plan. Start learning with structured
-            content from GreatFrontend.com
+            Time-based learning schedules with daily tasks, progress tracking, and structured content
           </p>
+          <div className="mt-6 flex justify-center space-x-4">
+            <Link
+              href="/learning-paths"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              📚 Learning Paths
+            </Link>
+            <Link
+              href="/preparation-guides"
+              className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              🎯 Preparation Guides
+            </Link>
+          </div>
         </div>
 
         {/* Active Plan Banner */}

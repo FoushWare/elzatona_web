@@ -106,8 +106,22 @@ export default function PreparationGuidesPage() {
             {t("preparationGuides.title")}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t("preparationGuides.description")}
+            Interview preparation strategies, question sets, and methodologies to ace your frontend interviews
           </p>
+          <div className="mt-6 flex justify-center space-x-4">
+            <Link
+              href="/learning-paths"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              📚 Learning Paths
+            </Link>
+            <Link
+              href="/study-plans"
+              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+            >
+              📅 Study Plans
+            </Link>
+          </div>
         </div>
 
         {/* Guides Grid */}
