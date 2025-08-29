@@ -8,22 +8,26 @@ export default function LearningPathsPage() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     "beginner" | "intermediate" | "advanced" | "all"
   >("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const filteredPaths = learningPaths.filter(
     (path) =>
-      selectedDifficulty === "all" || path.difficulty === selectedDifficulty
+      (selectedDifficulty === "all" || path.difficulty === selectedDifficulty) &&
+      (selectedCategory === "all" || path.category === selectedCategory)
   );
+
+  const categories = ["all", "javascript", "react", "css", "system-design", "tools"];
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "beginner":
-        return "text-green-600 bg-green-100";
+        return "text-green-600 bg-green-100 dark:bg-green-900/20 dark:text-green-400";
       case "intermediate":
-        return "text-yellow-600 bg-yellow-100";
+        return "text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400";
       case "advanced":
-        return "text-red-600 bg-red-100";
+        return "text-red-600 bg-red-100 dark:bg-red-900/20 dark:text-red-400";
       default:
-        return "text-gray-600 bg-gray-100";
+        return "text-gray-600 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400";
     }
   };
 
@@ -40,52 +44,119 @@ export default function LearningPathsPage() {
     }
   };
 
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "javascript":
+        return "⚡";
+      case "react":
+        return "⚛️";
+      case "css":
+        return "🎨";
+      case "system-design":
+        return "🏗️";
+      case "tools":
+        return "🛠️";
+      default:
+        return "📚";
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Learning Paths
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Structured learning journeys to master frontend development
-              concepts
-            </p>
+    <div className="min-h-screen bg-background py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
+            Learning Paths
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Curated educational journeys to master frontend development skills through carefully selected resources
+          </p>
+          <div className="mt-6 flex justify-center space-x-4">
+            <Link
+              href="/study-plans"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              📅 View Study Plans
+            </Link>
+            <Link
+              href="/preparation-guides"
+              className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              🎯 Preparation Guides
+            </Link>
           </div>
         </div>
-      </div>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Difficulty Filter */}
-        <div className="mb-8">
-          <div className="flex justify-center space-x-4">
-            {["all", "beginner", "intermediate", "advanced"].map(
-              (difficulty) => (
-                <button
-                  key={difficulty}
-                  onClick={() =>
-                    setSelectedDifficulty(
-                      difficulty as
-                        | "beginner"
-                        | "intermediate"
-                        | "advanced"
-                        | "all"
-                    )
-                  }
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                    selectedDifficulty === difficulty
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-                  }`}
-                >
-                  {difficulty === "all"
-                    ? "All Levels"
-                    : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-                </button>
-              )
-            )}
+        {/* Statistics */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">{learningPaths.length}</div>
+            <div className="text-card-foreground font-medium">Learning Paths</div>
+          </div>
+          <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
+            <div className="text-3xl font-bold text-green-600 mb-2">
+              {learningPaths.reduce((sum, path) => sum + path.estimatedTime, 0)}
+            </div>
+            <div className="text-card-foreground font-medium">Total Hours</div>
+          </div>
+          <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
+            <div className="text-3xl font-bold text-purple-600 mb-2">
+              {learningPaths.reduce((sum, path) => sum + path.resources.length, 0)}
+            </div>
+            <div className="text-card-foreground font-medium">Total Resources</div>
+          </div>
+          <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
+            <div className="text-3xl font-bold text-orange-600 mb-2">
+              {categories.length - 1}
+            </div>
+            <div className="text-card-foreground font-medium">Categories</div>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-card-foreground mb-2">
+                Difficulty Level
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {["all", "beginner", "intermediate", "advanced"].map((difficulty) => (
+                  <button
+                    key={difficulty}
+                    onClick={() => setSelectedDifficulty(difficulty as any)}
+                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                      selectedDifficulty === difficulty
+                        ? "bg-blue-600 text-white"
+                        : "bg-muted text-muted-foreground hover:bg-muted/80"
+                    }`}
+                  >
+                    {difficulty === "all" ? "All Levels" : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-card-foreground mb-2">
+                Category
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                      selectedCategory === category
+                        ? "bg-purple-600 text-white"
+                        : "bg-muted text-muted-foreground hover:bg-muted/80"
+                    }`}
+                  >
+                    {category === "all" ? "All Categories" : category.charAt(0).toUpperCase() + category.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -94,32 +165,29 @@ export default function LearningPathsPage() {
           {filteredPaths.map((path) => (
             <div
               key={path.id}
-              className="bg-white rounded-lg shadow-sm border p-6"
+              className="bg-card rounded-lg shadow-sm border border-border p-6 hover:shadow-md transition-shadow"
             >
               {/* Header */}
               <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {path.title}
-                  </h3>
-                  <p className="text-gray-600 mb-3">{path.description}</p>
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">{getCategoryIcon(path.category)}</span>
+                  <div>
+                    <h3 className="text-xl font-semibold text-foreground mb-1">
+                      {path.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm">{path.description}</p>
+                  </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-2xl">
-                    {getDifficultyIcon(path.difficulty)}
-                  </span>
-                  <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(
-                      path.difficulty
-                    )}`}
-                  >
+                  <span className="text-xl">{getDifficultyIcon(path.difficulty)}</span>
+                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(path.difficulty)}`}>
                     {path.difficulty}
                   </span>
                 </div>
               </div>
 
               {/* Stats */}
-              <div className="flex items-center space-x-6 mb-6 text-sm text-gray-600">
+              <div className="flex items-center space-x-6 mb-6 text-sm text-muted-foreground">
                 <div className="flex items-center space-x-1">
                   <span>📚</span>
                   <span>{path.resources.length} resources</span>
@@ -128,36 +196,45 @@ export default function LearningPathsPage() {
                   <span>⏱️</span>
                   <span>{path.estimatedTime} hours</span>
                 </div>
+                <div className="flex items-center space-x-1">
+                  <span>🎯</span>
+                  <span>{path.targetSkills.length} skills</span>
+                </div>
               </div>
 
               {/* Target Skills */}
               <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">
+                <h4 className="text-sm font-medium text-card-foreground mb-2">
                   Skills you'll learn:
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {path.targetSkills.map((skill) => (
+                  {path.targetSkills.slice(0, 4).map((skill) => (
                     <span
                       key={skill}
-                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
                     >
                       {skill}
                     </span>
                   ))}
+                  {path.targetSkills.length > 4 && (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                      +{path.targetSkills.length - 4} more
+                    </span>
+                  )}
                 </div>
               </div>
 
               {/* Prerequisites */}
               {path.prerequisites && path.prerequisites.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                  <h4 className="text-sm font-medium text-card-foreground mb-2">
                     Prerequisites:
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {path.prerequisites.map((prereq) => (
                       <span
                         key={prereq}
-                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
+                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
                       >
                         {prereq}
                       </span>
@@ -168,8 +245,8 @@ export default function LearningPathsPage() {
 
               {/* Resources Preview */}
               <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">
-                  Resources in this path:
+                <h4 className="text-sm font-medium text-card-foreground mb-2">
+                  Featured Resources:
                 </h4>
                 <div className="space-y-2">
                   {path.resources.slice(0, 3).map((resourceId) => {
@@ -177,7 +254,7 @@ export default function LearningPathsPage() {
                     return resource ? (
                       <div
                         key={resourceId}
-                        className="flex items-center space-x-2 text-sm text-gray-600"
+                        className="flex items-center space-x-2 text-sm text-muted-foreground"
                       >
                         <span>📄</span>
                         <span className="truncate">{resource.title}</span>
@@ -185,7 +262,7 @@ export default function LearningPathsPage() {
                     ) : null;
                   })}
                   {path.resources.length > 3 && (
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-muted-foreground">
                       +{path.resources.length - 3} more resources
                     </div>
                   )}
@@ -206,15 +283,58 @@ export default function LearningPathsPage() {
         {/* Empty State */}
         {filteredPaths.length === 0 && (
           <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">📚</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-xl font-semibold text-foreground mb-2">
               No learning paths found
             </h3>
-            <p className="text-gray-600">
-              Try selecting a different difficulty level
+            <p className="text-muted-foreground mb-4">
+              Try adjusting your filters or check out our other learning resources
             </p>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={() => {
+                  setSelectedDifficulty("all");
+                  setSelectedCategory("all");
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Clear Filters
+              </button>
+              <Link
+                href="/study-plans"
+                className="px-4 py-2 border border-border text-foreground rounded-lg hover:bg-muted transition-colors"
+              >
+                View Study Plans
+              </Link>
+            </div>
           </div>
         )}
+
+        {/* Call to Action */}
+        <div className="mt-16 text-center">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-white">
+            <h2 className="text-3xl font-bold mb-4">
+              Ready to Start Learning?
+            </h2>
+            <p className="text-xl mb-6 opacity-90">
+              Choose your learning path and begin your frontend development journey
+            </p>
+            <div className="flex justify-center space-x-4">
+              <Link
+                href="/study-plans"
+                className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors duration-200"
+              >
+                📅 Study Plans
+              </Link>
+              <Link
+                href="/preparation-guides"
+                className="border-2 border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors duration-200"
+              >
+                🎯 Preparation Guides
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

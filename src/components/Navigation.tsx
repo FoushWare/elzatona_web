@@ -45,10 +45,10 @@ export default function Navigation() {
     {
       label: "Learn",
       items: [
-        { href: "/resources", label: "External Resources" },
-        { href: "/learning-paths", label: "Learning Paths" },
-        { href: "/study-plans", label: "Study Plans" },
-        { href: "/preparation-guides", label: "Preparation Guides" },
+        { href: "/learning-paths", label: "📚 Learning Paths" },
+        { href: "/study-plans", label: "📅 Study Plans" },
+        { href: "/preparation-guides", label: "🎯 Preparation Guides" },
+        { href: "/resources", label: "📖 External Resources" },
         { href: "/git-tips", label: "Git Tips & Tricks" },
         {
           href: "/authentication-strategies",
