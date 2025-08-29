@@ -1,10 +1,11 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Noto_Naskh_Arabic } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
-// import LayoutWrapper from "@/components/LayoutWrapper";
+import { ThemeProvider } from "@/hooks/useDarkMode";
 
-const geistSans = Geist({
+const geist = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
@@ -14,32 +15,32 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "GreatFrontendHub - Practice Frontend Development",
-  description:
-    "Master frontend development with hands-on coding challenges. Practice HTML, CSS, and JavaScript with real-world projects.",
-  keywords:
-    "frontend development, coding challenges, HTML, CSS, JavaScript, web development, programming practice",
-  authors: [{ name: "GreatFrontendHub Team" }],
-};
+const notoNaskhArabic = Noto_Naskh_Arabic({
+  variable: "--font-arabic",
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700"],
+});
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
+export const metadata: Metadata = {
+  title: "Frontend KodDev - Ace Frontend Development Interviews",
+  description:
+    "Master frontend development interviews with comprehensive coding challenges, 500+ interview questions, and system design resources. Ace your frontend interviews with Frontend KodDev.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geist.variable} ${geistMono.variable} ${notoNaskhArabic.variable} antialiased bg-background text-foreground`}
       >
-        <Navigation />
-        {children}
+        <ThemeProvider>
+          <Navigation />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

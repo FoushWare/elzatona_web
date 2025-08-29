@@ -22,7 +22,7 @@ export default function InternalResourceCard({
       case "advanced":
         return "text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/20";
       default:
-        return "text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800";
+        return "text-muted-foreground bg-muted";
     }
   };
 
@@ -35,7 +35,7 @@ export default function InternalResourceCard({
       case "advanced":
         return "bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800";
       default:
-        return "bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700";
+        return "bg-muted border-border";
     }
   };
 

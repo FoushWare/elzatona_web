@@ -30,7 +30,7 @@ export default function ResourceCard({
       case "advanced":
         return "text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/20";
       default:
-        return "text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800";
+        return "text-muted-foreground bg-muted";
     }
   };
 
