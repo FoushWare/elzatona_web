@@ -37,6 +37,7 @@ export default function Navigation() {
       label: "Practice",
       items: [
         { href: "/coding", label: "Coding" },
+        { href: "/system-design", label: "System Design" },
         { href: "/practice/fundamentals", label: "Frontend Fundamentals" },
         { href: "/practice/advanced", label: "Advanced Topics" },
       ],
