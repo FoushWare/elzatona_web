@@ -92,17 +92,17 @@ export default function CodeEditor({
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-900">
+    <div className="h-full flex flex-col bg-card border border-border rounded-lg overflow-hidden">
       {/* Editor Header */}
-      <div className="bg-gray-800 border-b border-gray-700">
+      <div className="bg-muted border-b border-border">
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex space-x-1">
             <button
               onClick={() => setActiveTab("html")}
               className={`px-3 py-1 rounded-t-lg text-sm font-medium transition-colors ${
                 activeTab === "html"
-                  ? "bg-gray-700 text-white"
-                  : "bg-gray-600 text-gray-300 hover:bg-gray-600"
+                  ? "bg-background text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
               }`}
             >
               HTML
@@ -111,8 +111,8 @@ export default function CodeEditor({
               onClick={() => setActiveTab("css")}
               className={`px-3 py-1 rounded-t-lg text-sm font-medium transition-colors ${
                 activeTab === "css"
-                  ? "bg-gray-700 text-white"
-                  : "bg-gray-600 text-gray-300 hover:bg-gray-600"
+                  ? "bg-background text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
               }`}
             >
               CSS
@@ -121,8 +121,8 @@ export default function CodeEditor({
               onClick={() => setActiveTab("javascript")}
               className={`px-3 py-1 rounded-t-lg text-sm font-medium transition-colors ${
                 activeTab === "javascript"
-                  ? "bg-gray-700 text-white"
-                  : "bg-gray-600 text-gray-300 hover:bg-gray-600"
+                  ? "bg-background text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
               }`}
             >
               JavaScript

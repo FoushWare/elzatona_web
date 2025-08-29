@@ -34,7 +34,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
         <div className="container mx-auto px-4 py-16">
@@ -73,24 +73,26 @@ export default function Home() {
       {/* Categories Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl font-bold text-center mb-12 text-foreground">
             Choose Your Path
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {categories.map((category) => (
               <div
                 key={category.name}
-                className="bg-white rounded-lg shadow-md p-8 hover:shadow-lg transition-shadow"
+                className="bg-card rounded-lg shadow-md p-8 hover:shadow-lg transition-shadow border border-border"
               >
                 <div className="text-center">
-                  <h3 className="text-2xl font-semibold mb-4">
+                  <h3 className="text-2xl font-semibold mb-4 text-card-foreground">
                     {category.title}
                   </h3>
-                  <p className="text-gray-600 mb-6">{category.description}</p>
+                  <p className="text-muted-foreground mb-6">
+                    {category.description}
+                  </p>
                   <div className="text-3xl font-bold text-blue-600 mb-4">
                     {category.count}
                   </div>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-muted-foreground mb-6">
                     challenges available
                   </p>
                   <Link
@@ -107,9 +109,9 @@ export default function Home() {
       </section>
 
       {/* Featured Challenges Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-card">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl font-bold text-center mb-12 text-card-foreground">
             Featured Challenges
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -135,40 +137,44 @@ export default function Home() {
       </section>
 
       {/* Learning Resources Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl font-bold text-center mb-12 text-foreground">
             Comprehensive Learning Resources
           </h2>
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-purple-100 dark:bg-purple-900/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">📚</span>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Curated Resources</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-4 text-foreground">
+                Curated Resources
+              </h3>
+              <p className="text-muted-foreground">
                 Access carefully selected articles, videos, tools, and courses
                 from the best sources in frontend development.
               </p>
             </div>
             <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-green-100 dark:bg-green-900/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🎯</span>
               </div>
-              <h3 className="text-xl font-semibold mb-4">
+              <h3 className="text-xl font-semibold mb-4 text-foreground">
                 Structured Learning
               </h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 Follow curated learning paths designed to take you from beginner
                 to advanced frontend developer.
               </p>
             </div>
             <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-blue-100 dark:bg-blue-900/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🔍</span>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Easy Discovery</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-4 text-foreground">
+                Easy Discovery
+              </h3>
+              <p className="text-muted-foreground">
                 Find exactly what you need with advanced filtering by category,
                 difficulty, and resource type.
               </p>
@@ -198,14 +204,14 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-muted">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl font-bold text-center mb-12 text-foreground">
             Why Choose GreatFrontendHub?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-blue-100 dark:bg-blue-900/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
                   className="w-8 h-8 text-blue-600"
                   fill="none"
@@ -220,14 +226,16 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Learn by Doing</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-4 text-foreground">
+                Learn by Doing
+              </h3>
+              <p className="text-muted-foreground">
                 Practice with real-world coding challenges that build your
                 skills progressively.
               </p>
             </div>
             <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-green-100 dark:bg-green-900/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
                   className="w-8 h-8 text-green-600"
                   fill="none"
@@ -242,14 +250,16 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Instant Feedback</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-4 text-foreground">
+                Instant Feedback
+              </h3>
+              <p className="text-muted-foreground">
                 Get immediate feedback on your code with live preview and
                 automated testing.
               </p>
             </div>
             <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-purple-100 dark:bg-purple-900/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
                   className="w-8 h-8 text-purple-600"
                   fill="none"
@@ -264,8 +274,10 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-4">Expert Solutions</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-4 text-foreground">
+                Expert Solutions
+              </h3>
+              <p className="text-muted-foreground">
                 Learn from detailed explanations and best practices for each
                 challenge.
               </p>
