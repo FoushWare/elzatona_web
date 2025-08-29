@@ -24,13 +24,13 @@ export default function ResourceCard({
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "beginner":
-        return "text-green-600 bg-green-100";
+        return "text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/20";
       case "intermediate":
-        return "text-yellow-600 bg-yellow-100";
+        return "text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/20";
       case "advanced":
-        return "text-red-600 bg-red-100";
+        return "text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/20";
       default:
-        return "text-gray-600 bg-gray-100";
+        return "text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800";
     }
   };
 
@@ -67,7 +67,7 @@ export default function ResourceCard({
 
   return (
     <div
-      className={`bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow cursor-pointer ${
+      className={`bg-card rounded-lg shadow-sm border border-border hover:shadow-md transition-shadow cursor-pointer ${
         featured ? "ring-2 ring-blue-500" : ""
       }`}
       onClick={handleCardClick}
@@ -77,14 +77,14 @@ export default function ResourceCard({
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center space-x-2">
             <span className="text-2xl">{getTypeIcon(resource.type)}</span>
-            <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+            <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
               {resource.type}
             </span>
           </div>
           <button
             onClick={handleBookmark}
-            className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-              isBookmarked ? "text-red-500" : "text-gray-400"
+            className={`p-2 rounded-full hover:bg-muted transition-colors ${
+              isBookmarked ? "text-red-500" : "text-muted-foreground"
             }`}
           >
             <svg
@@ -104,12 +104,12 @@ export default function ResourceCard({
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+        <h3 className="text-lg font-semibold text-card-foreground mb-2 line-clamp-2">
           {resource.title}
         </h3>
 
         {/* Description */}
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+        <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
           {resource.description}
         </p>
 
@@ -118,13 +118,13 @@ export default function ResourceCard({
           {resource.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground"
             >
               {tag}
             </span>
           ))}
           {resource.tags.length > 3 && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
               +{resource.tags.length - 3} more
             </span>
           )}
@@ -137,7 +137,9 @@ export default function ResourceCard({
             {category && (
               <div className="flex items-center space-x-1">
                 <span className="text-sm">{category.icon}</span>
-                <span className="text-xs text-gray-600">{category.name}</span>
+                <span className="text-xs text-muted-foreground">
+                  {category.name}
+                </span>
               </div>
             )}
 
@@ -153,7 +155,7 @@ export default function ResourceCard({
 
           {/* Read Time */}
           {resource.estimatedReadTime && (
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-muted-foreground">
               {resource.estimatedReadTime} min read
             </span>
           )}
@@ -162,7 +164,7 @@ export default function ResourceCard({
         {/* Featured Badge */}
         {featured && (
           <div className="absolute top-2 right-2">
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300">
               ⭐ Featured
             </span>
           </div>

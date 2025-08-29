@@ -14,37 +14,37 @@ export default function ChallengeCard({
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300";
       case "medium":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300";
       case "hard":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300";
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "html":
-        return "bg-orange-100 text-orange-800";
+        return "bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-300";
       case "css":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300";
       case "javascript":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300";
     }
   };
 
   return (
     <div
-      className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer border border-gray-200"
+      className="bg-card rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer border border-border"
       onClick={onClick}
     >
       <div className="p-6">
         <div className="flex items-start justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <h3 className="text-lg font-semibold text-card-foreground mb-2">
             {challenge.title}
           </h3>
           <div className="flex gap-2">
@@ -65,7 +65,7 @@ export default function ChallengeCard({
           </div>
         </div>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+        <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
           {challenge.description}
         </p>
 
@@ -73,19 +73,19 @@ export default function ChallengeCard({
           {challenge.tags.slice(0, 3).map((tag, index) => (
             <span
               key={index}
-              className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+              className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded"
             >
               {tag}
             </span>
           ))}
           {challenge.tags.length > 3 && (
-            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">
+            <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">
               +{challenge.tags.length - 3}
             </span>
           )}
         </div>
 
-        <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span>
             Created: {new Date(challenge.createdAt).toLocaleDateString()}
           </span>

@@ -32,18 +32,20 @@ export default function QuestionsPage() {
     // Map categories to tabs
     const categoryToTab = {
       "JavaScript Functions": "coding",
-      "User Interface Coding": "coding", 
+      "User Interface Coding": "coding",
       "Algorithmic Coding": "coding",
       "System Design": "system-design",
-      "React": "coding",
-      "CSS": "coding",
+      React: "coding",
+      CSS: "coding",
       "Web APIs": "coding",
-      "Testing": "quiz"
+      Testing: "quiz",
     };
-    
-    const questionTab = categoryToTab[question.category as keyof typeof categoryToTab] || "coding";
+
+    const questionTab =
+      categoryToTab[question.category as keyof typeof categoryToTab] ||
+      "coding";
     if (questionTab !== activeTab) return false;
-    
+
     if (
       searchTerm &&
       !question.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -252,6 +254,24 @@ export default function QuestionsPage() {
           ))}
         </div>
 
+        {/* Special Collections */}
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-white mb-3">
+            Special Collections
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => router.push("/questions/javascript")}
+              className="flex items-center space-x-2 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+              </svg>
+              <span>JavaScript Interview Questions (155)</span>
+            </button>
+          </div>
+        </div>
+
         {/* Coding Sub-categories */}
         {activeTab === "coding" && (
           <div className="flex flex-wrap gap-2 mb-6">
@@ -345,12 +365,15 @@ export default function QuestionsPage() {
                     <div className="flex items-center space-x-4">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          question.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
-                          question.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
+                          question.difficulty === "easy"
+                            ? "bg-green-100 text-green-800"
+                            : question.difficulty === "medium"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
                         }`}
                       >
-                        {question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1)}
+                        {question.difficulty.charAt(0).toUpperCase() +
+                          question.difficulty.slice(1)}
                       </span>
                       <span className="text-gray-400 text-sm">
                         {question.estimatedTime} min
@@ -397,7 +420,7 @@ export default function QuestionsPage() {
           <div className="w-80 space-y-6">
             {/* Topics Filter */}
             <div className="bg-gray-800 rounded-lg p-4">
-                              <h3 className="text-lg font-semibold mb-4">Filter by Topics</h3>
+              <h3 className="text-lg font-semibold mb-4">Filter by Topics</h3>
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {availableTopics.slice(0, 20).map((topic) => (
                   <label
@@ -418,7 +441,9 @@ export default function QuestionsPage() {
 
             {/* Companies Filter */}
             <div className="bg-gray-800 rounded-lg p-4">
-                              <h3 className="text-lg font-semibold mb-4">Filter by Companies</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                Filter by Companies
+              </h3>
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {availableCompanies.map((company) => (
                   <label

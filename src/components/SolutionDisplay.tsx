@@ -29,8 +29,8 @@ export default function SolutionDisplay({
   const totalTests = testResults.length;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-card rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden border border-border">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4">
           <div className="flex items-center justify-between">
@@ -66,14 +66,14 @@ export default function SolutionDisplay({
         {/* Content */}
         <div className="flex-1 overflow-hidden">
           {/* Tabs */}
-          <div className="border-b border-gray-200">
+          <div className="border-b border-border">
             <nav className="flex space-x-8 px-6">
               <button
                 onClick={() => setActiveTab("solution")}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === "solution"
                     ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
                 }`}
               >
                 Official Solution
@@ -83,7 +83,7 @@ export default function SolutionDisplay({
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === "comparison"
                     ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
                 }`}
               >
                 Code Comparison
@@ -93,7 +93,7 @@ export default function SolutionDisplay({
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === "explanation"
                     ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
                 }`}
               >
                 Explanation
@@ -106,12 +106,12 @@ export default function SolutionDisplay({
             {activeTab === "solution" && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  <h3 className="text-lg font-semibold text-card-foreground mb-4">
                     Official Solution
                   </h3>
                   <div className="space-y-4">
                     <div>
-                      <h4 className="text-md font-medium text-gray-900 mb-2">
+                      <h4 className="text-md font-medium text-card-foreground mb-2">
                         HTML
                       </h4>
                       <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm">
@@ -119,7 +119,7 @@ export default function SolutionDisplay({
                       </pre>
                     </div>
                     <div>
-                      <h4 className="text-md font-medium text-gray-900 mb-2">
+                      <h4 className="text-md font-medium text-card-foreground mb-2">
                         CSS
                       </h4>
                       <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm">
@@ -127,7 +127,7 @@ export default function SolutionDisplay({
                       </pre>
                     </div>
                     <div>
-                      <h4 className="text-md font-medium text-gray-900 mb-2">
+                      <h4 className="text-md font-medium text-card-foreground mb-2">
                         JavaScript
                       </h4>
                       <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm">
@@ -141,38 +141,38 @@ export default function SolutionDisplay({
 
             {activeTab === "comparison" && (
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <h3 className="text-lg font-semibold text-card-foreground mb-4">
                   Code Comparison
                 </h3>
 
                 <div className="grid grid-cols-2 gap-6">
                   {/* Your Code */}
                   <div>
-                    <h4 className="text-md font-medium text-gray-900 mb-2">
+                    <h4 className="text-md font-medium text-card-foreground mb-2">
                       Your Code
                     </h4>
                     <div className="space-y-3">
                       <div>
-                        <h5 className="text-sm font-medium text-gray-700 mb-1">
+                        <h5 className="text-sm font-medium text-muted-foreground mb-1">
                           HTML
                         </h5>
-                        <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
+                        <pre className="bg-muted p-3 rounded text-xs overflow-x-auto text-muted-foreground">
                           <code>{userCode.html}</code>
                         </pre>
                       </div>
                       <div>
-                        <h5 className="text-sm font-medium text-gray-700 mb-1">
+                        <h5 className="text-sm font-medium text-muted-foreground mb-1">
                           CSS
                         </h5>
-                        <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
+                        <pre className="bg-muted p-3 rounded text-xs overflow-x-auto text-muted-foreground">
                           <code>{userCode.css}</code>
                         </pre>
                       </div>
                       <div>
-                        <h5 className="text-sm font-medium text-gray-700 mb-1">
+                        <h5 className="text-sm font-medium text-muted-foreground mb-1">
                           JavaScript
                         </h5>
-                        <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
+                        <pre className="bg-muted p-3 rounded text-xs overflow-x-auto text-muted-foreground">
                           <code>{userCode.javascript}</code>
                         </pre>
                       </div>
@@ -181,31 +181,31 @@ export default function SolutionDisplay({
 
                   {/* Solution Code */}
                   <div>
-                    <h4 className="text-md font-medium text-gray-900 mb-2">
+                    <h4 className="text-md font-medium text-card-foreground mb-2">
                       Solution Code
                     </h4>
                     <div className="space-y-3">
                       <div>
-                        <h5 className="text-sm font-medium text-gray-700 mb-1">
+                        <h5 className="text-sm font-medium text-muted-foreground mb-1">
                           HTML
                         </h5>
-                        <pre className="bg-green-50 p-3 rounded text-xs overflow-x-auto border border-green-200">
+                        <pre className="bg-green-50 dark:bg-green-900/20 p-3 rounded text-xs overflow-x-auto border border-green-200 dark:border-green-800">
                           <code>{challenge.solution.html}</code>
                         </pre>
                       </div>
                       <div>
-                        <h5 className="text-sm font-medium text-gray-700 mb-1">
+                        <h5 className="text-sm font-medium text-muted-foreground mb-1">
                           CSS
                         </h5>
-                        <pre className="bg-green-50 p-3 rounded text-xs overflow-x-auto border border-green-200">
+                        <pre className="bg-green-50 dark:bg-green-900/20 p-3 rounded text-xs overflow-x-auto border border-green-200 dark:border-green-800">
                           <code>{challenge.solution.css}</code>
                         </pre>
                       </div>
                       <div>
-                        <h5 className="text-sm font-medium text-gray-700 mb-1">
+                        <h5 className="text-sm font-medium text-muted-foreground mb-1">
                           JavaScript
                         </h5>
-                        <pre className="bg-green-50 p-3 rounded text-xs overflow-x-auto border border-green-200">
+                        <pre className="bg-green-50 dark:bg-green-900/20 p-3 rounded text-xs overflow-x-auto border border-green-200 dark:border-green-800">
                           <code>{challenge.solution.javascript}</code>
                         </pre>
                       </div>
@@ -217,26 +217,26 @@ export default function SolutionDisplay({
 
             {activeTab === "explanation" && (
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <h3 className="text-lg font-semibold text-card-foreground mb-4">
                   Solution Explanation
                 </h3>
 
-                <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                  <h4 className="text-md font-semibold text-blue-900 mb-3">
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <h4 className="text-md font-semibold text-blue-900 dark:text-blue-100 mb-3">
                     How the Solution Works
                   </h4>
                   <div className="prose prose-sm max-w-none">
-                    <p className="text-blue-800 leading-relaxed">
+                    <p className="text-blue-800 dark:text-blue-200 leading-relaxed">
                       {challenge.explanation}
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h4 className="text-md font-semibold text-gray-900 mb-3">
+                <div className="bg-muted p-6 rounded-lg">
+                  <h4 className="text-md font-semibold text-card-foreground mb-3">
                     Key Concepts
                   </h4>
-                  <ul className="space-y-2 text-gray-700">
+                  <ul className="space-y-2 text-muted-foreground">
                     {challenge.tags.map((tag, index) => (
                       <li key={index} className="flex items-center">
                         <svg
@@ -256,11 +256,11 @@ export default function SolutionDisplay({
                   </ul>
                 </div>
 
-                <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
-                  <h4 className="text-md font-semibold text-yellow-900 mb-3">
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <h4 className="text-md font-semibold text-yellow-900 dark:text-yellow-100 mb-3">
                     Best Practices
                   </h4>
-                  <ul className="space-y-2 text-yellow-800">
+                  <ul className="space-y-2 text-yellow-800 dark:text-yellow-200">
                     <li>
                       • Use semantic HTML elements for better accessibility
                     </li>
@@ -280,15 +280,15 @@ export default function SolutionDisplay({
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 px-6 py-4 bg-gray-50">
+        <div className="border-t border-border px-6 py-4 bg-muted">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               {allTestsPassed ? (
-                <span className="text-green-600 font-medium">
+                <span className="text-green-600 dark:text-green-400 font-medium">
                   🎉 Congratulations! You've completed this challenge!
                 </span>
               ) : (
-                <span className="text-yellow-600 font-medium">
+                <span className="text-yellow-600 dark:text-yellow-400 font-medium">
                   Keep practicing! You're making progress.
                 </span>
               )}
@@ -296,7 +296,7 @@ export default function SolutionDisplay({
             <div className="flex space-x-3">
               <button
                 onClick={onClose}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                className="px-4 py-2 bg-muted-foreground text-muted rounded-lg hover:bg-foreground hover:text-background transition-colors"
               >
                 Close
               </button>

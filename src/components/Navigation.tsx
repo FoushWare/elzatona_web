@@ -36,10 +36,9 @@ export default function Navigation() {
     {
       label: "Practice",
       items: [
-        { href: "/challenges", label: "Coding Challenges" },
-        { href: "/questions", label: "Practice Questions" },
-        { href: "/practice-questions", label: "All Practice Questions" },
-        { href: "/internal-resources", label: "Internal Resources" },
+        { href: "/coding", label: "Coding" },
+        { href: "/practice/fundamentals", label: "Frontend Fundamentals" },
+        { href: "/practice/advanced", label: "Advanced Topics" },
       ],
     },
     {
@@ -50,7 +49,10 @@ export default function Navigation() {
         { href: "/study-plans", label: "Study Plans" },
         { href: "/preparation-guides", label: "Preparation Guides" },
         { href: "/git-tips", label: "Git Tips & Tricks" },
-        { href: "/authentication-strategies", label: "Authentication Strategies" },
+        {
+          href: "/authentication-strategies",
+          label: "Authentication Strategies",
+        },
         { href: "/blog", label: "Blog & Articles" },
       ],
     },
@@ -64,7 +66,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 backdrop-blur-sm bg-white/95 dark:bg-gray-900/95">
+    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -87,8 +89,8 @@ export default function Navigation() {
                     href={item.href}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                       isActive(item.href)
-                        ? "text-blue-600 bg-blue-50 border border-blue-200"
-                        : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                        ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
+                        : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
                     }`}
                   >
                     {item.label}
@@ -103,8 +105,8 @@ export default function Navigation() {
                       }
                       className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${
                         openDropdown === item.label
-                          ? "text-blue-600 bg-blue-50 border border-blue-200"
-                          : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                          ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
+                          : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
                       }`}
                     >
                       <span>{item.label}</span>
@@ -126,7 +128,7 @@ export default function Navigation() {
                     </button>
 
                     {openDropdown === item.label && (
-                      <div className="absolute top-full left-0 mt-1 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                      <div className="absolute top-full left-0 mt-1 w-56 bg-card rounded-md shadow-lg border border-border z-50">
                         <div className="py-1">
                           {item.items?.map((subItem) => (
                             <Link
@@ -136,7 +138,7 @@ export default function Navigation() {
                               className={`block px-4 py-2 text-sm transition-colors ${
                                 isActive(subItem.href)
                                   ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20"
-                                  : "text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                  : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
                               }`}
                             >
                               {subItem.label}
@@ -156,7 +158,7 @@ export default function Navigation() {
             <DarkModeToggle />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden text-gray-600 hover:text-blue-600 p-2 rounded-md"
+              className="md:hidden text-muted-foreground hover:text-blue-600 p-2 rounded-md"
               aria-label="Toggle mobile menu"
             >
               <svg
@@ -187,7 +189,7 @@ export default function Navigation() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+          <div className="md:hidden border-t border-border bg-background">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
                 <div key={item.label}>
@@ -197,15 +199,15 @@ export default function Navigation() {
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
                         isActive(item.href)
-                          ? "text-blue-600 bg-blue-50 border border-blue-200"
-                          : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                          ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
+                          : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
                       }`}
                     >
                       {item.label}
                     </Link>
                   ) : (
                     <div>
-                      <div className="px-3 py-2 text-base font-medium text-gray-900 border-b border-gray-100">
+                      <div className="px-3 py-2 text-base font-medium text-foreground border-b border-border">
                         {item.label}
                       </div>
                       <div className="pl-4 space-y-1">
@@ -216,8 +218,8 @@ export default function Navigation() {
                             onClick={() => setIsMobileMenuOpen(false)}
                             className={`block px-3 py-2 rounded-md text-sm transition-colors ${
                               isActive(subItem.href)
-                                ? "text-blue-600 bg-blue-50 border border-blue-200"
-                                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                                ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
+                                : "text-muted-foreground hover:text-blue-600 hover:bg-muted"
                             }`}
                           >
                             {subItem.label}

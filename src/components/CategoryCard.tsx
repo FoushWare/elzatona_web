@@ -17,8 +17,8 @@ export default function CategoryCard({
     <div
       className={`p-4 rounded-lg border cursor-pointer transition-all ${
         isSelected
-          ? "bg-blue-50 border-blue-200 shadow-md"
-          : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-sm"
+          ? "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 shadow-md"
+          : "bg-card border-border hover:border-border/60 hover:shadow-sm"
       }`}
       onClick={onClick}
     >
@@ -35,7 +35,9 @@ export default function CategoryCard({
         {/* Name */}
         <h3
           className={`font-medium text-sm mb-1 ${
-            isSelected ? "text-blue-900" : "text-gray-900"
+            isSelected
+              ? "text-blue-900 dark:text-blue-100"
+              : "text-card-foreground"
           }`}
         >
           {category.name}
@@ -44,7 +46,9 @@ export default function CategoryCard({
         {/* Count */}
         <p
           className={`text-xs ${
-            isSelected ? "text-blue-600" : "text-gray-500"
+            isSelected
+              ? "text-blue-600 dark:text-blue-300"
+              : "text-muted-foreground"
           }`}
         >
           {category.count} resources
