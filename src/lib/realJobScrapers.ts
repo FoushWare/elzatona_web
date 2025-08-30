@@ -250,11 +250,11 @@ function getMockJobsForRealScraping(): RealJob[] {
       currency: "USD",
       type: "Full-time",
       datePosted: "2024-01-15",
-      link: "https://example.com/jobs/senior-react-developer",
+      link: "https://jsgurujobs.com/jobs?category=frontend",
       description: "Join our team and help build amazing React applications. We're looking for experienced developers who love clean code and great user experiences.",
       tags: ["React", "TypeScript", "Node.js", "CSS"],
       source: "Real Scraping",
-      sourceUrl: "https://example.com/jobs"
+      sourceUrl: "https://jsgurujobs.com/jobs?category=frontend"
     },
     {
       id: "real-2",
@@ -268,11 +268,11 @@ function getMockJobsForRealScraping(): RealJob[] {
       currency: "USD",
       type: "Full-time",
       datePosted: "2024-01-14",
-      link: "https://example.com/jobs/frontend-engineer",
+      link: "https://www.linkedin.com/jobs/search/?keywords=react%20developer",
       description: "Help us build the future of web applications. We need talented frontend engineers who are passionate about user experience.",
       tags: ["React", "JavaScript", "CSS", "HTML"],
       source: "Real Scraping",
-      sourceUrl: "https://example.com/jobs"
+      sourceUrl: "https://www.linkedin.com/jobs/search/?keywords=react%20developer"
     },
     {
       id: "real-3",
@@ -286,11 +286,11 @@ function getMockJobsForRealScraping(): RealJob[] {
       currency: "USD",
       type: "Remote",
       datePosted: "2024-01-13",
-      link: "https://example.com/jobs/react-developer-remote",
+      link: "https://weworkremotely.com/remote-jobs/search?term=react",
       description: "Join our remote-first team and work from anywhere. We're building amazing React applications for clients around the world.",
       tags: ["React", "Remote", "TypeScript", "Node.js"],
       source: "Real Scraping",
-      sourceUrl: "https://example.com/jobs"
+      sourceUrl: "https://weworkremotely.com/remote-jobs/search?term=react"
     }
   ];
 }
