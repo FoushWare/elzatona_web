@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Filter, Clock, MapPin, Building, DollarSign, Briefcase, Globe } from 'lucide-react';
+import { Search, Clock, MapPin, Building, DollarSign, Briefcase, Globe } from 'lucide-react';
 
 interface JobSource {
   name: string;
@@ -105,7 +105,6 @@ export default function JobsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<JobFilters>({
     sources: [],
     timeFilter: 'anytime',
@@ -181,12 +180,7 @@ export default function JobsPage() {
     return matchesSearch;
   });
 
-  const clearFilters = () => {
-    setSelectedTimeFilter('anytime');
-    setSelectedJobType('all');
-    setSelectedSource('all');
-    setSearchTerm('');
-  };
+
 
   const getSourceIcon = (sourceName: string) => {
     switch (sourceName) {
@@ -289,7 +283,7 @@ export default function JobsPage() {
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center">
               <div className="p-2 bg-orange-100 dark:bg-orange-900 rounded-lg">
-                <Filter className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+                <Globe className="h-6 w-6 text-orange-600 dark:text-orange-400" />
               </div>
               <div className="ml-4">
                 <p className="text-sm text-gray-600 dark:text-gray-400">Sources</p>
@@ -301,9 +295,9 @@ export default function JobsPage() {
 
         {/* Search and Filters */}
         <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4 mb-6">
+          <div className="mb-6">
             {/* Search */}
-            <div className="flex-1 relative">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <input
                 type="text"
@@ -313,53 +307,34 @@ export default function JobsPage() {
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
-            
-            {/* Filter Toggle */}
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-            >
-              <Filter className="h-5 w-5 mr-2" />
-              Filters
-            </button>
-            
-            {/* Clear Filters */}
-            <button
-              onClick={clearFilters}
-              className="px-4 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
-            >
-              Clear All
-            </button>
           </div>
 
           {/* Filters Panel */}
-          {showFilters && (
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6">
-              {/* Time Filter */}
-              <SegmentedControl
-                label="Time Filter"
-                options={timeFilterOptions}
-                value={selectedTimeFilter}
-                onChange={setSelectedTimeFilter}
-              />
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6">
+            {/* Time Filter */}
+            <SegmentedControl
+              label="Time Filter"
+              options={timeFilterOptions}
+              value={selectedTimeFilter}
+              onChange={setSelectedTimeFilter}
+            />
 
-              {/* Job Type */}
-              <SegmentedControl
-                label="Job Type"
-                options={jobTypeOptions}
-                value={selectedJobType}
-                onChange={setSelectedJobType}
-              />
+            {/* Job Type */}
+            <SegmentedControl
+              label="Job Type"
+              options={jobTypeOptions}
+              value={selectedJobType}
+              onChange={setSelectedJobType}
+            />
 
-              {/* Job Sources */}
-              <SegmentedControl
-                label="Job Sources"
-                options={sourceOptions}
-                value={selectedSource}
-                onChange={setSelectedSource}
-              />
-            </div>
-          )}
+            {/* Job Sources */}
+            <SegmentedControl
+              label="Job Sources"
+              options={sourceOptions}
+              value={selectedSource}
+              onChange={setSelectedSource}
+            />
+          </div>
         </div>
 
         {/* Error Message */}
