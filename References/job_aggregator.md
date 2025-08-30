@@ -313,6 +313,7 @@ fetchJobs(filters).then(data => setJobs(data));
 }, [filters]);
 
 return (
+
 <div className="container mx-auto px-4">
 <JobFilters filters={filters} onFilterChange={setFilters} />
 <JobList jobs={jobs} />
@@ -339,3 +340,81 @@ Performance Tracking: Monitor crawl times and success rates
 Error Handling: Implement robust error handling and notifications
 
 This enhanced PRD provides a clear roadmap for implementing a React job aggregator with dollar currency focus using Firecrawl, with specific technical details and implementation strategies.
+
+====
+
+General Job Boards:
+
+https://www.indeed.com/jobs?q=react+developer
+
+https://www.indeed.com/jobs?q=frontend+developer
+
+https://www.linkedin.com/jobs/search/?keywords=react%20developer
+
+https://www.linkedin.com/jobs/search/?keywords=frontend%20developer
+
+https://www.glassdoor.com/Job/react-developer-jobs-SRCH_KO0,14.htm
+
+https://www.glassdoor.com/Job/frontend-developer-jobs-SRCH_KO0,17.htm
+
+https://stackoverflow.com/jobs?q=react
+
+https://stackoverflow.com/jobs?q=frontend
+
+https://www.monster.com/jobs/search/?q=react-developer
+
+https://www.monster.com/jobs/search/?q=frontend-developer
+
+Tech-Focused:
+
+https://jsgurujobs.com/jobs?category=frontend
+
+https://jsgurujobs.com/jobs?skill=react
+
+https://angel.co/jobs?query=react%20developer
+
+https://angel.co/jobs?query=frontend%20developer
+
+https://www.hackerrank.com/jobs/search?q=react
+
+https://www.hackerrank.com/jobs/search?q=frontend
+
+Remote-Specific:
+
+https://weworkremotely.com/remote-jobs/search?term=react
+
+https://weworkremotely.com/remote-jobs/search?term=frontend
+
+https://remoteok.io/remote-react-jobs
+
+https://remoteok.io/remote-front-end-developer-jobs
+
+https://justremote.co/remote-react-jobs
+
+https://justremote.co/remote-frontend-jobs
+
+https://remote.co/remote-jobs/developer/?search=react
+
+https://remote.co/remote-jobs/developer/?search=frontend
+
+React-Specific:
+
+https://reactjobs.io/
+
+https://www.reactjobboard.com/
+
+https://reactcareers.com/
+
+Freelance/Contract:
+
+https://www.upwork.com/search/jobs/?q=react%20developer
+
+https://www.upwork.com/search/jobs/?q=frontend%20developer
+
+https://www.toptal.com/react/jobs
+
+https://www.toptal.com/front-end/jobs
+
+https://www.gun.io/work?q=react
+
+https://www.gun.io/work?q=frontend
