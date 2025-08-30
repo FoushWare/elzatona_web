@@ -42,18 +42,63 @@ const jobSources: JobSource[] = [
 ];
 
 const timeFilterOptions = [
-  { value: 'anytime', label: 'Any Time', icon: Clock },
-  { value: '24h', label: 'Last 24 Hours', icon: Clock },
-  { value: '7d', label: 'Last 7 Days', icon: Clock },
-  { value: '30d', label: 'Last 30 Days', icon: Clock }
+  { value: 'anytime', label: 'Any time' },
+  { value: '24h', label: 'Last 24 hours' },
+  { value: '7d', label: 'Last 7 days' }
 ];
 
 const jobTypeOptions = [
-  { value: 'full-time', label: 'Full Time', icon: Briefcase },
-  { value: 'part-time', label: 'Part Time', icon: Briefcase },
-  { value: 'contract', label: 'Contract', icon: Briefcase },
-  { value: 'internship', label: 'Internship', icon: Briefcase }
+  { value: 'all', label: 'All types' },
+  { value: 'full-time', label: 'Full time' },
+  { value: 'part-time', label: 'Part time' },
+  { value: 'contract', label: 'Contract' }
 ];
+
+const sourceOptions = [
+  { value: 'all', label: 'All sources' },
+  { value: 'JS Guru Jobs', label: 'JS Guru Jobs' },
+  { value: 'We Work Remotely', label: 'We Work Remotely' },
+  { value: 'Stack Overflow Jobs', label: 'Stack Overflow' }
+];
+
+// Segmented Control Component
+interface SegmentedControlProps {
+  options: { value: string; label: string }[];
+  value: string;
+  onChange: (value: string) => void;
+  label?: string;
+}
+
+function SegmentedControl({ options, value, onChange, label }: SegmentedControlProps) {
+  return (
+    <div className="space-y-3">
+      {label && (
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          {label}
+        </label>
+      )}
+      <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+        {options.map((option, index) => (
+          <button
+            key={option.value}
+            onClick={() => onChange(option.value)}
+            className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+              value === option.value
+                ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+            } ${
+              index === 0 ? 'rounded-l-md' : ''
+            } ${
+              index === options.length - 1 ? 'rounded-r-md' : ''
+            }`}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function JobsPage() {
   const [jobs, setJobs] = useState<RealJob[]>([]);
@@ -69,11 +114,28 @@ export default function JobsPage() {
     salary: 'any'
   });
 
+  // Single value states for segmented controls
+  const [selectedTimeFilter, setSelectedTimeFilter] = useState('anytime');
+  const [selectedJobType, setSelectedJobType] = useState('all');
+  const [selectedSource, setSelectedSource] = useState('all');
+
   // Statistics
   const totalJobs = jobs.length;
   const remoteJobs = jobs.filter(job => job.location.toLowerCase().includes('remote')).length;
   const fullTimeJobs = jobs.filter(job => job.jobType === 'full-time').length;
   const sourcesCount = new Set(jobs.map(job => job.source)).size;
+
+  useEffect(() => {
+    // Update filters when segmented controls change
+    const newFilters: JobFilters = {
+      sources: selectedSource === 'all' ? [] : [selectedSource],
+      timeFilter: selectedTimeFilter as 'anytime' | '24h' | '7d' | '30d',
+      jobType: selectedJobType === 'all' ? [] : [selectedJobType],
+      location: [],
+      salary: 'any'
+    };
+    setFilters(newFilters);
+  }, [selectedTimeFilter, selectedJobType, selectedSource]);
 
   useEffect(() => {
     fetchJobs();
@@ -119,32 +181,10 @@ export default function JobsPage() {
     return matchesSearch;
   });
 
-  const toggleSource = (sourceName: string) => {
-    setFilters(prev => ({
-      ...prev,
-      sources: prev.sources.includes(sourceName)
-        ? prev.sources.filter(s => s !== sourceName)
-        : [...prev.sources, sourceName]
-    }));
-  };
-
-  const toggleJobType = (jobType: string) => {
-    setFilters(prev => ({
-      ...prev,
-      jobType: prev.jobType.includes(jobType)
-        ? prev.jobType.filter(t => t !== jobType)
-        : [...prev.jobType, jobType]
-    }));
-  };
-
   const clearFilters = () => {
-    setFilters({
-      sources: [],
-      timeFilter: 'anytime',
-      jobType: [],
-      location: [],
-      salary: 'any'
-    });
+    setSelectedTimeFilter('anytime');
+    setSelectedJobType('all');
+    setSelectedSource('all');
     setSearchTerm('');
   };
 
@@ -295,63 +335,29 @@ export default function JobsPage() {
           {/* Filters Panel */}
           {showFilters && (
             <div className="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6">
-              {/* Job Sources */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Job Sources</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                  {jobSources.map((source) => (
-                    <label key={source.name} className="flex items-center space-x-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={filters.sources.includes(source.name)}
-                        onChange={() => toggleSource(source.name)}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">
-                        {getSourceIcon(source.name)} {source.name}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
               {/* Time Filter */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Time Filter</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {timeFilterOptions.map((option) => (
-                    <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="timeFilter"
-                        value={option.value}
-                        checked={filters.timeFilter === option.value}
-                        onChange={(e) => setFilters(prev => ({ ...prev, timeFilter: e.target.value as any }))}
-                        className="border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{option.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+              <SegmentedControl
+                label="Time Filter"
+                options={timeFilterOptions}
+                value={selectedTimeFilter}
+                onChange={setSelectedTimeFilter}
+              />
 
               {/* Job Type */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Job Type</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {jobTypeOptions.map((option) => (
-                    <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={filters.jobType.includes(option.value)}
-                        onChange={() => toggleJobType(option.value)}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{option.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+              <SegmentedControl
+                label="Job Type"
+                options={jobTypeOptions}
+                value={selectedJobType}
+                onChange={setSelectedJobType}
+              />
+
+              {/* Job Sources */}
+              <SegmentedControl
+                label="Job Sources"
+                options={sourceOptions}
+                value={selectedSource}
+                onChange={setSelectedSource}
+              />
             </div>
           )}
         </div>
