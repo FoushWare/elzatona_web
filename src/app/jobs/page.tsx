@@ -213,6 +213,7 @@ export default function JobsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<JobFilters>({
     sources: [],
     timeFilter: 'anytime',
@@ -432,10 +433,23 @@ export default function JobsPage() {
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
+            
+            {/* Mobile Filter Toggle */}
+            <div className="md:hidden mt-4">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+              >
+                {showFilters ? "Hide Filters" : "Show Filters"}
+                <span className="ml-2">🔍</span>
+              </button>
+            </div>
           </div>
 
           {/* Filters Panel */}
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6">
+          <div className={`border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6 transition-all duration-300 ${
+            showFilters ? 'block' : 'hidden md:block'
+          }`}>
             {/* Time Filter */}
             <SegmentedControl
               label="Time Filter"

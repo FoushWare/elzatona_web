@@ -5,6 +5,8 @@ import { preparationGuides } from "@/lib/preparationGuides";
 import Link from "next/link";
 
 export default function PreparationGuidesPage() {
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [selectedGuide, setSelectedGuide] = useState<string | null>(null);
 
   const guides = preparationGuides;
@@ -199,9 +201,27 @@ export default function PreparationGuidesPage() {
               Combine structured study plans with comprehensive preparation
               guides for maximum effectiveness
             </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+              <button
+                onClick={() => setShowStatistics(!showStatistics)}
+                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+              >
+                {showStatistics ? "Hide Statistics" : "Show Statistics"}
+                <span className="ml-2">📊</span>
+              </button>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+              >
+                {showFilters ? "Hide Filters" : "Show Filters"}
+                <span className="ml-2">🔍</span>
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-300 ${
+            showStatistics ? 'block' : 'hidden md:grid'
+          }`}>
             <div className="text-center p-6 bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-xl border border-red-200 dark:border-red-800 hover:shadow-lg transition-all duration-300 hover:scale-105 transform group">
               <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">⚡</div>
               <h3 className="text-xl font-semibold text-foreground mb-2">
@@ -271,9 +291,20 @@ export default function PreparationGuidesPage() {
                 Join thousands of developers who have successfully landed their
                 dream jobs
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+                <button
+                  onClick={() => setShowStatistics(!showStatistics)}
+                  className="inline-flex items-center px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg transition-colors border border-white/30"
+                >
+                  {showStatistics ? "Hide Statistics" : "Show Statistics"}
+                  <span className="ml-2">📊</span>
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-300 ${
+              showStatistics ? 'block' : 'hidden md:grid'
+            }`}>
               <div className="text-center group hover:scale-105 transition-transform duration-300">
                 <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">📈</div>
                 <div className="text-4xl font-bold mb-2 drop-shadow-sm">95%</div>
