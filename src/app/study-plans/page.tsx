@@ -695,7 +695,7 @@ export default function StudyPlansPage() {
                 <div className="space-y-3">
                   <button
                     onClick={() => handleQuickStart(plan.id)}
-                    className="w-full bg-purple-600 text-white py-3 px-4 rounded-md font-medium hover:bg-purple-700 hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
+                    className="w-full bg-transparent border-2 border-purple-600 text-purple-600 py-3 px-4 rounded-md font-medium hover:bg-purple-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
                   >
                     🚀 Quick Start
                     <svg className="w-4 h-4 ml-2 inline group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -704,7 +704,7 @@ export default function StudyPlansPage() {
                   </button>
                   <button
                     onClick={() => handleSelectPlan(plan.id)}
-                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
+                    className="w-full bg-transparent border-2 border-blue-600 text-blue-600 py-3 px-4 rounded-md font-medium hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
                   >
                     Select Plan
                     <svg className="w-4 h-4 ml-2 inline group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -713,7 +713,7 @@ export default function StudyPlansPage() {
                   </button>
                   <button
                     onClick={() => handleStartPlan(plan.id)}
-                    className="w-full bg-green-600 text-white py-3 px-4 rounded-md font-medium hover:bg-green-700 hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
+                    className="w-full bg-transparent border-2 border-green-600 text-green-600 py-3 px-4 rounded-md font-medium hover:bg-green-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
                   >
                     Start Plan
                     <svg className="w-4 h-4 ml-2 inline group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -722,7 +722,7 @@ export default function StudyPlansPage() {
                   </button>
                   <button
                     onClick={() => handleCustomizePlan(plan.id)}
-                    className="w-full btn-outline py-3 px-4 font-medium hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
+                    className="w-full bg-transparent border-2 border-gray-600 text-gray-600 py-3 px-4 font-medium hover:bg-gray-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
                   >
                     Customize Plan
                     <svg className="w-4 h-4 ml-2 inline group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
