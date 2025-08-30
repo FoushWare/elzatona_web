@@ -1,73 +1,194 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
-import { RealJob } from '@/lib/jobAggregator';
+import { Search, Filter, Clock, MapPin, Building, DollarSign, Briefcase, Globe } from 'lucide-react';
+
+interface JobSource {
+  name: string;
+  url: string;
+  enabled: boolean;
+  category: 'remote' | 'general' | 'tech';
+}
+
+interface RealJob {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  jobType: 'full-time' | 'part-time' | 'contract' | 'internship' | 'unknown';
+  salary: string;
+  description: string;
+  tags: string[];
+  link: string;
+  source: string;
+  postedDate?: string;
+  scrapedAt: Date;
+}
+
+interface JobFilters {
+  sources: string[];
+  timeFilter: 'anytime' | '24h' | '7d' | '30d';
+  jobType: string[];
+  location: string[];
+  salary: 'any' | 'entry' | 'mid' | 'senior';
+}
+
+const jobSources: JobSource[] = [
+  { name: 'JS Guru Jobs', url: 'https://jsgurujobs.com', enabled: true, category: 'tech' },
+  { name: 'We Work Remotely', url: 'https://weworkremotely.com', enabled: true, category: 'remote' },
+  { name: 'Stack Overflow Jobs', url: 'https://stackoverflow.com', enabled: true, category: 'tech' },
+  { name: 'Remote.co', url: 'https://remote.co', enabled: true, category: 'remote' },
+  { name: 'AngelList', url: 'https://angel.co', enabled: true, category: 'tech' }
+];
+
+const timeFilterOptions = [
+  { value: 'anytime', label: 'Any Time', icon: Clock },
+  { value: '24h', label: 'Last 24 Hours', icon: Clock },
+  { value: '7d', label: 'Last 7 Days', icon: Clock },
+  { value: '30d', label: 'Last 30 Days', icon: Clock }
+];
+
+const jobTypeOptions = [
+  { value: 'full-time', label: 'Full Time', icon: Briefcase },
+  { value: 'part-time', label: 'Part Time', icon: Briefcase },
+  { value: 'contract', label: 'Contract', icon: Briefcase },
+  { value: 'internship', label: 'Internship', icon: Briefcase }
+];
 
 export default function JobsPage() {
   const [jobs, setJobs] = useState<RealJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('All Countries');
-  const [selectedType, setSelectedType] = useState('All Types');
-  const [selectedSource, setSelectedSource] = useState('All Sources');
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState<JobFilters>({
+    sources: [],
+    timeFilter: 'anytime',
+    jobType: [],
+    location: [],
+    salary: 'any'
+  });
+
+  // Statistics
+  const totalJobs = jobs.length;
+  const remoteJobs = jobs.filter(job => job.location.toLowerCase().includes('remote')).length;
+  const fullTimeJobs = jobs.filter(job => job.jobType === 'full-time').length;
+  const sourcesCount = new Set(jobs.map(job => job.source)).size;
 
   useEffect(() => {
     fetchJobs();
-  }, []);
+  }, [filters]);
 
   const fetchJobs = async () => {
+    setLoading(true);
+    setError(null);
+    
     try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await fetch('/api/jobs?real=true');
+      const queryParams = new URLSearchParams({
+        real: 'true',
+        ...(filters.sources.length > 0 && { sources: filters.sources.join(',') }),
+        ...(filters.timeFilter !== 'anytime' && { timeFilter: filters.timeFilter }),
+        ...(filters.jobType.length > 0 && { jobType: filters.jobType.join(',') }),
+        ...(filters.location.length > 0 && { location: filters.location.join(',') }),
+        ...(filters.salary !== 'any' && { salary: filters.salary })
+      });
+
+      const response = await fetch(`/api/jobs?${queryParams}`);
       const data = await response.json();
-      
+
       if (data.success) {
-        setJobs(data.data || []);
+        setJobs(data.data);
       } else {
         setError(data.message || 'Failed to fetch jobs');
+        setJobs([]);
       }
     } catch (err) {
-      setError('Failed to fetch jobs. Please try again later.');
+      setError('Failed to fetch jobs');
+      setJobs([]);
     } finally {
       setLoading(false);
     }
   };
 
   const filteredJobs = jobs.filter(job => {
-    const matchesSearch = searchTerm === '' || 
-      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-
-    const matchesCountry = selectedCountry === 'All Countries' || job.country === selectedCountry;
-    const matchesType = selectedType === 'All Types' || job.type === selectedType;
-    const matchesSource = selectedSource === 'All Sources' || job.source === selectedSource;
-
-    return matchesSearch && matchesCountry && matchesType && matchesSource;
+    const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         job.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    return matchesSearch;
   });
 
-  const countries = ['All Countries', ...Array.from(new Set(jobs.map(job => job.country)))];
-  const types = ['All Types', ...Array.from(new Set(jobs.map(job => job.type)))];
-  const sources = ['All Sources', ...Array.from(new Set(jobs.map(job => job.source)))];
+  const toggleSource = (sourceName: string) => {
+    setFilters(prev => ({
+      ...prev,
+      sources: prev.sources.includes(sourceName)
+        ? prev.sources.filter(s => s !== sourceName)
+        : [...prev.sources, sourceName]
+    }));
+  };
 
-  const formatSalary = (job: RealJob) => {
-    if (job.salaryMin && job.salaryMax) {
-      return `${job.currency} ${job.salaryMin.toLocaleString()} - ${job.salaryMax.toLocaleString()}`;
+  const toggleJobType = (jobType: string) => {
+    setFilters(prev => ({
+      ...prev,
+      jobType: prev.jobType.includes(jobType)
+        ? prev.jobType.filter(t => t !== jobType)
+        : [...prev.jobType, jobType]
+    }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      sources: [],
+      timeFilter: 'anytime',
+      jobType: [],
+      location: [],
+      salary: 'any'
+    });
+    setSearchTerm('');
+  };
+
+  const getSourceIcon = (sourceName: string) => {
+    switch (sourceName) {
+      case 'JS Guru Jobs':
+        return '⚡';
+      case 'We Work Remotely':
+        return '🏠';
+      case 'Stack Overflow Jobs':
+        return '💻';
+      case 'Remote.co':
+        return '🌍';
+      case 'AngelList':
+        return '👼';
+      default:
+        return '💼';
     }
-    return job.salary || 'Salary not specified';
+  };
+
+  const getJobTypeColor = (jobType: string) => {
+    switch (jobType) {
+      case 'full-time':
+        return 'bg-green-100 text-green-800';
+      case 'part-time':
+        return 'bg-blue-100 text-blue-800';
+      case 'contract':
+        return 'bg-purple-100 text-purple-800';
+      case 'internship':
+        return 'bg-orange-100 text-orange-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Fetching real job listings...</p>
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600 dark:text-gray-400">Loading jobs from multiple sources...</p>
+            </div>
           </div>
         </div>
       </div>
@@ -75,229 +196,258 @@ export default function JobsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            💼 Frontend Job Aggregator
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            Frontend Job Aggregator
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
-            Real job listings from top tech job boards
+            Discover frontend opportunities from multiple job boards
           </p>
+        </div>
+
+        {/* Statistics */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                <Briefcase className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div className="ml-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400">Total Jobs</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalJobs}</p>
+              </div>
+            </div>
+          </div>
           
-          {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{jobs.length}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Total Jobs</div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
-              <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                {Array.from(new Set(jobs.map(job => job.company))).length}
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center">
+              <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
+                <Globe className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Companies</div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
-              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                {Array.from(new Set(jobs.map(job => job.country))).length}
+              <div className="ml-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400">Remote Jobs</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{remoteJobs}</p>
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Countries</div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
-              <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                {Array.from(new Set(jobs.map(job => job.source))).length}
+          </div>
+          
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center">
+              <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
+                <Building className="h-6 w-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Sources</div>
+              <div className="ml-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400">Full Time</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{fullTimeJobs}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center">
+              <div className="p-2 bg-orange-100 dark:bg-orange-900 rounded-lg">
+                <Filter className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+              </div>
+              <div className="ml-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400">Sources</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{sourcesCount}</p>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Search Jobs
-              </label>
+        {/* Search and Filters */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
+          <div className="flex flex-col lg:flex-row gap-4 mb-6">
+            {/* Search */}
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <input
                 type="text"
-                placeholder="Search by title, company, or skills..."
+                placeholder="Search jobs, companies, or skills..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Country
-              </label>
-              <select
-                value={selectedCountry}
-                onChange={(e) => setSelectedCountry(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-              >
-                {countries.map(country => (
-                  <option key={country} value={country}>{country}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Job Type
-              </label>
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-              >
-                {types.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Source
-              </label>
-              <select
-                value={selectedSource}
-                onChange={(e) => setSelectedSource(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-              >
-                {sources.map(source => (
-                  <option key={source} value={source}>{source}</option>
-                ))}
-              </select>
-            </div>
+            
+            {/* Filter Toggle */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            >
+              <Filter className="h-5 w-5 mr-2" />
+              Filters
+            </button>
+            
+            {/* Clear Filters */}
+            <button
+              onClick={clearFilters}
+              className="px-4 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+            >
+              Clear All
+            </button>
           </div>
+
+          {/* Filters Panel */}
+          {showFilters && (
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6">
+              {/* Job Sources */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Job Sources</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                  {jobSources.map((source) => (
+                    <label key={source.name} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={filters.sources.includes(source.name)}
+                        onChange={() => toggleSource(source.name)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                        {getSourceIcon(source.name)} {source.name}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Time Filter */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Time Filter</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {timeFilterOptions.map((option) => (
+                    <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="timeFilter"
+                        value={option.value}
+                        checked={filters.timeFilter === option.value}
+                        onChange={(e) => setFilters(prev => ({ ...prev, timeFilter: e.target.value as any }))}
+                        className="border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Job Type */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Job Type</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {jobTypeOptions.map((option) => (
+                    <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={filters.jobType.includes(option.value)}
+                        onChange={() => toggleJobType(option.value)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-8">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
+            <p className="text-red-800 dark:text-red-200">{error}</p>
+          </div>
+        )}
+
+        {/* Jobs List */}
+        <div className="space-y-4">
+          {filteredJobs.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-gray-400 dark:text-gray-600 mb-4">
+                <Briefcase className="h-16 w-16 mx-auto" />
               </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
-                  Error loading jobs
-                </h3>
-                <div className="mt-2 text-sm text-red-700 dark:text-red-300">
-                  {error}
-                </div>
-              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                No jobs found
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Try adjusting your search terms or filters
+              </p>
             </div>
-          </div>
-        )}
-
-        {/* No Jobs Message */}
-        {!loading && !error && filteredJobs.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              No jobs found
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Try adjusting your search criteria or check back later for new listings.
-            </p>
-            <button
-              onClick={fetchJobs}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors duration-200"
-            >
-              Refresh Jobs
-            </button>
-          </div>
-        )}
-
-        {/* Job Listings */}
-        {filteredJobs.length > 0 && (
-          <div className="space-y-6">
-            {filteredJobs.map((job) => (
-              <div key={job.id} className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-200">
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between">
+          ) : (
+            filteredJobs.map((job) => (
+              <div
+                key={job.id}
+                className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow cursor-pointer"
+                onClick={() => window.open(job.link, '_blank')}
+              >
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-                        <a href={job.link} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                          {job.title}
-                        </a>
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                        {job.title}
                       </h3>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        job.type === 'Remote' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                        job.type === 'Full-time' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-                        'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
-                      }`}>
-                        {job.type}
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        {getSourceIcon(job.source)} {job.source}
                       </span>
                     </div>
                     
-                    <p className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      {job.company}
-                    </p>
-                    
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-3">
-                      <span className="flex items-center">
-                        📍 {job.location}
-                      </span>
-                      <span className="flex items-center">
-                        💰 {formatSalary(job)}
-                      </span>
-                      <span className="flex items-center">
-                        📅 {job.datePosted}
-                      </span>
-                      <span className="flex items-center">
-                        🔗 {job.source}
-                      </span>
+                    <div className="flex items-center text-gray-600 dark:text-gray-400 mb-2">
+                      <Building className="h-4 w-4 mr-1" />
+                      <span className="mr-4">{job.company}</span>
+                      <MapPin className="h-4 w-4 mr-1" />
+                      <span>{job.location}</span>
                     </div>
                     
-                    <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-                      {job.description}
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-2">
-                      {job.tags.map((tag, index) => (
-                        <span
-                          key={index}
-                          className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs font-medium rounded-full"
-                        >
-                          {tag}
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getJobTypeColor(job.jobType)}`}>
+                        {job.jobType.replace('-', ' ')}
+                      </span>
+                      {job.salary !== 'Unknown' && (
+                        <span className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                          <DollarSign className="h-4 w-4 mr-1" />
+                          {job.salary}
                         </span>
-                      ))}
+                      )}
                     </div>
-                  </div>
-                  
-                  <div className="mt-4 md:mt-0 md:ml-4">
-                    <a
-                      href={job.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
-                    >
-                      Apply Now
-                      <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
                   </div>
                 </div>
+                
+                <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+                  {job.description}
+                </p>
+                
+                {job.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {job.tags.slice(0, 5).map((tag, index) => (
+                      <span
+                        key={index}
+                        className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                    {job.tags.length > 5 && (
+                      <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs rounded-full">
+                        +{job.tags.length - 5} more
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
-            ))}
+            ))
+          )}
+        </div>
+
+        {/* Results Count */}
+        {filteredJobs.length > 0 && (
+          <div className="mt-8 text-center text-gray-600 dark:text-gray-400">
+            Showing {filteredJobs.length} of {totalJobs} jobs
           </div>
         )}
-
-        {/* Footer */}
-        <div className="mt-12 text-center text-gray-600 dark:text-gray-400">
-                     <p className="text-sm">
-             Jobs are scraped from real job boards. Click &quot;Apply Now&quot; to view the original listing.
-           </p>
-          <p className="text-xs mt-2">
-            Last updated: {new Date().toLocaleString()}
-          </p>
-        </div>
       </div>
     </div>
   );
