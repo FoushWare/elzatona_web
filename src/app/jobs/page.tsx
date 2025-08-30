@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Clock, MapPin, Building, DollarSign, Briefcase, Globe } from 'lucide-react';
+import { Search, Clock, MapPin, Building, DollarSign, Briefcase, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface JobSource {
   name: string;
@@ -31,6 +31,15 @@ interface JobFilters {
   jobType: string[];
   location: string[];
   salary: 'any' | 'entry' | 'mid' | 'senior';
+}
+
+interface PaginationInfo {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
 }
 
 const jobSources: JobSource[] = [
@@ -100,6 +109,105 @@ function SegmentedControl({ options, value, onChange, label }: SegmentedControlP
   );
 }
 
+// Pagination Component
+interface PaginationProps {
+  pagination: PaginationInfo;
+  onPageChange: (page: number) => void;
+}
+
+function Pagination({ pagination, onPageChange }: PaginationProps) {
+  const { page, totalPages, hasNext, hasPrev } = pagination;
+  
+  if (totalPages <= 1) return null;
+
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisible = 5;
+    
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (page <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (page >= totalPages - 2) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = page - 1; i <= page + 1; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+    
+    return pages;
+  };
+
+  return (
+    <div className="flex items-center justify-center space-x-2 mt-8">
+      {/* Previous Button */}
+      <button
+        onClick={() => onPageChange(page - 1)}
+        disabled={!hasPrev}
+        className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+          hasPrev
+            ? 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600'
+            : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+        }`}
+      >
+        <ChevronLeft className="h-4 w-4 mr-1" />
+        Previous
+      </button>
+
+      {/* Page Numbers */}
+      <div className="flex items-center space-x-1">
+        {getPageNumbers().map((pageNum, index) => (
+          <button
+            key={index}
+            onClick={() => typeof pageNum === 'number' && onPageChange(pageNum)}
+            disabled={pageNum === '...'}
+            className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+              pageNum === page
+                ? 'bg-blue-600 text-white'
+                : pageNum === '...'
+                ? 'text-gray-400 dark:text-gray-500 cursor-default'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600'
+            }`}
+          >
+            {pageNum}
+          </button>
+        ))}
+      </div>
+
+      {/* Next Button */}
+      <button
+        onClick={() => onPageChange(page + 1)}
+        disabled={!hasNext}
+        className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+          hasNext
+            ? 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600'
+            : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+        }`}
+      >
+        Next
+        <ChevronRight className="h-4 w-4 ml-1" />
+      </button>
+    </div>
+  );
+}
+
 export default function JobsPage() {
   const [jobs, setJobs] = useState<RealJob[]>([]);
   const [loading, setLoading] = useState(true);
@@ -118,8 +226,18 @@ export default function JobsPage() {
   const [selectedJobType, setSelectedJobType] = useState('all');
   const [selectedSource, setSelectedSource] = useState('all');
 
+  // Pagination state
+  const [pagination, setPagination] = useState<PaginationInfo>({
+    page: 1,
+    limit: 20,
+    total: 0,
+    totalPages: 0,
+    hasNext: false,
+    hasPrev: false
+  });
+
   // Statistics
-  const totalJobs = jobs.length;
+  const totalJobs = pagination.total;
   const remoteJobs = jobs.filter(job => job.location.toLowerCase().includes('remote')).length;
   const fullTimeJobs = jobs.filter(job => job.jobType === 'full-time').length;
   const sourcesCount = new Set(jobs.map(job => job.source)).size;
@@ -134,11 +252,13 @@ export default function JobsPage() {
       salary: 'any'
     };
     setFilters(newFilters);
+    // Reset to page 1 when filters change
+    setPagination(prev => ({ ...prev, page: 1 }));
   }, [selectedTimeFilter, selectedJobType, selectedSource]);
 
   useEffect(() => {
     fetchJobs();
-  }, [filters]);
+  }, [filters, pagination.page]);
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -147,6 +267,8 @@ export default function JobsPage() {
     try {
       const queryParams = new URLSearchParams({
         real: 'true',
+        page: pagination.page.toString(),
+        limit: pagination.limit.toString(),
         ...(filters.sources.length > 0 && { sources: filters.sources.join(',') }),
         ...(filters.timeFilter !== 'anytime' && { timeFilter: filters.timeFilter }),
         ...(filters.jobType.length > 0 && { jobType: filters.jobType.join(',') }),
@@ -159,6 +281,7 @@ export default function JobsPage() {
 
       if (data.success) {
         setJobs(data.data);
+        setPagination(data.pagination);
       } else {
         setError(data.message || 'Failed to fetch jobs');
         setJobs([]);
@@ -180,7 +303,9 @@ export default function JobsPage() {
     return matchesSearch;
   });
 
-
+  const handlePageChange = (newPage: number) => {
+    setPagination(prev => ({ ...prev, page: newPage }));
+  };
 
   const getSourceIcon = (sourceName: string) => {
     switch (sourceName) {
@@ -423,10 +548,13 @@ export default function JobsPage() {
           )}
         </div>
 
+        {/* Pagination */}
+        <Pagination pagination={pagination} onPageChange={handlePageChange} />
+
         {/* Results Count */}
         {filteredJobs.length > 0 && (
           <div className="mt-8 text-center text-gray-600 dark:text-gray-400">
-            Showing {filteredJobs.length} of {totalJobs} jobs
+            Showing {filteredJobs.length} of {totalJobs} jobs (Page {pagination.page} of {pagination.totalPages})
           </div>
         )}
       </div>
