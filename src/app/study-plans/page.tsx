@@ -548,13 +548,13 @@ export default function StudyPlansPage() {
           <div className="mt-6 flex justify-center space-x-4">
             <Link
               href="/learning-paths"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+              className="bg-transparent border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               📚 Learning Paths
             </Link>
             <Link
               href="/preparation-guides"
-              className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+              className="bg-transparent border-2 border-purple-600 text-purple-600 px-6 py-3 rounded-lg hover:bg-purple-600 hover:text-white hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               🎯 Preparation Guides
             </Link>
@@ -578,7 +578,7 @@ export default function StudyPlansPage() {
               </div>
               <Link
                 href={`/study-plans/${activePlan}`}
-                className="btn-primary px-4 py-2"
+                className="bg-transparent border-2 border-blue-600 text-blue-600 px-4 py-2 rounded-md font-medium hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200"
               >
                 Continue Learning
               </Link>
@@ -901,7 +901,7 @@ export default function StudyPlansPage() {
                   </button>
                   <Link
                     href={`/study-plans/${selectedPlanData.id}`}
-                    className="flex-1 btn-primary py-3 px-4 text-center"
+                    className="flex-1 bg-transparent border-2 border-blue-600 text-blue-600 py-3 px-4 text-center rounded-md font-medium hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200"
                   >
                     Continue Learning
                   </Link>
@@ -924,13 +924,13 @@ export default function StudyPlansPage() {
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link
                 href="/questions"
-                className="bg-background text-primary px-6 py-3 rounded-md font-medium hover:bg-background/90 transition-colors duration-200"
+                className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 hover:scale-105 transform transition-all duration-200"
               >
                 Practice Questions
               </Link>
               <Link
                 href="/preparation-guides"
-                className="border border-primary-foreground/60 text-primary-foreground px-6 py-3 rounded-md font-medium hover:bg-primary-foreground hover:text-primary transition-colors duration-200"
+                className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 hover:scale-105 transform transition-all duration-200"
               >
                 Preparation Guides
               </Link>
