@@ -27,13 +27,16 @@ async function checkRobotsTxt(url: string): Promise<boolean> {
 }
 
 export async function scrapeJSGuruJobs(): Promise<RealJob[]> {
-  const sourceUrl = 'https://jsgurujobs.com/jobs?category=frontend';
+  const sourceUrl = 'https://jsgurujobs.com/jobs?search=frontend';
   try {
+    console.log('Starting JS Guru Jobs scraping...');
+    
     if (!(await checkRobotsTxt('https://jsgurujobs.com'))) {
       console.log('JS Guru Jobs robots.txt disallows scraping');
       return [];
     }
 
+    console.log('Fetching JS Guru Jobs page...');
     const response = await axios.get(sourceUrl, {
       headers: {
         'User-Agent': userAgents[Math.floor(Math.random() * userAgents.length)],
@@ -46,52 +49,66 @@ export async function scrapeJSGuruJobs(): Promise<RealJob[]> {
       timeout: 30000
     });
 
+    console.log('Response received, status:', response.status);
+    console.log('Response length:', response.data.length);
+
     const $ = cheerio.load(response.data);
     const jobs: RealJob[] = [];
 
-    // Try different selectors for job listings
-    const jobSelectors = [
-      '.job-listing',
-      '.job-card',
-      '.job-item',
-      '[data-testid="job-listing"]',
-      '.job'
-    ];
+    // Find all div.p-6 elements that contain job titles
+    const allP6Divs = $('div.p-6');
+    console.log(`Total div.p-6 elements: ${allP6Divs.length}`);
 
-    let jobElements: cheerio.Cheerio<cheerio.Element> | null = null;
-    for (const selector of jobSelectors) {
-      jobElements = $(selector);
-      if (jobElements.length > 0) {
-        console.log(`Found ${jobElements.length} jobs using selector: ${selector}`);
-        break;
-      }
-    }
-
-    if (!jobElements || jobElements.length === 0) {
-      console.log('No job elements found on JS Guru Jobs');
-      return [];
-    }
-
-    jobElements.each((index, element) => {
+    let jobIndex = 0;
+    allP6Divs.each((index, element) => {
       try {
         const $el = $(element);
         
-        const title = $el.find('h3, .job-title, .title').first().text().trim();
-        const company = $el.find('.company-name, .company, .employer').first().text().trim();
-        const location = $el.find('.location, .job-location, .region').first().text().trim();
-        const salary = $el.find('.salary, .compensation').first().text().trim();
-        const link = $el.find('a[href*="/jobs/"]').first().attr('href');
-        const datePosted = $el.find('.date, .posted-date, .time').first().text().trim();
+        // Extract job title
+        const titleElement = $el.find('h3 a').first();
+        const title = titleElement.text().trim();
+        const jobLink = titleElement.attr('href');
+        
+        // Only process if this is actually a job (has a title)
+        if (!title) return;
+        
+        console.log(`Processing job ${jobIndex + 1}: ${title}`);
+        
+        // Extract company name
+        const company = $el.find('p.mt-1').text().trim();
+        
+        // Extract location, job type, and salary from the flex container
+        const infoElements = $el.find('div.mt-2.flex span');
+        let location = '';
+        let jobType = '';
+        let salary = '';
+        
+        infoElements.each((i, infoEl) => {
+          const text = $(infoEl).text().trim();
+          if (i === 0) location = text; // First span is location
+          else if (i === 1) jobType = text; // Second span is job type
+          else if (i === 2) salary = text; // Third span is salary
+        });
+        
+        // Extract tags
+        const tags: string[] = [];
+        $el.find('span.inline-flex').each((i, tagEl) => {
+          const tag = $(tagEl).text().trim();
+          if (tag) tags.push(tag);
+        });
+        
+        // Extract description
+        const description = $el.find('div.mt-4.text-sm').text().trim();
 
         if (title && company) {
-          const jobUrl = link ? new URL(link, sourceUrl).href : sourceUrl;
+          const jobUrl = jobLink ? new URL(jobLink, 'https://jsgurujobs.com').href : sourceUrl;
           const salaryInfo = extractSalaryInfo(salary);
-          const jobType = determineJobType(title, '');
+          const jobTypeEnum = determineJobType(title, jobType);
           const country = extractCountry(location);
-          const tags = extractTags(title, '');
+          const extractedTags = extractTags(title, description);
 
           jobs.push({
-            id: `jsguru-${index + 1}`,
+            id: `jsguru-${jobIndex + 1}`,
             title,
             company,
             country,
@@ -100,21 +117,24 @@ export async function scrapeJSGuruJobs(): Promise<RealJob[]> {
             salaryMin: salaryInfo.salaryMin,
             salaryMax: salaryInfo.salaryMax,
             currency: salaryInfo.currency,
-            type: jobType,
-            datePosted: datePosted || new Date().toISOString().split('T')[0],
+            type: jobTypeEnum,
+            datePosted: new Date().toISOString().split('T')[0], // Use current date as fallback
             link: jobUrl,
-            description: `${title} at ${company}`,
-            tags,
+            description: description || `${title} at ${company}`,
+            tags: [...new Set([...tags, ...extractedTags])], // Combine and deduplicate tags
             source: "JS Guru Jobs",
             sourceUrl
           });
+          
+          console.log(`Added job: ${title} at ${company}`);
+          jobIndex++;
         }
       } catch (error) {
         console.error(`Error parsing job ${index}:`, error);
       }
     });
 
-    console.log(`Scraped ${jobs.length} jobs from JS Guru Jobs`);
+    console.log(`Successfully scraped ${jobs.length} jobs from JS Guru Jobs`);
     return jobs;
   } catch (error) {
     console.error('Error scraping JS Guru Jobs:', error);
