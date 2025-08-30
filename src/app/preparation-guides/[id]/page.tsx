@@ -1,0 +1,177 @@
+"use client";
+
+import { useParams, notFound } from "next/navigation";
+import Link from "next/link";
+import { getPreparationGuideById } from "@/lib/preparationGuides";
+
+export default function PreparationGuideDetailPage() {
+  const params = useParams();
+  const guideId = params.id as string;
+  
+  const guide = getPreparationGuideById(guideId);
+  
+  if (!guide) {
+    notFound();
+  }
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case "beginner":
+        return "text-green-600 bg-green-100 dark:bg-green-900/20 dark:text-green-400";
+      case "intermediate":
+        return "text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400";
+      case "advanced":
+        return "text-red-600 bg-red-100 dark:bg-red-900/20 dark:text-red-400";
+      case "all-levels":
+        return "text-blue-600 bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400";
+      default:
+        return "text-gray-600 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400";
+    }
+  };
+
+  const getDifficultyIcon = (difficulty: string) => {
+    switch (difficulty) {
+      case "beginner":
+        return "🌱";
+      case "intermediate":
+        return "🚀";
+      case "advanced":
+        return "⚡";
+      case "all-levels":
+        return "📚";
+      default:
+        return "📚";
+    }
+  };
+
+  const formatTime = (minutes: number) => {
+    if (minutes < 60) {
+      return `${minutes} minutes`;
+    } else if (minutes < 1440) { // less than 24 hours
+      const hours = Math.round(minutes / 60);
+      return `${hours} hours`;
+    } else {
+      const days = Math.round(minutes / 1440);
+      return `${days} days`;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb */}
+        <nav className="mb-8">
+          <Link 
+            href="/preparation-guides" 
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            ← Back to Preparation Guides
+          </Link>
+        </nav>
+
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(guide.difficulty)}`}>
+              {getDifficultyIcon(guide.difficulty)} {guide.difficulty.replace('-', ' ')}
+            </span>
+            <span className="text-muted-foreground">•</span>
+            <span className="text-muted-foreground">{formatTime(guide.estimatedTime)}</span>
+          </div>
+          
+          <h1 className="text-4xl font-bold text-foreground mb-4">
+            {guide.title}
+          </h1>
+          
+          <p className="text-xl text-muted-foreground mb-6">
+            {guide.description}
+          </p>
+
+          {/* Target Skills */}
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-foreground mb-3">Target Skills</h3>
+            <div className="flex flex-wrap gap-2">
+              {guide.targetSkills.map((skill) => (
+                <span
+                  key={skill}
+                  className="px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Sections */}
+        <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Guide Sections</h2>
+          
+          <div className="space-y-6">
+            {guide.sections.map((section, index) => (
+              <div
+                key={index}
+                className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {section.title}
+                  </h3>
+                  <span className="text-sm text-muted-foreground">
+                    {formatTime(section.readingTime)}
+                  </span>
+                </div>
+                <p className="text-muted-foreground mb-3">
+                  {section.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {section.topics.map((topic) => (
+                    <span
+                      key={topic}
+                      className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded text-xs"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Features */}
+        <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Key Features</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {guide.features.map((feature, index) => (
+              <div
+                key={index}
+                className="flex items-center text-sm text-muted-foreground"
+              >
+                <span className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></span>
+                {feature}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Link
+            href="/preparation-guides"
+            className="flex-1 bg-muted text-foreground px-6 py-3 rounded-lg text-center hover:bg-muted/80 transition-colors"
+          >
+            Browse All Preparation Guides
+          </Link>
+          <Link
+            href="/study-plans"
+            className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg text-center hover:bg-blue-700 transition-colors"
+          >
+            View Study Plans
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,101 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslation } from "@/hooks/useTranslation";
+import { preparationGuides } from "@/lib/preparationGuides";
 import Link from "next/link";
 
 export default function PreparationGuidesPage() {
   const { t, isRTL } = useTranslation();
   const [selectedGuide, setSelectedGuide] = useState<string | null>(null);
 
-  const guides = [
-    {
-      id: "frontend-playbook",
-      title: t("preparationGuides.frontendPlaybook.title"),
-      description: t("preparationGuides.frontendPlaybook.description"),
-      color: "from-blue-600 to-purple-600",
-      icon: "📚",
-      sections: [
-        t("preparationGuides.frontendPlaybook.sections.overview"),
-        t("preparationGuides.frontendPlaybook.sections.preparation"),
-        t("preparationGuides.frontendPlaybook.sections.technical"),
-        t("preparationGuides.frontendPlaybook.sections.systemDesign"),
-        t("preparationGuides.frontendPlaybook.sections.behavioral"),
-        t("preparationGuides.frontendPlaybook.sections.mockInterviews"),
-      ],
-      features: [
-        "500+ practice questions",
-        "Ex-interviewer insights",
-        "Step-by-step strategies",
-        "Mock interview scenarios",
-        "Company-specific tips",
-        "Behavioral question guides",
-      ],
-    },
-    {
-      id: "gfe75",
-      title: t("preparationGuides.gfe75.title"),
-      description: t("preparationGuides.gfe75.description"),
-      color: "from-green-600 to-teal-600",
-      icon: "🎯",
-      categories: [
-        t("preparationGuides.gfe75.categories.javascript"),
-        t("preparationGuides.gfe75.categories.react"),
-        t("preparationGuides.gfe75.categories.css"),
-        t("preparationGuides.gfe75.categories.systemDesign"),
-      ],
-      features: [
-        "75 essential questions",
-        "High-frequency topics",
-        "Detailed solutions",
-        "Difficulty progression",
-        "Time estimates",
-        "Success patterns",
-      ],
-    },
-    {
-      id: "blind75",
-      title: t("preparationGuides.blind75.title"),
-      description: t("preparationGuides.blind75.description"),
-      color: "from-orange-600 to-red-600",
-      icon: "🧠",
-      categories: [
-        t("preparationGuides.blind75.categories.algorithms"),
-        t("preparationGuides.blind75.categories.dataStructures"),
-        t("preparationGuides.blind75.categories.systemDesign"),
-      ],
-      features: [
-        "75 algorithm questions",
-        "Data structure mastery",
-        "System design patterns",
-        "Complexity analysis",
-        "Optimization techniques",
-        "Real-world applications",
-      ],
-    },
-    {
-      id: "system-design-playbook",
-      title: t("preparationGuides.systemDesignPlaybook.title"),
-      description: t("preparationGuides.systemDesignPlaybook.description"),
-      color: "from-purple-600 to-pink-600",
-      icon: "🏗️",
-      topics: [
-        t("preparationGuides.systemDesignPlaybook.topics.architecture"),
-        t("preparationGuides.systemDesignPlaybook.topics.scalability"),
-        t("preparationGuides.systemDesignPlaybook.topics.performance"),
-        t("preparationGuides.systemDesignPlaybook.topics.security"),
-        t("preparationGuides.systemDesignPlaybook.topics.testing"),
-      ],
-      features: [
-        "Architecture patterns",
-        "Scalability strategies",
-        "Performance optimization",
-        "Security best practices",
-        "Testing methodologies",
-        "Case studies",
-      ],
-    },
-  ];
+  const guides = preparationGuides;
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -201,10 +114,10 @@ export default function PreparationGuidesPage() {
                     onClick={() => setSelectedGuide(guide.id)}
                     className="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
                   >
-                    {t("common.start")} {guide.title}
+                    Start {guide.title}
                   </button>
                   <button className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-md font-medium hover:bg-gray-50 transition-colors duration-200">
-                    {t("common.viewDetails")}
+                    View Details
                   </button>
                 </div>
               </div>
@@ -216,7 +129,7 @@ export default function PreparationGuidesPage() {
         <div className="bg-white rounded-lg shadow-lg p-8 mb-12">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              {t("studyPlans.title")} + {t("preparationGuides.title")}
+              Study Plans + Preparation Guides
             </h2>
             <p className="text-xl text-gray-600">
               Combine structured study plans with comprehensive preparation
@@ -228,7 +141,7 @@ export default function PreparationGuidesPage() {
             <div className="text-center p-6 bg-gradient-to-br from-red-50 to-pink-50 rounded-lg">
               <div className="text-3xl mb-4">⚡</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {t("studyPlans.oneWeek.title")}
+                1 Week Plan
               </h3>
               <p className="text-gray-600 mb-4">
                 Intensive preparation with focused guides
@@ -237,14 +150,14 @@ export default function PreparationGuidesPage() {
                 href="/study-plans"
                 className="inline-block bg-red-600 text-white px-4 py-2 rounded-md font-medium hover:bg-red-700 transition-colors duration-200"
               >
-                {t("common.learnMore")}
+                Learn More
               </Link>
             </div>
 
             <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg">
               <div className="text-3xl mb-4">📅</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {t("studyPlans.oneMonth.title")}
+                1 Month Plan
               </h3>
               <p className="text-gray-600 mb-4">
                 Balanced approach with comprehensive coverage
@@ -253,14 +166,14 @@ export default function PreparationGuidesPage() {
                 href="/study-plans"
                 className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
               >
-                {t("common.learnMore")}
+                Learn More
               </Link>
             </div>
 
             <div className="text-center p-6 bg-gradient-to-br from-green-50 to-teal-50 rounded-lg">
               <div className="text-3xl mb-4">🎯</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {t("studyPlans.threeMonths.title")}
+                3 Months Plan
               </h3>
               <p className="text-gray-600 mb-4">
                 Deep mastery with expert-level preparation
@@ -269,7 +182,7 @@ export default function PreparationGuidesPage() {
                 href="/study-plans"
                 className="inline-block bg-green-600 text-white px-4 py-2 rounded-md font-medium hover:bg-green-700 transition-colors duration-200"
               >
-                {t("common.learnMore")}
+                Learn More
               </Link>
             </div>
           </div>
