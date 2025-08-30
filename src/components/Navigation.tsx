@@ -191,6 +191,15 @@ export default function Navigation() {
                 </div>
               )}
             </div>
+
+            <div className="relative">
+              <Link
+                href="/jobs"
+                className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
+              >
+                💼 Jobs
+              </Link>
+            </div>
           </div>
 
           <div className="flex items-center space-x-2">
