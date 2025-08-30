@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 
-// Mock job data - in real implementation, this would come from API
+// Enhanced mock job data with more sources and details
 const mockJobs = [
   {
     id: 1,
@@ -12,11 +12,15 @@ const mockJobs = [
     country: "United States",
     location: "San Francisco, CA",
     salary: "$120,000 - $150,000",
+    salaryMin: 120000,
+    salaryMax: 150000,
+    currency: "USD",
     type: "Full-time",
     datePosted: "2024-01-15",
     link: "https://example.com/job1",
     description: "We're looking for a Senior React Developer to join our team and help build amazing user experiences.",
-    tags: ["React", "TypeScript", "Node.js", "AWS"]
+    tags: ["React", "TypeScript", "Node.js", "AWS"],
+    source: "JS Guru Jobs"
   },
   {
     id: 2,
@@ -25,11 +29,15 @@ const mockJobs = [
     country: "United Kingdom",
     location: "London, UK",
     salary: "£60,000 - £80,000",
+    salaryMin: 60000,
+    salaryMax: 80000,
+    currency: "GBP",
     type: "Full-time",
     datePosted: "2024-01-14",
     link: "https://example.com/job2",
     description: "Join our fast-growing startup and help shape the future of our product with React and modern web technologies.",
-    tags: ["React", "JavaScript", "CSS", "Git"]
+    tags: ["React", "JavaScript", "CSS", "Git"],
+    source: "LinkedIn Jobs"
   },
   {
     id: 3,
@@ -38,11 +46,15 @@ const mockJobs = [
     country: "Canada",
     location: "Remote",
     salary: "$90,000 - $110,000",
+    salaryMin: 90000,
+    salaryMax: 110000,
+    currency: "USD",
     type: "Remote",
     datePosted: "2024-01-13",
     link: "https://example.com/job3",
     description: "Work from anywhere! We're seeking a talented React developer to join our distributed team.",
-    tags: ["React", "Remote", "TypeScript", "GraphQL"]
+    tags: ["React", "Remote", "TypeScript", "GraphQL"],
+    source: "We Work Remotely"
   },
   {
     id: 4,
@@ -51,11 +63,15 @@ const mockJobs = [
     country: "Germany",
     location: "Berlin, Germany",
     salary: "€45,000 - €55,000",
+    salaryMin: 45000,
+    salaryMax: 55000,
+    currency: "EUR",
     type: "Full-time",
     datePosted: "2024-01-12",
     link: "https://example.com/job4",
     description: "Perfect opportunity for a junior developer to grow their React skills in a supportive environment.",
-    tags: ["React", "JavaScript", "CSS", "Junior"]
+    tags: ["React", "JavaScript", "CSS", "Junior"],
+    source: "Indeed"
   },
   {
     id: 5,
@@ -64,11 +80,15 @@ const mockJobs = [
     country: "Australia",
     location: "Sydney, Australia",
     salary: "A$100,000 - A$130,000",
+    salaryMin: 100000,
+    salaryMax: 130000,
+    currency: "AUD",
     type: "Full-time",
     datePosted: "2024-01-11",
     link: "https://example.com/job5",
     description: "Build amazing mobile apps with React Native. Join our mobile development team!",
-    tags: ["React Native", "Mobile", "JavaScript", "iOS"]
+    tags: ["React Native", "Mobile", "JavaScript", "iOS"],
+    source: "Stack Overflow Jobs"
   },
   {
     id: 6,
@@ -77,11 +97,83 @@ const mockJobs = [
     country: "Netherlands",
     location: "Amsterdam, Netherlands",
     salary: "€70,000 - €90,000",
+    salaryMin: 70000,
+    salaryMax: 90000,
+    currency: "EUR",
     type: "Full-time",
     datePosted: "2024-01-10",
     link: "https://example.com/job6",
     description: "Full stack role with React frontend and Node.js backend. Great opportunity for growth!",
-    tags: ["React", "Node.js", "Full Stack", "MongoDB"]
+    tags: ["React", "Node.js", "Full Stack", "MongoDB"],
+    source: "Glassdoor"
+  },
+  {
+    id: 7,
+    title: "React Developer (Contract)",
+    company: "ContractTech",
+    country: "United States",
+    location: "New York, NY",
+    salary: "$80 - $120 per hour",
+    salaryMin: 80000,
+    salaryMax: 120000,
+    currency: "USD",
+    type: "Contract",
+    datePosted: "2024-01-09",
+    link: "https://example.com/job7",
+    description: "Contract position for React development. Flexible hours and remote work options available.",
+    tags: ["React", "Contract", "JavaScript", "CSS"],
+    source: "AngelList"
+  },
+  {
+    id: 8,
+    title: "Senior React Engineer",
+    company: "FinTech Solutions",
+    country: "United States",
+    location: "Austin, TX",
+    salary: "$130,000 - $160,000",
+    salaryMin: 130000,
+    salaryMax: 160000,
+    currency: "USD",
+    type: "Full-time",
+    datePosted: "2024-01-08",
+    link: "https://example.com/job8",
+    description: "Join our fintech team and build cutting-edge financial applications with React.",
+    tags: ["React", "FinTech", "TypeScript", "Redux"],
+    source: "HackerRank Jobs"
+  },
+  {
+    id: 9,
+    title: "React Developer (Part-time)",
+    company: "StartupHub",
+    country: "United Kingdom",
+    location: "Manchester, UK",
+    salary: "£30,000 - £40,000",
+    salaryMin: 30000,
+    salaryMax: 40000,
+    currency: "GBP",
+    type: "Part-time",
+    datePosted: "2024-01-07",
+    link: "https://example.com/job9",
+    description: "Part-time React development role perfect for students or those seeking work-life balance.",
+    tags: ["React", "Part-time", "JavaScript", "CSS"],
+    source: "ReactJobs.io"
+  },
+  {
+    id: 10,
+    title: "React Team Lead",
+    company: "TechGiant",
+    country: "Canada",
+    location: "Toronto, ON",
+    salary: "$140,000 - $180,000",
+    salaryMin: 140000,
+    salaryMax: 180000,
+    currency: "USD",
+    type: "Full-time",
+    datePosted: "2024-01-06",
+    link: "https://example.com/job10",
+    description: "Lead a team of React developers and shape the future of our product architecture.",
+    tags: ["React", "Leadership", "TypeScript", "Team Management"],
+    source: "LinkedIn Jobs"
   }
 ];
 
@@ -103,11 +195,39 @@ const jobTypes = [
   "Part-time"
 ];
 
+const salaryRanges = [
+  "All Salaries",
+  "$0 - $50,000",
+  "$50,000 - $100,000",
+  "$100,000 - $150,000",
+  "$150,000+"
+];
+
+const sortOptions = [
+  { value: "date", label: "Date Posted" },
+  { value: "salary", label: "Salary (High to Low)" },
+  { value: "salary-asc", label: "Salary (Low to High)" },
+  { value: "title", label: "Job Title" },
+  { value: "company", label: "Company" }
+];
+
 export default function JobsPage() {
   const [selectedCountry, setSelectedCountry] = useState("All Countries");
   const [selectedType, setSelectedType] = useState("All Types");
+  const [selectedSalaryRange, setSelectedSalaryRange] = useState("All Salaries");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [sortBy, setSortBy] = useState("date");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSalaryRange, setSelectedSalaryRange] = useState("All");
+
+  // Get unique locations for the selected country
+  const availableLocations = useMemo(() => {
+    const countryJobs = selectedCountry === "All Countries" 
+      ? mockJobs 
+      : mockJobs.filter(job => job.country === selectedCountry);
+    
+    const locations = [...new Set(countryJobs.map(job => job.location))];
+    return ["All Locations", ...locations];
+  }, [selectedCountry]);
 
   const filteredJobs = useMemo(() => {
     let filtered = mockJobs;
@@ -117,9 +237,26 @@ export default function JobsPage() {
       filtered = filtered.filter(job => job.country === selectedCountry);
     }
 
+    // Filter by location
+    if (selectedLocation && selectedLocation !== "All Locations") {
+      filtered = filtered.filter(job => job.location === selectedLocation);
+    }
+
     // Filter by job type
     if (selectedType !== "All Types") {
       filtered = filtered.filter(job => job.type === selectedType);
+    }
+
+    // Filter by salary range
+    if (selectedSalaryRange !== "All Salaries") {
+      const [min, max] = selectedSalaryRange.split(" - ");
+      const minSalary = min === "$0" ? 0 : parseInt(min.replace(/[$,]/g, ""));
+      const maxSalary = max === "$150,000+" ? Infinity : parseInt(max.replace(/[$,]/g, ""));
+      
+      filtered = filtered.filter(job => {
+        const jobSalary = (job.salaryMin + job.salaryMax) / 2;
+        return jobSalary >= minSalary && (maxSalary === Infinity || jobSalary <= maxSalary);
+      });
     }
 
     // Filter by search query
@@ -133,8 +270,26 @@ export default function JobsPage() {
       );
     }
 
+    // Sort jobs
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "date":
+          return new Date(b.datePosted).getTime() - new Date(a.datePosted).getTime();
+        case "salary":
+          return ((b.salaryMin + b.salaryMax) / 2) - ((a.salaryMin + a.salaryMax) / 2);
+        case "salary-asc":
+          return ((a.salaryMin + a.salaryMax) / 2) - ((b.salaryMin + b.salaryMax) / 2);
+        case "title":
+          return a.title.localeCompare(b.title);
+        case "company":
+          return a.company.localeCompare(b.company);
+        default:
+          return 0;
+      }
+    });
+
     return filtered;
-  }, [selectedCountry, selectedType, searchQuery]);
+  }, [selectedCountry, selectedLocation, selectedType, selectedSalaryRange, searchQuery, sortBy]);
 
   const getJobTypeColor = (type: string) => {
     switch (type) {
@@ -172,6 +327,14 @@ export default function JobsPage() {
     if (diffDays === 1) return "1 day ago";
     if (diffDays < 7) return `${diffDays} days ago`;
     return date.toLocaleDateString();
+  };
+
+  const getSalaryRange = (salaryMin: number, salaryMax: number, currency: string) => {
+    const avg = (salaryMin + salaryMax) / 2;
+    if (avg < 50000) return "$0 - $50,000";
+    if (avg < 100000) return "$50,000 - $100,000";
+    if (avg < 150000) return "$100,000 - $150,000";
+    return "$150,000+";
   };
 
   return (
@@ -231,15 +394,18 @@ export default function JobsPage() {
           </div>
 
           {/* Filters Row */}
-          <div className="flex flex-wrap gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             {/* Country Filter */}
-            <div className="flex-1 min-w-48">
+            <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 🌍 Country
               </label>
               <select
                 value={selectedCountry}
-                onChange={(e) => setSelectedCountry(e.target.value)}
+                onChange={(e) => {
+                  setSelectedCountry(e.target.value);
+                  setSelectedLocation("All Locations");
+                }}
                 className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300"
               >
                 {countries.map(country => (
@@ -250,8 +416,26 @@ export default function JobsPage() {
               </select>
             </div>
 
+            {/* Location Filter */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                📍 Location
+              </label>
+              <select
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300"
+              >
+                {availableLocations.map(location => (
+                  <option key={location} value={location}>
+                    {location === "All Locations" ? "📍 All Locations" : location}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Job Type Filter */}
-            <div className="flex-1 min-w-48">
+            <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 💼 Job Type
               </label>
@@ -267,14 +451,50 @@ export default function JobsPage() {
                 ))}
               </select>
             </div>
+
+            {/* Salary Range Filter */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                💰 Salary Range
+              </label>
+              <select
+                value={selectedSalaryRange}
+                onChange={(e) => setSelectedSalaryRange(e.target.value)}
+                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300"
+              >
+                {salaryRanges.map(range => (
+                  <option key={range} value={range}>
+                    {range === "All Salaries" ? "💰 All Salaries" : range}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sort By */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                🔄 Sort By
+              </label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-300"
+              >
+                {sortOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
         {/* Statistics */}
         <div className="mb-12 grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div className="text-3xl font-bold mb-2">{mockJobs.length}</div>
-            <div className="text-green-100">Total Jobs</div>
+            <div className="text-3xl font-bold mb-2">{filteredJobs.length}</div>
+            <div className="text-green-100">Filtered Jobs</div>
           </div>
           <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
             <div className="text-3xl font-bold mb-2">
@@ -366,6 +586,9 @@ export default function JobsPage() {
                   <div className="flex items-center justify-between mb-6">
                     <span className="text-xs text-gray-500 dark:text-gray-400">
                       📅 {formatDate(job.datePosted)}
+                    </span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      📊 {job.source}
                     </span>
                   </div>
 
