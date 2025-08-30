@@ -165,15 +165,15 @@ export default function PreparationGuidesPage() {
 
                 {/* Action Buttons */}
                 <div className="space-y-3">
-                  <button
-                    onClick={() => setSelectedGuide(guide.id)}
-                    className="w-full bg-transparent border-2 border-blue-600 text-blue-600 py-3 px-4 rounded-lg font-medium hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
+                  <Link
+                    href={`/preparation-guides/${guide.id}`}
+                    className="w-full bg-transparent border-2 border-blue-600 text-blue-600 py-3 px-4 rounded-lg font-medium hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg text-center block"
                   >
                     Start {guide.title}
                     <svg className="w-4 h-4 ml-2 inline group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
-                  </button>
+                  </Link>
                   <Link
                     href={`/preparation-guides/${guide.id}`}
                     className="w-full bg-transparent border-2 border-gray-600 text-gray-600 py-3 px-4 rounded-lg font-medium hover:bg-gray-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg text-center block"
