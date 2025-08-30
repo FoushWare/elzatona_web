@@ -5,7 +5,6 @@ import { preparationGuides } from "@/lib/preparationGuides";
 import Link from "next/link";
 
 export default function PreparationGuidesPage() {
-  const { t, isRTL } = useTranslation();
   const [selectedGuide, setSelectedGuide] = useState<string | null>(null);
 
   const guides = preparationGuides;
@@ -16,7 +15,7 @@ export default function PreparationGuidesPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-foreground mb-4">
-            {t("preparationGuides.title")}
+            Preparation Guides
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Interview preparation strategies, question sets, and methodologies
@@ -56,37 +55,31 @@ export default function PreparationGuidesPage() {
 
               {/* Guide Content */}
               <div className="p-6">
-                {/* Sections/Categories/Topics */}
+                {/* Sections */}
                 <div className="mb-6">
                   <h4 className="font-semibold text-foreground mb-3">
-                    {guide.sections
-                      ? "Sections"
-                      : guide.categories
-                      ? "Categories"
-                      : "Topics"}
+                    Sections
                   </h4>
                   <ul className="space-y-2">
-                    {(guide.sections || guide.categories || guide.topics)?.map(
-                      (item, index) => (
-                        <li
-                          key={index}
-                          className="flex items-center text-sm text-muted-foreground"
+                    {guide.sections?.map((section, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center text-sm text-muted-foreground"
+                      >
+                        <svg
+                          className="w-4 h-4 text-blue-500 mr-2 flex-shrink-0"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
                         >
-                          <svg
-                            className="w-4 h-4 text-blue-500 mr-2 flex-shrink-0"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          {item}
-                        </li>
-                      )
-                    )}
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        {section.title}
+                      </li>
+                    ))}
                   </ul>
                 </div>
 
@@ -232,13 +225,13 @@ export default function PreparationGuidesPage() {
                 href="/questions"
                 className="bg-blue-600 text-white px-8 py-4 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
               >
-                {t("questions.title")}
+                Practice Questions
               </Link>
               <Link
                 href="/study-plans"
                 className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-md font-medium hover:bg-blue-50 transition-colors duration-200"
               >
-                {t("studyPlans.title")}
+                Study Plans
               </Link>
             </div>
           </div>
