@@ -591,10 +591,10 @@ export default function StudyPlansPage() {
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`card overflow-hidden border transition-all duration-300 hover:shadow-xl ${
+              className={`card overflow-hidden border transition-all duration-300 hover:shadow-xl hover:scale-[1.02] transform cursor-pointer group ${
                 selectedPlan === plan.id
                   ? "border-primary/60 shadow-primary/20"
-                  : "border-border/40 hover:border-border/60"
+                  : "border-border/40 hover:border-border/60 hover:border-blue-300 dark:hover:border-blue-600"
               }`}
             >
               {/* Plan Header */}
@@ -695,27 +695,40 @@ export default function StudyPlansPage() {
                 <div className="space-y-3">
                   <button
                     onClick={() => handleQuickStart(plan.id)}
-                    className="w-full bg-purple-600 text-white py-3 px-4 rounded-md font-medium hover:bg-purple-700 transition-colors duration-200"
+                    className="w-full bg-purple-600 text-white py-3 px-4 rounded-md font-medium hover:bg-purple-700 hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
                   >
                     🚀 Quick Start
+                    <svg className="w-4 h-4 ml-2 inline group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
                   </button>
                   <button
                     onClick={() => handleSelectPlan(plan.id)}
-                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
+                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
                   >
                     Select Plan
+                    <svg className="w-4 h-4 ml-2 inline group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                    </svg>
                   </button>
                   <button
                     onClick={() => handleStartPlan(plan.id)}
-                    className="w-full bg-green-600 text-white py-3 px-4 rounded-md font-medium hover:bg-green-700 transition-colors duration-200"
+                    className="w-full bg-green-600 text-white py-3 px-4 rounded-md font-medium hover:bg-green-700 hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
                   >
                     Start Plan
+                    <svg className="w-4 h-4 ml-2 inline group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                   </button>
                   <button
                     onClick={() => handleCustomizePlan(plan.id)}
-                    className="w-full btn-outline py-3 px-4 font-medium"
+                    className="w-full btn-outline py-3 px-4 font-medium hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
                   >
                     Customize Plan
+                    <svg className="w-4 h-4 ml-2 inline group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                   </button>
                 </div>
               </div>
