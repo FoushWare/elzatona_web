@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { internalResources } from "@/lib/internalResources";
 
-export default function FrontendQuestionsPage() {
+function FrontendQuestionsPageContent() {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -130,143 +130,86 @@ export default function FrontendQuestionsPage() {
           </div>
         </div>
 
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        {/* Statistics */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
-            <div className="text-3xl font-bold text-blue-600 mb-2">
+            <div className="text-3xl font-bold text-foreground mb-2">
               {totalResources}
             </div>
-            <div className="text-card-foreground font-medium">
-              Total Resources
-            </div>
+            <div className="text-muted-foreground">Resources</div>
           </div>
           <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
-            <div className="text-3xl font-bold text-green-600 mb-2">
+            <div className="text-3xl font-bold text-foreground mb-2">
               {totalQuestions}
             </div>
-            <div className="text-card-foreground font-medium">
-              Total Questions
-            </div>
+            <div className="text-muted-foreground">Questions</div>
           </div>
           <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
-            <div className="text-3xl font-bold text-yellow-600 mb-2">
-              {totalMinutes}
+            <div className="text-3xl font-bold text-foreground mb-2">
+              {Math.round(totalMinutes / 60)}h {totalMinutes % 60}m
             </div>
-            <div className="text-card-foreground font-medium">
-              Total Minutes
-            </div>
-          </div>
-          <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
-            <div className="text-3xl font-bold text-purple-600 mb-2">
-              {filteredResources.length}
-            </div>
-            <div className="text-card-foreground font-medium">
-              Filtered Results
-            </div>
+            <div className="text-muted-foreground">Total Time</div>
           </div>
         </div>
 
         {/* Resources Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredResources.map((resource) => (
             <div
               key={resource.id}
-              className="border rounded-lg p-6 bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-800 hover:shadow-lg transition-shadow duration-200"
+              className="bg-card rounded-lg shadow-sm border border-border p-6 hover:shadow-md transition-shadow"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <span className="text-3xl">{resource.icon}</span>
-                  <div>
-                    <h3 className="text-xl font-semibold text-card-foreground mb-1">
-                      {resource.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm font-medium">
-                      {resource.description}
-                    </p>
-                  </div>
-                </div>
-                <span className="px-3 py-1 rounded-full text-xs font-medium text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/20">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm font-medium text-muted-foreground">
+                  {resource.category}
+                </span>
+                <span className="text-sm font-medium text-muted-foreground">
                   {resource.difficulty}
                 </span>
               </div>
-
-              <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-                <div className="bg-card/50 rounded-lg p-3">
-                  <div className="text-card-foreground font-semibold mb-1">
-                    Questions
-                  </div>
-                  <div className="text-2xl font-bold text-blue-600">
-                    {resource.totalQuestions}
-                  </div>
-                </div>
-                <div className="bg-card/50 rounded-lg p-3">
-                  <div className="text-card-foreground font-semibold mb-1">
-                    Time
-                  </div>
-                  <div className="text-2xl font-bold text-green-600">
-                    {resource.estimatedTime} min
-                  </div>
-                </div>
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                {resource.title}
+              </h3>
+              <p className="text-muted-foreground mb-4 line-clamp-3">
+                {resource.description}
+              </p>
+              <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                <span>{resource.totalQuestions} questions</span>
+                <span>{resource.estimatedTime} min</span>
               </div>
-
-              <div className="mb-4">
-                <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium flex items-center space-x-1">
-                  <span>Show Details</span>
-                  <svg
-                    className="w-4 h-4 transform transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
-
-              <div className="flex space-x-3">
-                <a
-                  className="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 font-medium"
-                  href={`/practice/fundamentals/${resource.id}`}
-                >
-                  Start Learning
-                </a>
-                <button className="px-4 py-2 border border-border text-muted-foreground rounded-md hover:bg-muted transition-colors duration-200">
-                  Preview
-                </button>
-              </div>
+              <a
+                href={resource.link}
+                className="inline-flex items-center justify-center w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+              >
+                Start Learning
+              </a>
             </div>
           ))}
         </div>
 
-        {/* Call to Action */}
-        <div className="mt-16 text-center">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-white">
-            <h2 className="text-3xl font-bold mb-4">
-              Ready to Master Frontend Development?
-            </h2>
-            <p className="text-xl mb-6 opacity-90">
-              Track your progress, explore study plans, and take your skills to
-              the next level.
+        {filteredResources.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">
+              No resources found matching your criteria.
             </p>
-            <div className="flex justify-center space-x-4">
-              <a
-                href="/practice/advanced"
-                className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors duration-200"
-              >
-                Advanced Topics
-              </a>
-              <button className="border-2 border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors duration-200">
-                Learn More
-              </button>
-            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
+  );
+}
+
+export default function FrontendQuestionsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading fundamentals...</p>
+        </div>
+      </div>
+    }>
+      <FrontendQuestionsPageContent />
+    </Suspense>
   );
 }

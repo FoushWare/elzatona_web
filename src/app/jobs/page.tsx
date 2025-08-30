@@ -8,6 +8,7 @@ export default function JobsPage() {
   const [jobs, setJobs] = useState<RealJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [useRealScraping, setUseRealScraping] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("All Countries");
   const [selectedType, setSelectedType] = useState("All Types");
   const [selectedSalaryRange, setSelectedSalaryRange] = useState("All Salaries");
@@ -16,12 +17,12 @@ export default function JobsPage() {
   const [sortBy, setSortBy] = useState("date");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch real jobs on component mount
+  // Fetch jobs on component mount and when real scraping toggle changes
   useEffect(() => {
     const loadJobs = async () => {
       try {
         setLoading(true);
-        const realJobs = await fetchRealJobs();
+        const realJobs = await fetchRealJobs(useRealScraping);
         setJobs(realJobs);
         setError(null);
       } catch (err) {
@@ -33,7 +34,7 @@ export default function JobsPage() {
     };
 
     loadJobs();
-  }, []);
+  }, [useRealScraping]);
 
   // Get unique countries from real jobs
   const countries = useMemo(() => {
@@ -200,10 +201,13 @@ export default function JobsPage() {
         <div className="text-center">
           <div className="text-6xl mb-6 animate-spin">🔄</div>
           <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-4">
-            Loading Real Job Listings...
+            {useRealScraping ? "Scraping Real Job Listings..." : "Loading Job Listings..."}
           </h2>
           <p className="text-gray-500 dark:text-gray-400">
-            Fetching the latest React job opportunities from multiple sources
+            {useRealScraping 
+              ? "Fetching the latest React job opportunities from multiple sources" 
+              : "Loading enhanced job data"
+            }
           </p>
         </div>
       </div>
@@ -241,14 +245,44 @@ export default function JobsPage() {
               React Job Aggregator
             </h1>
             <p className="text-xl text-green-100 max-w-3xl mx-auto leading-relaxed drop-shadow-sm">
-              Real job listings from multiple sources including JS Guru Jobs, LinkedIn, Indeed, Stack Overflow, and more.
+              {useRealScraping 
+                ? "Real job listings from multiple sources including JS Guru Jobs, LinkedIn, Indeed, Stack Overflow, and more."
+                : "Enhanced job data from multiple sources including JS Guru Jobs, LinkedIn, Indeed, Stack Overflow, and more."
+              }
             </p>
+            
+            {/* Real Scraping Toggle */}
+            <div className="mt-8 flex justify-center">
+              <div className="bg-white/20 backdrop-blur-sm rounded-full p-1 flex items-center">
+                <button
+                  onClick={() => setUseRealScraping(false)}
+                  className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                    !useRealScraping 
+                      ? 'bg-white text-green-600 shadow-lg' 
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  🎭 Enhanced Data
+                </button>
+                <button
+                  onClick={() => setUseRealScraping(true)}
+                  className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                    useRealScraping 
+                      ? 'bg-white text-green-600 shadow-lg' 
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  🌐 Real Scraping
+                </button>
+              </div>
+            </div>
+
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <div className="px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
-                🌍 {jobs.length} Real Jobs
+                🌍 {jobs.length} {useRealScraping ? 'Real' : 'Enhanced'} Jobs
               </div>
               <div className="px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
-                ⚡ Live from {sources.length - 1} Sources
+                ⚡ {useRealScraping ? 'Live' : 'Simulated'} Updates
               </div>
               <div className="px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
                 🎯 Global Opportunities
@@ -520,7 +554,10 @@ export default function JobsPage() {
         <div className="mt-16 bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 rounded-2xl p-8 text-white text-center shadow-2xl">
           <h2 className="text-3xl font-bold mb-4">Ready to Land Your Dream Job?</h2>
           <p className="text-xl text-green-100 mb-8">
-            These are real job listings from top platforms. Keep checking back for new opportunities!
+            {useRealScraping 
+              ? "These are real job listings from top platforms. Keep checking back for new opportunities!"
+              : "These are enhanced job listings based on real sources. Switch to real scraping for live data!"
+            }
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
