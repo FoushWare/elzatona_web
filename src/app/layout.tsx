@@ -4,6 +4,7 @@ import { Noto_Naskh_Arabic } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import { ThemeProvider } from "@/hooks/useDarkMode";
+import ChatGPT from "@/components/ChatGPT";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
         <ThemeProvider>
           <Navigation />
           {children}
+          <ChatGPT />
         </ThemeProvider>
       </body>
     </html>

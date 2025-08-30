@@ -68,7 +68,7 @@ export default function CodingPage() {
       case "medium":
         return "from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20";
       case "hard":
-        return "from-red-100 to-pink-100 dark:from-red-900/20 dark:to-pink-900/20";
+        return "from-red-100 to-pink-100 dark:from-red-900/20 dark:to-red-900/20";
       default:
         return "from-gray-100 to-slate-100 dark:from-gray-900/20 dark:to-slate-900/20";
     }
@@ -231,27 +231,28 @@ export default function CodingPage() {
           <div className={`grid grid-cols-1 md:grid-cols-4 gap-6 transition-all duration-300 ${
             showStatistics ? 'block' : 'hidden md:grid'
           }`}>
-          <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div className="text-3xl font-bold mb-2">{codingChallenges.length}</div>
-            <div className="text-blue-100">Total Challenges</div>
-          </div>
-          <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div className="text-3xl font-bold mb-2">
-              {codingChallenges.filter((c) => c.difficulty === "easy").length}
+            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+              <div className="text-3xl font-bold mb-2">{codingChallenges.length}</div>
+              <div className="text-blue-100">Total Challenges</div>
             </div>
-            <div className="text-green-100">Easy</div>
-          </div>
-          <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div className="text-3xl font-bold mb-2">
-              {codingChallenges.filter((c) => c.difficulty === "medium").length}
+            <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+              <div className="text-3xl font-bold mb-2">
+                {codingChallenges.filter((c) => c.difficulty === "easy").length}
+              </div>
+              <div className="text-green-100">Easy</div>
             </div>
-            <div className="text-yellow-100">Medium</div>
-          </div>
-          <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div className="text-3xl font-bold mb-2">
-              {codingChallenges.filter((c) => c.difficulty === "hard").length}
+            <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+              <div className="text-3xl font-bold mb-2">
+                {codingChallenges.filter((c) => c.difficulty === "medium").length}
+              </div>
+              <div className="text-yellow-100">Medium</div>
             </div>
-            <div className="text-red-100">Hard</div>
+            <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+              <div className="text-3xl font-bold mb-2">
+                {codingChallenges.filter((c) => c.difficulty === "hard").length}
+              </div>
+              <div className="text-red-100">Hard</div>
+            </div>
           </div>
         </div>
 
