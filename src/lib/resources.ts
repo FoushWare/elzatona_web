@@ -536,30 +536,71 @@ export const learningPaths: LearningPath[] = [
   {
     id: 'frontend-basics',
     title: 'Frontend Fundamentals',
-    description: 'Master the basics of HTML, CSS, and JavaScript',
+    description: 'Master the basics of HTML, CSS, and JavaScript with modern best practices',
     difficulty: 'beginner',
-    resources: ['css-layouts', 'object-properties', 'font-pairing'],
-    estimatedTime: 8,
-    targetSkills: ['HTML', 'CSS', 'JavaScript', 'Responsive Design']
+    resources: ['css-layouts', 'object-properties', 'font-pairing', 'css-stacking-context', 'event-loop'],
+    estimatedTime: 12,
+    targetSkills: ['HTML', 'CSS', 'JavaScript', 'Responsive Design', 'DOM Manipulation']
+  },
+  {
+    id: 'advanced-css',
+    title: 'Advanced CSS Mastery',
+    description: 'Deep dive into advanced CSS techniques and modern layouts',
+    difficulty: 'intermediate',
+    resources: ['css-stacking-context', 'css-layouts', 'masonry-layout', 'font-pairing'],
+    estimatedTime: 10,
+    prerequisites: ['frontend-basics'],
+    targetSkills: ['Advanced CSS', 'Layout Techniques', 'CSS Architecture', 'Performance']
+  },
+  {
+    id: 'javascript-deep-dive',
+    title: 'JavaScript Deep Dive',
+    description: 'Master advanced JavaScript concepts and modern patterns',
+    difficulty: 'intermediate',
+    resources: ['event-loop', 'generators-iterators', 'object-properties', 'logarithms-time-complexity'],
+    estimatedTime: 14,
+    prerequisites: ['frontend-basics'],
+    targetSkills: ['Advanced JavaScript', 'Async Programming', 'Performance', 'Algorithms']
   },
   {
     id: 'react-mastery',
     title: 'React Mastery',
-    description: 'Deep dive into React patterns and best practices',
+    description: 'Deep dive into React patterns, hooks, and best practices',
     difficulty: 'intermediate',
-    resources: ['react-rendering-patterns', 'render-props-pattern', 'prop-getters'],
-    estimatedTime: 12,
-    prerequisites: ['frontend-basics'],
-    targetSkills: ['React', 'Component Patterns', 'Performance Optimization']
+    resources: ['react-rendering-patterns', 'render-props-pattern', 'prop-getters', 'react-interview-questions'],
+    estimatedTime: 16,
+    prerequisites: ['frontend-basics', 'javascript-deep-dive'],
+    targetSkills: ['React', 'Component Patterns', 'Performance Optimization', 'State Management']
+  },
+  {
+    id: 'typescript-essentials',
+    title: 'TypeScript Essentials',
+    description: 'Learn TypeScript for better type safety and developer experience',
+    difficulty: 'intermediate',
+    resources: ['typescript-utility-types', 'solid-principles-typescript'],
+    estimatedTime: 8,
+    prerequisites: ['javascript-deep-dive'],
+    targetSkills: ['TypeScript', 'Type Safety', 'Utility Types', 'SOLID Principles']
+  },
+  {
+    id: 'testing-strategies',
+    title: 'Testing Strategies',
+    description: 'Master frontend testing with modern tools and best practices',
+    difficulty: 'intermediate',
+    resources: ['testing-implementation-details', 'stop-mocking-fetch'],
+    estimatedTime: 10,
+    prerequisites: ['react-mastery'],
+    targetSkills: ['Testing', 'Jest', 'React Testing', 'Test Strategy']
   },
   {
     id: 'performance-optimization',
     title: 'Performance Optimization',
     description: 'Learn to build fast, efficient web applications',
     difficulty: 'intermediate',
-    resources: ['core-web-vitals', 'performance-tools', 'bfcache'],
-    estimatedTime: 10,
-    targetSkills: ['Performance', 'Core Web Vitals', 'Optimization']
+    resources: ['core-web-vitals', 'performance-tools', 'bfcache', 'css-stacking-context'],
+    estimatedTime: 12,
+    prerequisites: ['frontend-basics'],
+    targetSkills: ['Performance', 'Core Web Vitals', 'Optimization', 'Monitoring']
   },
   {
     id: 'security-essentials',
@@ -567,8 +608,67 @@ export const learningPaths: LearningPath[] = [
     description: 'Essential security practices for frontend developers',
     difficulty: 'intermediate',
     resources: ['csp-guide', 'cookies-security', 'cors-visualized'],
+    estimatedTime: 8,
+    targetSkills: ['Security', 'CSP', 'Authentication', 'CORS', 'Best Practices']
+  },
+  {
+    id: 'system-design',
+    title: 'Frontend System Design',
+    description: 'Learn to design scalable frontend architectures',
+    difficulty: 'advanced',
+    resources: ['design-systems-course', 'atomic-design', 'microfrontends-concept'],
+    estimatedTime: 15,
+    prerequisites: ['react-mastery', 'typescript-essentials'],
+    targetSkills: ['System Design', 'Architecture', 'Design Systems', 'Micro Frontends']
+  },
+  {
+    id: 'build-tools-mastery',
+    title: 'Build Tools & DevOps',
+    description: 'Master modern build tools and deployment strategies',
+    difficulty: 'intermediate',
+    resources: ['build-tools-2023', 'monorepo-vs-polyrepo', 'squoosh'],
+    estimatedTime: 10,
+    prerequisites: ['frontend-basics'],
+    targetSkills: ['Build Tools', 'DevOps', 'Monorepos', 'Optimization']
+  },
+  {
+    id: 'api-integration',
+    title: 'API Integration & Communication',
+    description: 'Master frontend-backend communication and API patterns',
+    difficulty: 'intermediate',
+    resources: ['http-long-polling-vs-sse-vs-websockets', 'cors-visualized'],
+    estimatedTime: 8,
+    prerequisites: ['javascript-deep-dive'],
+    targetSkills: ['APIs', 'WebSockets', 'HTTP', 'Real-time Communication']
+  },
+  {
+    id: 'ai-tools-integration',
+    title: 'AI Tools for Frontend',
+    description: 'Integrate AI tools to enhance your development workflow',
+    difficulty: 'intermediate',
+    resources: ['v0-dev', 'figma-ai', 'mantine-ai'],
     estimatedTime: 6,
-    targetSkills: ['Security', 'CSP', 'Authentication', 'CORS']
+    targetSkills: ['AI Tools', 'UI Generation', 'Productivity', 'Modern Workflow']
+  },
+  {
+    id: 'interview-preparation',
+    title: 'Frontend Interview Prep',
+    description: 'Comprehensive preparation for frontend development interviews',
+    difficulty: 'intermediate',
+    resources: ['javascript-questions', 'react-interview-questions'],
+    estimatedTime: 20,
+    prerequisites: ['react-mastery', 'javascript-deep-dive'],
+    targetSkills: ['Interview Skills', 'Problem Solving', 'System Design', 'Communication']
+  },
+  {
+    id: 'advanced-architectures',
+    title: 'Advanced Frontend Architectures',
+    description: 'Explore cutting-edge frontend architectures and patterns',
+    difficulty: 'advanced',
+    resources: ['microfrontends-concept', 'monorepo-vs-polyrepo', 'design-systems-course'],
+    estimatedTime: 18,
+    prerequisites: ['system-design', 'build-tools-mastery'],
+    targetSkills: ['Micro Frontends', 'Monorepos', 'Scalable Architecture', 'Team Collaboration']
   }
 ];
 

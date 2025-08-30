@@ -16,7 +16,7 @@ export default function LearningPathsPage() {
       (selectedCategory === "all" || path.category === selectedCategory)
   );
 
-  const categories = ["all", "javascript", "react", "css", "system-design", "tools"];
+  const categories = ["all", "javascript", "react", "css", "typescript", "testing", "performance", "security", "system-design", "tools", "ai-tools", "interview"];
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -52,10 +52,22 @@ export default function LearningPathsPage() {
         return "⚛️";
       case "css":
         return "🎨";
+      case "typescript":
+        return "📘";
+      case "testing":
+        return "🧪";
+      case "performance":
+        return "⚡";
+      case "security":
+        return "🔒";
       case "system-design":
         return "🏗️";
       case "tools":
         return "🛠️";
+      case "ai-tools":
+        return "🤖";
+      case "interview":
+        return "💼";
       default:
         return "📚";
     }
