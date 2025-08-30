@@ -324,6 +324,13 @@ export default function Navigation() {
               >
                 📚 Resources
               </Link>
+              <Link
+                href="/jobs"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                💼 Jobs
+              </Link>
             </div>
           </div>
         )}
