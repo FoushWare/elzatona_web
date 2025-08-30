@@ -78,6 +78,26 @@ export default function PreparationGuideDetailPage() {
     return questions[sectionIndex] || "Practice questions coming soon...";
   };
 
+  // Get the appropriate practice page URL based on question content
+  const getPracticePageUrl = (question: string) => {
+    const lowerQuestion = question.toLowerCase();
+    if (lowerQuestion.includes('html') || lowerQuestion.includes('html4') || lowerQuestion.includes('html5')) {
+      return "/practice/fundamentals/html";
+    } else if (lowerQuestion.includes('css') || lowerQuestion.includes('box model')) {
+      return "/practice/fundamentals/css";
+    } else if (lowerQuestion.includes('javascript') || lowerQuestion.includes('async')) {
+      return "/practice/fundamentals/javascript";
+    } else if (lowerQuestion.includes('react') || lowerQuestion.includes('hooks')) {
+      return "/practice/fundamentals/react";
+    } else if (lowerQuestion.includes('optimize') || lowerQuestion.includes('performance')) {
+      return "/practice/fundamentals/performance";
+    } else if (lowerQuestion.includes('star') || lowerQuestion.includes('behavioral') || lowerQuestion.includes('interview')) {
+      return "/practice/fundamentals/behavioral";
+    } else {
+      return "/practice/fundamentals";
+    }
+  };
+
   // Mock resources for each section
   const getResources = (sectionIndex: number) => {
     const resources = [
@@ -206,22 +226,22 @@ export default function PreparationGuideDetailPage() {
                       </div>
                     </div>
 
-                    {/* Practice Question */}
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-foreground mb-3">Practice Question</h4>
-                      <div className="bg-background border border-border rounded-lg p-4">
-                        <p className="text-foreground mb-3">{getPracticeQuestions(index)}</p>
-                        <Link
-                          href="/practice/fundamentals"
-                          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                        >
-                          Practice Now
-                          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                          </svg>
-                        </Link>
-                      </div>
-                    </div>
+                                         {/* Practice Question */}
+                     <div className="mb-6">
+                       <h4 className="font-semibold text-foreground mb-3">Practice Question</h4>
+                       <div className="bg-background border border-border rounded-lg p-4">
+                         <p className="text-foreground mb-3">{getPracticeQuestions(index)}</p>
+                         <Link
+                           href={getPracticePageUrl(getPracticeQuestions(index))}
+                           className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                         >
+                           Practice Now
+                           <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                           </svg>
+                         </Link>
+                       </div>
+                     </div>
 
                     {/* Resources */}
                     <div className="mb-6">
