@@ -1,6 +1,9 @@
 // Job Aggregator Service
 // This service fetches real job data from multiple sources
 
+// Note: Real scraping functions are only available server-side
+// import { scrapeAllJobSources } from './realJobScrapers';
+
 export interface JobSource {
   name: string;
   url: string;
@@ -197,13 +200,9 @@ export function extractTags(title: string, description: string): string[] {
   return tags.slice(0, 5); // Limit to 5 tags
 }
 
-// Mock function to simulate real job fetching
-// In a real implementation, this would use actual web scraping or APIs
-export async function fetchRealJobs(): Promise<RealJob[]> {
-  // For now, we'll return enhanced mock data that looks more realistic
-  // based on the actual job sources you provided
-  
-  const realJobs: RealJob[] = [
+// Enhanced mock data function
+function getEnhancedMockJobs(): RealJob[] {
+  return [
     {
       id: "jsguru-1",
       title: "Senior Frontend Developer",
@@ -385,33 +384,57 @@ export async function fetchRealJobs(): Promise<RealJob[]> {
       sourceUrl: "https://www.hackerrank.com/jobs/search?q=react"
     }
   ];
+}
 
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  return realJobs;
+// Main function to fetch jobs (with toggle for real vs mock data)
+export async function fetchRealJobs(useRealScraping: boolean = false): Promise<RealJob[]> {
+  if (useRealScraping) {
+    try {
+      console.log('Attempting to fetch real jobs from API...');
+      // For now, we'll use enhanced mock data even when real scraping is requested
+      // In a production environment, this would call the API endpoint that handles real scraping
+      const response = await fetch('/api/jobs?real=true');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data.length > 0) {
+          console.log(`Successfully fetched ${data.data.length} real jobs from API`);
+          return data.data;
+        }
+      }
+      console.log('API call failed, falling back to enhanced mock data');
+      return getEnhancedMockJobs();
+    } catch (error) {
+      console.error('Error fetching real jobs, falling back to mock data:', error);
+      return getEnhancedMockJobs();
+    }
+  } else {
+    // Use enhanced mock data
+    console.log('Using enhanced mock job data');
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+    return getEnhancedMockJobs();
+  }
 }
 
 // Function to refresh jobs (would be called periodically)
-export async function refreshJobs(): Promise<RealJob[]> {
+export async function refreshJobs(useRealScraping: boolean = false): Promise<RealJob[]> {
   console.log("Refreshing job listings...");
-  return await fetchRealJobs();
+  return await fetchRealJobs(useRealScraping);
 }
 
 // Function to get jobs by source
-export async function getJobsBySource(source: string): Promise<RealJob[]> {
-  const allJobs = await fetchRealJobs();
+export async function getJobsBySource(source: string, useRealScraping: boolean = false): Promise<RealJob[]> {
+  const allJobs = await fetchRealJobs(useRealScraping);
   return allJobs.filter(job => job.source === source);
 }
 
 // Function to get jobs by country
-export async function getJobsByCountry(country: string): Promise<RealJob[]> {
-  const allJobs = await fetchRealJobs();
+export async function getJobsByCountry(country: string, useRealScraping: boolean = false): Promise<RealJob[]> {
+  const allJobs = await fetchRealJobs(useRealScraping);
   return allJobs.filter(job => job.country === country);
 }
 
 // Function to get jobs by type
-export async function getJobsByType(type: string): Promise<RealJob[]> {
-  const allJobs = await fetchRealJobs();
+export async function getJobsByType(type: string, useRealScraping: boolean = false): Promise<RealJob[]> {
+  const allJobs = await fetchRealJobs(useRealScraping);
   return allJobs.filter(job => job.type === type);
 }
