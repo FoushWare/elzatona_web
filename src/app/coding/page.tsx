@@ -16,6 +16,8 @@ export default function CodingPage() {
     "all" | "easy" | "medium" | "hard"
   >("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   const filteredChallenges = useMemo(() => {
     let filtered = codingChallenges;
@@ -137,7 +139,9 @@ export default function CodingPage() {
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Filters */}
-        <div className="mb-12 space-y-6">
+        <div className={`mb-12 space-y-6 transition-all duration-300 ${
+          showFilters ? 'block' : 'hidden md:block'
+        }`}>
           {/* Search */}
           <div className="relative">
             <input
@@ -204,7 +208,29 @@ export default function CodingPage() {
         </div>
 
         {/* Statistics */}
-        <div className="mb-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="mb-8">
+          <div className="text-center mb-6">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => setShowStatistics(!showStatistics)}
+                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+              >
+                {showStatistics ? "Hide Statistics" : "Show Statistics"}
+                <span className="ml-2">📊</span>
+              </button>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+              >
+                {showFilters ? "Hide Filters" : "Show Filters"}
+                <span className="ml-2">🔍</span>
+              </button>
+            </div>
+          </div>
+          
+          <div className={`grid grid-cols-1 md:grid-cols-4 gap-6 transition-all duration-300 ${
+            showStatistics ? 'block' : 'hidden md:grid'
+          }`}>
           <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
             <div className="text-3xl font-bold mb-2">{codingChallenges.length}</div>
             <div className="text-blue-100">Total Challenges</div>
