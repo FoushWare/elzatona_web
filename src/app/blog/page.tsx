@@ -168,8 +168,11 @@ const blogPosts: BlogPost[] = [
 ];
 
 export default function BlogPage() {
-  const [selectedCategory, setSelectedCategory] = useState<"all" | BlogPost["category"]>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<BlogPost["category"] | "all">("all");
+  const [selectedAuthor, setSelectedAuthor] = useState("all");
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   const filteredPosts = blogPosts.filter(post => {
     const matchesCategory = selectedCategory === "all" || post.category === selectedCategory;
@@ -218,22 +221,43 @@ export default function BlogPage() {
             </p>
             
             {/* Stats */}
-            <div className="flex justify-center gap-8 mb-8">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{blogPosts.length}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Total Articles</div>
+            <div className="mb-6">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+                <button
+                  onClick={() => setShowStatistics(!showStatistics)}
+                  className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                >
+                  {showStatistics ? "Hide Statistics" : "Show Statistics"}
+                  <span className="ml-2">📊</span>
+                </button>
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+                >
+                  {showFilters ? "Hide Filters" : "Show Filters"}
+                  <span className="ml-2">🔍</span>
+                </button>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600 dark:text-green-400">{originalPosts.length}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Original Content</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{externalPosts.length}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Curated Articles</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{featuredPosts.length}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Featured</div>
+              
+              <div className={`flex justify-center gap-8 transition-all duration-300 ${
+                showStatistics ? 'block' : 'hidden md:flex'
+              }`}>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{blogPosts.length}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Total Articles</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600 dark:text-blue-400">{originalPosts.length}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Original Content</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{externalPosts.length}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Curated Articles</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{featuredPosts.length}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Featured</div>
+                </div>
               </div>
             </div>
           </div>
@@ -242,7 +266,9 @@ export default function BlogPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8">
+        <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 transition-all duration-300 ${
+          showFilters ? 'block' : 'hidden md:block'
+        }`}>
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">

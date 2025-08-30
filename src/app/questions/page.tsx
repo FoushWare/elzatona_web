@@ -26,6 +26,8 @@ export default function QuestionsPage() {
     "popularity"
   );
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   // Filter questions based on current selections
   const filteredQuestions = greatFrontendQuestions.filter((question) => {
@@ -195,6 +197,22 @@ export default function QuestionsPage() {
             format, and topic, each with high quality answers and tests from big
             tech senior / staff engineers.
           </p>
+
+          {/* Mobile Toggle Buttons */}
+          <div className="flex flex-wrap gap-3 mt-6 md:hidden">
+            <button
+              onClick={() => setShowStatistics(!showStatistics)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            >
+              {showStatistics ? "Hide Statistics" : "Show Statistics"}
+            </button>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+            >
+              {showFilters ? "Hide Filters" : "Show Filters"}
+            </button>
+          </div>
         </div>
 
         {/* Search and Sort */}
@@ -299,28 +317,30 @@ export default function QuestionsPage() {
         )}
 
         {/* Question Statistics */}
-        <div className="flex items-center justify-between mb-6 p-4 bg-gray-800 rounded-lg">
-          <div className="flex items-center space-x-6">
-            <span className="text-gray-300">
-              <span className="font-semibold text-white">{filteredCount}</span>{" "}
-              of {totalQuestions} questions
-            </span>
-            <span className="text-gray-300">
-              <span className="font-semibold text-white">{totalHours}</span>{" "}
-              hours of content
-            </span>
-          </div>
+        <div className={`${showStatistics ? 'block' : 'hidden md:block'} mb-6`}>
+          <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+            <div className="flex items-center space-x-6">
+              <span className="text-gray-300">
+                <span className="font-semibold text-white">{filteredCount}</span>{" "}
+                of {totalQuestions} questions
+              </span>
+              <span className="text-gray-300">
+                <span className="font-semibold text-white">{totalHours}</span>{" "}
+                hours of content
+              </span>
+            </div>
 
-          {(selectedTopics.length > 0 ||
-            selectedCompanies.length > 0 ||
-            selectedDifficulty !== "all") && (
-            <button
-              onClick={clearFilters}
-              className="text-blue-400 hover:text-blue-300 text-sm"
-            >
-              Clear filters
-            </button>
-          )}
+            {(selectedTopics.length > 0 ||
+              selectedCompanies.length > 0 ||
+              selectedDifficulty !== "all") && (
+              <button
+                onClick={clearFilters}
+                className="text-blue-400 hover:text-blue-300 text-sm"
+              >
+                Clear filters
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Main Content */}
@@ -417,7 +437,7 @@ export default function QuestionsPage() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="w-80 space-y-6">
+          <div className={`${showFilters ? 'block' : 'hidden md:block'} w-80 space-y-6`}>
             {/* Topics Filter */}
             <div className="bg-gray-800 rounded-lg p-4">
               <h3 className="text-lg font-semibold mb-4">Filter by Topics</h3>

@@ -214,6 +214,9 @@ const systemDesignFeatures: SystemDesignFeature[] = [
 ];
 
 export default function SystemDesignPage() {
+  const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     "all" | "beginner" | "intermediate" | "advanced"
@@ -278,10 +281,30 @@ export default function SystemDesignPage() {
               <span>Watch YouTube Playlist</span>
             </Link>
           </div>
+          
+          {/* Toggle Buttons */}
+          <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => setShowStatistics(!showStatistics)}
+              className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            >
+              {showStatistics ? "Hide Statistics" : "Show Statistics"}
+              <span className="ml-2">📊</span>
+            </button>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+            >
+              {showFilters ? "Hide Filters" : "Show Filters"}
+              <span className="ml-2">🔍</span>
+            </button>
+          </div>
         </div>
 
         {/* Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className={`grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 transition-all duration-300 ${
+          showStatistics ? 'block' : 'hidden md:grid'
+        }`}>
           <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
             <div className="text-3xl font-bold text-blue-600 mb-2">
               {systemDesignFeatures.length}
@@ -318,7 +341,9 @@ export default function SystemDesignPage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-8">
+        <div className={`bg-card rounded-lg shadow-sm border border-border p-6 mb-8 transition-all duration-300 ${
+          showFilters ? 'block' : 'hidden md:block'
+        }`}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label

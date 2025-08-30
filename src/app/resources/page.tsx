@@ -28,6 +28,7 @@ export default function ResourcesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [resourcesPerPage] = useState(12);
   const [showFilters, setShowFilters] = useState(false);
+  const [showStatistics, setShowStatistics] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null); // Ref for the filter panel
 
   useEffect(() => {
@@ -146,6 +147,15 @@ export default function ResourcesPage() {
               Curated collection of the best frontend development resources,
               tools, and learning materials
             </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+              <button
+                onClick={() => setShowStatistics(!showStatistics)}
+                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+              >
+                {showStatistics ? "Hide Statistics" : "Show Statistics"}
+                <span className="ml-2">📊</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -157,6 +167,16 @@ export default function ResourcesPage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-4 lg:mb-0">
               Browse by Category
             </h2>
+            
+            {/* Mobile Toggle Buttons */}
+            <div className="md:hidden flex gap-2 mb-4">
+              <button
+                onClick={() => setShowStatistics(!showStatistics)}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
+              >
+                {showStatistics ? "Hide Stats" : "Show Stats"}
+              </button>
+            </div>
 
             {/* Filters Toggle Button */}
             <div className="relative">
@@ -336,7 +356,9 @@ export default function ResourcesPage() {
           </div>
 
           {/* Category Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+          <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6 transition-all duration-300 ${
+            showStatistics ? 'block' : 'hidden md:grid'
+          }`}>
             {resourceCategories.map((category) => (
               <CategoryCard
                 key={category.id}
