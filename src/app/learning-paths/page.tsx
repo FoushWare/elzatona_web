@@ -13,7 +13,7 @@ export default function LearningPathsPage() {
   const filteredPaths = learningPaths.filter(
     (path) =>
       (selectedDifficulty === "all" || path.difficulty === selectedDifficulty) &&
-      (selectedCategory === "all" || path.category === selectedCategory)
+      (selectedCategory === "all" || path.id.includes(selectedCategory))
   );
 
   const categories = ["all", "javascript", "react", "css", "typescript", "testing", "performance", "security", "system-design", "tools", "ai-tools", "interview"];

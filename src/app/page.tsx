@@ -4,8 +4,12 @@ import Link from "next/link";
 import ChallengeCard from "@/components/ChallengeCard";
 import { getChallenges } from "@/lib/challenges";
 import { Category } from "@/types/challenge";
+import { useState } from "react";
 
 export default function Home() {
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  
   const featuredChallenges = getChallenges().slice(0, 6);
   const categories: {
     name: Category;
@@ -31,6 +35,38 @@ export default function Home() {
       description: "Build components, hooks, and modern React apps",
       count: getChallenges({ category: "javascript" }).length, // Using JS count as proxy for React
     },
+  ];
+
+  // Statistics data
+  const statistics = [
+    {
+      title: "Total Challenges",
+      value: getChallenges().length,
+      icon: "🎯",
+      color: "text-blue-600",
+      bgColor: "bg-blue-100 dark:bg-blue-900/20"
+    },
+    {
+      title: "CSS Challenges",
+      value: getChallenges({ category: "css" }).length,
+      icon: "🎨",
+      color: "text-purple-600",
+      bgColor: "bg-purple-100 dark:bg-purple-900/20"
+    },
+    {
+      title: "JavaScript Challenges",
+      value: getChallenges({ category: "javascript" }).length,
+      icon: "⚡",
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-100 dark:bg-yellow-900/20"
+    },
+    {
+      title: "Learning Paths",
+      value: 13, // From learning paths data
+      icon: "🗺️",
+      color: "text-green-600",
+      bgColor: "bg-green-100 dark:bg-green-900/20"
+    }
   ];
 
   return (
@@ -90,6 +126,55 @@ export default function Home() {
                 🗺️ Study Plans
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Statistics Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-4 text-foreground">
+              Quick Stats
+            </h2>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => setShowStatistics(!showStatistics)}
+                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+              >
+                {showStatistics ? "Hide Statistics" : "Show Statistics"}
+                <span className="ml-2">📊</span>
+              </button>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+              >
+                {showFilters ? "Hide Filters" : "Show Filters"}
+                <span className="ml-2">🔍</span>
+              </button>
+            </div>
+          </div>
+          
+          {/* Statistics Grid - Hidden on mobile by default */}
+          <div className={`grid md:grid-cols-4 gap-8 transition-all duration-300 ${
+            showStatistics ? 'block' : 'hidden md:grid'
+          }`}>
+            {statistics.map((stat, index) => (
+              <div
+                key={stat.title}
+                className={`text-center p-8 rounded-2xl ${stat.bgColor} dark:bg-opacity-20 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105`}
+              >
+                <div className="text-6xl mb-4 transform hover:scale-110 transition-transform duration-300">
+                  {stat.icon}
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+                  {stat.title}
+                </h3>
+                <p className={`text-4xl font-bold ${stat.color}`}>
+                  {stat.value}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
