@@ -633,6 +633,11 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const useRealScraping = searchParams.get('real') === 'true';
     
+    // Pagination parameters
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '20');
+    const offset = (page - 1) * limit;
+    
     if (useRealScraping) {
       console.log('Attempting real web scraping...');
       
@@ -645,26 +650,46 @@ export async function GET(request: NextRequest) {
         salary: (searchParams.get('salary') as 'any' | 'entry' | 'mid' | 'senior') || 'any'
       };
       
-      const jobs = await scrapeAllJobSources(filters);
+      const allJobs = await scrapeAllJobSources(filters);
       
-      if (jobs.length === 0) {
+      if (allJobs.length === 0) {
         console.log('Real scraping returned no results');
         return NextResponse.json({
           success: false,
           message: 'No jobs found',
           count: 0,
           data: [],
+          pagination: {
+            page,
+            limit,
+            total: 0,
+            totalPages: 0,
+            hasNext: false,
+            hasPrev: false
+          },
           sources: jobSources.map(s => ({ name: s.name, enabled: s.enabled }))
         });
       }
       
-      console.log(`Successfully scraped ${jobs.length} jobs`);
+      // Apply pagination
+      const paginatedJobs = allJobs.slice(offset, offset + limit);
+      const totalPages = Math.ceil(allJobs.length / limit);
+      
+      console.log(`Successfully scraped ${allJobs.length} jobs, returning ${paginatedJobs.length} for page ${page}`);
       
       return NextResponse.json({
         success: true,
         message: 'Jobs scraped successfully',
-        count: jobs.length,
-        data: jobs,
+        count: allJobs.length,
+        data: paginatedJobs,
+        pagination: {
+          page,
+          limit,
+          total: allJobs.length,
+          totalPages,
+          hasNext: page < totalPages,
+          hasPrev: page > 1
+        },
         sources: jobSources.map(s => ({ name: s.name, enabled: s.enabled })),
         filters
       });
@@ -675,6 +700,14 @@ export async function GET(request: NextRequest) {
       message: 'Please specify real=true to get real jobs',
       count: 0,
       data: [],
+      pagination: {
+        page,
+        limit,
+        total: 0,
+        totalPages: 0,
+        hasNext: false,
+        hasPrev: false
+      },
       sources: jobSources.map(s => ({ name: s.name, enabled: s.enabled }))
     });
     
@@ -685,6 +718,14 @@ export async function GET(request: NextRequest) {
       message: 'Internal server error',
       count: 0,
       data: [],
+      pagination: {
+        page: 1,
+        limit: 20,
+        total: 0,
+        totalPages: 0,
+        hasNext: false,
+        hasPrev: false
+      },
       sources: jobSources.map(s => ({ name: s.name, enabled: s.enabled }))
     }, { status: 500 });
   }
