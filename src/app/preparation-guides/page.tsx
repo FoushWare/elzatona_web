@@ -105,11 +105,11 @@ export default function PreparationGuidesPage() {
                 <div className="space-y-3">
                   <button
                     onClick={() => setSelectedGuide(guide.id)}
-                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
+                    className="w-full bg-transparent border-2 border-blue-600 text-blue-600 py-3 px-4 rounded-md font-medium hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200"
                   >
                     Start {guide.title}
                   </button>
-                  <button className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-md font-medium hover:bg-gray-50 transition-colors duration-200">
+                  <button className="w-full bg-transparent border-2 border-gray-600 text-gray-600 py-3 px-4 rounded-md font-medium hover:bg-gray-600 hover:text-white hover:scale-105 transform transition-all duration-200">
                     View Details
                   </button>
                 </div>
@@ -141,7 +141,7 @@ export default function PreparationGuidesPage() {
               </p>
               <Link
                 href="/study-plans"
-                className="inline-block bg-red-600 text-white px-4 py-2 rounded-md font-medium hover:bg-red-700 transition-colors duration-200"
+                className="inline-block bg-transparent border-2 border-red-600 text-red-600 px-4 py-2 rounded-md font-medium hover:bg-red-600 hover:text-white hover:scale-105 transform transition-all duration-200"
               >
                 Learn More
               </Link>
@@ -157,7 +157,7 @@ export default function PreparationGuidesPage() {
               </p>
               <Link
                 href="/study-plans"
-                className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
+                className="inline-block bg-transparent border-2 border-blue-600 text-blue-600 px-4 py-2 rounded-md font-medium hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200"
               >
                 Learn More
               </Link>
@@ -173,7 +173,7 @@ export default function PreparationGuidesPage() {
               </p>
               <Link
                 href="/study-plans"
-                className="inline-block bg-green-600 text-white px-4 py-2 rounded-md font-medium hover:bg-green-700 transition-colors duration-200"
+                className="inline-block bg-transparent border-2 border-green-600 text-green-600 px-4 py-2 rounded-md font-medium hover:bg-green-600 hover:text-white hover:scale-105 transform transition-all duration-200"
               >
                 Learn More
               </Link>
@@ -223,13 +223,13 @@ export default function PreparationGuidesPage() {
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link
                 href="/questions"
-                className="bg-blue-600 text-white px-8 py-4 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
+                className="bg-transparent border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-md font-medium hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200"
               >
                 Practice Questions
               </Link>
               <Link
                 href="/study-plans"
-                className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-md font-medium hover:bg-blue-50 transition-colors duration-200"
+                className="bg-transparent border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-md font-medium hover:bg-purple-600 hover:text-white hover:scale-105 transform transition-all duration-200"
               >
                 Study Plans
               </Link>
