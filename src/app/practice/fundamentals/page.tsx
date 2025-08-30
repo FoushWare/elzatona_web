@@ -1,12 +1,22 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { internalResources } from "@/lib/internalResources";
 
 export default function FrontendQuestionsPage() {
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
+
+  // Handle URL parameters for category filtering
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get("category");
+    if (categoryFromUrl && ["javascript", "react", "css"].includes(categoryFromUrl)) {
+      setSelectedCategory(categoryFromUrl);
+    }
+  }, [searchParams]);
 
   // Filter resources to only include frontend fundamentals (JS, React, CSS)
   const frontendResources = useMemo(() => {

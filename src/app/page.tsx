@@ -14,12 +14,6 @@ export default function Home() {
     count: number;
   }[] = [
     {
-      name: "html",
-      title: "HTML Challenges",
-      description: "Master semantic markup, forms, and accessibility",
-      count: getChallenges({ category: "html" }).length,
-    },
-    {
       name: "css",
       title: "CSS Challenges",
       description: "Learn layouts, animations, and responsive design",
@@ -30,6 +24,12 @@ export default function Home() {
       title: "JavaScript Challenges",
       description: "Practice DOM manipulation, events, and modern JS",
       count: getChallenges({ category: "javascript" }).length,
+    },
+    {
+      name: "react",
+      title: "React Challenges",
+      description: "Build components, hooks, and modern React apps",
+      count: getChallenges({ category: "javascript" }).length, // Using JS count as proxy for React
     },
   ];
 
