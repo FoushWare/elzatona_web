@@ -19,6 +19,7 @@ interface CacheInfo {
   scrapedSources?: string;
   fallback?: boolean;
   enhancedMock?: boolean;
+  error?: string;
 }
 
 export async function GET(request: Request) {
@@ -34,22 +35,37 @@ export async function GET(request: Request) {
       try {
         console.log('Attempting real web scraping...');
         jobs = await scrapeAllJobSources();
-        cacheInfo = {
-          fromCache: false,
-          realScraping: true,
-          scrapedSources: jobs.length > 0 ? 'Multiple sources' : 'None'
-        };
+        
+        if (jobs && jobs.length > 0) {
+          console.log(`Successfully scraped ${jobs.length} jobs`);
+          cacheInfo = {
+            fromCache: false,
+            realScraping: true,
+            scrapedSources: `${jobs.length} jobs from multiple sources`
+          };
+        } else {
+          console.log('Real scraping returned empty results, falling back to enhanced mock data');
+          jobs = await fetchRealJobs(false);
+          cacheInfo = {
+            fromCache: false,
+            realScraping: false,
+            fallback: true,
+            error: 'Real scraping returned no results'
+          };
+        }
       } catch (scrapingError) {
         console.error('Real scraping failed, falling back to enhanced mock data:', scrapingError);
         jobs = await fetchRealJobs(false);
         cacheInfo = {
           fromCache: false,
           realScraping: false,
-          fallback: true
+          fallback: true,
+          error: `Scraping error: ${scrapingError instanceof Error ? scrapingError.message : 'Unknown error'}`
         };
       }
     } else {
       // Use enhanced mock data
+      console.log('Using enhanced mock job data');
       jobs = await fetchRealJobs(false);
       cacheInfo = {
         fromCache: false,
@@ -58,25 +74,61 @@ export async function GET(request: Request) {
       };
     }
     
+    // Ensure we always have jobs
+    if (!jobs || jobs.length === 0) {
+      console.log('No jobs available, using fallback mock data');
+      jobs = await fetchRealJobs(false);
+      cacheInfo = {
+        fromCache: false,
+        realScraping: false,
+        fallback: true,
+        error: 'No jobs available from any source'
+      };
+    }
+    
     return NextResponse.json({
       success: true,
       data: jobs,
       count: jobs.length,
-      realScraping: useRealScraping && scrapeAllJobSources,
+      realScraping: useRealScraping && scrapeAllJobSources && cacheInfo.realScraping,
       cache: cacheInfo,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
     console.error('Error fetching jobs:', error);
     
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to fetch jobs',
-        message: 'Please try again later'
-      },
-      { status: 500 }
-    );
+    // Return fallback data even on error
+    try {
+      const fallbackJobs = await fetchRealJobs(false);
+      return NextResponse.json({
+        success: true,
+        data: fallbackJobs,
+        count: fallbackJobs.length,
+        realScraping: false,
+        cache: {
+          fromCache: false,
+          realScraping: false,
+          fallback: true,
+          error: `API error: ${error instanceof Error ? error.message : 'Unknown error'}`
+        },
+        timestamp: new Date().toISOString()
+      });
+    } catch (fallbackError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Failed to fetch jobs',
+          message: 'Please try again later',
+          cache: {
+            fromCache: false,
+            realScraping: false,
+            fallback: false,
+            error: `Critical error: ${error instanceof Error ? error.message : 'Unknown error'}`
+          }
+        },
+        { status: 500 }
+      );
+    }
   }
 }
 
@@ -91,11 +143,20 @@ export async function POST(request: Request) {
     if (useRealScraping && scrapeAllJobSources) {
       try {
         jobs = await scrapeAllJobSources();
+        if (!jobs || jobs.length === 0) {
+          console.log('Real scraping returned no results, using enhanced mock data');
+          jobs = await fetchRealJobs(false);
+        }
       } catch (error) {
         console.error('Real scraping failed, using enhanced mock data:', error);
         jobs = await fetchRealJobs(false);
       }
     } else {
+      jobs = await fetchRealJobs(false);
+    }
+    
+    // Ensure we have jobs
+    if (!jobs || jobs.length === 0) {
       jobs = await fetchRealJobs(false);
     }
     
@@ -135,13 +196,27 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error filtering jobs:', error);
     
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to filter jobs',
-        message: 'Please try again later'
-      },
-      { status: 500 }
-    );
+    // Return fallback data even on error
+    try {
+      const fallbackJobs = await fetchRealJobs(false);
+      return NextResponse.json({
+        success: true,
+        data: fallbackJobs,
+        count: fallbackJobs.length,
+        filters: {},
+        realScraping: false,
+        error: `Filtering error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        timestamp: new Date().toISOString()
+      });
+    } catch (fallbackError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Failed to filter jobs',
+          message: 'Please try again later'
+        },
+        { status: 500 }
+      );
+    }
   }
 }
