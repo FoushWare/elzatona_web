@@ -87,13 +87,13 @@ export default function LearningPathsPage() {
           <div className="mt-6 flex justify-center space-x-4">
             <Link
               href="/study-plans"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               📅 View Study Plans
             </Link>
             <Link
               href="/preparation-guides"
-              className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+              className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               🎯 Preparation Guides
             </Link>
@@ -138,10 +138,10 @@ export default function LearningPathsPage() {
                   <button
                     key={difficulty}
                     onClick={() => setSelectedDifficulty(difficulty as any)}
-                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                    className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 transform ${
                       selectedDifficulty === difficulty
-                        ? "bg-blue-600 text-white"
-                        : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-muted text-muted-foreground hover:bg-muted/80 hover:shadow-md"
                     }`}
                   >
                     {difficulty === "all" ? "All Levels" : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
@@ -158,10 +158,10 @@ export default function LearningPathsPage() {
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                    className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 transform ${
                       selectedCategory === category
-                        ? "bg-purple-600 text-white"
-                        : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        ? "bg-purple-600 text-white shadow-lg"
+                        : "bg-muted text-muted-foreground hover:bg-muted/80 hover:shadow-md"
                     }`}
                   >
                     {category === "all" ? "All Categories" : category.charAt(0).toUpperCase() + category.slice(1)}
@@ -177,7 +177,7 @@ export default function LearningPathsPage() {
           {filteredPaths.map((path) => (
             <div
               key={path.id}
-              className="bg-card rounded-lg shadow-sm border border-border p-6 hover:shadow-md transition-shadow"
+              className="bg-card rounded-lg shadow-sm border border-border p-6 hover:shadow-xl hover:scale-[1.02] hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 transform cursor-pointer group"
             >
               {/* Header */}
               <div className="flex justify-between items-start mb-4">
@@ -284,9 +284,12 @@ export default function LearningPathsPage() {
               {/* Action Button */}
               <Link
                 href={`/learning-paths/${path.id}`}
-                className="inline-flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg"
               >
                 Start Learning Path
+                <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
               </Link>
             </div>
           ))}
