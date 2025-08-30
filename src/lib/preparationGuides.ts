@@ -1,199 +1,372 @@
-import { PreparationGuide } from '@/types/preparationGuide';
+export interface PreparationGuideSection {
+  title: string;
+  description: string;
+  readingTime: number;
+  topics: string[];
+}
+
+export interface PreparationGuide {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'all-levels';
+  estimatedTime: number;
+  color: string;
+  icon: string;
+  sections: PreparationGuideSection[];
+  features: string[];
+  targetSkills: string[];
+  featured?: boolean;
+}
 
 export const preparationGuides: PreparationGuide[] = [
   {
-    id: 'frontend-interview-playbook',
-    title: 'Front End Interview Playbook',
-    description: 'The definitive guide to front end interviews with end-to-end coverage, tips for all question types, and 500+ practice questions.',
+    id: 'complete-frontend-interview-guide',
+    title: 'Complete Frontend Interview Mastery',
+    description: 'A comprehensive guide covering all aspects of frontend interviews - from fundamentals to advanced concepts, system design, and behavioral questions.',
     difficulty: 'all-levels',
-    estimatedTime: 40,
+    estimatedTime: 60,
     color: 'from-blue-600 to-purple-600',
-    icon: '📚',
+    icon: '🎯',
     sections: [
       {
-        title: 'Introduction',
-        description: 'Everything you need to know - from types of questions to preparation tactics',
-        readingTime: 10,
-        topics: ['Interview types', 'Preparation strategies', 'Question categories']
+        title: 'Interview Fundamentals',
+        description: 'Understanding the interview process and preparation strategies',
+        readingTime: 15,
+        topics: ['Interview types and formats', 'Preparation timeline', 'Company research', 'Portfolio preparation', 'Mock interview strategies']
       },
       {
-        title: 'Coding Interviews',
-        description: 'Front end coding interviews, JavaScript coding, and data structures & algorithms',
-        readingTime: 21,
-        topics: ['JavaScript coding', 'DSA for frontend', 'Coding best practices']
+        title: 'Core Technologies Deep Dive',
+        description: 'Master HTML, CSS, and JavaScript fundamentals',
+        readingTime: 25,
+        topics: ['HTML5 semantic elements', 'CSS Grid and Flexbox', 'JavaScript ES6+ features', 'DOM manipulation', 'Event handling', 'Async programming']
       },
       {
-        title: 'User Interface Interviews',
-        description: 'UI coding interviews, cheatsheets, and API design principles',
-        readingTime: 34,
-        topics: ['UI components', 'Accessibility', 'API design']
+        title: 'Modern Frontend Frameworks',
+        description: 'React, Vue, and Angular concepts and best practices',
+        readingTime: 20,
+        topics: ['React hooks and lifecycle', 'State management', 'Component patterns', 'Performance optimization', 'Testing strategies']
       },
       {
-        title: 'System Design Interviews',
-        description: 'Front end system design interviews with quick start guide',
-        readingTime: 2,
-        topics: ['System design', 'Architecture', 'Scalability']
+        title: 'System Design for Frontend',
+        description: 'Design scalable frontend architectures and user interfaces',
+        readingTime: 30,
+        topics: ['Component architecture', 'State management patterns', 'Performance optimization', 'Accessibility', 'Mobile-first design']
       },
       {
-        title: 'Quiz Interviews',
-        description: 'Quiz-style front end interview questions with 100+ practice questions',
-        readingTime: 4,
-        topics: ['Technical concepts', 'Best practices', 'Common pitfalls']
+        title: 'Coding Challenges',
+        description: 'Practice with real-world coding problems and algorithms',
+        readingTime: 25,
+        topics: ['DOM manipulation challenges', 'CSS layout problems', 'JavaScript algorithms', 'React component building', 'Debugging techniques']
       },
       {
-        title: 'Resume Preparation',
-        description: 'Ultimate guide to front end engineer resumes with writing tips and samples',
-        readingTime: 7,
-        topics: ['Resume writing', 'Portfolio', 'Best practices']
+        title: 'Behavioral & Leadership',
+        description: 'Master behavioral questions and demonstrate leadership skills',
+        readingTime: 15,
+        topics: ['STAR method', 'Project leadership', 'Team collaboration', 'Conflict resolution', 'Technical decision making']
       }
     ],
     features: [
       '500+ practice questions',
-      'End-to-end guide',
-      'Tips for all question types',
-      'Ex-interviewer insights',
-      'Company-specific strategies',
-      'Mock interview scenarios'
-    ],
-    targetSkills: ['Interview Skills', 'Technical Knowledge', 'Problem Solving', 'Communication']
-  },
-  {
-    id: 'gfe75',
-    title: 'GFE 75 - Most Important Questions',
-    description: 'The smallest list of practice questions that gets you the most mileage in your preparation. Covers the most commonly asked front end interview topics.',
-    difficulty: 'intermediate',
-    estimatedTime: 2222,
-    color: 'from-green-600 to-teal-600',
-    icon: '🎯',
-    sections: [
-      {
-        title: 'JavaScript Functions',
-        description: 'Core JavaScript implementation questions',
-        readingTime: 600,
-        topics: ['Debounce', 'Throttle', 'Promise.all', 'Event Emitter', 'Deep Clone', 'Memoize']
-      },
-      {
-        title: 'User Interface Coding',
-        description: 'Practical UI component building',
-        readingTime: 800,
-        topics: ['Todo List', 'Contact Form', 'Tabs', 'Accordion', 'Modal', 'Data Table']
-      },
-      {
-        title: 'System Design',
-        description: 'Frontend system design challenges',
-        readingTime: 600,
-        topics: ['News Feed', 'Autocomplete', 'Image Carousel', 'Chat App', 'Video Streaming']
-      },
-      {
-        title: 'Quiz Questions',
-        description: 'Technical concept questions',
-        readingTime: 222,
-        topics: ['JavaScript fundamentals', 'CSS concepts', 'Browser APIs', 'Performance']
-      }
-    ],
-    features: [
-      '75 essential questions',
-      'Code in browser',
-      'Official solutions',
-      'Test cases',
-      'Progress tracking',
-      'High-frequency topics'
-    ],
-    targetSkills: ['JavaScript', 'React', 'CSS', 'System Design', 'Problem Solving']
-  },
-  {
-    id: 'blind75',
-    title: 'Blind 75 for Front End',
-    description: 'The most important front end interview questions to practice, with answers and test cases. Curated by big tech ex-interviewers.',
-    difficulty: 'advanced',
-    estimatedTime: 1500,
-    color: 'from-orange-600 to-red-600',
-    icon: '🧠',
-    sections: [
-      {
-        title: 'JavaScript Functions',
-        description: 'Advanced JavaScript implementation challenges',
-        readingTime: 500,
-        topics: ['Array methods', 'Promise utilities', 'DOM manipulation', 'Event handling']
-      },
-      {
-        title: 'UI Components',
-        description: 'Complex UI component implementations',
-        readingTime: 600,
-        topics: ['Advanced forms', 'Complex layouts', 'Interactive components', 'State management']
-      },
-      {
-        title: 'System Design',
-        description: 'Frontend system design challenges',
-        readingTime: 400,
-        topics: ['Component architecture', 'State design', 'Performance optimization', 'Scalability']
-      }
-    ],
-    features: [
-      '75 algorithm questions',
-      'Data structure mastery',
+      'Real interview scenarios',
+      'Step-by-step solutions',
+      'Performance optimization tips',
       'System design patterns',
-      'Complexity analysis',
-      'Optimization techniques',
-      'Real-world applications'
+      'Behavioral question strategies',
+      'Mock interview templates',
+      'Company-specific insights'
     ],
-    targetSkills: ['Algorithms', 'Data Structures', 'System Design', 'Performance', 'Architecture']
+    targetSkills: ['Interview Skills', 'Technical Knowledge', 'System Design', 'Problem Solving', 'Communication', 'Leadership']
   },
   {
-    id: 'system-design-playbook',
-    title: 'Front End System Design Playbook',
-    description: 'Comprehensive guide to frontend system design interviews with architecture patterns, scalability strategies, and real-world case studies.',
-    difficulty: 'advanced',
-    estimatedTime: 800,
-    color: 'from-purple-600 to-pink-600',
-    icon: '🏗️',
+    id: 'javascript-mastery-guide',
+    title: 'JavaScript Deep Dive & Advanced Concepts',
+    description: 'Master JavaScript from fundamentals to advanced patterns, including modern ES6+ features, async programming, and performance optimization.',
+    difficulty: 'intermediate',
+    estimatedTime: 45,
+    color: 'from-yellow-500 to-orange-500',
+    icon: '⚡',
     sections: [
       {
-        title: 'Architecture Fundamentals',
-        description: 'Core principles of frontend architecture',
-        readingTime: 120,
-        topics: ['Component design', 'State management', 'Data flow', 'Module patterns']
+        title: 'JavaScript Fundamentals',
+        description: 'Core concepts and language features',
+        readingTime: 20,
+        topics: ['Variables and scope', 'Functions and closures', 'Objects and prototypes', 'Arrays and methods', 'Error handling']
       },
       {
-        title: 'Scalability Strategies',
-        description: 'Building scalable frontend applications',
-        readingTime: 180,
-        topics: ['Code splitting', 'Lazy loading', 'Caching strategies', 'Performance optimization']
+        title: 'ES6+ Modern Features',
+        description: 'Latest JavaScript features and best practices',
+        readingTime: 25,
+        topics: ['Arrow functions', 'Destructuring', 'Template literals', 'Modules', 'Classes', 'Symbols and iterators']
+      },
+      {
+        title: 'Asynchronous JavaScript',
+        description: 'Master async programming patterns',
+        readingTime: 30,
+        topics: ['Callbacks and promises', 'Async/await', 'Event loop', 'Web APIs', 'Error handling in async code']
+      },
+      {
+        title: 'Advanced Patterns',
+        description: 'Design patterns and advanced concepts',
+        readingTime: 25,
+        topics: ['Functional programming', 'Object-oriented patterns', 'Module patterns', 'Memory management', 'Performance optimization']
+      },
+      {
+        title: 'DOM Manipulation',
+        description: 'Advanced DOM techniques and optimization',
+        readingTime: 20,
+        topics: ['DOM traversal', 'Event delegation', 'Virtual DOM', 'Performance optimization', 'Accessibility']
+      },
+      {
+        title: 'Testing & Debugging',
+        description: 'Testing strategies and debugging techniques',
+        readingTime: 15,
+        topics: ['Unit testing', 'Integration testing', 'Debugging tools', 'Performance profiling', 'Error tracking']
+      }
+    ],
+    features: [
+      '300+ JavaScript questions',
+      'Real-world code examples',
+      'Performance optimization tips',
+      'Modern ES6+ patterns',
+      'Async programming mastery',
+      'Testing strategies',
+      'Debugging techniques',
+      'Best practices guide'
+    ],
+    targetSkills: ['JavaScript', 'ES6+', 'Async Programming', 'Performance', 'Testing', 'Debugging']
+  },
+  {
+    id: 'react-ecosystem-guide',
+    title: 'React Ecosystem & Advanced Patterns',
+    description: 'Comprehensive React guide covering hooks, state management, performance optimization, testing, and modern React patterns.',
+    difficulty: 'intermediate',
+    estimatedTime: 50,
+    color: 'from-cyan-500 to-blue-500',
+    icon: '⚛️',
+    sections: [
+      {
+        title: 'React Fundamentals',
+        description: 'Core React concepts and component patterns',
+        readingTime: 20,
+        topics: ['Components and props', 'State and lifecycle', 'Event handling', 'Conditional rendering', 'Lists and keys']
+      },
+      {
+        title: 'Hooks Deep Dive',
+        description: 'Master React hooks and custom hooks',
+        readingTime: 25,
+        topics: ['useState and useEffect', 'useContext and useReducer', 'Custom hooks', 'Hook rules', 'Performance optimization']
+      },
+      {
+        title: 'State Management',
+        description: 'Advanced state management patterns',
+        readingTime: 30,
+        topics: ['Redux and Redux Toolkit', 'Context API', 'Zustand', 'React Query', 'State architecture patterns']
       },
       {
         title: 'Performance Optimization',
-        description: 'Techniques for high-performance frontend applications',
-        readingTime: 150,
-        topics: ['Bundle optimization', 'Rendering optimization', 'Network optimization', 'Memory management']
+        description: 'Optimize React applications for speed',
+        readingTime: 25,
+        topics: ['React.memo and useMemo', 'useCallback optimization', 'Code splitting', 'Lazy loading', 'Bundle optimization']
       },
       {
-        title: 'Security Best Practices',
-        description: 'Frontend security considerations and implementations',
-        readingTime: 100,
-        topics: ['XSS prevention', 'CSRF protection', 'Content Security Policy', 'Authentication']
+        title: 'Testing React Apps',
+        description: 'Comprehensive testing strategies',
+        readingTime: 20,
+        topics: ['Jest and React Testing Library', 'Component testing', 'Integration testing', 'E2E testing', 'Testing best practices']
       },
       {
-        title: 'Testing Methodologies',
-        description: 'Comprehensive testing strategies for frontend applications',
-        readingTime: 120,
-        topics: ['Unit testing', 'Integration testing', 'E2E testing', 'Performance testing']
-      },
-      {
-        title: 'Case Studies',
-        description: 'Real-world system design examples',
-        readingTime: 130,
-        topics: ['E-commerce platforms', 'Social media apps', 'Content management systems', 'Real-time applications']
+        title: 'Advanced Patterns',
+        description: 'Modern React patterns and architecture',
+        readingTime: 20,
+        topics: ['Compound components', 'Render props', 'Higher-order components', 'Error boundaries', 'Suspense and concurrent features']
       }
     ],
     features: [
+      '250+ React questions',
+      'Hook patterns and examples',
+      'State management solutions',
+      'Performance optimization',
+      'Testing strategies',
+      'Modern React patterns',
+      'Real-world examples',
+      'Best practices guide'
+    ],
+    targetSkills: ['React', 'Hooks', 'State Management', 'Performance', 'Testing', 'Modern Patterns']
+  },
+  {
+    id: 'frontend-system-design',
+    title: 'Frontend System Design & Architecture',
+    description: 'Master frontend system design, component architecture, performance optimization, and scalable application patterns.',
+    difficulty: 'advanced',
+    estimatedTime: 40,
+    color: 'from-green-500 to-teal-500',
+    icon: '🏗️',
+    sections: [
+      {
+        title: 'System Design Fundamentals',
+        description: 'Core principles of frontend system design',
+        readingTime: 20,
+        topics: ['Scalability principles', 'Performance metrics', 'User experience design', 'Accessibility standards', 'Cross-browser compatibility']
+      },
+      {
+        title: 'Component Architecture',
+        description: 'Design scalable component systems',
+        readingTime: 25,
+        topics: ['Component hierarchy', 'Props and state design', 'Composition patterns', 'Reusability principles', 'Component libraries']
+      },
+      {
+        title: 'State Management Architecture',
+        description: 'Design robust state management systems',
+        readingTime: 30,
+        topics: ['Global state patterns', 'Local state strategies', 'Data flow design', 'Caching strategies', 'State persistence']
+      },
+      {
+        title: 'Performance Optimization',
+        description: 'Optimize for speed and user experience',
+        readingTime: 25,
+        topics: ['Bundle optimization', 'Code splitting', 'Lazy loading', 'Caching strategies', 'Performance monitoring']
+      },
+      {
+        title: 'Security & Best Practices',
+        description: 'Implement security and follow best practices',
+        readingTime: 20,
+        topics: ['XSS prevention', 'CSRF protection', 'Input validation', 'Secure coding practices', 'Privacy compliance']
+      },
+      {
+        title: 'Deployment & DevOps',
+        description: 'Deploy and maintain frontend applications',
+        readingTime: 15,
+        topics: ['CI/CD pipelines', 'Environment management', 'Monitoring and logging', 'Error tracking', 'Performance monitoring']
+      }
+    ],
+    features: [
+      '100+ system design questions',
       'Architecture patterns',
-      'Scalability strategies',
       'Performance optimization',
       'Security best practices',
-      'Testing methodologies',
-      'Case studies'
+      'Deployment strategies',
+      'Real-world case studies',
+      'Scalability solutions',
+      'Best practices guide'
     ],
-    targetSkills: ['System Design', 'Architecture', 'Performance', 'Security', 'Testing', 'Scalability']
+    targetSkills: ['System Design', 'Architecture', 'Performance', 'Security', 'DevOps', 'Scalability']
+  },
+  {
+    id: 'css-mastery-guide',
+    title: 'CSS Mastery & Modern Layouts',
+    description: 'Master CSS from fundamentals to advanced techniques, including Grid, Flexbox, animations, and responsive design.',
+    difficulty: 'intermediate',
+    estimatedTime: 35,
+    color: 'from-pink-500 to-purple-500',
+    icon: '🎨',
+    sections: [
+      {
+        title: 'CSS Fundamentals',
+        description: 'Core CSS concepts and selectors',
+        readingTime: 15,
+        topics: ['Selectors and specificity', 'Box model', 'Positioning', 'Display properties', 'CSS units']
+      },
+      {
+        title: 'Modern Layout Systems',
+        description: 'Master Flexbox and CSS Grid',
+        readingTime: 25,
+        topics: ['Flexbox fundamentals', 'CSS Grid basics', 'Layout patterns', 'Responsive grids', 'Complex layouts']
+      },
+      {
+        title: 'Responsive Design',
+        description: 'Create responsive and mobile-first designs',
+        readingTime: 20,
+        topics: ['Media queries', 'Mobile-first approach', 'Responsive images', 'Viewport units', 'Breakpoint strategies']
+      },
+      {
+        title: 'CSS Animations & Transitions',
+        description: 'Create smooth animations and interactions',
+        readingTime: 20,
+        topics: ['Transitions', 'Keyframe animations', 'Transform properties', 'Animation performance', 'CSS variables']
+      },
+      {
+        title: 'CSS Architecture',
+        description: 'Organize and maintain CSS code',
+        readingTime: 15,
+        topics: ['CSS methodologies', 'Component-based CSS', 'CSS-in-JS', 'Preprocessors', 'CSS organization']
+      },
+      {
+        title: 'Advanced Techniques',
+        description: 'Advanced CSS techniques and optimization',
+        readingTime: 15,
+        topics: ['CSS custom properties', 'CSS Grid advanced', 'Performance optimization', 'Browser compatibility', 'CSS debugging']
+      }
+    ],
+    features: [
+      '200+ CSS questions',
+      'Layout challenges',
+      'Animation examples',
+      'Responsive design',
+      'Performance tips',
+      'Modern techniques',
+      'Best practices',
+      'Real-world examples'
+    ],
+    targetSkills: ['CSS', 'Layout Systems', 'Responsive Design', 'Animations', 'Performance', 'Architecture']
+  },
+  {
+    id: 'behavioral-leadership-guide',
+    title: 'Behavioral & Leadership Interview Prep',
+    description: 'Master behavioral questions, demonstrate leadership skills, and showcase your ability to work in teams and lead projects.',
+    difficulty: 'all-levels',
+    estimatedTime: 25,
+    color: 'from-indigo-500 to-purple-500',
+    icon: '👥',
+    sections: [
+      {
+        title: 'Behavioral Question Framework',
+        description: 'Master the STAR method and behavioral responses',
+        readingTime: 15,
+        topics: ['STAR method', 'Common behavioral questions', 'Response structure', 'Story preparation', 'Follow-up questions']
+      },
+      {
+        title: 'Leadership & Teamwork',
+        description: 'Demonstrate leadership and collaboration skills',
+        readingTime: 20,
+        topics: ['Team leadership', 'Conflict resolution', 'Project management', 'Mentoring others', 'Cross-functional collaboration']
+      },
+      {
+        title: 'Technical Leadership',
+        description: 'Showcase technical decision-making abilities',
+        readingTime: 20,
+        topics: ['Technical decisions', 'Architecture choices', 'Code review leadership', 'Technical mentoring', 'Innovation and improvement']
+      },
+      {
+        title: 'Communication Skills',
+        description: 'Improve communication and presentation skills',
+        readingTime: 15,
+        topics: ['Technical communication', 'Presentation skills', 'Documentation', 'Stakeholder communication', 'Remote collaboration']
+      },
+      {
+        title: 'Problem Solving & Innovation',
+        description: 'Demonstrate problem-solving and innovation abilities',
+        readingTime: 15,
+        topics: ['Problem-solving approach', 'Innovation examples', 'Process improvement', 'Creative solutions', 'Learning from failure']
+      },
+      {
+        title: 'Company & Culture Fit',
+        description: 'Show alignment with company values and culture',
+        readingTime: 10,
+        topics: ['Company research', 'Culture alignment', 'Values demonstration', 'Growth mindset', 'Long-term vision']
+      }
+    ],
+    features: [
+      '100+ behavioral questions',
+      'STAR method guide',
+      'Leadership examples',
+      'Communication tips',
+      'Company research',
+      'Mock interview scenarios',
+      'Response templates',
+      'Success strategies'
+    ],
+    targetSkills: ['Communication', 'Leadership', 'Teamwork', 'Problem Solving', 'Innovation', 'Culture Fit']
   }
 ];
 
