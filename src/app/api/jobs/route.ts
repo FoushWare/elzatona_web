@@ -16,14 +16,19 @@ async function checkRobotsTxt(url: string): Promise<boolean> {
     const response = await axios.get(robotsUrl, { timeout: 5000 });
     const robotsText = response.data.toLowerCase();
     
-    // Check if scraping is disallowed
-    if (robotsText.includes('disallow: /') || robotsText.includes('user-agent: *')) {
+    // Only block if explicitly disallowed for all user agents
+    if (robotsText.includes('user-agent: *') && robotsText.includes('disallow: /')) {
+      console.log(`Robots.txt explicitly disallows scraping for ${url}`);
       return false;
     }
+    
+    // Allow scraping if robots.txt is unclear or doesn't explicitly block
+    console.log(`Robots.txt allows scraping for ${url}`);
     return true;
   } catch (error) {
     console.log(`Could not check robots.txt for ${url}:`, error);
-    return true; // Assume allowed if we can't check
+    // Assume allowed if we can't check
+    return true;
   }
 }
 
