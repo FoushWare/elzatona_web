@@ -49,13 +49,26 @@ export default function CodingPage() {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
-        return "badge-success";
+        return "bg-gradient-to-r from-green-500 to-emerald-500 text-white";
       case "medium":
-        return "badge-warning";
+        return "bg-gradient-to-r from-yellow-500 to-orange-500 text-white";
       case "hard":
-        return "badge-destructive";
+        return "bg-gradient-to-r from-red-500 to-pink-500 text-white";
       default:
-        return "badge-secondary";
+        return "bg-gradient-to-r from-gray-500 to-slate-500 text-white";
+    }
+  };
+
+  const getDifficultyBgColor = (difficulty: string) => {
+    switch (difficulty) {
+      case "easy":
+        return "from-green-100 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20";
+      case "medium":
+        return "from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20";
+      case "hard":
+        return "from-red-100 to-pink-100 dark:from-red-900/20 dark:to-pink-900/20";
+      default:
+        return "from-gray-100 to-slate-100 dark:from-gray-900/20 dark:to-slate-900/20";
     }
   };
 
@@ -70,37 +83,72 @@ export default function CodingPage() {
     }
   };
 
+  const getCategoryGradient = (category: string) => {
+    switch (category) {
+      case "frontend":
+        return "from-purple-500 to-pink-500";
+      case "problem-solving":
+        return "from-blue-500 to-cyan-500";
+      default:
+        return "from-indigo-500 to-purple-500";
+    }
+  };
+
+  const getCategoryBgGradient = (category: string) => {
+    switch (category) {
+      case "frontend":
+        return "from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20";
+      case "problem-solving":
+        return "from-blue-100 to-cyan-100 dark:from-blue-900/20 dark:to-cyan-900/20";
+      default:
+        return "from-indigo-100 to-purple-100 dark:from-indigo-900/20 dark:to-purple-900/20";
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
-      <div className="bg-card border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="relative max-w-7xl mx-auto px-4 py-16">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-foreground mb-4 tracking-tight">
+            <div className="text-6xl mb-6 animate-bounce">🚀</div>
+            <h1 className="text-5xl font-bold mb-6 tracking-tight drop-shadow-lg">
               Coding Challenges
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed drop-shadow-sm">
               Practice your coding skills with interactive challenges. Write
               code, run tests, and improve your problem-solving abilities.
             </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <div className="px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
+                🎯 {codingChallenges.length} Challenges
+              </div>
+              <div className="px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
+                ⚡ Interactive Editor
+              </div>
+              <div className="px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
+                🏆 Real-time Testing
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Filters */}
-        <div className="mb-8 space-y-4">
+        <div className="mb-12 space-y-6">
           {/* Search */}
           <div className="relative">
             <input
               type="text"
-              placeholder="Search challenges..."
+              placeholder="🔍 Search challenges..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="form-input w-full pl-10"
+              className="w-full pl-12 pr-4 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 text-lg"
             />
             <svg
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -115,143 +163,173 @@ export default function CodingPage() {
           </div>
 
           {/* Category and Difficulty Filters */}
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-6">
             {/* Category Filter */}
             <div className="flex-1 min-w-48">
-              <label className="form-label">Category</label>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                📂 Category
+              </label>
               <select
                 value={selectedCategory}
                 onChange={(e) =>
                   setSelectedCategory(e.target.value as "all" | "frontend" | "problem-solving")
                 }
-                className="form-input"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
               >
-                <option value="all">All Categories</option>
-                <option value="frontend">Frontend Challenges</option>
-                <option value="problem-solving">Problem Solving</option>
+                <option value="all">🌟 All Categories</option>
+                <option value="frontend">🎨 Frontend Challenges</option>
+                <option value="problem-solving">🧮 Problem Solving</option>
               </select>
             </div>
 
             {/* Difficulty Filter */}
             <div className="flex-1 min-w-48">
-              <label className="form-label">Difficulty</label>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                🎯 Difficulty
+              </label>
               <select
                 value={selectedDifficulty}
                 onChange={(e) =>
                   setSelectedDifficulty(e.target.value as "all" | "easy" | "medium" | "hard")
                 }
-                className="form-input"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
               >
-                <option value="all">All Difficulties</option>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
+                <option value="all">🌈 All Difficulties</option>
+                <option value="easy">🌱 Easy</option>
+                <option value="medium">🚀 Medium</option>
+                <option value="hard">⚡ Hard</option>
               </select>
             </div>
           </div>
         </div>
 
         {/* Statistics */}
-        <div className="mb-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="card p-4 text-center">
-            <div className="text-2xl font-bold text-primary mb-1">
-              {codingChallenges.length}
-            </div>
-            <div className="text-sm text-muted-foreground">Total Challenges</div>
+        <div className="mb-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+            <div className="text-3xl font-bold mb-2">{codingChallenges.length}</div>
+            <div className="text-blue-100">Total Challenges</div>
           </div>
-          <div className="card p-4 text-center">
-            <div className="text-2xl font-bold text-success mb-1">
+          <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+            <div className="text-3xl font-bold mb-2">
               {codingChallenges.filter((c) => c.difficulty === "easy").length}
             </div>
-            <div className="text-sm text-muted-foreground">Easy</div>
+            <div className="text-green-100">Easy</div>
           </div>
-          <div className="card p-4 text-center">
-            <div className="text-2xl font-bold text-warning mb-1">
+          <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+            <div className="text-3xl font-bold mb-2">
               {codingChallenges.filter((c) => c.difficulty === "medium").length}
             </div>
-            <div className="text-sm text-muted-foreground">Medium</div>
+            <div className="text-yellow-100">Medium</div>
           </div>
-          <div className="card p-4 text-center">
-            <div className="text-2xl font-bold text-destructive mb-1">
+          <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+            <div className="text-3xl font-bold mb-2">
               {codingChallenges.filter((c) => c.difficulty === "hard").length}
             </div>
-            <div className="text-sm text-muted-foreground">Hard</div>
+            <div className="text-red-100">Hard</div>
           </div>
         </div>
 
         {/* Challenges Grid */}
         {filteredChallenges.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold text-foreground mb-2">
+          <div className="text-center py-16">
+            <div className="text-8xl mb-6 animate-pulse">🔍</div>
+            <h3 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-4">
               No challenges found
             </h3>
-            <p className="text-muted-foreground">
+            <p className="text-gray-500 dark:text-gray-400 text-lg">
               Try adjusting your search criteria or filters.
             </p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredChallenges.map((challenge) => (
-              <div
+              <Link
                 key={challenge.id}
-                className="card cursor-pointer transition-smooth"
+                href={`/coding/${challenge.id}`}
+                className="group block"
               >
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-2xl">
-                        {getCategoryIcon(challenge.category)}
+                <div className={`bg-gradient-to-br ${getCategoryBgGradient(challenge.category)} rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-white/20 cursor-pointer group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-gray-50 dark:group-hover:from-gray-800 dark:group-hover:to-gray-700`}>
+                  <div className="mb-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-12 h-12 bg-gradient-to-r ${getCategoryGradient(challenge.category)} rounded-xl flex items-center justify-center text-2xl shadow-lg`}>
+                          {getCategoryIcon(challenge.category)}
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 leading-tight group-hover:text-gray-900 dark:group-hover:text-white">
+                          {challenge.title}
+                        </h3>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-sm font-bold shadow-lg ${getDifficultyColor(challenge.difficulty)}`}>
+                        {challenge.difficulty}
                       </span>
-                      <h3 className="text-lg font-semibold text-card-foreground leading-tight">
-                        {challenge.title}
-                      </h3>
                     </div>
-                    <span className={`badge ${getDifficultyColor(challenge.difficulty)}`}>
-                      {challenge.difficulty}
-                    </span>
-                  </div>
 
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3 leading-relaxed">
-                    {challenge.description}
-                  </p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-3 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300">
+                      {challenge.description}
+                    </p>
 
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {challenge.tags.slice(0, 3).map((tag, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded font-medium"
-                      >
-                        {tag}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {challenge.tags.slice(0, 3).map((tag, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 text-xs rounded-full font-medium backdrop-blur-sm"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {challenge.tags.length > 3 && (
+                        <span className="px-3 py-1 bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 text-xs rounded-full font-medium backdrop-blur-sm">
+                          +{challenge.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-6">
+                      <span className="font-semibold flex items-center">
+                        ⏱️ {challenge.estimatedTime} min
                       </span>
-                    ))}
-                    {challenge.tags.length > 3 && (
-                      <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded font-medium">
-                        +{challenge.tags.length - 3}
+                      <span className="font-semibold flex items-center">
+                        🏆 {challenge.completionRate}% success
                       </span>
-                    )}
-                  </div>
+                    </div>
 
-                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
-                    <span className="font-medium">
-                      {challenge.estimatedTime} min
-                    </span>
-                    <span className="font-medium">
-                      {challenge.completionRate}% success rate
-                    </span>
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-6 rounded-xl font-bold text-center shadow-lg hover:shadow-xl transition-all duration-300 group-hover:from-blue-600 group-hover:to-purple-600">
+                      🚀 Start Challenge
+                    </div>
                   </div>
-
-                  <Link
-                    href={`/coding/${challenge.id}`}
-                    className="btn-primary w-full text-center"
-                  >
-                    Start Challenge
-                  </Link>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
+
+        {/* Call to Action */}
+        <div className="mt-16 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white text-center shadow-2xl">
+          <h2 className="text-3xl font-bold mb-4">Ready to Level Up?</h2>
+          <p className="text-xl text-indigo-100 mb-8">
+            Choose your challenge and start coding now!
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href="/practice/fundamentals"
+              className="px-8 py-4 bg-white text-indigo-600 rounded-xl font-bold hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              📚 Practice Questions
+            </Link>
+            <Link
+              href="/study-plans"
+              className="px-8 py-4 bg-white text-indigo-600 rounded-xl font-bold hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              📅 Study Plans
+            </Link>
+            <Link
+              href="/learning-paths"
+              className="px-8 py-4 bg-white text-indigo-600 rounded-xl font-bold hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              🛤️ Learning Paths
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
