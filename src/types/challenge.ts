@@ -1,5 +1,5 @@
 export type Difficulty = 'easy' | 'medium' | 'hard';
-export type Category = 'html' | 'css' | 'javascript';
+export type Category = 'html' | 'css' | 'javascript' | 'react';
 
 export interface Challenge {
   id: string;
