@@ -57,6 +57,24 @@ npm run dev
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
+- `npm run lint:fix` - Run ESLint with auto-fix
+- `npm run format` - Format code with Prettier
+
+### Code Quality & Pre-commit Hooks
+
+This project uses pre-commit hooks to ensure code quality:
+
+- **Husky**: Manages Git hooks
+- **lint-staged**: Runs linting and formatting only on staged files
+- **ESLint**: JavaScript/TypeScript linting
+- **Prettier**: Code formatting
+
+The pre-commit hook will automatically:
+1. Run ESLint with auto-fix on staged files
+2. Format code with Prettier
+3. Add the formatted files back to staging
+
+**Note**: Make sure to run `npm install` after cloning to set up the pre-commit hooks.
 
 ## 📁 Project Structure
 
