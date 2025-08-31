@@ -233,19 +233,14 @@ export default function Navigation() {
           </div>
 
           <div className="flex items-center space-x-2">
-            {/* Auth Buttons */}
+            {/* Progress Storage Button */}
             <div className="hidden md:flex items-center space-x-2">
               <Link
-                href="/login"
-                className="px-4 py-2 text-sm font-medium text-white hover:text-blue-100 transition-colors duration-200"
+                href="/auth"
+                className="px-6 py-2 text-sm font-medium bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all duration-200 hover:scale-105 shadow-lg flex items-center space-x-2"
               >
-                Login
-              </Link>
-              <Link
-                href="/signup"
-                className="px-4 py-2 text-sm font-medium bg-white text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 hover:scale-105"
-              >
-                Sign Up
+                <span>💾</span>
+                <span>Want to store your progress?</span>
               </Link>
             </div>
 
@@ -390,21 +385,24 @@ export default function Navigation() {
                 🏆 Gamification
               </Link>
 
-              {/* Mobile Auth Buttons */}
+              {/* Mobile Progress Storage Button */}
               <div className="pt-4 border-t border-blue-500/30">
                 <Link
-                  href="/login"
-                  className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                  href="/auth"
+                  className="block px-3 py-3 rounded-md text-base font-medium bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white transition-all duration-200 mx-3 text-center shadow-lg"
                   onClick={() => setIsOpen(false)}
                 >
-                  🔐 Login
+                  💾 Want to store your progress?
                 </Link>
+              </div>
+              {/* Mobile Progress Storage Button */}
+              <div className="pt-4 border-t border-blue-500/30">
                 <Link
-                  href="/signup"
-                  className="block px-3 py-2 rounded-md text-base font-medium bg-white text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 mx-3"
+                  href="/auth"
+                  className="block px-3 py-3 rounded-md text-base font-medium bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white transition-all duration-200 mx-3 text-center shadow-lg"
                   onClick={() => setIsOpen(false)}
                 >
-                  ✨ Sign Up
+                  💾 Want to store your progress?
                 </Link>
               </div>
             </div>
