@@ -85,10 +85,24 @@ export default function ChatGPT() {
       {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 flex items-center justify-center"
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-110 hover:rotate-3 flex items-center justify-center group"
         aria-label="Open AI Chat Assistant"
       >
-        <MessageCircle size={24} />
+        {/* Animated background glow */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+        
+        {/* Main button content */}
+        <div className="relative z-10 flex items-center justify-center">
+          <MessageCircle size={28} className="drop-shadow-lg" />
+        </div>
+        
+        {/* Floating notification dot */}
+        <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-bounce shadow-lg">
+          <div className="w-full h-full bg-white rounded-full animate-ping"></div>
+        </div>
+        
+        {/* Subtle border glow */}
+        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-500"></div>
       </button>
 
       {/* Chat Popup */}
@@ -103,19 +117,26 @@ export default function ChatGPT() {
           {/* Chat Window */}
           <div className="relative w-full max-w-md h-[500px] md:h-[600px] bg-white dark:bg-gray-800 rounded-t-2xl shadow-2xl flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-2xl">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                  <Bot size={20} />
+            <div className="relative overflow-hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white rounded-t-2xl">
+              {/* Animated background pattern */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 left-0 w-20 h-20 bg-white rounded-full blur-xl animate-pulse"></div>
+                <div className="absolute bottom-0 right-0 w-16 h-16 bg-white rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+                <div className="absolute top-1/2 left-1/2 w-12 h-12 bg-white rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+              </div>
+              
+              <div className="relative z-10 flex items-center gap-3">
+                <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                  <Bot size={22} className="drop-shadow-lg" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">AI Learning Assistant</h3>
-                  <p className="text-xs text-blue-100">Powered by ChatGPT</p>
+                  <h3 className="font-bold text-lg">AI Learning Assistant</h3>
+                  <p className="text-xs text-blue-100 font-medium">Powered by ChatGPT</p>
                 </div>
               </div>
               <button
                 onClick={toggleChat}
-                className="p-1 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
+                className="relative z-10 p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-all duration-300 hover:scale-110"
               >
                 <X size={20} />
               </button>
@@ -164,9 +185,11 @@ export default function ChatGPT() {
               
               {/* Suggested Questions */}
               {messages.length === 1 && (
-                <div className="space-y-2">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 text-center">💡 Try asking:</p>
-                  <div className="grid grid-cols-1 gap-2">
+                <div className="space-y-3">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">💡 Try asking:</p>
+                  </div>
+                  <div className="grid grid-cols-1 gap-3">
                     {CHATGPT_CONFIG.SUGGESTED_QUESTIONS.slice(0, 3).map((question, index) => (
                       <button
                         key={index}
@@ -217,11 +240,13 @@ export default function ChatGPT() {
                             .finally(() => setIsLoading(false));
                           }, 100);
                         }}
-                        className="text-left p-3 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg transition-colors text-sm text-blue-700 dark:text-blue-300"
+                        className="group text-left p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 border border-blue-200 dark:border-blue-800 rounded-xl transition-all duration-300 text-sm text-blue-700 dark:text-blue-300 hover:shadow-md hover:scale-[1.02]"
                       >
-                        <div className="flex items-center gap-2">
-                          <Lightbulb size={14} className="text-blue-500" />
-                          <span>{question}</span>
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <Lightbulb size={16} className="text-white" />
+                          </div>
+                          <span className="font-medium leading-relaxed">{question}</span>
                         </div>
                       </button>
                     ))}

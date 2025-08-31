@@ -6,6 +6,8 @@ import { internalResources } from "@/lib/internalResources";
 export default function SeniorDevPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
+  const [showStatistics, setShowStatistics] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   // Filter resources to only include senior dev content
   const seniorDevResources = useMemo(() => {
@@ -53,51 +55,69 @@ export default function SeniorDevPage() {
             performance optimization, system design, and modern frontend
             architecture.
           </p>
+
+          {/* Mobile Toggle Buttons */}
+          <div className="flex flex-wrap gap-3 justify-center mt-6 md:hidden">
+            <button
+              onClick={() => setShowStatistics(!showStatistics)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            >
+              {showStatistics ? "Hide Statistics" : "Show Statistics"}
+            </button>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+            >
+              {showFilters ? "Hide Filters" : "Show Filters"}
+            </button>
+          </div>
         </div>
 
         {/* Search and Filter Section */}
-        <div className="bg-card rounded-lg shadow-sm border border-border p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
-              <label
-                htmlFor="search"
-                className="block text-sm font-medium text-card-foreground mb-2"
-              >
-                Search
-              </label>
-              <input
-                type="text"
-                id="search"
-                placeholder="Search senior-level questions, topics, or concepts..."
-                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="difficulty"
-                className="block text-sm font-medium text-card-foreground mb-2"
-              >
-                Filter by Difficulty
-              </label>
-              <select
-                id="difficulty"
-                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
-                value={selectedDifficulty}
-                onChange={(e) => setSelectedDifficulty(e.target.value)}
-              >
-                <option value="all">All Difficulties</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
+        <div className={`${showFilters ? 'block' : 'hidden md:block'} mb-8`}>
+          <div className="bg-card rounded-lg shadow-sm border border-border p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="md:col-span-2">
+                <label
+                  htmlFor="search"
+                  className="block text-sm font-medium text-card-foreground mb-2"
+                >
+                  Search
+                </label>
+                <input
+                  type="text"
+                  id="search"
+                  placeholder="Search senior-level questions, topics, or concepts..."
+                  className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="difficulty"
+                  className="block text-sm font-medium text-card-foreground mb-2"
+                >
+                  Filter by Difficulty
+                </label>
+                <select
+                  id="difficulty"
+                  className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
+                  value={selectedDifficulty}
+                  onChange={(e) => setSelectedDifficulty(e.target.value)}
+                >
+                  <option value="all">All Difficulties</option>
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className={`${showStatistics ? 'block' : 'hidden md:grid'} grid-cols-1 md:grid-cols-4 gap-6 mb-8`}>
           <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
             <div className="text-3xl font-bold text-blue-600 mb-2">
               {totalResources}
