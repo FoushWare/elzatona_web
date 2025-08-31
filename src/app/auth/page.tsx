@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   ArrowLeft,
   User,
@@ -10,11 +12,14 @@ import {
   Eye,
   EyeOff,
   CheckCircle,
+  Loader2,
 } from 'lucide-react';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -22,21 +27,49 @@ export default function AuthPage() {
     name: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { login, signup, isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  // Redirect if already authenticated
+  if (isAuthenticated) {
+    router.push('/dashboard');
+    return null;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isLogin) {
-      // Handle login
-      console.log('Login:', {
-        email: formData.email,
-        password: formData.password,
-      });
-    } else {
-      // Handle signup
-      if (formData.password !== formData.confirmPassword) {
-        alert('Passwords do not match!');
-        return;
+    setError('');
+    setIsSubmitting(true);
+
+    try {
+      let success = false;
+
+      if (isLogin) {
+        success = await login(formData.email, formData.password);
+      } else {
+        if (formData.password !== formData.confirmPassword) {
+          setError('Passwords do not match!');
+          setIsSubmitting(false);
+          return;
+        }
+        success = await signup(
+          formData.name,
+          formData.email,
+          formData.password
+        );
       }
-      console.log('Signup:', formData);
+
+      if (success) {
+        router.push('/dashboard');
+      } else {
+        setError(
+          isLogin ? 'Invalid email or password' : 'Failed to create account'
+        );
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -45,6 +78,8 @@ export default function AuthPage() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
   return (
@@ -92,6 +127,13 @@ export default function AuthPage() {
           </p>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700/50 rounded-xl text-red-700 dark:text-red-300 text-center backdrop-blur-sm">
+            {error}
+          </div>
+        )}
+
         {/* Auth Form */}
         <div className="relative">
           {/* Form Background with Glass Effect */}
@@ -102,21 +144,23 @@ export default function AuthPage() {
             <div className="flex bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/50 dark:to-purple-900/50 rounded-xl p-1 mb-8 shadow-inner">
               <button
                 onClick={() => setIsLogin(true)}
+                disabled={isSubmitting}
                 className={`flex-1 py-3 px-6 rounded-lg text-sm font-bold transition-all duration-300 ${
                   isLogin
                     ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105'
                     : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
-                }`}
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 Sign In
               </button>
               <button
                 onClick={() => setIsLogin(false)}
+                disabled={isSubmitting}
                 className={`flex-1 py-3 px-6 rounded-lg text-sm font-bold transition-all duration-300 ${
                   !isLogin
                     ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg transform scale-105'
                     : 'text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400'
-                }`}
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 Sign Up
               </button>
@@ -139,7 +183,8 @@ export default function AuthPage() {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 backdrop-blur-sm"
+                      disabled={isSubmitting}
+                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="Enter your full name"
                       required={!isLogin}
                     />
@@ -162,7 +207,8 @@ export default function AuthPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 backdrop-blur-sm"
+                    disabled={isSubmitting}
+                    className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Enter your email"
                     required
                   />
@@ -184,14 +230,16 @@ export default function AuthPage() {
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="w-full pl-12 pr-12 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 backdrop-blur-sm"
+                    disabled={isSubmitting}
+                    className="w-full pl-12 pr-12 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Enter your password"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                    disabled={isSubmitting}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -218,7 +266,8 @@ export default function AuthPage() {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
-                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 backdrop-blur-sm"
+                      disabled={isSubmitting}
+                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl bg-white/50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="Confirm your password"
                       required={!isLogin}
                     />
@@ -231,7 +280,8 @@ export default function AuthPage() {
                   <label className="flex items-center group cursor-pointer">
                     <input
                       type="checkbox"
-                      className="w-5 h-5 text-blue-600 border-2 border-gray-300 dark:border-gray-600 rounded focus:ring-4 focus:ring-blue-500/20 focus:ring-offset-0 transition-all duration-200"
+                      disabled={isSubmitting}
+                      className="w-5 h-5 text-blue-600 border-2 border-gray-300 dark:border-gray-600 rounded focus:ring-4 focus:ring-blue-500/20 focus:ring-offset-0 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                     <span className="ml-3 text-sm text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       Remember me
@@ -249,7 +299,8 @@ export default function AuthPage() {
               {/* Action Button */}
               <button
                 type="submit"
-                className={`group/btn relative w-full py-4 px-6 rounded-xl font-bold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-xl overflow-hidden ${
+                disabled={isSubmitting}
+                className={`group/btn relative w-full py-4 px-6 rounded-xl font-bold text-white transition-all duration-300 transform hover:scale-105 hover:shadow-xl overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 ${
                   isLogin
                     ? 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600'
                     : 'bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 hover:from-purple-600 hover:via-pink-600 hover:to-rose-600'
@@ -260,8 +311,19 @@ export default function AuthPage() {
 
                 {/* Button Content */}
                 <span className="relative flex items-center justify-center space-x-2">
-                  <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
-                  <CheckCircle className="w-5 h-5 transform group-hover/btn:scale-110 transition-transform duration-200" />
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>
+                        {isLogin ? 'Signing In...' : 'Creating Account...'}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
+                      <CheckCircle className="w-5 h-5 transform group-hover/btn:scale-110 transition-transform duration-200" />
+                    </>
+                  )}
                 </span>
               </button>
             </form>
@@ -280,7 +342,10 @@ export default function AuthPage() {
               </div>
 
               <div className="mt-6 grid grid-cols-2 gap-4">
-                <button className="group relative inline-flex justify-center py-3 px-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl shadow-sm bg-white/50 dark:bg-gray-700/50 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                <button
+                  disabled={isSubmitting}
+                  className="group relative inline-flex justify-center py-3 px-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl shadow-sm bg-white/50 dark:bg-gray-700/50 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-300 hover:scale-105 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                >
                   <svg
                     className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200"
                     viewBox="0 0 24 24"
@@ -304,7 +369,10 @@ export default function AuthPage() {
                   </svg>
                   <span>Google</span>
                 </button>
-                <button className="group relative inline-flex justify-center py-3 px-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl shadow-sm bg-white/50 dark:bg-gray-700/50 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300 dark:hover:border-purple-500 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                <button
+                  disabled={isSubmitting}
+                  className="group relative inline-flex justify-center py-3 px-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl shadow-sm bg-white/50 dark:bg-gray-700/50 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300 dark:hover:border-purple-500 transition-all duration-300 hover:scale-105 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                >
                   <svg
                     className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200"
                     fill="currentColor"
@@ -357,7 +425,8 @@ export default function AuthPage() {
             {isLogin ? "Don't have an account? " : 'Already have an account? '}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-bold transition-colors hover:underline"
+              disabled={isSubmitting}
+              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-bold transition-colors hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLogin ? 'Sign up here' : 'Sign in here'}
             </button>
