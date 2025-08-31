@@ -135,22 +135,23 @@ export default function ResourcesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-card shadow-sm border-b border-border">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="text-4xl font-bold text-foreground mb-4">
               Frontend Learning Resources
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Curated collection of the best frontend development resources,
               tools, and learning materials
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+            {/* Mobile Toggle Buttons - Hidden on desktop */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 md:hidden">
               <button
                 onClick={() => setShowStatistics(!showStatistics)}
-                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
                 {showStatistics ? "Hide Statistics" : "Show Statistics"}
                 <span className="ml-2">📊</span>
@@ -164,7 +165,7 @@ export default function ResourcesPage() {
         {/* Categories and Filters */}
         <div className="mb-12">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 lg:mb-0">
+            <h2 className="text-2xl font-bold text-foreground mb-4 lg:mb-0">
               Browse by Category
             </h2>
             
@@ -172,7 +173,7 @@ export default function ResourcesPage() {
             <div className="md:hidden flex gap-2 mb-4">
               <button
                 onClick={() => setShowStatistics(!showStatistics)}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
+                className="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white text-sm rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md"
               >
                 {showStatistics ? "Hide Stats" : "Show Stats"}
               </button>

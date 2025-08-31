@@ -137,7 +137,8 @@ export default function Home() {
             <h2 className="text-3xl font-bold mb-4 text-foreground">
               Quick Stats
             </h2>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* Mobile Toggle Buttons - Hidden on desktop */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center md:hidden">
               <button
                 onClick={() => setShowStatistics(!showStatistics)}
                 className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
@@ -155,7 +156,7 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Statistics Grid - Hidden on mobile by default */}
+          {/* Statistics Grid - Always visible on desktop, toggleable on mobile */}
           <div className={`grid md:grid-cols-4 gap-8 transition-all duration-300 ${
             showStatistics ? 'block' : 'hidden md:grid'
           }`}>

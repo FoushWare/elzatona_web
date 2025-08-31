@@ -222,22 +222,23 @@ export default function BlogPage() {
             
             {/* Stats */}
             <div className="mb-6">
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
-                <button
-                  onClick={() => setShowStatistics(!showStatistics)}
-                  className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-                >
-                  {showStatistics ? "Hide Statistics" : "Show Statistics"}
-                  <span className="ml-2">📊</span>
-                </button>
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
-                >
-                  {showFilters ? "Hide Filters" : "Show Filters"}
-                  <span className="ml-2">🔍</span>
-                </button>
-              </div>
+                          {/* Mobile Toggle Buttons - Hidden on desktop */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4 md:hidden">
+              <button
+                onClick={() => setShowStatistics(!showStatistics)}
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                {showStatistics ? "Hide Statistics" : "Show Statistics"}
+                <span className="ml-2">📊</span>
+              </button>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                {showFilters ? "Hide Filters" : "Show Filters"}
+                <span className="ml-2">🔍</span>
+              </button>
+            </div>
               
               <div className={`flex justify-center gap-8 transition-all duration-300 ${
                 showStatistics ? 'block' : 'hidden md:flex'
