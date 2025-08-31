@@ -10,7 +10,6 @@ import {
   Code,
   TrendingUp,
   Crown,
-  Fire,
 } from 'lucide-react';
 
 interface Badge {
@@ -32,6 +31,7 @@ interface Achievement {
   description: string;
   icon: React.ReactNode;
   color: string;
+  bgColor: string;
   unlocked: boolean;
   unlockedAt?: string;
   points: number;
@@ -76,7 +76,7 @@ const badges: Badge[] = [
     id: 'streak-master',
     name: 'Streak Master',
     description: 'Maintain a 7-day learning streak',
-    icon: <Fire className="w-6 h-6" />,
+    icon: <Zap className="w-6 h-6" />,
     color: 'text-orange-600',
     bgColor: 'bg-orange-100 dark:bg-orange-900/20',
     unlocked: false,
@@ -129,6 +129,7 @@ const achievements: Achievement[] = [
     description: 'Complete 5 questions in a single day',
     icon: <TrendingUp className="w-5 h-5" />,
     color: 'text-green-600',
+    bgColor: 'bg-green-100 dark:bg-green-900/20',
     unlocked: true,
     unlockedAt: '2024-01-15',
     points: 25,
@@ -140,6 +141,7 @@ const achievements: Achievement[] = [
     description: 'Achieve 100% accuracy in a quiz',
     icon: <Target className="w-5 h-5" />,
     color: 'text-blue-600',
+    bgColor: 'bg-blue-100 dark:bg-blue-900/20',
     unlocked: true,
     unlockedAt: '2024-01-10',
     points: 50,
@@ -149,8 +151,9 @@ const achievements: Achievement[] = [
     id: 'weekend-warrior',
     title: 'Weekend Warrior',
     description: 'Study for 5+ hours over a weekend',
-    icon: <Fire className="w-5 h-5" />,
+    icon: <Zap className="w-5 h-5" />,
     color: 'text-orange-600',
+    bgColor: 'bg-orange-100 dark:bg-orange-900/20',
     unlocked: false,
     points: 100,
     rarity: 'epic',
@@ -161,6 +164,7 @@ const achievements: Achievement[] = [
     description: 'Complete 3 different learning paths',
     icon: <BookOpen className="w-5 h-5" />,
     color: 'text-purple-600',
+    bgColor: 'bg-purple-100 dark:bg-purple-900/20',
     unlocked: false,
     points: 200,
     rarity: 'legendary',
