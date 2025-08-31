@@ -201,17 +201,18 @@ export default function PreparationGuidesPage() {
               Combine structured study plans with comprehensive preparation
               guides for maximum effectiveness
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+            {/* Mobile Toggle Buttons - Hidden on desktop */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 md:hidden">
               <button
                 onClick={() => setShowStatistics(!showStatistics)}
-                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
                 {showStatistics ? "Hide Statistics" : "Show Statistics"}
                 <span className="ml-2">📊</span>
               </button>
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
                 {showFilters ? "Hide Filters" : "Show Filters"}
                 <span className="ml-2">🔍</span>
@@ -291,10 +292,11 @@ export default function PreparationGuidesPage() {
                 Join thousands of developers who have successfully landed their
                 dream jobs
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+              {/* Mobile Toggle Buttons - Hidden on desktop */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 md:hidden">
                 <button
                   onClick={() => setShowStatistics(!showStatistics)}
-                  className="inline-flex items-center px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg transition-colors border border-white/30"
+                  className="inline-flex items-center px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 border border-white/30"
                 >
                   {showStatistics ? "Hide Statistics" : "Show Statistics"}
                   <span className="ml-2">📊</span>
