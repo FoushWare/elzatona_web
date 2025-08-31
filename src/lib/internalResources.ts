@@ -999,6 +999,128 @@ function App() {
       'Bundling',
     ],
   },
+  // Critical CSS
+  {
+    id: 'tsd-03-4',
+    question:
+      'What is Critical CSS and how can you implement it in a modern frontend project?',
+    code: `// Next.js with Styled-Components SSR Example
+import Document from "next/document";
+import { ServerStyleSheet } from "styled-components";
+
+export default class MyDocument extends Document {
+  static async getInitialProps(ctx) {
+    const sheet = new ServerStyleSheet();
+    const originalRenderPage = ctx.renderPage;
+
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
+        });
+
+      const initialProps = await Document.getInitialProps(ctx);
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        ),
+      };
+    } finally {
+      sheet.seal();
+    }
+  }
+}`,
+    options: {
+      A: 'Critical CSS is only needed for large websites',
+      B: 'Critical CSS is CSS required to render above-the-fold content, improving FCP and LCP by inlining essential styles',
+      C: 'Critical CSS can only be implemented with webpack',
+      D: 'Critical CSS is not important for modern React applications',
+    },
+    correctAnswer: 'B',
+    explanation:
+      "Critical CSS is CSS required to render above-the-fold content. It's important for web performance as it improves First Contentful Paint (FCP), Largest Contentful Paint (LCP), and overall user experience. Implementation involves inlining critical CSS in the HTML head and loading the rest asynchronously. Tools include Critical, Penthouse, webpack plugins, and Next.js optimization strategies. In React (CRA), extract above-the-fold CSS manually or with tools like Penthouse, inline it in public/index.html, and defer loading of the full stylesheet. In Next.js, use Styled-Components/Emotion SSR or next-critical plugin to automatically generate and inline critical CSS during build.",
+    difficulty: 'advanced',
+    category: 'javascript',
+    tags: [
+      'critical-css',
+      'performance',
+      'optimization',
+      'fcp',
+      'lcp',
+      'nextjs',
+      'react',
+    ],
+    relatedTopics: [
+      'Performance Optimization',
+      'CSS Optimization',
+      'Next.js',
+      'React',
+      'Web Performance',
+    ],
+  },
+  // Image Optimization
+  {
+    id: 'tsd-03-5',
+    question:
+      'How would you optimize images for better performance and Core Web Vitals?',
+    code: `// Next.js Image Component with Optimization
+import Image from 'next/image';
+
+// Responsive image with srcset and lazy loading
+<Image
+  src="/hero-image.webp"
+  alt="Hero section image"
+  width={1200}
+  height={600}
+  priority={true} // Above-the-fold
+  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+  placeholder="blur"
+  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+/>
+
+// Lazy loaded image below the fold
+<Image
+  src="/gallery-image.webp"
+  alt="Gallery image"
+  width={400}
+  height={300}
+  loading="lazy"
+  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+/>`,
+    options: {
+      A: 'Use large, uncompressed images for best quality',
+      B: 'Implement comprehensive image optimization including dimensions, compression, modern formats, CDN, lazy loading, and responsive images',
+      C: 'Only optimize images on mobile devices',
+      D: 'Image optimization is not important for modern websites',
+    },
+    correctAnswer: 'B',
+    explanation:
+      'Comprehensive image optimization is crucial for performance and Core Web Vitals. Key strategies include: 1) Always specify width and height attributes to prevent Cumulative Layout Shift (CLS), 2) Use modern formats like WebP with fallbacks, 3) Implement lazy loading for below-the-fold images, 4) Provide responsive images with srcset for different viewport sizes, 5) Serve images via CDN with proper caching headers, 6) Use build-time compression tools like sharp or next/image, 7) Set priority loading for above-the-fold images, 8) Implement placeholder strategies (blur, low-quality) for better perceived performance.',
+    difficulty: 'advanced',
+    category: 'javascript',
+    tags: [
+      'image-optimization',
+      'performance',
+      'core-web-vitals',
+      'cls',
+      'fcp',
+      'lazy-loading',
+      'responsive-images',
+      'webp',
+      'cdn',
+    ],
+    relatedTopics: [
+      'Performance Optimization',
+      'Core Web Vitals',
+      'Image Optimization',
+      'Next.js',
+      'Web Performance',
+    ],
+  },
 ];
 
 // Combine all phases for the general frontend questions
