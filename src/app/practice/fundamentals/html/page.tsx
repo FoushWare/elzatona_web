@@ -73,6 +73,20 @@ const htmlQuestions = [
     answer: "Use audio and video elements with source elements for different formats. Include controls, autoplay, loop, and preload attributes as needed.",
     category: "Multimedia",
     difficulty: "Intermediate"
+  },
+  {
+    id: 11,
+    question: "What are ARIA attributes in HTML and why are they important?",
+    answer: "ARIA (Accessible Rich Internet Applications) attributes add semantic information to HTML to improve accessibility for assistive technologies like screen readers. They help users with disabilities by providing additional context when semantic HTML isn't sufficient. Common examples include aria-label (defines a label), aria-hidden='true' (hides from screen readers), role='dialog' (defines as dialog), and aria-expanded (indicates expandable content state). Best practice is to prefer semantic HTML (nav, main, button) over ARIA when possible; use ARIA to fill accessibility gaps.",
+    category: "Accessibility",
+    difficulty: "Advanced"
+  },
+  {
+    id: 12,
+    question: "What is the srcset attribute in HTML and how does it help with responsive images?",
+    answer: "The srcset attribute allows you to specify multiple image sources for different screen sizes and pixel densities. It helps create responsive images by serving the most appropriate image version to each device. The 'w' descriptor specifies image width (e.g., '300w', '600w'), while 'x' specifies pixel density (e.g., '1x', '2x'). Combined with the 'sizes' attribute, it tells the browser which image to download based on the viewport size. Example: <img srcset='small.jpg 300w, medium.jpg 600w, large.jpg 900w' sizes='(max-width: 600px) 300px, (max-width: 900px) 600px, 900px' src='fallback.jpg' alt='Responsive image'>. This improves performance by avoiding downloading unnecessarily large images on small devices.",
+    category: "Responsive",
+    difficulty: "Advanced"
   }
 ];
 
