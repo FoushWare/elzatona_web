@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import { useDarkMode } from "@/hooks/useDarkMode";
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,9 +30,9 @@ export default function Navigation() {
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -42,9 +42,9 @@ export default function Navigation() {
       setIsScrolled(window.scrollY > 0);
     }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -52,8 +52,8 @@ export default function Navigation() {
     <nav
       className={`sticky top-0 z-50 border-b border-blue-500/30 shadow-soft backdrop-blur-md transition-all duration-300 ${
         isScrolled
-          ? "bg-blue-600/95 text-white shadow-medium"
-          : "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
+          ? 'bg-blue-600/95 text-white shadow-medium'
+          : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white'
       }`}
     >
       <div className="container mx-auto px-4" ref={dropdownRef}>
@@ -77,14 +77,23 @@ export default function Navigation() {
             </div>
 
             <div className="relative">
+              <Link
+                href="/dashboard"
+                className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
+              >
+                Dashboard
+              </Link>
+            </div>
+
+            <div className="relative">
               <button
-                onClick={() => handleDropdownToggle("practice")}
+                onClick={() => handleDropdownToggle('practice')}
                 className="nav-link flex items-center space-x-1 text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
               >
                 <span>Practice</span>
                 <svg
                   className={`w-4 h-4 transition-transform ${
-                    openDropdown === "practice" ? "rotate-180" : ""
+                    openDropdown === 'practice' ? 'rotate-180' : ''
                   }`}
                   fill="none"
                   stroke="currentColor"
@@ -98,9 +107,23 @@ export default function Navigation() {
                   ></path>
                 </svg>
               </button>
-              {openDropdown === "practice" && (
+              {openDropdown === 'practice' && (
                 <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50">
                   <div className="py-1">
+                    <Link
+                      href="/progress"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={closeDropdowns}
+                    >
+                      📊 Progress Tracking
+                    </Link>
+                    <Link
+                      href="/gamification"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={closeDropdowns}
+                    >
+                      🏆 Gamification
+                    </Link>
                     <Link
                       href="/coding"
                       className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
@@ -136,13 +159,13 @@ export default function Navigation() {
 
             <div className="relative">
               <button
-                onClick={() => handleDropdownToggle("learn")}
+                onClick={() => handleDropdownToggle('learn')}
                 className="nav-link flex items-center space-x-1 text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
               >
                 <span>Learn</span>
                 <svg
                   className={`w-4 h-4 transition-transform ${
-                    openDropdown === "learn" ? "rotate-180" : ""
+                    openDropdown === 'learn' ? 'rotate-180' : ''
                   }`}
                   fill="none"
                   stroke="currentColor"
@@ -156,7 +179,7 @@ export default function Navigation() {
                   ></path>
                 </svg>
               </button>
-              {openDropdown === "learn" && (
+              {openDropdown === 'learn' && (
                 <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50">
                   <div className="py-1">
                     <Link
@@ -210,7 +233,21 @@ export default function Navigation() {
           </div>
 
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-lg bg-muted animate-pulse"></div>
+            {/* Auth Buttons */}
+            <div className="hidden md:flex items-center space-x-2">
+              <Link
+                href="/login"
+                className="px-4 py-2 text-sm font-medium text-white hover:text-blue-100 transition-colors duration-200"
+              >
+                Login
+              </Link>
+              <Link
+                href="/signup"
+                className="px-4 py-2 text-sm font-medium bg-white text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 hover:scale-105"
+              >
+                Sign Up
+              </Link>
+            </div>
 
             {/* Theme Toggle Button */}
             <button
@@ -338,6 +375,38 @@ export default function Navigation() {
               >
                 💼 Jobs
               </Link>
+              <Link
+                href="/progress"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                📊 Progress
+              </Link>
+              <Link
+                href="/gamification"
+                className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                onClick={() => setIsOpen(false)}
+              >
+                🏆 Gamification
+              </Link>
+
+              {/* Mobile Auth Buttons */}
+              <div className="pt-4 border-t border-blue-500/30">
+                <Link
+                  href="/login"
+                  className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
+                  onClick={() => setIsOpen(false)}
+                >
+                  🔐 Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="block px-3 py-2 rounded-md text-base font-medium bg-white text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 mx-3"
+                  onClick={() => setIsOpen(false)}
+                >
+                  ✨ Sign Up
+                </Link>
+              </div>
             </div>
           </div>
         )}
