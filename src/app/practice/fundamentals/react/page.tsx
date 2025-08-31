@@ -1,14 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { reactQuestions } from "@/lib/reactQuestions";
+import { useState } from 'react';
+import { reactQuestions } from '@/lib/reactQuestions';
 
 export default function ReactQuestionsPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [selectedAnswer, setSelectedAnswer] = useState('');
   const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
   const [totalAnswered, setTotalAnswered] = useState(0);
+  const [showStatistics, setShowStatistics] = useState(false);
 
   const questions = reactQuestions;
   const currentQuestion = questions[currentQuestionIndex];
@@ -16,17 +17,17 @@ export default function ReactQuestionsPage() {
   const handleAnswerSelect = (answer: string) => {
     if (selectedAnswer) return; // Prevent changing answer after selection
     setSelectedAnswer(answer);
-    setTotalAnswered((prev) => prev + 1);
+    setTotalAnswered(prev => prev + 1);
 
     if (answer === currentQuestion.answer) {
-      setScore((prev) => prev + 1);
+      setScore(prev => prev + 1);
     }
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedAnswer("");
+      setSelectedAnswer('');
       setShowAnswer(false);
     }
   };
@@ -34,7 +35,7 @@ export default function ReactQuestionsPage() {
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setSelectedAnswer("");
+      setSelectedAnswer('');
       setShowAnswer(false);
     }
   };
@@ -56,10 +57,23 @@ export default function ReactQuestionsPage() {
             Test your React knowledge with 270 comprehensive interview questions
             covering fundamentals to advanced concepts
           </p>
+
+          {/* Mobile Toggle Button */}
+          <div className="flex justify-center mt-6 md:hidden">
+            <button
+              onClick={() => setShowStatistics(!showStatistics)}
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              {showStatistics ? 'Hide Statistics' : 'Show Statistics'}
+              <span className="ml-2">📊</span>
+            </button>
+          </div>
         </div>
 
         {/* Progress and Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div
+          className={`${showStatistics ? 'block' : 'hidden md:grid'} grid-cols-1 md:grid-cols-4 gap-4 mb-8`}
+        >
           <div className="bg-card p-4 rounded-lg border border-border">
             <h3 className="text-sm font-medium text-muted-foreground">
               Progress
@@ -85,7 +99,7 @@ export default function ReactQuestionsPage() {
           <div className="bg-card p-4 rounded-lg border border-border">
             <h3 className="text-sm font-medium text-muted-foreground">Group</h3>
             <p className="text-2xl font-bold text-card-foreground">
-              {Math.floor(currentQuestionIndex / 20) + 1} /{" "}
+              {Math.floor(currentQuestionIndex / 20) + 1} /{' '}
               {Math.ceil(questions.length / 20)}
             </p>
           </div>
@@ -142,30 +156,30 @@ export default function ReactQuestionsPage() {
                   <button
                     key={index}
                     onClick={() => handleAnswerSelect(optionLabel)}
-                    disabled={selectedAnswer !== ""}
+                    disabled={selectedAnswer !== ''}
                     className={`w-full p-4 text-left rounded-lg border transition-all ${
                       isSelected
                         ? isCorrect
-                          ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200"
-                          : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200"
+                          ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200'
+                          : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200'
                         : showResult && isCorrect
-                        ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200"
-                        : "bg-card border-border hover:border-border/60 text-card-foreground hover:bg-muted/50"
-                    } ${selectedAnswer ? "cursor-default" : "cursor-pointer"}`}
+                          ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200'
+                          : 'bg-card border-border hover:border-border/60 text-card-foreground hover:bg-muted/50'
+                    } ${selectedAnswer ? 'cursor-default' : 'cursor-pointer'}`}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-medium ${
                           isSelected
                             ? isCorrect
-                              ? "bg-green-500 border-green-500 text-white"
-                              : "bg-red-500 border-red-500 text-white"
+                              ? 'bg-green-500 border-green-500 text-white'
+                              : 'bg-red-500 border-red-500 text-white'
                             : showResult && isCorrect
-                            ? "bg-green-500 border-green-500 text-white"
-                            : "border-border"
+                              ? 'bg-green-500 border-green-500 text-white'
+                              : 'border-border'
                         }`}
                       >
-                        {showResult ? (isCorrect ? "✓" : "✗") : optionLabel}
+                        {showResult ? (isCorrect ? '✓' : '✗') : optionLabel}
                       </div>
                       <span>{option}</span>
                     </div>
@@ -184,7 +198,7 @@ export default function ReactQuestionsPage() {
                   onClick={() => setShowAnswer(!showAnswer)}
                   className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
                 >
-                  {showAnswer ? "Hide" : "Show"}
+                  {showAnswer ? 'Hide' : 'Show'}
                 </button>
               </div>
               {showAnswer && (
@@ -210,7 +224,7 @@ export default function ReactQuestionsPage() {
                 onClick={() => {
                   const newIndex = Math.max(0, currentQuestionIndex - 20);
                   setCurrentQuestionIndex(newIndex);
-                  setSelectedAnswer("");
+                  setSelectedAnswer('');
                   setShowAnswer(false);
                 }}
                 disabled={currentQuestionIndex < 20}
@@ -225,7 +239,7 @@ export default function ReactQuestionsPage() {
                     currentQuestionIndex + 20
                   );
                   setCurrentQuestionIndex(newIndex);
-                  setSelectedAnswer("");
+                  setSelectedAnswer('');
                   setShowAnswer(false);
                 }}
                 disabled={currentQuestionIndex >= questions.length - 20}
@@ -253,7 +267,7 @@ export default function ReactQuestionsPage() {
             </h3>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>
-                Group {Math.floor(currentQuestionIndex / 20) + 1} of{" "}
+                Group {Math.floor(currentQuestionIndex / 20) + 1} of{' '}
                 {Math.ceil(questions.length / 20)}
               </span>
             </div>
@@ -263,8 +277,8 @@ export default function ReactQuestionsPage() {
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
               <h4 className="text-sm font-medium text-foreground">
-                Current Group: Questions{" "}
-                {Math.floor(currentQuestionIndex / 20) * 20 + 1} -{" "}
+                Current Group: Questions{' '}
+                {Math.floor(currentQuestionIndex / 20) * 20 + 1} -{' '}
                 {Math.min(
                   Math.floor(currentQuestionIndex / 20) * 20 + 20,
                   questions.length
@@ -274,7 +288,7 @@ export default function ReactQuestionsPage() {
                 {Math.min(
                   20,
                   questions.length - Math.floor(currentQuestionIndex / 20) * 20
-                )}{" "}
+                )}{' '}
                 questions
               </span>
             </div>
@@ -299,17 +313,17 @@ export default function ReactQuestionsPage() {
                       key={questionIndex}
                       onClick={() => {
                         setCurrentQuestionIndex(questionIndex);
-                        setSelectedAnswer("");
+                        setSelectedAnswer('');
                         setShowAnswer(false);
                       }}
                       className={`p-2 text-xs rounded border transition-colors ${
                         isCurrent
-                          ? "bg-blue-600 text-white border-blue-600"
+                          ? 'bg-blue-600 text-white border-blue-600'
                           : isAnswered
-                          ? isCorrect
-                            ? "bg-green-100 text-green-800 border-green-300"
-                            : "bg-red-100 text-red-800 border-red-300"
-                          : "bg-card text-card-foreground border-border hover:bg-muted"
+                            ? isCorrect
+                              ? 'bg-green-100 text-green-800 border-green-300'
+                              : 'bg-red-100 text-red-800 border-red-300'
+                            : 'bg-card text-card-foreground border-border hover:bg-muted'
                       }`}
                     >
                       {questionIndex + 1}
@@ -346,13 +360,13 @@ export default function ReactQuestionsPage() {
                       key={groupIndex}
                       onClick={() => {
                         setCurrentQuestionIndex(startIndex);
-                        setSelectedAnswer("");
+                        setSelectedAnswer('');
                         setShowAnswer(false);
                       }}
                       className={`p-3 text-sm rounded border transition-colors ${
                         isCurrentGroup
-                          ? "bg-blue-600 text-white border-blue-600"
-                          : "bg-card text-card-foreground border-border hover:bg-muted"
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'bg-card text-card-foreground border-border hover:bg-muted'
                       }`}
                     >
                       <div className="font-medium">Group {groupIndex + 1}</div>

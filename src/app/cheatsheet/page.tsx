@@ -82,7 +82,7 @@ const cheatSheetData: CheatSheetSection[] = [
       {
         title: 'Image Optimization Pipeline',
         content:
-          'WebP/AVIF format, responsive images with srcset, lazy loading with Intersection Observer, proper sizing, compression, CDN delivery.',
+          'WebP/AVIF format, responsive images with srcset and sizes attributes, picture element for art direction, lazy loading with Intersection Observer, proper sizing (300w, 600w, 900w), compression optimization, CDN delivery with automatic format conversion.',
         type: 'checklist',
         priority: 'high',
       },
@@ -404,6 +404,68 @@ const cheatSheetData: CheatSheetSection[] = [
         content:
           'Unit tests for components, integration tests for workflows, accessibility testing, performance testing, cross-device testing.',
         type: 'checklist',
+        priority: 'medium',
+      },
+    ],
+  },
+  {
+    id: 'responsive-images',
+    title: 'Responsive Images & srcset Implementation',
+    icon: <Smartphone className="w-8 h-8" />,
+    description:
+      'Complete guide to implementing responsive images with srcset, picture elements, and performance optimization',
+    color: 'text-purple-600 dark:text-purple-400',
+    bgColor:
+      'bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20',
+    borderColor: 'border-purple-200 dark:border-purple-800',
+    items: [
+      {
+        title: 'Basic srcset Implementation',
+        content:
+          'Use width descriptors (300w, 600w, 900w) with sizes attribute. Always include fallback src. Example: <img srcset="small.jpg 300w, medium.jpg 600w, large.jpg 900w" sizes="(max-width: 600px) 300px, (max-width: 900px) 600px, 900px" src="fallback.jpg" alt="Responsive image" />',
+        type: 'checklist',
+        priority: 'high',
+      },
+      {
+        title: 'Picture Element for Art Direction',
+        content:
+          'Use picture element with media queries for different image crops. Combine with srcset for optimal performance. Perfect for hero images that need different compositions on mobile vs desktop.',
+        type: 'tip',
+        priority: 'high',
+      },
+      {
+        title: 'Multiple Image Formats',
+        content:
+          'Provide WebP/AVIF with JPEG fallback. Use type attribute in source elements. Modern browsers will choose the best format, older browsers fall back to JPEG.',
+        type: 'info',
+        priority: 'medium',
+      },
+      {
+        title: 'Sizes Attribute Strategy',
+        content:
+          'Match sizes attribute to actual CSS layout. Use viewport units (vw) and media queries. Consider CSS Grid/Flexbox behavior when calculating sizes.',
+        type: 'tip',
+        priority: 'high',
+      },
+      {
+        title: 'Performance Monitoring',
+        content:
+          'Use Network tab in DevTools to verify correct image loading. Monitor Core Web Vitals (LCP, CLS). Test with different screen sizes and network conditions.',
+        type: 'checklist',
+        priority: 'medium',
+      },
+      {
+        title: 'Common Mistakes to Avoid',
+        content:
+          'Missing fallback src, incorrect sizes attribute, wrong image dimensions, not testing on multiple devices, forgetting to optimize images before creating srcset.',
+        type: 'warning',
+        priority: 'high',
+      },
+      {
+        title: 'Advanced Techniques',
+        content:
+          'Lazy loading with Intersection Observer, preloading critical images, service worker caching, progressive image loading, CDN with automatic format conversion.',
+        type: 'info',
         priority: 'medium',
       },
     ],

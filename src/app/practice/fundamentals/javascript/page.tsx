@@ -1,18 +1,19 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import {
   getJavaScriptQuestions,
   getJavaScriptQuestionById,
-} from "@/lib/javascriptQuestions";
-import JavaScriptQuestionCard from "@/components/JavaScriptQuestionCard";
+} from '@/lib/javascriptQuestions';
+import JavaScriptQuestionCard from '@/components/JavaScriptQuestionCard';
 
 export default function JSQuestionsPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string>("");
+  const [selectedAnswer, setSelectedAnswer] = useState<string>('');
   const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
   const [totalAnswered, setTotalAnswered] = useState(0);
+  const [showStatistics, setShowStatistics] = useState(false);
 
   const questions = getJavaScriptQuestions();
   const currentQuestion = questions[currentQuestionIndex];
@@ -36,7 +37,7 @@ export default function JSQuestionsPage() {
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedAnswer("");
+      setSelectedAnswer('');
       setShowAnswer(false);
     }
   };
@@ -44,14 +45,14 @@ export default function JSQuestionsPage() {
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setSelectedAnswer("");
+      setSelectedAnswer('');
       setShowAnswer(false);
     }
   };
 
   const handleReset = () => {
     setCurrentQuestionIndex(0);
-    setSelectedAnswer("");
+    setSelectedAnswer('');
     setShowAnswer(false);
     setScore(0);
     setTotalAnswered(0);
@@ -59,7 +60,7 @@ export default function JSQuestionsPage() {
 
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
   const accuracy =
-    totalAnswered > 0 ? ((score / totalAnswered) * 100).toFixed(1) : "0";
+    totalAnswered > 0 ? ((score / totalAnswered) * 100).toFixed(1) : '0';
 
   return (
     <div className="min-h-screen bg-background">
@@ -73,10 +74,23 @@ export default function JSQuestionsPage() {
             Test your JavaScript knowledge with 155 comprehensive interview
             questions covering fundamentals to advanced concepts
           </p>
+
+          {/* Mobile Toggle Button */}
+          <div className="flex justify-center mt-6 md:hidden">
+            <button
+              onClick={() => setShowStatistics(!showStatistics)}
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              {showStatistics ? 'Hide Statistics' : 'Show Statistics'}
+              <span className="ml-2">📊</span>
+            </button>
+          </div>
         </div>
 
         {/* Progress and Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div
+          className={`${showStatistics ? 'block' : 'hidden md:grid'} grid-cols-1 md:grid-cols-4 gap-4 mb-8`}
+        >
           <div className="bg-card p-4 rounded-lg border border-border">
             <h3 className="text-sm font-medium text-muted-foreground">
               Progress
@@ -181,7 +195,7 @@ export default function JSQuestionsPage() {
               </span>
               <span>•</span>
               <span>
-                Group {Math.floor(currentQuestionIndex / 20) + 1} of{" "}
+                Group {Math.floor(currentQuestionIndex / 20) + 1} of{' '}
                 {Math.ceil(questions.length / 20)}
               </span>
             </div>
@@ -196,7 +210,7 @@ export default function JSQuestionsPage() {
                   onClick={() => {
                     const newIndex = Math.max(0, currentQuestionIndex - 20);
                     setCurrentQuestionIndex(newIndex);
-                    setSelectedAnswer("");
+                    setSelectedAnswer('');
                     setShowAnswer(false);
                   }}
                   disabled={currentQuestionIndex < 20}
@@ -208,7 +222,7 @@ export default function JSQuestionsPage() {
                   onClick={() => {
                     const newIndex = Math.max(0, currentQuestionIndex - 1);
                     setCurrentQuestionIndex(newIndex);
-                    setSelectedAnswer("");
+                    setSelectedAnswer('');
                     setShowAnswer(false);
                   }}
                   disabled={currentQuestionIndex === 0}
@@ -226,7 +240,7 @@ export default function JSQuestionsPage() {
                       currentQuestionIndex + 1
                     );
                     setCurrentQuestionIndex(newIndex);
-                    setSelectedAnswer("");
+                    setSelectedAnswer('');
                     setShowAnswer(false);
                   }}
                   disabled={currentQuestionIndex === questions.length - 1}
@@ -241,7 +255,7 @@ export default function JSQuestionsPage() {
                       currentQuestionIndex + 20
                     );
                     setCurrentQuestionIndex(newIndex);
-                    setSelectedAnswer("");
+                    setSelectedAnswer('');
                     setShowAnswer(false);
                   }}
                   disabled={currentQuestionIndex >= questions.length - 20}
@@ -256,8 +270,8 @@ export default function JSQuestionsPage() {
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium text-foreground">
-                  Current Group: Questions{" "}
-                  {Math.floor(currentQuestionIndex / 20) * 20 + 1} -{" "}
+                  Current Group: Questions{' '}
+                  {Math.floor(currentQuestionIndex / 20) * 20 + 1} -{' '}
                   {Math.min(
                     Math.floor(currentQuestionIndex / 20) * 20 + 20,
                     questions.length
@@ -268,7 +282,7 @@ export default function JSQuestionsPage() {
                     20,
                     questions.length -
                       Math.floor(currentQuestionIndex / 20) * 20
-                  )}{" "}
+                  )}{' '}
                   questions
                 </span>
               </div>
@@ -292,17 +306,17 @@ export default function JSQuestionsPage() {
                         key={questionIndex}
                         onClick={() => {
                           setCurrentQuestionIndex(questionIndex);
-                          setSelectedAnswer("");
+                          setSelectedAnswer('');
                           setShowAnswer(false);
                         }}
                         className={`p-1 text-xs rounded border transition-colors ${
                           questionIndex === currentQuestionIndex
-                            ? "bg-primary text-primary-foreground border-primary"
+                            ? 'bg-primary text-primary-foreground border-primary'
                             : isAnswered
-                            ? isCorrect
-                              ? "bg-green-500/20 text-green-700 border-green-500 dark:text-green-400 dark:border-green-400"
-                              : "bg-red-500/20 text-red-700 border-red-500 dark:text-red-400 dark:border-red-400"
-                            : "bg-card text-card-foreground border-border hover:bg-muted"
+                              ? isCorrect
+                                ? 'bg-green-500/20 text-green-700 border-green-500 dark:text-green-400 dark:border-green-400'
+                                : 'bg-red-500/20 text-red-700 border-red-500 dark:text-red-400 dark:border-red-400'
+                              : 'bg-card text-card-foreground border-border hover:bg-muted'
                         }`}
                       >
                         {questionIndex + 1}
@@ -340,13 +354,13 @@ export default function JSQuestionsPage() {
                         key={groupIndex}
                         onClick={() => {
                           setCurrentQuestionIndex(startIndex);
-                          setSelectedAnswer("");
+                          setSelectedAnswer('');
                           setShowAnswer(false);
                         }}
                         className={`p-2 text-xs rounded border transition-colors ${
                           isCurrentGroup
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "bg-card text-card-foreground border-border hover:bg-muted"
+                            ? 'bg-primary text-primary-foreground border-primary'
+                            : 'bg-card text-card-foreground border-border hover:bg-muted'
                         }`}
                       >
                         <div className="font-medium">{groupIndex + 1}</div>
