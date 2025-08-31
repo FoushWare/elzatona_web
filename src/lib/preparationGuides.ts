@@ -225,7 +225,7 @@ export const preparationGuides: PreparationGuide[] = [
         title: 'Performance Optimization',
         description: 'Optimize for speed and user experience',
         readingTime: 25,
-        topics: ['Bundle optimization', 'Code splitting', 'Lazy loading', 'Caching strategies', 'Performance monitoring']
+        topics: ['Bundle optimization', 'Code splitting', 'Lazy loading', 'Caching strategies', 'CDN implementation', 'Performance monitoring']
       },
       {
         title: 'Security & Best Practices',

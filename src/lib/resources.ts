@@ -98,6 +98,14 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     count: 0
   },
   {
+    id: 'english',
+    name: 'English Learning',
+    description: 'Free resources to improve English language skills',
+    icon: '🇬🇧',
+    color: 'bg-blue-600',
+    count: 0
+  },
+  {
     id: 'system-design',
     name: 'System Design',
     description: 'Design systems and architecture patterns',
@@ -408,6 +416,80 @@ export const learningResources: LearningResource[] = [
     category: 'tools',
     type: 'tool',
     tags: ['images', 'optimization', 'performance'],
+    difficulty: 'beginner'
+  },
+
+  // English Learning
+  {
+    id: 'cbc-learning-english',
+    title: 'CBC Learning English',
+    description: 'Free English learning resources from Canadian Broadcasting Corporation',
+    url: 'https://www.cbc.ca/learning-english',
+    category: 'english',
+    type: 'website',
+    tags: ['english', 'learning', 'free', 'canadian'],
+    difficulty: 'beginner',
+    featured: true
+  },
+  {
+    id: 'bbc-learning-english',
+    title: 'BBC Learning English',
+    description: 'Comprehensive English learning resources from BBC',
+    url: 'https://www.bbc.co.uk/learningenglish',
+    category: 'english',
+    type: 'website',
+    tags: ['english', 'learning', 'free', 'british'],
+    difficulty: 'beginner',
+    featured: true
+  },
+  {
+    id: 'voa-learning-english',
+    title: 'VOA Learning English',
+    description: 'Voice of America English learning resources',
+    url: 'https://learningenglish.voanews.com/',
+    category: 'english',
+    type: 'website',
+    tags: ['english', 'learning', 'free', 'american'],
+    difficulty: 'beginner'
+  },
+  {
+    id: 'eslpod',
+    title: 'ESLPod',
+    description: 'English as a Second Language Podcast for learners',
+    url: 'https://www.eslpod.com/',
+    category: 'english',
+    type: 'podcast',
+    tags: ['english', 'learning', 'podcast', 'esl'],
+    difficulty: 'beginner'
+  },
+  {
+    id: 'the-english-we-speak',
+    title: 'The English We Speak (BBC)',
+    description: 'BBC podcast series on everyday English expressions',
+    url: 'https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak',
+    category: 'english',
+    type: 'podcast',
+    tags: ['english', 'learning', 'podcast', 'expressions'],
+    difficulty: 'intermediate'
+  },
+  {
+    id: 'lukes-english-podcast',
+    title: 'Luke\'s English Podcast',
+    description: 'Comprehensive English learning podcast by Luke Thompson',
+    url: 'https://teacherluke.co.uk/',
+    category: 'english',
+    type: 'podcast',
+    tags: ['english', 'learning', 'podcast', 'comprehensive'],
+    difficulty: 'intermediate'
+  },
+  {
+    id: 'all-ears-english',
+    title: 'All Ears English',
+    description: 'American English learning podcast and resources',
+    url: 'https://www.allearsenglish.com/',
+    category: 'english',
+    type: 'podcast',
+    tags: ['english', 'learning', 'podcast', 'american'],
     difficulty: 'beginner'
   },
 

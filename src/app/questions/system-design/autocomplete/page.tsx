@@ -108,6 +108,24 @@ export default function SystemDesignPracticePage() {
       explanation:
         "Round-robin load balancing works best for autocomplete systems because requests are stateless and have similar processing requirements. It provides even distribution and is simple to implement and maintain.",
     },
+    {
+      id: 6,
+      title: "CDN Implementation",
+      description: "Implementing Content Delivery Networks for performance",
+      scenario:
+        "Your autocomplete system needs to serve suggestions to users worldwide with minimal latency and high availability.",
+      question:
+        "What is the primary benefit of implementing a CDN for autocomplete suggestions?",
+      options: [
+        "Reduced server costs",
+        "Improved global response times",
+        "Better data security",
+        "Simplified deployment",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Improved global response times is the primary benefit. A CDN distributes autocomplete suggestions across servers worldwide, reducing latency by serving content from the closest server to each user, regardless of their geographic location.",
+    },
   ];
 
   const handleAnswerSelect = (answerIndex: number) => {
