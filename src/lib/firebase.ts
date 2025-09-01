@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp, FirebaseApp } from 'firebase/app';
 import {
   getAuth,
   GoogleAuthProvider,
@@ -10,42 +10,77 @@ import {
   onAuthStateChanged,
   User,
   AuthError,
+  Auth,
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  Firestore,
+} from 'firebase/firestore';
+
+// Check if Firebase is configured
+const isFirebaseConfigured =
+  process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
+  process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
+  process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'dummy-key',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'dummy-domain',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'dummy-project',
+  storageBucket:
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'dummy-bucket',
+  messagingSenderId:
+    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '123456789',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:123456789:web:dummy',
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase only if configured
+let app: FirebaseApp | null = null;
+let auth: Auth | null = null;
+let db: Firestore | null = null;
 
-// Initialize Firebase services
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+if (isFirebaseConfigured) {
+  try {
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  } catch (error) {
+    console.warn('Firebase initialization failed:', error);
+  }
+} else {
+  console.warn(
+    'Firebase not configured. Authentication features will be disabled.'
+  );
+}
 
-// Auth providers
-export const googleProvider = new GoogleAuthProvider();
-export const githubProvider = new GithubAuthProvider();
+// Auth providers (only create if Firebase is initialized)
+export const googleProvider = auth ? new GoogleAuthProvider() : null;
+export const githubProvider = auth ? new GithubAuthProvider() : null;
 
-// Configure providers
-googleProvider.setCustomParameters({
-  prompt: 'select_account',
-});
+// Configure providers if they exist
+if (googleProvider) {
+  googleProvider.setCustomParameters({
+    prompt: 'select_account',
+  });
+}
 
-githubProvider.setCustomParameters({
-  prompt: 'select_account',
-});
+if (githubProvider) {
+  githubProvider.setCustomParameters({
+    prompt: 'select_account',
+  });
+}
 
-// Authentication functions
+// Authentication functions with fallbacks
 export const signInWithGoogle = async () => {
+  if (!auth || !googleProvider) {
+    return { success: false, error: 'Firebase not configured' };
+  }
+
   try {
     const result = await signInWithPopup(auth, googleProvider);
     await saveUserToFirestore(result.user);
@@ -58,6 +93,10 @@ export const signInWithGoogle = async () => {
 };
 
 export const signInWithGithub = async () => {
+  if (!auth || !githubProvider) {
+    return { success: false, error: 'Firebase not configured' };
+  }
+
   try {
     const result = await signInWithPopup(auth, githubProvider);
     await saveUserToFirestore(result.user);
@@ -70,6 +109,10 @@ export const signInWithGithub = async () => {
 };
 
 export const signInWithEmail = async (email: string, password: string) => {
+  if (!auth) {
+    return { success: false, error: 'Firebase not configured' };
+  }
+
   try {
     const result = await signInWithEmailAndPassword(auth, email, password);
     return { success: true, user: result.user };
@@ -85,6 +128,10 @@ export const signUpWithEmail = async (
   password: string,
   displayName: string
 ) => {
+  if (!auth) {
+    return { success: false, error: 'Firebase not configured' };
+  }
+
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -102,6 +149,10 @@ export const signUpWithEmail = async (
 };
 
 export const signOutUser = async () => {
+  if (!auth) {
+    return { success: false, error: 'Firebase not configured' };
+  }
+
   try {
     await signOut(auth);
     return { success: true };
@@ -112,42 +163,42 @@ export const signOutUser = async () => {
   }
 };
 
-// Firestore functions
+// Firestore functions with fallbacks
 export const saveUserToFirestore = async (user: User, displayName?: string) => {
+  if (!db) {
+    console.warn('Firestore not available');
+    return;
+  }
+
   try {
     const userRef = doc(db, 'users', user.uid);
     const userData = {
       uid: user.uid,
       email: user.email,
-      displayName: displayName || user.displayName || 'Anonymous User',
+      displayName: displayName || user.displayName || 'User',
       photoURL: user.photoURL || null,
-      provider: user.providerData[0]?.providerId || 'email',
       createdAt: new Date().toISOString(),
       lastLogin: new Date().toISOString(),
-      isEmailVerified: user.emailVerified,
-      // Add user preferences and progress tracking
-      preferences: {
-        theme: 'system',
-        notifications: true,
-        language: 'en',
-      },
       progress: {
         questionsCompleted: 0,
-        totalPoints: 0,
-        currentStreak: 0,
-        badges: [],
-        achievements: [],
+        challengesCompleted: 0,
+        totalScore: 0,
+        streak: 0,
       },
     };
 
     await setDoc(userRef, userData, { merge: true });
-    console.log('User saved to Firestore');
   } catch (error) {
     console.error('Error saving user to Firestore:', error);
   }
 };
 
 export const getUserFromFirestore = async (uid: string) => {
+  if (!db) {
+    console.warn('Firestore not available');
+    return null;
+  }
+
   try {
     const userRef = doc(db, 'users', uid);
     const userSnap = await getDoc(userRef);
@@ -155,7 +206,6 @@ export const getUserFromFirestore = async (uid: string) => {
     if (userSnap.exists()) {
       return userSnap.data();
     } else {
-      console.log('No such user!');
       return null;
     }
   } catch (error) {
@@ -164,10 +214,18 @@ export const getUserFromFirestore = async (uid: string) => {
   }
 };
 
-// Auth state observer
-export const onAuthStateChange = (callback: (user: User | null) => void) => {
+// Auth state observer with fallback
+export const onAuthStateChangedWrapper = (
+  callback: (user: User | null) => void
+) => {
+  if (!auth) {
+    // If Firebase is not configured, immediately call callback with null
+    callback(null);
+    return () => {}; // Return empty unsubscribe function
+  }
+
   return onAuthStateChanged(auth, callback);
 };
 
-// Export auth instance for use in components
-export default auth;
+// Export auth and db for direct access (with fallbacks)
+export { auth, db };
