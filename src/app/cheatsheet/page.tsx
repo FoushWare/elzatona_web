@@ -670,24 +670,24 @@ export default function CheatSheetPage() {
 
         {/* Call to Action */}
         <div className="mt-16 text-center">
-          <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-lg p-8 text-white">
-            <h2 className="text-3xl font-bold mb-4">
+          <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-700 dark:via-purple-700 dark:to-pink-700 rounded-lg p-8 text-white shadow-xl">
+            <h2 className="text-3xl font-bold mb-4 text-white">
               Ready to Master Frontend Development?
             </h2>
-            <p className="text-xl mb-6 opacity-90">
+            <p className="text-xl mb-6 text-white/95 dark:text-white/90">
               Use this cheat sheet as your quick reference guide for frontend
               best practices.
             </p>
-            <div className="flex justify-center space-x-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/practice/fundamentals"
-                className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors duration-200"
+                className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-200 transform hover:scale-105 shadow-lg"
               >
                 Practice Fundamentals
               </Link>
               <Link
                 href="/learning-paths"
-                className="border-2 border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors duration-200"
+                className="border-2 border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 dark:hover:bg-white dark:hover:text-blue-600 transition-all duration-200 transform hover:scale-105 shadow-lg"
               >
                 Explore Learning Paths
               </Link>

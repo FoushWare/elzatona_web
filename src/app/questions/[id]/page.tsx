@@ -1,57 +1,47 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import {
-  Question,
-  sampleQuestions,
-  getDifficultyColor,
-  getDifficultyBgColor,
-} from "@/lib/questions";
+import { useParams, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { ArrowLeft, Code, CheckCircle, AlertTriangle, Clock, Users, Star } from 'lucide-react';
+import { greatFrontendQuestions } from '@/lib/greatfrontendQuestions';
 
 export default function QuestionDetailPage() {
   const params = useParams();
-  const questionId = params.id as string;
-  const [question, setQuestion] = useState<Question | null>(null);
-  const [activeTab, setActiveTab] = useState<
-    "problem" | "solution" | "submissions" | "discussion"
-  >("problem");
-  const [code, setCode] = useState<string>("");
-  const [language, setLanguage] = useState<string>("javascript");
+  const router = useRouter();
+  const [question, setQuestion] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const foundQuestion = sampleQuestions.find((q) => q.id === questionId);
-    if (foundQuestion) {
-      setQuestion(foundQuestion);
-      setCode(getInitialCode(foundQuestion));
+    if (params.id) {
+      const foundQuestion = greatFrontendQuestions.find(q => q.id === params.id);
+      if (foundQuestion) {
+        setQuestion(foundQuestion);
+      }
+      setLoading(false);
     }
-  }, [questionId]);
+  }, [params.id]);
 
-  const getInitialCode = (question: Question) => {
-    switch (question.subCategory) {
-      case "javascript-functions":
-        return `// ${question.title}\nfunction solution() {\n  // Your code here\n  \n}`;
-      case "user-interface":
-        return `// ${question.title}\nfunction Component() {\n  // Your React component here\n  \n}`;
-      case "css-layouts":
-        return `/* ${question.title} */\n.container {\n  /* Your CSS here */\n}`;
-      default:
-        return `// ${question.title}\n// Your code here\n`;
-    }
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading question...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!question) {
     return (
-      <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Question not found</h1>
-          <p className="text-gray-400 mb-6">
-            The question you're looking for doesn't exist.
-          </p>
+          <h1 className="text-2xl font-bold text-foreground mb-4">Question Not Found</h1>
+          <p className="text-muted-foreground mb-6">The question you're looking for doesn't exist.</p>
           <Link
             href="/questions"
-            className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
           >
             Back to Questions
           </Link>
@@ -60,231 +50,212 @@ export default function QuestionDetailPage() {
     );
   }
 
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case 'easy':
+        return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
+      case 'hard':
+        return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+    }
+  };
+
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'JavaScript Functions':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
+      case 'React':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400';
+      case 'CSS':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400';
+      case 'System Design':
+        return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b border-gray-800">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/questions"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold">{question.title}</h1>
-                <div className="flex items-center space-x-4 mt-2 text-sm text-gray-400">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyBgColor(
-                      question.difficulty
-                    )}`}
-                  >
-                    {question.difficulty}
-                  </span>
-                  <span>{question.estimatedTime} min</span>
-                  <span>
-                    {question.completionCount.toLocaleString()} completed
-                  </span>
+      <div className="bg-card shadow-sm border-b border-border">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-4xl mx-auto">
+            <Link
+              href="/questions"
+              className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mb-6 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Questions
+            </Link>
+            
+            <div className="flex items-center gap-2 mb-4">
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(question.category)}`}>
+                {question.category}
+              </span>
+              <span className="text-muted-foreground">•</span>
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(question.difficulty)}`}>
+                {question.difficulty}
+              </span>
+              <span className="text-muted-foreground">•</span>
+              <span className="text-muted-foreground">{question.estimatedTime} min</span>
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              {question.title}
+            </h1>
+            
+            <p className="text-xl text-muted-foreground mb-8">
+              {question.description}
+            </p>
+
+            {/* Stats */}
+            <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
+              {question.completionRate && (
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span>{question.completionRate}% completion rate</span>
                 </div>
-              </div>
+              )}
+              {question.companies && question.companies.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-blue-500" />
+                  <span>Asked at {question.companies.join(', ')}</span>
+                </div>
+              )}
+              {question.popularity && (
+                <div className="flex items-center gap-2">
+                  <Star className="w-4 h-4 text-yellow-500" />
+                  <span>Popularity: {question.popularity}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
+      {/* Content */}
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column - Problem Description */}
-          <div>
-            <div className="bg-gray-800 rounded-lg p-6 mb-6">
-              <h2 className="text-xl font-semibold mb-4">
-                Problem Description
-              </h2>
-              <p className="text-gray-300 leading-relaxed">
-                {question.description}
-              </p>
-
-              <div className="mt-6 space-y-4">
-                <div>
-                  <h3 className="font-medium text-gray-200 mb-2">
-                    Sub-category
-                  </h3>
-                  <span className="inline-block px-3 py-1 bg-gray-700 text-gray-300 rounded-full text-sm">
-                    {question.subCategory
-                      .replace("-", " ")
-                      .replace(/\b\w/g, (l) => l.toUpperCase())}
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="font-medium text-gray-200 mb-2">Frameworks</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {question.frameworks.map((framework, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-gray-700 text-gray-300 rounded-full text-sm"
-                      >
-                        {framework}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-medium text-gray-200 mb-2">Tags</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {question.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+        <div className="max-w-4xl mx-auto">
+          {/* Problem Statement */}
+          <div className="bg-card border border-border rounded-lg p-6 mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+              <Code className="w-6 h-6 text-blue-500" />
+              Problem Statement
+            </h2>
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+              <div dangerouslySetInnerHTML={{ __html: question.problemStatement || question.description }} />
             </div>
           </div>
 
-          {/* Right Column - Code Editor and Tabs */}
-          <div>
-            {/* Tabs */}
-            <div className="flex space-x-1 mb-4">
-              {["problem", "solution", "submissions", "discussion"].map(
-                (tab) => (
-                  <button
-                    key={tab}
-                    onClick={() =>
-                      setActiveTab(
-                        tab as
-                          | "problem"
-                          | "solution"
-                          | "submissions"
-                          | "discussion"
-                      )
-                    }
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                      activeTab === tab
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                    }`}
+          {/* Tags */}
+          {question.tags && question.tags.length > 0 && (
+            <div className="bg-card border border-border rounded-lg p-6 mb-8">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Related Topics</h3>
+              <div className="flex flex-wrap gap-2">
+                {question.tags.map((tag: string, index: number) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-400 rounded-full text-sm font-medium"
                   >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </button>
-                )
-              )}
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
+          )}
 
-            {/* Tab Content */}
-            <div className="bg-gray-800 rounded-lg p-6">
-              {activeTab === "problem" && (
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold">Code Editor</h3>
-                    <select
-                      value={language}
-                      onChange={(e) => setLanguage(e.target.value)}
-                      className="px-3 py-1 bg-gray-700 border border-gray-600 rounded text-gray-300"
-                    >
-                      <option value="javascript">JavaScript</option>
-                      <option value="typescript">TypeScript</option>
-                      <option value="jsx">JSX</option>
-                      <option value="css">CSS</option>
-                      <option value="html">HTML</option>
-                    </select>
-                  </div>
+          {/* Solution */}
+          {question.solution && (
+            <div className="bg-card border border-border rounded-lg p-6 mb-8">
+              <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <CheckCircle className="w-6 h-6 text-green-500" />
+                Solution
+              </h2>
+              <div className="prose prose-lg dark:prose-invert max-w-none">
+                <div dangerouslySetInnerHTML={{ __html: question.solution }} />
+              </div>
+            </div>
+          )}
 
-                  <textarea
-                    value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                    className="w-full h-64 p-4 bg-gray-900 border border-gray-700 rounded-lg text-gray-100 font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Write your code here..."
-                  />
-
-                  <div className="flex space-x-3 mt-4">
-                    <button className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
-                      Run Code
-                    </button>
-                    <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === "solution" && (
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Solution</h3>
-                  {question.hasSolution ? (
-                    <div className="space-y-4">
-                      <div className="bg-gray-900 p-4 rounded-lg">
-                        <h4 className="font-medium text-gray-200 mb-2">
-                          Sample Solution
-                        </h4>
-                        <pre className="text-sm text-gray-300 overflow-x-auto">
-                          <code>{getInitialCode(question)}</code>
-                        </pre>
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-gray-200 mb-2">
-                          Explanation
-                        </h4>
-                        <p className="text-gray-300">
-                          This is a sample solution for the "{question.title}"
-                          problem. The solution demonstrates the key concepts
-                          and implementation approach.
-                        </p>
-                      </div>
+          {/* Test Cases */}
+          {question.testCases && question.testCases.length > 0 && (
+            <div className="bg-card border border-border rounded-lg p-6 mb-8">
+              <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <AlertTriangle className="w-6 h-6 text-yellow-500" />
+                Test Cases
+              </h2>
+              <div className="space-y-4">
+                {question.testCases.map((testCase: any, index: number) => (
+                  <div key={index} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">Test Case {index + 1}</h4>
+                    <div className="space-y-2 text-sm">
+                      {testCase.input && (
+                        <div>
+                          <span className="font-medium text-foreground">Input:</span>
+                          <pre className="bg-gray-100 dark:bg-gray-700 p-2 rounded mt-1 overflow-x-auto">
+                            {JSON.stringify(testCase.input, null, 2)}
+                          </pre>
+                        </div>
+                      )}
+                      {testCase.output && (
+                        <div>
+                          <span className="font-medium text-foreground">Expected Output:</span>
+                          <pre className="bg-gray-100 dark:bg-gray-700 p-2 rounded mt-1 overflow-x-auto">
+                            {JSON.stringify(testCase.output, null, 2)}
+                          </pre>
+                        </div>
+                      )}
+                      {testCase.explanation && (
+                        <div>
+                          <span className="font-medium text-foreground">Explanation:</span>
+                          <p className="text-muted-foreground mt-1">{testCase.explanation}</p>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <div className="text-4xl mb-4">🔒</div>
-                      <h3 className="text-lg font-medium text-gray-200 mb-2">
-                        Premium Content
-                      </h3>
-                      <p className="text-gray-400 mb-4">
-                        This solution is available for premium users.
-                      </p>
-                      <button className="px-6 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors">
-                        Upgrade to Premium
-                      </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              Try This Question
+            </button>
+            <button className="flex-1 border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/20 px-6 py-3 rounded-lg font-medium transition-colors">
+              View Discussion
+            </button>
+          </div>
+
+          {/* Related Questions */}
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Related Questions</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {greatFrontendQuestions
+                .filter(q => q.category === question.category && q.id !== question.id)
+                .slice(0, 6)
+                .map(relatedQuestion => (
+                  <Link
+                    key={relatedQuestion.id}
+                    href={`/questions/${relatedQuestion.id}`}
+                    className="block bg-card border border-border rounded-lg p-4 hover:shadow-md transition-shadow"
+                  >
+                    <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
+                      {relatedQuestion.title}
+                    </h3>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(relatedQuestion.difficulty)}`}>
+                        {relatedQuestion.difficulty}
+                      </span>
+                      <span>{relatedQuestion.estimatedTime} min</span>
                     </div>
-                  )}
-                </div>
-              )}
-
-              {activeTab === "submissions" && (
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Submissions</h3>
-                  <div className="text-center py-8 text-gray-400">
-                    <p>No submissions yet.</p>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === "discussion" && (
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Discussion</h3>
-                  <div className="text-center py-8 text-gray-400">
-                    <p>No discussion yet.</p>
-                  </div>
-                </div>
-              )}
+                  </Link>
+                ))}
             </div>
           </div>
         </div>

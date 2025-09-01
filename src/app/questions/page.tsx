@@ -134,21 +134,21 @@ export default function QuestionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-4 py-8">
         {/* Header Section */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4">All Practice Questions</h1>
-          <p className="text-lg text-gray-400 mb-6">
+          <h1 className="text-4xl font-bold mb-4 text-foreground">All Practice Questions</h1>
+          <p className="text-lg text-muted-foreground mb-6">
             The largest question bank of 500+ practice questions for front end
             interviews
           </p>
 
           {/* Feature Highlights */}
           <div className="flex flex-wrap gap-4 mb-6">
-            <span className="flex items-center bg-gray-800 px-3 py-1 rounded-full text-sm">
+            <span className="flex items-center bg-card border border-border px-3 py-1 rounded-full text-sm text-foreground">
               <svg
-                className="w-4 h-4 mr-2 text-green-400"
+                className="w-4 h-4 mr-2 text-green-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -160,9 +160,9 @@ export default function QuestionsPage() {
               </svg>
               Solved by ex-interviewers
             </span>
-            <span className="flex items-center bg-gray-800 px-3 py-1 rounded-full text-sm">
+            <span className="flex items-center bg-card border border-border px-3 py-1 rounded-full text-sm text-foreground">
               <svg
-                className="w-4 h-4 mr-2 text-blue-400"
+                className="w-4 h-4 mr-2 text-blue-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -175,9 +175,9 @@ export default function QuestionsPage() {
               </svg>
               Test cases
             </span>
-            <span className="flex items-center bg-gray-800 px-3 py-1 rounded-full text-sm">
+            <span className="flex items-center bg-card border border-border px-3 py-1 rounded-full text-sm text-foreground">
               <svg
-                className="w-4 h-4 mr-2 text-purple-400"
+                className="w-4 h-4 mr-2 text-purple-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -191,7 +191,7 @@ export default function QuestionsPage() {
             </span>
           </div>
 
-          <p className="text-gray-300 max-w-3xl">
+          <p className="text-muted-foreground max-w-3xl">
             Save the trouble of searching the web for front end interview
             questions. We have 500+ practice questions in every framework,
             format, and topic, each with high quality answers and tests from big
