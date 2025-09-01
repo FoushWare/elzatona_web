@@ -7,9 +7,8 @@ import {
   useEffect,
   ReactNode,
 } from 'react';
-import { User, onAuthStateChanged } from 'firebase/auth';
+import { User } from 'firebase/auth';
 import {
-  auth,
   signInWithGoogle,
   signInWithGithub,
   signInWithEmail,
@@ -17,6 +16,7 @@ import {
   signOutUser,
   saveUserToFirestore,
   getUserFromFirestore,
+  onAuthStateChangedWrapper,
 } from '@/lib/firebase';
 
 interface FirebaseUser {
@@ -92,7 +92,7 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async firebaseUser => {
+    const unsubscribe = onAuthStateChangedWrapper(async firebaseUser => {
       setIsLoading(true);
 
       if (firebaseUser) {
