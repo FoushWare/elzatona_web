@@ -1,36 +1,36 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@/hooks/useDarkMode';
-import Navigation from '@/components/Navigation';
-import ChatGPT from '@/components/ChatGPT';
-import { AuthProvider } from '@/contexts/AuthContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
+import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
+import { Navbar } from '@/components/Navbar';
+import { ChatGPT } from '@/components/ChatGPT';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Frontend KodDev - Your Path to Frontend Interview Success',
+  title: 'Frontend KodDev - Master Frontend Development Interviews',
   description:
-    'Master frontend development interviews with hands-on coding challenges. Practice HTML, CSS, and JavaScript with 500+ interview questions. KodDev - Your Path to Frontend Interview Success',
+    'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
   keywords:
-    'frontend development, interview preparation, coding challenges, HTML, CSS, JavaScript, React, frontend interview questions',
+    'frontend development, interview preparation, React, JavaScript, CSS, HTML, coding challenges, learning paths',
   authors: [{ name: 'Frontend KodDev Team' }],
   creator: 'Frontend KodDev',
   publisher: 'Frontend KodDev',
   robots: 'index, follow',
   openGraph: {
-    title: 'Frontend KodDev - Your Path to Frontend Interview Success',
+    title: 'Frontend KodDev - Master Frontend Development Interviews',
     description:
-      'Master frontend development interviews with hands-on coding challenges. Practice HTML, CSS, and JavaScript with 500+ interview questions.',
+      'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
     type: 'website',
     locale: 'en_US',
     siteName: 'Frontend KodDev',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Frontend KodDev - Your Path to Frontend Interview Success',
+    title: 'Frontend KodDev - Master Frontend Development Interviews',
     description:
-      'Master frontend development interviews with hands-on coding challenges. Practice HTML, CSS, and JavaScript with 500+ interview questions.',
+      'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
   },
   viewport: 'width=device-width, initial-scale=1',
   themeColor: '#3B82F6',
@@ -38,18 +38,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
-          <AuthProvider>
-            <Navigation />
-            <main>{children}</main>
-            <ChatGPT />
-          </AuthProvider>
+          <FirebaseAuthProvider>
+            <div className="min-h-screen bg-background text-foreground">
+              <Navbar />
+              <main>{children}</main>
+              <ChatGPT />
+            </div>
+          </FirebaseAuthProvider>
         </ThemeProvider>
       </body>
     </html>

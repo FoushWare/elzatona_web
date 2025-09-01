@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import {
   BookOpen,
   Code,
@@ -13,420 +13,475 @@ import {
   Zap,
   BarChart3,
   CheckCircle,
+  Loader2,
+  LogOut,
+  Settings,
+  Trophy,
+  Star,
 } from 'lucide-react';
 
-interface DashboardCard {
-  id: string;
-  title: string;
-  value: string;
-  change: string;
-  changeType: 'positive' | 'negative' | 'neutral';
-  icon: React.ReactNode;
-  color: string;
-}
-
-interface RecentActivity {
-  id: string;
-  type: string;
-  title: string;
-  time: string;
-  icon: React.ReactNode;
-  color: string;
-}
-
-interface Recommendation {
-  id: string;
-  title: string;
-  description: string;
-  difficulty: string;
-  estimatedTime: string;
-  category: string;
-  icon: React.ReactNode;
-}
-
-const dashboardCards: DashboardCard[] = [
+// Dashboard cards data
+const dashboardCards = [
   {
-    id: 'streak',
-    title: 'Learning Streak',
-    value: '7 days',
-    change: '+2 days',
-    changeType: 'positive',
-    icon: <TrendingUp className="w-6 h-6" />,
-    color: 'text-green-600',
+    id: 1,
+    title: 'Practice Questions',
+    description: 'Continue practicing frontend questions',
+    icon: BookOpen,
+    color: 'from-blue-500 to-blue-600',
+    href: '/practice/fundamentals',
+    stats: '24/100 completed',
   },
   {
-    id: 'completed',
-    title: 'Items Completed',
-    value: '45',
-    change: '+12 this week',
-    changeType: 'positive',
-    icon: <CheckCircle className="w-6 h-6" />,
-    color: 'text-blue-600',
+    id: 2,
+    title: 'Learning Paths',
+    description: 'Follow structured learning paths',
+    icon: Target,
+    color: 'from-purple-500 to-purple-600',
+    href: '/learning-paths',
+    stats: '3 paths in progress',
   },
   {
-    id: 'time',
-    title: 'Study Time',
-    value: '23h',
-    change: '+5h this week',
-    changeType: 'positive',
-    icon: <Clock className="w-6 h-6" />,
-    color: 'text-purple-600',
+    id: 3,
+    title: 'Coding Challenges',
+    description: 'Solve real coding problems',
+    icon: Code,
+    color: 'from-green-500 to-green-600',
+    href: '/coding',
+    stats: '12 challenges solved',
   },
   {
-    id: 'accuracy',
-    title: 'Quiz Accuracy',
-    value: '87%',
-    change: '+3% this week',
-    changeType: 'positive',
-    icon: <Target className="w-6 h-6" />,
-    color: 'text-yellow-600',
+    id: 4,
+    title: 'Progress Analytics',
+    description: 'View your learning progress',
+    icon: BarChart3,
+    color: 'from-orange-500 to-orange-600',
+    href: '/progress',
+    stats: '85% completion rate',
   },
 ];
 
-const recentActivities: RecentActivity[] = [
+// Recent activities data
+const recentActivities = [
   {
-    id: '1',
-    type: 'Completed',
-    title: 'CSS Grid Layout Challenge',
+    id: 1,
+    type: 'question',
+    title: 'Completed CSS Grid question',
     time: '2 hours ago',
-    icon: <Code className="w-4 h-4" />,
-    color: 'text-green-600',
+    points: 10,
+    icon: CheckCircle,
+    color: 'text-green-500',
   },
   {
-    id: '2',
-    type: 'Started',
-    title: 'React Hooks Deep Dive',
-    time: '4 hours ago',
-    icon: <BookOpen className="w-4 h-4" />,
-    color: 'text-blue-600',
-  },
-  {
-    id: '3',
-    type: 'Achieved',
-    title: 'Performance Master Badge',
+    id: 2,
+    type: 'challenge',
+    title: 'Solved React Hooks challenge',
     time: '1 day ago',
-    icon: <Award className="w-4 h-4" />,
-    color: 'text-yellow-600',
+    points: 25,
+    icon: Trophy,
+    color: 'text-blue-500',
   },
   {
-    id: '4',
-    type: 'Completed',
-    title: 'JavaScript Fundamentals Quiz',
+    id: 3,
+    type: 'path',
+    title: 'Started JavaScript Fundamentals path',
     time: '2 days ago',
-    icon: <Target className="w-4 h-4" />,
-    color: 'text-green-600',
+    points: 5,
+    icon: Target,
+    color: 'text-purple-500',
+  },
+  {
+    id: 4,
+    type: 'achievement',
+    title: 'Earned "Quick Learner" badge',
+    time: '3 days ago',
+    points: 50,
+    icon: Award,
+    color: 'text-yellow-500',
   },
 ];
 
-const recommendations: Recommendation[] = [
+// Recommendations data
+const recommendations = [
   {
-    id: '1',
-    title: 'Advanced CSS Animations',
-    description:
-      'Master CSS keyframes and transitions for smooth user experiences',
+    id: 1,
+    title: 'React Hooks Deep Dive',
+    description: 'Master useState, useEffect, and custom hooks',
     difficulty: 'Intermediate',
     estimatedTime: '2-3 hours',
-    category: 'CSS',
-    icon: <Zap className="w-5 h-5" />,
+    icon: Code,
+    color: 'from-blue-500 to-cyan-500',
   },
   {
-    id: '2',
-    title: 'React Performance Optimization',
-    description:
-      'Learn React.memo, useMemo, and useCallback for better performance',
+    id: 2,
+    title: 'CSS Grid Mastery',
+    description: 'Learn advanced CSS Grid layouts and techniques',
     difficulty: 'Advanced',
     estimatedTime: '3-4 hours',
-    category: 'React',
-    icon: <TrendingUp className="w-5 h-5" />,
+    icon: Target,
+    color: 'from-purple-500 to-pink-500',
   },
   {
-    id: '3',
-    title: 'System Design: E-commerce Platform',
-    description:
-      'Design a scalable e-commerce system with frontend considerations',
-    difficulty: 'Advanced',
-    estimatedTime: '4-5 hours',
-    category: 'System Design',
-    icon: <Target className="w-5 h-5" />,
+    id: 3,
+    title: 'JavaScript ES6+ Features',
+    description: 'Explore modern JavaScript features and syntax',
+    difficulty: 'Intermediate',
+    estimatedTime: '2-3 hours',
+    icon: Zap,
+    color: 'from-green-500 to-emerald-500',
   },
 ];
 
 export default function DashboardPage() {
-  const [showStatistics, setShowStatistics] = useState(false);
+  const [showStats, setShowStats] = useState(true);
+  const { user, isAuthenticated, isLoading, signOut } = useFirebaseAuth();
 
-  const getChangeColor = (changeType: string) => {
-    switch (changeType) {
-      case 'positive':
-        return 'text-green-600';
-      case 'negative':
-        return 'text-red-600';
-      default:
-        return 'text-gray-600';
-    }
-  };
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
-  const getChangeIcon = (changeType: string) => {
-    switch (changeType) {
-      case 'positive':
-        return '↗️';
-      case 'negative':
-        return '↘️';
-      default:
-        return '→';
-    }
-  };
-
-  return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-background">
-        {/* Header */}
-        <div className="bg-card shadow-sm border-b border-border">
-          <div className="container mx-auto px-4 py-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold text-foreground mb-4">
-                Welcome back, Developer! 👋
-              </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Your personalized dashboard with progress, recommendations, and
-                learning insights
-              </p>
-
-              {/* Mobile Toggle Button */}
-              <div className="flex justify-center mt-6 md:hidden">
-                <button
-                  onClick={() => setShowStatistics(!showStatistics)}
-                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  {showStatistics ? 'Hide Statistics' : 'Show Statistics'}
-                  <span className="ml-2">📊</span>
-                </button>
-              </div>
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <div className="container mx-auto px-4 py-8">
+          {/* Welcome Section */}
+          <div className="text-center mb-12">
+            <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Code className="w-12 h-12 text-white" />
             </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              Welcome to Frontend KodDev
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+              Your comprehensive platform for mastering frontend development
+              interviews. Sign in to track your progress, unlock achievements,
+              and get personalized recommendations.
+            </p>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/auth"
+                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl transition-all duration-200 hover:scale-105 shadow-lg"
+              >
+                🚀 Sign In & Start Learning
+              </Link>
+              <Link
+                href="/practice/fundamentals"
+                className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-blue-600 text-blue-600 dark:text-blue-400 font-bold rounded-xl transition-all duration-200 hover:scale-105 hover:bg-blue-50 dark:hover:bg-gray-700"
+              >
+                📚 Explore Practice Questions
+              </Link>
+            </div>
+          </div>
+
+          {/* Features Preview */}
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BookOpen className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 text-center">
+                Practice Questions
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-center">
+                Access 500+ carefully curated frontend interview questions with
+                detailed explanations and solutions.
+              </p>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Target className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 text-center">
+                Learning Paths
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-center">
+                Follow structured learning paths designed by industry experts to
+                master specific technologies.
+              </p>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Trophy className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 text-center">
+                Gamified Progress
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 text-center">
+                Earn badges, track streaks, and compete with others while
+                building your frontend skills.
+              </p>
+            </div>
+          </div>
+
+          {/* Statistics Preview */}
+          <div className="text-center">
+            <button
+              onClick={() => setShowStats(!showStats)}
+              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 hover:scale-105 shadow-lg mb-6"
+            >
+              {showStats ? 'Hide Statistics' : 'Show Statistics'}
+            </button>
+
+            {showStats && (
+              <div className="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">
+                    500+
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-400">
+                    Practice Questions
+                  </div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">
+                    25+
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-400">
+                    Learning Paths
+                  </div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                  <div className="text-3xl font-bold text-green-600 mb-2">
+                    100+
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-400">
+                    Coding Challenges
+                  </div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                  <div className="text-3xl font-bold text-orange-600 mb-2">
+                    24/7
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-400">
+                    AI Support
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Authenticated user dashboard
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              Welcome back, {user?.displayName || 'Developer'}! 👋
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Ready to continue your frontend development journey?
+            </p>
+          </div>
+
+          {/* User Actions */}
+          <div className="flex items-center space-x-3 mt-4 md:mt-0">
+            <button className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+              <Settings className="w-5 h-5" />
+            </button>
+            <button
+              onClick={signOut}
+              className="flex items-center space-x-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Sign Out</span>
+            </button>
           </div>
         </div>
 
-        <div className="container mx-auto px-4 py-8">
-          {/* Statistics Cards */}
-          <div
-            className={`${showStatistics ? 'block' : 'hidden md:grid'} grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8`}
-          >
-            {dashboardCards.map(card => (
-              <div
-                key={card.id}
-                className="bg-card rounded-lg shadow-sm border border-border p-6 hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`${card.color} p-2 rounded-lg bg-muted`}>
-                    {card.icon}
-                  </div>
-                  <div
-                    className={`text-sm font-medium ${getChangeColor(card.changeType)}`}
-                  >
-                    {getChangeIcon(card.changeType)} {card.change}
-                  </div>
-                </div>
-                <div className="text-2xl font-bold text-foreground mb-1">
-                  {card.value}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {card.title}
-                </div>
-              </div>
-            ))}
+        {/* Statistics Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Your Progress
+            </h2>
+            <button
+              onClick={() => setShowStats(!showStats)}
+              className="md:hidden px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              {showStats ? 'Hide Stats' : 'Show Stats'}
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Recent Activity */}
-            <div className="lg:col-span-2">
-              <div className="bg-card rounded-lg shadow-sm border border-border p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-semibold text-foreground">
-                    Recent Activity
-                  </h2>
-                  <Link
-                    href="/progress"
-                    className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-                  >
-                    View All →
-                  </Link>
-                </div>
-                <div className="space-y-4">
-                  {recentActivities.map(activity => (
-                    <div
-                      key={activity.id}
-                      className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted transition-colors"
-                    >
-                      <div
-                        className={`${activity.color} p-2 rounded-lg bg-muted`}
-                      >
-                        {activity.icon}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm font-medium text-foreground">
-                            {activity.title}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {activity.time}
-                          </span>
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                          {activity.type}
-                        </span>
-                      </div>
+          {showStats && (
+            <div className="grid md:grid-cols-4 gap-6">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-2xl font-bold text-blue-600">
+                      {user?.progress?.questionsCompleted || 0}
                     </div>
-                  ))}
+                    <div className="text-gray-600 dark:text-gray-400">
+                      Questions Completed
+                    </div>
+                  </div>
+                  <BookOpen className="w-8 h-8 text-blue-500" />
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-2xl font-bold text-purple-600">
+                      {user?.progress?.totalPoints || 0}
+                    </div>
+                    <div className="text-gray-600 dark:text-gray-400">
+                      Total Points
+                    </div>
+                  </div>
+                  <Star className="w-8 h-8 text-purple-500" />
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-2xl font-bold text-green-600">
+                      {user?.progress?.currentStreak || 0}
+                    </div>
+                    <div className="text-gray-600 dark:text-gray-400">
+                      Day Streak
+                    </div>
+                  </div>
+                  <TrendingUp className="w-8 h-8 text-green-500" />
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-2xl font-bold text-orange-600">
+                      {user?.progress?.badges?.length || 0}
+                    </div>
+                    <div className="text-gray-600 dark:text-gray-400">
+                      Badges Earned
+                    </div>
+                  </div>
+                  <Award className="w-8 h-8 text-orange-500" />
                 </div>
               </div>
             </div>
+          )}
+        </div>
 
-            {/* Quick Actions */}
-            <div className="space-y-6">
-              <div className="bg-card rounded-lg shadow-sm border border-border p-6">
-                <h3 className="text-lg font-semibold text-foreground mb-4">
-                  Quick Actions
-                </h3>
-                <div className="space-y-3">
-                  <Link
-                    href="/practice/fundamentals"
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors text-foreground"
-                  >
-                    <BookOpen className="w-5 h-5 text-blue-600" />
-                    <span className="text-sm font-medium">
-                      Practice Fundamentals
-                    </span>
-                  </Link>
-                  <Link
-                    href="/coding"
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors text-foreground"
-                  >
-                    <Code className="w-5 h-5 text-green-600" />
-                    <span className="text-sm font-medium">
-                      Take Coding Challenge
-                    </span>
-                  </Link>
-                  <Link
-                    href="/learning-paths"
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors text-foreground"
-                  >
-                    <Target className="w-5 h-5 text-purple-600" />
-                    <span className="text-sm font-medium">
-                      Start Learning Path
-                    </span>
-                  </Link>
-                  <Link
-                    href="/progress"
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors text-foreground"
-                  >
-                    <BarChart3 className="w-5 h-5 text-yellow-600" />
-                    <span className="text-sm font-medium">View Progress</span>
-                  </Link>
-                </div>
+        {/* Dashboard Cards */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {dashboardCards.map(card => (
+            <Link
+              key={card.id}
+              href={card.href}
+              className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              <div
+                className={`w-16 h-16 bg-gradient-to-r ${card.color} rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200`}
+              >
+                <card.icon className="w-8 h-8 text-white" />
               </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                {card.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-3">
+                {card.description}
+              </p>
+              <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                {card.stats}
+              </div>
+            </Link>
+          ))}
+        </div>
 
-              {/* Today's Goal */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white">
-                <h3 className="text-lg font-semibold mb-2">
-                  🎯 Today&apos;s Goal
-                </h3>
-                <p className="text-blue-100 text-sm mb-4">
-                  Complete 3 practice questions and spend 30 minutes coding
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span>2/3 questions completed</span>
+        {/* Recent Activities & Recommendations */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Recent Activities */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+              <Clock className="w-5 h-5 mr-2 text-blue-500" />
+              Recent Activities
+            </h3>
+            <div className="space-y-4">
+              {recentActivities.map(activity => (
+                <div
+                  key={activity.id}
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <div
+                    className={`w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center`}
+                  >
+                    <activity.icon className={`w-5 h-5 ${activity.color}`} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-900 dark:text-white">
+                      {activity.title}
+                    </div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      {activity.time}
+                    </div>
+                  </div>
+                  <div className="text-sm font-bold text-green-600">
+                    +{activity.points}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm mt-1">
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                  <span>20/30 minutes spent</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
           {/* Recommendations */}
-          <div className="mt-8">
-            <div className="bg-card rounded-lg shadow-sm border border-border p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-foreground">
-                  Recommended for You
-                </h2>
-                <span className="text-sm text-muted-foreground">
-                  Based on your learning pattern
-                </span>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {recommendations.map(rec => (
-                  <div
-                    key={rec.id}
-                    className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="text-blue-600 p-2 rounded-lg bg-muted">
-                        {rec.icon}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-foreground text-sm">
-                          {rec.title}
-                        </h3>
-                        <span className="text-xs text-muted-foreground">
-                          {rec.category}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+              <Zap className="w-5 h-5 mr-2 text-yellow-500" />
+              Recommended for You
+            </h3>
+            <div className="space-y-4">
+              {recommendations.map(rec => (
+                <div
+                  key={rec.id}
+                  className="p-4 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 transition-colors"
+                >
+                  <div className="flex items-start space-x-3">
+                    <div
+                      className={`w-12 h-12 bg-gradient-to-r ${rec.color} rounded-lg flex items-center justify-center flex-shrink-0`}
+                    >
+                      <rec.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
+                        {rec.title}
+                      </h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                        {rec.description}
+                      </p>
+                      <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+                        <span className="flex items-center">
+                          <Target className="w-3 h-3 mr-1" />
+                          {rec.difficulty}
+                        </span>
+                        <span className="flex items-center">
+                          <Clock className="w-3 h-3 mr-1" />
+                          {rec.estimatedTime}
                         </span>
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      {rec.description}
-                    </p>
-                    <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
-                      <span
-                        className={`px-2 py-1 rounded-full ${
-                          rec.difficulty === 'Advanced'
-                            ? 'bg-red-100 text-red-700'
-                            : rec.difficulty === 'Intermediate'
-                              ? 'bg-yellow-100 text-yellow-700'
-                              : 'bg-green-100 text-green-700'
-                        }`}
-                      >
-                        {rec.difficulty}
-                      </span>
-                      <span>⏱️ {rec.estimatedTime}</span>
-                    </div>
-                    <button className="w-full px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
-                      Start Learning
-                    </button>
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Call to Action */}
-          <div className="mt-8 text-center">
-            <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-lg p-8 text-white">
-              <h2 className="text-3xl font-bold mb-4">
-                Ready to Accelerate Your Learning?
-              </h2>
-              <p className="text-xl mb-6 opacity-90">
-                Join thousands of developers mastering frontend development
-              </p>
-              <div className="flex justify-center space-x-4">
-                <Link
-                  href="/practice/fundamentals"
-                  className="bg-white text-green-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors duration-200"
-                >
-                  Start Practicing
-                </Link>
-                <Link
-                  href="/learning-paths"
-                  className="border-2 border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-green-600 transition-colors duration-200"
-                >
-                  Explore Paths
-                </Link>
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-    </ProtectedRoute>
+    </div>
   );
 }
