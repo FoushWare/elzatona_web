@@ -182,7 +182,7 @@ const blogPosts: BlogPost[] = [
 export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<BlogPost["category"] | "all">("all");
-  const [selectedAuthor, setSelectedAuthor] = useState("all");
+  // const [selectedAuthor, setSelectedAuthor] = useState("all");
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -301,7 +301,7 @@ export default function BlogPage() {
               {["all", "frontend", "interview", "react", "javascript", "css", "performance", "architecture"].map((category) => (
                 <button
                   key={category}
-                  onClick={() => setSelectedCategory(category as any)}
+                  onClick={() => setSelectedCategory(category as BlogPost["category"] | "all")}
                   className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
                     selectedCategory === category
                       ? "bg-blue-600 text-white"

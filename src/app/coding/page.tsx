@@ -51,26 +51,26 @@ export default function CodingPage() {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
-        return "bg-gradient-to-r from-green-500 to-emerald-500 text-white";
+        return "text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/20";
       case "medium":
-        return "bg-gradient-to-r from-yellow-500 to-orange-500 text-white";
+        return "text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/20";
       case "hard":
-        return "bg-gradient-to-r from-red-500 to-pink-500 text-white";
+        return "text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/20";
       default:
-        return "bg-gradient-to-r from-gray-500 to-slate-500 text-white";
+        return "text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/20";
     }
   };
 
-  const getDifficultyBgColor = (difficulty: string) => {
+  const getDifficultyBorder = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
-        return "from-green-100 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20";
+        return "border-green-200 dark:border-green-800";
       case "medium":
-        return "from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20";
+        return "border-yellow-200 dark:border-yellow-800";
       case "hard":
-        return "from-red-100 to-pink-100 dark:from-red-900/20 dark:to-red-900/20";
+        return "border-red-200 dark:border-red-800";
       default:
-        return "from-gray-100 to-slate-100 dark:from-gray-900/20 dark:to-slate-900/20";
+        return "border-gray-200 dark:border-gray-800";
     }
   };
 
@@ -85,74 +85,53 @@ export default function CodingPage() {
     }
   };
 
-  const getCategoryGradient = (category: string) => {
+  const getCategoryColor = (category: string) => {
     switch (category) {
       case "frontend":
-        return "from-purple-500 to-pink-500";
+        return "text-purple-600 dark:text-purple-400";
       case "problem-solving":
-        return "from-blue-500 to-cyan-500";
+        return "text-blue-600 dark:text-blue-400";
       default:
-        return "from-indigo-500 to-purple-500";
-    }
-  };
-
-  const getCategoryBgGradient = (category: string) => {
-    switch (category) {
-      case "frontend":
-        return "from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20";
-      case "problem-solving":
-        return "from-blue-100 to-cyan-100 dark:from-blue-900/20 dark:to-cyan-900/20";
-      default:
-        return "from-indigo-100 to-purple-100 dark:from-indigo-900/20 dark:to-purple-900/20";
+        return "text-indigo-600 dark:text-indigo-400";
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-16">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center">
-            <div className="text-6xl mb-6 animate-bounce">🚀</div>
-            <h1 className="text-5xl font-bold mb-6 tracking-tight drop-shadow-lg">
+            <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <span className="text-3xl">🚀</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
               Coding Challenges
             </h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed drop-shadow-sm">
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Practice your coding skills with interactive challenges. Write
               code, run tests, and improve your problem-solving abilities.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <div className="px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
-                🎯 {codingChallenges.length} Challenges
-              </div>
-              <div className="px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
-                ⚡ Interactive Editor
-              </div>
-              <div className="px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
-                🏆 Real-time Testing
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Filters */}
-        <div className={`mb-12 space-y-6 transition-all duration-300 ${
+        <div className={`mb-8 space-y-6 transition-all duration-300 ${
           showFilters ? 'block' : 'hidden md:block'
         }`}>
           {/* Search */}
           <div className="relative">
             <input
               type="text"
-              placeholder="🔍 Search challenges..."
+              placeholder="Search challenges..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 text-lg"
+              className="w-full pl-12 pr-4 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 text-lg"
             />
             <svg
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-400"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -167,41 +146,41 @@ export default function CodingPage() {
           </div>
 
           {/* Category and Difficulty Filters */}
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-wrap gap-4">
             {/* Category Filter */}
             <div className="flex-1 min-w-48">
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                📂 Category
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Category
               </label>
               <select
                 value={selectedCategory}
                 onChange={(e) =>
                   setSelectedCategory(e.target.value as "all" | "frontend" | "problem-solving")
                 }
-                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
               >
-                <option value="all">🌟 All Categories</option>
-                <option value="frontend">🎨 Frontend Challenges</option>
-                <option value="problem-solving">🧮 Problem Solving</option>
+                <option value="all">All Categories</option>
+                <option value="frontend">Frontend Challenges</option>
+                <option value="problem-solving">Problem Solving</option>
               </select>
             </div>
 
             {/* Difficulty Filter */}
             <div className="flex-1 min-w-48">
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                🎯 Difficulty
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Difficulty
               </label>
               <select
                 value={selectedDifficulty}
                 onChange={(e) =>
                   setSelectedDifficulty(e.target.value as "all" | "easy" | "medium" | "hard")
                 }
-                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all duration-300"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
               >
-                <option value="all">🌈 All Difficulties</option>
-                <option value="easy">🌱 Easy</option>
-                <option value="medium">🚀 Medium</option>
-                <option value="hard">⚡ Hard</option>
+                <option value="all">All Difficulties</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
               </select>
             </div>
           </div>
@@ -214,14 +193,14 @@ export default function CodingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:hidden">
               <button
                 onClick={() => setShowStatistics(!showStatistics)}
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200 shadow-sm"
               >
                 {showStatistics ? "Hide Statistics" : "Show Statistics"}
                 <span className="ml-2">📊</span>
               </button>
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+                className="inline-flex items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-all duration-200 shadow-sm"
               >
                 {showFilters ? "Hide Filters" : "Show Filters"}
                 <span className="ml-2">🔍</span>
@@ -229,100 +208,117 @@ export default function CodingPage() {
             </div>
           </div>
           
-          <div className={`grid grid-cols-1 md:grid-cols-4 gap-6 transition-all duration-300 ${
+          <div className={`grid grid-cols-1 md:grid-cols-4 gap-4 transition-all duration-300 ${
             showStatistics ? 'block' : 'hidden md:grid'
           }`}>
-            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-              <div className="text-3xl font-bold mb-2">{codingChallenges.length}</div>
-              <div className="text-blue-100">Total Challenges</div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+              <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{codingChallenges.length}</div>
+              <div className="text-gray-600 dark:text-gray-400 text-sm">Total Challenges</div>
             </div>
-            <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-              <div className="text-3xl font-bold mb-2">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">
                 {codingChallenges.filter((c) => c.difficulty === "easy").length}
               </div>
-              <div className="text-green-100">Easy</div>
+              <div className="text-gray-600 dark:text-gray-400 text-sm">Easy</div>
             </div>
-            <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-              <div className="text-3xl font-bold mb-2">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+              <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-1">
                 {codingChallenges.filter((c) => c.difficulty === "medium").length}
               </div>
-              <div className="text-yellow-100">Medium</div>
+              <div className="text-gray-600 dark:text-gray-400 text-sm">Medium</div>
             </div>
-            <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-              <div className="text-3xl font-bold mb-2">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+              <div className="text-2xl font-bold text-red-600 dark:text-red-400 mb-1">
                 {codingChallenges.filter((c) => c.difficulty === "hard").length}
               </div>
-              <div className="text-red-100">Hard</div>
+              <div className="text-gray-600 dark:text-gray-400 text-sm">Hard</div>
             </div>
           </div>
         </div>
 
-        {/* Challenges Grid */}
+        {/* Challenges List */}
         {filteredChallenges.length === 0 ? (
           <div className="text-center py-16">
-            <div className="text-8xl mb-6 animate-pulse">🔍</div>
-            <h3 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-4">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
               No challenges found
             </h3>
-            <p className="text-gray-500 dark:text-gray-400 text-lg">
+            <p className="text-gray-500 dark:text-gray-400">
               Try adjusting your search criteria or filters.
             </p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-4">
             {filteredChallenges.map((challenge) => (
               <Link
                 key={challenge.id}
                 href={`/coding/${challenge.id}`}
-                className="group block"
+                className="block"
               >
-                <div className={`bg-gradient-to-br ${getCategoryBgGradient(challenge.category)} rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-white/20 cursor-pointer group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-gray-50 dark:group-hover:from-gray-800 dark:group-hover:to-gray-700`}>
-                  <div className="mb-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-12 h-12 bg-gradient-to-r ${getCategoryGradient(challenge.category)} rounded-xl flex items-center justify-center text-2xl shadow-lg`}>
-                          {getCategoryIcon(challenge.category)}
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 leading-tight group-hover:text-gray-900 dark:group-hover:text-white">
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 hover:border-blue-300 dark:hover:border-blue-600">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-2xl">{getCategoryIcon(challenge.category)}</span>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                           {challenge.title}
                         </h3>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(challenge.difficulty)}`}>
+                          {challenge.difficulty}
+                        </span>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-sm font-bold shadow-lg ${getDifficultyColor(challenge.difficulty)}`}>
-                        {challenge.difficulty}
-                      </span>
+                      
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                        {challenge.description}
+                      </p>
+
+                      <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center gap-1">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                          <span>15 min</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                          <span>85%</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                          <span className={getCategoryColor(challenge.category)}>
+                            {challenge.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {challenge.tags.slice(0, 3).map((tag, index) => (
+                          <span
+                            key={index}
+                            className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded font-medium"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        {challenge.tags.length > 3 && (
+                          <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded font-medium">
+                            +{challenge.tags.length - 3}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-3 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-300">
-                      {challenge.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {challenge.tags.slice(0, 3).map((tag, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 text-xs rounded-full font-medium backdrop-blur-sm"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                      {challenge.tags.length > 3 && (
-                        <span className="px-3 py-1 bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 text-xs rounded-full font-medium backdrop-blur-sm">
-                          +{challenge.tags.length - 3}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-6">
-                      <span className="font-semibold flex items-center">
-                        ⏱️ {challenge.estimatedTime} min
-                      </span>
-                      <span className="font-semibold flex items-center">
-                        🏆 {challenge.completionRate}% success
-                      </span>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-6 rounded-xl font-bold text-center shadow-lg hover:shadow-xl transition-all duration-300 group-hover:from-blue-600 group-hover:to-purple-600">
-                      🚀 Start Challenge
+                    <div className="ml-6 flex flex-col items-end">
+                      <div className="text-right">
+                        <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                          Acceptance Rate
+                        </div>
+                        <div className="text-lg font-semibold text-gray-900 dark:text-white">
+                          {challenge.completionRate}%
+                        </div>
+                      </div>
+                      
+                      <button className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow-sm">
+                        Solve
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -332,29 +328,29 @@ export default function CodingPage() {
         )}
 
         {/* Call to Action */}
-        <div className="mt-16 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white text-center shadow-2xl">
-          <h2 className="text-3xl font-bold mb-4">Ready to Level Up?</h2>
-          <p className="text-xl text-indigo-100 mb-8">
+        <div className="mt-16 bg-white dark:bg-gray-800 rounded-lg p-8 text-center shadow-sm border border-gray-200 dark:border-gray-700">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Ready to Level Up?</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">
             Choose your challenge and start coding now!
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/practice/fundamentals"
-              className="px-8 py-4 bg-white text-indigo-600 rounded-xl font-bold hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm"
             >
-              📚 Practice Questions
+              Practice Questions
             </Link>
             <Link
               href="/study-plans"
-              className="px-8 py-4 bg-white text-indigo-600 rounded-xl font-bold hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm"
             >
-              📅 Study Plans
+              Study Plans
             </Link>
             <Link
               href="/learning-paths"
-              className="px-8 py-4 bg-white text-indigo-600 rounded-xl font-bold hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm"
             >
-              🛤️ Learning Paths
+              Learning Paths
             </Link>
           </div>
         </div>
