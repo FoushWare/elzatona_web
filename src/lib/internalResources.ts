@@ -12,7 +12,7 @@ export interface InternalQuestion {
   correctAnswer: 'A' | 'B' | 'C' | 'D' | 'E';
   explanation: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  category: 'javascript' | 'react' | 'css' | 'html' | 'dom' | 'async' | 'es6';
+  category: 'javascript' | 'react' | 'css' | 'html' | 'dom' | 'async' | 'es6' | 'git';
   tags: string[];
   relatedTopics: string[];
 }
@@ -1277,6 +1277,157 @@ export const internalResources: InternalResource[] = [
       'Interview-ready frontend skills',
       'Understanding of performance optimization and testing strategies',
     ],
+  },
+  {
+    id: 'git-fundamentals',
+    title: 'Git Version Control',
+    description:
+      'Master Git version control with comprehensive questions covering worktrees, branching strategies, merging, rebasing, hooks, and advanced Git workflows. Essential for modern development teams.',
+    icon: '📚',
+    category: 'git',
+    difficulty: 'intermediate',
+    questions: gitQuestions,
+    totalQuestions: gitQuestions.length,
+    estimatedTime: 45,
+    prerequisites: [
+      'Basic understanding of version control concepts',
+      'Familiarity with command line interface',
+      'Experience with collaborative development',
+    ],
+    learningOutcomes: [
+      'Understanding of Git worktrees and their use cases',
+      'Mastery of branching strategies and workflows',
+      'Knowledge of merge vs rebase scenarios',
+      'Ability to use Git hooks for automation',
+      'Understanding of advanced Git operations',
+      'Best practices for collaborative development',
+    ],
+    videoUrl: 'https://www.youtube.com/watch?v=SWYqp7iY_Tc',
+    videoTitle: 'Git Worktree Tutorial',
+    videoDescription:
+      'Comprehensive tutorial covering Git worktrees, including practical examples and best practices for managing multiple branches simultaneously.',
+  },
+];
+
+// Git Questions Resource
+export const gitQuestions: InternalQuestion[] = [
+  {
+    id: 'git-1',
+    question: "What is Git worktree and how does it work?",
+    code: `# Create a new worktree
+git worktree add ../feature-branch feature-branch
+
+# List all worktrees
+git worktree list
+
+# Remove a worktree
+git worktree remove ../feature-branch`,
+    options: {
+      A: 'A way to work on multiple branches simultaneously in different directories',
+      B: 'A tool to merge branches automatically',
+      C: 'A feature to backup your repository',
+      D: 'A way to clone repositories',
+    },
+    correctAnswer: 'A',
+    explanation:
+      'Git worktree allows you to check out multiple branches simultaneously in different directories. Unlike the traditional Git workflow where you can only have one branch checked out at a time, worktrees enable you to work on multiple branches without switching between them. This is particularly useful for working on multiple features or handling hotfixes while continuing development on other branches.',
+    difficulty: 'intermediate',
+    category: 'git',
+    tags: ['worktree', 'branches', 'version-control', 'git-workflow'],
+    relatedTopics: ['Git Branches', 'Version Control', 'Development Workflow'],
+  },
+  {
+    id: 'git-2',
+    question: "What's the difference between git merge and git rebase?",
+    code: `# Merge approach
+git checkout main
+git merge feature-branch
+
+# Rebase approach
+git checkout feature-branch
+git rebase main`,
+    options: {
+      A: 'Merge creates a merge commit, rebase replays commits on top of target branch',
+      B: 'Merge is faster, rebase is slower',
+      C: 'Merge is for public branches, rebase is for private branches only',
+      D: 'There is no difference, they do the same thing',
+    },
+    correctAnswer: 'A',
+    explanation:
+      'Git merge creates a new merge commit that combines the changes from both branches, preserving the complete history. Git rebase, on the other hand, takes the commits from your feature branch and replays them on top of the target branch, creating a linear history. Merge preserves the exact history but can make it more complex, while rebase creates a cleaner, linear history but rewrites commit history.',
+    difficulty: 'intermediate',
+    category: 'git',
+    tags: ['merge', 'rebase', 'git-workflow', 'version-control'],
+    relatedTopics: ['Git Workflow', 'Branch Management', 'Version Control'],
+  },
+  {
+    id: 'git-3',
+    question: "What is a Git hook and what are some common use cases?",
+    code: `# Pre-commit hook example
+#!/bin/sh
+npm run lint
+npm run test
+
+# Post-merge hook example
+#!/bin/sh
+npm install`,
+    options: {
+      A: 'A script that runs automatically at certain points in Git workflow',
+      B: 'A tool to backup your repository',
+      C: 'A way to merge branches',
+      D: 'A feature to clone repositories',
+    },
+    correctAnswer: 'A',
+    explanation:
+      'Git hooks are scripts that run automatically at certain points in the Git workflow. Common hooks include pre-commit (runs before a commit is created), post-commit (runs after a commit is created), pre-push (runs before pushing to remote), and post-merge (runs after a merge). They are commonly used for running tests, linting code, checking commit message format, and automating deployment processes.',
+    difficulty: 'intermediate',
+    category: 'git',
+    tags: ['hooks', 'automation', 'git-workflow', 'ci-cd'],
+    relatedTopics: ['Git Workflow', 'Automation', 'CI/CD'],
+  },
+  {
+    id: 'git-4',
+    question: "What is the difference between git reset and git revert?",
+    code: `# Reset (destructive)
+git reset --hard HEAD~1
+
+# Revert (safe)
+git revert HEAD`,
+    options: {
+      A: 'Reset rewrites history, revert creates a new commit that undoes changes',
+      B: 'Reset is for local changes, revert is for remote changes',
+      C: 'Reset is faster, revert is slower',
+      D: 'There is no difference, they do the same thing',
+    },
+    correctAnswer: 'A',
+    explanation:
+      'Git reset moves the HEAD and branch pointer to a previous commit, effectively rewriting history. This is destructive and should not be used on commits that have been pushed to a shared repository. Git revert creates a new commit that undoes the changes from a previous commit, preserving history and making it safe for shared repositories.',
+    difficulty: 'intermediate',
+    category: 'git',
+    tags: ['reset', 'revert', 'git-history', 'version-control'],
+    relatedTopics: ['Git History', 'Version Control', 'Collaboration'],
+  },
+  {
+    id: 'git-5',
+    question: "What is Git cherry-pick and when would you use it?",
+    code: `# Cherry-pick a specific commit
+git cherry-pick abc1234
+
+# Cherry-pick multiple commits
+git cherry-pick abc1234 def5678`,
+    options: {
+      A: 'Apply specific commits from one branch to another',
+      B: 'Delete commits from a branch',
+      C: 'Merge all commits from one branch to another',
+      D: 'Create a new branch from a specific commit',
+    },
+    correctAnswer: 'A',
+    explanation:
+      'Git cherry-pick allows you to apply specific commits from one branch to another. This is useful when you want to bring a specific feature or bug fix from one branch to another without merging the entire branch. It\'s commonly used in scenarios where you have a hotfix that needs to be applied to multiple release branches.',
+    difficulty: 'intermediate',
+    category: 'git',
+    tags: ['cherry-pick', 'commits', 'git-workflow', 'version-control'],
+    relatedTopics: ['Git Workflow', 'Branch Management', 'Version Control'],
   },
 ];
 

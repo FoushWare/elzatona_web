@@ -20,11 +20,23 @@ interface BlogPost {
 const blogPosts: BlogPost[] = [
   // Original Content
   {
+    id: "git-worktree-guide",
+    title: "What is Git Worktree and How to Make Use of It",
+    excerpt: "A comprehensive guide to Git worktrees - the powerful feature that allows you to work on multiple branches simultaneously without stashing or committing incomplete work.",
+    author: "KodDev Team",
+    date: "2024-01-15",
+    readTime: "15 min read",
+    category: "frontend",
+    tags: ["git", "worktree", "version-control", "workflow"],
+    isExternal: false,
+    featured: true
+  },
+  {
     id: "frontend-interview-prep-guide",
     title: "Complete Frontend Interview Preparation Guide",
     excerpt: "A comprehensive guide covering everything you need to know for frontend interviews, from basic concepts to advanced topics.",
     author: "KodDev Team",
-    date: "2024-01-15",
+    date: "2024-01-14",
     readTime: "15 min read",
     category: "interview",
     tags: ["interview", "preparation", "frontend", "guide"],

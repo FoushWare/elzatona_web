@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
@@ -28,6 +28,7 @@ export function Navbar() {
   const pathname = usePathname();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const { user, isAuthenticated, signOut } = useFirebaseAuth();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +37,18 @@ export function Navbar() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleSignOut = async () => {
@@ -113,7 +126,7 @@ export function Navbar() {
           </div>
 
           {/* Right side - Theme toggle and Auth */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {/* Theme Toggle */}
             <button
               onClick={toggleDarkMode}
@@ -133,7 +146,7 @@ export function Navbar() {
 
             {/* Auth Section */}
             {isAuthenticated ? (
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsOpen(!isOpen)}
                   className="flex items-center space-x-2 p-2 rounded-lg transition-all duration-200 hover:bg-blue-50 dark:hover:bg-gray-800"
@@ -149,7 +162,7 @@ export function Navbar() {
                       <User className="w-4 h-4 text-white" />
                     </div>
                   )}
-                  <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className="hidden lg:block text-sm font-medium text-gray-700 dark:text-gray-300">
                     {user?.displayName || 'User'}
                   </span>
                 </button>
@@ -195,13 +208,16 @@ export function Navbar() {
             ) : (
               <Link
                 href="/auth"
-                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
+                className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 hover:scale-105 shadow-lg whitespace-nowrap"
               >
                 <User className="w-4 h-4" />
-                <span className="hidden sm:block">
+                <span className="hidden lg:block text-sm">
                   Want to store your progress?
                 </span>
-                <span className="sm:hidden">Sign In</span>
+                <span className="hidden md:block lg:hidden text-sm">
+                  Store Progress
+                </span>
+                <span className="md:hidden text-sm">Sign In</span>
               </Link>
             )}
 

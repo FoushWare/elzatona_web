@@ -23,10 +23,10 @@ function FrontendQuestionsPageContent() {
     }
   }, [searchParams]);
 
-  // Filter resources to only include frontend fundamentals (JS, React, CSS)
+  // Filter resources to include frontend fundamentals and Git (JS, React, CSS, Git)
   const frontendResources = useMemo(() => {
     return internalResources.filter(resource =>
-      ['javascript', 'react', 'css'].includes(resource.category)
+      ['javascript', 'react', 'css', 'git'].includes(resource.category)
     );
   }, []);
 
@@ -256,6 +256,15 @@ function FrontendQuestionsPageContent() {
                     borderColor: 'border-purple-200 dark:border-purple-800',
                     textColor: 'text-purple-800 dark:text-purple-200',
                   };
+                case 'git':
+                  return {
+                    gradient: 'from-green-400 via-emerald-500 to-teal-600',
+                    hoverGradient: 'from-green-500 via-emerald-600 to-teal-700',
+                    icon: '📚',
+                    bgColor: 'bg-green-50 dark:bg-green-950/20',
+                    borderColor: 'border-green-200 dark:border-green-800',
+                    textColor: 'text-green-800 dark:text-green-200',
+                  };
                 default:
                   return {
                     gradient: 'from-gray-400 via-gray-500 to-gray-600',
@@ -313,7 +322,7 @@ function FrontendQuestionsPageContent() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-foreground group-hover:to-muted-foreground transition-all duration-300">
+                  <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-white transition-all duration-300">
                     {resource.title}
                   </h3>
 
