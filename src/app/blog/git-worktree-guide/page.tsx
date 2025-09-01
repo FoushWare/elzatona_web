@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, GitBranch, FolderOpen, Code, CheckCircle, AlertTriangle, Info } from 'lucide-react';
+import { ArrowLeft, GitBranch, Code, CheckCircle, AlertTriangle, Info } from 'lucide-react';
 
 export default function GitWorktreeBlogPost() {
   return (
@@ -289,14 +289,14 @@ export default function GitWorktreeBlogPost() {
                 
                 <div className="space-y-4">
                   <div className="bg-gray-900 text-green-400 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                    <div># Production issue discovered</div>
-                    <div>git worktree add -b hotfix/security-patch ../hotfix production</div>
-                    <br />
-                    <div># Fix the issue in hotfix worktree</div>
-                    <div>cd ../hotfix</div>
-                    <div># ... make changes ...</div>
-                    <div>git add .</div>
-                    <div>git commit -m "Fix security vulnerability"</div>
+                                         <div># Production issue discovered</div>
+                     <div>git worktree add -b hotfix/security-patch ../hotfix production</div>
+                     <br />
+                     <div># Fix the issue in hotfix worktree</div>
+                     <div>cd ../hotfix</div>
+                     <div># ... make changes ...</div>
+                     <div>git add .</div>
+                     <div>git commit -m &quot;Fix security vulnerability&quot;</div>
                     <br />
                     <div># Continue working on main feature</div>
                     <div>cd ../project-root</div>
@@ -410,8 +410,8 @@ export default function GitWorktreeBlogPost() {
                   <div>
                     <h4 className="font-semibold text-foreground mb-2">Issue: "worktree is dirty"</h4>
                     <div className="bg-gray-900 text-green-400 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                      <div># Commit or stash changes before removing</div>
-                      <div>git add . && git commit -m "Save changes"</div>
+                                           <div># Commit or stash changes before removing</div>
+                     <div>git add . && git commit -m &quot;Save changes&quot;</div>
                       <div>git worktree remove ../worktree-name</div>
                     </div>
                   </div>

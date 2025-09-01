@@ -152,11 +152,14 @@ export function Navbar() {
                   className="flex items-center space-x-2 p-2 rounded-lg transition-all duration-200 hover:bg-blue-50 dark:hover:bg-gray-800"
                 >
                   {user?.photoURL ? (
-                    <img
-                      src={user.photoURL}
-                      alt={user.displayName || 'User'}
-                      className="w-8 h-8 rounded-full"
-                    />
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={user.photoURL}
+                        alt={user.displayName || 'User'}
+                        className="w-8 h-8 rounded-full"
+                      />
+                    </>
                   ) : (
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                       <User className="w-4 h-4 text-white" />

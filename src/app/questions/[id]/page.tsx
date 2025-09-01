@@ -3,13 +3,12 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Code, CheckCircle, AlertTriangle, Clock, Users, Star } from 'lucide-react';
+import { ArrowLeft, Code, CheckCircle, AlertTriangle, Users, Star } from 'lucide-react';
 import { greatFrontendQuestions } from '@/lib/greatfrontendQuestions';
 
 export default function QuestionDetailPage() {
   const params = useParams();
-  const router = useRouter();
-  const [question, setQuestion] = useState<any>(null);
+  const [question, setQuestion] = useState<typeof greatFrontendQuestions[0] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,7 +37,7 @@ export default function QuestionDetailPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">Question Not Found</h1>
-          <p className="text-muted-foreground mb-6">The question you're looking for doesn't exist.</p>
+          <p className="text-muted-foreground mb-6">The question you&apos;re looking for doesn&apos;t exist.</p>
           <Link
             href="/questions"
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
@@ -147,7 +146,7 @@ export default function QuestionDetailPage() {
               Problem Statement
             </h2>
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              <div dangerouslySetInnerHTML={{ __html: question.problemStatement || question.description }} />
+              <p className="text-foreground">{question.description}</p>
             </div>
           </div>
 
@@ -168,65 +167,16 @@ export default function QuestionDetailPage() {
             </div>
           )}
 
-          {/* Solution */}
-          {question.solution && (
-            <div className="bg-card border border-border rounded-lg p-6 mb-8">
-              <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <CheckCircle className="w-6 h-6 text-green-500" />
-                Solution
-              </h2>
-              <div className="prose prose-lg dark:prose-invert max-w-none">
-                <div dangerouslySetInnerHTML={{ __html: question.solution }} />
-              </div>
-            </div>
-          )}
-
-          {/* Test Cases */}
-          {question.testCases && question.testCases.length > 0 && (
-            <div className="bg-card border border-border rounded-lg p-6 mb-8">
-              <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-                <AlertTriangle className="w-6 h-6 text-yellow-500" />
-                Test Cases
-              </h2>
-              <div className="space-y-4">
-                {question.testCases.map((testCase: any, index: number) => (
-                  <div key={index} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                    <h4 className="font-semibold text-foreground mb-2">Test Case {index + 1}</h4>
-                    <div className="space-y-2 text-sm">
-                      {testCase.input && (
-                        <div>
-                          <span className="font-medium text-foreground">Input:</span>
-                          <pre className="bg-gray-100 dark:bg-gray-700 p-2 rounded mt-1 overflow-x-auto">
-                            {JSON.stringify(testCase.input, null, 2)}
-                          </pre>
-                        </div>
-                      )}
-                      {testCase.output && (
-                        <div>
-                          <span className="font-medium text-foreground">Expected Output:</span>
-                          <pre className="bg-gray-100 dark:bg-gray-700 p-2 rounded mt-1 overflow-x-auto">
-                            {JSON.stringify(testCase.output, null, 2)}
-                          </pre>
-                        </div>
-                      )}
-                      {testCase.explanation && (
-                        <div>
-                          <span className="font-medium text-foreground">Explanation:</span>
-                          <p className="text-muted-foreground mt-1">{testCase.explanation}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <a
+              href={question.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors text-center"
+            >
               Try This Question
-            </button>
+            </a>
             <button className="flex-1 border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/20 px-6 py-3 rounded-lg font-medium transition-colors">
               View Discussion
             </button>
