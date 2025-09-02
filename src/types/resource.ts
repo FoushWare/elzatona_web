@@ -1,4 +1,4 @@
-export type ResourceCategory = 
+export type ResourceCategory =
   | 'ai-tools'
   | 'security'
   | 'performance'
@@ -18,7 +18,14 @@ export type ResourceCategory =
   | 'browser'
   | 'problem-solving';
 
-export type ResourceType = 'article' | 'video' | 'tool' | 'course' | 'book' | 'cheatsheet' | 'documentation';
+export type ResourceType =
+  | 'article'
+  | 'video'
+  | 'tool'
+  | 'course'
+  | 'book'
+  | 'cheatsheet'
+  | 'documentation';
 
 export interface LearningResource {
   id: string;
@@ -65,4 +72,6 @@ export interface LearningPath {
   estimatedTime: number; // in hours
   prerequisites?: string[];
   targetSkills: string[];
+  questionCount?: number; // number of practice questions
+  questionCategories?: string[]; // categories of questions included
 }

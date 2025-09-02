@@ -132,24 +132,10 @@ export default function Navbar() {
             </div>
 
             <Link
-              href="/practice/fundamentals"
-              className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
-            >
-              Practice
-            </Link>
-
-            <Link
               href="/coding"
               className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
             >
               Coding
-            </Link>
-
-            <Link
-              href="/questions"
-              className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
-            >
-              Questions
             </Link>
 
             <Link
@@ -318,27 +304,11 @@ export default function Navbar() {
             </Link>
 
             <Link
-              href="/practice/fundamentals"
-              className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
-              onClick={() => setIsOpen(false)}
-            >
-              📚 Practice Fundamentals
-            </Link>
-
-            <Link
               href="/coding"
               className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
               onClick={() => setIsOpen(false)}
             >
               💻 Coding Challenges
-            </Link>
-
-            <Link
-              href="/questions"
-              className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
-              onClick={() => setIsOpen(false)}
-            >
-              ❓ Interview Questions
             </Link>
 
             <Link

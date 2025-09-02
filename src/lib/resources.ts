@@ -1,4 +1,8 @@
-import { LearningResource, ResourceCategoryInfo, LearningPath } from '@/types/resource';
+import {
+  LearningResource,
+  ResourceCategoryInfo,
+  LearningPath,
+} from '@/types/resource';
 
 export const resourceCategories: ResourceCategoryInfo[] = [
   {
@@ -7,7 +11,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'AI-powered tools for frontend development and UI generation',
     icon: '🤖',
     color: 'bg-purple-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'security',
@@ -15,7 +19,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Web security best practices and common vulnerabilities',
     icon: '🔒',
     color: 'bg-red-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'performance',
@@ -23,7 +27,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Performance optimization and Core Web Vitals',
     icon: '⚡',
     color: 'bg-green-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'css',
@@ -31,7 +35,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'CSS layouts, animations, and best practices',
     icon: '🎨',
     color: 'bg-blue-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'javascript',
@@ -39,7 +43,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'JavaScript patterns, concepts, and advanced topics',
     icon: '📜',
     color: 'bg-yellow-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'react',
@@ -47,7 +51,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'React patterns, hooks, and best practices',
     icon: '⚛️',
     color: 'bg-cyan-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'typescript',
@@ -55,7 +59,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'TypeScript concepts and utility types',
     icon: '📘',
     color: 'bg-indigo-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'testing',
@@ -63,7 +67,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Testing strategies and best practices',
     icon: '🧪',
     color: 'bg-pink-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'git',
@@ -71,7 +75,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Git workflows and best practices',
     icon: '📚',
     color: 'bg-orange-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'html',
@@ -79,7 +83,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'HTML semantics and accessibility',
     icon: '🌐',
     color: 'bg-teal-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'tools',
@@ -87,7 +91,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Development tools and utilities',
     icon: '⚙️',
     color: 'bg-gray-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'interview',
@@ -95,7 +99,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Frontend interview questions and preparation',
     icon: '💼',
     color: 'bg-emerald-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'english',
@@ -103,7 +107,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Free resources to improve English language skills',
     icon: '🇬🇧',
     color: 'bg-blue-600',
-    count: 0
+    count: 0,
   },
   {
     id: 'system-design',
@@ -111,7 +115,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Design systems and architecture patterns',
     icon: '🏗️',
     color: 'bg-violet-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'micro-frontend',
@@ -119,7 +123,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Micro frontend architecture and patterns',
     icon: '🧩',
     color: 'bg-rose-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'api',
@@ -127,7 +131,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'API design patterns and best practices',
     icon: '🔌',
     color: 'bg-sky-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'build-tools',
@@ -135,7 +139,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Modern build tools and bundlers',
     icon: '🔧',
     color: 'bg-slate-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'browser',
@@ -143,7 +147,7 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Browser APIs and features',
     icon: '🌍',
     color: 'bg-amber-500',
-    count: 0
+    count: 0,
   },
   {
     id: 'problem-solving',
@@ -151,8 +155,8 @@ export const resourceCategories: ResourceCategoryInfo[] = [
     description: 'Algorithms and problem-solving techniques',
     icon: '🧮',
     color: 'bg-lime-500',
-    count: 0
-  }
+    count: 0,
+  },
 ];
 
 export const learningResources: LearningResource[] = [
@@ -160,23 +164,24 @@ export const learningResources: LearningResource[] = [
   {
     id: 'v0-dev',
     title: 'v0 - AI-powered UI component generator',
-    description: 'Vercel\'s AI-powered UI component generator for React and Tailwind',
+    description:
+      "Vercel's AI-powered UI component generator for React and Tailwind",
     url: 'https://v0.dev/',
     category: 'ai-tools',
     type: 'tool',
     tags: ['react', 'tailwind', 'ui-generation'],
     difficulty: 'beginner',
-    featured: true
+    featured: true,
   },
   {
     id: 'figma-ai',
     title: 'Figma AI',
-    description: 'Figma\'s built-in AI features for design generation',
+    description: "Figma's built-in AI features for design generation",
     url: 'https://www.figma.com/ai/',
     category: 'ai-tools',
     type: 'tool',
     tags: ['design', 'figma', 'ui-generation'],
-    difficulty: 'beginner'
+    difficulty: 'beginner',
   },
   {
     id: 'mantine-ai',
@@ -186,7 +191,7 @@ export const learningResources: LearningResource[] = [
     category: 'ai-tools',
     type: 'tool',
     tags: ['mantine', 'react', 'components'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
 
   // Security
@@ -199,7 +204,7 @@ export const learningResources: LearningResource[] = [
     type: 'article',
     tags: ['security', 'csp', 'xss'],
     difficulty: 'intermediate',
-    featured: true
+    featured: true,
   },
   {
     id: 'cookies-security',
@@ -209,7 +214,7 @@ export const learningResources: LearningResource[] = [
     category: 'security',
     type: 'article',
     tags: ['security', 'cookies', 'authentication'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
   {
     id: 'cors-visualized',
@@ -219,7 +224,7 @@ export const learningResources: LearningResource[] = [
     category: 'security',
     type: 'article',
     tags: ['security', 'cors', 'api'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
 
   // Performance
@@ -232,7 +237,7 @@ export const learningResources: LearningResource[] = [
     type: 'video',
     tags: ['performance', 'core-web-vitals', 'metrics'],
     difficulty: 'intermediate',
-    featured: true
+    featured: true,
   },
   {
     id: 'performance-tools',
@@ -242,7 +247,7 @@ export const learningResources: LearningResource[] = [
     category: 'performance',
     type: 'video',
     tags: ['performance', 'tools', 'measurement'],
-    difficulty: 'beginner'
+    difficulty: 'beginner',
   },
 
   // CSS
@@ -254,7 +259,7 @@ export const learningResources: LearningResource[] = [
     category: 'css',
     type: 'video',
     tags: ['css', 'stacking-context', 'z-index'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
   {
     id: 'css-layouts',
@@ -264,7 +269,7 @@ export const learningResources: LearningResource[] = [
     category: 'css',
     type: 'video',
     tags: ['css', 'layout', 'flexbox', 'grid'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
   {
     id: 'masonry-layout',
@@ -274,20 +279,21 @@ export const learningResources: LearningResource[] = [
     category: 'css',
     type: 'article',
     tags: ['css', 'masonry', 'layout'],
-    difficulty: 'advanced'
+    difficulty: 'advanced',
   },
 
   // JavaScript
   {
     id: 'event-loop',
     title: 'JavaScript Event Loop Visualized',
-    description: 'Visual explanation of the JavaScript event loop by Lydia Hallie',
+    description:
+      'Visual explanation of the JavaScript event loop by Lydia Hallie',
     url: 'https://dev.to/lydiahallie/javascript-visualized-event-loop-3dif',
     category: 'javascript',
     type: 'article',
     tags: ['javascript', 'event-loop', 'asynchronous'],
     difficulty: 'intermediate',
-    featured: true
+    featured: true,
   },
   {
     id: 'generators-iterators',
@@ -297,7 +303,7 @@ export const learningResources: LearningResource[] = [
     category: 'javascript',
     type: 'article',
     tags: ['javascript', 'generators', 'iterators'],
-    difficulty: 'advanced'
+    difficulty: 'advanced',
   },
   {
     id: 'object-properties',
@@ -307,7 +313,7 @@ export const learningResources: LearningResource[] = [
     category: 'javascript',
     type: 'article',
     tags: ['javascript', 'objects', 'properties'],
-    difficulty: 'beginner'
+    difficulty: 'beginner',
   },
 
   // React
@@ -320,7 +326,7 @@ export const learningResources: LearningResource[] = [
     type: 'video',
     tags: ['react', 'rendering', 'patterns'],
     difficulty: 'advanced',
-    featured: true
+    featured: true,
   },
   {
     id: 'render-props-pattern',
@@ -330,7 +336,7 @@ export const learningResources: LearningResource[] = [
     category: 'react',
     type: 'article',
     tags: ['react', 'render-props', 'patterns'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
   {
     id: 'prop-getters',
@@ -340,7 +346,7 @@ export const learningResources: LearningResource[] = [
     category: 'react',
     type: 'article',
     tags: ['react', 'prop-getters', 'patterns'],
-    difficulty: 'advanced'
+    difficulty: 'advanced',
   },
 
   // TypeScript
@@ -352,7 +358,7 @@ export const learningResources: LearningResource[] = [
     category: 'typescript',
     type: 'article',
     tags: ['typescript', 'utility-types', 'type-system'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
   {
     id: 'solid-principles-typescript',
@@ -362,19 +368,19 @@ export const learningResources: LearningResource[] = [
     category: 'typescript',
     type: 'article',
     tags: ['typescript', 'solid-principles', 'architecture'],
-    difficulty: 'advanced'
+    difficulty: 'advanced',
   },
 
   // Testing
   {
     id: 'testing-implementation-details',
     title: 'Testing Implementation Details',
-    description: 'Why you shouldn\'t test implementation details',
+    description: "Why you shouldn't test implementation details",
     url: 'https://kentcdodds.com/blog/testing-implementation-details',
     category: 'testing',
     type: 'article',
     tags: ['testing', 'best-practices', 'react'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
   {
     id: 'stop-mocking-fetch',
@@ -384,7 +390,7 @@ export const learningResources: LearningResource[] = [
     category: 'testing',
     type: 'article',
     tags: ['testing', 'api', 'fetch'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
 
   // Tools
@@ -396,7 +402,7 @@ export const learningResources: LearningResource[] = [
     category: 'tools',
     type: 'tool',
     tags: ['typography', 'design', 'fonts'],
-    difficulty: 'beginner'
+    difficulty: 'beginner',
   },
   {
     id: 'undraw-illustrations',
@@ -406,30 +412,31 @@ export const learningResources: LearningResource[] = [
     category: 'tools',
     type: 'tool',
     tags: ['illustrations', 'svg', 'design'],
-    difficulty: 'beginner'
+    difficulty: 'beginner',
   },
   {
     id: 'squoosh',
     title: 'Squoosh - Image Optimization',
-    description: 'Google\'s image optimization tool',
+    description: "Google's image optimization tool",
     url: 'https://squoosh.app/',
     category: 'tools',
     type: 'tool',
     tags: ['images', 'optimization', 'performance'],
-    difficulty: 'beginner'
+    difficulty: 'beginner',
   },
 
   // English Learning
   {
     id: 'cbc-learning-english',
     title: 'CBC Learning English',
-    description: 'Free English learning resources from Canadian Broadcasting Corporation',
+    description:
+      'Free English learning resources from Canadian Broadcasting Corporation',
     url: 'https://www.cbc.ca/learning-english',
     category: 'english',
     type: 'website',
     tags: ['english', 'learning', 'free', 'canadian'],
     difficulty: 'beginner',
-    featured: true
+    featured: true,
   },
   {
     id: 'bbc-learning-english',
@@ -440,7 +447,7 @@ export const learningResources: LearningResource[] = [
     type: 'website',
     tags: ['english', 'learning', 'free', 'british'],
     difficulty: 'beginner',
-    featured: true
+    featured: true,
   },
   {
     id: 'voa-learning-english',
@@ -450,7 +457,7 @@ export const learningResources: LearningResource[] = [
     category: 'english',
     type: 'website',
     tags: ['english', 'learning', 'free', 'american'],
-    difficulty: 'beginner'
+    difficulty: 'beginner',
   },
   {
     id: 'eslpod',
@@ -460,7 +467,7 @@ export const learningResources: LearningResource[] = [
     category: 'english',
     type: 'podcast',
     tags: ['english', 'learning', 'podcast', 'esl'],
-    difficulty: 'beginner'
+    difficulty: 'beginner',
   },
   {
     id: 'the-english-we-speak',
@@ -470,17 +477,17 @@ export const learningResources: LearningResource[] = [
     category: 'english',
     type: 'podcast',
     tags: ['english', 'learning', 'podcast', 'expressions'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
   {
     id: 'lukes-english-podcast',
-    title: 'Luke\'s English Podcast',
+    title: "Luke's English Podcast",
     description: 'Comprehensive English learning podcast by Luke Thompson',
     url: 'https://teacherluke.co.uk/',
     category: 'english',
     type: 'podcast',
     tags: ['english', 'learning', 'podcast', 'comprehensive'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
   {
     id: 'all-ears-english',
@@ -490,7 +497,7 @@ export const learningResources: LearningResource[] = [
     category: 'english',
     type: 'podcast',
     tags: ['english', 'learning', 'podcast', 'american'],
-    difficulty: 'beginner'
+    difficulty: 'beginner',
   },
 
   // Interview Prep
@@ -503,7 +510,7 @@ export const learningResources: LearningResource[] = [
     type: 'article',
     tags: ['interview', 'javascript', 'questions'],
     difficulty: 'intermediate',
-    featured: true
+    featured: true,
   },
   {
     id: 'react-interview-questions',
@@ -513,7 +520,7 @@ export const learningResources: LearningResource[] = [
     category: 'interview',
     type: 'article',
     tags: ['interview', 'react', 'questions'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
 
   // System Design
@@ -525,17 +532,17 @@ export const learningResources: LearningResource[] = [
     category: 'system-design',
     type: 'course',
     tags: ['design-systems', 'course', 'architecture'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
   {
     id: 'atomic-design',
     title: 'Atomic Design Methodology',
-    description: 'Brad Frost\'s atomic design methodology',
+    description: "Brad Frost's atomic design methodology",
     url: 'https://bradfrost.com/blog/post/atomic-web-design/',
     category: 'system-design',
     type: 'article',
     tags: ['atomic-design', 'design-systems', 'methodology'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
 
   // Micro Frontend
@@ -547,7 +554,7 @@ export const learningResources: LearningResource[] = [
     category: 'micro-frontend',
     type: 'article',
     tags: ['micro-frontend', 'architecture', 'spa'],
-    difficulty: 'advanced'
+    difficulty: 'advanced',
   },
 
   // API Design
@@ -559,7 +566,7 @@ export const learningResources: LearningResource[] = [
     category: 'api',
     type: 'video',
     tags: ['api', 'websockets', 'real-time'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
 
   // Build Tools
@@ -571,7 +578,7 @@ export const learningResources: LearningResource[] = [
     category: 'build-tools',
     type: 'article',
     tags: ['build-tools', 'bundlers', 'webpack', 'vite'],
-    difficulty: 'intermediate'
+    difficulty: 'intermediate',
   },
   {
     id: 'monorepo-vs-polyrepo',
@@ -581,7 +588,7 @@ export const learningResources: LearningResource[] = [
     category: 'build-tools',
     type: 'article',
     tags: ['monorepo', 'architecture', 'project-structure'],
-    difficulty: 'advanced'
+    difficulty: 'advanced',
   },
 
   // Browser
@@ -593,7 +600,7 @@ export const learningResources: LearningResource[] = [
     category: 'browser',
     type: 'article',
     tags: ['browser', 'caching', 'performance'],
-    difficulty: 'advanced'
+    difficulty: 'advanced',
   },
 
   // Problem Solving
@@ -605,64 +612,117 @@ export const learningResources: LearningResource[] = [
     category: 'problem-solving',
     type: 'video',
     tags: ['algorithms', 'time-complexity', 'logarithms'],
-    difficulty: 'advanced'
-  }
+    difficulty: 'advanced',
+  },
 ];
 
 // Update category counts
 resourceCategories.forEach(category => {
-  category.count = learningResources.filter(resource => resource.category === category.id).length;
+  category.count = learningResources.filter(
+    resource => resource.category === category.id
+  ).length;
 });
 
 export const learningPaths: LearningPath[] = [
   {
     id: 'frontend-basics',
     title: 'Frontend Fundamentals',
-    description: 'Master the basics of HTML, CSS, and JavaScript with modern best practices',
+    description:
+      'Master the basics of HTML, CSS, and JavaScript with modern best practices and 48 practice questions',
     difficulty: 'beginner',
-    resources: ['css-layouts', 'object-properties', 'font-pairing', 'css-stacking-context', 'event-loop'],
+    resources: [
+      'css-layouts',
+      'object-properties',
+      'font-pairing',
+      'css-stacking-context',
+      'event-loop',
+    ],
     estimatedTime: 12,
-    targetSkills: ['HTML', 'CSS', 'JavaScript', 'Responsive Design', 'DOM Manipulation']
+    targetSkills: [
+      'HTML',
+      'CSS',
+      'JavaScript',
+      'Responsive Design',
+      'DOM Manipulation',
+    ],
+    questionCount: 48,
+    questionCategories: ['html', 'css', 'javascript'],
   },
   {
     id: 'advanced-css',
     title: 'Advanced CSS Mastery',
     description: 'Deep dive into advanced CSS techniques and modern layouts',
     difficulty: 'intermediate',
-    resources: ['css-stacking-context', 'css-layouts', 'masonry-layout', 'font-pairing'],
+    resources: [
+      'css-stacking-context',
+      'css-layouts',
+      'masonry-layout',
+      'font-pairing',
+    ],
     estimatedTime: 10,
     prerequisites: ['frontend-basics'],
-    targetSkills: ['Advanced CSS', 'Layout Techniques', 'CSS Architecture', 'Performance']
+    targetSkills: [
+      'Advanced CSS',
+      'Layout Techniques',
+      'CSS Architecture',
+      'Performance',
+    ],
   },
   {
     id: 'javascript-deep-dive',
     title: 'JavaScript Deep Dive',
     description: 'Master advanced JavaScript concepts and modern patterns',
     difficulty: 'intermediate',
-    resources: ['event-loop', 'generators-iterators', 'object-properties', 'logarithms-time-complexity'],
+    resources: [
+      'event-loop',
+      'generators-iterators',
+      'object-properties',
+      'logarithms-time-complexity',
+    ],
     estimatedTime: 14,
     prerequisites: ['frontend-basics'],
-    targetSkills: ['Advanced JavaScript', 'Async Programming', 'Performance', 'Algorithms']
+    targetSkills: [
+      'Advanced JavaScript',
+      'Async Programming',
+      'Performance',
+      'Algorithms',
+    ],
   },
   {
     id: 'react-mastery',
     title: 'React Mastery',
     description: 'Deep dive into React patterns, hooks, and best practices',
     difficulty: 'intermediate',
-    resources: ['react-rendering-patterns', 'render-props-pattern', 'prop-getters', 'react-interview-questions'],
+    resources: [
+      'react-rendering-patterns',
+      'render-props-pattern',
+      'prop-getters',
+      'react-interview-questions',
+    ],
     estimatedTime: 16,
     prerequisites: ['frontend-basics', 'javascript-deep-dive'],
-    targetSkills: ['React', 'Component Patterns', 'Performance Optimization', 'State Management']
+    targetSkills: [
+      'React',
+      'Component Patterns',
+      'Performance Optimization',
+      'State Management',
+    ],
   },
   {
     id: 'typescript-essentials',
     title: 'TypeScript Essentials',
-    description: 'Learn TypeScript for better type safety and developer experience',
+    description:
+      'Learn TypeScript for better type safety and developer experience',
     difficulty: 'intermediate',
     resources: ['typescript-utility-types', 'solid-principles-typescript'],
     estimatedTime: 8,
     prerequisites: ['javascript-deep-dive'],
-    targetSkills: ['TypeScript', 'Type Safety', 'Utility Types', 'SOLID Principles']
+    targetSkills: [
+      'TypeScript',
+      'Type Safety',
+      'Utility Types',
+      'SOLID Principles',
+    ],
   },
   {
     id: 'testing-strategies',
@@ -672,17 +732,27 @@ export const learningPaths: LearningPath[] = [
     resources: ['testing-implementation-details', 'stop-mocking-fetch'],
     estimatedTime: 10,
     prerequisites: ['react-mastery'],
-    targetSkills: ['Testing', 'Jest', 'React Testing', 'Test Strategy']
+    targetSkills: ['Testing', 'Jest', 'React Testing', 'Test Strategy'],
   },
   {
     id: 'performance-optimization',
     title: 'Performance Optimization',
     description: 'Learn to build fast, efficient web applications',
     difficulty: 'intermediate',
-    resources: ['core-web-vitals', 'performance-tools', 'bfcache', 'css-stacking-context'],
+    resources: [
+      'core-web-vitals',
+      'performance-tools',
+      'bfcache',
+      'css-stacking-context',
+    ],
     estimatedTime: 12,
     prerequisites: ['frontend-basics'],
-    targetSkills: ['Performance', 'Core Web Vitals', 'Optimization', 'Monitoring']
+    targetSkills: [
+      'Performance',
+      'Core Web Vitals',
+      'Optimization',
+      'Monitoring',
+    ],
   },
   {
     id: 'security-essentials',
@@ -691,17 +761,32 @@ export const learningPaths: LearningPath[] = [
     difficulty: 'intermediate',
     resources: ['csp-guide', 'cookies-security', 'cors-visualized'],
     estimatedTime: 8,
-    targetSkills: ['Security', 'CSP', 'Authentication', 'CORS', 'Best Practices']
+    targetSkills: [
+      'Security',
+      'CSP',
+      'Authentication',
+      'CORS',
+      'Best Practices',
+    ],
   },
   {
     id: 'system-design',
     title: 'Frontend System Design',
     description: 'Learn to design scalable frontend architectures',
     difficulty: 'advanced',
-    resources: ['design-systems-course', 'atomic-design', 'microfrontends-concept'],
+    resources: [
+      'design-systems-course',
+      'atomic-design',
+      'microfrontends-concept',
+    ],
     estimatedTime: 15,
     prerequisites: ['react-mastery', 'typescript-essentials'],
-    targetSkills: ['System Design', 'Architecture', 'Design Systems', 'Micro Frontends']
+    targetSkills: [
+      'System Design',
+      'Architecture',
+      'Design Systems',
+      'Micro Frontends',
+    ],
   },
   {
     id: 'build-tools-mastery',
@@ -711,7 +796,7 @@ export const learningPaths: LearningPath[] = [
     resources: ['build-tools-2023', 'monorepo-vs-polyrepo', 'squoosh'],
     estimatedTime: 10,
     prerequisites: ['frontend-basics'],
-    targetSkills: ['Build Tools', 'DevOps', 'Monorepos', 'Optimization']
+    targetSkills: ['Build Tools', 'DevOps', 'Monorepos', 'Optimization'],
   },
   {
     id: 'api-integration',
@@ -721,7 +806,7 @@ export const learningPaths: LearningPath[] = [
     resources: ['http-long-polling-vs-sse-vs-websockets', 'cors-visualized'],
     estimatedTime: 8,
     prerequisites: ['javascript-deep-dive'],
-    targetSkills: ['APIs', 'WebSockets', 'HTTP', 'Real-time Communication']
+    targetSkills: ['APIs', 'WebSockets', 'HTTP', 'Real-time Communication'],
   },
   {
     id: 'ai-tools-integration',
@@ -730,28 +815,117 @@ export const learningPaths: LearningPath[] = [
     difficulty: 'intermediate',
     resources: ['v0-dev', 'figma-ai', 'mantine-ai'],
     estimatedTime: 6,
-    targetSkills: ['AI Tools', 'UI Generation', 'Productivity', 'Modern Workflow']
+    targetSkills: [
+      'AI Tools',
+      'UI Generation',
+      'Productivity',
+      'Modern Workflow',
+    ],
   },
   {
     id: 'interview-preparation',
     title: 'Frontend Interview Prep',
-    description: 'Comprehensive preparation for frontend development interviews',
+    description:
+      'Comprehensive preparation for frontend development interviews',
     difficulty: 'intermediate',
     resources: ['javascript-questions', 'react-interview-questions'],
     estimatedTime: 20,
     prerequisites: ['react-mastery', 'javascript-deep-dive'],
-    targetSkills: ['Interview Skills', 'Problem Solving', 'System Design', 'Communication']
+    targetSkills: [
+      'Interview Skills',
+      'Problem Solving',
+      'System Design',
+      'Communication',
+    ],
   },
   {
     id: 'advanced-architectures',
     title: 'Advanced Frontend Architectures',
     description: 'Explore cutting-edge frontend architectures and patterns',
     difficulty: 'advanced',
-    resources: ['microfrontends-concept', 'monorepo-vs-polyrepo', 'design-systems-course'],
+    resources: [
+      'microfrontends-concept',
+      'monorepo-vs-polyrepo',
+      'design-systems-course',
+    ],
     estimatedTime: 18,
     prerequisites: ['system-design', 'build-tools-mastery'],
-    targetSkills: ['Micro Frontends', 'Monorepos', 'Scalable Architecture', 'Team Collaboration']
-  }
+    targetSkills: [
+      'Micro Frontends',
+      'Monorepos',
+      'Scalable Architecture',
+      'Team Collaboration',
+    ],
+  },
+  {
+    id: 'javascript-practice',
+    title: 'JavaScript Practice & Interview Prep',
+    description:
+      '24 comprehensive JavaScript questions covering fundamentals to advanced concepts',
+    difficulty: 'intermediate',
+    resources: ['javascript-fundamentals', 'es6-features', 'advanced-patterns'],
+    estimatedTime: 8,
+    prerequisites: ['frontend-basics'],
+    targetSkills: ['JavaScript', 'ES6+', 'Advanced Patterns', 'Interview Prep'],
+    questionCount: 24,
+    questionCategories: ['javascript'],
+  },
+  {
+    id: 'css-practice',
+    title: 'CSS Practice & Layout Mastery',
+    description:
+      '11 CSS questions covering layouts, animations, and modern techniques',
+    difficulty: 'intermediate',
+    resources: ['css-layouts', 'css-animations', 'responsive-design'],
+    estimatedTime: 6,
+    prerequisites: ['frontend-basics'],
+    targetSkills: ['CSS', 'Layouts', 'Animations', 'Responsive Design'],
+    questionCount: 11,
+    questionCategories: ['css'],
+  },
+  {
+    id: 'html-practice',
+    title: 'HTML Practice & Semantic Mastery',
+    description: '3 HTML questions focusing on semantics and accessibility',
+    difficulty: 'beginner',
+    resources: ['html-semantics', 'accessibility', 'modern-html'],
+    estimatedTime: 4,
+    prerequisites: [],
+    targetSkills: ['HTML', 'Semantics', 'Accessibility', 'Modern Standards'],
+    questionCount: 3,
+    questionCategories: ['html'],
+  },
+  {
+    id: 'react-practice',
+    title: 'React Practice & Advanced Patterns',
+    description:
+      '10 React questions covering hooks, patterns, and advanced concepts',
+    difficulty: 'intermediate',
+    resources: ['react-hooks', 'component-patterns', 'performance'],
+    estimatedTime: 8,
+    prerequisites: ['javascript-practice'],
+    targetSkills: ['React', 'Hooks', 'Patterns', 'Performance'],
+    questionCount: 10,
+    questionCategories: ['react'],
+  },
+  {
+    id: 'interview-questions',
+    title: 'Comprehensive Interview Preparation',
+    description:
+      'All 48 fundamental questions organized by category and difficulty',
+    difficulty: 'intermediate',
+    resources: ['interview-prep', 'question-bank', 'practice-tests'],
+    estimatedTime: 15,
+    prerequisites: ['frontend-basics'],
+    targetSkills: [
+      'Interview Prep',
+      'Problem Solving',
+      'Technical Knowledge',
+      'Communication',
+    ],
+    questionCount: 48,
+    questionCategories: ['html', 'css', 'javascript', 'react'],
+  },
 ];
 
 export function getResourcesByCategory(category: string): LearningResource[] {
@@ -767,7 +941,8 @@ export function getResourcesByFilter(filter: {
   return learningResources.filter(resource => {
     if (filter.category && resource.category !== filter.category) return false;
     if (filter.type && resource.type !== filter.type) return false;
-    if (filter.difficulty && resource.difficulty !== filter.difficulty) return false;
+    if (filter.difficulty && resource.difficulty !== filter.difficulty)
+      return false;
     if (filter.searchTerm) {
       const searchLower = filter.searchTerm.toLowerCase();
       return (
