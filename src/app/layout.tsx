@@ -3,8 +3,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
-import { Navbar } from '@/components/Navbar';
-import { ChatGPT } from '@/components/ChatGPT';
+import Navbar from '@/components/Navbar';
+import ChatGPT from '@/components/ChatGPT';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -32,9 +32,14 @@ export const metadata: Metadata = {
     description:
       'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
   },
-  viewport: 'width=device-width, initial-scale=1',
-  themeColor: '#3B82F6',
 };
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
+export const themeColor = '#3B82F6';
 
 export default function RootLayout({
   children,
@@ -46,7 +51,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider>
           <FirebaseAuthProvider>
-            <div className="min-h-screen bg-background text-foreground">
+            <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
               <Navbar />
               <main>{children}</main>
               <ChatGPT />
