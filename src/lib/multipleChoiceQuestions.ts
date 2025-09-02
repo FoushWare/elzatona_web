@@ -277,6 +277,108 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     difficulty: 'medium',
     tags: ['react', 'fiber', 'concurrent', 'rendering'],
   },
+
+  // CSS/HTML Questions for Issue #40
+  {
+    id: 'css-flexbox-center',
+    question:
+      'How do you center an element both horizontally and vertically using CSS Flexbox?',
+    options: [
+      'display: center; align: center;',
+      'display: flex; justify-content: center; align-items: center;',
+      'display: flexbox; center: both;',
+      'flex: center; align: center;',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'To center an element both horizontally and vertically with Flexbox, use display: flex; justify-content: center; (horizontal centering) and align-items: center; (vertical centering).',
+    category: 'css',
+    difficulty: 'easy',
+    tags: ['css', 'flexbox', 'layout', 'centering'],
+  },
+  {
+    id: 'css-grid-template',
+    question: 'What does grid-template-columns: repeat(3, 1fr) create?',
+    options: [
+      '3 rows with equal height',
+      '3 columns with equal width',
+      '3 columns with 1px width each',
+      '3 columns with 100% width each',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'grid-template-columns: repeat(3, 1fr) creates 3 columns where each column takes up 1 fraction (1fr) of the available space, making them equal width.',
+    category: 'css',
+    difficulty: 'medium',
+    tags: ['css', 'grid', 'layout', 'responsive'],
+  },
+  {
+    id: 'css-pseudo-elements',
+    question:
+      'Which CSS pseudo-element is used to add content before an element?',
+    options: ['::after', '::before', '::first-line', '::first-letter'],
+    correctAnswer: 1,
+    explanation:
+      "The ::before pseudo-element is used to insert content before an element. It's commonly used for decorative elements, icons, or additional content.",
+    category: 'css',
+    difficulty: 'medium',
+    tags: ['css', 'pseudo-elements', 'content', 'styling'],
+  },
+  {
+    id: 'html-semantic-tags',
+    question:
+      'Which HTML tag is most semantically appropriate for the main content of a webpage?',
+    options: ['<div class="main">', '<main>', '<section>', '<article>'],
+    correctAnswer: 1,
+    explanation:
+      'The <main> tag is the most semantically appropriate for the primary content of a webpage. It should contain the main content and there should typically be only one <main> element per page.',
+    category: 'html',
+    difficulty: 'easy',
+    tags: ['html', 'semantics', 'accessibility', 'structure'],
+  },
+  {
+    id: 'css-media-queries',
+    question: 'What does @media (max-width: 768px) target?',
+    options: [
+      'Screens wider than 768px',
+      'Screens 768px wide or narrower',
+      'Screens exactly 768px wide',
+      'Screens with height of 768px',
+    ],
+    correctAnswer: 1,
+    explanation:
+      '@media (max-width: 768px) targets screens that are 768px wide or narrower. This is commonly used for mobile-first responsive design.',
+    category: 'css',
+    difficulty: 'easy',
+    tags: ['css', 'responsive', 'media-queries', 'mobile'],
+  },
+  {
+    id: 'html-form-validation',
+    question: 'Which HTML input attribute provides built-in form validation?',
+    options: ['validate', 'required', 'check', 'verify'],
+    correctAnswer: 1,
+    explanation:
+      'The required attribute provides built-in HTML5 form validation. When present, the form cannot be submitted unless the field has a value.',
+    category: 'html',
+    difficulty: 'easy',
+    tags: ['html', 'forms', 'validation', 'html5'],
+  },
+  {
+    id: 'css-transitions',
+    question: 'What CSS property controls the duration of a transition?',
+    options: [
+      'transition-timing',
+      'transition-duration',
+      'transition-speed',
+      'transition-time',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'transition-duration controls how long a CSS transition takes to complete. It can be specified in seconds (s) or milliseconds (ms).',
+    category: 'css',
+    difficulty: 'medium',
+    tags: ['css', 'transitions', 'animations', 'timing'],
+  },
 ];
 
 export const getQuestionsByCategory = (category: string) => {
