@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { generalFrontendPhase1Questions } from "@/lib/internalResources";
+import { useState } from 'react';
+// import { generalFrontendPhase1Questions } from "@/lib/internalResources";
 
 export default function TheSeniorDev01Page() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -9,8 +9,19 @@ export default function TheSeniorDev01Page() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  const currentQuestion = generalFrontendPhase1Questions[currentQuestionIndex];
-  const totalQuestions = generalFrontendPhase1Questions.length;
+  // const currentQuestion = generalFrontendPhase1Questions[currentQuestionIndex];
+  // const totalQuestions = generalFrontendPhase1Questions.length;
+
+  // Temporarily disabled to isolate build error
+  const currentQuestion = {
+    question: 'Question temporarily unavailable',
+    code: '',
+    options: { A: 'Option A', B: 'Option B', C: 'Option C', D: 'Option D' },
+    correctAnswer: 'A',
+    explanation:
+      'This question is temporarily unavailable while we fix the build error.',
+  };
+  const totalQuestions = 1;
 
   const handleAnswerSelect = (answer: string) => {
     setSelectedAnswer(answer);
@@ -104,12 +115,12 @@ export default function TheSeniorDev01Page() {
               className={`w-full text-left p-4 rounded-lg border transition-all duration-200 ${
                 selectedAnswer === key
                   ? isCorrect
-                    ? "bg-green-100 border-green-500 text-green-800"
-                    : "bg-red-100 border-red-500 text-red-800"
+                    ? 'bg-green-100 border-green-500 text-green-800'
+                    : 'bg-red-100 border-red-500 text-red-800'
                   : showAnswer && key === currentQuestion.correctAnswer
-                  ? "bg-green-100 border-green-500 text-green-800"
-                  : "bg-background border-border hover:bg-muted"
-              } ${showAnswer ? "cursor-default" : "cursor-pointer"}`}
+                    ? 'bg-green-100 border-green-500 text-green-800'
+                    : 'bg-background border-border hover:bg-muted'
+              } ${showAnswer ? 'cursor-default' : 'cursor-pointer'}`}
             >
               <span className="font-medium mr-2">{key}.</span>
               {value}
@@ -121,7 +132,7 @@ export default function TheSeniorDev01Page() {
         {showAnswer && (
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
             <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-              {isCorrect ? "✅ Correct!" : "❌ Incorrect"}
+              {isCorrect ? '✅ Correct!' : '❌ Incorrect'}
             </h3>
             <p className="text-blue-700 dark:text-blue-300">
               {currentQuestion.explanation}
@@ -155,14 +166,16 @@ export default function TheSeniorDev01Page() {
           Question Navigation
         </h3>
         <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
-          {generalFrontendPhase1Questions.map((_, index) => (
+          {/* {generalFrontendPhase1Questions.map((_, index) => ( */}
+          {/* Temporarily disabled to isolate build error */}
+          {Array.from({ length: totalQuestions }).map((_, index) => (
             <button
               key={index}
               onClick={() => handleQuestionSelect(index)}
               className={`p-2 text-sm rounded-md transition-colors ${
                 index === currentQuestionIndex
-                  ? "bg-blue-600 text-white"
-                  : "bg-muted text-foreground hover:bg-muted/80"
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-muted text-foreground hover:bg-muted/80'
               }`}
             >
               {index + 1}

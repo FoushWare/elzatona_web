@@ -12,7 +12,15 @@ export interface InternalQuestion {
   correctAnswer: 'A' | 'B' | 'C' | 'D' | 'E';
   explanation: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  category: 'javascript' | 'react' | 'css' | 'html' | 'dom' | 'async' | 'es6' | 'git';
+  category:
+    | 'javascript'
+    | 'react'
+    | 'css'
+    | 'html'
+    | 'dom'
+    | 'async'
+    | 'es6'
+    | 'git';
   tags: string[];
   relatedTopics: string[];
 }
@@ -1130,190 +1138,11 @@ export const generalFrontendQuestions: InternalQuestion[] = [
   ...generalFrontendPhase3Questions,
 ];
 
-// Internal Resources Collection
-export const internalResources: InternalResource[] = [
-  // ===== FRONTEND FUNDAMENTALS SECTION =====
-  {
-    id: 'javascript',
-    title: 'JavaScript Fundamentals',
-    description:
-      'Master JavaScript fundamentals with 155 comprehensive questions covering variables, functions, objects, closures, and advanced concepts. Perfect for interview preparation and skill assessment.',
-    icon: '🟨',
-    category: 'javascript',
-    difficulty: 'intermediate',
-    questions: javascriptQuestions,
-    totalQuestions: 155,
-    estimatedTime: 180,
-    prerequisites: [
-      'Basic JavaScript knowledge',
-      'Understanding of programming concepts',
-    ],
-    learningOutcomes: [
-      'Deep understanding of JavaScript core concepts',
-      'Ability to solve complex JavaScript problems',
-      'Interview-ready JavaScript knowledge',
-      'Understanding of common JavaScript pitfalls',
-    ],
-  },
-  {
-    id: 'react',
-    title: 'React Fundamentals',
-    description:
-      'Comprehensive React questions covering hooks, state management, component lifecycle, and modern React patterns. Essential for React developer interviews.',
-    icon: '⚛️',
-    category: 'react',
-    difficulty: 'intermediate',
-    questions: reactQuestions,
-    totalQuestions: 270,
-    estimatedTime: 270,
-    prerequisites: ['Basic React knowledge', 'Understanding of JavaScript'],
-    learningOutcomes: [
-      'Mastery of React hooks and state management',
-      'Understanding of React component lifecycle',
-      'Knowledge of modern React patterns',
-      'Interview-ready React skills',
-    ],
-  },
-  {
-    id: 'css',
-    title: 'CSS Fundamentals',
-    description:
-      'Essential CSS questions covering layout, positioning, flexbox, grid, and responsive design. Perfect for frontend developers and designers.',
-    icon: '🎨',
-    category: 'css',
-    difficulty: 'beginner',
-    questions: cssQuestions,
-    totalQuestions: cssQuestions.length,
-    estimatedTime: 60,
-    prerequisites: ['Basic HTML knowledge', 'Understanding of web design'],
-    learningOutcomes: [
-      'Mastery of CSS layout techniques',
-      'Understanding of responsive design principles',
-      'Knowledge of modern CSS features',
-      'Ability to create complex layouts',
-    ],
-  },
-
-  // ===== THE SENIOR DEV SECTION =====
-  {
-    id: 'webpack-tooling',
-    title: 'Webpack & Tooling',
-    description:
-      'Senior frontend interview questions covering Webpack & Tooling, CSS-in-JS, React Components & Hooks, State Management, Testing strategies, and Web Performance. Essential for senior developer interviews.',
-    icon: '🌱',
-    category: 'senior-dev',
-    difficulty: 'intermediate',
-    questions: generalFrontendPhase1Questions,
-    totalQuestions: 22,
-    estimatedTime: 22,
-    prerequisites: ['Basic knowledge of HTML, CSS, and JavaScript'],
-    learningOutcomes: [
-      'Deep understanding of JavaScript fundamentals',
-      'Knowledge of hoisting, scope, and closures',
-      'Mastery of this keyword and arrow functions',
-      'Understanding of type coercion and equality',
-      'Object property access patterns and references',
-      'Array methods and functional programming concepts',
-      'Error handling and debugging techniques',
-      'DOM manipulation and event handling',
-      'Asynchronous JavaScript concepts',
-    ],
-    videoUrl: 'https://www.youtube.com/watch?v=PeL25__th3s&t=2s',
-    videoTitle: 'JavaScript Fundamentals Tutorial',
-    videoDescription:
-      'Comprehensive video tutorial covering JavaScript fundamentals including hoisting, scope, closures, and core concepts needed for Phase 1 practice questions.',
-  },
-  {
-    id: 'performance-optimization',
-    title: 'Performance Optimization',
-    description:
-      'Intermediate to advanced frontend concepts including browser storage, performance optimization, image optimization, code quality, security, CDN, and micro-frontends. Essential for mid-level to senior developers.',
-    icon: '🚀',
-    category: 'senior-dev',
-    difficulty: 'intermediate',
-    questions: generalFrontendPhase2Questions,
-    totalQuestions: generalFrontendPhase2Questions.length,
-    estimatedTime: 105,
-    prerequisites: [
-      'JavaScript fundamentals',
-      'Basic understanding of web development',
-      'Familiarity with browser APIs',
-      'Experience with React',
-    ],
-    learningOutcomes: [
-      'Browser storage management',
-      'Performance optimization techniques',
-      'Image optimization strategies',
-      'Code quality best practices',
-      'Web security fundamentals',
-      'CDN implementation and optimization',
-      'Micro-frontend architecture understanding',
-    ],
-    videoUrl: 'https://www.youtube.com/watch?v=ILaXhmTraQ4',
-    videoTitle: 'Advanced Frontend Concepts Tutorial',
-    videoDescription:
-      'In-depth tutorial covering intermediate to advanced frontend concepts including performance optimization, security, CDN, and micro-frontends for Phase 2 practice questions.',
-  },
-  {
-    id: 'system-design',
-    title: 'System Design & Architecture',
-    description:
-      'Comprehensive collection of 32+ frontend interview questions covering all phases from fundamentals to advanced concepts. Perfect for comprehensive interview preparation.',
-    icon: '🎯',
-    category: 'senior-dev',
-    difficulty: 'intermediate',
-    questions: generalFrontendQuestions,
-    totalQuestions: generalFrontendQuestions.length,
-    estimatedTime: 330,
-    prerequisites: [
-      'Basic knowledge of HTML, CSS, and JavaScript',
-      'Understanding of web development concepts',
-      'Familiarity with React',
-    ],
-    learningOutcomes: [
-      'Comprehensive understanding of frontend development',
-      'Ability to answer senior-level interview questions',
-      'Knowledge of web technologies and best practices',
-      'Interview-ready frontend skills',
-      'Understanding of performance optimization and testing strategies',
-    ],
-  },
-  {
-    id: 'git-fundamentals',
-    title: 'Git Version Control',
-    description:
-      'Master Git version control with comprehensive questions covering worktrees, branching strategies, merging, rebasing, hooks, and advanced Git workflows. Essential for modern development teams.',
-    icon: '📚',
-    category: 'git',
-    difficulty: 'intermediate',
-    questions: gitQuestions,
-    totalQuestions: gitQuestions.length,
-    estimatedTime: 45,
-    prerequisites: [
-      'Basic understanding of version control concepts',
-      'Familiarity with command line interface',
-      'Experience with collaborative development',
-    ],
-    learningOutcomes: [
-      'Understanding of Git worktrees and their use cases',
-      'Mastery of branching strategies and workflows',
-      'Knowledge of merge vs rebase scenarios',
-      'Ability to use Git hooks for automation',
-      'Understanding of advanced Git operations',
-      'Best practices for collaborative development',
-    ],
-    videoUrl: 'https://www.youtube.com/watch?v=SWYqp7iY_Tc',
-    videoTitle: 'Git Worktree Tutorial',
-    videoDescription:
-      'Comprehensive tutorial covering Git worktrees, including practical examples and best practices for managing multiple branches simultaneously.',
-  },
-];
-
 // Git Questions Resource
 export const gitQuestions: InternalQuestion[] = [
   {
     id: 'git-1',
-    question: "What is Git worktree and how does it work?",
+    question: 'What is Git worktree and how does it work?',
     code: `# Create a new worktree
 git worktree add ../feature-branch feature-branch
 
@@ -1362,7 +1191,7 @@ git rebase main`,
   },
   {
     id: 'git-3',
-    question: "What is a Git hook and what are some common use cases?",
+    question: 'What is a Git hook and what are some common use cases?',
     code: `# Pre-commit hook example
 #!/bin/sh
 npm run lint
@@ -1387,7 +1216,7 @@ npm install`,
   },
   {
     id: 'git-4',
-    question: "What is the difference between git reset and git revert?",
+    question: 'What is the difference between git reset and git revert?',
     code: `# Reset (destructive)
 git reset --hard HEAD~1
 
@@ -1409,7 +1238,7 @@ git revert HEAD`,
   },
   {
     id: 'git-5',
-    question: "What is Git cherry-pick and when would you use it?",
+    question: 'What is Git cherry-pick and when would you use it?',
     code: `# Cherry-pick a specific commit
 git cherry-pick abc1234
 
@@ -1423,11 +1252,38 @@ git cherry-pick abc1234 def5678`,
     },
     correctAnswer: 'A',
     explanation:
-      'Git cherry-pick allows you to apply specific commits from one branch to another. This is useful when you want to bring a specific feature or bug fix from one branch to another without merging the entire branch. It\'s commonly used in scenarios where you have a hotfix that needs to be applied to multiple release branches.',
+      "Git cherry-pick allows you to apply specific commits from one branch to another. This is useful when you want to bring a specific feature or bug fix from one branch to another without merging the entire branch. It's commonly used in scenarios where you have a hotfix that needs to be applied to multiple release branches.",
     difficulty: 'intermediate',
     category: 'git',
     tags: ['cherry-pick', 'commits', 'git-workflow', 'version-control'],
     relatedTopics: ['Git Workflow', 'Branch Management', 'Version Control'],
+  },
+];
+
+// Internal Resources Collection
+export const internalResources: InternalResource[] = [
+  // ===== FRONTEND FUNDAMENTALS SECTION =====
+  {
+    id: 'javascript',
+    title: 'JavaScript Fundamentals',
+    description:
+      'Master JavaScript fundamentals with 155 comprehensive questions covering variables, functions, objects, closures, and advanced concepts. Perfect for interview preparation and skill assessment.',
+    icon: '🟨',
+    category: 'javascript',
+    difficulty: 'intermediate',
+    questions: javascriptQuestions,
+    totalQuestions: 155,
+    estimatedTime: 180,
+    prerequisites: [
+      'Basic JavaScript knowledge',
+      'Understanding of programming concepts',
+    ],
+    learningOutcomes: [
+      'Deep understanding of JavaScript core concepts',
+      'Ability to solve complex JavaScript problems',
+      'Interview-ready JavaScript knowledge',
+      'Understanding of common JavaScript pitfalls',
+    ],
   },
 ];
 
