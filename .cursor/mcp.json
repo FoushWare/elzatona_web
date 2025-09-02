@@ -6,7 +6,7 @@
 			"env": {
 				"ANTHROPIC_API_KEY": "YOUR_ANTHROPIC_API_KEY_HERE",
 				"PERPLEXITY_API_KEY": "YOUR_PERPLEXITY_API_KEY_HERE",
-				"OPENAI_API_KEY": "YOUR_OPENAI_KEY_HERE",
+				"OPENAI_API_KEY": "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",
 				"GOOGLE_API_KEY": "YOUR_GOOGLE_KEY_HERE",
 				"XAI_API_KEY": "YOUR_XAI_KEY_HERE",
 				"OPENROUTER_API_KEY": "YOUR_OPENROUTER_KEY_HERE",
@@ -21,6 +21,10 @@
 			"env": {
 			  "FIRECRAWL_API_KEY": "fc-a3d1b8339862421b898cc89bb10d4791"
 			}
+		  },
+		  "firebase": {
+			"command": "npx",
+			"args": ["-y", "firebase-tools@latest", "experimental:mcp"]
 		  }
 	}
 }
