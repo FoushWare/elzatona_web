@@ -1,50 +1,51 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   greatFrontendQuestions,
   getCompanies,
   getTags,
-} from "@/lib/greatfrontendQuestions";
+} from '@/lib/greatfrontendQuestions';
 // import { useTranslation } from "@/hooks/useTranslation";
 
 export default function QuestionsPage() {
   const router = useRouter();
   // const { t, isRTL } = useTranslation();
   const [activeTab, setActiveTab] = useState<
-    "coding" | "system-design" | "quiz"
-  >("coding");
+    'coding' | 'system-design' | 'quiz'
+  >('coding');
   const [activeSubCategory, setActiveSubCategory] = useState<string>(
-    "javascript-functions"
+    'javascript-functions'
   );
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<"popularity" | "difficulty" | "newest">(
-    "popularity"
+  const [sortBy, setSortBy] = useState<'popularity' | 'difficulty' | 'newest'>(
+    'popularity'
   );
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
   // Filter questions based on current selections
-  const filteredQuestions = greatFrontendQuestions.filter((question) => {
+  const filteredQuestions = greatFrontendQuestions.filter(question => {
     // Map categories to tabs
     const categoryToTab = {
-      "JavaScript Functions": "coding",
-      "User Interface Coding": "coding",
-      "Algorithmic Coding": "coding",
-      "System Design": "system-design",
-      React: "coding",
-      CSS: "coding",
-      "Web APIs": "coding",
-      Testing: "quiz",
+      'JavaScript Functions': 'coding',
+      'User Interface Coding': 'coding',
+      'Algorithmic Coding': 'coding',
+      'System Design': 'system-design',
+      React: 'coding',
+      CSS: 'coding',
+      'Web APIs': 'coding',
+      Testing: 'quiz',
     };
 
     const questionTab =
       categoryToTab[question.category as keyof typeof categoryToTab] ||
-      "coding";
+      'coding';
     if (questionTab !== activeTab) return false;
 
     if (
@@ -55,8 +56,8 @@ export default function QuestionsPage() {
       return false;
     if (
       selectedTopics.length > 0 &&
-      !selectedTopics.some((topic) =>
-        question.tags.some((tag) =>
+      !selectedTopics.some(topic =>
+        question.tags.some(tag =>
           tag.toLowerCase().includes(topic.toLowerCase())
         )
       )
@@ -64,13 +65,11 @@ export default function QuestionsPage() {
       return false;
     if (
       selectedCompanies.length > 0 &&
-      !selectedCompanies.some((company) =>
-        question.companies?.includes(company)
-      )
+      !selectedCompanies.some(company => question.companies?.includes(company))
     )
       return false;
     if (
-      selectedDifficulty !== "all" &&
+      selectedDifficulty !== 'all' &&
       question.difficulty !== selectedDifficulty
     )
       return false;
@@ -80,12 +79,12 @@ export default function QuestionsPage() {
   // Sort questions
   const sortedQuestions = [...filteredQuestions].sort((a, b) => {
     switch (sortBy) {
-      case "popularity":
+      case 'popularity':
         return (b.completionRate || 0) - (a.completionRate || 0);
-      case "difficulty":
+      case 'difficulty':
         const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
         return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-      case "newest":
+      case 'newest':
         return b.id.localeCompare(a.id);
       default:
         return 0;
@@ -101,17 +100,17 @@ export default function QuestionsPage() {
   const filteredCount = filteredQuestions.length;
 
   const toggleTopic = (topicId: string) => {
-    setSelectedTopics((prev) =>
+    setSelectedTopics(prev =>
       prev.includes(topicId)
-        ? prev.filter((id) => id !== topicId)
+        ? prev.filter(id => id !== topicId)
         : [...prev, topicId]
     );
   };
 
   const toggleCompany = (companyId: string) => {
-    setSelectedCompanies((prev) =>
+    setSelectedCompanies(prev =>
       prev.includes(companyId)
-        ? prev.filter((id) => id !== companyId)
+        ? prev.filter(id => id !== companyId)
         : [...prev, companyId]
     );
   };
@@ -123,8 +122,8 @@ export default function QuestionsPage() {
   const clearFilters = () => {
     setSelectedTopics([]);
     setSelectedCompanies([]);
-    setSearchTerm("");
-    setSelectedDifficulty("all");
+    setSearchTerm('');
+    setSelectedDifficulty('all');
   };
 
   const handleQuestionClick = (questionId: string) => {
@@ -137,7 +136,9 @@ export default function QuestionsPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header Section */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4 text-foreground">All Practice Questions</h1>
+          <h1 className="text-4xl font-bold mb-4 text-foreground">
+            All Practice Questions
+          </h1>
           <p className="text-lg text-muted-foreground mb-6">
             The largest question bank of 500+ practice questions for front end
             interviews
@@ -190,12 +191,28 @@ export default function QuestionsPage() {
             </span>
           </div>
 
-          <p className="text-muted-foreground max-w-3xl">
+          <p className="text-muted-foreground max-w-3xl mb-6">
             Save the trouble of searching the web for front end interview
             questions. We have 500+ practice questions in every framework,
             format, and topic, each with high quality answers and tests from big
             tech senior / staff engineers.
           </p>
+
+          {/* Quick Access Buttons */}
+          <div className="flex flex-wrap gap-4">
+            <Link
+              href="/questions/multiple-choice"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg"
+            >
+              🎯 Multiple Choice Quiz
+            </Link>
+            <Link
+              href="/coding"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 font-medium shadow-lg"
+            >
+              💻 Coding Challenges
+            </Link>
+          </div>
 
           {/* Mobile Toggle Buttons */}
           <div className="flex flex-wrap gap-3 mt-6 md:hidden">
@@ -203,13 +220,13 @@ export default function QuestionsPage() {
               onClick={() => setShowStatistics(!showStatistics)}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
             >
-              {showStatistics ? "Hide Statistics" : "Show Statistics"}
+              {showStatistics ? 'Hide Statistics' : 'Show Statistics'}
             </button>
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
             >
-              {showFilters ? "Hide Filters" : "Show Filters"}
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
             </button>
           </div>
         </div>
@@ -221,7 +238,7 @@ export default function QuestionsPage() {
               type="text"
               placeholder="Search within this list of questions"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
             />
             <svg
@@ -239,9 +256,9 @@ export default function QuestionsPage() {
 
           <select
             value={sortBy}
-            onChange={(e) =>
+            onChange={e =>
               setSortBy(
-                e.target.value as "popularity" | "difficulty" | "newest"
+                e.target.value as 'popularity' | 'difficulty' | 'newest'
               )
             }
             className="px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
@@ -254,16 +271,16 @@ export default function QuestionsPage() {
 
         {/* Content Tabs */}
         <div className="flex space-x-1 mb-6">
-          {["coding", "system-design", "quiz"].map((tab) => (
+          {['coding', 'system-design', 'quiz'].map(tab => (
             <button
               key={tab}
               onClick={() =>
-                setActiveTab(tab as "coding" | "system-design" | "quiz")
+                setActiveTab(tab as 'coding' | 'system-design' | 'quiz')
               }
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 activeTab === tab
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -278,7 +295,7 @@ export default function QuestionsPage() {
           </h3>
           <div className="flex flex-wrap gap-3">
             <button
-              onClick={() => router.push("/questions/javascript")}
+              onClick={() => router.push('/questions/javascript')}
               className="flex items-center space-x-2 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -290,23 +307,23 @@ export default function QuestionsPage() {
         </div>
 
         {/* Coding Sub-categories */}
-        {activeTab === "coding" && (
+        {activeTab === 'coding' && (
           <div className="flex flex-wrap gap-2 mb-6">
             {[
-              "JavaScript Functions",
-              "User Interface Coding",
-              "Algorithmic Coding",
-              "React",
-              "CSS",
-              "Web APIs",
-            ].map((subCategory) => (
+              'JavaScript Functions',
+              'User Interface Coding',
+              'Algorithmic Coding',
+              'React',
+              'CSS',
+              'Web APIs',
+            ].map(subCategory => (
               <button
                 key={subCategory}
                 onClick={() => setActiveSubCategory(subCategory)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   activeSubCategory === subCategory
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                 }`}
               >
                 {subCategory}
@@ -320,18 +337,20 @@ export default function QuestionsPage() {
           <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
             <div className="flex items-center space-x-6">
               <span className="text-gray-300">
-                <span className="font-semibold text-white">{filteredCount}</span>{" "}
+                <span className="font-semibold text-white">
+                  {filteredCount}
+                </span>{' '}
                 of {totalQuestions} questions
               </span>
               <span className="text-gray-300">
-                <span className="font-semibold text-white">{totalHours}</span>{" "}
+                <span className="font-semibold text-white">{totalHours}</span>{' '}
                 hours of content
               </span>
             </div>
 
             {(selectedTopics.length > 0 ||
               selectedCompanies.length > 0 ||
-              selectedDifficulty !== "all") && (
+              selectedDifficulty !== 'all') && (
               <button
                 onClick={clearFilters}
                 className="text-blue-400 hover:text-blue-300 text-sm"
@@ -347,7 +366,7 @@ export default function QuestionsPage() {
           {/* Questions List */}
           <div className="flex-1">
             <div className="space-y-4">
-              {sortedQuestions.map((question) => (
+              {sortedQuestions.map(question => (
                 <div
                   key={question.id}
                   onClick={() => handleQuestionClick(question.id)}
@@ -384,11 +403,11 @@ export default function QuestionsPage() {
                     <div className="flex items-center space-x-4">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          question.difficulty === "easy"
-                            ? "bg-green-100 text-green-800"
-                            : question.difficulty === "medium"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
+                          question.difficulty === 'easy'
+                            ? 'bg-green-100 text-green-800'
+                            : question.difficulty === 'medium'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
                         }`}
                       >
                         {question.difficulty.charAt(0).toUpperCase() +
@@ -436,12 +455,14 @@ export default function QuestionsPage() {
           </div>
 
           {/* Right Sidebar */}
-          <div className={`${showFilters ? 'block' : 'hidden md:block'} w-80 space-y-6`}>
+          <div
+            className={`${showFilters ? 'block' : 'hidden md:block'} w-80 space-y-6`}
+          >
             {/* Topics Filter */}
             <div className="bg-gray-800 rounded-lg p-4">
               <h3 className="text-lg font-semibold mb-4">Filter by Topics</h3>
               <div className="space-y-2 max-h-64 overflow-y-auto">
-                {availableTopics.slice(0, 20).map((topic) => (
+                {availableTopics.slice(0, 20).map(topic => (
                   <label
                     key={topic}
                     className="flex items-center space-x-2 cursor-pointer"
@@ -464,7 +485,7 @@ export default function QuestionsPage() {
                 Filter by Companies
               </h3>
               <div className="space-y-2 max-h-64 overflow-y-auto">
-                {availableCompanies.map((company) => (
+                {availableCompanies.map(company => (
                   <label
                     key={company}
                     className="flex items-center space-x-2 cursor-pointer"
@@ -485,7 +506,7 @@ export default function QuestionsPage() {
             <div className="bg-gray-800 rounded-lg p-4">
               <h3 className="text-lg font-semibold mb-4">Difficulty</h3>
               <div className="space-y-2">
-                {["all", "easy", "medium", "hard"].map((difficulty) => (
+                {['all', 'easy', 'medium', 'hard'].map(difficulty => (
                   <label
                     key={difficulty}
                     className="flex items-center space-x-2 cursor-pointer"
@@ -495,7 +516,7 @@ export default function QuestionsPage() {
                       name="difficulty"
                       value={difficulty}
                       checked={selectedDifficulty === difficulty}
-                      onChange={(e) => setSelectedDifficulty(e.target.value)}
+                      onChange={e => setSelectedDifficulty(e.target.value)}
                       className="border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500"
                     />
                     <span className="text-gray-300 capitalize">

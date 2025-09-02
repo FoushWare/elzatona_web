@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { internalResources } from '@/lib/internalResources';
+// import { internalResources } from '@/lib/internalResources';
 
 function FrontendQuestionsPageContent() {
   const searchParams = useSearchParams();
@@ -25,9 +25,18 @@ function FrontendQuestionsPageContent() {
 
   // Filter resources to include frontend fundamentals and Git (JS, React, CSS, Git)
   const frontendResources = useMemo(() => {
-    return internalResources.filter(resource =>
-      ['javascript', 'react', 'css', 'git'].includes(resource.category)
-    );
+    // return internalResources.filter(resource =>
+    //   ['javascript', 'react', 'css', 'git'].includes(resource.category)
+    // );
+    return [] as Array<{
+      id: string;
+      title: string;
+      description: string;
+      category: string;
+      difficulty: string;
+      totalQuestions: number;
+      estimatedTime: number;
+    }>; // Temporarily disabled to isolate build error
   }, []);
 
   // Filter resources based on search and filters

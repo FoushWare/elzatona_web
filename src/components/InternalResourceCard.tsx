@@ -1,11 +1,20 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { InternalResource } from "@/lib/internalResources";
+import { useState } from 'react';
+import Link from 'next/link';
+// import { InternalResource } from "@/lib/internalResources";
 
 interface InternalResourceCardProps {
-  resource: InternalResource;
+  resource: {
+    id: string;
+    title: string;
+    description: string;
+    difficulty: string;
+    icon: string;
+    totalQuestions: number;
+    estimatedTime: number;
+    videoUrl?: string;
+  }; // Temporarily disabled to isolate build error
 }
 
 export default function InternalResourceCard({
@@ -15,27 +24,27 @@ export default function InternalResourceCard({
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "beginner":
-        return "text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/20";
-      case "intermediate":
-        return "text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/20";
-      case "advanced":
-        return "text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/20";
+      case 'beginner':
+        return 'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/20';
+      case 'intermediate':
+        return 'text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/20';
+      case 'advanced':
+        return 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/20';
       default:
-        return "text-muted-foreground bg-muted";
+        return 'text-muted-foreground bg-muted';
     }
   };
 
   const getDifficultyBgColor = (difficulty: string) => {
     switch (difficulty) {
-      case "beginner":
-        return "bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800";
-      case "intermediate":
-        return "bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-800";
-      case "advanced":
-        return "bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800";
+      case 'beginner':
+        return 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800';
+      case 'intermediate':
+        return 'bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-800';
+      case 'advanced':
+        return 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800';
       default:
-        return "bg-muted border-border";
+        return 'bg-muted border-border';
     }
   };
 
@@ -102,10 +111,10 @@ export default function InternalResourceCard({
           onClick={() => setShowDetails(!showDetails)}
           className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium flex items-center space-x-1"
         >
-          <span>{showDetails ? "Hide" : "Show"} Details</span>
+          <span>{showDetails ? 'Hide' : 'Show'} Details</span>
           <svg
             className={`w-4 h-4 transform transition-transform ${
-              showDetails ? "rotate-180" : ""
+              showDetails ? 'rotate-180' : ''
             }`}
             fill="none"
             stroke="currentColor"

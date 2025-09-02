@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { generalFrontendPhase2Questions } from "@/lib/internalResources";
+import { useState } from 'react';
+// import { generalFrontendPhase2Questions } from "@/lib/internalResources";
 
 export default function TheSeniorDev02Page() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -9,8 +9,17 @@ export default function TheSeniorDev02Page() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  const currentQuestion = generalFrontendPhase2Questions[currentQuestionIndex];
-  const totalQuestions = generalFrontendPhase2Questions.length;
+  // const currentQuestion = generalFrontendPhase2Questions[currentQuestionIndex];
+  // const totalQuestions = generalFrontendPhase2Questions.length;
+
+  // Temporarily disabled to isolate build error
+  const currentQuestion = {
+    question: 'Question temporarily unavailable',
+    code: '',
+    options: { A: 'Option A', B: 'Option B', C: 'Option C', D: 'Option D' },
+    correctAnswer: 'A',
+  };
+  const totalQuestions = 1;
 
   const handleAnswerSelect = (answer: string) => {
     setSelectedAnswer(answer);
@@ -36,12 +45,12 @@ export default function TheSeniorDev02Page() {
     }
   };
 
-  const handleQuestionSelect = (index: number) => {
-    setCurrentQuestionIndex(index);
-    setShowAnswer(false);
-    setSelectedAnswer(null);
-    setIsCorrect(null);
-  };
+  // const handleQuestionSelect = (index: number) => {
+  //   setCurrentQuestionIndex(index);
+  //   setShowAnswer(false);
+  //   setSelectedAnswer(null);
+  //   setIsCorrect(null);
+  // };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -104,12 +113,12 @@ export default function TheSeniorDev02Page() {
               className={`w-full text-left p-4 rounded-lg border transition-all duration-200 ${
                 selectedAnswer === key
                   ? isCorrect
-                    ? "bg-green-100 border-green-500 text-green-800"
-                    : "bg-red-100 border-red-500 text-red-800"
+                    ? 'bg-green-100 border-green-500 text-green-800'
+                    : 'bg-red-100 border-red-500 text-red-800'
                   : showAnswer && key === currentQuestion.correctAnswer
-                  ? "bg-green-100 border-green-500 text-green-800"
-                  : "bg-background border-border hover:bg-muted"
-              } ${showAnswer ? "cursor-default" : "cursor-pointer"}`}
+                    ? 'bg-green-100 border-green-500 text-green-800'
+                    : 'bg-background border-border hover:bg-muted'
+              } ${showAnswer ? 'cursor-default' : 'cursor-pointer'}`}
             >
               <span className="font-medium mr-2">{key}.</span>
               {value}
@@ -121,7 +130,7 @@ export default function TheSeniorDev02Page() {
         {showAnswer && (
           <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 mb-6">
             <h3 className="font-semibold text-purple-800 dark:text-purple-200 mb-2">
-              {isCorrect ? "✅ Correct!" : "❌ Incorrect"}
+              {isCorrect ? '✅ Correct!' : '❌ Incorrect'}
             </h3>
             <p className="text-purple-700 dark:text-purple-300">
               {currentQuestion.explanation}
@@ -155,8 +164,9 @@ export default function TheSeniorDev02Page() {
           Question Navigation
         </h3>
         <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
-          {generalFrontendPhase2Questions.map((_, index) => (
-            <button
+          {/* generalFrontendPhase2Questions.map((_, index) => ( */}
+          {/* Temporarily disabled to isolate build error */}
+          {/* <button
               key={index}
               onClick={() => handleQuestionSelect(index)}
               className={`p-2 text-sm rounded-md transition-colors ${
@@ -166,8 +176,8 @@ export default function TheSeniorDev02Page() {
               }`}
             >
               {index + 1}
-            </button>
-          ))}
+            </button> */}
+          {/* ))} */}
         </div>
       </div>
 

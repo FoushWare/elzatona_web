@@ -135,14 +135,14 @@ export default function HTMLPracticePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-8">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 dark:from-gray-900 dark:via-orange-900/20 dark:to-red-900/20 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8">
-          <nav className="mb-6">
+        <div className="mb-12">
+          <nav className="mb-8">
             <Link
               href="/preparation-guides"
-              className="text-muted-foreground hover:text-foreground transition-colors flex items-center"
+              className="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-200 font-medium shadow-sm hover:shadow-md"
             >
               <svg
                 className="w-4 h-4 mr-2"
@@ -162,21 +162,25 @@ export default function HTMLPracticePage() {
           </nav>
 
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-foreground mb-4">
-              🎯 HTML Practice Questions
+            <div className="w-24 h-24 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <span className="text-4xl">🎨</span>
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent mb-6">
+              HTML Practice Questions
             </h1>
-            <p className="text-xl text-muted-foreground mb-6">
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
               Master HTML fundamentals with these essential interview questions
+              covering semantics, accessibility, and modern web standards
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <span className="px-4 py-2 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
+              <span className="px-6 py-3 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 text-blue-700 dark:text-blue-300 rounded-xl text-sm font-bold border-2 border-blue-200 dark:border-blue-700 shadow-sm">
                 {htmlQuestions.length} Questions
               </span>
-              <span className="px-4 py-2 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-full text-sm font-medium">
-                Beginner to Intermediate
+              <span className="px-6 py-3 bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 text-green-700 dark:text-green-300 rounded-xl text-sm font-bold border-2 border-green-200 dark:border-green-700 shadow-sm">
+                Beginner to Advanced
               </span>
-              <span className="px-4 py-2 bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium">
-                HTML5 & Semantics
+              <span className="px-6 py-3 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300 rounded-xl text-sm font-bold border-2 border-purple-200 dark:border-purple-700 shadow-sm">
+                Semantic & Modern
               </span>
             </div>
           </div>
@@ -187,61 +191,51 @@ export default function HTMLPracticePage() {
           {htmlQuestions.map(question => (
             <div
               key={question.id}
-              className="bg-card rounded-xl shadow-sm border border-border overflow-hidden hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border-2 border-orange-200 dark:border-orange-800 overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group"
             >
               <button
                 onClick={() => handleQuestionClick(question.id)}
-                className="w-full p-6 text-left hover:bg-muted/50 transition-colors"
+                className="w-full p-8 text-left hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 dark:hover:from-orange-900/20 dark:hover:to-red-900/20 transition-all duration-300"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="w-8 h-8 bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-sm font-bold">
-                        {question.id}
-                      </span>
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          question.difficulty === 'Beginner'
-                            ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300'
-                            : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300'
-                        }`}
-                      >
-                        {question.difficulty}
-                      </span>
-                      <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-xs">
-                        {question.category}
-                      </span>
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-md">
+                        <span className="text-white text-lg font-bold">
+                          {question.id}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={`px-4 py-2 rounded-xl text-sm font-bold border-2 ${
+                            question.difficulty === 'Beginner'
+                              ? 'bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700'
+                              : question.difficulty === 'Intermediate'
+                                ? 'bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-700'
+                                : 'bg-gradient-to-r from-red-100 to-pink-100 dark:from-red-900/30 dark:to-pink-900/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-700'
+                          }`}
+                        >
+                          {question.difficulty}
+                        </span>
+                        <span className="px-4 py-2 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 text-blue-700 dark:text-blue-300 rounded-xl text-sm font-bold border-2 border-blue-200 dark:border-blue-700">
+                          {question.category}
+                        </span>
+                      </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground mb-2">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors leading-relaxed">
                       {question.question}
                     </h3>
                   </div>
-                  <svg
-                    className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ml-4 flex-shrink-0 ${
-                      selectedQuestion === question.id && showAnswer
-                        ? 'rotate-180'
-                        : ''
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-              </button>
-
-              {selectedQuestion === question.id && showAnswer && (
-                <div className="border-t border-border p-6 bg-muted/20">
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-foreground mb-3 flex items-center">
+                  <div className="ml-6 flex items-center">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                        selectedQuestion === question.id && showAnswer
+                          ? 'bg-orange-500 text-white rotate-180'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 group-hover:bg-orange-100 dark:group-hover:bg-orange-900/30 group-hover:text-orange-600 dark:group-hover:text-orange-400'
+                      }`}
+                    >
                       <svg
-                        className="w-5 h-5 text-green-500 mr-2"
+                        className="w-5 h-5 transition-transform duration-300"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -250,20 +244,46 @@ export default function HTMLPracticePage() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth="2"
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          d="M19 9l-7 7-7-7"
                         />
                       </svg>
+                    </div>
+                  </div>
+                </div>
+              </button>
+
+              {selectedQuestion === question.id && showAnswer && (
+                <div className="border-t-2 border-orange-200 dark:border-orange-800 p-8 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20">
+                  <div className="mb-6">
+                    <h4 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center text-xl">
+                      <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mr-3 shadow-md">
+                        <svg
+                          className="w-5 h-5 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
                       Answer
                     </h4>
-                    <p className="text-foreground leading-relaxed">
-                      {question.answer}
-                    </p>
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border-2 border-green-200 dark:border-green-800 shadow-md">
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                        {question.answer}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-4">
                     <Link
                       href="/coding"
-                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                      className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                     >
                       🎯 Practice Coding
                     </Link>
@@ -271,13 +291,13 @@ export default function HTMLPracticePage() {
                       href="https://developer.mozilla.org/en-US/docs/Web/HTML"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                      className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                     >
                       📚 MDN Docs
                     </Link>
                     <Link
                       href="/practice/fundamentals"
-                      className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
+                      className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                     >
                       🔄 More Questions
                     </Link>
@@ -289,30 +309,36 @@ export default function HTMLPracticePage() {
         </div>
 
         {/* Call to Action */}
-        <div className="mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white text-center">
-          <h2 className="text-2xl font-bold mb-4">Ready for More Practice?</h2>
-          <p className="text-blue-100 mb-6">
-            Continue your learning journey with related topics
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href="/practice/fundamentals/css"
-              className="inline-flex items-center px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
-            >
-              🎨 CSS Practice
-            </Link>
-            <Link
-              href="/practice/fundamentals/javascript"
-              className="inline-flex items-center px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
-            >
-              ⚡ JavaScript Practice
-            </Link>
-            <Link
-              href="/coding"
-              className="inline-flex items-center px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
-            >
-              🎯 Coding Challenges
-            </Link>
+        <div className="mt-16 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 rounded-2xl p-10 text-white text-center shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-black/10 rounded-2xl"></div>
+          <div className="relative z-10">
+            <h2 className="text-3xl font-bold mb-6">
+              Ready for More Practice?
+            </h2>
+            <p className="text-orange-100 mb-8 text-lg leading-relaxed">
+              Continue your learning journey with related topics and master the
+              complete frontend stack
+            </p>
+            <div className="flex flex-wrap justify-center gap-6">
+              <Link
+                href="/practice/fundamentals/css"
+                className="inline-flex items-center px-8 py-4 bg-white text-orange-600 rounded-xl hover:bg-orange-50 transition-all duration-200 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                🎨 CSS Practice
+              </Link>
+              <Link
+                href="/practice/fundamentals/javascript"
+                className="inline-flex items-center px-8 py-4 bg-white text-orange-600 rounded-xl hover:bg-orange-50 transition-all duration-200 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                ⚡ JavaScript Practice
+              </Link>
+              <Link
+                href="/coding"
+                className="inline-flex items-center px-8 py-4 bg-white text-orange-600 rounded-xl hover:bg-orange-50 transition-all duration-200 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                🎯 Coding Challenges
+              </Link>
+            </div>
           </div>
         </div>
       </div>

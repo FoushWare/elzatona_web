@@ -1,32 +1,41 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import Link from "next/link";
-import { internalResources } from "@/lib/internalResources";
+import { useState, useMemo } from 'react';
+import Link from 'next/link';
+// import { internalResources } from "@/lib/internalResources";
 
 export default function SeniorDevPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
   // Filter resources to only include senior dev content
   const seniorDevResources = useMemo(() => {
-    return internalResources.filter(
-      (resource) => resource.category === "senior-dev"
-    );
+    // return internalResources.filter(
+    //   (resource) => resource.category === "senior-dev"
+    // );
+    return [] as Array<{
+      id: string;
+      title: string;
+      description: string;
+      category: string;
+      difficulty: string;
+      totalQuestions: number;
+      estimatedTime: number;
+    }>; // Temporarily disabled to isolate build error
   }, []);
 
   // Filter resources based on search and filters
   const filteredResources = useMemo(() => {
-    return seniorDevResources.filter((resource) => {
+    return seniorDevResources.filter(resource => {
       const matchesSearch =
-        searchQuery === "" ||
+        searchQuery === '' ||
         resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         resource.description.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesDifficulty =
-        selectedDifficulty === "all" ||
+        selectedDifficulty === 'all' ||
         resource.difficulty === selectedDifficulty;
 
       return matchesSearch && matchesDifficulty;
@@ -66,14 +75,14 @@ export default function SeniorDevPage() {
               onClick={() => setShowStatistics(!showStatistics)}
               className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
-              {showStatistics ? "Hide Statistics" : "Show Statistics"}
+              {showStatistics ? 'Hide Statistics' : 'Show Statistics'}
               <span>📊</span>
             </button>
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
-              {showFilters ? "Hide Filters" : "Show Filters"}
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
               <span>🔍</span>
             </button>
           </div>
@@ -96,7 +105,7 @@ export default function SeniorDevPage() {
                   placeholder="Search senior-level questions, topics, or concepts..."
                   className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-lg transition-all duration-200"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={e => setSearchQuery(e.target.value)}
                 />
               </div>
               <div>
@@ -110,7 +119,7 @@ export default function SeniorDevPage() {
                   id="difficulty"
                   className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-lg transition-all duration-200"
                   value={selectedDifficulty}
-                  onChange={(e) => setSelectedDifficulty(e.target.value)}
+                  onChange={e => setSelectedDifficulty(e.target.value)}
                 >
                   <option value="all">All Difficulties</option>
                   <option value="beginner">Beginner</option>
@@ -123,7 +132,9 @@ export default function SeniorDevPage() {
         </div>
 
         {/* Statistics Cards */}
-        <div className={`${showStatistics ? 'block' : 'hidden md:grid'} grid-cols-1 md:grid-cols-4 gap-6 mb-8`}>
+        <div
+          className={`${showStatistics ? 'block' : 'hidden md:grid'} grid-cols-1 md:grid-cols-4 gap-6 mb-8`}
+        >
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 border-blue-200 dark:border-blue-800 p-6 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
             <div className="flex items-center justify-center mb-4">
               <span className="text-3xl">📚</span>
@@ -172,7 +183,7 @@ export default function SeniorDevPage() {
 
         {/* Resources Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {filteredResources.map((resource) => (
+          {filteredResources.map(resource => (
             <div
               key={resource.id}
               className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 border-purple-200 dark:border-purple-800 p-8 hover:shadow-2xl transition-all duration-300 hover:scale-105 transform"
