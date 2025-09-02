@@ -4,7 +4,7 @@ import './globals.css';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
 import { Navbar } from '@/components/Navbar';
-// import { ChatGPT } from '@/components/ChatGPT';
+import { ChatGPT } from '@/components/ChatGPT';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -49,7 +49,7 @@ export default function RootLayout({
             <div className="min-h-screen bg-background text-foreground">
               <Navbar />
               <main>{children}</main>
-              {/* <ChatGPT /> */}
+              <ChatGPT />
             </div>
           </FirebaseAuthProvider>
         </ThemeProvider>
