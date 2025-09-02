@@ -159,6 +159,23 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     difficulty: 'easy',
     tags: ['browser-api', 'javascript', 'reload'],
   },
+  {
+    id: 'javascript-refresh-screen',
+    question:
+      'Which of the following is the correct way to refresh (reload) the current page in JavaScript?',
+    options: [
+      'window.refresh()',
+      'window.location.reload()',
+      'document.reload()',
+      'location.refresh()',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'window.location.reload() is the standard way to reload the page in JavaScript. Other options like refresh(), document.reload(), and location.refresh() do not exist in the JavaScript API.',
+    category: 'javascript',
+    difficulty: 'easy',
+    tags: ['javascript', 'dom', 'browser-api', 'page-refresh'],
+  },
 
   // WebSocket Questions
   {
