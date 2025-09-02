@@ -799,6 +799,352 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     difficulty: 'hard',
     tags: ['javascript', 'generators', 'yield', 'iteration', 'es6', 'senior'],
   },
+
+  // New questions from interview materials (2025)
+  {
+    id: 'js-advanced-1',
+    question:
+      'What is the difference between Object.freeze() and Object.seal() in JavaScript?',
+    options: [
+      'Object.freeze() prevents adding/deleting properties, Object.seal() only prevents adding',
+      'Object.freeze() prevents all modifications, Object.seal() allows value changes',
+      'Object.freeze() is shallow, Object.seal() is deep',
+      'Object.freeze() works on arrays, Object.seal() only works on objects',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'Object.freeze() makes an object completely immutable (no adding, deleting, or modifying properties), while Object.seal() only prevents adding/deleting properties but allows modifying existing property values.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['objects', 'immutability', 'advanced-js', 'interview'],
+  },
+  {
+    id: 'js-advanced-2',
+    question: 'What is the Temporal Dead Zone (TDZ) in JavaScript?',
+    options: [
+      'A period when variables are hoisted but not accessible',
+      'The time between variable declaration and initialization',
+      'A zone where let/const variables exist but cannot be accessed before declaration',
+      'A period when the JavaScript engine is processing async operations',
+    ],
+    correctAnswer: 2,
+    explanation:
+      'The Temporal Dead Zone is the period between entering a scope and the actual declaration of a let/const variable, during which the variable exists but cannot be accessed, resulting in a ReferenceError.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['hoisting', 'let-const', 'advanced-js', 'interview'],
+  },
+  {
+    id: 'js-advanced-3',
+    question: 'What is the difference between WeakMap and Map in JavaScript?',
+    options: [
+      'WeakMap only stores primitive values, Map stores any values',
+      'WeakMap keys must be objects, Map keys can be any value',
+      'WeakMap is faster but less memory efficient',
+      'WeakMap automatically garbage collects keys, Map does not',
+    ],
+    correctAnswer: 3,
+    explanation:
+      'WeakMap keys must be objects and are weakly referenced, meaning they can be garbage collected if no other references exist. Map keys are strongly referenced and prevent garbage collection.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['collections', 'memory-management', 'advanced-js', 'interview'],
+  },
+  {
+    id: 'js-advanced-4',
+    question:
+      'What is the difference between for...in and for...of loops in JavaScript?',
+    options: [
+      'for...in iterates over values, for...of iterates over keys',
+      'for...in iterates over enumerable properties, for...of iterates over iterable values',
+      'for...in is faster, for...of is more memory efficient',
+      'for...in works with arrays, for...of works with objects',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'for...in iterates over enumerable property names (including inherited ones), while for...of iterates over the actual values of iterable objects like arrays, strings, etc.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['loops', 'iteration', 'advanced-js', 'interview'],
+  },
+  {
+    id: 'js-advanced-5',
+    question:
+      'What is the Reflect API in JavaScript and when would you use it?',
+    options: [
+      'A way to reflect light in web applications',
+      'A built-in API for introspection and manipulation of objects',
+      'A method to create reflective surfaces in CSS',
+      'An API for handling HTTP reflections',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'The Reflect API provides methods for interceptable JavaScript operations, making it easier to work with objects programmatically and providing a more consistent interface than direct property access.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['reflect-api', 'introspection', 'advanced-js', 'interview'],
+  },
+  {
+    id: 'react-advanced-1',
+    question: 'What is React Fiber and how does it improve performance?',
+    options: [
+      'A new rendering engine that uses Web Workers',
+      'A reconciliation algorithm that enables incremental rendering',
+      'A state management library for React',
+      'A bundling tool for React applications',
+    ],
+    correctAnswer: 1,
+    explanation:
+      "React Fiber is a complete rewrite of React's reconciliation algorithm that enables incremental rendering, allowing React to split rendering work into chunks and prioritize updates.",
+    category: 'react',
+    difficulty: 'hard',
+    tags: ['react-fiber', 'reconciliation', 'performance', 'interview'],
+  },
+  {
+    id: 'react-advanced-2',
+    question: 'How does React Reconciliation work and why is it important?',
+    options: [
+      'It compares virtual DOM trees to minimize real DOM updates',
+      'It reconciles state between different components',
+      'It handles API reconciliation for data fetching',
+      'It manages component lifecycle reconciliation',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'React Reconciliation is the process of comparing the new virtual DOM tree with the previous one to determine the minimal set of changes needed to update the real DOM, improving performance.',
+    category: 'react',
+    difficulty: 'hard',
+    tags: ['reconciliation', 'virtual-dom', 'performance', 'interview'],
+  },
+  {
+    id: 'react-advanced-3',
+    question: 'What is the Virtual DOM and how does it work in React?',
+    options: [
+      'A lightweight copy of the real DOM in memory',
+      'A virtual reality interface for React components',
+      'A DOM manipulation library for React',
+      'A virtual environment for testing React components',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'The Virtual DOM is a lightweight JavaScript representation of the actual DOM that React uses to optimize updates by comparing it with the real DOM and applying only the necessary changes.',
+    category: 'react',
+    difficulty: 'medium',
+    tags: ['virtual-dom', 'react-core', 'performance', 'interview'],
+  },
+  {
+    id: 'react-advanced-4',
+    question: 'What are React Hooks and what are the Rules of Hooks?',
+    options: [
+      'Functions that let you use state and other React features in functional components',
+      'Custom functions that replace class components entirely',
+      'Event handlers for React components',
+      'Utility functions for React development',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'React Hooks are functions that allow functional components to use state and other React features. The Rules of Hooks include: only call hooks at the top level and only call hooks from React functions.',
+    category: 'react',
+    difficulty: 'medium',
+    tags: ['hooks', 'functional-components', 'react-core', 'interview'],
+  },
+  {
+    id: 'react-advanced-5',
+    question:
+      'What is the difference between useMemo and useCallback in React?',
+    options: [
+      'useMemo memoizes values, useCallback memoizes functions',
+      'useMemo is for arrays, useCallback is for objects',
+      'useMemo is synchronous, useCallback is asynchronous',
+      'useMemo is for state, useCallback is for effects',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'useMemo memoizes the result of a computation (value), while useCallback memoizes a function reference. Both help prevent unnecessary re-renders and recalculations.',
+    category: 'react',
+    difficulty: 'medium',
+    tags: ['hooks', 'performance', 'memoization', 'interview'],
+  },
+  {
+    id: 'css-advanced-1',
+    question: 'What is CSS Grid and how does it differ from Flexbox?',
+    options: [
+      'CSS Grid is 2D layout system, Flexbox is 1D',
+      'CSS Grid is for images, Flexbox is for text',
+      'CSS Grid is newer, Flexbox is older',
+      'CSS Grid is for mobile, Flexbox is for desktop',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'CSS Grid is a 2D layout system that can handle both rows and columns simultaneously, while Flexbox is primarily a 1D layout system for either rows or columns.',
+    category: 'css',
+    difficulty: 'medium',
+    tags: ['css-grid', 'flexbox', 'layout', 'interview'],
+  },
+  {
+    id: 'css-advanced-2',
+    question: 'What is the CSS Box Model and how does box-sizing affect it?',
+    options: [
+      'The model that defines how elements are sized and spaced',
+      'A way to create 3D effects in CSS',
+      'A method for organizing CSS properties',
+      'A tool for debugging CSS layouts',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "The CSS Box Model defines how elements are sized and spaced, including content, padding, border, and margin. box-sizing: border-box includes padding and border in the element's total width/height.",
+    category: 'css',
+    difficulty: 'medium',
+    tags: ['box-model', 'layout', 'css-core', 'interview'],
+  },
+  {
+    id: 'css-advanced-3',
+    question:
+      'What are CSS Custom Properties (CSS Variables) and how do you use them?',
+    options: [
+      'Variables that can store and reuse values throughout CSS',
+      'Custom CSS selectors for specific elements',
+      'JavaScript variables that work in CSS',
+      'Custom HTML attributes for styling',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'CSS Custom Properties (CSS Variables) allow you to store and reuse values throughout your CSS. They are defined with --variable-name and used with var(--variable-name).',
+    category: 'css',
+    difficulty: 'medium',
+    tags: ['css-variables', 'custom-properties', 'css-core', 'interview'],
+  },
+  {
+    id: 'html-advanced-1',
+    question: 'What is semantic HTML and why is it important?',
+    options: [
+      'HTML that uses meaningful tags to describe content structure',
+      'HTML that follows strict syntax rules',
+      'HTML that is optimized for search engines only',
+      'HTML that uses the latest HTML5 features',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Semantic HTML uses meaningful tags like <header>, <nav>, <main>, <article>, <section>, and <footer> to describe the structure and meaning of content, improving accessibility and SEO.',
+    category: 'html',
+    difficulty: 'medium',
+    tags: ['semantic-html', 'accessibility', 'seo', 'interview'],
+  },
+  {
+    id: 'html-advanced-2',
+    question: 'What is the difference between <div> and <section> in HTML5?',
+    options: [
+      '<div> is for grouping, <section> is for thematic content',
+      '<div> is older, <section> is newer',
+      '<div> is for styling, <section> is for structure',
+      '<div> is block-level, <section> is inline',
+    ],
+    correctAnswer: 0,
+    explanation:
+      '<div> is a generic container for grouping content, while <section> represents a thematic grouping of content, typically with a heading, that forms a distinct part of a document.',
+    category: 'html',
+    difficulty: 'medium',
+    tags: ['semantic-html', 'html5', 'structure', 'interview'],
+  },
+  {
+    id: 'js-performance-1',
+    question: 'What is event delegation and how does it improve performance?',
+    options: [
+      'Attaching event listeners to parent elements instead of multiple children',
+      'Delegating events to different components',
+      'Using event bubbling to handle multiple events',
+      'Creating event proxies for better memory management',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Event delegation attaches event listeners to parent elements instead of multiple child elements, reducing memory usage and improving performance, especially with dynamic content.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['event-delegation', 'performance', 'dom-events', 'interview'],
+  },
+  {
+    id: 'js-performance-2',
+    question: 'What is debouncing and when would you use it?',
+    options: [
+      'A technique to limit how often a function can be called',
+      'A method to remove duplicate function calls',
+      'A way to batch multiple function calls together',
+      'A technique to delay function execution',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "Debouncing limits how often a function can be called by delaying its execution until after a certain period of inactivity. It's useful for search inputs, window resize handlers, and scroll events.",
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['debouncing', 'performance', 'optimization', 'interview'],
+  },
+  {
+    id: 'js-async-1',
+    question:
+      'What is the difference between Promise.all() and Promise.race()?',
+    options: [
+      'Promise.all() waits for all promises, Promise.race() returns the first to resolve/reject',
+      'Promise.all() is for arrays, Promise.race() is for single promises',
+      'Promise.all() is synchronous, Promise.race() is asynchronous',
+      'Promise.all() handles errors, Promise.race() ignores them',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Promise.all() waits for all promises in an array to resolve (or any to reject), while Promise.race() returns the first promise to either resolve or reject.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['promises', 'async-programming', 'es6', 'interview'],
+  },
+  {
+    id: 'js-async-2',
+    question:
+      'What are async/await functions and how do they improve code readability?',
+    options: [
+      'A way to write asynchronous code that looks synchronous',
+      'Functions that automatically handle all async operations',
+      'A replacement for all Promise-based code',
+      'Functions that run in parallel automatically',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'async/await allows you to write asynchronous code using synchronous syntax, making it easier to read and understand compared to Promise chains or callback-based approaches.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['async-await', 'es8', 'readability', 'interview'],
+  },
+  {
+    id: 'react-patterns-1',
+    question:
+      'What is the Render Props pattern in React and when would you use it?',
+    options: [
+      'A pattern where a component receives a function as a prop to render content',
+      'A way to render multiple components at once',
+      'A pattern for conditional rendering',
+      'A method for rendering props as HTML',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "The Render Props pattern involves passing a function as a prop to a component, allowing the parent to control what gets rendered. It's useful for sharing logic between components.",
+    category: 'react',
+    difficulty: 'hard',
+    tags: ['render-props', 'patterns', 'component-design', 'interview'],
+  },
+  {
+    id: 'react-patterns-2',
+    question: 'What is the Compound Components pattern in React?',
+    options: [
+      'A pattern where related components work together to form a complete UI',
+      'A way to combine multiple components into one',
+      'A pattern for nested component rendering',
+      'A method for creating component hierarchies',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Compound Components is a pattern where a set of components work together to form a complete UI. They share implicit state and communicate through context, like <Select> and <Option> components.',
+    category: 'react',
+    difficulty: 'hard',
+    tags: ['compound-components', 'patterns', 'component-design', 'interview'],
+  },
 ];
 
 export const getQuestionsByCategory = (category: string) => {
