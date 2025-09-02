@@ -148,12 +148,11 @@ export const getFundamentalsStatistics = () => {
   const categories = getFundamentalCategories();
 
   return {
-    totalQuestions: multipleChoiceQuestions.length,
+    totalQuestions: multipleChoiceQuestions.length, // Now 75 questions (was 50)
     totalCategories: categories.length,
     categoryBreakdown: categories.map(cat => ({
-      name: cat.title,
+      name: cat.name,
       count: cat.questions.length,
-      icon: cat.icon,
       color: cat.color,
       bgColor: cat.bgColor,
       difficultyBreakdown: cat.difficultyBreakdown,

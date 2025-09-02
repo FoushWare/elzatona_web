@@ -861,13 +861,13 @@ export const learningPaths: LearningPath[] = [
     id: 'javascript-practice',
     title: 'JavaScript Practice & Interview Prep',
     description:
-      '24 comprehensive JavaScript questions covering fundamentals to advanced concepts',
+      '34 comprehensive JavaScript questions covering fundamentals to advanced concepts and interview preparation',
     difficulty: 'intermediate',
     resources: ['javascript-fundamentals', 'es6-features', 'advanced-patterns'],
     estimatedTime: 8,
     prerequisites: ['frontend-basics'],
     targetSkills: ['JavaScript', 'ES6+', 'Advanced Patterns', 'Interview Prep'],
-    questionCount: 24,
+    questionCount: 34, // Updated from 24 to 34 (24 original + 10 new advanced)
     questionCategories: ['javascript'],
   },
   {

@@ -16,7 +16,8 @@ export type ResourceCategory =
   | 'api'
   | 'build-tools'
   | 'browser'
-  | 'problem-solving';
+  | 'problem-solving'
+  | 'english';
 
 export type ResourceType =
   | 'article'
@@ -25,7 +26,9 @@ export type ResourceType =
   | 'course'
   | 'book'
   | 'cheatsheet'
-  | 'documentation';
+  | 'documentation'
+  | 'website'
+  | 'podcast';
 
 export interface LearningResource {
   id: string;
