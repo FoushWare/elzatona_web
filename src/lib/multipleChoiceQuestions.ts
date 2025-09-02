@@ -196,6 +196,153 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     tags: ['websockets', 'events', 'javascript'],
   },
 
+  // Additional JavaScript Fundamentals Questions
+  {
+    id: 'js-fundamentals-1',
+    question: 'What is the output of: console.log(1 + "2" + "2")?',
+    options: ['5', '122', '32', 'NaN'],
+    correctAnswer: 1,
+    explanation:
+      'JavaScript performs type coercion. 1 + "2" = "12", then "12" + "2" = "122". String concatenation takes precedence.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['javascript', 'type-coercion', 'concatenation', 'operators'],
+  },
+  {
+    id: 'js-fundamentals-2',
+    question: 'What is the purpose of the "use strict" directive?',
+    options: [
+      'To enable strict mode which catches common coding mistakes',
+      'To make the code run faster',
+      'To enable ES6 features',
+      'To disable browser compatibility features',
+    ],
+    correctAnswer: 0,
+    explanation:
+      '"use strict" enables strict mode, which catches common coding mistakes and prevents certain unsafe actions.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['javascript', 'strict-mode', 'best-practices', 'es5'],
+  },
+  {
+    id: 'js-fundamentals-3',
+    question: 'What is the difference between let, const, and var?',
+    options: [
+      'They are all the same',
+      'let and const are block-scoped, var is function-scoped',
+      'const is immutable, let and var are mutable',
+      'var is deprecated, let and const are modern',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'let and const are block-scoped and not hoisted, while var is function-scoped and hoisted. const cannot be reassigned.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['javascript', 'variables', 'scope', 'es6', 'hoisting'],
+  },
+  {
+    id: 'js-fundamentals-4',
+    question: 'What is the output of: console.log(0.1 + 0.2 === 0.3)?',
+    options: ['true', 'false', 'undefined', 'Error'],
+    correctAnswer: 1,
+    explanation:
+      'Due to floating-point precision issues, 0.1 + 0.2 equals approximately 0.30000000000000004, not exactly 0.3.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['javascript', 'floating-point', 'precision', 'numbers'],
+  },
+  {
+    id: 'js-fundamentals-5',
+    question: 'What is event bubbling in JavaScript?',
+    options: [
+      'Events bubble up from child to parent elements',
+      'Events bubble down from parent to child elements',
+      'Events create bubbles in the UI',
+      'Events are stored in a bubble data structure',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Event bubbling is the process where an event triggers on the deepest target element, then bubbles up through its parent elements.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['javascript', 'events', 'dom', 'bubbling', 'capturing'],
+  },
+  {
+    id: 'js-fundamentals-6',
+    question: 'What is the purpose of the bind() method?',
+    options: [
+      'To bind two objects together',
+      'To create a new function with a fixed "this" context',
+      'To bind event listeners to DOM elements',
+      'To bind data to a template',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'bind() creates a new function with a fixed "this" value, allowing you to control the context when the function is called.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['javascript', 'this', 'context', 'bind', 'methods'],
+  },
+  {
+    id: 'js-fundamentals-7',
+    question: 'What is a Promise in JavaScript?',
+    options: [
+      'A guarantee that code will run',
+      'An object representing the eventual completion of an asynchronous operation',
+      'A type of function that always returns a value',
+      'A way to make synchronous code asynchronous',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'A Promise is an object representing the eventual completion (or failure) of an asynchronous operation and its resulting value.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['javascript', 'promises', 'async', 'asynchronous'],
+  },
+  {
+    id: 'js-fundamentals-8',
+    question: 'What is the difference between call() and apply() methods?',
+    options: [
+      'call() takes arguments as an array, apply() takes them individually',
+      'apply() takes arguments as an array, call() takes them individually',
+      'They are identical in functionality',
+      'call() is synchronous, apply() is asynchronous',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'apply() takes arguments as an array, while call() takes arguments individually. Both methods set the "this" context.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['javascript', 'methods', 'this', 'context', 'call', 'apply'],
+  },
+  {
+    id: 'js-fundamentals-9',
+    question: 'What is the output of: console.log([] + [])?',
+    options: ['[]', '""', 'undefined', 'Error'],
+    correctAnswer: 1,
+    explanation:
+      'When arrays are converted to strings, they become empty strings. So [] + [] = "" + "" = "".',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['javascript', 'arrays', 'type-coercion', 'concatenation'],
+  },
+  {
+    id: 'js-fundamentals-10',
+    question: 'What is the purpose of the Symbol type in JavaScript?',
+    options: [
+      'To create unique identifiers',
+      'To represent mathematical symbols',
+      'To create private properties',
+      'To optimize string operations',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Symbols are primitive values that are guaranteed to be unique. They are often used as property keys to avoid naming conflicts.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['javascript', 'symbols', 'es6', 'unique-identifiers', 'primitives'],
+  },
+
   // React Questions
   {
     id: 'react-1',
@@ -466,6 +613,191 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     category: 'css',
     difficulty: 'medium',
     tags: ['css', 'transitions', 'animations', 'timing'],
+  },
+
+  // Advanced Senior Developer Questions
+  {
+    id: 'senior-js-1',
+    question:
+      'What is the difference between Object.freeze() and Object.seal()?',
+    options: [
+      'Object.freeze() prevents adding/deleting properties, Object.seal() prevents modifying existing properties',
+      'Object.seal() prevents adding/deleting properties, Object.freeze() prevents modifying existing properties',
+      'They are identical in functionality',
+      'Object.freeze() is for objects, Object.seal() is for arrays',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'Object.seal() prevents adding/deleting properties but allows modifying existing ones. Object.freeze() prevents adding/deleting AND modifying existing properties.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['javascript', 'objects', 'immutability', 'es5', 'senior'],
+  },
+  {
+    id: 'senior-js-2',
+    question: 'What is the Temporal Dead Zone (TDZ) in JavaScript?',
+    options: [
+      'A period when variables are undefined',
+      'The time between hoisting and initialization of let/const variables',
+      'A browser security feature',
+      'A performance optimization technique',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'The Temporal Dead Zone is the period between entering scope and the line where a let/const variable is declared. Accessing the variable during TDZ throws a ReferenceError.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['javascript', 'tdz', 'hoisting', 'scope', 'es6', 'senior'],
+  },
+  {
+    id: 'senior-js-3',
+    question: 'What is the difference between WeakMap and Map?',
+    options: [
+      'WeakMap is faster than Map',
+      'WeakMap keys are weakly referenced and can be garbage collected',
+      'Map is deprecated, WeakMap is the modern way',
+      'WeakMap only works with primitive keys',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'WeakMap keys are weakly referenced, meaning if the key object has no other references, it can be garbage collected. Map keys are strongly referenced.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: [
+      'javascript',
+      'weakmap',
+      'map',
+      'garbage-collection',
+      'es6',
+      'senior',
+    ],
+  },
+  {
+    id: 'senior-js-4',
+    question: 'What is the purpose of the Proxy object in JavaScript?',
+    options: [
+      'To create HTTP proxies',
+      'To intercept and customize operations on objects',
+      'To optimize performance',
+      'To create secure connections',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'Proxy allows you to intercept and customize fundamental operations on objects (like property lookup, assignment, enumeration, function invocation, etc.).',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['javascript', 'proxy', 'metaprogramming', 'es6', 'senior'],
+  },
+  {
+    id: 'senior-js-5',
+    question: 'What is the difference between for...in and for...of loops?',
+    options: [
+      'for...in iterates over values, for...of iterates over keys',
+      'for...in iterates over enumerable properties, for...of iterates over iterable values',
+      'for...in is for objects, for...of is for arrays',
+      'They are identical in functionality',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'for...in iterates over enumerable property names (including inherited ones), while for...of iterates over the values of iterable objects (arrays, strings, etc.).',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['javascript', 'loops', 'iteration', 'es6', 'senior'],
+  },
+  {
+    id: 'senior-js-6',
+    question: 'What is the purpose of the Reflect API?',
+    options: [
+      'To reflect light in the browser',
+      'To provide methods for interceptable JavaScript operations',
+      'To create mirror images of objects',
+      'To optimize reflection in 3D graphics',
+    ],
+    correctAnswer: 1,
+    explanation:
+      "Reflect provides methods for interceptable JavaScript operations. It's designed to work with Proxy and provides a more convenient API for default behavior.",
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: [
+      'javascript',
+      'reflect',
+      'proxy',
+      'metaprogramming',
+      'es6',
+      'senior',
+    ],
+  },
+  {
+    id: 'senior-js-7',
+    question: 'What is the difference between Set and WeakSet?',
+    options: [
+      'Set is faster than WeakSet',
+      'WeakSet values are weakly referenced and can be garbage collected',
+      'Set is deprecated, WeakSet is the modern way',
+      'WeakSet only works with primitive values',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'WeakSet values are weakly referenced, meaning if the value object has no other references, it can be garbage collected. Set values are strongly referenced.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: [
+      'javascript',
+      'weakset',
+      'set',
+      'garbage-collection',
+      'es6',
+      'senior',
+    ],
+  },
+  {
+    id: 'senior-js-8',
+    question: 'What is the purpose of the Symbol.iterator?',
+    options: [
+      'To create unique identifiers',
+      'To define how an object should be iterated',
+      'To optimize string operations',
+      'To create private properties',
+    ],
+    correctAnswer: 1,
+    explanation:
+      "Symbol.iterator is a well-known symbol that defines the default iterator for an object. It's what makes objects iterable with for...of loops.",
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['javascript', 'symbols', 'iteration', 'es6', 'senior'],
+  },
+  {
+    id: 'senior-js-9',
+    question:
+      'What is the difference between Object.create() and new Object()?',
+    options: [
+      'Object.create() is faster',
+      'Object.create() can set the prototype, new Object() cannot',
+      'new Object() is deprecated',
+      'They are identical in functionality',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'Object.create() allows you to specify the prototype object, while new Object() always creates an object with Object.prototype as its prototype.',
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['javascript', 'objects', 'prototypes', 'inheritance', 'senior'],
+  },
+  {
+    id: 'senior-js-10',
+    question: 'What is the purpose of the Generator function in JavaScript?',
+    options: [
+      'To generate random numbers',
+      'To create functions that can pause and resume execution',
+      'To optimize performance',
+      'To create infinite loops',
+    ],
+    correctAnswer: 1,
+    explanation:
+      "Generator functions can pause and resume execution using yield. They're useful for creating iterators and handling asynchronous operations in a synchronous-looking way.",
+    category: 'javascript',
+    difficulty: 'hard',
+    tags: ['javascript', 'generators', 'yield', 'iteration', 'es6', 'senior'],
   },
 ];
 
