@@ -63,7 +63,7 @@ export default function Navbar() {
   return (
     <nav className="bg-blue-600 shadow-lg sticky top-0 z-50 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-16 min-h-16 max-h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link
@@ -71,15 +71,18 @@ export default function Navbar() {
               className="flex items-center space-x-2 text-white hover:text-blue-100 transition-colors duration-200"
             >
               <span className="text-2xl">💻</span>
-              <span className="text-xl font-bold">Frontend KodDev</span>
+              <span className="text-lg lg:text-xl font-bold hidden sm:inline">
+                Frontend KodDev
+              </span>
+              <span className="text-lg font-bold sm:hidden">KodDev</span>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
             <Link
               href="/"
-              className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
+              className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-2 lg:px-3 py-2 rounded-lg text-sm lg:text-base"
             >
               Home
             </Link>
@@ -267,10 +270,12 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/auth"
-                className="px-6 py-2 text-sm font-medium bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all duration-200 hover:scale-105 shadow-lg flex items-center space-x-2"
+                className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all duration-200 hover:scale-105 shadow-lg flex items-center space-x-2 whitespace-nowrap"
+                title="Want to store your app progress?"
               >
                 <span>💾</span>
-                <span>Want to store your progress?</span>
+                <span className="hidden lg:inline">Store Progress</span>
+                <span className="lg:hidden">Progress</span>
               </Link>
             )}
           </div>
@@ -293,7 +298,7 @@ export default function Navbar() {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden bg-blue-700">
+        <div className="md:hidden bg-blue-700 max-h-screen overflow-y-auto">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link
               href="/"
@@ -426,7 +431,7 @@ export default function Navbar() {
                   className="block px-3 py-3 rounded-md text-base font-medium bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white transition-all duration-200 mx-3 text-center shadow-lg"
                   onClick={() => setIsOpen(false)}
                 >
-                  💾 Want to store your progress?
+                  💾 Store Progress
                 </Link>
               )}
             </div>
