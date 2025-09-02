@@ -278,6 +278,94 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     tags: ['react', 'fiber', 'concurrent', 'rendering'],
   },
 
+  // React Questions for Issues #43 and #42
+  {
+    id: 'react-reconciliation',
+    question: 'What is Reconciliation in React?',
+    options: [
+      'The process of syncing React state with Redux.',
+      'The algorithm React uses to decide how the Virtual DOM should update the Real DOM.',
+      'The communication between frontend and backend.',
+      'The way React merges CSS styles.',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'Reconciliation is the process React uses to compare the current Virtual DOM with the new Virtual DOM (after state/props change) and determine the minimum set of updates needed to efficiently update the real DOM.',
+    category: 'react',
+    difficulty: 'medium',
+    tags: [
+      'react',
+      'reconciliation',
+      'virtual-dom',
+      'performance',
+      'rendering',
+    ],
+  },
+  {
+    id: 'react-fiber',
+    question: 'What is React Fiber?',
+    options: [
+      'A database system for React.',
+      'A new reconciliation engine introduced in React 16 for incremental rendering.',
+      'A CSS styling framework used in React.',
+      'A replacement for React Virtual DOM.',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'React Fiber is the reconciliation engine introduced in React 16. It allows React to split rendering work into small units, pause, prioritize, and resume tasks efficiently — enabling features like concurrent rendering.',
+    category: 'react',
+    difficulty: 'hard',
+    tags: ['react', 'fiber', 'concurrent', 'rendering', 'performance'],
+  },
+  {
+    id: 'react-virtual-dom',
+    question: 'What is the Virtual DOM in React?',
+    options: [
+      'A direct copy of the real DOM used for styling.',
+      'A lightweight in-memory representation of the actual DOM.',
+      'A scheduler for handling rendering tasks.',
+      'A database used to store component state.',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'The Virtual DOM is a lightweight, in-memory tree representation of the actual DOM. React uses it to determine the minimal set of changes required to update the real DOM.',
+    category: 'react',
+    difficulty: 'medium',
+    tags: ['react', 'virtual-dom', 'dom', 'performance', 'rendering'],
+  },
+  {
+    id: 'react-fiber-vs-virtual-dom',
+    question: 'How does React Fiber differ from Virtual DOM?',
+    options: [
+      'Fiber is used for scheduling and prioritization, while Virtual DOM is used for representation of the DOM.',
+      'Fiber replaces Virtual DOM completely.',
+      "Fiber is faster because it doesn't use the Virtual DOM.",
+      'Fiber is just another name for Virtual DOM.',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "Virtual DOM = data structure representing the UI. Fiber = the engine that manages how and when Virtual DOM updates are applied. Fiber doesn't replace Virtual DOM; it works with it to make rendering more efficient.",
+    category: 'react',
+    difficulty: 'hard',
+    tags: ['react', 'fiber', 'virtual-dom', 'architecture', 'rendering'],
+  },
+  {
+    id: 'react-concurrent-rendering',
+    question: 'Which feature became possible mainly due to React Fiber?',
+    options: [
+      'Server-side rendering.',
+      'Concurrent rendering (splitting tasks into chunks).',
+      'Using JSX in React.',
+      'Redux state management.',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'Fiber enables concurrent rendering, letting React pause, prioritize, and resume rendering tasks, improving responsiveness for complex UIs.',
+    category: 'react',
+    difficulty: 'medium',
+    tags: ['react', 'fiber', 'concurrent', 'rendering', 'performance'],
+  },
+
   // CSS/HTML Questions for Issue #40
   {
     id: 'css-flexbox-center',
