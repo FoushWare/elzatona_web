@@ -80,13 +80,6 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
-            <Link
-              href="/"
-              className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-2 lg:px-3 py-2 rounded-lg text-sm lg:text-base"
-            >
-              Home
-            </Link>
-
             {/* Learning Paths Dropdown */}
             <div className="relative">
               <button
@@ -300,14 +293,6 @@ export default function Navbar() {
       {isOpen && (
         <div className="md:hidden bg-blue-700 max-h-screen overflow-y-auto">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              href="/"
-              className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
-              onClick={() => setIsOpen(false)}
-            >
-              🏠 Home
-            </Link>
-
             <Link
               href="/learning-paths"
               className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-white hover:text-blue-100 hover:bg-blue-700"
