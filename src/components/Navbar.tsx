@@ -70,11 +70,11 @@ export default function Navbar() {
               href="/"
               className="flex items-center space-x-2 text-white hover:text-blue-100 transition-colors duration-200"
             >
-              <span className="text-2xl">💻</span>
+              <span className="text-2xl">🫒</span>
               <span className="text-lg lg:text-xl font-bold hidden sm:inline">
-                Frontend KodDev
+                Zatona Web
               </span>
-              <span className="text-lg font-bold sm:hidden">KodDev</span>
+              <span className="text-lg font-bold sm:hidden">Zatona</span>
             </Link>
           </div>
 

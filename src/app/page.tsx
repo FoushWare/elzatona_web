@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import ChallengeCard from "@/components/ChallengeCard";
-import { getChallenges } from "@/lib/challenges";
-import { Category } from "@/types/challenge";
-import { useState } from "react";
+import Link from 'next/link';
+import ChallengeCard from '@/components/ChallengeCard';
+import { getChallenges } from '@/lib/challenges';
+import { Category } from '@/types/challenge';
+import { useState } from 'react';
 
 export default function Home() {
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  
+
   const featuredChallenges = getChallenges().slice(0, 6);
   const categories: {
     name: Category;
@@ -18,55 +18,55 @@ export default function Home() {
     count: number;
   }[] = [
     {
-      name: "css",
-      title: "CSS Challenges",
-      description: "Learn layouts, animations, and responsive design",
-      count: getChallenges({ category: "css" }).length,
+      name: 'css',
+      title: 'CSS Challenges',
+      description: 'Learn layouts, animations, and responsive design',
+      count: getChallenges({ category: 'css' }).length,
     },
     {
-      name: "javascript",
-      title: "JavaScript Challenges",
-      description: "Practice DOM manipulation, events, and modern JS",
-      count: getChallenges({ category: "javascript" }).length,
+      name: 'javascript',
+      title: 'JavaScript Challenges',
+      description: 'Practice DOM manipulation, events, and modern JS',
+      count: getChallenges({ category: 'javascript' }).length,
     },
     {
-      name: "react",
-      title: "React Challenges",
-      description: "Build components, hooks, and modern React apps",
-      count: getChallenges({ category: "javascript" }).length, // Using JS count as proxy for React
+      name: 'react',
+      title: 'React Challenges',
+      description: 'Build components, hooks, and modern React apps',
+      count: getChallenges({ category: 'javascript' }).length, // Using JS count as proxy for React
     },
   ];
 
   // Statistics data
   const statistics = [
     {
-      title: "Total Challenges",
+      title: 'Total Challenges',
       value: getChallenges().length,
-      icon: "🎯",
-      color: "text-blue-600",
-      bgColor: "bg-blue-100 dark:bg-blue-900/20"
+      icon: '🎯',
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-100 dark:bg-blue-900/20',
     },
     {
-      title: "CSS Challenges",
-      value: getChallenges({ category: "css" }).length,
-      icon: "🎨",
-      color: "text-purple-600",
-      bgColor: "bg-purple-100 dark:bg-purple-900/20"
+      title: 'CSS Challenges',
+      value: getChallenges({ category: 'css' }).length,
+      icon: '🎨',
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-100 dark:bg-purple-900/20',
     },
     {
-      title: "JavaScript Challenges",
-      value: getChallenges({ category: "javascript" }).length,
-      icon: "⚡",
-      color: "text-yellow-600",
-      bgColor: "bg-yellow-100 dark:bg-yellow-900/20"
+      title: 'JavaScript Challenges',
+      value: getChallenges({ category: 'javascript' }).length,
+      icon: '⚡',
+      color: 'text-yellow-600',
+      bgColor: 'bg-yellow-100 dark:bg-yellow-900/20',
     },
     {
-      title: "Learning Paths",
+      title: 'Learning Paths',
       value: 13, // From learning paths data
-      icon: "🗺️",
-      color: "text-green-600",
-      bgColor: "bg-green-100 dark:bg-green-900/20"
-    }
+      icon: '🗺️',
+      color: 'text-green-600',
+      bgColor: 'bg-green-100 dark:bg-green-900/20',
+    },
   ];
 
   return (
@@ -84,26 +84,25 @@ export default function Home() {
           <div className="text-center">
             <div className="text-8xl mb-6 animate-bounce">🚀</div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-              <span className="text-blue-100">Kod</span>
+              <span className="text-blue-100">Zatona</span>
               <span className="bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                Dev
+                Web
               </span>
             </h1>
             <div className="text-2xl md:text-3xl mb-4 text-blue-200 font-medium">
-              <span className="text-blue-300">Frontend KodDev</span>
+              <span className="text-blue-300">Zatona Web 🫒</span>
             </div>
             <div className="text-lg text-blue-100 mb-6 opacity-80">
-              <span className="text-blue-200">Frontend</span> +{" "}
-              <span className="text-blue-200">Kod</span> = Code •{" "}
-              <span className="text-blue-200">Dev</span> = Developer
+              <span className="text-blue-200">Zatona</span> = Olive •{' '}
+              <span className="text-blue-200">Web</span> = Web Development
               <br />
               <span className="text-sm opacity-75">
-                (Frontend KodDev = Frontend Code Developer)
+                (Zatona Web = Olive Web Development)
               </span>
             </div>
             <div className="text-lg text-blue-100 mb-4 opacity-90">
-              🎯 <span className="font-semibold">500+ Interview Questions</span>{" "}
-              • 🚀 <span className="font-semibold">Coding Challenges</span> • 📚{" "}
+              🎯 <span className="font-semibold">500+ Interview Questions</span>{' '}
+              • 🚀 <span className="font-semibold">Coding Challenges</span> • 📚{' '}
               <span className="font-semibold">Study Plans</span>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -143,23 +142,25 @@ export default function Home() {
                 onClick={() => setShowStatistics(!showStatistics)}
                 className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
               >
-                {showStatistics ? "Hide Statistics" : "Show Statistics"}
+                {showStatistics ? 'Hide Statistics' : 'Show Statistics'}
                 <span className="ml-2">📊</span>
               </button>
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
               >
-                {showFilters ? "Hide Filters" : "Show Filters"}
+                {showFilters ? 'Hide Filters' : 'Show Filters'}
                 <span className="ml-2">🔍</span>
               </button>
             </div>
           </div>
-          
+
           {/* Statistics Grid - Always visible on desktop, toggleable on mobile */}
-          <div className={`grid md:grid-cols-4 gap-8 transition-all duration-300 ${
-            showStatistics ? 'block' : 'hidden md:grid'
-          }`}>
+          <div
+            className={`grid md:grid-cols-4 gap-8 transition-all duration-300 ${
+              showStatistics ? 'block' : 'hidden md:grid'
+            }`}
+          >
             {statistics.map((stat, index) => (
               <div
                 key={stat.title}
@@ -189,25 +190,25 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {categories.map((category, index) => {
               const gradients = [
-                "from-purple-500 to-pink-500",
-                "from-blue-500 to-cyan-500",
-                "from-green-500 to-emerald-500",
+                'from-purple-500 to-pink-500',
+                'from-blue-500 to-cyan-500',
+                'from-green-500 to-emerald-500',
               ];
-              const icons = ["🎨", "⚡", "🚀"];
+              const icons = ['🎨', '⚡', '🚀'];
               const bgColors = [
-                "bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20",
-                "bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20",
-                "bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20",
+                'bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20',
+                'bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20',
+                'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20',
               ];
               const borderColors = [
-                "border-purple-200 dark:border-purple-800",
-                "border-blue-200 dark:border-blue-800",
-                "border-green-200 dark:border-green-800",
+                'border-purple-200 dark:border-purple-800',
+                'border-blue-200 dark:border-blue-800',
+                'border-green-200 dark:border-green-800',
               ];
               const textColors = [
-                "text-purple-600 dark:text-purple-400",
-                "text-blue-600 dark:text-blue-400",
-                "text-green-600 dark:text-green-400",
+                'text-purple-600 dark:text-purple-400',
+                'text-blue-600 dark:text-blue-400',
+                'text-green-600 dark:text-green-400',
               ];
 
               return (
@@ -266,7 +267,7 @@ export default function Home() {
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredChallenges.map((challenge) => (
+            {featuredChallenges.map(challenge => (
               <ChallengeCard key={challenge.id} challenge={challenge} />
             ))}
           </div>
@@ -283,7 +284,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 text-foreground">
-              Why Choose Frontend KodDev?
+              Why Choose Zatona Web?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Everything you need to ace frontend development interviews
@@ -402,8 +403,7 @@ export default function Home() {
           </h2>
           <p className="text-xl mb-10 max-w-2xl mx-auto leading-relaxed text-blue-50">
             Join thousands of developers who are already acing their frontend
-            interviews with{" "}
-            <span className="text-blue-200">Frontend KodDev</span>
+            interviews with <span className="text-blue-200">Zatona Web</span>
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link
