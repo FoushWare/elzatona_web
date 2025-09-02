@@ -1,0 +1,39 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+rules:
+
+- name: Parallel Development with Git Worktree
+  description: >
+  Handle tasks in parallel using git worktree. Each tab = one worktree on its own branch.
+  When merging, create an integration branch named after the merged branches.
+  Resolve conflicts there, test, and finally open a PR into main.
+  Keep integration branches as permanent references after merging.
+  steps:
+  - For each new task opened in a tab:
+    1. Create a new git worktree from the base branch (e.g., `main` or `develop`).
+    2. Create a feature branch named `feat/<task-name>`.
+    3. Do all changes inside that worktree.
+  - When finishing a task:
+    1. Commit and push changes to the feature branch.
+  - When merging two branches:
+    1. Create a new integration branch named `merge/<branchA>_<branchB>`.
+       Example: merging `feat/auth` + `feat/ui` → `merge/feat-auth_feat-ui`.
+    2. Checkout the integration branch.
+    3. Merge both feature branches into it.
+    4. Resolve conflicts inside the integration branch.
+    5. Run tests and verify stability in the integration branch.
+    6. Once stable, **create a Pull Request from the integration branch into `main`**.
+  - For multiple tasks:
+    1. Repeat the integration process pairwise until all feature branches are merged.
+    2. Always test integration branches thoroughly before PR.
+  - Finalization: 1. After the PR is merged into `main`, **keep the integration branch as a reference**. 2. Tag the integration branch with release notes or conflict resolution details. 3. Use integration branches for historical tracking and debugging if needed.
+    enforcement:
+  - Always isolate tasks in their own worktree branch.
+  - Never merge feature branches directly into `main`.
+  - Always resolve conflicts in integration branches.
+  - Always create a PR from integration → `main` (never push directly).
+  - Never delete integration branches — preserve them as historical references.
