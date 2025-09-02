@@ -1,87 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import ChallengeCard from '@/components/ChallengeCard';
-import { getChallenges } from '@/lib/challenges';
-import { Category } from '@/types/challenge';
-import { useState } from 'react';
+import ZatonaLogo from '@/components/ZatonaLogo';
 
 export default function Home() {
-  const [showStatistics, setShowStatistics] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-
-  const featuredChallenges = getChallenges().slice(0, 6);
-  const categories: {
-    name: Category;
-    title: string;
-    description: string;
-    count: number;
-  }[] = [
-    {
-      name: 'css',
-      title: 'CSS Challenges',
-      description: 'Learn layouts, animations, and responsive design',
-      count: getChallenges({ category: 'css' }).length,
-    },
-    {
-      name: 'javascript',
-      title: 'JavaScript Challenges',
-      description: 'Practice DOM manipulation, events, and modern JS',
-      count: getChallenges({ category: 'javascript' }).length,
-    },
-    {
-      name: 'react',
-      title: 'React Challenges',
-      description: 'Build components, hooks, and modern React apps',
-      count: getChallenges({ category: 'javascript' }).length, // Using JS count as proxy for React
-    },
-  ];
-
-  // Statistics data
-  const statistics = [
-    {
-      title: 'Total Challenges',
-      value: getChallenges().length,
-      icon: '🎯',
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100 dark:bg-blue-900/20',
-    },
-    {
-      title: 'CSS Challenges',
-      value: getChallenges({ category: 'css' }).length,
-      icon: '🎨',
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-100 dark:bg-purple-900/20',
-    },
-    {
-      title: 'JavaScript Challenges',
-      value: getChallenges({ category: 'javascript' }).length,
-      icon: '⚡',
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-100 dark:bg-yellow-900/20',
-    },
-    {
-      title: 'Learning Paths',
-      value: 13, // From learning paths data
-      icon: '🗺️',
-      color: 'text-green-600',
-      bgColor: 'bg-green-100 dark:bg-green-900/20',
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-4 h-4 bg-white rounded-full"></div>
-          <div className="absolute top-20 right-20 w-2 h-2 bg-white rounded-full"></div>
-          <div className="absolute bottom-20 left-1/4 w-3 h-3 bg-white rounded-full"></div>
-          <div className="absolute bottom-10 right-1/3 w-2 h-2 bg-white rounded-full"></div>
-        </div>
-        <div className="container mx-auto px-4 py-20 relative z-10">
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 to-purple-900/50"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
+            <div className="flex justify-center mb-8">
+              <ZatonaLogo size="lg" showText={false} />
+            </div>
             <div className="text-8xl mb-6 animate-bounce">🚀</div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
               <span className="text-blue-100">Zatona</span>
@@ -100,287 +32,77 @@ export default function Home() {
                 (Zatona Web = Olive Web Development)
               </span>
             </div>
-            <div className="text-lg text-blue-100 mb-4 opacity-90">
-              🎯 <span className="font-semibold">500+ Interview Questions</span>{' '}
-              • 🚀 <span className="font-semibold">Coding Challenges</span> • 📚{' '}
-              <span className="font-semibold">Study Plans</span>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <p className="text-xl text-blue-100 mb-10 max-w-3xl mx-auto leading-relaxed">
+              Master frontend development with our comprehensive platform
+              featuring practice questions, learning paths, coding challenges,
+              and real-time AI assistance. Perfect for interview preparation and
+              skill building.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link
-                href="/challenges"
-                className="inline-block px-8 py-4 bg-gradient-to-r from-orange-400 to-red-500 text-white font-bold rounded-xl hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                href="/practice/fundamentals"
+                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg font-semibold rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 hover:scale-105 shadow-lg"
               >
-                🎯 Practice Interviews
-              </Link>
-              <Link
-                href="/resources"
-                className="inline-block px-8 py-4 bg-gradient-to-r from-green-400 to-teal-500 text-white font-bold rounded-xl hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-              >
-                📚 Interview Questions
+                🚀 Start Learning
               </Link>
               <Link
                 href="/learning-paths"
-                className="inline-block px-8 py-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white font-bold rounded-xl hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white text-lg font-semibold rounded-xl hover:bg-white/20 transition-all duration-200 hover:scale-105 border border-white/20"
               >
-                🗺️ Study Plans
+                🗺️ Explore Paths
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Statistics Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4 text-foreground">
-              Quick Stats
-            </h2>
-            {/* Mobile Toggle Buttons - Hidden on desktop */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center md:hidden">
-              <button
-                onClick={() => setShowStatistics(!showStatistics)}
-                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-              >
-                {showStatistics ? 'Hide Statistics' : 'Show Statistics'}
-                <span className="ml-2">📊</span>
-              </button>
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
-              >
-                {showFilters ? 'Hide Filters' : 'Show Filters'}
-                <span className="ml-2">🔍</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Statistics Grid - Always visible on desktop, toggleable on mobile */}
-          <div
-            className={`grid md:grid-cols-4 gap-8 transition-all duration-300 ${
-              showStatistics ? 'block' : 'hidden md:grid'
-            }`}
-          >
-            {statistics.map((stat, index) => (
-              <div
-                key={stat.title}
-                className={`text-center p-8 rounded-2xl ${stat.bgColor} dark:bg-opacity-20 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105`}
-              >
-                <div className="text-6xl mb-4 transform hover:scale-110 transition-transform duration-300">
-                  {stat.icon}
-                </div>
-                <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
-                  {stat.title}
-                </h3>
-                <p className={`text-4xl font-bold ${stat.color}`}>
-                  {stat.value}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Categories Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-foreground">
-            Choose Your Path
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {categories.map((category, index) => {
-              const gradients = [
-                'from-purple-500 to-pink-500',
-                'from-blue-500 to-cyan-500',
-                'from-green-500 to-emerald-500',
-              ];
-              const icons = ['🎨', '⚡', '🚀'];
-              const bgColors = [
-                'bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20',
-                'bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20',
-                'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20',
-              ];
-              const borderColors = [
-                'border-purple-200 dark:border-purple-800',
-                'border-blue-200 dark:border-blue-800',
-                'border-green-200 dark:border-green-800',
-              ];
-              const textColors = [
-                'text-purple-600 dark:text-purple-400',
-                'text-blue-600 dark:text-blue-400',
-                'text-green-600 dark:text-green-400',
-              ];
-
-              return (
-                <div
-                  key={category.name}
-                  className={`${bgColors[index]} ${borderColors[index]} border-2 rounded-2xl p-8 hover:shadow-xl hover:scale-105 transition-all duration-300 transform hover:-translate-y-2`}
-                >
-                  <div className="text-center">
-                    <div
-                      className={`text-6xl mb-4 transform hover:scale-110 transition-transform duration-300`}
-                    >
-                      {icons[index]}
-                    </div>
-                    <h3
-                      className={`text-2xl font-bold mb-4 ${textColors[index]}`}
-                    >
-                      {category.title}
-                    </h3>
-                    <p className="text-muted-foreground mb-6 leading-relaxed">
-                      {category.description}
-                    </p>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Perfect for interview preparation
-                    </p>
-                    <div
-                      className={`text-4xl font-bold ${textColors[index]} mb-4`}
-                    >
-                      {category.count}
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-6">
-                      challenges available
-                    </p>
-                    <Link
-                      href={`/challenges?category=${category.name}`}
-                      className={`inline-block px-6 py-3 rounded-lg font-semibold text-white bg-gradient-to-r ${gradients[index]} hover:shadow-lg transform hover:scale-105 transition-all duration-300`}
-                    >
-                      Practice for Interviews
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Challenges Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-foreground">
-              Featured Challenges
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Start with these popular challenges to build your frontend skills
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredChallenges.map(challenge => (
-              <ChallengeCard key={challenge.id} challenge={challenge} />
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link href="/challenges" className="btn-primary">
-              View All Challenges
-            </Link>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
+      <section className="py-20 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 text-foreground">
               Why Choose Zatona Web?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Everything you need to ace frontend development interviews
+              Our platform combines cutting-edge technology with proven learning
+              methodologies to help you excel in frontend development.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 transform group-hover:scale-110 group-hover:rotate-3 hover:-translate-y-2 transition-all duration-300 shadow-lg animate-pulse">
-                <svg
-                  className="w-10 h-10 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-orange-600 dark:text-orange-400">
-                Interactive Learning
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="text-4xl mb-4">🎯</div>
+              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
+                Comprehensive Practice
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Hands-on coding challenges with real-time feedback
+              <p className="text-gray-600 dark:text-gray-300">
+                75+ carefully crafted questions covering JavaScript, React, CSS,
+                and HTML fundamentals to advanced concepts.
               </p>
             </div>
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-6 transform group-hover:scale-110 group-hover:-rotate-3 hover:-translate-y-2 transition-all duration-300 shadow-lg animate-bounce">
-                <svg
-                  className="w-10 h-10 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-blue-600 dark:text-blue-400">
-                Comprehensive Resources
+
+            {/* Feature 2 */}
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-8 border border-purple-200 dark:border-purple-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="text-4xl mb-4">🗺️</div>
+              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
+                Structured Learning Paths
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Curated learning materials and best practices
+              <p className="text-gray-600 dark:text-gray-300">
+                Follow curated learning paths designed by industry experts to
+                build your skills systematically.
               </p>
             </div>
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-6 transform group-hover:scale-110 group-hover:rotate-3 hover:-translate-y-2 transition-all duration-300 shadow-lg animate-pulse">
-                <svg
-                  className="w-10 h-10 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-green-600 dark:text-green-400">
-                Practice Questions
+
+            {/* Feature 3 */}
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="text-4xl mb-4">💻</div>
+              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
+                Real Coding Challenges
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Interview-style questions to prepare for technical assessments
-              </p>
-            </div>
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-pink-400 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6 transform group-hover:scale-110 group-hover:-rotate-3 hover:-translate-y-2 transition-all duration-300 shadow-lg animate-pulse">
-                <svg
-                  className="w-10 h-10 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-pink-600 dark:text-pink-400">
-                Track Progress
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Monitor your learning journey with detailed analytics
+              <p className="text-gray-600 dark:text-gray-300">
+                Practice with hands-on coding challenges that mirror real-world
+                interview scenarios and development tasks.
               </p>
             </div>
           </div>
@@ -388,18 +110,10 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20"></div>
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-4 h-4 bg-white rounded-full"></div>
-          <div className="absolute top-20 right-20 w-2 h-2 bg-white rounded-full"></div>
-          <div className="absolute bottom-20 left-1/4 w-3 h-3 bg-white rounded-full"></div>
-          <div className="absolute bottom-10 right-1/3 w-2 h-2 bg-white rounded-full"></div>
-        </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="text-6xl mb-6 animate-pulse">🌟</div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-            Ready to Start Your Journey?
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold mb-6 text-white">
+            Ready to Transform Your Frontend Skills?
           </h2>
           <p className="text-xl mb-10 max-w-2xl mx-auto leading-relaxed text-blue-50">
             Join thousands of developers who are already acing their frontend
@@ -407,16 +121,16 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link
-              href="/challenges"
-              className="inline-block px-10 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              href="/practice/fundamentals"
+              className="inline-flex items-center px-8 py-4 bg-white text-blue-600 rounded-xl hover:bg-blue-50 transition-colors font-semibold text-lg"
             >
-              🚀 Start Interview Prep
+              🚀 Start Practicing
             </Link>
             <Link
-              href="/resources"
-              className="inline-block px-10 py-4 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-bold rounded-xl hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              href="/learning-paths"
+              className="inline-flex items-center px-8 py-4 bg-blue-700 text-white rounded-xl hover:bg-blue-800 transition-colors font-semibold text-lg border border-white/20"
             >
-              🔍 View Questions
+              🗺️ View Learning Paths
             </Link>
           </div>
         </div>

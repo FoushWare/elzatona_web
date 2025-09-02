@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
   keywords:
-    'frontend development, interview preparation, React, JavaScript, CSS, HTML, coding challenges, learning paths',
+    'frontend development, interview preparation, React, JavaScript, CSS, HTML, coding challenges, learning paths, Zatona Web',
   authors: [{ name: 'Zatona Web Team' }],
   creator: 'Zatona Web',
   publisher: 'Zatona Web',
