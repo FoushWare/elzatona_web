@@ -295,6 +295,16 @@ export default function LearningPathsPage() {
                     {path.targetSkills.length} skills
                   </span>
                 </div>
+                {path.questionCount && (
+                  <div className="flex flex-col items-center text-center">
+                    <span className="text-base sm:text-lg lg:text-xl mb-1">
+                      ❓
+                    </span>
+                    <span className="text-xs sm:text-sm text-blue-600 font-medium">
+                      {path.questionCount} questions
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Target Skills */}
