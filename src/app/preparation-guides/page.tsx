@@ -5,7 +5,7 @@ import { preparationGuides } from '@/lib/preparationGuides';
 import Link from 'next/link';
 
 export default function PreparationGuidesPage() {
-  const [selectedGuide, _setSelectedGuide] = useState<string | null>(null);
+  const [selectedGuide] = useState<string | null>(null);
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -251,7 +251,7 @@ export default function PreparationGuidesPage() {
                   </Link>
                   <Link
                     href={`/preparation-guides/${guide.id}`}
-                    className="w-full bg-transparent border-3 border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-600 hover:to-gray-700 hover:text-white py-5 px-6 rounded-xl font-black hover:scale-105 transform transition-all duration-200 group-hover:shadow-xl text-center block shadow-md hover:shadow-xl"
+                    className="w-full bg-transparent border-2 border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-600 hover:to-gray-700 hover:text-white py-5 px-6 rounded-xl font-black hover:scale-105 transform transition-all duration-200 group-hover:shadow-xl text-center block shadow-md hover:shadow-xl"
                   >
                     📖 View Details
                     <svg
