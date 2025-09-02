@@ -90,93 +90,162 @@ export default function SeniorDevPage() {
 
         {/* Search and Filter Section */}
         <div className={`${showFilters ? 'block' : 'hidden md:block'} mb-8`}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 border-gray-200 dark:border-gray-700 p-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="md:col-span-2">
-                <label
-                  htmlFor="search"
-                  className="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3"
-                >
-                  🔍 Search Advanced Topics
-                </label>
-                <input
-                  type="text"
-                  id="search"
-                  placeholder="Search senior-level questions, topics, or concepts..."
-                  className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-lg transition-all duration-200"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                />
+          <div className="bg-gradient-to-br from-white via-purple-50 to-indigo-50 dark:from-gray-800 dark:via-purple-900/20 dark:to-indigo-900/20 rounded-2xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-8 relative overflow-hidden">
+            {/* Background decorative elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400/20 to-indigo-400/20 rounded-full -translate-y-16 translate-x-16"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-indigo-400/20 to-blue-400/20 rounded-full translate-y-12 -translate-x-12"></div>
+
+            <div className="relative z-10">
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
+                🔍 Advanced Topic Search & Filters
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="md:col-span-2">
+                  <label
+                    htmlFor="search"
+                    className="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2"
+                  >
+                    <span className="w-8 h-8 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center text-white text-sm">
+                      🔍
+                    </span>
+                    Search Advanced Topics
+                  </label>
+                  <input
+                    type="text"
+                    id="search"
+                    placeholder="Search senior-level questions, topics, or concepts..."
+                    className="w-full px-4 py-4 border-2 border-purple-300 dark:border-purple-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500/30 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="difficulty"
+                    className="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2"
+                  >
+                    <span className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-lg flex items-center justify-center text-white text-sm">
+                      🎯
+                    </span>
+                    Filter by Difficulty
+                  </label>
+                  <select
+                    id="difficulty"
+                    className="w-full px-4 py-4 border-2 border-indigo-300 dark:border-indigo-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-lg transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
+                    value={selectedDifficulty}
+                    onChange={e => setSelectedDifficulty(e.target.value)}
+                  >
+                    <option value="all">All Difficulties</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <label
-                  htmlFor="difficulty"
-                  className="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-3"
-                >
-                  🎯 Filter by Difficulty
-                </label>
-                <select
-                  id="difficulty"
-                  className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-lg transition-all duration-200"
-                  value={selectedDifficulty}
-                  onChange={e => setSelectedDifficulty(e.target.value)}
-                >
-                  <option value="all">All Difficulties</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                </select>
+
+              {/* Enhanced filter options */}
+              <div className="mt-6 pt-6 border-t-2 border-purple-200 dark:border-purple-700">
+                <div className="flex flex-wrap gap-4 justify-center">
+                  <button className="px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    📚 All Topics
+                  </button>
+                  <button className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    ⚡ Performance
+                  </button>
+                  <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    🏗️ Architecture
+                  </button>
+                  <button className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-green-600 hover:from-cyan-600 hover:to-green-700 text-white rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    🛠️ Tooling
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Statistics Cards */}
+        {/* Enhanced Statistics Cards */}
         <div
           className={`${showStatistics ? 'block' : 'hidden md:grid'} grid-cols-1 md:grid-cols-4 gap-6 mb-8`}
         >
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 border-blue-200 dark:border-blue-800 p-6 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div className="flex items-center justify-center mb-4">
-              <span className="text-3xl">📚</span>
+          <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 rounded-2xl shadow-2xl border-2 border-blue-300 dark:border-blue-600 p-6 text-center hover:shadow-3xl transition-all duration-300 hover:scale-110 transform group">
+            <div className="flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+              <span className="text-4xl">📚</span>
             </div>
-            <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
+            <div className="text-4xl font-black text-white mb-2 drop-shadow-lg">
               {totalResources}
             </div>
-            <div className="text-gray-700 dark:text-gray-300 font-bold text-lg">
+            <div className="text-blue-100 font-bold text-lg">
               Total Resources
             </div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 border-green-200 dark:border-green-800 p-6 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div className="flex items-center justify-center mb-4">
-              <span className="text-3xl">❓</span>
+            <div className="mt-3 w-full bg-blue-400/30 rounded-full h-2">
+              <div
+                className="bg-white h-2 rounded-full"
+                style={{
+                  width: `${Math.min((totalResources / 10) * 100, 100)}%`,
+                }}
+              ></div>
             </div>
-            <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-2">
+          </div>
+
+          <div className="bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 rounded-2xl shadow-2xl border-2 border-green-300 dark:border-green-600 p-6 text-center hover:shadow-3xl transition-all duration-300 hover:scale-110 transform group">
+            <div className="flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+              <span className="text-4xl">❓</span>
+            </div>
+            <div className="text-4xl font-black text-white mb-2 drop-shadow-lg">
               {totalQuestions}
             </div>
-            <div className="text-gray-700 dark:text-gray-300 font-bold text-lg">
+            <div className="text-green-100 font-bold text-lg">
               Total Questions
             </div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 border-yellow-200 dark:border-yellow-800 p-6 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div className="flex items-center justify-center mb-4">
-              <span className="text-3xl">⏱️</span>
+            <div className="mt-3 w-full bg-green-400/30 rounded-full h-2">
+              <div
+                className="bg-white h-2 rounded-full"
+                style={{
+                  width: `${Math.min((totalQuestions / 50) * 100, 100)}%`,
+                }}
+              ></div>
             </div>
-            <div className="text-3xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent mb-2">
+          </div>
+
+          <div className="bg-gradient-to-br from-yellow-500 via-yellow-600 to-orange-600 rounded-2xl shadow-2xl border-2 border-yellow-300 dark:border-yellow-600 p-6 text-center hover:shadow-3xl transition-all duration-300 hover:scale-110 transform group">
+            <div className="flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+              <span className="text-4xl">⏱️</span>
+            </div>
+            <div className="text-4xl font-black text-white mb-2 drop-shadow-lg">
               {totalMinutes}
             </div>
-            <div className="text-gray-700 dark:text-gray-300 font-bold text-lg">
+            <div className="text-yellow-100 font-bold text-lg">
               Total Minutes
             </div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 border-purple-200 dark:border-purple-800 p-6 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div className="flex items-center justify-center mb-4">
-              <span className="text-3xl">🎯</span>
+            <div className="mt-3 w-full bg-yellow-400/30 rounded-full h-2">
+              <div
+                className="bg-white h-2 rounded-full"
+                style={{
+                  width: `${Math.min((totalMinutes / 120) * 100, 100)}%`,
+                }}
+              ></div>
             </div>
-            <div className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 rounded-2xl shadow-2xl border-2 border-purple-300 dark:border-purple-600 p-6 text-center hover:shadow-3xl transition-all duration-300 hover:scale-110 transform group">
+            <div className="flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+              <span className="text-4xl">🎯</span>
+            </div>
+            <div className="text-4xl font-black text-white mb-2 drop-shadow-lg">
               {filteredResources.length}
             </div>
-            <div className="text-gray-700 dark:text-gray-300 font-bold text-lg">
+            <div className="text-purple-100 font-bold text-lg">
               Filtered Results
+            </div>
+            <div className="mt-3 w-full bg-purple-400/30 rounded-full h-2">
+              <div
+                className="bg-white h-2 rounded-full"
+                style={{
+                  width: `${totalResources > 0 ? (filteredResources / totalResources) * 100 : 0}%`,
+                }}
+              ></div>
             </div>
           </div>
         </div>
