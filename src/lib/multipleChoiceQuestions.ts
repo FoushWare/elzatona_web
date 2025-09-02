@@ -48,7 +48,7 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     id: 'css-3',
     question: 'Which of the following selectors are pseudo-class selectors?',
     options: [':hover', '::before', ':nth-child(2)', '::after'],
-    correctAnswer: 0, // Multiple correct answers, but we'll use the first one
+    correctAnswer: 0,
     explanation:
       ':hover and :nth-child(2) are pseudo-classes, while ::before and ::after are pseudo-elements.',
     category: 'css',
@@ -98,204 +98,10 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     difficulty: 'hard',
     tags: ['contain', 'css', 'performance'],
   },
-  {
-    id: 'css-7',
-    question: 'Which of the following returns a char?',
-    options: [
-      '"abc".substr(0)',
-      '"abc".charAt(0)',
-      '"abc".substring(0)',
-      '"abc".slice(0)',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'Only charAt(0) returns a single character "a". Other methods return the entire string from index 0 onward.',
-    category: 'css',
-    difficulty: 'easy',
-    tags: ['strings', 'javascript', 'methods'],
-  },
-  {
-    id: 'css-8',
-    question: 'What is the computed width when using box-sizing: border-box?',
-    options: [
-      'width + padding + border',
-      'width',
-      'content-width + padding',
-      'content-width + padding + border',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'With box-sizing: border-box, the declared width includes padding and border, so the computed width equals the declared width.',
-    category: 'css',
-    difficulty: 'easy',
-    tags: ['box-model', 'css', 'layout'],
-  },
-  {
-    id: 'css-9',
-    question: 'Which of the following selectors are pseudo-class selectors?',
-    options: [':hover', '::before', ':nth-child(2)', '::after'],
-    correctAnswer: 0,
-    explanation:
-      ':hover and :nth-child(2) are pseudo-classes, while ::before and ::after are pseudo-elements.',
-    category: 'css',
-    difficulty: 'medium',
-    tags: ['selectors', 'pseudo-classes', 'css'],
-  },
-  {
-    id: 'css-10',
-    question:
-      'If you set border widths like this: top = 10px, bottom = 5px, left = 20px, right = 1px, how would you write it in CSS shorthand?',
-    options: [
-      'border-width: 10px 5px 20px 1px;',
-      'border-width: 10px 1px 5px 20px;',
-      'border-width: 10px 20px 5px 1px;',
-      'border-width: 10px 20px 1px 5px;',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'CSS shorthand order is: top → right → bottom → left (clockwise from top).',
-    category: 'css',
-    difficulty: 'medium',
-    tags: ['border', 'shorthand', 'css'],
-  },
-  {
-    id: 'css-11',
-    question: 'What is the universal selector in CSS?',
-    options: ['*', '.', '#', ':root'],
-    correctAnswer: 0,
-    explanation: '* is the universal selector that matches all elements.',
-    category: 'css',
-    difficulty: 'easy',
-    tags: ['selectors', 'css', 'universal'],
-  },
-  {
-    id: 'css-12',
-    question: 'What does the CSS contain: strict; property do?',
-    options: [
-      'Makes the element a containing block for fixed-position descendants',
-      'Prevents the element from having visual effects outside its box',
-      'Turns the element into a flex container with flex-wrap enabled',
-      'Applies strict rendering optimizations for performance',
-    ],
-    correctAnswer: 1,
-    explanation:
-      "contain: strict creates a new containing block and stacking context, preventing visual effects from leaking outside the element's box.",
-    category: 'css',
-    difficulty: 'hard',
-    tags: ['contain', 'css', 'performance'],
-  },
-  {
-    id: 'css-13',
-    question: 'What is the computed width when using box-sizing: border-box?',
-    options: [
-      'width + padding + border',
-      'width',
-      'content-width + padding',
-      'content-width + padding + border',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'With box-sizing: border-box, the declared width includes padding and border, so the computed width equals the declared width.',
-    category: 'css',
-    difficulty: 'easy',
-    tags: ['box-model', 'css', 'layout'],
-  },
-  {
-    id: 'css-14',
-    question: 'Which of the following selectors are pseudo-class selectors?',
-    options: [':hover', '::before', ':nth-child(2)', '::after'],
-    correctAnswer: 0,
-    explanation:
-      ':hover and :nth-child(2) are pseudo-classes, while ::before and ::after are pseudo-elements.',
-    category: 'css',
-    difficulty: 'medium',
-    tags: ['selectors', 'pseudo-classes', 'css'],
-  },
-  {
-    id: 'css-15',
-    question:
-      'If you set border widths like this: top = 10px, bottom = 5px, left = 20px, right = 1px, how would you write it in CSS shorthand?',
-    options: [
-      'border-width: 10px 5px 20px 1px;',
-      'border-width: 10px 1px 5px 20px;',
-      'border-width: 10px 20px 5px 1px;',
-      'border-width: 10px 20px 1px 5px;',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'CSS shorthand order is: top → right → bottom → left (clockwise from top).',
-    category: 'css',
-    difficulty: 'medium',
-    tags: ['border', 'shorthand', 'css'],
-  },
-  {
-    id: 'css-16',
-    question: 'What is the universal selector in CSS?',
-    options: ['*', '.', '#', ':root'],
-    correctAnswer: 0,
-    explanation: '* is the universal selector that matches all elements.',
-    category: 'css',
-    difficulty: 'easy',
-    tags: ['selectors', 'css', 'universal'],
-  },
-  {
-    id: 'css-17',
-    question: 'What does the CSS contain: strict; property do?',
-    options: [
-      'Makes the element a containing block for fixed-position descendants',
-      'Prevents the element from having visual effects outside its box',
-      'Turns the element into a flex container with flex-wrap enabled',
-      'Applies strict rendering optimizations for performance',
-    ],
-    correctAnswer: 1,
-    explanation:
-      "contain: strict creates a new containing block and stacking context, preventing visual effects from leaking outside the element's box.",
-    category: 'css',
-    difficulty: 'hard',
-    tags: ['contain', 'css', 'performance'],
-  },
 
   // HTML Questions
   {
     id: 'html-1',
-    question: 'Which HTML event attribute occurs when you click an element?',
-    options: ['onmouseover', 'onchange', 'onclick', 'ondblclick'],
-    correctAnswer: 2,
-    explanation:
-      'onclick is the event attribute that fires when an element is clicked.',
-    category: 'html',
-    difficulty: 'easy',
-    tags: ['events', 'html', 'click'],
-  },
-  {
-    id: 'html-2',
-    question: 'Which of the following returns a char?',
-    options: [
-      '"abc".substr(0)',
-      '"abc".charAt(0)',
-      '"abc".substring(0)',
-      '"abc".slice(0)',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'Only charAt(0) returns a single character "a". Other methods return the entire string from index 0 onward.',
-    category: 'html',
-    difficulty: 'easy',
-    tags: ['strings', 'javascript', 'methods'],
-  },
-  {
-    id: 'html-3',
-    question: 'Which HTML event attribute occurs when you click an element?',
-    options: ['onmouseover', 'onchange', 'onclick', 'ondblclick'],
-    correctAnswer: 2,
-    explanation:
-      'onclick is the event attribute that fires when an element is clicked.',
-    category: 'html',
-    difficulty: 'easy',
-    tags: ['events', 'html', 'click'],
-  },
-  {
-    id: 'html-4',
     question: 'Which HTML event attribute occurs when you click an element?',
     options: ['onmouseover', 'onchange', 'onclick', 'ondblclick'],
     correctAnswer: 2,
@@ -319,7 +125,7 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Only charAt(0) returns a single character 'a'. Other methods return the entire string from index 0 onward.",
+      'Only charAt(0) returns a single character "a". Other methods return the entire string from index 0 onward.',
     category: 'javascript',
     difficulty: 'easy',
     tags: ['strings', 'javascript', 'methods'],
@@ -353,133 +159,11 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     difficulty: 'easy',
     tags: ['browser-api', 'javascript', 'reload'],
   },
-  {
-    id: 'js-4',
-    question: 'Which of the following returns a char?',
-    options: [
-      '"abc".substr(0)',
-      '"abc".charAt(0)',
-      '"abc".substring(0)',
-      '"abc".slice(0)',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'Only charAt(0) returns a single character "a". Other methods return the entire string from index 0 onward.',
-    category: 'javascript',
-    difficulty: 'easy',
-    tags: ['strings', 'javascript', 'methods'],
-  },
-  {
-    id: 'js-9',
-    question: 'Which of the following returns a char?',
-    options: [
-      '"abc".substr(0)',
-      '"abc".charAt(0)',
-      '"abc".substring(0)',
-      '"abc".slice(0)',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'Only charAt(0) returns a single character "a". Other methods return the entire string from index 0 onward.',
-    category: 'javascript',
-    difficulty: 'easy',
-    tags: ['strings', 'javascript', 'methods'],
-  },
-  {
-    id: 'js-10',
-    question: 'Which of the following returns a char?',
-    options: [
-      '"abc".substr(0)',
-      '"abc".charAt(0)',
-      '"abc".substring(0)',
-      '"abc".slice(0)',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'Only charAt(0) returns a single character "a". Other methods return the entire string from index 0 onward.',
-    category: 'javascript',
-    difficulty: 'easy',
-    tags: ['strings', 'javascript', 'methods'],
-  },
-  {
-    id: 'js-5',
-    question:
-      'Which of the following JavaScript events will always trigger when a key is pressed on the keyboard?',
-    options: ['onkeypress', 'onkeydown', 'onkeyup', 'onclick'],
-    correctAnswer: 1,
-    explanation:
-      "onkeydown triggers as soon as a key is pressed down, and it always fires for every key. onkeypress is deprecated and doesn't trigger for all keys.",
-    category: 'javascript',
-    difficulty: 'medium',
-    tags: ['events', 'keyboard', 'javascript'],
-  },
-  {
-    id: 'js-7',
-    question:
-      'Which event always triggers whenever a key is pressed on the keyboard?',
-    options: ['onkeypress', 'onkeydown', 'onkeyup', 'onclick'],
-    correctAnswer: 1,
-    explanation:
-      "onkeydown triggers as soon as a key is pressed down, and it always fires for every key. onkeypress is deprecated and doesn't trigger for all keys.",
-    category: 'javascript',
-    difficulty: 'medium',
-    tags: ['events', 'keyboard', 'javascript'],
-  },
-  {
-    id: 'js-6',
-    question:
-      'Which of the following is the correct way to refresh (reload) the current page in JavaScript?',
-    options: [
-      'window.refresh()',
-      'window.location.reload()',
-      'document.reload()',
-      'location.refresh()',
-    ],
-    correctAnswer: 1,
-    explanation:
-      "window.location.reload() is the standard way to reload the page in JavaScript. Other methods don't exist.",
-    category: 'javascript',
-    difficulty: 'easy',
-    tags: ['browser-api', 'javascript', 'reload'],
-  },
-  {
-    id: 'js-8',
-    question: 'How can you refresh the screen in JavaScript?',
-    options: [
-      'window.refresh()',
-      'window.location.reload()',
-      'document.reload()',
-      'location.refresh()',
-    ],
-    correctAnswer: 1,
-    explanation:
-      "window.location.reload() is the standard way to reload the page in JavaScript. Other methods don't exist.",
-    category: 'javascript',
-    difficulty: 'easy',
-    tags: ['browser-api', 'javascript', 'reload'],
-  },
 
   // WebSocket Questions
   {
     id: 'websocket-1',
     question:
-      "You're implementing a WebSocket event counter. Which event listener should you increment to count incoming messages from the server?",
-    options: [
-      'socket.onopen',
-      'socket.onmessage',
-      'socket.onerror',
-      'socket.onclose',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'onmessage fires each time data is received from the server—perfect for counting messages. onopen fires once when the connection opens.',
-    category: 'websockets',
-    difficulty: 'medium',
-    tags: ['websockets', 'events', 'javascript'],
-  },
-  {
-    id: 'websocket-2',
-    question:
       'Which WebSocket event should you count to track messages received from the server?',
     options: [
       'socket.onopen',
@@ -489,24 +173,7 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'onmessage fires each time data is received from the server—perfect for counting messages. onopen fires once when the connection opens.',
-    category: 'websockets',
-    difficulty: 'medium',
-    tags: ['websockets', 'events', 'javascript'],
-  },
-  {
-    id: 'websocket-3',
-    question:
-      'Which WebSocket event should you count to track messages received from the server?',
-    options: [
-      'socket.onopen',
-      'socket.onmessage',
-      'socket.onerror',
-      'socket.onclose',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'onmessage fires each time data is received from the server—perfect for counting messages. onopen fires once when the connection opens.',
+      'onmessage fires each time data is received from the server—perfect for counting messages. onopen fires once when the connection opens, onerror fires when an error occurs, and onclose fires when the connection closes.',
     category: 'websockets',
     difficulty: 'medium',
     tags: ['websockets', 'events', 'javascript'],
@@ -526,8 +193,8 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     explanation:
       'Reconciliation is the process React uses to compare the current Virtual DOM with the new Virtual DOM (after state/props change) and determine the minimum set of updates needed to efficiently update the real DOM.',
     category: 'react',
-    difficulty: 'medium',
-    tags: ['react', 'virtual-dom', 'reconciliation', 'performance'],
+    difficulty: 'hard',
+    tags: ['react', 'reconciliation', 'virtual-dom', 'performance'],
   },
   {
     id: 'react-2',
@@ -579,22 +246,6 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
   },
   {
     id: 'react-5',
-    question: 'Which feature became possible mainly due to React Fiber?',
-    options: [
-      'Server-side rendering.',
-      'Concurrent rendering (splitting tasks into chunks).',
-      'Using JSX in React.',
-      'Redux state management.',
-    ],
-    correctAnswer: 1,
-    explanation:
-      'Fiber enables concurrent rendering, letting React pause, prioritize, and resume rendering tasks, improving responsiveness for complex UIs.',
-    category: 'react',
-    difficulty: 'medium',
-    tags: ['react', 'fiber', 'concurrent', 'rendering'],
-  },
-  {
-    id: 'react-6',
     question: 'Which feature became possible mainly due to React Fiber?',
     options: [
       'Server-side rendering.',
