@@ -14,88 +14,91 @@ export default function PreparationGuidesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-4xl">📚</span>
+        {/* Enhanced Header with Better Visibility */}
+        <div className="text-center mb-16">
+          <div className="w-32 h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl animate-pulse">
+            <span className="text-6xl">📚</span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 drop-shadow-lg">
             Preparation Guides
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Interview preparation strategies, question sets, and methodologies
-            to ace your frontend interviews
+          <p className="text-2xl md:text-3xl text-gray-700 dark:text-gray-200 max-w-4xl mx-auto mb-10 leading-relaxed font-semibold">
+            🎯{' '}
+            <span className="text-blue-600 dark:text-blue-400 font-bold">
+              Master Frontend Interviews
+            </span>{' '}
+            with our comprehensive guides
           </p>
-          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
             <Link
               href="/learning-paths"
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-bold hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-10 py-5 rounded-2xl font-black hover:scale-110 transform transition-all duration-300 shadow-2xl hover:shadow-3xl text-lg"
             >
               📚 Learning Paths
             </Link>
             <Link
               href="/study-plans"
-              className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-bold hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-10 py-5 rounded-2xl font-black hover:scale-110 transform transition-all duration-300 shadow-2xl hover:shadow-3xl text-lg"
             >
               📅 Study Plans
             </Link>
           </div>
         </div>
 
-        {/* Guides Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        {/* Enhanced Guides Grid with Better Visibility */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
           {guides.map(guide => (
             <div
               key={guide.id}
-              className={`bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border-4 border-transparent overflow-hidden transition-all duration-300 hover:shadow-3xl hover:scale-[1.03] transform cursor-pointer group ${
+              className={`bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border-4 border-transparent overflow-hidden transition-all duration-300 hover:shadow-3xl hover:scale-[1.02] transform cursor-pointer group ${
                 selectedGuide === guide.id
                   ? 'border-blue-500 shadow-blue-500/50 ring-8 ring-blue-500/30'
                   : 'hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-blue-500/20'
               }`}
             >
-              {/* Guide Header */}
+              {/* Enhanced Guide Header with Better Text Contrast */}
               <div
-                className={`bg-gradient-to-br ${guide.color} p-8 text-white relative overflow-hidden shadow-2xl`}
+                className={`bg-gradient-to-br ${guide.color} p-10 text-white relative overflow-hidden shadow-2xl`}
               >
-                <div className="absolute inset-0 bg-black/30"></div>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/15 rounded-full -translate-y-16 translate-x-16"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/15 rounded-full translate-y-12 -translate-x-12"></div>
+                <div className="absolute inset-0 bg-black/40"></div>
+                <div className="absolute top-0 right-0 w-40 h-40 bg-white/20 rounded-full -translate-y-20 translate-x-20"></div>
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/20 rounded-full translate-y-16 -translate-x-16"></div>
                 <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-6">
+                  <div className="flex items-start justify-between mb-8">
                     <div className="flex items-center">
-                      <div className="text-6xl mr-6 drop-shadow-2xl filter brightness-125 animate-pulse">
+                      <div className="text-7xl mr-8 drop-shadow-2xl filter brightness-125 animate-pulse">
                         {guide.icon}
                       </div>
                       <div>
-                        <h3 className="text-3xl font-black mb-3 drop-shadow-2xl text-white tracking-wide">
+                        <h3 className="text-4xl font-black mb-4 drop-shadow-2xl text-white tracking-wide leading-tight">
                           {guide.title}
                         </h3>
                         <div className="flex items-center gap-4 text-white">
-                          <span className="px-4 py-2 bg-white/30 rounded-full text-sm font-black backdrop-blur-sm border-2 border-white/50 shadow-lg">
+                          <span className="px-6 py-3 bg-white/40 rounded-full text-base font-black backdrop-blur-sm border-2 border-white/60 shadow-lg">
                             {guide.difficulty.replace('-', ' ').toUpperCase()}
                           </span>
-                          <span className="text-lg font-bold">•</span>
-                          <span className="text-lg font-bold">
+                          <span className="text-xl font-bold">•</span>
+                          <span className="text-xl font-bold">
                             {guide.estimatedTime} hours
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <p className="text-white text-lg leading-relaxed font-semibold drop-shadow-lg">
+                  <p className="text-white text-xl leading-relaxed font-bold drop-shadow-lg max-w-none">
                     {guide.description}
                   </p>
                 </div>
               </div>
 
-              {/* Guide Content */}
-              <div className="p-8 bg-white dark:bg-gray-800 border-t-4 border-gray-100 dark:border-gray-700">
-                {/* Target Skills */}
-                <div className="mb-8">
-                  <h4 className="font-black text-foreground mb-4 flex items-center text-xl">
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-3 shadow-lg">
+              {/* Enhanced Guide Content with Better Text Readability */}
+              <div className="p-10 bg-white dark:bg-gray-800 border-t-4 border-gray-100 dark:border-gray-700">
+                {/* Target Skills with Enhanced Visibility */}
+                <div className="mb-10">
+                  <h4 className="font-black text-gray-900 dark:text-white mb-6 flex items-center text-2xl">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
                       <svg
-                        className="w-6 h-6 text-white"
+                        className="w-7 h-7 text-white"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -109,32 +112,32 @@ export default function PreparationGuidesPage() {
                       </svg>
                     </div>
                     <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                      Target Skills
+                      🎯 Target Skills
                     </span>
                   </h4>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-4">
                     {guide.targetSkills.slice(0, 4).map(skill => (
                       <span
                         key={skill}
-                        className="px-4 py-3 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/50 dark:to-purple-900/50 text-blue-800 dark:text-blue-200 rounded-xl text-sm font-black border-2 border-blue-300 dark:border-blue-600 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
+                        className="px-6 py-4 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/50 dark:to-purple-900/50 text-blue-900 dark:text-blue-100 rounded-xl text-base font-black border-2 border-blue-300 dark:border-blue-600 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
                       >
                         {skill}
                       </span>
                     ))}
                     {guide.targetSkills.length > 4 && (
-                      <span className="px-4 py-3 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-black border-2 border-gray-300 dark:border-gray-600 shadow-md">
+                      <span className="px-6 py-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 text-gray-800 dark:text-gray-200 rounded-xl text-base font-black border-2 border-gray-300 dark:border-gray-600 shadow-lg">
                         +{guide.targetSkills.length - 4} more
                       </span>
                     )}
                   </div>
                 </div>
 
-                {/* Sections Preview */}
-                <div className="mb-8">
-                  <h4 className="font-black text-foreground mb-4 flex items-center text-xl">
-                    <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-3 shadow-lg">
+                {/* Sections Preview with Enhanced Readability */}
+                <div className="mb-10">
+                  <h4 className="font-black text-gray-900 dark:text-white mb-6 flex items-center text-2xl">
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
                       <svg
-                        className="w-6 h-6 text-white"
+                        className="w-7 h-7 text-white"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -148,18 +151,18 @@ export default function PreparationGuidesPage() {
                       </svg>
                     </div>
                     <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                      Sections ({guide.sections.length})
+                      📚 Sections ({guide.sections.length})
                     </span>
                   </h4>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {guide.sections.slice(0, 3).map((section, index) => (
                       <div
                         key={index}
-                        className="flex items-center text-sm text-foreground group-hover:text-foreground transition-all duration-200 p-4 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 dark:hover:from-purple-900/20 dark:hover:to-pink-900/20 border border-transparent hover:border-purple-200 dark:hover:border-purple-700 shadow-sm hover:shadow-md"
+                        className="flex items-center text-base text-gray-900 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white transition-all duration-200 p-5 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 dark:hover:from-purple-900/20 dark:hover:to-pink-900/20 border border-transparent hover:border-purple-200 dark:hover:border-purple-700 shadow-md hover:shadow-lg"
                       >
-                        <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mr-4 flex-shrink-0 shadow-md">
+                        <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mr-5 flex-shrink-0 shadow-lg">
                           <svg
-                            className="w-5 h-5 text-white"
+                            className="w-6 h-6 text-white"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -170,28 +173,28 @@ export default function PreparationGuidesPage() {
                             />
                           </svg>
                         </div>
-                        <span className="font-bold truncate text-base">
+                        <span className="font-bold text-lg">
                           {section.title}
                         </span>
-                        <span className="ml-auto text-xs text-white font-black bg-gradient-to-r from-green-500 to-emerald-600 px-3 py-2 rounded-full shadow-md">
+                        <span className="ml-auto text-sm text-white font-black bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-2 rounded-full shadow-lg">
                           {section.readingTime}min
                         </span>
                       </div>
                     ))}
                     {guide.sections.length > 3 && (
-                      <div className="text-sm text-foreground pt-4 border-t-2 border-purple-200 dark:border-purple-700 font-bold text-center">
+                      <div className="text-base text-gray-900 dark:text-white pt-5 border-t-2 border-purple-200 dark:border-purple-700 font-bold text-center">
                         +{guide.sections.length - 3} more sections
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Features Preview */}
-                <div className="mb-8">
-                  <h4 className="font-black text-foreground mb-4 flex items-center text-xl">
-                    <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mr-3 shadow-lg">
+                {/* Features Preview with Enhanced Readability */}
+                <div className="mb-10">
+                  <h4 className="font-black text-gray-900 dark:text-white mb-6 flex items-center text-2xl">
+                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
                       <svg
-                        className="w-6 h-6 text-white"
+                        className="w-7 h-7 text-white"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -205,38 +208,36 @@ export default function PreparationGuidesPage() {
                       </svg>
                     </div>
                     <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                      Key Features
+                      ✨ Key Features
                     </span>
                   </h4>
-                  <div className="grid grid-cols-1 gap-3">
+                  <div className="grid grid-cols-1 gap-4">
                     {guide.features.slice(0, 3).map((feature, index) => (
                       <div
                         key={index}
-                        className="flex items-center text-sm text-foreground group-hover:text-foreground transition-all duration-200 p-4 rounded-xl hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 dark:hover:from-green-900/20 dark:hover:to-emerald-900/20 border border-transparent hover:border-green-200 dark:hover:border-green-700 shadow-sm hover:shadow-md"
+                        className="flex items-center text-base text-gray-900 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white transition-all duration-200 p-5 rounded-xl hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 dark:hover:from-green-900/20 dark:hover:to-emerald-900/20 border border-transparent hover:border-green-200 dark:hover:border-green-700 shadow-md hover:shadow-lg"
                       >
-                        <div className="w-4 h-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full mr-4 flex-shrink-0 shadow-md"></div>
-                        <span className="font-bold truncate text-base">
-                          {feature}
-                        </span>
+                        <div className="w-5 h-5 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full mr-5 flex-shrink-0 shadow-md"></div>
+                        <span className="font-bold text-lg">{feature}</span>
                       </div>
                     ))}
                     {guide.features.length > 3 && (
-                      <div className="text-sm text-foreground pt-4 border-t-2 border-green-200 dark:border-green-700 font-bold text-center">
+                      <div className="text-base text-gray-900 dark:text-white pt-5 border-t-2 border-green-200 dark:border-green-700 font-bold text-center">
                         +{guide.features.length - 3} more features
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="space-y-4">
+                {/* Enhanced Action Buttons */}
+                <div className="space-y-5">
                   <Link
                     href={`/preparation-guides/${guide.id}`}
-                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-5 px-6 rounded-xl font-black hover:scale-105 transform transition-all duration-200 group-hover:shadow-xl text-center block shadow-lg border-2 border-transparent hover:border-blue-400"
+                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-6 px-8 rounded-2xl font-black hover:scale-105 transform transition-all duration-200 group-hover:shadow-xl text-center block shadow-2xl border-2 border-transparent hover:border-blue-400 text-lg"
                   >
                     🚀 Start {guide.title}
                     <svg
-                      className="w-6 h-6 ml-2 inline group-hover:translate-x-1 transition-transform duration-200"
+                      className="w-7 h-7 ml-3 inline group-hover:translate-x-1 transition-transform duration-200"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -251,11 +252,11 @@ export default function PreparationGuidesPage() {
                   </Link>
                   <Link
                     href={`/preparation-guides/${guide.id}`}
-                    className="w-full bg-transparent border-2 border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-600 hover:to-gray-700 hover:text-white py-5 px-6 rounded-xl font-black hover:scale-105 transform transition-all duration-200 group-hover:shadow-xl text-center block shadow-md hover:shadow-xl"
+                    className="w-full bg-transparent border-2 border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gradient-to-r hover:from-gray-600 hover:to-gray-700 hover:text-white py-6 px-8 rounded-2xl font-black hover:scale-105 transform transition-all duration-200 group-hover:shadow-xl text-center block shadow-lg hover:shadow-xl text-lg"
                   >
                     📖 View Details
                     <svg
-                      className="w-6 h-6 ml-2 inline group-hover:translate-x-1 transition-transform duration-200"
+                      className="w-7 h-7 ml-3 inline group-hover:translate-x-1 transition-transform duration-200"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
