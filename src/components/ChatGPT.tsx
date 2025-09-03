@@ -99,7 +99,11 @@ export default function ChatGPT() {
         </div>
 
         {/* Floating notification dot */}
-        <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-bounce shadow-lg">
+        <div
+          className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-bounce shadow-lg"
+          role="status"
+          aria-label="New message notification"
+        >
           <div className="w-full h-full bg-white rounded-full animate-ping"></div>
         </div>
 

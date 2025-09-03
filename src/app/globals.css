@@ -17,6 +17,20 @@
   overflow: hidden;
 }
 
+/* Dark mode transition utilities */
+* {
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Ensure proper dark mode application */
+html.dark {
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+}
+
 @layer base {
   :root {
     /* Enhanced Light Mode Colors */

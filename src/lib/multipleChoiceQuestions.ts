@@ -4,7 +4,14 @@ export interface MultipleChoiceQuestion {
   options: string[];
   correctAnswer: number; // Index of correct answer (0-based)
   explanation: string;
-  category: 'css' | 'javascript' | 'html' | 'websockets' | 'react' | 'general';
+  category:
+    | 'css'
+    | 'javascript'
+    | 'html'
+    | 'websockets'
+    | 'react'
+    | 'general'
+    | 'git';
   difficulty: 'easy' | 'medium' | 'hard';
   tags: string[];
 }
@@ -1144,6 +1151,361 @@ export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
     category: 'react',
     difficulty: 'hard',
     tags: ['compound-components', 'patterns', 'component-design', 'interview'],
+  },
+  // Git Questions
+  {
+    id: 'git-worktree-1',
+    question: 'What is Git worktree and what problem does it solve?',
+    options: [
+      'A way to have multiple working directories from the same repository',
+      'A tool for managing multiple Git repositories',
+      'A feature for creating backup branches',
+      'A method for organizing Git commits',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Git worktree allows you to check out multiple branches simultaneously in different directories from the same repository. This solves the problem of needing to work on different features without stashing or committing incomplete work.',
+    category: 'git',
+    difficulty: 'medium',
+    tags: ['git-worktree', 'branching', 'workflow', 'interview'],
+  },
+  {
+    id: 'git-worktree-2',
+    question: 'How do you create a new Git worktree?',
+    options: [
+      'git worktree add <path> <branch>',
+      'git checkout -b <branch> <path>',
+      'git clone <repo> <path>',
+      'git branch <branch> <path>',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'The correct command is "git worktree add <path> <branch>". This creates a new working directory at the specified path with the specified branch checked out.',
+    category: 'git',
+    difficulty: 'easy',
+    tags: ['git-worktree', 'commands', 'branching', 'interview'],
+  },
+  {
+    id: 'git-worktree-3',
+    question: 'What happens when you delete a Git worktree?',
+    options: [
+      'The branch is deleted from the repository',
+      'Only the working directory is removed, the branch remains',
+      'All commits in that branch are lost',
+      'The repository becomes corrupted',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'When you delete a Git worktree using "git worktree remove <path>", only the working directory is removed. The branch and all its commits remain in the repository.',
+    category: 'git',
+    difficulty: 'medium',
+    tags: ['git-worktree', 'cleanup', 'branching', 'interview'],
+  },
+  {
+    id: 'git-merge-1',
+    question: 'What is the difference between git merge and git rebase?',
+    options: [
+      'Merge creates a merge commit, rebase replays commits on top of another branch',
+      'Merge is faster, rebase is slower',
+      'Merge preserves history, rebase rewrites history',
+      'Merge is for feature branches, rebase is for main branch',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Git merge creates a merge commit that combines changes from two branches, while git rebase replays commits from one branch on top of another, creating a linear history.',
+    category: 'git',
+    difficulty: 'medium',
+    tags: ['git-merge', 'git-rebase', 'branching', 'interview'],
+  },
+  {
+    id: 'git-merge-2',
+    question: 'What is a fast-forward merge in Git?',
+    options: [
+      'A merge where no merge commit is created because the target branch has no new commits',
+      'A merge that automatically resolves all conflicts',
+      'A merge that only includes the latest commit',
+      'A merge that creates a new branch',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'A fast-forward merge occurs when the target branch has no new commits since the source branch was created. Git simply moves the pointer forward without creating a merge commit.',
+    category: 'git',
+    difficulty: 'easy',
+    tags: ['git-merge', 'fast-forward', 'branching', 'interview'],
+  },
+  {
+    id: 'git-hooks-1',
+    question: 'What are Git hooks and what are they used for?',
+    options: [
+      'Scripts that run automatically at certain points in the Git workflow',
+      'Tools for creating Git repositories',
+      'Commands for managing Git branches',
+      'Features for Git authentication',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Git hooks are scripts that run automatically at certain points in the Git workflow, such as pre-commit, post-commit, pre-push, etc. They are used for automation, validation, and enforcing policies.',
+    category: 'git',
+    difficulty: 'medium',
+    tags: ['git-hooks', 'automation', 'workflow', 'interview'],
+  },
+  {
+    id: 'git-hooks-2',
+    question: 'Where are Git hooks stored in a repository?',
+    options: [
+      '.git/hooks/ directory',
+      'hooks/ directory in the root',
+      'src/hooks/ directory',
+      'package.json scripts section',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Git hooks are stored in the .git/hooks/ directory. Each hook file should be executable and named according to the hook type (e.g., pre-commit, post-commit).',
+    category: 'git',
+    difficulty: 'easy',
+    tags: ['git-hooks', 'file-structure', 'repository', 'interview'],
+  },
+  {
+    id: 'git-stash-1',
+    question: 'What does git stash do and when would you use it?',
+    options: [
+      'Temporarily saves uncommitted changes and reverts working directory to clean state',
+      'Creates a backup of all files in the repository',
+      'Moves commits to a different branch',
+      'Deletes all uncommitted changes',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "git stash temporarily saves uncommitted changes and reverts the working directory to a clean state. It's useful when you need to switch branches but aren't ready to commit your current work.",
+    category: 'git',
+    difficulty: 'easy',
+    tags: ['git-stash', 'workflow', 'branching', 'interview'],
+  },
+  {
+    id: 'git-stash-2',
+    question: 'How do you apply a stashed change in Git?',
+    options: [
+      'git stash pop or git stash apply',
+      'git stash merge',
+      'git stash checkout',
+      'git stash pull',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'You can use "git stash pop" to apply and remove the most recent stash, or "git stash apply" to apply without removing it. "git stash pop" is equivalent to "git stash apply" followed by "git stash drop".',
+    category: 'git',
+    difficulty: 'easy',
+    tags: ['git-stash', 'commands', 'workflow', 'interview'],
+  },
+  {
+    id: 'git-rebase-1',
+    question: 'What is interactive rebase in Git and when would you use it?',
+    options: [
+      'A rebase that allows you to edit, reorder, or squash commits',
+      'A rebase that automatically resolves conflicts',
+      'A rebase that only works with remote branches',
+      'A rebase that creates a new repository',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "Interactive rebase (git rebase -i) allows you to edit, reorder, squash, or split commits before applying them. It's useful for cleaning up commit history before merging a feature branch.",
+    category: 'git',
+    difficulty: 'hard',
+    tags: ['git-rebase', 'interactive', 'history-rewriting', 'interview'],
+  },
+  {
+    id: 'git-cherry-pick-1',
+    question: 'What is git cherry-pick and when would you use it?',
+    options: [
+      'Applies a specific commit from one branch to another',
+      'Creates a new branch from a specific commit',
+      'Merges two branches together',
+      'Deletes a specific commit from history',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "git cherry-pick applies a specific commit from one branch to another. It's useful when you want to bring a specific fix or feature from one branch to another without merging the entire branch.",
+    category: 'git',
+    difficulty: 'medium',
+    tags: ['git-cherry-pick', 'commits', 'branching', 'interview'],
+  },
+  {
+    id: 'git-bisect-1',
+    question: 'What is git bisect and what problem does it solve?',
+    options: [
+      'A tool for finding which commit introduced a bug',
+      'A way to split commits into smaller pieces',
+      'A method for merging two branches',
+      'A tool for cleaning up Git history',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'git bisect is a tool for finding which commit introduced a bug. It uses binary search to efficiently narrow down the problematic commit by testing different versions of the code.',
+    category: 'git',
+    difficulty: 'hard',
+    tags: ['git-bisect', 'debugging', 'binary-search', 'interview'],
+  },
+  {
+    id: 'git-submodules-1',
+    question: 'What are Git submodules and when would you use them?',
+    options: [
+      'A way to include one Git repository as a subdirectory of another',
+      'A method for creating smaller Git repositories',
+      'A tool for managing Git branches',
+      'A feature for Git authentication',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "Git submodules allow you to include one Git repository as a subdirectory of another. They're useful for including third-party libraries or shared components while maintaining separate version control.",
+    category: 'git',
+    difficulty: 'hard',
+    tags: ['git-submodules', 'repositories', 'dependencies', 'interview'],
+  },
+  {
+    id: 'git-tags-1',
+    question: 'What are Git tags and what are they used for?',
+    options: [
+      'Named references to specific commits, often used for releases',
+      'A way to organize Git branches',
+      'A method for grouping commits',
+      'A tool for Git authentication',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Git tags are named references to specific commits, often used to mark release points (v1.0, v2.0, etc.). They provide a way to reference important commits without remembering their hash.',
+    category: 'git',
+    difficulty: 'easy',
+    tags: ['git-tags', 'releases', 'versioning', 'interview'],
+  },
+  {
+    id: 'git-remote-1',
+    question: 'What is a Git remote and how do you add one?',
+    options: [
+      'A reference to another Git repository, added with git remote add',
+      'A local copy of a remote repository',
+      'A way to backup Git repositories',
+      'A method for Git authentication',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'A Git remote is a reference to another Git repository, typically hosted on a server. You add one with "git remote add <name> <url>", where <name> is typically "origin".',
+    category: 'git',
+    difficulty: 'easy',
+    tags: ['git-remote', 'repositories', 'collaboration', 'interview'],
+  },
+  {
+    id: 'git-conflict-1',
+    question: 'What causes a Git merge conflict and how do you resolve it?',
+    options: [
+      'When the same lines are modified in different branches, resolved by manually editing the conflicted files',
+      'When Git cannot connect to the remote repository',
+      'When there are too many commits to merge',
+      'When the working directory is not clean',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'A merge conflict occurs when the same lines are modified in different branches. Git marks the conflicts in the files, and you must manually edit them to resolve the conflicts before completing the merge.',
+    category: 'git',
+    difficulty: 'medium',
+    tags: ['git-merge', 'conflicts', 'resolution', 'interview'],
+  },
+  {
+    id: 'git-log-1',
+    question: 'What does git log --oneline do?',
+    options: [
+      'Shows a condensed one-line summary of each commit',
+      'Shows only the latest commit',
+      'Shows commits in a tree format',
+      'Shows commits with full details',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "git log --oneline shows a condensed one-line summary of each commit, including the abbreviated commit hash and commit message. It's useful for getting a quick overview of commit history.",
+    category: 'git',
+    difficulty: 'easy',
+    tags: ['git-log', 'history', 'commands', 'interview'],
+  },
+  {
+    id: 'git-reset-1',
+    question:
+      'What is the difference between git reset --soft and git reset --hard?',
+    options: [
+      '--soft keeps changes staged, --hard discards all changes',
+      '--soft discards changes, --hard keeps them',
+      '--soft is for commits, --hard is for branches',
+      '--soft is faster, --hard is slower',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'git reset --soft moves HEAD to the specified commit but keeps changes staged, while git reset --hard moves HEAD and discards all changes in the working directory and staging area.',
+    category: 'git',
+    difficulty: 'medium',
+    tags: ['git-reset', 'staging', 'workflow', 'interview'],
+  },
+  {
+    id: 'git-reflog-1',
+    question: 'What is git reflog and when would you use it?',
+    options: [
+      'A log of all reference updates, useful for recovering lost commits or branches',
+      'A way to view remote repository information',
+      'A tool for managing Git tags',
+      'A method for Git authentication',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "git reflog is a log of all reference updates in the repository. It's useful for recovering lost commits or branches, as it shows the history of where HEAD has been, even after destructive operations.",
+    category: 'git',
+    difficulty: 'hard',
+    tags: ['git-reflog', 'recovery', 'history', 'interview'],
+  },
+  {
+    id: 'git-blame-1',
+    question: 'What does git blame do and when would you use it?',
+    options: [
+      'Shows who last modified each line of a file and when',
+      'Assigns blame for bugs to specific developers',
+      'Creates a backup of a file',
+      'Moves a file to a different branch',
+    ],
+    correctAnswer: 0,
+    explanation:
+      "git blame shows who last modified each line of a file and when. It's useful for understanding the history of changes, identifying who introduced specific code, and understanding the context of modifications.",
+    category: 'git',
+    difficulty: 'medium',
+    tags: ['git-blame', 'history', 'tracking', 'interview'],
+  },
+  {
+    id: 'git-worktree-4',
+    question:
+      'What are the benefits of using Git worktrees in a development workflow?',
+    options: [
+      'Allows working on multiple features simultaneously without stashing, enables parallel development, and improves productivity',
+      'Makes Git faster and reduces repository size',
+      'Automatically resolves merge conflicts',
+      'Creates backup copies of the repository',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Git worktrees allow working on multiple features simultaneously without stashing, enable parallel development across different branches, and significantly improve developer productivity by eliminating context switching.',
+    category: 'git',
+    difficulty: 'medium',
+    tags: ['git-worktree', 'workflow', 'productivity', 'interview'],
+  },
+  {
+    id: 'git-worktree-5',
+    question: 'How do you list all Git worktrees in a repository?',
+    options: [
+      'git worktree list',
+      'git worktree show',
+      'git worktree status',
+      'git worktree info',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Use "git worktree list" to see all worktrees in the repository. This shows the path, branch, and commit hash for each worktree, including the main working directory.',
+    category: 'git',
+    difficulty: 'easy',
+    tags: ['git-worktree', 'commands', 'management', 'interview'],
   },
 ];
 
