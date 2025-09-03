@@ -22,13 +22,15 @@ export default function CodeEditor({
     challenge.starterCode.javascript
   );
 
-  const htmlEditorRef = useRef<import('@monaco-editor/react').OnMount>(null);
-  const cssEditorRef = useRef<import('@monaco-editor/react').OnMount>(null);
+  const htmlEditorRef =
+    useRef<import('monaco-editor').IStandaloneCodeEditor>(null);
+  const cssEditorRef =
+    useRef<import('monaco-editor').IStandaloneCodeEditor>(null);
   const javascriptEditorRef =
-    useRef<import('@monaco-editor/react').OnMount>(null);
+    useRef<import('monaco-editor').IStandaloneCodeEditor>(null);
 
   const handleEditorDidMount = (
-    editor: import('@monaco-editor/react').OnMount,
+    editor: import('monaco-editor').IStandaloneCodeEditor,
     monaco: typeof import('monaco-editor'),
     language: string
   ) => {

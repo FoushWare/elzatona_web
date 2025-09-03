@@ -100,7 +100,7 @@ export default function TestRunner({
 
     return {
       testCase,
-      passed: hasRequiredElements,
+      passed: hasRequiredElements || false,
       output: hasRequiredElements
         ? 'HTML structure is valid'
         : 'Missing required elements',
@@ -121,7 +121,7 @@ export default function TestRunner({
 
     return {
       testCase,
-      passed: hasRequiredProperties,
+      passed: hasRequiredProperties || false,
       output: hasRequiredProperties
         ? 'CSS properties found'
         : 'Missing required CSS properties',

@@ -9,7 +9,7 @@ import ZatonaLogo from './ZatonaLogo';
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const { isDarkMode, toggleDarkMode } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,11 +79,11 @@ export default function Navbar() {
           {/* Theme Toggle */}
           <div className="flex items-center space-x-4">
             <button
-              onClick={toggleTheme}
+              onClick={toggleDarkMode}
               className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors duration-200"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
             {/* Mobile menu button */}

@@ -45,7 +45,6 @@ export default function ChatGPT() {
         },
         body: JSON.stringify({
           messages: messages
-            .filter(msg => msg.role !== 'system')
             .map(msg => ({ role: msg.role, content: msg.content }))
             .concat({ role: 'user', content: inputValue }),
         }),
