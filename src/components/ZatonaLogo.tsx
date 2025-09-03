@@ -25,44 +25,53 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
 
   return (
     <div className={`flex items-center space-x-3 ${className}`}>
-      {/* Creative Olive-Inspired Logo */}
+      {/* Professional Logo Design */}
       <div className={`${sizeClasses[size]} relative`}>
-        {/* Main circular background */}
-        <div className="w-full h-full bg-gradient-to-br from-emerald-600 to-green-700 rounded-full flex items-center justify-center shadow-lg">
-          {/* Olive branch design - completely unique */}
-          <div className="relative">
-            {/* Central stem */}
-            <div className="w-1 h-4 bg-yellow-300 rounded-full transform rotate-12"></div>
+        {/* Main container with modern design */}
+        <div className="w-full h-full bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 rounded-2xl p-0.5 shadow-xl">
+          {/* Inner container */}
+          <div className="w-full h-full bg-white dark:bg-gray-900 rounded-2xl flex items-center justify-center relative">
+            {/* Olive branch icon - clean and professional */}
+            <div className="relative w-7 h-7">
+              {/* Main stem - vertical */}
+              <div className="absolute left-1/2 top-1 w-1 h-5 bg-emerald-600 transform -translate-x-1/2"></div>
 
-            {/* Left olive */}
-            <div className="absolute -left-2 -top-1 w-3 h-3 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full shadow-sm"></div>
+              {/* Horizontal branch */}
+              <div className="absolute left-1/2 top-2 w-4 h-0.5 bg-emerald-600 transform -translate-x-1/2"></div>
 
-            {/* Right olive */}
-            <div className="absolute -right-2 -top-1 w-3 h-3 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full shadow-sm"></div>
+              {/* Left olive */}
+              <div className="absolute left-1 top-1 w-2 h-2 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full shadow-sm"></div>
 
-            {/* Small leaves */}
-            <div className="absolute -left-1 top-2 w-2 h-1 bg-green-400 rounded-full transform -rotate-45"></div>
-            <div className="absolute -right-1 top-2 w-2 h-1 bg-green-400 rounded-full transform rotate-45"></div>
+              {/* Right olive */}
+              <div className="absolute right-1 top-1 w-2 h-2 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full shadow-sm"></div>
 
-            {/* Growth symbol - small sprout */}
-            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-2 bg-green-300 rounded-full"></div>
+              {/* Center olive */}
+              <div className="absolute left-1/2 top-1 w-2 h-2 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full transform -translate-x-1/2 shadow-sm"></div>
+
+              {/* Small leaf accents */}
+              <div className="absolute left-1/2 top-3 w-1 h-0.5 bg-emerald-500 rounded-full transform -translate-x-1/2"></div>
+              <div className="absolute left-1/2 top-4 w-1 h-0.5 bg-emerald-500 rounded-full transform -translate-x-1/2"></div>
+            </div>
+
+            {/* Subtle inner glow */}
+            <div className="absolute inset-1 bg-gradient-to-br from-emerald-50/40 to-green-50/40 dark:from-emerald-900/30 dark:to-green-900/30 rounded-xl"></div>
           </div>
         </div>
 
-        {/* Subtle glow effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-green-600/20 rounded-full animate-pulse"></div>
+        {/* Top-right accent */}
+        <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-amber-400 rounded-full shadow-sm"></div>
       </div>
 
       {/* Text Logo */}
       {showText && (
         <div className="flex flex-col">
           <span
-            className={`${textSizes[size]} font-bold bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent`}
+            className={`${textSizes[size]} font-bold bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent leading-tight tracking-tight`}
           >
             Zatona
           </span>
           <span
-            className={`${textSizes[size]} font-medium text-gray-600 dark:text-gray-300`}
+            className={`${textSizes[size]} font-semibold text-gray-800 dark:text-gray-200 leading-tight tracking-tight`}
           >
             Web
           </span>
