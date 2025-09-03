@@ -1,9 +1,24 @@
 'use client';
 
 import { useState } from 'react';
+import { multipleChoiceQuestions } from '@/lib/multipleChoiceQuestions';
+import { greatFrontendQuestions } from '@/lib/greatfrontendQuestions';
+import { javascriptQuestions } from '@/lib/javascriptQuestions';
 import { reactQuestions } from '@/lib/reactQuestions';
 
-export default function ReactQuestionsPage() {
+interface LearningPathQuestionsProps {
+  category: string;
+  title: string;
+  description: string;
+  onBack?: () => void;
+}
+
+export default function LearningPathQuestions({
+  category,
+  title,
+  description,
+  onBack,
+}: LearningPathQuestionsProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [showAnswer, setShowAnswer] = useState(false);
@@ -11,7 +26,29 @@ export default function ReactQuestionsPage() {
   const [totalAnswered, setTotalAnswered] = useState(0);
   const [showStatistics, setShowStatistics] = useState(false);
 
-  const questions = reactQuestions;
+  // Get questions based on category
+  const getQuestionsByCategory = () => {
+    switch (category) {
+      case 'javascript':
+        return javascriptQuestions;
+      case 'react':
+        return reactQuestions;
+      case 'css':
+        return multipleChoiceQuestions.filter(q => q.category === 'css');
+      case 'html':
+        return multipleChoiceQuestions.filter(q => q.category === 'html');
+      case 'git':
+        return multipleChoiceQuestions.filter(q => q.category === 'git');
+      case 'websockets':
+        return multipleChoiceQuestions.filter(q => q.category === 'websockets');
+      case 'general':
+        return multipleChoiceQuestions.filter(q => q.category === 'general');
+      default:
+        return multipleChoiceQuestions;
+    }
+  };
+
+  const questions = getQuestionsByCategory();
   const currentQuestion = questions[currentQuestionIndex];
 
   const handleAnswerSelect = (answer: string) => {
@@ -19,8 +56,17 @@ export default function ReactQuestionsPage() {
     setSelectedAnswer(answer);
     setTotalAnswered(prev => prev + 1);
 
-    if (answer === currentQuestion.answer) {
-      setScore(prev => prev + 1);
+    // Handle different question types
+    if ('correctAnswer' in currentQuestion) {
+      // MultipleChoiceQuestion type
+      if (answer === currentQuestion.correctAnswer.toString()) {
+        setScore(prev => prev + 1);
+      }
+    } else {
+      // JavaScriptQuestion or ReactQuestion type
+      if (answer === currentQuestion.answer) {
+        setScore(prev => prev + 1);
+      }
     }
   };
 
@@ -44,18 +90,63 @@ export default function ReactQuestionsPage() {
 
   const scorePercentage = totalAnswered > 0 ? (score / totalAnswered) * 100 : 0;
 
+  if (!currentQuestion) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-foreground mb-4">
+            No Questions Available
+          </h2>
+          <p className="text-muted-foreground">
+            This category doesn&apos;t have any questions yet.
+          </p>
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              ← Back to Learning Paths
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Get the correct answer for the current question
+  const getCorrectAnswer = () => {
+    if ('correctAnswer' in currentQuestion) {
+      // MultipleChoiceQuestion type
+      return currentQuestion.correctAnswer.toString();
+    } else {
+      // JavaScriptQuestion or ReactQuestion type
+      return currentQuestion.answer;
+    }
+  };
+
+  // Get difficulty for the current question
+  const getDifficulty = () => {
+    if ('difficulty' in currentQuestion) {
+      return currentQuestion.difficulty;
+    }
+    return 'medium'; // Default difficulty for JS/React questions
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            React Fundamentals
-          </h1>
-          <p className="text-muted-foreground text-lg">
-            Test your React knowledge with 270 comprehensive interview questions
-            covering fundamentals to advanced concepts
-          </p>
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 mb-4 transition-colors"
+            >
+              ← Back to Learning Paths
+            </button>
+          )}
+          <h1 className="text-4xl font-bold text-foreground mb-4">{title}</h1>
+          <p className="text-muted-foreground text-lg">{description}</p>
 
           {/* Mobile Toggle Button */}
           <div className="flex justify-center mt-6 md:hidden">
@@ -113,12 +204,12 @@ export default function ReactQuestionsPage() {
                 Question {currentQuestion.id}
               </div>
               <div className="text-sm text-muted-foreground">
-                React Interview
+                {category.charAt(0).toUpperCase() + category.slice(1)} Interview
               </div>
             </div>
             <div className="flex items-center gap-2">
               <span className="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">
-                {currentQuestion.difficulty}
+                {getDifficulty()}
               </span>
             </div>
           </div>
@@ -130,15 +221,6 @@ export default function ReactQuestionsPage() {
             </h3>
           </div>
 
-          {/* Code Block */}
-          {currentQuestion.code && (
-            <div className="bg-muted border border-border rounded-lg p-4">
-              <pre className="text-sm text-card-foreground overflow-x-auto">
-                <code>{currentQuestion.code}</code>
-              </pre>
-            </div>
-          )}
-
           {/* Options */}
           <div className="space-y-3">
             <h4 className="font-medium text-card-foreground">
@@ -148,7 +230,7 @@ export default function ReactQuestionsPage() {
               {currentQuestion.options.map((option, index) => {
                 const optionLabel = getOptionLabel(index);
                 const isSelected = selectedAnswer === optionLabel;
-                const isCorrect = currentQuestion.answer === optionLabel;
+                const isCorrect = optionLabel === getCorrectAnswer();
                 const showResult = selectedAnswer && (isSelected || isCorrect);
 
                 return (
