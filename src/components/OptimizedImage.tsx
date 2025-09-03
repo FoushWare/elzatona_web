@@ -28,6 +28,8 @@ interface OptimizedImageProps {
  * - Blur placeholders for better perceived performance
  * - Proper dimensions to prevent CLS
  * - CDN optimization via Vercel/Next.js
+ *
+ * @version 1.1 - Enhanced with Next.js Image integration and better type safety
  */
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
