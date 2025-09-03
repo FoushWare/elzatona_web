@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "build:check": "next build --turbopack && echo '✅ Build successful' || (echo '❌ Build failed' && exit 1)",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",

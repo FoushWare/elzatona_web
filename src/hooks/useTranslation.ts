@@ -28,13 +28,13 @@ export function useTranslation() {
 
       for (const k of keys) {
         if (value && typeof value === 'object' && k in value) {
-          value = value[k];
+          value = (value as Record<string, unknown>)[k];
         } else {
           // Fallback to English if translation not found
           value = translations.en;
           for (const fallbackKey of keys) {
             if (value && typeof value === 'object' && fallbackKey in value) {
-              value = value[fallbackKey];
+              value = (value as Record<string, unknown>)[fallbackKey];
             } else {
               return key; // Return the key if translation not found
             }

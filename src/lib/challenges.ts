@@ -1,11 +1,17 @@
-import { Challenge, Category, Difficulty, ChallengeFilters } from '@/types/challenge';
+import {
+  Challenge,
+  Category,
+  Difficulty,
+  ChallengeFilters,
+} from '@/types/challenge';
 
 // Sample challenges data - this will be replaced with Firebase data
 export const sampleChallenges: Challenge[] = [
   {
     id: '1',
     title: 'Create a Responsive Navigation Bar',
-    description: 'Build a responsive navigation bar that collapses into a hamburger menu on mobile devices.',
+    description:
+      'Build a responsive navigation bar that collapses into a hamburger menu on mobile devices.',
     category: 'html',
     difficulty: 'easy',
     starterCode: {
@@ -22,17 +28,17 @@ export const sampleChallenges: Challenge[] = [
 </body>
 </html>`,
       css: `/* Your CSS styles here */`,
-      javascript: `// Your JavaScript here`
+      javascript: `// Your JavaScript here`,
     },
     testCases: [
       {
         id: '1',
         name: 'Navigation Structure',
         description: 'Check if navigation has proper semantic HTML structure',
-        input: 'html',
+        input: { type: 'html' },
         expectedOutput: 'nav element with ul/li structure',
-        type: 'html'
-      }
+        type: 'html',
+      },
     ],
     solution: {
       html: `<!DOCTYPE html>
@@ -102,17 +108,19 @@ export const sampleChallenges: Challenge[] = [
 }`,
       javascript: `document.querySelector('.hamburger').addEventListener('click', function() {
     document.querySelector('.nav-menu').classList.toggle('active');
-});`
+});`,
     },
-    explanation: 'This solution creates a responsive navigation bar using flexbox. The hamburger menu appears on mobile devices (screens smaller than 768px) and toggles the navigation menu visibility.',
+    explanation:
+      'This solution creates a responsive navigation bar using flexbox. The hamburger menu appears on mobile devices (screens smaller than 768px) and toggles the navigation menu visibility.',
     tags: ['navigation', 'responsive', 'flexbox', 'mobile'],
     createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z'
+    updatedAt: '2024-01-01T00:00:00Z',
   },
   {
     id: '2',
     title: 'Build a Contact Form',
-    description: 'Create a contact form with proper validation and accessibility features.',
+    description:
+      'Create a contact form with proper validation and accessibility features.',
     category: 'html',
     difficulty: 'easy',
     starterCode: {
@@ -129,7 +137,7 @@ export const sampleChallenges: Challenge[] = [
 </body>
 </html>`,
       css: `/* Your CSS styles here */`,
-      javascript: `// Your JavaScript here`
+      javascript: `// Your JavaScript here`,
     },
     testCases: [
       {
@@ -138,8 +146,8 @@ export const sampleChallenges: Challenge[] = [
         description: 'Check if form has proper input fields and labels',
         input: 'html',
         expectedOutput: 'form with name, email, message fields',
-        type: 'html'
-      }
+        type: 'html',
+      },
     ],
     solution: {
       html: `<!DOCTYPE html>
@@ -207,17 +215,19 @@ button:hover {
     e.preventDefault();
     // Handle form submission
     console.log('Form submitted');
-});`
+});`,
     },
-    explanation: 'This solution creates a semantic contact form with proper labels, input types, and basic styling. The form includes validation attributes and is accessible.',
+    explanation:
+      'This solution creates a semantic contact form with proper labels, input types, and basic styling. The form includes validation attributes and is accessible.',
     tags: ['forms', 'validation', 'accessibility', 'semantic'],
     createdAt: '2024-01-02T00:00:00Z',
-    updatedAt: '2024-01-02T00:00:00Z'
+    updatedAt: '2024-01-02T00:00:00Z',
   },
   {
     id: '3',
     title: 'CSS Grid Layout',
-    description: 'Create a responsive grid layout using CSS Grid for a photo gallery.',
+    description:
+      'Create a responsive grid layout using CSS Grid for a photo gallery.',
     category: 'css',
     difficulty: 'medium',
     starterCode: {
@@ -235,17 +245,17 @@ button:hover {
 </body>
 </html>`,
       css: `/* Your CSS Grid styles here */`,
-      javascript: `// Your JavaScript here`
+      javascript: `// Your JavaScript here`,
     },
     testCases: [
       {
         id: '1',
         name: 'Grid Layout',
         description: 'Check if CSS Grid is properly implemented',
-        input: 'css',
+        input: { type: 'css' },
         expectedOutput: 'responsive grid with 3 columns on desktop',
-        type: 'css'
-      }
+        type: 'css',
+      },
     ],
     solution: {
       html: `<!DOCTYPE html>
@@ -296,17 +306,19 @@ button:hover {
         gap: 10px;
     }
 }`,
-      javascript: `// No JavaScript needed for this challenge`
+      javascript: `// No JavaScript needed for this challenge`,
     },
-    explanation: 'This solution uses CSS Grid with auto-fit and minmax for a responsive layout that adapts to different screen sizes. The grid automatically adjusts columns based on available space.',
+    explanation:
+      'This solution uses CSS Grid with auto-fit and minmax for a responsive layout that adapts to different screen sizes. The grid automatically adjusts columns based on available space.',
     tags: ['css-grid', 'responsive', 'layout', 'gallery'],
     createdAt: '2024-01-03T00:00:00Z',
-    updatedAt: '2024-01-03T00:00:00Z'
+    updatedAt: '2024-01-03T00:00:00Z',
   },
   {
     id: '4',
     title: 'JavaScript Todo List',
-    description: 'Build a todo list application with add, delete, and toggle functionality.',
+    description:
+      'Build a todo list application with add, delete, and toggle functionality.',
     category: 'javascript',
     difficulty: 'medium',
     starterCode: {
@@ -331,17 +343,17 @@ button:hover {
 </body>
 </html>`,
       css: `/* Your CSS styles here */`,
-      javascript: `// Your JavaScript here`
+      javascript: `// Your JavaScript here`,
     },
     testCases: [
       {
         id: '1',
         name: 'Add Todo',
         description: 'Check if new todos can be added',
-        input: 'javascript',
+        input: { type: 'javascript' },
         expectedOutput: 'todo item added to list',
-        type: 'javascript'
-      }
+        type: 'javascript',
+      },
     ],
     solution: {
       html: `<!DOCTYPE html>
@@ -455,17 +467,19 @@ function toggleTodo(checkbox) {
 function deleteTodo(button) {
     const todoItem = button.parentElement;
     todoItem.remove();
-}`
+}`,
     },
-    explanation: 'This solution creates a fully functional todo list with add, toggle, and delete functionality. It uses event delegation and DOM manipulation to manage the todo items.',
+    explanation:
+      'This solution creates a fully functional todo list with add, toggle, and delete functionality. It uses event delegation and DOM manipulation to manage the todo items.',
     tags: ['javascript', 'dom-manipulation', 'events', 'todo'],
     createdAt: '2024-01-04T00:00:00Z',
-    updatedAt: '2024-01-04T00:00:00Z'
+    updatedAt: '2024-01-04T00:00:00Z',
   },
   {
     id: '5',
     title: 'CSS Animations',
-    description: 'Create smooth animations for a loading spinner and button hover effects.',
+    description:
+      'Create smooth animations for a loading spinner and button hover effects.',
     category: 'css',
     difficulty: 'hard',
     starterCode: {
@@ -488,17 +502,17 @@ function deleteTodo(button) {
 </body>
 </html>`,
       css: `/* Your CSS animations here */`,
-      javascript: `// Your JavaScript here`
+      javascript: `// Your JavaScript here`,
     },
     testCases: [
       {
         id: '1',
         name: 'Spinner Animation',
         description: 'Check if spinner rotates continuously',
-        input: 'css',
+        input: { type: 'css' },
         expectedOutput: 'rotating spinner animation',
-        type: 'css'
-      }
+        type: 'css',
+      },
     ],
     solution: {
       html: `<!DOCTYPE html>
@@ -572,40 +586,41 @@ function deleteTodo(button) {
 .animated-btn:hover::before {
     left: 100%;
 }`,
-      javascript: `// No JavaScript needed for this challenge`
+      javascript: `// No JavaScript needed for this challenge`,
     },
-    explanation: 'This solution demonstrates advanced CSS animations including keyframes for rotation, transitions for smooth hover effects, and pseudo-elements for additional visual effects.',
+    explanation:
+      'This solution demonstrates advanced CSS animations including keyframes for rotation, transitions for smooth hover effects, and pseudo-elements for additional visual effects.',
     tags: ['css-animations', 'keyframes', 'transitions', 'effects'],
     createdAt: '2024-01-05T00:00:00Z',
-    updatedAt: '2024-01-05T00:00:00Z'
-  }
+    updatedAt: '2024-01-05T00:00:00Z',
+  },
 ];
 
 export function getChallenges(filters?: ChallengeFilters): Challenge[] {
   let filteredChallenges = [...sampleChallenges];
-  
+
   if (filters?.category) {
     filteredChallenges = filteredChallenges.filter(
       challenge => challenge.category === filters.category
     );
   }
-  
+
   if (filters?.difficulty) {
     filteredChallenges = filteredChallenges.filter(
       challenge => challenge.difficulty === filters.difficulty
     );
   }
-  
+
   if (filters?.search) {
     const searchTerm = filters.search.toLowerCase();
     filteredChallenges = filteredChallenges.filter(
-      challenge => 
+      challenge =>
         challenge.title.toLowerCase().includes(searchTerm) ||
         challenge.description.toLowerCase().includes(searchTerm) ||
         challenge.tags.some(tag => tag.toLowerCase().includes(searchTerm))
     );
   }
-  
+
   return filteredChallenges;
 }
 
@@ -618,5 +633,7 @@ export function getChallengesByCategory(category: Category): Challenge[] {
 }
 
 export function getChallengesByDifficulty(difficulty: Difficulty): Challenge[] {
-  return sampleChallenges.filter(challenge => challenge.difficulty === difficulty);
+  return sampleChallenges.filter(
+    challenge => challenge.difficulty === difficulty
+  );
 }

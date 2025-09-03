@@ -14,7 +14,13 @@ export default function Home() {
             <div className="flex justify-center mb-8">
               <ZatonaLogo size="lg" showText={true} variant="stacked" />
             </div>
-            <div className="text-8xl mb-6 animate-bounce">🚀</div>
+            <div
+              className="text-8xl mb-6 animate-bounce"
+              role="img"
+              aria-label="Rocket emoji"
+            >
+              🚀
+            </div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
               <span className="text-blue-100">Zatona</span>
               <span className="bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
@@ -41,7 +47,8 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link
                 href="/practice/fundamentals"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg font-semibold rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 hover:scale-105 shadow-lg"
+                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg font-semibold rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 hover:scale-105 shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50"
+                aria-label="Start learning frontend development fundamentals"
               >
                 🚀 Start Learning
               </Link>
@@ -60,10 +67,10 @@ export default function Home() {
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-foreground">
+            <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
               Why Choose Zatona Web?
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
               Our platform combines cutting-edge technology with proven learning
               methodologies to help you excel in frontend development.
             </p>
@@ -72,7 +79,13 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature 1 */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <div className="text-4xl mb-4">🎯</div>
+              <div
+                className="text-4xl mb-4"
+                role="img"
+                aria-label="Target emoji"
+              >
+                🎯
+              </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
                 Comprehensive Practice
               </h3>
@@ -84,7 +97,9 @@ export default function Home() {
 
             {/* Feature 2 */}
             <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-8 border border-purple-200 dark:border-purple-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <div className="text-4xl mb-4">🗺️</div>
+              <div className="text-4xl mb-4" role="img" aria-label="Map emoji">
+                🗺️
+              </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
                 Structured Learning Paths
               </h3>
@@ -96,7 +111,13 @@ export default function Home() {
 
             {/* Feature 3 */}
             <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-700 hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <div className="text-4xl mb-4">💻</div>
+              <div
+                className="text-4xl mb-4"
+                role="img"
+                aria-label="Computer emoji"
+              >
+                💻
+              </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
                 Real Coding Challenges
               </h3>
