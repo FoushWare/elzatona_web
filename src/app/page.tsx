@@ -12,7 +12,7 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
             <div className="flex justify-center mb-8">
-              <ZatonaLogo size="lg" showText={false} />
+              <ZatonaLogo size="lg" showText={true} variant="stacked" />
             </div>
             <div className="text-8xl mb-6 animate-bounce">🚀</div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
