@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState } from 'react';
+import Link from 'next/link';
 
 interface SystemDesignFeature {
   id: string;
@@ -9,7 +9,7 @@ interface SystemDesignFeature {
   description: string;
   videoUrl: string;
   thumbnail: string;
-  difficulty: "beginner" | "intermediate" | "advanced";
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
   estimatedTime: number;
   tags: string[];
   steps: string[];
@@ -22,239 +22,238 @@ interface SystemDesignFeature {
 // Sample system design features - you can expand this with actual content
 const systemDesignFeatures: SystemDesignFeature[] = [
   {
-    id: "facebook-feed",
-    title: "Facebook News Feed",
+    id: 'facebook-feed',
+    title: 'Facebook News Feed',
     description:
-      "Design a real-time news feed system that shows personalized content to millions of users with low latency and high availability.",
-    videoUrl: "https://www.youtube.com/watch?v=example1",
-    thumbnail: "/api/placeholder/400/225",
-    difficulty: "advanced",
+      'Design a real-time news feed system that shows personalized content to millions of users with low latency and high availability.',
+    videoUrl: 'https://www.youtube.com/watch?v=example1',
+    thumbnail: '/api/placeholder/400/225',
+    difficulty: 'advanced',
     estimatedTime: 45,
-    tags: ["Real-time", "Personalization", "Caching", "CDN", "Database"],
+    tags: ['Real-time', 'Personalization', 'Caching', 'CDN', 'Database'],
     steps: [
-      "Define requirements and constraints",
-      "Design high-level architecture",
-      "Plan data models and storage",
-      "Design caching strategy",
-      "Implement real-time updates",
-      "Optimize for performance",
+      'Define requirements and constraints',
+      'Design high-level architecture',
+      'Plan data models and storage',
+      'Design caching strategy',
+      'Implement real-time updates',
+      'Optimize for performance',
     ],
     diagrams: [
-      "System Architecture Diagram",
-      "Data Flow Diagram",
-      "Caching Strategy Diagram",
-      "Database Schema",
+      'System Architecture Diagram',
+      'Data Flow Diagram',
+      'Caching Strategy Diagram',
+      'Database Schema',
     ],
     keyConcepts: [
-      "Event-driven architecture",
-      "Content delivery networks",
-      "Database sharding",
-      "Real-time messaging",
-      "Personalization algorithms",
+      'Event-driven architecture',
+      'Content delivery networks',
+      'Database sharding',
+      'Real-time messaging',
+      'Personalization algorithms',
     ],
     relatedTopics: [
-      "Real-time Systems",
-      "Personalization",
-      "Caching Strategies",
+      'Real-time Systems',
+      'Personalization',
+      'Caching Strategies',
     ],
   },
   {
-    id: "netflix-streaming",
-    title: "Netflix Video Streaming",
+    id: 'netflix-streaming',
+    title: 'Netflix Video Streaming',
     description:
-      "Build a video streaming platform that can serve millions of concurrent users with adaptive bitrate streaming and global content delivery.",
-    videoUrl: "https://www.youtube.com/watch?v=example2",
-    thumbnail: "/api/placeholder/400/225",
-    difficulty: "advanced",
+      'Build a video streaming platform that can serve millions of concurrent users with adaptive bitrate streaming and global content delivery.',
+    videoUrl: 'https://www.youtube.com/watch?v=example2',
+    thumbnail: '/api/placeholder/400/225',
+    difficulty: 'advanced',
     estimatedTime: 60,
     tags: [
-      "Video Streaming",
-      "CDN",
-      "Adaptive Bitrate",
-      "Load Balancing",
-      "Microservices",
+      'Video Streaming',
+      'CDN',
+      'Adaptive Bitrate',
+      'Load Balancing',
+      'Microservices',
     ],
     steps: [
-      "Define streaming requirements",
-      "Design content delivery network",
-      "Implement adaptive bitrate streaming",
-      "Plan microservices architecture",
-      "Design recommendation system",
-      "Optimize for global scale",
+      'Define streaming requirements',
+      'Design content delivery network',
+      'Implement adaptive bitrate streaming',
+      'Plan microservices architecture',
+      'Design recommendation system',
+      'Optimize for global scale',
     ],
     diagrams: [
-      "CDN Architecture",
-      "Adaptive Streaming Flow",
-      "Microservices Diagram",
-      "Global Distribution Map",
+      'CDN Architecture',
+      'Adaptive Streaming Flow',
+      'Microservices Diagram',
+      'Global Distribution Map',
     ],
     keyConcepts: [
-      "Adaptive bitrate streaming",
-      "Content delivery networks",
-      "Microservices architecture",
-      "Load balancing",
-      "Geographic distribution",
+      'Adaptive bitrate streaming',
+      'Content delivery networks',
+      'Microservices architecture',
+      'Load balancing',
+      'Geographic distribution',
     ],
-    relatedTopics: ["Video Streaming", "CDN", "Microservices"],
+    relatedTopics: ['Video Streaming', 'CDN', 'Microservices'],
   },
   {
-    id: "google-search",
-    title: "Google Search Engine",
+    id: 'google-search',
+    title: 'Google Search Engine',
     description:
-      "Design a search engine that can index billions of web pages and return relevant results in milliseconds.",
-    videoUrl: "https://www.youtube.com/watch?v=example3",
-    thumbnail: "/api/placeholder/400/225",
-    difficulty: "advanced",
+      'Design a search engine that can index billions of web pages and return relevant results in milliseconds.',
+    videoUrl: 'https://www.youtube.com/watch?v=example3',
+    thumbnail: '/api/placeholder/400/225',
+    difficulty: 'advanced',
     estimatedTime: 75,
-    tags: ["Search", "Indexing", "Ranking", "Distributed Systems", "Caching"],
+    tags: ['Search', 'Indexing', 'Ranking', 'Distributed Systems', 'Caching'],
     steps: [
-      "Define search requirements",
-      "Design web crawler system",
-      "Plan indexing strategy",
-      "Implement ranking algorithm",
-      "Design distributed architecture",
-      "Optimize for speed and relevance",
+      'Define search requirements',
+      'Design web crawler system',
+      'Plan indexing strategy',
+      'Implement ranking algorithm',
+      'Design distributed architecture',
+      'Optimize for speed and relevance',
     ],
     diagrams: [
-      "Search Architecture",
-      "Indexing Process",
-      "Ranking Algorithm",
-      "Distributed System Map",
+      'Search Architecture',
+      'Indexing Process',
+      'Ranking Algorithm',
+      'Distributed System Map',
     ],
     keyConcepts: [
-      "Web crawling",
-      "Inverted indexing",
-      "PageRank algorithm",
-      "Distributed systems",
-      "Query processing",
+      'Web crawling',
+      'Inverted indexing',
+      'PageRank algorithm',
+      'Distributed systems',
+      'Query processing',
     ],
     relatedTopics: [
-      "Search Algorithms",
-      "Distributed Systems",
-      "Information Retrieval",
+      'Search Algorithms',
+      'Distributed Systems',
+      'Information Retrieval',
     ],
   },
   {
-    id: "uber-matching",
-    title: "Uber Driver-Rider Matching",
+    id: 'uber-matching',
+    title: 'Uber Driver-Rider Matching',
     description:
-      "Design a real-time matching system that connects drivers with riders efficiently while considering location, availability, and preferences.",
-    videoUrl: "https://www.youtube.com/watch?v=example4",
-    thumbnail: "/api/placeholder/400/225",
-    difficulty: "intermediate",
+      'Design a real-time matching system that connects drivers with riders efficiently while considering location, availability, and preferences.',
+    videoUrl: 'https://www.youtube.com/watch?v=example4',
+    thumbnail: '/api/placeholder/400/225',
+    difficulty: 'intermediate',
     estimatedTime: 40,
     tags: [
-      "Real-time Matching",
-      "Geolocation",
-      "Load Balancing",
-      "Microservices",
+      'Real-time Matching',
+      'Geolocation',
+      'Load Balancing',
+      'Microservices',
     ],
     steps: [
-      "Define matching requirements",
-      "Design location tracking system",
-      "Implement matching algorithm",
-      "Plan real-time communication",
-      "Design payment integration",
-      "Optimize for efficiency",
+      'Define matching requirements',
+      'Design location tracking system',
+      'Implement matching algorithm',
+      'Plan real-time communication',
+      'Design payment integration',
+      'Optimize for efficiency',
     ],
     diagrams: [
-      "Matching System Architecture",
-      "Location Tracking Flow",
-      "Real-time Communication",
-      "Payment Integration",
+      'Matching System Architecture',
+      'Location Tracking Flow',
+      'Real-time Communication',
+      'Payment Integration',
     ],
     keyConcepts: [
-      "Real-time matching",
-      "Geolocation services",
-      "Load balancing",
-      "Real-time communication",
-      "Payment processing",
+      'Real-time matching',
+      'Geolocation services',
+      'Load balancing',
+      'Real-time communication',
+      'Payment processing',
     ],
-    relatedTopics: ["Real-time Systems", "Geolocation", "Matching Algorithms"],
+    relatedTopics: ['Real-time Systems', 'Geolocation', 'Matching Algorithms'],
   },
   {
-    id: "twitter-timeline",
-    title: "Twitter Timeline",
+    id: 'twitter-timeline',
+    title: 'Twitter Timeline',
     description:
-      "Design a social media timeline that shows tweets from followed users in real-time with infinite scroll and engagement features.",
-    videoUrl: "https://www.youtube.com/watch?v=example5",
-    thumbnail: "/api/placeholder/400/225",
-    difficulty: "intermediate",
+      'Design a social media timeline that shows tweets from followed users in real-time with infinite scroll and engagement features.',
+    videoUrl: 'https://www.youtube.com/watch?v=example5',
+    thumbnail: '/api/placeholder/400/225',
+    difficulty: 'intermediate',
     estimatedTime: 50,
     tags: [
-      "Social Media",
-      "Real-time",
-      "Infinite Scroll",
-      "Caching",
-      "Database",
+      'Social Media',
+      'Real-time',
+      'Infinite Scroll',
+      'Caching',
+      'Database',
     ],
     steps: [
-      "Define timeline requirements",
-      "Design data models",
-      "Implement real-time updates",
-      "Plan caching strategy",
-      "Design infinite scroll",
-      "Optimize for performance",
+      'Define timeline requirements',
+      'Design data models',
+      'Implement real-time updates',
+      'Plan caching strategy',
+      'Design infinite scroll',
+      'Optimize for performance',
     ],
     diagrams: [
-      "Timeline Architecture",
-      "Data Flow Diagram",
-      "Caching Strategy",
-      "Real-time Updates Flow",
+      'Timeline Architecture',
+      'Data Flow Diagram',
+      'Caching Strategy',
+      'Real-time Updates Flow',
     ],
     keyConcepts: [
-      "Real-time updates",
-      "Infinite scroll",
-      "Caching strategies",
-      "Database optimization",
-      "Social graph",
+      'Real-time updates',
+      'Infinite scroll',
+      'Caching strategies',
+      'Database optimization',
+      'Social graph',
     ],
-    relatedTopics: ["Social Media", "Real-time Systems", "Caching"],
+    relatedTopics: ['Social Media', 'Real-time Systems', 'Caching'],
   },
 ];
 
 export default function SystemDesignPage() {
-  const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState<
-    "all" | "beginner" | "intermediate" | "advanced"
-  >("all");
-  const [selectedTag, setSelectedTag] = useState("all");
+    'all' | 'beginner' | 'intermediate' | 'advanced'
+  >('all');
+  const [selectedTag, setSelectedTag] = useState('all');
 
   // Filter features based on search and filters
-  const filteredFeatures = systemDesignFeatures.filter((feature) => {
+  const filteredFeatures = systemDesignFeatures.filter(feature => {
     const matchesSearch =
-      searchQuery === "" ||
+      searchQuery === '' ||
       feature.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       feature.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      feature.tags.some((tag) =>
+      feature.tags.some(tag =>
         tag.toLowerCase().includes(searchQuery.toLowerCase())
       );
     const matchesDifficulty =
-      selectedDifficulty === "all" || feature.difficulty === selectedDifficulty;
+      selectedDifficulty === 'all' || feature.difficulty === selectedDifficulty;
     const matchesTag =
-      selectedTag === "all" || feature.tags.includes(selectedTag);
+      selectedTag === 'all' || feature.tags.includes(selectedTag);
 
     return matchesSearch && matchesDifficulty && matchesTag;
   });
 
   // Get unique tags for filter
   const allTags = Array.from(
-    new Set(systemDesignFeatures.flatMap((feature) => feature.tags))
+    new Set(systemDesignFeatures.flatMap(feature => feature.tags))
   );
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "beginner":
-        return "text-success bg-success/20";
-      case "intermediate":
-        return "text-warning bg-warning/20";
-      case "advanced":
-        return "text-destructive bg-destructive/20";
+      case 'beginner':
+        return 'text-success bg-success/20';
+      case 'intermediate':
+        return 'text-warning bg-warning/20';
+      case 'advanced':
+        return 'text-destructive bg-destructive/20';
       default:
-        return "text-muted-foreground bg-muted";
+        return 'text-muted-foreground bg-muted';
     }
   };
 
@@ -281,30 +280,32 @@ export default function SystemDesignPage() {
               <span>Watch YouTube Playlist</span>
             </Link>
           </div>
-          
+
           {/* Mobile Toggle Buttons - Hidden on desktop */}
           <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center md:hidden">
             <button
               onClick={() => setShowStatistics(!showStatistics)}
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
-              {showStatistics ? "Hide Statistics" : "Show Statistics"}
+              {showStatistics ? 'Hide Statistics' : 'Show Statistics'}
               <span className="ml-2">📊</span>
             </button>
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
-              {showFilters ? "Hide Filters" : "Show Filters"}
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
               <span className="ml-2">🔍</span>
             </button>
           </div>
         </div>
 
         {/* Statistics */}
-        <div className={`grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 transition-all duration-300 ${
-          showStatistics ? 'block' : 'hidden md:grid'
-        }`}>
+        <div
+          className={`grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 transition-all duration-300 ${
+            showStatistics ? 'block' : 'hidden md:grid'
+          }`}
+        >
           <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
             <div className="text-3xl font-bold text-blue-600 mb-2">
               {systemDesignFeatures.length}
@@ -326,7 +327,7 @@ export default function SystemDesignPage() {
           </div>
           <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
             <div className="text-3xl font-bold text-purple-600 mb-2">
-              {systemDesignFeatures.filter((f) => f.isCompleted).length}
+              {systemDesignFeatures.filter(f => f.isCompleted).length}
             </div>
             <div className="text-card-foreground font-medium">Completed</div>
           </div>
@@ -341,9 +342,11 @@ export default function SystemDesignPage() {
         </div>
 
         {/* Filters */}
-        <div className={`bg-card rounded-lg shadow-sm border border-border p-6 mb-8 transition-all duration-300 ${
-          showFilters ? 'block' : 'hidden md:block'
-        }`}>
+        <div
+          className={`bg-card rounded-lg shadow-sm border border-border p-6 mb-8 transition-all duration-300 ${
+            showFilters ? 'block' : 'hidden md:block'
+          }`}
+        >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label
@@ -357,7 +360,7 @@ export default function SystemDesignPage() {
                 id="search"
                 placeholder="Search by title, description, or tags..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
                 className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
               />
             </div>
@@ -371,7 +374,15 @@ export default function SystemDesignPage() {
               <select
                 id="difficulty"
                 value={selectedDifficulty}
-                onChange={(e) => setSelectedDifficulty(e.target.value as any)}
+                onChange={e =>
+                  setSelectedDifficulty(
+                    e.target.value as
+                      | 'all'
+                      | 'beginner'
+                      | 'intermediate'
+                      | 'advanced'
+                  )
+                }
                 className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
               >
                 <option value="all">All Difficulties</option>
@@ -390,11 +401,11 @@ export default function SystemDesignPage() {
               <select
                 id="tag"
                 value={selectedTag}
-                onChange={(e) => setSelectedTag(e.target.value)}
+                onChange={e => setSelectedTag(e.target.value)}
                 className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground"
               >
                 <option value="all">All Topics</option>
-                {allTags.map((tag) => (
+                {allTags.map(tag => (
                   <option key={tag} value={tag}>
                     {tag}
                   </option>
@@ -406,7 +417,7 @@ export default function SystemDesignPage() {
 
         {/* System Design Features Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {filteredFeatures.map((feature) => (
+          {filteredFeatures.map(feature => (
             <div
               key={feature.id}
               className="bg-card rounded-lg shadow-sm border border-border p-6 hover:shadow-md transition-shadow"
@@ -434,7 +445,7 @@ export default function SystemDesignPage() {
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mb-4">
-                {feature.tags.map((tag) => (
+                {feature.tags.map(tag => (
                   <span
                     key={tag}
                     className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded dark:bg-blue-900/20 dark:text-blue-400"
@@ -478,7 +489,7 @@ export default function SystemDesignPage() {
                   Key Concepts:
                 </h4>
                 <div className="flex flex-wrap gap-1">
-                  {feature.keyConcepts.slice(0, 3).map((concept) => (
+                  {feature.keyConcepts.slice(0, 3).map(concept => (
                     <span
                       key={concept}
                       className="px-2 py-1 text-xs bg-muted text-muted-foreground rounded"
@@ -526,9 +537,9 @@ export default function SystemDesignPage() {
             </p>
             <button
               onClick={() => {
-                setSearchQuery("");
-                setSelectedDifficulty("all");
-                setSelectedTag("all");
+                setSearchQuery('');
+                setSelectedDifficulty('all');
+                setSelectedTag('all');
               }}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >

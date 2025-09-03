@@ -3,15 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import {
-  Award,
-  Zap,
-  Target,
-  BookOpen,
-  Code,
-  TrendingUp,
-  Crown,
-} from 'lucide-react';
+import { Zap, Target, BookOpen, Code, TrendingUp, Crown } from 'lucide-react';
 
 interface Badge {
   id: string;

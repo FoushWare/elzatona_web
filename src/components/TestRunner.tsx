@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { TestCase } from "@/types/challenge";
+import { useState } from 'react';
+import { TestCase } from '@/types/challenge';
 
 interface TestRunnerProps {
   testCases: TestCase[];
@@ -16,7 +16,7 @@ interface TestRunnerProps {
 interface TestResult {
   testCase: TestCase;
   passed: boolean;
-  output?: any;
+  output?: string | boolean | number;
   error?: string;
   executionTime: number;
 }
@@ -43,20 +43,20 @@ export default function TestRunner({
 
       try {
         switch (testCase.type) {
-          case "html":
+          case 'html':
             result = await runHtmlTest(testCase, userCode.html);
             break;
-          case "css":
+          case 'css':
             result = await runCssTest(testCase, userCode.css);
             break;
-          case "javascript":
+          case 'javascript':
             result = await runJavaScriptTest(testCase, userCode.javascript);
             break;
           default:
             result = {
               testCase,
               passed: false,
-              error: "Unknown test type",
+              error: 'Unknown test type',
               executionTime: 0,
             };
         }
@@ -64,7 +64,7 @@ export default function TestRunner({
         result = {
           testCase,
           passed: false,
-          error: error instanceof Error ? error.message : "Unknown error",
+          error: error instanceof Error ? error.message : 'Unknown error',
           executionTime: 0,
         };
       }
@@ -88,12 +88,12 @@ export default function TestRunner({
   ): Promise<TestResult> => {
     // Create a temporary DOM to test HTML structure
     const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlCode, "text/html");
+    const doc = parser.parseFromString(htmlCode, 'text/html');
 
     // Basic HTML structure validation
     const hasRequiredElements =
       testCase.input &&
-      Object.keys(testCase.input).every((selector) => {
+      Object.keys(testCase.input).every(selector => {
         const elements = doc.querySelectorAll(selector);
         return elements.length > 0;
       });
@@ -102,8 +102,8 @@ export default function TestRunner({
       testCase,
       passed: hasRequiredElements,
       output: hasRequiredElements
-        ? "HTML structure is valid"
-        : "Missing required elements",
+        ? 'HTML structure is valid'
+        : 'Missing required elements',
       executionTime: 0,
     };
   };
@@ -115,7 +115,7 @@ export default function TestRunner({
     // Basic CSS validation - check if required properties are present
     const hasRequiredProperties =
       testCase.input &&
-      Object.keys(testCase.input).every((property) => {
+      Object.keys(testCase.input).every(property => {
         return cssCode.includes(property);
       });
 
@@ -123,8 +123,8 @@ export default function TestRunner({
       testCase,
       passed: hasRequiredProperties,
       output: hasRequiredProperties
-        ? "CSS properties found"
-        : "Missing required CSS properties",
+        ? 'CSS properties found'
+        : 'Missing required CSS properties',
       executionTime: 0,
     };
   };
@@ -136,14 +136,14 @@ export default function TestRunner({
     // Create a sandboxed environment for JavaScript testing
     const sandbox = {
       console: {
-        log: (...args: any[]) => args,
-        error: (...args: any[]) => args,
-        warn: (...args: any[]) => args,
+        log: (...args: unknown[]) => args,
+        error: (...args: unknown[]) => args,
+        warn: (...args: unknown[]) => args,
       },
       document: {
-        querySelector: (selector: string) => ({ textContent: "", value: "" }),
-        querySelectorAll: (selector: string) => [],
-        getElementById: (id: string) => ({ textContent: "", value: "" }),
+        querySelector: () => ({ textContent: '', value: '' }),
+        querySelectorAll: () => [],
+        getElementById: () => ({ textContent: '', value: '' }),
         addEventListener: () => {},
         removeEventListener: () => {},
       },
@@ -151,8 +151,8 @@ export default function TestRunner({
         addEventListener: () => {},
         removeEventListener: () => {},
       },
-      setTimeout: (fn: Function, delay: number) => setTimeout(fn, delay),
-      setInterval: (fn: Function, delay: number) => setInterval(fn, delay),
+      setTimeout: (fn: () => void, delay: number) => setTimeout(fn, delay),
+      setInterval: (fn: () => void, delay: number) => setInterval(fn, delay),
       clearTimeout: (id: number) => clearTimeout(id),
       clearInterval: (id: number) => clearInterval(id),
     };
@@ -160,9 +160,9 @@ export default function TestRunner({
     try {
       // Execute the JavaScript code in the sandbox
       const userFunction = new Function(
-        "document",
-        "window",
-        "console",
+        'document',
+        'window',
+        'console',
         jsCode
       );
       const result = userFunction(
@@ -186,14 +186,14 @@ export default function TestRunner({
         testCase,
         passed: false,
         error:
-          error instanceof Error ? error.message : "JavaScript execution error",
+          error instanceof Error ? error.message : 'JavaScript execution error',
         executionTime: 0,
       };
     }
   };
 
   const getPassedCount = () =>
-    testResults.filter((result) => result.passed).length;
+    testResults.filter(result => result.passed).length;
   const getTotalCount = () => testResults.length;
 
   return (
@@ -215,11 +215,11 @@ export default function TestRunner({
               disabled={isRunning}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 isRunning
-                  ? "bg-muted text-muted-foreground cursor-not-allowed"
-                  : "bg-green-600 text-white hover:bg-green-700"
+                  ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                  : 'bg-green-600 text-white hover:bg-green-700'
               }`}
             >
-              {isRunning ? "Running Tests..." : "Run Tests"}
+              {isRunning ? 'Running Tests...' : 'Run Tests'}
             </button>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function TestRunner({
         {testResults.length === 0 && !isRunning && (
           <div className="text-center py-8 text-muted-foreground">
             <div className="text-4xl mb-4">🧪</div>
-            <p>Click "Run Tests" to execute test cases</p>
+            <p>Click &quot;Run Tests&quot; to execute test cases</p>
           </div>
         )}
 
@@ -248,8 +248,8 @@ export default function TestRunner({
                 key={index}
                 className={`p-4 rounded-lg border ${
                   result.passed
-                    ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
-                    : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+                    ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                    : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -320,8 +320,8 @@ export default function TestRunner({
           <div
             className={`mt-6 p-4 rounded-lg ${
               getPassedCount() === getTotalCount()
-                ? "bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800"
-                : "bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800"
+                ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
+                : 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800'
             }`}
           >
             <div className="flex items-center">
@@ -353,12 +353,12 @@ export default function TestRunner({
               <span
                 className={`font-medium ${
                   getPassedCount() === getTotalCount()
-                    ? "text-green-800 dark:text-green-200"
-                    : "text-yellow-800 dark:text-yellow-200"
+                    ? 'text-green-800 dark:text-green-200'
+                    : 'text-yellow-800 dark:text-yellow-200'
                 }`}
               >
                 {getPassedCount() === getTotalCount()
-                  ? "All tests passed! Great job!"
+                  ? 'All tests passed! Great job!'
                   : `${getPassedCount()} out of ${getTotalCount()} tests passed. Keep trying!`}
               </span>
             </div>

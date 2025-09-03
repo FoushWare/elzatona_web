@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Target, Award, BookOpen, Code, Zap } from 'lucide-react';
+import { Target, BookOpen, Code, Zap } from 'lucide-react';
 import Link from 'next/link';
 import ProtectedRoute from '@/components/ProtectedRoute';
 

@@ -1,15 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 export default function StudyPlanDetailPage() {
   const params = useParams();
   const planId = params.id as string;
 
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
-  const [currentWeek, setCurrentWeek] = useState(1);
 
   useEffect(() => {
     // Load progress from localStorage
@@ -21,7 +20,7 @@ export default function StudyPlanDetailPage() {
 
   const handleTaskComplete = (taskId: string) => {
     const newCompletedTasks = completedTasks.includes(taskId)
-      ? completedTasks.filter((id) => id !== taskId)
+      ? completedTasks.filter(id => id !== taskId)
       : [...completedTasks, taskId];
 
     setCompletedTasks(newCompletedTasks);
@@ -33,24 +32,24 @@ export default function StudyPlanDetailPage() {
 
   const getTaskTypeIcon = (type: string) => {
     switch (type) {
-      case "reading":
-        return "📖";
-      case "practice":
-        return "💻";
-      case "quiz":
-        return "❓";
-      case "project":
-        return "🚀";
-      case "review":
-        return "📝";
+      case 'reading':
+        return '📖';
+      case 'practice':
+        return '💻';
+      case 'quiz':
+        return '❓';
+      case 'project':
+        return '🚀';
+      case 'review':
+        return '📝';
       default:
-        return "📋";
+        return '📋';
     }
   };
 
   const calculateProgress = (tasks: { id: string }[]) => {
     if (tasks.length === 0) return 0;
-    const completed = tasks.filter((task) =>
+    const completed = tasks.filter(task =>
       completedTasks.includes(task.id)
     ).length;
     return Math.round((completed / tasks.length) * 100);
@@ -59,595 +58,595 @@ export default function StudyPlanDetailPage() {
   // Get plan data based on planId
   const getPlanData = (id: string) => {
     switch (id) {
-      case "one-week-intensive":
+      case 'one-week-intensive':
         return {
-          title: "1 Week Intensive Plan",
-          subtitle: "2 hours daily for 7 days",
+          title: '1 Week Intensive Plan',
+          subtitle: '2 hours daily for 7 days',
           description:
-            "Fast-track your preparation with focused daily sessions covering all essential topics.",
+            'Fast-track your preparation with focused daily sessions covering all essential topics.',
           totalHours: 14,
           weeks: 1,
           hoursPerDay: 2,
-          difficulty: "Advanced",
+          difficulty: 'Advanced',
           schedule: [
             {
               day: 1,
-              title: "JavaScript Fundamentals Day 1",
-              description: "Focus on hoisting, closures, and scope",
+              title: 'JavaScript Fundamentals Day 1',
+              description: 'Focus on hoisting, closures, and scope',
               tasks: [
                 {
-                  id: "js-hoisting-study",
-                  title: "Study Hoisting Concepts",
+                  id: 'js-hoisting-study',
+                  title: 'Study Hoisting Concepts',
                   description:
-                    "Read about hoisting and complete practice problems",
-                  type: "reading",
+                    'Read about hoisting and complete practice problems',
+                  type: 'reading',
                   time: 30,
-                  url: "/questions/quiz/explain-hoisting",
+                  url: '/questions/quiz/explain-hoisting',
                 },
                 {
-                  id: "js-closures-practice",
-                  title: "Practice Closure Problems",
-                  description: "Complete closure-related coding challenges",
-                  type: "practice",
+                  id: 'js-closures-practice',
+                  title: 'Practice Closure Problems',
+                  description: 'Complete closure-related coding challenges',
+                  type: 'practice',
                   time: 45,
-                  url: "/questions/javascript/closure",
+                  url: '/questions/javascript/closure',
                 },
                 {
-                  id: "js-promises-study",
-                  title: "Study Promises and Async/Await",
-                  description: "Learn about promises and async programming",
-                  type: "reading",
+                  id: 'js-promises-study',
+                  title: 'Study Promises and Async/Await',
+                  description: 'Learn about promises and async programming',
+                  type: 'reading',
                   time: 45,
-                  url: "/questions/javascript/promises",
+                  url: '/questions/javascript/promises',
                 },
               ],
             },
             {
               day: 2,
-              title: "React Fundamentals Day 2",
-              description: "Learn React hooks and component patterns",
+              title: 'React Fundamentals Day 2',
+              description: 'Learn React hooks and component patterns',
               tasks: [
                 {
-                  id: "react-hooks-practice",
-                  title: "Practice React Hooks",
-                  description: "Complete React hooks exercises",
-                  type: "practice",
+                  id: 'react-hooks-practice',
+                  title: 'Practice React Hooks',
+                  description: 'Complete React hooks exercises',
+                  type: 'practice',
                   time: 60,
-                  url: "/questions/react/hooks",
+                  url: '/questions/react/hooks',
                 },
                 {
-                  id: "react-concepts-study",
-                  title: "Study React State Management",
+                  id: 'react-concepts-study',
+                  title: 'Study React State Management',
                   description:
-                    "Learn about useState, useContext, and useReducer",
-                  type: "practice",
+                    'Learn about useState, useContext, and useReducer',
+                  type: 'practice',
                   time: 60,
-                  url: "/questions/react/state-management",
+                  url: '/questions/react/state-management',
                 },
               ],
             },
             {
               day: 3,
-              title: "CSS & Layout Day 3",
-              description: "Master CSS layout and responsive design",
+              title: 'CSS & Layout Day 3',
+              description: 'Master CSS layout and responsive design',
               tasks: [
                 {
-                  id: "css-layout-practice",
-                  title: "Practice CSS Layout",
-                  description: "Complete layout challenges",
-                  type: "practice",
+                  id: 'css-layout-practice',
+                  title: 'Practice CSS Layout',
+                  description: 'Complete layout challenges',
+                  type: 'practice',
                   time: 45,
-                  url: "/questions/user-interface/layout",
+                  url: '/questions/user-interface/layout',
                 },
                 {
-                  id: "responsive-design-project",
-                  title: "CSS Grid & Flexbox Practice",
-                  description: "Practice CSS Grid and Flexbox concepts",
-                  type: "practice",
+                  id: 'responsive-design-project',
+                  title: 'CSS Grid & Flexbox Practice',
+                  description: 'Practice CSS Grid and Flexbox concepts',
+                  type: 'practice',
                   time: 75,
-                  url: "/questions/user-interface/grid-flexbox",
+                  url: '/questions/user-interface/grid-flexbox',
                 },
               ],
             },
             {
               day: 4,
-              title: "System Design Day 4",
-              description: "Learn system design principles",
+              title: 'System Design Day 4',
+              description: 'Learn system design principles',
               tasks: [
                 {
-                  id: "system-design-practice",
-                  title: "Practice System Design",
-                  description: "Complete system design problems",
-                  type: "practice",
+                  id: 'system-design-practice',
+                  title: 'Practice System Design',
+                  description: 'Complete system design problems',
+                  type: 'practice',
                   time: 90,
-                  url: "/questions/system-design/autocomplete",
+                  url: '/questions/system-design/autocomplete',
                 },
               ],
             },
             {
               day: 5,
-              title: "Advanced JavaScript Day 5",
-              description: "Deep dive into advanced JavaScript concepts",
+              title: 'Advanced JavaScript Day 5',
+              description: 'Deep dive into advanced JavaScript concepts',
               tasks: [
                 {
-                  id: "advanced-js-practice",
-                  title: "Advanced JavaScript Practice",
-                  description: "Complete advanced JavaScript challenges",
-                  type: "practice",
+                  id: 'advanced-js-practice',
+                  title: 'Advanced JavaScript Practice',
+                  description: 'Complete advanced JavaScript challenges',
+                  type: 'practice',
                   time: 60,
                 },
                 {
-                  id: "algorithms-practice",
-                  title: "Practice Algorithm Problems",
-                  description: "Practice algorithm problems in JavaScript",
-                  type: "practice",
+                  id: 'algorithms-practice',
+                  title: 'Practice Algorithm Problems',
+                  description: 'Practice algorithm problems in JavaScript',
+                  type: 'practice',
                   time: 60,
                 },
               ],
             },
             {
               day: 6,
-              title: "Review & Practice Day 6",
-              description: "Review all learned concepts",
+              title: 'Review & Practice Day 6',
+              description: 'Review all learned concepts',
               tasks: [
                 {
-                  id: "concept-review",
-                  title: "Review All Concepts",
-                  description: "Review all learned concepts",
-                  type: "review",
+                  id: 'concept-review',
+                  title: 'Review All Concepts',
+                  description: 'Review all learned concepts',
+                  type: 'review',
                   time: 60,
                 },
                 {
-                  id: "mock-interview-practice",
-                  title: "Practice Mock Interview Questions",
-                  description: "Practice with mock interview questions",
-                  type: "practice",
+                  id: 'mock-interview-practice',
+                  title: 'Practice Mock Interview Questions',
+                  description: 'Practice with mock interview questions',
+                  type: 'practice',
                   time: 60,
                 },
               ],
             },
             {
               day: 7,
-              title: "Final Assessment Day 7",
-              description: "Complete final assessment and mock interview",
+              title: 'Final Assessment Day 7',
+              description: 'Complete final assessment and mock interview',
               tasks: [
                 {
-                  id: "final-mock-interview",
-                  title: "Complete Full Mock Interview",
-                  description: "Complete a full mock interview",
-                  type: "practice",
+                  id: 'final-mock-interview',
+                  title: 'Complete Full Mock Interview',
+                  description: 'Complete a full mock interview',
+                  type: 'practice',
                   time: 90,
                 },
                 {
-                  id: "final-review",
-                  title: "Quick Review of Key Concepts",
-                  description: "Quick review of key concepts",
-                  type: "review",
+                  id: 'final-review',
+                  title: 'Quick Review of Key Concepts',
+                  description: 'Quick review of key concepts',
+                  type: 'review',
                   time: 30,
                 },
               ],
             },
           ],
         };
-      case "one-month-balanced":
+      case 'one-month-balanced':
         return {
-          title: "1 Month Balanced Plan",
-          subtitle: "6 hours weekly for 4 weeks",
+          title: '1 Month Balanced Plan',
+          subtitle: '6 hours weekly for 4 weeks',
           description:
-            "Comprehensive preparation with a balanced approach to cover all essential topics thoroughly.",
+            'Comprehensive preparation with a balanced approach to cover all essential topics thoroughly.',
           totalHours: 24,
           weeks: 4,
           hoursPerDay: 1.5,
-          difficulty: "Intermediate",
+          difficulty: 'Intermediate',
           schedule: [
             {
               day: 1,
-              title: "Week 1: JavaScript Fundamentals",
-              description: "Start with core JavaScript concepts",
+              title: 'Week 1: JavaScript Fundamentals',
+              description: 'Start with core JavaScript concepts',
               tasks: [
                 {
-                  id: "js-basics-review",
-                  title: "JavaScript Basics Review",
-                  description: "Review fundamental JavaScript concepts",
-                  type: "reading",
+                  id: 'js-basics-review',
+                  title: 'JavaScript Basics Review',
+                  description: 'Review fundamental JavaScript concepts',
+                  type: 'reading',
                   time: 45,
                 },
                 {
-                  id: "js-hoisting-practice",
-                  title: "Hoisting Practice",
-                  description: "Practice hoisting concepts",
-                  type: "practice",
+                  id: 'js-hoisting-practice',
+                  title: 'Hoisting Practice',
+                  description: 'Practice hoisting concepts',
+                  type: 'practice',
                   time: 45,
-                  url: "/questions/quiz/explain-hoisting",
+                  url: '/questions/quiz/explain-hoisting',
                 },
               ],
             },
             {
               day: 2,
-              title: "Week 1: Advanced JavaScript",
-              description: "Deep dive into advanced JavaScript",
+              title: 'Week 1: Advanced JavaScript',
+              description: 'Deep dive into advanced JavaScript',
               tasks: [
                 {
-                  id: "js-closures-practice",
-                  title: "Closures Practice",
-                  description: "Practice closure concepts",
-                  type: "practice",
+                  id: 'js-closures-practice',
+                  title: 'Closures Practice',
+                  description: 'Practice closure concepts',
+                  type: 'practice',
                   time: 60,
-                  url: "/questions/javascript/closure",
+                  url: '/questions/javascript/closure',
                 },
                 {
-                  id: "js-promises-practice",
-                  title: "Promises Practice",
-                  description: "Practice promise and async concepts",
-                  type: "practice",
+                  id: 'js-promises-practice',
+                  title: 'Promises Practice',
+                  description: 'Practice promise and async concepts',
+                  type: 'practice',
                   time: 60,
-                  url: "/questions/javascript/promises",
+                  url: '/questions/javascript/promises',
                 },
               ],
             },
             {
               day: 3,
-              title: "Week 2: React Fundamentals",
-              description: "Learn React core concepts",
+              title: 'Week 2: React Fundamentals',
+              description: 'Learn React core concepts',
               tasks: [
                 {
-                  id: "react-hooks-practice",
-                  title: "React Hooks Practice",
-                  description: "Practice React hooks",
-                  type: "practice",
+                  id: 'react-hooks-practice',
+                  title: 'React Hooks Practice',
+                  description: 'Practice React hooks',
+                  type: 'practice',
                   time: 60,
-                  url: "/questions/react/hooks",
+                  url: '/questions/react/hooks',
                 },
                 {
-                  id: "react-state-practice",
-                  title: "State Management Practice",
-                  description: "Practice React state management",
-                  type: "practice",
+                  id: 'react-state-practice',
+                  title: 'State Management Practice',
+                  description: 'Practice React state management',
+                  type: 'practice',
                   time: 60,
-                  url: "/questions/react/state-management",
+                  url: '/questions/react/state-management',
                 },
               ],
             },
             {
               day: 4,
-              title: "Week 2: CSS & Layout",
-              description: "Master CSS layout techniques",
+              title: 'Week 2: CSS & Layout',
+              description: 'Master CSS layout techniques',
               tasks: [
                 {
-                  id: "css-layout-practice",
-                  title: "CSS Layout Practice",
-                  description: "Practice CSS layout concepts",
-                  type: "practice",
+                  id: 'css-layout-practice',
+                  title: 'CSS Layout Practice',
+                  description: 'Practice CSS layout concepts',
+                  type: 'practice',
                   time: 45,
-                  url: "/questions/user-interface/layout",
+                  url: '/questions/user-interface/layout',
                 },
                 {
-                  id: "responsive-design",
-                  title: "Responsive Design Project",
-                  description: "Build responsive components",
-                  type: "project",
+                  id: 'responsive-design',
+                  title: 'Responsive Design Project',
+                  description: 'Build responsive components',
+                  type: 'project',
                   time: 75,
                 },
               ],
             },
             {
               day: 5,
-              title: "Week 3: System Design",
-              description: "Learn system design principles",
+              title: 'Week 3: System Design',
+              description: 'Learn system design principles',
               tasks: [
                 {
-                  id: "system-design-practice",
-                  title: "System Design Practice",
-                  description: "Practice system design concepts",
-                  type: "practice",
+                  id: 'system-design-practice',
+                  title: 'System Design Practice',
+                  description: 'Practice system design concepts',
+                  type: 'practice',
                   time: 90,
-                  url: "/questions/system-design/autocomplete",
+                  url: '/questions/system-design/autocomplete',
                 },
               ],
             },
             {
               day: 6,
-              title: "Week 4: Advanced Topics",
-              description: "Cover advanced frontend concepts",
+              title: 'Week 4: Advanced Topics',
+              description: 'Cover advanced frontend concepts',
               tasks: [
                 {
-                  id: "advanced-js-practice",
-                  title: "Advanced JavaScript Practice",
-                  description: "Practice advanced JavaScript concepts",
-                  type: "practice",
+                  id: 'advanced-js-practice',
+                  title: 'Advanced JavaScript Practice',
+                  description: 'Practice advanced JavaScript concepts',
+                  type: 'practice',
                   time: 60,
                 },
                 {
-                  id: "performance-optimization",
-                  title: "Performance Optimization",
-                  description: "Learn about performance optimization",
-                  type: "reading",
+                  id: 'performance-optimization',
+                  title: 'Performance Optimization',
+                  description: 'Learn about performance optimization',
+                  type: 'reading',
                   time: 60,
                 },
               ],
             },
             {
               day: 7,
-              title: "Week 4: Final Review",
-              description: "Comprehensive review and mock interview",
+              title: 'Week 4: Final Review',
+              description: 'Comprehensive review and mock interview',
               tasks: [
                 {
-                  id: "comprehensive-review",
-                  title: "Comprehensive Review",
-                  description: "Review all learned concepts",
-                  type: "review",
+                  id: 'comprehensive-review',
+                  title: 'Comprehensive Review',
+                  description: 'Review all learned concepts',
+                  type: 'review',
                   time: 60,
                 },
                 {
-                  id: "mock-interview",
-                  title: "Mock Interview",
-                  description: "Complete a full mock interview",
-                  type: "practice",
+                  id: 'mock-interview',
+                  title: 'Mock Interview',
+                  description: 'Complete a full mock interview',
+                  type: 'practice',
                   time: 90,
                 },
               ],
             },
           ],
         };
-      case "three-months-comprehensive":
+      case 'three-months-comprehensive':
         return {
-          title: "3 Months Comprehensive Plan",
-          subtitle: "3 hours weekly for 12 weeks",
+          title: '3 Months Comprehensive Plan',
+          subtitle: '3 hours weekly for 12 weeks',
           description:
-            "Thorough preparation covering all aspects of frontend development with extensive practice.",
+            'Thorough preparation covering all aspects of frontend development with extensive practice.',
           totalHours: 36,
           weeks: 12,
           hoursPerDay: 1,
-          difficulty: "Beginner",
+          difficulty: 'Beginner',
           schedule: [
             {
               day: 1,
-              title: "Week 1: Introduction to Frontend",
-              description: "Start your frontend journey",
+              title: 'Week 1: Introduction to Frontend',
+              description: 'Start your frontend journey',
               tasks: [
                 {
-                  id: "frontend-intro",
-                  title: "Frontend Development Introduction",
-                  description: "Learn about frontend development basics",
-                  type: "reading",
+                  id: 'frontend-intro',
+                  title: 'Frontend Development Introduction',
+                  description: 'Learn about frontend development basics',
+                  type: 'reading',
                   time: 60,
                 },
                 {
-                  id: "html-css-basics",
-                  title: "HTML & CSS Basics",
-                  description: "Practice HTML and CSS fundamentals",
-                  type: "practice",
+                  id: 'html-css-basics',
+                  title: 'HTML & CSS Basics',
+                  description: 'Practice HTML and CSS fundamentals',
+                  type: 'practice',
                   time: 60,
                 },
               ],
             },
             {
               day: 2,
-              title: "Week 1: JavaScript Introduction",
-              description: "Begin learning JavaScript",
+              title: 'Week 1: JavaScript Introduction',
+              description: 'Begin learning JavaScript',
               tasks: [
                 {
-                  id: "js-intro-study",
-                  title: "JavaScript Introduction",
-                  description: "Learn JavaScript basics and syntax",
-                  type: "reading",
+                  id: 'js-intro-study',
+                  title: 'JavaScript Introduction',
+                  description: 'Learn JavaScript basics and syntax',
+                  type: 'reading',
                   time: 45,
                 },
                 {
-                  id: "js-basic-practice",
-                  title: "Basic JavaScript Practice",
-                  description: "Practice basic JavaScript concepts",
-                  type: "practice",
+                  id: 'js-basic-practice',
+                  title: 'Basic JavaScript Practice',
+                  description: 'Practice basic JavaScript concepts',
+                  type: 'practice',
                   time: 45,
                 },
               ],
             },
             {
               day: 3,
-              title: "Week 2: JavaScript Fundamentals",
-              description: "Deep dive into JavaScript basics",
+              title: 'Week 2: JavaScript Fundamentals',
+              description: 'Deep dive into JavaScript basics',
               tasks: [
                 {
-                  id: "js-hoisting-practice",
-                  title: "Hoisting Practice",
-                  description: "Practice hoisting concepts",
-                  type: "practice",
+                  id: 'js-hoisting-practice',
+                  title: 'Hoisting Practice',
+                  description: 'Practice hoisting concepts',
+                  type: 'practice',
                   time: 45,
-                  url: "/questions/quiz/explain-hoisting",
+                  url: '/questions/quiz/explain-hoisting',
                 },
                 {
-                  id: "js-closures-practice",
-                  title: "Closures Practice",
-                  description: "Practice closure concepts",
-                  type: "practice",
+                  id: 'js-closures-practice',
+                  title: 'Closures Practice',
+                  description: 'Practice closure concepts',
+                  type: 'practice',
                   time: 45,
-                  url: "/questions/javascript/closure",
+                  url: '/questions/javascript/closure',
                 },
               ],
             },
             {
               day: 4,
-              title: "Week 3: Advanced JavaScript",
-              description: "Learn advanced JavaScript concepts",
+              title: 'Week 3: Advanced JavaScript',
+              description: 'Learn advanced JavaScript concepts',
               tasks: [
                 {
-                  id: "js-promises-practice",
-                  title: "Promises Practice",
-                  description: "Practice promise and async concepts",
-                  type: "practice",
+                  id: 'js-promises-practice',
+                  title: 'Promises Practice',
+                  description: 'Practice promise and async concepts',
+                  type: 'practice',
                   time: 60,
-                  url: "/questions/javascript/promises",
+                  url: '/questions/javascript/promises',
                 },
                 {
-                  id: "js-advanced-concepts",
-                  title: "Advanced JavaScript Concepts",
-                  description: "Learn about prototypes, classes, and modules",
-                  type: "reading",
+                  id: 'js-advanced-concepts',
+                  title: 'Advanced JavaScript Concepts',
+                  description: 'Learn about prototypes, classes, and modules',
+                  type: 'reading',
                   time: 60,
                 },
               ],
             },
             {
               day: 5,
-              title: "Week 4: React Introduction",
-              description: "Start learning React",
+              title: 'Week 4: React Introduction',
+              description: 'Start learning React',
               tasks: [
                 {
-                  id: "react-intro",
-                  title: "React Introduction",
-                  description: "Learn React basics and JSX",
-                  type: "reading",
+                  id: 'react-intro',
+                  title: 'React Introduction',
+                  description: 'Learn React basics and JSX',
+                  type: 'reading',
                   time: 60,
                 },
                 {
-                  id: "react-components",
-                  title: "React Components",
-                  description: "Practice creating React components",
-                  type: "practice",
+                  id: 'react-components',
+                  title: 'React Components',
+                  description: 'Practice creating React components',
+                  type: 'practice',
                   time: 60,
                 },
               ],
             },
             {
               day: 6,
-              title: "Week 5: React Hooks",
-              description: "Learn React hooks",
+              title: 'Week 5: React Hooks',
+              description: 'Learn React hooks',
               tasks: [
                 {
-                  id: "react-hooks-practice",
-                  title: "React Hooks Practice",
-                  description: "Practice React hooks",
-                  type: "practice",
+                  id: 'react-hooks-practice',
+                  title: 'React Hooks Practice',
+                  description: 'Practice React hooks',
+                  type: 'practice',
                   time: 60,
-                  url: "/questions/react/hooks",
+                  url: '/questions/react/hooks',
                 },
                 {
-                  id: "react-state-practice",
-                  title: "State Management Practice",
-                  description: "Practice React state management",
-                  type: "practice",
+                  id: 'react-state-practice',
+                  title: 'State Management Practice',
+                  description: 'Practice React state management',
+                  type: 'practice',
                   time: 60,
-                  url: "/questions/react/state-management",
+                  url: '/questions/react/state-management',
                 },
               ],
             },
             {
               day: 7,
-              title: "Week 6: CSS & Styling",
-              description: "Master CSS and styling",
+              title: 'Week 6: CSS & Styling',
+              description: 'Master CSS and styling',
               tasks: [
                 {
-                  id: "css-layout-practice",
-                  title: "CSS Layout Practice",
-                  description: "Practice CSS layout concepts",
-                  type: "practice",
+                  id: 'css-layout-practice',
+                  title: 'CSS Layout Practice',
+                  description: 'Practice CSS layout concepts',
+                  type: 'practice',
                   time: 45,
-                  url: "/questions/user-interface/layout",
+                  url: '/questions/user-interface/layout',
                 },
                 {
-                  id: "css-advanced",
-                  title: "Advanced CSS",
-                  description: "Learn advanced CSS techniques",
-                  type: "reading",
+                  id: 'css-advanced',
+                  title: 'Advanced CSS',
+                  description: 'Learn advanced CSS techniques',
+                  type: 'reading',
                   time: 45,
                 },
               ],
             },
             {
               day: 8,
-              title: "Week 7: System Design",
-              description: "Learn system design principles",
+              title: 'Week 7: System Design',
+              description: 'Learn system design principles',
               tasks: [
                 {
-                  id: "system-design-practice",
-                  title: "System Design Practice",
-                  description: "Practice system design concepts",
-                  type: "practice",
+                  id: 'system-design-practice',
+                  title: 'System Design Practice',
+                  description: 'Practice system design concepts',
+                  type: 'practice',
                   time: 90,
-                  url: "/questions/system-design/autocomplete",
+                  url: '/questions/system-design/autocomplete',
                 },
               ],
             },
             {
               day: 9,
-              title: "Week 8: Performance & Optimization",
-              description: "Learn about performance optimization",
+              title: 'Week 8: Performance & Optimization',
+              description: 'Learn about performance optimization',
               tasks: [
                 {
-                  id: "performance-basics",
-                  title: "Performance Basics",
-                  description: "Learn performance fundamentals",
-                  type: "reading",
+                  id: 'performance-basics',
+                  title: 'Performance Basics',
+                  description: 'Learn performance fundamentals',
+                  type: 'reading',
                   time: 60,
                 },
                 {
-                  id: "optimization-practice",
-                  title: "Optimization Practice",
-                  description: "Practice optimization techniques",
-                  type: "practice",
+                  id: 'optimization-practice',
+                  title: 'Optimization Practice',
+                  description: 'Practice optimization techniques',
+                  type: 'practice',
                   time: 60,
                 },
               ],
             },
             {
               day: 10,
-              title: "Week 9: Testing & Debugging",
-              description: "Learn testing and debugging",
+              title: 'Week 9: Testing & Debugging',
+              description: 'Learn testing and debugging',
               tasks: [
                 {
-                  id: "testing-basics",
-                  title: "Testing Basics",
-                  description: "Learn testing fundamentals",
-                  type: "reading",
+                  id: 'testing-basics',
+                  title: 'Testing Basics',
+                  description: 'Learn testing fundamentals',
+                  type: 'reading',
                   time: 60,
                 },
                 {
-                  id: "debugging-practice",
-                  title: "Debugging Practice",
-                  description: "Practice debugging techniques",
-                  type: "practice",
+                  id: 'debugging-practice',
+                  title: 'Debugging Practice',
+                  description: 'Practice debugging techniques',
+                  type: 'practice',
                   time: 60,
                 },
               ],
             },
             {
               day: 11,
-              title: "Week 10: Advanced Topics",
-              description: "Cover advanced frontend topics",
+              title: 'Week 10: Advanced Topics',
+              description: 'Cover advanced frontend topics',
               tasks: [
                 {
-                  id: "advanced-concepts",
-                  title: "Advanced Concepts",
-                  description: "Learn advanced frontend concepts",
-                  type: "reading",
+                  id: 'advanced-concepts',
+                  title: 'Advanced Concepts',
+                  description: 'Learn advanced frontend concepts',
+                  type: 'reading',
                   time: 60,
                 },
                 {
-                  id: "advanced-practice",
-                  title: "Advanced Practice",
-                  description: "Practice advanced concepts",
-                  type: "practice",
+                  id: 'advanced-practice',
+                  title: 'Advanced Practice',
+                  description: 'Practice advanced concepts',
+                  type: 'practice',
                   time: 60,
                 },
               ],
             },
             {
               day: 12,
-              title: "Week 11-12: Final Preparation",
-              description: "Final review and mock interviews",
+              title: 'Week 11-12: Final Preparation',
+              description: 'Final review and mock interviews',
               tasks: [
                 {
-                  id: "comprehensive-review",
-                  title: "Comprehensive Review",
-                  description: "Review all learned concepts",
-                  type: "review",
+                  id: 'comprehensive-review',
+                  title: 'Comprehensive Review',
+                  description: 'Review all learned concepts',
+                  type: 'review',
                   time: 120,
                 },
                 {
-                  id: "mock-interviews",
-                  title: "Mock Interviews",
-                  description: "Complete multiple mock interviews",
-                  type: "practice",
+                  id: 'mock-interviews',
+                  title: 'Mock Interviews',
+                  description: 'Complete multiple mock interviews',
+                  type: 'practice',
                   time: 180,
                 },
               ],
@@ -656,13 +655,13 @@ export default function StudyPlanDetailPage() {
         };
       default:
         return {
-          title: "Plan Not Found",
+          title: 'Plan Not Found',
           subtitle: "This study plan doesn't exist",
-          description: "Please check the URL and try again.",
+          description: 'Please check the URL and try again.',
           totalHours: 0,
           weeks: 0,
           hoursPerDay: 0,
-          difficulty: "Unknown",
+          difficulty: 'Unknown',
           schedule: [],
         };
     }
@@ -670,7 +669,7 @@ export default function StudyPlanDetailPage() {
 
   const planData = getPlanData(planId);
 
-  const allTasks = planData.schedule.flatMap((day) => day.tasks);
+  const allTasks = planData.schedule.flatMap(day => day.tasks);
   const totalProgress = calculateProgress(allTasks);
 
   return (
@@ -745,7 +744,7 @@ export default function StudyPlanDetailPage() {
 
         {/* Daily Schedule */}
         <div className="space-y-6">
-          {planData.schedule.map((day) => (
+          {planData.schedule.map(day => (
             <div key={day.day} className="bg-white rounded-lg shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
@@ -756,7 +755,7 @@ export default function StudyPlanDetailPage() {
                 </div>
                 <div className="text-right">
                   <div className="text-sm text-gray-700 font-medium">
-                    {day.tasks.reduce((sum, task) => sum + task.time, 0)}{" "}
+                    {day.tasks.reduce((sum, task) => sum + task.time, 0)}{' '}
                     minutes
                   </div>
                   <div className="flex items-center">
@@ -774,13 +773,13 @@ export default function StudyPlanDetailPage() {
               </div>
 
               <div className="space-y-3">
-                {day.tasks.map((task) => (
+                {day.tasks.map(task => (
                   <div
                     key={task.id}
                     className={`flex items-center justify-between p-4 rounded-lg border transition-all duration-200 ${
                       completedTasks.includes(task.id)
-                        ? "bg-green-50 border-green-200"
-                        : "bg-gray-50 border-gray-200 hover:bg-gray-100"
+                        ? 'bg-green-50 border-green-200'
+                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                     }`}
                   >
                     <div className="flex items-center space-x-3">

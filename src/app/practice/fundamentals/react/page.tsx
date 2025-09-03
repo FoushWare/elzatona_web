@@ -42,7 +42,6 @@ export default function ReactQuestionsPage() {
 
   const getOptionLabel = (index: number) => String.fromCharCode(65 + index);
 
-  const progressPercentage = (totalAnswered / questions.length) * 100;
   const scorePercentage = totalAnswered > 0 ? (score / totalAnswered) * 100 : 0;
 
   return (
