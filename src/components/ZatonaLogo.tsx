@@ -4,12 +4,14 @@ interface ZatonaLogoProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   showText?: boolean;
+  variant?: 'horizontal' | 'stacked';
 }
 
 export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   size = 'md',
   className = '',
   showText = true,
+  variant = 'horizontal',
 }) => {
   const sizeClasses = {
     sm: 'w-8 h-8',
@@ -23,60 +25,166 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
     lg: 'text-2xl',
   };
 
-  return (
-    <div className={`flex items-center space-x-3 ${className}`}>
-      {/* Professional Logo Design */}
-      <div className={`${sizeClasses[size]} relative`}>
-        {/* Main container with modern design */}
-        <div className="w-full h-full bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 rounded-2xl p-0.5 shadow-xl">
-          {/* Inner container */}
-          <div className="w-full h-full bg-white dark:bg-gray-900 rounded-2xl flex items-center justify-center relative">
-            {/* Olive branch icon - clean and professional */}
-            <div className="relative w-7 h-7">
-              {/* Main stem - vertical */}
-              <div className="absolute left-1/2 top-1 w-1 h-5 bg-emerald-600 transform -translate-x-1/2"></div>
+  if (!showText) {
+    // Icon only - use the olive icon from the stacked design
+    return (
+      <div className={`${className}`}>
+        <svg
+          className={sizeClasses[size]}
+          viewBox="0 0 120 120"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-labelledby="icon-title"
+        >
+          <title id="icon-title">Zatona Web Icon</title>
+          <defs>
+            <radialGradient id="oliveRad" cx="40%" cy="30%" r="70%">
+              <stop offset="0" stopColor="#7EA142" />
+              <stop offset="1" stopColor="#486127" />
+            </radialGradient>
+          </defs>
+          <circle
+            cx="60"
+            cy="60"
+            r="60"
+            fill="url(#oliveRad)"
+            stroke="#2F421A"
+            strokeWidth="3"
+          />
+          <ellipse
+            cx="75"
+            cy="55"
+            rx="14"
+            ry="10"
+            fill="#253810"
+            opacity="0.95"
+          />
+          <g transform="translate(10,15) rotate(-25)">
+            <path
+              d="M0 0 C20 -9, 42.5 -9, 70 0 C47.5 10, 20 10, 0 0 Z"
+              fill="#5E7E3B"
+              stroke="#2F421A"
+              strokeWidth="2"
+            />
+          </g>
+        </svg>
+      </div>
+    );
+  }
 
-              {/* Horizontal branch */}
-              <div className="absolute left-1/2 top-2 w-4 h-0.5 bg-emerald-600 transform -translate-x-1/2"></div>
-
-              {/* Left olive */}
-              <div className="absolute left-1 top-1 w-2 h-2 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full shadow-sm"></div>
-
-              {/* Right olive */}
-              <div className="absolute right-1 top-1 w-2 h-2 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full shadow-sm"></div>
-
-              {/* Center olive */}
-              <div className="absolute left-1/2 top-1 w-2 h-2 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full transform -translate-x-1/2 shadow-sm"></div>
-
-              {/* Small leaf accents */}
-              <div className="absolute left-1/2 top-3 w-1 h-0.5 bg-emerald-500 rounded-full transform -translate-x-1/2"></div>
-              <div className="absolute left-1/2 top-4 w-1 h-0.5 bg-emerald-500 rounded-full transform -translate-x-1/2"></div>
-            </div>
-
-            {/* Subtle inner glow */}
-            <div className="absolute inset-1 bg-gradient-to-br from-emerald-50/40 to-green-50/40 dark:from-emerald-900/30 dark:to-green-900/30 rounded-xl"></div>
+  if (variant === 'stacked') {
+    // Stacked logo design
+    return (
+      <div className={`flex flex-col items-center space-y-2 ${className}`}>
+        <svg
+          className={sizeClasses[size]}
+          viewBox="0 0 120 120"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-labelledby="stacked-title"
+        >
+          <title id="stacked-title">Zatona Web Icon</title>
+          <defs>
+            <radialGradient id="oliveRad" cx="40%" cy="30%" r="70%">
+              <stop offset="0" stopColor="#7EA142" />
+              <stop offset="1" stopColor="#486127" />
+            </radialGradient>
+          </defs>
+          <circle
+            cx="60"
+            cy="60"
+            r="60"
+            fill="url(#oliveRad)"
+            stroke="#2F421A"
+            strokeWidth="3"
+          />
+          <ellipse
+            cx="75"
+            cy="55"
+            rx="14"
+            ry="10"
+            fill="#253810"
+            opacity="0.95"
+          />
+          <g transform="translate(10,15) rotate(-25)">
+            <path
+              d="M0 0 C20 -9, 42.5 -9, 70 0 C47.5 10, 20 10, 0 0 Z"
+              fill="#5E7E3B"
+              stroke="#2F421A"
+              strokeWidth="2"
+            />
+          </g>
+        </svg>
+        <div className="text-center">
+          <div
+            className={`${textSizes[size]} font-bold text-gray-900 dark:text-white leading-tight`}
+          >
+            ZATONA
+          </div>
+          <div
+            className={`${textSizes[size]} font-bold text-gray-700 dark:text-gray-300 leading-tight`}
+          >
+            WEB
           </div>
         </div>
-
-        {/* Top-right accent */}
-        <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-amber-400 rounded-full shadow-sm"></div>
       </div>
+    );
+  }
 
-      {/* Text Logo */}
-      {showText && (
-        <div className="flex flex-col">
-          <span
-            className={`${textSizes[size]} font-bold bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent leading-tight tracking-tight`}
-          >
-            Zatona
-          </span>
-          <span
-            className={`${textSizes[size]} font-semibold text-gray-800 dark:text-gray-200 leading-tight tracking-tight`}
-          >
-            Web
-          </span>
-        </div>
-      )}
+  // Horizontal logo design (default)
+  return (
+    <div className={`flex items-center space-x-3 ${className}`}>
+      <svg
+        className={sizeClasses[size]}
+        viewBox="0 0 120 120"
+        xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-labelledby="horizontal-title"
+      >
+        <title id="horizontal-title">Zatona Web Icon</title>
+        <defs>
+          <radialGradient id="oliveRad" cx="40%" cy="30%" r="70%">
+            <stop offset="0" stopColor="#7EA142" />
+            <stop offset="1" stopColor="#486127" />
+          </radialGradient>
+        </defs>
+        <circle
+          cx="60"
+          cy="60"
+          r="60"
+          fill="url(#oliveRad)"
+          stroke="#2F421A"
+          strokeWidth="3"
+        />
+        <ellipse
+          cx="75"
+          cy="55"
+          rx="14"
+          ry="10"
+          fill="#253810"
+          opacity="0.95"
+        />
+        <g transform="translate(10,15) rotate(-25)">
+          <path
+            d="M0 0 C20 -9, 42.5 -9, 70 0 C47.5 10, 20 10, 0 0 Z"
+            fill="#5E7E3B"
+            stroke="#2F421A"
+            strokeWidth="2"
+          />
+        </g>
+      </svg>
+      <div className="flex flex-col">
+        <span
+          className={`${textSizes[size]} font-bold text-gray-900 dark:text-white leading-tight tracking-tight`}
+        >
+          ZATONA
+        </span>
+        <span
+          className={`${textSizes[size]} font-semibold text-gray-700 dark:text-gray-300 leading-tight tracking-tight`}
+        >
+          WEB
+        </span>
+      </div>
     </div>
   );
 };
