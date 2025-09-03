@@ -38,7 +38,7 @@ const cheatSheetData: CheatSheetSection[] = [
     title: 'Performance Optimization & Monitoring',
     icon: <Zap className="w-8 h-8" />,
     description:
-      'Comprehensive performance optimization strategies and monitoring',
+      'Comprehensive performance optimization strategies with visual diagrams and flowcharts',
     color: 'text-yellow-600 dark:text-yellow-400',
     bgColor:
       'bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20',
@@ -47,71 +47,92 @@ const cheatSheetData: CheatSheetSection[] = [
       {
         title: 'Performance Audit Workflow',
         content:
-          'Lighthouse → Core Web Vitals → Identify bottlenecks → Implement fixes → Re-audit. Use Chrome DevTools Performance tab for detailed analysis.',
+          '📊 Workflow: Lighthouse → Core Web Vitals → Identify bottlenecks → Implement fixes → Re-audit → Monitor. Use Chrome DevTools Performance tab for detailed analysis. Tools: Lighthouse CI, WebPageTest, GTmetrix.',
         type: 'checklist',
         priority: 'high',
       },
       {
-        title: 'Critical Rendering Path',
+        title: 'Critical Rendering Path Flow',
         content:
-          'DOM + CSSOM → Render Tree → Layout → Paint. Minimize blocking resources, inline critical CSS, defer non-critical JavaScript.',
+          '🔄 Flow: HTML → DOM + CSS → CSSOM → Render Tree → Layout → Paint → Composite. Minimize blocking resources, inline critical CSS, defer non-critical JavaScript. Visual: DOM Tree → CSSOM Tree → Render Tree → Layout → Paint.',
         type: 'info',
         priority: 'high',
       },
       {
-        title: 'Core Web Vitals Monitoring',
+        title: 'Core Web Vitals Dashboard',
         content:
-          'FCP (First Contentful Paint) < 1.8s, LCP (Largest Contentful Paint) < 2.5s, TBT (Total Blocking Time) < 200ms, CLS (Cumulative Layout Shift) < 0.1.',
+          '📈 Metrics: FCP < 1.8s (First Contentful Paint), LCP < 2.5s (Largest Contentful Paint), TBT < 200ms (Total Blocking Time), CLS < 0.1 (Cumulative Layout Shift), INP < 200ms (Interaction to Next Paint). Monitor with Real User Monitoring (RUM).',
         type: 'checklist',
         priority: 'high',
       },
       {
-        title: 'Bundle Size Optimization',
+        title: 'Bundle Size Optimization Strategy',
         content:
-          'Code splitting, tree shaking, dynamic imports, analyze bundle with webpack-bundle-analyzer, remove unused dependencies, compress with gzip/brotli.',
+          '📦 Strategy: Code splitting (route-based, component-based) → Tree shaking (remove unused code) → Dynamic imports (React.lazy) → Analyze with webpack-bundle-analyzer → Remove unused dependencies → Compress with gzip/brotli → Implement module federation for micro-frontends.',
         type: 'tip',
         priority: 'high',
       },
       {
-        title: 'Critical CSS Strategy',
+        title: 'Critical CSS Implementation',
         content:
-          'Inline critical CSS for above-the-fold content, extract and inline critical styles, use tools like Critical or CriticalCSS, preload non-critical CSS.',
+          '🎯 Implementation: Extract above-the-fold CSS → Inline critical styles in <head> → Preload non-critical CSS → Use font-display: swap → Implement CSS-in-JS with SSR. Tools: Critical, CriticalCSS, Penthouse, webpack-critical-plugin.',
         type: 'tip',
         priority: 'high',
       },
       {
         title: 'Image Optimization Pipeline',
         content:
-          'WebP/AVIF format, responsive images with srcset and sizes attributes, picture element for art direction, lazy loading with Intersection Observer, proper sizing (300w, 600w, 900w), compression optimization, CDN delivery with automatic format conversion.',
+          '🖼️ Pipeline: Format selection (WebP/AVIF) → Responsive images (srcset + sizes) → Picture element (art direction) → Lazy loading (Intersection Observer) → Proper sizing (300w, 600w, 900w) → Compression (sharp, imagemin) → CDN delivery → Automatic format conversion.',
         type: 'checklist',
         priority: 'high',
       },
       {
-        title: 'Loading Strategy Flow',
+        title: 'Loading Strategy Flowchart',
         content:
-          'Critical resources first → Lazy load below-fold → Preload important resources → Prefetch likely resources → Background loading for others.',
+          '⚡ Flow: Critical resources (CSS, JS) → Above-the-fold content → Lazy load below-fold → Preload important resources → Prefetch likely resources → Background loading for others. Implement with Resource Hints: <link rel="preload">, <link rel="prefetch">, <link rel="dns-prefetch">.',
         type: 'info',
         priority: 'medium',
       },
       {
-        title: 'Caching Strategy',
+        title: 'Caching Strategy Implementation',
         content:
-          'Service Worker for offline, HTTP caching headers, CDN caching, browser caching, versioned assets, cache-first for static resources.',
+          '💾 Strategy: Service Worker (offline-first) → HTTP caching headers (Cache-Control, ETag) → CDN caching (edge locations) → Browser caching (localStorage, sessionStorage) → Versioned assets (content hash) → Cache-first for static resources → Network-first for API calls.',
         type: 'tip',
         priority: 'medium',
       },
       {
-        title: 'JavaScript Performance',
+        title: 'JavaScript Performance Optimization',
         content:
-          'Debounce/throttle events, use Web Workers for heavy tasks, optimize loops and algorithms, avoid memory leaks, use requestAnimationFrame for animations.',
+          '⚡ Optimization: Debounce/throttle events → Web Workers (heavy tasks) → Optimize loops and algorithms → Avoid memory leaks → requestAnimationFrame (animations) → Virtual scrolling (large lists) → Code splitting (dynamic imports) → Bundle analysis.',
         type: 'tip',
         priority: 'medium',
       },
       {
-        title: 'Network Optimization',
+        title: 'Network Optimization Flow',
         content:
-          'HTTP/2 or HTTP/3, request compression, minimize round trips, use CDN, implement resource hints (preload, prefetch, dns-prefetch).',
+          '🌐 Flow: HTTP/2 or HTTP/3 → Request compression (gzip/brotli) → Minimize round trips → CDN implementation → Resource hints (preload, prefetch, dns-prefetch) → Connection pooling → Keep-alive connections → Optimize DNS resolution.',
         type: 'info',
+        priority: 'medium',
+      },
+      {
+        title: 'Performance Monitoring Setup',
+        content:
+          '📊 Setup: Real User Monitoring (RUM) → Performance API integration → Error tracking (Sentry) → Custom metrics → A/B testing → Performance budgets → Automated alerts → Dashboard creation (Grafana, DataDog).',
+        type: 'checklist',
+        priority: 'medium',
+      },
+      {
+        title: 'Memory Management & Leaks',
+        content:
+          '🧠 Management: Monitor memory usage → Detect memory leaks → Implement proper cleanup → Use WeakMap/WeakSet → Avoid circular references → Profile with Chrome DevTools → Implement garbage collection optimization → Monitor heap size.',
+        type: 'warning',
+        priority: 'medium',
+      },
+      {
+        title: 'Service Worker Performance',
+        content:
+          '🔧 Performance: Implement offline-first strategy → Cache API optimization → Background sync → Push notifications → Update strategies (stale-while-revalidate) → Network fallbacks → Performance monitoring → Debug with DevTools.',
+        type: 'tip',
         priority: 'medium',
       },
     ],

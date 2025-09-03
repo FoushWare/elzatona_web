@@ -32,6 +32,7 @@ export default function LearningPathsPage() {
     'tools',
     'ai-tools',
     'interview',
+    'english',
   ];
 
   const getDifficultyColor = (difficulty: string) => {
@@ -84,6 +85,8 @@ export default function LearningPathsPage() {
         return '🤖';
       case 'interview':
         return '💼';
+      case 'english':
+        return '📚';
       default:
         return '📚';
     }
@@ -114,6 +117,12 @@ export default function LearningPathsPage() {
             >
               🎯 Preparation Guides
             </Link>
+            <Link
+              href="/learning-paths/enhanced"
+              className="bg-transparent border-2 border-green-600 text-green-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
+            >
+              🚀 Enhanced Learning Path (Interactive)
+            </Link>
           </div>
 
           {/* Mobile Toggle Buttons - Hidden on desktop */}
@@ -132,6 +141,12 @@ export default function LearningPathsPage() {
               {showFilters ? 'Hide Filters' : 'Show Filters'}
               <span className="ml-2">🔍</span>
             </button>
+            <Link
+              href="/learning-paths/enhanced"
+              className="inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base"
+            >
+              🚀 Enhanced Learning
+            </Link>
           </div>
         </div>
 

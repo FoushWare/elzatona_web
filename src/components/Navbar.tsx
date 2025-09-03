@@ -33,7 +33,11 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center space-x-2 text-white hover:text-blue-100 transition-colors duration-200"
+            className={`flex items-center space-x-2 transition-colors duration-200 ${
+              isScrolled
+                ? 'text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400'
+                : 'text-white hover:text-blue-100'
+            }`}
           >
             <ZatonaLogo size="md" showText={true} />
           </Link>
@@ -42,37 +46,60 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             <Link
               href="/learning-paths"
-              className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
+              className={`nav-link transition-all duration-200 hover:scale-105 px-3 py-2 rounded-lg ${
+                isScrolled
+                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                  : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+              }`}
             >
               Learning Paths
             </Link>
 
             <Link
               href="/coding"
-              className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
+              className={`nav-link transition-all duration-200 hover:scale-105 px-3 py-2 rounded-lg ${
+                isScrolled
+                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                  : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+              }`}
             >
               Coding
             </Link>
 
             <Link
               href="/preparation-guides"
-              className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
+              className={`nav-link transition-all duration-200 hover:scale-105 px-3 py-2 rounded-lg ${
+                isScrolled
+                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                  : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+              }`}
             >
               📖 Preparation Guides
             </Link>
 
             <Link
               href="/jobs"
-              className="nav-link text-white hover:text-blue-100 transition-all duration-200 hover:scale-105 hover:bg-blue-700/50 px-3 py-2 rounded-lg"
+              className={`nav-link transition-all duration-200 hover:scale-105 px-3 py-2 rounded-lg ${
+                isScrolled
+                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                  : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+              }`}
             >
               💼 Job Aggregator
             </Link>
 
             <Link
               href="/auth"
-              className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200"
+              className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                isScrolled
+                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                  : 'bg-white text-blue-600 hover:bg-blue-50'
+              }`}
             >
-              Want to store your app progress?
+              <span className="hidden lg:inline">
+                Want to store your app progress?
+              </span>
+              <span className="lg:hidden">Store Progress</span>
             </Link>
           </div>
 
@@ -80,7 +107,11 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors duration-200"
+              className={`p-2 rounded-lg transition-colors duration-200 ${
+                isScrolled
+                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+              }`}
               aria-label="Toggle theme"
             >
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
@@ -89,7 +120,11 @@ export default function Navbar() {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors duration-200"
+              className={`md:hidden p-2 rounded-lg transition-colors duration-200 ${
+                isScrolled
+                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+              }`}
               aria-label="Toggle mobile menu"
             >
               {isOpen ? <X size={20} /> : <Menu size={20} />}

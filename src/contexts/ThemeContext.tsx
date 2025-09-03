@@ -25,24 +25,42 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setIsDarkMode(true);
     }
     setIsLoaded(true);
+
+    // Debug logging
+    console.log(
+      'ThemeContext: Initial theme loaded:',
+      savedTheme || 'dark (default)'
+    );
   }, []);
 
   useEffect(() => {
     // Save theme preference to localStorage whenever it changes
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
 
-    // Apply theme class to document root
+    // Apply theme class to document root with proper cleanup
+    const root = document.documentElement;
+
     if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
+      root.classList.remove('light');
+      root.classList.add('dark');
+      // Also set data attribute for additional CSS targeting
+      root.setAttribute('data-theme', 'dark');
     } else {
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
+      root.classList.add('light');
+      // Also set data attribute for additional CSS targeting
+      root.setAttribute('data-theme', 'light');
     }
+
+    // Debug logging
+    console.log('ThemeContext: Theme applied:', isDarkMode ? 'dark' : 'light');
+    console.log('ThemeContext: Root classes:', root.className);
   }, [isDarkMode]);
 
   const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    console.log('ThemeContext: Theme toggled to:', newMode ? 'dark' : 'light');
   };
 
   const setDarkMode = (dark: boolean) => {

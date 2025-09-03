@@ -926,6 +926,32 @@ export const learningPaths: LearningPath[] = [
     questionCount: 48,
     questionCategories: ['html', 'css', 'javascript', 'react'],
   },
+  {
+    id: 'english-learning',
+    title: 'Improve Your English',
+    description:
+      'Free, high-quality resources to improve your English language skills for better communication in tech',
+    difficulty: 'beginner',
+    resources: [
+      'cbc-learning-english',
+      'bbc-learning-english',
+      'voa-learning-english',
+      'eslpod',
+      'the-english-we-speak',
+      'lukes-english-podcast',
+      'all-ears-english',
+    ],
+    estimatedTime: 12,
+    prerequisites: [],
+    targetSkills: [
+      'English Language',
+      'Communication',
+      'Listening',
+      'Speaking',
+      'Reading',
+      'Writing',
+    ],
+  },
 ];
 
 export function getResourcesByCategory(category: string): LearningResource[] {
