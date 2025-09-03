@@ -389,26 +389,21 @@ export default function LearningPathsPage() {
                 </div>
               </div>
 
-              {/* Action Button */}
-              <Link
-                href={`/learning-paths/${path.id}`}
-                className="inline-flex items-center justify-center w-full px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 bg-transparent border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg text-xs sm:text-sm lg:text-base"
-              >
-                Start Learning Path
-                <svg
-                  className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 group-hover:translate-x-1 transition-transform duration-200"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-2">
+                <button
+                  onClick={() => setSelectedPath(path.id)}
+                  className="flex-1 inline-flex items-center justify-center px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg text-xs sm:text-sm lg:text-base"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </Link>
+                  🧠 Practice Questions
+                </button>
+                <Link
+                  href={`/learning-paths/${path.id}`}
+                  className="flex-1 inline-flex items-center justify-center px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 bg-transparent border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg text-xs sm:text-sm lg:text-base"
+                >
+                  📚 View Resources
+                </Link>
+              </div>
             </div>
           ))}
         </div>
