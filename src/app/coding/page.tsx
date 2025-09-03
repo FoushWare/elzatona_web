@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { sampleChallenges } from '@/lib/challenges';
-import { Challenge, Difficulty, Category } from '@/types/challenge';
+import { Difficulty, Category } from '@/types/challenge';
 import Link from 'next/link';
 
 export default function CodingPage() {

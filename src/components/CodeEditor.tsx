@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useRef } from "react";
-import Editor from "@monaco-editor/react";
-import { Challenge } from "@/types/challenge";
+import { useState, useRef } from 'react';
+import Editor from '@monaco-editor/react';
+import { Challenge } from '@/types/challenge';
 
 interface CodeEditorProps {
   challenge: Challenge;
@@ -13,8 +13,8 @@ export default function CodeEditor({
   challenge,
   onCodeChange,
 }: CodeEditorProps) {
-  const [activeTab, setActiveTab] = useState<"html" | "css" | "javascript">(
-    "html"
+  const [activeTab, setActiveTab] = useState<'html' | 'css' | 'javascript'>(
+    'html'
   );
   const [htmlCode, setHtmlCode] = useState(challenge.starterCode.html);
   const [cssCode, setCssCode] = useState(challenge.starterCode.css);
@@ -22,16 +22,21 @@ export default function CodeEditor({
     challenge.starterCode.javascript
   );
 
-  const htmlEditorRef = useRef<any>(null);
-  const cssEditorRef = useRef<any>(null);
-  const javascriptEditorRef = useRef<any>(null);
+  const htmlEditorRef = useRef<import('@monaco-editor/react').OnMount>(null);
+  const cssEditorRef = useRef<import('@monaco-editor/react').OnMount>(null);
+  const javascriptEditorRef =
+    useRef<import('@monaco-editor/react').OnMount>(null);
 
-  const handleEditorDidMount = (editor: any, monaco: any, language: string) => {
-    if (language === "html") {
+  const handleEditorDidMount = (
+    editor: import('@monaco-editor/react').OnMount,
+    monaco: typeof import('monaco-editor'),
+    language: string
+  ) => {
+    if (language === 'html') {
       htmlEditorRef.current = editor;
-    } else if (language === "css") {
+    } else if (language === 'css') {
       cssEditorRef.current = editor;
-    } else if (language === "javascript") {
+    } else if (language === 'javascript') {
       javascriptEditorRef.current = editor;
     }
   };
@@ -39,11 +44,11 @@ export default function CodeEditor({
   const handleCodeChange = (value: string | undefined, language: string) => {
     if (!value) return;
 
-    if (language === "html") {
+    if (language === 'html') {
       setHtmlCode(value);
-    } else if (language === "css") {
+    } else if (language === 'css') {
       setCssCode(value);
-    } else if (language === "javascript") {
+    } else if (language === 'javascript') {
       setJavascriptCode(value);
     }
 
@@ -55,27 +60,27 @@ export default function CodeEditor({
 
   const getCurrentCode = () => {
     switch (activeTab) {
-      case "html":
+      case 'html':
         return htmlCode;
-      case "css":
+      case 'css':
         return cssCode;
-      case "javascript":
+      case 'javascript':
         return javascriptCode;
       default:
-        return "";
+        return '';
     }
   };
 
   const getLanguage = () => {
     switch (activeTab) {
-      case "html":
-        return "html";
-      case "css":
-        return "css";
-      case "javascript":
-        return "javascript";
+      case 'html':
+        return 'html';
+      case 'css':
+        return 'css';
+      case 'javascript':
+        return 'javascript';
       default:
-        return "html";
+        return 'html';
     }
   };
 
@@ -98,31 +103,31 @@ export default function CodeEditor({
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex space-x-1">
             <button
-              onClick={() => setActiveTab("html")}
+              onClick={() => setActiveTab('html')}
               className={`px-3 py-1 rounded-t-lg text-sm font-medium transition-colors ${
-                activeTab === "html"
-                  ? "bg-background text-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                activeTab === 'html'
+                  ? 'bg-background text-foreground'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
               }`}
             >
               HTML
             </button>
             <button
-              onClick={() => setActiveTab("css")}
+              onClick={() => setActiveTab('css')}
               className={`px-3 py-1 rounded-t-lg text-sm font-medium transition-colors ${
-                activeTab === "css"
-                  ? "bg-background text-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                activeTab === 'css'
+                  ? 'bg-background text-foreground'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
               }`}
             >
               CSS
             </button>
             <button
-              onClick={() => setActiveTab("javascript")}
+              onClick={() => setActiveTab('javascript')}
               className={`px-3 py-1 rounded-t-lg text-sm font-medium transition-colors ${
-                activeTab === "javascript"
-                  ? "bg-background text-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                activeTab === 'javascript'
+                  ? 'bg-background text-foreground'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
               }`}
             >
               JavaScript
@@ -152,7 +157,7 @@ export default function CodeEditor({
           height="100%"
           language={getLanguage()}
           value={getCurrentCode()}
-          onChange={(value) => handleCodeChange(value, getLanguage())}
+          onChange={value => handleCodeChange(value, getLanguage())}
           onMount={(editor, monaco) =>
             handleEditorDidMount(editor, monaco, getLanguage())
           }
@@ -160,14 +165,14 @@ export default function CodeEditor({
           options={{
             minimap: { enabled: false },
             fontSize: 14,
-            lineNumbers: "on",
+            lineNumbers: 'on',
             roundedSelection: false,
             scrollBeyondLastLine: false,
             automaticLayout: true,
-            wordWrap: "on",
+            wordWrap: 'on',
             folding: true,
-            foldingStrategy: "indentation",
-            showFoldingControls: "always",
+            foldingStrategy: 'indentation',
+            showFoldingControls: 'always',
             suggestOnTriggerCharacters: true,
             quickSuggestions: true,
             parameterHints: {

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Challenge } from "@/types/challenge";
+import { useState } from 'react';
+import { Challenge } from '@/types/challenge';
 
 interface SolutionDisplayProps {
   challenge: Challenge;
@@ -10,7 +10,12 @@ interface SolutionDisplayProps {
     css: string;
     javascript: string;
   };
-  testResults: any[];
+  testResults: Array<{
+    name: string;
+    passed: boolean;
+    message?: string;
+    error?: string;
+  }>;
   onClose: () => void;
 }
 
@@ -21,11 +26,11 @@ export default function SolutionDisplay({
   onClose,
 }: SolutionDisplayProps) {
   const [activeTab, setActiveTab] = useState<
-    "solution" | "comparison" | "explanation"
-  >("solution");
+    'solution' | 'comparison' | 'explanation'
+  >('solution');
 
-  const allTestsPassed = testResults.every((result) => result.passed);
-  const passedCount = testResults.filter((result) => result.passed).length;
+  const allTestsPassed = testResults.every(result => result.passed);
+  const passedCount = testResults.filter(result => result.passed).length;
   const totalTests = testResults.length;
 
   return (
@@ -38,7 +43,7 @@ export default function SolutionDisplay({
               <h2 className="text-xl font-bold">Challenge Complete!</h2>
               <p className="text-blue-100 mt-1">
                 {allTestsPassed
-                  ? "🎉 All tests passed!"
+                  ? '🎉 All tests passed!'
                   : `${passedCount}/${totalTests} tests passed`}
               </p>
             </div>
@@ -69,31 +74,31 @@ export default function SolutionDisplay({
           <div className="border-b border-border">
             <nav className="flex space-x-8 px-6">
               <button
-                onClick={() => setActiveTab("solution")}
+                onClick={() => setActiveTab('solution')}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "solution"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+                  activeTab === 'solution'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
                 }`}
               >
                 Official Solution
               </button>
               <button
-                onClick={() => setActiveTab("comparison")}
+                onClick={() => setActiveTab('comparison')}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "comparison"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+                  activeTab === 'comparison'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
                 }`}
               >
                 Code Comparison
               </button>
               <button
-                onClick={() => setActiveTab("explanation")}
+                onClick={() => setActiveTab('explanation')}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "explanation"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+                  activeTab === 'explanation'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
                 }`}
               >
                 Explanation
@@ -103,7 +108,7 @@ export default function SolutionDisplay({
 
           {/* Tab Content */}
           <div className="p-6 overflow-y-auto max-h-[60vh]">
-            {activeTab === "solution" && (
+            {activeTab === 'solution' && (
               <div className="space-y-6">
                 <div>
                   <h3 className="text-lg font-semibold text-card-foreground mb-4">
@@ -139,7 +144,7 @@ export default function SolutionDisplay({
               </div>
             )}
 
-            {activeTab === "comparison" && (
+            {activeTab === 'comparison' && (
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-card-foreground mb-4">
                   Code Comparison
@@ -215,7 +220,7 @@ export default function SolutionDisplay({
               </div>
             )}
 
-            {activeTab === "explanation" && (
+            {activeTab === 'explanation' && (
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-card-foreground mb-4">
                   Solution Explanation
@@ -285,11 +290,11 @@ export default function SolutionDisplay({
             <div className="text-sm text-muted-foreground">
               {allTestsPassed ? (
                 <span className="text-green-600 dark:text-green-400 font-medium">
-                  🎉 Congratulations! You've completed this challenge!
+                  🎉 Congratulations! You&apos;ve completed this challenge!
                 </span>
               ) : (
                 <span className="text-yellow-600 dark:text-yellow-400 font-medium">
-                  Keep practicing! You're making progress.
+                  Keep practicing! You&apos;re making progress.
                 </span>
               )}
             </div>
@@ -301,7 +306,7 @@ export default function SolutionDisplay({
                 Close
               </button>
               <button
-                onClick={() => (window.location.href = "/challenges")}
+                onClick={() => (window.location.href = '/challenges')}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Next Challenge

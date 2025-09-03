@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { MessageCircle, X, Send, Bot, User, Lightbulb } from "lucide-react";
-import { CHATGPT_CONFIG, ChatMessage } from "@/lib/chatgpt-config";
+import { useState } from 'react';
+import { MessageCircle, X, Send, Bot, User, Lightbulb } from 'lucide-react';
+import { CHATGPT_CONFIG, ChatMessage } from '@/lib/chatgpt-config';
 
 export default function ChatGPT() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: "1",
+      id: '1',
       content: CHATGPT_CONFIG.WELCOME_MESSAGE,
-      role: "assistant",
+      role: 'assistant',
       timestamp: new Date(),
     },
   ]);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const toggleChat = () => {
@@ -28,12 +28,12 @@ export default function ChatGPT() {
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       content: inputValue,
-      role: "user",
+      role: 'user',
       timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setInputValue("");
+    setInputValue('');
     setIsLoading(true);
 
     try {
@@ -47,7 +47,7 @@ export default function ChatGPT() {
           messages: messages
             .filter(msg => msg.role !== 'system')
             .map(msg => ({ role: msg.role, content: msg.content }))
-            .concat({ role: 'user', content: inputValue })
+            .concat({ role: 'user', content: inputValue }),
         }),
       });
 
@@ -60,7 +60,7 @@ export default function ChatGPT() {
       const aiResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
         content: data.choices[0].message.content,
-        role: "assistant",
+        role: 'assistant',
         timestamp: new Date(),
       };
 
@@ -69,8 +69,11 @@ export default function ChatGPT() {
       console.error('ChatGPT API error:', error);
       const errorMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        content: error instanceof Error ? error.message : CHATGPT_CONFIG.ERROR_MESSAGES.API_ERROR,
-        role: "assistant",
+        content:
+          error instanceof Error
+            ? error.message
+            : CHATGPT_CONFIG.ERROR_MESSAGES.API_ERROR,
+        role: 'assistant',
         timestamp: new Date(),
         isError: true,
       };
@@ -90,17 +93,17 @@ export default function ChatGPT() {
       >
         {/* Animated background glow */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
-        
+
         {/* Main button content */}
         <div className="relative z-10 flex items-center justify-center">
           <MessageCircle size={28} className="drop-shadow-lg" />
         </div>
-        
+
         {/* Floating notification dot */}
         <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-bounce shadow-lg">
           <div className="w-full h-full bg-white rounded-full animate-ping"></div>
         </div>
-        
+
         {/* Subtle border glow */}
         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-500"></div>
       </button>
@@ -113,7 +116,7 @@ export default function ChatGPT() {
             className="absolute inset-0 bg-black bg-opacity-50"
             onClick={toggleChat}
           />
-          
+
           {/* Chat Window */}
           <div className="relative w-full max-w-md h-[500px] md:h-[600px] bg-white dark:bg-gray-800 rounded-t-2xl shadow-2xl flex flex-col">
             {/* Header */}
@@ -121,17 +124,25 @@ export default function ChatGPT() {
               {/* Animated background pattern */}
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-0 left-0 w-20 h-20 bg-white rounded-full blur-xl animate-pulse"></div>
-                <div className="absolute bottom-0 right-0 w-16 h-16 bg-white rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-                <div className="absolute top-1/2 left-1/2 w-12 h-12 bg-white rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+                <div
+                  className="absolute bottom-0 right-0 w-16 h-16 bg-white rounded-full blur-xl animate-pulse"
+                  style={{ animationDelay: '1s' }}
+                ></div>
+                <div
+                  className="absolute top-1/2 left-1/2 w-12 h-12 bg-white rounded-full blur-xl animate-pulse"
+                  style={{ animationDelay: '2s' }}
+                ></div>
               </div>
-              
+
               <div className="relative z-10 flex items-center gap-3">
                 <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
                   <Bot size={22} className="drop-shadow-lg" />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">AI Learning Assistant</h3>
-                  <p className="text-xs text-blue-100 font-medium">Powered by ChatGPT</p>
+                  <p className="text-xs text-blue-100 font-medium">
+                    Powered by ChatGPT
+                  </p>
                 </div>
               </div>
               <button
@@ -144,116 +155,128 @@ export default function ChatGPT() {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {messages.map((message) => (
+              {messages.map(message => (
                 <div
                   key={message.id}
                   className={`flex gap-3 ${
-                    message.role === "user" ? "justify-end" : "justify-start"
+                    message.role === 'user' ? 'justify-end' : 'justify-start'
                   }`}
                 >
-                  {message.role === "assistant" && (
+                  {message.role === 'assistant' && (
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <Bot size={16} className="text-white" />
                     </div>
                   )}
-                  
+
                   <div
                     className={`max-w-[80%] px-4 py-2 rounded-2xl ${
-                      message.role === "user"
-                        ? "bg-blue-500 text-white rounded-br-md"
+                      message.role === 'user'
+                        ? 'bg-blue-500 text-white rounded-br-md'
                         : message.isError
-                        ? "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-md"
+                          ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-md'
                     }`}
                   >
                     <p className="text-sm">{message.content}</p>
                     <p className="text-xs opacity-70 mt-1">
                       {message.timestamp.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
+                        hour: '2-digit',
+                        minute: '2-digit',
                       })}
                     </p>
                   </div>
 
-                  {message.role === "user" && (
+                  {message.role === 'user' && (
                     <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
-                      <User size={16} className="text-gray-600 dark:text-gray-300" />
+                      <User
+                        size={16}
+                        className="text-gray-600 dark:text-gray-300"
+                      />
                     </div>
                   )}
                 </div>
               ))}
-              
+
               {/* Suggested Questions */}
               {messages.length === 1 && (
                 <div className="space-y-3">
                   <div className="text-center">
-                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">💡 Try asking:</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                      💡 Try asking:
+                    </p>
                   </div>
                   <div className="grid grid-cols-1 gap-3">
-                    {CHATGPT_CONFIG.SUGGESTED_QUESTIONS.slice(0, 3).map((question, index) => (
-                      <button
-                        key={index}
-                        onClick={() => {
-                          setInputValue(question);
-                          // Auto-submit the suggested question
-                          const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
-                          setInputValue(question);
-                          setTimeout(() => {
-                            const userMessage: ChatMessage = {
-                              id: Date.now().toString(),
-                              content: question,
-                              role: "user",
-                              timestamp: new Date(),
-                            };
-                            setMessages(prev => [...prev, userMessage]);
-                            setInputValue("");
-                            setIsLoading(true);
-                            
-                            // Call API with the suggested question
-                            fetch('/api/chatgpt', {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                messages: [{ role: 'user', content: question }]
-                              }),
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                              const aiResponse: ChatMessage = {
-                                id: (Date.now() + 1).toString(),
-                                content: data.choices[0].message.content,
-                                role: "assistant",
+                    {CHATGPT_CONFIG.SUGGESTED_QUESTIONS.slice(0, 3).map(
+                      (question, index) => (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            setInputValue(question);
+                            // Auto-submit the suggested question
+                            setInputValue(question);
+                            setTimeout(() => {
+                              const userMessage: ChatMessage = {
+                                id: Date.now().toString(),
+                                content: question,
+                                role: 'user',
                                 timestamp: new Date(),
                               };
-                              setMessages(prev => [...prev, aiResponse]);
-                            })
-                            .catch(error => {
-                              const errorMessage: ChatMessage = {
-                                id: (Date.now() + 1).toString(),
-                                content: error.message || CHATGPT_CONFIG.ERROR_MESSAGES.API_ERROR,
-                                role: "assistant",
-                                timestamp: new Date(),
-                                isError: true,
-                              };
-                              setMessages(prev => [...prev, errorMessage]);
-                            })
-                            .finally(() => setIsLoading(false));
-                          }, 100);
-                        }}
-                        className="group text-left p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 border border-blue-200 dark:border-blue-800 rounded-xl transition-all duration-300 text-sm text-blue-700 dark:text-blue-300 hover:shadow-md hover:scale-[1.02]"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <Lightbulb size={16} className="text-white" />
+                              setMessages(prev => [...prev, userMessage]);
+                              setInputValue('');
+                              setIsLoading(true);
+
+                              // Call API with the suggested question
+                              fetch('/api/chatgpt', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  messages: [
+                                    { role: 'user', content: question },
+                                  ],
+                                }),
+                              })
+                                .then(response => response.json())
+                                .then(data => {
+                                  const aiResponse: ChatMessage = {
+                                    id: (Date.now() + 1).toString(),
+                                    content: data.choices[0].message.content,
+                                    role: 'assistant',
+                                    timestamp: new Date(),
+                                  };
+                                  setMessages(prev => [...prev, aiResponse]);
+                                })
+                                .catch(error => {
+                                  const errorMessage: ChatMessage = {
+                                    id: (Date.now() + 1).toString(),
+                                    content:
+                                      error.message ||
+                                      CHATGPT_CONFIG.ERROR_MESSAGES.API_ERROR,
+                                    role: 'assistant',
+                                    timestamp: new Date(),
+                                    isError: true,
+                                  };
+                                  setMessages(prev => [...prev, errorMessage]);
+                                })
+                                .finally(() => setIsLoading(false));
+                            }, 100);
+                          }}
+                          className="group text-left p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 border border-blue-200 dark:border-blue-800 rounded-xl transition-all duration-300 text-sm text-blue-700 dark:text-blue-300 hover:shadow-md hover:scale-[1.02]"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                              <Lightbulb size={16} className="text-white" />
+                            </div>
+                            <span className="font-medium leading-relaxed">
+                              {question}
+                            </span>
                           </div>
-                          <span className="font-medium leading-relaxed">{question}</span>
-                        </div>
-                      </button>
-                    ))}
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
               )}
-              
+
               {isLoading && (
                 <div className="flex gap-3 justify-start">
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
@@ -262,8 +285,14 @@ export default function ChatGPT() {
                   <div className="bg-gray-100 dark:bg-gray-700 rounded-2xl rounded-bl-md px-4 py-2">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+                      <div
+                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        style={{ animationDelay: '0.1s' }}
+                      ></div>
+                      <div
+                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        style={{ animationDelay: '0.2s' }}
+                      ></div>
                     </div>
                   </div>
                 </div>
@@ -271,12 +300,15 @@ export default function ChatGPT() {
             </div>
 
             {/* Input Form */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 dark:border-gray-700">
+            <form
+              onSubmit={handleSubmit}
+              className="p-4 border-t border-gray-200 dark:border-gray-700"
+            >
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
+                  onChange={e => setInputValue(e.target.value)}
                   placeholder="Ask me anything about frontend development..."
                   className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
                   disabled={isLoading}

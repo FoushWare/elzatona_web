@@ -28,8 +28,8 @@ export interface TestCase {
   id: string;
   name: string;
   description: string;
-  input: any;
-  expectedOutput: any;
+  input: Record<string, unknown> | null;
+  expectedOutput: string | boolean | number | null;
   type: 'html' | 'css' | 'javascript';
 }
 

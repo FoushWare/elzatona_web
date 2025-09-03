@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Search, Clock, MapPin, Building, DollarSign, Briefcase, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
-
-interface JobSource {
-  name: string;
-  url: string;
-  enabled: boolean;
-  category: 'remote' | 'general' | 'tech';
-}
+import { useState, useEffect, useCallback } from 'react';
+import {
+  Search,
+  MapPin,
+  Building,
+  DollarSign,
+  Briefcase,
+  Globe,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 
 interface RealJob {
   id: string;
@@ -42,32 +44,24 @@ interface PaginationInfo {
   hasPrev: boolean;
 }
 
-const jobSources: JobSource[] = [
-  { name: 'JS Guru Jobs', url: 'https://jsgurujobs.com', enabled: true, category: 'tech' },
-  { name: 'We Work Remotely', url: 'https://weworkremotely.com', enabled: true, category: 'remote' },
-  { name: 'Stack Overflow Jobs', url: 'https://stackoverflow.com', enabled: true, category: 'tech' },
-  { name: 'Remote.co', url: 'https://remote.co', enabled: true, category: 'remote' },
-  { name: 'AngelList', url: 'https://angel.co', enabled: true, category: 'tech' }
-];
-
 const timeFilterOptions = [
   { value: 'anytime', label: 'Any time' },
   { value: '24h', label: 'Last 24 hours' },
-  { value: '7d', label: 'Last 7 days' }
+  { value: '7d', label: 'Last 7 days' },
 ];
 
 const jobTypeOptions = [
   { value: 'all', label: 'All types' },
   { value: 'full-time', label: 'Full time' },
   { value: 'part-time', label: 'Part time' },
-  { value: 'contract', label: 'Contract' }
+  { value: 'contract', label: 'Contract' },
 ];
 
 const sourceOptions = [
   { value: 'all', label: 'All sources' },
   { value: 'JS Guru Jobs', label: 'JS Guru Jobs' },
   { value: 'We Work Remotely', label: 'We Work Remotely' },
-  { value: 'Stack Overflow Jobs', label: 'Stack Overflow' }
+  { value: 'Stack Overflow Jobs', label: 'Stack Overflow' },
 ];
 
 // Segmented Control Component
@@ -78,7 +72,12 @@ interface SegmentedControlProps {
   label?: string;
 }
 
-function SegmentedControl({ options, value, onChange, label }: SegmentedControlProps) {
+function SegmentedControl({
+  options,
+  value,
+  onChange,
+  label,
+}: SegmentedControlProps) {
   return (
     <div className="space-y-3">
       {label && (
@@ -95,9 +94,7 @@ function SegmentedControl({ options, value, onChange, label }: SegmentedControlP
               value === option.value
                 ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm'
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-            } ${
-              index === 0 ? 'rounded-l-md' : ''
-            } ${
+            } ${index === 0 ? 'rounded-l-md' : ''} ${
               index === options.length - 1 ? 'rounded-r-md' : ''
             }`}
           >
@@ -117,13 +114,13 @@ interface PaginationProps {
 
 function Pagination({ pagination, onPageChange }: PaginationProps) {
   const { page, totalPages, hasNext, hasPrev } = pagination;
-  
+
   if (totalPages <= 1) return null;
 
   const getPageNumbers = () => {
     const pages = [];
     const maxVisible = 5;
-    
+
     if (totalPages <= maxVisible) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -151,7 +148,7 @@ function Pagination({ pagination, onPageChange }: PaginationProps) {
         pages.push(totalPages);
       }
     }
-    
+
     return pages;
   };
 
@@ -182,8 +179,8 @@ function Pagination({ pagination, onPageChange }: PaginationProps) {
               pageNum === page
                 ? 'bg-blue-600 text-white'
                 : pageNum === '...'
-                ? 'text-gray-400 dark:text-gray-500 cursor-default'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600'
+                  ? 'text-gray-400 dark:text-gray-500 cursor-default'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600'
             }`}
           >
             {pageNum}
@@ -219,7 +216,7 @@ export default function JobsPage() {
     timeFilter: 'anytime',
     jobType: [],
     location: [],
-    salary: 'any'
+    salary: 'any',
   });
 
   // Single value states for segmented controls
@@ -234,12 +231,14 @@ export default function JobsPage() {
     total: 0,
     totalPages: 0,
     hasNext: false,
-    hasPrev: false
+    hasPrev: false,
   });
 
   // Statistics
   const totalJobs = pagination.total;
-  const remoteJobs = jobs.filter(job => job.location.toLowerCase().includes('remote')).length;
+  const remoteJobs = jobs.filter(job =>
+    job.location.toLowerCase().includes('remote')
+  ).length;
   const fullTimeJobs = jobs.filter(job => job.jobType === 'full-time').length;
   const sourcesCount = new Set(jobs.map(job => job.source)).size;
 
@@ -250,31 +249,35 @@ export default function JobsPage() {
       timeFilter: selectedTimeFilter as 'anytime' | '24h' | '7d' | '30d',
       jobType: selectedJobType === 'all' ? [] : [selectedJobType],
       location: [],
-      salary: 'any'
+      salary: 'any',
     };
     setFilters(newFilters);
     // Reset to page 1 when filters change
     setPagination(prev => ({ ...prev, page: 1 }));
   }, [selectedTimeFilter, selectedJobType, selectedSource]);
 
-  useEffect(() => {
-    fetchJobs();
-  }, [filters, pagination.page]);
-
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const queryParams = new URLSearchParams({
         real: 'true',
         page: pagination.page.toString(),
         limit: pagination.limit.toString(),
-        ...(filters.sources.length > 0 && { sources: filters.sources.join(',') }),
-        ...(filters.timeFilter !== 'anytime' && { timeFilter: filters.timeFilter }),
-        ...(filters.jobType.length > 0 && { jobType: filters.jobType.join(',') }),
-        ...(filters.location.length > 0 && { location: filters.location.join(',') }),
-        ...(filters.salary !== 'any' && { salary: filters.salary })
+        ...(filters.sources.length > 0 && {
+          sources: filters.sources.join(','),
+        }),
+        ...(filters.timeFilter !== 'anytime' && {
+          timeFilter: filters.timeFilter,
+        }),
+        ...(filters.jobType.length > 0 && {
+          jobType: filters.jobType.join(','),
+        }),
+        ...(filters.location.length > 0 && {
+          location: filters.location.join(','),
+        }),
+        ...(filters.salary !== 'any' && { salary: filters.salary }),
       });
 
       const response = await fetch(`/api/jobs?${queryParams}`);
@@ -287,20 +290,27 @@ export default function JobsPage() {
         setError(data.message || 'Failed to fetch jobs');
         setJobs([]);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to fetch jobs');
       setJobs([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, pagination.page, pagination.limit]);
+
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
 
   const filteredJobs = jobs.filter(job => {
-    const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    
+    const matchesSearch =
+      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.tags.some(tag =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
     return matchesSearch;
   });
 
@@ -347,7 +357,9 @@ export default function JobsPage() {
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600 dark:text-gray-400">Loading jobs from multiple sources...</p>
+              <p className="text-gray-600 dark:text-gray-400">
+                Loading jobs from multiple sources...
+              </p>
             </div>
           </div>
         </div>
@@ -376,44 +388,60 @@ export default function JobsPage() {
                 <Briefcase className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div className="ml-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Total Jobs</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalJobs}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Total Jobs
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {totalJobs}
+                </p>
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center">
               <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
                 <Globe className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
               <div className="ml-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Remote Jobs</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{remoteJobs}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Remote Jobs
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {remoteJobs}
+                </p>
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center">
               <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
                 <Building className="h-6 w-6 text-purple-600 dark:text-purple-400" />
               </div>
               <div className="ml-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Full Time</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{fullTimeJobs}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Full Time
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {fullTimeJobs}
+                </p>
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center">
               <div className="p-2 bg-orange-100 dark:bg-orange-900 rounded-lg">
                 <Globe className="h-6 w-6 text-orange-600 dark:text-orange-400" />
               </div>
               <div className="ml-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Sources</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{sourcesCount}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Sources
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {sourcesCount}
+                </p>
               </div>
             </div>
           </div>
@@ -429,27 +457,29 @@ export default function JobsPage() {
                 type="text"
                 placeholder="Search jobs, companies, or skills..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
-            
+
             {/* Mobile Filter Toggle */}
             <div className="md:hidden mt-4">
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
               >
-                {showFilters ? "Hide Filters" : "Show Filters"}
+                {showFilters ? 'Hide Filters' : 'Show Filters'}
                 <span className="ml-2">🔍</span>
               </button>
             </div>
           </div>
 
           {/* Filters Panel */}
-          <div className={`border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6 transition-all duration-300 ${
-            showFilters ? 'block' : 'hidden md:block'
-          }`}>
+          <div
+            className={`border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6 transition-all duration-300 ${
+              showFilters ? 'block' : 'hidden md:block'
+            }`}
+          >
             {/* Time Filter */}
             <SegmentedControl
               label="Time Filter"
@@ -498,7 +528,7 @@ export default function JobsPage() {
               </p>
             </div>
           ) : (
-            filteredJobs.map((job) => (
+            filteredJobs.map(job => (
               <div
                 key={job.id}
                 className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow cursor-pointer"
@@ -514,16 +544,18 @@ export default function JobsPage() {
                         {getSourceIcon(job.source)} {job.source}
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center text-gray-600 dark:text-gray-400 mb-2">
                       <Building className="h-4 w-4 mr-1" />
                       <span className="mr-4">{job.company}</span>
                       <MapPin className="h-4 w-4 mr-1" />
                       <span>{job.location}</span>
                     </div>
-                    
+
                     <div className="flex items-center gap-2 mb-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getJobTypeColor(job.jobType)}`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getJobTypeColor(job.jobType)}`}
+                      >
                         {job.jobType.replace('-', ' ')}
                       </span>
                       {job.salary !== 'Unknown' && (
@@ -535,11 +567,11 @@ export default function JobsPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
                   {job.description}
                 </p>
-                
+
                 {job.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {job.tags.slice(0, 5).map((tag, index) => (
@@ -568,7 +600,8 @@ export default function JobsPage() {
         {/* Results Count */}
         {filteredJobs.length > 0 && (
           <div className="mt-8 text-center text-gray-600 dark:text-gray-400">
-            Showing {filteredJobs.length} of {totalJobs} jobs (Page {pagination.page} of {pagination.totalPages})
+            Showing {filteredJobs.length} of {totalJobs} jobs (Page{' '}
+            {pagination.page} of {pagination.totalPages})
           </div>
         )}
       </div>

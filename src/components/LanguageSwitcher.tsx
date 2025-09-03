@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useState } from 'react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function LanguageSwitcher() {
-  const { t, locale, changeLanguage, isRTL } = useTranslation();
+  const { t, locale, changeLanguage } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   const languages = [
-    { code: "en", name: "English", flag: "🇺🇸" },
-    { code: "ar", name: "العربية", flag: "🇸🇦" },
+    { code: 'en', name: 'English', flag: '🇺🇸' },
+    { code: 'ar', name: 'العربية', flag: '🇸🇦' },
   ];
 
-  const currentLanguage = languages.find((lang) => lang.code === locale);
+  const currentLanguage = languages.find(lang => lang.code === locale);
 
   const handleLanguageChange = (languageCode: string) => {
     changeLanguage(languageCode);
@@ -24,13 +24,13 @@ export default function LanguageSwitcher() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-        aria-label={t("navigation.language")}
+        aria-label={t('navigation.language')}
       >
         <span className="text-lg">{currentLanguage?.flag}</span>
         <span className="hidden sm:inline">{currentLanguage?.name}</span>
         <svg
           className={`w-4 h-4 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
+            isOpen ? 'rotate-180' : ''
           }`}
           fill="none"
           stroke="currentColor"
@@ -52,18 +52,18 @@ export default function LanguageSwitcher() {
             className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
-          
+
           {/* Dropdown */}
           <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20">
             <div className="py-1">
-              {languages.map((language) => (
+              {languages.map(language => (
                 <button
                   key={language.code}
                   onClick={() => handleLanguageChange(language.code)}
                   className={`w-full flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 ${
                     locale === language.code
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-gray-700"
+                      ? 'bg-blue-50 text-blue-700'
+                      : 'text-gray-700'
                   }`}
                 >
                   <span className="text-lg">{language.flag}</span>

@@ -1,19 +1,23 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Code, CheckCircle, AlertTriangle, Users, Star } from 'lucide-react';
+import { ArrowLeft, Code, CheckCircle, Users, Star } from 'lucide-react';
 import { greatFrontendQuestions } from '@/lib/greatfrontendQuestions';
 
 export default function QuestionDetailPage() {
   const params = useParams();
-  const [question, setQuestion] = useState<typeof greatFrontendQuestions[0] | null>(null);
+  const [question, setQuestion] = useState<
+    (typeof greatFrontendQuestions)[0] | null
+  >(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (params.id) {
-      const foundQuestion = greatFrontendQuestions.find(q => q.id === params.id);
+      const foundQuestion = greatFrontendQuestions.find(
+        q => q.id === params.id
+      );
       if (foundQuestion) {
         setQuestion(foundQuestion);
       }
@@ -36,8 +40,12 @@ export default function QuestionDetailPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Question Not Found</h1>
-          <p className="text-muted-foreground mb-6">The question you&apos;re looking for doesn&apos;t exist.</p>
+          <h1 className="text-2xl font-bold text-foreground mb-4">
+            Question Not Found
+          </h1>
+          <p className="text-muted-foreground mb-6">
+            The question you&apos;re looking for doesn&apos;t exist.
+          </p>
           <Link
             href="/questions"
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
@@ -90,23 +98,29 @@ export default function QuestionDetailPage() {
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Questions
             </Link>
-            
+
             <div className="flex items-center gap-2 mb-4">
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(question.category)}`}>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(question.category)}`}
+              >
                 {question.category}
               </span>
               <span className="text-muted-foreground">•</span>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(question.difficulty)}`}>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(question.difficulty)}`}
+              >
                 {question.difficulty}
               </span>
               <span className="text-muted-foreground">•</span>
-              <span className="text-muted-foreground">{question.estimatedTime} min</span>
+              <span className="text-muted-foreground">
+                {question.estimatedTime} min
+              </span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               {question.title}
             </h1>
-            
+
             <p className="text-xl text-muted-foreground mb-8">
               {question.description}
             </p>
@@ -153,7 +167,9 @@ export default function QuestionDetailPage() {
           {/* Tags */}
           {question.tags && question.tags.length > 0 && (
             <div className="bg-card border border-border rounded-lg p-6 mb-8">
-              <h3 className="text-lg font-semibold text-foreground mb-4">Related Topics</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">
+                Related Topics
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {question.tags.map((tag: string, index: number) => (
                   <span
@@ -184,10 +200,14 @@ export default function QuestionDetailPage() {
 
           {/* Related Questions */}
           <div className="mt-12">
-            <h2 className="text-2xl font-bold text-foreground mb-6">Related Questions</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-6">
+              Related Questions
+            </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {greatFrontendQuestions
-                .filter(q => q.category === question.category && q.id !== question.id)
+                .filter(
+                  q => q.category === question.category && q.id !== question.id
+                )
                 .slice(0, 6)
                 .map(relatedQuestion => (
                   <Link
@@ -199,7 +219,9 @@ export default function QuestionDetailPage() {
                       {relatedQuestion.title}
                     </h3>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(relatedQuestion.difficulty)}`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(relatedQuestion.difficulty)}`}
+                      >
                         {relatedQuestion.difficulty}
                       </span>
                       <span>{relatedQuestion.estimatedTime} min</span>

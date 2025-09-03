@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState } from 'react';
+import Link from 'next/link';
 
 interface Question {
   id: number;
@@ -14,19 +14,19 @@ interface Question {
 export default function HoistingQuizPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [showExplanation, setShowExplanation] = useState(false);
+
   const [score, setScore] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
 
   const questions: Question[] = [
     {
       id: 1,
-      question: "What is hoisting in JavaScript?",
+      question: 'What is hoisting in JavaScript?',
       options: [
-        "Moving variables to the top of their scope during compilation",
-        "Moving functions to the bottom of their scope",
-        "A way to optimize code performance",
-        "A method to prevent variable declaration",
+        'Moving variables to the top of their scope during compilation',
+        'Moving functions to the bottom of their scope',
+        'A way to optimize code performance',
+        'A method to prevent variable declaration',
       ],
       correctAnswer: 0,
       explanation:
@@ -35,20 +35,20 @@ export default function HoistingQuizPage() {
     {
       id: 2,
       question:
-        "What will be the output of this code?\n\nconsole.log(x);\nvar x = 5;",
-      options: ["5", "undefined", "ReferenceError", "null"],
+        'What will be the output of this code?\n\nconsole.log(x);\nvar x = 5;',
+      options: ['5', 'undefined', 'ReferenceError', 'null'],
       correctAnswer: 1,
       explanation:
         "The output will be 'undefined'. This is because var declarations are hoisted, but the initialization is not. The code is interpreted as:\nvar x;\nconsole.log(x);\nx = 5;",
     },
     {
       id: 3,
-      question: "Which of the following is NOT hoisted?",
+      question: 'Which of the following is NOT hoisted?',
       options: [
-        "var declarations",
-        "function declarations",
-        "let declarations",
-        "const declarations",
+        'var declarations',
+        'function declarations',
+        'let declarations',
+        'const declarations',
       ],
       correctAnswer: 2,
       explanation:
@@ -57,24 +57,24 @@ export default function HoistingQuizPage() {
     {
       id: 4,
       question:
-        "What will be the output?\n\nfunction test() {\n  console.log(a);\n  let a = 10;\n}\ntest();",
-      options: ["10", "undefined", "ReferenceError", "null"],
+        'What will be the output?\n\nfunction test() {\n  console.log(a);\n  let a = 10;\n}\ntest();',
+      options: ['10', 'undefined', 'ReferenceError', 'null'],
       correctAnswer: 2,
       explanation:
         "This will throw a ReferenceError because let declarations are hoisted but not initialized. The variable 'a' is in the temporal dead zone until the line where it's declared.",
     },
     {
       id: 5,
-      question: "Which function declaration style is hoisted?",
+      question: 'Which function declaration style is hoisted?',
       options: [
-        "Function expressions",
-        "Arrow functions",
-        "Function declarations",
-        "All of the above",
+        'Function expressions',
+        'Arrow functions',
+        'Function declarations',
+        'All of the above',
       ],
       correctAnswer: 2,
       explanation:
-        "Only function declarations are hoisted. Function expressions and arrow functions are not hoisted because they are assigned to variables, and variable assignments are not hoisted.",
+        'Only function declarations are hoisted. Function expressions and arrow functions are not hoisted because they are assigned to variables, and variable assignments are not hoisted.',
     },
   ];
 
@@ -90,7 +90,6 @@ export default function HoistingQuizPage() {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer(null);
-      setShowExplanation(false);
     } else {
       setQuizCompleted(true);
     }
@@ -99,7 +98,7 @@ export default function HoistingQuizPage() {
   const handleRetakeQuiz = () => {
     setCurrentQuestion(0);
     setSelectedAnswer(null);
-    setShowExplanation(false);
+
     setScore(0);
     setQuizCompleted(false);
   };
@@ -111,11 +110,11 @@ export default function HoistingQuizPage() {
   const getScoreMessage = () => {
     const percentage = getScorePercentage();
     if (percentage >= 80)
-      return "Excellent! You have a strong understanding of hoisting.";
+      return 'Excellent! You have a strong understanding of hoisting.';
     if (percentage >= 60)
-      return "Good job! You understand the basics of hoisting.";
-    if (percentage >= 40) return "Not bad! Review the concepts and try again.";
-    return "Keep practicing! Hoisting can be tricky at first.";
+      return 'Good job! You understand the basics of hoisting.';
+    if (percentage >= 40) return 'Not bad! Review the concepts and try again.';
+    return 'Keep practicing! Hoisting can be tricky at first.';
   };
 
   if (quizCompleted) {
@@ -222,9 +221,9 @@ export default function HoistingQuizPage() {
                 className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
                   selectedAnswer === index
                     ? selectedAnswer === currentQ.correctAnswer
-                      ? "border-green-500 bg-green-50"
-                      : "border-red-500 bg-red-50"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
                 }`}
               >
                 <div className="flex items-center">
@@ -232,13 +231,13 @@ export default function HoistingQuizPage() {
                     className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${
                       selectedAnswer === index
                         ? selectedAnswer === currentQ.correctAnswer
-                          ? "border-green-500 bg-green-500 text-white"
-                          : "border-red-500 bg-red-500 text-white"
-                        : "border-gray-300"
+                          ? 'border-green-500 bg-green-500 text-white'
+                          : 'border-red-500 bg-red-500 text-white'
+                        : 'border-gray-300'
                     }`}
                   >
                     {selectedAnswer === index &&
-                      (selectedAnswer === currentQ.correctAnswer ? "✓" : "✗")}
+                      (selectedAnswer === currentQ.correctAnswer ? '✓' : '✗')}
                   </div>
                   <span className="text-gray-900">{option}</span>
                 </div>
@@ -264,8 +263,8 @@ export default function HoistingQuizPage() {
                 className="bg-blue-600 text-white px-8 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
               >
                 {currentQuestion < questions.length - 1
-                  ? "Next Question"
-                  : "Finish Quiz"}
+                  ? 'Next Question'
+                  : 'Finish Quiz'}
               </button>
             </div>
           )}
