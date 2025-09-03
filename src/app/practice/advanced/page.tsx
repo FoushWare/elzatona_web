@@ -9,6 +9,7 @@ export default function SeniorDevPage() {
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [showResources, setShowResources] = useState(false);
 
   // Filter resources to only include senior dev content
   const seniorDevResources = useMemo(() => {
@@ -69,8 +70,8 @@ export default function SeniorDevPage() {
             architecture.
           </p>
 
-          {/* Mobile Toggle Buttons */}
-          <div className="flex flex-wrap gap-3 justify-center mt-6 md:hidden">
+          {/* Toggle Buttons - Always Visible */}
+          <div className="flex flex-wrap gap-3 justify-center mt-6">
             <button
               onClick={() => setShowStatistics(!showStatistics)}
               className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
@@ -85,11 +86,18 @@ export default function SeniorDevPage() {
               {showFilters ? 'Hide Filters' : 'Show Filters'}
               <span>🔍</span>
             </button>
+            <button
+              onClick={() => setShowResources(!showResources)}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              {showResources ? 'Hide Resources' : 'Show Resources'}
+              <span>📚</span>
+            </button>
           </div>
         </div>
 
-        {/* Search and Filter Section */}
-        <div className={`${showFilters ? 'block' : 'hidden md:block'} mb-8`}>
+        {/* Search and Filter Section - Hidden by default */}
+        <div className={`${showFilters ? 'block' : 'hidden'} mb-8`}>
           <div className="bg-gradient-to-br from-white via-purple-50 to-indigo-50 dark:from-gray-800 dark:via-purple-900/20 dark:to-indigo-900/20 rounded-2xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-8 relative overflow-hidden">
             {/* Background decorative elements */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400/20 to-indigo-400/20 rounded-full -translate-y-16 translate-x-16"></div>
@@ -165,9 +173,9 @@ export default function SeniorDevPage() {
           </div>
         </div>
 
-        {/* Enhanced Statistics Cards */}
+        {/* Enhanced Statistics Cards - Hidden by default */}
         <div
-          className={`${showStatistics ? 'block' : 'hidden md:grid'} grid-cols-1 md:grid-cols-4 gap-6 mb-8`}
+          className={`${showStatistics ? 'block' : 'hidden'} grid-cols-1 md:grid-cols-4 gap-6 mb-8`}
         >
           <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 rounded-2xl shadow-2xl border-2 border-blue-300 dark:border-blue-600 p-6 text-center hover:shadow-3xl transition-all duration-300 hover:scale-110 transform group">
             <div className="flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -250,103 +258,118 @@ export default function SeniorDevPage() {
           </div>
         </div>
 
-        {/* Resources Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {filteredResources.map(resource => (
-            <div
-              key={resource.id}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 border-purple-200 dark:border-purple-800 p-8 hover:shadow-2xl transition-all duration-300 hover:scale-105 transform"
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg">
-                    {resource.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                      {resource.title}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-lg">
-                      {resource.description}
-                    </p>
-                  </div>
-                </div>
-                <span className="px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-lg">
-                  {resource.difficulty}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-6 mb-6">
-                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-4 border-2 border-blue-200 dark:border-blue-800">
-                  <div className="text-gray-700 dark:text-gray-300 font-bold text-lg mb-2">
-                    Questions
-                  </div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                    {resource.totalQuestions}
-                  </div>
-                </div>
-                <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 border-2 border-green-200 dark:border-green-800">
-                  <div className="text-gray-700 dark:text-gray-300 font-bold text-lg mb-2">
-                    Time
-                  </div>
-                  <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                    {resource.estimatedTime} min
-                  </div>
-                </div>
-              </div>
-
-              {/* Video Tutorial Section */}
-              {resource.videoUrl && (
-                <div className="mb-6">
-                  <div className="flex items-center space-x-3 bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-xl p-4 border-2 border-purple-200 dark:border-purple-800">
-                    <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-5 h-5 text-white"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
-                      </svg>
+        {/* Resources Grid - Hidden by default */}
+        <div
+          className={`${showResources ? 'block' : 'hidden'} grid grid-cols-1 lg:grid-cols-2 gap-8`}
+        >
+          {filteredResources.length > 0 ? (
+            filteredResources.map(resource => (
+              <div
+                key={resource.id}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border-2 border-purple-200 dark:border-purple-800 p-8 hover:shadow-2xl transition-all duration-300 hover:scale-105 transform"
+              >
+                <div className="flex items-start justify-between mb-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg">
+                      {resource.icon}
                     </div>
-                    <span className="text-lg font-bold text-purple-700 dark:text-purple-300">
-                      📹 Video Tutorial Available
-                    </span>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                        {resource.title}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 text-lg">
+                        {resource.description}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-lg">
+                    {resource.difficulty}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6 mb-6">
+                  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-4 border-2 border-blue-200 dark:border-blue-800">
+                    <div className="text-gray-700 dark:text-gray-300 font-bold text-lg mb-2">
+                      Questions
+                    </div>
+                    <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                      {resource.totalQuestions}
+                    </div>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 border-2 border-green-200 dark:border-green-800">
+                    <div className="text-gray-700 dark:text-gray-300 font-bold text-lg mb-2">
+                      Time
+                    </div>
+                    <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                      {resource.estimatedTime} min
+                    </div>
                   </div>
                 </div>
-              )}
 
-              <div className="mb-6">
-                <button className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-lg font-bold flex items-center space-x-2 transition-colors duration-200">
-                  <span>Show Details</span>
-                  <svg
-                    className="w-5 h-5 transform transition-transform hover:scale-110"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                {/* Video Tutorial Section */}
+                {resource.videoUrl && (
+                  <div className="mb-6">
+                    <div className="flex items-center space-x-3 bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-xl p-4 border-2 border-purple-200 dark:border-purple-800">
+                      <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-5 h-5 text-white"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+                        </svg>
+                      </div>
+                      <span className="text-lg font-bold text-purple-700 dark:text-purple-300">
+                        📹 Video Tutorial Available
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="mb-6">
+                  <button className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-lg font-bold flex items-center space-x-2 transition-colors duration-200">
+                    <span>Show Details</span>
+                    <svg
+                      className="w-5 h-5 transform transition-transform hover:scale-110"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="flex space-x-4">
+                  <a
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-center py-3 px-6 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    href={`/practice/advanced/${resource.id}`}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    ></path>
-                  </svg>
-                </button>
+                    🚀 Start Learning
+                  </a>
+                  <button className="px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 font-bold">
+                    👁️ Preview
+                  </button>
+                </div>
               </div>
-
-              <div className="flex space-x-4">
-                <a
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-center py-3 px-6 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-                  href={`/practice/advanced/${resource.id}`}
-                >
-                  🚀 Start Learning
-                </a>
-                <button className="px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 font-bold">
-                  👁️ Preview
-                </button>
-              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <div className="text-6xl mb-4">📚</div>
+              <h3 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-2">
+                No Resources Available Yet
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Advanced frontend resources are coming soon. Check back later
+                for comprehensive content.
+              </p>
             </div>
-          ))}
+          )}
         </div>
 
         {/* Call to Action */}
