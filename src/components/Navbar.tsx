@@ -39,7 +39,7 @@ export default function Navbar() {
                 : 'text-white hover:text-blue-100'
             }`}
           >
-            <ZatonaLogo size="md" showText={true} />
+            <ZatonaLogo size="sm" showText={true} />
           </Link>
 
           {/* Desktop Navigation */}
@@ -96,10 +96,8 @@ export default function Navbar() {
                   : 'bg-white text-blue-600 hover:bg-blue-50'
               }`}
             >
-              <span className="hidden lg:inline">
-                Want to store your app progress?
-              </span>
-              <span className="lg:hidden">Store Progress</span>
+              <span className="hidden lg:inline">Save Progress</span>
+              <span className="lg:hidden">Save</span>
             </Link>
           </div>
 
@@ -176,7 +174,7 @@ export default function Navbar() {
                 className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 mt-8"
                 onClick={() => setIsOpen(false)}
               >
-                Want to store your app progress?
+                Save Progress
               </Link>
             </div>
 
