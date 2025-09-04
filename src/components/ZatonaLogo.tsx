@@ -15,9 +15,9 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   variant = 'horizontal',
 }) => {
   const sizeClasses = {
-    sm: 'w-32 h-12',
-    md: 'w-40 h-16',
-    lg: 'w-56 h-20',
+    sm: 'w-28 h-10',
+    md: 'w-36 h-14',
+    lg: 'w-48 h-18',
   };
 
   if (!showText) {
@@ -25,41 +25,49 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
     return (
       <div className={`${className}`}>
         <svg
-          className="w-12 h-12"
-          viewBox="0 0 120 120"
+          className="w-10 h-10"
+          viewBox="0 0 200 200"
           xmlns="http://www.w3.org/2000/svg"
           role="img"
           aria-labelledby="icon-title"
         >
           <title id="icon-title">Zatona Web Icon</title>
           <defs>
-            <radialGradient id="oliveRad" cx="40%" cy="30%" r="70%">
-              <stop offset="0" stopColor="#7EA142" />
-              <stop offset="1" stopColor="#486127" />
+            <linearGradient
+              id="oliveGradIcon"
+              x1="0.25"
+              x2="0.75"
+              y1="0.2"
+              y2="0.8"
+            >
+              <stop offset="0%" stopColor="#a5c94b" />
+              <stop offset="100%" stopColor="#4f6e1c" />
+            </linearGradient>
+            <radialGradient
+              id="oliveHighlightIcon"
+              cx="0.35"
+              cy="0.28"
+              r="0.45"
+            >
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
             </radialGradient>
           </defs>
-          <circle
-            cx="60"
-            cy="60"
-            r="60"
-            fill="url(#oliveRad)"
-            stroke="#2F421A"
-            strokeWidth="3"
-          />
-          <ellipse
-            cx="75"
-            cy="55"
-            rx="14"
-            ry="10"
-            fill="#253810"
-            opacity="0.95"
-          />
-          <g transform="translate(10,15) rotate(-25)">
-            <path
-              d="M0 0 C20 -9, 42.5 -9, 70 0 C47.5 10, 20 10, 0 0 Z"
-              fill="#5E7E3B"
-              stroke="#2F421A"
-              strokeWidth="2"
+          <g transform="translate(100,100)">
+            <ellipse
+              rx="35"
+              ry="47"
+              fill="url(#oliveGradIcon)"
+              stroke="#2f4013"
+              strokeWidth="4"
+            />
+            <ellipse
+              cx="-10"
+              cy="-15"
+              rx="12"
+              ry="20"
+              fill="url(#oliveHighlightIcon)"
+              opacity="0.7"
             />
           </g>
         </svg>
@@ -74,9 +82,9 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
         <Image
           src="/zatona-web-logo.svg"
           alt="ZatonaWeb Logo"
-          width={300}
-          height={120}
-          className="w-72 h-28"
+          width={200}
+          height={260}
+          className="w-48 h-60"
           priority
         />
       </div>
@@ -89,8 +97,8 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
       <Image
         src="/zatona-web-logo.svg"
         alt="ZatonaWeb Logo"
-        width={400}
-        height={160}
+        width={200}
+        height={260}
         className={sizeClasses[size]}
         priority
       />

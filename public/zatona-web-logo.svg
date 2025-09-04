@@ -1,56 +1,46 @@
 <svg xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 700 512"
-     width="300" height="120"
-     role="img" aria-label="ZatonaWeb logo with olive icon">
+     viewBox="0 0 400 520"
+     width="200" height="200"
+     role="img" aria-label="ZatonaWeb logo with olive and branch">
 
-  <!-- Olive Icon -->
-  <g transform="translate(0,0) scale(0.8)">
-    <!-- Branch -->
-    <path d="M56 380 C150 320, 260 210, 370 180
-             C420 170, 490 150, 500 146"
-          fill="none" stroke="#5a3b1d"
-          stroke-linecap="round" stroke-width="16" />
+  <!-- Branch -->
+  <path d="M200 90 C210 70, 240 60, 260 80"
+        fill="none" stroke="#5a3b1d"
+        stroke-linecap="round" stroke-width="10" />
 
-    <!-- Olive -->
-    <ellipse cx="420" cy="290" rx="58" ry="80"
-             fill="url(#oliveGrad)" stroke="#2f4013" stroke-width="8" />
-    <ellipse cx="393" cy="245" rx="28" ry="45"
-             fill="url(#oliveHighlight)" opacity="0.8"/>
+  <!-- Small Leaf -->
+  <path d="M260 70 C280 50, 310 70, 280 100
+           C270 110, 250 100, 260 70 Z"
+        fill="url(#leafGrad)" stroke="#214b12" stroke-width="5" />
 
-    <!-- Leaves -->
-    <path d="M140 340 C120 300, 110 240, 170 210
-             C190 200, 230 205, 246 236
-             C257 259, 220 312, 160 338 Z"
-          fill="url(#leafGrad)" stroke="#214b12" stroke-width="6" />
-
-    <path d="M100 150 C60 120, 70 40, 170 70
-             C210 84, 230 120, 200 160
-             C178 188, 135 176, 100 150 Z"
-          fill="url(#leafGrad)" stroke="#214b12" stroke-width="6" />
-
-    <path d="M260 120 C240 80, 260 10, 320 38
-             C342 50, 352 92, 330 130
-             C310 160, 280 150, 260 120 Z"
-          fill="url(#leafGrad)" stroke="#214b12" stroke-width="6" />
+  <!-- Single Olive -->
+  <g transform="translate(200,200)">
+    <ellipse rx="70" ry="95"
+             fill="url(#oliveGrad)"
+             stroke="#2f4013" stroke-width="8" />
+    <!-- Highlight -->
+    <ellipse cx="-20" cy="-30" rx="25" ry="40"
+             fill="url(#oliveHighlight)" opacity="0.7"/>
   </g>
 
   <!-- Text -->
-  <text x="400" y="300"
+  <text x="200" y="450"
+        text-anchor="middle"
         font-family="Segoe UI, Helvetica, Arial, sans-serif"
-        font-size="96"
-        font-weight="600"
+        font-size="72"
+        font-weight="700"
         fill="#2f4013">
     Zatona<tspan fill="#5a3b1d">Web</tspan>
   </text>
 
   <!-- Gradients -->
   <defs>
-    <linearGradient id="oliveGrad" x1="0.25" x2="0.75" y1="0.3" y2="0.7">
-      <stop offset="0%" stop-color="#9bbf4a"/>
-      <stop offset="100%" stop-color="#5f7e1f"/>
+    <linearGradient id="oliveGrad" x1="0.25" x2="0.75" y1="0.2" y2="0.8">
+      <stop offset="0%" stop-color="#a5c94b"/>
+      <stop offset="100%" stop-color="#4f6e1c"/>
     </linearGradient>
     <radialGradient id="oliveHighlight" cx="0.35" cy="0.28" r="0.45">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="leafGrad" x1="0" x2="1" y1="0" y2="1">
