@@ -15,9 +15,9 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   variant = 'horizontal',
 }) => {
   const sizeClasses = {
-    sm: 'w-40 h-16',
-    md: 'w-56 h-20',
-    lg: 'w-80 h-28',
+    sm: 'w-32 h-12',
+    md: 'w-40 h-16',
+    lg: 'w-56 h-20',
   };
 
   if (!showText) {
@@ -74,9 +74,9 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
         <Image
           src="/zatona-web-logo.svg"
           alt="ZatonaWeb Logo"
-          width={400}
-          height={160}
-          className="w-96 h-36"
+          width={300}
+          height={120}
+          className="w-72 h-28"
           priority
         />
       </div>
@@ -89,8 +89,8 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
       <Image
         src="/zatona-web-logo.svg"
         alt="ZatonaWeb Logo"
-        width={600}
-        height={240}
+        width={400}
+        height={160}
         className={sizeClasses[size]}
         priority
       />
