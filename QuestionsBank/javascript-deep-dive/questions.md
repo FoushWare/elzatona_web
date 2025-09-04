@@ -1194,3 +1194,661 @@ describe('Database operations', () => {
   });
 });
 ```
+
+---
+
+## Question 11: Variable Declarations - let, const, var
+
+**Question:** What is the difference between let, const, and var?
+
+**Answer:**
+
+**var:**
+- Function-scoped or globally-scoped
+- Hoisted and initialized with `undefined`
+- Can be redeclared
+- Can cause issues with block scope
+
+**let:**
+- Block-scoped (`{}`)
+- Hoisted but not initialized (Temporal Dead Zone)
+- Cannot be redeclared in the same scope
+- Better for loop variables
+
+**const:**
+- Block-scoped
+- Must be initialized at declaration
+- Cannot be reassigned
+- Note: The object it points to can still be mutated
+
+**Examples:**
+```javascript
+// var - function scoped
+function example() {
+  if (true) {
+    var x = 1;
+  }
+  console.log(x); // 1 (accessible)
+}
+
+// let - block scoped
+function example() {
+  if (true) {
+    let y = 1;
+  }
+  console.log(y); // ReferenceError
+}
+
+// const - block scoped, immutable reference
+const z = 1;
+z = 2; // TypeError
+
+const obj = { name: 'John' };
+obj.name = 'Jane'; // OK - object is mutable
+obj = {}; // TypeError - cannot reassign
+```
+
+---
+
+## Question 12: Event Bubbling and Capturing
+
+**Question:** Explain Event Bubbling and Capturing.
+
+**Answer:**
+These are two phases of event propagation in the DOM:
+
+**1. Capturing (Trickling):**
+- Event travels from the root of the DOM tree down to the target element
+- Use `addEventListener(event, callback, true)` to listen in capturing phase
+
+**2. Target:**
+- Event reaches the target element
+
+**3. Bubbling:**
+- Event bubbles up from the target element back to the root
+- This is the default behavior
+
+**Example:**
+```html
+<div id="parent">
+  <button id="child">Click me</button>
+</div>
+```
+
+```javascript
+// Capturing phase
+document.getElementById('parent').addEventListener('click', function() {
+  console.log('Parent clicked (capturing)');
+}, true);
+
+// Bubbling phase (default)
+document.getElementById('parent').addEventListener('click', function() {
+  console.log('Parent clicked (bubbling)');
+});
+
+document.getElementById('child').addEventListener('click', function() {
+  console.log('Child clicked');
+});
+
+// Output when clicking button:
+// Parent clicked (capturing)
+// Child clicked
+// Parent clicked (bubbling)
+```
+
+**Stopping Propagation:**
+```javascript
+element.addEventListener('click', function(event) {
+  event.stopPropagation(); // Stops event from bubbling/capturing
+  event.stopImmediatePropagation(); // Stops all event listeners
+});
+```
+
+---
+
+## Question 13: Closures - Advantages and Disadvantages
+
+**Question:** What is a Closure? What are its advantages and disadvantages?
+
+**Answer:**
+A closure is a function that "remembers" and has access to variables from its lexical (outer) scope even after that outer function has finished executing.
+
+**Advantages:**
+- **Data Privacy**: Emulate private variables in JavaScript
+- **Function Factories**: Create specialized functions
+- **Event Handlers**: Maintain state in event callbacks
+- **Module Pattern**: Create encapsulated modules
+
+**Disadvantages:**
+- **Memory Leaks**: Variables enclosed in a closure cannot be garbage collected as long as the function exists
+- **Performance**: Closures can be slower than regular functions
+- **Debugging**: Can make debugging more complex
+
+**Examples:**
+
+**Data Privacy:**
+```javascript
+function createCounter() {
+  let count = 0; // Private variable
+  
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    getCount: () => count
+  };
+}
+
+const counter = createCounter();
+console.log(counter.getCount()); // 0
+counter.increment();
+console.log(counter.getCount()); // 1
+// count is not directly accessible
+```
+
+**Function Factory:**
+```javascript
+function createMultiplier(factor) {
+  return function(number) {
+    return number * factor;
+  };
+}
+
+const double = createMultiplier(2);
+const triple = createMultiplier(3);
+
+console.log(double(5)); // 10
+console.log(triple(5)); // 15
+```
+
+**Memory Leak Example:**
+```javascript
+function createHandler() {
+  const largeData = new Array(1000000).fill('data');
+  
+  return function() {
+    // This closure keeps largeData in memory
+    console.log('Handler called');
+  };
+}
+
+const handler = createHandler();
+// largeData cannot be garbage collected until handler is removed
+```
+
+---
+
+## Question 14: Event Loop Execution Order
+
+**Question:** What is the output of the following code and why?
+
+```javascript
+console.log('1');
+setTimeout(() => console.log('2'), 0);
+console.log('3');
+```
+
+**Answer:**
+The output will be: **1, 3, 2**
+
+**Explanation:**
+Even though the setTimeout has a delay of 0, its callback is a macrotask and is pushed to the Web APIs and then the Task Queue. The Event Loop will only execute it after the current call stack is empty (i.e., after 1 and 3 have been logged).
+
+**Event Loop Steps:**
+1. `console.log('1')` executes immediately (call stack)
+2. `setTimeout` is registered with Web APIs (0ms delay)
+3. `console.log('3')` executes immediately (call stack)
+4. Call stack is now empty
+5. Event loop moves the setTimeout callback to the call stack
+6. `console.log('2')` executes
+
+**More Complex Example:**
+```javascript
+console.log('1');
+setTimeout(() => console.log('2'), 0);
+Promise.resolve().then(() => console.log('3'));
+console.log('4');
+// Output: 1, 4, 3, 2
+```
+
+**Why 3 comes before 2:**
+- Promises create microtasks (higher priority)
+- setTimeout creates macrotasks (lower priority)
+- Microtasks are processed before macrotasks
+
+---
+
+## Question 15: async/await and Promises
+
+**Question:** What is the relationship between async/await and Promises?
+
+**Answer:**
+async/await is syntactic sugar built on top of Promises. It makes asynchronous code look and behave more like synchronous code.
+
+**Key Points:**
+- An `async` function always returns a Promise
+- The `await` keyword pauses the execution of the async function until the Promise is settled
+- `await` can only be used inside `async` functions
+- `async/await` handles both resolved and rejected Promises
+
+**Examples:**
+
+**Basic async/await:**
+```javascript
+async function fetchData() {
+  try {
+    const response = await fetch('/api/data');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+```
+
+**Equivalent Promise version:**
+```javascript
+function fetchData() {
+  return fetch('/api/data')
+    .then(response => response.json())
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+```
+
+**Parallel execution:**
+```javascript
+// Sequential (slower)
+async function sequential() {
+  const user = await fetchUser();
+  const posts = await fetchPosts();
+  return { user, posts };
+}
+
+// Parallel (faster)
+async function parallel() {
+  const [user, posts] = await Promise.all([
+    fetchUser(),
+    fetchPosts()
+  ]);
+  return { user, posts };
+}
+```
+
+**Error handling:**
+```javascript
+async function handleErrors() {
+  try {
+    const result = await riskyOperation();
+    return result;
+  } catch (error) {
+    // Handle both sync and async errors
+    console.error('Operation failed:', error);
+    throw error; // Re-throw if needed
+  }
+}
+```
+
+---
+
+## Question 16: Pure Functions
+
+**Question:** What is a Pure Function?
+
+**Answer:**
+A pure function is a function where the output is determined only by its input arguments, without any observable side effects.
+
+**Characteristics:**
+- **Deterministic**: Same inputs always produce the same output
+- **No Side Effects**: Doesn't modify external state, make API calls, or modify the DOM
+- **Referential Transparency**: Can be replaced with its return value without changing program behavior
+
+**Examples:**
+
+**Pure Function:**
+```javascript
+function add(a, b) {
+  return a + b;
+}
+
+function multiplyByTwo(numbers) {
+  return numbers.map(n => n * 2);
+}
+
+function filterEvens(numbers) {
+  return numbers.filter(n => n % 2 === 0);
+}
+```
+
+**Impure Functions:**
+```javascript
+let counter = 0;
+
+function increment() {
+  counter++; // Side effect: modifies external state
+  return counter;
+}
+
+function getCurrentTime() {
+  return new Date(); // Side effect: different output each time
+}
+
+function logMessage(message) {
+  console.log(message); // Side effect: I/O operation
+  return message;
+}
+```
+
+**Benefits:**
+- **Predictable**: Easy to reason about and test
+- **Cacheable**: Results can be memoized
+- **Parallelizable**: Safe to run in parallel
+- **Testable**: No need to mock external dependencies
+
+**Example with Memoization:**
+```javascript
+function memoize(fn) {
+  const cache = new Map();
+  
+  return function(...args) {
+    const key = JSON.stringify(args);
+    
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    
+    const result = fn(...args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+const expensiveCalculation = memoize((n) => {
+  console.log('Computing...');
+  return n * n * n;
+});
+
+expensiveCalculation(5); // Computing... 125
+expensiveCalculation(5); // 125 (from cache)
+```
+
+---
+
+## Question 17: Generator Functions
+
+**Question:** What is a Generator Function?
+
+**Answer:**
+A generator function (defined with `function*`) can be paused and resumed. When called, it returns a generator object (which is an iterator). Execution is paused at each `yield` expression.
+
+**Key Features:**
+- **Pausable**: Can pause execution with `yield`
+- **Resumable**: Can resume execution from where it left off
+- **Iterator**: Returns an iterator object
+- **Lazy Evaluation**: Values are generated on demand
+
+**Basic Example:**
+```javascript
+function* numberGenerator() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+const gen = numberGenerator();
+console.log(gen.next()); // { value: 1, done: false }
+console.log(gen.next()); // { value: 2, done: false }
+console.log(gen.next()); // { value: 3, done: false }
+console.log(gen.next()); // { value: undefined, done: true }
+```
+
+**Practical Examples:**
+
+**1. Infinite Sequence:**
+```javascript
+function* fibonacci() {
+  let a = 0, b = 1;
+  
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+}
+
+const fib = fibonacci();
+console.log(fib.next().value); // 0
+console.log(fib.next().value); // 1
+console.log(fib.next().value); // 1
+console.log(fib.next().value); // 2
+```
+
+**2. Custom Iterator:**
+```javascript
+function* range(start, end) {
+  for (let i = start; i <= end; i++) {
+    yield i;
+  }
+}
+
+for (const num of range(1, 5)) {
+  console.log(num); // 1, 2, 3, 4, 5
+}
+```
+
+**3. Data Processing Pipeline:**
+```javascript
+function* dataProcessor(data) {
+  for (const item of data) {
+    if (item > 0) {
+      yield item * 2;
+    }
+  }
+}
+
+const numbers = [-1, 2, -3, 4, 5];
+const processed = [...dataProcessor(numbers)];
+console.log(processed); // [4, 8, 10]
+```
+
+**Use Cases:**
+- **Custom Iterators**: Create iterable objects
+- **Lazy Evaluation**: Generate values on demand
+- **State Machines**: Manage complex state transitions
+- **Async Flow Control**: Before async/await was available
+
+---
+
+## Question 18: Proxy Objects
+
+**Question:** What is a Proxy object?
+
+**Answer:**
+A Proxy object wraps another object and allows you to intercept and redefine fundamental operations for that object, such as property lookup, assignment, enumeration, and function invocation.
+
+**Syntax:**
+```javascript
+const proxy = new Proxy(target, handler);
+```
+
+**Common Use Cases:**
+- **Validation**: Validate property assignments
+- **Logging**: Log property access and modifications
+- **Reactive State**: Create reactive data structures
+- **Virtual Properties**: Create computed properties
+
+**Examples:**
+
+**1. Property Validation:**
+```javascript
+const person = new Proxy({}, {
+  set(target, property, value) {
+    if (property === 'age' && typeof value !== 'number') {
+      throw new TypeError('Age must be a number');
+    }
+    if (property === 'age' && value < 0) {
+      throw new RangeError('Age cannot be negative');
+    }
+    target[property] = value;
+    return true;
+  }
+});
+
+person.name = 'John'; // OK
+person.age = 25; // OK
+person.age = 'invalid'; // TypeError: Age must be a number
+```
+
+**2. Logging Proxy:**
+```javascript
+const loggedObject = new Proxy({}, {
+  get(target, property) {
+    console.log(`Getting property: ${property}`);
+    return target[property];
+  },
+  set(target, property, value) {
+    console.log(`Setting property: ${property} = ${value}`);
+    target[property] = value;
+    return true;
+  }
+});
+
+loggedObject.name = 'Alice'; // Setting property: name = Alice
+console.log(loggedObject.name); // Getting property: name, Alice
+```
+
+**3. Reactive State (Vue 3 style):**
+```javascript
+function reactive(target) {
+  return new Proxy(target, {
+    get(target, property) {
+      console.log(`Accessing: ${property}`);
+      return target[property];
+    },
+    set(target, property, value) {
+      console.log(`Updating: ${property} = ${value}`);
+      target[property] = value;
+      // Trigger reactivity system
+      return true;
+    }
+  });
+}
+
+const state = reactive({ count: 0 });
+state.count++; // Accessing: count, Updating: count = 1
+```
+
+**4. Virtual Properties:**
+```javascript
+const user = new Proxy({ firstName: 'John', lastName: 'Doe' }, {
+  get(target, property) {
+    if (property === 'fullName') {
+      return `${target.firstName} ${target.lastName}`;
+    }
+    return target[property];
+  }
+});
+
+console.log(user.fullName); // John Doe
+```
+
+**Available Traps:**
+- `get`: Property access
+- `set`: Property assignment
+- `has`: `in` operator
+- `deleteProperty`: `delete` operator
+- `ownKeys`: `Object.keys()`
+- `apply`: Function calls
+- `construct`: `new` operator
+
+---
+
+## Question 19: Tail Call Optimization (TCO)
+
+**Question:** What is Tail Call Optimization (TCO) and is it supported in JavaScript?
+
+**Answer:**
+TCO is a compiler feature where a recursive function call in tail position (the last action in a function) is optimized to reuse the current stack frame instead of creating a new one. This prevents stack overflow for deep recursion.
+
+**Tail Position:**
+A function call is in tail position if it's the last thing executed before the function returns.
+
+**Examples:**
+
+**Tail Recursive (can be optimized):**
+```javascript
+function factorial(n, acc = 1) {
+  if (n <= 1) return acc;
+  return factorial(n - 1, n * acc); // Tail call
+}
+
+// This can be optimized to use constant stack space
+console.log(factorial(5)); // 120
+```
+
+**Not Tail Recursive:**
+```javascript
+function factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1); // Not tail call - multiplication after return
+}
+
+// This cannot be optimized and will use O(n) stack space
+```
+
+**JavaScript Support:**
+As of now, TCO is only implemented in the JavaScript engine of **Safari**. It is **not supported** in:
+- **V8** (Chrome, Node.js, Edge)
+- **SpiderMonkey** (Firefox)
+
+**Workarounds:**
+
+**1. Trampoline Pattern:**
+```javascript
+function trampoline(fn) {
+  while (typeof fn === 'function') {
+    fn = fn();
+  }
+  return fn;
+}
+
+function factorial(n, acc = 1) {
+  if (n <= 1) return acc;
+  return () => factorial(n - 1, n * acc);
+}
+
+const result = trampoline(factorial(1000));
+console.log(result);
+```
+
+**2. Iterative Approach:**
+```javascript
+function factorialIterative(n) {
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+
+console.log(factorialIterative(1000)); // Works without stack overflow
+```
+
+**3. Generator-based:**
+```javascript
+function* factorialGenerator(n, acc = 1) {
+  if (n <= 1) {
+    yield acc;
+  } else {
+    yield* factorialGenerator(n - 1, n * acc);
+  }
+}
+
+const result = factorialGenerator(1000).next().value;
+console.log(result);
+```
+
+**Benefits of TCO:**
+- **Memory Efficiency**: Constant stack space usage
+- **Performance**: No function call overhead
+- **Safety**: Prevents stack overflow for deep recursion
+- **Functional Programming**: Enables recursive algorithms without performance concerns
