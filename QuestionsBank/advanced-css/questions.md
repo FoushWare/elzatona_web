@@ -667,3 +667,271 @@ const Button = styled.button`
     `}
 `;
 ```
+
+---
+
+## Question 11: CSS Units - em vs rem
+
+**Question:** What is the difference between em and rem?
+
+**Answer:**
+Both are relative units, but they reference different elements:
+
+**em:**
+- Relative to the font-size of its direct or nearest parent element
+- Can compound when nested (1.2em × 1.2em = 1.44em)
+- Useful for component-level scaling
+
+**rem (Root em):**
+- Relative to the font-size of the root (`<html>`) element
+- Consistent across the entire document
+- Better for global scaling and accessibility
+
+**Examples:**
+```css
+html {
+  font-size: 16px; /* Root font size */
+}
+
+.parent {
+  font-size: 20px;
+}
+
+.child-em {
+  font-size: 1.5em; /* 30px (20px × 1.5) */
+  margin: 2em; /* 40px (20px × 2) */
+}
+
+.child-rem {
+  font-size: 1.5rem; /* 24px (16px × 1.5) */
+  margin: 2rem; /* 32px (16px × 2) */
+}
+```
+
+**When to use:**
+- **em**: Component-level scaling, typography within components
+- **rem**: Global spacing, consistent sizing across the site
+
+---
+
+## Question 12: CSS Box Model Deep Dive
+
+**Question:** Explain the CSS Box Model in detail.
+
+**Answer:**
+The Box Model describes how every element is structured in CSS:
+
+**Components:**
+1. **Content**: The actual text or image
+2. **Padding**: Space between the content and the border
+3. **Border**: A line that surrounds the padding and content
+4. **Margin**: The outermost space that separates the element from other elements
+
+**Box-sizing Property:**
+```css
+/* content-box (default) */
+.element {
+  width: 200px;
+  padding: 20px;
+  border: 5px solid black;
+  /* Total width = 200px + 40px + 10px = 250px */
+  box-sizing: content-box;
+}
+
+/* border-box */
+.element {
+  width: 200px;
+  padding: 20px;
+  border: 5px solid black;
+  /* Total width = 200px (includes padding and border) */
+  box-sizing: border-box;
+}
+```
+
+**Visual Representation:**
+```
+┌─────────────────────────────────────┐ ← Margin (transparent)
+│ ┌─────────────────────────────────┐ │
+│ │ ┌─────────────────────────────┐ │ │ ← Border
+│ │ │ ┌─────────────────────────┐ │ │ │
+│ │ │ │        Content          │ │ │ │ ← Padding
+│ │ │ │                         │ │ │ │
+│ │ │ └─────────────────────────┘ │ │ │
+│ │ └─────────────────────────────┘ │ │
+│ └─────────────────────────────────┘ │
+└─────────────────────────────────────┘
+```
+
+---
+
+## Question 13: CSS Specificity Calculation
+
+**Question:** What is CSS Specificity and how is it calculated?
+
+**Answer:**
+Specificity is the set of rules that determines which CSS styles are applied when multiple rules target the same element.
+
+**Specificity Calculation (a, b, c, d):**
+
+1. **Inline styles** (`style="..."`): (1, 0, 0, 0) - Highest specificity
+2. **IDs**: (0, 1, 0, 0) - e.g., `#navbar`
+3. **Classes, attributes, pseudo-classes**: (0, 0, 1, 0) - e.g., `.nav-item`, `[type="text"]`, `:hover`
+4. **Elements and pseudo-elements**: (0, 0, 0, 1) - e.g., `div`, `::before`
+
+**Examples:**
+```css
+/* Specificity: (0, 0, 0, 1) */
+div { color: red; }
+
+/* Specificity: (0, 0, 1, 0) */
+.my-class { color: blue; }
+
+/* Specificity: (0, 1, 0, 0) */
+#my-id { color: green; }
+
+/* Specificity: (0, 1, 1, 1) */
+div.my-class#my-id { color: purple; }
+
+/* Specificity: (1, 0, 0, 0) */
+<div style="color: orange;"> <!-- Inline style wins -->
+```
+
+**Important Rules:**
+- Higher specificity wins
+- If specificity is equal, last rule wins (cascade order)
+- `!important` overrides everything but is generally discouraged
+
+---
+
+## Question 14: Critical CSS
+
+**Question:** What is Critical CSS?
+
+**Answer:**
+Critical CSS is the minimal set of CSS code required to style the content that is above the fold (visible to the user without scrolling) on the initial page load.
+
+**Benefits:**
+- Faster initial page render
+- Improved perceived performance
+- Better Core Web Vitals scores
+- Reduced FOUC (Flash of Unstyled Content)
+
+**Implementation:**
+```html
+<!-- Inline critical CSS -->
+<style>
+  .header { background: #333; }
+  .hero { padding: 2rem; }
+  .nav { display: flex; }
+</style>
+
+<!-- Load non-critical CSS asynchronously -->
+<link
+  rel="preload"
+  href="styles.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript>
+  <link rel="stylesheet" href="styles.css">
+</noscript>
+```
+
+**Tools for Critical CSS:**
+- **Critical**: npm package for extracting critical CSS
+- **Penthouse**: Critical CSS generator
+- **Addy Osmani's critical**: Webpack plugin
+
+**Example with Critical tool:**
+```bash
+npm install -g critical
+critical https://example.com --base dist --css dist/styles.css --width 1300 --height 900 --inline
+```
+
+---
+
+## Question 15: CSS Architecture for Large Applications
+
+**Question:** How do you manage CSS in a large-scale application to avoid conflicts?
+
+**Answer:**
+
+**1. CSS-in-JS (e.g., Styled Components):**
+```javascript
+import styled from 'styled-components';
+
+const Button = styled.button`
+  background: ${props => props.primary ? 'blue' : 'gray'};
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+`;
+```
+- Generates unique, scoped class names
+- Virtually eliminates global namespace conflicts
+- Component-based styling
+
+**2. CSS Modules:**
+```css
+/* Button.module.css */
+.button {
+  background: blue;
+  padding: 10px 20px;
+}
+```
+```javascript
+import styles from './Button.module.css';
+<button className={styles.button}>Click me</button>
+```
+- Automatically scopes class names to a specific component
+- Build-time transformation
+
+**3. BEM (Block, Element, Modifier):**
+```css
+/* Block */
+.card { }
+
+/* Element */
+.card__title { }
+.card__content { }
+.card__button { }
+
+/* Modifier */
+.card--featured { }
+.card__button--primary { }
+```
+- Strict naming convention
+- Makes selectors very specific
+- Avoids clashes through naming discipline
+
+**4. Design System & CDN:**
+```html
+<!-- Shared design system -->
+<link rel="stylesheet" href="https://cdn.example.com/design-system.css">
+
+<!-- App-specific CSS -->
+<link rel="stylesheet" href="/app-styles.css">
+```
+- Extract shared design system CSS file with long cache policy
+- Load app-specific CSS separately
+- Version control for design system
+
+**5. CSS Architecture Layers:**
+```css
+@layer base, components, utilities;
+
+@layer base {
+  body { margin: 0; }
+  h1 { font-size: 2rem; }
+}
+
+@layer components {
+  .button { padding: 1rem; }
+  .card { border: 1px solid #ccc; }
+}
+
+@layer utilities {
+  .text-center { text-align: center; }
+  .mb-1 { margin-bottom: 1rem; }
+}
+```
