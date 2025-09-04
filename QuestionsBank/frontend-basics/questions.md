@@ -329,3 +329,193 @@ h1 {
   font-size: clamp(1.5rem, 4vw, 3rem);
 }
 ```
+
+---
+
+## Question 11: Critical Rendering Path
+
+**Question:** In the critical rendering path, is CSS rendered before or after the DOM is constructed?
+
+**Answer:**
+CSS is rendered before the DOM. It is synchronous and blocking, meaning all CSS must be interpreted and any rules calculated before the browser can start parsing and rendering the HTML.
+
+**Critical Rendering Path Steps:**
+1. HTML parsing and DOM construction
+2. CSS parsing and CSSOM construction (blocking)
+3. Render tree construction
+4. Layout (reflow)
+5. Paint
+6. Composite
+
+---
+
+## Question 12: HTML and CSS Rendering
+
+**Question:** Is HTML rendered incrementally? Can we say the same about CSS?
+
+**Answer:**
+Yes, HTML is rendered incrementally as it is being parsed. However, CSS is "all or nothing" because it has a global namespace. The browser must interpret all CSS and calculate all possible rules that could apply to any element before it can proceed.
+
+**Why CSS is blocking:**
+- CSS has a global scope
+- Rules can affect any element
+- Browser needs complete CSS to determine final styles
+- Prevents FOUC (Flash of Unstyled Content)
+
+---
+
+## Question 13: Script Loading Attributes
+
+**Question:** What is the difference between async and defer attributes on a script tag?
+
+**Answer:**
+Both allow a script to be downloaded in the background without blocking HTML parsing.
+
+**async:**
+- Script is executed as soon as it is downloaded
+- Can happen at any time, potentially before or after DOMContentLoaded
+- Execution order is not guaranteed
+- Use for independent scripts
+
+**defer:**
+- Script is executed only after HTML is fully parsed
+- Just before the DOMContentLoaded event
+- Execution order of deferred scripts is maintained
+- ES6 modules are deferred by default
+
+**Example:**
+```html
+<script src="script1.js" async></script>
+<script src="script2.js" defer></script>
+```
+
+---
+
+## Question 14: Browser Data Storage
+
+**Question:** What are three ways to store data in the browser?
+
+**Answer:**
+
+**1. Cookies:**
+- Small (~4KB)
+- Sent with every HTTP request
+- Great for authentication (if HTTP-only)
+- Can have an expiration date
+- Accessible via document.cookie
+
+**2. Local Storage:**
+- Larger storage limit (typically ~5MB)
+- Persists indefinitely until explicitly cleared
+- Accessible to client-side JavaScript
+- Synchronous API
+
+**3. Session Storage:**
+- Similar to local storage but cleared when browser tab/window closes
+- Useful for temporary data like form inputs during a session
+- Same API as localStorage
+
+**Example:**
+```javascript
+// Cookies
+document.cookie = "username=john; expires=Thu, 18 Dec 2024 12:00:00 UTC";
+
+// Local Storage
+localStorage.setItem('user', JSON.stringify({name: 'John', age: 30}));
+const user = JSON.parse(localStorage.getItem('user'));
+
+// Session Storage
+sessionStorage.setItem('tempData', 'temporary value');
+```
+
+---
+
+## Question 15: JavaScript 'this' Keyword
+
+**Question:** Explain the this keyword in JavaScript.
+
+**Answer:**
+The value of `this` depends on how a function is called:
+
+**1. Global scope (non-strict mode):**
+```javascript
+console.log(this); // window object
+```
+
+**2. Object method:**
+```javascript
+const obj = {
+  name: 'John',
+  greet() {
+    console.log(this.name); // 'John'
+  }
+};
+obj.greet();
+```
+
+**3. Event handler:**
+```javascript
+button.addEventListener('click', function() {
+  console.log(this); // button element
+});
+```
+
+**4. Explicit binding (call, apply, bind):**
+```javascript
+function greet() {
+  console.log(this.name);
+}
+
+const person = { name: 'Alice' };
+greet.call(person); // 'Alice'
+greet.apply(person); // 'Alice'
+const boundGreet = greet.bind(person);
+boundGreet(); // 'Alice'
+```
+
+**5. Arrow functions:**
+```javascript
+const obj = {
+  name: 'John',
+  greet: () => {
+    console.log(this.name); // undefined (inherits from lexical scope)
+  }
+};
+```
+
+---
+
+## Question 16: Event Loop
+
+**Question:** Describe the steps in an Event Loop tick.
+
+**Answer:**
+The Event Loop processes tasks in this order:
+
+**1. Execute the Call Stack:**
+- Run all synchronous code until the call stack is empty
+
+**2. Process the Microtask Queue:**
+- Execute all microtasks (promise callbacks, queueMicrotask)
+- This queue must be completely emptied before moving on
+- Higher priority than macrotasks
+
+**3. Render:**
+- Update the UI if necessary
+- Only happens if needed (60fps target)
+
+**4. Process the Macrotask Queue:**
+- Take one task from the macrotask queue (setTimeout, setInterval, I/O callbacks)
+- Execute it completely
+
+**5. Repeat:**
+- Go back to step 1
+
+**Example:**
+```javascript
+console.log('1');
+setTimeout(() => console.log('2'), 0);
+Promise.resolve().then(() => console.log('3'));
+console.log('4');
+// Output: 1, 4, 3, 2
+```

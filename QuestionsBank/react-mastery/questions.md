@@ -842,3 +842,819 @@ test('Button with different props snapshot', () => {
 - Mock external dependencies
 - Write tests that are maintainable and readable
 - Test edge cases and error conditions
+
+---
+
+## Question 11: React Hooks Rules
+
+**Question:** What are the two main rules of Hooks?
+
+**Answer:**
+
+**1. Only Call Hooks at the Top Level:**
+Don't call Hooks inside loops, conditions, or nested functions. This ensures Hooks are called in the same order every time a component renders, which is how React preserves state between calls.
+
+**2. Only Call Hooks from React Functions:**
+Call them from within React functional components or from custom Hooks.
+
+**Examples:**
+
+**❌ Wrong - Conditional Hook:**
+```javascript
+function MyComponent({ shouldUseEffect }) {
+  if (shouldUseEffect) {
+    useEffect(() => {
+      // This violates the rules of hooks
+    }, []);
+  }
+  
+  return <div>Hello</div>;
+}
+```
+
+**✅ Correct - Always Call Hooks:**
+```javascript
+function MyComponent({ shouldUseEffect }) {
+  useEffect(() => {
+    if (shouldUseEffect) {
+      // Logic inside the hook
+    }
+  }, [shouldUseEffect]);
+  
+  return <div>Hello</div>;
+}
+```
+
+**❌ Wrong - Hook in Loop:**
+```javascript
+function MyComponent({ items }) {
+  items.forEach(item => {
+    useState(item); // This violates the rules of hooks
+  });
+  
+  return <div>Hello</div>;
+}
+```
+
+**✅ Correct - Use Array:**
+```javascript
+function MyComponent({ items }) {
+  const [selectedItems, setSelectedItems] = useState([]);
+  
+  return <div>Hello</div>;
+}
+```
+
+---
+
+## Question 12: Class Components vs Functional Components
+
+**Question:** What can you do with class components that you cannot do with functional components?
+
+**Answer:**
+**Use Error Boundaries.** There is currently no way to create an Error Boundary component using a Hook. Error Boundaries are class components that define either `static getDerivedStateFromError()` or `componentDidCatch()`.
+
+**Error Boundary Example:**
+```javascript
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Update state so the next render will show the fallback UI
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    // Log the error to an error reporting service
+    console.error('Error caught by boundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // Fallback UI
+      return <h1>Something went wrong.</h1>;
+    }
+
+    return this.props.children;
+  }
+}
+
+// Usage
+function App() {
+  return (
+    <ErrorBoundary>
+      <MyComponent />
+    </ErrorBoundary>
+  );
+}
+```
+
+**Why No Hook Equivalent:**
+- Error boundaries need to catch errors during the render phase
+- Hooks run after the component has rendered
+- The error boundary pattern requires lifecycle methods that don't have Hook equivalents
+
+**Workaround with react-error-boundary:**
+```javascript
+import { ErrorBoundary } from 'react-error-boundary';
+
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div role="alert">
+      <h2>Something went wrong:</h2>
+      <pre>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Try again</button>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onError={(error, errorInfo) => {
+        console.error('Error caught:', error, errorInfo);
+      }}
+    >
+      <MyComponent />
+    </ErrorBoundary>
+  );
+}
+```
+
+---
+
+## Question 13: useEffect with async functions
+
+**Question:** Why can't we use an async function directly as the input to useEffect?
+
+**Answer:**
+The function passed to `useEffect` can optionally return a cleanup function. If you mark it as `async`, it implicitly returns a Promise, and React cannot use a Promise as a cleanup function.
+
+**❌ Wrong:**
+```javascript
+useEffect(async () => {
+  const data = await fetchData();
+  setData(data);
+}, []);
+```
+
+**✅ Correct Pattern:**
+```javascript
+useEffect(() => {
+  const fetchData = async () => {
+    const result = await myApi.get(data);
+    setData(result);
+  };
+  
+  fetchData();
+}, [data]);
+```
+
+**Alternative with IIFE (Immediately Invoked Function Expression):**
+```javascript
+useEffect(() => {
+  (async () => {
+    const data = await fetchData();
+    setData(data);
+  })();
+}, []);
+```
+
+**With Cleanup:**
+```javascript
+useEffect(() => {
+  let cancelled = false;
+  
+  const fetchData = async () => {
+    const result = await myApi.get(data);
+    if (!cancelled) {
+      setData(result);
+    }
+  };
+  
+  fetchData();
+  
+  return () => {
+    cancelled = true;
+  };
+}, [data]);
+```
+
+**With AbortController:**
+```javascript
+useEffect(() => {
+  const controller = new AbortController();
+  
+  const fetchData = async () => {
+    try {
+      const response = await fetch('/api/data', {
+        signal: controller.signal
+      });
+      const data = await response.json();
+      setData(data);
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('Fetch error:', error);
+      }
+    }
+  };
+  
+  fetchData();
+  
+  return () => {
+    controller.abort();
+  };
+}, []);
+```
+
+---
+
+## Question 14: Concurrent React
+
+**Question:** What is Concurrent React (or Concurrent Mode)?
+
+**Answer:**
+Concurrent React is a new behind-the-scenes feature in React 18 that allows React to prepare multiple versions of the UI at the same time. It introduces a scheduler that can prioritize renders, pause, resume, or abandon work.
+
+**Key Features:**
+- **Interruptible Rendering**: React can pause work to handle high-priority updates
+- **Automatic Batching**: Multiple state updates are automatically batched
+- **Suspense Improvements**: Better support for data fetching and code splitting
+- **Transitions**: Mark updates as non-urgent to keep the UI responsive
+
+**Example with useTransition:**
+```javascript
+import { useState, useTransition } from 'react';
+
+function SearchResults() {
+  const [isPending, startTransition] = useTransition();
+  const [input, setInput] = useState('');
+  const [list, setList] = useState([]);
+
+  function handleChange(e) {
+    setInput(e.target.value);
+    
+    startTransition(() => {
+      // This update is marked as non-urgent
+      setList(expensiveSearch(e.target.value));
+    });
+  }
+
+  return (
+    <div>
+      <input value={input} onChange={handleChange} />
+      {isPending && <div>Searching...</div>}
+      <ul>
+        {list.map(item => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+**Example with Suspense:**
+```javascript
+import { Suspense, lazy } from 'react';
+
+const LazyComponent = lazy(() => import('./LazyComponent'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </Suspense>
+  );
+}
+```
+
+**Benefits:**
+- **Better User Experience**: UI stays responsive during heavy computations
+- **Automatic Batching**: Reduces unnecessary re-renders
+- **Improved Performance**: Better handling of concurrent updates
+- **Future-Proof**: Enables new React features
+
+---
+
+## Question 15: React Fiber
+
+**Question:** What is a Fiber in React?
+
+**Answer:**
+A Fiber is a JavaScript object that represents a unit of work. It contains information about a component, its input, and its output. The Fiber architecture, introduced in React 16, enables features like Concurrent React by allowing React to break rendering work into incremental units that can be paused and resumed.
+
+**Fiber Properties:**
+```javascript
+// Simplified Fiber structure
+const fiber = {
+  type: 'div', // Component type
+  key: 'unique-key',
+  props: { className: 'container' },
+  stateNode: domElement, // DOM node
+  child: childFiber, // First child
+  sibling: siblingFiber, // Next sibling
+  return: parentFiber, // Parent
+  alternate: previousFiber, // Previous version
+  effectTag: 'UPDATE', // What to do with this fiber
+  expirationTime: 1000, // Priority
+};
+```
+
+**Fiber Phases:**
+1. **Render Phase**: Build the fiber tree, can be interrupted
+2. **Commit Phase**: Apply changes to DOM, cannot be interrupted
+
+**Example of Fiber Work:**
+```javascript
+function App() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => setCount(c => c + 1)}>
+        Increment
+      </button>
+    </div>
+  );
+}
+```
+
+**Fiber Tree Structure:**
+```
+App Fiber
+├── div Fiber
+    ├── h1 Fiber
+    │   └── "Count: 0" Text Fiber
+    └── button Fiber
+        └── "Increment" Text Fiber
+```
+
+**Benefits:**
+- **Incremental Rendering**: Work can be split into chunks
+- **Priority-based Updates**: High-priority updates can interrupt low-priority ones
+- **Better Error Handling**: Errors are isolated to specific fibers
+- **Time Slicing**: React can yield control back to the browser
+
+---
+
+## Question 16: React Performance Optimization
+
+**Question:** How can we optimize the re-rendering process in React?
+
+**Answer:**
+
+**1. Avoid Unnecessary Re-renders:**
+```javascript
+// Use React.memo for components
+const ExpensiveComponent = React.memo(({ data }) => {
+  return <div>{data.name}</div>;
+});
+
+// Use useMemo for expensive calculations
+function MyComponent({ items }) {
+  const expensiveValue = useMemo(() => {
+    return items.reduce((sum, item) => sum + item.value, 0);
+  }, [items]);
+  
+  return <div>{expensiveValue}</div>;
+}
+
+// Use useCallback for functions passed as props
+function Parent({ items }) {
+  const handleClick = useCallback((id) => {
+    console.log('Clicked:', id);
+  }, []);
+  
+  return (
+    <div>
+      {items.map(item => (
+        <Child key={item.id} item={item} onClick={handleClick} />
+      ))}
+    </div>
+  );
+}
+```
+
+**2. Code Splitting & Lazy Loading:**
+```javascript
+import { lazy, Suspense } from 'react';
+
+const LazyComponent = lazy(() => import('./LazyComponent'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </Suspense>
+  );
+}
+```
+
+**3. Virtualization for Long Lists:**
+```javascript
+import { FixedSizeList as List } from 'react-window';
+
+function VirtualizedList({ items }) {
+  const Row = ({ index, style }) => (
+    <div style={style}>
+      {items[index].name}
+    </div>
+  );
+
+  return (
+    <List
+      height={600}
+      itemCount={items.length}
+      itemSize={50}
+    >
+      {Row}
+    </List>
+  );
+}
+```
+
+**4. Optimize Context Usage:**
+```javascript
+// Split contexts to avoid unnecessary re-renders
+const UserContext = createContext();
+const ThemeContext = createContext();
+
+// Use multiple providers
+function App() {
+  return (
+    <UserProvider>
+      <ThemeProvider>
+        <MyComponent />
+      </ThemeProvider>
+    </UserProvider>
+  );
+}
+```
+
+**5. Use Production Build:**
+```bash
+npm run build
+```
+
+**6. Profile with React DevTools:**
+- Use the Profiler tab to identify performance bottlenecks
+- Look for components that render frequently
+- Check for unnecessary re-renders
+
+---
+
+## Question 17: SSR Rehydration
+
+**Question:** What is rehydration in the context of SSR?
+
+**Answer:**
+Rehydration is the process of "making the static HTML interactive." After the server sends pre-rendered HTML to the client, the React code on the client loads, reads the existing DOM, and attaches the necessary event handlers and component state to it.
+
+**Rehydration Process:**
+1. **Server**: Renders React components to HTML string
+2. **Client**: Receives static HTML and displays it immediately
+3. **Client**: Downloads and executes JavaScript bundle
+4. **Client**: React "rehydrates" by attaching event handlers and state to existing DOM
+
+**Example:**
+```javascript
+// Server-side rendering
+import { renderToString } from 'react-dom/server';
+
+function App() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => setCount(c => c + 1)}>
+        Increment
+      </button>
+    </div>
+  );
+}
+
+// Server
+const html = renderToString(<App />);
+// Result: <div><h1>Count: 0</h1><button>Increment</button></div>
+```
+
+```javascript
+// Client-side rehydration
+import { hydrateRoot } from 'react-dom/client';
+
+const container = document.getElementById('root');
+hydrateRoot(container, <App />);
+```
+
+**Rehydration Challenges:**
+```javascript
+// ❌ Problem: Hydration mismatch
+function App() {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // Server renders "Server", client renders "Client"
+  return <div>{mounted ? 'Client' : 'Server'}</div>;
+}
+
+// ✅ Solution: Use suppressHydrationWarning
+function App() {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  return (
+    <div suppressHydrationWarning>
+      {mounted ? 'Client' : 'Server'}
+    </div>
+  );
+}
+```
+
+**Benefits:**
+- **Faster Initial Load**: Users see content immediately
+- **Better SEO**: Search engines can crawl the HTML
+- **Progressive Enhancement**: Works even if JavaScript fails to load
+
+---
+
+## Question 18: Sibling Component Communication
+
+**Question:** How can sibling components share state?
+
+**Answer:**
+
+**1. Lifting State Up:**
+Move the shared state to the closest common parent component and pass it down via props.
+
+```javascript
+function Parent() {
+  const [sharedState, setSharedState] = useState('');
+  
+  return (
+    <div>
+      <SiblingA 
+        value={sharedState} 
+        onChange={setSharedState} 
+      />
+      <SiblingB 
+        value={sharedState} 
+        onChange={setSharedState} 
+      />
+    </div>
+  );
+}
+
+function SiblingA({ value, onChange }) {
+  return (
+    <input 
+      value={value} 
+      onChange={(e) => onChange(e.target.value)} 
+    />
+  );
+}
+
+function SiblingB({ value, onChange }) {
+  return (
+    <div>Current value: {value}</div>
+  );
+}
+```
+
+**2. Context API:**
+Create a context to hold the state and use `useContext` to consume it in the siblings.
+
+```javascript
+const SharedStateContext = createContext();
+
+function Parent() {
+  const [sharedState, setSharedState] = useState('');
+  
+  return (
+    <SharedStateContext.Provider value={{ sharedState, setSharedState }}>
+      <SiblingA />
+      <SiblingB />
+    </SharedStateContext.Provider>
+  );
+}
+
+function SiblingA() {
+  const { sharedState, setSharedState } = useContext(SharedStateContext);
+  
+  return (
+    <input 
+      value={sharedState} 
+      onChange={(e) => setSharedState(e.target.value)} 
+    />
+  );
+}
+
+function SiblingB() {
+  const { sharedState } = useContext(SharedStateContext);
+  
+  return <div>Current value: {sharedState}</div>;
+}
+```
+
+**3. State Management Library:**
+Use a global state library like Redux, Zustand, or Recoil.
+
+```javascript
+// With Zustand
+import { create } from 'zustand';
+
+const useStore = create((set) => ({
+  sharedState: '',
+  setSharedState: (value) => set({ sharedState: value }),
+}));
+
+function SiblingA() {
+  const { sharedState, setSharedState } = useStore();
+  
+  return (
+    <input 
+      value={sharedState} 
+      onChange={(e) => setSharedState(e.target.value)} 
+    />
+  );
+}
+
+function SiblingB() {
+  const { sharedState } = useStore();
+  
+  return <div>Current value: {sharedState}</div>;
+}
+```
+
+**4. Custom Hook:**
+Create a custom hook that manages the shared state.
+
+```javascript
+function useSharedState(initialValue) {
+  const [state, setState] = useState(initialValue);
+  
+  return [state, setState];
+}
+
+function Parent() {
+  const [sharedState, setSharedState] = useSharedState('');
+  
+  return (
+    <div>
+      <SiblingA 
+        value={sharedState} 
+        onChange={setSharedState} 
+      />
+      <SiblingB value={sharedState} />
+    </div>
+  );
+}
+```
+
+---
+
+## Question 19: Global State Disadvantages
+
+**Question:** What are the disadvantages of using global state or React Context?
+
+**Answer:**
+
+**1. Performance Issues:**
+Can cause unnecessary re-renders for all components subscribed to the context, even if they only care about a part of the state that didn't change.
+
+```javascript
+// ❌ Problem: All consumers re-render when any part of state changes
+const AppContext = createContext();
+
+function AppProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [theme, setTheme] = useState('light');
+  const [notifications, setNotifications] = useState([]);
+  
+  const value = { user, setUser, theme, setTheme, notifications, setNotifications };
+  
+  return (
+    <AppContext.Provider value={value}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+
+// All components re-render when notifications change, even if they only use user
+function UserProfile() {
+  const { user } = useContext(AppContext); // Re-renders unnecessarily
+  return <div>{user?.name}</div>;
+}
+```
+
+**✅ Solution: Split Contexts**
+```javascript
+const UserContext = createContext();
+const ThemeContext = createContext();
+const NotificationContext = createContext();
+
+function UserProfile() {
+  const { user } = useContext(UserContext); // Only re-renders when user changes
+  return <div>{user?.name}</div>;
+}
+```
+
+**2. Testing Complexity:**
+Components are coupled to the global state, making them harder to test in isolation.
+
+```javascript
+// ❌ Hard to test - component depends on global state
+function UserProfile() {
+  const { user } = useContext(AppContext);
+  return <div>{user?.name}</div>;
+}
+
+// Test requires setting up the entire context
+test('renders user name', () => {
+  render(
+    <AppContext.Provider value={{ user: { name: 'John' } }}>
+      <UserProfile />
+    </AppContext.Provider>
+  );
+  
+  expect(screen.getByText('John')).toBeInTheDocument();
+});
+
+// ✅ Better - component accepts props
+function UserProfile({ user }) {
+  return <div>{user?.name}</div>;
+}
+
+// Test is simpler and more focused
+test('renders user name', () => {
+  render(<UserProfile user={{ name: 'John' }} />);
+  expect(screen.getByText('John')).toBeInTheDocument();
+});
+```
+
+**3. Maintainability Issues:**
+Can make the data flow harder to reason about and can lead to overuse, making the application overly dependent on global state.
+
+```javascript
+// ❌ Problem: Everything is global
+function App() {
+  return (
+    <GlobalStateProvider>
+      <Header />
+      <Main />
+      <Sidebar />
+      <Footer />
+    </GlobalStateProvider>
+  );
+}
+
+// All components access global state directly
+function Header() {
+  const { user, theme, notifications } = useContext(AppContext);
+  // Component becomes tightly coupled to global state
+}
+
+// ✅ Better: Use global state sparingly
+function App() {
+  return (
+    <UserProvider>
+      <ThemeProvider>
+        <Header />
+        <Main />
+        <Sidebar />
+        <Footer />
+      </ThemeProvider>
+    </UserProvider>
+  );
+}
+
+// Most components use local state or props
+function Header({ user, theme }) {
+  // Component is more predictable and testable
+}
+```
+
+**4. Debugging Complexity:**
+Harder to trace where state changes come from and why components re-render.
+
+**5. Bundle Size:**
+State management libraries add to the bundle size.
+
+**Best Practices:**
+- Use local state when possible
+- Split contexts by domain
+- Use global state only for truly global concerns
+- Consider alternatives like prop drilling for simple cases
+- Use React DevTools Profiler to identify performance issues
