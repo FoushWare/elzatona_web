@@ -133,49 +133,59 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation - Full Screen Overlay */}
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              href="/learning-paths"
-              className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-              onClick={() => setIsOpen(false)}
-            >
-              🗺️ Learning Paths
-            </Link>
+        <div className="md:hidden fixed inset-0 top-16 bg-white dark:bg-gray-900 z-40">
+          <div className="flex flex-col h-full">
+            {/* Navigation Links */}
+            <div className="flex-1 px-4 pt-8 space-y-4">
+              <Link
+                href="/learning-paths"
+                className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                onClick={() => setIsOpen(false)}
+              >
+                🗺️ Learning Paths
+              </Link>
 
-            <Link
-              href="/coding"
-              className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-              onClick={() => setIsOpen(false)}
-            >
-              💻 Coding Challenges
-            </Link>
+              <Link
+                href="/coding"
+                className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                onClick={() => setIsOpen(false)}
+              >
+                💻 Coding Challenges
+              </Link>
 
-            <Link
-              href="/preparation-guides"
-              className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-              onClick={() => setIsOpen(false)}
-            >
-              📖 Preparation Guides
-            </Link>
+              <Link
+                href="/preparation-guides"
+                className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                onClick={() => setIsOpen(false)}
+              >
+                📖 Preparation Guides
+              </Link>
 
-            <Link
-              href="/jobs"
-              className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-              onClick={() => setIsOpen(false)}
-            >
-              💼 Job Aggregator
-            </Link>
+              <Link
+                href="/jobs"
+                className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                onClick={() => setIsOpen(false)}
+              >
+                💼 Job Aggregator
+              </Link>
 
-            <Link
-              href="/auth"
-              className="block px-3 py-2 rounded-md text-base font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700"
-              onClick={() => setIsOpen(false)}
-            >
-              Want to store your app progress?
-            </Link>
+              <Link
+                href="/auth"
+                className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 mt-8"
+                onClick={() => setIsOpen(false)}
+              >
+                Want to store your app progress?
+              </Link>
+            </div>
+
+            {/* Bottom Section with Logo */}
+            <div className="px-4 pb-8 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex justify-center">
+                <ZatonaLogo size="lg" showText={true} variant="stacked" />
+              </div>
+            </div>
           </div>
         </div>
       )}
