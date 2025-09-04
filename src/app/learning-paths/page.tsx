@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { learningPaths, getResourceById } from '@/lib/resources';
 import Link from 'next/link';
+import LearningPathQuestions from '@/components/LearningPathQuestions';
 
 export default function LearningPathsPage() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<
@@ -11,6 +12,7 @@ export default function LearningPathsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedPath, setSelectedPath] = useState<string | null>(null);
 
   const filteredPaths = learningPaths.filter(
     path =>
