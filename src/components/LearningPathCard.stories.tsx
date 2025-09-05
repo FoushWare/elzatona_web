@@ -1,239 +1,208 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { LearningPathCard } from './LearningPathCard';
 
 const meta: Meta<typeof LearningPathCard> = {
-  title: 'Components/Learning Path Card',
+  title: 'Components/LearningPathCard',
   component: LearningPathCard,
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
     docs: {
       description: {
         component:
-          'A collapsible card component that displays learning path information with accordion functionality.',
+          'A collapsible card component for displaying learning path information including title, description, difficulty, skills, prerequisites, and resources.',
       },
     },
   },
-  tags: ['autodocs'],
   argTypes: {
     path: {
-      description: 'The learning path data object',
       control: 'object',
+      description: 'Learning path data object',
     },
     isCollapsed: {
-      description: 'Whether the card is collapsed or expanded',
       control: 'boolean',
+      description: 'Whether the card is collapsed',
     },
     onToggle: {
-      description: 'Callback function when the card is toggled',
-      action: 'toggled',
+      action: 'toggle',
+      description: 'Callback when card is toggled',
     },
   },
+  tags: ['autodocs'],
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const mockLearningPath = {
+const samplePath = {
   id: 'frontend-basics',
   title: 'Frontend Basics',
   description:
-    'Learn HTML, CSS, and JavaScript fundamentals to build modern web applications. This comprehensive path covers everything from basic markup to advanced styling and interactive functionality.',
+    'Learn the fundamentals of frontend development including HTML, CSS, and JavaScript. This comprehensive path covers everything from basic markup to modern JavaScript features.',
   difficulty: 'beginner' as const,
-  estimatedHours: 20,
-  questionCount: 116,
-  category: 'frontend',
-  skills: [
+  estimatedTime: 40,
+  questionCount: 25,
+  targetSkills: [
     'HTML',
     'CSS',
     'JavaScript',
-    'DOM Manipulation',
     'Responsive Design',
+    'DOM Manipulation',
   ],
-  prerequisites: [],
-  resources: [
-    {
-      title: 'MDN Web Docs',
-      url: 'https://developer.mozilla.org',
-      type: 'documentation' as const,
-    },
-    {
-      title: 'FreeCodeCamp',
-      url: 'https://freecodecamp.org',
-      type: 'course' as const,
-    },
-  ],
+  prerequisites: ['Basic computer skills', 'Text editor knowledge'],
+  resources: ['html-basics', 'css-fundamentals', 'javascript-intro'],
 };
 
-export const Collapsed: Story = {
+const advancedPath = {
+  id: 'react-mastery',
+  title: 'React Mastery',
+  description:
+    'Master React development with hooks, context, performance optimization, and advanced patterns. Build scalable applications with modern React practices.',
+  difficulty: 'advanced' as const,
+  estimatedTime: 80,
+  questionCount: 50,
+  targetSkills: [
+    'React Hooks',
+    'Context API',
+    'Performance Optimization',
+    'Testing',
+    'State Management',
+  ],
+  prerequisites: ['JavaScript ES6+', 'HTML/CSS', 'Basic React knowledge'],
+  resources: ['react-official-docs', 'advanced-react-patterns'],
+};
+
+const minimalPath = {
+  id: 'css-fundamentals',
+  title: 'CSS Fundamentals',
+  description: 'Learn CSS basics and styling techniques.',
+  difficulty: 'beginner' as const,
+  estimatedTime: 20,
+  questionCount: 15,
+  targetSkills: ['CSS Selectors', 'Box Model', 'Flexbox'],
+  prerequisites: [],
+  resources: [],
+};
+
+export const Default: Story = {
   args: {
-    path: mockLearningPath,
+    path: samplePath,
     isCollapsed: true,
-    onToggle: () => {},
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The default collapsed state showing only the header with title, question count, and arrow.',
-      },
-    },
   },
 };
 
 export const Expanded: Story = {
   args: {
-    path: mockLearningPath,
+    path: samplePath,
     isCollapsed: false,
-    onToggle: () => {},
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The expanded state showing all learning path details including description, skills, and action buttons.',
-      },
-    },
   },
 };
 
-export const IntermediateLevel: Story = {
+export const AdvancedPath: Story = {
+  args: {
+    path: advancedPath,
+    isCollapsed: true,
+  },
+};
+
+export const AdvancedPathExpanded: Story = {
+  args: {
+    path: advancedPath,
+    isCollapsed: false,
+  },
+};
+
+export const MinimalPath: Story = {
+  args: {
+    path: minimalPath,
+    isCollapsed: true,
+  },
+};
+
+export const MinimalPathExpanded: Story = {
+  args: {
+    path: minimalPath,
+    isCollapsed: false,
+  },
+};
+
+export const LongTitle: Story = {
   args: {
     path: {
-      ...mockLearningPath,
-      id: 'react-mastery',
-      title: 'React Mastery',
+      ...samplePath,
+      title:
+        'Advanced Frontend Development with Modern JavaScript and React Ecosystem',
+    },
+    isCollapsed: true,
+  },
+};
+
+export const LongDescription: Story = {
+  args: {
+    path: {
+      ...samplePath,
       description:
-        'Master React development with hooks, context, and advanced patterns. Learn to build scalable and maintainable React applications.',
-      difficulty: 'intermediate' as const,
-      estimatedHours: 30,
-      questionCount: 85,
-      skills: ['React', 'Hooks', 'Context API', 'State Management', 'Testing'],
-      prerequisites: ['frontend-basics'],
+        'This is an extremely comprehensive learning path that covers all aspects of modern frontend development. You will learn HTML5 semantic elements, advanced CSS techniques including Grid and Flexbox, modern JavaScript features like ES6+, async/await, modules, and much more. The path also includes React fundamentals, state management, routing, testing, and deployment strategies.',
     },
     isCollapsed: false,
-    onToggle: () => {},
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'An intermediate level learning path with more advanced content and prerequisites.',
-      },
-    },
   },
 };
 
-export const AdvancedLevel: Story = {
+export const ManySkills: Story = {
   args: {
     path: {
-      ...mockLearningPath,
-      id: 'system-design',
-      title: 'System Design',
-      description:
-        'Learn to design large-scale distributed systems. Cover scalability, reliability, and performance optimization for enterprise applications.',
-      difficulty: 'advanced' as const,
-      estimatedHours: 40,
-      questionCount: 65,
-      skills: [
-        'System Architecture',
-        'Scalability',
-        'Load Balancing',
-        'Caching',
-        'Microservices',
-      ],
-      prerequisites: ['react-mastery', 'backend-basics'],
-    },
-    isCollapsed: false,
-    onToggle: () => {},
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'An advanced level learning path with complex topics and multiple prerequisites.',
-      },
-    },
-  },
-};
-
-export const WithManySkills: Story = {
-  args: {
-    path: {
-      ...mockLearningPath,
-      skills: [
-        'HTML',
-        'CSS',
-        'JavaScript',
-        'DOM Manipulation',
-        'Responsive Design',
-        'Accessibility',
-        'Performance Optimization',
-        'Browser APIs',
-        'ES6+ Features',
-        'Async Programming',
-        'Error Handling',
-        'Debugging',
+      ...samplePath,
+      targetSkills: [
+        'HTML5',
+        'CSS3',
+        'JavaScript ES6+',
+        'React',
+        'Vue.js',
+        'Angular',
+        'TypeScript',
+        'Node.js',
+        'Express',
+        'MongoDB',
+        'PostgreSQL',
+        'Docker',
+        'Kubernetes',
+        'AWS',
+        'Testing',
+        'CI/CD',
       ],
     },
     isCollapsed: false,
-    onToggle: () => {},
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'A learning path with many skills to test the layout and wrapping behavior.',
-      },
-    },
   },
 };
 
-export const WithManyResources: Story = {
+export const ManyPrerequisites: Story = {
   args: {
     path: {
-      ...mockLearningPath,
+      ...samplePath,
+      prerequisites: [
+        'Basic computer skills',
+        'Text editor knowledge',
+        'Command line basics',
+        'Git fundamentals',
+        'Basic programming concepts',
+        'Web browser understanding',
+      ],
+    },
+    isCollapsed: false,
+  },
+};
+
+export const ManyResources: Story = {
+  args: {
+    path: {
+      ...samplePath,
       resources: [
-        {
-          title: 'MDN Web Docs',
-          url: 'https://developer.mozilla.org',
-          type: 'documentation' as const,
-        },
-        {
-          title: 'FreeCodeCamp',
-          url: 'https://freecodecamp.org',
-          type: 'course' as const,
-        },
-        {
-          title: 'Codecademy',
-          url: 'https://codecademy.com',
-          type: 'course' as const,
-        },
-        {
-          title: 'W3Schools',
-          url: 'https://w3schools.com',
-          type: 'documentation' as const,
-        },
-        {
-          title: 'CSS-Tricks',
-          url: 'https://css-tricks.com',
-          type: 'blog' as const,
-        },
-        {
-          title: 'JavaScript.info',
-          url: 'https://javascript.info',
-          type: 'tutorial' as const,
-        },
+        'html-basics',
+        'css-fundamentals',
+        'javascript-intro',
+        'frontend-best-practices',
+        'responsive-design-patterns',
       ],
     },
     isCollapsed: false,
-    onToggle: () => {},
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'A learning path with many resources to test the resource list layout.',
-      },
-    },
   },
 };
