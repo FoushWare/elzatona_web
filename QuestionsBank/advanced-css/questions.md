@@ -678,16 +678,19 @@ const Button = styled.button`
 Both are relative units, but they reference different elements:
 
 **em:**
+
 - Relative to the font-size of its direct or nearest parent element
 - Can compound when nested (1.2em × 1.2em = 1.44em)
 - Useful for component-level scaling
 
 **rem (Root em):**
+
 - Relative to the font-size of the root (`<html>`) element
 - Consistent across the entire document
 - Better for global scaling and accessibility
 
 **Examples:**
+
 ```css
 html {
   font-size: 16px; /* Root font size */
@@ -709,6 +712,7 @@ html {
 ```
 
 **When to use:**
+
 - **em**: Component-level scaling, typography within components
 - **rem**: Global spacing, consistent sizing across the site
 
@@ -722,12 +726,14 @@ html {
 The Box Model describes how every element is structured in CSS:
 
 **Components:**
+
 1. **Content**: The actual text or image
 2. **Padding**: Space between the content and the border
 3. **Border**: A line that surrounds the padding and content
 4. **Margin**: The outermost space that separates the element from other elements
 
 **Box-sizing Property:**
+
 ```css
 /* content-box (default) */
 .element {
@@ -749,6 +755,7 @@ The Box Model describes how every element is structured in CSS:
 ```
 
 **Visual Representation:**
+
 ```
 ┌─────────────────────────────────────┐ ← Margin (transparent)
 │ ┌─────────────────────────────────┐ │
@@ -779,6 +786,7 @@ Specificity is the set of rules that determines which CSS styles are applied whe
 4. **Elements and pseudo-elements**: (0, 0, 0, 1) - e.g., `div`, `::before`
 
 **Examples:**
+
 ```css
 /* Specificity: (0, 0, 0, 1) */
 div { color: red; }
@@ -797,6 +805,7 @@ div.my-class#my-id { color: purple; }
 ```
 
 **Important Rules:**
+
 - Higher specificity wins
 - If specificity is equal, last rule wins (cascade order)
 - `!important` overrides everything but is generally discouraged
@@ -811,18 +820,26 @@ div.my-class#my-id { color: purple; }
 Critical CSS is the minimal set of CSS code required to style the content that is above the fold (visible to the user without scrolling) on the initial page load.
 
 **Benefits:**
+
 - Faster initial page render
 - Improved perceived performance
 - Better Core Web Vitals scores
 - Reduced FOUC (Flash of Unstyled Content)
 
 **Implementation:**
+
 ```html
 <!-- Inline critical CSS -->
 <style>
-  .header { background: #333; }
-  .hero { padding: 2rem; }
-  .nav { display: flex; }
+  .header {
+    background: #333;
+  }
+  .hero {
+    padding: 2rem;
+  }
+  .nav {
+    display: flex;
+  }
 </style>
 
 <!-- Load non-critical CSS asynchronously -->
@@ -833,16 +850,18 @@ Critical CSS is the minimal set of CSS code required to style the content that i
   onload="this.onload=null;this.rel='stylesheet'"
 />
 <noscript>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </noscript>
 ```
 
 **Tools for Critical CSS:**
+
 - **Critical**: npm package for extracting critical CSS
 - **Penthouse**: Critical CSS generator
 - **Addy Osmani's critical**: Webpack plugin
 
 **Example with Critical tool:**
+
 ```bash
 npm install -g critical
 critical https://example.com --base dist --css dist/styles.css --width 1300 --height 900 --inline
@@ -857,21 +876,24 @@ critical https://example.com --base dist --css dist/styles.css --width 1300 --he
 **Answer:**
 
 **1. CSS-in-JS (e.g., Styled Components):**
+
 ```javascript
 import styled from 'styled-components';
 
 const Button = styled.button`
-  background: ${props => props.primary ? 'blue' : 'gray'};
+  background: ${props => (props.primary ? 'blue' : 'gray')};
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
 `;
 ```
+
 - Generates unique, scoped class names
 - Virtually eliminates global namespace conflicts
 - Component-based styling
 
 **2. CSS Modules:**
+
 ```css
 /* Button.module.css */
 .button {
@@ -879,59 +901,146 @@ const Button = styled.button`
   padding: 10px 20px;
 }
 ```
+
 ```javascript
 import styles from './Button.module.css';
-<button className={styles.button}>Click me</button>
+<button className={styles.button}>Click me</button>;
 ```
+
 - Automatically scopes class names to a specific component
 - Build-time transformation
 
 **3. BEM (Block, Element, Modifier):**
+
 ```css
 /* Block */
-.card { }
+.card {
+}
 
 /* Element */
-.card__title { }
-.card__content { }
-.card__button { }
+.card__title {
+}
+.card__content {
+}
+.card__button {
+}
 
 /* Modifier */
-.card--featured { }
-.card__button--primary { }
+.card--featured {
+}
+.card__button--primary {
+}
 ```
+
 - Strict naming convention
 - Makes selectors very specific
 - Avoids clashes through naming discipline
 
 **4. Design System & CDN:**
+
 ```html
 <!-- Shared design system -->
-<link rel="stylesheet" href="https://cdn.example.com/design-system.css">
+<link rel="stylesheet" href="https://cdn.example.com/design-system.css" />
 
 <!-- App-specific CSS -->
-<link rel="stylesheet" href="/app-styles.css">
+<link rel="stylesheet" href="/app-styles.css" />
 ```
+
 - Extract shared design system CSS file with long cache policy
 - Load app-specific CSS separately
 - Version control for design system
 
 **5. CSS Architecture Layers:**
+
 ```css
 @layer base, components, utilities;
 
 @layer base {
-  body { margin: 0; }
-  h1 { font-size: 2rem; }
+  body {
+    margin: 0;
+  }
+  h1 {
+    font-size: 2rem;
+  }
 }
 
 @layer components {
-  .button { padding: 1rem; }
-  .card { border: 1px solid #ccc; }
+  .button {
+    padding: 1rem;
+  }
+  .card {
+    border: 1px solid #ccc;
+  }
 }
 
 @layer utilities {
-  .text-center { text-align: center; }
-  .mb-1 { margin-bottom: 1rem; }
+  .text-center {
+    text-align: center;
+  }
+  .mb-1 {
+    margin-bottom: 1rem;
+  }
 }
 ```
+
+---
+
+## Question 11: CSS-in-JS Deep Dive
+
+**Question:** What is CSS-in-JS? What are its pros and cons?
+
+**Answer:**
+CSS-in-JS is a styling technique where CSS is written using JavaScript instead of in external stylesheets. Libraries like Styled Components or Emotion are used.
+
+**Pros:**
+
+- **Scoped Styles**: No conflicts between components
+- **Dynamic Styling**: Easy to style based on props/state
+- **Developer Experience**: Excellent tooling and debugging
+- **Type Safety**: With TypeScript, you get type checking for styles
+- **Dead Code Elimination**: Unused styles are automatically removed
+
+**Cons:**
+
+- **Runtime Cost**: Styles are often injected at runtime, which can impact performance
+- **Larger JS Bundle**: CSS is now part of your JavaScript bundle
+- **Harder to Cache**: CSS cannot be cached separately from JS
+- **Debugging**: Generated class names can be hard to read in DevTools
+- **Learning Curve**: Team needs to learn new syntax and patterns
+
+**Example with Styled Components:**
+
+```javascript
+import styled from 'styled-components';
+
+const Button = styled.button`
+  background: ${props => props.primary ? '#007bff' : '#6c757d'};
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+// Usage
+<Button primary>Primary Button</Button>
+<Button>Secondary Button</Button>
+```
+
+**When to Use CSS-in-JS:**
+
+- Component-based architecture (React, Vue)
+- Need for dynamic styling based on props/state
+- Team prefers JavaScript over CSS
+- Want type safety for styles
+
+**When to Avoid:**
+
+- Performance-critical applications
+- Large teams with strong CSS expertise
+- Need for separate CSS caching
+- Simple, static styling requirements

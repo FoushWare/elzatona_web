@@ -1199,3 +1199,661 @@ app.use((err, req, res, next) => {
   next(err);
 });
 ```
+
+---
+
+## Question 11: HTTP Methods for Chat Applications
+
+**Question:** Why would you use a POST request instead of a GET when sending the user's query?
+
+**Answer:**
+In RESTful design, HTTP verbs define the action. A GET request is for retrieving (reading) data, while a POST request is for creating a new resource. Sending a user's message is a "create" action, as it creates a new entry in the conversation on the server, making POST the semantically correct choice.
+
+**HTTP Method Semantics:**
+
+```javascript
+// ❌ Wrong - GET for sending data
+GET /api/chat?message=hello&conversationId=123
+// Problems:
+// - Message appears in URL (security risk)
+// - URL length limitations
+// - Cached by browsers/proxies
+// - Not semantically correct
+
+// ✅ Correct - POST for creating resources
+POST /api/chat
+Content-Type: application/json
+
+{
+  "message": "Hello, how are you?",
+  "conversationId": "123",
+  "userId": "user-456"
+}
+```
+
+**RESTful Design Principles:**
+
+```javascript
+// Resource-based design
+const chatAPI = {
+  // Create new message
+  sendMessage: {
+    method: 'POST',
+    url: '/api/conversations/:id/messages',
+    body: { content: 'Hello' },
+  },
+
+  // Retrieve conversation history
+  getMessages: {
+    method: 'GET',
+    url: '/api/conversations/:id/messages?page=1&limit=50',
+  },
+
+  // Update message (edit)
+  updateMessage: {
+    method: 'PUT',
+    url: '/api/conversations/:id/messages/:messageId',
+    body: { content: 'Updated message' },
+  },
+
+  // Delete message
+  deleteMessage: {
+    method: 'DELETE',
+    url: '/api/conversations/:id/messages/:messageId',
+  },
+};
+```
+
+**Security Considerations:**
+
+```javascript
+// GET request issues
+const getRequestIssues = {
+  urlExposure: 'Sensitive data in URL logs',
+  browserHistory: 'Messages stored in browser history',
+  referrerLeakage: 'URLs sent to external sites',
+  caching: 'Messages cached by proxies/CDNs',
+};
+
+// POST request benefits
+const postRequestBenefits = {
+  bodyEncryption: 'Data encrypted in request body',
+  noLogging: 'Sensitive data not in access logs',
+  sizeLimit: 'No URL length restrictions',
+  semanticCorrectness: 'Proper HTTP method usage',
+};
+```
+
+**Implementation Example:**
+
+```javascript
+// Frontend implementation
+const sendMessage = async (message, conversationId) => {
+  try {
+    const response = await fetch(
+      `/api/conversations/${conversationId}/messages`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          content: message,
+          timestamp: new Date().toISOString(),
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to send message:', error);
+    throw error;
+  }
+};
+
+// Backend implementation
+app.post(
+  '/api/conversations/:id/messages',
+  authenticateUser,
+  async (req, res) => {
+    try {
+      const { content } = req.body;
+      const { id: conversationId } = req.params;
+      const userId = req.user.id;
+
+      // Validate input
+      if (!content || content.trim().length === 0) {
+        return res.status(400).json({
+          error: 'Message content is required',
+        });
+      }
+
+      // Create message
+      const message = await Message.create({
+        content: content.trim(),
+        conversationId,
+        userId,
+        timestamp: new Date(),
+      });
+
+      res.status(201).json(message);
+    } catch (error) {
+      console.error('Error creating message:', error);
+      res.status(500).json({
+        error: 'Internal server error',
+      });
+    }
+  }
+);
+```
+
+---
+
+## Question 12: Streaming Data Handling
+
+**Question:** The answer from the LLM is streamed. What are the different ways to handle this on the frontend, and which one is most scalable?
+
+**Answer:**
+There are three common approaches:
+
+**Polling**: The client repeatedly asks the server for updates (e.g., every second). This is inefficient and doesn't scale well due to the high number of unnecessary requests, especially with billions of users.
+
+**WebSockets**: Provides a full-duplex (two-way) communication channel. While powerful, it has more overhead and complexity than needed for a one-way stream from server to client.
+
+**Server-Sent Events (SSE)**: A native browser API that allows the server to push text-based events to the client over a single, long-lived HTTP connection. This is the most scalable and efficient choice for this use case, as it's lightweight, simple to implement, and designed specifically for one-way streaming from server to client.
+
+**Comparison of Approaches:**
+
+**1. Polling:**
+
+```javascript
+// ❌ Inefficient polling approach
+const pollForUpdates = async conversationId => {
+  const pollInterval = setInterval(async () => {
+    try {
+      const response = await fetch(
+        `/api/conversations/${conversationId}/status`
+      );
+      const data = await response.json();
+
+      if (data.hasNewData) {
+        const newData = await fetch(
+          `/api/conversations/${conversationId}/latest`
+        );
+        updateUI(await newData.json());
+      }
+    } catch (error) {
+      console.error('Polling error:', error);
+    }
+  }, 1000); // Poll every second
+
+  return () => clearInterval(pollInterval);
+};
+
+// Problems with polling:
+const pollingProblems = {
+  inefficiency: 'Unnecessary requests when no updates',
+  latency: 'Up to 1 second delay for updates',
+  serverLoad: 'High number of requests',
+  batteryDrain: 'Continuous network activity on mobile',
+};
+```
+
+**2. WebSockets:**
+
+```javascript
+// WebSocket implementation
+const useWebSocket = url => {
+  const [socket, setSocket] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    const ws = new WebSocket(url);
+
+    ws.onopen = () => {
+      setIsConnected(true);
+      setSocket(ws);
+    };
+
+    ws.onmessage = event => {
+      const data = JSON.parse(event.data);
+      handleStreamData(data);
+    };
+
+    ws.onclose = () => {
+      setIsConnected(false);
+      setSocket(null);
+    };
+
+    ws.onerror = error => {
+      console.error('WebSocket error:', error);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [url]);
+
+  return { socket, isConnected };
+};
+
+// WebSocket pros and cons
+const webSocketAnalysis = {
+  pros: [
+    'Full-duplex communication',
+    'Low latency',
+    'Efficient for real-time apps',
+  ],
+  cons: [
+    'Complex connection management',
+    'Firewall/proxy issues',
+    'Overkill for one-way streaming',
+    'Higher resource usage',
+  ],
+};
+```
+
+**3. Server-Sent Events (SSE) - Recommended:**
+
+```javascript
+// ✅ Optimal SSE implementation
+const useServerSentEvents = url => {
+  const [eventSource, setEventSource] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    const es = new EventSource(url);
+
+    es.onopen = () => {
+      setIsConnected(true);
+      setEventSource(es);
+    };
+
+    es.onmessage = event => {
+      try {
+        const data = JSON.parse(event.data);
+        handleStreamChunk(data);
+      } catch (error) {
+        console.error('Error parsing SSE data:', error);
+      }
+    };
+
+    es.onerror = error => {
+      console.error('SSE error:', error);
+      setIsConnected(false);
+    };
+
+    return () => {
+      es.close();
+    };
+  }, [url]);
+
+  return { eventSource, isConnected };
+};
+
+// SSE benefits
+const sseBenefits = {
+  efficiency: 'Single HTTP connection',
+  simplicity: 'Native browser API',
+  reliability: 'Automatic reconnection',
+  scalability: 'Low server overhead',
+  compatibility: 'Works through firewalls/proxies',
+};
+```
+
+**Complete Chat Implementation:**
+
+```javascript
+// Chat component with SSE
+const ChatComponent = ({ conversationId }) => {
+  const [messages, setMessages] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
+
+  // SSE for receiving AI responses
+  useEffect(() => {
+    const eventSource = new EventSource(
+      `/api/conversations/${conversationId}/stream`
+    );
+
+    eventSource.onmessage = event => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === 'chunk') {
+        setMessages(prev => appendChunkToLastMessage(prev, data.content));
+      } else if (data.type === 'complete') {
+        setIsStreaming(false);
+      }
+    };
+
+    return () => eventSource.close();
+  }, [conversationId]);
+
+  const sendMessage = async () => {
+    if (!currentMessage.trim()) return;
+
+    // Add user message
+    const userMessage = {
+      id: Date.now(),
+      type: 'user',
+      content: currentMessage,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setCurrentMessage('');
+    setIsStreaming(true);
+
+    // Send to server
+    try {
+      await fetch(`/api/conversations/${conversationId}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: userMessage.content }),
+      });
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      setIsStreaming(false);
+    }
+  };
+
+  return (
+    <div className="chat-container">
+      <div className="messages">
+        {messages.map(message => (
+          <MessageComponent key={message.id} message={message} />
+        ))}
+        {isStreaming && <TypingIndicator />}
+      </div>
+      <div className="input-area">
+        <input
+          value={currentMessage}
+          onChange={e => setCurrentMessage(e.target.value)}
+          onKeyPress={e => e.key === 'Enter' && sendMessage()}
+          disabled={isStreaming}
+        />
+        <button onClick={sendMessage} disabled={isStreaming}>
+          Send
+        </button>
+      </div>
+    </div>
+  );
+};
+```
+
+---
+
+## Question 13: Frontend SSE Data Handling
+
+**Question:** How does the frontend handle incoming data from an SSE connection?
+
+**Answer:**
+You create a new EventSource object pointing to the server's endpoint. You then attach an event listener (e.g., onmessage). Every time the server sends a new chunk of data, this callback is fired. The frontend then takes that data payload and updates its state (e.g., appends the new chunk to the current AI reply in the conversation array), triggering a re-render of the UI.
+
+**SSE Connection Setup:**
+
+```javascript
+// Basic SSE connection
+const setupSSEConnection = conversationId => {
+  const eventSource = new EventSource(
+    `/api/conversations/${conversationId}/stream`
+  );
+
+  // Handle incoming messages
+  eventSource.onmessage = event => {
+    const data = JSON.parse(event.data);
+    handleStreamData(data);
+  };
+
+  // Handle connection events
+  eventSource.onopen = () => {
+    console.log('SSE connection opened');
+  };
+
+  eventSource.onerror = error => {
+    console.error('SSE connection error:', error);
+  };
+
+  return eventSource;
+};
+```
+
+**Data Processing and State Updates:**
+
+```javascript
+// Handle different types of stream data
+const handleStreamData = data => {
+  switch (data.type) {
+    case 'chunk':
+      // Append chunk to current AI message
+      appendChunkToMessage(data.content, data.messageId);
+      break;
+
+    case 'message_start':
+      // Start new AI message
+      createNewAIMessage(data.messageId);
+      break;
+
+    case 'message_complete':
+      // Mark message as complete
+      completeAIMessage(data.messageId);
+      break;
+
+    case 'error':
+      // Handle streaming error
+      handleStreamingError(data.error);
+      break;
+  }
+};
+
+// State update functions
+const appendChunkToMessage = (chunk, messageId) => {
+  setMessages(prevMessages =>
+    prevMessages.map(message =>
+      message.id === messageId
+        ? { ...message, content: message.content + chunk }
+        : message
+    )
+  );
+};
+
+const createNewAIMessage = messageId => {
+  const newMessage = {
+    id: messageId,
+    type: 'assistant',
+    content: '',
+    timestamp: new Date(),
+    status: 'streaming',
+  };
+
+  setMessages(prevMessages => [...prevMessages, newMessage]);
+};
+
+const completeAIMessage = messageId => {
+  setMessages(prevMessages =>
+    prevMessages.map(message =>
+      message.id === messageId ? { ...message, status: 'completed' } : message
+    )
+  );
+};
+```
+
+**React Hook Implementation:**
+
+```javascript
+// Custom hook for SSE
+const useSSE = (url, options = {}) => {
+  const [data, setData] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!url) return;
+
+    const eventSource = new EventSource(url);
+
+    eventSource.onopen = () => {
+      setIsConnected(true);
+      setError(null);
+    };
+
+    eventSource.onmessage = event => {
+      try {
+        const parsedData = JSON.parse(event.data);
+        setData(parsedData);
+
+        // Call custom handler if provided
+        if (options.onMessage) {
+          options.onMessage(parsedData);
+        }
+      } catch (err) {
+        console.error('Error parsing SSE data:', err);
+        setError(err);
+      }
+    };
+
+    eventSource.onerror = err => {
+      console.error('SSE error:', err);
+      setError(err);
+      setIsConnected(false);
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [url, options.onMessage]);
+
+  return { data, isConnected, error };
+};
+
+// Usage in component
+const ChatComponent = ({ conversationId }) => {
+  const [messages, setMessages] = useState([]);
+
+  const { isConnected, error } = useSSE(
+    `/api/conversations/${conversationId}/stream`,
+    {
+      onMessage: data => {
+        if (data.type === 'chunk') {
+          setMessages(prev =>
+            prev.map(msg =>
+              msg.id === data.messageId
+                ? { ...msg, content: msg.content + data.content }
+                : msg
+            )
+          );
+        }
+      },
+    }
+  );
+
+  return (
+    <div>
+      <div>Connection: {isConnected ? 'Connected' : 'Disconnected'}</div>
+      {error && <div>Error: {error.message}</div>}
+      {/* Render messages */}
+    </div>
+  );
+};
+```
+
+**Error Handling and Reconnection:**
+
+```javascript
+// Robust SSE implementation with reconnection
+const useRobustSSE = url => {
+  const [eventSource, setEventSource] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [reconnectAttempts, setReconnectAttempts] = useState(0);
+
+  const maxReconnectAttempts = 5;
+  const reconnectDelay = 1000; // 1 second
+
+  const connect = useCallback(() => {
+    const es = new EventSource(url);
+
+    es.onopen = () => {
+      setIsConnected(true);
+      setReconnectAttempts(0);
+    };
+
+    es.onmessage = event => {
+      const data = JSON.parse(event.data);
+      handleStreamData(data);
+    };
+
+    es.onerror = () => {
+      setIsConnected(false);
+      es.close();
+
+      if (reconnectAttempts < maxReconnectAttempts) {
+        setTimeout(
+          () => {
+            setReconnectAttempts(prev => prev + 1);
+            connect();
+          },
+          reconnectDelay * Math.pow(2, reconnectAttempts)
+        ); // Exponential backoff
+      }
+    };
+
+    setEventSource(es);
+  }, [url, reconnectAttempts]);
+
+  useEffect(() => {
+    connect();
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+  }, [connect]);
+
+  return { isConnected, reconnectAttempts };
+};
+```
+
+**Performance Optimization:**
+
+```javascript
+// Optimized message updates
+const useOptimizedMessages = () => {
+  const [messages, setMessages] = useState([]);
+
+  // Use useCallback to prevent unnecessary re-renders
+  const appendChunk = useCallback((messageId, chunk) => {
+    setMessages(prev =>
+      prev.map(msg =>
+        msg.id === messageId ? { ...msg, content: msg.content + chunk } : msg
+      )
+    );
+  }, []);
+
+  // Batch updates for better performance
+  const batchUpdate = useCallback(updates => {
+    setMessages(prev => {
+      let newMessages = [...prev];
+
+      updates.forEach(update => {
+        const index = newMessages.findIndex(msg => msg.id === update.messageId);
+        if (index !== -1) {
+          newMessages[index] = {
+            ...newMessages[index],
+            ...update.changes,
+          };
+        }
+      });
+
+      return newMessages;
+    });
+  }, []);
+
+  return { messages, appendChunk, batchUpdate };
+};
+```
