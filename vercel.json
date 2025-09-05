@@ -1,13 +1,7 @@
 {
-    "buildCommand": "npm run build-storybook",
-    "outputDirectory": "storybook-static",
-    "framework": null,
+    "framework": "nextjs",
+    "buildCommand": "npm run build",
+    "outputDirectory": ".next",
     "installCommand": "npm install",
-    "devCommand": "npm run storybook",
-    "rewrites": [
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
-        }
-    ]
+    "devCommand": "npm run dev"
 }
