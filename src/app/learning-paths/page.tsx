@@ -111,14 +111,6 @@ export default function LearningPathsPage() {
 
   const isCardCollapsed = (pathId: string) => collapsedCards.has(pathId);
 
-  const collapseAllCards = () => {
-    setCollapsedCards(new Set(filteredPaths.map(path => path.id)));
-  };
-
-  const expandAllCards = () => {
-    setCollapsedCards(new Set());
-  };
-
   return (
     <div className="min-h-screen bg-background py-4 sm:py-6 lg:py-8">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
@@ -150,22 +142,6 @@ export default function LearningPathsPage() {
             >
               🚀 Enhanced Learning Path (Interactive)
             </Link>
-          </div>
-
-          {/* Card Management Buttons */}
-          <div className="mt-4 flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4 px-4">
-            <button
-              onClick={collapseAllCards}
-              className="bg-transparent border-2 border-orange-600 text-orange-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-orange-600 hover:text-white hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
-            >
-              📁 Collapse All Cards
-            </button>
-            <button
-              onClick={expandAllCards}
-              className="bg-transparent border-2 border-teal-600 text-teal-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-teal-600 hover:text-white hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
-            >
-              📂 Expand All Cards
-            </button>
           </div>
 
           {/* Mobile Toggle Buttons - Hidden on desktop */}
