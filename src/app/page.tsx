@@ -149,11 +149,11 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link
-                href="/practice/fundamentals"
+                href="/learning-paths"
                 className="inline-flex items-center px-8 py-4 bg-white text-blue-600 rounded-xl hover:bg-blue-50 transition-colors font-semibold text-lg focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-50"
-                aria-label="Start practicing frontend development fundamentals"
+                aria-label="Start learning frontend development with structured paths"
               >
-                🚀 Start Practicing
+                🚀 Start Learning
               </Link>
               <Link
                 href="/learning-paths"

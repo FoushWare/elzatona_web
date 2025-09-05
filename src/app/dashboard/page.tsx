@@ -172,10 +172,10 @@ export default function DashboardPage() {
                 🚀 Sign In & Start Learning
               </Link>
               <Link
-                href="/practice/fundamentals"
+                href="/learning-paths"
                 className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-blue-600 text-blue-600 dark:text-blue-400 font-bold rounded-xl transition-all duration-200 hover:scale-105 hover:bg-blue-50 dark:hover:bg-gray-700"
               >
-                📚 Explore Practice Questions
+                📚 Start Learning
               </Link>
             </div>
           </div>
