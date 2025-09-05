@@ -181,16 +181,26 @@ export async function GET(
 
     console.log('Loaded questions count:', questions.length);
 
-    // Group questions (for now, put all in one group)
+    // Group questions into groups of 20
+    const questionsPerGroup = 20;
+    const groups = [];
+
+    for (let i = 0; i < questions.length; i += questionsPerGroup) {
+      const groupQuestions = questions.slice(i, i + questionsPerGroup);
+      const groupNumber = Math.floor(i / questionsPerGroup) + 1;
+      const startQuestion = i + 1;
+      const endQuestion = Math.min(i + questionsPerGroup, questions.length);
+
+      groups.push({
+        id: `group-${groupNumber}`,
+        title: `Questions ${startQuestion}-${endQuestion} (${groupQuestions.length} questions)`,
+        questions: groupQuestions,
+        totalQuestions: groupQuestions.length,
+      });
+    }
+
     const questionsData: QuestionsData = {
-      groups: [
-        {
-          id: 'group-1',
-          title: `All Questions (${questions.length})`,
-          questions: questions,
-          totalQuestions: questions.length,
-        },
-      ],
+      groups: groups,
       totalQuestions: questions.length,
     };
 
