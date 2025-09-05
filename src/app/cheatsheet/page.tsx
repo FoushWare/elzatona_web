@@ -701,10 +701,10 @@ export default function CheatSheetPage() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
-                href="/practice/fundamentals"
+                href="/learning-paths"
                 className="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-200 transform hover:scale-105 shadow-lg"
               >
-                Practice Fundamentals
+                Start Learning
               </Link>
               <Link
                 href="/learning-paths"
