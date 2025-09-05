@@ -1807,7 +1807,6 @@ console.log(obj);
 
 **Explanation:** If you have two keys with the same name, the key will be replaced. It will still be in its first position, but with the last specified value.
 
-
 ---
 
 ## Question 66
@@ -1818,7 +1817,7 @@ console.log(obj);
 const person = { name: 'Lydia' };
 
 function sayHi(age) {
-  return \`${this.name} is ${age}\`;
+return \`${this.name} is ${age}\`;
 }
 
 console.log(sayHi.call(person, 21));
@@ -1835,7 +1834,6 @@ console.log(sayHi.bind(person, 21));
 **Explanation:** With both, we can pass the object to which we want the \`this\` keyword to refer to. However, \`.call\` is also _executed immediately_!
 
 \`.bind.\` returns a _copy_ of the function, but with a bound context! It is not executed immediately.
-
 
 ---
 
@@ -1862,7 +1860,6 @@ console.log(numbers);
 
 depending on where you run it (it's different for every browser, node, etc.)
 
-
 ---
 
 ## Question 68
@@ -1871,15 +1868,15 @@ depending on where you run it (it's different for every browser, node, etc.)
 
 \`\`\`javascript
 (() => {
-  let x, y;
-  try {
-    throw new Error();
-  } catch (x) {
-    (x = 1), (y = 2);
-    console.log(x);
-  }
-  console.log(x);
-  console.log(y);
+let x, y;
+try {
+throw new Error();
+} catch (x) {
+(x = 1), (y = 2);
+console.log(x);
+}
+console.log(x);
+console.log(y);
 })();
 \`\`\`
 
@@ -1896,7 +1893,6 @@ Later, we set this block-scoped variable equal to \`1\`, and set the value of th
 
 Outside of the \`catch\` block, \`x\` is still \`undefined\`, and \`y\` is \`2\`. When we want to \`console.log(x)\` outside of the \`catch\` block, it returns \`undefined\`, and \`y\` returns \`2\`.
 
-
 ---
 
 ## Question 69
@@ -1905,10 +1901,10 @@ Outside of the \`catch\` block, \`x\` is still \`undefined\`, and \`y\` is \`2\`
 
 \`\`\`javascript
 [[0, 1], [2, 3]].reduce(
-  (acc, cur) => {
-    return acc.concat(cur);
-  },
-  [1, 2],
+(acc, cur) => {
+return acc.concat(cur);
+},
+[1, 2],
 );
 \`\`\`
 
@@ -1922,7 +1918,6 @@ Outside of the \`catch\` block, \`x\` is still \`undefined\`, and \`y\` is \`2\`
 **Explanation:** \`[1, 2]\` is our initial value. This is the value we start with, and the value of the very first \`acc\`. During the first round, \`acc\` is \`[1, 2]\`, and \`cur\` is \`[0, 1]\`. We concatenate them, which results in \`[1, 2, 0, 1]\`.
 
 Then, \`acc\` is \`[1, 2, 0, 1]\`, and \`cur\` is \`[2, 3]\`. We concatenate them, and get \`[1, 2, 0, 1, 2, 3]\`.
-
 
 ---
 
@@ -1949,7 +1944,6 @@ Then, \`acc\` is \`[1, 2, 0, 1]\`, and \`cur\` is \`[2, 3]\`. We concatenate the
 
 \`1\` is truthy. \`!1\` returns \`false\`. \`!false\` returns \`true\`.
 
-
 ---
 
 ## Question 71
@@ -1958,10 +1952,10 @@ Then, \`acc\` is \`[1, 2, 0, 1]\`, and \`cur\` is \`[2, 3]\`. We concatenate the
 
 \`\`\`javascript
 const user = {
-  email: 'my@email.com',
-  updateEmail: email => {
-    this.email = email
-  }
+email: 'my@email.com',
+updateEmail: email => {
+this.email = email
+}
 }
 
 user.updateEmail('new@email.com')
@@ -1977,7 +1971,6 @@ console.log(user.email)
 
 **Explanation:** The \`updateEmail\` function is an arrow function, and is not bound to the \`user\` object. This means that the \`this\` keyword is not referring to the \`user\` object, but refers to the global scope in this case. The value of \`email\` within the \`user\` object does not get updated. When logging the value of \`user.email\`, the original value of \`my@email.com\` gets returned.
 
-
 ---
 
 ## Question 72
@@ -1991,14 +1984,14 @@ const promise3 = Promise.reject('Third');
 const promise4 = Promise.resolve('Fourth');
 
 const runPromises = async () => {
-  const res1 = await Promise.all([promise1, promise2]);
-  const res2 = await Promise.all([promise3, promise4]);
-  return [res1, res2];
+const res1 = await Promise.all([promise1, promise2]);
+const res2 = await Promise.all([promise3, promise4]);
+return [res1, res2];
 };
 
 runPromises()
-  .then(res => console.log(res))
-  .catch(err => console.log(err));
+.then(res => console.log(res))
+.catch(err => console.log(err));
 \`\`\`
 
 **A:** \`[['First', 'Second'], ['Fourth']]\`  
@@ -2010,7 +2003,6 @@ runPromises()
 
 **Explanation:** The \`Promise.all\` method runs the passed promises in parallel. If one promise fails, the \`Promise.all\` method _rejects_ with the value of the rejected promise. In this case, \`promise3\` is rejected with the value \`"Third"\`. We're catching the rejected value in the chained \`catch\` method on the \`runPromises\` invocation to catch any errors within the \`runPromises\` function. Only \`"Third"\` gets logged, since \`promise3\` is rejected with this value.
 
-
 ---
 
 ## Question 73
@@ -2021,16 +2013,16 @@ runPromises()
 const myPromise = Promise.resolve(Promise.resolve('Promise!'));
 
 function funcOne() {
-  myPromise.then(res => res).then(res => console.log(res));
-  setTimeout(() => console.log('Timeout!'), 0);
-  console.log('Last line!');
+myPromise.then(res => res).then(res => console.log(res));
+setTimeout(() => console.log('Timeout!'), 0);
+console.log('Last line!');
 }
 
 async function funcTwo() {
-  const res = await myPromise;
-  console.log(await res);
-  setTimeout(() => console.log('Timeout!'), 0);
-  console.log('Last line!');
+const res = await myPromise;
+console.log(await res);
+setTimeout(() => console.log('Timeout!'), 0);
+console.log('Last line!');
 }
 
 funcOne();
@@ -2049,7 +2041,6 @@ funcTwo();
 Then, we invoke \`funcTwo\`. The variable \`res\` gets the value of the awaited \`myPromise\` promise. Since we use \`await\`, we pause the execution of the function until the promise gets resolved. The \`res\` variable now has the \`"Promise!"\` value. \`console.log(await res)\` logs \`"Promise!"\`. The next line is the \`setTimeout\` function, which is an _asynchronous_ operation. The code continues running and doesn't wait for the timeout. The next line is \`console.log('Last line!')\`, which gets logged immediately.
 
 After the \`setTimeout\` timer in both functions expires, \`"Timeout!"\` gets logged.
-
 
 ---
 
@@ -2079,7 +2070,6 @@ console.log(isNaN(age));
 
 With the \`isNaN\` method, you can check if the value is not a number. \`name\` is not a number, so \`isNaN(name)\` returns \`true\`. \`age\` is a number, so \`isNaN(age)\` returns \`false\`.
 
-
 ---
 
 ## Question 75
@@ -2090,8 +2080,8 @@ With the \`isNaN\` method, you can check if the value is not a number. \`name\` 
 const randomValue = 21;
 
 function getInfo() {
-  console.log(typeof randomValue);
-  const randomValue = 'Lydia Hallie';
+console.log(typeof randomValue);
+const randomValue = 'Lydia Hallie';
 }
 
 getInfo();
@@ -2106,7 +2096,6 @@ getInfo();
 
 **Explanation:** Variables declared with the \`const\` keyword are not accessible before they are initialized, this is called the _temporal dead zone_. In the \`getInfo\` function, on the first line, we try to access the \`randomValue\` variable before it is declared. The \`const\` variable is not accessible before its declaration, this throws a \`ReferenceError\`. If we had used \`var\` instead of \`const\`, the variable would have been hoisted.
 
-
 ---
 
 ## Question 76
@@ -2115,10 +2104,10 @@ getInfo();
 
 \`\`\`javascript
 function createMember({ email, address = {} }) {
-  return {
-    email,
-    address: address ? address : null
-  };
+return {
+email,
+address: address ? address : null
+};
 }
 
 const member = createMember({ email: 'my@email.com' });
@@ -2134,7 +2123,6 @@ console.log(member);
 
 **Explanation:** The default value of \`address\` is an empty object \`{}\`. When we set the variable \`member\` equal to the object returned by the \`createMember\` function, we didn't pass a value for the address, which means that the value of the address is the default empty object \`{}\`. An empty object is a truthy value, which means that the condition of the \`address ? address : null\` conditional returns \`true\`. The value of the address is the empty object \`{}\`.
 
-
 ---
 
 ## Question 77
@@ -2146,9 +2134,9 @@ let randomValue = { name: 'Lydia' };
 randomValue = 23;
 
 if (!typeof randomValue === 'string') {
-  console.log("It's not a string!");
+console.log("It's not a string!");
 } else {
-  console.log("Yay it's a string!");
+console.log("Yay it's a string!");
 }
 \`\`\`
 
@@ -2163,7 +2151,6 @@ if (!typeof randomValue === 'string') {
 
 \`!typeof randomValue === "string"\` always returns false, since we're actually checking \`false === "string"\`. Since the condition returned \`false\`, the code block of the \`else\` statement gets run, and \`Yay it's a string!\` gets logged.
 
-
 ---
 
 ## Question 78
@@ -2174,16 +2161,16 @@ if (!typeof randomValue === 'string') {
 const myPromise = Promise.resolve(Promise.resolve('Promise!'));
 
 function funcOne() {
-  myPromise.then(res => res).then(res => console.log(res));
-  setTimeout(() => console.log('Timeout!'), 0);
-  console.log('Last line!');
+myPromise.then(res => res).then(res => console.log(res));
+setTimeout(() => console.log('Timeout!'), 0);
+console.log('Last line!');
 }
 
 async function funcTwo() {
-  const res = await myPromise;
-  console.log(await res);
-  setTimeout(() => console.log('Timeout!'), 0);
-  console.log('Last line!');
+const res = await myPromise;
+console.log(await res);
+setTimeout(() => console.log('Timeout!'), 0);
+console.log('Last line!');
 }
 
 funcOne();
@@ -2202,7 +2189,6 @@ funcTwo();
 Then, we invoke \`funcTwo\`. The variable \`res\` gets the value of the awaited \`myPromise\` promise. Since we use \`await\`, we pause the execution of the function until the promise gets resolved. The \`res\` variable now has the \`"Promise!"\` value. \`console.log(await res)\` logs \`"Promise!"\`. The next line is the \`setTimeout\` function, which is an _asynchronous_ operation. The code continues running and doesn't wait for the timeout. The next line is \`console.log('Last line!')\`, which gets logged immediately.
 
 After the \`setTimeout\` timer in both functions expires, \`"Timeout!"\` gets logged.
-
 
 ---
 
@@ -2232,7 +2218,6 @@ console.log(isNaN(age));
 
 With the \`isNaN\` method, you can check if the value is not a number. \`name\` is not a number, so \`isNaN(name)\` returns \`true\`. \`age\` is a number, so \`isNaN(age)\` returns \`false\`.
 
-
 ---
 
 ## Question 80
@@ -2243,8 +2228,8 @@ With the \`isNaN\` method, you can check if the value is not a number. \`name\` 
 const randomValue = 21;
 
 function getInfo() {
-  console.log(typeof randomValue);
-  const randomValue = 'Lydia Hallie';
+console.log(typeof randomValue);
+const randomValue = 'Lydia Hallie';
 }
 
 getInfo();
@@ -2259,7 +2244,6 @@ getInfo();
 
 **Explanation:** Variables declared with the \`const\` keyword are not accessible before they are initialized, this is called the _temporal dead zone_. In the \`getInfo\` function, on the first line, we try to access the \`randomValue\` variable before it is declared. The \`const\` variable is not accessible before its declaration, this throws a \`ReferenceError\`. If we had used \`var\` instead of \`const\`, the variable would have been hoisted.
 
-
 ---
 
 ## Question 81: JavaScript Hoisting with var and let
@@ -2268,10 +2252,10 @@ getInfo();
 
 \`\`\`javascript
 function sayHi() {
-  console.log(name);
-  console.log(age);
-  var name = 'Lydia';
-  let age = 21;
+console.log(name);
+console.log(age);
+var name = 'Lydia';
+let age = 21;
 }
 
 sayHi();
@@ -2296,11 +2280,11 @@ Variables with the \`let\` keyword (and \`const\`) are hoisted, but unlike \`var
 
 \`\`\`javascript
 for (var i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 1);
+setTimeout(() => console.log(i), 1);
 }
 
 for (let i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 1);
+setTimeout(() => console.log(i), 1);
 }
 \`\`\`
 
@@ -2322,11 +2306,11 @@ In the second loop, the variable \`i\` was declared using the \`let\` keyword: v
 
 \`\`\`javascript
 const shape = {
-  radius: 10,
-  diameter() {
-    return this.radius * 2;
-  },
-  perimeter: () => 2 * Math.PI * this.radius,
+radius: 10,
+diameter() {
+return this.radius _ 2;
+},
+perimeter: () => 2 _ Math.PI \* this.radius,
 };
 
 console.log(shape.diameter());
@@ -2344,7 +2328,7 @@ console.log(shape.perimeter());
 
 With arrow functions, the \`this\` keyword refers to its current surrounding scope, unlike regular functions! This means that when we call \`perimeter\`, it doesn't refer to the shape object, but to its surrounding scope (window for example).
 
-Since there is no value \`radius\` in the scope of the arrow function, \`this.radius\` returns \`undefined\` which, when multiplied by \`2 * Math.PI\`, results in \`NaN\`.
+Since there is no value \`radius\` in the scope of the arrow function, \`this.radius\` returns \`undefined\` which, when multiplied by \`2 \* Math.PI\`, results in \`NaN\`.
 
 ---
 
@@ -2375,12 +2359,12 @@ The string \`'Lydia'\` is a truthy value. What we're actually asking, is "Is thi
 
 \`\`\`javascript
 const bird = {
-  size: 'small',
+size: 'small',
 };
 
 const mouse = {
-  name: 'Mickey',
-  small: true,
+name: 'Mickey',
+small: true,
 };
 \`\`\`
 
@@ -2436,8 +2420,8 @@ When you change one object, you change all of them.
 
 \`\`\`javascript
 function Person(firstName, lastName) {
-  this.firstName = firstName;
-  this.lastName = lastName;
+this.firstName = firstName;
+this.lastName = lastName;
 }
 
 const lydia = new Person('Lydia', 'Hallie');
@@ -2466,14 +2450,14 @@ We said that \`this.firstName\` equals \`"Sarah"\` and \`this.lastName\` equals 
 
 \`\`\`javascript
 class Chameleon {
-  static colorChange(newColor) {
-    this.newColor = newColor;
-    return this.newColor;
-  }
+static colorChange(newColor) {
+this.newColor = newColor;
+return this.newColor;
+}
 
-  constructor({ newColor = 'green' } = {}) {
-    this.newColor = newColor;
-  }
+constructor({ newColor = 'green' } = {}) {
+this.newColor = newColor;
+}
 }
 
 const freddie = new Chameleon({ newColor: 'purple' });
@@ -2524,13 +2508,13 @@ In order to avoid this, we can use \`"use strict"\`. This makes sure that you ha
 
 \`\`\`javascript
 function Person(firstName, lastName) {
-  this.firstName = firstName;
-  this.lastName = lastName;
+this.firstName = firstName;
+this.lastName = lastName;
 }
 
 const member = new Person('Lydia', 'Hallie');
 Person.getFullName = function () {
-  return \`${this.firstName} ${this.lastName}\`;
+return \`${this.firstName} ${this.lastName}\`;
 };
 
 console.log(member.getFullName());
@@ -2549,7 +2533,7 @@ If you want a method to be available to all object instances, you have to add it
 
 \`\`\`js
 Person.prototype.getFullName = function () {
-  return \`${this.firstName} ${this.lastName}\`;
+return \`${this.firstName} ${this.lastName}\`;
 };
 \`\`\`
 
@@ -2764,6 +2748,665 @@ undefined;
 
 ---
 
+## Question 102: HTML Basics - What is HTML?
+
+**Question:** What is HTML?
+
+**Answer:** HTML stands for HyperText Markup Language. It is the standard language used to create and design documents on the World Wide Web. HTML structures web content and allows the inclusion of text, images, links, and other elements.
+
+---
+
+## Question 103: HTML Tags
+
+**Question:** What are HTML tags?
+
+**Answer:** HTML tags are the building blocks of HTML. They are used to create elements and structure content on a web page. Tags are enclosed in angle brackets, For example, `<p>` for a paragraph. Most tags come in pairs: an opening tag `<p>` and a closing tag `</p>`.
+
+---
+
+## Question 104: HTML Document Structure
+
+**Question:** What is the basic structure of an HTML document?
+
+**Answer:** An HTML document has a defined structure that includes the following elements:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page Title</title>
+  </head>
+  <body>
+    <!-- Content goes here -->
+  </body>
+</html>
+```
+
+- `<!DOCTYPE html>`: Declares the document type and version of HTML.
+- `<html>`: The root element of the document.
+- `<head>`: Contains meta-information about the document, such as the title and links to stylesheets.
+- `<title>`: Specifies the title of the document, displayed in the browser's title bar.
+- `<body>`: Contains the content of the document, such as text, images, and other elements.
+
+---
+
+## Question 105: HTML Elements vs Tags
+
+**Question:** What is the difference between an element and a tag in HTML?
+
+**Answer:** 
+- **Tag**: A tag is a part of HTML syntax used to define elements. Tags are enclosed in angle brackets, e.g., `<div>`.
+- **Element**: An element consists of a start tag, content, and an end tag. For example, `<p>This is a paragraph.</p>` is a paragraph element.
+
+---
+
+## Question 106: HTML Attributes
+
+**Question:** What are attributes in HTML?
+
+**Answer:** Attributes provide additional information about HTML elements. They are included within the opening tag and usually come in name-value pairs, like `name="value"`.
+
+For example, in `<a href="https://www.example.com/">Link</a>`, `href` is an attribute specifying the URL of the link.
+
+---
+
+## Question 107: Creating Hyperlinks
+
+**Question:** How do you create a hyperlink in HTML?
+
+**Answer:** To create a hyperlink, use the `<a>` (anchor) tag with the `href` attribute specifying the URL:
+
+```html
+<a href="https://www.example.com/">Visit Example</a>
+```
+
+This creates a clickable link labeled "Visit Example" that directs to https://www.example.com/
+
+---
+
+## Question 108: HTML Image Tag
+
+**Question:** What is the purpose of the `<img>` tag in HTML?
+
+**Answer:** The `<img>` tag is used to embed images in an HTML document. It is a self-closing tag and requires the `src` attribute to specify the image source:
+
+```html
+<img src="image.jpg" alt="Description of image">
+```
+
+- `src`: Specifies the path to the image file.
+- `alt`: Provides alternative text for the image, which is displayed if the image cannot be loaded.
+
+---
+
+## Question 109: Block vs Inline Elements
+
+**Question:** What is the difference between block-level and inline elements in HTML?
+
+**Answer:** 
+- **Block-level elements**: These elements start on a new line and take up the full width available. Examples include `<div>`, `<p>`, and `<h1>` to `<h6>`.
+- **Inline elements**: These elements do not start on a new line and only take up as much width as necessary. Examples include `<span>`, `<a>`, and `<img>`.
+
+---
+
+## Question 110: HTML Lists
+
+**Question:** How do you create a list in HTML?
+
+**Answer:** HTML supports two types of lists:
+
+**Ordered List**: Creates a numbered list using the `<ol>` tag.
+```html
+<ol>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ol>
+```
+
+**Unordered List**: Creates a bulleted list using the `<ul>` tag.
+```html
+<ul>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ul>
+```
+
+---
+
+## Question 111: HTML Forms
+
+**Question:** What is the `<form>` tag used for in HTML?
+
+**Answer:** The `<form>` tag is used to create an HTML form for user input. It can contain various form elements like text fields, checkboxes, radio buttons, and submit buttons.
+
+```html
+<form action="/submit" method="post">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name">
+  <input type="submit" value="Submit">
+</form>
+```
+
+---
+
+## Question 112: HTML Line Break
+
+**Question:** What is the purpose of the `<br>` tag?
+
+**Answer:** The `<br>` tag inserts a line break in the text, moving the content after the tag to a new line. It's an empty tag and doesn't require a closing tag.
+
+---
+
+## Question 113: Links in New Tab
+
+**Question:** How do you create a hyperlink that opens in a new tab?
+
+**Answer:** To open a link in a new tab, use the `target` attribute with the value `_blank`:
+
+```html
+<a href="https://www.example.com/" target="_blank">Visit Example</a>
+```
+
+---
+
+## Question 114: HTML Title Tag
+
+**Question:** What is the `<title>` tag used for?
+
+**Answer:** The `<title>` tag defines the title of the HTML document, which appears in the browser's title bar or tab. It's placed within the `<head>` section.
+
+---
+
+## Question 115: HTML Comments
+
+**Question:** How do you add a comment in HTML?
+
+**Answer:** Comments in HTML are added using the following syntax:
+
+```html
+<!-- This is a comment -->
+```
+
+Comments are not displayed in the browser and are used to leave notes or explanations within the code.
+
+---
+
+## Question 116: HTML Meta Tag
+
+**Question:** What is the purpose of the `<meta>` tag?
+
+**Answer:** The `<meta>` tag provides metadata about the HTML document, such as character set, author, description, and keywords. It's placed within the `<head>` section.
+
+---
+
+## Question 117: HTML Tables
+
+**Question:** How do you create a table in HTML?
+
+**Answer:** A table is created using the `<table>` tag, with rows defined by `<tr>` and cells by `<td>`. Headers can be defined using `<th>`.
+
+```html
+<table>
+  <tr>
+    <th>Header 1</th>
+    <th>Header 2</th>
+  </tr>
+  <tr>
+    <td>Data 1</td>
+    <td>Data 2</td>
+  </tr>
+</table>
+```
+
+---
+
+## Question 118: Head vs Body Tags
+
+**Question:** What is the difference between `<head>` and `<body>` tags?
+
+**Answer:** 
+- `<head>`: Contains meta-information about the document, such as the title, character set, and links to stylesheets and scripts.
+- `<body>`: Contains the actual content of the document that is displayed in the browser, such as text, images, and links.
+
+---
+
+## Question 119: Character Encoding
+
+**Question:** How do you specify the character encoding for an HTML document?
+
+**Answer:** The character encoding is specified using a `<meta>` tag within the `<head>` section:
+
+```html
+<meta charset="UTF-8">
+```
+
+---
+
+## Question 120: HTML Strong Tag
+
+**Question:** What is the `<strong>` tag used for?
+
+**Answer:** The `<strong>` tag is used to indicate that the text is of strong importance, typically displayed in bold by browsers.
+
+---
+
+## Question 121: Email Links
+
+**Question:** How do you create an email link in HTML?
+
+**Answer:** To create a link that opens the user's default email client with a new message, use the `mailto:` scheme:
+
+```html
+<a href="mailto:example@example.com">Send Email</a>
+```
+
+---
+
+## Question 122: HTML Emphasis Tag
+
+**Question:** What is the `<em>` tag used for?
+
+**Answer:** The `<em>` tag is used to emphasize text, typically displayed in italics by browsers.
+
+---
+
+## Question 123: HTML Checkboxes
+
+**Question:** How do you create a checkbox in HTML?
+
+**Answer:** A checkbox is created using the `<input>` tag with the `type` attribute set to `checkbox`:
+
+```html
+<input type="checkbox" id="subscribe" name="subscribe">
+<label for="subscribe">Subscribe to newsletter</label>
+```
+
+---
+
+## Question 124: HTML Label Tag
+
+**Question:** What is the purpose of the `<label>` tag?
+
+**Answer:** The `<label>` tag defines a label for an `<input>` element, improving accessibility and usability. Associating a `<label>` with an `<input>` can be done using the `for` attribute, which matches the `id` of the `<input>`.
+
+---
+
+## Question 125: HTML Dropdown Lists
+
+**Question:** How do you create a dropdown list in HTML?
+
+**Answer:** A dropdown list is created using the `<select>` tag, with each option defined by an `<option>` tag:
+
+```html
+<label for="fruits">Choose a fruit:</label>
+<select id="fruits" name="fruits">
+  <option value="apple">Apple</option>
+  <option value="banana">Banana</option>
+  <option value="cherry">Cherry</option>
+</select>
+```
+
+---
+
+## Question 126: HTML Blockquote
+
+**Question:** What is the `<blockquote>` tag used for?
+
+**Answer:** The `<blockquote>` tag is used to define a section that is quoted from another source, typically displayed with indentation by browsers.
+
+---
+
+## Question 127: Semantic HTML Elements
+
+**Question:** What are semantic HTML elements?
+
+**Answer:** Semantic HTML elements clearly describe their meaning in a human- and machine-readable way. Examples include `<article>`, `<section>`, `<header>`, `<footer>`, and `<nav>`. They improve the accessibility and SEO of web pages.
+
+---
+
+## Question 128: HTML5 Video Embedding
+
+**Question:** How do you embed a video in HTML5?
+
+**Answer:** HTML5 provides the `<video>` tag to embed videos:
+
+```html
+<video controls>
+  <source src="video.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+```
+
+- `controls`: Adds video controls like play, pause, and volume.
+- `source`: Specifies the video file and its format.
+
+---
+
+## Question 129: Image Alt Attribute
+
+**Question:** What is the purpose of the alt attribute in the `<img>` tag?
+
+**Answer:** The `alt` attribute provides alternative text for an image, which is displayed if the image cannot be loaded. It also improves accessibility by describing the image to screen readers.
+
+---
+
+## Question 130: HTML Fieldset Tag
+
+**Question:** What is the `<fieldset>` tag used for in HTML forms?
+
+**Answer:** The `<fieldset>` tag is used to group related elements within a form, and the `<legend>` tag can provide a caption for the group:
+
+```html
+<fieldset>
+  <legend>Personal Information</legend>
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name">
+</fieldset>
+```
+
+---
+
+## Question 131: HTML Noscript Tag
+
+**Question:** What is the purpose of the `<noscript>` tag in HTML?
+
+**Answer:** The `<noscript>` tag defines alternative content to be displayed if the user's browser does not support JavaScript or if JavaScript is disabled.
+
+```html
+<noscript>
+  <p>JavaScript is not enabled in your browser.</p>
+</noscript>
+```
+
+---
+
+## Question 132: Including JavaScript Files
+
+**Question:** How do you include a JavaScript file in an HTML document?
+
+**Answer:** Use the `<script>` tag with the `src` attribute to link an external JavaScript file:
+
+```html
+<script src="script.js"></script>
+```
+
+---
+
+## Question 133: Bold vs Strong Tags
+
+**Question:** What is the difference between the `<b>` and `<strong>` tags?
+
+**Answer:** Both tags display text in bold, but `<strong>` indicates that the text is of strong importance, providing semantic meaning, while `<b>` does not convey any extra importance.
+
+---
+
+## Question 134: HTML Textarea
+
+**Question:** How do you create a multi-line text input in an HTML form?
+
+**Answer:** Use the `<textarea>` tag to create a multi-line text input:
+
+```html
+<textarea name="message" rows="4" cols="50"></textarea>
+```
+
+---
+
+## Question 135: Form Action Attribute
+
+**Question:** What is the purpose of the action attribute in an HTML form?
+
+**Answer:** The `action` attribute specifies the URL to which the form data will be submitted when the form is submitted.
+
+```html
+<form action="/submit-form" method="post">
+  <!-- form elements -->
+</form>
+```
+
+---
+
+## Question 136: HTML Ordered Lists
+
+**Question:** How do you create a numbered list in HTML?
+
+**Answer:** Use the `<ol>` (ordered list) tag, with each list item defined by `<li>`:
+
+```html
+<ol>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ol>
+```
+
+---
+
+## Question 137: HTML Base Tag
+
+**Question:** What is the purpose of the `<base>` tag in HTML?
+
+**Answer:** The `<base>` tag specifies the base URL for all relative URLs in a document. It must be included inside the `<head>` section.
+
+```html
+<base href="https://www.example.com/">
+```
+
+---
+
+## Question 138: HTML Definition Lists
+
+**Question:** How do you create a definition list in HTML?
+
+**Answer:** Use the `<dl>` tag for the list, `<dt>` for each term, and `<dd>` for each definition:
+
+```html
+<dl>
+  <dt>HTML</dt>
+  <dd>HyperText Markup Language</dd>
+  <dt>CSS</dt>
+  <dd>Cascading Style Sheets</dd>
+</dl>
+```
+
+---
+
+## Question 139: Form Enctype Attribute
+
+**Question:** What is the purpose of the enctype attribute in an HTML form?
+
+**Answer:** The `enctype` attribute specifies how form data should be encoded when submitting it to the server. It's used with the `method="post"` attribute.
+
+```html
+<form action="/upload" method="post" enctype="multipart/form-data">
+  <!-- form elements -->
+</form>
+```
+
+---
+
+## Question 140: HTML Hidden Input Fields
+
+**Question:** How do you create a hidden input field in an HTML form?
+
+**Answer:** Use `<input type="hidden">` to create a hidden input field that stores data without displaying it to the user:
+
+```html
+<input type="hidden" name="userID" value="12345">
+```
+
+---
+
+## Question 141: HTML Address Tag
+
+**Question:** What is the purpose of the `<address>` tag in HTML?
+
+**Answer:** The `<address>` tag is used to define contact information for the author or owner of a document or article.
+
+```html
+<address>
+  Written by John Doe.<br>
+  Visit us at:<br>
+  Example.com<br>
+  Box 564, Disneyland<br>
+  USA
+</address>
+```
+
+---
+
+## Question 142: HTML5 Canvas Element
+
+**Question:** What is the purpose of the `<canvas>` element in HTML5?
+
+**Answer:** The `<canvas>` element provides a drawable region in the document that can be used to render graphics, such as charts, games, or other visual images, on the fly via scripting (usually JavaScript).
+
+```html
+<canvas id="myCanvas" width="200" height="100"></canvas>
+```
+
+---
+
+## Question 143: Semantic vs Styling Tags
+
+**Question:** What is the difference between `<b>` and `<strong>`, and between `<i>` and `<em>` tags?
+
+**Answer:** The `<b>` and `<i>` tags are used for styling text to be bold and italic respectively, without conveying any extra importance or emphasis. In contrast, `<strong>` and `<em>` not only style the text (bold and italic respectively) but also semantically indicate that the text is of greater importance (`<strong>`) or should be emphasized (`<em>`). This semantic meaning can be beneficial for accessibility and SEO.
+
+---
+
+## Question 144: SVG in HTML
+
+**Question:** How can you include SVG graphics directly in an HTML document?
+
+**Answer:** Scalable Vector Graphics (SVG) can be embedded directly within HTML using the `<svg>` tag. This allows for defining vector-based graphics that can scale without loss of quality.
+
+```html
+<svg width="100" height="100">
+  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+</svg>
+```
+
+---
+
+## Question 145: HTML Data Attributes
+
+**Question:** What are data attributes in HTML, and how are they used?
+
+**Answer:** Data attributes in HTML are custom attributes that start with `data-` and allow you to store extra information on HTML elements. They are often used to embed custom data that can be accessed via JavaScript.
+
+```html
+<div data-user-id="12345" data-role="admin">User Info</div>
+```
+
+In JavaScript, you can access these attributes using the dataset property:
+
+```javascript
+const div = document.querySelector('div');
+console.log(div.dataset.userId); // Outputs: 12345
+console.log(div.dataset.role);   // Outputs: admin
+```
+
+---
+
+## Question 146: HTML Template Tag
+
+**Question:** Explain the purpose of the `<template>` tag in HTML.
+
+**Answer:** The `<template>` tag is used to declare a fragment of HTML that is not to be rendered immediately when the page loads. Instead, it can be instantiated later using JavaScript. This is useful for client-side templating.
+
+```html
+<template id="my-template">
+  <div class="card">
+    <h2></h2>
+    <p></p>
+  </div>
+</template>
+```
+
+JavaScript can then be used to clone and insert the template content into the document.
+
+---
+
+## Question 147: Link Rel Attribute
+
+**Question:** What is the purpose of the rel attribute in a `<link>` tag?
+
+**Answer:** The `rel` attribute specifies the relationship between the current document and the linked resource. For example, `rel="stylesheet"` indicates that the linked file is a CSS stylesheet.
+
+```html
+<link rel="stylesheet" href="styles.css">
+```
+
+---
+
+## Question 148: Multiple Language Versions
+
+**Question:** How do you specify multiple language versions of a webpage?
+
+**Answer:** To provide multiple language versions of a webpage, you can use the `hreflang` attribute in the `<link>` tag to specify the language of an alternate version. This helps search engines understand and serve the correct language version to users.
+
+```html
+<link rel="alternate" href="example.fr.html" hreflang="fr">
+<link rel="alternate" href="example.es.html" hreflang="es">
+```
+
+---
+
+## Question 149: HTML Output Tag
+
+**Question:** What is the purpose of the `<output>` tag in HTML?
+
+**Answer:** The `<output>` tag represents the result of a calculation or user action. It's typically used in conjunction with forms to display the outcome of user interactions.
+
+```html
+<form oninput="result.value=parseInt(a.value)+parseInt(b.value)">
+  <input type="number" id="a" value="0"> +
+  <input type="number" id="b" value="0">
+  = <output name="result" for="a b">0</output>
+</form>
+```
+
+---
+
+## Question 150: Contenteditable Attribute
+
+**Question:** How can you make an HTML element editable in the browser?
+
+**Answer:** To make an HTML element editable directly in the browser, you can set the `contenteditable` attribute to `true`. This allows users to edit the content of the element in place.
+
+```html
+<div contenteditable="true">
+  This is an editable div. Click here to edit the text.
+</div>
+```
+
+---
+
+## Question 151: HTML Datalist Tag
+
+**Question:** What is the purpose of the `<datalist>` tag in HTML?
+
+**Answer:** The `<datalist>` tag is used to provide a list of predefined options to an `<input>` element, typically used to offer autocomplete suggestions.
+
+```html
+<label for="browser">Choose your browser:</label>
+<input list="browsers" id="browser" name="browser">
+<datalist id="browsers">
+  <option value="Chrome">
+  <option value="Firefox">
+  <option value="Safari">
+  <option value="Edge">
+  <option value="Opera">
+</datalist>
+```
+
+When the user starts typing in the input field, the browser will display the options defined in the `<datalist>` that match the current input.
+
+---
+
 ## Question 101: HTML DOCTYPE
 
 **Question:** What does a DOCTYPE do?
@@ -2852,14 +3495,14 @@ However, one perfectly valid use of data attributes, is to add a hook for _end t
 
 All the above-mentioned technologies are key-value storage mechanisms on the client side. They are only able to store values as strings.
 
-|  | `cookie` | `localStorage` | `sessionStorage` |
-| --- | --- | --- | --- |
-| Initiator | Client or server. Server can use `Set-Cookie` header | Client | Client |
-| Expiry | Manually set | Forever | On tab close |
-| Persistent across browser sessions | Depends on whether expiration is set | Yes | No |
-| Sent to server with every HTTP request | Cookies are automatically being sent via `Cookie` header | No | No |
-| Capacity (per domain) | 4kb | 5MB | 5MB |
-| Accessibility | Any window | Any window | Same tab |
+|                                        | `cookie`                                                 | `localStorage` | `sessionStorage` |
+| -------------------------------------- | -------------------------------------------------------- | -------------- | ---------------- |
+| Initiator                              | Client or server. Server can use `Set-Cookie` header     | Client         | Client           |
+| Expiry                                 | Manually set                                             | Forever        | On tab close     |
+| Persistent across browser sessions     | Depends on whether expiration is set                     | Yes            | No               |
+| Sent to server with every HTTP request | Cookies are automatically being sent via `Cookie` header | No             | No               |
+| Capacity (per domain)                  | 4kb                                                      | 5MB            | 5MB              |
+| Accessibility                          | Any window                                               | Any window     | Same tab         |
 
 _Note: If the user decides to clear browsing data via whatever mechanism provided by the browser, this will clear out any `cookie`, `localStorage`, or `sessionStorage` stored. It's important to keep this in mind when designing for local persistance, especially when comparing to alternatives such as server side storing in a database or similar (which of course will persist despite user actions)._
 
