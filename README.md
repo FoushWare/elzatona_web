@@ -2,6 +2,11 @@
 
 A platform for frontend developers to practice coding challenges and prepare for technical interviews. Master HTML, CSS, and JavaScript with hands-on projects and real-world scenarios.
 
+## 🌐 Live Applications
+
+- **Main Website**: [https://great-frontend-ib73ljepe-foushwares-projects.vercel.app](https://great-frontend-ib73ljepe-foushwares-projects.vercel.app)
+- **Storybook (Component Library)**: [https://great-frontend-hub-storybook-e1uw1c7ci-foushwares-projects.vercel.app](https://great-frontend-hub-storybook-e1uw1c7ci-foushwares-projects.vercel.app)
+
 ## ✨ Features
 
 - **Open Access**: No signup required - start practicing immediately
@@ -18,7 +23,7 @@ A platform for frontend developers to practice coding challenges and prepare for
 - **Language**: TypeScript
 - **Styling**: TailwindCSS
 - **Code Editor**: Monaco Editor (planned)
-- **Deployment**: Vercel (planned)
+- **Deployment**: Vercel ✅
 - **Monitoring**: Sentry (planned)
 
 ## 🚀 Getting Started
@@ -122,7 +127,7 @@ src/
 - [ ] Solution comparison view
 - [ ] Responsive design implementation
 - [ ] Dark/light mode toggle
-- [ ] Vercel deployment
+- [x] Vercel deployment ✅
 - [ ] CI/CD pipeline
 - [ ] Monitoring integration
 
