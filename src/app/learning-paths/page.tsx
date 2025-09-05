@@ -13,9 +13,7 @@ export default function LearningPathsPage() {
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   // const [selectedPath, setSelectedPath] = useState<string | null>(null);
-  const [collapsedCards, setCollapsedCards] = useState<Set<string>>(
-    new Set(learningPaths.map(path => path.id))
-  );
+  const [collapsedCards, setCollapsedCards] = useState<Set<string>>(new Set());
 
   const filteredPaths = learningPaths.filter(
     path =>
