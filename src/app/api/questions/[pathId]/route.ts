@@ -74,7 +74,7 @@ function parseMarkdownQuestions(filePath: string): Question[] {
     const questions: Question[] = [];
 
     // Split content by question headers (## Question)
-    const questionSections = content.split(/^## Question \d+:?/m);
+    const questionSections = content.split(/^## Question \d+:/m);
     questionSections.shift(); // Remove first empty section
 
     questionSections.forEach((section, index) => {
@@ -91,9 +91,12 @@ function parseMarkdownQuestions(filePath: string): Question[] {
         if (line.startsWith('**Answer:**')) {
           inAnswer = true;
           answerContent = line.replace('**Answer:**', '').trim();
+        } else if (line.startsWith('**Question:**')) {
+          inAnswer = false;
+          questionContent = line.replace('**Question:**', '').trim();
         } else if (inAnswer) {
           answerContent += '\n' + line;
-        } else {
+        } else if (!inAnswer && line.trim() && !line.startsWith('---')) {
           questionContent += '\n' + line;
         }
       }
@@ -105,8 +108,8 @@ function parseMarkdownQuestions(filePath: string): Question[] {
           question: questionContent.trim(),
           answer: answerContent.trim(),
           difficulty: 'intermediate',
-          category: 'JavaScript',
-          tags: ['javascript'],
+          category: 'Frontend Basics',
+          tags: ['frontend', 'basics'],
           options: [
             answerContent.substring(0, 100) +
               (answerContent.length > 100 ? '...' : ''),
@@ -135,8 +138,10 @@ export async function GET(
 
     // Get the QuestionsBank path for this learning path
     const questionsBankPath = pathToQuestionsMap[pathId];
+    console.log('QuestionsBank path:', questionsBankPath);
 
     if (!questionsBankPath) {
+      console.log('Learning path not found in mapping');
       return NextResponse.json(
         { error: 'Learning path not found' },
         { status: 404 }
@@ -161,42 +166,31 @@ export async function GET(
 
     // Try to load from JSON first
     if (fs.existsSync(jsonFilePath)) {
+      console.log('Loading from JSON file:', jsonFilePath);
       questions = loadQuestionsFromJSON(jsonFilePath);
     } else if (fs.existsSync(markdownFilePath)) {
-      // Fallback to markdown parsing if JSON doesn't exist
+      console.log('Loading from Markdown file:', markdownFilePath);
       questions = parseMarkdownQuestions(markdownFilePath);
     } else {
+      console.log('No questions file found for path:', questionsBankPath);
       return NextResponse.json(
         { error: 'Questions file not found' },
         { status: 404 }
       );
     }
 
-    if (questions.length === 0) {
-      return NextResponse.json(
-        { error: 'No questions found in file' },
-        { status: 404 }
-      );
-    }
+    console.log('Loaded questions count:', questions.length);
 
-    // Group questions into chunks of 20
-    const groups: QuestionGroup[] = [];
-    const questionsPerGroup = 20;
-
-    for (let i = 0; i < questions.length; i += questionsPerGroup) {
-      const groupQuestions = questions.slice(i, i + questionsPerGroup);
-      const groupNumber = Math.floor(i / questionsPerGroup) + 1;
-
-      groups.push({
-        id: `group-${groupNumber}`,
-        title: `Questions ${i + 1}-${Math.min(i + questionsPerGroup, questions.length)}`,
-        questions: groupQuestions,
-        totalQuestions: groupQuestions.length,
-      });
-    }
-
+    // Group questions (for now, put all in one group)
     const questionsData: QuestionsData = {
-      groups,
+      groups: [
+        {
+          id: 'group-1',
+          title: `All Questions (${questions.length})`,
+          questions: questions,
+          totalQuestions: questions.length,
+        },
+      ],
       totalQuestions: questions.length,
     };
 
