@@ -375,13 +375,6 @@ export default function Navbar() {
                 Save Progress
               </Link>
             </div>
-
-            {/* Bottom Section with Logo */}
-            <div className="px-4 pb-8 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex justify-center">
-                <ZatonaLogo size="lg" showText={true} variant="stacked" />
-              </div>
-            </div>
           </div>
         </div>
       )}

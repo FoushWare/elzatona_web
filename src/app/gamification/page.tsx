@@ -595,10 +595,10 @@ export default function GamificationPage() {
               </p>
               <div className="flex justify-center space-x-4">
                 <Link
-                  href="/practice/fundamentals"
+                  href="/learning-paths"
                   className="bg-white text-green-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors duration-200"
                 >
-                  Practice Now
+                  Start Learning
                 </Link>
                 <Link
                   href="/coding"

@@ -252,6 +252,22 @@ export default function CodingPage() {
           </p>
         </div>
 
+        {/* Quick Action Buttons */}
+        <div className="mb-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <Link
+            href="/practice/algorithm-problems"
+            className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-200 hover:scale-105 shadow-lg"
+          >
+            🧮 Algorithm Problems
+          </Link>
+          <Link
+            href="/practice/frontend-challenges"
+            className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-semibold rounded-xl transition-all duration-200 hover:scale-105 shadow-lg"
+          >
+            🎨 Frontend Challenges
+          </Link>
+        </div>
+
         {/* Problems Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredChallenges.map(challenge => (
@@ -358,10 +374,10 @@ export default function CodingPage() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
-                href="/practice/fundamentals"
+                href="/learning-paths"
                 className="px-8 py-4 bg-white text-blue-600 rounded-xl font-bold hover:bg-gray-100 transition-colors duration-200"
               >
-                Practice Fundamentals
+                Start Learning
               </Link>
               <Link
                 href="/study-plans"

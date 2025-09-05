@@ -719,11 +719,11 @@ export default function QuestionsPage() {
                     <div
                       className={`transition-all duration-300 ease-in-out overflow-hidden ${
                         isExpanded
-                          ? 'max-h-96 opacity-100'
+                          ? 'max-h-[500px] opacity-100'
                           : 'max-h-0 opacity-0'
                       }`}
                     >
-                      <div className="p-4 pt-3">
+                      <div className="p-4 pt-3 max-h-[500px] overflow-y-auto">
                         <div className="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-15 lg:grid-cols-20 gap-3">
                           {group.questions.map((question, questionIndex) => {
                             const isCurrentQuestion =
