@@ -1,5 +1,27 @@
 import '@testing-library/jest-dom';
 
+// Mock Request and Response for Node.js environment
+global.Request = class Request {
+  constructor(input, init = {}) {
+    this.url = input;
+    this.method = init.method || 'GET';
+    this.headers = new Map(Object.entries(init.headers || {}));
+  }
+};
+
+global.Response = class Response {
+  constructor(body, init = {}) {
+    this.body = body;
+    this.status = init.status || 200;
+    this.statusText = init.statusText || 'OK';
+    this.headers = new Map(Object.entries(init.headers || {}));
+  }
+
+  async json() {
+    return JSON.parse(this.body);
+  }
+};
+
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
   useRouter() {
