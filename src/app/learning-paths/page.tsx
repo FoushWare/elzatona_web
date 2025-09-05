@@ -274,64 +274,41 @@ export default function LearningPathsPage() {
               key={path.id}
               className="bg-card rounded-lg shadow-sm border border-border hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 transform group"
             >
-              {/* Header - Always Visible */}
+              {/* Collapsible Header Row */}
               <div
-                className="p-3 sm:p-4 lg:p-6 cursor-pointer"
+                className="p-4 cursor-pointer border-b border-border hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
                 onClick={() => toggleCard(path.id)}
               >
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-3">
-                  <div className="flex items-start space-x-2 sm:space-x-3 min-w-0 flex-1">
-                    <span className="text-lg sm:text-xl lg:text-2xl flex-shrink-0">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3 min-w-0 flex-1">
+                    <span className="text-xl flex-shrink-0">
                       {getCategoryIcon(path.id.split('-')[0])}
                     </span>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-foreground mb-1 break-words">
-                        {path.title}
-                      </h3>
-                      {!isCardCollapsed(path.id) && (
-                        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
-                          {path.description}
-                        </p>
-                      )}
-                    </div>
+                    <h3 className="text-lg font-semibold text-foreground truncate">
+                      {path.title}
+                    </h3>
                   </div>
-                  <div className="flex items-center space-x-1 sm:space-x-2 sm:flex-shrink-0">
-                    <span className="text-base sm:text-lg lg:text-xl">
-                      {getDifficultyIcon(path.difficulty)}
-                    </span>
-                    <span
-                      className={`inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium ${getDifficultyColor(path.difficulty)}`}
-                    >
-                      {path.difficulty}
-                    </span>
+                  <div className="flex items-center space-x-3 flex-shrink-0">
                     {path.questionCount && (
-                      <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
                         {path.questionCount} questions
                       </span>
                     )}
-                    <button
-                      className="ml-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                      onClick={e => {
-                        e.stopPropagation();
-                        toggleCard(path.id);
-                      }}
+                    <svg
+                      className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
+                        isCardCollapsed(path.id) ? '' : 'rotate-180'
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      <svg
-                        className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
-                          isCardCollapsed(path.id) ? '' : 'rotate-180'
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
                   </div>
                 </div>
               </div>
@@ -344,7 +321,28 @@ export default function LearningPathsPage() {
                     : 'max-h-[2000px] opacity-100'
                 }`}
               >
-                <div className="px-3 sm:px-4 lg:px-6 pb-3 sm:pb-4 lg:pb-6">
+                <div className="p-4 sm:p-6">
+                  {/* Description */}
+                  <div className="mb-4">
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {path.description}
+                    </p>
+                  </div>
+
+                  {/* Difficulty Badge */}
+                  <div className="mb-4">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-lg">
+                        {getDifficultyIcon(path.difficulty)}
+                      </span>
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(path.difficulty)}`}
+                      >
+                        {path.difficulty}
+                      </span>
+                    </div>
+                  </div>
+
                   {/* Stats */}
                   <div className="grid grid-cols-3 gap-1 sm:gap-2 lg:gap-4 mb-3 sm:mb-4 lg:mb-6 text-xs sm:text-sm text-muted-foreground">
                     <div className="flex flex-col items-center text-center">
