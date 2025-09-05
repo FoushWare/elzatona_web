@@ -75,6 +75,7 @@ This project uses pre-commit hooks to ensure code quality:
 - **Prettier**: Code formatting
 
 The pre-commit hook will automatically:
+
 1. Run ESLint with auto-fix on staged files
 2. Format code with Prettier
 3. Add the formatted files back to staging

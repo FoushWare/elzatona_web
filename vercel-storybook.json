@@ -4,6 +4,7 @@
     "framework": null,
     "installCommand": "npm install",
     "devCommand": "npm run storybook",
+    "functions": {},
     "rewrites": [
         {
             "source": "/(.*)",
