@@ -117,6 +117,29 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
+      // Prevent scroll on touch devices
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      // Restore body scroll
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [isOpen]);
+
   // Handle click outside to close dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -131,6 +154,18 @@ export default function Navbar() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Handle escape key to close mobile menu
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, [isOpen]);
 
   const toggleDropdown = (dropdownLabel: string) => {
     setActiveDropdown(activeDropdown === dropdownLabel ? null : dropdownLabel);
@@ -275,10 +310,21 @@ export default function Navbar() {
 
       {/* Mobile Navigation - Full Screen Overlay */}
       {isOpen && (
-        <div className="md:hidden fixed inset-0 top-16 bg-white dark:bg-gray-900 z-40">
+        <div
+          className="md:hidden fixed inset-0 top-16 bg-white dark:bg-gray-900 z-40 overflow-hidden animate-in slide-in-from-top-4 duration-300"
+          onClick={e => {
+            // Close menu when clicking on the backdrop (not on content)
+            if (e.target === e.currentTarget) {
+              setIsOpen(false);
+            }
+          }}
+        >
           <div className="flex flex-col h-full">
-            {/* Navigation Links */}
-            <div className="flex-1 px-4 pt-8 space-y-6">
+            {/* Navigation Links - Scrollable Container */}
+            <div
+              className="flex-1 px-4 pt-8 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent"
+              style={{ touchAction: 'pan-y' }}
+            >
               {dropdownMenus.map(menu => (
                 <div key={menu.label} className="space-y-2">
                   <div className="flex items-center px-4 py-2">
