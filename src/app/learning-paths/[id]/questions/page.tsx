@@ -32,12 +32,6 @@ export default function QuestionsPage() {
 
   const learningPath = learningPaths.find(path => path.id === pathId);
 
-  useEffect(() => {
-    if (pathId) {
-      loadQuestions();
-    }
-  }, [pathId, loadQuestions]);
-
   const loadQuestions = useCallback(async () => {
     try {
       setLoading(true);
@@ -52,6 +46,12 @@ export default function QuestionsPage() {
       setLoading(false);
     }
   }, [pathId]);
+
+  useEffect(() => {
+    if (pathId) {
+      loadQuestions();
+    }
+  }, [pathId, loadQuestions]);
 
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex.toString());
