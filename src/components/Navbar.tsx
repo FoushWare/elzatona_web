@@ -320,9 +320,20 @@ export default function Navbar() {
           }}
         >
           <div className="flex flex-col h-full">
+            {/* Save Progress Button - Right after logo */}
+            <div className="px-4 pt-4 pb-2">
+              <Link
+                href="/auth"
+                className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 text-center"
+                onClick={() => setIsOpen(false)}
+              >
+                💾 Save Progress
+              </Link>
+            </div>
+
             {/* Navigation Links - Scrollable Container */}
             <div
-              className="flex-1 px-4 pt-8 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent"
+              className="flex-1 px-4 pt-4 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent"
               style={{ touchAction: 'pan-y' }}
             >
               {dropdownMenus.map(menu => (
@@ -366,14 +377,6 @@ export default function Navbar() {
                   💼 Job Aggregator
                 </Link>
               </div>
-
-              <Link
-                href="/auth"
-                className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 mt-8"
-                onClick={() => setIsOpen(false)}
-              >
-                Save Progress
-              </Link>
             </div>
           </div>
         </div>
