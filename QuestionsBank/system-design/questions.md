@@ -988,3 +988,550 @@ class PerformanceMonitor {
   }
 }
 ```
+
+---
+
+## Question 11: Frontend System Design Process
+
+**Question:** Walk me through your initial process for designing a complex frontend application like a ChatGPT interface.
+
+**Answer:**
+The first step is always to understand the problem by defining the functional requirements through user stories. For a chat interface, the core story is: a user types a query and receives a streamed answer. Next, I create a wireframe to visualize the UI components, which helps in extracting the necessary state variables and state transitions. This foundational work informs the API design and data structures before finally addressing non-functional requirements like performance, security, and accessibility.
+
+**Step-by-Step Process:**
+
+**1. Requirements Gathering:**
+
+```javascript
+// User Stories
+const userStories = [
+  'As a user, I want to type a message and send it',
+  'As a user, I want to see the AI response stream in real-time',
+  'As a user, I want to view my conversation history',
+  'As a user, I want to start a new conversation',
+];
+```
+
+**2. Wireframe Creation:**
+
+```javascript
+// Component Structure
+const ChatInterface = {
+  components: {
+    ChatHeader: 'Title and new chat button',
+    MessageList: 'Scrollable list of messages',
+    InputArea: 'Text input and send button',
+    StatusBar: 'Connection status and typing indicator',
+  },
+};
+```
+
+**3. State Modeling:**
+
+```javascript
+// State Structure
+const chatState = {
+  userQuery: '', // Current input
+  conversation: [], // Message history
+  isConnected: false, // SSE connection status
+  isTyping: false, // AI typing indicator
+};
+```
+
+**4. API Design:**
+
+```javascript
+// API Endpoints
+const apiEndpoints = {
+  sendMessage: 'POST /api/chat',
+  streamResponse: 'GET /api/chat/stream/:conversationId',
+  getHistory: 'GET /api/conversations/:id',
+};
+```
+
+**5. Non-Functional Requirements:**
+
+- **Performance**: Virtual scrolling for long conversations
+- **Security**: XSS prevention for AI responses
+- **Accessibility**: Screen reader support, keyboard navigation
+- **Scalability**: Efficient state management, connection pooling
+
+---
+
+## Question 12: Wireframe Importance in System Design
+
+**Question:** Why is creating a wireframe a crucial step in a frontend system design interview?
+
+**Answer:**
+A wireframe brings clarity to your intentions. It allows you to visually identify components, model the state distribution, and understand state transitions. It demonstrates seniority by showing you can translate user needs into a functional UI structure without a pre-existing design, a key skill for a senior developer.
+
+**Benefits of Wireframing:**
+
+**1. Component Identification:**
+
+```javascript
+// Wireframe helps identify these components
+const components = {
+  ChatContainer: 'Main wrapper',
+  MessageList: 'Scrollable message container',
+  MessageItem: 'Individual message component',
+  InputForm: 'Message input and send button',
+  TypingIndicator: 'Shows when AI is responding',
+};
+```
+
+**2. State Distribution:**
+
+```javascript
+// Wireframe reveals state needs
+const stateDistribution = {
+  global: ['conversation', 'connectionStatus'],
+  local: ['userQuery', 'isTyping', 'scrollPosition'],
+};
+```
+
+**3. Data Flow Visualization:**
+
+```javascript
+// Wireframe shows data flow
+const dataFlow = {
+  userInput: 'InputForm → ChatContainer → API',
+  aiResponse: 'API → ChatContainer → MessageList → MessageItem',
+  history: 'API → ChatContainer → MessageList',
+};
+```
+
+**4. User Experience Considerations:**
+
+- **Visual Hierarchy**: What's most important?
+- **Interaction Patterns**: How do users navigate?
+- **Responsive Design**: How does it work on mobile?
+- **Loading States**: What happens during API calls?
+
+**Example Wireframe Structure:**
+
+```
+┌─────────────────────────────────────┐
+│ Chat Header (New Chat, Settings)    │
+├─────────────────────────────────────┤
+│                                     │
+│ Message List (Scrollable)           │
+│ ┌─────────────────────────────────┐ │
+│ │ User: Hello, how are you?       │ │
+│ └─────────────────────────────────┘ │
+│ ┌─────────────────────────────────┐ │
+│ │ AI: I'm doing well, thank you!  │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+├─────────────────────────────────────┤
+│ Input: [Type message...] [Send]     │
+└─────────────────────────────────────┘
+```
+
+---
+
+## Question 13: Chat Application State Modeling
+
+**Question:** How would you model the state for the chat conversation?
+
+**Answer:**
+I would model it with two primary state variables:
+
+**userQuery (string)**: A controlled input for the user's current message.
+
+**conversation (Array of objects)**: An array containing the history of the chat. Each item in the array would be a "reply" object with properties like id (string), type (e.g., 'user' or 'chat'), timestamp, and content (string).
+
+**Detailed State Structure:**
+
+```javascript
+// TypeScript interfaces
+interface Message {
+  id: string;
+  conversationId: string;
+  timestamp: Date;
+  type: 'user' | 'assistant';
+  content: string;
+  status?: 'sending' | 'sent' | 'error';
+}
+
+interface ChatState {
+  userQuery: string;
+  conversation: Message[];
+  isConnected: boolean;
+  isTyping: boolean;
+  currentConversationId: string | null;
+}
+
+// React state implementation
+const [chatState, setChatState] = useState<ChatState>({
+  userQuery: '',
+  conversation: [],
+  isConnected: false,
+  isTyping: false,
+  currentConversationId: null
+});
+```
+
+**State Management Functions:**
+
+```javascript
+// Add user message
+const addUserMessage = (content: string) => {
+  const newMessage: Message = {
+    id: generateId(),
+    conversationId: chatState.currentConversationId,
+    timestamp: new Date(),
+    type: 'user',
+    content,
+    status: 'sending'
+  };
+
+  setChatState(prev => ({
+    ...prev,
+    conversation: [...prev.conversation, newMessage],
+    userQuery: ''
+  }));
+};
+
+// Add AI response chunk
+const addAIResponseChunk = (chunk: string, messageId?: string) => {
+  setChatState(prev => {
+    const lastMessage = prev.conversation[prev.conversation.length - 1];
+
+    if (lastMessage?.type === 'assistant' && lastMessage.status === 'streaming') {
+      // Append to existing AI message
+      return {
+        ...prev,
+        conversation: prev.conversation.map((msg, index) =>
+          index === prev.conversation.length - 1
+            ? { ...msg, content: msg.content + chunk }
+            : msg
+        )
+      };
+    } else {
+      // Create new AI message
+      const newMessage: Message = {
+        id: messageId || generateId(),
+        conversationId: prev.currentConversationId,
+        timestamp: new Date(),
+        type: 'assistant',
+        content: chunk,
+        status: 'streaming'
+      };
+
+      return {
+        ...prev,
+        conversation: [...prev.conversation, newMessage]
+      };
+    }
+  });
+};
+```
+
+---
+
+## Question 14: State Transitions in Chat Application
+
+**Question:** What are the primary state transitions in this chat application?
+
+**Answer:**
+State transitions come from two sources:
+
+**User Interactions**: Typing in the input field (updates userQuery) and clicking the "send" button (clears userQuery and initiates an API call).
+
+**Backend Synchronization**: Listening for new data chunks from the server via Server-Sent Events and appending them to the conversation array.
+
+**State Transition Diagram:**
+
+```javascript
+// State transition mapping
+const stateTransitions = {
+  // User Interactions
+  userTyping: {
+    from: { userQuery: 'any string' },
+    to: { userQuery: 'new string' },
+    trigger: 'onChange event',
+  },
+
+  sendMessage: {
+    from: { userQuery: 'non-empty string', conversation: 'any' },
+    to: { userQuery: '', conversation: 'adds user message' },
+    trigger: 'onSubmit event',
+    sideEffect: 'API call to /api/chat',
+  },
+
+  // Backend Synchronization
+  receiveChunk: {
+    from: { conversation: 'any', isTyping: 'any' },
+    to: { conversation: 'appends chunk', isTyping: true },
+    trigger: 'SSE message event',
+  },
+
+  streamComplete: {
+    from: { isTyping: true },
+    to: { isTyping: false },
+    trigger: 'SSE close event',
+  },
+
+  connectionLost: {
+    from: { isConnected: true },
+    to: { isConnected: false },
+    trigger: 'SSE error event',
+  },
+
+  connectionRestored: {
+    from: { isConnected: false },
+    to: { isConnected: true },
+    trigger: 'SSE open event',
+  },
+};
+```
+
+**Implementation with React:**
+
+```javascript
+// User interaction handlers
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setChatState(prev => ({
+    ...prev,
+    userQuery: e.target.value
+  }));
+};
+
+const handleSendMessage = async () => {
+  if (!chatState.userQuery.trim()) return;
+
+  // Add user message to conversation
+  const userMessage: Message = {
+    id: generateId(),
+    conversationId: chatState.currentConversationId,
+    timestamp: new Date(),
+    type: 'user',
+    content: chatState.userQuery,
+    status: 'sending'
+  };
+
+  setChatState(prev => ({
+    ...prev,
+    userQuery: '',
+    conversation: [...prev.conversation, userMessage]
+  }));
+
+  // Initiate API call
+  await sendMessageToAPI(userMessage);
+};
+
+// Backend synchronization
+useEffect(() => {
+  const eventSource = new EventSource('/api/chat/stream');
+
+  eventSource.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+
+    if (data.type === 'chunk') {
+      setChatState(prev => ({
+        ...prev,
+        isTyping: true,
+        conversation: appendChunkToLastMessage(prev.conversation, data.content)
+      }));
+    } else if (data.type === 'complete') {
+      setChatState(prev => ({
+        ...prev,
+        isTyping: false
+      }));
+    }
+  };
+
+  eventSource.onopen = () => {
+    setChatState(prev => ({ ...prev, isConnected: true }));
+  };
+
+  eventSource.onerror = () => {
+    setChatState(prev => ({ ...prev, isConnected: false }));
+  };
+
+  return () => {
+    eventSource.close();
+  };
+}, []);
+```
+
+---
+
+## Question 11: Backend Service Scalability Design
+
+**Question:** How do you design a backend service for scalability?
+
+**Answer:**
+Designing a scalable backend service requires considering multiple architectural patterns and principles:
+
+**1. Statelessness:**
+Design services to be stateless (using JWTs for auth instead of server-side sessions) so any instance can handle any request.
+
+```javascript
+// Stateless service design
+class UserService {
+  constructor() {
+    this.jwtSecret = process.env.JWT_SECRET;
+  }
+
+  // No server-side session storage
+  async authenticateUser(token) {
+    try {
+      const decoded = jwt.verify(token, this.jwtSecret);
+      return { userId: decoded.userId, role: decoded.role };
+    } catch (error) {
+      throw new Error('Invalid token');
+    }
+  }
+
+  // Any instance can handle any request
+  async getUserData(userId) {
+    // Stateless operation - no local state dependencies
+    return await this.database.getUser(userId);
+  }
+}
+```
+
+**2. Horizontal Scaling:**
+Use a load balancer to distribute traffic across multiple identical instances of your service.
+
+```javascript
+// Load balancer configuration
+const loadBalancerConfig = {
+  algorithm: 'round-robin',
+  healthCheck: {
+    path: '/health',
+    interval: 30000,
+    timeout: 5000,
+  },
+  instances: [
+    { host: 'service-1.example.com', port: 3000 },
+    { host: 'service-2.example.com', port: 3000 },
+    { host: 'service-3.example.com', port: 3000 },
+  ],
+};
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
+```
+
+**3. Database Scaling:**
+Consider database read replicas, sharding, or moving appropriate data to a more scalable NoSQL solution.
+
+```javascript
+// Database scaling strategy
+class DatabaseManager {
+  constructor() {
+    this.masterDB = new Connection(process.env.MASTER_DB_URL);
+    this.readReplicas = [
+      new Connection(process.env.REPLICA_1_URL),
+      new Connection(process.env.REPLICA_2_URL),
+      new Connection(process.env.REPLICA_3_URL),
+    ];
+  }
+
+  // Write operations go to master
+  async write(query, params) {
+    return await this.masterDB.query(query, params);
+  }
+
+  // Read operations can use replicas
+  async read(query, params) {
+    const replica = this.getRandomReplica();
+    return await replica.query(query, params);
+  }
+
+  getRandomReplica() {
+    const index = Math.floor(Math.random() * this.readReplicas.length);
+    return this.readReplicas[index];
+  }
+}
+```
+
+**4. Caching:**
+Implement caching layers (e.g., Redis) to reduce load on the database and application servers.
+
+```javascript
+// Redis caching implementation
+class CacheService {
+  constructor() {
+    this.redis = new Redis(process.env.REDIS_URL);
+  }
+
+  async get(key) {
+    try {
+      const cached = await this.redis.get(key);
+      return cached ? JSON.parse(cached) : null;
+    } catch (error) {
+      console.error('Cache get error:', error);
+      return null;
+    }
+  }
+
+  async set(key, value, ttl = 3600) {
+    try {
+      await this.redis.setex(key, ttl, JSON.stringify(value));
+    } catch (error) {
+      console.error('Cache set error:', error);
+    }
+  }
+
+  async invalidate(pattern) {
+    try {
+      const keys = await this.redis.keys(pattern);
+      if (keys.length > 0) {
+        await this.redis.del(...keys);
+      }
+    } catch (error) {
+      console.error('Cache invalidation error:', error);
+    }
+  }
+}
+
+// Usage in service
+class ProductService {
+  constructor() {
+    this.cache = new CacheService();
+    this.db = new DatabaseManager();
+  }
+
+  async getProduct(productId) {
+    const cacheKey = `product:${productId}`;
+
+    // Try cache first
+    let product = await this.cache.get(cacheKey);
+
+    if (!product) {
+      // Cache miss - fetch from database
+      product = await this.db.read('SELECT * FROM products WHERE id = ?', [
+        productId,
+      ]);
+
+      // Cache for future requests
+      if (product) {
+        await this.cache.set(cacheKey, product, 1800); // 30 minutes
+      }
+    }
+
+    return product;
+  }
+}
+```
+
+**Key Scalability Principles:**
+
+- **Stateless Design**: No server-side session storage
+- **Horizontal Scaling**: Multiple identical instances behind load balancer
+- **Database Optimization**: Read replicas, connection pooling, query optimization
+- **Caching Strategy**: Redis for frequently accessed data
+- **Microservices**: Break monolith into focused services
+- **Message Queues**: Decouple services with async communication
+- **CDN**: Serve static assets from edge locations
+- **Monitoring**: Track performance metrics and bottlenecks
