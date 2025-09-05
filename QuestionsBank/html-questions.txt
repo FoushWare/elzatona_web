@@ -1,0 +1,319 @@
+HTML Interview Questions and Answers
+Last Updated : 24 Jul, 2025
+HTML (HyperText Markup Language) is the foundational language for creating web pages and web applications. Whether you're a fresher or an experienced professional, preparing for an HTML interview requires a solid understanding of both basic and advanced concepts.
+
+Below is a curated list of 50+ HTML interview questions and answers, structured to guide you from fundamental topics to more complex ones, ensuring a comprehensive preparation.
+
+Table of Content
+
+Basic HTML Interview Questions For Freshers
+HTML Intermediate Interview Questions
+HTML Interview Questions For Experienced
+Note: Before proceeding to learn HTML interview questions and answers, if you are completely new to the language, we recommend building a solid foundation first by exploring our free HTML Tutorial.
+
+Basic HTML Interview Questions For Freshers
+1. What is HTML?
+HTML stands for HyperText Markup Language. It is the standard language used to create and design documents on the World Wide Web. HTML structures web content and allows the inclusion of text, images, links, and other elements.
+
+2. What are HTML tags?
+HTML tags are the building blocks of HTML. They are used to create elements and structure content on a web page. Tags are enclosed in angle brackets, For example, <p> for a paragraph. Most tags come in pairs: an opening tag <p> and a closing tag </p>.
+
+To Learn HTML Tags More, you can refer to this article.
+
+3. What is the basic structure of an HTML document?
+An HTML document has a defined structure that includes the following elements:
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page Title</title>
+  </head>
+  <body>
+    <!-- Content goes here -->
+  </body>
+</html>
+<!DOCTYPE html>: Declares the document type and version of HTML.
+<html>: The root element of the document.
+<head>: Contains meta-information about the document, such as the title and links to stylesheets.
+<title>: Specifies the title of the document, displayed in the browser's title bar.
+<body>: Contains the content of the document, such as text, images, and other elements.
+4. What is the difference between an element and a tag in HTML?
+Tag: A tag is a part of HTML syntax used to define elements. Tags are enclosed in angle brackets, e.g., <div>.
+Element: An element consists of a start tag, content, and an end tag. For example, <p>This is a paragraph.</p> is a paragraph element.
+5. What are attributes in HTML?
+Attributes provide additional information about HTML elements. They are included within the opening tag and usually come in name-value pairs, like name="value".
+
+For example, in <a href="https://www.example.com/">Link</a>, href is an attribute specifying the URL of the link.
+
+6. How do you create a hyperlink in HTML?
+To create a hyperlink, use the <a> (anchor) tag with the href attribute specifying the URL:
+
+<a href="https://www.example.com/">Visit Example</a>
+This creates a clickable link labeled "Visit Example" that directs to https://www.example.com/
+
+To know more about the topic refer to creating hyperlink in html.
+
+7. What is the purpose of the <img> tag in HTML?
+The <img> tag is used to embed images in an HTML document. It is a self-closing tag and requires the src attribute to specify the image source:
+
+<img src="image.jpg" alt="Description of image">
+src: Specifies the path to the image file.
+alt: Provides alternative text for the image, which is displayed if the image cannot be loaded.
+To know more about the topic refer to img tag in html.
+
+8. What is the difference between block-level and inline elements in HTML?
+Block-level elements: These elements start on a new line and take up the full width available. Examples include <div>, <p>, and <h1> to <h6>.
+Inline elements: These elements do not start on a new line and only take up as much width as necessary. Examples include <span>, <a>, and <img>.
+9. How do you create a list in HTML?
+HTML supports two types of lists:
+
+Ordered List: Creates a numbered list using the <ol> tag.
+<ol>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ol>
+Unordered List: Creates a bulleted list using the <ul> tag.
+<ul>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ul>
+10. What is the <form> tag used for in HTML?
+The <form> tag is used to create an HTML form for user input. It can contain various form elements like text fields, checkboxes, radio buttons, and submit buttons.
+
+<form action="/submit" method="post">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name">
+  <input type="submit" value="Submit">
+</form>
+11. What is the purpose of the <br> tag?
+The <br> tag inserts a line break in the text, moving the content after the tag to a new line. It's an empty tag and doesn't require a closing tag.
+
+12. How do you create a hyperlink that opens in a new tab?
+To open a link in a new tab, use the target attribute with the value _blank:
+
+<a href="https://www.example.com/" target="_blank">Visit Example</a>
+13. What is the <title> tag used for?
+The <title> tag defines the title of the HTML document, which appears in the browser's title bar or tab. It's placed within the <head> section.
+
+14. How do you add a comment in HTML?
+Comments in HTML are added using the following syntax:
+
+<!-- This is a comment -->
+Comments are not displayed in the browser and are used to leave notes or explanations within the code.
+
+15. What is the purpose of the <meta> tag?
+The <meta> tag provides metadata about the HTML document, such as character set, author, description, and keywords. It's placed within the <head> section.
+
+16. How do you create a table in HTML?
+A table is created using the <table> tag, with rows defined by <tr> and cells by <td>. Headers can be defined using <th>.
+
+<table>
+  <tr>
+    <th>Header 1</th>
+    <th>Header 2</th>
+  </tr>
+  <tr>
+    <td>Data 1</td>
+    <td>Data 2</td>
+  </tr>
+</table>
+17. What is the difference between <head> and <body> tags?
+<head>: Contains meta-information about the document, such as the title, character set, and links to stylesheets and scripts.
+<body>: Contains the actual content of the document that is displayed in the browser, such as text, images, and links.
+18. How do you specify the character encoding for an HTML document?
+The character encoding is specified using a <meta> tag within the <head> section:
+
+<meta charset="UTF-8">
+19. What is the <strong> tag used for?
+The <strong> tag is used to indicate that the text is of strong importance, typically displayed in bold by browsers.
+
+20. How do you create an email link in HTML?
+To create a link that opens the user's default email client with a new message, use the mailto: scheme:
+
+<a href="mailto:example@example.com">Send Email</a>
+21. What is the <em> tag used for?
+The <em> tag is used to emphasize text, typically displayed in italics by browsers.
+
+22. How do you create a checkbox in HTML?
+A checkbox is created using the <input> tag with the type attribute set to checkbox:
+
+<input type="checkbox" id="subscribe" name="subscribe">
+<label for="subscribe">Subscribe to newsletter</label>
+23. What is the purpose of the <label> tag?
+The <label> tag defines a label for an <input> element, improving accessibility and usability. Associating a <label> with an <input> can be done using the for attribute, which matches the id of the <input>.
+
+24. How do you create a dropdown list in HTML?
+A dropdown list is created using the <select> tag, with each option defined by an <option> tag:
+
+<label for="fruits">Choose a fruit:</label>
+<select id="fruits" name="fruits">
+  <option value="apple">Apple</option>
+  <option value="banana">Banana</option>
+  <option value="cherry">Cherry</option>
+</select>
+25. What is the <blockquote> tag used for?
+The <blockquote> tag is used to define a section that is quoted from another source, typically displayed with indentation by browsers.
+
+HTML Intermediate Interview Questions
+26. What are semantic HTML elements?
+Semantic HTML elements clearly describe their meaning in a human- and machine-readable way. Examples include <article>, <section>, <header>, <footer>, and <nav>. They improve the accessibility and SEO of web pages.
+
+To know more about the topic refer to HTML Semantic tag.
+
+27. How do you embed a video in HTML5?
+HTML5 provides the <video> tag to embed videos:
+
+<video controls>
+  <source src="video.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+controls: Adds video controls like play, pause, and volume.
+source: Specifies the video file and its format.
+28. What is the purpose of the alt attribute in the <img> tag?
+The alt attribute provides alternative text for an image, which is displayed if the image cannot be loaded. It also improves accessibility by describing the image to screen readers.
+
+29. What is the <fieldset> tag used for in HTML forms?
+The <fieldset> tag is used to group related elements within a form, and the <legend> tag can provide a caption for the group:
+
+<fieldset>
+  <legend>Personal Information</legend>
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name">
+</fieldset>
+30. What is the purpose of the <noscript> tag in HTML?
+The <noscript> tag defines alternative content to be displayed if the user's browser does not support JavaScript or if JavaScript is disabled.
+
+<noscript>
+  <p>JavaScript is not enabled in your browser.</p>
+</noscript>
+31. How do you include a JavaScript file in an HTML document?
+Use the <script> tag with the src attribute to link an external JavaScript file:
+
+<script src="script.js"></script>
+32. What is the difference between the <b> and <strong> tags?
+Both tags display text in bold, but <strong> indicates that the text is of strong importance, providing semantic meaning, while <b> does not convey any extra importance.
+
+33. How do you create a multi-line text input in an HTML form?
+Use the <textarea> tag to create a multi-line text input:
+
+<textarea name="message" rows="4" cols="50"></textarea>
+34. What is the purpose of the action attribute in an HTML form?
+The action attribute specifies the URL to which the form data will be submitted when the form is submitted.
+
+<form action="/submit-form" method="post">
+  <!-- form elements -->
+</form>
+35. How do you create a numbered list in HTML?
+Use the <ol> (ordered list) tag, with each list item defined by <li>:
+
+<ol>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ol>
+36. What is the purpose of the <base> tag in HTML?
+The <base> tag specifies the base URL for all relative URLs in a document. It must be included inside the <head> section.
+
+<base href="https://www.example.com//">
+37. How do you create a definition list in HTML?
+Use the <dl> tag for the list, <dt> for each term, and <dd> for each definition:
+
+<dl>
+  <dt>HTML</dt>
+  <dd>HyperText Markup Language</dd>
+  <dt>CSS</dt>
+  <dd>Cascading Style Sheets</dd>
+</dl>
+38. What is the purpose of the enctype attribute in an HTML form?
+The enctype attribute specifies how form data should be encoded when submitting it to the server. It's used with the method="post" attribute.
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+  <!-- form elements -->
+</form>
+39. How do you create a hidden input field in an HTML form?
+Use <input type="hidden"> to create a hidden input field that stores data without displaying it to the user:
+
+<input type="hidden" name="userID" value="12345">
+40. What is the purpose of the <address> tag in HTML?
+The <address> tag is used to define contact information for the author or owner of a document or article.
+
+<address>
+  Written by John Doe.<br>
+  Visit us at:<br>
+  Example.com<br>
+  Box 564, Disneyland<br>
+  USA
+</address>
+HTML Interview Questions For Experienced
+41. What is the purpose of the <canvas> element in HTML5?
+The <canvas> element provides a drawable region in the document that can be used to render graphics, such as charts, games, or other visual images, on the fly via scripting (usually JavaScript).
+
+<canvas id="myCanvas" width="200" height="100"></canvas>
+42. What is the difference between <b> and <strong>, and between <i> and <em> tags?
+The <b> and <i> tags are used for styling text to be bold and italic respectively, without conveying any extra importance or emphasis. In contrast, <strong> and <em> not only style the text (bold and italic respectively) but also semantically indicate that the text is of greater importance (<strong>) or should be emphasized (<em>). This semantic meaning can be beneficial for accessibility and SEO.
+
+43. How can you include SVG graphics directly in an HTML document?
+Scalable Vector Graphics (SVG) can be embedded directly within HTML using the <svg> tag. This allows for defining vector-based graphics that can scale without loss of quality.
+
+<svg width="100" height="100">
+  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+</svg>
+44. What are data attributes in HTML, and how are they used?
+Data attributes in HTML are custom attributes that start with data- and allow you to store extra information on HTML elements. They are often used to embed custom data that can be accessed via JavaScript.
+
+<div data-user-id="12345" data-role="admin">User Info</div>
+In JavaScript, you can access these attributes using the dataset property:
+
+const div = document.querySelector('div');
+console.log(div.dataset.userId); // Outputs: 12345
+console.log(div.dataset.role);   // Outputs: admin
+45. Explain the purpose of the <template> tag in HTML.
+The <template> tag is used to declare a fragment of HTML that is not to be rendered immediately when the page loads. Instead, it can be instantiated later using JavaScript. This is useful for client-side templating.
+
+<template id="my-template">
+  <div class="card">
+    <h2></h2>
+    <p></p>
+  </div>
+</template>
+JavaScript can then be used to clone and insert the template content into the document.
+
+46. What is the purpose of the rel attribute in a <link> tag?
+The rel attribute specifies the relationship between the current document and the linked resource. For example, rel="stylesheet" indicates that the linked file is a CSS stylesheet.
+
+<link rel="stylesheet" href="styles.css">
+47. How do you specify multiple language versions of a webpage?
+To provide multiple language versions of a webpage, you can use the hreflang attribute in the <link> tag to specify the language of an alternate version. This helps search engines understand and serve the correct language version to users.
+
+<link rel="alternate" href="example.fr.html" hreflang="fr">
+<link rel="alternate" href="example.es.html" hreflang="es">
+48. What is the purpose of the <output> tag in HTML?
+The <output> tag represents the result of a calculation or user action. It's typically used in conjunction with forms to display the outcome of user interactions.
+
+<form oninput="result.value=parseInt(a.value)+parseInt(b.value)">
+  <input type="number" id="a" value="0"> +
+  <input type="number" id="b" value="0">
+  = <output name="result" for="a b">0</output>
+</form>
+49. How can you make an HTML element editable in the browser?
+To make an HTML element editable directly in the browser, you can set the contenteditable attribute to true. This allows users to edit the content of the element in place.
+
+<div contenteditable="true">
+  This is an editable div. Click here to edit the text.
+</div>
+50. What is the purpose of the <datalist> tag in HTML?
+The <datalist> tag is used to provide a list of predefined options to an <input> element, typically used to offer autocomplete suggestions.
+
+<label for="browser">Choose your browser:</label>
+<input list="browsers" id="browser" name="browser">
+<datalist id="browsers">
+  <option value="Chrome">
+  <option value="Firefox">
+  <option value="Safari">
+  <option value="Edge">
+  <option value="Opera">
+</datalist>
+When the user starts typing in the input field, the browser will display the options defined in the <datalist> that match the current input.

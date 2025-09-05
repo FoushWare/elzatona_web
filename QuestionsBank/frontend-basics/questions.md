@@ -2794,7 +2794,8 @@ undefined;
 
 **Question:** What is the difference between an element and a tag in HTML?
 
-**Answer:** 
+**Answer:**
+
 - **Tag**: A tag is a part of HTML syntax used to define elements. Tags are enclosed in angle brackets, e.g., `<div>`.
 - **Element**: An element consists of a start tag, content, and an end tag. For example, `<p>This is a paragraph.</p>` is a paragraph element.
 
@@ -2831,7 +2832,7 @@ This creates a clickable link labeled "Visit Example" that directs to https://ww
 **Answer:** The `<img>` tag is used to embed images in an HTML document. It is a self-closing tag and requires the `src` attribute to specify the image source:
 
 ```html
-<img src="image.jpg" alt="Description of image">
+<img src="image.jpg" alt="Description of image" />
 ```
 
 - `src`: Specifies the path to the image file.
@@ -2843,7 +2844,8 @@ This creates a clickable link labeled "Visit Example" that directs to https://ww
 
 **Question:** What is the difference between block-level and inline elements in HTML?
 
-**Answer:** 
+**Answer:**
+
 - **Block-level elements**: These elements start on a new line and take up the full width available. Examples include `<div>`, `<p>`, and `<h1>` to `<h6>`.
 - **Inline elements**: These elements do not start on a new line and only take up as much width as necessary. Examples include `<span>`, `<a>`, and `<img>`.
 
@@ -2856,6 +2858,7 @@ This creates a clickable link labeled "Visit Example" that directs to https://ww
 **Answer:** HTML supports two types of lists:
 
 **Ordered List**: Creates a numbered list using the `<ol>` tag.
+
 ```html
 <ol>
   <li>First item</li>
@@ -2865,6 +2868,7 @@ This creates a clickable link labeled "Visit Example" that directs to https://ww
 ```
 
 **Unordered List**: Creates a bulleted list using the `<ul>` tag.
+
 ```html
 <ul>
   <li>First item</li>
@@ -2884,8 +2888,8 @@ This creates a clickable link labeled "Visit Example" that directs to https://ww
 ```html
 <form action="/submit" method="post">
   <label for="name">Name:</label>
-  <input type="text" id="name" name="name">
-  <input type="submit" value="Submit">
+  <input type="text" id="name" name="name" />
+  <input type="submit" value="Submit" />
 </form>
 ```
 
@@ -2966,7 +2970,8 @@ Comments are not displayed in the browser and are used to leave notes or explana
 
 **Question:** What is the difference between `<head>` and `<body>` tags?
 
-**Answer:** 
+**Answer:**
+
 - `<head>`: Contains meta-information about the document, such as the title, character set, and links to stylesheets and scripts.
 - `<body>`: Contains the actual content of the document that is displayed in the browser, such as text, images, and links.
 
@@ -2979,7 +2984,7 @@ Comments are not displayed in the browser and are used to leave notes or explana
 **Answer:** The character encoding is specified using a `<meta>` tag within the `<head>` section:
 
 ```html
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 ```
 
 ---
@@ -3019,7 +3024,7 @@ Comments are not displayed in the browser and are used to leave notes or explana
 **Answer:** A checkbox is created using the `<input>` tag with the `type` attribute set to `checkbox`:
 
 ```html
-<input type="checkbox" id="subscribe" name="subscribe">
+<input type="checkbox" id="subscribe" name="subscribe" />
 <label for="subscribe">Subscribe to newsletter</label>
 ```
 
@@ -3074,7 +3079,7 @@ Comments are not displayed in the browser and are used to leave notes or explana
 
 ```html
 <video controls>
-  <source src="video.mp4" type="video/mp4">
+  <source src="video.mp4" type="video/mp4" />
   Your browser does not support the video tag.
 </video>
 ```
@@ -3102,7 +3107,7 @@ Comments are not displayed in the browser and are used to leave notes or explana
 <fieldset>
   <legend>Personal Information</legend>
   <label for="name">Name:</label>
-  <input type="text" id="name" name="name">
+  <input type="text" id="name" name="name" />
 </fieldset>
 ```
 
@@ -3191,7 +3196,7 @@ Comments are not displayed in the browser and are used to leave notes or explana
 **Answer:** The `<base>` tag specifies the base URL for all relative URLs in a document. It must be included inside the `<head>` section.
 
 ```html
-<base href="https://www.example.com/">
+<base href="https://www.example.com/" />
 ```
 
 ---
@@ -3234,7 +3239,7 @@ Comments are not displayed in the browser and are used to leave notes or explana
 **Answer:** Use `<input type="hidden">` to create a hidden input field that stores data without displaying it to the user:
 
 ```html
-<input type="hidden" name="userID" value="12345">
+<input type="hidden" name="userID" value="12345" />
 ```
 
 ---
@@ -3247,10 +3252,10 @@ Comments are not displayed in the browser and are used to leave notes or explana
 
 ```html
 <address>
-  Written by John Doe.<br>
-  Visit us at:<br>
-  Example.com<br>
-  Box 564, Disneyland<br>
+  Written by John Doe.<br />
+  Visit us at:<br />
+  Example.com<br />
+  Box 564, Disneyland<br />
   USA
 </address>
 ```
@@ -3306,7 +3311,7 @@ In JavaScript, you can access these attributes using the dataset property:
 ```javascript
 const div = document.querySelector('div');
 console.log(div.dataset.userId); // Outputs: 12345
-console.log(div.dataset.role);   // Outputs: admin
+console.log(div.dataset.role); // Outputs: admin
 ```
 
 ---
@@ -3337,7 +3342,7 @@ JavaScript can then be used to clone and insert the template content into the do
 **Answer:** The `rel` attribute specifies the relationship between the current document and the linked resource. For example, `rel="stylesheet"` indicates that the linked file is a CSS stylesheet.
 
 ```html
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css" />
 ```
 
 ---
@@ -3349,8 +3354,8 @@ JavaScript can then be used to clone and insert the template content into the do
 **Answer:** To provide multiple language versions of a webpage, you can use the `hreflang` attribute in the `<link>` tag to specify the language of an alternate version. This helps search engines understand and serve the correct language version to users.
 
 ```html
-<link rel="alternate" href="example.fr.html" hreflang="fr">
-<link rel="alternate" href="example.es.html" hreflang="es">
+<link rel="alternate" href="example.fr.html" hreflang="fr" />
+<link rel="alternate" href="example.es.html" hreflang="es" />
 ```
 
 ---
@@ -3363,8 +3368,8 @@ JavaScript can then be used to clone and insert the template content into the do
 
 ```html
 <form oninput="result.value=parseInt(a.value)+parseInt(b.value)">
-  <input type="number" id="a" value="0"> +
-  <input type="number" id="b" value="0">
+  <input type="number" id="a" value="0" /> +
+  <input type="number" id="b" value="0" />
   = <output name="result" for="a b">0</output>
 </form>
 ```
@@ -3393,13 +3398,13 @@ JavaScript can then be used to clone and insert the template content into the do
 
 ```html
 <label for="browser">Choose your browser:</label>
-<input list="browsers" id="browser" name="browser">
+<input list="browsers" id="browser" name="browser" />
 <datalist id="browsers">
-  <option value="Chrome">
-  <option value="Firefox">
-  <option value="Safari">
-  <option value="Edge">
-  <option value="Opera">
+  <option value="Chrome"></option>
+  <option value="Firefox"></option>
+  <option value="Safari"></option>
+  <option value="Edge"></option>
+  <option value="Opera"></option>
 </datalist>
 ```
 
