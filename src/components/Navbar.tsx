@@ -336,34 +336,41 @@ export default function Navbar() {
               className="flex-1 px-4 pt-4 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent"
               style={{ touchAction: 'pan-y' }}
             >
-              {dropdownMenus.map(menu => (
-                <div key={menu.label} className="space-y-2">
-                  <div className="flex items-center px-4 py-2">
-                    <span className="text-xl mr-3">{menu.icon}</span>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {menu.label}
-                    </h3>
-                  </div>
-                  <div className="pl-8 space-y-1">
-                    {menu.items.map(item => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="block px-4 py-3 rounded-lg text-base font-medium transition-colors text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <div className="flex items-center">
-                          <span className="text-lg mr-3">{item.icon}</span>
-                          <div>
-                            <div className="font-medium">{item.label}</div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {item.description}
+              {dropdownMenus.map((menu, index) => (
+                <div key={menu.label}>
+                  <div className="space-y-2">
+                    <div className="flex items-center px-4 py-2">
+                      <span className="text-xl mr-3">{menu.icon}</span>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {menu.label}
+                      </h3>
+                    </div>
+                    <div className="pl-8 space-y-1">
+                      {menu.items.map(item => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block px-4 py-3 rounded-lg text-base font-medium transition-colors text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <div className="flex items-center">
+                            <span className="text-lg mr-3">{item.icon}</span>
+                            <div>
+                              <div className="font-medium">{item.label}</div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                                {item.description}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </Link>
-                    ))}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
+
+                  {/* Divider after each section (except the last one) */}
+                  {index < dropdownMenus.length - 1 && (
+                    <div className="my-6 border-t border-gray-200 dark:border-gray-700"></div>
+                  )}
                 </div>
               ))}
 
