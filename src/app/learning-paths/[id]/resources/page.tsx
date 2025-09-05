@@ -20,97 +20,6 @@ export default function ResourcesPage() {
 
   const learningPath = learningPaths.find(path => path.id === pathId);
 
-  useEffect(() => {
-    if (pathId) {
-      loadResources();
-    }
-  }, [pathId, loadResources]);
-
-  useEffect(() => {
-    filterResources();
-  }, [
-    resources,
-    selectedType,
-    selectedDifficulty,
-    searchQuery,
-    filterResources,
-  ]);
-
-  const loadResources = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      // Mock resources data - in a real app, this would come from the resources.md files
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const mockResources: Resource[] = [
-        {
-          id: 'css-grid-guide',
-          title: 'Complete CSS Grid Guide',
-          description:
-            'A comprehensive guide to CSS Grid layout with practical examples and best practices.',
-          url: 'https://css-tricks.com/snippets/css/complete-guide-grid/',
-          type: 'article',
-          platform: 'CSS-Tricks',
-          difficulty: 'intermediate',
-          tags: ['CSS', 'Grid', 'Layout'],
-        },
-        {
-          id: 'flexbox-course',
-          title: 'Flexbox Complete Course',
-          description:
-            'Learn Flexbox from basics to advanced techniques with interactive examples.',
-          url: 'https://www.youtube.com/watch?v=3YW65K6LcIA',
-          type: 'video',
-          platform: 'YouTube',
-          duration: '2h 30m',
-          difficulty: 'beginner',
-          tags: ['CSS', 'Flexbox', 'Layout'],
-        },
-        {
-          id: 'javascript-fundamentals',
-          title: 'JavaScript Fundamentals Course',
-          description:
-            'Master JavaScript fundamentals including variables, functions, and DOM manipulation.',
-          url: 'https://www.udemy.com/course/javascript-fundamentals/',
-          type: 'course',
-          platform: 'Udemy',
-          duration: '8h 45m',
-          difficulty: 'beginner',
-          tags: ['JavaScript', 'Fundamentals', 'DOM'],
-        },
-        {
-          id: 'react-docs',
-          title: 'React Official Documentation',
-          description:
-            'The official React documentation with guides, API reference, and tutorials.',
-          url: 'https://react.dev/',
-          type: 'documentation',
-          platform: 'React',
-          difficulty: 'intermediate',
-          tags: ['React', 'Documentation', 'Hooks'],
-        },
-        {
-          id: 'typescript-handbook',
-          title: 'TypeScript Handbook',
-          description:
-            'Complete TypeScript handbook covering types, interfaces, and advanced features.',
-          url: 'https://www.typescriptlang.org/docs/',
-          type: 'documentation',
-          platform: 'TypeScript',
-          difficulty: 'intermediate',
-          tags: ['TypeScript', 'Types', 'Interfaces'],
-        },
-      ];
-
-      const resourcesData = getResourcesForPath(pathId);
-      setResources(resourcesData);
-    } catch (error) {
-      console.error('Error loading resources:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [pathId]);
-
   const filterResources = useCallback(() => {
     let filtered = resources;
 
@@ -139,6 +48,102 @@ export default function ResourcesPage() {
 
     setFilteredResources(filtered);
   }, [resources, selectedType, selectedDifficulty, searchQuery]);
+
+  const loadResources = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      // Mock resources data - in a real app, this would come from the resources.md files
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const mockResources: Resource[] = [
+        {
+          id: 'css-grid-guide',
+          title: 'Complete CSS Grid Guide',
+          description:
+            'A comprehensive guide to CSS Grid layout with practical examples and best practices.',
+          url: 'https://css-tricks.com/snippets/css/complete-guide-grid/',
+          type: 'article',
+          platform: 'CSS-Tricks',
+          difficulty: 'intermediate',
+          tags: ['CSS', 'Grid', 'Layout'],
+          category: 'CSS',
+        },
+        {
+          id: 'flexbox-course',
+          title: 'Flexbox Complete Course',
+          description:
+            'Learn Flexbox from basics to advanced techniques with interactive examples.',
+          url: 'https://www.youtube.com/watch?v=3YW65K6LcIA',
+          type: 'video',
+          platform: 'YouTube',
+          duration: '2h 30m',
+          difficulty: 'beginner',
+          tags: ['CSS', 'Flexbox', 'Layout'],
+          category: 'CSS',
+        },
+        {
+          id: 'javascript-fundamentals',
+          title: 'JavaScript Fundamentals Course',
+          description:
+            'Master JavaScript fundamentals including variables, functions, and DOM manipulation.',
+          url: 'https://www.udemy.com/course/javascript-fundamentals/',
+          type: 'course',
+          platform: 'Udemy',
+          duration: '8h 45m',
+          difficulty: 'beginner',
+          tags: ['JavaScript', 'Fundamentals', 'DOM'],
+          category: 'JavaScript',
+        },
+        {
+          id: 'react-docs',
+          title: 'React Official Documentation',
+          description:
+            'The official React documentation with guides, API reference, and tutorials.',
+          url: 'https://react.dev/',
+          type: 'documentation',
+          platform: 'React',
+          difficulty: 'intermediate',
+          tags: ['React', 'Documentation', 'Hooks'],
+          category: 'React',
+        },
+        {
+          id: 'typescript-handbook',
+          title: 'TypeScript Handbook',
+          description:
+            'Complete TypeScript handbook covering types, interfaces, and advanced features.',
+          url: 'https://www.typescriptlang.org/docs/',
+          type: 'documentation',
+          platform: 'TypeScript',
+          difficulty: 'intermediate',
+          tags: ['TypeScript', 'Types', 'Interfaces'],
+          category: 'TypeScript',
+        },
+      ];
+
+      const resourcesData = getResourcesForPath(pathId);
+      setResources(resourcesData);
+    } catch (error) {
+      console.error('Error loading resources:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [pathId]);
+
+  useEffect(() => {
+    if (pathId) {
+      loadResources();
+    }
+  }, [pathId, loadResources]);
+
+  useEffect(() => {
+    filterResources();
+  }, [
+    resources,
+    selectedType,
+    selectedDifficulty,
+    searchQuery,
+    filterResources,
+  ]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {

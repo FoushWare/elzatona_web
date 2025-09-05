@@ -13,7 +13,9 @@ export default function LearningPathsPage() {
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   // const [selectedPath, setSelectedPath] = useState<string | null>(null);
-  const [collapsedCards, setCollapsedCards] = useState<Set<string>>(new Set());
+  const [collapsedCards, setCollapsedCards] = useState<Set<string>>(
+    new Set(learningPaths.map(path => path.id))
+  );
 
   const filteredPaths = learningPaths.filter(
     path =>
@@ -272,198 +274,193 @@ export default function LearningPathsPage() {
           {filteredPaths.map(path => (
             <div
               key={path.id}
-              className="bg-card rounded-lg shadow-sm border border-border hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 transform group"
+              className={`bg-card rounded-lg shadow-sm border border-border hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 transform group overflow-hidden ${
+                isCardCollapsed(path.id)
+                  ? 'max-h-0 opacity-0'
+                  : 'max-h-[2000px] opacity-100'
+              }`}
             >
-              {/* Collapsible Content - Entire Card */}
+              {/* Header */}
               <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                  isCardCollapsed(path.id)
-                    ? 'max-h-0 opacity-0'
-                    : 'max-h-[2000px] opacity-100'
-                }`}
+                className="p-3 sm:p-4 lg:p-6 cursor-pointer"
+                onClick={() => toggleCard(path.id)}
               >
-                {/* Header */}
-                <div
-                  className="p-3 sm:p-4 lg:p-6 cursor-pointer"
-                  onClick={() => toggleCard(path.id)}
-                >
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-3">
-                    <div className="flex items-start space-x-2 sm:space-x-3 min-w-0 flex-1">
-                      <span className="text-lg sm:text-xl lg:text-2xl flex-shrink-0">
-                        {getCategoryIcon(path.id.split('-')[0])}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-foreground mb-1 break-words">
-                          {path.title}
-                        </h3>
-                        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
-                          {path.description}
-                        </p>
-                      </div>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-3">
+                  <div className="flex items-start space-x-2 sm:space-x-3 min-w-0 flex-1">
+                    <span className="text-lg sm:text-xl lg:text-2xl flex-shrink-0">
+                      {getCategoryIcon(path.id.split('-')[0])}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-foreground mb-1 break-words">
+                        {path.title}
+                      </h3>
+                      <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
+                        {path.description}
+                      </p>
                     </div>
-                    <div className="flex items-center space-x-1 sm:space-x-2 sm:flex-shrink-0">
-                      <span className="text-base sm:text-lg lg:text-xl">
-                        {getDifficultyIcon(path.difficulty)}
+                  </div>
+                  <div className="flex items-center space-x-1 sm:space-x-2 sm:flex-shrink-0">
+                    <span className="text-base sm:text-lg lg:text-xl">
+                      {getDifficultyIcon(path.difficulty)}
+                    </span>
+                    <span
+                      className={`inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium ${getDifficultyColor(path.difficulty)}`}
+                    >
+                      {path.difficulty}
+                    </span>
+                    {path.questionCount && (
+                      <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                        {path.questionCount} questions
                       </span>
+                    )}
+                    <button
+                      className="ml-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      onClick={e => {
+                        e.stopPropagation();
+                        toggleCard(path.id);
+                      }}
+                    >
+                      <svg
+                        className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
+                          isCardCollapsed(path.id) ? '' : 'rotate-180'
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="px-3 sm:px-4 lg:px-6 pb-3 sm:pb-4 lg:pb-6">
+                {/* Stats */}
+                <div className="grid grid-cols-3 gap-1 sm:gap-2 lg:gap-4 mb-3 sm:mb-4 lg:mb-6 text-xs sm:text-sm text-muted-foreground">
+                  <div className="flex flex-col items-center text-center">
+                    <span className="text-base sm:text-lg lg:text-xl mb-1">
+                      📚
+                    </span>
+                    <span className="text-xs sm:text-sm">
+                      {path.resources.length} resources
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-center text-center">
+                    <span className="text-base sm:text-lg lg:text-xl mb-1">
+                      ⏱️
+                    </span>
+                    <span className="text-xs sm:text-sm">
+                      {path.estimatedTime} hours
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-center text-center">
+                    <span className="text-base sm:text-lg lg:text-xl mb-1">
+                      🎯
+                    </span>
+                    <span className="text-xs sm:text-sm">
+                      {path.targetSkills.length} skills
+                    </span>
+                  </div>
+                  {path.questionCount && (
+                    <div className="flex flex-col items-center text-center">
+                      <span className="text-base sm:text-lg lg:text-xl mb-1">
+                        ❓
+                      </span>
+                      <span className="text-xs sm:text-sm text-blue-600 font-medium">
+                        {path.questionCount} questions
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Target Skills */}
+                <div className="mb-3 sm:mb-4 lg:mb-6">
+                  <h4 className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
+                    Skills you&apos;ll learn:
+                  </h4>
+                  <div className="flex flex-wrap gap-1 sm:gap-2">
+                    {path.targetSkills.slice(0, 4).map(skill => (
                       <span
-                        className={`inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium ${getDifficultyColor(path.difficulty)}`}
+                        key={skill}
+                        className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
                       >
-                        {path.difficulty}
+                        {skill}
                       </span>
-                      {path.questionCount && (
-                        <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
-                          {path.questionCount} questions
-                        </span>
-                      )}
-                      <button
-                        className="ml-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                        onClick={e => {
-                          e.stopPropagation();
-                          toggleCard(path.id);
-                        }}
-                      >
-                        <svg
-                          className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
-                            isCardCollapsed(path.id) ? '' : 'rotate-180'
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </button>
-                    </div>
+                    ))}
+                    {path.targetSkills.length > 4 && (
+                      <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                        +{path.targetSkills.length - 4} more
+                      </span>
+                    )}
                   </div>
                 </div>
 
-                {/* Content */}
-                <div className="px-3 sm:px-4 lg:px-6 pb-3 sm:pb-4 lg:pb-6">
-                  {/* Stats */}
-                  <div className="grid grid-cols-3 gap-1 sm:gap-2 lg:gap-4 mb-3 sm:mb-4 lg:mb-6 text-xs sm:text-sm text-muted-foreground">
-                    <div className="flex flex-col items-center text-center">
-                      <span className="text-base sm:text-lg lg:text-xl mb-1">
-                        📚
-                      </span>
-                      <span className="text-xs sm:text-sm">
-                        {path.resources.length} resources
-                      </span>
-                    </div>
-                    <div className="flex flex-col items-center text-center">
-                      <span className="text-base sm:text-lg lg:text-xl mb-1">
-                        ⏱️
-                      </span>
-                      <span className="text-xs sm:text-sm">
-                        {path.estimatedTime} hours
-                      </span>
-                    </div>
-                    <div className="flex flex-col items-center text-center">
-                      <span className="text-base sm:text-lg lg:text-xl mb-1">
-                        🎯
-                      </span>
-                      <span className="text-xs sm:text-sm">
-                        {path.targetSkills.length} skills
-                      </span>
-                    </div>
-                    {path.questionCount && (
-                      <div className="flex flex-col items-center text-center">
-                        <span className="text-base sm:text-lg lg:text-xl mb-1">
-                          ❓
+                {/* Prerequisites */}
+                {path.prerequisites && path.prerequisites.length > 0 && (
+                  <div className="mb-3 sm:mb-4 lg:mb-6">
+                    <h4 className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
+                      Prerequisites:
+                    </h4>
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
+                      {path.prerequisites.map(prereq => (
+                        <span
+                          key={prereq}
+                          className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                        >
+                          {prereq}
                         </span>
-                        <span className="text-xs sm:text-sm text-blue-600 font-medium">
-                          {path.questionCount} questions
-                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Resources Preview */}
+                <div className="mb-3 sm:mb-4 lg:mb-6">
+                  <h4 className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
+                    Featured Resources:
+                  </h4>
+                  <div className="space-y-1 sm:space-y-2">
+                    {path.resources.slice(0, 3).map(resourceId => {
+                      const resource = getResourceById(resourceId);
+                      return resource ? (
+                        <div
+                          key={resourceId}
+                          className="flex items-center space-x-2 text-xs sm:text-sm text-muted-foreground"
+                        >
+                          <span>📄</span>
+                          <span className="truncate">{resource.title}</span>
+                        </div>
+                      ) : null;
+                    })}
+                    {path.resources.length > 3 && (
+                      <div className="text-xs sm:text-sm text-muted-foreground">
+                        +{path.resources.length - 3} more resources
                       </div>
                     )}
                   </div>
+                </div>
 
-                  {/* Target Skills */}
-                  <div className="mb-3 sm:mb-4 lg:mb-6">
-                    <h4 className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
-                      Skills you&apos;ll learn:
-                    </h4>
-                    <div className="flex flex-wrap gap-1 sm:gap-2">
-                      {path.targetSkills.slice(0, 4).map(skill => (
-                        <span
-                          key={skill}
-                          className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                      {path.targetSkills.length > 4 && (
-                        <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400">
-                          +{path.targetSkills.length - 4} more
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Prerequisites */}
-                  {path.prerequisites && path.prerequisites.length > 0 && (
-                    <div className="mb-3 sm:mb-4 lg:mb-6">
-                      <h4 className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
-                        Prerequisites:
-                      </h4>
-                      <div className="flex flex-wrap gap-1 sm:gap-2">
-                        {path.prerequisites.map(prereq => (
-                          <span
-                            key={prereq}
-                            className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                          >
-                            {prereq}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Resources Preview */}
-                  <div className="mb-3 sm:mb-4 lg:mb-6">
-                    <h4 className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
-                      Featured Resources:
-                    </h4>
-                    <div className="space-y-1 sm:space-y-2">
-                      {path.resources.slice(0, 3).map(resourceId => {
-                        const resource = getResourceById(resourceId);
-                        return resource ? (
-                          <div
-                            key={resourceId}
-                            className="flex items-center space-x-2 text-xs sm:text-sm text-muted-foreground"
-                          >
-                            <span>📄</span>
-                            <span className="truncate">{resource.title}</span>
-                          </div>
-                        ) : null;
-                      })}
-                      {path.resources.length > 3 && (
-                        <div className="text-xs sm:text-sm text-muted-foreground">
-                          +{path.resources.length - 3} more resources
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <Link
-                      href={`/learning-paths/${path.id}/questions`}
-                      className="flex-1 inline-flex items-center justify-center px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg text-xs sm:text-sm lg:text-base"
-                    >
-                      🧠 Practice Questions
-                    </Link>
-                    <Link
-                      href={`/learning-paths/${path.id}/resources`}
-                      className="flex-1 inline-flex items-center justify-center px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 bg-transparent border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg text-xs sm:text-sm lg:text-base"
-                    >
-                      📚 View Resources
-                    </Link>
-                  </div>
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Link
+                    href={`/learning-paths/${path.id}/questions`}
+                    className="flex-1 inline-flex items-center justify-center px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg text-xs sm:text-sm lg:text-base"
+                  >
+                    🧠 Practice Questions
+                  </Link>
+                  <Link
+                    href={`/learning-paths/${path.id}/resources`}
+                    className="flex-1 inline-flex items-center justify-center px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 bg-transparent border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white hover:scale-105 transform transition-all duration-200 group-hover:shadow-lg text-xs sm:text-sm lg:text-base"
+                  >
+                    📚 View Resources
+                  </Link>
                 </div>
               </div>
             </div>
