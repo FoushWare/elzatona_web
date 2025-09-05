@@ -765,3 +765,108 @@ app.post('/upload', upload.single('file'), (req, res) => {
   });
 });
 ```
+
+---
+
+## Question 11: Frontend Security Measures
+
+**Question:** From a frontend perspective, what security measures are essential when communicating with a microservices backend?
+
+**Answer:**
+While the backend handles most security, the frontend must correctly implement:
+
+**1. HTTPS:**
+Always ensure all API calls are made to https:// endpoints to encrypt data in transit and prevent man-in-the-middle attacks.
+
+**2. Authentication Token Management:**
+The frontend is responsible for securely obtaining (e.g., via a login flow), storing (preferably in memory or secure HTTP-only cookies, not local storage for critical tokens), and attaching authentication tokens (like JWTs) to every outgoing request to the API Gateway.
+
+**3. CORS Compliance:**
+Understand that browsers block requests to different domains unless the server (the API Gateway) sends the correct CORS headers. The frontend must handle potential CORS errors gracefully.
+
+**4. Input Sanitization:**
+Although the backend must validate all data, frontend sanitization provides the first line of defense and better user experience.
+
+**Example Implementation:**
+
+```javascript
+// Secure API client
+class SecureAPIClient {
+  constructor(baseURL) {
+    this.baseURL = baseURL;
+    this.token = null;
+  }
+
+  // Store token securely (in memory, not localStorage)
+  setToken(token) {
+    this.token = token;
+  }
+
+  // Make secure API calls
+  async request(endpoint, options = {}) {
+    const url = `${this.baseURL}${endpoint}`;
+
+    const config = {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    };
+
+    // Add authentication token
+    if (this.token) {
+      config.headers.Authorization = `Bearer ${this.token}`;
+    }
+
+    try {
+      const response = await fetch(url, config);
+
+      // Handle CORS errors
+      if (!response.ok && response.status === 0) {
+        throw new Error('CORS error - check server configuration');
+      }
+
+      return response;
+    } catch (error) {
+      console.error('API request failed:', error);
+      throw error;
+    }
+  }
+
+  // Sanitize user input
+  sanitizeInput(input) {
+    if (typeof input !== 'string') return input;
+
+    // Basic HTML sanitization
+    return input
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;')
+      .replace(/\//g, '&#x2F;');
+  }
+}
+
+// Usage
+const apiClient = new SecureAPIClient('https://api.example.com');
+apiClient.setToken('your-jwt-token');
+
+// Sanitize before sending
+const userInput = apiClient.sanitizeInput(userFormData.comment);
+await apiClient.request('/comments', {
+  method: 'POST',
+  body: JSON.stringify({ comment: userInput }),
+});
+```
+
+**Key Frontend Security Responsibilities:**
+
+- Always use HTTPS for API calls
+- Handle authentication tokens securely
+- Implement proper error handling for CORS issues
+- Sanitize user input before display
+- Never store sensitive data in localStorage
+- Implement proper session management
+- Use Content Security Policy (CSP) headers
+- Validate file uploads on the frontend (in addition to backend validation)

@@ -685,3 +685,582 @@ module.exports = {
   }
 };
 ```
+
+---
+
+## Question 11: First Contentful Paint (FCP)
+
+**Question:** What is FCP (First Contentful Paint), and what are common causes of a poor FCP score?
+
+**Answer:**
+FCP measures the time from when the page starts loading to when any part of the page's content is rendered on the screen (e.g., text, an image).
+
+**Causes of poor FCP:**
+
+- **Heavy Client-Side Rendering**: Large JavaScript bundles that must be downloaded, parsed, and executed before rendering anything.
+- **No CDN/Slow Assets**: Static assets (JS, CSS, images) are served from a slow origin server instead of a fast, globally distributed CDN.
+- **Unoptimized Assets**: Large, uncompressed images and unminified code.
+- **Render-Blocking Resources**: Large amounts of CSS that must be loaded and parsed before the browser can render.
+
+**Measuring FCP:**
+
+```javascript
+// Measure FCP
+new PerformanceObserver(entryList => {
+  const entries = entryList.getEntries();
+  entries.forEach(entry => {
+    console.log('FCP:', entry.startTime);
+  });
+}).observe({ entryTypes: ['paint'] });
+
+// FCP thresholds
+const fcpThresholds = {
+  good: 1800, // 1.8 seconds
+  needsImprovement: 3000, // 3 seconds
+  poor: 3000, // 3+ seconds
+};
+```
+
+**FCP Optimization Strategies:**
+
+```javascript
+// 1. Critical CSS inlining
+const criticalCSS = `
+  body { margin: 0; font-family: Arial; }
+  .header { background: #333; color: white; }
+  .hero { height: 100vh; background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); }
+`;
+
+// Inline critical CSS
+const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>${criticalCSS}</style>
+  <link rel="preload" href="non-critical.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+</head>
+<body>
+  <div class="hero">Hero content</div>
+</body>
+</html>
+`;
+
+// 2. Resource hints
+const resourceHints = `
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="/fonts/main.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/images/hero.webp" as="image">
+`;
+```
+
+**Server-Side Rendering for FCP:**
+
+```javascript
+// Next.js SSR example
+export async function getServerSideProps() {
+  const data = await fetchData();
+
+  return {
+    props: {
+      data,
+      // Pre-render critical content
+      initialHtml: renderToString(<CriticalContent data={data} />),
+    },
+  };
+}
+
+// React SSR
+import { renderToString } from 'react-dom/server';
+
+function App({ data }) {
+  return (
+    <div>
+      <Header />
+      <HeroSection data={data} />
+      <LazyContent />
+    </div>
+  );
+}
+
+// Server renders critical content immediately
+const html = renderToString(<App data={data} />);
+```
+
+**CDN and Asset Optimization:**
+
+```javascript
+// CDN configuration
+const cdnConfig = {
+  // Use CDN for static assets
+  staticAssets: 'https://cdn.example.com',
+
+  // Optimize images
+  imageOptimization: {
+    format: 'webp',
+    quality: 85,
+    responsive: true,
+    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+  },
+
+  // Compress assets
+  compression: {
+    gzip: true,
+    brotli: true,
+    minify: true,
+  },
+};
+
+// Image optimization
+const optimizedImage = `
+  <picture>
+    <source srcset="hero.webp" type="image/webp">
+    <source srcset="hero.avif" type="image/avif">
+    <img src="hero.jpg" alt="Hero" loading="eager" fetchpriority="high">
+  </picture>
+`;
+```
+
+---
+
+## Question 12: FCP Score Improvement
+
+**Question:** How would you improve a poor FCP score?
+
+**Answer:**
+
+1. **CDN & Caching**: Serve all static assets from a CDN with proper caching headers.
+2. **Bundle Analysis & Optimization**: Analyze the bundle (e.g., with Webpack Bundle Analyzer) to identify and remove large or unused libraries. Enable minification and compression.
+3. **Code Splitting**: Use dynamic imports (React.lazy, import()) to split code into chunks that are loaded only when needed (e.g., per route).
+4. **Consider SSR**: For content-heavy sites, Server-Side Rendering can send HTML directly to the client, dramatically improving FCP.
+
+**Bundle Analysis and Optimization:**
+
+```javascript
+// webpack.config.js - Bundle analysis
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+module.exports = {
+  plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      reportFilename: 'bundle-report.html',
+    }),
+  ],
+
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+        common: {
+          name: 'common',
+          minChunks: 2,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+  },
+};
+
+// Code splitting with React.lazy
+const LazyComponent = React.lazy(() => import('./LazyComponent'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </Suspense>
+  );
+}
+```
+
+**Critical Resource Optimization:**
+
+```javascript
+// Critical CSS extraction
+const criticalCSS = `
+  /* Above-the-fold styles */
+  .header { position: fixed; top: 0; width: 100%; }
+  .hero { height: 100vh; display: flex; align-items: center; }
+  .hero h1 { font-size: 3rem; margin: 0; }
+`;
+
+// Inline critical CSS
+const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>${criticalCSS}</style>
+  <link rel="preload" href="non-critical.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+</head>
+<body>
+  <header class="header">Header</header>
+  <section class="hero">
+    <h1>Hero Title</h1>
+  </section>
+</body>
+</html>
+`;
+
+// Resource preloading
+const preloadResources = `
+  <link rel="preload" href="/fonts/main.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/images/hero.webp" as="image">
+  <link rel="preload" href="/js/critical.js" as="script">
+`;
+```
+
+**Server-Side Rendering Implementation:**
+
+```javascript
+// Next.js SSR
+export async function getServerSideProps() {
+  const startTime = Date.now();
+
+  // Fetch critical data
+  const [user, posts] = await Promise.all([fetchUser(), fetchPosts()]);
+
+  const renderTime = Date.now() - startTime;
+
+  return {
+    props: {
+      user,
+      posts,
+      renderTime,
+    },
+  };
+}
+
+// React SSR with streaming
+import { renderToPipeableStream } from 'react-dom/server';
+
+function App({ data }) {
+  return (
+    <div>
+      <Header />
+      <HeroSection data={data} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <LazyContent />
+      </Suspense>
+    </div>
+  );
+}
+
+// Stream rendering for faster FCP
+const stream = renderToPipeableStream(<App data={data} />, {
+  onShellReady() {
+    // Send initial HTML immediately
+    res.setHeader('Content-Type', 'text/html');
+    stream.pipe(res);
+  },
+});
+```
+
+**CDN and Caching Strategy:**
+
+```javascript
+// CDN configuration
+const cdnConfig = {
+  // Static assets
+  staticAssets: {
+    domain: 'https://cdn.example.com',
+    cacheControl: 'public, max-age=31536000, immutable',
+  },
+
+  // API responses
+  apiResponses: {
+    cacheControl: 'public, max-age=300, s-maxage=600',
+  },
+
+  // HTML pages
+  htmlPages: {
+    cacheControl: 'public, max-age=0, s-maxage=300',
+  },
+};
+
+// Service Worker for caching
+const serviceWorker = `
+  self.addEventListener('fetch', event => {
+    if (event.request.destination === 'image') {
+      event.respondWith(
+        caches.match(event.request).then(response => {
+          return response || fetch(event.request);
+        })
+      );
+    }
+  });
+`;
+```
+
+**Performance Monitoring:**
+
+```javascript
+// FCP monitoring
+class FCPMonitor {
+  constructor() {
+    this.observeFCP();
+  }
+
+  observeFCP() {
+    new PerformanceObserver(entryList => {
+      const entries = entryList.getEntries();
+      entries.forEach(entry => {
+        if (entry.name === 'first-contentful-paint') {
+          this.reportFCP(entry.startTime);
+        }
+      });
+    }).observe({ entryTypes: ['paint'] });
+  }
+
+  reportFCP(fcpTime) {
+    // Send to analytics
+    analytics.track('fcp', {
+      value: fcpTime,
+      rating: this.getRating(fcpTime),
+    });
+  }
+
+  getRating(fcpTime) {
+    if (fcpTime <= 1800) return 'good';
+    if (fcpTime <= 3000) return 'needs-improvement';
+    return 'poor';
+  }
+}
+
+new FCPMonitor();
+```
+
+---
+
+## Question 13: SSR vs CSR Performance
+
+**Question:** When should you consider Server-Side Rendering (SSR) vs. Client-Side Rendering (CSR)?
+
+**Answer:**
+
+- **Use SSR for**: Content-focused websites where SEO and initial load time (FCP) are critical (e.g., e-commerce, news sites, marketing pages).
+- **Use CSR for**: Highly interactive web applications (SaaS dashboards, accounting software) where the user experience after the initial load is the priority, and SEO is less critical. CSR is often simpler to develop and deploy.
+
+**SSR Use Cases:**
+
+```javascript
+// E-commerce product page - SSR
+export async function getServerSideProps({ params }) {
+  const product = await fetchProduct(params.id);
+  const reviews = await fetchReviews(params.id);
+
+  return {
+    props: {
+      product,
+      reviews,
+      // Pre-render for SEO and fast FCP
+      meta: {
+        title: product.name,
+        description: product.description,
+        image: product.image,
+      },
+    },
+  };
+}
+
+// News article - SSR
+export async function getServerSideProps({ params }) {
+  const article = await fetchArticle(params.slug);
+
+  return {
+    props: {
+      article,
+      // Critical for SEO
+      meta: {
+        title: article.title,
+        description: article.excerpt,
+        publishedTime: article.publishedAt,
+      },
+    },
+  };
+}
+```
+
+**CSR Use Cases:**
+
+```javascript
+// Dashboard application - CSR
+function Dashboard() {
+  const [data, setData] = useState(null);
+  const [filters, setFilters] = useState({});
+
+  useEffect(() => {
+    // Load data after initial render
+    fetchDashboardData(filters).then(setData);
+  }, [filters]);
+
+  return (
+    <div>
+      <FilterPanel onFilterChange={setFilters} />
+      <DataVisualization data={data} />
+      <InteractiveCharts data={data} />
+    </div>
+  );
+}
+
+// Admin panel - CSR
+function AdminPanel() {
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  return (
+    <div>
+      <UserList users={users} onSelect={setSelectedUser} />
+      <UserEditor user={selectedUser} />
+    </div>
+  );
+}
+```
+
+**Hybrid Approach (SSG + CSR):**
+
+```javascript
+// Static generation for content, CSR for interactivity
+export async function getStaticProps() {
+  const posts = await fetchPosts();
+
+  return {
+    props: { posts },
+    revalidate: 3600, // Revalidate every hour
+  };
+}
+
+function Blog({ posts }) {
+  const [comments, setComments] = useState({});
+
+  // Static content rendered at build time
+  return (
+    <div>
+      {posts.map(post => (
+        <article key={post.id}>
+          <h1>{post.title}</h1>
+          <p>{post.content}</p>
+
+          {/* Interactive content loaded client-side */}
+          <Comments
+            postId={post.id}
+            comments={comments[post.id]}
+            onLoad={setComments}
+          />
+        </article>
+      ))}
+    </div>
+  );
+}
+```
+
+**Performance Comparison:**
+
+```javascript
+// SSR Performance
+const ssrMetrics = {
+  fcp: 800, // Fast - HTML sent immediately
+  lcp: 1200, // Fast - content pre-rendered
+  ttfb: 200, // Fast - server response
+  fid: 50, // Good - minimal JS
+  cls: 0.05, // Good - stable layout
+  seo: 'excellent', // Perfect - content in HTML
+};
+
+// CSR Performance
+const csrMetrics = {
+  fcp: 2500, // Slow - JS must load first
+  lcp: 3000, // Slow - content rendered after JS
+  ttfb: 100, // Fast - static files
+  fid: 200, // Poor - large JS bundle
+  cls: 0.15, // Poor - layout shifts
+  seo: 'poor', // Poor - no content in HTML
+};
+```
+
+**Implementation Considerations:**
+
+```javascript
+// SSR Implementation
+const ssrApp = {
+  // Pros
+  pros: [
+    'Fast initial load',
+    'Excellent SEO',
+    'Social media sharing',
+    'Accessibility',
+    'Progressive enhancement',
+  ],
+
+  // Cons
+  cons: [
+    'Complex deployment',
+    'Server costs',
+    'Slower subsequent navigation',
+    'Limited interactivity',
+    'Hydration issues',
+  ],
+};
+
+// CSR Implementation
+const csrApp = {
+  // Pros
+  pros: [
+    'Simple deployment',
+    'Fast subsequent navigation',
+    'Rich interactivity',
+    'Offline capabilities',
+    'Real-time updates',
+  ],
+
+  // Cons
+  cons: [
+    'Slow initial load',
+    'Poor SEO',
+    'Accessibility issues',
+    'Large bundle size',
+    'JavaScript required',
+  ],
+};
+```
+
+**Decision Matrix:**
+
+```javascript
+const decisionMatrix = {
+  // Choose SSR when:
+  ssr: {
+    seo: 'critical',
+    content: 'static',
+    users: 'public',
+    performance: 'initial-load',
+    complexity: 'low',
+  },
+
+  // Choose CSR when:
+  csr: {
+    seo: 'not-important',
+    content: 'dynamic',
+    users: 'authenticated',
+    performance: 'interaction',
+    complexity: 'high',
+  },
+
+  // Choose hybrid when:
+  hybrid: {
+    seo: 'important',
+    content: 'mixed',
+    users: 'both',
+    performance: 'balanced',
+    complexity: 'medium',
+  },
+};
+```

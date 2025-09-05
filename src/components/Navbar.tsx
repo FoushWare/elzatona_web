@@ -1,15 +1,112 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import ZatonaLogo from './ZatonaLogo';
+
+interface DropdownItem {
+  href: string;
+  label: string;
+  icon?: string;
+  description?: string;
+}
+
+interface DropdownMenu {
+  label: string;
+  icon: string;
+  items: DropdownItem[];
+}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const { isDarkMode, toggleDarkMode } = useTheme();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Dropdown menu data
+  const dropdownMenus: DropdownMenu[] = [
+    {
+      label: 'Learning',
+      icon: '📚',
+      items: [
+        {
+          href: '/learning-paths',
+          label: 'Learning Paths',
+          icon: '🗺️',
+          description: 'Structured learning paths for frontend development',
+        },
+        {
+          href: '/cheatsheet',
+          label: 'Cheat Sheet',
+          icon: '📋',
+          description: 'Quick reference for frontend best practices',
+        },
+        {
+          href: '/resources',
+          label: 'Resources',
+          icon: '📖',
+          description: 'Curated learning materials and tools',
+        },
+        {
+          href: '/articles',
+          label: 'Articles',
+          icon: '📰',
+          description: 'High-quality frontend development articles',
+        },
+      ],
+    },
+    {
+      label: 'Practice',
+      icon: '💻',
+      items: [
+        {
+          href: '/practice/frontend-challenges',
+          label: 'Frontend Challenges',
+          icon: '⚡',
+          description: 'React, JavaScript, CSS, and DOM challenges',
+        },
+        {
+          href: '/practice/algorithm-problems',
+          label: 'Algorithm Problems',
+          icon: '🧮',
+          description: 'Data structures and algorithm challenges',
+        },
+      ],
+    },
+    {
+      label: 'Interview Prep',
+      icon: '🎯',
+      items: [
+        {
+          href: '/mock-interviews',
+          label: 'Mock Interviews',
+          icon: '🎬',
+          description: 'Video mock interviews and practice sessions',
+        },
+        {
+          href: '/preparation-guides',
+          label: 'Preparation Guides',
+          icon: '📖',
+          description: 'Comprehensive interview preparation guides',
+        },
+      ],
+    },
+    {
+      label: 'Media',
+      icon: '🎧',
+      items: [
+        {
+          href: '/podcasts',
+          label: 'Podcasts',
+          icon: '🎧',
+          description: 'Tech podcasts and audio content',
+        },
+      ],
+    },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +116,25 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggleDropdown = (dropdownLabel: string) => {
+    setActiveDropdown(activeDropdown === dropdownLabel ? null : dropdownLabel);
+  };
 
   return (
     <nav
@@ -42,41 +158,67 @@ export default function Navbar() {
             <ZatonaLogo size="sm" showText={true} />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/learning-paths"
-              className={`nav-link transition-all duration-200 hover:scale-105 px-3 py-2 rounded-lg ${
-                isScrolled
-                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                  : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
-              }`}
-            >
-              Learning Paths
-            </Link>
+          {/* Desktop Navigation with Dropdowns */}
+          <div
+            className="hidden md:flex items-center space-x-6"
+            ref={dropdownRef}
+          >
+            {dropdownMenus.map(menu => (
+              <div key={menu.label} className="relative">
+                <button
+                  onClick={() => toggleDropdown(menu.label)}
+                  className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                    isScrolled
+                      ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                      : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+                  }`}
+                >
+                  <span>{menu.icon}</span>
+                  <span className="font-medium">{menu.label}</span>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      activeDropdown === menu.label ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
 
-            <Link
-              href="/coding"
-              className={`nav-link transition-all duration-200 hover:scale-105 px-3 py-2 rounded-lg ${
-                isScrolled
-                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                  : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
-              }`}
-            >
-              Coding
-            </Link>
+                {/* Dropdown Menu */}
+                {activeDropdown === menu.label && (
+                  <div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                      <h3 className="font-semibold text-gray-900 dark:text-white flex items-center">
+                        <span className="mr-2">{menu.icon}</span>
+                        {menu.label}
+                      </h3>
+                    </div>
+                    <div className="py-2">
+                      {menu.items.map(item => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="flex items-start px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 group"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                            {item.icon}
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                              {item.label}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                              {item.description}
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
 
-            <Link
-              href="/preparation-guides"
-              className={`nav-link transition-all duration-200 hover:scale-105 px-3 py-2 rounded-lg ${
-                isScrolled
-                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                  : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
-              }`}
-            >
-              📖 Preparation Guides
-            </Link>
-
+            {/* Job Aggregator - Standalone Link */}
             <Link
               href="/jobs"
               className={`nav-link transition-all duration-200 hover:scale-105 px-3 py-2 rounded-lg ${
@@ -136,38 +278,48 @@ export default function Navbar() {
         <div className="md:hidden fixed inset-0 top-16 bg-white dark:bg-gray-900 z-40">
           <div className="flex flex-col h-full">
             {/* Navigation Links */}
-            <div className="flex-1 px-4 pt-8 space-y-4">
-              <Link
-                href="/learning-paths"
-                className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                onClick={() => setIsOpen(false)}
-              >
-                🗺️ Learning Paths
-              </Link>
+            <div className="flex-1 px-4 pt-8 space-y-6">
+              {dropdownMenus.map(menu => (
+                <div key={menu.label} className="space-y-2">
+                  <div className="flex items-center px-4 py-2">
+                    <span className="text-xl mr-3">{menu.icon}</span>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      {menu.label}
+                    </h3>
+                  </div>
+                  <div className="pl-8 space-y-1">
+                    {menu.items.map(item => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-3 rounded-lg text-base font-medium transition-colors text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <div className="flex items-center">
+                          <span className="text-lg mr-3">{item.icon}</span>
+                          <div>
+                            <div className="font-medium">{item.label}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              {item.description}
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
 
-              <Link
-                href="/coding"
-                className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                onClick={() => setIsOpen(false)}
-              >
-                💻 Coding Challenges
-              </Link>
-
-              <Link
-                href="/preparation-guides"
-                className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                onClick={() => setIsOpen(false)}
-              >
-                📖 Preparation Guides
-              </Link>
-
-              <Link
-                href="/jobs"
-                className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                onClick={() => setIsOpen(false)}
-              >
-                💼 Job Aggregator
-              </Link>
+              {/* Job Aggregator - Standalone Link */}
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <Link
+                  href="/jobs"
+                  className="block px-4 py-4 rounded-lg text-lg font-medium transition-colors text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                  onClick={() => setIsOpen(false)}
+                >
+                  💼 Job Aggregator
+                </Link>
+              </div>
 
               <Link
                 href="/auth"

@@ -1317,3 +1317,636 @@ class ComplianceMonitor {
   }
 }
 ```
+
+---
+
+## Question 11: Webpack Module Bundler
+
+**Question:** What is Webpack, and what is it used for?
+
+**Answer:**
+Webpack is a module bundler. Its primary purpose is to take multiple JavaScript files (and other assets like CSS, images) that use modules (import/export) and bundle them into a smaller number of optimized files (often just one) for the browser. This is necessary because browsers historically couldn't natively handle complex module dependency graphs.
+
+**Basic Webpack Configuration:**
+
+```javascript
+// webpack.config.js
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.[contenthash].js',
+    clean: true,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+          },
+        },
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
+    ],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+    }),
+  ],
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  },
+};
+```
+
+**Webpack Loaders:**
+
+```javascript
+// Different loaders for different file types
+module.exports = {
+  module: {
+    rules: [
+      // JavaScript/TypeScript
+      {
+        test: /\.(js|jsx|ts|tsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react',
+              '@babel/preset-typescript',
+            ],
+          },
+        },
+      },
+
+      // CSS
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader', // Injects CSS into DOM
+          'css-loader', // Resolves CSS imports
+          'postcss-loader', // PostCSS processing
+        ],
+      },
+
+      // SCSS/Sass
+      {
+        test: /\.(scss|sass)$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+
+      // Images
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name].[hash][ext]',
+        },
+      },
+
+      // Fonts
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name].[hash][ext]',
+        },
+      },
+    ],
+  },
+};
+```
+
+**Webpack Plugins:**
+
+```javascript
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    // Clean dist folder before build
+    new CleanWebpackPlugin(),
+
+    // Generate HTML file
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      title: 'My App',
+      meta: {
+        viewport: 'width=device-width, initial-scale=1',
+      },
+    }),
+
+    // Extract CSS to separate file
+    new MiniCssExtractPlugin({
+      filename: 'styles.[contenthash].css',
+    }),
+
+    // Copy static assets
+    new CopyWebpackPlugin({
+      patterns: [{ from: 'public', to: 'assets' }],
+    }),
+  ],
+};
+```
+
+**Code Splitting:**
+
+```javascript
+module.exports = {
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+        common: {
+          name: 'common',
+          minChunks: 2,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+  },
+};
+
+// Dynamic imports for code splitting
+// In your JavaScript code:
+const LazyComponent = React.lazy(() => import('./LazyComponent'));
+
+// Or with webpack magic comments:
+const LazyComponent = React.lazy(
+  () => import(/* webpackChunkName: "lazy-component" */ './LazyComponent')
+);
+```
+
+**Development vs Production:**
+
+```javascript
+// webpack.config.js
+const isProduction = process.env.NODE_ENV === 'production';
+
+module.exports = {
+  mode: isProduction ? 'production' : 'development',
+
+  devtool: isProduction ? 'source-map' : 'eval-source-map',
+
+  devServer: {
+    static: './dist',
+    hot: true,
+    open: true,
+    port: 3000,
+    historyApiFallback: true,
+  },
+
+  optimization: {
+    minimize: isProduction,
+    splitChunks: isProduction
+      ? {
+          chunks: 'all',
+        }
+      : false,
+  },
+
+  plugins: [
+    ...(isProduction
+      ? [new MiniCssExtractPlugin(), new TerserPlugin()]
+      : [new webpack.HotModuleReplacementPlugin()]),
+  ],
+};
+```
+
+---
+
+## Question 12: Tree Shaking
+
+**Question:** What is tree shaking?
+
+**Answer:**
+Tree shaking is a dead code elimination process performed by bundlers like Webpack. It analyzes your code and its module dependencies to identify and remove code that is not actually used (exported but never imported). This significantly reduces the final bundle size. It works best with ES6 module syntax (import/export) due to its static structure.
+
+**How Tree Shaking Works:**
+
+```javascript
+// math.js - Library with multiple exports
+export function add(a, b) {
+  return a + b;
+}
+
+export function subtract(a, b) {
+  return a - b;
+}
+
+export function multiply(a, b) {
+  return a * b;
+}
+
+export function divide(a, b) {
+  return a / b;
+}
+
+// main.js - Only imports what it uses
+import { add, multiply } from './math.js';
+
+console.log(add(2, 3)); // 5
+console.log(multiply(4, 5)); // 20
+
+// After tree shaking, only add() and multiply() are included in the bundle
+// subtract() and divide() are eliminated
+```
+
+**ES6 Modules (Tree Shakeable):**
+
+```javascript
+// ✅ Good - ES6 modules (tree shakeable)
+// utils.js
+export const formatDate = date => {
+  /* ... */
+};
+export const formatCurrency = amount => {
+  /* ... */
+};
+export const validateEmail = email => {
+  /* ... */
+};
+
+// main.js
+import { formatDate } from './utils.js';
+// Only formatDate is included in bundle
+
+// ❌ Bad - CommonJS (not tree shakeable)
+// utils.js
+module.exports = {
+  formatDate: date => {
+    /* ... */
+  },
+  formatCurrency: amount => {
+    /* ... */
+  },
+  validateEmail: email => {
+    /* ... */
+  },
+};
+
+// main.js
+const { formatDate } = require('./utils.js');
+// All functions are included in bundle
+```
+
+**Tree Shaking with Libraries:**
+
+```javascript
+// ✅ Good - Import specific functions
+import { debounce, throttle } from 'lodash-es';
+
+// ❌ Bad - Import entire library
+import _ from 'lodash';
+
+// ✅ Good - Import from specific path
+import debounce from 'lodash/debounce';
+
+// ❌ Bad - Import from main entry
+import { debounce } from 'lodash';
+```
+
+**Webpack Tree Shaking Configuration:**
+
+```javascript
+// webpack.config.js
+module.exports = {
+  mode: 'production', // Tree shaking only works in production mode
+
+  optimization: {
+    usedExports: true, // Mark used exports
+    sideEffects: false, // Assume no side effects
+
+    // Or specify files with side effects
+    sideEffects: ['*.css', '*.scss', './src/polyfills.js'],
+  },
+};
+```
+
+**Package.json Side Effects:**
+
+```json
+{
+  "name": "my-package",
+  "sideEffects": false,
+  // or
+  "sideEffects": ["*.css", "*.scss", "./src/polyfills.js"]
+}
+```
+
+**Tree Shaking with CSS:**
+
+```javascript
+// webpack.config.js
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const PurgeCSSPlugin = require('purgecss-webpack-plugin');
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+    ],
+  },
+
+  plugins: [
+    new MiniCssExtractPlugin(),
+
+    // Remove unused CSS
+    new PurgeCSSPlugin({
+      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+      safelist: {
+        standard: [/^hljs/, /^cm-/, /^CodeMirror/],
+      },
+    }),
+  ],
+};
+```
+
+**Tree Shaking Best Practices:**
+
+```javascript
+// ✅ Good - Pure functions (tree shakeable)
+export const utils = {
+  add: (a, b) => a + b,
+  multiply: (a, b) => a * b,
+};
+
+// ❌ Bad - Side effects (not tree shakeable)
+export const utils = {
+  add: (a, b) => {
+    console.log('Adding numbers'); // Side effect
+    return a + b;
+  },
+};
+
+// ✅ Good - Separate exports
+export const formatDate = date => {
+  /* ... */
+};
+export const formatCurrency = amount => {
+  /* ... */
+};
+
+// ❌ Bad - Object export
+export const formatters = {
+  date: date => {
+    /* ... */
+  },
+  currency: amount => {
+    /* ... */
+  },
+};
+```
+
+---
+
+## Question 13: Webpack Dependency Graph
+
+**Question:** What is a dependency graph in Webpack?
+
+**Answer:**
+A dependency graph is an internal representation Webpack builds starting from your application's entry point (e.g., index.js). It maps out every import and require statement, creating a graph of how all modules depend on each other. This graph is then used to generate the optimized bundles.
+
+**How Dependency Graph Works:**
+
+```javascript
+// Entry point: src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import './styles.css';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+// App.js
+import Header from './components/Header';
+import Main from './components/Main';
+import Footer from './components/Footer';
+
+export default function App() {
+  return (
+    <div>
+      <Header />
+      <Main />
+      <Footer />
+    </div>
+  );
+}
+
+// Header.js
+import Logo from './Logo';
+import Navigation from './Navigation';
+
+export default function Header() {
+  return (
+    <header>
+      <Logo />
+      <Navigation />
+    </header>
+  );
+}
+```
+
+**Dependency Graph Visualization:**
+
+```
+index.js
+├── react (node_modules)
+├── react-dom (node_modules)
+├── App.js
+│   ├── Header.js
+│   │   ├── Logo.js
+│   │   └── Navigation.js
+│   ├── Main.js
+│   └── Footer.js
+└── styles.css
+```
+
+**Webpack Bundle Analysis:**
+
+```javascript
+// webpack.config.js
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+module.exports = {
+  plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      reportFilename: 'bundle-report.html',
+    }),
+  ],
+};
+
+// Or use webpack-bundle-analyzer CLI
+// npx webpack-bundle-analyzer dist/bundle.js
+```
+
+**Circular Dependencies:**
+
+```javascript
+// ❌ Bad - Circular dependency
+// user.js
+import { getPost } from './post.js';
+export const getUser = id => {
+  /* ... */
+};
+
+// post.js
+import { getUser } from './user.js';
+export const getPost = id => {
+  /* ... */
+};
+
+// ✅ Good - Break circular dependency
+// user.js
+export const getUser = id => {
+  /* ... */
+};
+
+// post.js
+export const getPost = id => {
+  /* ... */
+};
+
+// user-post.js - Common module
+import { getUser } from './user.js';
+import { getPost } from './post.js';
+
+export const getUserWithPosts = async userId => {
+  const user = await getUser(userId);
+  const posts = await getPost(userId);
+  return { user, posts };
+};
+```
+
+**Dynamic Imports and Code Splitting:**
+
+```javascript
+// Static import - included in main bundle
+import Header from './Header';
+
+// Dynamic import - creates separate chunk
+const LazyComponent = React.lazy(() => import('./LazyComponent'));
+
+// Dynamic import with webpack magic comments
+const LazyComponent = React.lazy(
+  () => import(/* webpackChunkName: "lazy-component" */ './LazyComponent')
+);
+
+// Multiple dynamic imports
+const loadComponent = componentName => {
+  return import(`./components/${componentName}`);
+};
+```
+
+**Webpack Module Resolution:**
+
+```javascript
+// webpack.config.js
+module.exports = {
+  resolve: {
+    // File extensions to resolve
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+
+    // Directory names to resolve
+    modules: ['node_modules', 'src'],
+
+    // Alias for shorter imports
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
+    },
+  },
+};
+
+// Usage with aliases
+import Header from '@components/Header';
+import { formatDate } from '@utils/date';
+```
+
+**Dependency Graph Optimization:**
+
+```javascript
+// webpack.config.js
+module.exports = {
+  optimization: {
+    // Split chunks based on dependency graph
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        // Vendor chunk for node_modules
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+
+        // Common chunk for shared code
+        common: {
+          name: 'common',
+          minChunks: 2,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+  },
+};
+```
+
+**Webpack Stats and Analysis:**
+
+```javascript
+// webpack.config.js
+module.exports = {
+  stats: {
+    // Show module information
+    modules: true,
+
+    // Show chunk information
+    chunks: true,
+
+    // Show dependency information
+    dependencies: true,
+
+    // Show reasons for including modules
+    reasons: true,
+  },
+};
+
+// Generate stats file
+// webpack --config webpack.config.js --json > stats.json
+```
