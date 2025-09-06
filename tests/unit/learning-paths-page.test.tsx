@@ -273,10 +273,10 @@ describe('LearningPathsPage', () => {
     render(<LearningPathsPage />);
 
     expect(
-      screen.getByRole('button', { name: /show statistics/i })
+      screen.getByRole('button', { name: /show stats/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /show filters/i })
+      screen.getByRole('button', { name: /filters/i })
     ).toBeInTheDocument();
   });
 
@@ -285,12 +285,12 @@ describe('LearningPathsPage', () => {
     render(<LearningPathsPage />);
 
     const toggleButton = screen.getByRole('button', {
-      name: /show statistics/i,
+      name: /show stats/i,
     });
     await user.click(toggleButton);
 
     expect(
-      screen.getByRole('button', { name: /hide statistics/i })
+      screen.getByRole('button', { name: /hide stats/i })
     ).toBeInTheDocument();
   });
 
@@ -298,7 +298,7 @@ describe('LearningPathsPage', () => {
     const user = userEvent.setup();
     render(<LearningPathsPage />);
 
-    const toggleButton = screen.getByRole('button', { name: /show filters/i });
+    const toggleButton = screen.getByRole('button', { name: /filters/i });
     await user.click(toggleButton);
 
     expect(

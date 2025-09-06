@@ -383,10 +383,10 @@ describe('Learning Paths Page Integration Tests', () => {
       render(<LearningPathsPage />);
 
       expect(
-        screen.getByRole('button', { name: /show statistics/i })
+        screen.getByRole('button', { name: /show stats/i })
       ).toBeInTheDocument();
       expect(
-        screen.getByRole('button', { name: /show filters/i })
+        screen.getByRole('button', { name: /filters/i })
       ).toBeInTheDocument();
     });
 
@@ -406,7 +406,7 @@ describe('Learning Paths Page Integration Tests', () => {
       expect(statisticsContainer).toHaveClass('hidden', 'md:grid');
 
       // Click show statistics button
-      fireEvent.click(screen.getByRole('button', { name: /show statistics/i }));
+      fireEvent.click(screen.getByRole('button', { name: /show stats/i }));
 
       // Statistics should now be visible
       await waitFor(() => {
@@ -430,7 +430,7 @@ describe('Learning Paths Page Integration Tests', () => {
       expect(filtersContainer).toHaveClass('hidden', 'md:block');
 
       // Click show filters button
-      fireEvent.click(screen.getByRole('button', { name: /show filters/i }));
+      fireEvent.click(screen.getByRole('button', { name: /filters/i }));
 
       // Filters should now be visible
       await waitFor(() => {

@@ -111,10 +111,10 @@ describe('Learning Paths Components', () => {
       );
 
       const showStatsButton = screen.getByRole('button', {
-        name: /show statistics/i,
+        name: /show stats/i,
       });
       const showFiltersButton = screen.getByRole('button', {
-        name: /show filters/i,
+        name: /filters/i,
       });
 
       expect(showStatsButton).toBeInTheDocument();
@@ -138,7 +138,7 @@ describe('Learning Paths Components', () => {
       );
 
       expect(
-        screen.getByRole('button', { name: /hide statistics/i })
+        screen.getByRole('button', { name: /hide stats/i })
       ).toBeInTheDocument();
       expect(
         screen.getByRole('button', { name: /hide filters/i })
