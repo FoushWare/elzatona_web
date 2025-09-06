@@ -8,11 +8,17 @@ import {
   QuestionsData,
   getQuestionsForPath,
 } from '@/lib/questions';
+import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { flashcardService } from '@/lib/firebase-flashcards';
+import AddToFlashcard from '@/components/AddToFlashcard';
+import ToastContainer, { useToast, Toast } from '@/components/Toast';
 
 export default function QuestionsPage() {
   const params = useParams();
   const router = useRouter();
   const pathId = params.id as string;
+  const { user } = useFirebaseAuth();
+  const { toasts, removeToast, showSuccess, showError } = useToast();
 
   const [questionsData, setQuestionsData] = useState<QuestionsData | null>(
     null
@@ -57,7 +63,7 @@ export default function QuestionsPage() {
     setSelectedAnswer(answerIndex.toString());
   };
 
-  const handleSubmitAnswer = () => {
+  const handleSubmitAnswer = async () => {
     if (!selectedAnswer || !currentGroup) return;
 
     const currentQuestion = currentGroup.questions[currentQuestionIndex];
@@ -67,6 +73,43 @@ export default function QuestionsPage() {
     if (isCorrect && !answeredQuestions.has(currentQuestion.id)) {
       setScore(prev => prev + 1);
       setAnsweredQuestions(prev => new Set([...prev, currentQuestion.id]));
+    }
+
+    // Automatic flashcard creation on failure
+    if (!isCorrect && user) {
+      try {
+        const { exists } = await flashcardService.checkFlashcardExists(
+          user.uid,
+          currentQuestion.question
+        );
+
+        if (!exists) {
+          await flashcardService.createFlashcardFromQuestion({
+            question: currentQuestion.question,
+            answer:
+              currentQuestion.answer ||
+              currentQuestion.explanation ||
+              'No explanation provided',
+            category:
+              currentQuestion.category || learningPath?.title || 'General',
+            difficulty: currentQuestion.difficulty || 'intermediate',
+            source: `${learningPath?.title} - ${currentGroup.title}`,
+            addedBy: 'failed',
+            userId: user.uid,
+          });
+
+          showSuccess(
+            'Question Bookmarked',
+            'This question has been automatically bookmarked to your Flashcards for review later.'
+          );
+        }
+      } catch (error) {
+        console.error('Error creating flashcard from failed question:', error);
+        showError(
+          'Error',
+          'Failed to add question to flashcards. Please try again.'
+        );
+      }
     }
 
     setShowAnswer(true);
@@ -450,15 +493,55 @@ export default function QuestionsPage() {
 
         {/* Question Card */}
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 relative">
+            {/* Bookmark at top right */}
+            {user && (
+              <div className="absolute top-6 right-6">
+                <AddToFlashcard
+                  question={currentQuestion.question}
+                  answer={
+                    currentQuestion.answer ||
+                    currentQuestion.explanation ||
+                    'No explanation provided'
+                  }
+                  category={
+                    currentQuestion.category || learningPath?.title || 'General'
+                  }
+                  difficulty={currentQuestion.difficulty || 'intermediate'}
+                  source={`${learningPath?.title} - ${currentGroup.title}`}
+                  onStatusChange={status => {
+                    if (status === 'added') {
+                      showSuccess(
+                        'Question Bookmarked',
+                        'Question saved to your flashcard deck for later review'
+                      );
+                    } else if (status === 'removed') {
+                      showSuccess(
+                        'Bookmark Removed',
+                        'Question removed from your flashcard collection'
+                      );
+                    } else if (status === 'error') {
+                      showError(
+                        'Error',
+                        'Failed to update bookmark. Please try again.'
+                      );
+                    }
+                  }}
+                  className="!p-2 !px-0"
+                />
+              </div>
+            )}
+
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
-                <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium">
-                  {currentQuestion.category}
-                </span>
-                <span className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm font-medium">
-                  {currentQuestion.difficulty}
-                </span>
+                <div className="flex items-center space-x-3">
+                  <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium">
+                    {currentQuestion.category}
+                  </span>
+                  <span className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm font-medium">
+                    {currentQuestion.difficulty}
+                  </span>
+                </div>
               </div>
 
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
@@ -585,6 +668,42 @@ export default function QuestionsPage() {
                       </p>
                     </div>
                   )}
+
+                  {/* Flashcard hint for wrong answers */}
+                  {user &&
+                    selectedAnswer &&
+                    parseInt(selectedAnswer) !==
+                      currentQuestion.correctAnswer && (
+                      <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                        <div className="flex items-center space-x-2">
+                          <div className="p-1 bg-green-100 dark:bg-green-800 rounded">
+                            <svg
+                              className="w-4 h-4 text-green-600 dark:text-green-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                              />
+                            </svg>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-green-800 dark:text-green-200">
+                              💡 This question has been automatically bookmarked
+                              to your Flashcards!
+                            </p>
+                            <p className="text-xs text-green-700 dark:text-green-300">
+                              Review it later with spaced repetition to
+                              strengthen your understanding.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                 </div>
               </div>
             )}
@@ -762,6 +881,9 @@ export default function QuestionsPage() {
           </div>
         </div>
       </div>
+
+      {/* Toast Notifications */}
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );
 }
