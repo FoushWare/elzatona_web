@@ -495,42 +495,48 @@ export default function QuestionsPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 relative">
             {/* Bookmark at top right */}
-            {user && (
-              <div className="absolute top-6 right-6">
-                <AddToFlashcard
-                  question={currentQuestion.question}
-                  answer={
-                    currentQuestion.answer ||
-                    currentQuestion.explanation ||
-                    'No explanation provided'
-                  }
-                  category={
-                    currentQuestion.category || learningPath?.title || 'General'
-                  }
-                  difficulty={currentQuestion.difficulty || 'intermediate'}
-                  source={`${learningPath?.title} - ${currentGroup.title}`}
-                  onStatusChange={status => {
-                    if (status === 'added') {
-                      showSuccess(
-                        'Question Bookmarked',
-                        'Question saved to your flashcard deck for later review'
+            <div className="absolute top-6 right-6">
+              <AddToFlashcard
+                key={currentQuestion.question} // Force re-render when question changes
+                question={currentQuestion.question}
+                answer={
+                  currentQuestion.answer ||
+                  currentQuestion.explanation ||
+                  'No explanation provided'
+                }
+                category={
+                  currentQuestion.category || learningPath?.title || 'General'
+                }
+                difficulty={currentQuestion.difficulty || 'intermediate'}
+                source={`${learningPath?.title} - ${currentGroup.title}`}
+                onStatusChange={status => {
+                  if (status === 'added') {
+                    showSuccess(
+                      'Question Bookmarked',
+                      'Question saved to your flashcard deck for later review'
+                    );
+                  } else if (status === 'removed') {
+                    showSuccess(
+                      'Bookmark Removed',
+                      'Question removed from your flashcard collection'
+                    );
+                  } else if (status === 'error') {
+                    if (!user) {
+                      showError(
+                        'Authentication Required',
+                        'Please sign in to bookmark questions'
                       );
-                    } else if (status === 'removed') {
-                      showSuccess(
-                        'Bookmark Removed',
-                        'Question removed from your flashcard collection'
-                      );
-                    } else if (status === 'error') {
+                    } else {
                       showError(
                         'Error',
                         'Failed to update bookmark. Please try again.'
                       );
                     }
-                  }}
-                  className="!p-2 !px-0"
-                />
-              </div>
-            )}
+                  }
+                }}
+                className="!p-2 !px-0"
+              />
+            </div>
 
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
