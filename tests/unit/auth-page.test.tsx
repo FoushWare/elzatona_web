@@ -74,7 +74,7 @@ describe('AuthPage', () => {
       const toggleButton = screen.getByText("Don't have an account? Sign up");
       fireEvent.click(toggleButton);
 
-      expect(screen.getByText('Create Account')).toBeInTheDocument();
+      expect(screen.getAllByText('Create Account')).toHaveLength(2);
       expect(
         screen.getByText(
           'Join Frontend KodDev and start mastering frontend development'
