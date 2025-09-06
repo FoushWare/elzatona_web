@@ -1,0 +1,48 @@
+#!/usr/bin/env sh
+
+echo "🔍 Running FULL pre-commit checks (including E2E tests)..."
+
+# Run lint-staged first
+echo "📝 Running lint-staged..."
+npx lint-staged
+
+# Check if lint-staged passed
+if [ $? -ne 0 ]; then
+  echo "❌ Lint-staged failed. Please fix the issues before committing."
+  exit 1
+fi
+
+# Run unit and integration tests
+echo "🧪 Running unit and integration tests..."
+npm run test:all
+
+# Check if tests passed
+if [ $? -ne 0 ]; then
+  echo "❌ Unit/Integration tests failed! Please fix the failing tests before committing."
+  echo "💡 You can run 'npm run test:all' manually to see the specific test failures."
+  exit 1
+fi
+
+# Run E2E tests (optional - can be slow)
+echo "🎭 Running E2E tests..."
+npm run test:e2e
+
+# Check if E2E tests passed
+if [ $? -ne 0 ]; then
+  echo "❌ E2E tests failed! Please fix the failing E2E tests before committing."
+  echo "💡 You can run 'npm run test:e2e' manually to see the specific test failures."
+  exit 1
+fi
+
+# Run build check
+echo "🏗️  Running build check..."
+npm run build
+
+# Check if build passed
+if [ $? -ne 0 ]; then
+  echo "❌ Build failed! Please fix the build issues before committing."
+  echo "💡 You can run 'npm run build' manually to see the specific errors."
+  exit 1
+fi
+
+echo "✅ All pre-commit checks passed! Tests (unit, integration, E2E), linting, and build are successful."
