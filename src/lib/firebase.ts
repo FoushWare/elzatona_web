@@ -11,6 +11,9 @@ import {
   User,
   AuthError,
   Auth,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -49,6 +52,12 @@ if (isFirebaseConfigured) {
     app = initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
+
+    // Configure authentication persistence
+    // This ensures users stay logged in across browser sessions
+    setPersistence(auth, browserLocalPersistence).catch(error => {
+      console.warn('Failed to set auth persistence:', error);
+    });
   } catch (error) {
     console.warn('Firebase initialization failed:', error);
   }
@@ -154,7 +163,23 @@ export const signOutUser = async () => {
   }
 
   try {
+    // Sign out from Firebase Auth
     await signOut(auth);
+
+    // Clear any local storage items related to authentication
+    if (typeof window !== 'undefined') {
+      // Clear any cached user data
+      localStorage.removeItem('firebase:authUser');
+      sessionStorage.clear();
+
+      // Clear any other auth-related storage
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('firebase:') || key.startsWith('auth_')) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
+
     return { success: true };
   } catch (error: unknown) {
     const authError = error as AuthError;
@@ -225,6 +250,30 @@ export const onAuthStateChangedWrapper = (
   }
 
   return onAuthStateChanged(auth, callback);
+};
+
+// Check if user is currently authenticated
+export const getCurrentUser = () => {
+  if (!auth) {
+    return null;
+  }
+  return auth.currentUser;
+};
+
+// Force token refresh to ensure user is still authenticated
+export const refreshUserToken = async () => {
+  if (!auth || !auth.currentUser) {
+    return { success: false, error: 'No authenticated user' };
+  }
+
+  try {
+    await auth.currentUser.getIdToken(true); // Force refresh
+    return { success: true };
+  } catch (error: unknown) {
+    const authError = error as AuthError;
+    console.error('Token refresh error:', authError);
+    return { success: false, error: authError.message };
+  }
 };
 
 // Export auth and db for direct access (with fallbacks)
