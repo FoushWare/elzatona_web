@@ -1,0 +1,163 @@
+{
+  "questions": [
+    {
+      "id": "pnpm-1",
+      "question": "What is pnpm?",
+      "options": [
+        "A JavaScript testing framework",
+        "A fast, disk space–efficient package manager",
+        "A cloud deployment tool",
+        "A JavaScript transpiler"
+      ],
+      "correctAnswer": 1,
+      "explanation": "PNPM (performant npm) is a fast, disk space–efficient package manager for Node.js that uses a global content-addressable store with symlinks.",
+      "category": "build-tools",
+      "difficulty": "easy",
+      "tags": ["pnpm", "package-manager", "nodejs"]
+    },
+    {
+      "id": "pnpm-2",
+      "question": "How does pnpm save disk space compared to npm?",
+      "options": [
+        "By compressing node_modules",
+        "By deleting unused dependencies automatically",
+        "By using a global content-addressable store with symlinks",
+        "By caching only devDependencies"
+      ],
+      "correctAnswer": 2,
+      "explanation": "PNPM uses a global content-addressable store with symlinks, allowing multiple projects to share the same package versions without duplicating files.",
+      "category": "build-tools",
+      "difficulty": "medium",
+      "tags": ["pnpm", "disk-space", "optimization"]
+    },
+    {
+      "id": "pnpm-3",
+      "question": "Which file does pnpm use to lock dependencies?",
+      "options": [
+        "package-lock.json",
+        "yarn.lock",
+        "pnpm-lock.yaml",
+        "lock.json"
+      ],
+      "correctAnswer": 2,
+      "explanation": "PNPM uses pnpm-lock.yaml as its lock file to ensure reproducible builds across different environments.",
+      "category": "build-tools",
+      "difficulty": "easy",
+      "tags": ["pnpm", "lock-file", "dependencies"]
+    },
+    {
+      "id": "pnpm-4",
+      "question": "Which command installs all dependencies listed in package.json?",
+      "options": [
+        "pnpm start",
+        "pnpm install",
+        "pnpm add",
+        "pnpm get"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The command 'pnpm install' (or 'pnpm i') installs all dependencies listed in package.json.",
+      "category": "build-tools",
+      "difficulty": "easy",
+      "tags": ["pnpm", "install", "dependencies"]
+    },
+    {
+      "id": "pnpm-5",
+      "question": "How do you add lodash as a dependency?",
+      "options": [
+        "pnpm install lodash",
+        "pnpm add lodash",
+        "pnpm get lodash",
+        "pnpm add -D lodash"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To add lodash as a dependency, use the command 'pnpm add lodash'.",
+      "category": "build-tools",
+      "difficulty": "easy",
+      "tags": ["pnpm", "add", "dependencies"]
+    },
+    {
+      "id": "pnpm-6",
+      "question": "How do you add jest as a devDependency?",
+      "options": [
+        "pnpm install jest",
+        "pnpm add jest",
+        "pnpm add -D jest",
+        "pnpm test jest"
+      ],
+      "correctAnswer": 2,
+      "explanation": "To add jest as a devDependency, use the command 'pnpm add -D jest'.",
+      "category": "build-tools",
+      "difficulty": "easy",
+      "tags": ["pnpm", "dev-dependencies", "jest"]
+    },
+    {
+      "id": "pnpm-7",
+      "question": "Which command removes a package?",
+      "options": [
+        "pnpm uninstall <pkg>",
+        "pnpm delete <pkg>",
+        "pnpm remove <pkg>",
+        "pnpm purge <pkg>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The command 'pnpm remove <pkg>' removes a package from the project.",
+      "category": "build-tools",
+      "difficulty": "easy",
+      "tags": ["pnpm", "remove", "uninstall"]
+    },
+    {
+      "id": "pnpm-8",
+      "question": "How do you run a script called build from package.json?",
+      "options": [
+        "pnpm start build",
+        "pnpm build",
+        "pnpm run build",
+        "pnpm exec build"
+      ],
+      "correctAnswer": 2,
+      "explanation": "To run a script called build from package.json, use the command 'pnpm run build'.",
+      "category": "build-tools",
+      "difficulty": "easy",
+      "tags": ["pnpm", "scripts", "build"]
+    },
+    {
+      "id": "pnpm-9",
+      "question": "What is the difference between pnpm install and pnpm update?",
+      "options": [
+        "Both commands are identical",
+        "pnpm install installs deps; pnpm update updates them",
+        "pnpm install updates deps; pnpm update removes them",
+        "pnpm install only works in monorepos"
+      ],
+      "correctAnswer": 1,
+      "explanation": "pnpm install installs dependencies according to package.json and pnpm-lock.yaml, while pnpm update updates dependencies to their latest versions within specified ranges.",
+      "category": "build-tools",
+      "difficulty": "medium",
+      "tags": ["pnpm", "install", "update", "dependencies"]
+    },
+    {
+      "id": "pnpm-10",
+      "question": "Does pnpm support workspaces (monorepos)?",
+      "options": [
+        "No, it works only with single projects",
+        "Yes, with limited support",
+        "Yes, it has built-in workspace support",
+        "Only with plugins"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Yes, pnpm has built-in workspace support for managing monorepos with excellent functionality.",
+      "category": "build-tools",
+      "difficulty": "medium",
+      "tags": ["pnpm", "workspaces", "monorepo"]
+    }
+  ],
+  "metadata": {
+    "title": "PNPM Package Manager Questions",
+    "description": "Multiple choice questions about PNPM package manager",
+    "category": "build-tools",
+    "difficulty": "mixed",
+    "tags": ["pnpm", "package-manager", "nodejs", "build-tools"],
+    "totalQuestions": 10,
+    "lastUpdated": "2024-01-06"
+  }
+}

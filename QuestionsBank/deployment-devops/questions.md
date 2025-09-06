@@ -1950,3 +1950,956 @@ module.exports = {
 // Generate stats file
 // webpack --config webpack.config.js --json > stats.json
 ```
+
+---
+
+## Question 14: PNPM Package Manager
+
+**Question:** What is pnpm?
+
+**Answer:**
+PNPM (performant npm) is a fast, disk space–efficient package manager for Node.js. It uses a global content-addressable store with symlinks to save disk space and improve installation speed. PNPM creates a hard link from the global store to the project's node_modules, allowing multiple projects to share the same package versions without duplicating files.
+
+**Key Features:**
+- **Disk Space Efficiency**: Uses symlinks and hard links to avoid duplicating packages
+- **Speed**: Faster than npm and yarn due to efficient storage and parallel downloads
+- **Strict**: Prevents phantom dependencies by only allowing access to explicitly declared packages
+- **Monorepo Support**: Built-in workspace support for managing multiple packages
+- **Compatibility**: Compatible with npm and yarn package.json files
+
+**Basic PNPM Commands:**
+
+```bash
+# Install all dependencies
+pnpm install
+
+# Add a dependency
+pnpm add lodash
+
+# Add a dev dependency
+pnpm add -D jest
+
+# Remove a package
+pnpm remove lodash
+
+# Run scripts
+pnpm run build
+pnpm test
+
+# Update dependencies
+pnpm update
+
+# Check for outdated packages
+pnpm outdated
+
+# Audit for security vulnerabilities
+pnpm audit
+```
+
+**PNPM vs NPM vs Yarn:**
+
+| Feature | NPM | Yarn | PNPM |
+|---------|-----|------|------|
+| Speed | Medium | Fast | Fastest |
+| Disk Usage | High | Medium | Lowest |
+| Phantom Dependencies | Allowed | Allowed | Prevented |
+| Monorepo Support | Limited | Good | Excellent |
+| Lock File | package-lock.json | yarn.lock | pnpm-lock.yaml |
+
+**PNPM Workspace Configuration:**
+
+```json
+// pnpm-workspace.yaml
+packages:
+  - 'packages/*'
+  - 'apps/*'
+  - 'tools/*'
+```
+
+```json
+// package.json
+{
+  "name": "my-monorepo",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r run build",
+    "test": "pnpm -r run test",
+    "lint": "pnpm -r run lint"
+  }
+}
+```
+
+**PNPM Configuration (.npmrc):**
+
+```ini
+# .npmrc
+shamefully-hoist=true
+strict-peer-dependencies=false
+auto-install-peers=true
+save-exact=true
+```
+
+---
+
+## Question 15: PNPM Disk Space Efficiency
+
+**Question:** How does pnpm save disk space compared to npm?
+
+**Answer:**
+PNPM saves disk space through its unique storage mechanism using a global content-addressable store with symlinks. Here's how it works:
+
+**Traditional NPM Approach:**
+```
+project1/node_modules/lodash/ (4.2MB)
+project2/node_modules/lodash/ (4.2MB)  # Duplicate!
+project3/node_modules/lodash/ (4.2MB)  # Duplicate!
+Total: 12.6MB for the same package
+```
+
+**PNPM Approach:**
+```
+~/.pnpm-store/lodash@4.17.21/ (4.2MB)  # Single copy
+project1/node_modules/lodash -> ~/.pnpm-store/lodash@4.17.21/
+project2/node_modules/lodash -> ~/.pnpm-store/lodash@4.17.21/
+project3/node_modules/lodash -> ~/.pnpm-store/lodash@4.17.21/
+Total: 4.2MB for the same package
+```
+
+**Content-Addressable Storage:**
+
+```bash
+# PNPM store structure
+~/.pnpm-store/
+├── v3/
+│   ├── files/
+│   │   └── 00/
+│   │       └── 1234567890abcdef...  # Content hash
+│   └── packages/
+│       └── lodash@4.17.21/
+│           └── node_modules/
+│               └── lodash/
+```
+
+**Symlink Structure:**
+
+```bash
+# Project node_modules structure
+project/
+├── node_modules/
+│   ├── lodash -> .pnpm/lodash@4.17.21/node_modules/lodash
+│   └── .pnpm/
+│       └── lodash@4.17.21/
+│           └── node_modules/
+│               └── lodash -> ~/.pnpm-store/v3/packages/lodash@4.17.21/node_modules/lodash
+```
+
+**Benefits:**
+- **Space Savings**: Up to 90% reduction in disk usage
+- **Faster Installs**: No need to download/copy existing packages
+- **Consistency**: Same package version across all projects
+- **Integrity**: Content-addressable storage ensures package integrity
+
+**Store Management:**
+
+```bash
+# Check store size
+pnpm store path
+pnpm store status
+
+# Prune unused packages
+pnpm store prune
+
+# Remove all packages from store
+pnpm store prune --force
+```
+
+---
+
+## Question 16: PNPM Lock File
+
+**Question:** Which file does pnpm use to lock dependencies?
+
+**Answer:**
+PNPM uses `pnpm-lock.yaml` as its lock file to ensure reproducible builds across different environments. This file contains the exact versions of all dependencies and their integrity hashes.
+
+**pnpm-lock.yaml Structure:**
+
+```yaml
+# pnpm-lock.yaml
+lockfileVersion: '6.0'
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
+
+devDependencies:
+  jest:
+    specifier: ^29.0.0
+    version: 29.0.0
+
+packages:
+  /lodash/4.17.21:
+    resolution: {integrity: sha512-L2R1m2+8hB1QsSkoAK3OHfW5GzyX/I4r445X0ShJfGXYqiF2bY/9y4Fnmqknel4enO3dKitXiwGn6Wp1R0Hmg==}
+    dependencies:
+      '@types/lodash': 4.14.191
+    dev: false
+
+  /jest/29.0.0:
+    resolution: {integrity: sha512-...}
+    dependencies:
+      '@jest/console': 29.0.0
+      '@jest/core': 29.0.0
+      '@jest/environment': 29.0.0
+    dev: true
+```
+
+**Lock File Benefits:**
+- **Reproducible Builds**: Exact same dependency tree across environments
+- **Security**: Integrity hashes prevent tampering
+- **Performance**: Faster installs by skipping resolution
+- **Consistency**: Team members get identical dependencies
+
+**Lock File Management:**
+
+```bash
+# Generate lock file
+pnpm install
+
+# Update lock file
+pnpm update
+
+# Install from lock file
+pnpm install --frozen-lockfile
+
+# Ignore lock file (not recommended)
+pnpm install --no-frozen-lockfile
+```
+
+**Lock File vs Package.json:**
+
+| File | Purpose | Content |
+|------|---------|---------|
+| package.json | Dependency declaration | Version ranges, scripts, metadata |
+| pnpm-lock.yaml | Dependency resolution | Exact versions, integrity hashes, dependency tree |
+
+**Best Practices:**
+- Always commit `pnpm-lock.yaml` to version control
+- Use `--frozen-lockfile` in CI/CD pipelines
+- Don't manually edit the lock file
+- Update lock file when adding/removing dependencies
+
+---
+
+## Question 17: PNPM Installation Commands
+
+**Question:** Which command installs all dependencies listed in package.json?
+
+**Answer:**
+The command `pnpm install` (or `pnpm i`) installs all dependencies listed in package.json. This command reads the package.json file and installs all dependencies and devDependencies into the node_modules directory.
+
+**Basic Installation Commands:**
+
+```bash
+# Install all dependencies
+pnpm install
+pnpm i
+
+# Install and update lock file
+pnpm install --no-frozen-lockfile
+
+# Install from lock file only (CI/CD)
+pnpm install --frozen-lockfile
+
+# Install without optional dependencies
+pnpm install --ignore-optional
+
+# Install with specific registry
+pnpm install --registry https://registry.npmjs.org/
+```
+
+**Adding Dependencies:**
+
+```bash
+# Add production dependency
+pnpm add lodash
+pnpm add lodash@4.17.21  # Specific version
+pnpm add lodash@^4.17.0  # Version range
+
+# Add dev dependency
+pnpm add -D jest
+pnpm add --save-dev typescript
+
+# Add global package
+pnpm add -g pnpm
+
+# Add to specific workspace
+pnpm add lodash --filter my-package
+```
+
+**Removing Dependencies:**
+
+```bash
+# Remove package
+pnpm remove lodash
+pnpm remove -D jest
+
+# Remove from specific workspace
+pnpm remove lodash --filter my-package
+```
+
+**Installation Options:**
+
+```bash
+# Install with specific node version
+pnpm install --engine-strict
+
+# Install with specific package manager
+pnpm install --package-manager-strict
+
+# Install with specific hoisting
+pnpm install --shamefully-hoist
+
+# Install with specific peer dependency handling
+pnpm install --strict-peer-dependencies
+```
+
+**Workspace Installation:**
+
+```bash
+# Install all workspace dependencies
+pnpm install -r
+
+# Install dependencies for specific workspace
+pnpm install --filter my-package
+
+# Install dependencies for multiple workspaces
+pnpm install --filter "my-package" --filter "another-package"
+```
+
+**Installation Process:**
+1. Read package.json and pnpm-lock.yaml
+2. Resolve dependency tree
+3. Download packages to global store
+4. Create symlinks in node_modules
+5. Run postinstall scripts
+6. Update lock file (if not frozen)
+
+---
+
+## Question 18: PNPM Adding Dependencies
+
+**Question:** How do you add lodash as a dependency?
+
+**Answer:**
+To add lodash as a dependency, use the command `pnpm add lodash`. This command adds lodash to the dependencies section of package.json and installs it.
+
+**Adding Dependencies:**
+
+```bash
+# Add as production dependency
+pnpm add lodash
+
+# Add specific version
+pnpm add lodash@4.17.21
+
+# Add version range
+pnpm add lodash@^4.17.0
+pnpm add lodash@~4.17.0
+
+# Add latest version
+pnpm add lodash@latest
+```
+
+**Adding Different Types of Dependencies:**
+
+```bash
+# Production dependency
+pnpm add lodash
+pnpm add --save lodash
+
+# Development dependency
+pnpm add -D lodash
+pnpm add --save-dev lodash
+
+# Optional dependency
+pnpm add -O lodash
+pnpm add --save-optional lodash
+
+# Peer dependency
+pnpm add -P react
+pnpm add --save-peer react
+```
+
+**Adding Multiple Packages:**
+
+```bash
+# Add multiple packages at once
+pnpm add lodash moment axios
+
+# Add with specific versions
+pnpm add lodash@4.17.21 moment@2.29.4 axios@1.4.0
+```
+
+**Adding from Different Sources:**
+
+```bash
+# Add from npm registry
+pnpm add lodash
+
+# Add from GitHub
+pnpm add github:user/repo
+
+# Add from local path
+pnpm add ./local-package
+
+# Add from tarball
+pnpm add https://example.com/package.tgz
+```
+
+**Workspace Dependencies:**
+
+```bash
+# Add to specific workspace
+pnpm add lodash --filter my-package
+
+# Add workspace dependency
+pnpm add my-workspace-package --filter my-package
+
+# Add to all workspaces
+pnpm add -r lodash
+```
+
+**Package.json Changes:**
+
+```json
+// Before
+{
+  "dependencies": {}
+}
+
+// After pnpm add lodash
+{
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
+```
+
+**Installation Process:**
+1. Resolve package version
+2. Download to global store
+3. Create symlink in node_modules
+4. Update package.json
+5. Update pnpm-lock.yaml
+
+---
+
+## Question 19: PNPM Dev Dependencies
+
+**Question:** How do you add jest as a devDependency?
+
+**Answer:**
+To add jest as a devDependency, use the command `pnpm add -D jest`. The `-D` flag (or `--save-dev`) adds the package to the devDependencies section of package.json.
+
+**Adding Dev Dependencies:**
+
+```bash
+# Add as dev dependency
+pnpm add -D jest
+pnpm add --save-dev jest
+
+# Add specific version
+pnpm add -D jest@29.0.0
+
+# Add multiple dev dependencies
+pnpm add -D jest typescript @types/node
+```
+
+**Dev Dependencies vs Dependencies:**
+
+```json
+// package.json
+{
+  "dependencies": {
+    "lodash": "^4.17.21"  // Required in production
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",     // Only needed during development
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
+```
+
+**Common Dev Dependencies:**
+
+```bash
+# Testing
+pnpm add -D jest
+pnpm add -D @testing-library/react
+pnpm add -D @testing-library/jest-dom
+
+# TypeScript
+pnpm add -D typescript
+pnpm add -D @types/node
+pnpm add -D @types/react
+
+# Linting and Formatting
+pnpm add -D eslint
+pnpm add -D prettier
+pnpm add -D @typescript-eslint/parser
+
+# Build Tools
+pnpm add -D webpack
+pnpm add -D vite
+pnpm add -D rollup
+
+# Development Server
+pnpm add -D nodemon
+pnpm add -D concurrently
+```
+
+**Installation Behavior:**
+
+```bash
+# Install all dependencies (including dev)
+pnpm install
+
+# Install only production dependencies
+pnpm install --prod
+pnpm install --production
+
+# Install with specific environment
+NODE_ENV=production pnpm install
+```
+
+**Workspace Dev Dependencies:**
+
+```bash
+# Add to specific workspace
+pnpm add -D jest --filter my-package
+
+# Add to all workspaces
+pnpm add -r -D jest
+```
+
+**Best Practices:**
+- Use devDependencies for tools only needed during development
+- Keep production dependencies minimal
+- Use exact versions for dev dependencies when possible
+- Regularly update dev dependencies for security
+
+---
+
+## Question 20: PNPM Removing Packages
+
+**Question:** Which command removes a package?
+
+**Answer:**
+The command `pnpm remove <pkg>` removes a package from the project. This command removes the package from package.json and deletes it from node_modules.
+
+**Removing Packages:**
+
+```bash
+# Remove package
+pnpm remove lodash
+pnpm remove jest
+
+# Remove multiple packages
+pnpm remove lodash moment axios
+
+# Remove dev dependency
+pnpm remove -D jest
+pnpm remove --save-dev typescript
+```
+
+**Remove vs Uninstall vs Delete:**
+
+```bash
+# All these commands do the same thing
+pnpm remove lodash
+pnpm uninstall lodash
+pnpm delete lodash
+```
+
+**Removing Different Types:**
+
+```bash
+# Remove production dependency
+pnpm remove lodash
+
+# Remove dev dependency
+pnpm remove -D jest
+
+# Remove optional dependency
+pnpm remove -O some-optional-package
+
+# Remove peer dependency
+pnpm remove -P react
+```
+
+**Workspace Removal:**
+
+```bash
+# Remove from specific workspace
+pnpm remove lodash --filter my-package
+
+# Remove from all workspaces
+pnpm remove -r lodash
+```
+
+**Package.json Changes:**
+
+```json
+// Before
+{
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
+
+// After pnpm remove lodash
+{
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
+```
+
+**Removal Process:**
+1. Remove package from package.json
+2. Remove symlink from node_modules
+3. Update pnpm-lock.yaml
+4. Clean up unused packages (if any)
+
+**Cleanup Commands:**
+
+```bash
+# Remove unused packages
+pnpm prune
+
+# Remove all node_modules and reinstall
+rm -rf node_modules
+pnpm install
+
+# Clean global store
+pnpm store prune
+```
+
+---
+
+## Question 21: PNPM Running Scripts
+
+**Question:** How do you run a script called build from package.json?
+
+**Answer:**
+To run a script called build from package.json, use the command `pnpm run build`. The `run` command executes scripts defined in the package.json file.
+
+**Running Scripts:**
+
+```bash
+# Run script
+pnpm run build
+pnpm run test
+pnpm run start
+
+# Short form (for common scripts)
+pnpm build
+pnpm test
+pnpm start
+```
+
+**Package.json Scripts:**
+
+```json
+{
+  "scripts": {
+    "build": "webpack --mode production",
+    "test": "jest",
+    "start": "node server.js",
+    "dev": "webpack serve --mode development",
+    "lint": "eslint src/",
+    "format": "prettier --write src/"
+  }
+}
+```
+
+**Running Different Scripts:**
+
+```bash
+# Build script
+pnpm run build
+
+# Test script
+pnpm run test
+
+# Start script
+pnpm run start
+
+# Custom script
+pnpm run my-custom-script
+```
+
+**Script Options:**
+
+```bash
+# Run with arguments
+pnpm run build -- --watch
+pnpm run test -- --coverage
+
+# Run in specific workspace
+pnpm run build --filter my-package
+
+# Run in all workspaces
+pnpm run build -r
+
+# Run with environment variables
+NODE_ENV=production pnpm run build
+```
+
+**Common Scripts:**
+
+```bash
+# Development
+pnpm run dev
+pnpm run develop
+pnpm run serve
+
+# Building
+pnpm run build
+pnpm run compile
+pnpm run bundle
+
+# Testing
+pnpm run test
+pnpm run test:unit
+pnpm run test:e2e
+
+# Linting
+pnpm run lint
+pnpm run lint:fix
+pnpm run format
+
+# Deployment
+pnpm run deploy
+pnpm run publish
+pnpm run release
+```
+
+**Workspace Scripts:**
+
+```bash
+# Run script in specific workspace
+pnpm run build --filter my-package
+
+# Run script in all workspaces
+pnpm run build -r
+
+# Run script in parallel
+pnpm run build -r --parallel
+
+# Run script with dependencies
+pnpm run build -r --recursive
+```
+
+**Script Execution:**
+1. Look for script in package.json
+2. Execute command in project directory
+3. Pass through any additional arguments
+4. Return exit code
+
+---
+
+## Question 22: PNPM Install vs Update
+
+**Question:** What is the difference between pnpm install and pnpm update?
+
+**Answer:**
+The difference between `pnpm install` and `pnpm update` is:
+
+- **`pnpm install`**: Installs dependencies according to package.json and pnpm-lock.yaml, without changing versions
+- **`pnpm update`**: Updates dependencies to their latest versions within the specified ranges in package.json
+
+**pnpm install:**
+```bash
+# Install exact versions from lock file
+pnpm install
+
+# Install and update lock file
+pnpm install --no-frozen-lockfile
+```
+
+**pnpm update:**
+```bash
+# Update all dependencies
+pnpm update
+
+# Update specific package
+pnpm update lodash
+
+# Update to latest versions
+pnpm update --latest
+
+# Update in specific workspace
+pnpm update --filter my-package
+```
+
+**Version Ranges:**
+
+```json
+// package.json
+{
+  "dependencies": {
+    "lodash": "^4.17.21"  // Can update to 4.x.x
+  }
+}
+```
+
+**Install Behavior:**
+- Reads package.json and pnpm-lock.yaml
+- Installs exact versions from lock file
+- Does not change package versions
+- Faster execution
+
+**Update Behavior:**
+- Reads package.json version ranges
+- Updates to latest compatible versions
+- Updates pnpm-lock.yaml
+- May change package versions
+
+**Update Options:**
+
+```bash
+# Update all dependencies
+pnpm update
+
+# Update specific package
+pnpm update lodash
+
+# Update to latest (ignore ranges)
+pnpm update --latest
+
+# Update dev dependencies
+pnpm update --dev
+
+# Update with specific depth
+pnpm update --depth 1
+```
+
+**Best Practices:**
+- Use `pnpm install` for consistent builds
+- Use `pnpm update` to get latest features/fixes
+- Test after updating dependencies
+- Use `--frozen-lockfile` in CI/CD
+
+---
+
+## Question 23: PNPM Workspace Support
+
+**Question:** Does pnpm support workspaces (monorepos)?
+
+**Answer:**
+Yes, pnpm has built-in workspace support for managing monorepos. It provides excellent monorepo functionality with efficient dependency management and workspace-specific operations.
+
+**Workspace Configuration:**
+
+```yaml
+# pnpm-workspace.yaml
+packages:
+  - 'packages/*'
+  - 'apps/*'
+  - 'tools/*'
+  - '!**/test/**'
+```
+
+**Workspace Structure:**
+
+```
+my-monorepo/
+├── pnpm-workspace.yaml
+├── package.json
+├── packages/
+│   ├── shared/
+│   │   └── package.json
+│   └── ui/
+│       └── package.json
+├── apps/
+│   ├── web/
+│   │   └── package.json
+│   └── mobile/
+│       └── package.json
+└── tools/
+    └── build/
+        └── package.json
+```
+
+**Workspace Commands:**
+
+```bash
+# Install all workspace dependencies
+pnpm install -r
+
+# Add dependency to specific workspace
+pnpm add lodash --filter my-package
+
+# Run script in specific workspace
+pnpm run build --filter my-package
+
+# Run script in all workspaces
+pnpm run build -r
+
+# Run in parallel
+pnpm run build -r --parallel
+```
+
+**Workspace Dependencies:**
+
+```json
+// apps/web/package.json
+{
+  "name": "@myorg/web",
+  "dependencies": {
+    "@myorg/shared": "workspace:*",
+    "@myorg/ui": "workspace:^1.0.0"
+  }
+}
+```
+
+**Workspace Benefits:**
+- **Efficient Storage**: Shared dependencies across workspaces
+- **Dependency Management**: Easy cross-workspace dependencies
+- **Script Execution**: Run commands across workspaces
+- **Version Management**: Consistent versions across workspaces
+
+**Advanced Workspace Features:**
+
+```bash
+# Filter by name pattern
+pnpm run build --filter "@myorg/*"
+
+# Filter by directory
+pnpm run build --filter "./packages/*"
+
+# Filter by changed packages
+pnpm run build --filter "...[HEAD~1]"
+
+# Filter by dependencies
+pnpm run build --filter "...@myorg/shared"
+```
+
+**Workspace vs Other Tools:**
+
+| Feature | PNPM | NPM | Yarn |
+|---------|------|-----|------|
+| Workspace Support | Built-in | Limited | Good |
+| Dependency Hoisting | Configurable | Automatic | Automatic |
+| Cross-workspace deps | Easy | Complex | Easy |
+| Performance | Fast | Slow | Medium |
