@@ -269,8 +269,8 @@ export default function Navbar() {
               href="/auth"
               className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
                 isScrolled
-                  ? 'bg-blue-600 text-white hover:bg-blue-700'
-                  : 'bg-white text-blue-600 hover:bg-blue-50'
+                  ? 'bg-green-600 text-white hover:bg-green-700'
+                  : 'bg-white text-green-600 hover:bg-green-50'
               }`}
             >
               <span className="hidden lg:inline">Save Progress</span>
@@ -324,7 +324,7 @@ export default function Navbar() {
             <div className="px-4 pt-4 pb-2">
               <Link
                 href="/auth"
-                className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 text-center"
+                className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-green-600 text-white hover:bg-green-700 text-center"
                 onClick={() => setIsOpen(false)}
               >
                 💾 Save Progress
