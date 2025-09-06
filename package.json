@@ -18,10 +18,17 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:unit": "jest --testPathPattern=tests/unit",
+    "test:integration": "jest --testPathPattern=tests/integration",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
-    "test:all": "npm run test"
+    "test:all": "npm run test:unit && npm run test:integration",
+    "test:ci": "npm run test:unit && npm run test:integration",
+    "pre-commit:switch": "bash scripts/switch-pre-commit.sh",
+    "pre-commit:fast": "cp .husky/pre-commit-fast .husky/pre-commit && echo '✅ Switched to FAST pre-commit checks'",
+    "pre-commit:standard": "cp .husky/pre-commit .husky/pre-commit && echo '✅ Switched to STANDARD pre-commit checks'",
+    "pre-commit:full": "cp .husky/pre-commit-full .husky/pre-commit && echo '✅ Switched to FULL pre-commit checks'"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -47,6 +54,7 @@
     "@storybook/addon-onboarding": "^9.1.4",
     "@storybook/addon-vitest": "^9.1.4",
     "@storybook/nextjs-vite": "^9.1.4",
+    "@storybook/test": "^8.6.14",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
