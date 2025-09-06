@@ -30,8 +30,12 @@ export default function AddToFlashcard({
   const [state, setState] = useState<FlashcardState>('add');
   const [flashcardId, setFlashcardId] = useState<string | null>(null);
 
-  // Check if flashcard already exists when component mounts
+  // Check if flashcard already exists when component mounts or question changes
   useEffect(() => {
+    // Reset state when question changes
+    setState('add');
+    setFlashcardId(null);
+
     if (user) {
       checkExistingFlashcard();
     }
@@ -123,13 +127,13 @@ export default function AddToFlashcard({
   const getTooltip = () => {
     switch (state) {
       case 'add':
-        return 'Bookmark this question for later review';
+        return 'Click to bookmark this question';
       case 'saved':
         return 'Remove bookmark';
       case 'loading':
         return 'Processing...';
       default:
-        return 'Bookmark this question for later review';
+        return 'Click to bookmark this question';
     }
   };
 
@@ -144,19 +148,20 @@ export default function AddToFlashcard({
 
     switch (state) {
       case 'add':
-        return `${baseClasses} bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 focus:ring-blue-500 hover:shadow-md`;
+        return `${baseClasses} bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-gray-600 dark:hover:text-gray-300 focus:ring-gray-500 hover:shadow-sm`;
       case 'saved':
         return `${baseClasses} bg-blue-500 hover:bg-blue-600 text-white focus:ring-blue-500 shadow-md`;
       case 'loading':
         return `${baseClasses} bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed`;
       default:
-        return `${baseClasses} bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 focus:ring-blue-500 hover:shadow-md`;
+        return `${baseClasses} bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-gray-600 dark:hover:text-gray-300 focus:ring-gray-500 hover:shadow-sm`;
     }
   };
 
-  if (!user) {
-    return null; // Don't show the button if user is not authenticated
-  }
+  // Show the button even if user is not authenticated, but disable functionality
+  // if (!user) {
+  //   return null; // Don't show the button if user is not authenticated
+  // }
 
   return (
     <button

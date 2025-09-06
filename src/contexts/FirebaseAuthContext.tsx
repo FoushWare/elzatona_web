@@ -18,6 +18,7 @@ import {
   getUserFromFirestore,
   onAuthStateChangedWrapper,
 } from '@/lib/firebase';
+import { clearAuthData, setupTokenRefresh } from '@/lib/auth-utils';
 
 interface FirebaseUser {
   uid: string;
@@ -98,6 +99,9 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
       if (firebaseUser) {
         setFirebaseUser(firebaseUser);
 
+        // Set up automatic token refresh for authenticated users
+        const cleanupTokenRefresh = setupTokenRefresh();
+
         // Get user data from Firestore
         const userData = await getUserFromFirestore(firebaseUser.uid);
         if (userData) {
@@ -129,6 +133,9 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
           // Save to Firestore
           await saveUserToFirestore(firebaseUser);
         }
+
+        // Return cleanup function for token refresh
+        return cleanupTokenRefresh;
       } else {
         setFirebaseUser(null);
         setUser(null);
@@ -165,12 +172,29 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
   };
 
   const handleSignOut = async () => {
-    const result = await signOutUser();
-    if (result.success) {
-      setUser(null);
-      setFirebaseUser(null);
+    try {
+      setIsLoading(true);
+      const result = await signOutUser();
+      if (result.success) {
+        setUser(null);
+        setFirebaseUser(null);
+
+        // Clear all authentication-related data
+        clearAuthData();
+
+        // Force a page reload to clear any cached state
+        // This ensures a clean logout experience
+        if (typeof window !== 'undefined') {
+          window.location.href = '/';
+        }
+      }
+      return result;
+    } catch (error) {
+      console.error('Sign out error:', error);
+      return { success: false, error: 'Failed to sign out' };
+    } finally {
+      setIsLoading(false);
     }
-    return result;
   };
 
   const updateUserProfile = async (updates: Partial<FirebaseUser>) => {
