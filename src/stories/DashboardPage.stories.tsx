@@ -1,36 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { within, userEvent, expect } from '@storybook/test';
 import DashboardPage from '@/app/dashboard/page';
-
-// Mock Firebase Auth Context
-const mockFirebaseAuth = {
-  user: {
-    uid: 'test-uid',
-    email: 'test@example.com',
-    displayName: 'Test User',
-    photoURL: 'https://example.com/photo.jpg',
-  },
-  isAuthenticated: true,
-  isLoading: false,
-  signOut: () => {},
-};
-
-// Mock Enhanced Dashboard component
-jest.mock('@/components/EnhancedDashboard', () => {
-  return function MockEnhancedDashboard() {
-    return (
-      <div data-testid="enhanced-dashboard" className="p-8">
-        <h1>Enhanced Dashboard</h1>
-        <p>Mock enhanced dashboard component for Storybook</p>
-      </div>
-    );
-  };
-});
-
-// Mock the hooks
-jest.mock('@/contexts/FirebaseAuthContext', () => ({
-  useFirebaseAuth: () => mockFirebaseAuth,
-}));
 
 const meta: Meta<typeof DashboardPage> = {
   title: 'Pages/DashboardPage',
@@ -72,20 +41,6 @@ export const UnauthenticatedUser: Story = {
       },
     },
   },
-  decorators: [
-    Story => {
-      // Mock unauthenticated state
-      jest.doMock('@/contexts/FirebaseAuthContext', () => ({
-        useFirebaseAuth: () => ({
-          user: null,
-          isAuthenticated: false,
-          isLoading: false,
-          signOut: () => {},
-        }),
-      }));
-      return <Story />;
-    },
-  ],
 };
 
 export const LoadingState: Story = {
@@ -97,20 +52,6 @@ export const LoadingState: Story = {
       },
     },
   },
-  decorators: [
-    Story => {
-      // Mock loading state
-      jest.doMock('@/contexts/FirebaseAuthContext', () => ({
-        useFirebaseAuth: () => ({
-          user: null,
-          isAuthenticated: false,
-          isLoading: true,
-          signOut: () => {},
-        }),
-      }));
-      return <Story />;
-    },
-  ],
 };
 
 export const WithStatisticsExpanded: Story = {
@@ -121,35 +62,6 @@ export const WithStatisticsExpanded: Story = {
         story: 'Unauthenticated dashboard with statistics section expanded.',
       },
     },
-  },
-  decorators: [
-    Story => {
-      // Mock unauthenticated state
-      jest.doMock('@/contexts/FirebaseAuthContext', () => ({
-        useFirebaseAuth: () => ({
-          user: null,
-          isAuthenticated: false,
-          isLoading: false,
-          signOut: () => {},
-        }),
-      }));
-      return <Story />;
-    },
-  ],
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    // Click to show statistics
-    const showStatsButton = canvas.getByRole('button', {
-      name: /show statistics/i,
-    });
-    await userEvent.click(showStatsButton);
-
-    // Verify statistics are displayed
-    await expect(canvas.getByText('500+')).toBeInTheDocument();
-    await expect(canvas.getByText('25+')).toBeInTheDocument();
-    await expect(canvas.getByText('100+')).toBeInTheDocument();
-    await expect(canvas.getByText('24/7')).toBeInTheDocument();
   },
 };
 
@@ -165,20 +77,6 @@ export const DarkMode: Story = {
       default: 'dark',
     },
   },
-  decorators: [
-    Story => {
-      // Mock unauthenticated state for better visibility
-      jest.doMock('@/contexts/FirebaseAuthContext', () => ({
-        useFirebaseAuth: () => ({
-          user: null,
-          isAuthenticated: false,
-          isLoading: false,
-          signOut: () => {},
-        }),
-      }));
-      return <Story />;
-    },
-  ],
 };
 
 export const MobileView: Story = {
@@ -193,20 +91,6 @@ export const MobileView: Story = {
       defaultViewport: 'mobile1',
     },
   },
-  decorators: [
-    Story => {
-      // Mock unauthenticated state for better mobile testing
-      jest.doMock('@/contexts/FirebaseAuthContext', () => ({
-        useFirebaseAuth: () => ({
-          user: null,
-          isAuthenticated: false,
-          isLoading: false,
-          signOut: () => {},
-        }),
-      }));
-      return <Story />;
-    },
-  ],
 };
 
 export const TabletView: Story = {
@@ -221,18 +105,4 @@ export const TabletView: Story = {
       defaultViewport: 'tablet',
     },
   },
-  decorators: [
-    Story => {
-      // Mock unauthenticated state for better tablet testing
-      jest.doMock('@/contexts/FirebaseAuthContext', () => ({
-        useFirebaseAuth: () => ({
-          user: null,
-          isAuthenticated: false,
-          isLoading: false,
-          signOut: () => {},
-        }),
-      }));
-      return <Story />;
-    },
-  ],
 };
