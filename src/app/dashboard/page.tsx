@@ -134,6 +134,7 @@ const recommendations = [
 
 export default function DashboardPage() {
   const { user, isAuthenticated, isLoading } = useFirebaseAuth();
+  const [showStats, setShowStats] = useState(false);
 
   if (isLoading) {
     return (
