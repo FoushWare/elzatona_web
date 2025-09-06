@@ -95,10 +95,10 @@ describe('Learning Paths Page', () => {
     render(<LearningPathsPage />);
 
     expect(
-      screen.getByRole('button', { name: /show statistics/i })
+      screen.getByRole('button', { name: /show stats/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /show filters/i })
+      screen.getByRole('button', { name: /filters/i })
     ).toBeInTheDocument();
   });
 
