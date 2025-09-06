@@ -46,16 +46,16 @@ describe('AddToFlashcard Component', () => {
     render(<AddToFlashcard {...defaultProps} />);
 
     const addButton = screen.getByRole('button', {
-      name: /bookmark/i,
+      name: /click to bookmark this question/i,
     });
     expect(addButton).toBeInTheDocument();
     expect(addButton).toHaveAttribute(
       'title',
-      'Bookmark this question for later review'
+      'Click to bookmark this question'
     );
   });
 
-  it('does not render when user is not authenticated', () => {
+  it('renders button even when user is not authenticated', () => {
     mockUseFirebaseAuth.mockReturnValue({
       user: null,
       loading: false,
@@ -64,8 +64,12 @@ describe('AddToFlashcard Component', () => {
       signUp: jest.fn(),
     });
 
-    const { container } = render(<AddToFlashcard {...defaultProps} />);
-    expect(container.firstChild).toBeNull();
+    render(<AddToFlashcard {...defaultProps} />);
+
+    const button = screen.getByRole('button', {
+      name: /click to bookmark this question/i,
+    });
+    expect(button).toBeInTheDocument();
   });
 
   it('shows loading state when adding flashcard', async () => {
@@ -79,7 +83,7 @@ describe('AddToFlashcard Component', () => {
     render(<AddToFlashcard {...defaultProps} />);
 
     const addButton = screen.getByRole('button', {
-      name: /bookmark/i,
+      name: /click to bookmark this question/i,
     });
     fireEvent.click(addButton);
 
@@ -105,7 +109,7 @@ describe('AddToFlashcard Component', () => {
     );
 
     const addButton = screen.getByRole('button', {
-      name: /bookmark/i,
+      name: /click to bookmark this question/i,
     });
     fireEvent.click(addButton);
 
@@ -124,7 +128,7 @@ describe('AddToFlashcard Component', () => {
 
     await waitFor(() => {
       const savedButton = screen.getByRole('button', {
-        name: /bookmarked/i,
+        name: /remove bookmark/i,
       });
       expect(savedButton).toBeInTheDocument();
       expect(savedButton).toHaveAttribute('title', 'Remove bookmark');
@@ -143,7 +147,7 @@ describe('AddToFlashcard Component', () => {
     );
 
     const addButton = screen.getByRole('button', {
-      name: /bookmark/i,
+      name: /click to bookmark this question/i,
     });
     fireEvent.click(addButton);
 
