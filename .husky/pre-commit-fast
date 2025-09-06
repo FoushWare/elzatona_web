@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-echo "🔍 Running pre-commit checks..."
+echo "🔍 Running FAST pre-commit checks (linting + build only)..."
 
 # Run lint-staged first
 echo "📝 Running lint-staged..."
@@ -11,10 +11,6 @@ if [ $? -ne 0 ]; then
   echo "❌ Lint-staged failed. Please fix the issues before committing."
   exit 1
 fi
-
-# Skip tests for now (tests need to be fixed first)
-echo "⚠️  Skipping tests - they need to be fixed first"
-echo "💡 Run 'npm test' manually to see test failures and fix them"
 
 # Run build check
 echo "🏗️  Running build check..."
@@ -27,4 +23,5 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "✅ All pre-commit checks passed! Tests, linting, and build are successful."
+echo "✅ Fast pre-commit checks passed! Linting and build are successful."
+echo "💡 Note: Tests were skipped. Run 'npm test' manually if needed."
