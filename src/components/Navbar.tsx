@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
+import { Menu, X, Sun, Moon, ChevronDown, User, LogOut } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import ZatonaLogo from './ZatonaLogo';
 
 interface DropdownItem {
@@ -23,8 +24,11 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
+  const { isAuthenticated, user, signOut } = useFirebaseAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
 
   // Dropdown menu data
   const dropdownMenus: DropdownMenu[] = [
@@ -37,6 +41,12 @@ export default function Navbar() {
           label: 'Learning Paths',
           icon: '🗺️',
           description: 'Structured learning paths for frontend development',
+        },
+        {
+          href: '/tutorials',
+          label: 'Tutorials',
+          icon: '🎓',
+          description: 'Step-by-step tutorials for all skill levels',
         },
         {
           href: '/cheatsheet',
@@ -56,6 +66,18 @@ export default function Navbar() {
           icon: '📰',
           description: 'High-quality frontend development articles',
         },
+        {
+          href: '/video-courses',
+          label: 'Video Courses',
+          icon: '🎥',
+          description: 'Comprehensive video-based learning content',
+        },
+        {
+          href: '/documentation',
+          label: 'Documentation',
+          icon: '📚',
+          description: 'Official docs and API references',
+        },
       ],
     },
     {
@@ -73,6 +95,36 @@ export default function Navbar() {
           label: 'Algorithm Problems',
           icon: '🧮',
           description: 'Data structures and algorithm challenges',
+        },
+        {
+          href: '/practice/coding-exercises',
+          label: 'Coding Exercises',
+          icon: '⌨️',
+          description: 'Interactive coding exercises with instant feedback',
+        },
+        {
+          href: '/practice/projects',
+          label: 'Projects',
+          icon: '🚀',
+          description: 'Build real-world projects to showcase your skills',
+        },
+        {
+          href: '/practice/code-reviews',
+          label: 'Code Reviews',
+          icon: '👀',
+          description: 'Review and improve existing code examples',
+        },
+        {
+          href: '/practice/quiz',
+          label: 'Quiz & Tests',
+          icon: '🧠',
+          description: 'Test your knowledge with interactive quizzes',
+        },
+        {
+          href: '/flashcards',
+          label: 'Interactive Flashcards',
+          icon: '🃏',
+          description: 'Reinforce learning with spaced repetition',
         },
       ],
     },
@@ -140,7 +192,7 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
-  // Handle click outside to close dropdown
+  // Handle click outside to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -148,6 +200,12 @@ export default function Navbar() {
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setActiveDropdown(null);
+      }
+      if (
+        userDropdownRef.current &&
+        !userDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsUserDropdownOpen(false);
       }
     };
 
@@ -202,14 +260,18 @@ export default function Navbar() {
               <div key={menu.label} className="relative">
                 <button
                   onClick={() => toggleDropdown(menu.label)}
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group ${
                     isScrolled
                       ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                       : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+                  } ${
+                    activeDropdown === menu.label
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      : ''
                   }`}
                 >
-                  <span>{menu.icon}</span>
-                  <span className="font-medium">{menu.label}</span>
+                  <span className="text-lg">{menu.icon}</span>
+                  <span className="font-semibold text-base">{menu.label}</span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
                       activeDropdown === menu.label ? 'rotate-180' : ''
@@ -219,34 +281,58 @@ export default function Navbar() {
 
                 {/* Dropdown Menu */}
                 {activeDropdown === menu.label && (
-                  <div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-2 z-50">
-                    <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                      <h3 className="font-semibold text-gray-900 dark:text-white flex items-center">
-                        <span className="mr-2">{menu.icon}</span>
+                  <div className="absolute top-full left-0 mt-2 w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200">
+                    {/* Parent Section Header */}
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
+                      <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-lg">
+                        <span className="mr-3 text-xl">{menu.icon}</span>
                         {menu.label}
+                        <span className="ml-2 text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
+                          {menu.items.length} items
+                        </span>
                       </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 ml-8">
+                        Explore all {menu.label.toLowerCase()} resources
+                      </p>
                     </div>
-                    <div className="py-2">
-                      {menu.items.map(item => (
+
+                    {/* Child Items */}
+                    <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                      {menu.items.map((item, index) => (
                         <Link
                           key={item.href}
                           href={item.href}
-                          className="flex items-start px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 group"
+                          className="flex items-start px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
                           onClick={() => setActiveDropdown(null)}
                         >
-                          <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                          <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
                             {item.icon}
                           </span>
                           <div className="flex-1 min-w-0">
-                            <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                            <div className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 flex items-center">
                               {item.label}
+                              <span className="ml-2 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-0.5 rounded-full">
+                                #{index + 1}
+                              </span>
                             </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            <div className="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
                               {item.description}
                             </div>
                           </div>
+                          {/* Arrow indicator */}
+                          <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <ChevronDown className="w-4 h-4 text-gray-400 rotate-[-90deg]" />
+                          </div>
                         </Link>
                       ))}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-b-xl">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                        💡 Click any item to explore {menu.label.toLowerCase()}{' '}
+                        content
+                      </p>
                     </div>
                   </div>
                 )}
@@ -265,17 +351,85 @@ export default function Navbar() {
               💼 Job Aggregator
             </Link>
 
-            <Link
-              href="/auth"
-              className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-                isScrolled
-                  ? 'bg-green-600 text-white hover:bg-green-700'
-                  : 'bg-white text-green-600 hover:bg-green-50'
-              }`}
-            >
-              <span className="hidden lg:inline">Save Progress</span>
-              <span className="lg:hidden">Save</span>
-            </Link>
+            {/* User Dropdown or Auth Button */}
+            {isAuthenticated ? (
+              <div className="relative" ref={userDropdownRef}>
+                <button
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className={`p-2 rounded-lg transition-colors duration-200 ${
+                    isScrolled
+                      ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                      : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                  }`}
+                  aria-label="User menu"
+                >
+                  <User size={20} />
+                </button>
+
+                {/* User Dropdown Menu */}
+                {isUserDropdownOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                      <p
+                        className="text-sm font-medium text-gray-900 dark:text-white truncate"
+                        title={user?.displayName || user?.email || 'User'}
+                      >
+                        {user?.displayName || user?.email || 'User'}
+                      </p>
+                      <p
+                        className="text-xs text-gray-500 dark:text-gray-400 truncate"
+                        title={user?.email}
+                      >
+                        {user?.email}
+                      </p>
+                    </div>
+
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                    >
+                      <span className="mr-3">📊</span>
+                      Dashboard
+                    </Link>
+
+                    <Link
+                      href="/flashcards"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                    >
+                      <span className="mr-3">🃏</span>
+                      Flashcards
+                    </Link>
+
+                    <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
+                      <button
+                        onClick={() => {
+                          signOut();
+                          setIsUserDropdownOpen(false);
+                        }}
+                        className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                      >
+                        <LogOut size={16} className="mr-3" />
+                        Sign Out
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                href="/auth"
+                className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                  isScrolled
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-white text-green-600 hover:bg-green-50'
+                }`}
+              >
+                <span className="hidden lg:inline">Save Progress</span>
+                <span className="lg:hidden">Save</span>
+              </Link>
+            )}
           </div>
 
           {/* Theme Toggle */}
@@ -320,15 +474,64 @@ export default function Navbar() {
           }}
         >
           <div className="flex flex-col h-full">
-            {/* Save Progress Button - Right after logo */}
+            {/* User Section - Right after logo */}
             <div className="px-4 pt-4 pb-2">
-              <Link
-                href="/auth"
-                className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-green-600 text-white hover:bg-green-700 text-center"
-                onClick={() => setIsOpen(false)}
-              >
-                💾 Save Progress
-              </Link>
+              {isAuthenticated ? (
+                <div className="space-y-2">
+                  {/* User Info */}
+                  <div className="px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                    <p
+                      className="text-sm font-medium text-gray-900 dark:text-white truncate"
+                      title={user?.displayName || user?.email || 'User'}
+                    >
+                      {user?.displayName || user?.email || 'User'}
+                    </p>
+                    <p
+                      className="text-xs text-gray-500 dark:text-gray-400 truncate"
+                      title={user?.email}
+                    >
+                      {user?.email}
+                    </p>
+                  </div>
+
+                  {/* Dashboard Link */}
+                  <Link
+                    href="/dashboard"
+                    className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 text-center"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    📊 Dashboard
+                  </Link>
+
+                  {/* Flashcards Link */}
+                  <Link
+                    href="/flashcards"
+                    className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-purple-600 text-white hover:bg-purple-700 text-center"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    🃏 Flashcards
+                  </Link>
+
+                  {/* Sign Out Button */}
+                  <button
+                    onClick={() => {
+                      signOut();
+                      setIsOpen(false);
+                    }}
+                    className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-red-600 text-white hover:bg-red-700 text-center"
+                  >
+                    🚪 Sign Out
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/auth"
+                  className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-green-600 text-white hover:bg-green-700 text-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  💾 Save Progress
+                </Link>
+              )}
             </div>
 
             {/* Navigation Links - Scrollable Container */}
@@ -339,25 +542,43 @@ export default function Navbar() {
               {dropdownMenus.map((menu, index) => (
                 <div key={menu.label}>
                   <div className="space-y-2">
-                    <div className="flex items-center px-4 py-2">
-                      <span className="text-xl mr-3">{menu.icon}</span>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        {menu.label}
-                      </h3>
+                    {/* Parent Section Header */}
+                    <div className="flex items-center px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <span className="text-2xl mr-3">{menu.icon}</span>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center">
+                          {menu.label}
+                          <span className="ml-2 text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
+                            {menu.items.length} items
+                          </span>
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Explore all {menu.label.toLowerCase()} resources
+                        </p>
+                      </div>
                     </div>
-                    <div className="pl-8 space-y-1">
-                      {menu.items.map(item => (
+
+                    {/* Child Items */}
+                    <div className="pl-4 space-y-1">
+                      {menu.items.map((item, itemIndex) => (
                         <Link
                           key={item.href}
                           href={item.href}
-                          className="block px-4 py-3 rounded-lg text-base font-medium transition-colors text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                          className="block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
                           onClick={() => setIsOpen(false)}
                         >
                           <div className="flex items-center">
-                            <span className="text-lg mr-3">{item.icon}</span>
-                            <div>
-                              <div className="font-medium">{item.label}</div>
-                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                            <span className="text-lg mr-3 flex-shrink-0">
+                              {item.icon}
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-semibold flex items-center">
+                                {item.label}
+                                <span className="ml-2 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-0.5 rounded-full">
+                                  #{itemIndex + 1}
+                                </span>
+                              </div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
                                 {item.description}
                               </div>
                             </div>
