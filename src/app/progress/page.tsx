@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Target, BookOpen, Code, Zap } from 'lucide-react';
 import Link from 'next/link';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import ProgressAnalytics from '@/components/ProgressAnalytics';
+import ContinueWhereLeftOff from '@/components/ContinueWhereLeftOff';
 
 interface ProgressItem {
   id: string;
@@ -115,40 +117,14 @@ export default function ProgressPage() {
         </div>
 
         <div className="container mx-auto px-4 py-8">
-          {/* Statistics Section */}
-          <div
-            className={`${showStatistics ? 'block' : 'hidden md:grid'} grid-cols-1 md:grid-cols-4 gap-6 mb-8`}
-          >
-            <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">
-                {Math.round(totalProgress)}%
-              </div>
-              <div className="text-card-foreground font-medium">
-                Overall Progress
-              </div>
-            </div>
-            <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
-              <div className="text-3xl font-bold text-green-600 mb-2">
-                {totalCompleted}
-              </div>
-              <div className="text-card-foreground font-medium">
-                Items Completed
-              </div>
-            </div>
-            <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
-              <div className="text-3xl font-bold text-purple-600 mb-2">
-                {totalItems}
-              </div>
-              <div className="text-card-foreground font-medium">
-                Total Items
-              </div>
-            </div>
-            <div className="bg-card rounded-lg shadow-sm border border-border p-6 text-center">
-              <div className="text-3xl font-bold text-yellow-600 mb-2">
-                {progressData.length}
-              </div>
-              <div className="text-card-foreground font-medium">Categories</div>
-            </div>
+          {/* Enhanced Analytics Section */}
+          <div className="mb-8">
+            <ProgressAnalytics />
+          </div>
+
+          {/* Continue Where Left Off */}
+          <div className="mb-8">
+            <ContinueWhereLeftOff />
           </div>
 
           {/* Progress Cards */}
