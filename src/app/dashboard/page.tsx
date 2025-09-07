@@ -8,17 +8,11 @@ import {
   BookOpen,
   Code,
   Target,
-  TrendingUp,
-  Clock,
-  Award,
   Zap,
   BarChart3,
   CheckCircle,
   Loader2,
-  LogOut,
-  Settings,
   Trophy,
-  Star,
 } from 'lucide-react';
 
 // Dashboard cards data
@@ -61,76 +55,7 @@ const dashboardCards = [
   },
 ];
 
-// Recent activities data
-const recentActivities = [
-  {
-    id: 1,
-    type: 'question',
-    title: 'Completed CSS Grid question',
-    time: '2 hours ago',
-    points: 10,
-    icon: CheckCircle,
-    color: 'text-green-500',
-  },
-  {
-    id: 2,
-    type: 'challenge',
-    title: 'Solved React Hooks challenge',
-    time: '1 day ago',
-    points: 25,
-    icon: Trophy,
-    color: 'text-blue-500',
-  },
-  {
-    id: 3,
-    type: 'path',
-    title: 'Started JavaScript Fundamentals path',
-    time: '2 days ago',
-    points: 5,
-    icon: Target,
-    color: 'text-purple-500',
-  },
-  {
-    id: 4,
-    type: 'achievement',
-    title: 'Earned "Quick Learner" badge',
-    time: '3 days ago',
-    points: 50,
-    icon: Award,
-    color: 'text-yellow-500',
-  },
-];
-
-// Recommendations data
-const recommendations = [
-  {
-    id: 1,
-    title: 'React Hooks Deep Dive',
-    description: 'Master useState, useEffect, and custom hooks',
-    difficulty: 'Intermediate',
-    estimatedTime: '2-3 hours',
-    icon: Code,
-    color: 'from-blue-500 to-cyan-500',
-  },
-  {
-    id: 2,
-    title: 'CSS Grid Mastery',
-    description: 'Learn advanced CSS Grid layouts and techniques',
-    difficulty: 'Advanced',
-    estimatedTime: '3-4 hours',
-    icon: Target,
-    color: 'from-purple-500 to-pink-500',
-  },
-  {
-    id: 3,
-    title: 'JavaScript ES6+ Features',
-    description: 'Explore modern JavaScript features and syntax',
-    difficulty: 'Intermediate',
-    estimatedTime: '2-3 hours',
-    icon: Zap,
-    color: 'from-green-500 to-emerald-500',
-  },
-];
+// Dashboard cards data only - other data moved to EnhancedDashboard
 
 export default function DashboardPage() {
   const { user, isAuthenticated, isLoading } = useFirebaseAuth();
@@ -274,6 +199,49 @@ export default function DashboardPage() {
     );
   }
 
-  // Authenticated user dashboard - use enhanced dashboard
-  return <EnhancedDashboard />;
+  // Authenticated user dashboard - use enhanced dashboard with fallback
+  try {
+    return <EnhancedDashboard />;
+  } catch (error) {
+    console.error('Error rendering EnhancedDashboard:', error);
+    // Fallback to simple dashboard
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Welcome back, {user?.displayName || 'Developer'}! 👋
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
+              Ready to continue your frontend development journey?
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {dashboardCards.map(card => (
+                <Link
+                  key={card.id}
+                  href={card.href}
+                  className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105"
+                >
+                  <div
+                    className={`w-16 h-16 bg-gradient-to-r ${card.color} rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200`}
+                  >
+                    <card.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {card.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-3">
+                    {card.description}
+                  </p>
+                  <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                    {card.stats}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
