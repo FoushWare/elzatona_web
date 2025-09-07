@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import {
   UserProgress,
-  LearningPathProgress,
   QuestionAttempt,
   ChallengeAttempt,
   DashboardStats,
@@ -16,17 +15,21 @@ import {
   updateUserStreak,
   getDashboardStats,
   getContinueWhereLeftOff,
-  updateUserPreferences
+  updateUserPreferences,
 } from '@/lib/firebase-progress';
 
 export interface UseUserProgressReturn {
   progress: UserProgress | null;
   dashboardStats: DashboardStats | null;
-  continueData: any;
+  continueData: unknown;
   isLoading: boolean;
   error: string | null;
-  updateQuestion: (attempt: Omit<QuestionAttempt, 'timestamp' | 'points'>) => Promise<void>;
-  updateChallenge: (attempt: Omit<ChallengeAttempt, 'timestamp' | 'points'>) => Promise<void>;
+  updateQuestion: (
+    attempt: Omit<QuestionAttempt, 'timestamp' | 'points'>
+  ) => Promise<void>;
+  updateChallenge: (
+    attempt: Omit<ChallengeAttempt, 'timestamp' | 'points'>
+  ) => Promise<void>;
   updateLearningPath: (
     pathId: string,
     pathName: string,
@@ -35,7 +38,9 @@ export interface UseUserProgressReturn {
     timeSpent: number
   ) => Promise<void>;
   updateStreak: () => Promise<void>;
-  updatePreferences: (preferences: Partial<UserProgress['preferences']>) => Promise<void>;
+  updatePreferences: (
+    preferences: Partial<UserProgress['preferences']>
+  ) => Promise<void>;
   refreshProgress: () => Promise<void>;
   refreshDashboardStats: () => Promise<void>;
   refreshContinueData: () => Promise<void>;
@@ -44,8 +49,10 @@ export interface UseUserProgressReturn {
 export const useUserProgress = (): UseUserProgressReturn => {
   const { user, isAuthenticated } = useFirebaseAuth();
   const [progress, setProgress] = useState<UserProgress | null>(null);
-  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
-  const [continueData, setContinueData] = useState<any>(null);
+  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(
+    null
+  );
+  const [continueData, setContinueData] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -53,12 +60,25 @@ export const useUserProgress = (): UseUserProgressReturn => {
   useEffect(() => {
     if (isAuthenticated && user?.uid) {
       loadUserProgress();
+
+      // Add a timeout to prevent infinite loading
+      const timeout = setTimeout(() => {
+        if (isLoading) {
+          console.warn(
+            'User progress loading timeout - setting default values'
+          );
+          setIsLoading(false);
+          setError('Loading timeout - using default values');
+        }
+      }, 10000); // 10 second timeout
+
+      return () => clearTimeout(timeout);
     } else {
       setProgress(null);
       setDashboardStats(null);
       setContinueData(null);
     }
-  }, [isAuthenticated, user?.uid]);
+  }, [isAuthenticated, user?.uid, loadUserProgress, isLoading]);
 
   const loadUserProgress = useCallback(async () => {
     if (!user?.uid) return;
@@ -68,7 +88,36 @@ export const useUserProgress = (): UseUserProgressReturn => {
 
     try {
       const userProgress = await getUserProgress(user.uid);
-      setProgress(userProgress);
+      if (userProgress) {
+        setProgress(userProgress);
+      } else {
+        // If getUserProgress returns null, create a default progress object
+        const defaultProgress: UserProgress = {
+          userId: user.uid,
+          totalQuestionsCompleted: 0,
+          totalChallengesCompleted: 0,
+          totalPoints: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+          lastActivityDate: new Date().toISOString(),
+          badges: [],
+          achievements: [],
+          learningPaths: [],
+          questionHistory: [],
+          challengeHistory: [],
+          preferences: {
+            theme: 'system',
+            language: 'en',
+            notifications: true,
+            emailUpdates: false,
+            difficulty: 'mixed',
+            focusAreas: [],
+          },
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        setProgress(defaultProgress);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load progress');
       console.error('Error loading user progress:', err);
@@ -82,9 +131,32 @@ export const useUserProgress = (): UseUserProgressReturn => {
 
     try {
       const stats = await getDashboardStats(user.uid);
-      setDashboardStats(stats);
+      if (stats) {
+        setDashboardStats(stats);
+      } else {
+        // Set default stats if none exist
+        setDashboardStats({
+          totalTimeSpent: 0,
+          averageScore: 0,
+          completionRate: 0,
+          weeklyProgress: 0,
+          monthlyProgress: 0,
+          topCategories: [],
+          recentActivity: [],
+        });
+      }
     } catch (err) {
       console.error('Error loading dashboard stats:', err);
+      // Set default stats on error
+      setDashboardStats({
+        totalTimeSpent: 0,
+        averageScore: 0,
+        completionRate: 0,
+        weeklyProgress: 0,
+        monthlyProgress: 0,
+        topCategories: [],
+        recentActivity: [],
+      });
     }
   }, [user?.uid]);
 
@@ -93,70 +165,95 @@ export const useUserProgress = (): UseUserProgressReturn => {
 
     try {
       const data = await getContinueWhereLeftOff(user.uid);
-      setContinueData(data);
+      setContinueData(data || null);
     } catch (err) {
       console.error('Error loading continue data:', err);
+      setContinueData(null);
     }
   }, [user?.uid]);
 
-  const updateQuestion = useCallback(async (
-    attempt: Omit<QuestionAttempt, 'timestamp' | 'points'>
-  ) => {
-    if (!user?.uid) {
-      throw new Error('User not authenticated');
-    }
+  const updateQuestion = useCallback(
+    async (attempt: Omit<QuestionAttempt, 'timestamp' | 'points'>) => {
+      if (!user?.uid) {
+        throw new Error('User not authenticated');
+      }
 
-    try {
-      await updateQuestionProgress(user.uid, attempt);
-      await loadUserProgress();
-      await loadDashboardStats();
-      await updateUserStreak(user.uid);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update question progress');
-      throw err;
-    }
-  }, [user?.uid, loadUserProgress, loadDashboardStats]);
+      try {
+        await updateQuestionProgress(user.uid, attempt);
+        await loadUserProgress();
+        await loadDashboardStats();
+        await updateUserStreak(user.uid);
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Failed to update question progress'
+        );
+        throw err;
+      }
+    },
+    [user?.uid, loadUserProgress, loadDashboardStats]
+  );
 
-  const updateChallenge = useCallback(async (
-    attempt: Omit<ChallengeAttempt, 'timestamp' | 'points'>
-  ) => {
-    if (!user?.uid) {
-      throw new Error('User not authenticated');
-    }
+  const updateChallenge = useCallback(
+    async (attempt: Omit<ChallengeAttempt, 'timestamp' | 'points'>) => {
+      if (!user?.uid) {
+        throw new Error('User not authenticated');
+      }
 
-    try {
-      await updateChallengeProgress(user.uid, attempt);
-      await loadUserProgress();
-      await loadDashboardStats();
-      await updateUserStreak(user.uid);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update challenge progress');
-      throw err;
-    }
-  }, [user?.uid, loadUserProgress, loadDashboardStats]);
+      try {
+        await updateChallengeProgress(user.uid, attempt);
+        await loadUserProgress();
+        await loadDashboardStats();
+        await updateUserStreak(user.uid);
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Failed to update challenge progress'
+        );
+        throw err;
+      }
+    },
+    [user?.uid, loadUserProgress, loadDashboardStats]
+  );
 
-  const updateLearningPath = useCallback(async (
-    pathId: string,
-    pathName: string,
-    sectionId: string,
-    completed: boolean,
-    timeSpent: number
-  ) => {
-    if (!user?.uid) {
-      throw new Error('User not authenticated');
-    }
+  const updateLearningPath = useCallback(
+    async (
+      pathId: string,
+      pathName: string,
+      sectionId: string,
+      completed: boolean,
+      timeSpent: number
+    ) => {
+      if (!user?.uid) {
+        throw new Error('User not authenticated');
+      }
 
-    try {
-      await updateLearningPathProgress(user.uid, pathId, pathName, sectionId, completed, timeSpent);
-      await loadUserProgress();
-      await loadDashboardStats();
-      await loadContinueData();
-      await updateUserStreak(user.uid);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update learning path progress');
-      throw err;
-    }
-  }, [user?.uid, loadUserProgress, loadDashboardStats, loadContinueData]);
+      try {
+        await updateLearningPathProgress(
+          user.uid,
+          pathId,
+          pathName,
+          sectionId,
+          completed,
+          timeSpent
+        );
+        await loadUserProgress();
+        await loadDashboardStats();
+        await loadContinueData();
+        await updateUserStreak(user.uid);
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Failed to update learning path progress'
+        );
+        throw err;
+      }
+    },
+    [user?.uid, loadUserProgress, loadDashboardStats, loadContinueData]
+  );
 
   const updateStreak = useCallback(async () => {
     if (!user?.uid) {
@@ -172,21 +269,24 @@ export const useUserProgress = (): UseUserProgressReturn => {
     }
   }, [user?.uid, loadUserProgress]);
 
-  const updatePreferences = useCallback(async (
-    preferences: Partial<UserProgress['preferences']>
-  ) => {
-    if (!user?.uid) {
-      throw new Error('User not authenticated');
-    }
+  const updatePreferences = useCallback(
+    async (preferences: Partial<UserProgress['preferences']>) => {
+      if (!user?.uid) {
+        throw new Error('User not authenticated');
+      }
 
-    try {
-      await updateUserPreferences(user.uid, preferences);
-      await loadUserProgress();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update preferences');
-      throw err;
-    }
-  }, [user?.uid, loadUserProgress]);
+      try {
+        await updateUserPreferences(user.uid, preferences);
+        await loadUserProgress();
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Failed to update preferences'
+        );
+        throw err;
+      }
+    },
+    [user?.uid, loadUserProgress]
+  );
 
   const refreshProgress = useCallback(async () => {
     await loadUserProgress();
@@ -221,6 +321,6 @@ export const useUserProgress = (): UseUserProgressReturn => {
     updatePreferences,
     refreshProgress,
     refreshDashboardStats,
-    refreshContinueData
+    refreshContinueData,
   };
 };
