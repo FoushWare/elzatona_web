@@ -1,7 +1,7 @@
 // v1.0 - Enhanced User Dashboard with Progress Tracking
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useUserProgress } from '@/hooks/useUserProgress';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
@@ -9,9 +9,7 @@ import {
   BookOpen,
   Code,
   Target,
-  TrendingUp,
   Clock,
-  Award,
   Zap,
   BarChart3,
   CheckCircle,
@@ -22,15 +20,12 @@ import {
   Star,
   Play,
   ArrowRight,
-  Calendar,
   Timer,
-  Users,
   Brain,
   Flame,
   Medal,
   ChevronRight,
   Activity,
-  Bookmark,
   RefreshCw,
 } from 'lucide-react';
 
@@ -38,7 +33,7 @@ interface DashboardCard {
   id: string;
   title: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   color: string;
   href: string;
   stats: string;
@@ -51,7 +46,7 @@ interface RecentActivity {
   title: string;
   time: string;
   points: number;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   color: string;
 }
 
@@ -61,7 +56,7 @@ interface Recommendation {
   description: string;
   difficulty: string;
   estimatedTime: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   color: string;
   href: string;
 }
@@ -222,7 +217,8 @@ export default function EnhancedDashboard() {
     );
   }
 
-  if (error) {
+  // Only show error screen for critical errors, not timeouts
+  if (error && !error.includes('timeout')) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">
@@ -239,9 +235,37 @@ export default function EnhancedDashboard() {
     );
   }
 
+  // For timeout errors, show a warning but continue with the dashboard
+  if (error && error.includes('timeout')) {
+    console.log('Showing dashboard with default data due to timeout');
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="container mx-auto px-4 py-8">
+        {/* Timeout Warning Banner */}
+        {error && error.includes('timeout') && (
+          <div className="mb-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+            <div className="flex items-center">
+              <div className="text-yellow-600 dark:text-yellow-400 mr-3">
+                ⚠️
+              </div>
+              <div className="flex-1">
+                <p className="text-yellow-800 dark:text-yellow-200 text-sm">
+                  Dashboard loaded with default data. Some features may be
+                  limited.
+                </p>
+              </div>
+              <button
+                onClick={handleRefresh}
+                className="ml-3 px-3 py-1 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700 transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
