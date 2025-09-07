@@ -49,16 +49,28 @@ jest.mock('lucide-react', () => ({
 
 const mockUserProgress = {
   progress: {
-    questionsCompleted: 24,
-    challengesCompleted: 12,
-    totalScore: 850,
-    streak: 7,
+    totalQuestionsCompleted: 24,
+    totalChallengesCompleted: 12,
+    totalPoints: 850,
+    currentStreak: 7,
     badges: ['Quick Learner', 'Problem Solver'],
     achievements: ['First Question', 'Week Streak'],
   },
+  dashboardStats: {
+    totalTimeSpent: 120,
+    averageScore: 85,
+    completionRate: 75,
+    weeklyProgress: 20,
+    monthlyProgress: 60,
+    topCategories: [],
+    recentActivity: [],
+  },
+  continueData: null,
   isLoading: false,
   error: null,
   refreshProgress: jest.fn(),
+  refreshDashboardStats: jest.fn(),
+  refreshContinueData: jest.fn(),
 };
 
 const mockFirebaseAuth = {

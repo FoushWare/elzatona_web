@@ -56,30 +56,6 @@ export const useUserProgress = (): UseUserProgressReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Load user progress when user changes
-  useEffect(() => {
-    if (isAuthenticated && user?.uid) {
-      loadUserProgress();
-
-      // Add a timeout to prevent infinite loading
-      const timeout = setTimeout(() => {
-        if (isLoading) {
-          console.warn(
-            'User progress loading timeout - setting default values'
-          );
-          setIsLoading(false);
-          setError('Loading timeout - using default values');
-        }
-      }, 10000); // 10 second timeout
-
-      return () => clearTimeout(timeout);
-    } else {
-      setProgress(null);
-      setDashboardStats(null);
-      setContinueData(null);
-    }
-  }, [isAuthenticated, user?.uid, loadUserProgress, isLoading]);
-
   const loadUserProgress = useCallback(async () => {
     if (!user?.uid) return;
 
@@ -299,6 +275,30 @@ export const useUserProgress = (): UseUserProgressReturn => {
   const refreshContinueData = useCallback(async () => {
     await loadContinueData();
   }, [loadContinueData]);
+
+  // Load user progress when user changes
+  useEffect(() => {
+    if (isAuthenticated && user?.uid) {
+      loadUserProgress();
+
+      // Add a timeout to prevent infinite loading
+      const timeout = setTimeout(() => {
+        if (isLoading) {
+          console.warn(
+            'User progress loading timeout - setting default values'
+          );
+          setIsLoading(false);
+          setError('Loading timeout - using default values');
+        }
+      }, 10000); // 10 second timeout
+
+      return () => clearTimeout(timeout);
+    } else {
+      setProgress(null);
+      setDashboardStats(null);
+      setContinueData(null);
+    }
+  }, [isAuthenticated, user?.uid, loadUserProgress, isLoading]);
 
   // Load dashboard stats and continue data when progress is loaded
   useEffect(() => {
