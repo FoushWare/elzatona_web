@@ -55,10 +55,12 @@ export const useUserProgress = (): UseUserProgressReturn => {
   const [continueData, setContinueData] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoadingProgress, setIsLoadingProgress] = useState(false);
 
   const loadUserProgress = useCallback(async () => {
-    if (!user?.uid) return;
+    if (!user?.uid || isLoadingProgress) return;
 
+    setIsLoadingProgress(true);
     setIsLoading(true);
     setError(null);
 
@@ -99,8 +101,9 @@ export const useUserProgress = (): UseUserProgressReturn => {
       console.error('Error loading user progress:', err);
     } finally {
       setIsLoading(false);
+      setIsLoadingProgress(false);
     }
-  }, [user?.uid]);
+  }, [user?.uid, isLoadingProgress]);
 
   const loadDashboardStats = useCallback(async () => {
     if (!user?.uid) return;
@@ -283,13 +286,9 @@ export const useUserProgress = (): UseUserProgressReturn => {
 
       // Add a timeout to prevent infinite loading
       const timeout = setTimeout(() => {
-        if (isLoading) {
-          console.warn(
-            'User progress loading timeout - setting default values'
-          );
-          setIsLoading(false);
-          setError('Loading timeout - using default values');
-        }
+        console.warn('User progress loading timeout - setting default values');
+        setIsLoading(false);
+        setError('Loading timeout - using default values');
       }, 10000); // 10 second timeout
 
       return () => clearTimeout(timeout);
@@ -298,7 +297,7 @@ export const useUserProgress = (): UseUserProgressReturn => {
       setDashboardStats(null);
       setContinueData(null);
     }
-  }, [isAuthenticated, user?.uid, loadUserProgress, isLoading]);
+  }, [isAuthenticated, user?.uid, loadUserProgress]);
 
   // Load dashboard stats and continue data when progress is loaded
   useEffect(() => {
