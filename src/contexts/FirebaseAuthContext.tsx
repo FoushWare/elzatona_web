@@ -96,18 +96,70 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
     const unsubscribe = onAuthStateChangedWrapper(async firebaseUser => {
       setIsLoading(true);
 
-      if (firebaseUser) {
-        setFirebaseUser(firebaseUser);
+      try {
+        if (firebaseUser) {
+          setFirebaseUser(firebaseUser);
 
-        // Set up automatic token refresh for authenticated users
-        const cleanupTokenRefresh = setupTokenRefresh();
+          // Set up automatic token refresh for authenticated users
+          const cleanupTokenRefresh = setupTokenRefresh();
 
-        // Get user data from Firestore
-        const userData = await getUserFromFirestore(firebaseUser.uid);
-        if (userData) {
-          setUser(userData as FirebaseUser);
+          // Get user data from Firestore with timeout
+          let userData = null;
+          try {
+            const firestorePromise = getUserFromFirestore(firebaseUser.uid);
+            const timeoutPromise = new Promise((_, reject) =>
+              setTimeout(() => reject(new Error('Firestore timeout')), 5000)
+            );
+            userData = await Promise.race([firestorePromise, timeoutPromise]);
+          } catch (error) {
+            console.warn(
+              'Firestore fetch failed or timed out, using basic user data:',
+              error
+            );
+          }
+
+          if (userData) {
+            setUser(userData as FirebaseUser);
+          } else {
+            // Create basic user object if not in Firestore or if Firestore fails
+            const basicUser: FirebaseUser = {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              displayName: firebaseUser.displayName,
+              photoURL: firebaseUser.photoURL,
+              provider: firebaseUser.providerData[0]?.providerId || 'email',
+              isEmailVerified: firebaseUser.emailVerified,
+              preferences: {
+                theme: 'system',
+                notifications: true,
+                language: 'en',
+              },
+              progress: {
+                questionsCompleted: 0,
+                totalPoints: 0,
+                currentStreak: 0,
+                badges: [],
+                achievements: [],
+              },
+            };
+            setUser(basicUser);
+
+            // Try to save to Firestore (don't wait for it)
+            saveUserToFirestore(firebaseUser).catch(error =>
+              console.warn('Failed to save user to Firestore:', error)
+            );
+          }
+
+          // Return cleanup function for token refresh
+          return cleanupTokenRefresh;
         } else {
-          // Create basic user object if not in Firestore
+          setFirebaseUser(null);
+          setUser(null);
+        }
+      } catch (error) {
+        console.error('Error in auth state change:', error);
+        // Set basic user data even if there's an error
+        if (firebaseUser) {
           const basicUser: FirebaseUser = {
             uid: firebaseUser.uid,
             email: firebaseUser.email,
@@ -129,19 +181,11 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
             },
           };
           setUser(basicUser);
-
-          // Save to Firestore
-          await saveUserToFirestore(firebaseUser);
+          setFirebaseUser(firebaseUser);
         }
-
-        // Return cleanup function for token refresh
-        return cleanupTokenRefresh;
-      } else {
-        setFirebaseUser(null);
-        setUser(null);
+      } finally {
+        setIsLoading(false);
       }
-
-      setIsLoading(false);
     });
 
     return () => unsubscribe();
