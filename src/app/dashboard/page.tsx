@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import EnhancedDashboard from '@/components/EnhancedDashboard';
@@ -60,8 +60,23 @@ const dashboardCards = [
 export default function DashboardPage() {
   const { user, isAuthenticated, isLoading } = useFirebaseAuth();
   const [showStats, setShowStats] = useState(false);
+  const [forceShowDashboard, setForceShowDashboard] = useState(false);
 
-  if (isLoading) {
+  // Add a timeout to force show dashboard if loading takes too long
+  useEffect(() => {
+    if (isLoading) {
+      const timeout = setTimeout(() => {
+        console.warn('Dashboard loading timeout - forcing dashboard to show');
+        setForceShowDashboard(true);
+      }, 8000); // 8 second timeout
+
+      return () => clearTimeout(timeout);
+    } else {
+      setForceShowDashboard(false);
+    }
+  }, [isLoading]);
+
+  if (isLoading && !forceShowDashboard) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
