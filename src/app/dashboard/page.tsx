@@ -214,49 +214,6 @@ export default function DashboardPage() {
     );
   }
 
-  // Authenticated user dashboard - use enhanced dashboard with fallback
-  try {
-    return <EnhancedDashboard />;
-  } catch (error) {
-    console.error('Error rendering EnhancedDashboard:', error);
-    // Fallback to simple dashboard
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Welcome back, {user?.displayName || 'Developer'}! 👋
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-8">
-              Ready to continue your frontend development journey?
-            </p>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {dashboardCards.map(card => (
-                <Link
-                  key={card.id}
-                  href={card.href}
-                  className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                  <div
-                    className={`w-16 h-16 bg-gradient-to-r ${card.color} rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200`}
-                  >
-                    <card.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {card.title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-3">
-                    {card.description}
-                  </p>
-                  <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">
-                    {card.stats}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Authenticated user dashboard - use enhanced dashboard
+  return <EnhancedDashboard />;
 }

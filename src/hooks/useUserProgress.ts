@@ -69,32 +69,11 @@ export const useUserProgress = (): UseUserProgressReturn => {
       if (userProgress) {
         setProgress(userProgress);
       } else {
-        // If getUserProgress returns null, create a default progress object
-        const defaultProgress: UserProgress = {
-          userId: user.uid,
-          totalQuestionsCompleted: 0,
-          totalChallengesCompleted: 0,
-          totalPoints: 0,
-          currentStreak: 0,
-          longestStreak: 0,
-          lastActivityDate: new Date().toISOString(),
-          badges: [],
-          achievements: [],
-          learningPaths: [],
-          questionHistory: [],
-          challengeHistory: [],
-          preferences: {
-            theme: 'system',
-            language: 'en',
-            notifications: true,
-            emailUpdates: false,
-            difficulty: 'mixed',
-            focusAreas: [],
-          },
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-        setProgress(defaultProgress);
+        // If getUserProgress returns null, set error instead of default data
+        setError(
+          'No user progress data found. Please try refreshing the page.'
+        );
+        console.warn('No user progress data found for user:', user.uid);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load progress');
@@ -113,29 +92,12 @@ export const useUserProgress = (): UseUserProgressReturn => {
       if (stats) {
         setDashboardStats(stats);
       } else {
-        // Set default stats if none exist
-        setDashboardStats({
-          totalTimeSpent: 0,
-          averageScore: 0,
-          completionRate: 0,
-          weeklyProgress: 0,
-          monthlyProgress: 0,
-          topCategories: [],
-          recentActivity: [],
-        });
+        // Don't set default stats - let it remain null
+        console.warn('No dashboard stats found for user:', user.uid);
       }
     } catch (err) {
       console.error('Error loading dashboard stats:', err);
-      // Set default stats on error
-      setDashboardStats({
-        totalTimeSpent: 0,
-        averageScore: 0,
-        completionRate: 0,
-        weeklyProgress: 0,
-        monthlyProgress: 0,
-        topCategories: [],
-        recentActivity: [],
-      });
+      // Don't set default stats on error - let it remain null
     }
   }, [user?.uid]);
 
