@@ -19,7 +19,7 @@ export function FilterButtons({
 }: FilterButtonsProps) {
   return (
     <div
-      className={`bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-4 sm:p-6 mb-6 sm:mb-8 transition-all duration-300 ${
+      className={`bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-6 mb-6 sm:mb-8 transition-all duration-300 backdrop-blur-sm ${
         isVisible ? 'block' : 'hidden md:block'
       }`}
     >
@@ -34,10 +34,10 @@ export function FilterButtons({
                 <button
                   key={difficulty}
                   onClick={() => onDifficultyChange(difficulty)}
-                  className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 hover:scale-105 transform border-2 ${
+                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 transform border-2 ${
                     selectedDifficulty === difficulty
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/25'
-                      : 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 hover:from-blue-500 hover:to-blue-600 hover:text-white hover:shadow-md hover:shadow-blue-500/25'
+                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 border-blue-500 dark:border-blue-600 text-white shadow-xl shadow-blue-500/30 dark:shadow-blue-400/40'
+                      : 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-200 hover:from-blue-500 hover:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 hover:text-white hover:shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-blue-400/30'
                   }`}
                 >
                   {difficulty === 'all'
@@ -57,10 +57,10 @@ export function FilterButtons({
               <button
                 key={category}
                 onClick={() => onCategoryChange(category)}
-                className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 hover:scale-105 transform border-2 ${
+                className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 transform border-2 ${
                   selectedCategory === category
-                    ? 'bg-gradient-to-r from-purple-500 to-purple-600 border-purple-500 text-white shadow-lg shadow-purple-500/25'
-                    : 'bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-300 dark:border-purple-600 text-purple-700 dark:text-purple-300 hover:from-purple-500 hover:to-purple-600 hover:text-white hover:shadow-md hover:shadow-purple-500/25'
+                    ? 'bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 border-purple-500 dark:border-purple-600 text-white shadow-xl shadow-purple-500/30 dark:shadow-purple-400/40'
+                    : 'bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 border-purple-300 dark:border-purple-600 text-purple-700 dark:text-purple-200 hover:from-purple-500 hover:to-purple-600 dark:hover:from-purple-600 dark:hover:to-purple-700 hover:text-white hover:shadow-lg hover:shadow-purple-500/25 dark:hover:shadow-purple-400/30'
                 }`}
               >
                 {category === 'all'

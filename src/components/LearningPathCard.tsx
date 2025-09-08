@@ -74,12 +74,12 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
   return (
     <div
       data-testid="learning-path-card"
-      className={`bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 transform group hover:scale-[1.02] ${className}`}
+      className={`bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 hover:shadow-2xl hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-300 transform group hover:scale-[1.02] backdrop-blur-sm ${className}`}
     >
       {/* Header Row - Always Visible */}
       <div
         data-testid="card-header"
-        className="p-4 cursor-pointer border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/10 dark:hover:to-purple-900/10 transition-all duration-300"
+        className="p-4 cursor-pointer border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-t-2xl"
         onClick={() => onToggle(path.id)}
       >
         <div className="flex items-center justify-between">
@@ -87,13 +87,13 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             <span className="text-xl flex-shrink-0">
               {getCategoryIcon(category)}
             </span>
-            <h3 className="text-lg font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent truncate">
+            <h3 className="text-lg font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent truncate drop-shadow-sm">
               {path.title}
             </h3>
           </div>
           <div className="flex items-center space-x-3 flex-shrink-0">
             {path.questionCount && (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-700">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/40 dark:to-blue-800/40 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-600 shadow-sm">
                 {path.questionCount} questions
               </span>
             )}
@@ -146,28 +146,28 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4 mb-3 sm:mb-4 lg:mb-6">
-            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg border border-blue-200 dark:border-blue-700">
+            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl border border-blue-200 dark:border-blue-600 shadow-sm hover:shadow-md transition-all duration-300">
               <span className="text-lg sm:text-xl lg:text-2xl mb-1">📚</span>
-              <span className="text-xs sm:text-sm font-semibold text-blue-700 dark:text-blue-300">
+              <span className="text-xs sm:text-sm font-semibold text-blue-700 dark:text-blue-200">
                 {path.resources.length} resources
               </span>
             </div>
-            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 rounded-lg border border-emerald-200 dark:border-emerald-700">
+            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/30 dark:to-emerald-800/30 rounded-xl border border-emerald-200 dark:border-emerald-600 shadow-sm hover:shadow-md transition-all duration-300">
               <span className="text-lg sm:text-xl lg:text-2xl mb-1">⏱️</span>
-              <span className="text-xs sm:text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+              <span className="text-xs sm:text-sm font-semibold text-emerald-700 dark:text-emerald-200">
                 {path.estimatedTime} hours
               </span>
             </div>
-            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg border border-purple-200 dark:border-purple-700">
+            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-xl border border-purple-200 dark:border-purple-600 shadow-sm hover:shadow-md transition-all duration-300">
               <span className="text-lg sm:text-xl lg:text-2xl mb-1">🎯</span>
-              <span className="text-xs sm:text-sm font-semibold text-purple-700 dark:text-purple-300">
+              <span className="text-xs sm:text-sm font-semibold text-purple-700 dark:text-purple-200">
                 {path.targetSkills.length} skills
               </span>
             </div>
             {path.questionCount && (
-              <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-lg border border-orange-200 dark:border-orange-700">
+              <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30 rounded-xl border border-orange-200 dark:border-orange-600 shadow-sm hover:shadow-md transition-all duration-300">
                 <span className="text-lg sm:text-xl lg:text-2xl mb-1">❓</span>
-                <span className="text-xs sm:text-sm font-semibold text-orange-700 dark:text-orange-300">
+                <span className="text-xs sm:text-sm font-semibold text-orange-700 dark:text-orange-200">
                   {path.questionCount} questions
                 </span>
               </div>
@@ -245,13 +245,13 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href={`/learning-paths/${path.id}/questions`}
-              className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-blue-500/25 text-sm lg:text-base"
+              className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 hover:scale-105 transform transition-all duration-300 shadow-lg hover:shadow-blue-500/30 dark:hover:shadow-blue-400/40 text-sm lg:text-base"
             >
               🧠 Practice Questions
             </Link>
             <Link
               href={`/learning-paths/${path.id}/resources`}
-              className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-purple-700 hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-purple-500/25 text-sm lg:text-base"
+              className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-purple-700 dark:hover:from-purple-700 dark:hover:to-purple-800 hover:scale-105 transform transition-all duration-300 shadow-lg hover:shadow-purple-500/30 dark:hover:shadow-purple-400/40 text-sm lg:text-base"
             >
               📚 View Resources
             </Link>
