@@ -84,10 +84,10 @@ export function PageHeader({
   return (
     <div className={`text-center mb-8 sm:mb-12 ${className}`}>
       <div className="relative">
-        {/* Ultra-vibrant decorative background elements */}
-        <div className="absolute inset-0 bg-gradient-to-r from-pink-400/40 via-purple-400/40 via-blue-400/40 to-cyan-400/40 dark:from-pink-500/30 dark:via-purple-500/30 dark:via-blue-500/30 dark:to-cyan-500/30 rounded-full blur-3xl transform scale-150 animate-pulse"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/30 via-yellow-400/30 via-orange-400/30 to-red-400/30 dark:from-emerald-500/25 dark:via-yellow-500/25 dark:via-orange-500/25 dark:to-red-500/25 rounded-full blur-2xl transform scale-125 animate-pulse delay-1000"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-violet-400/25 via-fuchsia-400/25 via-rose-400/25 to-pink-400/25 dark:from-violet-500/20 dark:via-fuchsia-500/20 dark:via-rose-500/20 dark:to-pink-500/20 rounded-full blur-xl transform scale-110 animate-pulse delay-2000"></div>
+        {/* Light decorative background elements */}
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-200/20 via-purple-200/20 via-blue-200/20 to-cyan-200/20 dark:from-pink-500/15 dark:via-purple-500/15 dark:via-blue-500/15 dark:to-cyan-500/15 rounded-full blur-3xl transform scale-150 animate-float-gentle"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-200/15 via-yellow-200/15 via-orange-200/15 to-red-200/15 dark:from-emerald-500/10 dark:via-yellow-500/10 dark:via-orange-500/10 dark:to-red-500/10 rounded-full blur-2xl transform scale-125 animate-float-slow delay-1000"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-violet-200/10 via-fuchsia-200/10 via-rose-200/10 to-pink-200/10 dark:from-violet-500/8 dark:via-fuchsia-500/8 dark:via-rose-500/8 dark:to-pink-500/8 rounded-full blur-xl transform scale-110 animate-float-reverse delay-2000"></div>
         <div className="relative">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink-600 via-purple-600 via-blue-600 to-cyan-600 dark:from-pink-400 dark:via-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent mb-3 sm:mb-4 drop-shadow-lg">
             {title}
