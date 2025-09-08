@@ -71,26 +71,27 @@ export function PageHeader({
   const getLinkStyles = (variant: string) => {
     switch (variant) {
       case 'primary':
-        return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-2 border-transparent hover:border-blue-300 shadow-lg hover:shadow-blue-500/25';
+        return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 dark:from-blue-600 dark:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 text-white border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-400 shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-blue-400/30';
       case 'secondary':
-        return 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white border-2 border-transparent hover:border-purple-300 shadow-lg hover:shadow-purple-500/25';
+        return 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 dark:from-purple-600 dark:to-purple-700 dark:hover:from-purple-700 dark:hover:to-purple-800 text-white border-2 border-transparent hover:border-purple-300 dark:hover:border-purple-400 shadow-lg hover:shadow-purple-500/25 dark:hover:shadow-purple-400/30';
       case 'tertiary':
-        return 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-2 border-transparent hover:border-emerald-300 shadow-lg hover:shadow-emerald-500/25';
+        return 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 dark:from-emerald-600 dark:to-emerald-700 dark:hover:from-emerald-700 dark:hover:to-emerald-800 text-white border-2 border-transparent hover:border-emerald-300 dark:hover:border-emerald-400 shadow-lg hover:shadow-emerald-500/25 dark:hover:shadow-emerald-400/30';
       default:
-        return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-2 border-transparent hover:border-blue-300 shadow-lg hover:shadow-blue-500/25';
+        return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 dark:from-blue-600 dark:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 text-white border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-400 shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-blue-400/30';
     }
   };
 
   return (
     <div className={`text-center mb-8 sm:mb-12 ${className}`}>
       <div className="relative">
-        {/* Decorative background elements */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 rounded-full blur-3xl transform scale-150"></div>
+        {/* Enhanced decorative background elements */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 dark:from-blue-500/20 dark:via-purple-500/20 dark:to-pink-500/20 rounded-full blur-3xl transform scale-150 animate-pulse"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-blue-400/20 dark:from-emerald-500/15 dark:via-cyan-500/15 dark:to-blue-500/15 rounded-full blur-2xl transform scale-125 animate-pulse delay-1000"></div>
         <div className="relative">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 sm:mb-4">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent mb-3 sm:mb-4 drop-shadow-sm">
             {title}
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto px-2 leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-700 dark:text-gray-200 max-w-3xl mx-auto px-2 leading-relaxed font-medium">
             {description}
           </p>
         </div>
@@ -116,10 +117,10 @@ export function PageHeader({
             {/* Statistics Toggle */}
             <button
               onClick={onToggleStatistics}
-              className={`inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-md text-sm ${
+              className={`inline-flex items-center justify-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg text-sm ${
                 showStatistics
-                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25'
-                  : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20'
+                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white shadow-xl shadow-blue-500/30 dark:shadow-blue-400/40'
+                  : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-200 hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/30 dark:hover:to-blue-800/30 border border-gray-200 dark:border-gray-600'
               }`}
             >
               <span className="mr-2">📊</span>
@@ -129,10 +130,10 @@ export function PageHeader({
             {/* Filters Toggle */}
             <button
               onClick={onToggleFilters}
-              className={`inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-md text-sm ${
+              className={`inline-flex items-center justify-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg text-sm ${
                 showFilters
-                  ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/25'
-                  : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/20 dark:hover:to-purple-800/20'
+                  ? 'bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 text-white shadow-xl shadow-purple-500/30 dark:shadow-purple-400/40'
+                  : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-200 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/30 dark:hover:to-purple-800/30 border border-gray-200 dark:border-gray-600'
               }`}
             >
               <Filter className="w-4 h-4 mr-2" />
