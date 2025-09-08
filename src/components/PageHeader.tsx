@@ -71,24 +71,30 @@ export function PageHeader({
   const getLinkStyles = (variant: string) => {
     switch (variant) {
       case 'primary':
-        return 'bg-transparent border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white';
+        return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-2 border-transparent hover:border-blue-300 shadow-lg hover:shadow-blue-500/25';
       case 'secondary':
-        return 'bg-transparent border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white';
+        return 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white border-2 border-transparent hover:border-purple-300 shadow-lg hover:shadow-purple-500/25';
       case 'tertiary':
-        return 'bg-transparent border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white';
+        return 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-2 border-transparent hover:border-emerald-300 shadow-lg hover:shadow-emerald-500/25';
       default:
-        return 'bg-transparent border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white';
+        return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-2 border-transparent hover:border-blue-300 shadow-lg hover:shadow-blue-500/25';
     }
   };
 
   return (
     <div className={`text-center mb-8 sm:mb-12 ${className}`}>
-      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3 sm:mb-4">
-        {title}
-      </h1>
-      <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto px-2">
-        {description}
-      </p>
+      <div className="relative">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 rounded-full blur-3xl transform scale-150"></div>
+        <div className="relative">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 sm:mb-4">
+            {title}
+          </h1>
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto px-2 leading-relaxed">
+            {description}
+          </p>
+        </div>
+      </div>
       <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 px-4">
         {links.map((link, index) => (
           <Link
@@ -112,8 +118,8 @@ export function PageHeader({
               onClick={onToggleStatistics}
               className={`inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-md text-sm ${
                 showStatistics
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25'
+                  : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20'
               }`}
             >
               <span className="mr-2">📊</span>
@@ -125,8 +131,8 @@ export function PageHeader({
               onClick={onToggleFilters}
               className={`inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-md text-sm ${
                 showFilters
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20'
+                  ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/25'
+                  : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/20 dark:hover:to-purple-800/20'
               }`}
             >
               <Filter className="w-4 h-4 mr-2" />
