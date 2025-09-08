@@ -71,27 +71,28 @@ export function PageHeader({
   const getLinkStyles = (variant: string) => {
     switch (variant) {
       case 'primary':
-        return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 dark:from-blue-600 dark:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 text-white border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-400 shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-blue-400/30';
+        return 'bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 hover:from-pink-600 hover:via-purple-600 hover:to-blue-600 dark:from-pink-600 dark:via-purple-600 dark:to-blue-600 dark:hover:from-pink-700 dark:hover:via-purple-700 dark:hover:to-blue-700 text-white border-2 border-transparent hover:border-pink-300 dark:hover:border-pink-400 shadow-xl hover:shadow-pink-500/30 dark:hover:shadow-pink-400/40';
       case 'secondary':
-        return 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 dark:from-purple-600 dark:to-purple-700 dark:hover:from-purple-700 dark:hover:to-purple-800 text-white border-2 border-transparent hover:border-purple-300 dark:hover:border-purple-400 shadow-lg hover:shadow-purple-500/25 dark:hover:shadow-purple-400/30';
+        return 'bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 hover:from-emerald-600 hover:via-cyan-600 hover:to-blue-600 dark:from-emerald-600 dark:via-cyan-600 dark:to-blue-600 dark:hover:from-emerald-700 dark:hover:via-cyan-700 dark:hover:to-blue-700 text-white border-2 border-transparent hover:border-emerald-300 dark:hover:border-emerald-400 shadow-xl hover:shadow-emerald-500/30 dark:hover:shadow-emerald-400/40';
       case 'tertiary':
-        return 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 dark:from-emerald-600 dark:to-emerald-700 dark:hover:from-emerald-700 dark:hover:to-emerald-800 text-white border-2 border-transparent hover:border-emerald-300 dark:hover:border-emerald-400 shadow-lg hover:shadow-emerald-500/25 dark:hover:shadow-emerald-400/30';
+        return 'bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 hover:from-orange-600 hover:via-red-600 hover:to-pink-600 dark:from-orange-600 dark:via-red-600 dark:to-pink-600 dark:hover:from-orange-700 dark:hover:via-red-700 dark:hover:to-pink-700 text-white border-2 border-transparent hover:border-orange-300 dark:hover:border-orange-400 shadow-xl hover:shadow-orange-500/30 dark:hover:shadow-orange-400/40';
       default:
-        return 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 dark:from-blue-600 dark:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 text-white border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-400 shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-blue-400/30';
+        return 'bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 hover:from-pink-600 hover:via-purple-600 hover:to-blue-600 dark:from-pink-600 dark:via-purple-600 dark:to-blue-600 dark:hover:from-pink-700 dark:hover:via-purple-700 dark:hover:to-blue-700 text-white border-2 border-transparent hover:border-pink-300 dark:hover:border-pink-400 shadow-xl hover:shadow-pink-500/30 dark:hover:shadow-pink-400/40';
     }
   };
 
   return (
     <div className={`text-center mb-8 sm:mb-12 ${className}`}>
       <div className="relative">
-        {/* Enhanced decorative background elements */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 dark:from-blue-500/20 dark:via-purple-500/20 dark:to-pink-500/20 rounded-full blur-3xl transform scale-150 animate-pulse"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 via-cyan-400/20 to-blue-400/20 dark:from-emerald-500/15 dark:via-cyan-500/15 dark:to-blue-500/15 rounded-full blur-2xl transform scale-125 animate-pulse delay-1000"></div>
+        {/* Ultra-vibrant decorative background elements */}
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-400/40 via-purple-400/40 via-blue-400/40 to-cyan-400/40 dark:from-pink-500/30 dark:via-purple-500/30 dark:via-blue-500/30 dark:to-cyan-500/30 rounded-full blur-3xl transform scale-150 animate-pulse"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/30 via-yellow-400/30 via-orange-400/30 to-red-400/30 dark:from-emerald-500/25 dark:via-yellow-500/25 dark:via-orange-500/25 dark:to-red-500/25 rounded-full blur-2xl transform scale-125 animate-pulse delay-1000"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-violet-400/25 via-fuchsia-400/25 via-rose-400/25 to-pink-400/25 dark:from-violet-500/20 dark:via-fuchsia-500/20 dark:via-rose-500/20 dark:to-pink-500/20 rounded-full blur-xl transform scale-110 animate-pulse delay-2000"></div>
         <div className="relative">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent mb-3 sm:mb-4 drop-shadow-sm">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-pink-600 via-purple-600 via-blue-600 to-cyan-600 dark:from-pink-400 dark:via-purple-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent mb-3 sm:mb-4 drop-shadow-lg">
             {title}
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-700 dark:text-gray-200 max-w-3xl mx-auto px-2 leading-relaxed font-medium">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto px-2 leading-relaxed font-semibold">
             {description}
           </p>
         </div>
@@ -119,8 +120,8 @@ export function PageHeader({
               onClick={onToggleStatistics}
               className={`inline-flex items-center justify-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg text-sm ${
                 showStatistics
-                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white shadow-xl shadow-blue-500/30 dark:shadow-blue-400/40'
-                  : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-200 hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/30 dark:hover:to-blue-800/30 border border-gray-200 dark:border-gray-600'
+                  ? 'bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 dark:from-pink-600 dark:via-purple-600 dark:to-blue-600 text-white shadow-xl shadow-pink-500/30 dark:shadow-pink-400/40'
+                  : 'bg-gradient-to-r from-pink-100 via-purple-100 to-blue-100 dark:from-pink-800/30 dark:via-purple-800/30 dark:to-blue-800/30 text-pink-700 dark:text-pink-200 hover:from-pink-200 hover:via-purple-200 hover:to-blue-200 dark:hover:from-pink-700/40 dark:hover:via-purple-700/40 dark:hover:to-blue-700/40 border border-pink-200 dark:border-pink-600'
               }`}
             >
               <span className="mr-2">📊</span>
@@ -132,8 +133,8 @@ export function PageHeader({
               onClick={onToggleFilters}
               className={`inline-flex items-center justify-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg text-sm ${
                 showFilters
-                  ? 'bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 text-white shadow-xl shadow-purple-500/30 dark:shadow-purple-400/40'
-                  : 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-200 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/30 dark:hover:to-purple-800/30 border border-gray-200 dark:border-gray-600'
+                  ? 'bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 dark:from-emerald-600 dark:via-cyan-600 dark:to-blue-600 text-white shadow-xl shadow-emerald-500/30 dark:shadow-emerald-400/40'
+                  : 'bg-gradient-to-r from-emerald-100 via-cyan-100 to-blue-100 dark:from-emerald-800/30 dark:via-cyan-800/30 dark:to-blue-800/30 text-emerald-700 dark:text-emerald-200 hover:from-emerald-200 hover:via-cyan-200 hover:to-blue-200 dark:hover:from-emerald-700/40 dark:hover:via-cyan-700/40 dark:hover:to-blue-700/40 border border-emerald-200 dark:border-emerald-600'
               }`}
             >
               <Filter className="w-4 h-4 mr-2" />
