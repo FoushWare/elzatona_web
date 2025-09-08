@@ -1,7 +1,7 @@
 // v1.0 - User Progress Management Hook
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import {
   UserProgress,
@@ -55,12 +55,12 @@ export const useUserProgress = (): UseUserProgressReturn => {
   const [continueData, setContinueData] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isLoadingProgress, setIsLoadingProgress] = useState(false);
+  const isLoadingRef = useRef(false);
 
   const loadUserProgress = useCallback(async () => {
-    if (!user?.uid || isLoadingProgress) return;
+    if (!user?.uid || isLoadingRef.current) return;
 
-    setIsLoadingProgress(true);
+    isLoadingRef.current = true;
     setIsLoading(true);
     setError(null);
 
@@ -101,9 +101,9 @@ export const useUserProgress = (): UseUserProgressReturn => {
       console.error('Error loading user progress:', err);
     } finally {
       setIsLoading(false);
-      setIsLoadingProgress(false);
+      isLoadingRef.current = false;
     }
-  }, [user?.uid, isLoadingProgress]);
+  }, [user?.uid]);
 
   const loadDashboardStats = useCallback(async () => {
     if (!user?.uid) return;
