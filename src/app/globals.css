@@ -372,3 +372,98 @@ html.light {
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4), 0 4px 6px rgba(0, 0, 0, 0.4);
   }
 }
+
+/* Custom floating animations for background elements */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-10px) translateX(-5px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-15px) translateX(8px) rotate(0.5deg);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(15px) translateX(-8px) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateY(10px) translateX(5px) rotate(1deg);
+  }
+  75% {
+    transform: translateY(20px) translateX(-10px) rotate(-1deg);
+  }
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-8px) translateX(4px) rotate(0.3deg);
+  }
+  66% {
+    transform: translateY(-4px) translateX(-2px) rotate(-0.3deg);
+  }
+}
+
+@keyframes wave-slow {
+  0%, 100% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  50% {
+    transform: translateX(100%) skewX(15deg);
+  }
+}
+
+@keyframes wave-reverse {
+  0%, 100% {
+    transform: translateX(100%) skewX(15deg);
+  }
+  50% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+}
+
+@keyframes wave-gentle {
+  0%, 100% {
+    transform: translateX(-50%) skewX(-8deg);
+  }
+  50% {
+    transform: translateX(50%) skewX(8deg);
+  }
+}
+
+/* Apply animations */
+.animate-float-slow {
+  animation: float-slow 20s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 25s ease-in-out infinite;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 15s ease-in-out infinite;
+}
+
+.animate-wave-slow {
+  animation: wave-slow 30s ease-in-out infinite;
+}
+
+.animate-wave-reverse {
+  animation: wave-reverse 35s ease-in-out infinite;
+}
+
+.animate-wave-gentle {
+  animation: wave-gentle 25s ease-in-out infinite;
+}
