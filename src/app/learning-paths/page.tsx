@@ -60,12 +60,23 @@ export default function LearningPathsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-900 dark:via-gray-900 dark:to-indigo-950 py-4 sm:py-6 lg:py-8 relative overflow-hidden">
-      {/* Animated background elements */}
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 via-blue-200 to-cyan-200 dark:from-purple-900 dark:via-indigo-900 dark:via-blue-900 dark:to-cyan-900 py-4 sm:py-6 lg:py-8 relative overflow-hidden">
+      {/* Enhanced animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-400/20 to-indigo-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-emerald-400/10 to-blue-400/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+        {/* Large colorful orbs */}
+        <div className="absolute -top-60 -right-60 w-96 h-96 bg-gradient-to-br from-pink-400/30 via-purple-400/30 to-blue-400/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-60 -left-60 w-96 h-96 bg-gradient-to-br from-cyan-400/30 via-emerald-400/30 to-yellow-400/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-gradient-to-br from-orange-400/25 via-red-400/25 to-pink-400/25 rounded-full blur-3xl animate-pulse delay-500"></div>
+        <div className="absolute top-2/3 right-1/4 w-80 h-80 bg-gradient-to-br from-indigo-400/25 via-purple-400/25 to-pink-400/25 rounded-full blur-3xl animate-pulse delay-1500"></div>
+
+        {/* Medium floating elements */}
+        <div className="absolute top-1/4 right-1/3 w-64 h-64 bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 rounded-full blur-2xl animate-pulse delay-700"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full blur-2xl animate-pulse delay-1200"></div>
+
+        {/* Small accent elements */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-br from-violet-400/15 to-fuchsia-400/15 rounded-full blur-xl animate-pulse delay-2000"></div>
+        <div className="absolute top-3/4 left-1/6 w-40 h-40 bg-gradient-to-br from-rose-400/15 to-pink-400/15 rounded-full blur-xl animate-pulse delay-800"></div>
+        <div className="absolute top-1/6 right-1/6 w-40 h-40 bg-gradient-to-br from-teal-400/15 to-emerald-400/15 rounded-full blur-xl animate-pulse delay-1800"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
