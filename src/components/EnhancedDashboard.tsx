@@ -217,8 +217,8 @@ export default function EnhancedDashboard() {
     );
   }
 
-  // Only show error screen for critical errors, not timeouts
-  if (error && !error.includes('timeout')) {
+  // Show error screen for any error (including timeouts) if we don't have progress data
+  if (error && !progress) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">
@@ -235,16 +235,16 @@ export default function EnhancedDashboard() {
     );
   }
 
-  // For timeout errors, show a warning but continue with the dashboard
-  if (error && error.includes('timeout')) {
-    console.log('Showing dashboard with default data due to timeout');
+  // If we have an error but also have progress data, show a warning banner
+  if (error && progress) {
+    console.log('Showing dashboard with real data despite error:', error);
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="container mx-auto px-4 py-8">
-        {/* Timeout Warning Banner */}
-        {error && error.includes('timeout') && (
+        {/* Error Warning Banner - only show if we have real data but there's an error */}
+        {error && progress && (
           <div className="mb-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
             <div className="flex items-center">
               <div className="text-yellow-600 dark:text-yellow-400 mr-3">
@@ -252,8 +252,7 @@ export default function EnhancedDashboard() {
               </div>
               <div className="flex-1">
                 <p className="text-yellow-800 dark:text-yellow-200 text-sm">
-                  Dashboard loaded with default data. Some features may be
-                  limited.
+                  Some data may not be fully loaded. {error}
                 </p>
               </div>
               <button
