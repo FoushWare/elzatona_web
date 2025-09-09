@@ -47,25 +47,111 @@ export const mockQuestionsData: Record<string, Question[]> = {
   'frontend-basics': [
     {
       id: 'q1',
-      title: 'CSS Display Properties',
+      title: 'CSS Display Properties - Block Elements',
       question:
-        'What is the difference between `display: block`, `display: inline`, and `display: inline-block` in CSS?',
-      answer:
-        "**`display: block`**: Elements take up the full width of their container, start on a new line, and can have width/height set. Examples: `<div>`, `<p>`, `<h1>`\n\n**`display: inline`**: Elements only take up as much width as their content, don't start on a new line, and cannot have width/height set. Examples: `<span>`, `<a>`, `<strong>`\n\n**`display: inline-block`**: Combines both - elements flow inline like inline elements but can have width/height set like block elements. Perfect for creating horizontal layouts with control over dimensions.",
+        'Which of the following statements about display: block is true?',
+      answer: 'B) It always starts on a new line.',
       explanation:
-        'Understanding display properties is fundamental to CSS layout. Block elements create new lines and take full width, inline elements flow with text and only take needed space, while inline-block combines the best of both.',
+        'Block-level elements always start on a new line and take up the full width of their container. They can have width and height properties set, unlike inline elements.',
       difficulty: 'beginner',
       category: 'CSS',
       options: [
-        'Block elements take full width and start on new lines, inline elements only take needed space and flow with text, inline-block combines both behaviors',
-        'All three are exactly the same and can be used interchangeably',
-        'Block elements are for text, inline elements are for images, inline-block is for buttons',
-        'Block elements are deprecated, inline elements are modern, inline-block is experimental',
+        'It takes only the width of its content.',
+        'It always starts on a new line.',
+        'Width and height cannot be set.',
+        'It behaves like inline elements.',
       ],
-      correctAnswer: 0,
+      correctAnswer: 1,
     },
     {
       id: 'q2',
+      title: 'CSS Display Properties - Inline Elements',
+      question: 'What happens when you apply display: inline to an element?',
+      answer: 'B) It ignores width and height properties.',
+      explanation:
+        'Inline elements ignore width and height properties and only take up as much space as their content requires. They flow with text and do not start on new lines.',
+      difficulty: 'beginner',
+      category: 'CSS',
+      options: [
+        'It takes the full width of its parent.',
+        'It ignores width and height properties.',
+        'It always starts on a new line.',
+        'It behaves like a block element.',
+      ],
+      correctAnswer: 1,
+    },
+    {
+      id: 'q3',
+      title: 'CSS Display Properties - Inline-Block Elements',
+      question:
+        'Which display type allows you to place elements side-by-side and set custom width and height?',
+      answer: 'C) inline-block',
+      explanation:
+        'inline-block combines the best of both worlds: elements flow inline like inline elements but can have width and height set like block elements, making them perfect for side-by-side layouts with custom dimensions.',
+      difficulty: 'beginner',
+      category: 'CSS',
+      options: ['block', 'inline', 'inline-block', 'none of the above'],
+      correctAnswer: 2,
+    },
+    {
+      id: 'q4',
+      title: 'CSS Display Properties - Inline Behavior',
+      question:
+        'For an element with display: inline, which of the following is true?',
+      answer: 'C) It flows with text and takes only content width.',
+      explanation:
+        'Inline elements flow with text content and only take up the width needed for their content. They cannot have width/height set and do not start on new lines.',
+      difficulty: 'beginner',
+      category: 'CSS',
+      options: [
+        'You can set width and height freely.',
+        'Vertical margin works normally.',
+        'It flows with text and takes only content width.',
+        'It always pushes the next element to a new line.',
+      ],
+      correctAnswer: 2,
+    },
+    {
+      id: 'q5',
+      title: 'CSS Display Properties - Block Elements Examples',
+      question:
+        'Which of the following are examples of default block-level elements? (Choose all that apply)',
+      answer: 'A, B, D) <div>, <p>, <h1>',
+      explanation:
+        'Block-level elements like <div>, <p>, and <h1> take up the full width of their container and start on new lines. <span> is an inline element by default.',
+      difficulty: 'beginner',
+      category: 'CSS',
+      options: ['<div>', '<p>', '<span>', '<h1>'],
+      correctAnswer: 0, // Note: This is a multiple choice question, but the current system only supports single choice
+    },
+    {
+      id: 'q6',
+      title: 'CSS Display Properties - Inline Elements Examples',
+      question:
+        'Which of the following are examples of default inline elements? (Choose all that apply)',
+      answer: 'A, B) <a>, <strong>',
+      explanation:
+        'Inline elements like <a> and <strong> flow with text and only take up the space needed for their content. <img> is inline-block by default, and <section> is a block element.',
+      difficulty: 'beginner',
+      category: 'CSS',
+      options: ['<a>', '<strong>', '<img>', '<section>'],
+      correctAnswer: 0, // Note: This is a multiple choice question, but the current system only supports single choice
+    },
+    {
+      id: 'q7',
+      title: 'CSS Display Properties - Navigation Layout',
+      question:
+        'If you want to create button-like navigation items that align side-by-side and allow custom width/height, which display property is most suitable?',
+      answer: 'C) inline-block',
+      explanation:
+        'inline-block is perfect for navigation items because it allows elements to sit side-by-side (like inline) while still allowing you to set custom width and height (like block).',
+      difficulty: 'beginner',
+      category: 'CSS',
+      options: ['block', 'inline', 'inline-block', 'flex'],
+      correctAnswer: 2,
+    },
+    {
+      id: 'q8',
       title: 'JavaScript Variables',
       question:
         'Explain the difference between `var`, `let`, and `const` in JavaScript.',
@@ -84,7 +170,7 @@ export const mockQuestionsData: Record<string, Question[]> = {
       correctAnswer: 0,
     },
     {
-      id: 'q3',
+      id: 'q9',
       title: 'HTML Semantic Elements',
       question: 'What are semantic HTML elements and why are they important?',
       answer:
