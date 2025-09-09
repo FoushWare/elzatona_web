@@ -1,0 +1,23 @@
+---
+alwaysApply: true
+---
+
+# Protect interview Q&A in question.mdc
+
+By default, do not delete, overwrite, or rearrange any questions or answers.Allowed actions:
+
+- Add new questions and answers when explicitly asked.
+- Reformat for readability (spacing, numbering, markdown headings).
+- Remove or rearrange questions only if the user explicitly requests it.
+- When making changes, keep all other content intact.
+
+Allowed actions:
+
+- Add new questions and answers when explicitly asked.
+- Reformat for readability (spacing, numbering, markdown headings).
+- Remove or rearrange questions only if the user explicitly requests it.
+- When making changes, keep all other content intact.
+
+instruction: |
+
+---
