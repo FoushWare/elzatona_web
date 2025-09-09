@@ -1,14 +1,114 @@
 # Frontend Fundamentals - Questions Bank
 
-## Question 1: CSS Display Properties
+## Question 1: CSS Display Properties - Block Elements
 
-**Question:** What is the difference between `display: block`, `display: inline`, and `display: inline-block` in CSS?
+**Question:** Which of the following statements about display: block is true?
 
-**Answer:**
+**Answer:** B) It always starts on a new line.
 
-- **`display: block`**: Elements take up the full width of their container, start on a new line, and can have width/height set. Examples: `<div>`, `<p>`, `<h1>`
-- **`display: inline`**: Elements only take up as much width as their content, don't start on a new line, and cannot have width/height set. Examples: `<span>`, `<a>`, `<strong>`
-- **`display: inline-block`**: Combines both - elements flow inline like inline elements but can have width/height set like block elements. Perfect for creating horizontal layouts with control over dimensions.
+**Explanation:** Block-level elements always start on a new line and take up the full width of their container. They can have width and height properties set, unlike inline elements.
+
+**Options:**
+A) It takes only the width of its content.
+B) It always starts on a new line.
+C) Width and height cannot be set.
+D) It behaves like inline elements.
+
+---
+
+## Question 2: CSS Display Properties - Inline Elements
+
+**Question:** What happens when you apply display: inline to an element?
+
+**Answer:** B) It ignores width and height properties.
+
+**Explanation:** Inline elements ignore width and height properties and only take up as much space as their content requires. They flow with text and do not start on new lines.
+
+**Options:**
+A) It takes the full width of its parent.
+B) It ignores width and height properties.
+C) It always starts on a new line.
+D) It behaves like a block element.
+
+---
+
+## Question 3: CSS Display Properties - Inline-Block Elements
+
+**Question:** Which display type allows you to place elements side-by-side and set custom width and height?
+
+**Answer:** C) inline-block
+
+**Explanation:** inline-block combines the best of both worlds: elements flow inline like inline elements but can have width and height set like block elements, making them perfect for side-by-side layouts with custom dimensions.
+
+**Options:**
+A) block
+B) inline
+C) inline-block
+D) none of the above
+
+---
+
+## Question 4: CSS Display Properties - Inline Behavior
+
+**Question:** For an element with display: inline, which of the following is true?
+
+**Answer:** C) It flows with text and takes only content width.
+
+**Explanation:** Inline elements flow with text content and only take up the width needed for their content. They cannot have width/height set and do not start on new lines.
+
+**Options:**
+A) You can set width and height freely.
+B) Vertical margin works normally.
+C) It flows with text and takes only content width.
+D) It always pushes the next element to a new line.
+
+---
+
+## Question 5: CSS Display Properties - Block Elements Examples
+
+**Question:** Which of the following are examples of default block-level elements? (Choose all that apply)
+
+**Answer:** A, B, D) <div>, <p>, <h1>
+
+**Explanation:** Block-level elements like <div>, <p>, and <h1> take up the full width of their container and start on new lines. <span> is an inline element by default.
+
+**Options:**
+A) <div>
+B) <p>
+C) <span>
+D) <h1>
+
+---
+
+## Question 6: CSS Display Properties - Inline Elements Examples
+
+**Question:** Which of the following are examples of default inline elements? (Choose all that apply)
+
+**Answer:** A, B) <a>, <strong>
+
+**Explanation:** Inline elements like <a> and <strong> flow with text and only take up the space needed for their content. <img> is inline-block by default, and <section> is a block element.
+
+**Options:**
+A) <a>
+B) <strong>
+C) <img>
+D) <section>
+
+---
+
+## Question 7: CSS Display Properties - Navigation Layout
+
+**Question:** If you want to create button-like navigation items that align side-by-side and allow custom width/height, which display property is most suitable?
+
+**Answer:** C) inline-block
+
+**Explanation:** inline-block is perfect for navigation items because it allows elements to sit side-by-side (like inline) while still allowing you to set width, height, padding, and margins (like block).
+
+**Options:**
+A) block
+B) inline
+C) inline-block
+D) flex
 
 ---
 
