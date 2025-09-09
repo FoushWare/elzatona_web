@@ -73,25 +73,6 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
 
   return (
     <div className="relative">
-      {/* Tags Badge Above Card */}
-      <div className="absolute -top-3 left-4 z-10">
-        <div className="flex flex-wrap gap-1 max-w-xs">
-          {path.targetSkills.slice(0, 3).map(skill => (
-            <span
-              key={skill}
-              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 text-white border border-white dark:border-gray-800 shadow-lg"
-            >
-              {skill}
-            </span>
-          ))}
-          {path.targetSkills.length > 3 && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-600 dark:to-gray-700 text-white border border-white dark:border-gray-800 shadow-lg">
-              +{path.targetSkills.length - 3}
-            </span>
-          )}
-        </div>
-      </div>
-
       <div
         data-testid="learning-path-card"
         className={`bg-gradient-to-br from-gray-50 via-slate-50 via-gray-50 to-slate-50 dark:from-gray-800/20 dark:via-slate-800/20 dark:via-gray-800/20 dark:to-slate-800/20 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300 transform group hover:scale-[1.02] backdrop-blur-sm ${className}`}
@@ -149,6 +130,25 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
               <p className="text-muted-foreground text-sm leading-relaxed">
                 {path.description}
               </p>
+            </div>
+
+            {/* Tags Badge - Only visible when expanded */}
+            <div className="mb-4">
+              <div className="flex flex-wrap gap-1">
+                {path.targetSkills.slice(0, 3).map(skill => (
+                  <span
+                    key={skill}
+                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 text-white border border-white dark:border-gray-800 shadow-lg"
+                  >
+                    {skill}
+                  </span>
+                ))}
+                {path.targetSkills.length > 3 && (
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-600 dark:to-gray-700 text-white border border-white dark:border-gray-800 shadow-lg">
+                    +{path.targetSkills.length - 3}
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Difficulty Badge */}
