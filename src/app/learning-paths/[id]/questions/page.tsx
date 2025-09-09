@@ -8,7 +8,7 @@ import { useFirebaseQuestions } from '@/hooks/useFirebaseQuestions';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { flashcardService } from '@/lib/firebase-flashcards';
 import AddToFlashcard from '@/components/AddToFlashcard';
-import SimpleTTS from '@/components/SimpleTTS';
+import EnhancedTTS from '@/components/EnhancedTTS';
 import ExpandableText from '@/components/ExpandableText';
 import MobilePagination from '@/components/MobilePagination';
 import ToastContainer, { useToast } from '@/components/Toast';
@@ -697,7 +697,7 @@ export default function QuestionsPage() {
 
             {/* Text-to-Speech at top left */}
             <div className="absolute top-6 left-6 z-10">
-              <SimpleTTS text={currentQuestion.question} />
+              <EnhancedTTS text={currentQuestion.question} />
             </div>
 
             <div className="mb-6 pt-12">
