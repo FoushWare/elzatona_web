@@ -4,7 +4,6 @@ import {
   collection,
   query,
   where,
-  orderBy,
   getDocs,
 } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
@@ -41,11 +40,7 @@ export async function GET(
 
     // Query questions from Firebase
     const questionsRef = collection(db, 'questions');
-    const q = query(
-      questionsRef,
-      where('learningPath', '==', learningPath),
-      orderBy('order', 'asc')
-    );
+    const q = query(questionsRef, where('learningPath', '==', learningPath));
 
     const querySnapshot = await getDocs(q);
     const questions = [];
@@ -56,6 +51,9 @@ export async function GET(
         ...doc.data(),
       });
     });
+
+    // Sort questions by order field in JavaScript
+    questions.sort((a, b) => (a.order || 0) - (b.order || 0));
 
     console.log(`Found ${questions.length} questions for ${learningPath}`);
 
