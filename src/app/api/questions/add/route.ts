@@ -137,21 +137,37 @@ const questions = [
   },
 ];
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
-    console.log('Adding questions to Firebase...');
+    const body = await request.json();
+    const { learningPath, questions: questionsToAdd } = body;
+
+    if (!questionsToAdd || !Array.isArray(questionsToAdd)) {
+      return NextResponse.json(
+        { success: false, error: 'Questions array is required' },
+        { status: 400 }
+      );
+    }
+
+    console.log(
+      `Adding ${questionsToAdd.length} questions to Firebase for learning path: ${learningPath}`
+    );
 
     const results = [];
 
-    for (const question of questions) {
+    for (const question of questionsToAdd) {
       await setDoc(doc(db, 'questions', question.id), question);
-      results.push(`✅ Added question ${question.id}: ${question.title}`);
-      console.log(`✅ Added question ${question.id}: ${question.title}`);
+      results.push(
+        `✅ Added question ${question.id}: ${question.question?.substring(0, 50)}...`
+      );
+      console.log(
+        `✅ Added question ${question.id}: ${question.question?.substring(0, 50)}...`
+      );
     }
 
     return NextResponse.json({
       success: true,
-      message: `Successfully added ${questions.length} questions to Firebase!`,
+      message: `Successfully added ${questionsToAdd.length} questions to Firebase!`,
       results,
     });
   } catch (error) {
