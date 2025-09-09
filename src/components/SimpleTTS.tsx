@@ -168,17 +168,20 @@ export default function SimpleTTS({ text, className = '' }: SimpleTTSProps) {
   const cleanTextForTTS = (text: string): string => {
     return (
       text
-        // Remove code blocks (```code```)
-        .replace(/```[\s\S]*?```/g, '')
-        // Remove inline code (`code`)
-        .replace(/`[^`]*`/g, '')
-        // Remove markdown links [text](url)
+        // Extract content from code blocks (```code```) and keep the content
+        .replace(/```[\s\S]*?```/g, match => {
+          const content = match.replace(/```/g, '').trim();
+          return content;
+        })
+        // Extract content from inline code (`code`) and keep the content
+        .replace(/`([^`]*)`/g, '$1')
+        // Remove markdown links [text](url) but keep the text
         .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-        // Remove markdown bold **text**
+        // Remove markdown bold **text** but keep the text
         .replace(/\*\*([^*]+)\*\*/g, '$1')
-        // Remove markdown italic *text*
+        // Remove markdown italic *text* but keep the text
         .replace(/\*([^*]+)\*/g, '$1')
-        // Remove HTML tags
+        // Remove HTML tags but keep the content
         .replace(/<[^>]*>/g, '')
         // Clean up extra whitespace
         .replace(/\s+/g, ' ')
