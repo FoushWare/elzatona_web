@@ -566,7 +566,7 @@ export default function QuestionsPage() {
                 <div className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                   <ExpandableText
                     text={currentQuestion.question}
-                    maxLength={300}
+                    maxLength={400}
                     className="whitespace-pre-wrap"
                     expandText="Read more"
                     collapseText="Read less"
@@ -622,30 +622,37 @@ export default function QuestionsPage() {
                     disabled={showAnswer}
                     className={buttonClass}
                   >
-                    <div className="flex items-center">
-                      <div
-                        className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                          isSelected
-                            ? 'border-blue-500 bg-blue-500'
-                            : 'border-gray-300 dark:border-gray-600'
-                        }`}
-                      >
-                        {isSelected && (
-                          <div className="w-full h-full rounded-full bg-white scale-50"></div>
-                        )}
+                    <div className="flex items-start space-x-3">
+                      {/* Radio button indicator */}
+                      <div className="flex-shrink-0 mt-1">
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 ${
+                            isSelected
+                              ? 'border-blue-500 bg-blue-500'
+                              : 'border-gray-300 dark:border-gray-600'
+                          }`}
+                        >
+                          {isSelected && (
+                            <div className="w-full h-full rounded-full bg-white scale-50"></div>
+                          )}
+                        </div>
                       </div>
-                      <div
-                        className={`text-gray-900 dark:text-white ${
-                          showResult && isCorrect ? 'font-semibold' : ''
-                        }`}
-                      >
-                        <ExpandableText
-                          text={option}
-                          maxLength={150}
-                          className="text-left"
-                          expandText="Show more"
-                          collapseText="Show less"
-                        />
+
+                      {/* Option text */}
+                      <div className="flex-1 min-w-0">
+                        <div
+                          className={`text-gray-900 dark:text-white leading-relaxed ${
+                            showResult && isCorrect ? 'font-semibold' : ''
+                          }`}
+                        >
+                          <ExpandableText
+                            text={option}
+                            maxLength={200}
+                            className="text-left"
+                            expandText="Read more"
+                            collapseText="Read less"
+                          />
+                        </div>
                       </div>
                       {showResult && isCorrect && (
                         <span className="ml-auto text-green-600 dark:text-green-400 font-semibold">
@@ -698,7 +705,7 @@ export default function QuestionsPage() {
                       <div className="text-blue-800 dark:text-blue-300">
                         <ExpandableText
                           text={currentQuestion.explanation}
-                          maxLength={300}
+                          maxLength={400}
                           className="whitespace-pre-line"
                           expandText="Read more"
                           collapseText="Read less"

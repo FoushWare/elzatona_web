@@ -165,6 +165,27 @@ export default function SimpleTTS({ text, className = '' }: SimpleTTSProps) {
     }
   };
 
+  const cleanTextForTTS = (text: string): string => {
+    return (
+      text
+        // Remove code blocks (```code```)
+        .replace(/```[\s\S]*?```/g, '')
+        // Remove inline code (`code`)
+        .replace(/`[^`]*`/g, '')
+        // Remove markdown links [text](url)
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        // Remove markdown bold **text**
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        // Remove markdown italic *text*
+        .replace(/\*([^*]+)\*/g, '$1')
+        // Remove HTML tags
+        .replace(/<[^>]*>/g, '')
+        // Clean up extra whitespace
+        .replace(/\s+/g, ' ')
+        .trim()
+    );
+  };
+
   const handleSpeak = async () => {
     if (!text.trim()) {
       setError('No text to speak');
@@ -180,15 +201,18 @@ export default function SimpleTTS({ text, className = '' }: SimpleTTSProps) {
     setError(null);
     abortControllerRef.current = new AbortController();
 
+    // Clean the text for better TTS
+    const cleanText = cleanTextForTTS(text);
+
     try {
       // First try API-based TTS (better quality)
-      await speakWithAPI(text);
+      await speakWithAPI(cleanText);
     } catch (apiError) {
       console.log('API TTS failed, falling back to browser TTS:', apiError);
 
       try {
         // Fallback to browser TTS
-        await speakWithBrowserTTS(text);
+        await speakWithBrowserTTS(cleanText);
       } catch (browserError) {
         console.error('Browser TTS also failed:', browserError);
         setIsLoading(false);
