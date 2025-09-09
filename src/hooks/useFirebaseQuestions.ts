@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface Question {
   id: string;
@@ -28,7 +28,7 @@ export function useFirebaseQuestions(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchQuestions = async () => {
+  const fetchQuestions = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -52,7 +52,7 @@ export function useFirebaseQuestions(
     } finally {
       setLoading(false);
     }
-  };
+  }, [learningPath]);
 
   useEffect(() => {
     if (learningPath) {
