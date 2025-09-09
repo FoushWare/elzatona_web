@@ -12,7 +12,9 @@ import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { flashcardService } from '@/lib/firebase-flashcards';
 import AddToFlashcard from '@/components/AddToFlashcard';
 import TextToSpeech from '@/components/TextToSpeech';
-import ToastContainer, { useToast, Toast } from '@/components/Toast';
+import ExpandableText from '@/components/ExpandableText';
+import MobilePagination from '@/components/MobilePagination';
+import ToastContainer, { useToast } from '@/components/Toast';
 
 export default function QuestionsPage() {
   const params = useParams();
@@ -557,9 +559,15 @@ export default function QuestionsPage() {
 
               <div className="prose dark:prose-invert max-w-none">
                 <div className="flex items-start gap-3">
-                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed flex-1">
-                    {currentQuestion.question}
-                  </p>
+                  <div className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed flex-1">
+                    <ExpandableText
+                      text={currentQuestion.question}
+                      maxLength={300}
+                      className="whitespace-pre-wrap"
+                      expandText="Read more"
+                      collapseText="Read less"
+                    />
+                  </div>
                   <TextToSpeech
                     text={currentQuestion.question}
                     className="flex-shrink-0 mt-1"
@@ -627,13 +635,19 @@ export default function QuestionsPage() {
                           <div className="w-full h-full rounded-full bg-white scale-50"></div>
                         )}
                       </div>
-                      <span
+                      <div
                         className={`text-gray-900 dark:text-white ${
                           showResult && isCorrect ? 'font-semibold' : ''
                         }`}
                       >
-                        {option}
-                      </span>
+                        <ExpandableText
+                          text={option}
+                          maxLength={150}
+                          className="text-left"
+                          expandText="Show more"
+                          collapseText="Show less"
+                        />
+                      </div>
                       {showResult && isCorrect && (
                         <span className="ml-auto text-green-600 dark:text-green-400 font-semibold">
                           ✓ Correct
@@ -668,17 +682,29 @@ export default function QuestionsPage() {
                   Answer & Explanation
                 </h3>
                 <div className="prose dark:prose-invert max-w-none">
-                  <div className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
-                    {currentQuestion.answer}
+                  <div className="text-gray-700 dark:text-gray-300">
+                    <ExpandableText
+                      text={currentQuestion.answer}
+                      maxLength={400}
+                      className="whitespace-pre-line"
+                      expandText="Read more"
+                      collapseText="Read less"
+                    />
                   </div>
                   {currentQuestion.explanation && (
                     <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                       <h4 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">
                         Why this is correct:
                       </h4>
-                      <p className="text-blue-800 dark:text-blue-300">
-                        {currentQuestion.explanation}
-                      </p>
+                      <div className="text-blue-800 dark:text-blue-300">
+                        <ExpandableText
+                          text={currentQuestion.explanation}
+                          maxLength={300}
+                          className="whitespace-pre-line"
+                          expandText="Read more"
+                          collapseText="Read less"
+                        />
+                      </div>
                     </div>
                   )}
 
@@ -723,176 +749,20 @@ export default function QuestionsPage() {
           </div>
         </div>
 
-        {/* Pagination */}
-        <div className="mt-8 max-w-4xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Navigation
-              </h3>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={handlePreviousQuestion}
-                  disabled={
-                    isNavigating ||
-                    (currentQuestionIndex === 0 &&
-                      questionsData.groups.findIndex(
-                        g => g.id === currentGroup.id
-                      ) === 0)
-                  }
-                  className="flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-                >
-                  <svg
-                    className="w-4 h-4 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                  Previous
-                </button>
-
-                <button
-                  onClick={handleNextQuestion}
-                  disabled={isNavigating || !showAnswer}
-                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200"
-                >
-                  Next
-                  <svg
-                    className="w-4 h-4 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Group Navigation */}
-            <div className="space-y-4">
-              {questionsData?.groups.map((group, groupIndex) => {
-                const isExpanded = expandedGroups.has(group.id);
-                const answeredInGroup = group.questions.filter(q =>
-                  answeredQuestions.has(q.id)
-                ).length;
-                const totalInGroup = group.questions.length;
-
-                return (
-                  <div
-                    key={group.id}
-                    className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
-                  >
-                    {/* Group Header - Clickable to toggle */}
-                    <button
-                      onClick={() => toggleGroupExpansion(group.id)}
-                      className="w-full p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div
-                            className={`transform transition-transform duration-200 ${isExpanded ? 'rotate-90' : 'rotate-0'}`}
-                          >
-                            <svg
-                              className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
-                          </div>
-                          <div>
-                            <h4 className="font-medium text-gray-900 dark:text-white">
-                              {group.title}
-                            </h4>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                              {answeredInGroup}/{totalInGroup} questions
-                              answered
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          {/* Progress indicator */}
-                          <div className="w-16 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-green-500 transition-all duration-300"
-                              style={{
-                                width: `${(answeredInGroup / totalInGroup) * 100}%`,
-                              }}
-                            />
-                          </div>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            {Math.round((answeredInGroup / totalInGroup) * 100)}
-                            %
-                          </span>
-                        </div>
-                      </div>
-                    </button>
-
-                    {/* Collapsible Content */}
-                    <div
-                      className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                        isExpanded
-                          ? 'max-h-[500px] opacity-100'
-                          : 'max-h-0 opacity-0'
-                      }`}
-                    >
-                      <div className="p-4 pt-3 max-h-[500px] overflow-y-auto">
-                        <div className="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-15 lg:grid-cols-20 gap-3">
-                          {group.questions.map((question, questionIndex) => {
-                            const isCurrentQuestion =
-                              currentGroup?.id === group.id &&
-                              currentQuestionIndex === questionIndex;
-                            const isAnswered = answeredQuestions.has(
-                              question.id
-                            );
-
-                            return (
-                              <button
-                                key={question.id}
-                                onClick={() =>
-                                  navigateToQuestion(groupIndex, questionIndex)
-                                }
-                                disabled={isNavigating}
-                                className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-                                  isCurrentQuestion
-                                    ? 'bg-blue-600 text-white'
-                                    : isAnswered
-                                      ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-300 dark:border-green-700'
-                                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                                }`}
-                              >
-                                {questionIndex + 1}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+        {/* Mobile-Friendly Pagination */}
+        <MobilePagination
+          currentGroup={currentGroup}
+          currentQuestionIndex={currentQuestionIndex}
+          questionsData={questionsData}
+          onPrevious={handlePreviousQuestion}
+          onNext={handleNextQuestion}
+          onNavigateToQuestion={navigateToQuestion}
+          isNavigating={isNavigating}
+          showAnswer={showAnswer}
+          answeredQuestions={answeredQuestions}
+          expandedGroups={expandedGroups}
+          onToggleGroupExpansion={toggleGroupExpansion}
+        />
       </div>
 
       {/* Toast Notifications */}
