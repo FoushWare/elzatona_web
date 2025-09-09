@@ -59,6 +59,12 @@ export default function MobilePagination({
   );
   const isFirstQuestion = currentQuestionIndex === 0 && currentGroupIndex === 0;
 
+  // Calculate total questions across all groups
+  const totalQuestions = questionsData.groups.reduce(
+    (total, group) => total + group.questions.length,
+    0
+  );
+
   return (
     <div className="mt-8 max-w-4xl mx-auto">
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
@@ -77,7 +83,7 @@ export default function MobilePagination({
               <span className="mr-2">
                 {showFullNavigation
                   ? 'Hide'
-                  : `More ${currentGroup.questions.length} Questions`}
+                  : `More ${totalQuestions} Questions`}
               </span>
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${
@@ -122,7 +128,7 @@ export default function MobilePagination({
 
             <button
               onClick={onNext}
-              disabled={isNavigating || !showAnswer}
+              disabled={isNavigating} // Removed !showAnswer condition to allow free navigation
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200"
             >
               Next
@@ -173,7 +179,7 @@ export default function MobilePagination({
 
             <button
               onClick={onNext}
-              disabled={isNavigating || !showAnswer}
+              disabled={isNavigating} // Removed !showAnswer condition to allow free navigation
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200"
             >
               Next
