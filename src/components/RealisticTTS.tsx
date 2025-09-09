@@ -8,31 +8,49 @@ interface RealisticTTSProps {
   disabled?: boolean;
 }
 
-// Free TTS service voices (realistic, human-like)
+// Enhanced TTS service voices (more realistic, human-like)
 const REALISTIC_VOICES = [
   {
     id: 'en',
-    name: 'English (Natural)',
+    name: 'English (Enhanced)',
     gender: 'Neutral',
-    provider: 'Google',
+    provider: 'Google Enhanced',
+    quality: 'High',
   },
   {
     id: 'en-us',
-    name: 'English US (Natural)',
+    name: 'English US (Enhanced)',
     gender: 'Neutral',
-    provider: 'Google',
+    provider: 'Google Enhanced',
+    quality: 'High',
   },
   {
     id: 'en-gb',
-    name: 'English UK (Natural)',
+    name: 'English UK (Enhanced)',
     gender: 'Neutral',
-    provider: 'Google',
+    provider: 'Google Enhanced',
+    quality: 'High',
   },
   {
     id: 'en-au',
-    name: 'English AU (Natural)',
+    name: 'English AU (Enhanced)',
     gender: 'Neutral',
-    provider: 'Google',
+    provider: 'Google Enhanced',
+    quality: 'High',
+  },
+  {
+    id: 'en-ca',
+    name: 'English CA (Enhanced)',
+    gender: 'Neutral',
+    provider: 'Google Enhanced',
+    quality: 'High',
+  },
+  {
+    id: 'en-in',
+    name: 'English IN (Enhanced)',
+    gender: 'Neutral',
+    provider: 'Google Enhanced',
+    quality: 'High',
   },
 ];
 
