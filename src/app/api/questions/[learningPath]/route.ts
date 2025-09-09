@@ -24,10 +24,10 @@ const db = getFirestore(app);
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { learningPath: string } }
+  { params }: { params: Promise<{ learningPath: string }> }
 ) {
   try {
-    const { learningPath } = params;
+    const { learningPath } = await params;
 
     if (!learningPath) {
       return NextResponse.json(
