@@ -11,6 +11,7 @@ import {
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { flashcardService } from '@/lib/firebase-flashcards';
 import AddToFlashcard from '@/components/AddToFlashcard';
+import TextToSpeech from '@/components/TextToSpeech';
 import ToastContainer, { useToast, Toast } from '@/components/Toast';
 
 export default function QuestionsPage() {
@@ -555,9 +556,15 @@ export default function QuestionsPage() {
               </h2>
 
               <div className="prose dark:prose-invert max-w-none">
-                <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {currentQuestion.question}
-                </p>
+                <div className="flex items-start gap-3">
+                  <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed flex-1">
+                    {currentQuestion.question}
+                  </p>
+                  <TextToSpeech
+                    text={currentQuestion.question}
+                    className="flex-shrink-0 mt-1"
+                  />
+                </div>
               </div>
             </div>
 
