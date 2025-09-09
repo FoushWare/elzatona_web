@@ -17,6 +17,7 @@ export default function TextToSpeech({
   const [isSupported, setIsSupported] = useState(true);
   const [selectedVoice, setSelectedVoice] =
     useState<SpeechSynthesisVoice | null>(null);
+  const [voiceInfo, setVoiceInfo] = useState<string>('');
   const speechSynthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // Check if speech synthesis is supported and load voices
@@ -30,51 +31,101 @@ export default function TextToSpeech({
 
         // Prefer human-like voices similar to ChatGPT
         const preferredVoices = [
-          // Google voices (most human-like)
+          // Google voices (most human-like and free)
           'Google US English',
           'Google UK English Female',
           'Google UK English Male',
           'Google Australian English Female',
           'Google Australian English Male',
-          // Microsoft voices
+          'Google US English Female',
+          'Google US English Male',
+          // Microsoft voices (Windows)
           'Microsoft Aria Online (Natural) - English (United States)',
           'Microsoft Jenny Online (Natural) - English (United States)',
           'Microsoft Guy Online (Natural) - English (United States)',
-          // Apple voices (on macOS)
+          'Microsoft Zira Desktop - English (United States)',
+          'Microsoft David Desktop - English (United States)',
+          'Microsoft Mark Desktop - English (United States)',
+          // Apple voices (macOS - very natural)
           'Samantha',
           'Alex',
           'Victoria',
           'Daniel',
-          // Other high-quality voices
-          'Microsoft Zira Desktop - English (United States)',
-          'Microsoft David Desktop - English (United States)',
-          'Microsoft Mark Desktop - English (United States)',
+          'Karen',
+          'Moira',
+          'Tessa',
+          // Chrome/Edge voices
+          'Microsoft Zira - English (United States)',
+          'Microsoft David - English (United States)',
+          'Microsoft Mark - English (United States)',
+          // Additional high-quality voices
+          'Hazel',
+          'Susan',
+          'Tom',
+          'Veena',
         ];
 
-        // Find the best available voice
+        // Find the best available voice with improved algorithm
         let bestVoice = null;
 
-        // First, try to find a preferred voice
+        // First, try to find an exact match from preferred voices
         for (const preferredName of preferredVoices) {
-          bestVoice = voices.find(
-            voice =>
-              voice.name.includes(preferredName) || voice.name === preferredName
-          );
+          bestVoice = voices.find(voice => voice.name === preferredName);
           if (bestVoice) break;
         }
 
-        // If no preferred voice found, look for high-quality alternatives
+        // If no exact match, try partial matches
         if (!bestVoice) {
-          // Look for voices with "Natural" or "Neural" in the name
-          bestVoice = voices.find(
-            voice =>
-              voice.name.toLowerCase().includes('natural') ||
-              voice.name.toLowerCase().includes('neural') ||
-              voice.name.toLowerCase().includes('premium')
+          for (const preferredName of preferredVoices) {
+            bestVoice = voices.find(voice =>
+              voice.name.toLowerCase().includes(preferredName.toLowerCase())
+            );
+            if (bestVoice) break;
+          }
+        }
+
+        // Look for high-quality voices with specific keywords
+        if (!bestVoice) {
+          const qualityKeywords = [
+            'natural',
+            'neural',
+            'premium',
+            'enhanced',
+            'hd',
+          ];
+          bestVoice = voices.find(voice =>
+            qualityKeywords.some(keyword =>
+              voice.name.toLowerCase().includes(keyword)
+            )
           );
         }
 
-        // If still no voice found, look for English voices with good quality indicators
+        // Look for Google voices (usually the best free quality)
+        if (!bestVoice) {
+          bestVoice = voices.find(voice =>
+            voice.name.toLowerCase().includes('google')
+          );
+        }
+
+        // Look for Microsoft voices (good quality on Windows)
+        if (!bestVoice) {
+          bestVoice = voices.find(voice =>
+            voice.name.toLowerCase().includes('microsoft')
+          );
+        }
+
+        // Look for Apple voices (excellent quality on macOS)
+        if (!bestVoice) {
+          bestVoice = voices.find(
+            voice =>
+              voice.name.toLowerCase().includes('samantha') ||
+              voice.name.toLowerCase().includes('alex') ||
+              voice.name.toLowerCase().includes('victoria') ||
+              voice.name.toLowerCase().includes('daniel')
+          );
+        }
+
+        // Look for any English voice with good quality indicators
         if (!bestVoice) {
           bestVoice = voices.find(
             voice =>
@@ -82,7 +133,8 @@ export default function TextToSpeech({
               (voice.name.toLowerCase().includes('female') ||
                 voice.name.toLowerCase().includes('male') ||
                 voice.name.toLowerCase().includes('us') ||
-                voice.name.toLowerCase().includes('uk'))
+                voice.name.toLowerCase().includes('uk') ||
+                voice.name.toLowerCase().includes('australia'))
           );
         }
 
@@ -97,6 +149,20 @@ export default function TextToSpeech({
         }
 
         setSelectedVoice(bestVoice);
+
+        // Set voice info for debugging/display
+        if (bestVoice) {
+          setVoiceInfo(`${bestVoice.name} (${bestVoice.lang})`);
+          console.log(
+            '🎤 Selected voice:',
+            bestVoice.name,
+            'Language:',
+            bestVoice.lang
+          );
+        } else {
+          setVoiceInfo('Default voice');
+          console.log('🎤 Using default voice');
+        }
       };
 
       // Load voices immediately if available
@@ -110,6 +176,36 @@ export default function TextToSpeech({
       setIsSupported(false);
     }
   }, []);
+
+  const retryWithFallbackVoice = () => {
+    if (!text || disabled) return;
+
+    try {
+      const utterance = new SpeechSynthesisUtterance(text);
+      speechSynthesisRef.current = utterance;
+
+      // Use default voice without any specific voice selection
+      utterance.lang = 'en-US';
+      utterance.rate = 0.8; // Slower for better clarity
+      utterance.pitch = 1.0;
+      utterance.volume = 0.8;
+
+      utterance.onstart = () => setIsPlaying(true);
+      utterance.onend = () => {
+        setIsPlaying(false);
+        speechSynthesisRef.current = null;
+      };
+      utterance.onerror = () => {
+        setIsPlaying(false);
+        speechSynthesisRef.current = null;
+      };
+
+      window.speechSynthesis.speak(utterance);
+    } catch (error) {
+      console.error('Fallback speech synthesis failed:', error);
+      setIsPlaying(false);
+    }
+  };
 
   const handleSpeak = () => {
     if (!isSupported || disabled) return;
@@ -132,9 +228,44 @@ export default function TextToSpeech({
 
       // Configure speech settings for human-like quality
       utterance.lang = 'en-US';
-      utterance.rate = 0.85; // Slightly slower for more natural speech
-      utterance.pitch = 1.0; // Natural pitch
-      utterance.volume = 1.0; // Full volume
+
+      // Optimize speech parameters based on the selected voice
+      if (selectedVoice) {
+        // Google voices work best with these settings
+        if (selectedVoice.name.toLowerCase().includes('google')) {
+          utterance.rate = 0.9; // Slightly slower for natural flow
+          utterance.pitch = 1.0; // Natural pitch
+          utterance.volume = 0.9; // Slightly lower for comfort
+        }
+        // Apple voices (Samantha, Alex, etc.) work well with these settings
+        else if (
+          selectedVoice.name.toLowerCase().includes('samantha') ||
+          selectedVoice.name.toLowerCase().includes('alex') ||
+          selectedVoice.name.toLowerCase().includes('victoria') ||
+          selectedVoice.name.toLowerCase().includes('daniel')
+        ) {
+          utterance.rate = 0.85; // Slower for more natural speech
+          utterance.pitch = 1.0; // Natural pitch
+          utterance.volume = 0.95; // High volume for clarity
+        }
+        // Microsoft voices
+        else if (selectedVoice.name.toLowerCase().includes('microsoft')) {
+          utterance.rate = 0.9; // Good balance for Microsoft voices
+          utterance.pitch = 1.0; // Natural pitch
+          utterance.volume = 0.9; // Comfortable volume
+        }
+        // Default settings for other voices
+        else {
+          utterance.rate = 0.85; // Slightly slower for more natural speech
+          utterance.pitch = 1.0; // Natural pitch
+          utterance.volume = 0.9; // Comfortable volume
+        }
+      } else {
+        // Fallback settings when no voice is selected
+        utterance.rate = 0.85;
+        utterance.pitch = 1.0;
+        utterance.volume = 0.9;
+      }
 
       // Use the selected human-like voice
       if (selectedVoice) {
@@ -155,6 +286,14 @@ export default function TextToSpeech({
         console.error('Speech synthesis error:', event.error);
         setIsPlaying(false);
         speechSynthesisRef.current = null;
+
+        // Try to retry with a different voice if available
+        if (event.error === 'not-allowed' || event.error === 'audio-busy') {
+          console.log('🔄 Retrying with fallback voice...');
+          setTimeout(() => {
+            retryWithFallbackVoice();
+          }, 1000);
+        }
       };
 
       // Speak the text
@@ -195,8 +334,16 @@ export default function TextToSpeech({
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
         ${className}
       `}
-      aria-label={isPlaying ? 'Stop reading question' : 'Read question aloud'}
-      title={isPlaying ? 'Stop reading question' : 'Read question aloud'}
+      aria-label={
+        isPlaying
+          ? 'Stop reading question'
+          : `Read question aloud using ${voiceInfo}`
+      }
+      title={
+        isPlaying
+          ? 'Stop reading question'
+          : `Read question aloud using ${voiceInfo}`
+      }
     >
       {isPlaying ? (
         <svg
