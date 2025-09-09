@@ -498,7 +498,7 @@ export default function QuestionsPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 relative">
             {/* Bookmark at top right */}
-            <div className="absolute top-6 right-6">
+            <div className="absolute top-6 right-6 z-10">
               <AddToFlashcard
                 key={currentQuestion.question} // Force re-render when question changes
                 question={currentQuestion.question}
@@ -541,7 +541,12 @@ export default function QuestionsPage() {
               />
             </div>
 
-            <div className="mb-6">
+            {/* Text-to-Speech at top left */}
+            <div className="absolute top-6 left-6 z-10">
+              <TextToSpeech text={currentQuestion.question} className="!p-2" />
+            </div>
+
+            <div className="mb-6 pt-12">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
                   <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium">
@@ -558,19 +563,13 @@ export default function QuestionsPage() {
               </h2>
 
               <div className="prose dark:prose-invert max-w-none">
-                <div className="flex items-start gap-3">
-                  <div className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed flex-1">
-                    <ExpandableText
-                      text={currentQuestion.question}
-                      maxLength={300}
-                      className="whitespace-pre-wrap"
-                      expandText="Read more"
-                      collapseText="Read less"
-                    />
-                  </div>
-                  <TextToSpeech
+                <div className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <ExpandableText
                     text={currentQuestion.question}
-                    className="flex-shrink-0 mt-1"
+                    maxLength={300}
+                    className="whitespace-pre-wrap"
+                    expandText="Read more"
+                    collapseText="Read less"
                   />
                 </div>
               </div>
