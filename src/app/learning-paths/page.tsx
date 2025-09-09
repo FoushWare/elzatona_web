@@ -15,7 +15,9 @@ export default function LearningPathsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showStatistics, setShowStatistics] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [collapsedCards, setCollapsedCards] = useState<Set<string>>(new Set());
+  const [collapsedCards, setCollapsedCards] = useState<Set<string>>(
+    new Set(learningPaths.map(path => path.id)) // All cards start closed
+  );
 
   const filteredPaths = learningPaths.filter(
     path =>
@@ -43,11 +45,25 @@ export default function LearningPathsPage() {
   const toggleCard = (pathId: string) => {
     setCollapsedCards(prev => {
       const newSet = new Set(prev);
+
+      // If the clicked card is currently closed, close all others and open this one
       if (newSet.has(pathId)) {
-        newSet.delete(pathId);
+        // Close all cards first
+        newSet.clear();
+        // Then add all path IDs except the clicked one (keeping it open)
+        learningPaths.forEach(path => {
+          if (path.id !== pathId) {
+            newSet.add(path.id);
+          }
+        });
       } else {
-        newSet.add(pathId);
+        // If the clicked card is currently open, close it (close all cards)
+        newSet.clear();
+        learningPaths.forEach(path => {
+          newSet.add(path.id);
+        });
       }
+
       return newSet;
     });
   };
