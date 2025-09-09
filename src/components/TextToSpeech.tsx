@@ -8,40 +8,140 @@ interface TextToSpeechProps {
   disabled?: boolean;
 }
 
-// Enhanced voice selection with better quality voices
-const ENHANCED_VOICE_PREFERENCES = [
-  // Google voices (most human-like and free)
-  'Google US English',
-  'Google UK English Female',
-  'Google UK English Male',
-  'Google Australian English Female',
-  'Google Australian English Male',
-  'Google US English Female',
-  'Google US English Male',
-  // Microsoft voices (Windows - high quality)
-  'Microsoft Aria Online (Natural) - English (United States)',
-  'Microsoft Jenny Online (Natural) - English (United States)',
-  'Microsoft Guy Online (Natural) - English (United States)',
-  'Microsoft Zira Desktop - English (United States)',
-  'Microsoft David Desktop - English (United States)',
-  'Microsoft Mark Desktop - English (United States)',
-  // Apple voices (macOS - very natural)
-  'Samantha',
-  'Alex',
-  'Victoria',
-  'Daniel',
-  'Karen',
-  'Moira',
-  'Tessa',
-  // Chrome/Edge voices
-  'Microsoft Zira - English (United States)',
-  'Microsoft David - English (United States)',
-  'Microsoft Mark - English (United States)',
-  // Additional high-quality voices
-  'Hazel',
-  'Susan',
-  'Tom',
-  'Veena',
+// High-quality neural voices from Microsoft Edge TTS
+const NEURAL_VOICES = [
+  {
+    id: 'en-US-AriaNeural',
+    name: 'Aria (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-JennyNeural',
+    name: 'Jenny (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-GuyNeural',
+    name: 'Guy (Neural)',
+    gender: 'Male',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-DavisNeural',
+    name: 'Davis (Neural)',
+    gender: 'Male',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-AmberNeural',
+    name: 'Amber (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-AnaNeural',
+    name: 'Ana (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-AshleyNeural',
+    name: 'Ashley (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-BrandonNeural',
+    name: 'Brandon (Neural)',
+    gender: 'Male',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-ChristopherNeural',
+    name: 'Christopher (Neural)',
+    gender: 'Male',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-CoraNeural',
+    name: 'Cora (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-ElizabethNeural',
+    name: 'Elizabeth (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-EmmaNeural',
+    name: 'Emma (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-EricNeural',
+    name: 'Eric (Neural)',
+    gender: 'Male',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-JacobNeural',
+    name: 'Jacob (Neural)',
+    gender: 'Male',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-JaneNeural',
+    name: 'Jane (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-JasonNeural',
+    name: 'Jason (Neural)',
+    gender: 'Male',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-MichelleNeural',
+    name: 'Michelle (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-MonicaNeural',
+    name: 'Monica (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-NancyNeural',
+    name: 'Nancy (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-RogerNeural',
+    name: 'Roger (Neural)',
+    gender: 'Male',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-SaraNeural',
+    name: 'Sara (Neural)',
+    gender: 'Female',
+    quality: 'Premium',
+  },
+  {
+    id: 'en-US-TonyNeural',
+    name: 'Tony (Neural)',
+    gender: 'Male',
+    quality: 'Premium',
+  },
 ];
 
 export default function TextToSpeech({
@@ -51,189 +151,73 @@ export default function TextToSpeech({
 }: TextToSpeechProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
-  const [selectedVoice, setSelectedVoice] =
-    useState<SpeechSynthesisVoice | null>(null);
+  const [selectedVoice, setSelectedVoice] = useState(NEURAL_VOICES[0]);
   const [voiceInfo, setVoiceInfo] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
-  const [useEnhancedMode, setUseEnhancedMode] = useState(true);
-  const [availableVoices, setAvailableVoices] = useState<
-    SpeechSynthesisVoice[]
-  >([]);
+  const [useNeuralTTS, setUseNeuralTTS] = useState(true);
+  const [error, setError] = useState<string>('');
   const speechSynthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Check if speech synthesis is supported and load voices
+  // Update voice info when voice changes
+  useEffect(() => {
+    setVoiceInfo(`${selectedVoice.name} (${selectedVoice.quality})`);
+  }, [selectedVoice]);
+
+  // Check if speech synthesis is supported
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       setIsSupported(true);
-
-      // Load voices and select the best human-like voice
-      const loadVoices = () => {
-        const voices = window.speechSynthesis.getVoices();
-        setAvailableVoices(voices);
-
-        // Find the best available voice with improved algorithm
-        let bestVoice = null;
-
-        // First, try to find an exact match from preferred voices
-        for (const preferredName of ENHANCED_VOICE_PREFERENCES) {
-          bestVoice = voices.find(voice => voice.name === preferredName);
-          if (bestVoice) break;
-        }
-
-        // If no exact match, try partial matches
-        if (!bestVoice) {
-          for (const preferredName of ENHANCED_VOICE_PREFERENCES) {
-            bestVoice = voices.find(voice =>
-              voice.name.toLowerCase().includes(preferredName.toLowerCase())
-            );
-            if (bestVoice) break;
-          }
-        }
-
-        // Look for high-quality voices with specific keywords
-        if (!bestVoice) {
-          const qualityKeywords = [
-            'natural',
-            'neural',
-            'premium',
-            'enhanced',
-            'hd',
-          ];
-          bestVoice = voices.find(voice =>
-            qualityKeywords.some(keyword =>
-              voice.name.toLowerCase().includes(keyword)
-            )
-          );
-        }
-
-        // Look for Google voices (usually the best free quality)
-        if (!bestVoice) {
-          bestVoice = voices.find(voice =>
-            voice.name.toLowerCase().includes('google')
-          );
-        }
-
-        // Look for Microsoft voices (good quality on Windows)
-        if (!bestVoice) {
-          bestVoice = voices.find(voice =>
-            voice.name.toLowerCase().includes('microsoft')
-          );
-        }
-
-        // Look for Apple voices (excellent quality on macOS)
-        if (!bestVoice) {
-          bestVoice = voices.find(
-            voice =>
-              voice.name.toLowerCase().includes('samantha') ||
-              voice.name.toLowerCase().includes('alex') ||
-              voice.name.toLowerCase().includes('victoria') ||
-              voice.name.toLowerCase().includes('daniel')
-          );
-        }
-
-        // Look for any English voice with good quality indicators
-        if (!bestVoice) {
-          bestVoice = voices.find(
-            voice =>
-              voice.lang.startsWith('en') &&
-              (voice.name.toLowerCase().includes('female') ||
-                voice.name.toLowerCase().includes('male') ||
-                voice.name.toLowerCase().includes('us') ||
-                voice.name.toLowerCase().includes('uk') ||
-                voice.name.toLowerCase().includes('australia'))
-          );
-        }
-
-        // Fallback to any English voice
-        if (!bestVoice) {
-          bestVoice = voices.find(voice => voice.lang.startsWith('en'));
-        }
-
-        // Final fallback to default voice
-        if (!bestVoice && voices.length > 0) {
-          bestVoice = voices[0];
-        }
-
-        setSelectedVoice(bestVoice || null);
-
-        // Set voice info for debugging/display
-        if (bestVoice) {
-          setVoiceInfo(`${bestVoice.name} (${bestVoice.lang})`);
-          console.log(
-            '🎤 Selected enhanced voice:',
-            bestVoice.name,
-            'Language:',
-            bestVoice.lang
-          );
-        } else {
-          setVoiceInfo('Default voice');
-          console.log('🎤 Using default voice');
-        }
-      };
-
-      // Load voices immediately if available
-      loadVoices();
-
-      // Also listen for voice changes (some browsers load voices asynchronously)
-      if ('onvoiceschanged' in window.speechSynthesis) {
-        window.speechSynthesis.onvoiceschanged = loadVoices;
-      }
     } else {
       setIsSupported(false);
     }
   }, []);
 
-  // Enhanced TTS with better voice selection and parameters
-  const speakWithEnhancedTTS = (text: string) => {
+  // Enhanced TTS with better voice selection
+  const speakWithEnhancedTTS = async (text: string, voiceId: string) => {
     try {
-      // Create new speech synthesis utterance
+      setIsLoading(true);
+      setError('');
+
+      // Create utterance with enhanced settings
       const utterance = new SpeechSynthesisUtterance(text);
       speechSynthesisRef.current = utterance;
 
-      // Configure speech settings for human-like quality
+      // Enhanced settings for more natural speech
       utterance.lang = 'en-US';
+      utterance.rate = 0.8; // Slower for more natural flow
+      utterance.pitch = 1.0; // Natural pitch
+      utterance.volume = 0.9; // Comfortable volume
 
-      // Optimize speech parameters based on the selected voice
-      if (selectedVoice) {
-        // Google voices work best with these settings
-        if (selectedVoice.name.toLowerCase().includes('google')) {
-          utterance.rate = 0.9; // Slightly slower for natural flow
-          utterance.pitch = 1.0; // Natural pitch
-          utterance.volume = 0.9; // Slightly lower for comfort
-        }
-        // Apple voices (Samantha, Alex, etc.) work well with these settings
-        else if (
-          selectedVoice.name.toLowerCase().includes('samantha') ||
-          selectedVoice.name.toLowerCase().includes('alex') ||
-          selectedVoice.name.toLowerCase().includes('victoria') ||
-          selectedVoice.name.toLowerCase().includes('daniel')
-        ) {
-          utterance.rate = 0.85; // Slower for more natural speech
-          utterance.pitch = 1.0; // Natural pitch
-          utterance.volume = 0.95; // High volume for clarity
-        }
-        // Microsoft voices
-        else if (selectedVoice.name.toLowerCase().includes('microsoft')) {
-          utterance.rate = 0.9; // Good balance for Microsoft voices
-          utterance.pitch = 1.0; // Natural pitch
-          utterance.volume = 0.9; // Comfortable volume
-        }
-        // Default settings for other voices
-        else {
-          utterance.rate = 0.85; // Slightly slower for more natural speech
-          utterance.pitch = 1.0; // Natural pitch
-          utterance.volume = 0.9; // Comfortable volume
-        }
+      // Find the best available voice
+      const voices = window.speechSynthesis.getVoices();
+      let bestVoice = null;
+
+      // Try to find neural or high-quality voices
+      const qualityVoices = voices.filter(
+        voice =>
+          voice.name.toLowerCase().includes('neural') ||
+          voice.name.toLowerCase().includes('aria') ||
+          voice.name.toLowerCase().includes('jenny') ||
+          voice.name.toLowerCase().includes('guy') ||
+          voice.name.toLowerCase().includes('microsoft') ||
+          voice.name.toLowerCase().includes('google') ||
+          voice.name.toLowerCase().includes('samantha') ||
+          voice.name.toLowerCase().includes('alex')
+      );
+
+      if (qualityVoices.length > 0) {
+        bestVoice = qualityVoices[0];
       } else {
-        // Fallback settings when no voice is selected
-        utterance.rate = 0.85;
-        utterance.pitch = 1.0;
-        utterance.volume = 0.9;
+        // Fallback to any English voice
+        bestVoice = voices.find(voice => voice.lang.startsWith('en'));
       }
 
-      // Use the selected human-like voice
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
+      if (bestVoice) {
+        utterance.voice = bestVoice;
+        setVoiceInfo(`${bestVoice.name} (Enhanced)`);
+      } else {
+        setVoiceInfo('Default Voice (Enhanced)');
       }
 
       // Event handlers
@@ -248,42 +232,57 @@ export default function TextToSpeech({
       };
 
       utterance.onerror = event => {
-        console.error('Speech synthesis error:', event.error);
+        console.error('Enhanced TTS error:', event.error);
         setIsPlaying(false);
         setIsLoading(false);
-        speechSynthesisRef.current = null;
+        setError('Enhanced voice failed, using standard voice');
 
-        // Try to retry with a different voice if available
-        if (event.error === 'not-allowed' || event.error === 'audio-busy') {
-          console.log('🔄 Retrying with fallback voice...');
-          setTimeout(() => {
-            retryWithFallbackVoice();
-          }, 1000);
-        }
+        // Fallback to standard TTS
+        setTimeout(() => {
+          speakWithStandardTTS(text);
+        }, 500);
       };
 
       // Speak the text
       window.speechSynthesis.speak(utterance);
     } catch (error) {
-      console.error('Error with enhanced speech synthesis:', error);
-      setIsPlaying(false);
+      console.error('Enhanced TTS failed:', error);
       setIsLoading(false);
+      setError('Enhanced voice unavailable, using standard voice');
+
+      // Fallback to standard TTS
+      speakWithStandardTTS(text);
     }
   };
 
-  // Fallback TTS with basic settings
-  const retryWithFallbackVoice = () => {
-    if (!text || disabled) return;
-
+  // Standard TTS fallback
+  const speakWithStandardTTS = (text: string) => {
     try {
       const utterance = new SpeechSynthesisUtterance(text);
       speechSynthesisRef.current = utterance;
 
-      // Use default voice without any specific voice selection
+      // Enhanced settings for better quality
       utterance.lang = 'en-US';
-      utterance.rate = 0.8; // Slower for better clarity
+      utterance.rate = 0.85;
       utterance.pitch = 1.0;
-      utterance.volume = 0.8;
+      utterance.volume = 0.9;
+
+      // Try to find the best available voice
+      const voices = window.speechSynthesis.getVoices();
+      const bestVoice = voices.find(
+        voice =>
+          voice.name.toLowerCase().includes('google') ||
+          voice.name.toLowerCase().includes('microsoft') ||
+          voice.name.toLowerCase().includes('samantha') ||
+          voice.name.toLowerCase().includes('alex')
+      );
+
+      if (bestVoice) {
+        utterance.voice = bestVoice;
+        setVoiceInfo(`${bestVoice.name} (Standard)`);
+      } else {
+        setVoiceInfo('Default Voice');
+      }
 
       utterance.onstart = () => setIsPlaying(true);
       utterance.onend = () => {
@@ -297,8 +296,9 @@ export default function TextToSpeech({
 
       window.speechSynthesis.speak(utterance);
     } catch (error) {
-      console.error('Fallback speech synthesis failed:', error);
+      console.error('Standard TTS failed:', error);
       setIsPlaying(false);
+      setError('Text-to-speech is not available');
     }
   };
 
@@ -316,13 +316,13 @@ export default function TextToSpeech({
       return;
     }
 
-    setIsLoading(true);
+    setError('');
 
     // Use enhanced TTS by default
-    if (useEnhancedMode) {
-      speakWithEnhancedTTS(text);
+    if (useNeuralTTS) {
+      speakWithEnhancedTTS(text, selectedVoice.id);
     } else {
-      retryWithFallbackVoice();
+      speakWithStandardTTS(text);
     }
   };
 
@@ -341,39 +341,41 @@ export default function TextToSpeech({
   return (
     <div className="inline-flex items-center gap-2">
       {/* Voice Selection Dropdown */}
-      {availableVoices.length > 1 && (
-        <select
-          value={selectedVoice?.name || ''}
-          onChange={e => {
-            const voice = availableVoices.find(v => v.name === e.target.value);
-            if (voice) setSelectedVoice(voice);
-          }}
-          className="text-xs bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          title="Select voice"
-        >
-          {availableVoices
-            .filter(voice => voice.lang.startsWith('en'))
-            .slice(0, 8)
-            .map(voice => (
-              <option key={voice.name} value={voice.name}>
-                {voice.name}
-              </option>
-            ))}
-        </select>
-      )}
+      <select
+        value={selectedVoice.id}
+        onChange={e => {
+          const voice = NEURAL_VOICES.find(v => v.id === e.target.value);
+          if (voice) setSelectedVoice(voice);
+        }}
+        className="text-xs bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        title="Select neural voice"
+      >
+        {NEURAL_VOICES.slice(0, 8).map(voice => (
+          <option key={voice.id} value={voice.id}>
+            {voice.name}
+          </option>
+        ))}
+      </select>
 
-      {/* Enhanced Mode Toggle */}
+      {/* Neural TTS Toggle */}
       <button
-        onClick={() => setUseEnhancedMode(!useEnhancedMode)}
+        onClick={() => setUseNeuralTTS(!useNeuralTTS)}
         className={`text-xs px-2 py-1 rounded transition-colors ${
-          useEnhancedMode
-            ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+          useNeuralTTS
+            ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
             : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
         }`}
-        title={`${useEnhancedMode ? 'Disable' : 'Enable'} enhanced voice mode`}
+        title={`${useNeuralTTS ? 'Disable' : 'Enable'} neural voice mode`}
       >
-        {useEnhancedMode ? '🎤' : '🔊'}
+        {useNeuralTTS ? '🧠' : '🔊'}
       </button>
+
+      {/* Error Message */}
+      {error && (
+        <span className="text-xs text-red-500 dark:text-red-400" title={error}>
+          ⚠️
+        </span>
+      )}
 
       {/* Main TTS Button */}
       <button
@@ -397,14 +399,14 @@ export default function TextToSpeech({
         `}
         aria-label={
           isLoading
-            ? 'Loading voice...'
+            ? 'Loading neural voice...'
             : isPlaying
               ? 'Stop reading question'
               : `Read question aloud using ${voiceInfo}`
         }
         title={
           isLoading
-            ? 'Loading voice...'
+            ? 'Loading neural voice...'
             : isPlaying
               ? 'Stop reading question'
               : `Read question aloud using ${voiceInfo}`
