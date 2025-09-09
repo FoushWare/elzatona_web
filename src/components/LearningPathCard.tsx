@@ -93,7 +93,8 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
           </div>
           <div className="flex items-center space-x-3 flex-shrink-0">
             {path.questionCount && (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-gray-100 via-slate-100 to-gray-100 dark:from-gray-800/40 dark:via-slate-800/40 dark:to-gray-800/40 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 shadow-sm">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 text-white border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300 animate-pulse">
+                <span className="mr-1">🧠</span>
                 {path.questionCount} questions
               </span>
             )}
@@ -146,28 +147,28 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4 mb-3 sm:mb-4 lg:mb-6">
-            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-gray-100 via-slate-100 to-gray-100 dark:from-gray-800/40 dark:via-slate-800/40 dark:to-gray-800/40 rounded-xl border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow-md transition-all duration-300">
+            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 dark:from-emerald-600 dark:via-teal-600 dark:to-cyan-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
               <span className="text-lg sm:text-xl lg:text-2xl mb-1">📚</span>
-              <span className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <span className="text-xs sm:text-sm font-semibold text-white">
                 {path.resources.length} resources
               </span>
             </div>
-            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-slate-100 via-gray-100 to-slate-100 dark:from-slate-800/40 dark:via-gray-800/40 dark:to-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-600 shadow-sm hover:shadow-md transition-all duration-300">
+            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 dark:from-orange-600 dark:via-red-600 dark:to-pink-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
               <span className="text-lg sm:text-xl lg:text-2xl mb-1">⏱️</span>
-              <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <span className="text-xs sm:text-sm font-semibold text-white">
                 {path.estimatedTime} hours
               </span>
             </div>
-            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-zinc-100 via-gray-100 to-zinc-100 dark:from-zinc-800/40 dark:via-gray-800/40 dark:to-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-600 shadow-sm hover:shadow-md transition-all duration-300">
+            <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 dark:from-violet-600 dark:via-purple-600 dark:to-fuchsia-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
               <span className="text-lg sm:text-xl lg:text-2xl mb-1">🎯</span>
-              <span className="text-xs sm:text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+              <span className="text-xs sm:text-sm font-semibold text-white">
                 {path.targetSkills.length} skills
               </span>
             </div>
             {path.questionCount && (
-              <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-neutral-100 via-gray-100 to-neutral-100 dark:from-neutral-800/40 dark:via-gray-800/40 dark:to-neutral-800/40 rounded-xl border border-neutral-200 dark:border-neutral-600 shadow-sm hover:shadow-md transition-all duration-300">
-                <span className="text-lg sm:text-xl lg:text-2xl mb-1">❓</span>
-                <span className="text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+              <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
+                <span className="text-lg sm:text-xl lg:text-2xl mb-1">🧠</span>
+                <span className="text-xs sm:text-sm font-semibold text-white">
                   {path.questionCount} questions
                 </span>
               </div>
