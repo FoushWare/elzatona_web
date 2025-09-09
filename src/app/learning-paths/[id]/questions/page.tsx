@@ -78,6 +78,144 @@ export default function QuestionsPage() {
     }
   }, [questionsData]);
 
+  // Auto TTS when question changes
+  useEffect(() => {
+    if (currentGroup && currentGroup.questions[currentQuestionIndex]) {
+      const currentQuestion = currentGroup.questions[currentQuestionIndex];
+      const questionText = currentQuestion.question;
+
+      // Small delay to ensure UI is ready
+      const timer = setTimeout(() => {
+        // Trigger TTS automatically
+        if (
+          questionText &&
+          typeof window !== 'undefined' &&
+          'speechSynthesis' in window
+        ) {
+          // Cancel any ongoing speech
+          speechSynthesis.cancel();
+
+          const utterance = new SpeechSynthesisUtterance(questionText);
+
+          // Try to find the best available voice
+          const voices = speechSynthesis.getVoices();
+          const preferredVoices = [
+            'Google US English',
+            'Microsoft Zira Desktop',
+            'Microsoft David Desktop',
+            'Alex',
+            'Samantha',
+            'Victoria',
+            'Daniel',
+            'Moira',
+            'Tessa',
+            'Karen',
+            'Fiona',
+            'Veena',
+          ];
+
+          let selectedVoice = null;
+          for (const preferred of preferredVoices) {
+            selectedVoice = voices.find(
+              voice =>
+                voice.name.includes(preferred) ||
+                voice.name.toLowerCase().includes(preferred.toLowerCase())
+            );
+            if (selectedVoice) break;
+          }
+
+          if (selectedVoice) {
+            utterance.voice = selectedVoice;
+          }
+
+          // Optimize speech parameters
+          utterance.rate = 0.9;
+          utterance.pitch = 1.0;
+          utterance.volume = 0.8;
+          utterance.lang = 'en-US';
+
+          speechSynthesis.speak(utterance);
+        }
+      }, 500); // 500ms delay
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentGroup, currentQuestionIndex]);
+
+  // Auto TTS when answer is shown
+  useEffect(() => {
+    if (
+      showAnswer &&
+      currentGroup &&
+      currentGroup.questions[currentQuestionIndex]
+    ) {
+      const currentQuestion = currentGroup.questions[currentQuestionIndex];
+      const answerText = currentQuestion.answer;
+      const explanationText = currentQuestion.explanation;
+
+      // Combine answer and explanation for TTS
+      const fullText = explanationText
+        ? `${answerText}. ${explanationText}`
+        : answerText;
+
+      // Small delay to ensure UI is ready
+      const timer = setTimeout(() => {
+        // Trigger TTS automatically for the answer
+        if (
+          fullText &&
+          typeof window !== 'undefined' &&
+          'speechSynthesis' in window
+        ) {
+          // Cancel any ongoing speech
+          speechSynthesis.cancel();
+
+          const utterance = new SpeechSynthesisUtterance(fullText);
+
+          // Try to find the best available voice
+          const voices = speechSynthesis.getVoices();
+          const preferredVoices = [
+            'Google US English',
+            'Microsoft Zira Desktop',
+            'Microsoft David Desktop',
+            'Alex',
+            'Samantha',
+            'Victoria',
+            'Daniel',
+            'Moira',
+            'Tessa',
+            'Karen',
+            'Fiona',
+            'Veena',
+          ];
+
+          let selectedVoice = null;
+          for (const preferred of preferredVoices) {
+            selectedVoice = voices.find(
+              voice =>
+                voice.name.includes(preferred) ||
+                voice.name.toLowerCase().includes(preferred.toLowerCase())
+            );
+            if (selectedVoice) break;
+          }
+
+          if (selectedVoice) {
+            utterance.voice = selectedVoice;
+          }
+
+          // Optimize speech parameters
+          utterance.rate = 0.9;
+          utterance.pitch = 1.0;
+          utterance.volume = 0.8;
+          utterance.lang = 'en-US';
+
+          speechSynthesis.speak(utterance);
+        }
+      }, 300); // 300ms delay for answer
+
+      return () => clearTimeout(timer);
+    }
+  }, [showAnswer, currentGroup, currentQuestionIndex]);
+
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex.toString());
   };
