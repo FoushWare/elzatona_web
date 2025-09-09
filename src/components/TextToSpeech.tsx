@@ -8,6 +8,42 @@ interface TextToSpeechProps {
   disabled?: boolean;
 }
 
+// Enhanced voice selection with better quality voices
+const ENHANCED_VOICE_PREFERENCES = [
+  // Google voices (most human-like and free)
+  'Google US English',
+  'Google UK English Female',
+  'Google UK English Male',
+  'Google Australian English Female',
+  'Google Australian English Male',
+  'Google US English Female',
+  'Google US English Male',
+  // Microsoft voices (Windows - high quality)
+  'Microsoft Aria Online (Natural) - English (United States)',
+  'Microsoft Jenny Online (Natural) - English (United States)',
+  'Microsoft Guy Online (Natural) - English (United States)',
+  'Microsoft Zira Desktop - English (United States)',
+  'Microsoft David Desktop - English (United States)',
+  'Microsoft Mark Desktop - English (United States)',
+  // Apple voices (macOS - very natural)
+  'Samantha',
+  'Alex',
+  'Victoria',
+  'Daniel',
+  'Karen',
+  'Moira',
+  'Tessa',
+  // Chrome/Edge voices
+  'Microsoft Zira - English (United States)',
+  'Microsoft David - English (United States)',
+  'Microsoft Mark - English (United States)',
+  // Additional high-quality voices
+  'Hazel',
+  'Susan',
+  'Tom',
+  'Veena',
+];
+
 export default function TextToSpeech({
   text,
   className = '',
@@ -18,6 +54,11 @@ export default function TextToSpeech({
   const [selectedVoice, setSelectedVoice] =
     useState<SpeechSynthesisVoice | null>(null);
   const [voiceInfo, setVoiceInfo] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [useEnhancedMode, setUseEnhancedMode] = useState(true);
+  const [availableVoices, setAvailableVoices] = useState<
+    SpeechSynthesisVoice[]
+  >([]);
   const speechSynthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // Check if speech synthesis is supported and load voices
@@ -28,55 +69,20 @@ export default function TextToSpeech({
       // Load voices and select the best human-like voice
       const loadVoices = () => {
         const voices = window.speechSynthesis.getVoices();
-
-        // Prefer human-like voices similar to ChatGPT
-        const preferredVoices = [
-          // Google voices (most human-like and free)
-          'Google US English',
-          'Google UK English Female',
-          'Google UK English Male',
-          'Google Australian English Female',
-          'Google Australian English Male',
-          'Google US English Female',
-          'Google US English Male',
-          // Microsoft voices (Windows)
-          'Microsoft Aria Online (Natural) - English (United States)',
-          'Microsoft Jenny Online (Natural) - English (United States)',
-          'Microsoft Guy Online (Natural) - English (United States)',
-          'Microsoft Zira Desktop - English (United States)',
-          'Microsoft David Desktop - English (United States)',
-          'Microsoft Mark Desktop - English (United States)',
-          // Apple voices (macOS - very natural)
-          'Samantha',
-          'Alex',
-          'Victoria',
-          'Daniel',
-          'Karen',
-          'Moira',
-          'Tessa',
-          // Chrome/Edge voices
-          'Microsoft Zira - English (United States)',
-          'Microsoft David - English (United States)',
-          'Microsoft Mark - English (United States)',
-          // Additional high-quality voices
-          'Hazel',
-          'Susan',
-          'Tom',
-          'Veena',
-        ];
+        setAvailableVoices(voices);
 
         // Find the best available voice with improved algorithm
         let bestVoice = null;
 
         // First, try to find an exact match from preferred voices
-        for (const preferredName of preferredVoices) {
+        for (const preferredName of ENHANCED_VOICE_PREFERENCES) {
           bestVoice = voices.find(voice => voice.name === preferredName);
           if (bestVoice) break;
         }
 
         // If no exact match, try partial matches
         if (!bestVoice) {
-          for (const preferredName of preferredVoices) {
+          for (const preferredName of ENHANCED_VOICE_PREFERENCES) {
             bestVoice = voices.find(voice =>
               voice.name.toLowerCase().includes(preferredName.toLowerCase())
             );
@@ -148,13 +154,13 @@ export default function TextToSpeech({
           bestVoice = voices[0];
         }
 
-        setSelectedVoice(bestVoice);
+        setSelectedVoice(bestVoice || null);
 
         // Set voice info for debugging/display
         if (bestVoice) {
           setVoiceInfo(`${bestVoice.name} (${bestVoice.lang})`);
           console.log(
-            '🎤 Selected voice:',
+            '🎤 Selected enhanced voice:',
             bestVoice.name,
             'Language:',
             bestVoice.lang
@@ -177,50 +183,8 @@ export default function TextToSpeech({
     }
   }, []);
 
-  const retryWithFallbackVoice = () => {
-    if (!text || disabled) return;
-
-    try {
-      const utterance = new SpeechSynthesisUtterance(text);
-      speechSynthesisRef.current = utterance;
-
-      // Use default voice without any specific voice selection
-      utterance.lang = 'en-US';
-      utterance.rate = 0.8; // Slower for better clarity
-      utterance.pitch = 1.0;
-      utterance.volume = 0.8;
-
-      utterance.onstart = () => setIsPlaying(true);
-      utterance.onend = () => {
-        setIsPlaying(false);
-        speechSynthesisRef.current = null;
-      };
-      utterance.onerror = () => {
-        setIsPlaying(false);
-        speechSynthesisRef.current = null;
-      };
-
-      window.speechSynthesis.speak(utterance);
-    } catch (error) {
-      console.error('Fallback speech synthesis failed:', error);
-      setIsPlaying(false);
-    }
-  };
-
-  const handleSpeak = () => {
-    if (!isSupported || disabled) return;
-
-    // Stop any currently playing speech
-    if (speechSynthesisRef.current) {
-      window.speechSynthesis.cancel();
-      setIsPlaying(false);
-    }
-
-    // If the same text is already playing, just stop it
-    if (isPlaying) {
-      return;
-    }
-
+  // Enhanced TTS with better voice selection and parameters
+  const speakWithEnhancedTTS = (text: string) => {
     try {
       // Create new speech synthesis utterance
       const utterance = new SpeechSynthesisUtterance(text);
@@ -275,6 +239,7 @@ export default function TextToSpeech({
       // Event handlers
       utterance.onstart = () => {
         setIsPlaying(true);
+        setIsLoading(false);
       };
 
       utterance.onend = () => {
@@ -285,6 +250,7 @@ export default function TextToSpeech({
       utterance.onerror = event => {
         console.error('Speech synthesis error:', event.error);
         setIsPlaying(false);
+        setIsLoading(false);
         speechSynthesisRef.current = null;
 
         // Try to retry with a different voice if available
@@ -299,8 +265,64 @@ export default function TextToSpeech({
       // Speak the text
       window.speechSynthesis.speak(utterance);
     } catch (error) {
-      console.error('Error with speech synthesis:', error);
+      console.error('Error with enhanced speech synthesis:', error);
       setIsPlaying(false);
+      setIsLoading(false);
+    }
+  };
+
+  // Fallback TTS with basic settings
+  const retryWithFallbackVoice = () => {
+    if (!text || disabled) return;
+
+    try {
+      const utterance = new SpeechSynthesisUtterance(text);
+      speechSynthesisRef.current = utterance;
+
+      // Use default voice without any specific voice selection
+      utterance.lang = 'en-US';
+      utterance.rate = 0.8; // Slower for better clarity
+      utterance.pitch = 1.0;
+      utterance.volume = 0.8;
+
+      utterance.onstart = () => setIsPlaying(true);
+      utterance.onend = () => {
+        setIsPlaying(false);
+        speechSynthesisRef.current = null;
+      };
+      utterance.onerror = () => {
+        setIsPlaying(false);
+        speechSynthesisRef.current = null;
+      };
+
+      window.speechSynthesis.speak(utterance);
+    } catch (error) {
+      console.error('Fallback speech synthesis failed:', error);
+      setIsPlaying(false);
+    }
+  };
+
+  const handleSpeak = () => {
+    if (!isSupported || disabled) return;
+
+    // Stop any currently playing speech
+    if (speechSynthesisRef.current) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+    }
+
+    // If the same text is already playing, just stop it
+    if (isPlaying) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    // Use enhanced TTS by default
+    if (useEnhancedMode) {
+      speakWithEnhancedTTS(text);
+    } else {
+      retryWithFallbackVoice();
     }
   };
 
@@ -317,61 +339,126 @@ export default function TextToSpeech({
   }
 
   return (
-    <button
-      onClick={handleSpeak}
-      onKeyDown={handleKeyDown}
-      disabled={disabled}
-      className={`
-        inline-flex items-center justify-center
-        w-8 h-8 rounded-full
-        transition-all duration-200
-        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-        ${
-          isPlaying
-            ? 'bg-blue-500 text-white shadow-lg'
-            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-800 hover:text-blue-600 dark:hover:text-blue-300'
-        }
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-        ${className}
-      `}
-      aria-label={
-        isPlaying
-          ? 'Stop reading question'
-          : `Read question aloud using ${voiceInfo}`
-      }
-      title={
-        isPlaying
-          ? 'Stop reading question'
-          : `Read question aloud using ${voiceInfo}`
-      }
-    >
-      {isPlaying ? (
-        <svg
-          className="w-4 h-4"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          aria-hidden="true"
+    <div className="inline-flex items-center gap-2">
+      {/* Voice Selection Dropdown */}
+      {availableVoices.length > 1 && (
+        <select
+          value={selectedVoice?.name || ''}
+          onChange={e => {
+            const voice = availableVoices.find(v => v.name === e.target.value);
+            if (voice) setSelectedVoice(voice);
+          }}
+          className="text-xs bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          title="Select voice"
         >
-          <path
-            fillRule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
-            clipRule="evenodd"
-          />
-        </svg>
-      ) : (
-        <svg
-          className="w-4 h-4"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          aria-hidden="true"
-        >
-          <path
-            fillRule="evenodd"
-            d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.617.793L4.617 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.617l3.766-3.793a1 1 0 011.617.793zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"
-            clipRule="evenodd"
-          />
-        </svg>
+          {availableVoices
+            .filter(voice => voice.lang.startsWith('en'))
+            .slice(0, 8)
+            .map(voice => (
+              <option key={voice.name} value={voice.name}>
+                {voice.name}
+              </option>
+            ))}
+        </select>
       )}
-    </button>
+
+      {/* Enhanced Mode Toggle */}
+      <button
+        onClick={() => setUseEnhancedMode(!useEnhancedMode)}
+        className={`text-xs px-2 py-1 rounded transition-colors ${
+          useEnhancedMode
+            ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+        }`}
+        title={`${useEnhancedMode ? 'Disable' : 'Enable'} enhanced voice mode`}
+      >
+        {useEnhancedMode ? '🎤' : '🔊'}
+      </button>
+
+      {/* Main TTS Button */}
+      <button
+        onClick={handleSpeak}
+        onKeyDown={handleKeyDown}
+        disabled={disabled || isLoading}
+        className={`
+          inline-flex items-center justify-center
+          w-8 h-8 rounded-full
+          transition-all duration-200
+          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+          ${
+            isPlaying
+              ? 'bg-blue-500 text-white shadow-lg'
+              : isLoading
+                ? 'bg-yellow-500 text-white shadow-lg animate-pulse'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-800 hover:text-blue-600 dark:hover:text-blue-300'
+          }
+          ${disabled || isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+          ${className}
+        `}
+        aria-label={
+          isLoading
+            ? 'Loading voice...'
+            : isPlaying
+              ? 'Stop reading question'
+              : `Read question aloud using ${voiceInfo}`
+        }
+        title={
+          isLoading
+            ? 'Loading voice...'
+            : isPlaying
+              ? 'Stop reading question'
+              : `Read question aloud using ${voiceInfo}`
+        }
+      >
+        {isLoading ? (
+          <svg
+            className="w-4 h-4 animate-spin"
+            fill="none"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+        ) : isPlaying ? (
+          <svg
+            className="w-4 h-4"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ) : (
+          <svg
+            className="w-4 h-4"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.617.793L4.617 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.617l3.766-3.793a1 1 0 011.617.793zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"
+              clipRule="evenodd"
+            />
+          </svg>
+        )}
+      </button>
+    </div>
   );
 }
