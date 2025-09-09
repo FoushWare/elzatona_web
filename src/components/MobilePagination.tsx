@@ -65,7 +65,7 @@ export default function MobilePagination({
         {/* Mobile Navigation Header */}
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Navigation
+            Questions
           </h3>
 
           {/* Mobile: Show More Questions Button */}
@@ -75,7 +75,9 @@ export default function MobilePagination({
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
             >
               <span className="mr-2">
-                {showFullNavigation ? 'Hide' : 'More Questions'}
+                {showFullNavigation
+                  ? 'Hide'
+                  : `More ${currentGroup.questions.length} Questions`}
               </span>
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${
