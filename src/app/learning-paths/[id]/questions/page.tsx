@@ -1,13 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { learningPaths } from '@/lib/resources';
-import {
-  QuestionGroup,
-  QuestionsData,
-  getQuestionsForPath,
-} from '@/lib/questions';
+import { QuestionGroup } from '@/lib/questions';
+import { useFirebaseQuestions } from '@/hooks/useFirebaseQuestions';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { flashcardService } from '@/lib/firebase-flashcards';
 import AddToFlashcard from '@/components/AddToFlashcard';
@@ -23,9 +20,6 @@ export default function QuestionsPage() {
   const { user } = useFirebaseAuth();
   const { toasts, removeToast, showSuccess, showError } = useToast();
 
-  const [questionsData, setQuestionsData] = useState<QuestionsData | null>(
-    null
-  );
   const [currentGroup, setCurrentGroup] = useState<QuestionGroup | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -34,33 +28,55 @@ export default function QuestionsPage() {
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<string>>(
     new Set()
   );
-  const [loading, setLoading] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
   const learningPath = learningPaths.find(path => path.id === pathId);
 
-  const loadQuestions = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await getQuestionsForPath(pathId);
-      setQuestionsData(data);
-      if (data.groups.length > 0) {
-        setCurrentGroup(data.groups[0]);
-      }
-    } catch (error) {
-      console.error('Error loading questions:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [pathId]);
+  // Use Firebase questions hook
+  const { questions: firebaseQuestions, loading } =
+    useFirebaseQuestions(pathId);
 
-  useEffect(() => {
-    if (pathId) {
-      loadQuestions();
+  // Convert Firebase questions to the expected format
+  const questionsData = useMemo(() => {
+    if (!firebaseQuestions || firebaseQuestions.length === 0) {
+      return null;
     }
-  }, [pathId, loadQuestions]);
+
+    // Group questions by category or create a single group
+    const groups: QuestionGroup[] = [
+      {
+        id: 'main',
+        title: 'CSS Display Properties',
+        questions: firebaseQuestions.map(q => ({
+          id: q.id,
+          title: q.title,
+          question: q.question,
+          options: q.options,
+          correctAnswer: q.correctAnswer,
+          answer: q.answer,
+          explanation: q.explanation,
+          category: q.category,
+          difficulty: q.difficulty,
+          source: `${learningPath?.title || 'Learning Path'} - ${q.category}`,
+        })),
+      },
+    ];
+
+    return {
+      groups,
+      totalQuestions: firebaseQuestions.length,
+    };
+  }, [firebaseQuestions, learningPath]);
+
+  // Set current group when questions are loaded
+  useEffect(() => {
+    if (questionsData && questionsData.groups.length > 0) {
+      setCurrentGroup(questionsData.groups[0]);
+      setCurrentQuestionIndex(0);
+    }
+  }, [questionsData]);
 
   const handleAnswerSelect = (answerIndex: number) => {
     setSelectedAnswer(answerIndex.toString());
