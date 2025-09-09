@@ -15,12 +15,97 @@ export default function TextToSpeech({
 }: TextToSpeechProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
+  const [selectedVoice, setSelectedVoice] =
+    useState<SpeechSynthesisVoice | null>(null);
   const speechSynthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  // Check if speech synthesis is supported
+  // Check if speech synthesis is supported and load voices
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       setIsSupported(true);
+
+      // Load voices and select the best human-like voice
+      const loadVoices = () => {
+        const voices = window.speechSynthesis.getVoices();
+
+        // Prefer human-like voices similar to ChatGPT
+        const preferredVoices = [
+          // Google voices (most human-like)
+          'Google US English',
+          'Google UK English Female',
+          'Google UK English Male',
+          'Google Australian English Female',
+          'Google Australian English Male',
+          // Microsoft voices
+          'Microsoft Aria Online (Natural) - English (United States)',
+          'Microsoft Jenny Online (Natural) - English (United States)',
+          'Microsoft Guy Online (Natural) - English (United States)',
+          // Apple voices (on macOS)
+          'Samantha',
+          'Alex',
+          'Victoria',
+          'Daniel',
+          // Other high-quality voices
+          'Microsoft Zira Desktop - English (United States)',
+          'Microsoft David Desktop - English (United States)',
+          'Microsoft Mark Desktop - English (United States)',
+        ];
+
+        // Find the best available voice
+        let bestVoice = null;
+
+        // First, try to find a preferred voice
+        for (const preferredName of preferredVoices) {
+          bestVoice = voices.find(
+            voice =>
+              voice.name.includes(preferredName) || voice.name === preferredName
+          );
+          if (bestVoice) break;
+        }
+
+        // If no preferred voice found, look for high-quality alternatives
+        if (!bestVoice) {
+          // Look for voices with "Natural" or "Neural" in the name
+          bestVoice = voices.find(
+            voice =>
+              voice.name.toLowerCase().includes('natural') ||
+              voice.name.toLowerCase().includes('neural') ||
+              voice.name.toLowerCase().includes('premium')
+          );
+        }
+
+        // If still no voice found, look for English voices with good quality indicators
+        if (!bestVoice) {
+          bestVoice = voices.find(
+            voice =>
+              voice.lang.startsWith('en') &&
+              (voice.name.toLowerCase().includes('female') ||
+                voice.name.toLowerCase().includes('male') ||
+                voice.name.toLowerCase().includes('us') ||
+                voice.name.toLowerCase().includes('uk'))
+          );
+        }
+
+        // Fallback to any English voice
+        if (!bestVoice) {
+          bestVoice = voices.find(voice => voice.lang.startsWith('en'));
+        }
+
+        // Final fallback to default voice
+        if (!bestVoice && voices.length > 0) {
+          bestVoice = voices[0];
+        }
+
+        setSelectedVoice(bestVoice);
+      };
+
+      // Load voices immediately if available
+      loadVoices();
+
+      // Also listen for voice changes (some browsers load voices asynchronously)
+      if ('onvoiceschanged' in window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+      }
     } else {
       setIsSupported(false);
     }
@@ -45,11 +130,16 @@ export default function TextToSpeech({
       const utterance = new SpeechSynthesisUtterance(text);
       speechSynthesisRef.current = utterance;
 
-      // Configure speech settings
+      // Configure speech settings for human-like quality
       utterance.lang = 'en-US';
-      utterance.rate = 0.9; // Slightly slower for better comprehension
-      utterance.pitch = 1;
-      utterance.volume = 1;
+      utterance.rate = 0.85; // Slightly slower for more natural speech
+      utterance.pitch = 1.0; // Natural pitch
+      utterance.volume = 1.0; // Full volume
+
+      // Use the selected human-like voice
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
 
       // Event handlers
       utterance.onstart = () => {
