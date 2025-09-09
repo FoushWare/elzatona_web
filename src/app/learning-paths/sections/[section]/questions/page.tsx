@@ -14,6 +14,7 @@ import { multipleChoiceQuestions } from '@/lib/multipleChoiceQuestions';
 import { javascriptQuestions } from '@/lib/javascriptQuestions';
 import { reactQuestions } from '@/lib/reactQuestions';
 import { greatFrontendQuestions } from '@/lib/greatfrontendQuestions';
+import TextToSpeech from '@/components/TextToSpeech';
 
 interface Question {
   id: string;
@@ -291,9 +292,15 @@ export default function LearningPathQuestionsPage() {
 
           {/* Question Text */}
           <div>
-            <h3 className="text-lg font-semibold text-card-foreground mb-4">
-              {currentQuestion.question}
-            </h3>
+            <div className="flex items-start gap-3 mb-4">
+              <h3 className="text-lg font-semibold text-card-foreground flex-1">
+                {currentQuestion.question}
+              </h3>
+              <TextToSpeech
+                text={currentQuestion.question}
+                className="flex-shrink-0 mt-1"
+              />
+            </div>
           </div>
 
           {/* Options */}
