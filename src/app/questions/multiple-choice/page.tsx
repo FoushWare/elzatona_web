@@ -1,10 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import {
-  multipleChoiceQuestions,
-  // MultipleChoiceQuestion,
-} from '@/lib/multipleChoiceQuestions';
+import { useState, useEffect } from 'react';
 import {
   CheckCircle,
   XCircle,
@@ -16,7 +12,21 @@ import {
   BarChart3,
 } from 'lucide-react';
 
+interface Question {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+  category: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  learningPath: string;
+  type: string;
+}
+
 export default function MultipleChoiceQuizPage() {
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -26,11 +36,73 @@ export default function MultipleChoiceQuizPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
+  const [error, setError] = useState<string | null>(null);
 
-  const currentQuestion = multipleChoiceQuestions[currentQuestionIndex];
+  // Fetch questions from Firebase
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Fetch from all learning paths that have multiple-choice questions
+        const learningPaths = [
+          'frontend-basics',
+          'advanced-css',
+          'javascript-deep-dive',
+          'react-mastery',
+          'typescript-essentials',
+          'performance-optimization',
+          'security',
+          'testing-strategies',
+          'system-design',
+          'accessibility',
+          'api-integration',
+          'git-version-control',
+          'english-learning',
+        ];
+
+        const allQuestions: Question[] = [];
+
+        for (const learningPath of learningPaths) {
+          try {
+            const response = await fetch(`/api/questions/${learningPath}`);
+            const data = await response.json();
+
+            if (data.success && data.questions) {
+              const multipleChoiceQuestions = data.questions.filter(
+                (q: Question) =>
+                  q.type === 'multiple-choice' &&
+                  q.options &&
+                  q.options.length > 0
+              );
+              allQuestions.push(...multipleChoiceQuestions);
+            }
+          } catch (err) {
+            console.warn(`Failed to fetch questions for ${learningPath}:`, err);
+          }
+        }
+
+        if (allQuestions.length > 0) {
+          setQuestions(allQuestions);
+        } else {
+          setError('No questions available');
+        }
+      } catch (err) {
+        setError('Failed to fetch questions from Firebase');
+        console.error('Error fetching questions:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
+
+  const currentQuestion = questions[currentQuestionIndex];
 
   // Filter questions based on selections
-  const filteredQuestions = multipleChoiceQuestions.filter(q => {
+  const filteredQuestions = questions.filter(q => {
     if (selectedCategory !== 'all' && q.category !== selectedCategory)
       return false;
     if (selectedDifficulty !== 'all' && q.difficulty !== selectedDifficulty)
@@ -106,6 +178,56 @@ export default function MultipleChoiceQuizPage() {
 
   const accuracy =
     totalAnswered > 0 ? Math.round((score / totalAnswered) * 100) : 0;
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-lg text-muted-foreground">Loading questions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-foreground mb-2">
+            Error Loading Questions
+          </h2>
+          <p className="text-muted-foreground mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Show no questions state
+  if (questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-gray-500 text-6xl mb-4">📝</div>
+          <h2 className="text-2xl font-bold text-foreground mb-2">
+            No Questions Available
+          </h2>
+          <p className="text-muted-foreground">
+            No multiple choice questions found in the database.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -185,10 +307,13 @@ export default function MultipleChoiceQuizPage() {
                   className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground"
                 >
                   <option value="all">All Categories</option>
-                  <option value="css">CSS</option>
-                  <option value="javascript">JavaScript</option>
-                  <option value="html">HTML</option>
-                  <option value="websockets">WebSockets</option>
+                  {[...new Set(questions.map(q => q.category))].map(
+                    category => (
+                      <option key={category} value={category}>
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
               <div>
@@ -201,9 +326,14 @@ export default function MultipleChoiceQuizPage() {
                   className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground"
                 >
                   <option value="all">All Difficulties</option>
-                  <option value="easy">Easy</option>
-                  <option value="medium">Medium</option>
-                  <option value="hard">Hard</option>
+                  {[...new Set(questions.map(q => q.difficulty))].map(
+                    difficulty => (
+                      <option key={difficulty} value={difficulty}>
+                        {difficulty.charAt(0).toUpperCase() +
+                          difficulty.slice(1)}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
             </div>
