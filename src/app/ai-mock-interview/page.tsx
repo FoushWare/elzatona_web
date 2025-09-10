@@ -12,6 +12,10 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
+  Volume2,
+  VolumeX,
+  Phone,
+  PhoneOff,
 } from 'lucide-react';
 
 interface Message {
@@ -20,6 +24,8 @@ interface Message {
   content: string;
   timestamp: Date;
   isTyping?: boolean;
+  isVoice?: boolean;
+  audioUrl?: string;
 }
 
 interface InterviewSession {
@@ -88,9 +94,15 @@ export default function AIMockInterviewPage() {
   const [showResults, setShowResults] = useState(false);
   const [interviewScore, setInterviewScore] = useState<number | null>(null);
   const [interviewFeedback, setInterviewFeedback] = useState<string>('');
+  const [isVoiceMode, setIsVoiceMode] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isListening, setIsListening] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -101,25 +113,59 @@ export default function AIMockInterviewPage() {
   }, [messages]);
 
   useEffect(() => {
-    // Initialize speech recognition
-    if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
-      const SpeechRecognition = window.webkitSpeechRecognition;
+    // Initialize speech recognition for continuous conversation
+    if (
+      typeof window !== 'undefined' &&
+      ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)
+    ) {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'en-US';
 
       recognitionRef.current.onresult = event => {
-        const transcript = event.results[0][0].transcript;
-        setCurrentMessage(transcript);
+        let finalTranscript = '';
+        let interimTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+
+        if (finalTranscript) {
+          setCurrentMessage(finalTranscript);
+          setIsListening(false);
+          // Auto-send message in voice mode
+          if (isVoiceMode && isInterviewActive) {
+            sendMessage(finalTranscript);
+          }
+        } else {
+          setCurrentMessage(interimTranscript);
+        }
+      };
+
+      recognitionRef.current.onerror = event => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
         setIsRecording(false);
       };
 
-      recognitionRef.current.onerror = () => {
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
         setIsRecording(false);
       };
+
+      recognitionRef.current.onstart = () => {
+        setIsListening(true);
+      };
     }
-  }, []);
+  }, [isVoiceMode, isInterviewActive]);
 
   const startInterview = async () => {
     setIsInterviewActive(true);
@@ -165,6 +211,11 @@ export default function AIMockInterviewPage() {
       setMessages([aiMessage]);
       newSession.messages = [aiMessage];
       setSession(newSession);
+
+      // Auto-speak the greeting in voice mode
+      if (isVoiceMode) {
+        await speakText(data.message);
+      }
     } catch (error) {
       console.error('Failed to start interview:', error);
     } finally {
@@ -201,14 +252,16 @@ export default function AIMockInterviewPage() {
     }
   };
 
-  const sendMessage = async () => {
-    if (!currentMessage.trim() || !session) return;
+  const sendMessage = async (messageText?: string) => {
+    const messageToSend = messageText || currentMessage;
+    if (!messageToSend.trim() || !session) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
-      content: currentMessage,
+      content: messageToSend,
       timestamp: new Date(),
+      isVoice: isVoiceMode,
     };
 
     const newMessages = [...messages, userMessage];
@@ -222,7 +275,7 @@ export default function AIMockInterviewPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sessionId: session.id,
-          message: currentMessage,
+          message: messageToSend,
           messages: newMessages,
           category: selectedCategory,
           difficulty: selectedDifficulty,
@@ -236,9 +289,15 @@ export default function AIMockInterviewPage() {
         type: 'ai',
         content: data.message,
         timestamp: new Date(),
+        isVoice: isVoiceMode,
       };
 
       setMessages([...newMessages, aiMessage]);
+
+      // Auto-speak AI response in voice mode
+      if (isVoiceMode) {
+        await speakText(data.message);
+      }
     } catch (error) {
       console.error('Failed to send message:', error);
     } finally {
@@ -246,17 +305,82 @@ export default function AIMockInterviewPage() {
     }
   };
 
-  const startRecording = () => {
-    if (recognitionRef.current && !isRecording) {
+  // Enhanced voice functions
+  const speakText = async (text: string) => {
+    if (!isVoiceMode) return;
+
+    setIsSpeaking(true);
+    try {
+      // Use our TTS API for better quality
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+
+      if (response.ok) {
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        if (audioRef.current) {
+          audioRef.current.src = audioUrl;
+          audioRef.current.onended = () => setIsSpeaking(false);
+          audioRef.current.onerror = () => setIsSpeaking(false);
+          await audioRef.current.play();
+        }
+      } else {
+        // Fallback to browser TTS
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.onend = () => setIsSpeaking(false);
+        utterance.onerror = () => setIsSpeaking(false);
+        window.speechSynthesis.speak(utterance);
+      }
+    } catch (error) {
+      console.error('TTS Error:', error);
+      setIsSpeaking(false);
+    }
+  };
+
+  const startVoiceConversation = () => {
+    if (recognitionRef.current && !isRecording && isVoiceMode) {
       setIsRecording(true);
       recognitionRef.current.start();
     }
   };
 
-  const stopRecording = () => {
+  const stopVoiceConversation = () => {
     if (recognitionRef.current && isRecording) {
       recognitionRef.current.stop();
       setIsRecording(false);
+    }
+  };
+
+  const toggleVoiceMode = () => {
+    setIsVoiceMode(!isVoiceMode);
+    if (isRecording) {
+      stopVoiceConversation();
+    }
+  };
+
+  const startRecording = () => {
+    if (isVoiceMode) {
+      startVoiceConversation();
+    } else {
+      if (recognitionRef.current && !isRecording) {
+        setIsRecording(true);
+        recognitionRef.current.start();
+      }
+    }
+  };
+
+  const stopRecording = () => {
+    if (isVoiceMode) {
+      stopVoiceConversation();
+    } else {
+      if (recognitionRef.current && isRecording) {
+        recognitionRef.current.stop();
+        setIsRecording(false);
+      }
     }
   };
 
@@ -284,6 +408,9 @@ export default function AIMockInterviewPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Hidden audio element for TTS playback */}
+      <audio ref={audioRef} style={{ display: 'none' }} />
+
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -401,6 +528,44 @@ export default function AIMockInterviewPage() {
                     </p>
                   </div>
                   <div className="flex items-center space-x-4">
+                    {/* Voice Mode Toggle */}
+                    <button
+                      onClick={toggleVoiceMode}
+                      className={`px-3 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2 ${
+                        isVoiceMode
+                          ? 'bg-green-500 hover:bg-green-600'
+                          : 'bg-gray-500 hover:bg-gray-600'
+                      }`}
+                      title={isVoiceMode ? 'Voice Mode ON' : 'Voice Mode OFF'}
+                    >
+                      {isVoiceMode ? (
+                        <Volume2 className="w-4 h-4" />
+                      ) : (
+                        <VolumeX className="w-4 h-4" />
+                      )}
+                      <span className="text-sm">
+                        {isVoiceMode ? 'Voice' : 'Text'}
+                      </span>
+                    </button>
+
+                    {/* Voice Status Indicators */}
+                    {isVoiceMode && (
+                      <div className="flex items-center space-x-2">
+                        {isSpeaking && (
+                          <div className="flex items-center space-x-1 text-green-200">
+                            <Volume2 className="w-4 h-4 animate-pulse" />
+                            <span className="text-sm">AI Speaking</span>
+                          </div>
+                        )}
+                        {isListening && (
+                          <div className="flex items-center space-x-1 text-yellow-200">
+                            <Mic className="w-4 h-4 animate-pulse" />
+                            <span className="text-sm">Listening</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <div className="flex items-center space-x-2">
                       <Clock className="w-5 h-5" />
                       <span className="text-sm">
@@ -480,6 +645,21 @@ export default function AIMockInterviewPage() {
 
               {/* Input Area */}
               <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+                {/* Voice Mode Status */}
+                {isVoiceMode && (
+                  <div className="mb-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                    <div className="flex items-center space-x-2 text-green-700 dark:text-green-300">
+                      <Phone className="w-4 h-4" />
+                      <span className="text-sm font-medium">
+                        Voice Mode Active
+                      </span>
+                      <span className="text-xs text-green-600 dark:text-green-400">
+                        • Speak naturally, AI will respond with voice
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex items-center space-x-2">
                   <div className="flex-1 flex items-center space-x-2">
                     <input
@@ -487,7 +667,11 @@ export default function AIMockInterviewPage() {
                       value={currentMessage}
                       onChange={e => setCurrentMessage(e.target.value)}
                       onKeyPress={e => e.key === 'Enter' && sendMessage()}
-                      placeholder="Type your answer or use voice input..."
+                      placeholder={
+                        isVoiceMode
+                          ? 'Voice input active - speak or type here...'
+                          : 'Type your answer or use voice input...'
+                      }
                       className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                       disabled={isLoading}
                     />
@@ -495,10 +679,19 @@ export default function AIMockInterviewPage() {
                       onClick={isRecording ? stopRecording : startRecording}
                       className={`p-2 rounded-lg transition-colors duration-200 ${
                         isRecording
-                          ? 'bg-red-500 hover:bg-red-600 text-white'
-                          : 'bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
+                          ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
+                          : isVoiceMode
+                            ? 'bg-green-500 hover:bg-green-600 text-white'
+                            : 'bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
                       }`}
                       disabled={isLoading}
+                      title={
+                        isRecording
+                          ? 'Stop recording'
+                          : isVoiceMode
+                            ? 'Start voice conversation'
+                            : 'Start voice input'
+                      }
                     >
                       {isRecording ? (
                         <MicOff className="w-5 h-5" />
@@ -515,6 +708,16 @@ export default function AIMockInterviewPage() {
                     <Send className="w-4 h-4" />
                   </button>
                 </div>
+
+                {/* Voice Mode Instructions */}
+                {isVoiceMode && (
+                  <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    💡 In voice mode: Speak naturally and the AI will respond
+                    with voice.
+                    {isRecording && ' Currently listening...'}
+                    {isSpeaking && ' AI is speaking...'}
+                  </div>
+                )}
               </div>
             </div>
           </div>
