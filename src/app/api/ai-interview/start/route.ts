@@ -120,7 +120,7 @@ const interviewQuestions = {
 
 export async function POST(request: NextRequest) {
   try {
-    const { category, difficulty } = await request.json();
+    const { category, difficulty, mode, adaptiveLevel } = await request.json();
 
     if (!category || !difficulty) {
       return NextResponse.json(
@@ -145,7 +145,8 @@ export async function POST(request: NextRequest) {
     const randomQuestion =
       questions[Math.floor(Math.random() * questions.length)];
 
-    const greetingMessage = `Hello! I'm your AI interviewer. I'll be conducting a ${difficulty} level interview focused on ${category} development. Let's begin with our first question:
+    const modeText = mode ? ` in ${mode.replace('-', ' ')} mode` : '';
+    const greetingMessage = `Hello! I'm your AI interviewer. I'll be conducting a ${difficulty} level interview focused on ${category} development${modeText}. I'll adapt the difficulty based on your responses and provide real-time feedback. Let's begin with our first question:
 
 **${randomQuestion}**
 

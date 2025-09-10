@@ -139,7 +139,18 @@ const constructiveFeedback = [
 
 export async function POST(request: NextRequest) {
   try {
-    const { sessionId, message, category, difficulty } = await request.json();
+    const {
+      sessionId,
+      message,
+      category,
+      difficulty,
+      mode,
+      adaptiveLevel,
+      responseTime,
+      conceptsCovered,
+      weakAreas,
+      strongAreas,
+    } = await request.json();
 
     if (!message || !category || !difficulty) {
       return NextResponse.json(
@@ -148,46 +159,158 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Analyze the user's response
+    // Enhanced response analysis
     const responseLength = message.length;
     const hasTechnicalTerms =
-      /(function|class|component|API|database|server|client|state|props|hook|async|await|promise|callback|event|DOM|CSS|HTML|JavaScript|React|Node|SQL|NoSQL|HTTP|REST|GraphQL|microservice|container|Docker|Kubernetes|AWS|Azure|GCP)/i.test(
+      /(function|class|component|API|database|server|client|state|props|hook|async|await|promise|callback|event|DOM|CSS|HTML|JavaScript|React|Node|SQL|NoSQL|HTTP|REST|GraphQL|microservice|container|Docker|Kubernetes|AWS|Azure|GCP|algorithm|data structure|optimization|scalability|performance|security|testing|deployment|architecture|design pattern)/i.test(
         message
       );
     const hasExamples =
-      /(example|for instance|like|such as|imagine|suppose)/i.test(message);
+      /(example|for instance|like|such as|imagine|suppose|when I|in my experience)/i.test(
+        message
+      );
     const hasStructure =
-      /(first|second|third|then|next|finally|in conclusion|to summarize)/i.test(
+      /(first|second|third|then|next|finally|in conclusion|to summarize|step 1|step 2|initially|subsequently|therefore|however|moreover|additionally)/i.test(
+        message
+      );
+    const hasCodeExamples =
+      /(```|`|const|let|var|function|class|import|export)/i.test(message);
+    const hasBestPractices =
+      /(best practice|recommended|should|avoid|don't|never|always|typically|usually)/i.test(
         message
       );
 
-    // Generate appropriate response
+    // Calculate response quality score
+    let qualityScore = 0;
+    if (responseLength > 100) qualityScore += 20;
+    if (hasTechnicalTerms) qualityScore += 25;
+    if (hasExamples) qualityScore += 20;
+    if (hasStructure) qualityScore += 15;
+    if (hasCodeExamples) qualityScore += 10;
+    if (hasBestPractices) qualityScore += 10;
+
+    // Adjust for response time (faster responses get bonus points)
+    if (responseTime && responseTime < 30000) {
+      // Less than 30 seconds
+      qualityScore += 5;
+    }
+
+    // Extract concepts mentioned
+    const conceptMatches = message.match(
+      /(React|JavaScript|CSS|HTML|Node\.js|API|Database|Authentication|Security|Performance|Scalability|Testing|Deployment|Architecture|Design Pattern|Algorithm|Data Structure|Optimization|Microservice|Container|Docker|Kubernetes|AWS|Azure|GCP)/gi
+    );
+    const mentionedConcepts = conceptMatches
+      ? [...new Set(conceptMatches.map(c => c.toLowerCase()))]
+      : [];
+
+    // Determine missing concepts based on category
+    const categoryConcepts = {
+      frontend: [
+        'react',
+        'javascript',
+        'css',
+        'html',
+        'dom',
+        'state management',
+        'performance',
+        'accessibility',
+      ],
+      backend: [
+        'node.js',
+        'api',
+        'database',
+        'authentication',
+        'security',
+        'performance',
+        'scalability',
+        'testing',
+      ],
+      fullstack: [
+        'frontend',
+        'backend',
+        'integration',
+        'deployment',
+        'ci/cd',
+        'monitoring',
+        'architecture',
+        'devops',
+      ],
+      'system-design': [
+        'architecture',
+        'scalability',
+        'performance',
+        'caching',
+        'load balancing',
+        'microservices',
+        'databases',
+        'security',
+      ],
+      behavioral: [
+        'leadership',
+        'communication',
+        'problem solving',
+        'teamwork',
+        'adaptability',
+        'conflict resolution',
+        'time management',
+        'innovation',
+      ],
+    };
+
+    const expectedConcepts =
+      categoryConcepts[category as keyof typeof categoryConcepts] || [];
+    const missingConcepts = expectedConcepts.filter(
+      concept =>
+        !mentionedConcepts.some(
+          mentioned =>
+            mentioned.includes(concept) || concept.includes(mentioned)
+        )
+    );
+
+    // Generate appropriate response with adaptive difficulty
     let aiResponse = '';
+    let newAdaptiveLevel = adaptiveLevel || 5;
+
+    // Adjust adaptive level based on response quality
+    if (qualityScore >= 80) {
+      newAdaptiveLevel = Math.min(10, newAdaptiveLevel + 1); // Increase difficulty
+    } else if (qualityScore < 40) {
+      newAdaptiveLevel = Math.max(0, newAdaptiveLevel - 1); // Decrease difficulty
+    }
+
     const shouldAskFollowUp = Math.random() > 0.3; // 70% chance of follow-up
 
     // Provide feedback based on response quality
     if (responseLength < 50) {
       aiResponse = "I'd like to hear more details about your answer. ";
-    } else if (
-      responseLength > 200 &&
-      hasTechnicalTerms &&
-      (hasExamples || hasStructure)
-    ) {
+    } else if (qualityScore >= 80) {
       aiResponse =
         positiveFeedback[Math.floor(Math.random() * positiveFeedback.length)] +
         ' ';
-    } else {
+    } else if (qualityScore >= 60) {
       aiResponse =
         constructiveFeedback[
           Math.floor(Math.random() * constructiveFeedback.length)
         ] + ' ';
+    } else {
+      aiResponse = 'Let me help you think through this more systematically. ';
     }
 
-    // Add follow-up question or next question
+    // Add follow-up question or next question based on adaptive level
     if (shouldAskFollowUp) {
+      // Select difficulty level based on adaptive level
+      let questionDifficulty = difficulty;
+      if (newAdaptiveLevel >= 7) {
+        questionDifficulty = 'advanced';
+      } else if (newAdaptiveLevel >= 4) {
+        questionDifficulty = 'intermediate';
+      } else {
+        questionDifficulty = 'beginner';
+      }
+
       const followUps =
         followUpQuestions[category as keyof typeof followUpQuestions]?.[
-          difficulty as keyof typeof followUpQuestions.frontend
+          questionDifficulty as keyof typeof followUpQuestions.frontend
         ];
       if (followUps && followUps.length > 0) {
         const followUp =
@@ -210,32 +333,63 @@ export async function POST(request: NextRequest) {
           Math.floor(Math.random() * nextQuestionResponses.length)
         ] + ' ';
 
-      // Get next question (simplified - in real implementation, you'd track question progression)
-      const nextQuestions = [
-        'How would you handle edge cases in this scenario?',
-        'What are the potential challenges with this approach?',
-        'How would you optimize this for better performance?',
-        'What security considerations should be taken into account?',
-        'How would you test this functionality?',
-      ];
+      // Get next question based on adaptive level and missing concepts
+      let nextQuestion = '';
+      if (missingConcepts.length > 0 && Math.random() > 0.5) {
+        // Ask about missing concepts
+        const concept =
+          missingConcepts[Math.floor(Math.random() * missingConcepts.length)];
+        nextQuestion = `How would you approach ${concept} in this context?`;
+      } else {
+        // Standard progression questions
+        const nextQuestions = [
+          'How would you handle edge cases in this scenario?',
+          'What are the potential challenges with this approach?',
+          'How would you optimize this for better performance?',
+          'What security considerations should be taken into account?',
+          'How would you test this functionality?',
+        ];
+        nextQuestion =
+          nextQuestions[Math.floor(Math.random() * nextQuestions.length)];
+      }
 
-      aiResponse +=
-        nextQuestions[Math.floor(Math.random() * nextQuestions.length)];
+      aiResponse += nextQuestion;
     }
 
     return NextResponse.json({
       success: true,
       message: aiResponse,
       sessionId,
+      adaptiveLevel: newAdaptiveLevel,
+      evaluation: {
+        score: qualityScore,
+        feedback:
+          qualityScore >= 80
+            ? 'Excellent response!'
+            : qualityScore >= 60
+              ? 'Good response, keep it up!'
+              : 'Consider providing more detail and examples.',
+        concepts: mentionedConcepts,
+        missing: missingConcepts,
+      },
       analysis: {
         responseLength,
         hasTechnicalTerms,
         hasExamples,
         hasStructure,
+        hasCodeExamples,
+        hasBestPractices,
         quality:
-          responseLength > 100 && hasTechnicalTerms
-            ? 'good'
-            : 'needs_improvement',
+          qualityScore >= 80
+            ? 'excellent'
+            : qualityScore >= 60
+              ? 'good'
+              : qualityScore >= 40
+                ? 'fair'
+                : 'needs_improvement',
+        responseTime,
+        mentionedConcepts,
+        missingConcepts,
       },
     });
   } catch (error) {
