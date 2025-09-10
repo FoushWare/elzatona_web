@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -10,7 +10,6 @@ import {
   XCircle,
   Info,
 } from 'lucide-react';
-import { multipleChoiceQuestions } from '@/lib/multipleChoiceQuestions';
 import EnhancedTTS from '@/components/EnhancedTTS';
 
 interface Question {
@@ -21,129 +20,127 @@ interface Question {
   explanation: string;
   category: string;
   difficulty: 'easy' | 'medium' | 'hard';
+  learningPath: string;
+  type: string;
 }
 
 export default function LearningPathQuestionsPage() {
   const params = useParams();
-  const router = useRouter();
   const section = params.section as string;
 
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
   const [totalAnswered, setTotalAnswered] = useState(0);
-  const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(
-    new Set()
-  );
-  const [currentGroup, setCurrentGroup] = useState(0);
-  const [questionsPerGroup] = useState(20);
 
-  // Get questions based on section
-  const getQuestionsBySection = (): Question[] => {
-    switch (section) {
-      case 'javascript':
-        return multipleChoiceQuestions
-          .filter(q => q.category === 'javascript')
-          .map(q => ({
-            id: q.id,
-            question: q.question,
-            options: q.options,
-            correctAnswer: q.correctAnswer,
-            explanation: q.explanation,
-            category: q.category,
-            difficulty: q.difficulty,
-          }));
-      case 'react':
-        return multipleChoiceQuestions
-          .filter(q => q.category === 'react')
-          .map(q => ({
-            id: q.id,
-            question: q.question,
-            options: q.options,
-            correctAnswer: q.correctAnswer,
-            explanation: q.explanation,
-            category: q.category,
-            difficulty: q.difficulty,
-          }));
-      case 'css':
-        return multipleChoiceQuestions
-          .filter(q => q.category === 'css')
-          .map(q => ({
-            id: q.id,
-            question: q.question,
-            options: q.options,
-            correctAnswer: q.correctAnswer,
-            explanation: q.explanation,
-            category: q.category,
-            difficulty: q.difficulty,
-          }));
-      case 'html':
-        return multipleChoiceQuestions
-          .filter(q => q.category === 'html')
-          .map(q => ({
-            id: q.id,
-            question: q.question,
-            options: q.options,
-            correctAnswer: q.correctAnswer,
-            explanation: q.explanation,
-            category: q.category,
-            difficulty: q.difficulty,
-          }));
-      case 'git':
-        return multipleChoiceQuestions
-          .filter(q => q.category === 'git')
-          .map(q => ({
-            id: q.id,
-            question: q.question,
-            options: q.options,
-            correctAnswer: q.correctAnswer,
-            explanation: q.explanation,
-            category: q.category,
-            difficulty: q.difficulty,
-          }));
-      case 'frontend-basics':
-        // Return a mix of CSS, HTML, and JavaScript questions for frontend basics
-        return multipleChoiceQuestions
-          .filter(q => ['css', 'html', 'javascript'].includes(q.category))
-          .map(q => ({
-            id: q.id,
-            question: q.question,
-            options: q.options,
-            correctAnswer: q.correctAnswer,
-            explanation: q.explanation,
-            category: q.category,
-            difficulty: q.difficulty,
-          }));
-      default:
-        return multipleChoiceQuestions;
+  // Fetch questions from Firebase based on section
+  const fetchQuestions = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Map section to learning path
+      const sectionToLearningPath: { [key: string]: string } = {
+        javascript: 'javascript-deep-dive',
+        react: 'react-mastery',
+        css: 'advanced-css',
+        html: 'frontend-basics',
+        git: 'git-version-control',
+        'frontend-basics': 'frontend-basics',
+        'advanced-css': 'advanced-css',
+        'javascript-deep-dive': 'javascript-deep-dive',
+        'react-mastery': 'react-mastery',
+        'typescript-essentials': 'typescript-essentials',
+        'performance-optimization': 'performance-optimization',
+        security: 'security',
+        'testing-strategies': 'testing-strategies',
+        'system-design': 'system-design',
+        accessibility: 'accessibility',
+        'api-integration': 'api-integration',
+        'git-version-control': 'git-version-control',
+        'english-learning': 'english-learning',
+      };
+
+      const learningPath = sectionToLearningPath[section] || section;
+
+      const response = await fetch(`/api/questions/${learningPath}`);
+      const data = await response.json();
+
+      if (data.success && data.questions) {
+        // Filter for multiple-choice questions only
+        const multipleChoiceQuestions = data.questions.filter(
+          (q: Question) =>
+            q.type === 'multiple-choice' && q.options && q.options.length > 0
+        );
+        setQuestions(multipleChoiceQuestions);
+      } else {
+        setError(data.error || 'Failed to fetch questions');
+      }
+    } catch (err) {
+      setError('Failed to fetch questions from Firebase');
+      console.error('Error fetching questions:', err);
+    } finally {
+      setLoading(false);
     }
+  }, [section]);
+
+  // Load questions when component mounts or section changes
+  useEffect(() => {
+    fetchQuestions();
+  }, [fetchQuestions]);
+
+  const currentQuestion = questions[currentQuestionIndex];
+  const scorePercentage = totalAnswered > 0 ? (score / totalAnswered) * 100 : 0;
+
+  const getSectionTitle = () => {
+    const titles: { [key: string]: string } = {
+      javascript: 'JavaScript Deep Dive',
+      react: 'React Mastery',
+      css: 'Advanced CSS',
+      html: 'HTML Fundamentals',
+      git: 'Git Version Control',
+      'frontend-basics': 'Frontend Basics',
+      'advanced-css': 'Advanced CSS',
+      'javascript-deep-dive': 'JavaScript Deep Dive',
+      'react-mastery': 'React Mastery',
+      'typescript-essentials': 'TypeScript Essentials',
+      'performance-optimization': 'Performance Optimization',
+      security: 'Security',
+      'testing-strategies': 'Testing Strategies',
+      'system-design': 'System Design',
+      accessibility: 'Accessibility',
+      'api-integration': 'API Integration',
+      'git-version-control': 'Git Version Control',
+      'english-learning': 'English Learning',
+    };
+    return (
+      titles[section] || section.charAt(0).toUpperCase() + section.slice(1)
+    );
   };
 
-  const questions = getQuestionsBySection();
-  const totalGroups = Math.ceil(questions.length / questionsPerGroup);
-  const currentQuestion = questions[currentQuestionIndex];
-
-  // Update current group when question index changes
-  useEffect(() => {
-    setCurrentGroup(Math.floor(currentQuestionIndex / questionsPerGroup));
-  }, [currentQuestionIndex, questionsPerGroup]);
-
   const handleAnswerSelect = (answerIndex: number) => {
-    if (selectedAnswer !== null) return; // Prevent changing answer after selection
-
+    if (showAnswer) return;
     setSelectedAnswer(answerIndex);
-    setTotalAnswered(prev => prev + 1);
-    setAnsweredQuestions(prev => new Set(prev).add(currentQuestionIndex));
+  };
 
-    if (answerIndex === currentQuestion.correctAnswer) {
+  const handleSubmitAnswer = () => {
+    if (selectedAnswer === null) return;
+
+    setShowAnswer(true);
+    setTotalAnswered(prev => prev + 1);
+
+    if (selectedAnswer === currentQuestion.correctAnswer) {
       setScore(prev => prev + 1);
     }
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setShowAnswer(false);
     }
@@ -151,70 +148,9 @@ export default function LearningPathQuestionsPage() {
 
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setCurrentQuestionIndex(prev => prev - 1);
       setSelectedAnswer(null);
       setShowAnswer(false);
-    }
-  };
-
-  const goToGroup = (groupIndex: number) => {
-    const startIndex = groupIndex * questionsPerGroup;
-    setCurrentQuestionIndex(startIndex);
-    setSelectedAnswer(null);
-    setShowAnswer(false);
-    setCurrentGroup(groupIndex);
-  };
-
-  const goToNextGroup = () => {
-    if (currentGroup < totalGroups - 1) {
-      goToGroup(currentGroup + 1);
-    }
-  };
-
-  const goToPreviousGroup = () => {
-    if (currentGroup > 0) {
-      goToGroup(currentGroup - 1);
-    }
-  };
-
-  const getOptionLabel = (index: number) => String.fromCharCode(65 + index);
-  const scorePercentage = totalAnswered > 0 ? (score / totalAnswered) * 100 : 0;
-
-  if (!currentQuestion) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-4">
-            No Questions Available
-          </h2>
-          <p className="text-muted-foreground">
-            This section doesn&apos;t have any questions yet.
-          </p>
-          <Link
-            href="/learning-paths"
-            className="mt-4 inline-flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            ← Back to Learning Paths
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  const getSectionTitle = () => {
-    switch (section) {
-      case 'javascript':
-        return 'JavaScript Fundamentals';
-      case 'react':
-        return 'React Fundamentals';
-      case 'css':
-        return 'CSS Fundamentals';
-      case 'html':
-        return 'HTML Fundamentals';
-      case 'git':
-        return 'Git Fundamentals';
-      default:
-        return 'Learning Path Questions';
     }
   };
 
@@ -230,6 +166,70 @@ export default function LearningPathQuestionsPage() {
         return 'text-gray-600 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400';
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8">
+          <div className="bg-card border border-border rounded-lg p-8 text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-muted-foreground">
+              Loading questions from Firebase...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8">
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
+            <div className="flex items-center">
+              <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
+              <h3 className="text-red-800 dark:text-red-200 font-medium">
+                Error Loading Questions
+              </h3>
+            </div>
+            <p className="text-red-700 dark:text-red-300 mt-2">{error}</p>
+            <button
+              onClick={fetchQuestions}
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8">
+          <div className="bg-card border border-border rounded-lg p-8 text-center">
+            <Info className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-card-foreground mb-2">
+              No Questions Available
+            </h3>
+            <p className="text-muted-foreground mb-4">
+              No multiple-choice questions found for {section}. Questions may
+              still be loading or this section might not have questions yet.
+            </p>
+            <button
+              onClick={fetchQuestions}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -252,7 +252,7 @@ export default function LearningPathQuestionsPage() {
         </div>
 
         {/* Progress and Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-card p-4 rounded-lg border border-border">
             <h3 className="text-sm font-medium text-muted-foreground">
               Progress
@@ -273,12 +273,6 @@ export default function LearningPathQuestionsPage() {
             <h3 className="text-sm font-medium text-muted-foreground">Score</h3>
             <p className="text-2xl font-bold text-card-foreground">
               {score} / {totalAnswered}
-            </p>
-          </div>
-          <div className="bg-card p-4 rounded-lg border border-border">
-            <h3 className="text-sm font-medium text-muted-foreground">Group</h3>
-            <p className="text-2xl font-bold text-card-foreground">
-              {currentGroup + 1} / {totalGroups}
             </p>
           </div>
         </div>
@@ -322,235 +316,86 @@ export default function LearningPathQuestionsPage() {
             <h4 className="font-medium text-card-foreground">
               Select the correct answer:
             </h4>
-            <div className="space-y-2">
-              {currentQuestion.options.map((option, index) => {
-                const optionLabel = getOptionLabel(index);
-                const isSelected = selectedAnswer === index;
-                const isCorrect = index === currentQuestion.correctAnswer;
-                const showResult =
-                  selectedAnswer !== null && (isSelected || isCorrect);
+            {currentQuestion.options.map((option, index) => {
+              const isSelected = selectedAnswer === index;
+              const isCorrect = index === currentQuestion.correctAnswer;
+              const showCorrect = showAnswer && isCorrect;
+              const showIncorrect = showAnswer && isSelected && !isCorrect;
 
-                return (
-                  <button
-                    key={index}
-                    onClick={() => handleAnswerSelect(index)}
-                    disabled={selectedAnswer !== null}
-                    className={`w-full p-4 text-left rounded-lg border transition-all ${
-                      isSelected
-                        ? isCorrect
-                          ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200'
-                          : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200'
-                        : showResult && isCorrect
-                          ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200'
-                          : 'bg-card border-border hover:border-border/60 text-card-foreground hover:bg-muted/50'
-                    } ${selectedAnswer !== null ? 'cursor-default' : 'cursor-pointer'}`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-medium ${
-                          isSelected
-                            ? isCorrect
-                              ? 'bg-green-500 border-green-500 text-white'
-                              : 'bg-red-500 border-red-500 text-white'
-                            : showResult && isCorrect
-                              ? 'bg-green-500 border-green-500 text-white'
-                              : 'border-border'
-                        }`}
-                      >
-                        {showResult ? (
-                          isCorrect ? (
-                            <CheckCircle className="w-4 h-4" />
-                          ) : (
-                            <XCircle className="w-4 h-4" />
-                          )
-                        ) : (
-                          optionLabel
-                        )}
-                      </div>
-                      <span>{option}</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleAnswerSelect(index)}
+                  disabled={showAnswer}
+                  className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
+                    showCorrect
+                      ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                      : showIncorrect
+                        ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                        : isSelected
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                          : 'border-border hover:border-blue-300 hover:bg-muted/50'
+                  } ${showAnswer ? 'cursor-default' : 'cursor-pointer'}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-card-foreground">
+                      {String.fromCharCode(65 + index)}. {option}
+                    </span>
+                    {showCorrect && (
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    )}
+                    {showIncorrect && (
+                      <XCircle className="w-5 h-5 text-red-600" />
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
+          {/* Submit Button */}
+          {!showAnswer && selectedAnswer !== null && (
+            <button
+              onClick={handleSubmitAnswer}
+              className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              Submit Answer
+            </button>
+          )}
+
           {/* Explanation */}
-          {selectedAnswer !== null && (
-            <div className="mt-6 p-4 bg-muted rounded-lg">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="font-medium text-foreground flex items-center gap-2">
-                  <Info className="w-4 h-4" />
-                  Explanation
-                </h4>
-                <button
-                  onClick={() => setShowAnswer(!showAnswer)}
-                  className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
-                >
-                  {showAnswer ? 'Hide' : 'Show'}
-                </button>
-              </div>
-              {showAnswer && (
-                <p className="text-muted-foreground">
-                  {currentQuestion.explanation}
-                </p>
-              )}
+          {showAnswer && (
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
+                Explanation:
+              </h4>
+              <p className="text-blue-800 dark:text-blue-200">
+                {currentQuestion.explanation}
+              </p>
             </div>
           )}
 
           {/* Navigation */}
-          <div className="flex items-center justify-between pt-4">
+          <div className="flex justify-between items-center pt-4 border-t border-border">
             <button
               onClick={handlePreviousQuestion}
               disabled={currentQuestionIndex === 0}
-              className="px-4 py-2 border border-border text-muted-foreground rounded-md hover:bg-muted transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4 mr-2" />
               Previous
             </button>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={goToPreviousGroup}
-                disabled={currentGroup === 0}
-                className="px-3 py-1 text-sm bg-muted hover:bg-accent text-muted-foreground hover:text-foreground rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
-              >
-                <ArrowLeft className="w-3 h-3" />
-                Group {currentGroup}
-              </button>
-              <button
-                onClick={goToNextGroup}
-                disabled={currentGroup >= totalGroups - 1}
-                className="px-3 py-1 text-sm bg-muted hover:bg-accent text-muted-foreground hover:text-foreground rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
-              >
-                Group {currentGroup + 2}
-                <ArrowRight className="w-3 h-3" />
-              </button>
-            </div>
-
+            <span className="text-sm text-muted-foreground">
+              {currentQuestionIndex + 1} of {questions.length}
+            </span>
             <button
               onClick={handleNextQuestion}
               disabled={currentQuestionIndex === questions.length - 1}
-              className="px-4 py-2 border border-border text-muted-foreground rounded-md hover:bg-muted transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
             >
               Next
               <ArrowRight className="w-4 h-4" />
             </button>
-          </div>
-        </div>
-
-        {/* Question Navigation */}
-        <div className="bg-card border border-border rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">
-              Question Navigation
-            </h3>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>
-                Group {currentGroup + 1} of {totalGroups}
-              </span>
-            </div>
-          </div>
-
-          {/* Current Group */}
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="text-sm font-medium text-foreground">
-                Current Group: Questions {currentGroup * questionsPerGroup + 1}{' '}
-                -{' '}
-                {Math.min(
-                  (currentGroup + 1) * questionsPerGroup,
-                  questions.length
-                )}
-              </h4>
-              <span className="text-xs text-muted-foreground">
-                {Math.min(
-                  questionsPerGroup,
-                  questions.length - currentGroup * questionsPerGroup
-                )}{' '}
-                questions
-              </span>
-            </div>
-            <div className="grid grid-cols-10 gap-1">
-              {Array.from(
-                {
-                  length: Math.min(
-                    questionsPerGroup,
-                    questions.length - currentGroup * questionsPerGroup
-                  ),
-                },
-                (_, index) => {
-                  const questionIndex =
-                    currentGroup * questionsPerGroup + index;
-                  const isAnswered = answeredQuestions.has(questionIndex);
-                  const isCorrect = questionIndex < score;
-                  const isCurrent = questionIndex === currentQuestionIndex;
-
-                  return (
-                    <button
-                      key={questionIndex}
-                      onClick={() => {
-                        setCurrentQuestionIndex(questionIndex);
-                        setSelectedAnswer(null);
-                        setShowAnswer(false);
-                      }}
-                      className={`p-2 text-xs rounded border transition-colors ${
-                        isCurrent
-                          ? 'bg-blue-600 text-white border-blue-600'
-                          : isAnswered
-                            ? isCorrect
-                              ? 'bg-green-100 text-green-800 border-green-300'
-                              : 'bg-red-100 text-red-800 border-red-300'
-                            : 'bg-card text-card-foreground border-border hover:bg-muted'
-                      }`}
-                    >
-                      {questionIndex + 1}
-                    </button>
-                  );
-                }
-              )}
-            </div>
-          </div>
-
-          <div className="border-t border-border my-4"></div>
-
-          {/* All Groups */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="text-sm font-medium text-foreground">
-                All Groups
-              </h4>
-              <span className="text-xs text-muted-foreground">
-                Click to jump to any group
-              </span>
-            </div>
-            <div className="grid grid-cols-5 gap-2">
-              {Array.from({ length: totalGroups }, (_, groupIndex) => {
-                const startIndex = groupIndex * questionsPerGroup;
-                const endIndex = Math.min(
-                  startIndex + questionsPerGroup,
-                  questions.length
-                );
-                const isCurrentGroup = currentGroup === groupIndex;
-
-                return (
-                  <button
-                    key={groupIndex}
-                    onClick={() => goToGroup(groupIndex)}
-                    className={`p-3 text-sm rounded border transition-colors ${
-                      isCurrentGroup
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-card text-card-foreground border-border hover:bg-muted'
-                    }`}
-                  >
-                    <div className="font-medium">Group {groupIndex + 1}</div>
-                    <div className="text-xs opacity-80">
-                      {startIndex + 1}-{endIndex}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
           </div>
         </div>
       </div>
