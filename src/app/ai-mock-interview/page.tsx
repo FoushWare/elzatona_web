@@ -16,6 +16,15 @@ import {
   VolumeX,
   Phone,
   PhoneOff,
+  BookOpen,
+  TrendingUp,
+  Target,
+  Brain,
+  Zap,
+  Star,
+  Award,
+  MessageSquare,
+  BarChart3,
 } from 'lucide-react';
 
 interface Message {
@@ -26,6 +35,12 @@ interface Message {
   isTyping?: boolean;
   isVoice?: boolean;
   audioUrl?: string;
+  evaluation?: {
+    score: number;
+    feedback: string;
+    concepts: string[];
+    missing: string[];
+  };
 }
 
 interface InterviewSession {
@@ -37,6 +52,23 @@ interface InterviewSession {
   feedback?: string;
   category: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
+  adaptiveLevel: number; // 0-10 scale for adaptive difficulty
+  conceptsCovered: string[];
+  weakAreas: string[];
+  strongAreas: string[];
+  totalQuestions: number;
+  correctAnswers: number;
+  averageResponseTime: number;
+  voiceModeEnabled: boolean;
+}
+
+interface FlashcardData {
+  question: string;
+  answer: string;
+  explanation: string;
+  category: string;
+  difficulty: string;
+  tags: string[];
 }
 
 const interviewCategories = [
@@ -45,47 +77,140 @@ const interviewCategories = [
     name: 'Frontend Development',
     icon: '🎨',
     description: 'React, JavaScript, CSS, HTML',
+    concepts: [
+      'React',
+      'JavaScript',
+      'CSS',
+      'HTML',
+      'DOM',
+      'State Management',
+      'Performance',
+      'Accessibility',
+    ],
   },
   {
     id: 'backend',
     name: 'Backend Development',
     icon: '⚙️',
     description: 'Node.js, APIs, Databases',
+    concepts: [
+      'Node.js',
+      'APIs',
+      'Databases',
+      'Authentication',
+      'Security',
+      'Performance',
+      'Scalability',
+      'Testing',
+    ],
   },
   {
     id: 'fullstack',
     name: 'Full Stack',
     icon: '🚀',
     description: 'Complete web development',
+    concepts: [
+      'Frontend',
+      'Backend',
+      'Integration',
+      'Deployment',
+      'CI/CD',
+      'Monitoring',
+      'Architecture',
+      'DevOps',
+    ],
   },
   {
     id: 'system-design',
     name: 'System Design',
     icon: '🏗️',
     description: 'Architecture and scalability',
+    concepts: [
+      'Architecture',
+      'Scalability',
+      'Performance',
+      'Caching',
+      'Load Balancing',
+      'Microservices',
+      'Databases',
+      'Security',
+    ],
   },
   {
     id: 'behavioral',
     name: 'Behavioral',
     icon: '💬',
     description: 'Soft skills and culture fit',
+    concepts: [
+      'Leadership',
+      'Communication',
+      'Problem Solving',
+      'Teamwork',
+      'Adaptability',
+      'Conflict Resolution',
+      'Time Management',
+      'Innovation',
+    ],
   },
 ];
 
 const difficultyLevels = [
-  { id: 'beginner', name: 'Beginner', description: '0-2 years experience' },
+  {
+    id: 'beginner',
+    name: 'Beginner',
+    description: '0-2 years experience',
+    multiplier: 1.2,
+  },
   {
     id: 'intermediate',
     name: 'Intermediate',
     description: '2-5 years experience',
+    multiplier: 1.0,
   },
-  { id: 'advanced', name: 'Advanced', description: '5+ years experience' },
+  {
+    id: 'advanced',
+    name: 'Advanced',
+    description: '5+ years experience',
+    multiplier: 0.8,
+  },
+];
+
+const interviewModes = [
+  {
+    id: 'standard',
+    name: 'Standard Interview',
+    description: 'Traditional Q&A format',
+    icon: '💼',
+    duration: '15-20 minutes',
+  },
+  {
+    id: 'technical-deep-dive',
+    name: 'Technical Deep Dive',
+    description: 'In-depth technical discussion',
+    icon: '🔬',
+    duration: '25-30 minutes',
+  },
+  {
+    id: 'rapid-fire',
+    name: 'Rapid Fire',
+    description: 'Quick questions and answers',
+    icon: '⚡',
+    duration: '10-15 minutes',
+  },
+  {
+    id: 'scenario-based',
+    name: 'Scenario Based',
+    description: 'Real-world problem solving',
+    icon: '🎯',
+    duration: '20-25 minutes',
+  },
 ];
 
 export default function AIMockInterviewPage() {
   const [isInterviewActive, setIsInterviewActive] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('frontend');
   const [selectedDifficulty, setSelectedDifficulty] = useState('intermediate');
+  const [selectedMode, setSelectedMode] = useState('standard');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -97,6 +222,15 @@ export default function AIMockInterviewPage() {
   const [isVoiceMode, setIsVoiceMode] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [adaptiveLevel, setAdaptiveLevel] = useState(5);
+  const [conceptsCovered, setConceptsCovered] = useState<string[]>([]);
+  const [weakAreas, setWeakAreas] = useState<string[]>([]);
+  const [strongAreas, setStrongAreas] = useState<string[]>([]);
+  const [flashcardsToAdd, setFlashcardsToAdd] = useState<FlashcardData[]>([]);
+  const [showFlashcards, setShowFlashcards] = useState(false);
+  const [responseStartTime, setResponseStartTime] = useState<number | null>(
+    null
+  );
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -113,7 +247,7 @@ export default function AIMockInterviewPage() {
   }, [messages]);
 
   useEffect(() => {
-    // Initialize speech recognition for continuous conversation
+    // Enhanced speech recognition with better error handling
     if (
       typeof window !== 'undefined' &&
       ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)
@@ -124,6 +258,7 @@ export default function AIMockInterviewPage() {
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'en-US';
+      recognitionRef.current.maxAlternatives = 3;
 
       recognitionRef.current.onresult = event => {
         let finalTranscript = '';
@@ -154,18 +289,36 @@ export default function AIMockInterviewPage() {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
         setIsRecording(false);
+
+        // Handle specific errors
+        if (event.error === 'no-speech') {
+          console.log('No speech detected, continuing to listen...');
+          // Restart recognition after a short delay
+          setTimeout(() => {
+            if (isRecording && recognitionRef.current) {
+              recognitionRef.current.start();
+            }
+          }, 1000);
+        }
       };
 
       recognitionRef.current.onend = () => {
         setIsListening(false);
-        setIsRecording(false);
+        if (isRecording && isVoiceMode) {
+          // Restart recognition for continuous conversation
+          setTimeout(() => {
+            if (recognitionRef.current && isRecording) {
+              recognitionRef.current.start();
+            }
+          }, 500);
+        }
       };
 
       recognitionRef.current.onstart = () => {
         setIsListening(true);
       };
     }
-  }, [isVoiceMode, isInterviewActive]);
+  }, [isVoiceMode, isInterviewActive, isRecording]);
 
   const startInterview = async () => {
     setIsInterviewActive(true);
@@ -173,6 +326,12 @@ export default function AIMockInterviewPage() {
     setMessages([]);
     setInterviewScore(null);
     setInterviewFeedback('');
+    setAdaptiveLevel(5);
+    setConceptsCovered([]);
+    setWeakAreas([]);
+    setStrongAreas([]);
+    setFlashcardsToAdd([]);
+    setResponseStartTime(Date.now());
 
     const newSession: InterviewSession = {
       id: Date.now().toString(),
@@ -183,6 +342,14 @@ export default function AIMockInterviewPage() {
         | 'beginner'
         | 'intermediate'
         | 'advanced',
+      adaptiveLevel: 5,
+      conceptsCovered: [],
+      weakAreas: [],
+      strongAreas: [],
+      totalQuestions: 0,
+      correctAnswers: 0,
+      averageResponseTime: 0,
+      voiceModeEnabled: isVoiceMode,
     };
 
     setSession(newSession);
@@ -196,6 +363,8 @@ export default function AIMockInterviewPage() {
         body: JSON.stringify({
           category: selectedCategory,
           difficulty: selectedDifficulty,
+          mode: selectedMode,
+          adaptiveLevel: adaptiveLevel,
         }),
       });
 
@@ -210,6 +379,7 @@ export default function AIMockInterviewPage() {
 
       setMessages([aiMessage]);
       newSession.messages = [aiMessage];
+      newSession.totalQuestions = 1;
       setSession(newSession);
 
       // Auto-speak the greeting in voice mode
@@ -238,12 +408,21 @@ export default function AIMockInterviewPage() {
           messages: messages,
           category: selectedCategory,
           difficulty: selectedDifficulty,
+          mode: selectedMode,
+          adaptiveLevel: adaptiveLevel,
+          conceptsCovered: conceptsCovered,
+          weakAreas: weakAreas,
+          strongAreas: strongAreas,
+          totalQuestions: session.totalQuestions,
+          correctAnswers: session.correctAnswers,
+          averageResponseTime: session.averageResponseTime,
         }),
       });
 
       const data = await response.json();
       setInterviewScore(data.score);
       setInterviewFeedback(data.feedback);
+      setFlashcardsToAdd(data.flashcards || []);
       setShowResults(true);
     } catch (error) {
       console.error('Failed to end interview:', error);
@@ -255,6 +434,9 @@ export default function AIMockInterviewPage() {
   const sendMessage = async (messageText?: string) => {
     const messageToSend = messageText || currentMessage;
     if (!messageToSend.trim() || !session) return;
+
+    const responseTime = responseStartTime ? Date.now() - responseStartTime : 0;
+    setResponseStartTime(Date.now());
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -279,6 +461,12 @@ export default function AIMockInterviewPage() {
           messages: newMessages,
           category: selectedCategory,
           difficulty: selectedDifficulty,
+          mode: selectedMode,
+          adaptiveLevel: adaptiveLevel,
+          responseTime: responseTime,
+          conceptsCovered: conceptsCovered,
+          weakAreas: weakAreas,
+          strongAreas: strongAreas,
         }),
       });
 
@@ -290,9 +478,45 @@ export default function AIMockInterviewPage() {
         content: data.message,
         timestamp: new Date(),
         isVoice: isVoiceMode,
+        evaluation: data.evaluation,
       };
 
       setMessages([...newMessages, aiMessage]);
+
+      // Update adaptive level and concepts
+      if (data.evaluation) {
+        setAdaptiveLevel(data.adaptiveLevel || adaptiveLevel);
+        setConceptsCovered(prev => [
+          ...prev,
+          ...(data.evaluation.concepts || []),
+        ]);
+        if (data.evaluation.score < 60) {
+          setWeakAreas(prev => [...prev, ...(data.evaluation.missing || [])]);
+        } else {
+          setStrongAreas(prev => [
+            ...prev,
+            ...(data.evaluation.concepts || []),
+          ]);
+        }
+      }
+
+      // Update session
+      const updatedSession = {
+        ...session,
+        messages: [...newMessages, aiMessage],
+        adaptiveLevel: data.adaptiveLevel || adaptiveLevel,
+        conceptsCovered: [
+          ...conceptsCovered,
+          ...(data.evaluation?.concepts || []),
+        ],
+        totalQuestions: session.totalQuestions + 1,
+        correctAnswers:
+          data.evaluation?.score >= 60
+            ? session.correctAnswers + 1
+            : session.correctAnswers,
+        averageResponseTime: (session.averageResponseTime + responseTime) / 2,
+      };
+      setSession(updatedSession);
 
       // Auto-speak AI response in voice mode
       if (isVoiceMode) {
@@ -305,17 +529,21 @@ export default function AIMockInterviewPage() {
     }
   };
 
-  // Enhanced voice functions
+  // Enhanced voice functions with better error handling
   const speakText = async (text: string) => {
     if (!isVoiceMode) return;
 
     setIsSpeaking(true);
     try {
-      // Use our TTS API for better quality
+      // Use our enhanced TTS API for better quality
       const response = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({
+          text,
+          voice: 'enhanced', // Request enhanced voice
+          speed: 0.9, // Slightly slower for better comprehension
+        }),
       });
 
       if (response.ok) {
@@ -329,8 +557,23 @@ export default function AIMockInterviewPage() {
           await audioRef.current.play();
         }
       } else {
-        // Fallback to browser TTS
+        // Fallback to browser TTS with enhanced settings
         const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.9;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        // Try to use a better voice if available
+        const voices = window.speechSynthesis.getVoices();
+        const preferredVoice = voices.find(
+          voice =>
+            voice.lang.startsWith('en') &&
+            (voice.name.includes('Google') || voice.name.includes('Microsoft'))
+        );
+        if (preferredVoice) {
+          utterance.voice = preferredVoice;
+        }
+
         utterance.onend = () => setIsSpeaking(false);
         utterance.onerror = () => setIsSpeaking(false);
         window.speechSynthesis.speak(utterance);
@@ -392,6 +635,31 @@ export default function AIMockInterviewPage() {
     setShowResults(false);
     setInterviewScore(null);
     setInterviewFeedback('');
+    setAdaptiveLevel(5);
+    setConceptsCovered([]);
+    setWeakAreas([]);
+    setStrongAreas([]);
+    setFlashcardsToAdd([]);
+    setShowFlashcards(false);
+  };
+
+  const addFlashcards = async () => {
+    if (flashcardsToAdd.length === 0) return;
+
+    try {
+      const response = await fetch('/api/flashcards/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ flashcards: flashcardsToAdd }),
+      });
+
+      if (response.ok) {
+        setFlashcardsToAdd([]);
+        alert(`Successfully added ${flashcardsToAdd.length} flashcards!`);
+      }
+    } catch (error) {
+      console.error('Failed to add flashcards:', error);
+    }
   };
 
   const getScoreColor = (score: number) => {
@@ -406,6 +674,18 @@ export default function AIMockInterviewPage() {
     return <AlertCircle className="w-6 h-6 text-red-600" />;
   };
 
+  const getAdaptiveLevelColor = (level: number) => {
+    if (level >= 7) return 'text-red-600';
+    if (level >= 4) return 'text-yellow-600';
+    return 'text-green-600';
+  };
+
+  const getAdaptiveLevelText = (level: number) => {
+    if (level >= 7) return 'Advanced';
+    if (level >= 4) return 'Intermediate';
+    return 'Beginner';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       {/* Hidden audio element for TTS playback */}
@@ -418,8 +698,9 @@ export default function AIMockInterviewPage() {
             🤖 AI Mock Interview
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Practice with our AI interviewer. Get real-time feedback and improve
-            your interview skills.
+            Practice with our AI interviewer. Get real-time feedback, adaptive
+            questioning, and improve your interview skills with voice-based
+            conversations.
           </p>
         </div>
 
@@ -430,6 +711,41 @@ export default function AIMockInterviewPage() {
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                 Choose Your Interview
               </h2>
+
+              {/* Interview Mode Selection */}
+              <div className="mb-8">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Interview Mode
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {interviewModes.map(mode => (
+                    <button
+                      key={mode.id}
+                      onClick={() => setSelectedMode(mode.id)}
+                      className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${
+                        selectedMode === mode.id
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-blue-300'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span className="text-2xl">{mode.icon}</span>
+                        <div>
+                          <h4 className="font-semibold text-gray-900 dark:text-white">
+                            {mode.name}
+                          </h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {mode.description}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-500">
+                            {mode.duration}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               {/* Category Selection */}
               <div className="mb-8">
@@ -524,10 +840,22 @@ export default function AIMockInterviewPage() {
                       {
                         difficultyLevels.find(d => d.id === selectedDifficulty)
                           ?.name
-                      }
+                      }{' '}
+                      • {interviewModes.find(m => m.id === selectedMode)?.name}
                     </p>
                   </div>
                   <div className="flex items-center space-x-4">
+                    {/* Adaptive Level Indicator */}
+                    <div className="flex items-center space-x-2">
+                      <Brain className="w-4 h-4" />
+                      <span className="text-sm">
+                        Level:{' '}
+                        <span className={getAdaptiveLevelColor(adaptiveLevel)}>
+                          {getAdaptiveLevelText(adaptiveLevel)}
+                        </span>
+                      </span>
+                    </div>
+
                     {/* Voice Mode Toggle */}
                     <button
                       onClick={toggleVoiceMode}
@@ -613,6 +941,21 @@ export default function AIMockInterviewPage() {
                           <p className="text-xs opacity-70 mt-1">
                             {message.timestamp.toLocaleTimeString()}
                           </p>
+                          {message.evaluation && (
+                            <div className="mt-2 p-2 bg-white/10 rounded text-xs">
+                              <div className="flex items-center space-x-2">
+                                <Star className="w-3 h-3" />
+                                <span>
+                                  Score: {message.evaluation.score}/100
+                                </span>
+                              </div>
+                              {message.evaluation.feedback && (
+                                <p className="mt-1 text-xs opacity-90">
+                                  {message.evaluation.feedback}
+                                </p>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -755,6 +1098,77 @@ export default function AIMockInterviewPage() {
                 </div>
               )}
 
+              {/* Performance Metrics */}
+              {session && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
+                    <Target className="w-8 h-8 mx-auto mb-2 text-blue-600" />
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {session.totalQuestions}
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      Questions Asked
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
+                    <CheckCircle className="w-8 h-8 mx-auto mb-2 text-green-600" />
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {session.correctAnswers}
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      Correct Answers
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
+                    <TrendingUp className="w-8 h-8 mx-auto mb-2 text-purple-600" />
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {Math.round(session.averageResponseTime / 1000)}s
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      Avg Response Time
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Concepts Covered */}
+              {conceptsCovered.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                    Concepts Covered
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {conceptsCovered.map((concept, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm"
+                      >
+                        {concept}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Weak Areas */}
+              {weakAreas.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                    Areas for Improvement
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {weakAreas.map((area, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded-full text-sm"
+                      >
+                        {area}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Feedback */}
               {interviewFeedback && (
                 <div className="mb-8">
@@ -766,6 +1180,29 @@ export default function AIMockInterviewPage() {
                       {interviewFeedback}
                     </p>
                   </div>
+                </div>
+              )}
+
+              {/* Flashcards */}
+              {flashcardsToAdd.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                    Flashcards Generated
+                  </h3>
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-4">
+                    <p className="text-blue-800 dark:text-blue-300 text-sm">
+                      We&apos;ve generated {flashcardsToAdd.length} flashcards
+                      based on areas where you can improve. These will help you
+                      study and prepare for future interviews.
+                    </p>
+                  </div>
+                  <button
+                    onClick={addFlashcards}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
+                  >
+                    <BookOpen className="w-4 h-4" />
+                    <span>Add to Flashcards</span>
+                  </button>
                 </div>
               )}
 

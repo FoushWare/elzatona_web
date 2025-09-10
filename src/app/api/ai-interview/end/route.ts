@@ -9,7 +9,20 @@ interface Message {
 
 export async function POST(request: NextRequest) {
   try {
-    const { sessionId, messages, category, difficulty } = await request.json();
+    const {
+      sessionId,
+      messages,
+      category,
+      difficulty,
+      mode,
+      adaptiveLevel,
+      conceptsCovered,
+      weakAreas,
+      strongAreas,
+      totalQuestions,
+      correctAnswers,
+      averageResponseTime,
+    } = await request.json();
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
@@ -32,16 +45,20 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Calculate score based on various factors
+    // Enhanced scoring calculation
     let score = 0;
     let feedback = '';
 
-    // Analyze response quality
-    const avgResponseLength =
-      userMessages.reduce(
-        (sum: number, msg: Message) => sum + msg.content.length,
-        0
-      ) / totalMessages;
+    // Use provided metrics if available, otherwise calculate from messages
+    const avgResponseLength = averageResponseTime
+      ? userMessages.reduce(
+          (sum: number, msg: Message) => sum + msg.content.length,
+          0
+        ) / totalMessages
+      : userMessages.reduce(
+          (sum: number, msg: Message) => sum + msg.content.length,
+          0
+        ) / totalMessages;
 
     const technicalTermsCount = userMessages.reduce(
       (sum: number, msg: Message) => {
@@ -64,12 +81,22 @@ export async function POST(request: NextRequest) {
       return sum + (msg.content.match(structure) || []).length;
     }, 0);
 
-    // Calculate base score
-    score += Math.min(30, avgResponseLength / 10); // Response length (max 30 points)
+    // Calculate base score with enhanced metrics
+    score += Math.min(25, avgResponseLength / 10); // Response length (max 25 points)
     score += Math.min(25, technicalTermsCount * 2); // Technical knowledge (max 25 points)
     score += Math.min(20, examplesCount * 3); // Examples and experience (max 20 points)
     score += Math.min(15, structureCount * 2); // Structured thinking (max 15 points)
     score += Math.min(10, totalMessages * 2); // Engagement (max 10 points)
+
+    // Bonus for adaptive level progression
+    if (adaptiveLevel && adaptiveLevel > 5) {
+      score += Math.min(5, (adaptiveLevel - 5) * 0.5); // Adaptive progression bonus
+    }
+
+    // Bonus for response time (faster responses)
+    if (averageResponseTime && averageResponseTime < 30000) {
+      score += 5; // Quick response bonus
+    }
 
     // Adjust for difficulty level
     const difficultyMultiplier = {
@@ -125,11 +152,27 @@ export async function POST(request: NextRequest) {
       ];
     feedback += `\n\nSuggestion: ${randomSuggestion}`;
 
+    // Generate flashcards for weak areas
+    const flashcards = [];
+    if (weakAreas && weakAreas.length > 0) {
+      weakAreas.forEach(area => {
+        flashcards.push({
+          question: `What is ${area} and how is it used in ${category} development?`,
+          answer: `This is a key concept in ${category} development that you should study further.`,
+          explanation: `Understanding ${area} is crucial for ${category} development. Consider reviewing documentation and practicing with examples.`,
+          category: category,
+          difficulty: difficulty,
+          tags: [area, category, 'interview-prep'],
+        });
+      });
+    }
+
     return NextResponse.json({
       success: true,
       score,
       feedback,
       sessionId,
+      flashcards: flashcards,
       analysis: {
         totalMessages,
         avgResponseLength: Math.round(avgResponseLength),
@@ -138,6 +181,14 @@ export async function POST(request: NextRequest) {
         structureCount,
         category,
         difficulty,
+        adaptiveLevel,
+        conceptsCovered: conceptsCovered || [],
+        weakAreas: weakAreas || [],
+        strongAreas: strongAreas || [],
+        totalQuestions: totalQuestions || totalMessages,
+        correctAnswers:
+          correctAnswers || Math.round(totalMessages * (score / 100)),
+        averageResponseTime: averageResponseTime || 0,
       },
     });
   } catch (error) {
