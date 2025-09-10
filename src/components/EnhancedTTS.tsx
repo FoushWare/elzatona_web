@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, VolumeX, Loader2, Settings, Play, Pause } from 'lucide-react';
+import { Volume2, VolumeX, Loader2, Play, Pause } from 'lucide-react';
 
 interface EnhancedTTSProps {
   text: string;
@@ -9,14 +9,6 @@ interface EnhancedTTSProps {
   autoPlay?: boolean;
   onStart?: () => void;
   onEnd?: () => void;
-}
-
-interface VoiceOption {
-  name: string;
-  lang: string;
-  gender: 'male' | 'female';
-  quality: 'high' | 'medium' | 'low';
-  description: string;
 }
 
 export default function EnhancedTTS({
@@ -31,61 +23,14 @@ export default function EnhancedTTS({
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoice, setSelectedVoice] =
     useState<SpeechSynthesisVoice | null>(null);
-  const [showSettings, setShowSettings] = useState(false);
-  const [rate, setRate] = useState(0.9);
-  const [pitch, setPitch] = useState(1.0);
-  const [volume, setVolume] = useState(1.0);
-  const [useServerTTS, setUseServerTTS] = useState(false);
+  const [rate] = useState(0.9);
+  const [pitch] = useState(1.0);
+  const [volume] = useState(1.0);
+  const [useServerTTS] = useState(false);
   const [serverTTSLoading, setServerTTSLoading] = useState(false);
 
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  // Enhanced voice options with better quality voices
-  const voiceOptions: VoiceOption[] = [
-    {
-      name: 'Google US English Female',
-      lang: 'en-US',
-      gender: 'female',
-      quality: 'high',
-      description: 'Natural, clear female voice',
-    },
-    {
-      name: 'Google US English Male',
-      lang: 'en-US',
-      gender: 'male',
-      quality: 'high',
-      description: 'Natural, clear male voice',
-    },
-    {
-      name: 'Microsoft Zira',
-      lang: 'en-US',
-      gender: 'female',
-      quality: 'high',
-      description: 'Professional female voice',
-    },
-    {
-      name: 'Microsoft David',
-      lang: 'en-US',
-      gender: 'male',
-      quality: 'high',
-      description: 'Professional male voice',
-    },
-    {
-      name: 'Alex',
-      lang: 'en-US',
-      gender: 'male',
-      quality: 'medium',
-      description: 'Standard male voice',
-    },
-    {
-      name: 'Samantha',
-      lang: 'en-US',
-      gender: 'female',
-      quality: 'medium',
-      description: 'Standard female voice',
-    },
-  ];
 
   useEffect(() => {
     const loadVoices = () => {
@@ -322,136 +267,6 @@ export default function EnhancedTTS({
           <Volume2 className="w-5 h-5" />
         )}
       </button>
-
-      {/* Settings Button */}
-      <button
-        onClick={() => setShowSettings(!showSettings)}
-        className="ml-2 p-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white transition-colors"
-        title="TTS Settings"
-      >
-        <Settings className="w-4 h-4" />
-      </button>
-
-      {/* Settings Panel */}
-      {showSettings && (
-        <div className="absolute top-12 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50 min-w-80">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            TTS Settings
-          </h3>
-
-          {/* Voice Selection */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Voice
-            </label>
-            <select
-              value={selectedVoice?.name || ''}
-              onChange={e => {
-                const voice = voices.find(v => v.name === e.target.value);
-                setSelectedVoice(voice || null);
-              }}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
-            >
-              {voices.map(voice => (
-                <option key={voice.name} value={voice.name}>
-                  {voice.name} ({voice.lang})
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* TTS Method */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              TTS Method
-            </label>
-            <div className="space-y-2">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="ttsMethod"
-                  checked={!useServerTTS}
-                  onChange={() => setUseServerTTS(false)}
-                  className="mr-2"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Browser TTS (Faster, Local)
-                </span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="ttsMethod"
-                  checked={useServerTTS}
-                  onChange={() => setUseServerTTS(true)}
-                  className="mr-2"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Server TTS (Better Quality)
-                </span>
-              </label>
-            </div>
-          </div>
-
-          {/* Speed Control */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Speed: {rate.toFixed(1)}x
-            </label>
-            <input
-              type="range"
-              min="0.5"
-              max="2"
-              step="0.1"
-              value={rate}
-              onChange={e => setRate(parseFloat(e.target.value))}
-              className="w-full"
-            />
-          </div>
-
-          {/* Pitch Control */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Pitch: {pitch.toFixed(1)}
-            </label>
-            <input
-              type="range"
-              min="0.5"
-              max="2"
-              step="0.1"
-              value={pitch}
-              onChange={e => setPitch(parseFloat(e.target.value))}
-              className="w-full"
-            />
-          </div>
-
-          {/* Volume Control */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Volume: {Math.round(volume * 100)}%
-            </label>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={volume}
-              onChange={e => setVolume(parseFloat(e.target.value))}
-              className="w-full"
-            />
-          </div>
-
-          {/* Voice Quality Info */}
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            <p>
-              💡 Tip: Google and Microsoft voices typically sound more natural
-            </p>
-            <p>
-              🎯 Server TTS may provide better quality but requires internet
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
