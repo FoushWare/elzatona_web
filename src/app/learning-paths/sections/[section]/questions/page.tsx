@@ -14,7 +14,7 @@ import { multipleChoiceQuestions } from '@/lib/multipleChoiceQuestions';
 import { javascriptQuestions } from '@/lib/javascriptQuestions';
 import { reactQuestions } from '@/lib/reactQuestions';
 import { greatFrontendQuestions } from '@/lib/greatfrontendQuestions';
-import SimpleTTS from '@/components/SimpleTTS';
+import EnhancedTTS from '@/components/EnhancedTTS';
 
 interface Question {
   id: string;
@@ -296,7 +296,7 @@ export default function LearningPathQuestionsPage() {
               <h3 className="text-lg font-semibold text-card-foreground flex-1">
                 {currentQuestion.question}
               </h3>
-              <SimpleTTS
+              <EnhancedTTS
                 text={currentQuestion.question}
                 className="flex-shrink-0 mt-1"
               />
