@@ -1,25 +1,147 @@
 'use client';
 
 import { useState } from 'react';
-// import { generalFrontendPhase2Questions } from "@/lib/internalResources";
 
-export default function TheSeniorDev02Page() {
+interface Question {
+  question: string;
+  code?: string;
+  options: { A: string; B: string; C: string; D: string };
+  correctAnswer: string;
+  explanation: string;
+}
+
+const performanceOptimizationQuestions: Question[] = [
+  {
+    question:
+      'What is the primary purpose of code splitting in web applications?',
+    code: `
+// Example of dynamic import for code splitting
+const LazyComponent = React.lazy(() => import('./LazyComponent'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </Suspense>
+  );
+}`,
+    options: {
+      A: 'To reduce the initial bundle size and improve loading performance',
+      B: 'To organize code into separate files for better maintainability',
+      C: 'To prevent code duplication across different modules',
+      D: 'To enable server-side rendering of components',
+    },
+    correctAnswer: 'A',
+    explanation:
+      'Code splitting allows you to split your code into various bundles which can then be loaded on demand or in parallel. This helps reduce the initial bundle size, which improves the initial loading performance of your application.',
+  },
+  {
+    question:
+      'Which of the following is the most effective way to optimize image loading performance?',
+    code: `
+// Image optimization techniques
+<img 
+  src="image.jpg" 
+  loading="lazy"
+  decoding="async"
+  alt="Description"
+  width="300"
+  height="200"
+/>`,
+    options: {
+      A: 'Using the largest possible image size for all devices',
+      B: 'Implementing lazy loading, proper sizing, and modern formats like WebP',
+      C: 'Loading all images immediately when the page loads',
+      D: 'Using only PNG format for all images',
+    },
+    correctAnswer: 'B',
+    explanation:
+      'The most effective approach combines lazy loading (loading images only when needed), proper sizing (serving appropriately sized images for different devices), and modern formats like WebP or AVIF which provide better compression than traditional formats.',
+  },
+  {
+    question:
+      'What is the purpose of the Critical Rendering Path in web performance?',
+    code: `
+// Critical CSS inlining
+<head>
+  <style>
+    /* Critical above-the-fold CSS */
+    .header { display: flex; }
+    .hero { background: blue; }
+  </style>
+  <link rel="preload" href="non-critical.css" as="style">
+</head>`,
+    options: {
+      A: 'To determine which CSS files should be loaded first',
+      B: 'To optimize the sequence of steps the browser takes to render a page',
+      C: 'To identify which JavaScript files are critical for functionality',
+      D: 'To measure the time it takes for a page to become interactive',
+    },
+    correctAnswer: 'B',
+    explanation:
+      'The Critical Rendering Path is the sequence of steps the browser goes through to convert HTML, CSS, and JavaScript into actual pixels on the screen. Optimizing this path improves perceived and actual loading performance.',
+  },
+  {
+    question:
+      'Which caching strategy is most appropriate for static assets like images and CSS files?',
+    code: `
+// Cache-Control headers for static assets
+Cache-Control: public, max-age=31536000, immutable
+
+// Service Worker caching strategy
+self.addEventListener('fetch', event => {
+  if (event.request.destination === 'image') {
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => response || fetch(event.request))
+    );
+  }
+});`,
+    options: {
+      A: 'Cache-Control: no-cache',
+      B: 'Cache-Control: public, max-age=31536000, immutable',
+      C: 'Cache-Control: private, max-age=300',
+      D: 'Cache-Control: no-store',
+    },
+    correctAnswer: 'B',
+    explanation:
+      'Static assets like images and CSS files that don\'t change frequently should use long-term caching with the "immutable" directive, allowing browsers to cache them for extended periods (1 year) without revalidation.',
+  },
+  {
+    question:
+      'What is the main benefit of using a Content Delivery Network (CDN)?',
+    code: `
+// CDN usage example
+// Instead of: https://mywebsite.com/assets/image.jpg
+// Use: https://cdn.mywebsite.com/assets/image.jpg
+
+// Multiple CDN endpoints for redundancy
+const cdnUrls = [
+  'https://cdn1.mywebsite.com',
+  'https://cdn2.mywebsite.com',
+  'https://cdn3.mywebsite.com'
+];`,
+    options: {
+      A: 'To reduce server costs by using shared hosting',
+      B: 'To improve security by encrypting all content',
+      C: 'To reduce latency by serving content from geographically closer servers',
+      D: 'To automatically compress all content',
+    },
+    correctAnswer: 'C',
+    explanation:
+      'CDNs improve performance by serving content from edge servers located geographically closer to users, reducing latency and improving loading times. This is especially beneficial for global applications.',
+  },
+];
+
+export default function PerformanceOptimizationPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  // const currentQuestion = generalFrontendPhase2Questions[currentQuestionIndex];
-  // const totalQuestions = generalFrontendPhase2Questions.length;
-
-  // Temporarily disabled to isolate build error
-  const currentQuestion = {
-    question: 'Question temporarily unavailable',
-    code: '',
-    options: { A: 'Option A', B: 'Option B', C: 'Option C', D: 'Option D' },
-    correctAnswer: 'A',
-  };
-  const totalQuestions = 1;
+  const currentQuestion =
+    performanceOptimizationQuestions[currentQuestionIndex];
+  const totalQuestions = performanceOptimizationQuestions.length;
 
   const handleAnswerSelect = (answer: string) => {
     setSelectedAnswer(answer);
@@ -45,12 +167,12 @@ export default function TheSeniorDev02Page() {
     }
   };
 
-  // const handleQuestionSelect = (index: number) => {
-  //   setCurrentQuestionIndex(index);
-  //   setShowAnswer(false);
-  //   setSelectedAnswer(null);
-  //   setIsCorrect(null);
-  // };
+  const handleQuestionSelect = (index: number) => {
+    setCurrentQuestionIndex(index);
+    setShowAnswer(false);
+    setSelectedAnswer(null);
+    setIsCorrect(null);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -164,20 +286,19 @@ export default function TheSeniorDev02Page() {
           Question Navigation
         </h3>
         <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
-          {/* generalFrontendPhase2Questions.map((_, index) => ( */}
-          {/* Temporarily disabled to isolate build error */}
-          {/* <button
+          {performanceOptimizationQuestions.map((_, index) => (
+            <button
               key={index}
               onClick={() => handleQuestionSelect(index)}
               className={`p-2 text-sm rounded-md transition-colors ${
                 index === currentQuestionIndex
-                  ? "bg-purple-600 text-white"
-                  : "bg-muted text-foreground hover:bg-muted/80"
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-muted text-foreground hover:bg-muted/80'
               }`}
             >
               {index + 1}
-            </button> */}
-          {/* ))} */}
+            </button>
+          ))}
         </div>
       </div>
 
