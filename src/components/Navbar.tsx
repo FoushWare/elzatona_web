@@ -139,6 +139,13 @@ export default function Navbar() {
           description: 'Video mock interviews and practice sessions',
         },
         {
+          href: '/ai-mock-interview',
+          label: 'AI Mock Interview',
+          icon: '🤖',
+          description:
+            'Practice with AI interviewer and get real-time feedback',
+        },
+        {
           href: '/culture-fit-interviews',
           label: 'Culture Fit Questions',
           icon: '🌟',
