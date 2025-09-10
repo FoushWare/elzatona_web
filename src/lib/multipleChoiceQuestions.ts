@@ -17,6 +17,169 @@ export interface MultipleChoiceQuestion {
 }
 
 export const multipleChoiceQuestions: MultipleChoiceQuestion[] = [
+  // Original Frontend Basics Questions (Preserved from collected content)
+  {
+    id: 'fb-q1',
+    question: 'Which of the following statements about display: block is true?',
+    options: [
+      'It takes only the width of its content.',
+      'It always starts on a new line.',
+      'Width and height cannot be set.',
+      'It behaves like inline elements.',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'Block-level elements always start on a new line and take up the full width of their container. They can have width and height properties set, unlike inline elements.',
+    category: 'css',
+    difficulty: 'easy',
+    tags: ['css', 'display', 'block'],
+  },
+  {
+    id: 'fb-q2',
+    question: 'What happens when you apply display: inline to an element?',
+    options: [
+      'It takes the full width of its parent.',
+      'It ignores width and height properties.',
+      'It always starts on a new line.',
+      'It behaves like a block element.',
+    ],
+    correctAnswer: 1,
+    explanation:
+      'Inline elements ignore width and height properties and only take up as much space as their content requires. They flow with text and do not start on new lines.',
+    category: 'css',
+    difficulty: 'easy',
+    tags: ['css', 'display', 'inline'],
+  },
+  {
+    id: 'fb-q3',
+    question:
+      'Which display type allows you to place elements side-by-side and set custom width and height?',
+    options: ['block', 'inline', 'inline-block', 'none of the above'],
+    correctAnswer: 2,
+    explanation:
+      'inline-block combines the best of both worlds: elements flow inline like inline elements but can have width and height set like block elements, making them perfect for side-by-side layouts with custom dimensions.',
+    category: 'css',
+    difficulty: 'easy',
+    tags: ['css', 'display', 'inline-block'],
+  },
+  {
+    id: 'fb-q4',
+    question:
+      'For an element with display: inline, which of the following is true?',
+    options: [
+      'You can set width and height freely.',
+      'Vertical margin works normally.',
+      'It flows with text and takes only content width.',
+      'It always pushes the next element to a new line.',
+    ],
+    correctAnswer: 2,
+    explanation:
+      'Inline elements flow with text content and only take up the width needed for their content. They cannot have width/height set and do not start on new lines.',
+    category: 'css',
+    difficulty: 'easy',
+    tags: ['css', 'display', 'inline'],
+  },
+  {
+    id: 'fb-q5',
+    question:
+      'Which of the following are examples of default block-level elements?',
+    options: ['<div>', '<p>', '<span>', '<h1>'],
+    correctAnswer: 0,
+    explanation:
+      'Block-level elements like <div>, <p>, and <h1> take up the full width of their container and start on new lines. <span> is an inline element by default.',
+    category: 'html',
+    difficulty: 'easy',
+    tags: ['html', 'block-elements'],
+  },
+  {
+    id: 'fb-q6',
+    question: 'Which of the following are examples of default inline elements?',
+    options: ['<a>', '<strong>', '<img>', '<section>'],
+    correctAnswer: 0,
+    explanation:
+      'Inline elements like <a> and <strong> flow with text and only take up the space needed for their content. <img> is inline-block by default, and <section> is a block element.',
+    category: 'html',
+    difficulty: 'easy',
+    tags: ['html', 'inline-elements'],
+  },
+  {
+    id: 'fb-q7',
+    question:
+      'If you want to create button-like navigation items that align side-by-side and allow custom width/height, which display property is most suitable?',
+    options: ['block', 'inline', 'inline-block', 'flex'],
+    correctAnswer: 2,
+    explanation:
+      'inline-block is perfect for navigation items because it allows elements to sit side-by-side (like inline) while still allowing you to set custom width and height (like block).',
+    category: 'css',
+    difficulty: 'easy',
+    tags: ['css', 'display', 'navigation'],
+  },
+  {
+    id: 'fb-q8',
+    question:
+      'What is the difference between `var`, `let`, and `const` in JavaScript?',
+    options: [
+      'var is function-scoped and hoisted, let and const are block-scoped with temporal dead zone',
+      'All three are exactly the same in modern JavaScript',
+      'var is for numbers, let is for strings, const is for objects',
+      'var is deprecated, let and const are the same thing',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'The key differences are in scoping, hoisting behavior, and mutability. `var` has function scope and is hoisted, while `let` and `const` have block scope and are in a temporal dead zone until declared.',
+    category: 'javascript',
+    difficulty: 'easy',
+    tags: ['javascript', 'variables', 'scope'],
+  },
+  {
+    id: 'fb-q9',
+    question: 'What are semantic HTML elements and why are they important?',
+    options: [
+      'They provide meaning to content, improving accessibility, SEO, and code maintainability',
+      'They are just fancy divs with no real purpose',
+      'They are only important for mobile websites',
+      'They are deprecated in HTML5',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Semantic elements provide meaning to the content, making it more accessible to assistive technologies and better for SEO. They also make the code more maintainable and easier to style.',
+    category: 'html',
+    difficulty: 'easy',
+    tags: ['html', 'semantic', 'accessibility'],
+  },
+  {
+    id: 'fb-q10',
+    question: 'When should you use CSS Grid vs Flexbox?',
+    options: [
+      'Grid for 2D layouts and page structure, Flexbox for 1D layouts and components',
+      "Always use Grid because it's more powerful",
+      "Always use Flexbox because it's simpler",
+      'They are exactly the same, use whichever you prefer',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Grid is for 2D layouts (both rows and columns), while Flexbox is for 1D layouts (either row or column). Grid is better for overall page structure, Flexbox is better for component-level layouts.',
+    category: 'css',
+    difficulty: 'medium',
+    tags: ['css', 'grid', 'flexbox', 'layout'],
+  },
+  {
+    id: 'fb-q11',
+    question: 'What is the execution order of this code?',
+    options: [
+      'start, end, promise, timeout',
+      'start, promise, end, timeout',
+      'start, timeout, end, promise',
+      'promise, start, end, timeout',
+    ],
+    correctAnswer: 0,
+    explanation:
+      'Synchronous code runs first, then microtasks (promises), then macrotasks (setTimeout). This is because microtasks have higher priority than macrotasks in the event loop.',
+    category: 'javascript',
+    difficulty: 'medium',
+    tags: ['javascript', 'event-loop', 'asynchronous'],
+  },
+
   // CSS Questions
   {
     id: 'css-1',

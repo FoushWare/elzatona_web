@@ -11,9 +11,6 @@ import {
   Info,
 } from 'lucide-react';
 import { multipleChoiceQuestions } from '@/lib/multipleChoiceQuestions';
-import { javascriptQuestions } from '@/lib/javascriptQuestions';
-import { reactQuestions } from '@/lib/reactQuestions';
-import { greatFrontendQuestions } from '@/lib/greatfrontendQuestions';
 import EnhancedTTS from '@/components/EnhancedTTS';
 
 interface Question {
@@ -46,25 +43,29 @@ export default function LearningPathQuestionsPage() {
   const getQuestionsBySection = (): Question[] => {
     switch (section) {
       case 'javascript':
-        return javascriptQuestions.map(q => ({
-          id: q.id,
-          question: q.question,
-          options: q.options || [q.answer, 'Option B', 'Option C', 'Option D'],
-          correctAnswer: 0, // First option is correct for JS questions
-          explanation: q.explanation || 'This is a JavaScript question.',
-          category: 'javascript',
-          difficulty: q.difficulty || 'medium',
-        }));
+        return multipleChoiceQuestions
+          .filter(q => q.category === 'javascript')
+          .map(q => ({
+            id: q.id,
+            question: q.question,
+            options: q.options,
+            correctAnswer: q.correctAnswer,
+            explanation: q.explanation,
+            category: q.category,
+            difficulty: q.difficulty,
+          }));
       case 'react':
-        return reactQuestions.map(q => ({
-          id: q.id,
-          question: q.question,
-          options: q.options || [q.answer, 'Option B', 'Option C', 'Option D'],
-          correctAnswer: 0, // First option is correct for React questions
-          explanation: q.explanation || 'This is a React question.',
-          category: 'react',
-          difficulty: q.difficulty || 'medium',
-        }));
+        return multipleChoiceQuestions
+          .filter(q => q.category === 'react')
+          .map(q => ({
+            id: q.id,
+            question: q.question,
+            options: q.options,
+            correctAnswer: q.correctAnswer,
+            explanation: q.explanation,
+            category: q.category,
+            difficulty: q.difficulty,
+          }));
       case 'css':
         return multipleChoiceQuestions
           .filter(q => q.category === 'css')
@@ -92,6 +93,19 @@ export default function LearningPathQuestionsPage() {
       case 'git':
         return multipleChoiceQuestions
           .filter(q => q.category === 'git')
+          .map(q => ({
+            id: q.id,
+            question: q.question,
+            options: q.options,
+            correctAnswer: q.correctAnswer,
+            explanation: q.explanation,
+            category: q.category,
+            difficulty: q.difficulty,
+          }));
+      case 'frontend-basics':
+        // Return a mix of CSS, HTML, and JavaScript questions for frontend basics
+        return multipleChoiceQuestions
+          .filter(q => ['css', 'html', 'javascript'].includes(q.category))
           .map(q => ({
             id: q.id,
             question: q.question,
