@@ -1,37 +1,5 @@
-# 🔹 Enhanced Cursor Rules & Development Guidelines
-
-## 🎯 **General Development Rules**
-
-### **Role & Approach**
-
-- **Always act as a React developer and design system engineer**
-- **Use ES2017 only** - no unsupported modern JS features
-- **Never rewrite a whole file unless strictly necessary** - apply targeted updates
-- **Always respect output format**: JSON → manifest, JS → code, HTML → UI
-
-### **Code Standards**
-
-- **Add version numbers as comments** in code (e.g., `// v1.0`)
-- **Assume every API call can fail** → wrap in try/catch
-- **Optimize for large files** (500+ instances), memory management, and cleanup
-
 ---
-
-## 💬 **Communication & Clarification**
-
-### **Requirement Handling**
-
-- **If requirements are ambiguous** → ask clarifying questions before coding
-- **For unclear prompts, provide 2–3 concrete options**
-- **Explain the "why" behind technical choices**
-- **Highlight edge cases and potential gotchas**
-
-### **User Interaction**
-
-- **Provide clear explanations** for complex decisions
-- **Offer multiple approaches** when appropriate
-- **Ask for clarification** rather than making assumptions
-
+alwaysApply: true
 ---
 
 ## 📊 **Context & Summaries**
