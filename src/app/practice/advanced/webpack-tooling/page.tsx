@@ -1,27 +1,201 @@
 'use client';
 
 import { useState } from 'react';
-// import { generalFrontendPhase1Questions } from "@/lib/internalResources";
 
-export default function TheSeniorDev01Page() {
+interface Question {
+  question: string;
+  code?: string;
+  options: { A: string; B: string; C: string; D: string };
+  correctAnswer: string;
+  explanation: string;
+}
+
+const webpackToolingQuestions: Question[] = [
+  {
+    question:
+      'What is the primary purpose of Webpack in modern frontend development?',
+    code: `
+// webpack.config.js
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+  },
+  module: {
+    rules: [
+      {
+        test: /\\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react']
+          }
+        }
+      }
+    ]
+  }
+};`,
+    options: {
+      A: 'To provide a development server for React applications',
+      B: 'To bundle, transform, and optimize JavaScript modules and assets',
+      C: 'To replace npm as a package manager',
+      D: 'To automatically generate CSS from JavaScript',
+    },
+    correctAnswer: 'B',
+    explanation:
+      'Webpack is a module bundler that takes modules with dependencies and generates static assets representing those modules. It bundles JavaScript files, transforms them (using loaders), and optimizes them for production.',
+  },
+  {
+    question:
+      'Which Webpack optimization technique is most effective for reducing bundle size?',
+    code: `
+// webpack.config.js - Code splitting example
+module.exports = {
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\\\/]node_modules[\\\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+        common: {
+          name: 'common',
+          minChunks: 2,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
+  }
+};`,
+    options: {
+      A: 'Increasing the number of entry points',
+      B: 'Implementing code splitting and tree shaking',
+      C: 'Using only synchronous imports',
+      D: 'Disabling all Webpack optimizations',
+    },
+    correctAnswer: 'B',
+    explanation:
+      'Code splitting allows you to split your code into various bundles which can be loaded on demand or in parallel. Tree shaking eliminates dead code. Both techniques significantly reduce bundle size and improve loading performance.',
+  },
+  {
+    question: 'What is the purpose of Webpack loaders?',
+    code: `
+// webpack.config.js - Loader configuration
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\\.(png|jpg|gif)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            outputPath: 'images/'
+          }
+        }
+      },
+      {
+        test: /\\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      }
+    ]
+  }
+};`,
+    options: {
+      A: 'To manage npm package dependencies',
+      B: 'To transform and process different types of files',
+      C: 'To optimize images automatically',
+      D: 'To generate TypeScript definitions',
+    },
+    correctAnswer: 'B',
+    explanation:
+      'Loaders are transformations that are applied to the source code of a module. They allow you to preprocess files as you import or "load" them. For example, you can use loaders to transform TypeScript to JavaScript, or to inline images as data URLs.',
+  },
+  {
+    question:
+      'Which tool is most effective for analyzing Webpack bundle composition?',
+    code: `
+// webpack.config.js - Bundle analyzer setup
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+module.exports = {
+  plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      reportFilename: 'bundle-report.html'
+    })
+  ]
+};
+
+// Alternative: webpack-bundle-analyzer CLI
+// npx webpack-bundle-analyzer dist/bundle.js`,
+    options: {
+      A: 'Chrome DevTools Performance tab',
+      B: 'webpack-bundle-analyzer',
+      C: 'ESLint',
+      D: 'Prettier',
+    },
+    correctAnswer: 'B',
+    explanation:
+      "webpack-bundle-analyzer is a tool that analyzes your bundle and shows you what's taking up space. It provides an interactive treemap visualization of the contents of all your bundles, helping you identify large dependencies and optimization opportunities.",
+  },
+  {
+    question: 'What is the difference between Webpack plugins and loaders?',
+    code: `
+// webpack.config.js - Plugins vs Loaders
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  module: {
+    rules: [
+      // LOADER: Transforms individual files
+      {
+        test: /\\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
+      }
+    ]
+  },
+  plugins: [
+    // PLUGIN: Performs actions on the entire bundle
+    new HtmlWebpackPlugin({
+      template: './src/index.html'
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css'
+    })
+  ]
+};`,
+    options: {
+      A: 'Loaders work on individual files, plugins work on the entire bundle',
+      B: 'Plugins are faster than loaders',
+      C: 'Loaders are only for JavaScript files',
+      D: 'There is no difference between them',
+    },
+    correctAnswer: 'A',
+    explanation:
+      'Loaders transform individual files as they are imported/required. Plugins perform actions on the entire bundle or chunks, such as generating HTML files, extracting CSS, or optimizing the bundle. Loaders work at the module level, plugins work at the bundle level.',
+  },
+];
+
+export default function WebpackToolingPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  // const currentQuestion = generalFrontendPhase1Questions[currentQuestionIndex];
-  // const totalQuestions = generalFrontendPhase1Questions.length;
-
-  // Temporarily disabled to isolate build error
-  const currentQuestion = {
-    question: 'Question temporarily unavailable',
-    code: '',
-    options: { A: 'Option A', B: 'Option B', C: 'Option C', D: 'Option D' },
-    correctAnswer: 'A',
-    explanation:
-      'This question is temporarily unavailable while we fix the build error.',
-  };
-  const totalQuestions = 1;
+  const currentQuestion = webpackToolingQuestions[currentQuestionIndex];
+  const totalQuestions = webpackToolingQuestions.length;
 
   const handleAnswerSelect = (answer: string) => {
     setSelectedAnswer(answer);
@@ -166,9 +340,7 @@ export default function TheSeniorDev01Page() {
           Question Navigation
         </h3>
         <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
-          {/* {generalFrontendPhase1Questions.map((_, index) => ( */}
-          {/* Temporarily disabled to isolate build error */}
-          {Array.from({ length: totalQuestions }).map((_, index) => (
+          {webpackToolingQuestions.map((_, index) => (
             <button
               key={index}
               onClick={() => handleQuestionSelect(index)}
