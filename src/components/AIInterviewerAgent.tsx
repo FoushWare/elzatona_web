@@ -5,6 +5,7 @@ import DailyIframe from '@daily-co/daily-js';
 
 interface AIInterviewerAgentProps {
   roomUrl: string;
+  interviewTopic: string;
   onAgentReady: () => void;
   onAgentError: (error: string) => void;
 }
@@ -20,6 +21,7 @@ interface InterviewQuestion {
 
 export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
   roomUrl,
+  interviewTopic,
   onAgentReady,
   onAgentError,
 }) => {
@@ -31,14 +33,153 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
   const [agentStatus, setAgentStatus] = useState<
     'connecting' | 'ready' | 'speaking' | 'listening' | 'thinking'
   >('connecting');
+  const [interviewQuestions, setInterviewQuestions] = useState<
+    InterviewQuestion[]
+  >([]);
+  const [questionsLoaded, setQuestionsLoaded] = useState(false);
 
-  // Sample interview questions
-  const interviewQuestions: InterviewQuestion[] = [
+  // Fetch questions from Firebase based on interview topic
+  const fetchQuestionsFromFirebase = async () => {
+    try {
+      // Map interview topics to learning paths
+      const topicToLearningPath: Record<string, string> = {
+        'Frontend Development': 'frontend-basics',
+        React: 'react-mastery',
+        JavaScript: 'javascript-deep-dive',
+        CSS: 'advanced-css',
+        TypeScript: 'typescript-essentials',
+        'Web Performance': 'performance-optimization',
+        'System Design': 'system-design',
+      };
+
+      const learningPath =
+        topicToLearningPath[interviewTopic] || 'frontend-basics';
+
+      const response = await fetch(`/api/questions/${learningPath}`);
+      const data = await response.json();
+
+      if (data.success && data.questions) {
+        // Convert Firebase questions to interview format
+        const convertedQuestions: InterviewQuestion[] = data.questions
+          .filter(
+            (q: { type: string; options: string[] }) =>
+              q.type === 'multiple-choice' && q.options && q.options.length > 0
+          )
+          .map(
+            (q: {
+              id: string;
+              question: string;
+              category: string;
+              difficulty: string;
+              explanation: string;
+            }) => ({
+              id: q.id,
+              question: q.question,
+              category: q.category || interviewTopic,
+              difficulty: q.difficulty || 'intermediate',
+              expectedKeywords: extractKeywords(q.question, q.explanation),
+              followUpQuestions: generateFollowUpQuestions(
+                q.question,
+                q.category
+              ),
+            })
+          );
+
+        setInterviewQuestions(convertedQuestions);
+        setQuestionsLoaded(true);
+        console.log(
+          `🤖 AI Agent loaded ${convertedQuestions.length} questions for ${interviewTopic}`
+        );
+      } else {
+        throw new Error('Failed to fetch questions from Firebase');
+      }
+    } catch (error) {
+      console.error('❌ Error fetching questions for AI agent:', error);
+      // Fallback to basic questions
+      setInterviewQuestions(getFallbackQuestions());
+      setQuestionsLoaded(true);
+    }
+  };
+
+  // Extract keywords from question and explanation
+  const extractKeywords = (question: string, explanation: string): string[] => {
+    const text = `${question} ${explanation}`.toLowerCase();
+    const commonKeywords = [
+      'react',
+      'javascript',
+      'css',
+      'html',
+      'state',
+      'props',
+      'component',
+      'function',
+      'variable',
+      'scope',
+      'closure',
+      'promise',
+      'async',
+      'dom',
+      'event',
+      'hook',
+      'effect',
+      'context',
+      'reducer',
+      'ref',
+      'layout',
+      'flexbox',
+      'grid',
+      'responsive',
+      'media',
+      'query',
+      'performance',
+      'optimization',
+      'bundle',
+      'webpack',
+      'babel',
+    ];
+
+    return commonKeywords.filter(keyword => text.includes(keyword));
+  };
+
+  // Generate follow-up questions based on the main question
+  const generateFollowUpQuestions = (
+    question: string,
+    category: string
+  ): string[] => {
+    const followUps: Record<string, string[]> = {
+      React: [
+        'Can you provide a practical example?',
+        'What are the common pitfalls with this concept?',
+        'How would you implement this in a real application?',
+      ],
+      JavaScript: [
+        'Can you write a code example?',
+        'What are the performance implications?',
+        'How does this relate to other JavaScript concepts?',
+      ],
+      CSS: [
+        'Can you show me the CSS code?',
+        'What are the browser compatibility considerations?',
+        'How would you make this responsive?',
+      ],
+    };
+
+    return (
+      followUps[category] || [
+        'Can you provide more details?',
+        'What are the practical applications?',
+        'How would you implement this?',
+      ]
+    );
+  };
+
+  // Fallback questions if Firebase fails
+  const getFallbackQuestions = (): InterviewQuestion[] => [
     {
-      id: 'react-1',
+      id: 'fallback-1',
       question:
         'Can you explain the difference between useState and useRef in React?',
-      category: 'React',
+      category: interviewTopic,
       difficulty: 'intermediate',
       expectedKeywords: ['state', 're-render', 'persistence', 'DOM', 'mutable'],
       followUpQuestions: [
@@ -47,9 +188,9 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
       ],
     },
     {
-      id: 'js-1',
+      id: 'fallback-2',
       question: 'What is a closure in JavaScript and why is it useful?',
-      category: 'JavaScript',
+      category: interviewTopic,
       difficulty: 'intermediate',
       expectedKeywords: ['function', 'scope', 'variable', 'access', 'private'],
       followUpQuestions: [
@@ -57,25 +198,12 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
         'How do closures help with data privacy?',
       ],
     },
-    {
-      id: 'css-1',
-      question: 'Explain the CSS Box Model and how it affects layout.',
-      category: 'CSS',
-      difficulty: 'beginner',
-      expectedKeywords: [
-        'content',
-        'padding',
-        'border',
-        'margin',
-        'width',
-        'height',
-      ],
-      followUpQuestions: [
-        'What happens when you set box-sizing: border-box?',
-        'How does the box model affect element sizing?',
-      ],
-    },
   ];
+
+  // Load questions when component mounts
+  useEffect(() => {
+    fetchQuestionsFromFirebase();
+  }, [interviewTopic]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!iframeRef.current || !roomUrl) return;
@@ -87,7 +215,6 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
       showParticipantsBar: false,
       userName: 'AI Interviewer',
       theme: {
-        accent: '#10b981',
         accentText: '#ffffff',
         background: '#f8fafc',
         backgroundAccent: '#e2e8f0',
@@ -146,10 +273,13 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
     return () => {
       iframe.destroy();
     };
-  }, [roomUrl, onAgentReady, onAgentError]);
+  }, [roomUrl, onAgentReady, onAgentError]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const startInterview = () => {
-    if (interviewQuestions.length === 0) return;
+    if (!questionsLoaded || interviewQuestions.length === 0) {
+      console.log('⏳ Waiting for questions to load...');
+      return;
+    }
 
     const randomQuestion =
       interviewQuestions[Math.floor(Math.random() * interviewQuestions.length)];
@@ -222,12 +352,12 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
   };
 
   // This would be called when the human participant speaks
-  const processHumanSpeech = (transcript: string) => {
-    if (isListening && transcript.trim()) {
-      setIsListening(false);
-      evaluateAnswer(transcript);
-    }
-  };
+  // const processHumanSpeech = (transcript: string) => {
+  //   if (isListening && transcript.trim()) {
+  //     setIsListening(false);
+  //     evaluateAnswer(transcript);
+  //   }
+  // };
 
   return (
     <div className="hidden">
