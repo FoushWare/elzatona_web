@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { learningPaths } from '@/lib/resources';
 import { PageHeader } from '@/components/PageHeader';
 import { StatisticsSection } from '@/components/StatisticsSection';
@@ -18,6 +18,8 @@ export default function LearningPathsPage() {
   const [collapsedCards, setCollapsedCards] = useState<Set<string>>(
     new Set(learningPaths.map(path => path.id)) // All cards start closed
   );
+  const [lastOpenedCard, setLastOpenedCard] = useState<string | null>(null);
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const filteredPaths = learningPaths.filter(
     path =>
@@ -45,9 +47,10 @@ export default function LearningPathsPage() {
   const toggleCard = (pathId: string) => {
     setCollapsedCards(prev => {
       const newSet = new Set(prev);
+      const wasCardClosed = newSet.has(pathId);
 
       // If the clicked card is currently closed, close all others and open this one
-      if (newSet.has(pathId)) {
+      if (wasCardClosed) {
         // Close all cards first
         newSet.clear();
         // Then add all path IDs except the clicked one (keeping it open)
@@ -56,12 +59,15 @@ export default function LearningPathsPage() {
             newSet.add(path.id);
           }
         });
+        // Track that this card was just opened
+        setLastOpenedCard(pathId);
       } else {
         // If the clicked card is currently open, close it (close all cards)
         newSet.clear();
         learningPaths.forEach(path => {
           newSet.add(path.id);
         });
+        setLastOpenedCard(null);
       }
 
       return newSet;
@@ -72,6 +78,38 @@ export default function LearningPathsPage() {
     setSelectedDifficulty('all');
     setSelectedCategory('all');
   };
+
+  // Scroll to action buttons when a card is opened
+  useEffect(() => {
+    if (lastOpenedCard && cardRefs.current[lastOpenedCard]) {
+      // Wait for the card animation to complete before scrolling
+      const timer = setTimeout(() => {
+        const cardElement = cardRefs.current[lastOpenedCard];
+        if (cardElement) {
+          // Find the action buttons section within the card
+          const actionButtons = cardElement.querySelector(
+            '[data-action-buttons]'
+          );
+          if (actionButtons) {
+            actionButtons.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+              inline: 'nearest',
+            });
+          } else {
+            // Fallback: scroll to the card itself
+            cardElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+              inline: 'nearest',
+            });
+          }
+        }
+      }, 350); // Wait for the card expansion animation (300ms + buffer)
+
+      return () => clearTimeout(timer);
+    }
+  }, [lastOpenedCard]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-slate-50 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900 py-4 sm:py-6 lg:py-8">
@@ -118,6 +156,7 @@ export default function LearningPathsPage() {
           collapsedCards={collapsedCards}
           onToggleCard={toggleCard}
           onClearFilters={clearFilters}
+          cardRefs={cardRefs}
         />
 
         {/* Call to Action */}
