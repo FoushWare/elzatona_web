@@ -122,6 +122,7 @@ export default function ScheduleInterviewPage() {
             {/* AI Interviewer Agent */}
             <AIInterviewerAgent
               roomUrl={room.url}
+              interviewTopic={room.topic}
               onAgentReady={handleAgentReady}
               onAgentError={handleAgentError}
             />
