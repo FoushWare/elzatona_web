@@ -31,6 +31,7 @@
     "pre-commit:full": "cp .husky/pre-commit-full .husky/pre-commit && echo '✅ Switched to FULL pre-commit checks'"
   },
   "dependencies": {
+    "@daily-co/daily-js": "^0.84.0",
     "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.7.0",
     "axios": "^1.11.0",
