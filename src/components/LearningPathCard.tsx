@@ -19,6 +19,7 @@ export interface LearningPathCardProps {
   path: LearningPath;
   isCollapsed: boolean;
   onToggle: (pathId: string) => void;
+  cardRef?: (el: HTMLDivElement | null) => void;
   className?: string;
 }
 
@@ -67,6 +68,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
   path,
   isCollapsed,
   onToggle,
+  cardRef,
   className = '',
 }) => {
   const category = path.id.split('-')[0];
@@ -74,6 +76,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
   return (
     <div className="relative">
       <div
+        ref={cardRef}
         data-testid="learning-path-card"
         className={`bg-gradient-to-br from-gray-50 via-slate-50 via-gray-50 to-slate-50 dark:from-gray-800/20 dark:via-slate-800/20 dark:via-gray-800/20 dark:to-slate-800/20 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300 transform group hover:scale-[1.02] backdrop-blur-sm ${className}`}
       >
@@ -265,7 +268,10 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div
+              data-action-buttons
+              className="flex flex-col sm:flex-row gap-3"
+            >
               <Link
                 href={`/learning-paths/${path.id}/questions`}
                 className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-gray-600 to-gray-700 dark:from-gray-500 dark:to-gray-600 text-white font-semibold rounded-xl hover:from-gray-700 hover:to-gray-800 dark:hover:from-gray-600 dark:hover:to-gray-700 hover:scale-105 transform transition-all duration-300 shadow-lg hover:shadow-gray-500/20 dark:hover:shadow-gray-400/25 text-sm lg:text-base"
