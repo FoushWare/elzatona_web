@@ -45,12 +45,15 @@ export default function AddToFlashcard({
     if (!user) return;
 
     try {
-      const { exists, flashcardId: existingId } =
-        await flashcardService.checkFlashcardExists(user.uid, question);
+      const result = await flashcardService.checkFlashcardExists(
+        user.uid,
+        question
+      );
 
-      if (exists && existingId) {
+      // Handle case where result might be undefined or null
+      if (result && result.exists && result.flashcardId) {
         setState('saved');
-        setFlashcardId(existingId);
+        setFlashcardId(result.flashcardId);
       }
     } catch (error) {
       console.error('Error checking existing flashcard:', error);
