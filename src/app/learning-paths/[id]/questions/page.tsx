@@ -45,12 +45,25 @@ export default function QuestionsPage() {
       return null;
     }
 
+    // Filter only multiple-choice questions and ensure they have required fields
+    const multipleChoiceQuestions = firebaseQuestions.filter(
+      q =>
+        q.type === 'multiple-choice' &&
+        q.options &&
+        q.options.length > 0 &&
+        typeof q.correctAnswer === 'number'
+    );
+
+    if (multipleChoiceQuestions.length === 0) {
+      return null;
+    }
+
     // Group questions by category or create a single group
     const groups: QuestionGroup[] = [
       {
         id: 'main',
-        title: 'CSS Display Properties',
-        questions: firebaseQuestions.map(q => ({
+        title: 'Multiple Choice Questions',
+        questions: multipleChoiceQuestions.map(q => ({
           id: q.id,
           title: q.title,
           question: q.question,
@@ -67,7 +80,7 @@ export default function QuestionsPage() {
 
     return {
       groups,
-      totalQuestions: firebaseQuestions.length,
+      totalQuestions: multipleChoiceQuestions.length,
     };
   }, [firebaseQuestions, learningPath]);
 
