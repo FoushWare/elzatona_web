@@ -4,46 +4,15 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { learningPaths } from '@/lib/resources';
 import { PageHeader } from '@/components/PageHeader';
-import { StatisticsSection } from '@/components/StatisticsSection';
-import { FilterButtons } from '@/components/FilterButtons';
 import { LearningPathsGrid } from '@/components/LearningPathsGrid';
 import { CallToAction } from '@/components/CallToAction';
 
 export default function LearningPathsPage() {
-  const [selectedDifficulty, setSelectedDifficulty] = useState<
-    'beginner' | 'intermediate' | 'advanced' | 'all'
-  >('all');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [showStatistics, setShowStatistics] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
   const [collapsedCards, setCollapsedCards] = useState<Set<string>>(
     new Set(learningPaths.map(path => path.id)) // All cards start closed
   );
   const [lastOpenedCard, setLastOpenedCard] = useState<string | null>(null);
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
-  const filteredPaths = learningPaths.filter(
-    path =>
-      (selectedDifficulty === 'all' ||
-        path.difficulty === selectedDifficulty) &&
-      (selectedCategory === 'all' || path.id.includes(selectedCategory))
-  );
-
-  const categories = [
-    'all',
-    'javascript',
-    'react',
-    'css',
-    'typescript',
-    'testing',
-    'performance',
-    'security',
-    'system-design',
-    'tools',
-    'ai-tools',
-    'interview',
-    'english',
-  ];
 
   const toggleCard = (pathId: string) => {
     setCollapsedCards(prev => {
@@ -73,11 +42,6 @@ export default function LearningPathsPage() {
 
       return newSet;
     });
-  };
-
-  const clearFilters = () => {
-    setSelectedDifficulty('all');
-    setSelectedCategory('all');
   };
 
   // Scroll to the end of the card (flashcard icon) when a card is opened
@@ -118,12 +82,8 @@ export default function LearningPathsPage() {
         {/* Header */}
         <PageHeader
           title="Learning Paths"
-          description="Curated educational journeys to master frontend development skills through carefully selected resources"
-          showMobileButtons={true}
-          onToggleStatistics={() => setShowStatistics(!showStatistics)}
-          onToggleFilters={() => setShowFilters(!showFilters)}
-          showStatistics={showStatistics}
-          showFilters={showFilters}
+          description="Your path to success in interviews"
+          showMobileButtons={false}
         />
 
         {/* Schedule Interview Button */}
@@ -149,37 +109,11 @@ export default function LearningPathsPage() {
           </Link>
         </div>
 
-        {/* Statistics */}
-        <StatisticsSection
-          learningPathsCount={learningPaths.length}
-          totalHours={learningPaths.reduce(
-            (sum, path) => sum + path.estimatedTime,
-            0
-          )}
-          totalResources={learningPaths.reduce(
-            (sum, path) => sum + path.resources.length,
-            0
-          )}
-          categoriesCount={categories.length - 1}
-          isVisible={showStatistics}
-        />
-
-        {/* Filters */}
-        <FilterButtons
-          selectedDifficulty={selectedDifficulty}
-          selectedCategory={selectedCategory}
-          onDifficultyChange={setSelectedDifficulty}
-          onCategoryChange={setSelectedCategory}
-          categories={categories}
-          isVisible={showFilters}
-        />
-
         {/* Learning Paths Grid */}
         <LearningPathsGrid
-          paths={filteredPaths}
+          paths={learningPaths}
           collapsedCards={collapsedCards}
           onToggleCard={toggleCard}
-          onClearFilters={clearFilters}
           cardRefs={cardRefs}
         />
 

@@ -6,7 +6,6 @@ export interface LearningPathsGridProps {
   paths: LearningPath[];
   collapsedCards: Set<string>;
   onToggleCard: (pathId: string) => void;
-  onClearFilters: () => void;
   cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
   className?: string;
 }
@@ -15,12 +14,11 @@ export const LearningPathsGrid: React.FC<LearningPathsGridProps> = ({
   paths,
   collapsedCards,
   onToggleCard,
-  onClearFilters,
   cardRefs,
   className = '',
 }) => {
   if (paths.length === 0) {
-    return <EmptyState onClearFilters={onClearFilters} />;
+    return <EmptyState />;
   }
 
   return (
