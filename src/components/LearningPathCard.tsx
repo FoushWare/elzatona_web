@@ -60,7 +60,7 @@ const getDifficultyColor = (difficulty: string): string => {
     case 'advanced':
       return 'text-red-600 bg-red-100 dark:bg-red-900/20 dark:text-red-400';
     default:
-      return 'text-gray-600 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400';
+      return 'text-muted-foreground bg-gray-100 dark:bg-gray-900/20';
   }
 };
 
@@ -81,19 +81,21 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
         className={`bg-gradient-to-br from-gray-50 via-slate-50 via-gray-50 to-slate-50 dark:from-gray-800/20 dark:via-slate-800/20 dark:via-gray-800/20 dark:to-slate-800/20 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300 transform group hover:scale-[1.02] backdrop-blur-sm ${className}`}
       >
         {/* Header Row - Always Visible */}
-        <div
+        <button
           data-testid="card-header"
-          className="p-4 cursor-pointer border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:via-slate-50 hover:to-gray-50 dark:hover:from-gray-800/30 dark:hover:via-slate-800/30 dark:hover:to-gray-800/30 transition-all duration-300 rounded-t-2xl"
+          className="w-full p-4 cursor-pointer border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:via-slate-50 hover:to-gray-50 dark:hover:from-gray-800/30 dark:hover:via-slate-800/30 dark:hover:to-gray-800/30 transition-all duration-300 rounded-t-2xl text-left"
           onClick={() => onToggle(path.id)}
+          aria-expanded={!isCollapsed}
+          aria-label={`Toggle ${path.title} learning path details`}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3 min-w-0 flex-1">
               <span className="text-xl flex-shrink-0">
                 {getCategoryIcon(category)}
               </span>
-              <h3 className="text-lg font-bold bg-gradient-to-r from-gray-700 via-slate-700 to-gray-700 dark:from-gray-300 dark:via-slate-300 dark:to-gray-300 bg-clip-text text-transparent truncate drop-shadow-sm">
+              <div className="text-lg font-bold bg-gradient-to-r from-gray-700 via-slate-700 to-gray-700 dark:from-gray-300 dark:via-slate-300 dark:to-gray-300 bg-clip-text text-transparent truncate drop-shadow-sm text-foreground">
                 {path.title}
-              </h3>
+              </div>
             </div>
             <div className="flex items-center space-x-3 flex-shrink-0">
               {path.questionCount && (
@@ -102,7 +104,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
                 </span>
               )}
               <svg
-                className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
+                className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ${
                   isCollapsed ? '' : 'rotate-180'
                 }`}
                 fill="none"
@@ -118,7 +120,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
               </svg>
             </div>
           </div>
-        </div>
+        </button>
 
         {/* Collapsible Content */}
         <div
@@ -156,7 +158,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             {/* Difficulty Badge */}
             <div className="mb-4">
               <div className="flex items-center space-x-2">
-                <span className="text-lg">
+                <span className="text-lg text-foreground">
                   {getDifficultyIcon(path.difficulty)}
                 </span>
                 <span
@@ -170,26 +172,32 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             {/* Stats */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4 mb-3 sm:mb-4 lg:mb-6">
               <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 dark:from-emerald-600 dark:via-teal-600 dark:to-cyan-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
-                <span className="text-lg sm:text-xl lg:text-2xl mb-1">📚</span>
+                <span className="text-lg sm:text-xl lg:text-2xl mb-1 text-foreground">
+                  📚
+                </span>
                 <span className="text-xs sm:text-sm font-semibold text-white">
                   {path.resources.length} resources
                 </span>
               </div>
               <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 dark:from-orange-600 dark:via-red-600 dark:to-pink-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
-                <span className="text-lg sm:text-xl lg:text-2xl mb-1">⏱️</span>
+                <span className="text-lg sm:text-xl lg:text-2xl mb-1 text-foreground">
+                  ⏱️
+                </span>
                 <span className="text-xs sm:text-sm font-semibold text-white">
                   {path.estimatedTime} hours
                 </span>
               </div>
               <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 dark:from-violet-600 dark:via-purple-600 dark:to-fuchsia-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
-                <span className="text-lg sm:text-xl lg:text-2xl mb-1">🎯</span>
+                <span className="text-lg sm:text-xl lg:text-2xl mb-1 text-foreground">
+                  🎯
+                </span>
                 <span className="text-xs sm:text-sm font-semibold text-white">
                   {path.targetSkills.length} skills
                 </span>
               </div>
               {path.questionCount && (
                 <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
-                  <span className="text-lg sm:text-xl lg:text-2xl mb-1">
+                  <span className="text-lg sm:text-xl lg:text-2xl mb-1 text-foreground">
                     🧠
                   </span>
                   <span className="text-xs sm:text-sm font-semibold text-white">
@@ -201,14 +209,14 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
 
             {/* Target Skills */}
             <div className="mb-3 sm:mb-4 lg:mb-6">
-              <h4 className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
+              <div className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
                 Skills you&apos;ll learn:
-              </h4>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {path.targetSkills.slice(0, 4).map(skill => (
                   <span
                     key={skill}
-                    className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-gray-100 via-slate-100 to-gray-100 dark:from-gray-800/40 dark:via-slate-800/40 dark:to-gray-800/40 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 shadow-sm"
+                    className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-gray-100 via-slate-100 to-gray-100 dark:from-gray-800/40 dark:via-slate-800/40 dark:to-gray-800/40 text-foreground border border-gray-200 dark:border-gray-600 shadow-sm"
                   >
                     {skill}
                   </span>
@@ -224,14 +232,14 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             {/* Prerequisites */}
             {path.prerequisites && path.prerequisites.length > 0 && (
               <div className="mb-3 sm:mb-4 lg:mb-6">
-                <h4 className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
+                <div className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
                   Prerequisites:
-                </h4>
+                </div>
                 <div className="flex flex-wrap gap-1 sm:gap-2">
                   {path.prerequisites.map(prereq => (
                     <span
                       key={prereq}
-                      className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                      className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-gray-100 text-muted-foreground dark:bg-gray-800"
                     >
                       {prereq}
                     </span>
@@ -242,9 +250,9 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
 
             {/* Resources Preview */}
             <div className="mb-3 sm:mb-4 lg:mb-6">
-              <h4 className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
+              <div className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
                 Featured Resources:
-              </h4>
+              </div>
               <div className="space-y-1 sm:space-y-2">
                 {path.resources.slice(0, 3).map(resourceId => {
                   const resource = getResourceById(resourceId);
