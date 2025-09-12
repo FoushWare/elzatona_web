@@ -37,8 +37,8 @@ export default function ChatGPT() {
     setIsLoading(true);
 
     try {
-      // Call the Groq API (free alternative)
-      const response = await fetch('/api/groq', {
+      // Call the Qwen AI API (free alternative)
+      const response = await fetch('/api/qwen', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ export default function ChatGPT() {
                 <div>
                   <h3 className="font-bold text-lg">AI Learning Assistant</h3>
                   <p className="text-xs text-blue-100 font-medium">
-                    Powered by Groq AI
+                    Powered by Qwen AI
                   </p>
                 </div>
               </div>
@@ -228,8 +228,8 @@ export default function ChatGPT() {
                               setInputValue('');
                               setIsLoading(true);
 
-                              // Call Groq API with the suggested question
-                              fetch('/api/groq', {
+                              // Call Qwen AI API with the suggested question
+                              fetch('/api/qwen', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
