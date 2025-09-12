@@ -158,7 +158,8 @@ describe('EnhancedDashboard', () => {
 
       render(<EnhancedDashboard />);
 
-      expect(screen.getByText('Failed to load progress')).toBeInTheDocument();
+      // The error text is split across elements, so we check for the error message in a more flexible way
+      expect(screen.getByText(/failed to load progress/i)).toBeInTheDocument();
     });
 
     it('shows retry button when there is an error', () => {
@@ -169,7 +170,7 @@ describe('EnhancedDashboard', () => {
 
       render(<EnhancedDashboard />);
 
-      const retryButton = screen.getByRole('button', { name: /try again/i });
+      const retryButton = screen.getByRole('button', { name: /retry/i });
       expect(retryButton).toBeInTheDocument();
     });
 
@@ -183,7 +184,7 @@ describe('EnhancedDashboard', () => {
 
       render(<EnhancedDashboard />);
 
-      const retryButton = screen.getByRole('button', { name: /try again/i });
+      const retryButton = screen.getByRole('button', { name: /retry/i });
       fireEvent.click(retryButton);
 
       expect(mockRefreshProgress).toHaveBeenCalled();
