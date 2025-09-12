@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modern olive branch design -->
+  
+  <!-- Main stem -->
+  <path d="M 100 40 L 100 160" 
+        stroke="#4a7c59" 
+        stroke-width="6" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <!-- Left branch -->
+  <path d="M 100 80 Q 60 100 40 120" 
+        stroke="#4a7c59" 
+        stroke-width="4" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <!-- Right branch -->
+  <path d="M 100 80 Q 140 100 160 120" 
+        stroke="#4a7c59" 
+        stroke-width="4" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <!-- Olive leaves - Left side -->
+  <g>
+    <!-- Leaf 1 -->
+    <path d="M 50 90 Q 35 85 30 95 Q 35 105 50 100" 
+          fill="#6b8e23" 
+          stroke="#556b2f" 
+          stroke-width="1"/>
+    
+    <!-- Leaf 2 -->
+    <path d="M 45 110 Q 30 105 25 115 Q 30 125 45 120" 
+          fill="#6b8e23" 
+          stroke="#556b2f" 
+          stroke-width="1"/>
+    
+    <!-- Leaf 3 -->
+    <path d="M 40 130 Q 25 125 20 135 Q 25 145 40 140" 
+          fill="#6b8e23" 
+          stroke="#556b2f" 
+          stroke-width="1"/>
+  </g>
+  
+  <!-- Olive leaves - Right side -->
+  <g>
+    <!-- Leaf 4 -->
+    <path d="M 150 90 Q 165 85 170 95 Q 165 105 150 100" 
+          fill="#6b8e23" 
+          stroke="#556b2f" 
+          stroke-width="1"/>
+    
+    <!-- Leaf 5 -->
+    <path d="M 155 110 Q 170 105 175 115 Q 170 125 155 120" 
+          fill="#6b8e23" 
+          stroke="#556b2f" 
+          stroke-width="1"/>
+    
+    <!-- Leaf 6 -->
+    <path d="M 160 130 Q 175 125 180 135 Q 175 145 160 140" 
+          fill="#6b8e23" 
+          stroke="#556b2f" 
+          stroke-width="1"/>
+  </g>
+  
+  <!-- Olive fruits -->
+  <g>
+    <!-- Left olives -->
+    <circle cx="60" cy="100" r="4" fill="#556b2f"/>
+    <circle cx="50" cy="120" r="3" fill="#556b2f"/>
+    
+    <!-- Right olives -->
+    <circle cx="140" cy="100" r="4" fill="#556b2f"/>
+    <circle cx="150" cy="120" r="3" fill="#556b2f"/>
+  </g>
+  
+  <!-- Center circle for text -->
+  <circle cx="100" cy="100" r="25" 
+          fill="rgba(255,255,255,0.1)" 
+          stroke="rgba(107,142,35,0.3)" 
+          stroke-width="2"/>
+  
+  <!-- "Z" in center -->
+  <text x="100" y="108" 
+        font-family="Arial, sans-serif" 
+        font-size="20" 
+        font-weight="bold" 
+        text-anchor="middle" 
+        fill="#6b8e23">Z</text>
+</svg>

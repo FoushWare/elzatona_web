@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Minimalist olive branch -->
+  
+  <!-- Main stem -->
+  <path d="M 50 20 L 50 80" 
+        stroke="#6b8e23" 
+        stroke-width="3" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <!-- Left branch -->
+  <path d="M 50 40 Q 30 50 20 60" 
+        stroke="#6b8e23" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <!-- Right branch -->
+  <path d="M 50 40 Q 70 50 80 60" 
+        stroke="#6b8e23" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <!-- Simple olive leaves -->
+  <g>
+    <!-- Left leaves -->
+    <ellipse cx="25" cy="45" rx="8" ry="15" fill="#6b8e23" transform="rotate(-30 25 45)"/>
+    <ellipse cx="20" cy="60" rx="6" ry="12" fill="#6b8e23" transform="rotate(-45 20 60)"/>
+    
+    <!-- Right leaves -->
+    <ellipse cx="75" cy="45" rx="8" ry="15" fill="#6b8e23" transform="rotate(30 75 45)"/>
+    <ellipse cx="80" cy="60" rx="6" ry="12" fill="#6b8e23" transform="rotate(45 80 60)"/>
+  </g>
+  
+  <!-- Small olives -->
+  <circle cx="30" cy="50" r="2" fill="#556b2f"/>
+  <circle cx="70" cy="50" r="2" fill="#556b2f"/>
+</svg>
