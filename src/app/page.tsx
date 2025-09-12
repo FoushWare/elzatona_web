@@ -29,21 +29,16 @@ export default function Home() {
                 </span>
               </h1>
               <div className="text-2xl md:text-3xl mb-4 text-blue-200 font-medium">
-                <span className="text-blue-300">Zatona Web 🫒</span>
-              </div>
-              <div className="text-lg text-blue-100 mb-6 opacity-80">
-                <span className="text-blue-200">Zatona</span> = Olive •{' '}
-                <span className="text-blue-200">Web</span> = Web Development
-                <br />
-                <span className="text-sm opacity-75">
-                  (Zatona Web = Olive Web Development)
+                <span className="text-blue-300">
+                  Frontend Development Platform
                 </span>
               </div>
+              <div className="text-lg text-blue-100 mb-6 opacity-80">
+                Master frontend development with comprehensive learning
+                resources
+              </div>
               <p className="text-xl text-blue-100 mb-10 max-w-3xl mx-auto leading-relaxed">
-                Master frontend development with our comprehensive platform
-                featuring practice questions, learning paths, coding challenges,
-                and real-time AI assistance. Perfect for interview preparation
-                and skill building.
+                your way to master interviews
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 <Link
@@ -70,7 +65,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
-                Why Choose Zatona Web?
+                Why Choose Our Platform?
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
                 Our platform combines cutting-edge technology with proven
@@ -145,7 +140,7 @@ export default function Home() {
             </h2>
             <p className="text-xl mb-10 max-w-2xl mx-auto leading-relaxed text-blue-50">
               Join thousands of developers who are already acing their frontend
-              interviews with <span className="text-blue-200">Zatona Web</span>
+              interviews with our comprehensive platform
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link
