@@ -21,14 +21,14 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   };
 
   if (!showText) {
-    // Icon only - using the new zatona-web-02.jpg as icon
+    // Icon only - using the new zatona-web-black.png as icon
     return (
       <div className={`${className}`}>
         <Image
-          src="/zatona-web-02.jpg"
+          src="/zatona-web-black.png"
           alt="Zatona Web Icon"
-          width={824}
-          height={738}
+          width={580}
+          height={564}
           className="w-10 h-10"
           priority
         />
@@ -37,14 +37,14 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   }
 
   if (variant === 'stacked') {
-    // Stacked logo design using the new zatona-web-02.jpg with text
+    // Stacked logo design using the new zatona-web-black.png with text
     return (
       <div className={`flex flex-col items-center space-y-2 ${className}`}>
         <Image
-          src="/zatona-web-02.jpg"
+          src="/zatona-web-black.png"
           alt="Zatona Web Logo"
-          width={824}
-          height={738}
+          width={580}
+          height={564}
           className="w-48 h-48"
           priority
         />
@@ -57,14 +57,14 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
     );
   }
 
-  // Horizontal logo design (default) using the new zatona-web-02.jpg with text below
+  // Horizontal logo design (default) using the new zatona-web-black.png with text below
   return (
     <div className={`flex flex-col items-center ${className}`}>
       <Image
-        src="/zatona-web-02.jpg"
+        src="/zatona-web-black.png"
         alt="Zatona Web Logo"
-        width={824}
-        height={738}
+        width={580}
+        height={564}
         className={sizeClasses[size]}
         priority
       />
