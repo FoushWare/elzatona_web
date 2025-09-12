@@ -2,16 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { topic, duration = 30 } = await request.json();
+    const { topic, duration = 30, apiKey } = await request.json();
 
     // Daily.co API endpoint
     const DAILY_API_URL = 'https://api.daily.co/v1/rooms';
-    const DAILY_API_KEY = process.env.DAILY_API_KEY;
+    const DAILY_API_KEY = apiKey || process.env.DAILY_API_KEY;
 
     if (!DAILY_API_KEY) {
       return NextResponse.json(
-        { error: 'Daily.co API key not configured' },
-        { status: 500 }
+        { error: 'Daily.co API key is required' },
+        { status: 400 }
       );
     }
 
