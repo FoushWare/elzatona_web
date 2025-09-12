@@ -12,7 +12,12 @@ process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID = 'G-TEST123';
 // Mock Request and Response for Node.js environment
 global.Request = class Request {
   constructor(input, init = {}) {
-    this.url = input;
+    Object.defineProperty(this, 'url', {
+      value: input,
+      writable: false,
+      enumerable: true,
+      configurable: false,
+    });
     this.method = init.method || 'GET';
     this.headers = new Map(Object.entries(init.headers || {}));
   }
