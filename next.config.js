@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    // Remove deprecated turbo setting
+    optimizeCss: true,
+    optimizePackageImports: ['lucide-react'],
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -64,11 +65,6 @@ const nextConfig = {
   // Performance optimization
   compress: true,
   poweredByHeader: false,
-  // Enable compression
-  experimental: {
-    optimizeCss: true,
-    optimizePackageImports: ['lucide-react'],
-  },
 };
 
 module.exports = nextConfig;
