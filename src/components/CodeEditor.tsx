@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, memo } from 'react';
 import Editor from '@monaco-editor/react';
 import { Challenge } from '@/types/challenge';
 
@@ -9,7 +9,7 @@ interface CodeEditorProps {
   onCodeChange?: (html: string, css: string, javascript: string) => void;
 }
 
-export default function CodeEditor({
+const CodeEditor = memo(function CodeEditor({
   challenge,
   onCodeChange,
 }: CodeEditorProps) {
@@ -22,16 +22,13 @@ export default function CodeEditor({
     challenge.starterCode.javascript
   );
 
-  const htmlEditorRef =
-    useRef<import('monaco-editor').IStandaloneCodeEditor>(null);
-  const cssEditorRef =
-    useRef<import('monaco-editor').IStandaloneCodeEditor>(null);
-  const javascriptEditorRef =
-    useRef<import('monaco-editor').IStandaloneCodeEditor>(null);
+  const htmlEditorRef = useRef<unknown>(null);
+  const cssEditorRef = useRef<unknown>(null);
+  const javascriptEditorRef = useRef<unknown>(null);
 
   const handleEditorDidMount = (
-    editor: import('monaco-editor').IStandaloneCodeEditor,
-    monaco: typeof import('monaco-editor'),
+    editor: unknown,
+    monaco: unknown,
     language: string
   ) => {
     if (language === 'html') {
@@ -199,4 +196,6 @@ export default function CodeEditor({
       </div>
     </div>
   );
-}
+});
+
+export default CodeEditor;

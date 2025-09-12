@@ -82,10 +82,10 @@ export function PageHeader({
         <div className="absolute inset-0 bg-gradient-to-r from-gray-200/20 via-slate-200/20 to-gray-200/20 dark:from-gray-700/10 dark:via-slate-700/10 dark:to-gray-700/10 rounded-full blur-3xl transform scale-150"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-slate-200/15 via-gray-200/15 to-slate-200/15 dark:from-slate-600/8 dark:via-gray-600/8 dark:to-slate-600/8 rounded-full blur-2xl transform scale-125"></div>
         <div className="relative">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-700 via-slate-700 to-gray-700 dark:from-gray-300 dark:via-slate-300 dark:to-gray-300 bg-clip-text text-transparent mb-3 sm:mb-4 drop-shadow-sm">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-700 via-slate-700 to-gray-700 dark:from-gray-300 dark:via-slate-300 dark:to-gray-300 bg-clip-text text-transparent mb-3 sm:mb-4 drop-shadow-sm text-foreground">
             {title}
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-700 dark:text-gray-200 max-w-3xl mx-auto px-2 leading-relaxed font-medium">
+          <p className="text-base sm:text-lg lg:text-xl text-foreground max-w-3xl mx-auto px-2 leading-relaxed font-medium">
             {description}
           </p>
         </div>

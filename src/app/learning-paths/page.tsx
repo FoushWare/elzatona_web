@@ -78,7 +78,7 @@ export default function LearningPathsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-slate-50 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900 py-4 sm:py-6 lg:py-8">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
         {/* Header */}
         <PageHeader
           title="Learning Paths"
@@ -119,7 +119,7 @@ export default function LearningPathsPage() {
 
         {/* Call to Action */}
         <CallToAction />
-      </div>
+      </main>
     </div>
   );
 }
