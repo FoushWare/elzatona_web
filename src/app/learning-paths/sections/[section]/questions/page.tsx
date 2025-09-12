@@ -11,6 +11,7 @@ import {
   Info,
 } from 'lucide-react';
 import EnhancedTTS from '@/components/EnhancedTTS';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 interface Question {
   id: string;
@@ -232,173 +233,177 @@ export default function LearningPathQuestionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <Link
-            href="/learning-paths"
-            className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 mb-4 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Learning Paths
-          </Link>
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            {getSectionTitle()}
-          </h1>
-          <p className="text-muted-foreground text-lg">
-            Practice questions to master {section} fundamentals
-          </p>
-        </div>
-
-        {/* Progress and Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-card p-4 rounded-lg border border-border">
-            <h3 className="text-sm font-medium text-muted-foreground">
-              Progress
-            </h3>
-            <p className="text-2xl font-bold text-card-foreground">
-              {currentQuestionIndex + 1} / {questions.length}
-            </p>
-          </div>
-          <div className="bg-card p-4 rounded-lg border border-border">
-            <h3 className="text-sm font-medium text-muted-foreground">
-              Accuracy
-            </h3>
-            <p className="text-2xl font-bold text-card-foreground">
-              {scorePercentage.toFixed(1)}%
-            </p>
-          </div>
-          <div className="bg-card p-4 rounded-lg border border-border">
-            <h3 className="text-sm font-medium text-muted-foreground">Score</h3>
-            <p className="text-2xl font-bold text-card-foreground">
-              {score} / {totalAnswered}
-            </p>
-          </div>
-        </div>
-
-        {/* Question Card */}
-        <div className="bg-card border border-border rounded-lg p-6 space-y-6 mb-8">
-          {/* Question Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium">
-                Question {currentQuestion.id}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                {section.charAt(0).toUpperCase() + section.slice(1)} Interview
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(currentQuestion.difficulty)}`}
-              >
-                {currentQuestion.difficulty}
-              </span>
-            </div>
-          </div>
-
-          {/* Question Text */}
-          <div>
-            <div className="flex items-start gap-3 mb-4">
-              <h3 className="text-lg font-semibold text-card-foreground flex-1">
-                {currentQuestion.question}
-              </h3>
-              <EnhancedTTS
-                text={currentQuestion.question}
-                className="flex-shrink-0 mt-1"
-              />
-            </div>
-          </div>
-
-          {/* Options */}
-          <div className="space-y-3">
-            <h4 className="font-medium text-card-foreground">
-              Select the correct answer:
-            </h4>
-            {currentQuestion.options.map((option, index) => {
-              const isSelected = selectedAnswer === index;
-              const isCorrect = index === currentQuestion.correctAnswer;
-              const showCorrect = showAnswer && isCorrect;
-              const showIncorrect = showAnswer && isSelected && !isCorrect;
-
-              return (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerSelect(index)}
-                  disabled={showAnswer}
-                  className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
-                    showCorrect
-                      ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                      : showIncorrect
-                        ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
-                        : isSelected
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                          : 'border-border hover:border-blue-300 hover:bg-muted/50'
-                  } ${showAnswer ? 'cursor-default' : 'cursor-pointer'}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium text-card-foreground">
-                      {String.fromCharCode(65 + index)}. {option}
-                    </span>
-                    {showCorrect && (
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                    )}
-                    {showIncorrect && (
-                      <XCircle className="w-5 h-5 text-red-600" />
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Submit Button */}
-          {!showAnswer && selectedAnswer !== null && (
-            <button
-              onClick={handleSubmitAnswer}
-              className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            >
-              Submit Answer
-            </button>
-          )}
-
-          {/* Explanation */}
-          {showAnswer && (
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-              <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                Explanation:
-              </h4>
-              <p className="text-blue-800 dark:text-blue-200">
-                {currentQuestion.explanation}
-              </p>
-            </div>
-          )}
-
-          {/* Navigation */}
-          <div className="flex justify-between items-center pt-4 border-t border-border">
-            <button
-              onClick={handlePreviousQuestion}
-              disabled={currentQuestionIndex === 0}
-              className="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+    <ErrorBoundary>
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8">
+          {/* Header */}
+          <div className="mb-8">
+            <Link
+              href="/learning-paths"
+              className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 mb-4 transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Previous
-            </button>
-            <span className="text-sm text-muted-foreground">
-              {currentQuestionIndex + 1} of {questions.length}
-            </span>
-            <button
-              onClick={handleNextQuestion}
-              disabled={currentQuestionIndex === questions.length - 1}
-              className="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
-            >
-              Next
-              <ArrowRight className="w-4 h-4" />
-            </button>
+              Back to Learning Paths
+            </Link>
+            <h1 className="text-4xl font-bold text-foreground mb-4">
+              {getSectionTitle()}
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              Practice questions to master {section} fundamentals
+            </p>
+          </div>
+
+          {/* Progress and Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div className="bg-card p-4 rounded-lg border border-border">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                Progress
+              </h3>
+              <p className="text-2xl font-bold text-card-foreground">
+                {currentQuestionIndex + 1} / {questions.length}
+              </p>
+            </div>
+            <div className="bg-card p-4 rounded-lg border border-border">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                Accuracy
+              </h3>
+              <p className="text-2xl font-bold text-card-foreground">
+                {scorePercentage.toFixed(1)}%
+              </p>
+            </div>
+            <div className="bg-card p-4 rounded-lg border border-border">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                Score
+              </h3>
+              <p className="text-2xl font-bold text-card-foreground">
+                {score} / {totalAnswered}
+              </p>
+            </div>
+          </div>
+
+          {/* Question Card */}
+          <div className="bg-card border border-border rounded-lg p-6 space-y-6 mb-8">
+            {/* Question Header */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium">
+                  Question {currentQuestion.id}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {section.charAt(0).toUpperCase() + section.slice(1)} Interview
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(currentQuestion.difficulty)}`}
+                >
+                  {currentQuestion.difficulty}
+                </span>
+              </div>
+            </div>
+
+            {/* Question Text */}
+            <div>
+              <div className="flex items-start gap-3 mb-4">
+                <h3 className="text-lg font-semibold text-card-foreground flex-1">
+                  {currentQuestion.question}
+                </h3>
+                <EnhancedTTS
+                  text={currentQuestion.question}
+                  className="flex-shrink-0 mt-1"
+                />
+              </div>
+            </div>
+
+            {/* Options */}
+            <div className="space-y-3">
+              <h4 className="font-medium text-card-foreground">
+                Select the correct answer:
+              </h4>
+              {currentQuestion.options.map((option, index) => {
+                const isSelected = selectedAnswer === index;
+                const isCorrect = index === currentQuestion.correctAnswer;
+                const showCorrect = showAnswer && isCorrect;
+                const showIncorrect = showAnswer && isSelected && !isCorrect;
+
+                return (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerSelect(index)}
+                    disabled={showAnswer}
+                    className={`w-full p-4 text-left rounded-lg border-2 transition-all ${
+                      showCorrect
+                        ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                        : showIncorrect
+                          ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                          : isSelected
+                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                            : 'border-border hover:border-blue-300 hover:bg-muted/50'
+                    } ${showAnswer ? 'cursor-default' : 'cursor-pointer'}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-card-foreground">
+                        {String.fromCharCode(65 + index)}. {option}
+                      </span>
+                      {showCorrect && (
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      )}
+                      {showIncorrect && (
+                        <XCircle className="w-5 h-5 text-red-600" />
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Submit Button */}
+            {!showAnswer && selectedAnswer !== null && (
+              <button
+                onClick={handleSubmitAnswer}
+                className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              >
+                Submit Answer
+              </button>
+            )}
+
+            {/* Explanation */}
+            {showAnswer && (
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
+                  Explanation:
+                </h4>
+                <p className="text-blue-800 dark:text-blue-200">
+                  {currentQuestion.explanation}
+                </p>
+              </div>
+            )}
+
+            {/* Navigation */}
+            <div className="flex justify-between items-center pt-4 border-t border-border">
+              <button
+                onClick={handlePreviousQuestion}
+                disabled={currentQuestionIndex === 0}
+                className="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Previous
+              </button>
+              <span className="text-sm text-muted-foreground">
+                {currentQuestionIndex + 1} of {questions.length}
+              </span>
+              <button
+                onClick={handleNextQuestion}
+                disabled={currentQuestionIndex === questions.length - 1}
+                className="flex items-center px-4 py-2 text-blue-600 hover:text-blue-800 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+              >
+                Next
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 }
