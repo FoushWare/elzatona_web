@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 interface ExpandableTextProps {
-  text: string;
+  text: string | undefined | null;
   maxLength?: number;
   className?: string;
   showToggle?: boolean;
@@ -20,6 +20,11 @@ export default function ExpandableText({
   collapseText = 'Show less',
 }: ExpandableTextProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Handle null/undefined text
+  if (!text) {
+    return <span className={className}>No content available</span>;
+  }
 
   // If text is shorter than maxLength, don't show toggle
   if (text.length <= maxLength) {

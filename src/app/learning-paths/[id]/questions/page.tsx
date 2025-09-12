@@ -3,7 +3,15 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { learningPaths } from '@/lib/resources';
-import { QuestionGroup } from '@/lib/questions';
+// import { QuestionGroup } from '@/lib/questions'; // Removed - using Firebase directly
+
+// Define QuestionGroup type locally
+interface QuestionGroup {
+  id: string;
+  title: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  questions: any[];
+}
 import { useFirebaseQuestions } from '@/hooks/useFirebaseQuestions';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { flashcardService } from '@/lib/firebase-flashcards';
@@ -47,8 +55,10 @@ export default function QuestionsPage() {
 
     // Filter only multiple-choice questions and ensure they have required fields
     const multipleChoiceQuestions = firebaseQuestions.filter(
-      q =>
-        q.type === 'multiple-choice' &&
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (q: any) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (q as any).type === 'multiple-choice' &&
         q.options &&
         q.options.length > 0 &&
         typeof q.correctAnswer === 'number'
@@ -611,7 +621,8 @@ export default function QuestionsPage() {
                           >
                             <div className="p-4 pt-3 space-y-3">
                               {group.questions.map(
-                                (question, questionIndex) => {
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                (question: any, questionIndex: number) => {
                                   const isCurrentQuestion =
                                     currentGroup?.id === group.id &&
                                     currentQuestionIndex === questionIndex;
@@ -745,7 +756,7 @@ export default function QuestionsPage() {
                 <div className="prose dark:prose-invert max-w-none">
                   <div className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                     <ExpandableText
-                      text={currentQuestion.question}
+                      text={currentQuestion.question || 'No question available'}
                       maxLength={400}
                       className="whitespace-pre-wrap"
                       expandText="Read more"
@@ -771,83 +782,86 @@ export default function QuestionsPage() {
 
               {/* Answer Options */}
               <div className="space-y-3 mb-6">
-                {currentQuestion.options?.map((option, index) => {
-                  const isSelected = selectedAnswer === index.toString();
-                  const isCorrect = index === currentQuestion.correctAnswer;
-                  const showResult = showAnswer;
+                {currentQuestion.options?.map(
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  (option: any, index: number) => {
+                    const isSelected = selectedAnswer === index.toString();
+                    const isCorrect = index === currentQuestion.correctAnswer;
+                    const showResult = showAnswer;
 
-                  let buttonClass =
-                    'w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ';
+                    let buttonClass =
+                      'w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ';
 
-                  if (showResult) {
-                    if (isCorrect) {
-                      buttonClass +=
-                        'border-green-500 bg-green-50 dark:bg-green-900/20';
-                    } else if (isSelected && !isCorrect) {
-                      buttonClass +=
-                        'border-red-500 bg-red-50 dark:bg-red-900/20';
+                    if (showResult) {
+                      if (isCorrect) {
+                        buttonClass +=
+                          'border-green-500 bg-green-50 dark:bg-green-900/20';
+                      } else if (isSelected && !isCorrect) {
+                        buttonClass +=
+                          'border-red-500 bg-red-50 dark:bg-red-900/20';
+                      } else {
+                        buttonClass += 'border-gray-200 dark:border-gray-600';
+                      }
                     } else {
-                      buttonClass += 'border-gray-200 dark:border-gray-600';
+                      buttonClass += isSelected
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500';
                     }
-                  } else {
-                    buttonClass += isSelected
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                      : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500';
+
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => !showAnswer && handleAnswerSelect(index)}
+                        disabled={showAnswer}
+                        className={buttonClass}
+                      >
+                        <div className="flex items-start space-x-3">
+                          {/* Radio button indicator */}
+                          <div className="flex-shrink-0 mt-1">
+                            <div
+                              className={`w-5 h-5 rounded-full border-2 ${
+                                isSelected
+                                  ? 'border-blue-500 bg-blue-500'
+                                  : 'border-gray-300 dark:border-gray-600'
+                              }`}
+                            >
+                              {isSelected && (
+                                <div className="w-full h-full rounded-full bg-white scale-50"></div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Option text */}
+                          <div className="flex-1 min-w-0">
+                            <div
+                              className={`text-gray-900 dark:text-white leading-relaxed ${
+                                showResult && isCorrect ? 'font-semibold' : ''
+                              }`}
+                            >
+                              <ExpandableText
+                                text={option || 'No option text'}
+                                maxLength={200}
+                                className="text-left"
+                                expandText="Read more"
+                                collapseText="Read less"
+                              />
+                            </div>
+                          </div>
+                          {showResult && isCorrect && (
+                            <span className="ml-auto text-green-600 dark:text-green-400 font-semibold">
+                              ✓ Correct
+                            </span>
+                          )}
+                          {showResult && isSelected && !isCorrect && (
+                            <span className="ml-auto text-red-600 dark:text-red-400 font-semibold">
+                              ✗ Incorrect
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    );
                   }
-
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => !showAnswer && handleAnswerSelect(index)}
-                      disabled={showAnswer}
-                      className={buttonClass}
-                    >
-                      <div className="flex items-start space-x-3">
-                        {/* Radio button indicator */}
-                        <div className="flex-shrink-0 mt-1">
-                          <div
-                            className={`w-5 h-5 rounded-full border-2 ${
-                              isSelected
-                                ? 'border-blue-500 bg-blue-500'
-                                : 'border-gray-300 dark:border-gray-600'
-                            }`}
-                          >
-                            {isSelected && (
-                              <div className="w-full h-full rounded-full bg-white scale-50"></div>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Option text */}
-                        <div className="flex-1 min-w-0">
-                          <div
-                            className={`text-gray-900 dark:text-white leading-relaxed ${
-                              showResult && isCorrect ? 'font-semibold' : ''
-                            }`}
-                          >
-                            <ExpandableText
-                              text={option}
-                              maxLength={200}
-                              className="text-left"
-                              expandText="Read more"
-                              collapseText="Read less"
-                            />
-                          </div>
-                        </div>
-                        {showResult && isCorrect && (
-                          <span className="ml-auto text-green-600 dark:text-green-400 font-semibold">
-                            ✓ Correct
-                          </span>
-                        )}
-                        {showResult && isSelected && !isCorrect && (
-                          <span className="ml-auto text-red-600 dark:text-red-400 font-semibold">
-                            ✗ Incorrect
-                          </span>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
+                )}
               </div>
 
               {/* Submit Button */}
@@ -870,7 +884,7 @@ export default function QuestionsPage() {
                   <div className="prose dark:prose-invert max-w-none">
                     <div className="text-gray-700 dark:text-gray-300">
                       <ExpandableText
-                        text={currentQuestion.answer}
+                        text={currentQuestion.answer || 'No answer available'}
                         maxLength={400}
                         className="whitespace-pre-line"
                         expandText="Read more"
@@ -884,7 +898,10 @@ export default function QuestionsPage() {
                         </h4>
                         <div className="text-blue-800 dark:text-blue-300">
                           <ExpandableText
-                            text={currentQuestion.explanation}
+                            text={
+                              currentQuestion.explanation ||
+                              'No explanation available'
+                            }
                             maxLength={400}
                             className="whitespace-pre-line"
                             expandText="Read more"
