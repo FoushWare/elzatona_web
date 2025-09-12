@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import ZatonaLogo from './ZatonaLogo';
 
 import { DarkModeToggle } from './DarkModeToggle';
 
@@ -10,11 +11,8 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link
-              href="/"
-              className="text-xl font-bold text-gray-900 dark:text-white"
-            >
-              Frontend KodDev
+            <Link href="/" className="flex items-center">
+              <ZatonaLogo size="sm" showText={true} variant="horizontal" />
             </Link>
           </div>
 
