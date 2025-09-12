@@ -3,6 +3,25 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LearningPathsPage from '@/app/learning-paths/page';
 
+// Mock Next.js Link component
+jest.mock('next/link', () => {
+  return function MockLink({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    [key: string]: unknown;
+  }) {
+    return (
+      <a href={href} {...props}>
+        {children}
+      </a>
+    );
+  };
+});
+
 // Mock the resources
 jest.mock('@/lib/resources', () => ({
   learningPaths: [
@@ -52,61 +71,28 @@ describe('LearningPathsPage', () => {
     jest.clearAllMocks();
   });
 
-  it('renders the page title and description', () => {
+  it('renders the page title and new subtitle', () => {
     render(<LearningPathsPage />);
 
     expect(
       screen.getByRole('heading', { name: 'Learning Paths' })
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/curated educational journeys/i)
+      screen.getByText('Your path to success in interviews')
     ).toBeInTheDocument();
   });
 
-  it('displays statistics correctly', () => {
+  it('renders the Schedule AI Mock Interview button', () => {
     render(<LearningPathsPage />);
 
-    // Check for statistics numbers
-    expect(screen.getByText('3')).toBeInTheDocument(); // Learning Paths count
-    expect(screen.getByText('130')).toBeInTheDocument(); // Total Hours (40 + 60 + 30)
-    expect(screen.getByText('5')).toBeInTheDocument(); // Total Resources (2 + 2 + 1)
-    expect(screen.getByText('12')).toBeInTheDocument(); // Categories count
+    const scheduleButton = screen.getByRole('link', {
+      name: /schedule ai mock interview/i,
+    });
+    expect(scheduleButton).toBeInTheDocument();
+    expect(scheduleButton).toHaveAttribute('href', '/schedule-interview');
   });
 
-  it('renders difficulty level filter buttons', () => {
-    render(<LearningPathsPage />);
-
-    expect(
-      screen.getByRole('button', { name: /all levels/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /beginner/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /intermediate/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /advanced/i })
-    ).toBeInTheDocument();
-  });
-
-  it('renders category filter buttons with correct labels', () => {
-    render(<LearningPathsPage />);
-
-    expect(
-      screen.getByRole('button', { name: /all categories/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /javascript/i })
-    ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /react/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /css/i })).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /typescript/i })
-    ).toBeInTheDocument();
-  });
-
-  it('renders learning path cards with correct information', () => {
+  it('renders all learning path cards without filtering', () => {
     render(<LearningPathsPage />);
 
     // Check for learning path titles
@@ -114,124 +100,32 @@ describe('LearningPathsPage', () => {
     expect(screen.getByText('React Mastery')).toBeInTheDocument();
     expect(screen.getByText('Advanced CSS Mastery')).toBeInTheDocument();
 
-    // Check for question counts (use getAllByText since there are multiple instances)
-    expect(screen.getAllByText('25 questions')).toHaveLength(2); // Header and stats
-    expect(screen.getAllByText('30 questions')).toHaveLength(2);
-    expect(screen.getAllByText('20 questions')).toHaveLength(2);
-  });
-
-  it('allows clicking difficulty filter buttons', async () => {
-    const user = userEvent.setup();
-    render(<LearningPathsPage />);
-
-    const beginnerButton = screen.getByRole('button', { name: /beginner/i });
-    await user.click(beginnerButton);
-
-    // Should show only beginner level paths
-    expect(screen.getByText('Frontend Basics')).toBeInTheDocument();
-    expect(screen.queryByText('React Mastery')).not.toBeInTheDocument();
-    expect(screen.queryByText('Advanced CSS Mastery')).not.toBeInTheDocument();
-  });
-
-  it('allows clicking category filter buttons', async () => {
-    const user = userEvent.setup();
-    render(<LearningPathsPage />);
-
-    const reactButton = screen.getByRole('button', { name: /react/i });
-    await user.click(reactButton);
-
-    // Should show only React-related paths
-    expect(screen.getByText('React Mastery')).toBeInTheDocument();
-    expect(screen.queryByText('Frontend Basics')).not.toBeInTheDocument();
-    expect(screen.queryByText('Advanced CSS Mastery')).not.toBeInTheDocument();
-  });
-
-  it('shows all paths when "All Levels" is selected', async () => {
-    const user = userEvent.setup();
-    render(<LearningPathsPage />);
-
-    // First filter to beginner
-    const beginnerButton = screen.getByRole('button', { name: /beginner/i });
-    await user.click(beginnerButton);
-
-    // Then select all levels
-    const allLevelsButton = screen.getByRole('button', { name: /all levels/i });
-    await user.click(allLevelsButton);
-
-    // Should show all paths again
-    expect(screen.getByText('Frontend Basics')).toBeInTheDocument();
-    expect(screen.getByText('React Mastery')).toBeInTheDocument();
-    expect(screen.getByText('Advanced CSS Mastery')).toBeInTheDocument();
-  });
-
-  it('shows all paths when "All Categories" is selected', async () => {
-    const user = userEvent.setup();
-    render(<LearningPathsPage />);
-
-    // First filter to react
-    const reactButton = screen.getByRole('button', { name: /react/i });
-    await user.click(reactButton);
-
-    // Then select all categories
-    const allCategoriesButton = screen.getByRole('button', {
-      name: /all categories/i,
-    });
-    await user.click(allCategoriesButton);
-
-    // Should show all paths again
-    expect(screen.getByText('Frontend Basics')).toBeInTheDocument();
-    expect(screen.getByText('React Mastery')).toBeInTheDocument();
-    expect(screen.getByText('Advanced CSS Mastery')).toBeInTheDocument();
-  });
-
-  it('shows empty state when no paths match filters', async () => {
-    const user = userEvent.setup();
-    render(<LearningPathsPage />);
-
-    // Filter to advanced difficulty
-    const advancedButton = screen.getByRole('button', { name: /advanced/i });
-    await user.click(advancedButton);
-
-    // Filter to javascript category (no advanced javascript paths in mock)
-    const javascriptButton = screen.getByRole('button', {
-      name: /javascript/i,
-    });
-    await user.click(javascriptButton);
-
-    // Should show empty state
-    expect(screen.getByText(/no learning paths found/i)).toBeInTheDocument();
+    // Check for descriptions
     expect(
-      screen.getByRole('button', { name: /clear filters/i })
+      screen.getByText('Learn HTML, CSS, and JavaScript fundamentals')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Master React development with hooks and patterns')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Advanced CSS techniques and modern layouts')
     ).toBeInTheDocument();
   });
 
-  it('clears filters when clear filters button is clicked', async () => {
-    const user = userEvent.setup();
+  it('renders question count badges with simplified format', () => {
     render(<LearningPathsPage />);
 
-    // Apply filters
-    const advancedButton = screen.getByRole('button', { name: /advanced/i });
-    await user.click(advancedButton);
-
-    const javascriptButton = screen.getByRole('button', {
-      name: /javascript/i,
-    });
-    await user.click(javascriptButton);
-
-    // Clear filters
-    const clearButton = screen.getByRole('button', { name: /clear filters/i });
-    await user.click(clearButton);
-
-    // Should show all paths again
-    expect(screen.getByText('Frontend Basics')).toBeInTheDocument();
-    expect(screen.getByText('React Mastery')).toBeInTheDocument();
-    expect(screen.getByText('Advanced CSS Mastery')).toBeInTheDocument();
+    // Check for simplified question count badges (#number Q)
+    expect(screen.getByText('#25 Q')).toBeInTheDocument();
+    expect(screen.getByText('#30 Q')).toBeInTheDocument();
+    expect(screen.getByText('#20 Q')).toBeInTheDocument();
   });
 
   it('toggles card expansion when header is clicked', async () => {
     const user = userEvent.setup();
     render(<LearningPathsPage />);
 
+    // Find the first card header (it's a div with cursor-pointer, not a button)
     const frontendCard = screen
       .getByText('Frontend Basics')
       .closest('[data-testid="learning-path-card"]');
@@ -239,70 +133,110 @@ describe('LearningPathsPage', () => {
 
     expect(header).toBeInTheDocument();
 
-    // Content should be in DOM
+    // Click to toggle
+    await user.click(header!);
+
+    // Content should be visible (cards start collapsed)
     const description = screen.getByText(
       'Learn HTML, CSS, and JavaScript fundamentals'
     );
     expect(description).toBeInTheDocument();
-
-    // Click to toggle (should work without errors)
-    await user.click(header!);
-
-    // Click again to toggle back
-    await user.click(header!);
-
-    // Content should still be in DOM
-    expect(description).toBeInTheDocument();
   });
 
-  it('shows navigation links', () => {
+  it('shows navigation links in header', () => {
     render(<LearningPathsPage />);
 
     expect(
       screen.getByRole('link', { name: /view study plans/i })
     ).toBeInTheDocument();
+    // There are multiple preparation guides links (header and CTA), so use getAllByRole
     expect(
       screen.getAllByRole('link', { name: /preparation guides/i })
-    ).toHaveLength(2); // Header and CTA
-    expect(
-      screen.getByRole('link', { name: /enhanced learning path/i })
-    ).toBeInTheDocument();
+    ).toHaveLength(2);
   });
 
-  it('shows mobile toggle buttons', () => {
+  it('does not show filter buttons or statistics', () => {
+    render(<LearningPathsPage />);
+
+    // Should not show filter buttons
+    expect(
+      screen.queryByRole('button', { name: /all levels/i })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /beginner/i })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /intermediate/i })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /advanced/i })
+    ).not.toBeInTheDocument();
+
+    // Should not show category filter buttons
+    expect(
+      screen.queryByRole('button', { name: /javascript/i })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /react/i })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /css/i })
+    ).not.toBeInTheDocument();
+
+    // Should not show statistics
+    expect(screen.queryByText(/total hours/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/total resources/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/categories/i)).not.toBeInTheDocument();
+  });
+
+  it('does not show mobile toggle buttons', () => {
     render(<LearningPathsPage />);
 
     expect(
-      screen.getByRole('button', { name: /show stats/i })
-    ).toBeInTheDocument();
+      screen.queryByRole('button', { name: /show stats/i })
+    ).not.toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /filters/i })
-    ).toBeInTheDocument();
+      screen.queryByRole('button', { name: /filters/i })
+    ).not.toBeInTheDocument();
   });
 
-  it('toggles statistics visibility on mobile', async () => {
-    const user = userEvent.setup();
+  it('renders call to action section', () => {
     render(<LearningPathsPage />);
 
-    const toggleButton = screen.getByRole('button', {
-      name: /show stats/i,
+    // Check for CTA section (should be present)
+    expect(screen.getByText(/ready to start learning/i)).toBeInTheDocument();
+  });
+
+  it('has proper accessibility attributes', () => {
+    render(<LearningPathsPage />);
+
+    // Check for proper heading structure
+    const mainHeading = screen.getByRole('heading', { name: 'Learning Paths' });
+    expect(mainHeading).toBeInTheDocument();
+
+    // Check for proper link attributes
+    const scheduleLink = screen.getByRole('link', {
+      name: /schedule ai mock interview/i,
     });
-    await user.click(toggleButton);
-
-    expect(
-      screen.getByRole('button', { name: /hide stats/i })
-    ).toBeInTheDocument();
+    expect(scheduleLink).toHaveAttribute('href', '/schedule-interview');
   });
 
-  it('toggles filters visibility on mobile', async () => {
-    const user = userEvent.setup();
+  it('renders flashcard icons for each learning path', () => {
     render(<LearningPathsPage />);
 
-    const toggleButton = screen.getByRole('button', { name: /filters/i });
-    await user.click(toggleButton);
+    // Check for flashcard icons (should have aria-label for accessibility)
+    const flashcardIcons = screen.getAllByLabelText(
+      /add learning path to flashcards/i
+    );
+    expect(flashcardIcons).toHaveLength(3); // One for each learning path
+  });
 
-    expect(
-      screen.getByRole('button', { name: /hide filters/i })
-    ).toBeInTheDocument();
+  it('has proper responsive design classes', () => {
+    const { container } = render(<LearningPathsPage />);
+
+    // Check for responsive classes on the main container
+    const mainContainer = container.querySelector('.min-h-screen');
+    expect(mainContainer).toBeInTheDocument();
+    expect(mainContainer).toHaveClass('min-h-screen');
   });
 });

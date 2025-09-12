@@ -1,8 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-
-// Import the main page component
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import LearningPathsPage from '@/app/learning-paths/page';
 
 // Mock Next.js Link component
@@ -24,67 +22,71 @@ jest.mock('next/link', () => {
   };
 });
 
-// Mock the resources module with realistic data
+// Mock the resources
 jest.mock('@/lib/resources', () => ({
   learningPaths: [
     {
       id: 'frontend-basics',
-      title: 'Frontend Fundamentals',
-      description:
-        'Master the essential building blocks of web development: HTML semantics, CSS layouts, and JavaScript fundamentals.',
-      difficulty: 'beginner',
-      estimatedTime: 15,
-      questionCount: 100,
-      resources: ['css-layouts', 'object-properties', 'font-pairing'],
-      targetSkills: ['HTML Semantics', 'CSS Layouts', 'JavaScript Basics'],
-      prerequisites: [],
-    },
-    {
-      id: 'advanced-css',
-      title: 'Advanced CSS Mastery',
-      description:
-        'Master advanced CSS techniques including Grid, Flexbox, animations, and modern layout patterns.',
-      difficulty: 'intermediate',
-      estimatedTime: 12,
-      questionCount: 20,
-      resources: ['css-stacking-context', 'css-layouts', 'masonry-layout'],
-      targetSkills: [
-        'CSS Grid & Flexbox',
-        'Advanced Layouts',
-        'CSS Animations',
+      title: 'Frontend Basics',
+      description: 'Learn HTML, CSS, and JavaScript fundamentals',
+      difficulty: 'beginner' as const,
+      estimatedTime: 40,
+      questionCount: 25,
+      resources: [
+        {
+          id: 'resource1',
+          title: 'HTML Tutorial',
+          url: 'https://example.com/html',
+          type: 'documentation',
+        },
+        {
+          id: 'resource2',
+          title: 'CSS Guide',
+          url: 'https://example.com/css',
+          type: 'tutorial',
+        },
       ],
-      prerequisites: ['frontend-basics'],
+      targetSkills: ['HTML', 'CSS', 'JavaScript'],
+      prerequisites: ['Basic computer skills'],
     },
     {
       id: 'react-mastery',
       title: 'React Mastery',
-      description:
-        'Master React development with hooks, context, performance optimization, and advanced patterns.',
-      difficulty: 'intermediate',
-      estimatedTime: 25,
-      questionCount: 50,
-      resources: ['react-hooks', 'react-context', 'react-performance'],
-      targetSkills: ['React Hooks', 'Context API', 'State Management'],
-      prerequisites: ['frontend-basics'],
+      description: 'Master React development with hooks and patterns',
+      difficulty: 'intermediate' as const,
+      estimatedTime: 60,
+      questionCount: 30,
+      resources: [
+        {
+          id: 'resource3',
+          title: 'React Guide',
+          url: 'https://example.com/react',
+          type: 'tutorial',
+        },
+      ],
+      targetSkills: ['React', 'Hooks', 'State Management'],
+      prerequisites: ['JavaScript ES6+'],
     },
     {
-      id: 'javascript-deep-dive',
-      title: 'JavaScript Deep Dive',
-      description:
-        'Advanced JavaScript concepts including closures, prototypes, async programming, and modern ES6+ features.',
-      difficulty: 'advanced',
+      id: 'advanced-css',
+      title: 'Advanced CSS Mastery',
+      description: 'Advanced CSS techniques and modern layouts',
+      difficulty: 'advanced' as const,
       estimatedTime: 30,
-      questionCount: 75,
+      questionCount: 20,
       resources: [
-        'javascript-closures',
-        'javascript-prototypes',
-        'javascript-async',
+        {
+          id: 'resource4',
+          title: 'CSS Grid Guide',
+          url: 'https://example.com/css-grid',
+          type: 'documentation',
+        },
       ],
-      targetSkills: ['Closures', 'Prototypes', 'Async Programming'],
-      prerequisites: ['frontend-basics'],
+      targetSkills: ['CSS Grid', 'Flexbox', 'Animations'],
+      prerequisites: ['CSS Basics'],
     },
   ],
-  getResourceById: jest.fn((id: string) => ({
+  getResourceById: jest.fn(id => ({
     id,
     title: `Resource ${id}`,
     url: `https://example.com/${id}`,
@@ -92,413 +94,340 @@ jest.mock('@/lib/resources', () => ({
   })),
 }));
 
-describe('Learning Paths Page Integration Tests', () => {
+describe('Learning Paths Integration Tests', () => {
   beforeEach(() => {
-    // Clear any previous state
     jest.clearAllMocks();
   });
 
-  describe('Page Rendering', () => {
-    it('renders the complete learning paths page', () => {
+  describe('Page Rendering Integration', () => {
+    it('renders complete learning paths page with all components', () => {
       render(<LearningPathsPage />);
 
-      // Check page title and description
+      // Check page header
       expect(
         screen.getByRole('heading', { name: 'Learning Paths' })
       ).toBeInTheDocument();
       expect(
-        screen.getByText(/curated educational journeys/i)
+        screen.getByText('Your path to success in interviews')
       ).toBeInTheDocument();
 
-      // Check statistics
-      expect(screen.getByText('4')).toBeInTheDocument(); // learningPathsCount
-      expect(screen.getAllByText('Learning Paths')).toHaveLength(2); // Page title and stats
-      expect(screen.getByText('Total Hours')).toBeInTheDocument();
-      expect(screen.getByText('Total Resources')).toBeInTheDocument();
-      expect(screen.getByText('Categories')).toBeInTheDocument();
+      // Check schedule interview button
+      expect(
+        screen.getByRole('link', { name: /schedule ai mock interview/i })
+      ).toBeInTheDocument();
 
-      // Check filter buttons
-      expect(screen.getByText('All Levels')).toBeInTheDocument();
-      expect(screen.getByText('Beginner')).toBeInTheDocument();
-      expect(screen.getByText('Intermediate')).toBeInTheDocument();
-      expect(screen.getByText('Advanced')).toBeInTheDocument();
-
-      // Check category filters
-      expect(screen.getByText('All Categories')).toBeInTheDocument();
-      expect(screen.getByText('Javascript')).toBeInTheDocument();
-      expect(screen.getByText('React')).toBeInTheDocument();
-      expect(screen.getByText('Css')).toBeInTheDocument();
-    });
-
-    it('renders all learning path cards', () => {
-      render(<LearningPathsPage />);
-
-      expect(screen.getByText('Frontend Fundamentals')).toBeInTheDocument();
-      expect(screen.getByText('Advanced CSS Mastery')).toBeInTheDocument();
+      // Check all learning path cards
+      expect(screen.getByText('Frontend Basics')).toBeInTheDocument();
       expect(screen.getByText('React Mastery')).toBeInTheDocument();
-      expect(screen.getByText('JavaScript Deep Dive')).toBeInTheDocument();
+      expect(screen.getByText('Advanced CSS Mastery')).toBeInTheDocument();
+
+      // Check call to action
+      expect(
+        screen.getByText(/ready to start your journey/i)
+      ).toBeInTheDocument();
     });
 
-    it('displays correct question counts for each learning path', () => {
+    it('renders navigation links in header', () => {
       render(<LearningPathsPage />);
 
-      expect(screen.getAllByText('100 questions')).toHaveLength(2); // Header and stats
-      expect(screen.getAllByText('20 questions')).toHaveLength(2); // Header and stats
-      expect(screen.getAllByText('50 questions')).toHaveLength(2); // Header and stats
-      expect(screen.getAllByText('75 questions')).toHaveLength(2); // Header and stats
+      expect(
+        screen.getByRole('link', { name: /view study plans/i })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: /preparation guides/i })
+      ).toBeInTheDocument();
     });
   });
 
-  describe('Filtering Functionality', () => {
-    it('filters by beginner difficulty level', async () => {
+  describe('Card Interaction Integration', () => {
+    it('allows expanding and collapsing cards', async () => {
+      const user = userEvent.setup();
       render(<LearningPathsPage />);
 
-      // Click beginner filter
-      fireEvent.click(screen.getByText('Beginner'));
+      // Initially cards should be collapsed (no action buttons visible)
+      expect(
+        screen.queryByRole('link', { name: /practice questions/i })
+      ).not.toBeInTheDocument();
 
-      // Wait for filtering to complete
-      await waitFor(() => {
-        expect(screen.getByText('Frontend Fundamentals')).toBeInTheDocument();
-        expect(
-          screen.queryByText('Advanced CSS Mastery')
-        ).not.toBeInTheDocument();
-        expect(screen.queryByText('React Mastery')).not.toBeInTheDocument();
-        expect(
-          screen.queryByText('JavaScript Deep Dive')
-        ).not.toBeInTheDocument();
-      });
-    });
+      // Click on first card header to expand
+      const frontendCard = screen
+        .getByText('Frontend Basics')
+        .closest('button');
+      await user.click(frontendCard!);
 
-    it('filters by intermediate difficulty level', async () => {
-      render(<LearningPathsPage />);
-
-      // Click intermediate filter
-      fireEvent.click(screen.getByText('Intermediate'));
-
-      // Wait for filtering to complete
-      await waitFor(() => {
-        expect(screen.getByText('Advanced CSS Mastery')).toBeInTheDocument();
-        expect(screen.getByText('React Mastery')).toBeInTheDocument();
-        expect(
-          screen.queryByText('Frontend Fundamentals')
-        ).not.toBeInTheDocument();
-        expect(
-          screen.queryByText('JavaScript Deep Dive')
-        ).not.toBeInTheDocument();
-      });
-    });
-
-    it('filters by advanced difficulty level', async () => {
-      render(<LearningPathsPage />);
-
-      // Click advanced filter
-      fireEvent.click(screen.getByText('Advanced'));
-
-      // Wait for filtering to complete
-      await waitFor(() => {
-        expect(screen.getByText('JavaScript Deep Dive')).toBeInTheDocument();
-        expect(
-          screen.queryByText('Frontend Fundamentals')
-        ).not.toBeInTheDocument();
-        expect(
-          screen.queryByText('Advanced CSS Mastery')
-        ).not.toBeInTheDocument();
-        expect(screen.queryByText('React Mastery')).not.toBeInTheDocument();
-      });
-    });
-
-    it('filters by React category', async () => {
-      render(<LearningPathsPage />);
-
-      // Click React category filter
-      fireEvent.click(screen.getByText('React'));
-
-      // Wait for filtering to complete
-      await waitFor(() => {
-        expect(screen.getByText('React Mastery')).toBeInTheDocument();
-        expect(
-          screen.queryByText('Frontend Fundamentals')
-        ).not.toBeInTheDocument();
-        expect(
-          screen.queryByText('Advanced CSS Mastery')
-        ).not.toBeInTheDocument();
-        expect(
-          screen.queryByText('JavaScript Deep Dive')
-        ).not.toBeInTheDocument();
-      });
-    });
-
-    it('filters by CSS category', async () => {
-      render(<LearningPathsPage />);
-
-      // Click CSS category filter
-      fireEvent.click(screen.getByText('Css'));
-
-      // Wait for filtering to complete
-      await waitFor(() => {
-        expect(screen.getByText('Advanced CSS Mastery')).toBeInTheDocument();
-        expect(
-          screen.queryByText('Frontend Fundamentals')
-        ).not.toBeInTheDocument();
-        expect(screen.queryByText('React Mastery')).not.toBeInTheDocument();
-        expect(
-          screen.queryByText('JavaScript Deep Dive')
-        ).not.toBeInTheDocument();
-      });
-    });
-
-    it('combines difficulty and category filters', async () => {
-      render(<LearningPathsPage />);
-
-      // Click intermediate difficulty
-      fireEvent.click(screen.getByText('Intermediate'));
-
-      // Click CSS category
-      fireEvent.click(screen.getByText('Css'));
-
-      // Wait for filtering to complete
-      await waitFor(() => {
-        expect(screen.getByText('Advanced CSS Mastery')).toBeInTheDocument();
-        expect(screen.queryByText('React Mastery')).not.toBeInTheDocument();
-        expect(
-          screen.queryByText('Frontend Fundamentals')
-        ).not.toBeInTheDocument();
-        expect(
-          screen.queryByText('JavaScript Deep Dive')
-        ).not.toBeInTheDocument();
-      });
-    });
-
-    it('shows empty state when no paths match filters', async () => {
-      render(<LearningPathsPage />);
-
-      // Apply filters that should result in no matches
-      fireEvent.click(screen.getByText('Advanced'));
-      fireEvent.click(screen.getByText('React'));
-
-      // Wait for empty state
+      // Action buttons should now be visible
       await waitFor(() => {
         expect(
-          screen.getByText(/no learning paths found/i)
-        ).toBeInTheDocument();
-        expect(
-          screen.getByRole('button', { name: /clear filters/i })
+          screen.getByRole('link', { name: /practice questions/i })
         ).toBeInTheDocument();
       });
     });
 
-    it('clears filters when clear filters button is clicked', async () => {
+    it('maintains card state when toggling multiple cards', async () => {
+      const user = userEvent.setup();
       render(<LearningPathsPage />);
 
-      // Apply filters
-      fireEvent.click(screen.getByText('Advanced'));
-      fireEvent.click(screen.getByText('React'));
+      // Expand first card
+      const frontendCard = screen
+        .getByText('Frontend Basics')
+        .closest('button');
+      await user.click(frontendCard!);
 
-      // Wait for empty state
+      // Expand second card
+      const reactCard = screen.getByText('React Mastery').closest('button');
+      await user.click(reactCard!);
+
+      // Both cards should be expanded
       await waitFor(() => {
-        expect(
-          screen.getByText(/no learning paths found/i)
-        ).toBeInTheDocument();
-      });
-
-      // Clear filters
-      fireEvent.click(screen.getByRole('button', { name: /clear filters/i }));
-
-      // Wait for paths to reappear
-      await waitFor(() => {
-        expect(screen.getByText('Frontend Fundamentals')).toBeInTheDocument();
-        expect(screen.getByText('Advanced CSS Mastery')).toBeInTheDocument();
-        expect(screen.getByText('React Mastery')).toBeInTheDocument();
-        expect(screen.getByText('JavaScript Deep Dive')).toBeInTheDocument();
+        const practiceButtons = screen.getAllByRole('link', {
+          name: /practice questions/i,
+        });
+        expect(practiceButtons).toHaveLength(2);
       });
     });
-  });
 
-  describe('Card Interaction', () => {
-    it('expands and collapses learning path cards', async () => {
+    it('scrolls to flashcard icon when card is expanded', async () => {
+      const user = userEvent.setup();
+
+      // Mock scrollIntoView
+      const mockScrollIntoView = jest.fn();
+      Element.prototype.scrollIntoView = mockScrollIntoView;
+
       render(<LearningPathsPage />);
-
-      // Initially collapsed, content should not be visible
-      expect(
-        screen.queryByText(/master the essential building blocks/i)
-      ).toBeInTheDocument(); // Element exists but is hidden by CSS
-
-      // Click to expand first card
-      const firstCardHeader = screen.getAllByTestId('card-header')[0];
-      fireEvent.click(firstCardHeader);
-
-      // Content should now be visible
-      await waitFor(() => {
-        expect(
-          screen.getByText(/master the essential building blocks/i)
-        ).toBeVisible();
-      });
-
-      // Check for action buttons
-      expect(
-        screen.getAllByRole('link', { name: /practice questions/i })
-      ).toHaveLength(4); // All cards expanded
-      expect(
-        screen.getAllByRole('link', { name: /view resources/i })
-      ).toHaveLength(4); // All cards expanded
-    });
-
-    it('maintains filter state when cards are expanded/collapsed', async () => {
-      render(<LearningPathsPage />);
-
-      // Apply a filter
-      fireEvent.click(screen.getByText('Beginner'));
-
-      // Wait for filtering
-      await waitFor(() => {
-        expect(screen.getByText('Frontend Fundamentals')).toBeInTheDocument();
-        expect(
-          screen.queryByText('Advanced CSS Mastery')
-        ).not.toBeInTheDocument();
-      });
 
       // Expand a card
-      const cardHeader = screen.getByTestId('card-header');
-      fireEvent.click(cardHeader);
+      const frontendCard = screen
+        .getByText('Frontend Basics')
+        .closest('button');
+      await user.click(frontendCard!);
 
-      // Filter should still be applied
+      // Wait for scroll to be called
       await waitFor(() => {
-        expect(screen.getByText('Frontend Fundamentals')).toBeInTheDocument();
-        expect(
-          screen.queryByText('Advanced CSS Mastery')
-        ).not.toBeInTheDocument();
+        expect(mockScrollIntoView).toHaveBeenCalled();
       });
     });
   });
 
-  describe('Mobile Responsiveness', () => {
-    it('shows mobile toggle buttons on mobile viewport', () => {
-      // Mock window.innerWidth for mobile
-      Object.defineProperty(window, 'innerWidth', {
-        writable: true,
-        configurable: true,
-        value: 375,
-      });
-
+  describe('Navigation Integration', () => {
+    it('has correct href attributes for all navigation links', () => {
       render(<LearningPathsPage />);
 
-      expect(
-        screen.getByRole('button', { name: /show stats/i })
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole('button', { name: /filters/i })
-      ).toBeInTheDocument();
-    });
-
-    it('toggles statistics visibility on mobile', async () => {
-      Object.defineProperty(window, 'innerWidth', {
-        writable: true,
-        configurable: true,
-        value: 375,
-      });
-
-      render(<LearningPathsPage />);
-
-      // Statistics should be hidden by default on mobile
-      const statisticsContainer = screen
-        .getAllByText('Learning Paths')[1]
-        .closest('div')?.parentElement?.parentElement;
-      expect(statisticsContainer).toHaveClass('hidden', 'md:grid');
-
-      // Click show statistics button
-      fireEvent.click(screen.getByRole('button', { name: /show stats/i }));
-
-      // Statistics should now be visible
-      await waitFor(() => {
-        expect(statisticsContainer).toHaveClass('block');
-      });
-    });
-
-    it('toggles filters visibility on mobile', async () => {
-      Object.defineProperty(window, 'innerWidth', {
-        writable: true,
-        configurable: true,
-        value: 375,
-      });
-
-      render(<LearningPathsPage />);
-
-      // Filters should be hidden by default on mobile
-      const filtersContainer = screen
-        .getByText('Difficulty Level')
-        .closest('div')?.parentElement?.parentElement;
-      expect(filtersContainer).toHaveClass('hidden', 'md:block');
-
-      // Click show filters button
-      fireEvent.click(screen.getByRole('button', { name: /filters/i }));
-
-      // Filters should now be visible
-      await waitFor(() => {
-        expect(filtersContainer).toHaveClass('block');
-      });
-    });
-  });
-
-  describe('Navigation Links', () => {
-    it('renders navigation links with correct hrefs', () => {
-      render(<LearningPathsPage />);
-
-      const studyPlansLink = screen.getAllByRole('link', {
+      // Check header navigation links
+      const studyPlansLink = screen.getByRole('link', {
         name: /view study plans/i,
-      })[0];
-      const prepGuidesLink = screen.getAllByRole('link', {
+      });
+      const prepGuidesLink = screen.getByRole('link', {
         name: /preparation guides/i,
-      })[0];
-      const enhancedLink = screen.getAllByRole('link', {
-        name: /enhanced learning path/i,
-      })[0];
+      });
 
       expect(studyPlansLink).toHaveAttribute('href', '/study-plans');
       expect(prepGuidesLink).toHaveAttribute('href', '/preparation-guides');
-      expect(enhancedLink).toHaveAttribute('href', '/learning-paths/enhanced');
+
+      // Check schedule interview button
+      const scheduleLink = screen.getByRole('link', {
+        name: /schedule ai mock interview/i,
+      });
+      expect(scheduleLink).toHaveAttribute('href', '/schedule-interview');
     });
 
-    it('renders call to action links', () => {
+    it('has correct href attributes for card action buttons when expanded', async () => {
+      const user = userEvent.setup();
       render(<LearningPathsPage />);
 
-      // Scroll to bottom to see call to action (simulate)
-      const callToAction = screen.getByText(/ready to start learning/i);
-      expect(callToAction).toBeInTheDocument();
+      // Expand first card
+      const frontendCard = screen
+        .getByText('Frontend Basics')
+        .closest('button');
+      await user.click(frontendCard!);
 
-      const ctaStudyPlans = screen.getAllByRole('link', {
-        name: /study plans/i,
-      })[1]; // Second occurrence (CTA)
-      const ctaPrepGuides = screen.getAllByRole('link', {
-        name: /preparation guides/i,
-      })[1]; // Second occurrence (CTA)
+      await waitFor(() => {
+        const practiceButton = screen.getByRole('link', {
+          name: /practice questions/i,
+        });
+        const resourcesButton = screen.getByRole('link', {
+          name: /view resources/i,
+        });
 
-      expect(ctaStudyPlans).toHaveAttribute('href', '/study-plans');
-      expect(ctaPrepGuides).toHaveAttribute('href', '/preparation-guides');
+        expect(practiceButton).toHaveAttribute(
+          'href',
+          '/learning-paths/frontend-basics/questions'
+        );
+        expect(resourcesButton).toHaveAttribute(
+          'href',
+          '/learning-paths/frontend-basics/resources'
+        );
+      });
+    });
+
+    it('has correct href attributes for flashcard icons when expanded', async () => {
+      const user = userEvent.setup();
+      render(<LearningPathsPage />);
+
+      // Expand first card
+      const frontendCard = screen
+        .getByText('Frontend Basics')
+        .closest('button');
+      await user.click(frontendCard!);
+
+      await waitFor(() => {
+        const flashcardIcon = screen.getByLabelText(/add to flashcards/i);
+        expect(flashcardIcon).toHaveAttribute(
+          'href',
+          '/learning-paths/frontend-basics/questions'
+        );
+      });
     });
   });
 
-  describe('Statistics Display', () => {
-    it('displays correct statistics values', () => {
+  describe('Data Integration', () => {
+    it('displays correct question counts for all learning paths', () => {
       render(<LearningPathsPage />);
 
-      // Check that statistics are calculated correctly
-      expect(screen.getByText('4')).toBeInTheDocument(); // learningPathsCount
-      expect(screen.getByText('82')).toBeInTheDocument(); // totalHours (15+12+25+30)
-      expect(screen.getAllByText('12')).toHaveLength(2); // totalResources (3+3+3+3) and categoriesCount
+      expect(screen.getByText('#25 Q')).toBeInTheDocument();
+      expect(screen.getByText('#30 Q')).toBeInTheDocument();
+      expect(screen.getByText('#20 Q')).toBeInTheDocument();
     });
 
-    it('updates statistics when filters are applied', async () => {
+    it('displays correct difficulty levels for all learning paths', () => {
       render(<LearningPathsPage />);
 
-      // Apply beginner filter
-      fireEvent.click(screen.getByText('Beginner'));
+      expect(screen.getByText('beginner')).toBeInTheDocument();
+      expect(screen.getByText('intermediate')).toBeInTheDocument();
+      expect(screen.getByText('advanced')).toBeInTheDocument();
+    });
 
-      // Statistics should still show total values (not filtered)
-      await waitFor(() => {
-        expect(screen.getByText('4')).toBeInTheDocument(); // learningPathsCount
-        expect(screen.getByText('82')).toBeInTheDocument(); // totalHours
-        expect(screen.getAllByText('12')).toHaveLength(2); // totalResources and categoriesCount
+    it('displays correct estimated times for all learning paths', () => {
+      render(<LearningPathsPage />);
+
+      expect(screen.getByText('40 hours')).toBeInTheDocument();
+      expect(screen.getByText('60 hours')).toBeInTheDocument();
+      expect(screen.getByText('30 hours')).toBeInTheDocument();
+    });
+
+    it('displays correct target skills for all learning paths', () => {
+      render(<LearningPathsPage />);
+
+      // Frontend Basics skills
+      expect(screen.getByText('HTML')).toBeInTheDocument();
+      expect(screen.getByText('CSS')).toBeInTheDocument();
+      expect(screen.getByText('JavaScript')).toBeInTheDocument();
+
+      // React Mastery skills
+      expect(screen.getByText('React')).toBeInTheDocument();
+      expect(screen.getByText('Hooks')).toBeInTheDocument();
+      expect(screen.getByText('State Management')).toBeInTheDocument();
+
+      // Advanced CSS skills
+      expect(screen.getByText('CSS Grid')).toBeInTheDocument();
+      expect(screen.getByText('Flexbox')).toBeInTheDocument();
+      expect(screen.getByText('Animations')).toBeInTheDocument();
+    });
+
+    it('displays correct prerequisites for all learning paths', () => {
+      render(<LearningPathsPage />);
+
+      expect(screen.getByText('Basic computer skills')).toBeInTheDocument();
+      expect(screen.getByText('JavaScript ES6+')).toBeInTheDocument();
+      expect(screen.getByText('CSS Basics')).toBeInTheDocument();
+    });
+  });
+
+  describe('Responsive Design Integration', () => {
+    it('applies responsive classes correctly', () => {
+      const { container } = render(<LearningPathsPage />);
+
+      // Check main container
+      const mainContainer = container.querySelector('.min-h-screen');
+      expect(mainContainer).toHaveClass(
+        'bg-gradient-to-br',
+        'from-gray-50',
+        'via-white',
+        'to-slate-50'
+      );
+
+      // Check grid layout
+      const grid = container.querySelector('.grid');
+      expect(grid).toHaveClass('grid-cols-1', 'lg:grid-cols-2');
+    });
+
+    it('handles mobile viewport correctly', () => {
+      // Mock mobile viewport
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 375,
       });
+
+      render(<LearningPathsPage />);
+
+      // Should still render all content
+      expect(
+        screen.getByRole('heading', { name: 'Learning Paths' })
+      ).toBeInTheDocument();
+      expect(screen.getByText('Frontend Basics')).toBeInTheDocument();
+    });
+  });
+
+  describe('Accessibility Integration', () => {
+    it('has proper heading hierarchy', () => {
+      render(<LearningPathsPage />);
+
+      const mainHeading = screen.getByRole('heading', {
+        name: 'Learning Paths',
+      });
+      expect(mainHeading.tagName).toBe('H1');
+    });
+
+    it('has proper ARIA attributes for interactive elements', () => {
+      render(<LearningPathsPage />);
+
+      // Check that buttons have proper ARIA attributes
+      const cardButtons = screen.getAllByRole('button');
+      cardButtons.forEach(button => {
+        expect(button).toHaveAttribute('aria-expanded');
+      });
+    });
+
+    it('has proper focus management', () => {
+      render(<LearningPathsPage />);
+
+      // Check that links are focusable
+      const links = screen.getAllByRole('link');
+      links.forEach(link => {
+        expect(link).not.toBeDisabled();
+      });
+    });
+  });
+
+  describe('Error Handling Integration', () => {
+    it('handles missing learning paths gracefully', () => {
+      // Mock empty learning paths
+      jest.doMock('@/lib/resources', () => ({
+        learningPaths: [],
+        getResourceById: jest.fn(),
+      }));
+
+      expect(() => {
+        render(<LearningPathsPage />);
+      }).not.toThrow();
+    });
+
+    it('handles malformed learning path data gracefully', () => {
+      // Mock malformed data
+      jest.doMock('@/lib/resources', () => ({
+        learningPaths: [
+          {
+            id: 'malformed-path',
+            title: 'Malformed Path',
+            // Missing required fields
+          },
+        ],
+        getResourceById: jest.fn(),
+      }));
+
+      expect(() => {
+        render(<LearningPathsPage />);
+      }).not.toThrow();
     });
   });
 });
