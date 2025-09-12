@@ -26,8 +26,8 @@ To enable automatic deployments, you need to add the following secrets to your G
 
 Once set up, your applications will be automatically deployed to:
 
-- **Main Website**: https://great-frontend-ib73ljepe-foushwares-projects.vercel.app
-- **Storybook**: https://great-frontend-hub-storybook-e1uw1c7ci-foushwares-projects.vercel.app
+- **Main Website**: https://zatona-web.vercel.app
+- **Storybook**: https://zatona-web-storybook.vercel.app
 
 ## How it works
 
@@ -41,13 +41,13 @@ If you need to deploy manually:
 
 ### Main Website:
 ```bash
-npx vercel link --project great-frontend-hub
+npx vercel link --project zatona-web
 npx vercel --prod
 ```
 
 ### Storybook:
 ```bash
-npx vercel link --project great-frontend-hub-storybook
+npx vercel link --project zatona-web-storybook
 npx vercel --prod
 ```
 
