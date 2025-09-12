@@ -70,9 +70,7 @@ describe.skip('Learning Paths Components', () => {
       expect(
         screen.getByRole('link', { name: /preparation guides/i })
       ).toBeInTheDocument();
-      expect(
-        screen.getByRole('link', { name: /enhanced learning path/i })
-      ).toBeInTheDocument();
+      // Enhanced Learning Path link was removed in simplified version
     });
 
     it('renders custom links when provided', () => {
