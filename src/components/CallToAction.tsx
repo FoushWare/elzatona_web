@@ -4,10 +4,10 @@ export function CallToAction() {
   return (
     <div className="mt-12 sm:mt-16 text-center px-4">
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 sm:p-8 text-white">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 text-foreground">
           Ready to Start Learning?
         </h2>
-        <p className="text-lg sm:text-xl mb-4 sm:mb-6 opacity-90">
+        <p className="text-lg sm:text-xl mb-4 sm:mb-6 opacity-90 text-foreground">
           Choose your learning path and begin your frontend development journey
         </p>
         <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">

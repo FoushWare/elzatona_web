@@ -15,21 +15,21 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   variant = 'horizontal',
 }) => {
   const sizeClasses = {
-    sm: 'w-8 h-12',
-    md: 'w-12 h-18',
-    lg: 'w-16 h-24',
+    sm: 'w-10 h-10',
+    md: 'w-14 h-14',
+    lg: 'w-18 h-18',
   };
 
   if (!showText) {
-    // Icon only - using the new zatona-web-logo2.svg as icon
+    // Icon only - using the new zatona-web-02.jpg as icon
     return (
       <div className={`${className}`}>
         <Image
-          src="/zatona-web-logo2.svg"
+          src="/zatona-web-02.jpg"
           alt="Zatona Web Icon"
-          width={40}
-          height={60}
-          className="w-8 h-12"
+          width={824}
+          height={738}
+          className="w-10 h-10"
           priority
         />
       </div>
@@ -37,15 +37,15 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   }
 
   if (variant === 'stacked') {
-    // Stacked logo design using the new zatona-web-logo2.svg with text
+    // Stacked logo design using the new zatona-web-02.jpg with text
     return (
       <div className={`flex flex-col items-center space-y-2 ${className}`}>
         <Image
-          src="/zatona-web-logo2.svg"
+          src="/zatona-web-02.jpg"
           alt="Zatona Web Logo"
-          width={200}
-          height={300}
-          className="w-48 h-72"
+          width={824}
+          height={738}
+          className="w-48 h-48"
           priority
         />
         <div className="text-center">
@@ -57,14 +57,14 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
     );
   }
 
-  // Horizontal logo design (default) using the new zatona-web-logo2.svg with text below
+  // Horizontal logo design (default) using the new zatona-web-02.jpg with text below
   return (
     <div className={`flex flex-col items-center ${className}`}>
       <Image
-        src="/zatona-web-logo2.svg"
+        src="/zatona-web-02.jpg"
         alt="Zatona Web Logo"
-        width={200}
-        height={300}
+        width={824}
+        height={738}
         className={sizeClasses[size]}
         priority
       />
