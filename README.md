@@ -4,8 +4,8 @@ A platform for frontend developers to practice coding challenges and prepare for
 
 ## 🌐 Live Applications
 
-- **Main Website**: [https://great-frontend-ib73ljepe-foushwares-projects.vercel.app](https://great-frontend-ib73ljepe-foushwares-projects.vercel.app)
-- **Storybook (Component Library)**: [https://great-frontend-hub-storybook-e1uw1c7ci-foushwares-projects.vercel.app](https://great-frontend-hub-storybook-e1uw1c7ci-foushwares-projects.vercel.app)
+- **Main Website**: [https://zatona-web.vercel.app](https://zatona-web.vercel.app)
+- **Storybook (Component Library)**: [https://zatona-web-storybook.vercel.app](https://zatona-web-storybook.vercel.app)
 
 ## ✨ Features
 

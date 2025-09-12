@@ -125,8 +125,8 @@ To switch between main website and Storybook deployments:
 
 ## 📊 Monitoring
 
-- **Main Website**: Monitor at https://vercel.com/foushwares-projects/great-frontend-hub
-- **Storybook**: Monitor at https://vercel.com/foushwares-projects/great-frontend-hub
+- **Main Website**: Monitor at https://vercel.com/foushwares-projects/zatona-web
+- **Storybook**: Monitor at https://vercel.com/foushwares-projects/zatona-web-storybook
 
 Both deployments include:
 
