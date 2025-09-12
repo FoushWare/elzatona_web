@@ -1,8 +1,28 @@
 'use client';
 
-import { useState } from 'react';
-import { MessageCircle, X, Send, Bot, User, Lightbulb } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import {
+  MessageCircle,
+  X,
+  Send,
+  Bot,
+  User,
+  Lightbulb,
+  Mic,
+  MicOff,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 import { CHATGPT_CONFIG, ChatMessage } from '@/lib/chatgpt-config';
+
+// TypeScript declarations for Web Speech API
+declare global {
+  interface Window {
+    webkitSpeechRecognition: typeof SpeechRecognition;
+    SpeechRecognition: typeof SpeechRecognition;
+    speechSynthesis: SpeechSynthesis;
+  }
+}
 
 export default function ChatGPT() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,9 +36,92 @@ export default function ChatGPT() {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speechEnabled, setSpeechEnabled] = useState(true);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const synthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  // Initialize speech recognition
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
+      const SpeechRecognition =
+        window.webkitSpeechRecognition || window.SpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = 'en-US';
+
+      recognitionRef.current.onresult = event => {
+        const transcript = event.results[0][0].transcript;
+        setInputValue(transcript);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onerror = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+  }, []);
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
+  };
+
+  const startListening = () => {
+    if (recognitionRef.current && !isListening) {
+      setIsListening(true);
+      recognitionRef.current.start();
+    }
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current && isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    }
+  };
+
+  const speakText = (text: string) => {
+    if (
+      !speechEnabled ||
+      typeof window === 'undefined' ||
+      !('speechSynthesis' in window)
+    )
+      return;
+
+    // Stop any ongoing speech
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.volume = 0.8;
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    synthesisRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const stopSpeaking = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,6 +167,13 @@ export default function ChatGPT() {
       };
 
       setMessages(prev => [...prev, aiResponse]);
+
+      // Speak the AI response if speech is enabled
+      if (speechEnabled) {
+        setTimeout(() => {
+          speakText(data.choices[0].message.content);
+        }, 500);
+      }
     } catch (error) {
       console.error('ChatGPT API error:', error);
       const errorMessage: ChatMessage = {
@@ -121,43 +231,60 @@ export default function ChatGPT() {
           />
 
           {/* Chat Window */}
-          <div className="relative w-full h-full md:max-w-md md:h-[600px] lg:h-[600px] bg-white dark:bg-gray-800 rounded-none md:rounded-t-2xl shadow-2xl flex flex-col">
+          <div className="relative w-full h-full md:max-w-lg md:h-[700px] lg:h-[700px] bg-white dark:bg-gray-900 rounded-none md:rounded-t-2xl shadow-2xl flex flex-col border border-gray-200 dark:border-gray-700">
             {/* Header */}
-            <div className="relative overflow-hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white rounded-none md:rounded-t-2xl">
-              {/* Animated background pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-0 left-0 w-20 h-20 bg-white rounded-full blur-xl animate-pulse"></div>
-                <div
-                  className="absolute bottom-0 right-0 w-16 h-16 bg-white rounded-full blur-xl animate-pulse"
-                  style={{ animationDelay: '1s' }}
-                ></div>
-                <div
-                  className="absolute top-1/2 left-1/2 w-12 h-12 bg-white rounded-full blur-xl animate-pulse"
-                  style={{ animationDelay: '2s' }}
-                ></div>
-              </div>
-
-              <div className="relative z-10 flex items-center gap-3">
-                <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
-                  <Bot size={22} className="drop-shadow-lg" />
+            <div className="relative flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-none md:rounded-t-2xl">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                  <Bot size={20} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg">AI Learning Assistant</h3>
-                  <p className="text-xs text-blue-100 font-medium">
+                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                    AI Learning Assistant
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     Powered by Qwen AI
                   </p>
                 </div>
               </div>
-              <button
-                onClick={toggleChat}
-                className="relative z-10 p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-all duration-300 hover:scale-110"
-              >
-                <X size={20} />
-              </button>
+              <div className="flex items-center gap-2">
+                {/* Speech Toggle */}
+                <button
+                  onClick={() => setSpeechEnabled(!speechEnabled)}
+                  className={`p-2 rounded-full transition-colors ${
+                    speechEnabled
+                      ? 'text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20'
+                      : 'text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
+                  title={speechEnabled ? 'Disable speech' : 'Enable speech'}
+                >
+                  {speechEnabled ? (
+                    <Volume2 size={18} />
+                  ) : (
+                    <VolumeX size={18} />
+                  )}
+                </button>
+                {/* Stop Speaking */}
+                {isSpeaking && (
+                  <button
+                    onClick={stopSpeaking}
+                    className="p-2 rounded-full text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                    title="Stop speaking"
+                  >
+                    <VolumeX size={18} />
+                  </button>
+                )}
+                <button
+                  onClick={toggleChat}
+                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <X size={20} className="text-gray-600 dark:text-gray-400" />
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-gray-50 dark:bg-gray-800">
               {messages.map(message => (
                 <div
                   key={message.id}
@@ -166,39 +293,55 @@ export default function ChatGPT() {
                   }`}
                 >
                   {message.role === 'assistant' && (
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
                       <Bot size={16} className="text-white" />
                     </div>
                   )}
 
                   <div
-                    className={`max-w-[80%] px-4 py-2 rounded-2xl ${
+                    className={`max-w-[85%] px-4 py-3 rounded-2xl shadow-sm ${
                       message.role === 'user'
                         ? 'bg-blue-500 text-white rounded-br-md'
                         : message.isError
-                          ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-md'
+                          ? 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+                          : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-bl-md border border-gray-200 dark:border-gray-600'
                     }`}
                   >
-                    <p className="text-sm">{message.content}</p>
-                    <p className="text-xs opacity-70 mt-1">
-                      {message.timestamp.toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </p>
+                    <div className="prose prose-sm max-w-none dark:prose-invert">
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                        {message.content}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between mt-2">
+                      <p className="text-xs opacity-60">
+                        {message.timestamp.toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                      {message.role === 'assistant' && speechEnabled && (
+                        <button
+                          onClick={() => speakText(message.content)}
+                          className="text-xs opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1"
+                          title="Speak this message"
+                        >
+                          <Volume2 size={12} />
+                          Speak
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   {message.role === 'user' && (
-                    <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
-                      <User
-                        size={16}
-                        className="text-gray-600 dark:text-gray-300"
-                      />
+                    <div className="w-8 h-8 bg-gradient-to-r from-gray-400 to-gray-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
+                      <User size={16} className="text-white" />
                     </div>
                   )}
                 </div>
               ))}
+
+              {/* Auto-scroll anchor */}
+              <div ref={messagesEndRef} />
 
               {/* Suggested Questions */}
               {messages.length === 1 && (
@@ -303,31 +446,65 @@ export default function ChatGPT() {
             </div>
 
             {/* Input Form */}
-            <form
-              onSubmit={handleSubmit}
-              className="p-4 border-t border-gray-200 dark:border-gray-700"
-            >
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={e => setInputValue(e.target.value)}
-                  placeholder="Ask me anything about frontend development..."
-                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
-                  disabled={isLoading}
-                />
-                <button
-                  type="submit"
-                  disabled={!inputValue.trim() || isLoading}
-                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  <Send size={16} />
-                </button>
-              </div>
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+              <form onSubmit={handleSubmit} className="relative">
+                <div className="flex items-end gap-2">
+                  <div className="flex-1 relative">
+                    <textarea
+                      value={inputValue}
+                      onChange={e => setInputValue(e.target.value)}
+                      placeholder="Ask me anything about frontend development..."
+                      className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm resize-none min-h-[48px] max-h-32"
+                      disabled={isLoading}
+                      rows={1}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSubmit(e);
+                        }
+                      }}
+                    />
+
+                    {/* Voice Input Button */}
+                    <button
+                      type="button"
+                      onClick={isListening ? stopListening : startListening}
+                      disabled={isLoading}
+                      className={`absolute right-3 top-1/2 transform -translate-y-1/2 p-2 rounded-full transition-all duration-200 ${
+                        isListening
+                          ? 'bg-red-500 text-white animate-pulse'
+                          : 'text-gray-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                      }`}
+                      title={
+                        isListening ? 'Stop listening' : 'Start voice input'
+                      }
+                    >
+                      {isListening ? <MicOff size={16} /> : <Mic size={16} />}
+                    </button>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading || !inputValue.trim()}
+                    className="px-4 py-3 bg-blue-500 text-white rounded-2xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl disabled:shadow-none"
+                  >
+                    <Send size={18} />
+                  </button>
+                </div>
+
+                {/* Voice Status Indicator */}
+                {isListening && (
+                  <div className="absolute -top-8 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs flex items-center gap-2 animate-pulse">
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                    Listening...
+                  </div>
+                )}
+              </form>
+
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-                Ask about HTML, CSS, JavaScript, React, or interview prep!
+                💬 Type your message or 🎤 use voice input • Press Enter to send
               </p>
-            </form>
+            </div>
           </div>
         </div>
       )}
