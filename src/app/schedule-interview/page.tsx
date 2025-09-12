@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { DailyVideoCall } from '@/components/DailyVideoCall';
 import { AIInterviewerAgent } from '@/components/AIInterviewerAgent';
 import { PageHeader } from '@/components/PageHeader';
+import DailyApiKeyInput from '@/components/DailyApiKeyInput';
 
 interface InterviewRoom {
   id: string;
@@ -21,10 +22,22 @@ export default function ScheduleInterviewPage() {
   const [interviewDuration, setInterviewDuration] = useState(30);
   const [isAgentReady, setIsAgentReady] = useState(false);
   const [agentError, setAgentError] = useState<string | null>(null);
+  const [dailyApiKey, setDailyApiKey] = useState('');
+  const [isApiKeyValid, setIsApiKeyValid] = useState(false);
 
   const createInterviewRoom = async () => {
     if (!userName.trim()) {
       alert('Please enter your name');
+      return;
+    }
+
+    if (!dailyApiKey.trim()) {
+      alert('Please enter your Daily.co API key');
+      return;
+    }
+
+    if (!isApiKeyValid) {
+      alert('Please enter a valid Daily.co API key');
       return;
     }
 
@@ -40,6 +53,7 @@ export default function ScheduleInterviewPage() {
         body: JSON.stringify({
           topic: interviewTopic,
           duration: interviewDuration,
+          apiKey: dailyApiKey, // Pass user's API key
         }),
       });
 
@@ -216,6 +230,13 @@ export default function ScheduleInterviewPage() {
                 />
               </div>
 
+              {/* Daily.co API Key */}
+              <DailyApiKeyInput
+                value={dailyApiKey}
+                onChange={setDailyApiKey}
+                onValidate={setIsApiKeyValid}
+              />
+
               {/* Interview Topic */}
               <div>
                 <label
@@ -280,7 +301,9 @@ export default function ScheduleInterviewPage() {
               {/* Create Room Button */}
               <button
                 type="submit"
-                disabled={isCreatingRoom}
+                disabled={
+                  isCreatingRoom || !isApiKeyValid || !dailyApiKey.trim()
+                }
                 className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isCreatingRoom ? (
