@@ -113,7 +113,7 @@ export default function ChatGPT() {
 
       {/* Chat Popup */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-end p-4 md:p-6">
+        <div className="fixed inset-0 z-50 flex items-end justify-end p-0 md:p-4 lg:p-6">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black bg-opacity-50"
@@ -121,9 +121,9 @@ export default function ChatGPT() {
           />
 
           {/* Chat Window */}
-          <div className="relative w-full max-w-md h-[500px] md:h-[600px] bg-white dark:bg-gray-800 rounded-t-2xl shadow-2xl flex flex-col">
+          <div className="relative w-full h-full md:max-w-md md:h-[600px] lg:h-[600px] bg-white dark:bg-gray-800 rounded-none md:rounded-t-2xl shadow-2xl flex flex-col">
             {/* Header */}
-            <div className="relative overflow-hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white rounded-t-2xl">
+            <div className="relative overflow-hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white rounded-none md:rounded-t-2xl">
               {/* Animated background pattern */}
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-0 left-0 w-20 h-20 bg-white rounded-full blur-xl animate-pulse"></div>
