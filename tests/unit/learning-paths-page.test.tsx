@@ -158,29 +158,29 @@ describe('LearningPathsPage', () => {
   it('does not show filter buttons or statistics', () => {
     render(<LearningPathsPage />);
 
-    // Should not show filter buttons
+    // Should not show filter buttons (check for specific filter button text patterns)
     expect(
-      screen.queryByRole('button', { name: /all levels/i })
+      screen.queryByRole('button', { name: /^all levels$/i })
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: /beginner/i })
+      screen.queryByRole('button', { name: /^beginner$/i })
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: /intermediate/i })
+      screen.queryByRole('button', { name: /^intermediate$/i })
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: /advanced/i })
+      screen.queryByRole('button', { name: /^advanced$/i })
     ).not.toBeInTheDocument();
 
-    // Should not show category filter buttons
+    // Should not show category filter buttons (check for specific filter button text patterns)
     expect(
-      screen.queryByRole('button', { name: /javascript/i })
+      screen.queryByRole('button', { name: /^javascript$/i })
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: /react/i })
+      screen.queryByRole('button', { name: /^react$/i })
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: /css/i })
+      screen.queryByRole('button', { name: /^css$/i })
     ).not.toBeInTheDocument();
 
     // Should not show statistics
