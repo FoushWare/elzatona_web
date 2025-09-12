@@ -15,21 +15,21 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   variant = 'horizontal',
 }) => {
   const sizeClasses = {
-    sm: 'w-28 h-10',
-    md: 'w-36 h-14',
-    lg: 'w-48 h-18',
+    sm: 'w-8 h-12',
+    md: 'w-12 h-18',
+    lg: 'w-16 h-24',
   };
 
   if (!showText) {
-    // Icon only - using the new olive-themed icon
+    // Icon only - using the new zatona-web-logo2.svg as icon
     return (
       <div className={`${className}`}>
         <Image
-          src="/zatona-web-icon.svg"
+          src="/zatona-web-logo2.svg"
           alt="Zatona Web Icon"
-          width={100}
-          height={100}
-          className="w-10 h-10"
+          width={40}
+          height={60}
+          className="w-8 h-12"
           priority
         />
       </div>
@@ -37,32 +37,40 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   }
 
   if (variant === 'stacked') {
-    // Stacked logo design using the new SVG
+    // Stacked logo design using the new zatona-web-logo2.svg with text
     return (
       <div className={`flex flex-col items-center space-y-2 ${className}`}>
         <Image
-          src="/zatona-web-logo.svg"
+          src="/zatona-web-logo2.svg"
           alt="Zatona Web Logo"
           width={200}
-          height={200}
-          className="w-48 h-48"
+          height={300}
+          className="w-48 h-72"
           priority
         />
+        <div className="text-center">
+          <span className="text-xl font-bold text-gray-900 dark:text-white">
+            Zatona Web
+          </span>
+        </div>
       </div>
     );
   }
 
-  // Horizontal logo design (default) using the new SVG
+  // Horizontal logo design (default) using the new zatona-web-logo2.svg with text below
   return (
-    <div className={`${className}`}>
+    <div className={`flex flex-col items-center ${className}`}>
       <Image
-        src="/zatona-web-logo-horizontal.svg"
+        src="/zatona-web-logo2.svg"
         alt="Zatona Web Logo"
-        width={300}
-        height={80}
+        width={200}
+        height={300}
         className={sizeClasses[size]}
         priority
       />
+      <span className="text-[10px] font-semibold mt-0.5 text-center leading-tight">
+        Zatona Web
+      </span>
     </div>
   );
 };
