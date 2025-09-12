@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <!-- Olive branch gradient -->
     <linearGradient id="oliveBranchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -28,50 +28,50 @@
   </defs>
   
   <!-- Background shape (map-like contour) -->
-  <path d="M20 40 Q30 20 50 25 Q70 15 90 30 Q110 20 130 35 Q150 25 170 40 Q175 60 170 80 Q165 100 150 110 Q130 120 110 115 Q90 125 70 120 Q50 130 30 125 Q15 120 10 100 Q5 80 10 60 Q15 45 20 40 Z" 
+  <path d="M15 20 Q25 10 40 15 Q55 8 70 20 Q85 15 100 25 Q105 35 100 45 Q95 55 80 60 Q65 65 50 60 Q35 70 20 65 Q8 60 5 45 Q2 30 5 20 Q8 15 15 20 Z" 
         fill="url(#bgShapeGrad)" 
         stroke="#d4e6d4" 
-        stroke-width="1"/>
+        stroke-width="0.5"/>
   
   <!-- Olive branch -->
-  <path d="M30 50 Q45 40 60 50 Q75 45 90 55 Q105 50 120 60" 
+  <path d="M20 25 Q30 20 40 25 Q50 22 60 28 Q70 25 80 30" 
         stroke="url(#oliveBranchGrad)" 
-        stroke-width="3" 
+        stroke-width="2" 
         fill="none" 
         stroke-linecap="round"/>
   
   <!-- Left leaf -->
-  <path d="M35 45 Q25 40 30 35 Q35 30 45 35 Q40 40 35 45" 
+  <path d="M25 22 Q18 18 22 15 Q25 12 32 15 Q28 18 25 22" 
         fill="url(#oliveBranchGrad)" 
         stroke="#1a3009" 
-        stroke-width="1"/>
+        stroke-width="0.5"/>
   
   <!-- Right leaf -->
-  <path d="M85 50 Q75 45 80 40 Q85 35 95 40 Q90 45 85 50" 
+  <path d="M75 28 Q68 25 72 22 Q75 20 82 22 Q78 25 75 28" 
         fill="url(#oliveBranchGrad)" 
         stroke="#1a3009" 
-        stroke-width="1"/>
+        stroke-width="0.5"/>
   
   <!-- First olive -->
-  <ellipse cx="50" cy="55" rx="8" ry="12" 
+  <ellipse cx="35" cy="28" rx="5" ry="8" 
            fill="url(#oliveGrad)" 
            stroke="#2d5016" 
-           stroke-width="1.5"/>
-  <ellipse cx="48" cy="52" rx="4" ry="6" 
+           stroke-width="1"/>
+  <ellipse cx="33" cy="26" rx="2.5" ry="4" 
            fill="url(#oliveHighlight)"/>
   
   <!-- Second olive -->
-  <ellipse cx="110" cy="65" rx="8" ry="12" 
+  <ellipse cx="75" cy="33" rx="5" ry="8" 
            fill="url(#oliveGrad)" 
            stroke="#2d5016" 
-           stroke-width="1.5"/>
-  <ellipse cx="108" cy="62" rx="4" ry="6" 
+           stroke-width="1"/>
+  <ellipse cx="73" cy="31" rx="2.5" ry="4" 
            fill="url(#oliveHighlight)"/>
   
   <!-- Text: ZATONA WEB -->
-  <text x="100" y="160" 
+  <text x="150" y="50" 
         font-family="serif" 
-        font-size="18" 
+        font-size="24" 
         font-weight="bold" 
         text-anchor="middle" 
         fill="#2d5016">ZATONA WEB</text>
