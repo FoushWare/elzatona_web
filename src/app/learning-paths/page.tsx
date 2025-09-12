@@ -80,28 +80,28 @@ export default function LearningPathsPage() {
     setSelectedCategory('all');
   };
 
-  // Scroll to action buttons when a card is opened
+  // Scroll to the end of the card (flashcard icon) when a card is opened
   useEffect(() => {
     if (lastOpenedCard && cardRefs.current[lastOpenedCard]) {
       // Wait for the card animation to complete before scrolling
       const timer = setTimeout(() => {
         const cardElement = cardRefs.current[lastOpenedCard];
         if (cardElement) {
-          // Find the action buttons section within the card
-          const actionButtons = cardElement.querySelector(
-            '[data-action-buttons]'
+          // Find the flashcard icon at the end of the card
+          const flashcardIcon = cardElement.querySelector(
+            '[data-flashcard-icon]'
           );
-          if (actionButtons) {
-            actionButtons.scrollIntoView({
+          if (flashcardIcon) {
+            flashcardIcon.scrollIntoView({
               behavior: 'smooth',
-              block: 'center',
+              block: 'end',
               inline: 'nearest',
             });
           } else {
-            // Fallback: scroll to the card itself
+            // Fallback: scroll to the end of the card
             cardElement.scrollIntoView({
               behavior: 'smooth',
-              block: 'center',
+              block: 'end',
               inline: 'nearest',
             });
           }

@@ -98,8 +98,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             <div className="flex items-center space-x-3 flex-shrink-0">
               {path.questionCount && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 text-white border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300 animate-pulse">
-                  <span className="mr-1">🧠</span>
-                  {path.questionCount} questions
+                  #{path.questionCount} Q
                 </span>
               )}
               <svg
@@ -287,7 +286,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             </div>
 
             {/* Flashcard Icon at the End */}
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end mt-4" data-flashcard-icon>
               <Link
                 href={`/learning-paths/${path.id}/questions`}
                 className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 dark:from-yellow-600 dark:via-orange-600 dark:to-red-600 text-white shadow-lg hover:shadow-xl hover:scale-110 transform transition-all duration-300 border-2 border-white dark:border-gray-800"
