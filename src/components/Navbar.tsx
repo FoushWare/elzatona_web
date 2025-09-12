@@ -172,6 +172,18 @@ export default function Navbar() {
         },
       ],
     },
+    {
+      label: 'Admin',
+      icon: '⚙️',
+      items: [
+        {
+          href: '/admin',
+          label: 'Challenge Management',
+          icon: '📝',
+          description: 'Manage coding challenges and content',
+        },
+      ],
+    },
   ];
 
   useEffect(() => {
@@ -262,7 +274,7 @@ export default function Navbar() {
                 : 'text-white hover:text-blue-100'
             }`}
           >
-            <ZatonaLogo size="sm" showText={true} />
+            <ZatonaLogo size="sm" showText={false} />
           </Link>
 
           {/* Desktop Navigation with Dropdowns */}
