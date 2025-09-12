@@ -9,26 +9,26 @@ import ChatGPT from '@/components/ChatGPT';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Zatona Web 🫒 - Master Frontend Development Interviews',
+  title: 'Master Frontend Development Interviews',
   description:
     'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
   keywords:
-    'frontend development, interview preparation, React, JavaScript, CSS, HTML, coding challenges, learning paths, Zatona Web',
-  authors: [{ name: 'Zatona Web Team' }],
-  creator: 'Zatona Web',
-  publisher: 'Zatona Web',
+    'frontend development, interview preparation, React, JavaScript, CSS, HTML, coding challenges, learning paths',
+  authors: [{ name: 'Development Team' }],
+  creator: 'Development Team',
+  publisher: 'Development Team',
   robots: 'index, follow',
   openGraph: {
-    title: 'Zatona Web 🫒 - Master Frontend Development Interviews',
+    title: 'Master Frontend Development Interviews',
     description:
       'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
     type: 'website',
     locale: 'en_US',
-    siteName: 'Zatona Web',
+    siteName: 'Frontend Development Platform',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Zatona Web 🫒 - Master Frontend Development Interviews',
+    title: 'Master Frontend Development Interviews',
     description:
       'Comprehensive platform for mastering frontend development interviews. Practice questions, learning paths, coding challenges, and real-time AI assistance.',
   },
