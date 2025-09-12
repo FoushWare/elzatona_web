@@ -4,7 +4,7 @@ import LearningPathsPage from '@/app/learning-paths/page';
 
 // Mock the API response
 jest.mock(
-  '@/app/api/questions/[pathId]/route',
+  '@/app/api/questions/[learningPath]/route',
   () => ({
     GET: jest.fn().mockResolvedValue({
       json: () =>
@@ -35,78 +35,48 @@ describe('Learning Paths Page', () => {
     expect(headings.length).toBeGreaterThan(0);
   });
 
-  it('renders statistics section', () => {
+  it('renders AI mock interview button', () => {
     render(<LearningPathsPage />);
 
-    // Check for statistics numbers
-    expect(screen.getByText('20')).toBeInTheDocument(); // Learning Paths count
-    expect(screen.getByText('286')).toBeInTheDocument(); // Total Hours
-    expect(screen.getByText('66')).toBeInTheDocument(); // Total Resources
-    expect(screen.getByText('12')).toBeInTheDocument(); // Total Skills
+    // Check for AI mock interview button
+    expect(
+      screen.getByRole('link', { name: /schedule ai mock interview/i })
+    ).toBeInTheDocument();
   });
 
-  it('renders filter buttons', () => {
+  it('renders learning path cards', () => {
     render(<LearningPathsPage />);
 
-    // Check for difficulty filter buttons
-    expect(
-      screen.getByRole('button', { name: /all levels/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /beginner/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /intermediate/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /advanced/i })
-    ).toBeInTheDocument();
-
-    // Check for category filter buttons
-    expect(
-      screen.getByRole('button', { name: /all categories/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /javascript/i })
-    ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /react/i })).toBeInTheDocument();
-  });
-
-  it('renders navigation links', () => {
-    render(<LearningPathsPage />);
-
-    // Check for navigation links (use getAllByRole to handle duplicates)
-    const studyPlansLinks = screen.getAllByRole('link', {
-      name: /view study plans/i,
-    });
-    const preparationGuidesLinks = screen.getAllByRole('link', {
-      name: /preparation guides/i,
-    });
-    const enhancedLearningLinks = screen.getAllByRole('link', {
-      name: /enhanced learning/i,
-    });
-
-    expect(studyPlansLinks.length).toBeGreaterThan(0);
-    expect(preparationGuidesLinks.length).toBeGreaterThan(0);
-    expect(enhancedLearningLinks.length).toBeGreaterThan(0);
-  });
-
-  it('renders mobile buttons', () => {
-    render(<LearningPathsPage />);
-
-    expect(
-      screen.getByRole('button', { name: /show stats/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /filters/i })
-    ).toBeInTheDocument();
+    // Check for learning path cards (should be collapsed by default)
+    const cards = screen.getAllByTestId('learning-path-card');
+    expect(cards.length).toBeGreaterThan(0);
   });
 
   it('renders page description', () => {
     render(<LearningPathsPage />);
 
     expect(
-      screen.getByText(/curated educational journeys/i)
+      screen.getByText(/your path to success in interviews/i)
     ).toBeInTheDocument();
+  });
+
+  it('does not render statistics section', () => {
+    render(<LearningPathsPage />);
+
+    // Statistics section should not be present in simplified version
+    expect(screen.queryByText('20')).not.toBeInTheDocument();
+    expect(screen.queryByText('286')).not.toBeInTheDocument();
+  });
+
+  it('does not render filter buttons', () => {
+    render(<LearningPathsPage />);
+
+    // Filter buttons should not be present in simplified version
+    expect(
+      screen.queryByRole('button', { name: /all levels/i })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /beginner/i })
+    ).not.toBeInTheDocument();
   });
 });
