@@ -163,6 +163,12 @@ export const flashcardService = {
     userId?: string;
   }): Promise<string | null> {
     try {
+      // Check if Firebase is properly configured
+      if (!db) {
+        console.warn('Firestore not available - skipping flashcard creation');
+        return null;
+      }
+
       const flashcardData = {
         question: questionData.question,
         answer: questionData.answer,
@@ -193,6 +199,12 @@ export const flashcardService = {
     question: string
   ): Promise<{ exists: boolean; flashcardId?: string }> {
     try {
+      // Check if Firebase is properly configured
+      if (!db) {
+        console.warn('Firestore not available - skipping flashcard check');
+        return { exists: false };
+      }
+
       const flashcardsQuery = query(
         collection(db, 'flashcards'),
         where('createdBy', '==', userId),
