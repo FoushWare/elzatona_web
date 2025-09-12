@@ -42,12 +42,6 @@ export function PageHeader({
       icon: '🎯',
       variant: 'secondary' as const,
     },
-    {
-      href: '/learning-paths/enhanced',
-      label: 'Enhanced Learning Path (Interactive)',
-      icon: '🚀',
-      variant: 'tertiary' as const,
-    },
   ],
   className = '',
 }: PageHeaderProps) {
