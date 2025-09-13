@@ -490,13 +490,12 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/auth"
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center ${
                   isScrolled
                     ? 'bg-green-600 text-white hover:bg-green-700'
                     : 'bg-green-500 text-white hover:bg-green-600'
                 }`}
               >
-                <span className="text-lg">💾</span>
                 <span className="hidden lg:inline text-sm">Save Progress</span>
                 <span className="lg:hidden text-sm">Save</span>
               </Link>
@@ -600,7 +599,7 @@ export default function Navbar() {
                   className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-green-600 text-white hover:bg-green-700 text-center"
                   onClick={() => setIsOpen(false)}
                 >
-                  💾 Save Progress
+                  Save Progress
                 </Link>
               )}
             </div>
