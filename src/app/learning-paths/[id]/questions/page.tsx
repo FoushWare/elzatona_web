@@ -106,13 +106,14 @@ export default function QuestionsPage() {
   useEffect(() => {
     if (currentGroup && currentGroup.questions[currentQuestionIndex]) {
       const currentQuestion = currentGroup.questions[currentQuestionIndex];
-      const questionText = currentQuestion.question;
+      const questionText = currentQuestion.question || '';
 
       // Small delay to ensure UI is ready
       const timer = setTimeout(() => {
         // Trigger TTS automatically
         if (
           questionText &&
+          questionText.trim() !== '' &&
           typeof window !== 'undefined' &&
           'speechSynthesis' in window
         ) {
@@ -174,19 +175,29 @@ export default function QuestionsPage() {
       currentGroup.questions[currentQuestionIndex]
     ) {
       const currentQuestion = currentGroup.questions[currentQuestionIndex];
-      const answerText = currentQuestion.answer;
-      const explanationText = currentQuestion.explanation;
+      const answerText = currentQuestion.answer || '';
+      const explanationText = currentQuestion.explanation || '';
 
-      // Combine answer and explanation for TTS
-      const fullText = explanationText
-        ? `${answerText}. ${explanationText}`
-        : answerText;
+      // Combine answer and explanation for TTS with proper fallbacks
+      let fullText = '';
+      if (answerText && explanationText) {
+        fullText = `${answerText}. ${explanationText}`;
+      } else if (answerText) {
+        fullText = answerText;
+      } else if (explanationText) {
+        fullText = explanationText;
+      } else {
+        // Fallback to a generic message if no content is available
+        fullText = 'No answer explanation available for this question.';
+      }
 
       // Small delay to ensure UI is ready
       const timer = setTimeout(() => {
         // Trigger TTS automatically for the answer
         if (
           fullText &&
+          fullText.trim() !== '' &&
+          fullText !== 'No answer explanation available for this question.' &&
           typeof window !== 'undefined' &&
           'speechSynthesis' in window
         ) {
