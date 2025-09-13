@@ -14,11 +14,13 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   showText = true,
   variant = 'horizontal',
 }) => {
-  const sizeClasses = {
-    sm: 'w-20 h-20',
-    md: 'w-28 h-28',
-    lg: 'w-32 h-32',
+  const sizeConfig = {
+    sm: { class: 'w-20 h-20', width: 80, height: 80 },
+    md: { class: 'w-28 h-28', width: 112, height: 112 },
+    lg: { class: 'w-32 h-32', width: 128, height: 128 },
   };
+
+  const config = sizeConfig[size];
 
   // Icon only - using the zatona-web-blue01.png as icon (no text)
   return (
@@ -26,9 +28,9 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
       <Image
         src="/zatona-web-blue01.png"
         alt="Frontend Development Platform Icon"
-        width={200}
-        height={200}
-        className={sizeClasses[size]}
+        width={config.width}
+        height={config.height}
+        className={`${config.class} object-contain`}
         priority
       />
     </div>
