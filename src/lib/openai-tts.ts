@@ -22,7 +22,7 @@ export class OpenAITTS {
   private baseUrl = 'https://api.openai.com/v1/audio/speech';
 
   constructor(apiKey?: string) {
-    this.apiKey = apiKey || process.env.NEXT_PUBLIC_OPENAI_API_KEY || '';
+    this.apiKey = apiKey || process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY || '';
   }
 
   async synthesize(options: OpenAITTSOptions): Promise<TTSResponse> {
