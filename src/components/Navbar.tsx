@@ -489,16 +489,14 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/auth"
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-lg ${
+                className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
                   isScrolled
-                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 shadow-green-500/25'
-                    : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 shadow-green-500/25'
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-green-500 text-white hover:bg-green-600'
                 }`}
               >
-                <span className="hidden lg:inline flex items-center">
-                  💾 Save Progress
-                </span>
-                <span className="lg:hidden flex items-center">💾 Save</span>
+                <span className="hidden lg:inline">💾 Save Progress</span>
+                <span className="lg:hidden">💾 Save</span>
               </Link>
             )}
           </div>
@@ -597,7 +595,7 @@ export default function Navbar() {
               ) : (
                 <Link
                   href="/auth"
-                  className="block w-full px-6 py-4 rounded-xl text-lg font-semibold transition-all duration-300 bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 text-center shadow-lg hover:scale-105 shadow-green-500/25"
+                  className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-green-600 text-white hover:bg-green-700 text-center"
                   onClick={() => setIsOpen(false)}
                 >
                   💾 Save Progress
