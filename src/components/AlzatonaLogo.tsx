@@ -1,14 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
 
-interface ZatonaLogoProps {
+interface AlzatonaLogoProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   showText?: boolean;
   variant?: 'horizontal' | 'stacked';
 }
 
-export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
+export const AlzatonaLogo: React.FC<AlzatonaLogoProps> = ({
   size = 'md',
   className = '',
   showText = true,
@@ -37,4 +37,4 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   );
 };
 
-export default ZatonaLogo;
+export default AlzatonaLogo;

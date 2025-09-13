@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import ZatonaLogo from '@/components/ZatonaLogo';
+import AlzatonaLogo from '@/components/AlzatonaLogo';
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
             <div className="text-center">
               <div className="flex justify-center mb-8">
-                <ZatonaLogo size="lg" showText={true} variant="stacked" />
+                <AlzatonaLogo size="lg" showText={true} variant="stacked" />
               </div>
               <div
                 className="text-8xl mb-6 animate-bounce"
@@ -23,7 +23,7 @@ export default function Home() {
                 🚀
               </div>
               <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-                <span className="text-blue-100">Zatona</span>
+                <span className="text-blue-100">Alzatona</span>
                 <span className="bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
                   Web
                 </span>
