@@ -23,9 +23,9 @@ export default function EnhancedTTS({
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoice, setSelectedVoice] =
     useState<SpeechSynthesisVoice | null>(null);
-  const [rate] = useState(0.9);
-  const [pitch] = useState(1.0);
-  const [volume] = useState(1.0);
+  const [rate] = useState(0.85); // Slightly slower for better comprehension
+  const [pitch] = useState(1.1); // Slightly higher pitch for more natural sound
+  const [volume] = useState(0.9); // Higher volume for clarity
   const [useServerTTS] = useState(false);
   const [serverTTSLoading, setServerTTSLoading] = useState(false);
 
@@ -62,15 +62,57 @@ export default function EnhancedTTS({
   const findBestVoice = (
     availableVoices: SpeechSynthesisVoice[]
   ): SpeechSynthesisVoice => {
-    // Priority order for voice selection
+    // Enhanced voice selection prioritizing natural-sounding voices
     const voicePriorities = [
+      // Google Cloud voices (most natural)
       { name: 'Google US English Female', lang: 'en-US' },
+      { name: 'Google UK English Female', lang: 'en-GB' },
+      { name: 'Google Australian English Female', lang: 'en-AU' },
       { name: 'Google US English Male', lang: 'en-US' },
+      { name: 'Google UK English Male', lang: 'en-GB' },
+      { name: 'Google Australian English Male', lang: 'en-AU' },
+      
+      // Microsoft Neural voices (very natural)
+      { name: 'Microsoft Aria Desktop', lang: 'en-US' },
+      { name: 'Microsoft Jenny Neural', lang: 'en-US' },
+      { name: 'Microsoft Guy Neural', lang: 'en-US' },
       { name: 'Microsoft Zira', lang: 'en-US' },
       { name: 'Microsoft David', lang: 'en-US' },
+      { name: 'Microsoft Hazel Desktop', lang: 'en-US' },
+      { name: 'Microsoft Susan Desktop', lang: 'en-US' },
+      
+      // Apple voices (natural on macOS)
       { name: 'Alex', lang: 'en-US' },
       { name: 'Samantha', lang: 'en-US' },
+      { name: 'Victoria', lang: 'en-US' },
+      { name: 'Daniel', lang: 'en-US' },
+      { name: 'Moira', lang: 'en-US' },
+      { name: 'Tessa', lang: 'en-US' },
+      { name: 'Karen', lang: 'en-US' },
+      { name: 'Fiona', lang: 'en-US' },
+      { name: 'Veena', lang: 'en-US' },
+      { name: 'Susan', lang: 'en-US' },
+      { name: 'Tom', lang: 'en-US' },
+      { name: 'Vicki', lang: 'en-US' },
     ];
+
+    // First, try to find neural or cloud-based voices
+    const neuralVoices = availableVoices.filter(voice => 
+      voice.name.toLowerCase().includes('neural') ||
+      voice.name.toLowerCase().includes('google') ||
+      voice.name.toLowerCase().includes('cloud')
+    );
+    
+    if (neuralVoices.length > 0) {
+      // Prefer female voices for better clarity
+      const femaleNeural = neuralVoices.find(voice => 
+        voice.name.toLowerCase().includes('female') ||
+        voice.name.toLowerCase().includes('aria') ||
+        voice.name.toLowerCase().includes('jenny')
+      );
+      if (femaleNeural) return femaleNeural;
+      return neuralVoices[0];
+    }
 
     // Try to find voices in priority order
     for (const priority of voicePriorities) {
@@ -80,8 +122,12 @@ export default function EnhancedTTS({
       if (voice) return voice;
     }
 
-    // Fallback to any English voice
-    const englishVoice = availableVoices.find(v => v.lang.startsWith('en'));
+    // Fallback to any English voice (avoid compact/enhanced voices)
+    const englishVoice = availableVoices.find(v => 
+      v.lang.startsWith('en') && 
+      !v.name.toLowerCase().includes('compact') &&
+      !v.name.toLowerCase().includes('enhanced')
+    );
     if (englishVoice) return englishVoice;
 
     // Final fallback to first available voice

@@ -122,12 +122,26 @@ export default function QuestionsPage() {
 
           const utterance = new SpeechSynthesisUtterance(questionText);
 
-          // Try to find the best available voice
+          // Enhanced voice selection for more natural sound
           const voices = speechSynthesis.getVoices();
+          
+          // Prioritize high-quality, natural-sounding voices
           const preferredVoices = [
+            // Google Cloud voices (most natural)
             'Google US English',
+            'Google UK English Female',
+            'Google UK English Male',
+            'Google Australian English Female',
+            'Google Australian English Male',
+            
+            // Microsoft Neural voices (very natural)
+            'Microsoft Aria Desktop',
+            'Microsoft Jenny Neural',
+            'Microsoft Guy Neural',
             'Microsoft Zira Desktop',
             'Microsoft David Desktop',
+            
+            // Apple voices (natural on macOS)
             'Alex',
             'Samantha',
             'Victoria',
@@ -137,26 +151,68 @@ export default function QuestionsPage() {
             'Karen',
             'Fiona',
             'Veena',
+            'Fred',
+            'Junior',
+            'Ralph',
+            'Susan',
+            'Tom',
+            'Vicki',
+            'Whisper',
+            
+            // Other high-quality voices
+            'Microsoft Hazel Desktop',
+            'Microsoft Susan Desktop',
+            'Microsoft Mark Desktop',
+            'Microsoft Catherine Desktop',
           ];
 
           let selectedVoice = null;
-          for (const preferred of preferredVoices) {
-            selectedVoice = voices.find(
-              voice =>
-                voice.name.includes(preferred) ||
-                voice.name.toLowerCase().includes(preferred.toLowerCase())
+          
+          // First, try to find voices that are specifically neural or cloud-based
+          const neuralVoices = voices.filter(voice => 
+            voice.name.toLowerCase().includes('neural') ||
+            voice.name.toLowerCase().includes('google') ||
+            voice.name.toLowerCase().includes('cloud')
+          );
+          
+          if (neuralVoices.length > 0) {
+            // Prefer female voices for better clarity
+            selectedVoice = neuralVoices.find(voice => 
+              voice.name.toLowerCase().includes('female') ||
+              voice.name.toLowerCase().includes('aria') ||
+              voice.name.toLowerCase().includes('jenny')
+            ) || neuralVoices[0];
+          }
+          
+          // If no neural voices, try the preferred list
+          if (!selectedVoice) {
+            for (const preferred of preferredVoices) {
+              selectedVoice = voices.find(
+                voice =>
+                  voice.name.includes(preferred) ||
+                  voice.name.toLowerCase().includes(preferred.toLowerCase())
+              );
+              if (selectedVoice) break;
+            }
+          }
+          
+          // Fallback to any English voice
+          if (!selectedVoice) {
+            selectedVoice = voices.find(voice => 
+              voice.lang.startsWith('en') && 
+              !voice.name.toLowerCase().includes('compact') &&
+              !voice.name.toLowerCase().includes('enhanced')
             );
-            if (selectedVoice) break;
           }
 
           if (selectedVoice) {
             utterance.voice = selectedVoice;
           }
 
-          // Optimize speech parameters
-          utterance.rate = 0.9;
-          utterance.pitch = 1.0;
-          utterance.volume = 0.8;
+          // Optimize speech parameters for more natural sound
+          utterance.rate = 0.85; // Slightly slower for better comprehension
+          utterance.pitch = 1.1; // Slightly higher pitch for more natural sound
+          utterance.volume = 0.9; // Higher volume for clarity
           utterance.lang = 'en-US';
 
           speechSynthesis.speak(utterance);
@@ -206,12 +262,26 @@ export default function QuestionsPage() {
 
           const utterance = new SpeechSynthesisUtterance(fullText);
 
-          // Try to find the best available voice
+          // Enhanced voice selection for more natural sound
           const voices = speechSynthesis.getVoices();
+          
+          // Prioritize high-quality, natural-sounding voices
           const preferredVoices = [
+            // Google Cloud voices (most natural)
             'Google US English',
+            'Google UK English Female',
+            'Google UK English Male',
+            'Google Australian English Female',
+            'Google Australian English Male',
+            
+            // Microsoft Neural voices (very natural)
+            'Microsoft Aria Desktop',
+            'Microsoft Jenny Neural',
+            'Microsoft Guy Neural',
             'Microsoft Zira Desktop',
             'Microsoft David Desktop',
+            
+            // Apple voices (natural on macOS)
             'Alex',
             'Samantha',
             'Victoria',
@@ -221,26 +291,68 @@ export default function QuestionsPage() {
             'Karen',
             'Fiona',
             'Veena',
+            'Fred',
+            'Junior',
+            'Ralph',
+            'Susan',
+            'Tom',
+            'Vicki',
+            'Whisper',
+            
+            // Other high-quality voices
+            'Microsoft Hazel Desktop',
+            'Microsoft Susan Desktop',
+            'Microsoft Mark Desktop',
+            'Microsoft Catherine Desktop',
           ];
 
           let selectedVoice = null;
-          for (const preferred of preferredVoices) {
-            selectedVoice = voices.find(
-              voice =>
-                voice.name.includes(preferred) ||
-                voice.name.toLowerCase().includes(preferred.toLowerCase())
+          
+          // First, try to find voices that are specifically neural or cloud-based
+          const neuralVoices = voices.filter(voice => 
+            voice.name.toLowerCase().includes('neural') ||
+            voice.name.toLowerCase().includes('google') ||
+            voice.name.toLowerCase().includes('cloud')
+          );
+          
+          if (neuralVoices.length > 0) {
+            // Prefer female voices for better clarity
+            selectedVoice = neuralVoices.find(voice => 
+              voice.name.toLowerCase().includes('female') ||
+              voice.name.toLowerCase().includes('aria') ||
+              voice.name.toLowerCase().includes('jenny')
+            ) || neuralVoices[0];
+          }
+          
+          // If no neural voices, try the preferred list
+          if (!selectedVoice) {
+            for (const preferred of preferredVoices) {
+              selectedVoice = voices.find(
+                voice =>
+                  voice.name.includes(preferred) ||
+                  voice.name.toLowerCase().includes(preferred.toLowerCase())
+              );
+              if (selectedVoice) break;
+            }
+          }
+          
+          // Fallback to any English voice
+          if (!selectedVoice) {
+            selectedVoice = voices.find(voice => 
+              voice.lang.startsWith('en') && 
+              !voice.name.toLowerCase().includes('compact') &&
+              !voice.name.toLowerCase().includes('enhanced')
             );
-            if (selectedVoice) break;
           }
 
           if (selectedVoice) {
             utterance.voice = selectedVoice;
           }
 
-          // Optimize speech parameters
-          utterance.rate = 0.9;
-          utterance.pitch = 1.0;
-          utterance.volume = 0.8;
+          // Optimize speech parameters for more natural sound
+          utterance.rate = 0.85; // Slightly slower for better comprehension
+          utterance.pitch = 1.1; // Slightly higher pitch for more natural sound
+          utterance.volume = 0.9; // Higher volume for clarity
           utterance.lang = 'en-US';
 
           speechSynthesis.speak(utterance);
