@@ -15,9 +15,9 @@ export const ZatonaLogo: React.FC<ZatonaLogoProps> = ({
   variant = 'horizontal',
 }) => {
   const sizeConfig = {
-    sm: { class: 'w-20 h-20', width: 80, height: 80 },
-    md: { class: 'w-28 h-28', width: 112, height: 112 },
-    lg: { class: 'w-32 h-32', width: 128, height: 128 },
+    sm: { class: 'w-24 h-24', width: 96, height: 96 },
+    md: { class: 'w-32 h-32', width: 128, height: 128 },
+    lg: { class: 'w-40 h-40', width: 160, height: 160 },
   };
 
   const config = sizeConfig[size];
