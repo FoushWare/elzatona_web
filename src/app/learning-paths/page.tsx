@@ -90,7 +90,7 @@ export default function LearningPathsPage() {
         <div className="mb-6 flex justify-center">
           <Link
             href="/schedule-interview"
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200"
+            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-purple-700 hover:shadow-xl hover:shadow-purple-500/25 dark:hover:shadow-purple-400/30 transform hover:-translate-y-0.5 transition-all duration-200 border border-blue-500/20 dark:border-purple-400/20"
           >
             <svg
               className="w-5 h-5 mr-2"

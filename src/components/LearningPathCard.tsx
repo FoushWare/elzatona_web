@@ -281,13 +281,13 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             >
               <Link
                 href={`/learning-paths/${path.id}/questions`}
-                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-gray-600 to-gray-700 dark:from-gray-500 dark:to-gray-600 text-white font-semibold rounded-xl hover:from-gray-700 hover:to-gray-800 dark:hover:from-gray-600 dark:hover:to-gray-700 hover:scale-105 transform transition-all duration-300 shadow-lg hover:shadow-gray-500/20 dark:hover:shadow-gray-400/25 text-sm lg:text-base"
+                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 hover:shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-blue-400/30 transform hover:-translate-y-0.5 transition-all duration-200 text-sm lg:text-base border border-blue-500/20 dark:border-blue-400/20"
               >
                 🧠 Practice Questions
               </Link>
               <Link
                 href={`/learning-paths/${path.id}/resources`}
-                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-slate-600 to-slate-700 dark:from-slate-500 dark:to-slate-600 text-white font-semibold rounded-xl hover:from-slate-700 hover:to-slate-800 dark:hover:from-slate-600 dark:hover:to-slate-700 hover:scale-105 transform transition-all duration-300 shadow-lg hover:shadow-slate-500/20 dark:hover:shadow-slate-400/25 text-sm lg:text-base"
+                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 dark:from-purple-500 dark:to-purple-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-purple-800 dark:hover:from-purple-600 dark:hover:to-purple-700 hover:shadow-lg hover:shadow-purple-500/25 dark:hover:shadow-purple-400/30 transform hover:-translate-y-0.5 transition-all duration-200 text-sm lg:text-base border border-purple-500/20 dark:border-purple-400/20"
               >
                 📚 View Resources
               </Link>
@@ -297,7 +297,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             <div className="flex justify-end mt-4" data-flashcard-icon>
               <Link
                 href={`/learning-paths/${path.id}/questions`}
-                className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 dark:from-yellow-600 dark:via-orange-600 dark:to-red-600 text-white shadow-lg hover:shadow-xl hover:scale-110 transform transition-all duration-300 border-2 border-white dark:border-gray-800"
+                className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 dark:from-yellow-600 dark:via-orange-600 dark:to-red-600 text-white shadow-lg hover:shadow-xl hover:shadow-orange-500/30 dark:hover:shadow-orange-400/40 hover:scale-105 transform hover:-translate-y-1 transition-all duration-200 border-2 border-white dark:border-gray-800 hover:border-yellow-300 dark:hover:border-yellow-400"
                 title="Add to Flashcards"
                 aria-label="Add learning path to flashcards"
               >
