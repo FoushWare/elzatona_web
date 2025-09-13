@@ -286,13 +286,13 @@ export default function Navbar() {
               <div key={menu.label} className="relative">
                 <button
                   onClick={() => toggleDropdown(menu.label)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group ${
+                  className={`flex items-center space-x-3 px-5 py-3 rounded-xl transition-all duration-300 hover:scale-105 relative group font-semibold shadow-md hover:shadow-lg ${
                     isScrolled
                       ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                       : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
                   } ${
                     activeDropdown === menu.label
-                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-lg'
                       : ''
                   }`}
                 >
@@ -489,14 +489,16 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/auth"
-                className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-lg ${
                   isScrolled
-                    ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-white text-green-600 hover:bg-green-50'
+                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 shadow-green-500/25'
+                    : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 shadow-green-500/25'
                 }`}
               >
-                <span className="hidden lg:inline">Save Progress</span>
-                <span className="lg:hidden">Save</span>
+                <span className="hidden lg:inline flex items-center">
+                  💾 Save Progress
+                </span>
+                <span className="lg:hidden flex items-center">💾 Save</span>
               </Link>
             )}
           </div>
@@ -595,7 +597,7 @@ export default function Navbar() {
               ) : (
                 <Link
                   href="/auth"
-                  className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-green-600 text-white hover:bg-green-700 text-center"
+                  className="block w-full px-6 py-4 rounded-xl text-lg font-semibold transition-all duration-300 bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 text-center shadow-lg hover:scale-105 shadow-green-500/25"
                   onClick={() => setIsOpen(false)}
                 >
                   💾 Save Progress
@@ -612,16 +614,16 @@ export default function Navbar() {
                 <div key={menu.label}>
                   <div className="space-y-2">
                     {/* Parent Section Header */}
-                    <div className="flex items-center px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                      <span className="text-2xl mr-3">{menu.icon}</span>
+                    <div className="flex items-center px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800 shadow-md">
+                      <span className="text-3xl mr-4">{menu.icon}</span>
                       <div className="flex-1">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center">
                           {menu.label}
-                          <span className="ml-2 text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
+                          <span className="ml-3 text-sm bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full font-semibold">
                             {menu.items.length} items
                           </span>
                         </h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-base text-gray-600 dark:text-gray-400 mt-1">
                           Explore all {menu.label.toLowerCase()} resources
                         </p>
                       </div>
@@ -633,21 +635,21 @@ export default function Navbar() {
                         <Link
                           key={item.href}
                           href={item.href}
-                          className="block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
+                          className="block px-5 py-4 rounded-xl text-lg font-semibold transition-all duration-300 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-l-4 border-transparent hover:border-blue-400 dark:hover:border-blue-500 shadow-sm hover:shadow-md hover:scale-105"
                           onClick={() => setIsOpen(false)}
                         >
                           <div className="flex items-center">
-                            <span className="text-lg mr-3 flex-shrink-0">
+                            <span className="text-2xl mr-4 flex-shrink-0">
                               {item.icon}
                             </span>
                             <div className="flex-1">
-                              <div className="font-semibold flex items-center">
+                              <div className="font-bold flex items-center text-lg">
                                 {item.label}
-                                <span className="ml-2 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-0.5 rounded-full">
+                                <span className="ml-3 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full font-semibold">
                                   #{itemIndex + 1}
                                 </span>
                               </div>
-                              <div className="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
+                              <div className="text-base text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
                                 {item.description}
                               </div>
                             </div>
