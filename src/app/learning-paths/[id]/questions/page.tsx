@@ -43,6 +43,128 @@ export default function QuestionsPage() {
 
   const learningPath = learningPaths.find(path => path.id === pathId);
 
+  // Enhanced TTS function with OpenAI fallback
+  const speakWithEnhancedTTS = async (text: string) => {
+    if (!text || typeof window === 'undefined') return;
+
+    try {
+      // Try OpenAI TTS first (most human-like)
+      const response = await fetch('/api/tts/openai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: text,
+          voice: 'nova', // Most natural OpenAI voice
+          model: 'tts-1-hd', // High definition model
+          speed: 1.0, // Normal speed for natural speech
+          format: 'mp3'
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        
+        if (result.success && result.audioUrl) {
+          const audio = new Audio(result.audioUrl);
+          audio.play();
+          console.log(`🎙️ Using OpenAI TTS with voice: ${result.voice}`);
+          return;
+        }
+      }
+
+      // Fallback to enhanced browser TTS
+      console.log('🎙️ Using enhanced browser TTS');
+      speakWithBrowserTTS(text);
+
+    } catch (error) {
+      console.error('TTS error:', error);
+      // Final fallback to browser TTS
+      speakWithBrowserTTS(text);
+    }
+  };
+
+  // Enhanced browser TTS with intelligent voice selection
+  const speakWithBrowserTTS = (text: string) => {
+    if (!text || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+
+    speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = speechSynthesis.getVoices();
+    
+    // Function to score voice quality for human-like speech
+    const scoreVoice = (voice: SpeechSynthesisVoice) => {
+      let score = 0;
+      const name = voice.name.toLowerCase();
+      
+      // Highest priority: Neural and AI voices (most human-like)
+      if (name.includes('neural')) score += 100;
+      if (name.includes('google')) score += 90;
+      if (name.includes('cloud')) score += 85;
+      if (name.includes('aria')) score += 80;
+      if (name.includes('jenny')) score += 75;
+      
+      // High priority: Premium voices
+      if (name.includes('premium')) score += 70;
+      if (name.includes('desktop')) score += 60;
+      if (name.includes('enhanced')) score += 50;
+      
+      // Medium priority: Natural voices
+      if (name.includes('alex')) score += 40;
+      if (name.includes('samantha')) score += 40;
+      if (name.includes('victoria')) score += 35;
+      if (name.includes('daniel')) score += 35;
+      if (name.includes('moira')) score += 30;
+      if (name.includes('tessa')) score += 30;
+      
+      // Prefer female voices for clarity
+      if (name.includes('female')) score += 20;
+      if (name.includes('aria') || name.includes('jenny') || name.includes('samantha')) score += 15;
+      
+      // Avoid robotic voices
+      if (name.includes('compact')) score -= 50;
+      if (name.includes('basic')) score -= 30;
+      if (name.includes('standard')) score -= 20;
+      
+      // Language preference
+      if (voice.lang === 'en-US') score += 10;
+      if (voice.lang === 'en-GB') score += 8;
+      if (voice.lang === 'en-AU') score += 6;
+      
+      return score;
+    };
+    
+    // Sort voices by human-like quality score
+    const sortedVoices = voices
+      .filter(voice => voice.lang.startsWith('en'))
+      .sort((a, b) => scoreVoice(b) - scoreVoice(a));
+    
+    const selectedVoice = sortedVoices[0];
+
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+      console.log(`🎙️ Using browser voice: ${selectedVoice.name} (Score: ${scoreVoice(selectedVoice)})`);
+    }
+
+    // Optimize speech parameters for human-like sound
+    utterance.rate = 0.8; // Slower for more natural pacing
+    utterance.pitch = 1.15; // Slightly higher pitch for warmth
+    utterance.volume = 0.95; // High volume for clarity
+    utterance.lang = 'en-US';
+    
+    // Add natural pauses and emphasis
+    utterance.onboundary = (event) => {
+      if (event.name === 'word') {
+        // Add subtle pauses between words for natural flow
+        utterance.rate = Math.random() * 0.1 + 0.75; // Slight variation in rate
+      }
+    };
+
+    speechSynthesis.speak(utterance);
+  };
+
   // Use Firebase questions hook
   const { questions: firebaseQuestions, loading } =
     useFirebaseQuestions(pathId);
@@ -110,90 +232,9 @@ export default function QuestionsPage() {
 
       // Small delay to ensure UI is ready
       const timer = setTimeout(() => {
-        // Trigger TTS automatically
-        if (
-          questionText &&
-          questionText.trim() !== '' &&
-          typeof window !== 'undefined' &&
-          'speechSynthesis' in window
-        ) {
-          // Cancel any ongoing speech
-          speechSynthesis.cancel();
-
-          const utterance = new SpeechSynthesisUtterance(questionText);
-
-          // Advanced human-like voice selection
-          const voices = speechSynthesis.getVoices();
-          
-          // Function to score voice quality for human-like speech
-          const scoreVoice = (voice) => {
-            let score = 0;
-            const name = voice.name.toLowerCase();
-            
-            // Highest priority: Neural and AI voices (most human-like)
-            if (name.includes('neural')) score += 100;
-            if (name.includes('google')) score += 90;
-            if (name.includes('cloud')) score += 85;
-            if (name.includes('aria')) score += 80;
-            if (name.includes('jenny')) score += 75;
-            
-            // High priority: Premium voices
-            if (name.includes('premium')) score += 70;
-            if (name.includes('desktop')) score += 60;
-            if (name.includes('enhanced')) score += 50;
-            
-            // Medium priority: Natural voices
-            if (name.includes('alex')) score += 40;
-            if (name.includes('samantha')) score += 40;
-            if (name.includes('victoria')) score += 35;
-            if (name.includes('daniel')) score += 35;
-            if (name.includes('moira')) score += 30;
-            if (name.includes('tessa')) score += 30;
-            
-            // Prefer female voices for clarity
-            if (name.includes('female')) score += 20;
-            if (name.includes('aria') || name.includes('jenny') || name.includes('samantha')) score += 15;
-            
-            // Avoid robotic voices
-            if (name.includes('compact')) score -= 50;
-            if (name.includes('basic')) score -= 30;
-            if (name.includes('standard')) score -= 20;
-            
-            // Language preference
-            if (voice.lang === 'en-US') score += 10;
-            if (voice.lang === 'en-GB') score += 8;
-            if (voice.lang === 'en-AU') score += 6;
-            
-            return score;
-          };
-          
-          // Sort voices by human-like quality score
-          const sortedVoices = voices
-            .filter(voice => voice.lang.startsWith('en'))
-            .sort((a, b) => scoreVoice(b) - scoreVoice(a));
-          
-          const selectedVoice = sortedVoices[0];
-
-          if (selectedVoice) {
-            utterance.voice = selectedVoice;
-            console.log(`Using voice: ${selectedVoice.name} (Score: ${scoreVoice(selectedVoice)})`);
-          }
-
-          // Optimize speech parameters for human-like sound
-          utterance.rate = 0.8; // Slower for more natural pacing
-          utterance.pitch = 1.15; // Slightly higher pitch for warmth
-          utterance.volume = 0.95; // High volume for clarity
-          utterance.lang = 'en-US';
-          
-          // Add natural pauses and emphasis
-          utterance.onboundary = (event) => {
-            if (event.name === 'word') {
-              // Add subtle pauses between words for natural flow
-              utterance.rate = Math.random() * 0.1 + 0.75; // Slight variation in rate
-            }
-          };
-
-          speechSynthesis.speak(utterance);
+        // Use enhanced TTS with OpenAI fallback
+        if (questionText && questionText.trim() !== '') {
+          speakWithEnhancedTTS(questionText);
         }
       }, 500); // 500ms delay
 
@@ -227,91 +268,13 @@ export default function QuestionsPage() {
 
       // Small delay to ensure UI is ready
       const timer = setTimeout(() => {
-        // Trigger TTS automatically for the answer
+        // Use enhanced TTS with OpenAI fallback for answers
         if (
           fullText &&
           fullText.trim() !== '' &&
-          fullText !== 'No answer explanation available for this question.' &&
-          typeof window !== 'undefined' &&
-          'speechSynthesis' in window
+          fullText !== 'No answer explanation available for this question.'
         ) {
-          // Cancel any ongoing speech
-          speechSynthesis.cancel();
-
-          const utterance = new SpeechSynthesisUtterance(fullText);
-
-          // Advanced human-like voice selection
-          const voices = speechSynthesis.getVoices();
-          
-          // Function to score voice quality for human-like speech
-          const scoreVoice = (voice) => {
-            let score = 0;
-            const name = voice.name.toLowerCase();
-            
-            // Highest priority: Neural and AI voices (most human-like)
-            if (name.includes('neural')) score += 100;
-            if (name.includes('google')) score += 90;
-            if (name.includes('cloud')) score += 85;
-            if (name.includes('aria')) score += 80;
-            if (name.includes('jenny')) score += 75;
-            
-            // High priority: Premium voices
-            if (name.includes('premium')) score += 70;
-            if (name.includes('desktop')) score += 60;
-            if (name.includes('enhanced')) score += 50;
-            
-            // Medium priority: Natural voices
-            if (name.includes('alex')) score += 40;
-            if (name.includes('samantha')) score += 40;
-            if (name.includes('victoria')) score += 35;
-            if (name.includes('daniel')) score += 35;
-            if (name.includes('moira')) score += 30;
-            if (name.includes('tessa')) score += 30;
-            
-            // Prefer female voices for clarity
-            if (name.includes('female')) score += 20;
-            if (name.includes('aria') || name.includes('jenny') || name.includes('samantha')) score += 15;
-            
-            // Avoid robotic voices
-            if (name.includes('compact')) score -= 50;
-            if (name.includes('basic')) score -= 30;
-            if (name.includes('standard')) score -= 20;
-            
-            // Language preference
-            if (voice.lang === 'en-US') score += 10;
-            if (voice.lang === 'en-GB') score += 8;
-            if (voice.lang === 'en-AU') score += 6;
-            
-            return score;
-          };
-          
-          // Sort voices by human-like quality score
-          const sortedVoices = voices
-            .filter(voice => voice.lang.startsWith('en'))
-            .sort((a, b) => scoreVoice(b) - scoreVoice(a));
-          
-          const selectedVoice = sortedVoices[0];
-
-          if (selectedVoice) {
-            utterance.voice = selectedVoice;
-            console.log(`Using voice: ${selectedVoice.name} (Score: ${scoreVoice(selectedVoice)})`);
-          }
-
-          // Optimize speech parameters for human-like sound
-          utterance.rate = 0.8; // Slower for more natural pacing
-          utterance.pitch = 1.15; // Slightly higher pitch for warmth
-          utterance.volume = 0.95; // High volume for clarity
-          utterance.lang = 'en-US';
-          
-          // Add natural pauses and emphasis
-          utterance.onboundary = (event) => {
-            if (event.name === 'word') {
-              // Add subtle pauses between words for natural flow
-              utterance.rate = Math.random() * 0.1 + 0.75; // Slight variation in rate
-            }
-          };
-
-          speechSynthesis.speak(utterance);
+          speakWithEnhancedTTS(fullText);
         }
       }, 300); // 300ms delay for answer
 
