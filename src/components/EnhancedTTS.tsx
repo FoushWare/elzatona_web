@@ -23,9 +23,9 @@ export default function EnhancedTTS({
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoice, setSelectedVoice] =
     useState<SpeechSynthesisVoice | null>(null);
-  const [rate] = useState(0.85); // Slightly slower for better comprehension
-  const [pitch] = useState(1.1); // Slightly higher pitch for more natural sound
-  const [volume] = useState(0.9); // Higher volume for clarity
+  const [rate] = useState(0.8); // Slower for more natural pacing
+  const [pitch] = useState(1.15); // Slightly higher pitch for warmth
+  const [volume] = useState(0.95); // High volume for clarity
   const [useServerTTS] = useState(false);
   const [serverTTSLoading, setServerTTSLoading] = useState(false);
 
@@ -62,73 +62,62 @@ export default function EnhancedTTS({
   const findBestVoice = (
     availableVoices: SpeechSynthesisVoice[]
   ): SpeechSynthesisVoice => {
-    // Enhanced voice selection prioritizing natural-sounding voices
-    const voicePriorities = [
-      // Google Cloud voices (most natural)
-      { name: 'Google US English Female', lang: 'en-US' },
-      { name: 'Google UK English Female', lang: 'en-GB' },
-      { name: 'Google Australian English Female', lang: 'en-AU' },
-      { name: 'Google US English Male', lang: 'en-US' },
-      { name: 'Google UK English Male', lang: 'en-GB' },
-      { name: 'Google Australian English Male', lang: 'en-AU' },
+    // Advanced human-like voice selection with scoring system
+    const scoreVoice = (voice: SpeechSynthesisVoice): number => {
+      let score = 0;
+      const name = voice.name.toLowerCase();
       
-      // Microsoft Neural voices (very natural)
-      { name: 'Microsoft Aria Desktop', lang: 'en-US' },
-      { name: 'Microsoft Jenny Neural', lang: 'en-US' },
-      { name: 'Microsoft Guy Neural', lang: 'en-US' },
-      { name: 'Microsoft Zira', lang: 'en-US' },
-      { name: 'Microsoft David', lang: 'en-US' },
-      { name: 'Microsoft Hazel Desktop', lang: 'en-US' },
-      { name: 'Microsoft Susan Desktop', lang: 'en-US' },
+      // Highest priority: Neural and AI voices (most human-like)
+      if (name.includes('neural')) score += 100;
+      if (name.includes('google')) score += 90;
+      if (name.includes('cloud')) score += 85;
+      if (name.includes('aria')) score += 80;
+      if (name.includes('jenny')) score += 75;
       
-      // Apple voices (natural on macOS)
-      { name: 'Alex', lang: 'en-US' },
-      { name: 'Samantha', lang: 'en-US' },
-      { name: 'Victoria', lang: 'en-US' },
-      { name: 'Daniel', lang: 'en-US' },
-      { name: 'Moira', lang: 'en-US' },
-      { name: 'Tessa', lang: 'en-US' },
-      { name: 'Karen', lang: 'en-US' },
-      { name: 'Fiona', lang: 'en-US' },
-      { name: 'Veena', lang: 'en-US' },
-      { name: 'Susan', lang: 'en-US' },
-      { name: 'Tom', lang: 'en-US' },
-      { name: 'Vicki', lang: 'en-US' },
-    ];
+      // High priority: Premium voices
+      if (name.includes('premium')) score += 70;
+      if (name.includes('desktop')) score += 60;
+      if (name.includes('enhanced')) score += 50;
+      
+      // Medium priority: Natural voices
+      if (name.includes('alex')) score += 40;
+      if (name.includes('samantha')) score += 40;
+      if (name.includes('victoria')) score += 35;
+      if (name.includes('daniel')) score += 35;
+      if (name.includes('moira')) score += 30;
+      if (name.includes('tessa')) score += 30;
+      if (name.includes('karen')) score += 25;
+      if (name.includes('fiona')) score += 25;
+      if (name.includes('veena')) score += 25;
+      
+      // Prefer female voices for clarity
+      if (name.includes('female')) score += 20;
+      if (name.includes('aria') || name.includes('jenny') || name.includes('samantha')) score += 15;
+      
+      // Avoid robotic voices
+      if (name.includes('compact')) score -= 50;
+      if (name.includes('basic')) score -= 30;
+      if (name.includes('standard')) score -= 20;
+      
+      // Language preference
+      if (voice.lang === 'en-US') score += 10;
+      if (voice.lang === 'en-GB') score += 8;
+      if (voice.lang === 'en-AU') score += 6;
+      
+      return score;
+    };
 
-    // First, try to find neural or cloud-based voices
-    const neuralVoices = availableVoices.filter(voice => 
-      voice.name.toLowerCase().includes('neural') ||
-      voice.name.toLowerCase().includes('google') ||
-      voice.name.toLowerCase().includes('cloud')
-    );
+    // Sort voices by human-like quality score
+    const sortedVoices = availableVoices
+      .filter(voice => voice.lang.startsWith('en'))
+      .sort((a, b) => scoreVoice(b) - scoreVoice(a));
     
-    if (neuralVoices.length > 0) {
-      // Prefer female voices for better clarity
-      const femaleNeural = neuralVoices.find(voice => 
-        voice.name.toLowerCase().includes('female') ||
-        voice.name.toLowerCase().includes('aria') ||
-        voice.name.toLowerCase().includes('jenny')
-      );
-      if (femaleNeural) return femaleNeural;
-      return neuralVoices[0];
+    const bestVoice = sortedVoices[0];
+    
+    if (bestVoice) {
+      console.log(`EnhancedTTS using voice: ${bestVoice.name} (Score: ${scoreVoice(bestVoice)})`);
+      return bestVoice;
     }
-
-    // Try to find voices in priority order
-    for (const priority of voicePriorities) {
-      const voice = availableVoices.find(
-        v => v.name.includes(priority.name) && v.lang === priority.lang
-      );
-      if (voice) return voice;
-    }
-
-    // Fallback to any English voice (avoid compact/enhanced voices)
-    const englishVoice = availableVoices.find(v => 
-      v.lang.startsWith('en') && 
-      !v.name.toLowerCase().includes('compact') &&
-      !v.name.toLowerCase().includes('enhanced')
-    );
-    if (englishVoice) return englishVoice;
 
     // Final fallback to first available voice
     return availableVoices[0];
@@ -182,6 +171,14 @@ export default function EnhancedTTS({
     utterance.onerror = event => {
       console.error('Speech synthesis error:', event);
       setIsPlaying(false);
+    };
+
+    // Add natural pauses and emphasis for human-like speech
+    utterance.onboundary = (event) => {
+      if (event.name === 'word') {
+        // Add subtle pauses between words for natural flow
+        utterance.rate = Math.random() * 0.1 + 0.75; // Slight variation in rate
+      }
     };
 
     utteranceRef.current = utterance;
