@@ -264,7 +264,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link
             href="/"
@@ -286,18 +286,18 @@ export default function Navbar() {
               <div key={menu.label} className="relative">
                 <button
                   onClick={() => toggleDropdown(menu.label)}
-                  className={`flex items-center space-x-3 px-5 py-3 rounded-xl transition-all duration-300 hover:scale-105 relative group font-semibold shadow-md hover:shadow-lg ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
                     isScrolled
                       ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                       : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
                   } ${
                     activeDropdown === menu.label
-                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-lg'
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
                       : ''
                   }`}
                 >
                   <span className="text-lg">{menu.icon}</span>
-                  <span className="font-semibold text-base">{menu.label}</span>
+                  <span className="font-medium text-sm">{menu.label}</span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
                       activeDropdown === menu.label ? 'rotate-180' : ''
@@ -368,13 +368,14 @@ export default function Navbar() {
             {/* Job Aggregator - Standalone Link */}
             <Link
               href="/jobs"
-              className={`nav-link transition-all duration-200 hover:scale-105 px-3 py-2 rounded-lg ${
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 font-medium ${
                 isScrolled
                   ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                   : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
               }`}
             >
-              💼 Job Aggregator
+              <span className="text-lg">💼</span>
+              <span className="text-sm">Job Aggregator</span>
             </Link>
 
             {/* User Dropdown or Auth Button */}
@@ -489,14 +490,15 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/auth"
-                className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
                   isScrolled
                     ? 'bg-green-600 text-white hover:bg-green-700'
                     : 'bg-green-500 text-white hover:bg-green-600'
                 }`}
               >
-                <span className="hidden lg:inline">💾 Save Progress</span>
-                <span className="lg:hidden">💾 Save</span>
+                <span className="text-lg">💾</span>
+                <span className="hidden lg:inline text-sm">Save Progress</span>
+                <span className="lg:hidden text-sm">Save</span>
               </Link>
             )}
           </div>
