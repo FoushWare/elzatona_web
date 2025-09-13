@@ -490,7 +490,7 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/auth"
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center ${
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center mr-4 ${
                   isScrolled
                     ? 'bg-green-600 text-white hover:bg-green-700'
                     : 'bg-green-500 text-white hover:bg-green-600'
@@ -503,7 +503,7 @@ export default function Navbar() {
           </div>
 
           {/* Theme Toggle */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-6">
             <button
               onClick={toggleDarkMode}
               className={`p-2 rounded-lg transition-colors duration-200 ${
