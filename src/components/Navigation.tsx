@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import ZatonaLogo from './ZatonaLogo';
+import AlzatonaLogo from './AlzatonaLogo';
 
 import { DarkModeToggle } from './DarkModeToggle';
 
@@ -12,7 +12,7 @@ export default function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              <ZatonaLogo size="sm" showText={true} variant="horizontal" />
+              <AlzatonaLogo size="sm" showText={true} variant="horizontal" />
             </Link>
           </div>
 

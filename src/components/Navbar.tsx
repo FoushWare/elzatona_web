@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Menu, X, Sun, Moon, ChevronDown, User, LogOut } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
-import ZatonaLogo from './ZatonaLogo';
+import AlzatonaLogo from './AlzatonaLogo';
 
 interface DropdownItem {
   href: string;
@@ -262,7 +262,7 @@ export default function Navbar() {
                 : 'text-white hover:text-blue-100'
             }`}
           >
-            <ZatonaLogo size="sm" showText={false} />
+            <AlzatonaLogo size="sm" showText={false} />
           </Link>
 
           {/* Desktop Navigation with Dropdowns */}
