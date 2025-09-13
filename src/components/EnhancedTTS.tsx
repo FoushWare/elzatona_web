@@ -26,7 +26,7 @@ export default function EnhancedTTS({
   const [rate] = useState(0.8); // Slower for more natural pacing
   const [pitch] = useState(1.15); // Slightly higher pitch for warmth
   const [volume] = useState(0.95); // High volume for clarity
-  const [useServerTTS] = useState(false);
+  const [useServerTTS] = useState(true); // Enable server TTS by default
   const [serverTTSLoading, setServerTTSLoading] = useState(false);
 
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -192,7 +192,38 @@ export default function EnhancedTTS({
     setServerTTSLoading(true);
 
     try {
-      const response = await fetch('/api/tts', {
+      // Try OpenAI TTS first (most human-like)
+      const response = await fetch('/api/tts/openai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: cleanTextForTTS(text),
+          voice: 'nova', // Most natural OpenAI voice
+          model: 'tts-1-hd', // High definition model
+          speed: 1.0, // Normal speed for natural speech
+          format: 'mp3'
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        
+        if (result.success && result.audioUrl) {
+          if (audioRef.current) {
+            audioRef.current.src = result.audioUrl;
+            audioRef.current.play();
+            setIsPlaying(true);
+            onStart?.();
+            console.log(`Using OpenAI TTS with voice: ${result.voice}`);
+            return;
+          }
+        }
+      }
+
+      // If OpenAI TTS fails, try the old server TTS
+      const fallbackResponse = await fetch('/api/tts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -205,21 +236,25 @@ export default function EnhancedTTS({
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('TTS request failed');
+      if (fallbackResponse.ok) {
+        const audioBlob = await fallbackResponse.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        if (audioRef.current) {
+          audioRef.current.src = audioUrl;
+          audioRef.current.play();
+          setIsPlaying(true);
+          onStart?.();
+          console.log('Using fallback server TTS');
+          return;
+        }
       }
 
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
+      throw new Error('All server TTS methods failed');
 
-      if (audioRef.current) {
-        audioRef.current.src = audioUrl;
-        audioRef.current.play();
-        setIsPlaying(true);
-        onStart?.();
-      }
     } catch (error) {
       console.error('Server TTS error:', error);
+      console.log('Falling back to browser TTS');
       // Fallback to browser TTS
       speakWithBrowserTTS();
     } finally {
