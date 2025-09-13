@@ -172,18 +172,6 @@ export default function Navbar() {
         },
       ],
     },
-    {
-      label: 'Admin',
-      icon: '⚙️',
-      items: [
-        {
-          href: '/admin',
-          label: 'Challenge Management',
-          icon: '📝',
-          description: 'Manage coding challenges and content',
-        },
-      ],
-    },
   ];
 
   useEffect(() => {
