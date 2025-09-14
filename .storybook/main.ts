@@ -14,5 +14,31 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ['../public'],
+  typescript: {
+    check: false,
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+      propFilter: prop =>
+        prop.parent ? !/node_modules/.test(prop.parent.fileName) : true,
+    },
+  },
+  viteFinal: async config => {
+    // Ensure proper build configuration for Vercel
+    config.build = {
+      ...config.build,
+      rollupOptions: {
+        ...config.build?.rollupOptions,
+        output: {
+          ...config.build?.rollupOptions?.output,
+          manualChunks: {
+            vendor: ['react', 'react-dom'],
+            storybook: ['@storybook/react', '@storybook/addon-docs'],
+          },
+        },
+      },
+    };
+    return config;
+  },
 };
 export default config;
