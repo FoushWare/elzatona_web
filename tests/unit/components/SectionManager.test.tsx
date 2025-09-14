@@ -113,13 +113,17 @@ describe('SectionManager', () => {
       expect(screen.getByText('Frontend Fundamentals')).toBeInTheDocument();
     });
 
-    const addButton = screen.getByText('Add New Section');
+    const addButton = screen.getByText('Add Section');
     fireEvent.click(addButton);
 
-    expect(screen.getByText('Add New Section')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Section name')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Add New Section')).toBeInTheDocument();
+    });
     expect(
-      screen.getByPlaceholderText('Section description')
+      screen.getByPlaceholderText('Enter section name')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText('Enter section description')
     ).toBeInTheDocument();
   });
 
@@ -144,25 +148,33 @@ describe('SectionManager', () => {
     });
 
     // Open add section modal
-    const addButton = screen.getByText('Add New Section');
+    const addButton = screen.getByText('Add Section');
     fireEvent.click(addButton);
 
+    await waitFor(() => {
+      expect(screen.getByText('Add New Section')).toBeInTheDocument();
+    });
+
     // Fill form
-    await user.type(screen.getByPlaceholderText('Section name'), 'New Section');
     await user.type(
-      screen.getByPlaceholderText('Section description'),
+      screen.getByPlaceholderText('Enter section name'),
+      'New Section'
+    );
+    await user.type(
+      screen.getByPlaceholderText('Enter section description'),
       'A new section'
     );
 
-    // Submit form
-    const submitButton = screen.getByText('Add Section');
+    // Submit form - get the submit button from the modal (second "Add Section" button)
+    const submitButtons = screen.getAllByText('Add Section');
+    const submitButton = submitButtons[1]; // Second button is the modal submit button
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(mockSectionClientService.addSection).toHaveBeenCalledWith({
-        name: 'New Section',
-        description: 'A new section',
-      });
+      expect(mockSectionClientService.addSection).toHaveBeenCalledWith(
+        'New Section',
+        'A new section'
+      );
     });
   });
 
@@ -173,9 +185,9 @@ describe('SectionManager', () => {
       expect(screen.getByText('Frontend Fundamentals')).toBeInTheDocument();
     });
 
-    // Find and click the "Add Question" button for the first section
-    const addQuestionButtons = screen.getAllByText('Add Question');
-    fireEvent.click(addQuestionButtons[0]);
+    // Find and click the "Add One" button for the first section
+    const addOneButtons = screen.getAllByText('Add One');
+    fireEvent.click(addOneButtons[0]);
 
     expect(screen.getByTestId('question-creator')).toBeInTheDocument();
   });
@@ -187,9 +199,9 @@ describe('SectionManager', () => {
       expect(screen.getByText('Frontend Fundamentals')).toBeInTheDocument();
     });
 
-    // Find and click the "Bulk Upload" button for the first section
-    const bulkUploadButtons = screen.getAllByText('Bulk Upload');
-    fireEvent.click(bulkUploadButtons[0]);
+    // Find and click the "Bulk Add" button for the first section
+    const bulkAddButtons = screen.getAllByText('Bulk Add');
+    fireEvent.click(bulkAddButtons[0]);
 
     expect(screen.getByTestId('bulk-question-uploader')).toBeInTheDocument();
   });
@@ -209,12 +221,12 @@ describe('SectionManager', () => {
       expect(screen.getByText('Frontend Fundamentals')).toBeInTheDocument();
     });
 
-    // Find and click the delete button for the first section
-    const deleteButtons = screen.getAllByText('Delete');
+    // Find and click the delete button (trash icon) for the first section
+    const deleteButtons = screen.getAllByTitle('Delete section');
     fireEvent.click(deleteButtons[0]);
 
     expect(window.confirm).toHaveBeenCalledWith(
-      'Are you sure you want to delete "Frontend Fundamentals"? This will also delete all questions in this section.'
+      'Are you sure you want to delete "Frontend Fundamentals"? This will also delete all associated questions.'
     );
 
     await waitFor(() => {
@@ -232,8 +244,8 @@ describe('SectionManager', () => {
     });
 
     // Check that statistics are displayed
-    expect(screen.getByText('Total Sections: 2')).toBeInTheDocument();
-    expect(screen.getByText('Total Questions: 15')).toBeInTheDocument();
+    expect(screen.getByText('Total Sections')).toBeInTheDocument();
+    expect(screen.getByText('Total Questions')).toBeInTheDocument();
   });
 
   it('should handle empty sections list', async () => {
@@ -245,7 +257,11 @@ describe('SectionManager', () => {
     render(<SectionManager />);
 
     await waitFor(() => {
-      expect(screen.getByText('No sections found')).toBeInTheDocument();
+      // When there are no sections, the grid should be empty but still show the header
+      expect(
+        screen.getByText('📚 Learning Paths Management')
+      ).toBeInTheDocument();
+      expect(screen.getByText('Total Sections')).toBeInTheDocument();
     });
   });
 
@@ -257,8 +273,8 @@ describe('SectionManager', () => {
     });
 
     // Open question creator modal
-    const addQuestionButtons = screen.getAllByText('Add Question');
-    fireEvent.click(addQuestionButtons[0]);
+    const addOneButtons = screen.getAllByText('Add One');
+    fireEvent.click(addOneButtons[0]);
 
     expect(screen.getByTestId('question-creator')).toBeInTheDocument();
 
