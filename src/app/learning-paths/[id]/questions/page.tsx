@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { learningPaths } from '@/lib/resources';
 import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
@@ -65,16 +65,19 @@ export default function QuestionsPage() {
 
   const learningPath = learningPaths.find(path => path.id === pathId);
 
+  // Memoize initial filters to prevent unnecessary re-renders
+  const initialFilters = useMemo(() => ({
+    learningPath: learningPath?.id,
+    isActive: true,
+  }), [learningPath?.id]);
+
   // Use unified questions hook
   const {
     questions: unifiedQuestions,
     isLoading,
     error,
   } = useUnifiedQuestions({
-    initialFilters: {
-      learningPath: learningPath?.id,
-      isActive: true,
-    },
+    initialFilters,
   });
 
   // Enhanced TTS function with OpenAI fallback
