@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import AlzatonaLogo from './AlzatonaLogo';
 
-import { DarkModeToggle } from './DarkModeToggle';
+import DarkModeToggle from './DarkModeToggle';
 
 export default function Navigation() {
   return (

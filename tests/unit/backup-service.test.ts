@@ -1,19 +1,57 @@
 import { BackupService } from '@/lib/backup-service';
-import fs from 'fs';
-import path from 'path';
 
-// Mock fs module
-jest.mock('fs');
-jest.mock('path');
+// Mock fs module using promises API
+jest.mock('fs', () => ({
+  promises: {
+    mkdir: jest.fn().mockResolvedValue(undefined),
+    readFile: jest.fn().mockResolvedValue('[]'),
+    writeFile: jest.fn().mockResolvedValue(undefined),
+    access: jest.fn().mockResolvedValue(undefined),
+    readdir: jest.fn().mockResolvedValue([]),
+    stat: jest.fn().mockResolvedValue({ isDirectory: () => true }),
+    unlink: jest.fn().mockResolvedValue(undefined),
+  },
+  mkdirSync: jest.fn().mockImplementation(() => {}),
+  readFileSync: jest.fn().mockReturnValue('[]'),
+  writeFileSync: jest.fn().mockImplementation(() => {}),
+  existsSync: jest.fn().mockReturnValue(false),
+  readdirSync: jest.fn().mockReturnValue([]),
+  statSync: jest.fn().mockReturnValue({ isDirectory: () => true }),
+  unlinkSync: jest.fn().mockImplementation(() => {}),
+}));
 
-const mockFs = fs as jest.Mocked<typeof fs>;
-const mockPath = path as jest.Mocked<typeof path>;
+jest.mock('path', () => ({
+  join: jest.fn().mockImplementation((...args) => args.join('/')),
+  resolve: jest.fn().mockImplementation((...args) => args.join('/')),
+}));
+
+// Get mocked modules
+const mockFs = jest.mocked(require('fs'));
+const mockPath = jest.mocked(require('path'));
 
 describe('BackupService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Mock path.join to return predictable paths
+    
+    // Reset all fs mocks to default successful state
+    Object.values(mockFs.promises).forEach(mock => {
+      if (typeof mock === 'function' && 'mockResolvedValue' in mock) {
+        mock.mockResolvedValue(undefined);
+      }
+    });
+    
+    // Reset synchronous fs mocks
+    mockFs.mkdirSync.mockImplementation(() => {});
+    mockFs.readFileSync.mockReturnValue('[]');
+    mockFs.writeFileSync.mockImplementation(() => {});
+    mockFs.existsSync.mockReturnValue(false);
+    mockFs.readdirSync.mockReturnValue([]);
+    mockFs.statSync.mockReturnValue({ isDirectory: () => true });
+    mockFs.unlinkSync.mockImplementation(() => {});
+    
+    // Reset path mocks
     mockPath.join.mockImplementation((...args) => args.join('/'));
+    mockPath.resolve.mockImplementation((...args) => args.join('/'));
   });
 
   describe('backupQuestion', () => {
@@ -24,28 +62,27 @@ describe('BackupService', () => {
         content: 'What is the answer?',
         type: 'single' as const,
         difficulty: 'easy' as const,
-        options: ['Option 1', 'Option 2'],
-        correctAnswers: [0],
+        section: 'frontend-fundamentals',
+        options: [
+          { id: 'a', text: 'Option 1', isCorrect: true },
+          { id: 'b', text: 'Option 2', isCorrect: false }
+        ],
+        correctAnswers: ['a'],
         explanation: 'This is the explanation',
-        audioQuestionUrl: null,
-        audioAnswerUrl: null,
         createdAt: '2024-01-01T00:00:00Z',
         updatedAt: '2024-01-01T00:00:00Z',
+        isActive: true,
       };
 
       const existingQuestions = [];
-      mockFs.existsSync.mockReturnValue(true);
-      mockFs.readFileSync.mockReturnValue(JSON.stringify(existingQuestions));
-      mockFs.writeFileSync.mockImplementation(() => {});
+      mockFs.promises.readFile.mockResolvedValue(JSON.stringify(existingQuestions));
+      mockFs.promises.writeFile.mockResolvedValue(undefined);
 
-      const result = await BackupService.backupQuestion(
-        'frontend-fundamentals',
-        mockQuestion
-      );
+      const result = await BackupService.backupQuestion(mockQuestion);
 
       expect(result.success).toBe(true);
-      expect(mockFs.writeFileSync).toHaveBeenCalledWith(
-        'backup/questions/frontend-fundamentals-questions.json',
+      expect(mockFs.promises.writeFile).toHaveBeenCalledWith(
+        expect.stringContaining('backup/questions/frontend-fundamentals-questions.json'),
         expect.stringContaining('Test Question')
       );
     });
@@ -57,28 +94,29 @@ describe('BackupService', () => {
         content: 'What is the answer?',
         type: 'single' as const,
         difficulty: 'easy' as const,
-        options: ['Option 1', 'Option 2'],
-        correctAnswers: [0],
+        section: 'frontend-fundamentals',
+        options: [
+          { id: 'a', text: 'Option 1', isCorrect: true },
+          { id: 'b', text: 'Option 2', isCorrect: false }
+        ],
+        correctAnswers: ['a'],
         explanation: 'This is the explanation',
-        audioQuestionUrl: null,
-        audioAnswerUrl: null,
         createdAt: '2024-01-01T00:00:00Z',
         updatedAt: '2024-01-01T00:00:00Z',
+        isActive: true,
       };
 
-      mockFs.existsSync.mockReturnValue(false);
-      mockFs.mkdirSync.mockImplementation(() => {});
-      mockFs.writeFileSync.mockImplementation(() => {});
+      // Mock readFile to throw (file doesn't exist)
+      mockFs.promises.readFile.mockRejectedValue(new Error('File not found'));
+      mockFs.promises.writeFile.mockResolvedValue(undefined);
 
-      const result = await BackupService.backupQuestion(
-        'frontend-fundamentals',
-        mockQuestion
-      );
+      const result = await BackupService.backupQuestion(mockQuestion);
 
       expect(result.success).toBe(true);
-      expect(mockFs.mkdirSync).toHaveBeenCalledWith('backup/questions', {
-        recursive: true,
-      });
+      expect(mockFs.promises.mkdir).toHaveBeenCalledWith(
+        expect.stringContaining('backup/questions'),
+        { recursive: true }
+      );
     });
 
     it('should append to existing questions in backup file', async () => {
@@ -89,13 +127,16 @@ describe('BackupService', () => {
           content: 'What is the answer?',
           type: 'single' as const,
           difficulty: 'easy' as const,
-          options: ['Option 1', 'Option 2'],
-          correctAnswers: [0],
+          section: 'frontend-fundamentals',
+          options: [
+            { id: 'a', text: 'Option 1', isCorrect: true },
+            { id: 'b', text: 'Option 2', isCorrect: false }
+          ],
+          correctAnswers: ['a'],
           explanation: 'This is the explanation',
-          audioQuestionUrl: null,
-          audioAnswerUrl: null,
           createdAt: '2024-01-01T00:00:00Z',
           updatedAt: '2024-01-01T00:00:00Z',
+          isActive: true,
         },
       ];
 
@@ -105,26 +146,25 @@ describe('BackupService', () => {
         content: 'What is the answer?',
         type: 'single' as const,
         difficulty: 'medium' as const,
-        options: ['Option A', 'Option B'],
-        correctAnswers: [1],
+        section: 'frontend-fundamentals',
+        options: [
+          { id: 'a', text: 'Option A', isCorrect: false },
+          { id: 'b', text: 'Option B', isCorrect: true }
+        ],
+        correctAnswers: ['b'],
         explanation: 'This is the new explanation',
-        audioQuestionUrl: null,
-        audioAnswerUrl: null,
         createdAt: '2024-01-01T00:00:00Z',
         updatedAt: '2024-01-01T00:00:00Z',
+        isActive: true,
       };
 
-      mockFs.existsSync.mockReturnValue(true);
-      mockFs.readFileSync.mockReturnValue(JSON.stringify(existingQuestions));
-      mockFs.writeFileSync.mockImplementation(() => {});
+      mockFs.promises.readFile.mockResolvedValue(JSON.stringify(existingQuestions));
+      mockFs.promises.writeFile.mockResolvedValue(undefined);
 
-      const result = await BackupService.backupQuestion(
-        'frontend-fundamentals',
-        newQuestion
-      );
+      const result = await BackupService.backupQuestion(newQuestion);
 
       expect(result.success).toBe(true);
-      const writeCall = mockFs.writeFileSync.mock.calls[0];
+      const writeCall = mockFs.promises.writeFile.mock.calls[0];
       const writtenData = JSON.parse(writeCall[1] as string);
       expect(writtenData).toHaveLength(2);
       expect(writtenData[0].title).toBe('Existing Question');
@@ -140,43 +180,40 @@ describe('BackupService', () => {
         'react-mastery-questions.json',
       ];
 
-      mockFs.existsSync.mockReturnValue(true);
-      mockFs.readdirSync.mockReturnValue(mockFiles as unknown as string[]);
-      mockFs.readFileSync.mockImplementation(filePath => {
+      mockFs.promises.readdir.mockResolvedValue(mockFiles as unknown as string[]);
+      mockFs.promises.readFile.mockImplementation(filePath => {
         if (filePath.includes('frontend-fundamentals')) {
-          return JSON.stringify([{ id: 'q1' }, { id: 'q2' }]); // 2 questions
+          return Promise.resolve(JSON.stringify([{ id: 'q1' }, { id: 'q2' }])); // 2 questions
         } else if (filePath.includes('javascript-deep-dive')) {
-          return JSON.stringify([{ id: 'q1' }]); // 1 question
+          return Promise.resolve(JSON.stringify([{ id: 'q1' }])); // 1 question
         } else if (filePath.includes('react-mastery')) {
-          return JSON.stringify([]); // 0 questions
+          return Promise.resolve(JSON.stringify([])); // 0 questions
         }
-        return JSON.stringify([]);
+        return Promise.resolve(JSON.stringify([]));
       });
 
       const result = await BackupService.getBackupStats();
 
-      expect(result.success).toBe(true);
-      expect(result.data).toEqual({
-        totalSections: 3,
+      expect(result).toEqual({
+        totalFiles: 3,
         totalQuestions: 3,
-        sections: [
-          { name: 'frontend-fundamentals', questionCount: 2 },
-          { name: 'javascript-deep-dive', questionCount: 1 },
-          { name: 'react-mastery', questionCount: 0 },
-        ],
+        sections: {
+          'frontend-fundamentals': 2,
+          'javascript-deep-dive': 1,
+          'react-mastery': 0,
+        },
       });
     });
 
     it('should return empty stats if backup directory does not exist', async () => {
-      mockFs.existsSync.mockReturnValue(false);
+      mockFs.promises.readdir.mockRejectedValue(new Error('Directory not found'));
 
       const result = await BackupService.getBackupStats();
 
-      expect(result.success).toBe(true);
-      expect(result.data).toEqual({
-        totalSections: 0,
+      expect(result).toEqual({
+        totalFiles: 0,
         totalQuestions: 0,
-        sections: [],
+        sections: {},
       });
     });
   });
@@ -190,56 +227,55 @@ describe('BackupService', () => {
           content: 'What is the answer?',
           type: 'single' as const,
           difficulty: 'easy' as const,
-          options: ['Option 1', 'Option 2'],
-          correctAnswers: [0],
+          section: 'frontend-fundamentals',
+          options: [
+            { id: 'a', text: 'Option 1', isCorrect: true },
+            { id: 'b', text: 'Option 2', isCorrect: false }
+          ],
+          correctAnswers: ['a'],
           explanation: 'This is the explanation',
-          audioQuestionUrl: null,
-          audioAnswerUrl: null,
           createdAt: '2024-01-01T00:00:00Z',
           updatedAt: '2024-01-01T00:00:00Z',
+          isActive: true,
         },
       ];
 
-      mockFs.existsSync.mockReturnValue(true);
-      mockFs.readFileSync.mockReturnValue(JSON.stringify(mockQuestions));
+      mockFs.promises.readFile.mockResolvedValue(JSON.stringify(mockQuestions));
 
       const result = await BackupService.getSectionBackup(
         'frontend-fundamentals'
       );
 
-      expect(result.success).toBe(true);
-      expect(result.data).toEqual(mockQuestions);
+      expect(result).toEqual(mockQuestions);
     });
 
     it('should return empty array if section backup does not exist', async () => {
-      mockFs.existsSync.mockReturnValue(false);
+      mockFs.promises.readFile.mockRejectedValue(new Error('File not found'));
 
       const result = await BackupService.getSectionBackup(
         'non-existent-section'
       );
 
-      expect(result.success).toBe(true);
-      expect(result.data).toEqual([]);
+      expect(result).toEqual([]);
     });
   });
 
   describe('deleteSectionBackup', () => {
     it('should delete section backup file', async () => {
-      mockFs.existsSync.mockReturnValue(true);
-      mockFs.unlinkSync.mockImplementation(() => {});
+      mockFs.promises.unlink.mockResolvedValue(undefined);
 
       const result = await BackupService.deleteSectionBackup(
         'frontend-fundamentals'
       );
 
       expect(result.success).toBe(true);
-      expect(mockFs.unlinkSync).toHaveBeenCalledWith(
-        'backup/questions/frontend-fundamentals-questions.json'
+      expect(mockFs.promises.unlink).toHaveBeenCalledWith(
+        expect.stringContaining('backup/questions/frontend-fundamentals-questions.json')
       );
     });
 
     it('should handle non-existent backup file', async () => {
-      mockFs.existsSync.mockReturnValue(false);
+      mockFs.promises.unlink.mockRejectedValue(new Error('File not found'));
 
       const result = await BackupService.deleteSectionBackup(
         'non-existent-section'
@@ -250,10 +286,7 @@ describe('BackupService', () => {
     });
 
     it('should handle file deletion errors', async () => {
-      mockFs.existsSync.mockReturnValue(true);
-      mockFs.unlinkSync.mockImplementation(() => {
-        throw new Error('Permission denied');
-      });
+      mockFs.promises.unlink.mockRejectedValue(new Error('Permission denied'));
 
       const result = await BackupService.deleteSectionBackup(
         'frontend-fundamentals'
@@ -273,40 +306,38 @@ describe('BackupService', () => {
           content: 'What is the answer?',
           type: 'single' as const,
           difficulty: 'easy' as const,
-          options: ['Option 1', 'Option 2'],
-          correctAnswers: [0],
+          section: 'frontend-fundamentals',
+          options: [
+            { id: 'a', text: 'Option 1', isCorrect: true },
+            { id: 'b', text: 'Option 2', isCorrect: false }
+          ],
+          correctAnswers: ['a'],
           explanation: 'This is the explanation',
-          audioQuestionUrl: null,
-          audioAnswerUrl: null,
           createdAt: '2024-01-01T00:00:00Z',
           updatedAt: '2024-01-01T00:00:00Z',
+          isActive: true,
         },
       ];
 
-      mockFs.existsSync.mockReturnValue(true);
-      mockFs.readFileSync.mockReturnValue(JSON.stringify(mockBackupQuestions));
-      mockFs.writeFileSync.mockImplementation(() => {});
+      mockFs.promises.readFile.mockResolvedValue(JSON.stringify(mockBackupQuestions));
 
       const result = await BackupService.restoreFromBackup(
         'frontend-fundamentals'
       );
 
       expect(result.success).toBe(true);
-      expect(mockFs.writeFileSync).toHaveBeenCalledWith(
-        'data/questions/frontend-fundamentals-questions.json',
-        JSON.stringify(mockBackupQuestions, null, 2)
-      );
+      expect(result.questionsRestored).toBe(1);
     });
 
     it('should handle non-existent backup file during restore', async () => {
-      mockFs.existsSync.mockReturnValue(false);
+      mockFs.promises.readFile.mockRejectedValue(new Error('File not found'));
 
       const result = await BackupService.restoreFromBackup(
         'non-existent-section'
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('not found');
+      expect(result.message).toContain('No backup questions found');
     });
   });
 });

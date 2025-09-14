@@ -16,45 +16,51 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Load theme preference from localStorage on mount
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setIsDarkMode(savedTheme === 'dark');
-    } else {
-      // Default to dark mode
-      setIsDarkMode(true);
+    // Load theme preference from localStorage on mount (client-side only)
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        setIsDarkMode(savedTheme === 'dark');
+      } else {
+        // Default to dark mode
+        setIsDarkMode(true);
+      }
+      
+      // Debug logging
+      console.log(
+        'ThemeContext: Initial theme loaded:',
+        savedTheme || 'dark (default)'
+      );
     }
     setIsLoaded(true);
-
-    // Debug logging
-    console.log(
-      'ThemeContext: Initial theme loaded:',
-      savedTheme || 'dark (default)'
-    );
   }, []);
 
   useEffect(() => {
-    // Save theme preference to localStorage whenever it changes
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-
-    // Apply theme class to document root with proper cleanup
-    const root = document.documentElement;
-
-    if (isDarkMode) {
-      root.classList.remove('light');
-      root.classList.add('dark');
-      // Also set data attribute for additional CSS targeting
-      root.setAttribute('data-theme', 'dark');
-    } else {
-      root.classList.remove('dark');
-      root.classList.add('light');
-      // Also set data attribute for additional CSS targeting
-      root.setAttribute('data-theme', 'light');
+    // Save theme preference to localStorage whenever it changes (client-side only)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
     }
 
-    // Debug logging
-    console.log('ThemeContext: Theme applied:', isDarkMode ? 'dark' : 'light');
-    console.log('ThemeContext: Root classes:', root.className);
+    // Apply theme class to document root with proper cleanup (client-side only)
+    if (typeof document !== 'undefined') {
+      const root = document.documentElement;
+
+      if (isDarkMode) {
+        root.classList.remove('light');
+        root.classList.add('dark');
+        // Also set data attribute for additional CSS targeting
+        root.setAttribute('data-theme', 'dark');
+      } else {
+        root.classList.remove('dark');
+        root.classList.add('light');
+        // Also set data attribute for additional CSS targeting
+        root.setAttribute('data-theme', 'light');
+      }
+
+      // Debug logging
+      console.log('ThemeContext: Theme applied:', isDarkMode ? 'dark' : 'light');
+      console.log('ThemeContext: Root classes:', root.className);
+    }
   }, [isDarkMode]);
 
   const toggleDarkMode = () => {
