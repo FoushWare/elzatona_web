@@ -72,7 +72,12 @@ export default function QuestionsPage() {
     questions: unifiedQuestions,
     isLoading,
     error,
-  } = useUnifiedQuestions();
+  } = useUnifiedQuestions({
+    initialFilters: {
+      learningPath: learningPath?.id,
+      isActive: true,
+    },
+  });
 
   // Enhanced TTS function with OpenAI fallback
   const speakWithEnhancedTTS = async (text: string) => {
@@ -120,7 +125,7 @@ export default function QuestionsPage() {
 
     // Filter questions for this learning path
     const pathQuestions = unifiedQuestions.filter(
-      q => q.learningPath === learningPath?.title && q.isActive
+      q => q.learningPath === learningPath?.id && q.isActive
     );
 
     if (pathQuestions.length === 0) {
