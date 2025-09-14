@@ -54,9 +54,7 @@ export default function QuestionsPage() {
   const { toasts, removeToast, showSuccess, showError } = useToast();
 
   const [score, setScore] = useState(0);
-  const [answeredQuestions, setAnsweredQuestions] = useState<Set<string>>(
-    new Set()
-  );
+  const [, setAnsweredQuestions] = useState<Set<string>>(new Set());
   const [currentGroup, setCurrentGroup] = useState<QuestionGroup | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<
@@ -103,7 +101,7 @@ export default function QuestionsPage() {
         audio.play();
         return;
       }
-    } catch (error) {
+    } catch (_error) {
       console.log('OpenAI TTS failed, falling back to browser TTS');
     }
 
@@ -263,7 +261,7 @@ export default function QuestionsPage() {
         tags: currentQuestion.tags,
       });
       showSuccess('Added to flashcards! 📚');
-    } catch (error) {
+    } catch (_error) {
       showError('Failed to add to flashcards');
     }
   };
