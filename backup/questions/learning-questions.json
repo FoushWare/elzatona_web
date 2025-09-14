@@ -1,0 +1,80 @@
+[
+    {
+        "id": "question_1703123456789_abc123def",
+        "title": "What is React?",
+        "content": "React is a JavaScript library for building user interfaces.",
+        "type": "single",
+        "difficulty": "easy",
+        "section": "learning",
+        "options": [
+            {
+                "id": "a",
+                "text": "A JavaScript library for building user interfaces",
+                "isCorrect": true
+            },
+            {
+                "id": "b",
+                "text": "A CSS framework",
+                "isCorrect": false
+            },
+            {
+                "id": "c",
+                "text": "A database management system",
+                "isCorrect": false
+            },
+            {
+                "id": "d",
+                "text": "A server-side framework",
+                "isCorrect": false
+            }
+        ],
+        "correctAnswers": [
+            "a"
+        ],
+        "explanation": "React is a JavaScript library developed by Facebook for building user interfaces, particularly web applications.",
+        "audioQuestion": "/audio/questions/question-1.mp3",
+        "audioAnswer": "/audio/answers/answer-1.mp3",
+        "createdAt": "2024-01-15T10:30:00.000Z",
+        "updatedAt": "2024-01-15T10:30:00.000Z",
+        "isActive": true
+    },
+    {
+        "id": "question_1703123456790_def456ghi",
+        "title": "What are React Hooks?",
+        "content": "Which of the following are React hooks?",
+        "type": "multiple",
+        "difficulty": "medium",
+        "section": "learning",
+        "options": [
+            {
+                "id": "a",
+                "text": "useState",
+                "isCorrect": true
+            },
+            {
+                "id": "b",
+                "text": "useEffect",
+                "isCorrect": true
+            },
+            {
+                "id": "c",
+                "text": "useContext",
+                "isCorrect": true
+            },
+            {
+                "id": "d",
+                "text": "useClass",
+                "isCorrect": false
+            }
+        ],
+        "correctAnswers": [
+            "a",
+            "b",
+            "c"
+        ],
+        "explanation": "useState, useEffect, and useContext are all React hooks. useClass is not a valid React hook.",
+        "createdAt": "2024-01-16T14:20:00.000Z",
+        "updatedAt": "2024-01-16T14:20:00.000Z",
+        "isActive": true
+    }
+]
