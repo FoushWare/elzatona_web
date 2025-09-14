@@ -34,8 +34,7 @@ export const LearningPathsGrid: React.FC<LearningPathsGridProps> = ({
     >
       {paths.map(path => {
         const dynamicQuestionCount = getQuestionCount(path.id);
-        const isQuestionCountLoading =
-          isStatsLoading || stats[path.id]?.isLoading || false;
+        const isQuestionCountLoading = dynamicQuestionCount === undefined;
 
         return (
           <LearningPathCard
