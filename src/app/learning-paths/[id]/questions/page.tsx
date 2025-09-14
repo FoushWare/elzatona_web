@@ -143,7 +143,7 @@ export default function QuestionsPage() {
           // Convert unified format to expected format
           question: q.content,
           answer: q.explanation,
-          options: q.options.map(opt => opt.text),
+          options: q.options, // Keep full option structure with id, text, isCorrect
           correctAnswer:
             q.type === 'single'
               ? q.options.findIndex(opt => opt.isCorrect)
