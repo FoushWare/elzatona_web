@@ -128,6 +128,12 @@ export default function Navbar() {
             'Practice behavioral interview questions with text input',
         },
         {
+          href: '/questions/company-specific',
+          label: 'Company-Specific Questions',
+          icon: '🏢',
+          description: 'Questions tailored for specific companies',
+        },
+        {
           href: '/flashcards',
           label: 'Interactive Flashcards',
           icon: '🃏',
