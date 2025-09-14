@@ -19,6 +19,53 @@ jest.mock('@/contexts/FirebaseAuthContext', () => ({
   useFirebaseAuth: jest.fn(),
 }));
 
+// Mock useUserProgress hook
+jest.mock('@/hooks/useUserProgress', () => ({
+  useUserProgress: jest.fn(() => ({
+    progress: {
+      userId: 'test-user-id',
+      totalQuestionsAnswered: 24,
+      totalChallengesCompleted: 12,
+      learningPathsCompleted: 3,
+      currentStreak: 7,
+      longestStreak: 15,
+      totalPoints: 1250,
+      preferences: {
+        difficulty: 'medium',
+        topics: ['javascript', 'react'],
+        notifications: true,
+      },
+    },
+    dashboardStats: {
+      totalQuestions: 100,
+      questionsCompleted: 24,
+      totalChallenges: 50,
+      challengesCompleted: 12,
+      learningPathsCompleted: 3,
+      currentStreak: 7,
+      longestStreak: 15,
+      totalPoints: 1250,
+      averageScore: 85,
+      timeSpent: 3600,
+    },
+    continueData: {
+      type: 'question',
+      title: 'JavaScript Closures',
+      progress: 0.6,
+    },
+    isLoading: false,
+    error: null,
+    updateQuestion: jest.fn(),
+    updateChallenge: jest.fn(),
+    updateLearningPath: jest.fn(),
+    updateStreak: jest.fn(),
+    updatePreferences: jest.fn(),
+    refreshProgress: jest.fn(),
+    refreshDashboardStats: jest.fn(),
+    refreshContinueData: jest.fn(),
+  })),
+}));
+
 // Mock Firebase Auth Context with real-like behavior
 const createMockFirebaseAuth = (initialState = {}) => {
   let state = {
