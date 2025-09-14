@@ -1,0 +1,699 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { SectionClientService } from '@/lib/section-client';
+import { LearningSection, SectionQuestion } from '@/lib/section-service';
+import QuestionCreator from './QuestionCreator';
+import BulkQuestionUploader from './BulkQuestionUploader';
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  GripVertical,
+  BookOpen,
+  Users,
+  Settings,
+  Upload,
+  FileText,
+  CheckCircle,
+  AlertCircle,
+  XCircle,
+} from 'lucide-react';
+
+export default function SectionManager() {
+  const [sections, setSections] = useState<LearningSection[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  // Modal states
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showQuestionsModal, setShowQuestionsModal] = useState(false);
+  const [showBulkModal, setShowBulkModal] = useState(false);
+  const [showQuestionCreator, setShowQuestionCreator] = useState(false);
+
+  // Form states
+  const [editingSection, setEditingSection] = useState<LearningSection | null>(
+    null
+  );
+  const [selectedSection, setSelectedSection] =
+    useState<LearningSection | null>(null);
+  const [sectionQuestions, setSectionQuestions] = useState<SectionQuestion[]>(
+    []
+  );
+
+  // Add/Edit form
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+  });
+
+  useEffect(() => {
+    loadSections();
+  }, []);
+
+  const loadSections = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const result = await SectionClientService.getSections();
+
+      if (result.success) {
+        setSections(result.data);
+      } else {
+        setError(result.error || 'Failed to load sections');
+      }
+    } catch (error) {
+      setError('Failed to load sections');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddSection = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.name.trim()) {
+      setError('Section name is required');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const result = await SectionClientService.addSection(
+        formData.name.trim(),
+        formData.description.trim()
+      );
+
+      if (result.success) {
+        setSuccess('Section added successfully');
+        setShowAddModal(false);
+        setFormData({ name: '', description: '' });
+        await loadSections();
+      } else {
+        setError(result.error || 'Failed to add section');
+      }
+    } catch (error) {
+      setError('Failed to add section');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditSection = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!editingSection || !formData.name.trim()) {
+      setError('Section name is required');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const result = await SectionClientService.updateSection(
+        editingSection.id,
+        {
+          name: formData.name.trim(),
+          description: formData.description.trim(),
+        }
+      );
+
+      if (result.success) {
+        setSuccess('Section updated successfully');
+        setShowEditModal(false);
+        setEditingSection(null);
+        setFormData({ name: '', description: '' });
+        await loadSections();
+      } else {
+        setError(result.error || 'Failed to update section');
+      }
+    } catch (error) {
+      setError('Failed to update section');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteSection = async (
+    sectionId: string,
+    sectionName: string
+  ) => {
+    if (
+      !confirm(
+        `Are you sure you want to delete "${sectionName}"? This will also delete all associated questions.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const result = await SectionClientService.deleteSection(sectionId);
+
+      if (result.success) {
+        setSuccess('Section deleted successfully');
+        await loadSections();
+      } else {
+        setError(result.error || 'Failed to delete section');
+      }
+    } catch (error) {
+      setError('Failed to delete section');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleViewQuestions = async (section: LearningSection) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const result = await SectionClientService.getSectionQuestions(section.id);
+
+      if (result.success) {
+        setSectionQuestions(result.data);
+        setSelectedSection(section);
+        setShowQuestionsModal(true);
+      } else {
+        setError(result.error || 'Failed to load questions');
+      }
+    } catch (error) {
+      setError('Failed to load questions');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const openEditModal = (section: LearningSection) => {
+    setEditingSection(section);
+    setFormData({
+      name: section.name,
+      description: section.description,
+    });
+    setShowEditModal(true);
+  };
+
+  const openBulkModal = (section: LearningSection) => {
+    setSelectedSection(section);
+    setShowBulkModal(true);
+  };
+
+  const openQuestionCreator = (section: LearningSection) => {
+    setSelectedSection(section);
+    setShowQuestionCreator(true);
+  };
+
+  const handleQuestionAdded = async () => {
+    if (selectedSection) {
+      await handleViewQuestions(selectedSection);
+    }
+    await loadSections(); // Refresh section counts
+  };
+
+  const clearMessages = () => {
+    setError(null);
+    setSuccess(null);
+  };
+
+  if (loading && sections.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+        <p className="text-gray-600 dark:text-gray-400">Loading sections...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            📚 Learning Paths Management
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Manage learning sections and their questions
+          </p>
+        </div>
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors flex items-center space-x-2"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Add Section</span>
+        </button>
+      </div>
+
+      {/* Messages */}
+      {error && (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <div className="flex items-center">
+            <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
+            <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+          </div>
+        </div>
+      )}
+
+      {success && (
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+          <div className="flex items-center">
+            <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+            <p className="text-green-600 dark:text-green-400 text-sm">
+              {success}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center">
+            <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+              <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Total Sections
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {sections.length}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center">
+            <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+              <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Active Sections
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {sections.filter(s => s.isActive).length}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center">
+            <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
+              <FileText className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Total Questions
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {sections.reduce((sum, s) => sum + s.questionCount, 0)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center">
+            <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
+              <Users className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Avg Questions/Section
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {sections.length > 0
+                  ? Math.round(
+                      sections.reduce((sum, s) => sum + s.questionCount, 0) /
+                        sections.length
+                    )
+                  : 0}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sections Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sections.map(section => (
+          <div
+            key={section.id}
+            className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-shadow"
+          >
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">
+                    {SectionClientService.getSectionIcon(section.name)}
+                  </span>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                      {section.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {section.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-1">
+                  <button
+                    onClick={() => openEditModal(section)}
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                    title="Edit section"
+                  >
+                    <Edit className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleDeleteSection(section.id, section.name)
+                    }
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                    title="Delete section"
+                  >
+                    <Trash2 className="w-4 h-4 text-red-500 dark:text-red-400" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <span className="flex items-center">
+                  <FileText className="w-4 h-4 mr-1" />
+                  {section.questionCount} questions
+                </span>
+                <span
+                  className={`px-2 py-1 rounded text-xs ${
+                    section.isActive
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                      : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+                  }`}
+                >
+                  {section.isActive ? 'Active' : 'Inactive'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2">
+                <button
+                  onClick={() => handleViewQuestions(section)}
+                  className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition-colors flex items-center justify-center space-x-1"
+                >
+                  <Eye className="w-4 h-4" />
+                  <span>View Questions</span>
+                </button>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => openQuestionCreator(section)}
+                    className="px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded transition-colors flex items-center justify-center space-x-1"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add One</span>
+                  </button>
+                  <button
+                    onClick={() => openBulkModal(section)}
+                    className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded transition-colors flex items-center justify-center space-x-1"
+                  >
+                    <Upload className="w-4 h-4" />
+                    <span>Bulk Add</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Add Section Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Add New Section
+              </h2>
+            </div>
+
+            <form onSubmit={handleAddSection} className="p-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Section Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={e =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    placeholder="Enter section name"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={e =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    placeholder="Enter section description"
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAddModal(false);
+                    setFormData({ name: '', description: '' });
+                    clearMessages();
+                  }}
+                  className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
+                >
+                  {loading ? 'Adding...' : 'Add Section'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Section Modal */}
+      {showEditModal && editingSection && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Edit Section
+              </h2>
+            </div>
+
+            <form onSubmit={handleEditSection} className="p-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Section Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={e =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    placeholder="Enter section name"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={e =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    placeholder="Enter section description"
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setEditingSection(null);
+                    setFormData({ name: '', description: '' });
+                    clearMessages();
+                  }}
+                  className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
+                >
+                  {loading ? 'Updating...' : 'Update Section'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Questions Modal - Placeholder for now */}
+      {showQuestionsModal && selectedSection && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">
+                    {SectionClientService.getSectionIcon(selectedSection.name)}
+                  </span>
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      {selectedSection.name} Questions
+                    </h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {sectionQuestions.length} questions
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowQuestionsModal(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                >
+                  <span className="text-gray-500 dark:text-gray-400">✕</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              {sectionQuestions.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-600 dark:text-gray-400">
+                    No questions found in this section
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {sectionQuestions.map(question => (
+                    <div
+                      key={question.id}
+                      className="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+                            {question.title}
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                            {question.content}
+                          </p>
+
+                          <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+                            <span
+                              className={`px-2 py-1 rounded ${SectionClientService.getDifficultyColor(question.difficulty)}`}
+                            >
+                              {question.difficulty.charAt(0).toUpperCase() +
+                                question.difficulty.slice(1)}
+                            </span>
+                            <span
+                              className={`px-2 py-1 rounded ${SectionClientService.getQuestionTypeColor(question.type)}`}
+                            >
+                              {question.type === 'single'
+                                ? 'Single Choice'
+                                : 'Multiple Choice'}
+                            </span>
+                            <span
+                              className={`px-2 py-1 rounded ${
+                                question.isComplete
+                                  ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                                  : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                              }`}
+                            >
+                              {question.isComplete ? 'Complete' : 'Incomplete'}
+                            </span>
+                            <span>
+                              Created:{' '}
+                              {new Date(
+                                question.createdAt
+                              ).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Question Creator Modal */}
+      {showQuestionCreator && selectedSection && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <QuestionCreator
+              sectionId={selectedSection.id}
+              sectionName={selectedSection.name}
+              onQuestionAdded={handleQuestionAdded}
+              onClose={() => setShowQuestionCreator(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Questions Modal */}
+      {showBulkModal && selectedSection && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <BulkQuestionUploader
+              sectionId={selectedSection.id}
+              sectionName={selectedSection.name}
+              onQuestionsAdded={handleQuestionAdded}
+              onClose={() => setShowBulkModal(false)}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
