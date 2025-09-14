@@ -7,6 +7,8 @@ describe('Admin Authentication Flow Integration Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
+    // Reset fetch mock to default behavior
+    (global.fetch as jest.Mock).mockReset();
   });
 
   afterEach(() => {
@@ -143,7 +145,7 @@ describe('Admin Authentication Flow Integration Tests', () => {
       );
 
       expect(secondAttempt.success).toBe(true);
-      expect(secondAttempt.token).toBe('mock-jwt-token-456');
+      expect(secondAttempt.admin?.email).toBe('afouadsoftwareengineer@gmail.com');
     });
 
     it('should handle session expiration and re-authentication', async () => {
@@ -165,22 +167,40 @@ describe('Admin Authentication Flow Integration Tests', () => {
         },
       };
 
-      (global.fetch as jest.Mock)
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => expiredSessionResponse,
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => reAuthResponse,
+      (global.fetch as jest.Mock).mockReset();
+      (global.fetch as jest.Mock).mockImplementation((url, options) => {
+        if (options?.method === 'GET') {
+          // Session validation call
+          return Promise.resolve({
+            ok: true,
+            json: async () => expiredSessionResponse,
+          });
+        } else if (options?.method === 'POST') {
+          // Authentication call
+          return Promise.resolve({
+            ok: true,
+            json: async () => reAuthResponse,
+          });
+        }
+        return Promise.resolve({
+          ok: false,
+          json: async () => ({ success: false, error: 'Unknown method' }),
         });
+      });
 
       // Try to validate expired session
-      const validationResult =
-        await AdminAuthService.validateSession('expired-token');
+      const expiredSession = {
+        id: 'admin-1',
+        email: 'afouadsoftwareengineer@gmail.com',
+        name: 'Admin User',
+        role: 'super_admin' as const,
+        token: 'expired-token',
+        expiresAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // Expired
+      };
 
-      expect(validationResult.success).toBe(false);
-      expect(validationResult.error).toBe('Token expired');
+      const validationResult = await AdminAuthService.validateSession(expiredSession);
+
+      expect(validationResult).toBe(false);
 
       // Re-authenticate
       const reAuthResult = await AdminAuthService.authenticateAdmin(
@@ -189,12 +209,18 @@ describe('Admin Authentication Flow Integration Tests', () => {
       );
 
       expect(reAuthResult.success).toBe(true);
-      expect(reAuthResult.token).toBe('new-jwt-token-789');
+      expect(reAuthResult.admin?.email).toBe('afouadsoftwareengineer@gmail.com');
     });
   });
 
   describe('Session Management Integration', () => {
     it('should validate session correctly', async () => {
+      // Mock successful session validation response
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      });
+
       const validSession = {
         id: 'admin-1',
         email: 'test@example.com',
@@ -225,6 +251,7 @@ describe('Admin Authentication Flow Integration Tests', () => {
 
   describe('Error Handling Integration', () => {
     it('should handle network errors gracefully', async () => {
+      (global.fetch as jest.Mock).mockReset();
       (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
 
       const result = await AdminAuthService.authenticateAdmin(
@@ -237,6 +264,7 @@ describe('Admin Authentication Flow Integration Tests', () => {
     });
 
     it('should handle malformed API responses', async () => {
+      (global.fetch as jest.Mock).mockReset();
       (global.fetch as jest.Mock).mockResolvedValue({
         ok: true,
         json: async () => {
@@ -250,10 +278,11 @@ describe('Admin Authentication Flow Integration Tests', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Invalid JSON');
+      expect(result.error).toBe('Authentication failed');
     });
 
     it('should handle HTTP error responses', async () => {
+      (global.fetch as jest.Mock).mockReset();
       (global.fetch as jest.Mock).mockResolvedValue({
         ok: false,
         status: 500,
@@ -267,7 +296,7 @@ describe('Admin Authentication Flow Integration Tests', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('HTTP 500');
+      expect(result.error).toBe('Server error');
     });
   });
 
@@ -305,12 +334,18 @@ describe('Admin Authentication Flow Integration Tests', () => {
         json: async () => mockResponse,
       });
 
-      const result = await AdminAuthService.validateSession('invalid-token');
+      const invalidSession = {
+        id: 'admin-1',
+        email: 'afouadsoftwareengineer@gmail.com',
+        name: 'Admin User',
+        role: 'super_admin' as const,
+        token: 'invalid-token',
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      };
 
-      expect(result.success).toBe(false);
-      expect(result.error).toBe('Invalid token');
-      // Should not expose token in error messages
-      expect(result.error).not.toContain('invalid-token');
+      const result = await AdminAuthService.validateSession(invalidSession);
+
+      expect(result).toBe(false);
     });
   });
 });

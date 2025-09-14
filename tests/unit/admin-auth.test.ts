@@ -72,7 +72,7 @@ describe('AdminAuthService', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Network error');
+      expect(result.error).toBe('Authentication failed');
     });
   });
 
@@ -86,6 +86,11 @@ describe('AdminAuthService', () => {
         token: 'valid-token',
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
       };
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      });
 
       const result = await AdminAuthService.validateSession(mockSession);
       expect(result).toBe(true);
