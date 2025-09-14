@@ -1,6 +1,7 @@
 import React from 'react';
 import { LearningPathCard, LearningPath } from './LearningPathCard';
 import { EmptyState } from './EmptyState';
+import { useLearningPathStats } from '@/hooks/useLearningPathStats';
 
 export interface LearningPathsGridProps {
   paths: LearningPath[];
@@ -17,6 +18,12 @@ export const LearningPathsGrid: React.FC<LearningPathsGridProps> = ({
   cardRefs,
   className = '',
 }) => {
+  const {
+    stats,
+    isLoading: isStatsLoading,
+    getQuestionCount,
+  } = useLearningPathStats();
+
   if (paths.length === 0) {
     return <EmptyState />;
   }
@@ -25,17 +32,25 @@ export const LearningPathsGrid: React.FC<LearningPathsGridProps> = ({
     <div
       className={`grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-8 ${className}`}
     >
-      {paths.map(path => (
-        <LearningPathCard
-          key={path.id}
-          path={path}
-          isCollapsed={collapsedCards.has(path.id)}
-          onToggle={onToggleCard}
-          cardRef={el => {
-            cardRefs.current[path.id] = el;
-          }}
-        />
-      ))}
+      {paths.map(path => {
+        const dynamicQuestionCount = getQuestionCount(path.id);
+        const isQuestionCountLoading =
+          isStatsLoading || stats[path.id]?.isLoading || false;
+
+        return (
+          <LearningPathCard
+            key={path.id}
+            path={path}
+            isCollapsed={collapsedCards.has(path.id)}
+            onToggle={onToggleCard}
+            cardRef={el => {
+              cardRefs.current[path.id] = el;
+            }}
+            dynamicQuestionCount={dynamicQuestionCount}
+            isQuestionCountLoading={isQuestionCountLoading}
+          />
+        );
+      })}
     </div>
   );
 };
