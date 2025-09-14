@@ -1,51 +1,145 @@
 {
-  // Example (Standard Edition):
-  //
-  // "indexes": [
-  //   {
-  //     "collectionGroup": "widgets",
-  //     "queryScope": "COLLECTION",
-  //     "fields": [
-  //       { "fieldPath": "foo", "arrayConfig": "CONTAINS" },
-  //       { "fieldPath": "bar", "mode": "DESCENDING" }
-  //     ]
-  //   },
-  //
-  //  "fieldOverrides": [
-  //    {
-  //      "collectionGroup": "widgets",
-  //      "fieldPath": "baz",
-  //      "indexes": [
-  //        { "order": "ASCENDING", "queryScope": "COLLECTION" }
-  //      ]
-  //    },
-  //   ]
-  // ]
-  //
-  // Example (Enterprise Edition):
-  //
-  // "indexes": [
-  //   {
-  //     "collectionGroup": "reviews",
-  //     "queryScope": "COLLECTION_GROUP",
-  //     "apiScope": "MONGODB_COMPATIBLE_API",
-  //     "density": "DENSE",
-  //     "multikey": false,
-  //     "fields": [
-  //       { "fieldPath": "baz", "mode": "ASCENDING" }
-  //     ]
-  //   },
-  //   {
-  //     "collectionGroup": "items",
-  //     "queryScope": "COLLECTION_GROUP",
-  //     "apiScope": "MONGODB_COMPATIBLE_API",
-  //     "density": "SPARSE_ANY",
-  //     "multikey": true,
-  //     "fields": [
-  //       { "fieldPath": "baz", "mode": "ASCENDING" }
-  //     ]
-  //   },
-  // ]
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "unifiedQuestions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "learningPath",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "unifiedQuestions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "category",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "unifiedQuestions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "difficulty",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "unifiedQuestions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "learningPath",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "unifiedQuestions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "difficulty",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "unifiedQuestions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "learningPath",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "difficulty",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "unifiedQuestions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "sectionId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "unifiedQuestions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isComplete",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

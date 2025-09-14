@@ -86,7 +86,7 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
   };
 
   // Only super admins can manage other admins
-  if (currentUser.role !== 'super_admin') {
+  if (!currentUser || currentUser.role !== 'super_admin') {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -275,16 +275,18 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  {admin.isActive && admin.id !== currentUser.id && (
-                    <button
-                      onClick={() =>
-                        handleDeactivateAdmin(admin.id, admin.email)
-                      }
-                      className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-sm transition-colors"
-                    >
-                      Deactivate
-                    </button>
-                  )}
+                  {admin.isActive &&
+                    currentUser &&
+                    admin.id !== currentUser.id && (
+                      <button
+                        onClick={() =>
+                          handleDeactivateAdmin(admin.id, admin.email)
+                        }
+                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-sm transition-colors"
+                      >
+                        Deactivate
+                      </button>
+                    )}
                 </div>
               </div>
             ))}

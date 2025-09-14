@@ -1,0 +1,202 @@
+[
+  {
+    "id": "section_1",
+    "name": "Frontend Fundamentals",
+    "description": "Learn and practice frontend fundamentals",
+    "order": 1,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_2",
+    "name": "Advanced CSS Mastery",
+    "description": "Learn and practice advanced css mastery",
+    "order": 2,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_3",
+    "name": "JavaScript Deep Dive",
+    "description": "Learn and practice javascript deep dive",
+    "order": 3,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_4",
+    "name": "React Mastery",
+    "description": "Learn and practice react mastery",
+    "order": 4,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_5",
+    "name": "TypeScript Essentials",
+    "description": "Learn and practice typescript essentials",
+    "order": 5,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_6",
+    "name": "Testing Strategies",
+    "description": "Learn and practice testing strategies",
+    "order": 6,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_7",
+    "name": "Performance Optimization",
+    "description": "Learn and practice performance optimization",
+    "order": 7,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_8",
+    "name": "Security Essentials",
+    "description": "Learn and practice security essentials",
+    "order": 8,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_9",
+    "name": "Frontend System Design",
+    "description": "Learn and practice frontend system design",
+    "order": 9,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_10",
+    "name": "Build Tools & DevOps",
+    "description": "Learn and practice build tools & devops",
+    "order": 10,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_11",
+    "name": "API Integration & Communication",
+    "description": "Learn and practice api integration & communication",
+    "order": 11,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_12",
+    "name": "AI Tools for Frontend",
+    "description": "Learn and practice ai tools for frontend",
+    "order": 12,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_13",
+    "name": "Frontend Interview Prep",
+    "description": "Learn and practice frontend interview prep",
+    "order": 13,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_14",
+    "name": "Advanced Frontend Architectures",
+    "description": "Learn and practice advanced frontend architectures",
+    "order": 14,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_15",
+    "name": "JavaScript Practice & Interview Prep",
+    "description": "Learn and practice javascript practice & interview prep",
+    "order": 15,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_16",
+    "name": "CSS Practice & Layout Mastery",
+    "description": "Learn and practice css practice & layout mastery",
+    "order": 16,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_17",
+    "name": "HTML Practice & Semantic Mastery",
+    "description": "Learn and practice html practice & semantic mastery",
+    "order": 17,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_18",
+    "name": "React Practice & Advanced Patterns",
+    "description": "Learn and practice react practice & advanced patterns",
+    "order": 18,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_19",
+    "name": "Comprehensive Interview Preparation",
+    "description": "Learn and practice comprehensive interview preparation",
+    "order": 19,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  },
+  {
+    "id": "section_20",
+    "name": "Improve Your English",
+    "description": "Learn and practice improve your english",
+    "order": 20,
+    "isActive": true,
+    "questionCount": 0,
+    "createdAt": "2025-09-14T15:51:32.714Z",
+    "updatedAt": "2025-09-14T15:51:32.714Z"
+  }
+]
