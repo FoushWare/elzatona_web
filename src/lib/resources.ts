@@ -647,7 +647,7 @@ export const learningPaths: LearningPath[] = [
       'DOM Manipulation',
       'Event Handling',
     ],
-    questionCount: 100,
+    questionCount: 122,
     questionCategories: ['html', 'css', 'javascript'],
   },
   {
@@ -672,7 +672,7 @@ export const learningPaths: LearningPath[] = [
       'Performance Optimization',
       'Responsive Design',
     ],
-    questionCount: 20,
+    questionCount: 16,
     questionCategories: ['css'],
   },
   {
@@ -697,7 +697,7 @@ export const learningPaths: LearningPath[] = [
       'Performance Optimization',
       'Memory Management',
     ],
-    questionCount: 129,
+    questionCount: 70,
     questionCategories: ['javascript'],
   },
   {
@@ -742,7 +742,7 @@ export const learningPaths: LearningPath[] = [
       'SOLID Principles',
       'Modern Patterns',
     ],
-    questionCount: 25,
+    questionCount: 12,
     questionCategories: ['typescript'],
   },
   {
@@ -762,7 +762,7 @@ export const learningPaths: LearningPath[] = [
       'Test Strategy',
       'Mocking & Stubbing',
     ],
-    questionCount: 20,
+    questionCount: 10,
     questionCategories: ['testing'],
   },
   {
@@ -787,7 +787,7 @@ export const learningPaths: LearningPath[] = [
       'Caching Strategies',
       'Image Optimization',
     ],
-    questionCount: 20,
+    questionCount: 9,
     questionCategories: ['performance'],
   },
   {
@@ -806,7 +806,7 @@ export const learningPaths: LearningPath[] = [
       'Secure Coding Practices',
       'Security Best Practices',
     ],
-    questionCount: 15,
+    questionCount: 7,
     questionCategories: ['security'],
   },
   {
@@ -830,7 +830,7 @@ export const learningPaths: LearningPath[] = [
       'Scalable Patterns',
       'Team Collaboration',
     ],
-    questionCount: 20,
+    questionCount: 10,
     questionCategories: ['system-design'],
   },
   {
@@ -870,7 +870,7 @@ export const learningPaths: LearningPath[] = [
       'Data Fetching Patterns',
       'API Optimization',
     ],
-    questionCount: 20,
+    questionCount: 8,
     questionCategories: ['api', 'communication'],
   },
   {
@@ -1061,6 +1061,8 @@ export const learningPaths: LearningPath[] = [
       'Reading',
       'Writing',
     ],
+    questionCount: 8,
+    questionCategories: ['english'],
   },
 ];
 
