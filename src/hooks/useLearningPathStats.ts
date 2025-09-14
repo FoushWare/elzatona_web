@@ -15,7 +15,7 @@ interface UseLearningPathStatsReturn {
   isLoading: boolean;
   error: string | null;
   refreshStats: () => Promise<void>;
-  getQuestionCount: (pathId: string) => number;
+  getQuestionCount: (pathId: string) => number | undefined;
 }
 
 export function useLearningPathStats(): UseLearningPathStatsReturn {
@@ -103,10 +103,15 @@ export function useLearningPathStats(): UseLearningPathStatsReturn {
 
   // Get question count for a specific path
   const getQuestionCount = useCallback(
-    (pathId: string): number => {
-      return stats[pathId]?.questionCount || 0;
+    (pathId: string): number | undefined => {
+      // Return undefined if we haven't loaded stats yet (to show loading state)
+      // Return the actual count if we have loaded stats
+      if (isLoading || !stats[pathId]) {
+        return undefined;
+      }
+      return stats[pathId].questionCount;
     },
-    [stats]
+    [stats, isLoading]
   );
 
   // Load stats on mount
