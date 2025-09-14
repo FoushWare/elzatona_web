@@ -128,6 +128,45 @@ export class SectionService {
   }
 
   /**
+   * Initialize default sections
+   */
+  static async initializeDefaultSections(): Promise<SectionResult> {
+    try {
+      await this.ensureDirectories();
+
+      const sectionsPath = this.getSectionsPath();
+
+      // Check if sections file already exists
+      try {
+        await fs.access(sectionsPath);
+        // File exists, don't overwrite
+        return {
+          success: true,
+          message: 'Sections file already exists',
+          data: null,
+        };
+      } catch (error) {
+        // File doesn't exist, create it with default sections
+        const defaultSections = this.getDefaultSections();
+        await this.saveSections(defaultSections);
+
+        return {
+          success: true,
+          message: 'Default sections initialized successfully',
+          data: defaultSections,
+        };
+      }
+    } catch (error) {
+      console.error('Failed to initialize default sections:', error);
+      return {
+        success: false,
+        message: 'Failed to initialize default sections',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  /**
    * Get default sections
    */
   private static getDefaultSections(): LearningSection[] {
