@@ -34,6 +34,7 @@ export default function SectionManager() {
   const [showQuestionsModal, setShowQuestionsModal] = useState(false);
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [showQuestionCreator, setShowQuestionCreator] = useState(false);
+  const [showEditQuestionModal, setShowEditQuestionModal] = useState(false);
 
   // Form states
   const [editingSection, setEditingSection] = useState<UnifiedSection | null>(
@@ -44,6 +45,7 @@ export default function SectionManager() {
   const [sectionQuestions, setSectionQuestions] = useState<SectionQuestion[]>(
     []
   );
+  const [editingQuestion, setEditingQuestion] = useState<SectionQuestion | null>(null);
 
   // Add/Edit form
   const [formData, setFormData] = useState({
@@ -220,6 +222,38 @@ export default function SectionManager() {
       await handleViewQuestions(selectedSection);
     }
     await loadSections(); // Refresh section counts
+  };
+
+  // Handle edit question
+  const handleEditQuestion = (question: SectionQuestion) => {
+    setEditingQuestion(question);
+    setShowEditQuestionModal(true);
+  };
+
+  // Handle delete question
+  const handleDeleteQuestion = async (question: SectionQuestion) => {
+    if (!confirm(`Are you sure you want to delete the question "${question.title}"?`)) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      // TODO: Implement delete question API call
+      // For now, we'll show an error since we need to implement the delete functionality
+      setError('Delete functionality not yet implemented. Please use the unified question manager for now.');
+      
+      // Refresh questions list
+      if (selectedSection) {
+        await handleViewQuestions(selectedSection);
+      }
+      await loadSections();
+    } catch (error) {
+      setError('Failed to delete question');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const clearMessages = () => {
@@ -660,6 +694,24 @@ export default function SectionManager() {
                             </span>
                           </div>
                         </div>
+                        
+                        {/* Edit and Delete Buttons */}
+                        <div className="flex items-center space-x-2 ml-4">
+                          <button
+                            onClick={() => handleEditQuestion(question)}
+                            className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                            title="Edit question"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteQuestion(question)}
+                            className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                            title="Delete question"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -694,6 +746,145 @@ export default function SectionManager() {
               onQuestionsAdded={handleQuestionAdded}
               onClose={() => setShowBulkModal(false)}
             />
+          </div>
+        </div>
+      )}
+
+      {/* Edit Question Modal */}
+      {showEditQuestionModal && editingQuestion && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-800 rounded-lg shadow-xl">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Edit Question
+                </h2>
+                <button
+                  onClick={() => setShowEditQuestionModal(false)}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {/* Question Title */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Question Title
+                  </label>
+                  <input
+                    type="text"
+                    value={editingQuestion.title}
+                    readOnly
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  />
+                </div>
+
+                {/* Question Content */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Question Content
+                  </label>
+                  <textarea
+                    value={editingQuestion.content}
+                    readOnly
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  />
+                </div>
+
+                {/* Question Type and Difficulty */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Question Type
+                    </label>
+                    <div className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+                      {editingQuestion.type === 'single' ? 'Single Choice' : 'Multiple Choice'}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Difficulty
+                    </label>
+                    <div className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+                      {editingQuestion.difficulty.charAt(0).toUpperCase() + editingQuestion.difficulty.slice(1)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Options */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Answer Options
+                  </label>
+                  <div className="space-y-2">
+                    {editingQuestion.options?.map((option, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <span className="w-6 h-6 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-sm font-medium text-gray-600 dark:text-gray-300">
+                          {String.fromCharCode(65 + index)}
+                        </span>
+                        <div className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+                          {option.text}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Status */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Status
+                  </label>
+                  <div className={`px-3 py-2 rounded-md ${
+                    editingQuestion.isComplete
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                      : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                  }`}>
+                    {editingQuestion.isComplete ? 'Complete' : 'Incomplete'}
+                  </div>
+                </div>
+
+                {/* Note about full editing */}
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <div className="flex items-start">
+                    <AlertCircle className="w-5 h-5 text-blue-500 mt-0.5 mr-3" />
+                    <div>
+                      <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-1">
+                        Full Editing Available
+                      </h3>
+                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                        For complete question editing (title, content, options, etc.), please use the 
+                        <strong> Unified Question Manager</strong> in the admin panel. This view shows 
+                        the current question details for reference.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <button
+                    onClick={() => setShowEditQuestionModal(false)}
+                    className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowEditQuestionModal(false);
+                      // TODO: Navigate to unified question manager with this question pre-selected
+                      window.open('/admin/content/questions', '_blank');
+                    }}
+                    className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+                  >
+                    Edit in Question Manager
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
