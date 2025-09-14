@@ -121,6 +121,13 @@ export default function Navbar() {
           description: 'Test your knowledge with interactive quizzes',
         },
         {
+          href: '/questions/behavioral',
+          label: 'Behavioral Questions',
+          icon: '🤝',
+          description:
+            'Practice behavioral interview questions with text input',
+        },
+        {
           href: '/flashcards',
           label: 'Interactive Flashcards',
           icon: '🃏',

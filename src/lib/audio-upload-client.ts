@@ -6,6 +6,7 @@ export interface AudioUploadResult {
 
 export interface AudioDeleteResult {
   success: boolean;
+  message?: string;
   error?: string;
 }
 
@@ -30,7 +31,7 @@ export class ClientAudioUploadService {
   ): Promise<AudioUploadResult> {
     try {
       const validation = this.validateAudioFile(file);
-      if (!validation.valid) {
+      if (!validation.isValid) {
         return { success: false, error: validation.error };
       }
 
@@ -67,7 +68,7 @@ export class ClientAudioUploadService {
   ): Promise<AudioUploadResult> {
     try {
       const validation = this.validateAudioFile(file);
-      if (!validation.valid) {
+      if (!validation.isValid) {
         return { success: false, error: validation.error };
       }
 
@@ -100,10 +101,25 @@ export class ClientAudioUploadService {
    */
   static async deleteAudio(audioUrl: string): Promise<AudioDeleteResult> {
     try {
-      // For now, we'll just log the deletion
-      // In a real implementation, you'd call a DELETE API endpoint
-      console.log(`✅ Audio file deleted: ${audioUrl}`);
-      return { success: true };
+      const response = await fetch('/api/audio/upload', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ audioUrl }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        console.log(`✅ Audio file deleted: ${audioUrl}`);
+        return { success: true, message: 'Audio file deleted successfully' };
+      } else {
+        return {
+          success: false,
+          error: data.error || 'Failed to delete audio file',
+        };
+      }
     } catch (error) {
       console.error('Error deleting audio file:', error);
       return { success: false, error: 'Failed to delete audio file' };
@@ -113,26 +129,25 @@ export class ClientAudioUploadService {
   /**
    * Validate audio file
    */
-  private static validateAudioFile(file: File): {
-    valid: boolean;
+  static validateAudioFile(file: File): {
+    isValid: boolean;
     error?: string;
   } {
     if (file.size > this.MAX_FILE_SIZE) {
       return {
-        valid: false,
-        error: `File size must be less than ${this.MAX_FILE_SIZE / (1024 * 1024)}MB`,
+        isValid: false,
+        error: `File size exceeds ${this.MAX_FILE_SIZE / (1024 * 1024)}MB limit`,
       };
     }
 
     if (!this.ALLOWED_TYPES.includes(file.type)) {
       return {
-        valid: false,
-        error:
-          'File type not supported. Please use MP3, WAV, OGG, M4A, AAC, or WebM',
+        isValid: false,
+        error: 'Invalid file type. Only audio files are allowed.',
       };
     }
 
-    return { valid: true };
+    return { isValid: true };
   }
 
   /**

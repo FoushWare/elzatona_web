@@ -207,6 +207,12 @@ export default function QuestionsPage() {
               🎯 Multiple Choice Quiz
             </Link>
             <Link
+              href="/questions/behavioral"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg hover:from-orange-700 hover:to-red-700 transition-all duration-200 font-medium shadow-lg"
+            >
+              🤝 Behavioral Questions
+            </Link>
+            <Link
               href="/coding"
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 font-medium shadow-lg"
             >
