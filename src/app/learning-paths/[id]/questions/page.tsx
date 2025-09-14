@@ -415,7 +415,7 @@ export default function QuestionsPage() {
 
                   return (
                     <button
-                      key={option.id}
+                      key={option.id || `option-${index}`}
                       onClick={() => handleAnswerSelect(index)}
                       className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
                         isSelected
