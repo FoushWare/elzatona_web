@@ -21,6 +21,8 @@ export interface LearningPathCardProps {
   onToggle: (pathId: string) => void;
   cardRef?: (el: HTMLDivElement | null) => void;
   className?: string;
+  dynamicQuestionCount?: number;
+  isQuestionCountLoading?: boolean;
 }
 
 const getCategoryIcon = (category: string): string => {
@@ -70,6 +72,8 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
   onToggle,
   cardRef,
   className = '',
+  dynamicQuestionCount,
+  isQuestionCountLoading = false,
 }) => {
   const category = path.id.split('-')[0];
 
@@ -98,9 +102,37 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
               </div>
             </div>
             <div className="flex items-center space-x-3 flex-shrink-0">
-              {path.questionCount && (
+              {(dynamicQuestionCount !== undefined
+                ? dynamicQuestionCount
+                : path.questionCount) && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 text-white border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300 animate-pulse">
-                  #{path.questionCount} Q
+                  {isQuestionCountLoading ? (
+                    <span className="flex items-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-1 h-3 w-3 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Loading...
+                    </span>
+                  ) : (
+                    `#${dynamicQuestionCount !== undefined ? dynamicQuestionCount : path.questionCount} Q`
+                  )}
                 </span>
               )}
               <svg
@@ -195,13 +227,41 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
                   {path.targetSkills.length} skills
                 </span>
               </div>
-              {path.questionCount && (
+              {(dynamicQuestionCount !== undefined
+                ? dynamicQuestionCount
+                : path.questionCount) && (
                 <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
                   <span className="text-lg sm:text-xl lg:text-2xl mb-1 text-foreground">
                     🧠
                   </span>
                   <span className="text-xs sm:text-sm font-semibold text-white">
-                    {path.questionCount} questions
+                    {isQuestionCountLoading ? (
+                      <span className="flex items-center">
+                        <svg
+                          className="animate-spin -ml-1 mr-1 h-3 w-3 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Loading...
+                      </span>
+                    ) : (
+                      `${dynamicQuestionCount !== undefined ? dynamicQuestionCount : path.questionCount} questions`
+                    )}
                   </span>
                 </div>
               )}
