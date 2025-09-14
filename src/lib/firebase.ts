@@ -288,4 +288,4 @@ export const refreshUserToken = async () => {
 };
 
 // Export auth and db for direct access (with fallbacks)
-export { auth, db, storage };
+export { app, auth, db, storage };
