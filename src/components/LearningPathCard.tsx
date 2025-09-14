@@ -139,9 +139,9 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             {/* Tags Badge - Only visible when expanded */}
             <div className="mb-4">
               <div className="flex flex-wrap gap-1">
-                {path.targetSkills.slice(0, 3).map(skill => (
+                {path.targetSkills.slice(0, 3).map((skill, index) => (
                   <span
-                    key={skill}
+                    key={`tag-${skill}-${index}`}
                     className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 text-white border border-white dark:border-gray-800 shadow-lg"
                   >
                     {skill}
@@ -213,9 +213,9 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
                 Skills you&apos;ll learn:
               </div>
               <div className="flex flex-wrap gap-2">
-                {path.targetSkills.slice(0, 4).map(skill => (
+                {path.targetSkills.slice(0, 4).map((skill, index) => (
                   <span
-                    key={skill}
+                    key={`skill-${skill}-${index}`}
                     className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-gray-100 via-slate-100 to-gray-100 dark:from-gray-800/40 dark:via-slate-800/40 dark:to-gray-800/40 text-foreground border border-gray-200 dark:border-gray-600 shadow-sm"
                   >
                     {skill}

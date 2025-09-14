@@ -47,6 +47,28 @@ global.console = {
 // Mock fetch globally
 global.fetch = jest.fn();
 
+// Mock Node.js fs module for file system operations
+jest.mock('fs', () => ({
+  promises: {
+    mkdir: jest.fn().mockResolvedValue(undefined),
+    readFile: jest.fn().mockResolvedValue('[]'),
+    writeFile: jest.fn().mockResolvedValue(undefined),
+    access: jest.fn().mockResolvedValue(undefined),
+    readdir: jest.fn().mockResolvedValue([]),
+    stat: jest.fn().mockResolvedValue({ isDirectory: () => true }),
+    unlink: jest.fn().mockResolvedValue(undefined),
+  },
+  mkdir: jest.fn().mockImplementation((path, options, callback) => {
+    if (callback) callback(null);
+  }),
+  readFileSync: jest.fn().mockReturnValue('[]'),
+  writeFileSync: jest.fn().mockImplementation(() => {}),
+  existsSync: jest.fn().mockReturnValue(false),
+  readdirSync: jest.fn().mockReturnValue([]),
+  statSync: jest.fn().mockReturnValue({ isDirectory: () => true }),
+  unlinkSync: jest.fn().mockImplementation(() => {}),
+}));
+
 // Mock File constructor
 global.File = class File {
   constructor(
