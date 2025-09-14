@@ -6,6 +6,7 @@ import { Volume2, VolumeX, Loader2, Play, Pause } from 'lucide-react';
 interface EnhancedTTSProps {
   text: string;
   className?: string;
+  title?: string;
   autoPlay?: boolean;
   onStart?: () => void;
   onEnd?: () => void;
@@ -14,6 +15,7 @@ interface EnhancedTTSProps {
 export default function EnhancedTTS({
   text,
   className = '',
+  title,
   autoPlay = false,
   onStart,
   onEnd,
@@ -335,7 +337,7 @@ export default function EnhancedTTS({
           }
           ${isLoading || serverTTSLoading ? 'opacity-50 cursor-not-allowed' : ''}
         `}
-        title={isPlaying ? 'Stop speaking' : 'Start speaking'}
+        title={title || (isPlaying ? 'Stop speaking' : 'Start speaking')}
       >
         {isLoading || serverTTSLoading ? (
           <Loader2 className="w-5 h-5 animate-spin" />

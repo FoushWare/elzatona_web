@@ -382,15 +382,11 @@ export default function QuestionsPage() {
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() =>
-                      speakWithEnhancedTTS(currentQuestion.question)
-                    }
+                  <EnhancedTTS 
+                    text={currentQuestion.question}
                     className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                     title="Read question aloud"
-                  >
-                    <EnhancedTTS />
-                  </button>
+                  />
                   {user && (
                     <button
                       onClick={handleAddToFlashcards}
