@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { SectionClientService } from '@/lib/section-client';
 import { LearningSection, SectionQuestion } from '@/lib/section-service';
+import { UnifiedSectionClientService, UnifiedSection } from '@/lib/unified-section-client';
 import QuestionCreator from './QuestionCreator';
 import BulkQuestionUploader from './BulkQuestionUploader';
 import {
@@ -22,7 +23,7 @@ import {
 } from 'lucide-react';
 
 export default function SectionManager() {
-  const [sections, setSections] = useState<LearningSection[]>([]);
+  const [sections, setSections] = useState<UnifiedSection[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -35,11 +36,11 @@ export default function SectionManager() {
   const [showQuestionCreator, setShowQuestionCreator] = useState(false);
 
   // Form states
-  const [editingSection, setEditingSection] = useState<LearningSection | null>(
+  const [editingSection, setEditingSection] = useState<UnifiedSection | null>(
     null
   );
   const [selectedSection, setSelectedSection] =
-    useState<LearningSection | null>(null);
+    useState<UnifiedSection | null>(null);
   const [sectionQuestions, setSectionQuestions] = useState<SectionQuestion[]>(
     []
   );
@@ -59,7 +60,8 @@ export default function SectionManager() {
       setLoading(true);
       setError(null);
 
-      const result = await SectionClientService.getSections();
+      // Use unified sections service instead of file-based service
+      const result = await UnifiedSectionClientService.getSections();
 
       if (result.success) {
         setSections(result.data);
@@ -172,12 +174,13 @@ export default function SectionManager() {
     }
   };
 
-  const handleViewQuestions = async (section: LearningSection) => {
+  const handleViewQuestions = async (section: UnifiedSection) => {
     try {
       setLoading(true);
       setError(null);
 
-      const result = await SectionClientService.getSectionQuestions(section.id);
+      // Use unified section questions service
+      const result = await UnifiedSectionClientService.getSectionQuestions(section.learningPathId);
 
       if (result.success) {
         setSectionQuestions(result.data);
@@ -193,7 +196,7 @@ export default function SectionManager() {
     }
   };
 
-  const openEditModal = (section: LearningSection) => {
+  const openEditModal = (section: UnifiedSection) => {
     setEditingSection(section);
     setFormData({
       name: section.name,
@@ -202,12 +205,12 @@ export default function SectionManager() {
     setShowEditModal(true);
   };
 
-  const openBulkModal = (section: LearningSection) => {
+  const openBulkModal = (section: UnifiedSection) => {
     setSelectedSection(section);
     setShowBulkModal(true);
   };
 
-  const openQuestionCreator = (section: LearningSection) => {
+  const openQuestionCreator = (section: UnifiedSection) => {
     setSelectedSection(section);
     setShowQuestionCreator(true);
   };
