@@ -251,23 +251,6 @@ export default function QuestionsPage() {
     }
   };
 
-  const handleAddToFlashcards = async () => {
-    const currentQuestion = currentGroup?.questions[currentQuestionIndex];
-    if (!currentQuestion || !user) return;
-
-    try {
-      await flashcardService.addFlashcard(user.uid, {
-        front: currentQuestion.question,
-        back: currentQuestion.explanation,
-        category: currentQuestion.category,
-        difficulty: currentQuestion.difficulty,
-        tags: currentQuestion.tags,
-      });
-      showSuccess('Added to flashcards! 📚');
-    } catch (_error) {
-      showError('Failed to add to flashcards');
-    }
-  };
 
   if (isLoading) {
     return (
@@ -388,13 +371,23 @@ export default function QuestionsPage() {
                     title="Read question aloud"
                   />
                   {user && (
-                    <button
-                      onClick={handleAddToFlashcards}
+                    <AddToFlashcard
+                      question={currentQuestion.question}
+                      answer={currentQuestion.explanation || ''}
+                      category={currentQuestion.category || 'General'}
+                      difficulty={currentQuestion.difficulty || 'beginner'}
+                      source={`Learning Path: ${learningPath?.title || 'Unknown'}`}
                       className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                      title="Add to flashcards"
-                    >
-                      <AddToFlashcard />
-                    </button>
+                      onStatusChange={(status) => {
+                        if (status === 'added') {
+                          // Optional: Show success message
+                          console.log('Question added to flashcards');
+                        } else if (status === 'error') {
+                          // Optional: Show error message
+                          console.error('Failed to add question to flashcards');
+                        }
+                      }}
+                    />
                   )}
                 </div>
               </div>
