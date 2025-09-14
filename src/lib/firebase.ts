@@ -22,49 +22,60 @@ import {
   getDoc,
   Firestore,
 } from 'firebase/firestore';
+import { getStorage, Storage } from 'firebase/storage';
 
-// Check if Firebase is configured
-const isFirebaseConfigured =
-  process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
-  process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
-  process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+// Check if Firebase is configured (always true since we have fallback values)
+const isFirebaseConfigured = true;
 
-// Firebase configuration
+// Firebase configuration - using your actual Firebase project
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'dummy-key',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'dummy-domain',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'dummy-project',
+  apiKey:
+    process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
+    'AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y',
+  authDomain:
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
+    'fir-demo-project-adffb.firebaseapp.com',
+  projectId:
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'fir-demo-project-adffb',
   storageBucket:
-    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'dummy-bucket',
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+    'fir-demo-project-adffb.firebasestorage.app',
   messagingSenderId:
-    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '123456789',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:123456789:web:dummy',
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '76366138630',
+  appId:
+    process.env.NEXT_PUBLIC_FIREBASE_APP_ID ||
+    '1:76366138630:web:0f3381c2f5a62e0401e287',
+  measurementId:
+    process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-XZ5VKFGG4Y',
 };
 
-// Initialize Firebase only if configured
+// Initialize Firebase (always initialize for development)
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
+let storage: Storage | null = null;
 
-if (isFirebaseConfigured) {
-  try {
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
+try {
+  // Force a fresh Firebase initialization
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  storage = getStorage(app);
 
-    // Configure authentication persistence
-    // This ensures users stay logged in across browser sessions
-    setPersistence(auth, browserLocalPersistence).catch(error => {
-      console.warn('Failed to set auth persistence:', error);
-    });
-  } catch (error) {
-    console.warn('Firebase initialization failed:', error);
-  }
-} else {
-  console.warn(
-    'Firebase not configured. Authentication features will be disabled.'
-  );
+  // Configure authentication persistence
+  // This ensures users stay logged in across browser sessions
+  setPersistence(auth, browserLocalPersistence).catch(error => {
+    console.warn('Failed to set auth persistence:', error);
+  });
+
+  console.log('✅ Firebase initialized successfully!');
+  console.log('📋 Configuration:', {
+    projectId: firebaseConfig.projectId,
+    authDomain: firebaseConfig.authDomain,
+    storageBucket: firebaseConfig.storageBucket,
+  });
+} catch (error) {
+  console.warn('Firebase initialization failed:', error);
 }
 
 // Auth providers (only create if Firebase is initialized)
@@ -277,4 +288,4 @@ export const refreshUserToken = async () => {
 };
 
 // Export auth and db for direct access (with fallbacks)
-export { auth, db };
+export { auth, db, storage };

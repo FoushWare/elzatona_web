@@ -1,5 +1,7 @@
 {
-  "projects": {},
+  "projects": {
+    "default": "fir-demo-project-adffb"
+  },
   "targets": {},
   "etags": {}
 }

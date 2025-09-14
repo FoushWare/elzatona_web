@@ -20,6 +20,7 @@ import EnhancedTTS from '@/components/EnhancedTTS';
 import ExpandableText from '@/components/ExpandableText';
 import ToastContainer, { useToast } from '@/components/Toast';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import CustomAudioPlayer from '@/components/CustomAudioPlayer';
 
 export default function QuestionsPage() {
   const params = useParams();
@@ -29,7 +30,9 @@ export default function QuestionsPage() {
   const { toasts, removeToast, showSuccess, showError } = useToast();
 
   const [score, setScore] = useState(0);
-  const [answeredQuestions, setAnsweredQuestions] = useState<Set<string>>(new Set());
+  const [answeredQuestions, setAnsweredQuestions] = useState<Set<string>>(
+    new Set()
+  );
 
   const learningPath = learningPaths.find(path => path.id === pathId);
 
@@ -49,13 +52,13 @@ export default function QuestionsPage() {
           voice: 'nova', // Most natural OpenAI voice
           model: 'tts-1-hd', // High definition model
           speed: 1.0, // Normal speed for natural speech
-          format: 'mp3'
+          format: 'mp3',
         }),
       });
 
       if (response.ok) {
         const result = await response.json();
-        
+
         if (result.success && result.audioUrl) {
           const audio = new Audio(result.audioUrl);
           audio.play();
@@ -67,7 +70,6 @@ export default function QuestionsPage() {
       // Fallback to enhanced browser TTS
       console.log('🎙️ Using enhanced browser TTS');
       speakWithBrowserTTS(text);
-
     } catch (error) {
       console.error('TTS error:', error);
       // Final fallback to browser TTS
@@ -77,30 +79,35 @@ export default function QuestionsPage() {
 
   // Enhanced browser TTS with intelligent voice selection
   const speakWithBrowserTTS = (text: string) => {
-    if (!text || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    if (
+      !text ||
+      typeof window === 'undefined' ||
+      !('speechSynthesis' in window)
+    )
+      return;
 
     speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = speechSynthesis.getVoices();
-    
+
     // Function to score voice quality for human-like speech
     const scoreVoice = (voice: SpeechSynthesisVoice) => {
       let score = 0;
       const name = voice.name.toLowerCase();
-      
+
       // Highest priority: Neural and AI voices (most human-like)
       if (name.includes('neural')) score += 100;
       if (name.includes('google')) score += 90;
       if (name.includes('cloud')) score += 85;
       if (name.includes('aria')) score += 80;
       if (name.includes('jenny')) score += 75;
-      
+
       // High priority: Premium voices
       if (name.includes('premium')) score += 70;
       if (name.includes('desktop')) score += 60;
       if (name.includes('enhanced')) score += 50;
-      
+
       // Medium priority: Natural voices
       if (name.includes('alex')) score += 40;
       if (name.includes('samantha')) score += 40;
@@ -108,34 +115,41 @@ export default function QuestionsPage() {
       if (name.includes('daniel')) score += 35;
       if (name.includes('moira')) score += 30;
       if (name.includes('tessa')) score += 30;
-      
+
       // Prefer female voices for clarity
       if (name.includes('female')) score += 20;
-      if (name.includes('aria') || name.includes('jenny') || name.includes('samantha')) score += 15;
-      
+      if (
+        name.includes('aria') ||
+        name.includes('jenny') ||
+        name.includes('samantha')
+      )
+        score += 15;
+
       // Avoid robotic voices
       if (name.includes('compact')) score -= 50;
       if (name.includes('basic')) score -= 30;
       if (name.includes('standard')) score -= 20;
-      
+
       // Language preference
       if (voice.lang === 'en-US') score += 10;
       if (voice.lang === 'en-GB') score += 8;
       if (voice.lang === 'en-AU') score += 6;
-      
+
       return score;
     };
-    
+
     // Sort voices by human-like quality score
     const sortedVoices = voices
       .filter(voice => voice.lang.startsWith('en'))
       .sort((a, b) => scoreVoice(b) - scoreVoice(a));
-    
+
     const selectedVoice = sortedVoices[0];
 
     if (selectedVoice) {
       utterance.voice = selectedVoice;
-      console.log(`🎙️ Using browser voice: ${selectedVoice.name} (Score: ${scoreVoice(selectedVoice)})`);
+      console.log(
+        `🎙️ Using browser voice: ${selectedVoice.name} (Score: ${scoreVoice(selectedVoice)})`
+      );
     }
 
     // Optimize speech parameters for human-like sound
@@ -143,9 +157,9 @@ export default function QuestionsPage() {
     utterance.pitch = 1.15; // Slightly higher pitch for warmth
     utterance.volume = 0.95; // High volume for clarity
     utterance.lang = 'en-US';
-    
+
     // Add natural pauses and emphasis
-    utterance.onboundary = (event) => {
+    utterance.onboundary = event => {
       if (event.name === 'word') {
         // Add subtle pauses between words for natural flow
         utterance.rate = Math.random() * 0.1 + 0.75; // Slight variation in rate
@@ -156,7 +170,8 @@ export default function QuestionsPage() {
   };
 
   // Use Firebase questions hook
-  const { questions: firebaseQuestions, loading } = useFirebaseQuestions(pathId);
+  const { questions: firebaseQuestions, loading } =
+    useFirebaseQuestions(pathId);
 
   // Convert Firebase questions to the expected format
   const questionsData = useMemo(() => {
@@ -165,12 +180,13 @@ export default function QuestionsPage() {
     }
 
     // Filter only multiple-choice questions and ensure they have required fields
-    const multipleChoiceQuestions = firebaseQuestions.filter(q => 
-      q.type === 'multiple-choice' && 
-      q.question && 
-      q.options && 
-      q.options.length > 0 && 
-      typeof q.correctAnswer === 'number'
+    const multipleChoiceQuestions = firebaseQuestions.filter(
+      q =>
+        q.type === 'multiple-choice' &&
+        q.question &&
+        q.options &&
+        q.options.length > 0 &&
+        typeof q.correctAnswer === 'number'
     );
 
     // Group questions by category or create a single group
@@ -280,7 +296,12 @@ export default function QuestionsPage() {
                       All Questions
                     </div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">
-                      {answeredQuestions.size} of {questionsData?.groups.reduce((total, group) => total + group.questions.length, 0) || 0} answered
+                      {answeredQuestions.size} of{' '}
+                      {questionsData?.groups.reduce(
+                        (total, group) => total + group.questions.length,
+                        0
+                      ) || 0}{' '}
+                      answered
                     </div>
                   </div>
                 </div>
@@ -302,7 +323,10 @@ export default function QuestionsPage() {
           <div className="max-w-6xl mx-auto">
             <div className="space-y-6">
               {questionsData?.groups.map((group, groupIndex) => (
-                <div key={group.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <div
+                  key={group.id}
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6"
+                >
                   <div className="mb-6">
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                       {group.title}
@@ -315,22 +339,23 @@ export default function QuestionsPage() {
                   <div className="space-y-4">
                     {group.questions.map((question, questionIndex) => {
                       const isAnswered = answeredQuestions.has(question.id);
-                      const [localSelectedAnswer, setLocalSelectedAnswer] = useState<string | null>(null);
-                      const [localShowAnswer, setLocalShowAnswer] = useState(false);
 
-                      const handleLocalSubmit = () => {
-                        if (localSelectedAnswer !== null) {
-                          const isCorrect = parseInt(localSelectedAnswer) === question.correctAnswer;
-                          if (isCorrect) {
-                            setScore(prev => prev + 1);
-                          }
-                          setAnsweredQuestions(prev => new Set([...prev, question.id]));
-                          setLocalShowAnswer(true);
+                      const handleLocalSubmit = (selectedAnswer: string) => {
+                        const isCorrect =
+                          parseInt(selectedAnswer) === question.correctAnswer;
+                        if (isCorrect) {
+                          setScore(prev => prev + 1);
                         }
+                        setAnsweredQuestions(
+                          prev => new Set([...prev, question.id])
+                        );
                       };
 
                       return (
-                        <div key={question.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                        <div
+                          key={question.id}
+                          className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+                        >
                           <div className="flex items-start justify-between mb-4">
                             <div className="flex-1">
                               <div className="flex items-center space-x-3 mb-3">
@@ -343,14 +368,16 @@ export default function QuestionsPage() {
                                   </span>
                                 )}
                               </div>
-                              
+
                               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                                 {question.title}
                               </h3>
 
                               <div className="text-gray-700 dark:text-gray-300 mb-4">
                                 <ExpandableText
-                                  text={question.question || 'No question available'}
+                                  text={
+                                    question.question || 'No question available'
+                                  }
                                   maxLength={200}
                                   className="whitespace-pre-wrap"
                                   expandText="Read more"
@@ -374,21 +401,36 @@ export default function QuestionsPage() {
                             </div>
 
                             <div className="flex items-center space-x-2 ml-4">
-                              <EnhancedTTS text={question.question} />
+                              <CustomAudioPlayer
+                                audioUrl={question.questionAudio}
+                                fallbackText={question.question}
+                              />
                               <AddToFlashcard
                                 questionId={question.id}
                                 questionTitle={question.title}
                                 questionText={question.question}
-                                onStatusChange={(status) => {
+                                onStatusChange={status => {
                                   if (status === 'added') {
-                                    showSuccess('Question Bookmarked', 'Question saved to your flashcard deck');
+                                    showSuccess(
+                                      'Question Bookmarked',
+                                      'Question saved to your flashcard deck'
+                                    );
                                   } else if (status === 'removed') {
-                                    showSuccess('Bookmark Removed', 'Question removed from your flashcard collection');
+                                    showSuccess(
+                                      'Bookmark Removed',
+                                      'Question removed from your flashcard collection'
+                                    );
                                   } else if (status === 'error') {
                                     if (!user) {
-                                      showError('Authentication Required', 'Please sign in to bookmark questions');
+                                      showError(
+                                        'Authentication Required',
+                                        'Please sign in to bookmark questions'
+                                      );
                                     } else {
-                                      showError('Error', 'Failed to update bookmark. Please try again.');
+                                      showError(
+                                        'Error',
+                                        'Failed to update bookmark. Please try again.'
+                                      );
                                     }
                                   }
                                 }}
@@ -399,83 +441,90 @@ export default function QuestionsPage() {
 
                           {/* Answer Options */}
                           <div className="space-y-2 mb-4">
-                            {question.options?.map((option: any, index: number) => {
-                              const isSelected = localSelectedAnswer === index.toString();
-                              const isCorrect = index === question.correctAnswer;
-                              const showResult = localShowAnswer || isAnswered;
+                            {question.options?.map(
+                              (option: unknown, index: number) => {
+                                const isCorrect =
+                                  index === question.correctAnswer;
+                                const showResult = isAnswered;
 
-                              let buttonClass = 'w-full text-left p-3 rounded-lg border-2 transition-all duration-200 text-sm ';
+                                let buttonClass =
+                                  'w-full text-left p-3 rounded-lg border-2 transition-all duration-200 text-sm ';
 
-                              if (showResult) {
-                                if (isCorrect) {
-                                  buttonClass += 'border-green-500 bg-green-50 dark:bg-green-900/20';
-                                } else if (isSelected && !isCorrect) {
-                                  buttonClass += 'border-red-500 bg-red-50 dark:bg-red-900/20';
+                                if (showResult) {
+                                  if (isCorrect) {
+                                    buttonClass +=
+                                      'border-green-500 bg-green-50 dark:bg-green-900/20';
+                                  } else if (isSelected && !isCorrect) {
+                                    buttonClass +=
+                                      'border-red-500 bg-red-50 dark:bg-red-900/20';
+                                  } else {
+                                    buttonClass +=
+                                      'border-gray-200 dark:border-gray-600';
+                                  }
                                 } else {
-                                  buttonClass += 'border-gray-200 dark:border-gray-600';
+                                  buttonClass += isSelected
+                                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                                    : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500';
                                 }
-                              } else {
-                                buttonClass += isSelected
-                                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                                  : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500';
-                              }
 
-                              return (
-                                <button
-                                  key={index}
-                                  onClick={() => {
-                                    if (!showResult) {
-                                      setLocalSelectedAnswer(index.toString());
-                                    }
-                                  }}
-                                  className={buttonClass}
-                                  disabled={showResult}
-                                >
-                                  <div className="flex items-start space-x-3">
-                                    <span className="flex-shrink-0 w-5 h-5 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
-                                      {String.fromCharCode(65 + index)}
-                                    </span>
-                                    <span className="text-gray-900 dark:text-white">
-                                      {option}
-                                    </span>
-                                    {showResult && isCorrect && (
-                                      <span className="flex-shrink-0 text-green-600 dark:text-green-400">
-                                        ✓
+                                return (
+                                  <button
+                                    key={index}
+                                    onClick={() => {
+                                      if (!showResult) {
+                                        handleLocalSubmit(index.toString());
+                                      }
+                                    }}
+                                    className={buttonClass}
+                                    disabled={showResult}
+                                  >
+                                    <div className="flex items-start space-x-3">
+                                      <span className="flex-shrink-0 w-5 h-5 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
+                                        {String.fromCharCode(65 + index)}
                                       </span>
-                                    )}
-                                    {showResult && isSelected && !isCorrect && (
-                                      <span className="flex-shrink-0 text-red-600 dark:text-red-400">
-                                        ✗
+                                      <span className="text-gray-900 dark:text-white">
+                                        {option}
                                       </span>
-                                    )}
-                                  </div>
-                                </button>
-                              );
-                            })}
+                                      {showResult && isCorrect && (
+                                        <span className="flex-shrink-0 text-green-600 dark:text-green-400">
+                                          ✓
+                                        </span>
+                                      )}
+                                      {showResult &&
+                                        isSelected &&
+                                        !isCorrect && (
+                                          <span className="flex-shrink-0 text-red-600 dark:text-red-400">
+                                            ✗
+                                          </span>
+                                        )}
+                                    </div>
+                                  </button>
+                                );
+                              }
+                            )}
                           </div>
 
-                          {/* Submit Button */}
-                          {!localShowAnswer && !isAnswered && (
-                            <div className="mb-4">
-                              <button
-                                onClick={handleLocalSubmit}
-                                disabled={!localSelectedAnswer}
-                                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
-                              >
-                                Submit Answer
-                              </button>
-                            </div>
-                          )}
-
                           {/* Answer Explanation */}
-                          {(localShowAnswer || isAnswered) && (
+                          {isAnswered && (
                             <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                              <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2">
-                                Answer Explanation:
-                              </h4>
+                              <div className="flex items-center justify-between mb-2">
+                                <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100">
+                                  Answer Explanation:
+                                </h4>
+                                <CustomAudioPlayer
+                                  audioUrl={question.answerAudio}
+                                  fallbackText={
+                                    question.explanation ||
+                                    'No explanation available.'
+                                  }
+                                />
+                              </div>
                               <div className="text-blue-800 dark:text-blue-200 text-sm">
                                 <ExpandableText
-                                  text={question.explanation || 'No explanation available.'}
+                                  text={
+                                    question.explanation ||
+                                    'No explanation available.'
+                                  }
                                   maxLength={200}
                                   className="whitespace-pre-wrap"
                                   expandText="Read more"
