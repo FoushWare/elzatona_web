@@ -65,10 +65,13 @@ export default function QuestionsPage() {
   const learningPath = learningPaths.find(path => path.id === pathId);
 
   // Memoize initial filters to prevent unnecessary re-renders
-  const initialFilters = useMemo(() => ({
-    learningPath: learningPath?.id,
-    isActive: true,
-  }), [learningPath?.id]);
+  const initialFilters = useMemo(
+    () => ({
+      learningPath: learningPath?.id,
+      isActive: true,
+    }),
+    [learningPath?.id]
+  );
 
   // Use unified questions hook
   const {
@@ -78,7 +81,6 @@ export default function QuestionsPage() {
   } = useUnifiedQuestions({
     initialFilters,
   });
-
 
   // Convert unified questions to the expected format
   const questionsData = useMemo(() => {
@@ -211,7 +213,6 @@ export default function QuestionsPage() {
     }
   };
 
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
@@ -280,9 +281,7 @@ export default function QuestionsPage() {
                 <h1 className="text-3xl font-bold text-white mb-2">
                   {learningPath?.title || 'Learning Path'} Questions
                 </h1>
-                <p className="text-blue-100 text-lg">
-                  {currentGroup.title}
-                </p>
+                <p className="text-blue-100 text-lg">{currentGroup.title}</p>
               </div>
               <div className="text-right">
                 <div className="text-blue-100 text-sm mb-1">
@@ -318,14 +317,17 @@ export default function QuestionsPage() {
             <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 border-b border-gray-200 dark:border-gray-600">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold ${
-                    currentQuestion.difficulty === 'easy' 
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' 
-                      : currentQuestion.difficulty === 'medium'
-                      ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
-                      : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                  }`}>
-                    {currentQuestion.difficulty?.charAt(0).toUpperCase() + currentQuestion.difficulty?.slice(1)}
+                  <span
+                    className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold ${
+                      currentQuestion.difficulty === 'easy'
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                        : currentQuestion.difficulty === 'medium'
+                          ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+                          : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                    }`}
+                  >
+                    {currentQuestion.difficulty?.charAt(0).toUpperCase() +
+                      currentQuestion.difficulty?.slice(1)}
                   </span>
                   <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
                     {currentQuestion.category}
@@ -343,7 +345,7 @@ export default function QuestionsPage() {
                       difficulty={currentQuestion.difficulty || 'beginner'}
                       source={`Learning Path: ${learningPath?.title || 'Unknown'}`}
                       className="p-3 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-md"
-                      onStatusChange={(status) => {
+                      onStatusChange={status => {
                         if (status === 'added') {
                           // Optional: Show success message
                           console.log('Question added to flashcards');
@@ -361,9 +363,33 @@ export default function QuestionsPage() {
             {/* Question Content */}
             <div className="px-8 py-8">
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white leading-relaxed mb-6">
-                  <ExpandableText text={currentQuestion.question} />
-                </h2>
+                <div className="text-2xl font-bold text-gray-900 dark:text-white leading-relaxed mb-6">
+                  {currentQuestion.question.includes('```') ? (
+                    <div className="space-y-4">
+                      {currentQuestion.question.split('```').map((part, index) => {
+                        if (index % 2 === 0) {
+                          // Regular text
+                          return (
+                            <div key={index} className="whitespace-pre-wrap">
+                              {part.trim()}
+                            </div>
+                          );
+                        } else {
+                          // Code block
+                          return (
+                            <div key={index} className="bg-gray-900 dark:bg-gray-800 rounded-lg p-4 overflow-x-auto">
+                              <pre className="text-gray-100 text-lg font-mono">
+                                <code>{part.trim()}</code>
+                              </pre>
+                            </div>
+                          );
+                        }
+                      })}
+                    </div>
+                  ) : (
+                    <ExpandableText text={currentQuestion.question} />
+                  )}
+                </div>
 
                 {/* Audio Question */}
                 {currentQuestion.audioQuestion && (
@@ -394,20 +420,29 @@ export default function QuestionsPage() {
                       }`}
                     >
                       <div className="flex items-center">
-                        <span className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mr-4 transition-colors ${
-                          isSelected
-                            ? 'bg-blue-500 text-white'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
-                        }`}>
+                        <span
+                          className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mr-4 transition-colors ${
+                            isSelected
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                          }`}
+                        >
                           {String.fromCharCode(65 + index)}
                         </span>
-                        <span className={`text-lg font-medium ${
-                          isSelected
-                            ? 'text-blue-900 dark:text-blue-100'
-                            : 'text-gray-900 dark:text-white'
-                        }`}>
-                          {option.text}
-                        </span>
+                        <div className="flex flex-wrap items-center gap-2">
+                          {option.text.split(' ').map((word, wordIndex) => (
+                            <span
+                              key={wordIndex}
+                              className={`px-3 py-1.5 rounded-md text-sm font-medium ${
+                                isSelected
+                                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200'
+                                  : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                              }`}
+                            >
+                              {word.replace(/`/g, '')}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </button>
                   );
@@ -428,28 +463,36 @@ export default function QuestionsPage() {
 
               {/* Explanation */}
               {showExplanation && (
-                <div className={`rounded-2xl p-8 mb-8 border-2 ${
-                  isAnswerCorrect 
-                    ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' 
-                    : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
-                }`}>
+                <div
+                  className={`rounded-2xl p-8 mb-8 border-2 ${
+                    isAnswerCorrect
+                      ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                      : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                  }`}
+                >
                   <div className="flex items-center mb-6">
-                    <div className={`w-4 h-4 rounded-full mr-4 ${
-                      isAnswerCorrect ? 'bg-green-500' : 'bg-red-500'
-                    }`}></div>
-                    <h3 className={`text-2xl font-bold ${
-                      isAnswerCorrect 
-                        ? 'text-green-800 dark:text-green-200' 
-                        : 'text-red-800 dark:text-red-200'
-                    }`}>
+                    <div
+                      className={`w-4 h-4 rounded-full mr-4 ${
+                        isAnswerCorrect ? 'bg-green-500' : 'bg-red-500'
+                      }`}
+                    ></div>
+                    <h3
+                      className={`text-2xl font-bold ${
+                        isAnswerCorrect
+                          ? 'text-green-800 dark:text-green-200'
+                          : 'text-red-800 dark:text-red-200'
+                      }`}
+                    >
                       {isAnswerCorrect ? '🎉 Correct!' : '❌ Incorrect'}
                     </h3>
                   </div>
-                  <div className={`text-lg leading-relaxed ${
-                    isAnswerCorrect 
-                      ? 'text-green-700 dark:text-green-300' 
-                      : 'text-red-700 dark:text-red-300'
-                  }`}>
+                  <div
+                    className={`text-lg leading-relaxed ${
+                      isAnswerCorrect
+                        ? 'text-green-700 dark:text-green-300'
+                        : 'text-red-700 dark:text-red-300'
+                    }`}
+                  >
                     <ExpandableText text={currentQuestion.explanation} />
                   </div>
 
