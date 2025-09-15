@@ -54,17 +54,31 @@ export default function QuestionsManagementPage() {
 
   const handleSearch = () => {
     loadQuestions({
-      category: selectedCategory === 'all' ? undefined : selectedCategory || undefined,
-      difficulty: selectedDifficulty === 'all' ? undefined : selectedDifficulty || undefined,
-      learningPath: selectedLearningPath === 'all' ? undefined : selectedLearningPath || undefined,
+      category:
+        selectedCategory === 'all' ? undefined : selectedCategory || undefined,
+      difficulty:
+        selectedDifficulty === 'all'
+          ? undefined
+          : selectedDifficulty || undefined,
+      learningPath:
+        selectedLearningPath === 'all'
+          ? undefined
+          : selectedLearningPath || undefined,
     });
   };
 
   const handleFilterChange = () => {
     loadQuestions({
-      category: selectedCategory === 'all' ? undefined : selectedCategory || undefined,
-      difficulty: selectedDifficulty === 'all' ? undefined : selectedDifficulty || undefined,
-      learningPath: selectedLearningPath === 'all' ? undefined : selectedLearningPath || undefined,
+      category:
+        selectedCategory === 'all' ? undefined : selectedCategory || undefined,
+      difficulty:
+        selectedDifficulty === 'all'
+          ? undefined
+          : selectedDifficulty || undefined,
+      learningPath:
+        selectedLearningPath === 'all'
+          ? undefined
+          : selectedLearningPath || undefined,
     });
   };
 
