@@ -43,8 +43,8 @@ export interface UnifiedQuestion {
   sectionId?: string; // Links to learning sections
 
   // Audio Support
-  audioQuestion?: string; // URL to question audio file
-  audioAnswer?: string; // URL to answer audio file
+  audioQuestion?: string; // Path to question audio file (e.g., '/audio/question.mp3')
+  audioAnswer?: string; // Path to answer audio file (e.g., '/audio/answer.mp3')
 
   // Scoring & Timing
   points: number;
@@ -112,8 +112,8 @@ export interface BulkQuestionData {
   timeLimit?: number;
   
   // Audio Support
-  audioQuestion?: string; // URL to question audio file
-  audioAnswer?: string; // URL to answer audio file
+  audioQuestion?: string; // Path to question audio file (e.g., '/audio/question.mp3')
+  audioAnswer?: string; // Path to answer audio file (e.g., '/audio/answer.mp3')
 }
 
 // Question Service Class
