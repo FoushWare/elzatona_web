@@ -9,7 +9,17 @@ process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = '123456789';
 process.env.NEXT_PUBLIC_FIREBASE_APP_ID = '1:123456789:web:test';
 process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID = 'G-TEST123';
 
-// Mock Request and Response for Node.js environment
+// Mock fetch, Request and Response for Node.js environment
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    status: 200,
+    statusText: 'OK',
+    json: () => Promise.resolve({}),
+    text: () => Promise.resolve(''),
+  })
+);
+
 global.Request = class Request {
   constructor(input, init = {}) {
     Object.defineProperty(this, 'url', {
