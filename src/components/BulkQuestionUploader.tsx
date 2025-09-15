@@ -47,6 +47,8 @@ export default function BulkQuestionUploader({
       ],
       correctAnswers: [],
       explanation: '',
+      audioQuestion: '',
+      audioAnswer: '',
     },
   ]);
 
@@ -70,6 +72,8 @@ export default function BulkQuestionUploader({
         ],
         correctAnswers: [],
         explanation: '',
+        audioQuestion: '',
+        audioAnswer: '',
       },
     ]);
   };
@@ -271,7 +275,9 @@ export default function BulkQuestionUploader({
       console.log('📥 Firebase Import Result:', result);
 
       if (result.success > 0) {
-        setSuccess(`${result.success} questions added successfully! ${result.failed > 0 ? `${result.failed} failed.` : ''}`);
+        setSuccess(
+          `${result.success} questions added successfully! ${result.failed > 0 ? `${result.failed} failed.` : ''}`
+        );
         setQuestions([
           {
             title: '',
@@ -325,6 +331,8 @@ export default function BulkQuestionUploader({
           ],
           correctAnswers: ['a'],
           explanation: 'This is the correct answer because...',
+          audioQuestion: 'https://example.com/question-audio.mp3',
+          audioAnswer: 'https://example.com/answer-audio.mp3',
         },
       ],
     };
@@ -444,7 +452,9 @@ export default function BulkQuestionUploader({
       { "id": "d", "text": "A server", "isCorrect": false }
     ],
     "correctAnswers": ["a"],
-    "explanation": "React is indeed a JavaScript library for building user interfaces."
+    "explanation": "React is indeed a JavaScript library for building user interfaces.",
+    "audioQuestion": "https://example.com/question-audio.mp3",
+    "audioAnswer": "https://example.com/answer-audio.mp3"
   }
 ]`}
               className="w-full h-64 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono text-sm"
@@ -711,6 +721,46 @@ export default function BulkQuestionUploader({
                     placeholder="Explain why the correct answer is correct..."
                     rows={2}
                   />
+                </div>
+
+                {/* Audio Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Question Audio URL
+                    </label>
+                    <input
+                      type="url"
+                      value={question.audioQuestion || ''}
+                      onChange={e =>
+                        updateQuestion(
+                          questionIndex,
+                          'audioQuestion',
+                          e.target.value
+                        )
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                      placeholder="https://example.com/question-audio.mp3"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Answer Audio URL
+                    </label>
+                    <input
+                      type="url"
+                      value={question.audioAnswer || ''}
+                      onChange={e =>
+                        updateQuestion(
+                          questionIndex,
+                          'audioAnswer',
+                          e.target.value
+                        )
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                      placeholder="https://example.com/answer-audio.mp3"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
