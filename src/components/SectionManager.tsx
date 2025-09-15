@@ -20,6 +20,7 @@ import {
   CheckCircle,
   AlertCircle,
   XCircle,
+  X,
 } from 'lucide-react';
 
 export default function SectionManager() {
