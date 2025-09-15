@@ -543,7 +543,7 @@ export default function QuestionsPage() {
           </div>
 
           {/* Toast Container */}
-          <ToastContainer toasts={toasts} removeToast={removeToast} />
+          <ToastContainer toasts={toasts} onRemove={removeToast} />
         </div>
       </div>
     </ErrorBoundary>
