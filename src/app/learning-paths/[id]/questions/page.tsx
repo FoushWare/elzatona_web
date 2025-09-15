@@ -471,10 +471,7 @@ export default function QuestionsPage() {
 
                         {/* Bottom accent */}
                         <div className="mt-6 pt-4 border-t border-gray-700/30 dark:border-gray-600/30">
-                          <div className="flex items-center justify-between text-xs text-gray-500">
-                            <span className="font-mono">
-                              Frontend Learning Hub
-                            </span>
+                          <div className="flex items-center justify-end text-xs text-gray-500">
                             <span className="font-mono">
                               Question #{currentQuestionIndex + 1}
                             </span>
