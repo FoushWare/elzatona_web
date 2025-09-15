@@ -28,6 +28,17 @@ This directory contains comprehensive documentation for all features in the Grea
 
 - [Testing System](./testing-system.md) - Comprehensive testing with Jest, RTL, and Playwright
 - [Deployment System](./deployment-system.md) - Automated Vercel deployment with CI/CD
+- [API System](./api-system.md) - Next.js API routes and server-side endpoints
+- [Security System](./security-system.md) - Comprehensive security and authentication
+- [Performance Optimization](./performance-optimization.md) - Performance monitoring and optimization
+
+### **User Experience & Design**
+
+- [Theme System](./theme-system.md) - Light/dark mode with persistent preferences
+- [Component System](./component-system.md) - Shadcn/ui and Tailwind CSS components
+- [Accessibility Features](./accessibility-features.md) - WCAG compliance and inclusive design
+- [User Experience Design](./user-experience-design.md) - User-centered design principles
+- [Monitoring & Analytics](./monitoring-analytics.md) - Performance and user behavior tracking
 
 ### **Legacy Features**
 
@@ -110,11 +121,22 @@ When implementing a new feature, please:
 - Deployment
 - CI/CD
 - Code Quality
+- API Development
+- Security
+- Performance
+
+### **User Experience**
+
+- Theme System
+- Component Design
+- Accessibility
+- UX Design
+- Analytics
 
 ## 📊 **Feature Metrics**
 
-- **Total Features**: 12 documented features
-- **Active Features**: 10 features
+- **Total Features**: 20 documented features
+- **Active Features**: 18 features
 - **In Development**: 0 features
 - **Planned Features**: 2 features
 
