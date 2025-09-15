@@ -186,7 +186,7 @@ export default function QuestionsPage() {
     setShowExplanation(true);
 
     if (isCorrect) {
-      setScore(prev => prev + (currentQuestion.points || 10));
+      setScore(prev => prev + 1);
       showSuccess('Correct! 🎉');
     } else {
       showError('Incorrect. Check the explanation below.');
@@ -207,19 +207,18 @@ export default function QuestionsPage() {
       setIsAnswerCorrect(null);
     } else {
       // All questions completed
-      showSuccess(`Quiz completed! Final score: ${score} points`);
+      showSuccess(`Quiz completed! Final score: ${score}`);
     }
   };
 
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
-    setSelectedAnswer(null);
-    setShowExplanation(false);
-    setIsAnswerCorrect(null);
+      setSelectedAnswer(null);
+      setShowExplanation(false);
+      setIsAnswerCorrect(null);
     }
   };
-
 
   if (isLoading) {
     return (
@@ -297,7 +296,7 @@ export default function QuestionsPage() {
                   {currentGroup.questions.length}
                 </div>
                 <div className="text-2xl font-bold text-white">
-                  Score: {score} points
+                  Score: {score}
                 </div>
               </div>
             </div>
@@ -339,9 +338,6 @@ export default function QuestionsPage() {
                   </span>
                   <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
                     {currentQuestion.category}
-                  </span>
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
-                    {currentQuestion.points} points
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -456,7 +452,6 @@ export default function QuestionsPage() {
                 </div>
               </div>
 
-
               {/* Answer Options */}
               <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 bg-gray-50/50 dark:bg-gray-700/30 rounded-lg p-4 sm:p-5 border border-gray-100 dark:border-gray-600">
                 <div className="mb-6">
@@ -475,11 +470,11 @@ export default function QuestionsPage() {
                       onClick={() => handleAnswerSelect(index)}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                  className={`w-full text-left p-4 sm:p-5 rounded-lg border-2 transition-all duration-200 ${
-                    isSelected
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
-                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800 hover:shadow-sm'
-                  }`}
+                      className={`w-full text-left p-4 sm:p-5 rounded-lg border-2 transition-all duration-200 ${
+                        isSelected
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800 hover:shadow-sm'
+                      }`}
                     >
                       <div className="flex items-center">
                         <motion.span
@@ -646,7 +641,6 @@ export default function QuestionsPage() {
                   </motion.div>
                 )}
               </AnimatePresence>
-
 
               {/* Navigation */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700">
