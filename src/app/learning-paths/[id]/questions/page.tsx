@@ -400,8 +400,8 @@ export default function QuestionsPage() {
                             {/* Audio Button */}
                             {currentQuestion.audioQuestion ? (
                               <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
+                                whileHover={{ scale: 1.15 }}
+                                whileTap={{ scale: 0.95 }}
                                 onClick={() => {
                                   const audio = new Audio(
                                     currentQuestion.audioQuestion
@@ -412,11 +412,11 @@ export default function QuestionsPage() {
                                       console.error('Error playing audio:', e)
                                     );
                                 }}
-                                className="p-2 text-gray-400 hover:text-white transition-all duration-200 bg-gray-800/50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-700/70 dark:hover:bg-gray-600/70 backdrop-blur-sm border border-gray-600/30 dark:border-gray-500/30"
+                                className="p-3 text-blue-400 hover:text-blue-200 transition-all duration-200 bg-blue-800/50 dark:bg-blue-700/50 rounded-xl hover:bg-blue-700/70 dark:hover:bg-blue-600/70 backdrop-blur-sm border border-blue-600/30 dark:border-blue-500/30 shadow-lg hover:shadow-xl"
                                 title="Play question audio"
                               >
                                 <svg
-                                  className="w-4 h-4"
+                                  className="w-6 h-6"
                                   fill="currentColor"
                                   viewBox="0 0 24 24"
                                 >
@@ -424,9 +424,9 @@ export default function QuestionsPage() {
                                 </svg>
                               </motion.button>
                             ) : (
-                              <div className="p-2 text-gray-500 bg-gray-800/30 dark:bg-gray-700/30 rounded-lg opacity-50">
+                              <div className="p-3 text-gray-500 bg-gray-800/30 dark:bg-gray-700/30 rounded-xl opacity-50">
                                 <svg
-                                  className="w-4 h-4"
+                                  className="w-6 h-6"
                                   fill="currentColor"
                                   viewBox="0 0 24 24"
                                 >
@@ -483,7 +483,6 @@ export default function QuestionsPage() {
                       </div>
                     </motion.div>
                   </div>
-
                 </div>
               </div>
 
@@ -869,8 +868,8 @@ export default function QuestionsPage() {
                             {/* Audio Button */}
                             {currentQuestion.audioAnswer ? (
                               <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
+                                whileHover={{ scale: 1.15 }}
+                                whileTap={{ scale: 0.95 }}
                                 onClick={() => {
                                   const audio = new Audio(
                                     currentQuestion.audioAnswer
@@ -881,7 +880,7 @@ export default function QuestionsPage() {
                                       console.error('Error playing audio:', e)
                                     );
                                 }}
-                                className={`p-2 transition-all duration-200 rounded-lg backdrop-blur-sm border ${
+                                className={`p-3 transition-all duration-200 rounded-xl backdrop-blur-sm border shadow-lg hover:shadow-xl ${
                                   isAnswerCorrect
                                     ? 'text-green-400 hover:text-green-200 bg-green-800/50 dark:bg-green-700/50 hover:bg-green-700/70 dark:hover:bg-green-600/70 border-green-600/30 dark:border-green-500/30'
                                     : 'text-red-400 hover:text-red-200 bg-red-800/50 dark:bg-red-700/50 hover:bg-red-700/70 dark:hover:bg-red-600/70 border-red-600/30 dark:border-red-500/30'
@@ -889,7 +888,7 @@ export default function QuestionsPage() {
                                 title="Play answer audio"
                               >
                                 <svg
-                                  className="w-4 h-4"
+                                  className="w-6 h-6"
                                   fill="currentColor"
                                   viewBox="0 0 24 24"
                                 >
@@ -897,13 +896,15 @@ export default function QuestionsPage() {
                                 </svg>
                               </motion.button>
                             ) : (
-                              <div className={`p-2 rounded-lg opacity-50 ${
-                                isAnswerCorrect
-                                  ? 'text-green-500 bg-green-800/30 dark:bg-green-700/30'
-                                  : 'text-red-500 bg-red-800/30 dark:bg-red-700/30'
-                              }`}>
+                              <div
+                                className={`p-3 rounded-xl opacity-50 ${
+                                  isAnswerCorrect
+                                    ? 'text-green-500 bg-green-800/30 dark:bg-green-700/30'
+                                    : 'text-red-500 bg-red-800/30 dark:bg-red-700/30'
+                                }`}
+                              >
                                 <svg
-                                  className="w-4 h-4"
+                                  className="w-6 h-6"
                                   fill="currentColor"
                                   viewBox="0 0 24 24"
                                 >
