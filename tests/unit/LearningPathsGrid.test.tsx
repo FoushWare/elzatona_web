@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { LearningPathsGrid } from '@/components/LearningPathsGrid';
 
 // Mock Next.js Link component
@@ -20,6 +20,24 @@ jest.mock('next/link', () => {
     );
   };
 });
+
+// Mock useLearningPathStats hook
+jest.mock('@/hooks/useLearningPathStats', () => ({
+  useLearningPathStats: () => ({
+    stats: {},
+    isLoading: false,
+    error: null,
+    refreshStats: jest.fn(),
+    getQuestionCount: jest.fn((pathId) => {
+      // Return the static question count for each path
+      const pathCounts: Record<string, number> = {
+        'frontend-basics': 25,
+        'react-mastery': 30,
+      };
+      return pathCounts[pathId] || 0;
+    }),
+  }),
+}));
 
 const mockLearningPaths = [
   {
@@ -73,14 +91,18 @@ describe('LearningPathsGrid', () => {
   });
 
   it('renders all learning path cards', () => {
-    render(<LearningPathsGrid {...defaultProps} />);
+    act(() => {
+      render(<LearningPathsGrid {...defaultProps} />);
+    });
 
     expect(screen.getByText('Frontend Basics')).toBeInTheDocument();
     expect(screen.getByText('React Mastery')).toBeInTheDocument();
   });
 
   it('renders correct number of cards', () => {
-    render(<LearningPathsGrid {...defaultProps} />);
+    act(() => {
+      render(<LearningPathsGrid {...defaultProps} />);
+    });
 
     const cards = screen.getAllByText(/Frontend Basics|React Mastery/);
     expect(cards).toHaveLength(2);
@@ -111,7 +133,9 @@ describe('LearningPathsGrid', () => {
   });
 
   it('passes correct props to each LearningPathCard', () => {
-    render(<LearningPathsGrid {...defaultProps} />);
+    act(() => {
+      render(<LearningPathsGrid {...defaultProps} />);
+    });
 
     // Check that cards are rendered with correct titles
     expect(screen.getByText('Frontend Basics')).toBeInTheDocument();
@@ -123,14 +147,18 @@ describe('LearningPathsGrid', () => {
   });
 
   it('handles empty paths array', () => {
-    render(<LearningPathsGrid {...defaultProps} paths={[]} />);
+    act(() => {
+      render(<LearningPathsGrid {...defaultProps} paths={[]} />);
+    });
 
     // Should show empty state
     expect(screen.getByText(/no learning paths found/i)).toBeInTheDocument();
   });
 
   it('renders empty state with correct message', () => {
-    render(<LearningPathsGrid {...defaultProps} paths={[]} />);
+    act(() => {
+      render(<LearningPathsGrid {...defaultProps} paths={[]} />);
+    });
 
     expect(screen.getByText('No learning paths found')).toBeInTheDocument();
     expect(
@@ -139,7 +167,9 @@ describe('LearningPathsGrid', () => {
   });
 
   it('renders empty state with link to study plans', () => {
-    render(<LearningPathsGrid {...defaultProps} paths={[]} />);
+    act(() => {
+      render(<LearningPathsGrid {...defaultProps} paths={[]} />);
+    });
 
     const studyPlansLink = screen.getByRole('link', {
       name: /view study plans/i,
@@ -150,7 +180,9 @@ describe('LearningPathsGrid', () => {
 
   it('handles single learning path', () => {
     const singlePath = [mockLearningPaths[0]];
-    render(<LearningPathsGrid {...defaultProps} paths={singlePath} />);
+    act(() => {
+      render(<LearningPathsGrid {...defaultProps} paths={singlePath} />);
+    });
 
     expect(screen.getByText('Frontend Basics')).toBeInTheDocument();
     expect(screen.queryByText('React Mastery')).not.toBeInTheDocument();
@@ -165,7 +197,9 @@ describe('LearningPathsGrid', () => {
         title: `Learning Path ${index + 1}`,
       }));
 
-    render(<LearningPathsGrid {...defaultProps} paths={manyPaths} />);
+    act(() => {
+      render(<LearningPathsGrid {...defaultProps} paths={manyPaths} />);
+    });
 
     // Should render all paths
     expect(screen.getByText('Learning Path 1')).toBeInTheDocument();
@@ -174,9 +208,11 @@ describe('LearningPathsGrid', () => {
 
   it('passes collapsed state correctly to cards', () => {
     const collapsedCards = new Set(['frontend-basics']);
-    render(
-      <LearningPathsGrid {...defaultProps} collapsedCards={collapsedCards} />
-    );
+    act(() => {
+      render(
+        <LearningPathsGrid {...defaultProps} collapsedCards={collapsedCards} />
+      );
+    });
 
     // Frontend Basics should be collapsed (action buttons hidden by CSS)
     const practiceButtons = screen.getAllByRole('link', {
@@ -188,9 +224,11 @@ describe('LearningPathsGrid', () => {
 
   it('passes expanded state correctly to cards', () => {
     const collapsedCards = new Set(); // Empty set means all cards are expanded
-    render(
-      <LearningPathsGrid {...defaultProps} collapsedCards={collapsedCards} />
-    );
+    act(() => {
+      render(
+        <LearningPathsGrid {...defaultProps} collapsedCards={collapsedCards} />
+      );
+    });
 
     // Action buttons should be visible for all cards
     const practiceButtons = screen.getAllByRole('link', {
@@ -201,9 +239,11 @@ describe('LearningPathsGrid', () => {
 
   it('handles mixed collapsed/expanded states', () => {
     const collapsedCards = new Set(['frontend-basics']); // Only frontend-basics is collapsed
-    render(
-      <LearningPathsGrid {...defaultProps} collapsedCards={collapsedCards} />
-    );
+    act(() => {
+      render(
+        <LearningPathsGrid {...defaultProps} collapsedCards={collapsedCards} />
+      );
+    });
 
     // React Mastery should be expanded (action buttons visible)
     const practiceButtons = screen.getAllByRole('link', {
@@ -214,9 +254,11 @@ describe('LearningPathsGrid', () => {
 
   it('calls onToggleCard when card is toggled', async () => {
     const mockOnToggleCard = jest.fn();
-    render(
-      <LearningPathsGrid {...defaultProps} onToggleCard={mockOnToggleCard} />
-    );
+    act(() => {
+      render(
+        <LearningPathsGrid {...defaultProps} onToggleCard={mockOnToggleCard} />
+      );
+    });
 
     // This test would require interaction with the card, but since we're testing the grid,
     // we'll verify that the prop is passed correctly by checking the component structure
@@ -230,12 +272,16 @@ describe('LearningPathsGrid', () => {
     };
 
     expect(() => {
-      render(<LearningPathsGrid {...propsWithoutCardRefs} />);
+      act(() => {
+        render(<LearningPathsGrid {...propsWithoutCardRefs} />);
+      });
     }).not.toThrow();
   });
 
   it('renders with proper accessibility structure', () => {
-    render(<LearningPathsGrid {...defaultProps} />);
+    act(() => {
+      render(<LearningPathsGrid {...defaultProps} />);
+    });
 
     // Check that the grid has proper structure
     const grid = document.querySelector('.grid');
@@ -266,7 +312,9 @@ describe('LearningPathsGrid', () => {
     };
 
     expect(() => {
-      render(<LearningPathsGrid {...defaultProps} paths={[incompletePath]} />);
+      act(() => {
+        render(<LearningPathsGrid {...defaultProps} paths={[incompletePath]} />);
+      });
     }).not.toThrow();
   });
 });
