@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { SectionClientService } from '@/lib/section-client';
-import { BulkQuestionData } from '@/lib/section-service';
+import { BulkQuestionData } from '@/lib/unified-question-schema';
+import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import {
   Upload,
   FileText,
@@ -28,6 +28,7 @@ export default function BulkQuestionUploader({
   onQuestionsAdded,
   onClose,
 }: BulkQuestionUploaderProps) {
+  const { bulkImportQuestions } = useUnifiedQuestions();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -141,7 +142,7 @@ export default function BulkQuestionUploader({
   const parseJsonInput = () => {
     try {
       const parsed = JSON.parse(jsonInput);
-      
+
       // Handle both array format and object with questions property
       let questionsArray: BulkQuestionData[];
       if (Array.isArray(parsed)) {
@@ -149,21 +150,27 @@ export default function BulkQuestionUploader({
       } else if (parsed.questions && Array.isArray(parsed.questions)) {
         questionsArray = parsed.questions;
       } else {
-        throw new Error('Invalid format. Expected an array of questions or an object with a "questions" property.');
+        throw new Error(
+          'Invalid format. Expected an array of questions or an object with a "questions" property.'
+        );
       }
 
       // Validate each question
       const validatedQuestions = questionsArray.map((q, index) => {
         if (!q.title || !q.content) {
-          throw new Error(`Question ${index + 1}: title and content are required`);
+          throw new Error(
+            `Question ${index + 1}: title and content are required`
+          );
         }
-        
+
         if (!q.options || !Array.isArray(q.options)) {
           throw new Error(`Question ${index + 1}: options array is required`);
         }
 
         if (!q.options.some(opt => opt.isCorrect)) {
-          throw new Error(`Question ${index + 1}: at least one option must be marked as correct`);
+          throw new Error(
+            `Question ${index + 1}: at least one option must be marked as correct`
+          );
         }
 
         return {
@@ -176,7 +183,9 @@ export default function BulkQuestionUploader({
             text: opt.text || '',
             isCorrect: opt.isCorrect || false,
           })),
-          correctAnswers: q.correctAnswers || q.options.filter(opt => opt.isCorrect).map(opt => opt.id),
+          correctAnswers:
+            q.correctAnswers ||
+            q.options.filter(opt => opt.isCorrect).map(opt => opt.id),
           explanation: q.explanation || '',
           category: q.category || sectionName,
           learningPath: q.learningPath || sectionId,
@@ -187,10 +196,14 @@ export default function BulkQuestionUploader({
 
       setQuestions(validatedQuestions);
       setError(null);
-      setSuccess(`Successfully parsed ${validatedQuestions.length} questions from JSON!`);
+      setSuccess(
+        `Successfully parsed ${validatedQuestions.length} questions from JSON!`
+      );
       setJsonParsed(true);
     } catch (error) {
-      setError(`JSON parsing error: ${error instanceof Error ? error.message : 'Invalid JSON format'}`);
+      setError(
+        `JSON parsing error: ${error instanceof Error ? error.message : 'Invalid JSON format'}`
+      );
       setSuccess(null);
       setJsonParsed(false);
     }
@@ -216,7 +229,7 @@ export default function BulkQuestionUploader({
   };
 
   const submitQuestions = async () => {
-    console.log('🚀 Starting bulk question submission...');
+    console.log('🚀 Starting bulk question submission to Firebase...');
     console.log('Section ID:', sectionId);
     console.log('Questions to submit:', questions);
 
@@ -240,16 +253,25 @@ export default function BulkQuestionUploader({
       setLoading(true);
       setError(null);
 
-      console.log('📤 Calling SectionClientService.addBulkQuestions...');
-      const result = await SectionClientService.addBulkQuestions(
-        sectionId,
-        validQuestions
-      );
+      // Transform questions to include required Firebase fields
+      const firebaseQuestions = validQuestions.map(q => ({
+        ...q,
+        learningPath: sectionId, // Use sectionId as learningPath
+        category: sectionName, // Use sectionName as category
+        subcategory: sectionName, // Use sectionName as subcategory
+        sectionId: sectionId,
+        tags: q.tags || [],
+        points: q.points || 1,
+        timeLimit: q.timeLimit || 60,
+      }));
 
-      console.log('📥 API Response:', result);
+      console.log('📤 Calling bulkImportQuestions with Firebase...');
+      const result = await bulkImportQuestions(firebaseQuestions);
 
-      if (result.success) {
-        setSuccess(`${validQuestions.length} questions added successfully!`);
+      console.log('📥 Firebase Import Result:', result);
+
+      if (result.success > 0) {
+        setSuccess(`${result.success} questions added successfully! ${result.failed > 0 ? `${result.failed} failed.` : ''}`);
         setQuestions([
           {
             title: '',
@@ -268,11 +290,11 @@ export default function BulkQuestionUploader({
         ]);
 
         if (onQuestionsAdded) {
-          onQuestionsAdded(result.data);
+          onQuestionsAdded(firebaseQuestions);
         }
       } else {
-        console.error('❌ API returned error:', result.error);
-        setError(result.error || 'Failed to add questions');
+        console.error('❌ No questions were imported:', result.errors);
+        setError(`Failed to import questions: ${result.errors.join(', ')}`);
       }
     } catch (error) {
       console.error('❌ Exception during submission:', error);
@@ -407,7 +429,7 @@ export default function BulkQuestionUploader({
             </div>
             <textarea
               value={jsonInput}
-              onChange={(e) => setJsonInput(e.target.value)}
+              onChange={e => setJsonInput(e.target.value)}
               placeholder={`Paste your questions array here, for example:
 [
   {
@@ -452,7 +474,9 @@ export default function BulkQuestionUploader({
                 >
                   <Save className="w-4 h-4" />
                   <span>
-                    {loading ? 'Adding...' : `Bulk Add ${questions.length} Questions`}
+                    {loading
+                      ? 'Adding...'
+                      : `Bulk Add ${questions.length} Questions`}
                   </span>
                 </button>
               )}
@@ -506,223 +530,227 @@ export default function BulkQuestionUploader({
       {/* Form Input Mode */}
       {inputMode === 'form' && (
         <form onSubmit={handleSubmit} className="space-y-8">
-        {questions.map((question, questionIndex) => (
-          <div
-            key={questionIndex}
-            className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Question {questionIndex + 1}
-              </h3>
-              {questions.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeQuestion(questionIndex)}
-                  className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-
-            <div className="space-y-4">
-              {/* Question Title */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Question Title
-                </label>
-                <input
-                  type="text"
-                  value={question.title}
-                  onChange={e =>
-                    updateQuestion(questionIndex, 'title', e.target.value)
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="Enter question title"
-                />
-              </div>
-
-              {/* Question Content */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Question Content
-                </label>
-                <textarea
-                  value={question.content}
-                  onChange={e =>
-                    updateQuestion(questionIndex, 'content', e.target.value)
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="Enter the question content..."
-                  rows={3}
-                />
-              </div>
-
-              {/* Question Type and Difficulty */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Question Type
-                  </label>
-                  <select
-                    value={question.type}
-                    onChange={e =>
-                      updateQuestion(questionIndex, 'type', e.target.value)
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  >
-                    <option value="single">Single Choice</option>
-                    <option value="multiple">Multiple Choice</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Difficulty Level
-                  </label>
-                  <select
-                    value={question.difficulty}
-                    onChange={e =>
-                      updateQuestion(
-                        questionIndex,
-                        'difficulty',
-                        e.target.value
-                      )
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  >
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Options */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Answer Options
-                  </label>
+          {questions.map((question, questionIndex) => (
+            <div
+              key={questionIndex}
+              className="border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Question {questionIndex + 1}
+                </h3>
+                {questions.length > 1 && (
                   <button
                     type="button"
-                    onClick={() => addOption(questionIndex)}
-                    className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition-colors flex items-center space-x-1"
+                    onClick={() => removeQuestion(questionIndex)}
+                    className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                   >
-                    <Plus className="w-4 h-4" />
-                    <span>Add Option</span>
+                    <Trash2 className="w-4 h-4" />
                   </button>
+                )}
+              </div>
+
+              <div className="space-y-4">
+                {/* Question Title */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Question Title
+                  </label>
+                  <input
+                    type="text"
+                    value={question.title}
+                    onChange={e =>
+                      updateQuestion(questionIndex, 'title', e.target.value)
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    placeholder="Enter question title"
+                  />
                 </div>
 
-                <div className="space-y-3">
-                  {question.options.map((option, optionIndex) => (
-                    <div
-                      key={option.id}
-                      className="flex items-center space-x-3"
+                {/* Question Content */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Question Content
+                  </label>
+                  <textarea
+                    value={question.content}
+                    onChange={e =>
+                      updateQuestion(questionIndex, 'content', e.target.value)
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    placeholder="Enter the question content..."
+                    rows={3}
+                  />
+                </div>
+
+                {/* Question Type and Difficulty */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Question Type
+                    </label>
+                    <select
+                      value={question.type}
+                      onChange={e =>
+                        updateQuestion(questionIndex, 'type', e.target.value)
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                     >
-                      <div className="flex items-center">
+                      <option value="single">Single Choice</option>
+                      <option value="multiple">Multiple Choice</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Difficulty Level
+                    </label>
+                    <select
+                      value={question.difficulty}
+                      onChange={e =>
+                        updateQuestion(
+                          questionIndex,
+                          'difficulty',
+                          e.target.value
+                        )
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    >
+                      <option value="easy">Easy</option>
+                      <option value="medium">Medium</option>
+                      <option value="hard">Hard</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Options */}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Answer Options
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => addOption(questionIndex)}
+                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition-colors flex items-center space-x-1"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Add Option</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {question.options.map((option, optionIndex) => (
+                      <div
+                        key={option.id}
+                        className="flex items-center space-x-3"
+                      >
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={option.isCorrect}
+                            onChange={e =>
+                              updateOption(
+                                questionIndex,
+                                optionIndex,
+                                'isCorrect',
+                                e.target.checked
+                              )
+                            }
+                            className="mr-2"
+                          />
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 w-6">
+                            {option.id.toUpperCase()}.
+                          </span>
+                        </div>
                         <input
-                          type="checkbox"
-                          checked={option.isCorrect}
+                          type="text"
+                          value={option.text}
                           onChange={e =>
                             updateOption(
                               questionIndex,
                               optionIndex,
-                              'isCorrect',
-                              e.target.checked
+                              'text',
+                              e.target.value
                             )
                           }
-                          className="mr-2"
+                          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                          placeholder={`Option ${option.id.toUpperCase()}`}
                         />
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 w-6">
-                          {option.id.toUpperCase()}.
-                        </span>
+                        {question.options.length > 2 && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              removeOption(questionIndex, optionIndex)
+                            }
+                            className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
                       </div>
-                      <input
-                        type="text"
-                        value={option.text}
-                        onChange={e =>
-                          updateOption(
-                            questionIndex,
-                            optionIndex,
-                            'text',
-                            e.target.value
-                          )
-                        }
-                        className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                        placeholder={`Option ${option.id.toUpperCase()}`}
-                      />
-                      {question.options.length > 2 && (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            removeOption(questionIndex, optionIndex)
-                          }
-                          className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+
+                {/* Explanation */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Explanation
+                  </label>
+                  <textarea
+                    value={question.explanation}
+                    onChange={e =>
+                      updateQuestion(
+                        questionIndex,
+                        'explanation',
+                        e.target.value
+                      )
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    placeholder="Explain why the correct answer is correct..."
+                    rows={2}
+                  />
                 </div>
               </div>
-
-              {/* Explanation */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Explanation
-                </label>
-                <textarea
-                  value={question.explanation}
-                  onChange={e =>
-                    updateQuestion(questionIndex, 'explanation', e.target.value)
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="Explain why the correct answer is correct..."
-                  rows={2}
-                />
-              </div>
             </div>
-          </div>
-        ))}
+          ))}
 
-        {/* Add Question Button */}
-        <div className="flex justify-center">
-          <button
-            type="button"
-            onClick={addQuestion}
-            className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center space-x-2"
-          >
-            <Plus className="w-5 h-5" />
-            <span>Add Another Question</span>
-          </button>
-        </div>
-
-        {/* Submit Button */}
-        <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-          {onClose && (
+          {/* Add Question Button */}
+          <div className="flex justify-center">
             <button
               type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+              onClick={addQuestion}
+              className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center space-x-2"
             >
-              Cancel
+              <Plus className="w-5 h-5" />
+              <span>Add Another Question</span>
             </button>
-          )}
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2"
-          >
-            <Save className="w-4 h-4" />
-            <span>
-              {loading ? 'Adding...' : `Add ${questions.length} Questions`}
-            </span>
-          </button>
-        </div>
-      </form>
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+            {onClose && (
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+            )}
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2"
+            >
+              <Save className="w-4 h-4" />
+              <span>
+                {loading ? 'Adding...' : `Add ${questions.length} Questions`}
+              </span>
+            </button>
+          </div>
+        </form>
       )}
     </div>
   );
