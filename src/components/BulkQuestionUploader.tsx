@@ -331,8 +331,8 @@ export default function BulkQuestionUploader({
           ],
           correctAnswers: ['a'],
           explanation: 'This is the correct answer because...',
-          audioQuestion: 'https://example.com/question-audio.mp3',
-          audioAnswer: 'https://example.com/answer-audio.mp3',
+          audioQuestion: '/audio/question-audio.mp3',
+          audioAnswer: '/audio/answer-audio.mp3',
         },
       ],
     };
@@ -453,8 +453,8 @@ export default function BulkQuestionUploader({
     ],
     "correctAnswers": ["a"],
     "explanation": "React is indeed a JavaScript library for building user interfaces.",
-    "audioQuestion": "https://example.com/question-audio.mp3",
-    "audioAnswer": "https://example.com/answer-audio.mp3"
+    "audioQuestion": "/audio/question-audio.mp3",
+    "audioAnswer": "/audio/answer-audio.mp3"
   }
 ]`}
               className="w-full h-64 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono text-sm"
@@ -740,7 +740,7 @@ export default function BulkQuestionUploader({
                         )
                       }
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                      placeholder="https://example.com/question-audio.mp3"
+                      placeholder="/audio/question-audio.mp3"
                     />
                   </div>
                   <div>
@@ -758,7 +758,7 @@ export default function BulkQuestionUploader({
                         )
                       }
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                      placeholder="https://example.com/answer-audio.mp3"
+                      placeholder="/audio/answer-audio.mp3"
                     />
                   </div>
                 </div>
