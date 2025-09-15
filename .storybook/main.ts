@@ -40,5 +40,7 @@ const config: StorybookConfig = {
     };
     return config;
   },
+  // Ensure clean build output directory
+  outputDir: 'storybook-static',
 };
 export default config;
