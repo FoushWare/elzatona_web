@@ -373,7 +373,10 @@ export default function QuestionsPage() {
                           if (index % 2 === 0) {
                             // Regular text - preserve newlines
                             return (
-                              <div key={index} className="whitespace-pre-wrap text-2xl">
+                              <div
+                                key={index}
+                                className="whitespace-pre-wrap text-2xl"
+                              >
                                 {part.trim()}
                               </div>
                             );
@@ -557,7 +560,7 @@ export default function QuestionsPage() {
         </div>
 
         {/* Toast Container */}
-        <ToastContainer toasts={toasts} removeToast={removeToast} />
+        <ToastContainer toasts={toasts} onRemove={removeToast} />
       </div>
     </ErrorBoundary>
   );
