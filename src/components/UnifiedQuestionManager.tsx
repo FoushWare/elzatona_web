@@ -67,6 +67,8 @@ export default function UnifiedQuestionManager({
   const [editingQuestion, setEditingQuestion] =
     useState<UnifiedQuestion | null>(null);
   const [showBulkImport, setShowBulkImport] = useState(false);
+  const [bulkJsonInput, setBulkJsonInput] = useState('');
+  const [bulkInputMode, setBulkInputMode] = useState<'file' | 'json'>('file');
 
   // Form state
   const [formData, setFormData] = useState({
@@ -204,7 +206,7 @@ export default function UnifiedQuestionManager({
     });
   };
 
-  // Handle bulk import
+  // Handle bulk import from file
   const handleBulkImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -223,6 +225,39 @@ export default function UnifiedQuestionManager({
       }
     } catch (error) {
       alert('Failed to import questions. Please check the file format.');
+      console.error('Import error:', error);
+    }
+  };
+
+  // Handle bulk import from JSON textarea
+  const handleBulkJsonImport = async () => {
+    try {
+      const parsed = JSON.parse(bulkJsonInput);
+      
+      // Handle both array format and object with questions property
+      let questionsData: BulkQuestionData[];
+      if (Array.isArray(parsed)) {
+        questionsData = parsed;
+      } else if (parsed.questions && Array.isArray(parsed.questions)) {
+        questionsData = parsed.questions;
+      } else {
+        alert('Invalid format. Expected an array of questions or an object with a "questions" property.');
+        return;
+      }
+
+      const results = await bulkImportQuestions(questionsData);
+      alert(
+        `Import completed: ${results.success} successful, ${results.failed} failed`
+      );
+
+      if (results.errors.length > 0) {
+        console.error('Import errors:', results.errors);
+      }
+
+      // Clear the input
+      setBulkJsonInput('');
+    } catch (error) {
+      alert(`JSON parsing error: ${error instanceof Error ? error.message : 'Invalid JSON format'}`);
       console.error('Import error:', error);
     }
   };
@@ -377,14 +412,105 @@ export default function UnifiedQuestionManager({
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Bulk Import Questions</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Upload a JSON file containing an array of question objects
+                Import multiple questions at once using JSON format
               </p>
-              <input
-                type="file"
-                accept=".json"
-                onChange={handleBulkImport}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              />
+              
+              {/* Input Mode Toggle */}
+              <div className="flex items-center space-x-4">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Import Method:
+                </span>
+                <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                  <button
+                    onClick={() => setBulkInputMode('file')}
+                    className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                      bulkInputMode === 'file'
+                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                  >
+                    Upload File
+                  </button>
+                  <button
+                    onClick={() => setBulkInputMode('json')}
+                    className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                      bulkInputMode === 'json'
+                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                  >
+                    Paste JSON
+                  </button>
+                </div>
+              </div>
+
+              {/* File Upload Mode */}
+              {bulkInputMode === 'file' && (
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    Upload a JSON file containing an array of question objects
+                  </p>
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleBulkImport}
+                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  />
+                </div>
+              )}
+
+              {/* JSON Input Mode */}
+              {bulkInputMode === 'json' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                      Paste JSON Array of Questions:
+                    </label>
+                    <textarea
+                      value={bulkJsonInput}
+                      onChange={(e) => setBulkJsonInput(e.target.value)}
+                      placeholder={`Paste your questions array here, for example:
+[
+  {
+    "title": "What is React?",
+    "content": "React is a JavaScript library for building user interfaces.",
+    "type": "single",
+    "difficulty": "easy",
+    "options": [
+      { "id": "a", "text": "A JavaScript library", "isCorrect": true },
+      { "id": "b", "text": "A CSS framework", "isCorrect": false },
+      { "id": "c", "text": "A database", "isCorrect": false },
+      { "id": "d", "text": "A server", "isCorrect": false }
+    ],
+    "correctAnswers": ["a"],
+    "explanation": "React is indeed a JavaScript library for building user interfaces.",
+    "category": "Frontend",
+    "learningPath": "react-mastery",
+    "tags": ["react", "javascript"],
+    "points": 1
+  }
+]`}
+                      className="w-full h-64 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono text-sm"
+                    />
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button
+                      onClick={handleBulkJsonImport}
+                      disabled={!bulkJsonInput.trim()}
+                      className="flex items-center space-x-2"
+                    >
+                      <Upload className="w-4 h-4" />
+                      <span>Import Questions</span>
+                    </Button>
+                    <Button
+                      onClick={() => setBulkJsonInput('')}
+                      variant="outline"
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

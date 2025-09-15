@@ -49,6 +49,9 @@ export default function BulkQuestionUploader({
     },
   ]);
 
+  const [jsonInput, setJsonInput] = useState('');
+  const [inputMode, setInputMode] = useState<'form' | 'json'>('form');
+
   const addQuestion = () => {
     setQuestions([
       ...questions,
@@ -131,6 +134,82 @@ export default function BulkQuestionUploader({
         .map(opt => opt.id);
       setQuestions(newQuestions);
     }
+  };
+
+  // Handle JSON input parsing
+  const parseJsonInput = () => {
+    try {
+      const parsed = JSON.parse(jsonInput);
+      
+      // Handle both array format and object with questions property
+      let questionsArray: BulkQuestionData[];
+      if (Array.isArray(parsed)) {
+        questionsArray = parsed;
+      } else if (parsed.questions && Array.isArray(parsed.questions)) {
+        questionsArray = parsed.questions;
+      } else {
+        throw new Error('Invalid format. Expected an array of questions or an object with a "questions" property.');
+      }
+
+      // Validate each question
+      const validatedQuestions = questionsArray.map((q, index) => {
+        if (!q.title || !q.content) {
+          throw new Error(`Question ${index + 1}: title and content are required`);
+        }
+        
+        if (!q.options || !Array.isArray(q.options)) {
+          throw new Error(`Question ${index + 1}: options array is required`);
+        }
+
+        if (!q.options.some(opt => opt.isCorrect)) {
+          throw new Error(`Question ${index + 1}: at least one option must be marked as correct`);
+        }
+
+        return {
+          title: q.title,
+          content: q.content,
+          type: q.type || 'single',
+          difficulty: q.difficulty || 'easy',
+          options: q.options.map((opt, optIndex) => ({
+            id: opt.id || String.fromCharCode(97 + optIndex), // a, b, c, d...
+            text: opt.text || '',
+            isCorrect: opt.isCorrect || false,
+          })),
+          correctAnswers: q.correctAnswers || q.options.filter(opt => opt.isCorrect).map(opt => opt.id),
+          explanation: q.explanation || '',
+          category: q.category || sectionName,
+          learningPath: q.learningPath || sectionId,
+          tags: q.tags || [],
+          points: q.points || 1,
+        };
+      });
+
+      setQuestions(validatedQuestions);
+      setError(null);
+      setSuccess(`Successfully parsed ${validatedQuestions.length} questions from JSON!`);
+    } catch (error) {
+      setError(`JSON parsing error: ${error instanceof Error ? error.message : 'Invalid JSON format'}`);
+      setSuccess(null);
+    }
+  };
+
+  // Generate JSON from current questions
+  const generateJsonFromQuestions = () => {
+    const jsonData = questions.map(q => ({
+      title: q.title,
+      content: q.content,
+      type: q.type,
+      difficulty: q.difficulty,
+      options: q.options,
+      correctAnswers: q.correctAnswers,
+      explanation: q.explanation,
+      category: q.category || sectionName,
+      learningPath: q.learningPath || sectionId,
+      tags: q.tags || [],
+      points: q.points || 1,
+    }));
+
+    setJsonInput(JSON.stringify(jsonData, null, 2));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -251,6 +330,99 @@ export default function BulkQuestionUploader({
         )}
       </div>
 
+      {/* Input Mode Toggle */}
+      <div className="mb-6">
+        <div className="flex items-center space-x-4 mb-4">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Input Mode:
+          </span>
+          <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+            <button
+              onClick={() => setInputMode('form')}
+              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                inputMode === 'form'
+                  ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              Form Input
+            </button>
+            <button
+              onClick={() => setInputMode('json')}
+              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                inputMode === 'json'
+                  ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              JSON Array
+            </button>
+          </div>
+        </div>
+
+        {/* JSON Input Mode */}
+        {inputMode === 'json' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Paste JSON Array of Questions:
+              </label>
+              <div className="flex space-x-2">
+                <button
+                  onClick={generateJsonFromQuestions}
+                  className="px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+                >
+                  Generate from Form
+                </button>
+                <button
+                  onClick={downloadTemplate}
+                  className="px-3 py-1 text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-md hover:bg-green-200 dark:hover:bg-green-800 transition-colors"
+                >
+                  Download Template
+                </button>
+              </div>
+            </div>
+            <textarea
+              value={jsonInput}
+              onChange={(e) => setJsonInput(e.target.value)}
+              placeholder={`Paste your questions array here, for example:
+[
+  {
+    "title": "What is React?",
+    "content": "React is a JavaScript library for building user interfaces.",
+    "type": "single",
+    "difficulty": "easy",
+    "options": [
+      { "id": "a", "text": "A JavaScript library", "isCorrect": true },
+      { "id": "b", "text": "A CSS framework", "isCorrect": false },
+      { "id": "c", "text": "A database", "isCorrect": false },
+      { "id": "d", "text": "A server", "isCorrect": false }
+    ],
+    "correctAnswers": ["a"],
+    "explanation": "React is indeed a JavaScript library for building user interfaces."
+  }
+]`}
+              className="w-full h-64 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono text-sm"
+            />
+            <div className="flex space-x-2">
+              <button
+                onClick={parseJsonInput}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center space-x-2"
+              >
+                <CheckCircle className="w-4 h-4" />
+                <span>Parse JSON</span>
+              </button>
+              <button
+                onClick={() => setJsonInput('')}
+                className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Messages */}
       {error && (
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
@@ -293,7 +465,9 @@ export default function BulkQuestionUploader({
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Form Input Mode */}
+      {inputMode === 'form' && (
+        <form onSubmit={handleSubmit} className="space-y-8">
         {questions.map((question, questionIndex) => (
           <div
             key={questionIndex}
@@ -511,6 +685,7 @@ export default function BulkQuestionUploader({
           </button>
         </div>
       </form>
+      )}
     </div>
   );
 }
