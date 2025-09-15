@@ -7,7 +7,6 @@ import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { flashcardService } from '@/lib/firebase-flashcards';
 import AddToFlashcard from '@/components/AddToFlashcard';
-import EnhancedTTS from '@/components/EnhancedTTS';
 import ExpandableText from '@/components/ExpandableText';
 import ToastContainer, { useToast } from '@/components/Toast';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -74,43 +73,6 @@ export default function QuestionsPage() {
     error,
   } = useUnifiedQuestions();
 
-  // Enhanced TTS function with OpenAI fallback
-  const speakWithEnhancedTTS = async (text: string) => {
-    if (!text || typeof window === 'undefined') return;
-
-    try {
-      // Try OpenAI TTS first (most human-like)
-      const response = await fetch('/api/tts/openai', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: text,
-          voice: 'alloy', // You can change this to 'echo', 'fable', 'onyx', 'nova', 'shimmer'
-        }),
-      });
-
-      if (response.ok) {
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audio = new Audio(audioUrl);
-        audio.play();
-        return;
-      }
-    } catch (error) {
-      console.log('OpenAI TTS failed, falling back to browser TTS');
-    }
-
-    // Fallback to browser TTS
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.8;
-      utterance.pitch = 1;
-      utterance.volume = 0.8;
-      speechSynthesis.speak(utterance);
-    }
-  };
 
   // Convert unified questions to the expected format
   const questionsData = useMemo(() => {
@@ -162,18 +124,16 @@ export default function QuestionsPage() {
     }
   }, [questionsData]);
 
-  // Auto TTS when question changes
+  // Auto play uploaded audio when question changes
   useEffect(() => {
     if (currentGroup && currentGroup.questions[currentQuestionIndex]) {
       const currentQuestion = currentGroup.questions[currentQuestionIndex];
       if (currentQuestion.audioQuestion) {
-        // Play audio question if available
+        // Play uploaded audio question if available
         const audio = new Audio(currentQuestion.audioQuestion);
         audio.play().catch(console.error);
-      } else {
-        // Use TTS for question text
-        speakWithEnhancedTTS(currentQuestion.question);
       }
+      // No TTS fallback - only use uploaded audio files
     }
   }, [currentQuestionIndex, currentGroup]);
 
@@ -376,23 +336,22 @@ export default function QuestionsPage() {
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() =>
-                      speakWithEnhancedTTS(currentQuestion.question)
-                    }
-                    className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                    title="Read question aloud"
-                  >
-                    <EnhancedTTS />
-                  </button>
                   {user && (
-                    <button
-                      onClick={handleAddToFlashcards}
+                    <AddToFlashcard
+                      question={currentQuestion.question}
+                      answer={currentQuestion.explanation || ''}
+                      category={currentQuestion.category || 'General'}
+                      difficulty={currentQuestion.difficulty || 'beginner'}
+                      source={`Learning Path: ${learningPath?.title || 'Unknown'}`}
                       className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                      title="Add to flashcards"
-                    >
-                      <AddToFlashcard />
-                    </button>
+                      onStatusChange={(status) => {
+                        if (status === 'added') {
+                          console.log('Question added to flashcards');
+                        } else if (status === 'error') {
+                          console.error('Failed to add question to flashcards');
+                        }
+                      }}
+                    />
                   )}
                 </div>
               </div>
