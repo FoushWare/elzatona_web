@@ -370,56 +370,27 @@ export default function QuestionsPage() {
               <div className="mb-8">
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex-1">
-                    {currentQuestion.question.includes('```') ? (
-                      <div className="space-y-4">
-                        {currentQuestion.question
-                          .split('```')
-                          .map((part, index) => {
-                            if (index % 2 === 0) {
-                              // Regular text - preserve newlines
-                              return (
-                                <div
-                                  key={index}
-                                  className="whitespace-pre-wrap text-xl text-gray-900 dark:text-gray-100 font-semibold leading-relaxed"
-                                >
-                                  {part.trim()}
-                                </div>
-                              );
-                            } else {
-                              // Code block
-                              return (
-                                <div
-                                  key={index}
-                                  className="bg-gray-900 dark:bg-gray-950 rounded-xl p-6 overflow-x-auto border border-gray-800 dark:border-gray-700 relative shadow-lg"
-                                >
-                                  <button
-                                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-colors bg-gray-800 dark:bg-gray-700 rounded-lg"
-                                    onClick={() => {
-                                      navigator.clipboard.writeText(part);
-                                    }}
-                                    title="Copy code"
-                                  >
-                                    <svg
-                                      className="w-4 h-4"
-                                      fill="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
-                                    </svg>
-                                  </button>
-                                  <pre className="text-gray-100 text-base font-mono whitespace-pre-wrap leading-relaxed pr-12">
-                                    <code>{part}</code>
-                                  </pre>
-                                </div>
-                              );
-                            }
-                          })}
-                      </div>
-                    ) : (
-                      <div className="whitespace-pre-wrap text-xl text-gray-900 dark:text-gray-100 font-semibold leading-relaxed">
-                        <ExpandableText text={currentQuestion.question} />
-                      </div>
-                    )}
+                    {/* Render all questions as code blocks */}
+                    <div className="bg-gray-900 dark:bg-gray-950 rounded-xl p-6 overflow-x-auto border border-gray-800 dark:border-gray-700 relative shadow-lg">
+                      <button
+                        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-colors bg-gray-800 dark:bg-gray-700 rounded-lg"
+                        onClick={() => {
+                          navigator.clipboard.writeText(currentQuestion.question);
+                        }}
+                        title="Copy question"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                        </svg>
+                      </button>
+                      <pre className="text-gray-100 text-base font-mono whitespace-pre-wrap leading-relaxed pr-12">
+                        <code>{currentQuestion.question}</code>
+                      </pre>
+                    </div>
                   </div>
 
                   {/* Audio Question Button */}
@@ -749,14 +720,29 @@ export default function QuestionsPage() {
                         </div>
                       )}
                     </div>
-                    <div
-                      className={`text-lg sm:text-xl text-gray-900 dark:text-gray-100 leading-relaxed font-semibold ${
+                    <div className="bg-gray-900 dark:bg-gray-950 rounded-xl p-6 overflow-x-auto border border-gray-800 dark:border-gray-700 relative shadow-lg">
+                      <button
+                        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-colors bg-gray-800 dark:bg-gray-700 rounded-lg"
+                        onClick={() => {
+                          navigator.clipboard.writeText(currentQuestion.explanation);
+                        }}
+                        title="Copy explanation"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                        </svg>
+                      </button>
+                      <pre className={`text-base font-mono whitespace-pre-wrap leading-relaxed pr-12 ${
                         isAnswerCorrect
-                          ? 'text-green-900 dark:text-green-100'
-                          : 'text-red-900 dark:text-red-100'
-                      }`}
-                    >
-                      <ExpandableText text={currentQuestion.explanation} />
+                          ? 'text-green-100'
+                          : 'text-red-100'
+                      }`}>
+                        <code>{currentQuestion.explanation}</code>
+                      </pre>
                     </div>
                   </motion.div>
                 )}
