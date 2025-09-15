@@ -13,7 +13,7 @@
     "format": "prettier --write .",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "rm -rf storybook-static && storybook build",
     "vercel-build": "npm run build-storybook",
     "test": "jest",
     "test:watch": "jest --watch",
