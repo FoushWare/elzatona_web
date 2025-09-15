@@ -362,18 +362,19 @@ export default function QuestionsPage() {
 
             {/* Question Content */}
             <div className="px-8 py-8">
+              {/* Question Title */}
               <div className="mb-8">
-                <div className="text-2xl font-bold text-gray-900 dark:text-white leading-relaxed mb-6">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
                   {currentQuestion.question.includes('```') ? (
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                       {currentQuestion.question
                         .split('```')
                         .map((part, index) => {
                           if (index % 2 === 0) {
                             // Regular text - preserve newlines
                             return (
-                              <div key={index} className="whitespace-pre-wrap">
-                                {part}
+                              <div key={index} className="whitespace-pre-wrap text-2xl">
+                                {part.trim()}
                               </div>
                             );
                           } else {
@@ -381,9 +382,9 @@ export default function QuestionsPage() {
                             return (
                               <div
                                 key={index}
-                                className="bg-gray-900 dark:bg-gray-800 rounded-lg p-4 overflow-x-auto"
+                                className="bg-gray-900 dark:bg-gray-800 rounded-xl p-6 overflow-x-auto border border-gray-700"
                               >
-                                <pre className="text-gray-100 text-lg font-mono whitespace-pre-wrap">
+                                <pre className="text-gray-100 text-lg font-mono whitespace-pre-wrap leading-relaxed">
                                   <code>{part}</code>
                                 </pre>
                               </div>
@@ -392,11 +393,11 @@ export default function QuestionsPage() {
                         })}
                     </div>
                   ) : (
-                    <div className="whitespace-pre-wrap">
+                    <div className="whitespace-pre-wrap text-2xl">
                       <ExpandableText text={currentQuestion.question} />
                     </div>
                   )}
-                </div>
+                </h2>
 
                 {/* Audio Question */}
                 {currentQuestion.audioQuestion && (
@@ -407,8 +408,8 @@ export default function QuestionsPage() {
               </div>
 
               {/* Answer Options */}
-              <div className="space-y-4 mb-8">
-                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">
+              <div className="space-y-3 mb-8">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">
                   Choose your answer:
                 </h3>
                 {currentQuestion.options.map((option, index) => {
@@ -420,15 +421,15 @@ export default function QuestionsPage() {
                     <button
                       key={option.id || `option-${index}`}
                       onClick={() => handleAnswerSelect(index)}
-                      className={`w-full text-left p-5 rounded-xl border-2 transition-all duration-300 transform hover:scale-[1.02] ${
+                      className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
                         isSelected
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg ring-2 ring-blue-200 dark:ring-blue-800'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-md bg-white dark:bg-gray-800'
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800'
                       }`}
                     >
                       <div className="flex items-center">
                         <span
-                          className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold mr-4 transition-colors ${
+                          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mr-4 transition-colors ${
                             isSelected
                               ? 'bg-blue-500 text-white'
                               : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
@@ -436,21 +437,24 @@ export default function QuestionsPage() {
                         >
                           {String.fromCharCode(65 + index)}
                         </span>
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex items-center gap-2">
                           {option.text.split(/(\s+)/).map((part, wordIndex) => {
                             if (part.match(/\s+/)) {
                               // This is whitespace (spaces, newlines, etc.)
                               return (
-                                <span key={wordIndex} className="whitespace-pre-wrap">
+                                <span
+                                  key={wordIndex}
+                                  className="whitespace-pre-wrap"
+                                >
                                   {part}
                                 </span>
                               );
                             } else {
-                              // This is a word
+                              // This is a word - create individual boxes
                               return (
                                 <span
                                   key={wordIndex}
-                                  className={`px-3 py-1.5 rounded-md text-sm font-medium ${
+                                  className={`px-2 py-1 rounded text-sm font-mono ${
                                     isSelected
                                       ? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200'
                                       : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
@@ -473,7 +477,7 @@ export default function QuestionsPage() {
                 <div className="flex justify-center mb-8">
                   <button
                     onClick={handleSubmitAnswer}
-                    className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-lg transition-colors duration-200"
                   >
                     Submit Answer
                   </button>
@@ -483,30 +487,30 @@ export default function QuestionsPage() {
               {/* Explanation */}
               {showExplanation && (
                 <div
-                  className={`rounded-2xl p-8 mb-8 border-2 ${
+                  className={`rounded-lg p-6 mb-8 border ${
                     isAnswerCorrect
                       ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
                       : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
                   }`}
                 >
-                  <div className="flex items-center mb-6">
+                  <div className="flex items-center mb-4">
                     <div
-                      className={`w-4 h-4 rounded-full mr-4 ${
+                      className={`w-3 h-3 rounded-full mr-3 ${
                         isAnswerCorrect ? 'bg-green-500' : 'bg-red-500'
                       }`}
                     ></div>
                     <h3
-                      className={`text-2xl font-bold ${
+                      className={`text-xl font-bold ${
                         isAnswerCorrect
                           ? 'text-green-800 dark:text-green-200'
                           : 'text-red-800 dark:text-red-200'
                       }`}
                     >
-                      {isAnswerCorrect ? '🎉 Correct!' : '❌ Incorrect'}
+                      {isAnswerCorrect ? 'Correct!' : 'Incorrect'}
                     </h3>
                   </div>
                   <div
-                    className={`text-lg leading-relaxed ${
+                    className={`text-gray-700 dark:text-gray-300 leading-relaxed ${
                       isAnswerCorrect
                         ? 'text-green-700 dark:text-green-300'
                         : 'text-red-700 dark:text-red-300'
@@ -517,7 +521,7 @@ export default function QuestionsPage() {
 
                   {/* Audio Answer */}
                   {currentQuestion.audioAnswer && (
-                    <div className="mt-6">
+                    <div className="mt-4">
                       <CustomAudioPlayer src={currentQuestion.audioAnswer} />
                     </div>
                   )}
@@ -529,7 +533,7 @@ export default function QuestionsPage() {
                 <button
                   onClick={handlePreviousQuestion}
                   disabled={currentQuestionIndex === 0}
-                  className="px-6 py-3 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg"
+                  className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                 >
                   ← Previous
                 </button>
@@ -538,11 +542,11 @@ export default function QuestionsPage() {
                   {showExplanation && (
                     <button
                       onClick={handleNextQuestion}
-                      className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                      className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors"
                     >
                       {currentQuestionIndex ===
                       currentGroup.questions.length - 1
-                        ? '🏁 Finish Quiz'
+                        ? 'Finish Quiz'
                         : 'Next Question →'}
                     </button>
                   )}
