@@ -366,28 +366,35 @@ export default function QuestionsPage() {
                 <div className="text-2xl font-bold text-gray-900 dark:text-white leading-relaxed mb-6">
                   {currentQuestion.question.includes('```') ? (
                     <div className="space-y-4">
-                      {currentQuestion.question.split('```').map((part, index) => {
-                        if (index % 2 === 0) {
-                          // Regular text
-                          return (
-                            <div key={index} className="whitespace-pre-wrap">
-                              {part.trim()}
-                            </div>
-                          );
-                        } else {
-                          // Code block
-                          return (
-                            <div key={index} className="bg-gray-900 dark:bg-gray-800 rounded-lg p-4 overflow-x-auto">
-                              <pre className="text-gray-100 text-lg font-mono">
-                                <code>{part.trim()}</code>
-                              </pre>
-                            </div>
-                          );
-                        }
-                      })}
+                      {currentQuestion.question
+                        .split('```')
+                        .map((part, index) => {
+                          if (index % 2 === 0) {
+                            // Regular text - preserve newlines
+                            return (
+                              <div key={index} className="whitespace-pre-wrap">
+                                {part}
+                              </div>
+                            );
+                          } else {
+                            // Code block
+                            return (
+                              <div
+                                key={index}
+                                className="bg-gray-900 dark:bg-gray-800 rounded-lg p-4 overflow-x-auto"
+                              >
+                                <pre className="text-gray-100 text-lg font-mono whitespace-pre-wrap">
+                                  <code>{part}</code>
+                                </pre>
+                              </div>
+                            );
+                          }
+                        })}
                     </div>
                   ) : (
-                    <ExpandableText text={currentQuestion.question} />
+                    <div className="whitespace-pre-wrap">
+                      <ExpandableText text={currentQuestion.question} />
+                    </div>
                   )}
                 </div>
 
@@ -430,18 +437,30 @@ export default function QuestionsPage() {
                           {String.fromCharCode(65 + index)}
                         </span>
                         <div className="flex flex-wrap items-center gap-2">
-                          {option.text.split(' ').map((word, wordIndex) => (
-                            <span
-                              key={wordIndex}
-                              className={`px-3 py-1.5 rounded-md text-sm font-medium ${
-                                isSelected
-                                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200'
-                                  : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
-                              }`}
-                            >
-                              {word.replace(/`/g, '')}
-                            </span>
-                          ))}
+                          {option.text.split(/(\s+)/).map((part, wordIndex) => {
+                            if (part.match(/\s+/)) {
+                              // This is whitespace (spaces, newlines, etc.)
+                              return (
+                                <span key={wordIndex} className="whitespace-pre-wrap">
+                                  {part}
+                                </span>
+                              );
+                            } else {
+                              // This is a word
+                              return (
+                                <span
+                                  key={wordIndex}
+                                  className={`px-3 py-1.5 rounded-md text-sm font-medium ${
+                                    isSelected
+                                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200'
+                                      : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                                  }`}
+                                >
+                                  {part.replace(/`/g, '')}
+                                </span>
+                              );
+                            }
+                          })}
                         </div>
                       </div>
                     </button>
