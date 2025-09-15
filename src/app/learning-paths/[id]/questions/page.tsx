@@ -370,27 +370,67 @@ export default function QuestionsPage() {
               <div className="mb-8">
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex-1">
-                    {/* Render all questions as code blocks */}
-                    <div className="bg-gray-900 dark:bg-gray-950 rounded-xl p-6 overflow-x-auto border border-gray-800 dark:border-gray-700 relative shadow-lg">
-                      <button
-                        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-colors bg-gray-800 dark:bg-gray-700 rounded-lg"
-                        onClick={() => {
-                          navigator.clipboard.writeText(currentQuestion.question);
-                        }}
-                        title="Copy question"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
-                        </svg>
-                      </button>
-                      <pre className="text-gray-100 text-base font-mono whitespace-pre-wrap leading-relaxed pr-12">
-                        <code>{currentQuestion.question}</code>
-                      </pre>
-                    </div>
+                    {/* Beautiful Question Code Block */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      className="relative group"
+                    >
+                      {/* Gradient Background */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-pink-600/10 rounded-2xl blur-sm"></div>
+                      
+                      {/* Main Code Block */}
+                      <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 rounded-2xl p-8 overflow-x-auto border border-gray-700/50 dark:border-gray-600/50 shadow-2xl backdrop-blur-sm">
+                        {/* Header Bar */}
+                        <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-700/30 dark:border-gray-600/30">
+                          <div className="flex items-center space-x-3">
+                            <div className="flex space-x-2">
+                              <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <span className="text-sm text-gray-400 font-mono">Question</span>
+                          </div>
+                          
+                          {/* Copy Button */}
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="p-3 text-gray-400 hover:text-white transition-all duration-200 bg-gray-800/50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-700/70 dark:hover:bg-gray-600/70 backdrop-blur-sm border border-gray-600/30 dark:border-gray-500/30"
+                            onClick={() => {
+                              navigator.clipboard.writeText(currentQuestion.question);
+                            }}
+                            title="Copy question"
+                          >
+                            <svg
+                              className="w-5 h-5"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                            </svg>
+                          </motion.button>
+                        </div>
+                        
+                        {/* Question Content */}
+                        <pre className="text-gray-100 text-lg font-mono whitespace-pre-wrap leading-relaxed">
+                          <code className="relative">
+                            {/* Syntax highlighting effect */}
+                            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></span>
+                            <span className="relative z-10">{currentQuestion.question}</span>
+                          </code>
+                        </pre>
+                        
+                        {/* Bottom accent */}
+                        <div className="mt-6 pt-4 border-t border-gray-700/30 dark:border-gray-600/30">
+                          <div className="flex items-center justify-between text-xs text-gray-500">
+                            <span className="font-mono">Frontend Learning Hub</span>
+                            <span className="font-mono">Question #{currentQuestionIndex + 1}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
                   </div>
 
                   {/* Audio Question Button */}
@@ -433,8 +473,18 @@ export default function QuestionsPage() {
                 </div>
               </div>
 
-              {/* Answer Options */}
-              <div className="space-y-4 sm:space-y-5 mb-6 sm:mb-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-800/50 rounded-xl p-6 sm:p-8 border border-gray-200 dark:border-gray-600 shadow-sm">
+              {/* Beautiful Answer Options */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+                className="relative group mb-6 sm:mb-8"
+              >
+                {/* Gradient Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/3 to-pink-600/5 rounded-2xl blur-sm"></div>
+                
+                {/* Main Container */}
+                <div className="relative space-y-4 sm:space-y-5 bg-gradient-to-br from-white/90 via-gray-50/90 to-white/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-6 sm:p-8 border border-gray-200/50 dark:border-gray-600/50 shadow-xl backdrop-blur-sm">
                 <div className="mb-6">
                   <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">
                     Choose your answer:
@@ -509,35 +559,35 @@ export default function QuestionsPage() {
                     <motion.button
                       key={option.id || `option-${index}`}
                       onClick={() => handleAnswerSelect(index)}
-                      whileHover={{ scale: 1.02 }}
+                      whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
-                      className={`w-full text-left p-5 sm:p-6 rounded-xl border-2 transition-all duration-200 ${
+                      className={`relative w-full text-left p-6 sm:p-7 rounded-2xl border-2 transition-all duration-300 overflow-hidden ${
                         showCorrectness
                           ? isCorrect
-                            ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-md'
+                            ? 'border-green-400 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 shadow-lg shadow-green-500/20'
                             : isSelected
-                              ? 'border-red-500 bg-red-50 dark:bg-red-900/20 shadow-md'
-                              : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
+                              ? 'border-red-400 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/30 dark:to-rose-900/30 shadow-lg shadow-red-500/20'
+                              : 'border-gray-200 dark:border-gray-600 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 shadow-sm'
                           : isSelected
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
-                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800 hover:shadow-sm'
+                            ? 'border-blue-400 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 shadow-lg shadow-blue-500/20'
+                            : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 hover:shadow-lg hover:shadow-blue-500/10'
                       }`}
                     >
                       <div className="flex items-center">
                         <motion.span
-                          className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-sm sm:text-base font-bold mr-4 sm:mr-5 transition-colors ${
+                          className={`flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-base sm:text-lg font-bold mr-5 sm:mr-6 transition-all duration-300 shadow-lg ${
                             showCorrectness
                               ? isCorrect
-                                ? 'bg-green-500 text-white shadow-md'
+                                ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/30'
                                 : isSelected
-                                  ? 'bg-red-500 text-white shadow-md'
-                                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                                  ? 'bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/30'
+                                  : 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-600 dark:text-gray-300 shadow-gray-500/20'
                               : isSelected
-                                ? 'bg-blue-500 text-white shadow-md'
-                                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                                ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-blue-500/30'
+                                : 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-600 dark:text-gray-300 shadow-gray-500/20'
                           }`}
-                          animate={isSelected ? { scale: [1, 1.1, 1] } : {}}
-                          transition={{ duration: 0.3 }}
+                          animate={isSelected ? { scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] } : {}}
+                          transition={{ duration: 0.4 }}
                         >
                           {String.fromCharCode(65 + index)}
                         </motion.span>
@@ -596,7 +646,8 @@ export default function QuestionsPage() {
                     </motion.button>
                   );
                 })}
-              </div>
+                </div>
+              </motion.div>
 
               {/* Submit Button */}
               {selectedAnswer && !showExplanation && (
@@ -720,30 +771,105 @@ export default function QuestionsPage() {
                         </div>
                       )}
                     </div>
-                    <div className="bg-gray-900 dark:bg-gray-950 rounded-xl p-6 overflow-x-auto border border-gray-800 dark:border-gray-700 relative shadow-lg">
-                      <button
-                        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-colors bg-gray-800 dark:bg-gray-700 rounded-lg"
-                        onClick={() => {
-                          navigator.clipboard.writeText(currentQuestion.explanation);
-                        }}
-                        title="Copy explanation"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
-                        </svg>
-                      </button>
-                      <pre className={`text-base font-mono whitespace-pre-wrap leading-relaxed pr-12 ${
+                    {/* Beautiful Explanation Code Block */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
+                      className="relative group"
+                    >
+                      {/* Gradient Background */}
+                      <div className={`absolute inset-0 rounded-2xl blur-sm ${
                         isAnswerCorrect
-                          ? 'text-green-100'
-                          : 'text-red-100'
+                          ? 'bg-gradient-to-br from-green-600/10 via-emerald-600/5 to-teal-600/10'
+                          : 'bg-gradient-to-br from-red-600/10 via-rose-600/5 to-pink-600/10'
+                      }`}></div>
+                      
+                      {/* Main Code Block */}
+                      <div className={`relative rounded-2xl p-8 overflow-x-auto border shadow-2xl backdrop-blur-sm ${
+                        isAnswerCorrect
+                          ? 'bg-gradient-to-br from-green-900/90 via-emerald-900/80 to-teal-900/90 dark:from-green-950/90 dark:via-emerald-950/80 dark:to-teal-950/90 border-green-700/50 dark:border-green-600/50'
+                          : 'bg-gradient-to-br from-red-900/90 via-rose-900/80 to-pink-900/90 dark:from-red-950/90 dark:via-rose-950/80 dark:to-pink-950/90 border-red-700/50 dark:border-red-600/50'
                       }`}>
-                        <code>{currentQuestion.explanation}</code>
-                      </pre>
-                    </div>
+                        {/* Header Bar */}
+                        <div className={`flex items-center justify-between mb-6 pb-4 border-b ${
+                          isAnswerCorrect
+                            ? 'border-green-700/30 dark:border-green-600/30'
+                            : 'border-red-700/30 dark:border-red-600/30'
+                        }`}>
+                          <div className="flex items-center space-x-3">
+                            <div className="flex space-x-2">
+                              <div className={`w-3 h-3 rounded-full ${
+                                isAnswerCorrect ? 'bg-green-500' : 'bg-red-500'
+                              }`}></div>
+                              <div className={`w-3 h-3 rounded-full ${
+                                isAnswerCorrect ? 'bg-emerald-500' : 'bg-rose-500'
+                              }`}></div>
+                              <div className={`w-3 h-3 rounded-full ${
+                                isAnswerCorrect ? 'bg-teal-500' : 'bg-pink-500'
+                              }`}></div>
+                            </div>
+                            <span className={`text-sm font-mono ${
+                              isAnswerCorrect ? 'text-green-400' : 'text-red-400'
+                            }`}>
+                              {isAnswerCorrect ? 'Explanation ✓' : 'Explanation ✗'}
+                            </span>
+                          </div>
+                          
+                          {/* Copy Button */}
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className={`p-3 transition-all duration-200 rounded-xl backdrop-blur-sm border ${
+                              isAnswerCorrect
+                                ? 'text-green-400 hover:text-green-200 bg-green-800/50 dark:bg-green-700/50 hover:bg-green-700/70 dark:hover:bg-green-600/70 border-green-600/30 dark:border-green-500/30'
+                                : 'text-red-400 hover:text-red-200 bg-red-800/50 dark:bg-red-700/50 hover:bg-red-700/70 dark:hover:bg-red-600/70 border-red-600/30 dark:border-red-500/30'
+                            }`}
+                            onClick={() => {
+                              navigator.clipboard.writeText(currentQuestion.explanation);
+                            }}
+                            title="Copy explanation"
+                          >
+                            <svg
+                              className="w-5 h-5"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                            </svg>
+                          </motion.button>
+                        </div>
+                        
+                        {/* Explanation Content */}
+                        <pre className={`text-lg font-mono whitespace-pre-wrap leading-relaxed ${
+                          isAnswerCorrect ? 'text-green-100' : 'text-red-100'
+                        }`}>
+                          <code className="relative">
+                            {/* Syntax highlighting effect */}
+                            <span className={`absolute inset-0 animate-pulse ${
+                              isAnswerCorrect
+                                ? 'bg-gradient-to-r from-transparent via-green-500/10 to-transparent'
+                                : 'bg-gradient-to-r from-transparent via-red-500/10 to-transparent'
+                            }`}></span>
+                            <span className="relative z-10">{currentQuestion.explanation}</span>
+                          </code>
+                        </pre>
+                        
+                        {/* Bottom accent */}
+                        <div className={`mt-6 pt-4 border-t ${
+                          isAnswerCorrect
+                            ? 'border-green-700/30 dark:border-green-600/30'
+                            : 'border-red-700/30 dark:border-red-600/30'
+                        }`}>
+                          <div className={`flex items-center justify-between text-xs font-mono ${
+                            isAnswerCorrect ? 'text-green-500' : 'text-red-500'
+                          }`}>
+                            <span>Frontend Learning Hub</span>
+                            <span>{isAnswerCorrect ? 'Correct Answer' : 'Incorrect Answer'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
                   </motion.div>
                 )}
               </AnimatePresence>
