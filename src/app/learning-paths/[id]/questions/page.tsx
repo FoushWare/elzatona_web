@@ -364,9 +364,9 @@ export default function QuestionsPage() {
               {/* Question Title */}
               <div className="mb-8">
                 <div className="flex items-start justify-between mb-6">
-                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white flex-1">
+                  <div className="flex-1">
                     {currentQuestion.question.includes('```') ? (
-                      <div className="space-y-6">
+                      <div className="space-y-4">
                         {currentQuestion.question
                           .split('```')
                           .map((part, index) => {
@@ -375,7 +375,7 @@ export default function QuestionsPage() {
                               return (
                                 <div
                                   key={index}
-                                  className="whitespace-pre-wrap text-2xl"
+                                  className="whitespace-pre-wrap text-xl text-gray-800 dark:text-gray-200 font-medium"
                                 >
                                   {part.trim()}
                                 </div>
@@ -385,9 +385,20 @@ export default function QuestionsPage() {
                               return (
                                 <div
                                   key={index}
-                                  className="bg-gray-900 dark:bg-gray-800 rounded-xl p-6 overflow-x-auto border border-gray-700"
+                                  className="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 overflow-x-auto border border-gray-800 dark:border-gray-700 relative"
                                 >
-                                  <pre className="text-gray-100 text-lg font-mono whitespace-pre-wrap leading-relaxed">
+                                  <button
+                                    className="absolute top-3 right-3 p-2 text-gray-400 hover:text-gray-200 transition-colors"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(part);
+                                    }}
+                                    title="Copy code"
+                                  >
+                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                      <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                    </svg>
+                                  </button>
+                                  <pre className="text-gray-100 text-sm font-mono whitespace-pre-wrap leading-relaxed pr-8">
                                     <code>{part}</code>
                                   </pre>
                                 </div>
@@ -396,29 +407,35 @@ export default function QuestionsPage() {
                           })}
                       </div>
                     ) : (
-                      <div className="whitespace-pre-wrap text-2xl">
+                      <div className="whitespace-pre-wrap text-xl text-gray-800 dark:text-gray-200 font-medium">
                         <ExpandableText text={currentQuestion.question} />
                       </div>
                     )}
-                  </h2>
-                  
+                  </div>
+
                   {/* Audio Question Button */}
                   {currentQuestion.audioQuestion && (
                     <div className="ml-4 flex-shrink-0">
                       <button
                         onClick={() => {
-                          const audio = new Audio(currentQuestion.audioQuestion);
-                          audio.play().catch(e => console.error("Error playing audio:", e));
+                          const audio = new Audio(
+                            currentQuestion.audioQuestion
+                          );
+                          audio
+                            .play()
+                            .catch(e =>
+                              console.error('Error playing audio:', e)
+                            );
                         }}
                         className="flex items-center justify-center w-12 h-12 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 rounded-full transition-colors duration-200 group"
                         title="Play question audio"
                       >
-                        <svg 
-                          className="w-6 h-6 text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300" 
-                          fill="currentColor" 
+                        <svg
+                          className="w-6 h-6 text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300"
+                          fill="currentColor"
                           viewBox="0 0 24 24"
                         >
-                          <path d="M8 5v14l11-7z"/>
+                          <path d="M8 5v14l11-7z" />
                         </svg>
                       </button>
                     </div>
@@ -428,7 +445,7 @@ export default function QuestionsPage() {
 
               {/* Answer Options */}
               <div className="space-y-4 mb-8">
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">
+                <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-6">
                   Choose your answer:
                 </h3>
                 {currentQuestion.options.map((option, index) => {
@@ -456,7 +473,7 @@ export default function QuestionsPage() {
                         >
                           {String.fromCharCode(65 + index)}
                         </span>
-                        <div className="text-lg font-medium text-gray-800 dark:text-gray-200">
+                        <div className="text-base text-gray-700 dark:text-gray-300">
                           {option.text}
                         </div>
                       </div>
@@ -494,32 +511,36 @@ export default function QuestionsPage() {
                         }`}
                       ></div>
                       <h3
-                        className={`text-xl font-bold ${
+                        className={`text-lg font-semibold ${
                           isAnswerCorrect
-                            ? 'text-green-800 dark:text-green-200'
-                            : 'text-red-800 dark:text-red-200'
+                            ? 'text-green-700 dark:text-green-300'
+                            : 'text-red-700 dark:text-red-300'
                         }`}
                       >
                         {isAnswerCorrect ? 'Correct!' : 'Incorrect'}
                       </h3>
                     </div>
-                    
+
                     {/* Audio Answer Button */}
                     {currentQuestion.audioAnswer && (
                       <button
                         onClick={() => {
                           const audio = new Audio(currentQuestion.audioAnswer);
-                          audio.play().catch(e => console.error("Error playing audio:", e));
+                          audio
+                            .play()
+                            .catch(e =>
+                              console.error('Error playing audio:', e)
+                            );
                         }}
                         className="flex items-center justify-center w-10 h-10 bg-green-100 hover:bg-green-200 dark:bg-green-900/30 dark:hover:bg-green-900/50 rounded-full transition-colors duration-200 group"
                         title="Play answer explanation audio"
                       >
-                        <svg 
-                          className="w-5 h-5 text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300" 
-                          fill="currentColor" 
+                        <svg
+                          className="w-5 h-5 text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300"
+                          fill="currentColor"
                           viewBox="0 0 24 24"
                         >
-                          <path d="M8 5v14l11-7z"/>
+                          <path d="M8 5v14l11-7z" />
                         </svg>
                       </button>
                     )}
@@ -533,7 +554,6 @@ export default function QuestionsPage() {
                   >
                     <ExpandableText text={currentQuestion.explanation} />
                   </div>
-
                 </div>
               )}
 
