@@ -110,6 +110,10 @@ export interface BulkQuestionData {
   sectionId?: string;
   points: number;
   timeLimit?: number;
+  
+  // Audio Support
+  audioQuestion?: string; // URL to question audio file
+  audioAnswer?: string; // URL to answer audio file
 }
 
 // Question Service Class
