@@ -62,7 +62,6 @@ export default function QuestionsPage() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showHint, setShowHint] = useState(false);
 
   const learningPath = learningPaths.find(path => path.id === pathId);
 
@@ -185,7 +184,6 @@ export default function QuestionsPage() {
 
     setIsAnswerCorrect(isCorrect);
     setShowExplanation(true);
-    setShowHint(false);
 
     if (isCorrect) {
       setScore(prev => prev + (currentQuestion.points || 10));
@@ -216,64 +214,12 @@ export default function QuestionsPage() {
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setSelectedAnswer(null);
-      setShowExplanation(false);
-      setIsAnswerCorrect(null);
-      setShowHint(false);
+    setSelectedAnswer(null);
+    setShowExplanation(false);
+    setIsAnswerCorrect(null);
     }
   };
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey) return; // Don't interfere with browser shortcuts
-
-      switch (e.key.toLowerCase()) {
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-          const optionIndex = parseInt(e.key) - 1;
-          if (
-            currentGroup &&
-            optionIndex <
-              currentGroup.questions[currentQuestionIndex]?.options.length
-          ) {
-            handleAnswerSelect(optionIndex);
-          }
-          break;
-        case 'enter':
-          if (selectedAnswer && !showExplanation) {
-            handleSubmitAnswer();
-          } else if (showExplanation) {
-            handleNextQuestion();
-          }
-          break;
-        case 'arrowleft':
-          handlePreviousQuestion();
-          break;
-        case 'arrowright':
-          if (showExplanation) {
-            handleNextQuestion();
-          }
-          break;
-        case 'h':
-          if (!showExplanation) {
-            setShowHint(!showHint);
-          }
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [
-    selectedAnswer,
-    showExplanation,
-    currentQuestionIndex,
-    currentGroup,
-    showHint,
-  ]);
 
   if (isLoading) {
     return (
@@ -337,7 +283,7 @@ export default function QuestionsPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 shadow-lg">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2">
@@ -373,7 +319,7 @@ export default function QuestionsPage() {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
             {/* Question Header */}
             <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 border-b border-gray-200 dark:border-gray-600">
@@ -423,7 +369,7 @@ export default function QuestionsPage() {
             </div>
 
             {/* Question Content */}
-            <div className="px-8 py-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
               {/* Question Title */}
               <div className="mb-8">
                 <div className="flex items-start justify-between mb-6">
@@ -510,63 +456,13 @@ export default function QuestionsPage() {
                 </div>
               </div>
 
-              {/* Hint System */}
-              {showHint && !showExplanation && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg"
-                >
-                  <div className="flex items-start">
-                    <svg
-                      className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 mr-3 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <div>
-                      <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">
-                        Hint
-                      </h4>
-                      <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                        Think about the order of variable declarations and
-                        hoisting behavior in JavaScript.
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
 
               {/* Answer Options */}
-              <div className="space-y-4 mb-8 bg-gray-50/50 dark:bg-gray-700/30 rounded-lg p-5 border border-gray-100 dark:border-gray-600">
-                <div className="flex items-center justify-between mb-6">
+              <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 bg-gray-50/50 dark:bg-gray-700/30 rounded-lg p-4 sm:p-5 border border-gray-100 dark:border-gray-600">
+                <div className="mb-6">
                   <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">
                     Choose your answer:
                   </h3>
-                  {!showExplanation && (
-                    <button
-                      onClick={() => setShowHint(!showHint)}
-                      className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium flex items-center gap-1"
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {showHint ? 'Hide Hint' : 'Show Hint'}
-                    </button>
-                  )}
                 </div>
                 {currentQuestion.options.map((option, index) => {
                   const isSelected = Array.isArray(selectedAnswer)
@@ -579,15 +475,15 @@ export default function QuestionsPage() {
                       onClick={() => handleAnswerSelect(index)}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className={`w-full text-left p-5 rounded-xl border-2 transition-all duration-200 ${
-                        isSelected
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800 hover:shadow-md'
-                      }`}
+                  className={`w-full text-left p-4 sm:p-5 rounded-lg border-2 transition-all duration-200 ${
+                    isSelected
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800 hover:shadow-sm'
+                  }`}
                     >
                       <div className="flex items-center">
                         <motion.span
-                          className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold mr-4 transition-colors ${
+                          className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold mr-3 sm:mr-4 transition-colors ${
                             isSelected
                               ? 'bg-blue-500 text-white shadow-md'
                               : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
@@ -597,7 +493,7 @@ export default function QuestionsPage() {
                         >
                           {String.fromCharCode(65 + index)}
                         </motion.span>
-                        <div className="text-lg text-gray-800 dark:text-gray-200 font-medium">
+                        <div className="text-base sm:text-lg text-gray-800 dark:text-gray-200 font-medium">
                           {option.text}
                         </div>
                         {isSelected && (
@@ -639,7 +535,7 @@ export default function QuestionsPage() {
                     disabled={isSubmitting}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 flex items-center gap-3 ${
+                    className={`px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-all duration-200 flex items-center gap-2 sm:gap-3 ${
                       isSubmitting
                         ? 'bg-gray-400 cursor-not-allowed'
                         : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'
@@ -688,7 +584,7 @@ export default function QuestionsPage() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -20, scale: 0.95 }}
                     transition={{ duration: 0.4, ease: 'easeOut' }}
-                    className={`rounded-lg p-6 mb-8 border shadow-sm ${
+                    className={`rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 border shadow-sm ${
                       isAnswerCorrect
                         ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
                         : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'
@@ -739,7 +635,7 @@ export default function QuestionsPage() {
                       )}
                     </div>
                     <div
-                      className={`text-lg text-gray-800 dark:text-gray-200 leading-relaxed font-medium ${
+                      className={`text-base sm:text-lg text-gray-800 dark:text-gray-200 leading-relaxed font-medium ${
                         isAnswerCorrect
                           ? 'text-green-800 dark:text-green-200'
                           : 'text-red-800 dark:text-red-200'
@@ -751,45 +647,13 @@ export default function QuestionsPage() {
                 )}
               </AnimatePresence>
 
-              {/* Keyboard Shortcuts Info */}
-              <div className="mb-6 p-4 bg-gray-50/50 dark:bg-gray-800/30 rounded-lg border border-gray-100 dark:border-gray-600">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Keyboard Shortcuts
-                </h4>
-                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-                  <div>
-                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
-                      1-4
-                    </kbd>{' '}
-                    Select answer
-                  </div>
-                  <div>
-                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
-                      Enter
-                    </kbd>{' '}
-                    Submit/Next
-                  </div>
-                  <div>
-                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
-                      ←
-                    </kbd>{' '}
-                    Previous
-                  </div>
-                  <div>
-                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
-                      H
-                    </kbd>{' '}
-                    Toggle hint
-                  </div>
-                </div>
-              </div>
 
               {/* Navigation */}
-              <div className="flex justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700">
                 <button
                   onClick={handlePreviousQuestion}
                   disabled={currentQuestionIndex === 0}
-                  className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                  className="px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                 >
                   ← Previous
                 </button>
@@ -798,7 +662,7 @@ export default function QuestionsPage() {
                   {showExplanation && (
                     <button
                       onClick={handleNextQuestion}
-                      className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors"
+                      className="px-4 sm:px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm sm:text-base font-semibold transition-colors"
                     >
                       {currentQuestionIndex ===
                       currentGroup.questions.length - 1
