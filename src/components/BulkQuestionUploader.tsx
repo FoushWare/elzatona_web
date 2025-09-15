@@ -215,8 +215,10 @@ export default function BulkQuestionUploader({
     setJsonInput(JSON.stringify(jsonData, null, 2));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const submitQuestions = async () => {
+    console.log('🚀 Starting bulk question submission...');
+    console.log('Section ID:', sectionId);
+    console.log('Questions to submit:', questions);
 
     // Basic validation
     const validQuestions = questions.filter(
@@ -227,6 +229,8 @@ export default function BulkQuestionUploader({
         q.options.some(opt => opt.isCorrect)
     );
 
+    console.log('Valid questions after filtering:', validQuestions);
+
     if (validQuestions.length === 0) {
       setError('At least one complete question is required');
       return;
@@ -236,10 +240,13 @@ export default function BulkQuestionUploader({
       setLoading(true);
       setError(null);
 
+      console.log('📤 Calling SectionClientService.addBulkQuestions...');
       const result = await SectionClientService.addBulkQuestions(
         sectionId,
         validQuestions
       );
+
+      console.log('📥 API Response:', result);
 
       if (result.success) {
         setSuccess(`${validQuestions.length} questions added successfully!`);
@@ -264,13 +271,20 @@ export default function BulkQuestionUploader({
           onQuestionsAdded(result.data);
         }
       } else {
+        console.error('❌ API returned error:', result.error);
         setError(result.error || 'Failed to add questions');
       }
     } catch (error) {
+      console.error('❌ Exception during submission:', error);
       setError('Failed to add questions');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await submitQuestions();
   };
 
   const downloadTemplate = () => {
@@ -432,7 +446,7 @@ export default function BulkQuestionUploader({
               </button>
               {jsonParsed && questions.length > 0 && questions[0].title && (
                 <button
-                  onClick={handleSubmit}
+                  onClick={submitQuestions}
                   disabled={loading}
                   className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2"
                 >
