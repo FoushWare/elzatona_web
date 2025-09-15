@@ -51,6 +51,7 @@ export default function BulkQuestionUploader({
 
   const [jsonInput, setJsonInput] = useState('');
   const [inputMode, setInputMode] = useState<'form' | 'json'>('form');
+  const [jsonParsed, setJsonParsed] = useState(false);
 
   const addQuestion = () => {
     setQuestions([
@@ -187,9 +188,11 @@ export default function BulkQuestionUploader({
       setQuestions(validatedQuestions);
       setError(null);
       setSuccess(`Successfully parsed ${validatedQuestions.length} questions from JSON!`);
+      setJsonParsed(true);
     } catch (error) {
       setError(`JSON parsing error: ${error instanceof Error ? error.message : 'Invalid JSON format'}`);
       setSuccess(null);
+      setJsonParsed(false);
     }
   };
 
@@ -338,7 +341,10 @@ export default function BulkQuestionUploader({
           </span>
           <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
             <button
-              onClick={() => setInputMode('form')}
+              onClick={() => {
+                setInputMode('form');
+                setJsonParsed(false);
+              }}
               className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
                 inputMode === 'form'
                   ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
@@ -348,7 +354,10 @@ export default function BulkQuestionUploader({
               Form Input
             </button>
             <button
-              onClick={() => setInputMode('json')}
+              onClick={() => {
+                setInputMode('json');
+                setJsonParsed(false);
+              }}
               className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
                 inputMode === 'json'
                   ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
@@ -413,11 +422,26 @@ export default function BulkQuestionUploader({
                 <span>Parse JSON</span>
               </button>
               <button
-                onClick={() => setJsonInput('')}
+                onClick={() => {
+                  setJsonInput('');
+                  setJsonParsed(false);
+                }}
                 className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
               >
                 Clear
               </button>
+              {jsonParsed && questions.length > 0 && questions[0].title && (
+                <button
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>
+                    {loading ? 'Adding...' : `Bulk Add ${questions.length} Questions`}
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         )}
