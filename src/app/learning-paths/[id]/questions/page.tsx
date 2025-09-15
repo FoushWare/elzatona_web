@@ -468,11 +468,60 @@ export default function QuestionsPage() {
                   <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">
                     Choose your answer:
                   </h3>
+                  {selectedAnswer !== null && !showExplanation && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-2"
+                    >
+                      {(() => {
+                        const isCorrect = Array.isArray(selectedAnswer)
+                          ? selectedAnswer.every(answerId =>
+                              currentQuestion.correctAnswers.includes(answerId)
+                            ) && selectedAnswer.length === currentQuestion.correctAnswers.length
+                          : currentQuestion.correctAnswers.includes(selectedAnswer as string);
+                        
+                        return (
+                          <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                            isCorrect
+                              ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                              : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                          }`}>
+                            <svg
+                              className={`w-4 h-4 mr-2 ${
+                                isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                              }`}
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              {isCorrect ? (
+                                <path
+                                  fillRule="evenodd"
+                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              ) : (
+                                <path
+                                  fillRule="evenodd"
+                                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                  clipRule="evenodd"
+                                />
+                              )}
+                            </svg>
+                            {isCorrect ? 'Correct!' : 'Incorrect'}
+                          </div>
+                        );
+                      })()}
+                    </motion.div>
+                  )}
                 </div>
                 {currentQuestion.options.map((option, index) => {
                   const isSelected = Array.isArray(selectedAnswer)
                     ? selectedAnswer.includes(option.id)
                     : selectedAnswer === option.id;
+                  
+                  const isCorrect = currentQuestion.correctAnswers.includes(option.id);
+                  const showCorrectness = selectedAnswer !== null && !showExplanation;
 
                   return (
                     <motion.button
@@ -481,17 +530,29 @@ export default function QuestionsPage() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className={`w-full text-left p-4 sm:p-5 rounded-lg border-2 transition-all duration-200 ${
-                        isSelected
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800 hover:shadow-sm'
+                        showCorrectness
+                          ? isCorrect
+                            ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-md'
+                            : isSelected
+                              ? 'border-red-500 bg-red-50 dark:bg-red-900/20 shadow-md'
+                              : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
+                          : isSelected
+                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800 hover:shadow-sm'
                       }`}
                     >
                       <div className="flex items-center">
                         <motion.span
                           className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold mr-3 sm:mr-4 transition-colors ${
-                            isSelected
-                              ? 'bg-blue-500 text-white shadow-md'
-                              : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                            showCorrectness
+                              ? isCorrect
+                                ? 'bg-green-500 text-white shadow-md'
+                                : isSelected
+                                  ? 'bg-red-500 text-white shadow-md'
+                                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                              : isSelected
+                                ? 'bg-blue-500 text-white shadow-md'
+                                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
                           }`}
                           animate={isSelected ? { scale: [1, 1.1, 1] } : {}}
                           transition={{ duration: 0.3 }}
@@ -508,17 +569,45 @@ export default function QuestionsPage() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.1 }}
                           >
-                            <svg
-                              className="w-5 h-5 text-blue-500"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
+                            {showCorrectness ? (
+                              isCorrect ? (
+                                <svg
+                                  className="w-5 h-5 text-green-500"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              ) : (
+                                <svg
+                                  className="w-5 h-5 text-red-500"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )
+                            ) : (
+                              <svg
+                                className="w-5 h-5 text-blue-500"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            )}
                           </motion.div>
                         )}
                       </div>
