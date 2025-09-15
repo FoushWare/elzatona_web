@@ -380,7 +380,7 @@ export default function QuestionsPage() {
                               return (
                                 <div
                                   key={index}
-                                  className="whitespace-pre-wrap text-lg text-gray-800 dark:text-gray-200 font-medium leading-relaxed"
+                                  className="whitespace-pre-wrap text-xl text-gray-900 dark:text-gray-100 font-semibold leading-relaxed"
                                 >
                                   {part.trim()}
                                 </div>
@@ -390,7 +390,7 @@ export default function QuestionsPage() {
                               return (
                                 <div
                                   key={index}
-                                  className="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 overflow-x-auto border border-gray-800 dark:border-gray-700 relative shadow-sm"
+                                  className="bg-gray-900 dark:bg-gray-950 rounded-xl p-6 overflow-x-auto border border-gray-800 dark:border-gray-700 relative shadow-lg"
                                 >
                                   <button
                                     className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-colors bg-gray-800 dark:bg-gray-700 rounded-lg"
@@ -407,7 +407,7 @@ export default function QuestionsPage() {
                                       <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
                                     </svg>
                                   </button>
-                                  <pre className="text-gray-100 text-sm font-mono whitespace-pre-wrap leading-relaxed pr-10">
+                                  <pre className="text-gray-100 text-base font-mono whitespace-pre-wrap leading-relaxed pr-12">
                                     <code>{part}</code>
                                   </pre>
                                 </div>
@@ -416,7 +416,7 @@ export default function QuestionsPage() {
                           })}
                       </div>
                     ) : (
-                      <div className="whitespace-pre-wrap text-lg text-gray-800 dark:text-gray-200 font-medium leading-relaxed">
+                      <div className="whitespace-pre-wrap text-xl text-gray-900 dark:text-gray-100 font-semibold leading-relaxed">
                         <ExpandableText text={currentQuestion.question} />
                       </div>
                     )}
@@ -463,7 +463,7 @@ export default function QuestionsPage() {
               </div>
 
               {/* Answer Options */}
-              <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 bg-gray-50/50 dark:bg-gray-700/30 rounded-lg p-4 sm:p-5 border border-gray-100 dark:border-gray-600">
+              <div className="space-y-4 sm:space-y-5 mb-6 sm:mb-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-800/50 rounded-xl p-6 sm:p-8 border border-gray-200 dark:border-gray-600 shadow-sm">
                 <div className="mb-6">
                   <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">
                     Choose your answer:
@@ -478,18 +478,26 @@ export default function QuestionsPage() {
                         const isCorrect = Array.isArray(selectedAnswer)
                           ? selectedAnswer.every(answerId =>
                               currentQuestion.correctAnswers.includes(answerId)
-                            ) && selectedAnswer.length === currentQuestion.correctAnswers.length
-                          : currentQuestion.correctAnswers.includes(selectedAnswer as string);
-                        
+                            ) &&
+                            selectedAnswer.length ===
+                              currentQuestion.correctAnswers.length
+                          : currentQuestion.correctAnswers.includes(
+                              selectedAnswer as string
+                            );
+
                         return (
-                          <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                            isCorrect
-                              ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                              : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                          }`}>
+                          <div
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                              isCorrect
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                                : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                            }`}
+                          >
                             <svg
                               className={`w-4 h-4 mr-2 ${
-                                isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                                isCorrect
+                                  ? 'text-green-600 dark:text-green-400'
+                                  : 'text-red-600 dark:text-red-400'
                               }`}
                               fill="currentColor"
                               viewBox="0 0 20 20"
@@ -519,9 +527,12 @@ export default function QuestionsPage() {
                   const isSelected = Array.isArray(selectedAnswer)
                     ? selectedAnswer.includes(option.id)
                     : selectedAnswer === option.id;
-                  
-                  const isCorrect = currentQuestion.correctAnswers.includes(option.id);
-                  const showCorrectness = selectedAnswer !== null && !showExplanation;
+
+                  const isCorrect = currentQuestion.correctAnswers.includes(
+                    option.id
+                  );
+                  const showCorrectness =
+                    selectedAnswer !== null && !showExplanation;
 
                   return (
                     <motion.button
@@ -529,7 +540,7 @@ export default function QuestionsPage() {
                       onClick={() => handleAnswerSelect(index)}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className={`w-full text-left p-4 sm:p-5 rounded-lg border-2 transition-all duration-200 ${
+                      className={`w-full text-left p-5 sm:p-6 rounded-xl border-2 transition-all duration-200 ${
                         showCorrectness
                           ? isCorrect
                             ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-md'
@@ -543,7 +554,7 @@ export default function QuestionsPage() {
                     >
                       <div className="flex items-center">
                         <motion.span
-                          className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold mr-3 sm:mr-4 transition-colors ${
+                          className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-sm sm:text-base font-bold mr-4 sm:mr-5 transition-colors ${
                             showCorrectness
                               ? isCorrect
                                 ? 'bg-green-500 text-white shadow-md'
@@ -559,7 +570,7 @@ export default function QuestionsPage() {
                         >
                           {String.fromCharCode(65 + index)}
                         </motion.span>
-                        <div className="text-base sm:text-lg text-gray-800 dark:text-gray-200 font-medium">
+                        <div className="text-lg sm:text-xl text-gray-900 dark:text-gray-100 font-semibold">
                           {option.text}
                         </div>
                         {isSelected && (
@@ -629,10 +640,10 @@ export default function QuestionsPage() {
                     disabled={isSubmitting}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-all duration-200 flex items-center gap-2 sm:gap-3 ${
+                    className={`px-8 sm:px-10 py-4 sm:py-5 rounded-xl font-bold text-lg sm:text-xl transition-all duration-200 flex items-center gap-3 sm:gap-4 ${
                       isSubmitting
                         ? 'bg-gray-400 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'
+                        : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-xl hover:shadow-2xl'
                     }`}
                   >
                     {isSubmitting ? (
@@ -678,10 +689,10 @@ export default function QuestionsPage() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -20, scale: 0.95 }}
                     transition={{ duration: 0.4, ease: 'easeOut' }}
-                    className={`rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 border shadow-sm ${
+                    className={`rounded-xl p-6 sm:p-8 mb-6 sm:mb-8 border shadow-lg ${
                       isAnswerCorrect
-                        ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
-                        : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'
+                        ? 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-300 dark:border-green-700'
+                        : 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-300 dark:border-red-700'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-4">
@@ -739,10 +750,10 @@ export default function QuestionsPage() {
                       )}
                     </div>
                     <div
-                      className={`text-base sm:text-lg text-gray-800 dark:text-gray-200 leading-relaxed font-medium ${
+                      className={`text-lg sm:text-xl text-gray-900 dark:text-gray-100 leading-relaxed font-semibold ${
                         isAnswerCorrect
-                          ? 'text-green-800 dark:text-green-200'
-                          : 'text-red-800 dark:text-red-200'
+                          ? 'text-green-900 dark:text-green-100'
+                          : 'text-red-900 dark:text-red-100'
                       }`}
                     >
                       <ExpandableText text={currentQuestion.explanation} />
