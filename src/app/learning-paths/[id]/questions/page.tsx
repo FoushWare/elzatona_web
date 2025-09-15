@@ -423,8 +423,8 @@ export default function QuestionsPage() {
                   </div>
 
                   {/* Audio Question Button */}
-                  {currentQuestion.audioQuestion && (
-                    <div className="ml-4 flex-shrink-0">
+                  <div className="ml-4 flex-shrink-0">
+                    {currentQuestion.audioQuestion ? (
                       <button
                         onClick={() => {
                           const audio = new Audio(
@@ -436,19 +436,29 @@ export default function QuestionsPage() {
                               console.error('Error playing audio:', e)
                             );
                         }}
-                        className="flex items-center justify-center w-12 h-12 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 rounded-full transition-colors duration-200 group"
+                        className="flex items-center justify-center w-14 h-14 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 rounded-full transition-all duration-200 group shadow-lg hover:shadow-xl"
                         title="Play question audio"
                       >
                         <svg
-                          className="w-6 h-6 text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300"
+                          className="w-7 h-7 text-white group-hover:scale-110 transition-transform duration-200"
                           fill="currentColor"
                           viewBox="0 0 24 24"
                         >
                           <path d="M8 5v14l11-7z" />
                         </svg>
                       </button>
-                    </div>
-                  )}
+                    ) : (
+                      <div className="flex items-center justify-center w-14 h-14 bg-gray-300 dark:bg-gray-600 rounded-full opacity-50">
+                        <svg
+                          className="w-7 h-7 text-gray-500 dark:text-gray-400"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -604,7 +614,7 @@ export default function QuestionsPage() {
                       </div>
 
                       {/* Audio Answer Button */}
-                      {currentQuestion.audioAnswer && (
+                      {currentQuestion.audioAnswer ? (
                         <button
                           onClick={() => {
                             const audio = new Audio(
@@ -616,17 +626,27 @@ export default function QuestionsPage() {
                                 console.error('Error playing audio:', e)
                               );
                           }}
-                          className="flex items-center justify-center w-10 h-10 bg-green-100 hover:bg-green-200 dark:bg-green-900/30 dark:hover:bg-green-900/50 rounded-full transition-colors duration-200 group"
+                          className="flex items-center justify-center w-12 h-12 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 rounded-full transition-all duration-200 group shadow-lg hover:shadow-xl"
                           title="Play answer explanation audio"
                         >
                           <svg
-                            className="w-5 h-5 text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300"
+                            className="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-200"
                             fill="currentColor"
                             viewBox="0 0 24 24"
                           >
                             <path d="M8 5v14l11-7z" />
                           </svg>
                         </button>
+                      ) : (
+                        <div className="flex items-center justify-center w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full opacity-50">
+                          <svg
+                            className="w-6 h-6 text-gray-500 dark:text-gray-400"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
                       )}
                     </div>
                     <div
