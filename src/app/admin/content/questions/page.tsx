@@ -30,19 +30,19 @@ export default function QuestionsManagementPage() {
   } = useUnifiedQuestions();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLearningPath, setSelectedLearningPath] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedLearningPath, setSelectedLearningPath] = useState('all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   const difficulties = [
-    { id: '', name: 'All Difficulties' },
+    { id: 'all', name: 'All Difficulties' },
     { id: 'easy', name: 'Easy' },
     { id: 'medium', name: 'Medium' },
     { id: 'hard', name: 'Hard' },
   ];
 
   const categories = [
-    { id: '', name: 'All Categories' },
+    { id: 'all', name: 'All Categories' },
     { id: 'CSS', name: 'CSS' },
     { id: 'JavaScript', name: 'JavaScript' },
     { id: 'React', name: 'React' },
@@ -54,17 +54,17 @@ export default function QuestionsManagementPage() {
 
   const handleSearch = () => {
     loadQuestions({
-      category: selectedCategory || undefined,
-      difficulty: selectedDifficulty || undefined,
-      learningPath: selectedLearningPath || undefined,
+      category: selectedCategory === 'all' ? undefined : selectedCategory || undefined,
+      difficulty: selectedDifficulty === 'all' ? undefined : selectedDifficulty || undefined,
+      learningPath: selectedLearningPath === 'all' ? undefined : selectedLearningPath || undefined,
     });
   };
 
   const handleFilterChange = () => {
     loadQuestions({
-      category: selectedCategory || undefined,
-      difficulty: selectedDifficulty || undefined,
-      learningPath: selectedLearningPath || undefined,
+      category: selectedCategory === 'all' ? undefined : selectedCategory || undefined,
+      difficulty: selectedDifficulty === 'all' ? undefined : selectedDifficulty || undefined,
+      learningPath: selectedLearningPath === 'all' ? undefined : selectedLearningPath || undefined,
     });
   };
 
@@ -194,7 +194,7 @@ export default function QuestionsManagementPage() {
                   <SelectValue placeholder="Learning Path" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Paths</SelectItem>
+                  <SelectItem value="all">All Paths</SelectItem>
                   {learningPaths.map(path => (
                     <SelectItem key={path.id} value={path.name}>
                       {path.name}
