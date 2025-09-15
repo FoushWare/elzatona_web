@@ -334,7 +334,7 @@ export default function QuestionsPage() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 shadow-lg">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -423,7 +423,7 @@ export default function QuestionsPage() {
             </div>
 
             {/* Question Content */}
-            <div className="px-8 py-8 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="px-8 py-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
               {/* Question Title */}
               <div className="mb-8">
                 <div className="flex items-start justify-between mb-6">
@@ -438,7 +438,7 @@ export default function QuestionsPage() {
                               return (
                                 <div
                                   key={index}
-                                  className="whitespace-pre-wrap text-2xl text-gray-900 dark:text-gray-100 font-semibold leading-relaxed"
+                                  className="whitespace-pre-wrap text-lg text-gray-800 dark:text-gray-200 font-medium leading-relaxed"
                                 >
                                   {part.trim()}
                                 </div>
@@ -448,7 +448,7 @@ export default function QuestionsPage() {
                               return (
                                 <div
                                   key={index}
-                                  className="bg-gray-900 dark:bg-gray-950 rounded-xl p-6 overflow-x-auto border border-gray-800 dark:border-gray-700 relative shadow-lg"
+                                  className="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 overflow-x-auto border border-gray-800 dark:border-gray-700 relative shadow-sm"
                                 >
                                   <button
                                     className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-colors bg-gray-800 dark:bg-gray-700 rounded-lg"
@@ -465,7 +465,7 @@ export default function QuestionsPage() {
                                       <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
                                     </svg>
                                   </button>
-                                  <pre className="text-gray-100 text-base font-mono whitespace-pre-wrap leading-relaxed pr-12">
+                                  <pre className="text-gray-100 text-sm font-mono whitespace-pre-wrap leading-relaxed pr-10">
                                     <code>{part}</code>
                                   </pre>
                                 </div>
@@ -474,7 +474,7 @@ export default function QuestionsPage() {
                           })}
                       </div>
                     ) : (
-                      <div className="whitespace-pre-wrap text-2xl text-gray-900 dark:text-gray-100 font-semibold leading-relaxed">
+                      <div className="whitespace-pre-wrap text-lg text-gray-800 dark:text-gray-200 font-medium leading-relaxed">
                         <ExpandableText text={currentQuestion.question} />
                       </div>
                     )}
@@ -543,7 +543,7 @@ export default function QuestionsPage() {
               )}
 
               {/* Answer Options */}
-              <div className="space-y-4 mb-8 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+              <div className="space-y-4 mb-8 bg-gray-50/50 dark:bg-gray-700/30 rounded-lg p-5 border border-gray-100 dark:border-gray-600">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">
                     Choose your answer:
@@ -639,10 +639,10 @@ export default function QuestionsPage() {
                     disabled={isSubmitting}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`px-10 py-5 rounded-xl font-bold text-xl transition-all duration-200 flex items-center gap-3 ${
+                    className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 flex items-center gap-3 ${
                       isSubmitting
                         ? 'bg-gray-400 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-xl hover:shadow-2xl'
+                        : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'
                     }`}
                   >
                     {isSubmitting ? (
@@ -688,10 +688,10 @@ export default function QuestionsPage() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -20, scale: 0.95 }}
                     transition={{ duration: 0.4, ease: 'easeOut' }}
-                    className={`rounded-xl p-8 mb-8 border shadow-lg ${
+                    className={`rounded-lg p-6 mb-8 border shadow-sm ${
                       isAnswerCorrect
-                        ? 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-300 dark:border-green-700'
-                        : 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-300 dark:border-red-700'
+                        ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
+                        : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-4">
@@ -738,13 +738,13 @@ export default function QuestionsPage() {
                         </button>
                       )}
                     </div>
-                     <div
-                       className={`text-lg text-gray-800 dark:text-gray-200 leading-relaxed font-medium ${
-                         isAnswerCorrect
-                           ? 'text-green-800 dark:text-green-200'
-                           : 'text-red-800 dark:text-red-200'
-                       }`}
-                     >
+                    <div
+                      className={`text-lg text-gray-800 dark:text-gray-200 leading-relaxed font-medium ${
+                        isAnswerCorrect
+                          ? 'text-green-800 dark:text-green-200'
+                          : 'text-red-800 dark:text-red-200'
+                      }`}
+                    >
                       <ExpandableText text={currentQuestion.explanation} />
                     </div>
                   </motion.div>
@@ -752,7 +752,7 @@ export default function QuestionsPage() {
               </AnimatePresence>
 
               {/* Keyboard Shortcuts Info */}
-              <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="mb-6 p-4 bg-gray-50/50 dark:bg-gray-800/30 rounded-lg border border-gray-100 dark:border-gray-600">
                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Keyboard Shortcuts
                 </h4>
