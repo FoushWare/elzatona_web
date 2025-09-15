@@ -3,7 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { SectionClientService } from '@/lib/section-client';
 import { LearningSection, SectionQuestion } from '@/lib/section-service';
-import { UnifiedSectionClientService, UnifiedSection } from '@/lib/unified-section-client';
+import {
+  UnifiedSectionClientService,
+  UnifiedSection,
+} from '@/lib/unified-section-client';
 import QuestionCreator from './QuestionCreator';
 import BulkQuestionUploader from './BulkQuestionUploader';
 import {
@@ -41,12 +44,14 @@ export default function SectionManager() {
   const [editingSection, setEditingSection] = useState<UnifiedSection | null>(
     null
   );
-  const [selectedSection, setSelectedSection] =
-    useState<UnifiedSection | null>(null);
+  const [selectedSection, setSelectedSection] = useState<UnifiedSection | null>(
+    null
+  );
   const [sectionQuestions, setSectionQuestions] = useState<SectionQuestion[]>(
     []
   );
-  const [editingQuestion, setEditingQuestion] = useState<SectionQuestion | null>(null);
+  const [editingQuestion, setEditingQuestion] =
+    useState<SectionQuestion | null>(null);
 
   // Add/Edit form
   const [formData, setFormData] = useState({
@@ -183,7 +188,9 @@ export default function SectionManager() {
       setError(null);
 
       // Use unified section questions service
-      const result = await UnifiedSectionClientService.getSectionQuestions(section.learningPathId);
+      const result = await UnifiedSectionClientService.getSectionQuestions(
+        section.learningPathId
+      );
 
       if (result.success) {
         setSectionQuestions(result.data);
@@ -233,7 +240,11 @@ export default function SectionManager() {
 
   // Handle delete question
   const handleDeleteQuestion = async (question: SectionQuestion) => {
-    if (!confirm(`Are you sure you want to delete the question "${question.title}"?`)) {
+    if (
+      !confirm(
+        `Are you sure you want to delete the question "${question.title}"?`
+      )
+    ) {
       return;
     }
 
@@ -243,8 +254,10 @@ export default function SectionManager() {
 
       // TODO: Implement delete question API call
       // For now, we'll show an error since we need to implement the delete functionality
-      setError('Delete functionality not yet implemented. Please use the unified question manager for now.');
-      
+      setError(
+        'Delete functionality not yet implemented. Please use the unified question manager for now.'
+      );
+
       // Refresh questions list
       if (selectedSection) {
         await handleViewQuestions(selectedSection);
@@ -695,7 +708,7 @@ export default function SectionManager() {
                             </span>
                           </div>
                         </div>
-                        
+
                         {/* Edit and Delete Buttons */}
                         <div className="flex items-center space-x-2 ml-4">
                           <button
@@ -802,7 +815,9 @@ export default function SectionManager() {
                       Question Type
                     </label>
                     <div className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
-                      {editingQuestion.type === 'single' ? 'Single Choice' : 'Multiple Choice'}
+                      {editingQuestion.type === 'single'
+                        ? 'Single Choice'
+                        : 'Multiple Choice'}
                     </div>
                   </div>
                   <div>
@@ -810,7 +825,8 @@ export default function SectionManager() {
                       Difficulty
                     </label>
                     <div className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
-                      {editingQuestion.difficulty.charAt(0).toUpperCase() + editingQuestion.difficulty.slice(1)}
+                      {editingQuestion.difficulty.charAt(0).toUpperCase() +
+                        editingQuestion.difficulty.slice(1)}
                     </div>
                   </div>
                 </div>
@@ -839,11 +855,13 @@ export default function SectionManager() {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Status
                   </label>
-                  <div className={`px-3 py-2 rounded-md ${
-                    editingQuestion.isComplete
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                      : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
-                  }`}>
+                  <div
+                    className={`px-3 py-2 rounded-md ${
+                      editingQuestion.isComplete
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                        : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                    }`}
+                  >
                     {editingQuestion.isComplete ? 'Complete' : 'Incomplete'}
                   </div>
                 </div>
@@ -857,9 +875,11 @@ export default function SectionManager() {
                         Full Editing Available
                       </h3>
                       <p className="text-sm text-blue-700 dark:text-blue-300">
-                        For complete question editing (title, content, options, etc.), please use the 
-                        <strong> Unified Question Manager</strong> in the admin panel. This view shows 
-                        the current question details for reference.
+                        For complete question editing (title, content, options,
+                        etc.), please use the
+                        <strong> Unified Question Manager</strong> in the admin
+                        panel. This view shows the current question details for
+                        reference.
                       </p>
                     </div>
                   </div>

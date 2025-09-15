@@ -17,6 +17,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
+import { AudioCollectionService } from './audio-collection-service';
 
 // Unified Question Interface - Single source of truth
 export interface UnifiedQuestion {
@@ -140,6 +141,15 @@ export class UnifiedQuestionService {
         updatedAt: timestamp,
       });
 
+      // Create audio mapping for the question
+      await this.createAudioMappingForQuestion(
+        questionRef.id,
+        questionData.learningPath,
+        questionData.sectionId || 'questions',
+        questionData.audioQuestion,
+        questionData.audioAnswer
+      );
+
       // Update learning path question count
       await this.updateLearningPathQuestionCount(questionData.learningPath);
 
@@ -147,6 +157,48 @@ export class UnifiedQuestionService {
     } catch (error) {
       console.error('Error creating question:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Create audio mapping for a question
+   */
+  private static async createAudioMappingForQuestion(
+    questionId: string,
+    learningPath: string,
+    sectionId: string,
+    questionAudioPath?: string,
+    answerAudioPath?: string
+  ): Promise<void> {
+    try {
+      // Get the next question number for this section
+      const nextNumberResult = await AudioCollectionService.getNextQuestionNumber(
+        learningPath,
+        sectionId
+      );
+
+      if (!nextNumberResult.success) {
+        console.warn('Could not get next question number:', nextNumberResult.error);
+        return;
+      }
+
+      const questionNumber = nextNumberResult.nextNumber || 1;
+
+      // Create the audio mapping
+      const audioResult = await AudioCollectionService.createOrUpdateAudioMapping(
+        questionId,
+        learningPath,
+        sectionId,
+        questionNumber,
+        questionAudioPath,
+        answerAudioPath
+      );
+
+      if (!audioResult.success) {
+        console.warn('Could not create audio mapping:', audioResult.error);
+      }
+    } catch (error) {
+      console.error('Error creating audio mapping:', error);
     }
   }
 
@@ -293,6 +345,10 @@ export class UnifiedQuestionService {
     }
 
     try {
+      // Delete the audio mapping first
+      await AudioCollectionService.deleteAudioMapping(questionId);
+
+      // Delete the question
       const questionRef = doc(db, this.COLLECTION_NAME, questionId);
       await deleteDoc(questionRef);
     } catch (error) {

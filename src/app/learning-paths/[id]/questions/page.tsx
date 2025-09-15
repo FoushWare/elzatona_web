@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { learningPaths } from '@/lib/resources';
 import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
+import { useAudioCollection } from '@/hooks/useAudioCollection';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { flashcardService } from '@/lib/firebase-flashcards';
 import AddToFlashcard from '@/components/AddToFlashcard';
@@ -83,6 +84,9 @@ export default function QuestionsPage() {
     initialFilters,
   });
 
+  // Audio collection hook
+  const { getAudioMapping } = useAudioCollection();
+
   // Convert unified questions to the expected format
   const questionsData = useMemo(() => {
     if (!unifiedQuestions || unifiedQuestions.length === 0) {
@@ -103,7 +107,7 @@ export default function QuestionsPage() {
       {
         id: 'main',
         title: `${learningPath?.title || 'Learning Path'} Questions`,
-        questions: pathQuestions.map(q => ({
+        questions: pathQuestions.map((q, index) => ({
           ...q,
           // Convert unified format to expected format
           question: q.content,
@@ -115,6 +119,9 @@ export default function QuestionsPage() {
               : q.options
                   .map((opt, index) => (opt.isCorrect ? index : -1))
                   .filter(i => i !== -1),
+          // Use audio from question data or generate default paths
+          audioQuestion: q.audioQuestion || `/audio/${learningPath?.id}/questions/question-${index + 1}.mp3`,
+          audioAnswer: q.audioAnswer || `/audio/${learningPath?.id}/questions/answer-${index + 1}.mp3`,
         })),
       },
     ];
