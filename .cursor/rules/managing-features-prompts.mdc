@@ -1,0 +1,52 @@
+---
+description: Project rules for handling ideas, features, and E2E tests
+globs: ['**/*']
+alwaysApply: true
+---
+
+# Cursor Rules for Project Ideas
+
+## Rules for Managing Features & Prompts
+
+1. **Ideas Directory**
+   - Every new **feature** or **prompt** must have its own dedicated markdown file.
+   - Files should be stored inside the `ideas/` directory.
+
+2. **File Naming Convention**
+   - Use lowercase, kebab-case for filenames.
+   - Example:
+     - `dual-entry-feature.md`
+     - `improve-onboarding-prompt.md`
+
+3. **File Structure**
+   Each markdown file should include:
+   - **Title**: Name of the feature or prompt.
+   - **Description**: Short explanation of what it is and why it’s needed.
+   - **Details**: Expanded notes, design ideas, or implementation notes.
+   - **E2E Testing**: How to test the feature end-to-end.
+   - **Status**: (draft | in-progress | implemented)
+
+   Example:
+
+   ```markdown
+   # Dual Entry Feature
+
+   **Description**  
+   Add support for dual entry logic in forms to ensure accuracy.
+
+   **Details**
+
+   - Compare field A with field B before submission.
+   - Show inline validation messages.
+   - Use case: KYC and financial forms.
+
+   **E2E Testing**
+
+   - Navigate to the form page.
+   - Fill in both fields with different values → expect error message.
+   - Fill in both fields with the same value → expect successful submission.
+   - Run `npm run test:e2e` and check Cypress/Playwright logs.
+
+   **Status**  
+   Draft
+   ```
