@@ -7,12 +7,14 @@ A secure admin authentication system built with Firebase Admin SDK, JWT tokens, 
 ## 🔧 **Technical Implementation**
 
 ### **Core Components**
+
 - **Firebase Admin SDK**: Server-side authentication and user management
 - **JWT Tokens**: Secure session management with server-side validation
 - **bcryptjs**: Password hashing for secure credential storage
 - **Next.js API Routes**: Server-side authentication endpoints
 
 ### **Key Files**
+
 - `src/app/api/auth/login/route.ts` - Admin login endpoint
 - `src/app/api/auth/logout/route.ts` - Admin logout endpoint
 - `src/app/api/auth/verify/route.ts` - Token verification endpoint
@@ -20,6 +22,7 @@ A secure admin authentication system built with Firebase Admin SDK, JWT tokens, 
 - `src/contexts/AuthContext.tsx` - Client-side auth context
 
 ### **Database Structure**
+
 ```javascript
 // Firestore Collection: admins
 {
@@ -34,12 +37,14 @@ A secure admin authentication system built with Firebase Admin SDK, JWT tokens, 
 ## 🚀 **Features**
 
 ### **Authentication Flow**
+
 1. **Login**: Email/password validation against Firestore
 2. **Token Generation**: JWT token with admin claims
 3. **Session Management**: Secure token storage and validation
 4. **Logout**: Token invalidation and cleanup
 
 ### **Security Features**
+
 - Password hashing with bcrypt
 - JWT token expiration (24 hours)
 - Server-side token validation
@@ -49,12 +54,14 @@ A secure admin authentication system built with Firebase Admin SDK, JWT tokens, 
 ## 📱 **User Experience**
 
 ### **Admin Login Page**
+
 - Clean, professional login form
 - Email and password fields
 - Loading states and error handling
 - Responsive design
 
 ### **Session Persistence**
+
 - Automatic login state restoration
 - Secure token storage
 - Session timeout handling
@@ -94,5 +101,5 @@ A secure admin authentication system built with Firebase Admin SDK, JWT tokens, 
 
 ---
 
-*Last Updated: December 2024*
-*Status: ✅ Implemented and Active*
+_Last Updated: December 2024_
+_Status: ✅ Implemented and Active_

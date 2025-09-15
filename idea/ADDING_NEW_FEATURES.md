@@ -5,6 +5,7 @@
 When implementing a new feature, follow these steps:
 
 ### 1. **Create Feature Documentation**
+
 ```bash
 # Copy the template
 cp idea/feature-template.md idea/your-feature-name.md
@@ -14,6 +15,7 @@ cp idea/feature-template.md idea/your-feature-name.md
 ```
 
 ### 2. **Documentation Structure**
+
 - **Feature Overview**: What does it do?
 - **Technical Implementation**: How is it built?
 - **Features**: What capabilities does it have?
@@ -25,7 +27,9 @@ cp idea/feature-template.md idea/your-feature-name.md
 - **Related Documentation**: Links to related features
 
 ### 3. **Update Master README**
+
 Add your feature to the appropriate section in `idea/README.md`:
+
 - Core Features
 - Feature Categories
 - Feature Metrics
@@ -33,11 +37,13 @@ Add your feature to the appropriate section in `idea/README.md`:
 ## 📝 **Documentation Standards**
 
 ### **File Naming**
+
 - Use kebab-case: `my-awesome-feature.md`
 - Be descriptive: `user-authentication-system.md`
 - Use `.md` extension
 
 ### **Content Guidelines**
+
 - Start with clear overview
 - Include technical details
 - Document user experience
@@ -45,6 +51,7 @@ Add your feature to the appropriate section in `idea/README.md`:
 - Link related features
 
 ### **Code Examples**
+
 ```typescript
 // Use proper syntax highlighting
 interface MyFeature {
@@ -65,6 +72,7 @@ interface MyFeature {
 ## 📋 **Template Usage**
 
 The `feature-template.md` includes:
+
 - Standard sections
 - Status indicators
 - Related documentation links
@@ -80,4 +88,4 @@ The `feature-template.md` includes:
 
 ---
 
-*This guide ensures consistent, comprehensive feature documentation across the project.*
+_This guide ensures consistent, comprehensive feature documentation across the project._
