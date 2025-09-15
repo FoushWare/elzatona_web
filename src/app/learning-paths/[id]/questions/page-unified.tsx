@@ -73,7 +73,6 @@ export default function QuestionsPage() {
     error,
   } = useUnifiedQuestions();
 
-
   // Convert unified questions to the expected format
   const questionsData = useMemo(() => {
     if (!unifiedQuestions || unifiedQuestions.length === 0) {
@@ -344,7 +343,7 @@ export default function QuestionsPage() {
                       difficulty={currentQuestion.difficulty || 'beginner'}
                       source={`Learning Path: ${learningPath?.title || 'Unknown'}`}
                       className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                      onStatusChange={(status) => {
+                      onStatusChange={status => {
                         if (status === 'added') {
                           console.log('Question added to flashcards');
                         } else if (status === 'error') {
