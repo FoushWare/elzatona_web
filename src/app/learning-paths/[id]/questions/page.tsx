@@ -10,7 +10,6 @@ import AddToFlashcard from '@/components/AddToFlashcard';
 import ExpandableText from '@/components/ExpandableText';
 import ToastContainer, { useToast } from '@/components/Toast';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import CustomAudioPlayer from '@/components/CustomAudioPlayer';
 
 // Define QuestionGroup type locally
 interface QuestionGroup {
@@ -364,54 +363,71 @@ export default function QuestionsPage() {
             <div className="px-8 py-8">
               {/* Question Title */}
               <div className="mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-                  {currentQuestion.question.includes('```') ? (
-                    <div className="space-y-6">
-                      {currentQuestion.question
-                        .split('```')
-                        .map((part, index) => {
-                          if (index % 2 === 0) {
-                            // Regular text - preserve newlines
-                            return (
-                              <div
-                                key={index}
-                                className="whitespace-pre-wrap text-2xl"
-                              >
-                                {part.trim()}
-                              </div>
-                            );
-                          } else {
-                            // Code block
-                            return (
-                              <div
-                                key={index}
-                                className="bg-gray-900 dark:bg-gray-800 rounded-xl p-6 overflow-x-auto border border-gray-700"
-                              >
-                                <pre className="text-gray-100 text-lg font-mono whitespace-pre-wrap leading-relaxed">
-                                  <code>{part}</code>
-                                </pre>
-                              </div>
-                            );
-                          }
-                        })}
-                    </div>
-                  ) : (
-                    <div className="whitespace-pre-wrap text-2xl">
-                      <ExpandableText text={currentQuestion.question} />
+                <div className="flex items-start justify-between mb-6">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white flex-1">
+                    {currentQuestion.question.includes('```') ? (
+                      <div className="space-y-6">
+                        {currentQuestion.question
+                          .split('```')
+                          .map((part, index) => {
+                            if (index % 2 === 0) {
+                              // Regular text - preserve newlines
+                              return (
+                                <div
+                                  key={index}
+                                  className="whitespace-pre-wrap text-2xl"
+                                >
+                                  {part.trim()}
+                                </div>
+                              );
+                            } else {
+                              // Code block
+                              return (
+                                <div
+                                  key={index}
+                                  className="bg-gray-900 dark:bg-gray-800 rounded-xl p-6 overflow-x-auto border border-gray-700"
+                                >
+                                  <pre className="text-gray-100 text-lg font-mono whitespace-pre-wrap leading-relaxed">
+                                    <code>{part}</code>
+                                  </pre>
+                                </div>
+                              );
+                            }
+                          })}
+                      </div>
+                    ) : (
+                      <div className="whitespace-pre-wrap text-2xl">
+                        <ExpandableText text={currentQuestion.question} />
+                      </div>
+                    )}
+                  </h2>
+                  
+                  {/* Audio Question Button */}
+                  {currentQuestion.audioQuestion && (
+                    <div className="ml-4 flex-shrink-0">
+                      <button
+                        onClick={() => {
+                          const audio = new Audio(currentQuestion.audioQuestion);
+                          audio.play().catch(e => console.error("Error playing audio:", e));
+                        }}
+                        className="flex items-center justify-center w-12 h-12 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 rounded-full transition-colors duration-200 group"
+                        title="Play question audio"
+                      >
+                        <svg 
+                          className="w-6 h-6 text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300" 
+                          fill="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </button>
                     </div>
                   )}
-                </h2>
-
-                {/* Audio Question */}
-                {currentQuestion.audioQuestion && (
-                  <div className="mb-6">
-                    <CustomAudioPlayer src={currentQuestion.audioQuestion} />
-                  </div>
-                )}
+                </div>
               </div>
 
               {/* Answer Options */}
-              <div className="space-y-3 mb-8">
+              <div className="space-y-4 mb-8">
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">
                   Choose your answer:
                 </h3>
@@ -424,50 +440,24 @@ export default function QuestionsPage() {
                     <button
                       key={option.id || `option-${index}`}
                       onClick={() => handleAnswerSelect(index)}
-                      className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
+                      className={`w-full text-left p-5 rounded-xl border-2 transition-all duration-200 ${
                         isSelected
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-md'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800'
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg transform scale-[1.02]'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800 hover:shadow-md'
                       }`}
                     >
                       <div className="flex items-center">
                         <span
-                          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mr-4 transition-colors ${
+                          className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold mr-4 transition-colors ${
                             isSelected
-                              ? 'bg-blue-500 text-white'
+                              ? 'bg-blue-500 text-white shadow-md'
                               : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
                           }`}
                         >
                           {String.fromCharCode(65 + index)}
                         </span>
-                        <div className="flex items-center gap-2">
-                          {option.text.split(/(\s+)/).map((part, wordIndex) => {
-                            if (part.match(/\s+/)) {
-                              // This is whitespace (spaces, newlines, etc.)
-                              return (
-                                <span
-                                  key={wordIndex}
-                                  className="whitespace-pre-wrap"
-                                >
-                                  {part}
-                                </span>
-                              );
-                            } else {
-                              // This is a word - create individual boxes
-                              return (
-                                <span
-                                  key={wordIndex}
-                                  className={`px-2 py-1 rounded text-sm font-mono ${
-                                    isSelected
-                                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200'
-                                      : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
-                                  }`}
-                                >
-                                  {part.replace(/`/g, '')}
-                                </span>
-                              );
-                            }
-                          })}
+                        <div className="text-lg font-medium text-gray-800 dark:text-gray-200">
+                          {option.text}
                         </div>
                       </div>
                     </button>
@@ -496,21 +486,43 @@ export default function QuestionsPage() {
                       : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
                   }`}
                 >
-                  <div className="flex items-center mb-4">
-                    <div
-                      className={`w-3 h-3 rounded-full mr-3 ${
-                        isAnswerCorrect ? 'bg-green-500' : 'bg-red-500'
-                      }`}
-                    ></div>
-                    <h3
-                      className={`text-xl font-bold ${
-                        isAnswerCorrect
-                          ? 'text-green-800 dark:text-green-200'
-                          : 'text-red-800 dark:text-red-200'
-                      }`}
-                    >
-                      {isAnswerCorrect ? 'Correct!' : 'Incorrect'}
-                    </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      <div
+                        className={`w-3 h-3 rounded-full mr-3 ${
+                          isAnswerCorrect ? 'bg-green-500' : 'bg-red-500'
+                        }`}
+                      ></div>
+                      <h3
+                        className={`text-xl font-bold ${
+                          isAnswerCorrect
+                            ? 'text-green-800 dark:text-green-200'
+                            : 'text-red-800 dark:text-red-200'
+                        }`}
+                      >
+                        {isAnswerCorrect ? 'Correct!' : 'Incorrect'}
+                      </h3>
+                    </div>
+                    
+                    {/* Audio Answer Button */}
+                    {currentQuestion.audioAnswer && (
+                      <button
+                        onClick={() => {
+                          const audio = new Audio(currentQuestion.audioAnswer);
+                          audio.play().catch(e => console.error("Error playing audio:", e));
+                        }}
+                        className="flex items-center justify-center w-10 h-10 bg-green-100 hover:bg-green-200 dark:bg-green-900/30 dark:hover:bg-green-900/50 rounded-full transition-colors duration-200 group"
+                        title="Play answer explanation audio"
+                      >
+                        <svg 
+                          className="w-5 h-5 text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300" 
+                          fill="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </button>
+                    )}
                   </div>
                   <div
                     className={`text-gray-700 dark:text-gray-300 leading-relaxed ${
@@ -522,12 +534,6 @@ export default function QuestionsPage() {
                     <ExpandableText text={currentQuestion.explanation} />
                   </div>
 
-                  {/* Audio Answer */}
-                  {currentQuestion.audioAnswer && (
-                    <div className="mt-4">
-                      <CustomAudioPlayer src={currentQuestion.audioAnswer} />
-                    </div>
-                  )}
                 </div>
               )}
 
