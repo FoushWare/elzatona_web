@@ -173,7 +173,7 @@ export default function QuestionsPage() {
     if (!currentQuestion || !selectedAnswer || isSubmitting) return;
 
     setIsSubmitting(true);
-    
+
     // Add a small delay for better UX
     await new Promise(resolve => setTimeout(resolve, 300));
 
@@ -227,14 +227,18 @@ export default function QuestionsPage() {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey) return; // Don't interfere with browser shortcuts
-      
+
       switch (e.key.toLowerCase()) {
         case '1':
         case '2':
         case '3':
         case '4':
           const optionIndex = parseInt(e.key) - 1;
-          if (currentGroup && optionIndex < currentGroup.questions[currentQuestionIndex]?.options.length) {
+          if (
+            currentGroup &&
+            optionIndex <
+              currentGroup.questions[currentQuestionIndex]?.options.length
+          ) {
             handleAnswerSelect(optionIndex);
           }
           break;
@@ -263,7 +267,13 @@ export default function QuestionsPage() {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [selectedAnswer, showExplanation, currentQuestionIndex, currentGroup, showHint]);
+  }, [
+    selectedAnswer,
+    showExplanation,
+    currentQuestionIndex,
+    currentGroup,
+    showHint,
+  ]);
 
   if (isLoading) {
     return (
@@ -324,7 +334,7 @@ export default function QuestionsPage() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 shadow-lg">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -413,7 +423,7 @@ export default function QuestionsPage() {
             </div>
 
             {/* Question Content */}
-            <div className="px-8 py-8">
+            <div className="px-8 py-8 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
               {/* Question Title */}
               <div className="mb-8">
                 <div className="flex items-start justify-between mb-6">
@@ -428,7 +438,7 @@ export default function QuestionsPage() {
                               return (
                                 <div
                                   key={index}
-                                  className="whitespace-pre-wrap text-xl text-gray-800 dark:text-gray-200 font-medium"
+                                  className="whitespace-pre-wrap text-2xl text-gray-900 dark:text-gray-100 font-semibold leading-relaxed"
                                 >
                                   {part.trim()}
                                 </div>
@@ -438,10 +448,10 @@ export default function QuestionsPage() {
                               return (
                                 <div
                                   key={index}
-                                  className="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 overflow-x-auto border border-gray-800 dark:border-gray-700 relative"
+                                  className="bg-gray-900 dark:bg-gray-950 rounded-xl p-6 overflow-x-auto border border-gray-800 dark:border-gray-700 relative shadow-lg"
                                 >
                                   <button
-                                    className="absolute top-3 right-3 p-2 text-gray-400 hover:text-gray-200 transition-colors"
+                                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-200 transition-colors bg-gray-800 dark:bg-gray-700 rounded-lg"
                                     onClick={() => {
                                       navigator.clipboard.writeText(part);
                                     }}
@@ -455,7 +465,7 @@ export default function QuestionsPage() {
                                       <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
                                     </svg>
                                   </button>
-                                  <pre className="text-gray-100 text-sm font-mono whitespace-pre-wrap leading-relaxed pr-8">
+                                  <pre className="text-gray-100 text-base font-mono whitespace-pre-wrap leading-relaxed pr-12">
                                     <code>{part}</code>
                                   </pre>
                                 </div>
@@ -464,7 +474,7 @@ export default function QuestionsPage() {
                           })}
                       </div>
                     ) : (
-                      <div className="whitespace-pre-wrap text-xl text-gray-800 dark:text-gray-200 font-medium">
+                      <div className="whitespace-pre-wrap text-2xl text-gray-900 dark:text-gray-100 font-semibold leading-relaxed">
                         <ExpandableText text={currentQuestion.question} />
                       </div>
                     )}
@@ -508,13 +518,24 @@ export default function QuestionsPage() {
                   className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg"
                 >
                   <div className="flex items-start">
-                    <svg className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    <svg
+                      className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 mr-3 flex-shrink-0"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                     <div>
-                      <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">Hint</h4>
+                      <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">
+                        Hint
+                      </h4>
                       <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                        Think about the order of variable declarations and hoisting behavior in JavaScript.
+                        Think about the order of variable declarations and
+                        hoisting behavior in JavaScript.
                       </p>
                     </div>
                   </div>
@@ -522,7 +543,7 @@ export default function QuestionsPage() {
               )}
 
               {/* Answer Options */}
-              <div className="space-y-4 mb-8">
+              <div className="space-y-4 mb-8 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">
                     Choose your answer:
@@ -532,8 +553,16 @@ export default function QuestionsPage() {
                       onClick={() => setShowHint(!showHint)}
                       className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium flex items-center gap-1"
                     >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       {showHint ? 'Hide Hint' : 'Show Hint'}
                     </button>
@@ -568,7 +597,7 @@ export default function QuestionsPage() {
                         >
                           {String.fromCharCode(65 + index)}
                         </motion.span>
-                        <div className="text-base text-gray-700 dark:text-gray-300">
+                        <div className="text-lg text-gray-800 dark:text-gray-200 font-medium">
                           {option.text}
                         </div>
                         {isSelected && (
@@ -578,8 +607,16 @@ export default function QuestionsPage() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.1 }}
                           >
-                            <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            <svg
+                              className="w-5 h-5 text-blue-500"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           </motion.div>
                         )}
@@ -591,7 +628,7 @@ export default function QuestionsPage() {
 
               {/* Submit Button */}
               {selectedAnswer && !showExplanation && (
-                <motion.div 
+                <motion.div
                   className="flex justify-center mb-8"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -602,10 +639,10 @@ export default function QuestionsPage() {
                     disabled={isSubmitting}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 flex items-center gap-3 ${
+                    className={`px-10 py-5 rounded-xl font-bold text-xl transition-all duration-200 flex items-center gap-3 ${
                       isSubmitting
                         ? 'bg-gray-400 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
+                        : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-xl hover:shadow-2xl'
                     }`}
                   >
                     {isSubmitting ? (
@@ -613,15 +650,29 @@ export default function QuestionsPage() {
                         <motion.div
                           className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                           animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          transition={{
+                            duration: 1,
+                            repeat: Infinity,
+                            ease: 'linear',
+                          }}
                         />
                         Submitting...
                       </>
                     ) : (
                       <>
                         Submit Answer
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 7l5 5m0 0l-5 5m5-5H6"
+                          />
                         </svg>
                       </>
                     )}
@@ -636,76 +687,100 @@ export default function QuestionsPage() {
                     initial={{ opacity: 0, y: 20, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className={`rounded-lg p-6 mb-8 border ${
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
+                    className={`rounded-xl p-8 mb-8 border shadow-lg ${
                       isAnswerCorrect
-                        ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-                        : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                        ? 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-300 dark:border-green-700'
+                        : 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-300 dark:border-red-700'
                     }`}
                   >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center">
-                      <div
-                        className={`w-3 h-3 rounded-full mr-3 ${
-                          isAnswerCorrect ? 'bg-green-500' : 'bg-red-500'
-                        }`}
-                      ></div>
-                      <h3
-                        className={`text-lg font-semibold ${
-                          isAnswerCorrect
-                            ? 'text-green-700 dark:text-green-300'
-                            : 'text-red-700 dark:text-red-300'
-                        }`}
-                      >
-                        {isAnswerCorrect ? 'Correct!' : 'Incorrect'}
-                      </h3>
-                    </div>
-
-                    {/* Audio Answer Button */}
-                    {currentQuestion.audioAnswer && (
-                      <button
-                        onClick={() => {
-                          const audio = new Audio(currentQuestion.audioAnswer);
-                          audio
-                            .play()
-                            .catch(e =>
-                              console.error('Error playing audio:', e)
-                            );
-                        }}
-                        className="flex items-center justify-center w-10 h-10 bg-green-100 hover:bg-green-200 dark:bg-green-900/30 dark:hover:bg-green-900/50 rounded-full transition-colors duration-200 group"
-                        title="Play answer explanation audio"
-                      >
-                        <svg
-                          className="w-5 h-5 text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center">
+                        <div
+                          className={`w-3 h-3 rounded-full mr-3 ${
+                            isAnswerCorrect ? 'bg-green-500' : 'bg-red-500'
+                          }`}
+                        ></div>
+                        <h3
+                          className={`text-lg font-semibold ${
+                            isAnswerCorrect
+                              ? 'text-green-700 dark:text-green-300'
+                              : 'text-red-700 dark:text-red-300'
+                          }`}
                         >
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </button>
-                    )}
-                  </div>
-                  <div
-                    className={`text-gray-700 dark:text-gray-300 leading-relaxed ${
-                      isAnswerCorrect
-                        ? 'text-green-700 dark:text-green-300'
-                        : 'text-red-700 dark:text-red-300'
-                    }`}
-                  >
-                    <ExpandableText text={currentQuestion.explanation} />
-                  </div>
+                          {isAnswerCorrect ? 'Correct!' : 'Incorrect'}
+                        </h3>
+                      </div>
+
+                      {/* Audio Answer Button */}
+                      {currentQuestion.audioAnswer && (
+                        <button
+                          onClick={() => {
+                            const audio = new Audio(
+                              currentQuestion.audioAnswer
+                            );
+                            audio
+                              .play()
+                              .catch(e =>
+                                console.error('Error playing audio:', e)
+                              );
+                          }}
+                          className="flex items-center justify-center w-10 h-10 bg-green-100 hover:bg-green-200 dark:bg-green-900/30 dark:hover:bg-green-900/50 rounded-full transition-colors duration-200 group"
+                          title="Play answer explanation audio"
+                        >
+                          <svg
+                            className="w-5 h-5 text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                     <div
+                       className={`text-lg text-gray-800 dark:text-gray-200 leading-relaxed font-medium ${
+                         isAnswerCorrect
+                           ? 'text-green-800 dark:text-green-200'
+                           : 'text-red-800 dark:text-red-200'
+                       }`}
+                     >
+                      <ExpandableText text={currentQuestion.explanation} />
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
 
               {/* Keyboard Shortcuts Info */}
               <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Keyboard Shortcuts</h4>
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Keyboard Shortcuts
+                </h4>
                 <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-                  <div><kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">1-4</kbd> Select answer</div>
-                  <div><kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">Enter</kbd> Submit/Next</div>
-                  <div><kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">←</kbd> Previous</div>
-                  <div><kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">H</kbd> Toggle hint</div>
+                  <div>
+                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
+                      1-4
+                    </kbd>{' '}
+                    Select answer
+                  </div>
+                  <div>
+                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
+                      Enter
+                    </kbd>{' '}
+                    Submit/Next
+                  </div>
+                  <div>
+                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
+                      ←
+                    </kbd>{' '}
+                    Previous
+                  </div>
+                  <div>
+                    <kbd className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
+                      H
+                    </kbd>{' '}
+                    Toggle hint
+                  </div>
                 </div>
               </div>
 
