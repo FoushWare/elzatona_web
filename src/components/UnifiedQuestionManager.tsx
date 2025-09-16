@@ -60,9 +60,9 @@ export default function UnifiedQuestionManager({
 
   // Local state
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('');
-  const [selectedLearningPath, setSelectedLearningPath] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [selectedLearningPath, setSelectedLearningPath] = useState('all');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingQuestion, setEditingQuestion] =
     useState<UnifiedQuestion | null>(null);
@@ -112,9 +112,9 @@ export default function UnifiedQuestionManager({
   // Handle filter change
   const handleFilterChange = () => {
     loadQuestions({
-      category: selectedCategory || undefined,
-      difficulty: selectedDifficulty || undefined,
-      learningPath: selectedLearningPath || undefined,
+      category: selectedCategory && selectedCategory !== 'all' ? selectedCategory : undefined,
+      difficulty: selectedDifficulty && selectedDifficulty !== 'all' ? selectedDifficulty : undefined,
+      learningPath: selectedLearningPath && selectedLearningPath !== 'all' ? selectedLearningPath : undefined,
     });
   };
 
@@ -349,7 +349,7 @@ export default function UnifiedQuestionManager({
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="CSS">CSS</SelectItem>
                 <SelectItem value="JavaScript">JavaScript</SelectItem>
                 <SelectItem value="React">React</SelectItem>
@@ -367,7 +367,7 @@ export default function UnifiedQuestionManager({
                 <SelectValue placeholder="Difficulty" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Difficulties</SelectItem>
+                <SelectItem value="all">All Difficulties</SelectItem>
                 <SelectItem value="easy">Easy</SelectItem>
                 <SelectItem value="medium">Medium</SelectItem>
                 <SelectItem value="hard">Hard</SelectItem>
@@ -381,7 +381,7 @@ export default function UnifiedQuestionManager({
                 <SelectValue placeholder="Learning Path" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Paths</SelectItem>
+                <SelectItem value="all">All Paths</SelectItem>
                 {learningPaths.map(path => (
                   <SelectItem key={path.id} value={path.name}>
                     {path.name}
