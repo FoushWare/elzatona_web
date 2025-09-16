@@ -177,16 +177,18 @@ export default function QuestionsPage() {
       }
     }
 
-    // Show explanation immediately after selection
-    await new Promise(resolve => setTimeout(resolve, 300));
-
+    // Check if answer is correct immediately
     const isCorrect = Array.isArray(newSelectedAnswer)
       ? newSelectedAnswer.every(answerId =>
           currentQuestion.correctAnswers.includes(answerId)
         ) && newSelectedAnswer.length === currentQuestion.correctAnswers.length
       : currentQuestion.correctAnswers.includes(newSelectedAnswer as string);
 
+    // Set correctness immediately for visual feedback
     setIsAnswerCorrect(isCorrect);
+
+    // Show explanation after a short delay
+    await new Promise(resolve => setTimeout(resolve, 500));
     setShowExplanation(true);
 
     if (isCorrect) {
@@ -568,8 +570,7 @@ export default function QuestionsPage() {
                     const isCorrect = currentQuestion.correctAnswers.includes(
                       option.id
                     );
-                    const showCorrectness =
-                      selectedAnswer !== null && !showExplanation;
+                    const showCorrectness = selectedAnswer !== null;
 
                     return (
                       <motion.button
@@ -744,211 +745,73 @@ export default function QuestionsPage() {
                         </div>
                       )}
                     </div>
-                    {/* Beautiful Explanation Code Block */}
+                    {/* Simple Explanation */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{
-                        duration: 0.5,
+                        duration: 0.4,
                         ease: 'easeOut',
                         delay: 0.2,
                       }}
-                      className="relative group"
+                      className={`rounded-xl p-6 border-2 shadow-lg ${
+                        isAnswerCorrect
+                          ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700'
+                          : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700'
+                      }`}
                     >
-                      {/* Gradient Background */}
-                      <div
-                        className={`absolute inset-0 rounded-2xl blur-sm ${
+                      {/* Explanation Header */}
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className={`text-lg font-semibold ${
                           isAnswerCorrect
-                            ? 'bg-gradient-to-br from-green-600/10 via-emerald-600/5 to-teal-600/10'
-                            : 'bg-gradient-to-br from-red-600/10 via-rose-600/5 to-pink-600/10'
-                        }`}
-                      ></div>
+                            ? 'text-green-800 dark:text-green-200'
+                            : 'text-red-800 dark:text-red-200'
+                        }`}>
+                          Explanation
+                        </h4>
+                        
+                        {/* Audio Button */}
+                        {currentQuestion.audioAnswer ? (
+                          <button
+                            onClick={() => {
+                              const audio = new Audio(currentQuestion.audioAnswer);
+                              audio.play().catch(e => console.error('Error playing audio:', e));
+                            }}
+                            className={`p-2 rounded-lg transition-all duration-200 ${
+                              isAnswerCorrect
+                                ? 'bg-green-500 hover:bg-green-600 text-white'
+                                : 'bg-red-500 hover:bg-red-600 text-white'
+                            }`}
+                            title="Play answer audio"
+                          >
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </button>
+                        ) : (
+                          <div className={`p-2 rounded-lg opacity-50 ${
+                            isAnswerCorrect ? 'bg-green-300' : 'bg-red-300'
+                          }`}>
+                            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
 
-                      {/* Main Code Block */}
-                      <div
-                        className={`relative rounded-2xl p-8 overflow-x-auto border shadow-2xl backdrop-blur-sm ${
+                      {/* Explanation Content */}
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                        className={`text-base leading-relaxed whitespace-pre-wrap ${
                           isAnswerCorrect
-                            ? 'bg-gradient-to-br from-green-900/90 via-emerald-900/80 to-teal-900/90 dark:from-green-950/90 dark:via-emerald-950/80 dark:to-teal-950/90 border-green-700/50 dark:border-green-600/50'
-                            : 'bg-gradient-to-br from-red-900/90 via-rose-900/80 to-pink-900/90 dark:from-red-950/90 dark:via-rose-950/80 dark:to-pink-950/90 border-red-700/50 dark:border-red-600/50'
+                            ? 'text-green-700 dark:text-green-300'
+                            : 'text-red-700 dark:text-red-300'
                         }`}
                       >
-                        {/* Header Bar */}
-                        <div
-                          className={`flex items-center justify-between mb-6 pb-4 border-b ${
-                            isAnswerCorrect
-                              ? 'border-green-700/30 dark:border-green-600/30'
-                              : 'border-red-700/30 dark:border-red-600/30'
-                          }`}
-                        >
-                          <div className="flex items-center space-x-3">
-                            <div className="flex space-x-2">
-                              <div
-                                className={`w-3 h-3 rounded-full ${
-                                  isAnswerCorrect
-                                    ? 'bg-green-500'
-                                    : 'bg-red-500'
-                                }`}
-                              ></div>
-                              <div
-                                className={`w-3 h-3 rounded-full ${
-                                  isAnswerCorrect
-                                    ? 'bg-emerald-500'
-                                    : 'bg-rose-500'
-                                }`}
-                              ></div>
-                              <div
-                                className={`w-3 h-3 rounded-full ${
-                                  isAnswerCorrect
-                                    ? 'bg-teal-500'
-                                    : 'bg-pink-500'
-                                }`}
-                              ></div>
-                            </div>
-                            <span
-                              className={`text-sm font-mono ${
-                                isAnswerCorrect
-                                  ? 'text-green-400'
-                                  : 'text-red-400'
-                              }`}
-                            >
-                              {isAnswerCorrect
-                                ? 'Explanation ✓'
-                                : 'Explanation ✗'}
-                            </span>
-                          </div>
-
-                          {/* Action Buttons */}
-                          <div className="flex items-center space-x-2">
-                            {/* Audio Button */}
-                            {currentQuestion.audioAnswer ? (
-                              <motion.button
-                                whileHover={{ scale: 1.15 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => {
-                                  const audio = new Audio(
-                                    currentQuestion.audioAnswer
-                                  );
-                                  audio
-                                    .play()
-                                    .catch(e =>
-                                      console.error('Error playing audio:', e)
-                                    );
-                                }}
-                                className={`p-3 transition-all duration-200 rounded-xl backdrop-blur-sm border shadow-lg hover:shadow-xl ${
-                                  isAnswerCorrect
-                                    ? 'text-green-400 hover:text-green-200 bg-green-800/50 dark:bg-green-700/50 hover:bg-green-700/70 dark:hover:bg-green-600/70 border-green-600/30 dark:border-green-500/30'
-                                    : 'text-red-400 hover:text-red-200 bg-red-800/50 dark:bg-red-700/50 hover:bg-red-700/70 dark:hover:bg-red-600/70 border-red-600/30 dark:border-red-500/30'
-                                }`}
-                                title="Play answer audio"
-                              >
-                                <svg
-                                  className="w-6 h-6"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
-                              </motion.button>
-                            ) : (
-                              <div
-                                className={`p-3 rounded-xl opacity-50 ${
-                                  isAnswerCorrect
-                                    ? 'text-green-500 bg-green-800/30 dark:bg-green-700/30'
-                                    : 'text-red-500 bg-red-800/30 dark:bg-red-700/30'
-                                }`}
-                              >
-                                <svg
-                                  className="w-6 h-6"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
-                              </div>
-                            )}
-
-                            {/* Copy Button */}
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              className={`p-2 transition-all duration-200 rounded-lg backdrop-blur-sm border ${
-                                isAnswerCorrect
-                                  ? 'text-green-400 hover:text-green-200 bg-green-800/50 dark:bg-green-700/50 hover:bg-green-700/70 dark:hover:bg-green-600/70 border-green-600/30 dark:border-green-500/30'
-                                  : 'text-red-400 hover:text-red-200 bg-red-800/50 dark:bg-red-700/50 hover:bg-red-700/70 dark:hover:bg-red-600/70 border-red-600/30 dark:border-red-500/30'
-                              }`}
-                              onClick={() => {
-                                navigator.clipboard.writeText(
-                                  currentQuestion.explanation
-                                );
-                              }}
-                              title="Copy explanation"
-                            >
-                              <svg
-                                className="w-4 h-4"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
-                              </svg>
-                            </motion.button>
-                          </div>
-                        </div>
-
-                        {/* Explanation Content */}
-                        <motion.pre
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.4 }}
-                          className={`text-xl font-mono whitespace-pre-wrap leading-relaxed pr-12 ${
-                            isAnswerCorrect ? 'text-green-100' : 'text-red-100'
-                          }`}
-                        >
-                          <code className="relative">
-                            {/* Enhanced syntax highlighting effect */}
-                            <motion.span
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{ delay: 0.5 }}
-                              className={`absolute inset-0 ${
-                                isAnswerCorrect
-                                  ? 'bg-gradient-to-r from-transparent via-green-500/15 to-transparent'
-                                  : 'bg-gradient-to-r from-transparent via-red-500/15 to-transparent'
-                              }`}
-                            ></motion.span>
-                            <motion.span 
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.6 }}
-                              className="relative z-10"
-                            >
-                              {currentQuestion.explanation}
-                            </motion.span>
-                          </code>
-                        </motion.pre>
-
-                        {/* Bottom accent */}
-                        <div
-                          className={`mt-6 pt-4 border-t ${
-                            isAnswerCorrect
-                              ? 'border-green-700/30 dark:border-green-600/30'
-                              : 'border-red-700/30 dark:border-red-600/30'
-                          }`}
-                        >
-                          <div
-                            className={`flex items-center justify-end text-xs font-mono ${
-                              isAnswerCorrect
-                                ? 'text-green-500'
-                                : 'text-red-500'
-                            }`}
-                          >
-                            <span>
-                              {isAnswerCorrect
-                                ? '✓ Correct Answer'
-                                : '✗ Incorrect Answer'}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                        {currentQuestion.explanation}
+                      </motion.div>
                     </motion.div>
                   </motion.div>
                 )}
