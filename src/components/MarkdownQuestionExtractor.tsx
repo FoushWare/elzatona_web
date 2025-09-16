@@ -36,6 +36,9 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  // Debug: Log learning paths
+  console.log('MarkdownQuestionExtractor - Learning Paths:', learningPaths);
+
   const { bulkImportQuestions } = useUnifiedQuestions();
 
   const categories = [
@@ -126,12 +129,19 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
   };
 
   const handleExtractQuestions = () => {
+    console.log('Extract Questions Debug:', {
+      markdownContent: markdownContent.trim(),
+      selectedLearningPath,
+      selectedCategory,
+      learningPathsCount: learningPaths.length
+    });
+    
     if (!markdownContent.trim()) {
       setError('Please enter markdown content');
       return;
     }
     
-    if (!selectedLearningPath) {
+    if (!selectedLearningPath || selectedLearningPath === '') {
       setError('Please select a learning path');
       return;
     }
@@ -242,13 +252,18 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
                 value={selectedLearningPath}
                 onChange={(e) => setSelectedLearningPath(e.target.value)}
                 className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                required
               >
                 <option value="">Select Learning Path</option>
-                {learningPaths.map(path => (
-                  <option key={path.id} value={path.id}>
-                    {path.name}
-                  </option>
-                ))}
+                {learningPaths.length === 0 ? (
+                  <option value="" disabled>Loading learning paths...</option>
+                ) : (
+                  learningPaths.map(path => (
+                    <option key={path.id} value={path.id}>
+                      {path.name}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 
@@ -307,6 +322,18 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
               placeholder="Paste your markdown content here..."
               className="w-full h-64 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm resize-none"
             />
+          </div>
+
+          {/* Debug Info */}
+          <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Debug Info:</h4>
+            <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+              <div>Learning Paths Count: {learningPaths.length}</div>
+              <div>Selected Learning Path: "{selectedLearningPath}"</div>
+              <div>Selected Category: "{selectedCategory}"</div>
+              <div>Selected Difficulty: "{selectedDifficulty}"</div>
+              <div>Markdown Length: {markdownContent.length}</div>
+            </div>
           </div>
 
           {/* Error/Success Messages */}
