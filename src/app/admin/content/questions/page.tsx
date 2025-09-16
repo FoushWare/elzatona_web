@@ -14,8 +14,9 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Trash2, Edit, Eye, Plus, Search, Filter, Loader2 } from 'lucide-react';
+import { Trash2, Edit, Eye, Plus, Search, Filter, Loader2, FileText } from 'lucide-react';
 import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
+import { MarkdownQuestionExtractor } from '@/components/MarkdownQuestionExtractor';
 
 export default function QuestionsManagementPage() {
   const {
@@ -33,6 +34,7 @@ export default function QuestionsManagementPage() {
   const [selectedLearningPath, setSelectedLearningPath] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [showMarkdownExtractor, setShowMarkdownExtractor] = useState(false);
 
   const difficulties = [
     { id: 'all', name: 'All Difficulties' },
@@ -106,12 +108,21 @@ export default function QuestionsManagementPage() {
               Manage all questions from the unified system
             </p>
           </div>
-          <Button
-            onClick={() => (window.location.href = '/admin/questions/unified')}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Go to Unified Manager
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              onClick={() => setShowMarkdownExtractor(true)}
+              variant="outline"
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Extract from Markdown
+            </Button>
+            <Button
+              onClick={() => (window.location.href = '/admin/questions/unified')}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Go to Unified Manager
+            </Button>
+          </div>
         </div>
 
         {/* Statistics */}
@@ -335,6 +346,14 @@ export default function QuestionsManagementPage() {
           </Card>
         )}
       </div>
+
+      {/* Markdown Question Extractor Modal */}
+      {showMarkdownExtractor && (
+        <MarkdownQuestionExtractor
+          learningPaths={learningPaths}
+          onClose={() => setShowMarkdownExtractor(false)}
+        />
+      )}
     </AdminLayout>
   );
 }
