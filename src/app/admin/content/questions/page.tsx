@@ -28,6 +28,7 @@ export default function QuestionsManagementPage() {
     isLoading,
     error,
     loadQuestions,
+    loadLearningPaths,
     deleteQuestion,
     clearError,
   } = useUnifiedQuestions();
