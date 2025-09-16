@@ -38,6 +38,8 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
 
   // Debug: Log learning paths
   console.log('MarkdownQuestionExtractor - Learning Paths:', learningPaths);
+  console.log('MarkdownQuestionExtractor - Learning Paths Length:', learningPaths.length);
+  console.log('MarkdownQuestionExtractor - Learning Paths Structure:', learningPaths.map(p => ({ id: p.id, name: p.name })));
 
   const { bulkImportQuestions } = useUnifiedQuestions();
 
@@ -133,7 +135,12 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
       markdownContent: markdownContent.trim(),
       selectedLearningPath,
       selectedCategory,
-      learningPathsCount: learningPaths.length
+      learningPathsCount: learningPaths.length,
+      learningPaths: learningPaths.map(p => ({ id: p.id, name: p.name })),
+      selectedLearningPathType: typeof selectedLearningPath,
+      selectedLearningPathLength: selectedLearningPath.length,
+      isEmpty: selectedLearningPath === '',
+      isFalsy: !selectedLearningPath
     });
     
     if (!markdownContent.trim()) {

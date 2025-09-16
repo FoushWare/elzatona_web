@@ -18,6 +18,7 @@ import { Trash2, Edit, Eye, Plus, Search, Filter, Loader2, FileText } from 'luci
 import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import { MarkdownQuestionExtractor } from '@/components/MarkdownQuestionExtractor';
 import { QuestionEditModal } from '@/components/QuestionEditModal';
+import { useEffect } from 'react';
 
 export default function QuestionsManagementPage() {
   const {
@@ -37,6 +38,11 @@ export default function QuestionsManagementPage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showMarkdownExtractor, setShowMarkdownExtractor] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<any>(null);
+
+  // Load learning paths when component mounts
+  useEffect(() => {
+    loadLearningPaths();
+  }, []);
 
   const difficulties = [
     { id: 'all', name: 'All Difficulties' },
