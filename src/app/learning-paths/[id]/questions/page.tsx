@@ -191,6 +191,18 @@ export default function QuestionsPage() {
     await new Promise(resolve => setTimeout(resolve, 500));
     setShowExplanation(true);
 
+    // Scroll to explanation section after explanation is shown
+    setTimeout(() => {
+      const explanationElement = document.getElementById('explanation-section');
+      if (explanationElement) {
+        explanationElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start',
+          inline: 'nearest'
+        });
+      }
+    }, 100); // Small delay to ensure the element is rendered
+
     if (isCorrect) {
       setScore(prev => prev + 1);
       showSuccess('Correct! 🎉');
@@ -675,6 +687,7 @@ export default function QuestionsPage() {
               <AnimatePresence>
                 {showExplanation && (
                   <motion.div
+                    id="explanation-section"
                     initial={{ opacity: 0, y: 20, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -20, scale: 0.95 }}
