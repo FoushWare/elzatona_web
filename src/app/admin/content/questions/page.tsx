@@ -17,6 +17,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Trash2, Edit, Eye, Plus, Search, Filter, Loader2, FileText } from 'lucide-react';
 import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import { MarkdownQuestionExtractor } from '@/components/MarkdownQuestionExtractor';
+import { QuestionEditModal } from '@/components/QuestionEditModal';
 
 export default function QuestionsManagementPage() {
   const {
@@ -35,6 +36,7 @@ export default function QuestionsManagementPage() {
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showMarkdownExtractor, setShowMarkdownExtractor] = useState(false);
+  const [editingQuestion, setEditingQuestion] = useState<any>(null);
 
   const difficulties = [
     { id: 'all', name: 'All Difficulties' },
@@ -317,7 +319,11 @@ export default function QuestionsManagementPage() {
                       <Button size="sm" variant="outline">
                         <Eye className="w-4 h-4" />
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => setEditingQuestion(question)}
+                      >
                         <Edit className="w-4 h-4" />
                       </Button>
                       <Button
@@ -352,6 +358,19 @@ export default function QuestionsManagementPage() {
         <MarkdownQuestionExtractor
           learningPaths={learningPaths}
           onClose={() => setShowMarkdownExtractor(false)}
+        />
+      )}
+
+      {/* Question Edit Modal */}
+      {editingQuestion && (
+        <QuestionEditModal
+          question={editingQuestion}
+          learningPaths={learningPaths}
+          onClose={() => setEditingQuestion(null)}
+          onSuccess={() => {
+            setEditingQuestion(null);
+            loadQuestions();
+          }}
         />
       )}
     </AdminLayout>
