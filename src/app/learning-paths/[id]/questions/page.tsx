@@ -1,17 +1,17 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { learningPaths } from '@/lib/resources';
 import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import { useAudioCollection } from '@/hooks/useAudioCollection';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
-import { flashcardService } from '@/lib/firebase-flashcards';
 import AddToFlashcard from '@/components/AddToFlashcard';
-import ExpandableText from '@/components/ExpandableText';
 import ToastContainer, { useToast } from '@/components/Toast';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { OpenEndedQuestion } from '@/components/OpenEndedQuestion';
 import { motion, AnimatePresence } from 'framer-motion';
+import { checkAudioExists } from '@/lib/audio-utils';
 
 // Define QuestionGroup type locally
 interface QuestionGroup {
@@ -24,7 +24,7 @@ interface UnifiedQuestion {
   id: string;
   title: string;
   content: string;
-  type: 'single' | 'multiple';
+  type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended';
   difficulty: 'easy' | 'medium' | 'hard';
   category: string;
   learningPath: string;
@@ -37,6 +37,12 @@ interface UnifiedQuestion {
   explanation: string;
   audioQuestion?: string;
   audioAnswer?: string;
+  showQuestionAudio?: boolean;
+  showAnswerAudio?: boolean;
+  // Open-ended question fields
+  expectedAnswer?: string;
+  aiValidationPrompt?: string;
+  acceptPartialCredit?: boolean;
   tags: string[];
   points: number;
   timeLimit?: number;
@@ -62,6 +68,23 @@ export default function QuestionsPage() {
   >(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
+  const [validationResult, setValidationResult] = useState<{
+    isCorrect: boolean;
+    feedback: string;
+  } | null>(null);
+  const [audioStates, setAudioStates] = useState<
+    Record<
+      string,
+      {
+        hasQuestionAudio: boolean;
+        hasAnswerAudio: boolean;
+        questionAudioPath?: string;
+        answerAudioPath?: string;
+        showQuestionAudio: boolean;
+        showAnswerAudio: boolean;
+      }
+    >
+  >({});
 
   const learningPath = learningPaths.find(path => path.id === pathId);
 
@@ -84,7 +107,7 @@ export default function QuestionsPage() {
   });
 
   // Audio collection hook
-  const { getAudioMapping } = useAudioCollection();
+  const {} = useAudioCollection();
 
   // Convert unified questions to the expected format
   const questionsData = useMemo(() => {
@@ -119,8 +142,12 @@ export default function QuestionsPage() {
                   .map((opt, index) => (opt.isCorrect ? index : -1))
                   .filter(i => i !== -1),
           // Use audio from question data or generate default paths
-          audioQuestion: q.audioQuestion || `/audio/${learningPath?.id}/questions/question-${index + 1}.mp3`,
-          audioAnswer: q.audioAnswer || `/audio/${learningPath?.id}/questions/answer-${index + 1}.mp3`,
+          audioQuestion:
+            q.audioQuestion ||
+            `/audio/${learningPath?.id}/questions/question-${index + 1}.mp3`,
+          audioAnswer:
+            q.audioAnswer ||
+            `/audio/${learningPath?.id}/questions/answer-${index + 1}.mp3`,
         })),
       },
     ];
@@ -133,9 +160,65 @@ export default function QuestionsPage() {
 
   // Set current group when questions are loaded
   useEffect(() => {
-    if (questionsData && questionsData.groups.length > 0) {
+    if (
+      questionsData &&
+      questionsData.groups &&
+      questionsData.groups.length > 0
+    ) {
       setCurrentGroup(questionsData.groups[0]);
       setCurrentQuestionIndex(0);
+    }
+  }, [questionsData]);
+
+  // Check audio validity when questions change
+  useEffect(() => {
+    console.log('questionsData structure:', questionsData);
+    if (
+      questionsData &&
+      questionsData.groups &&
+      questionsData.groups.length > 0
+    ) {
+      const checkAudioForQuestions = async () => {
+        const newAudioStates: Record<
+          string,
+          {
+            hasQuestionAudio: boolean;
+            hasAnswerAudio: boolean;
+            questionAudioPath?: string;
+            answerAudioPath?: string;
+            showQuestionAudio: boolean;
+            showAnswerAudio: boolean;
+          }
+        > = {};
+
+        // Get all questions from all groups
+        const allQuestions = questionsData.groups.flatMap(
+          group => group.questions
+        );
+
+        for (const question of allQuestions) {
+          const questionAudio = question.audioQuestion;
+          const answerAudio = question.audioAnswer;
+
+          const [questionExists, answerExists] = await Promise.all([
+            questionAudio ? checkAudioExists(questionAudio) : false,
+            answerAudio ? checkAudioExists(answerAudio) : false,
+          ]);
+
+          newAudioStates[question.id] = {
+            hasQuestionAudio: questionExists,
+            hasAnswerAudio: answerExists,
+            questionAudioPath: questionExists ? questionAudio : undefined,
+            answerAudioPath: answerExists ? answerAudio : undefined,
+            showQuestionAudio: question.showQuestionAudio ?? true,
+            showAnswerAudio: question.showAnswerAudio ?? true,
+          };
+        }
+
+        setAudioStates(newAudioStates);
+      };
+
+      checkAudioForQuestions();
     }
   }, [questionsData]);
 
@@ -143,14 +226,16 @@ export default function QuestionsPage() {
   useEffect(() => {
     if (currentGroup && currentGroup.questions[currentQuestionIndex]) {
       const currentQuestion = currentGroup.questions[currentQuestionIndex];
-      if (currentQuestion.audioQuestion) {
+      const audioState = audioStates[currentQuestion.id];
+
+      if (audioState?.hasQuestionAudio && audioState.questionAudioPath) {
         // Play uploaded audio question if available
-        const audio = new Audio(currentQuestion.audioQuestion);
+        const audio = new Audio(audioState.questionAudioPath);
         audio.play().catch(console.error);
       }
       // No TTS fallback - only use uploaded audio files
     }
-  }, [currentQuestionIndex, currentGroup]);
+  }, [currentQuestionIndex, currentGroup, audioStates]);
 
   const handleAnswerSelect = async (answerIndex: number) => {
     const currentQuestion = currentGroup?.questions[currentQuestionIndex];
@@ -195,10 +280,10 @@ export default function QuestionsPage() {
     setTimeout(() => {
       const explanationElement = document.getElementById('explanation-section');
       if (explanationElement) {
-        explanationElement.scrollIntoView({ 
-          behavior: 'smooth', 
+        explanationElement.scrollIntoView({
+          behavior: 'smooth',
           block: 'start',
-          inline: 'nearest'
+          inline: 'nearest',
         });
       }
     }, 100); // Small delay to ensure the element is rendered
@@ -212,7 +297,6 @@ export default function QuestionsPage() {
 
     setAnsweredQuestions(prev => new Set([...prev, currentQuestion.id]));
   };
-
 
   const handleNextQuestion = () => {
     if (!currentGroup) return;
@@ -416,19 +500,25 @@ export default function QuestionsPage() {
                           {/* Action Buttons */}
                           <div className="flex items-center space-x-2">
                             {/* Audio Button */}
-                            {currentQuestion.audioQuestion ? (
+                            {audioStates[currentQuestion.id]
+                              ?.showQuestionAudio &&
+                            audioStates[currentQuestion.id]
+                              ?.hasQuestionAudio ? (
                               <motion.button
                                 whileHover={{ scale: 1.15 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => {
-                                  const audio = new Audio(
-                                    currentQuestion.audioQuestion
-                                  );
-                                  audio
-                                    .play()
-                                    .catch(e =>
-                                      console.error('Error playing audio:', e)
-                                    );
+                                  const audioPath =
+                                    audioStates[currentQuestion.id]
+                                      ?.questionAudioPath;
+                                  if (audioPath) {
+                                    const audio = new Audio(audioPath);
+                                    audio
+                                      .play()
+                                      .catch(e =>
+                                        console.error('Error playing audio:', e)
+                                      );
+                                  }
                                 }}
                                 className="p-3 text-blue-400 hover:text-blue-200 transition-all duration-200 bg-blue-800/50 dark:bg-blue-700/50 rounded-xl hover:bg-blue-700/70 dark:hover:bg-blue-600/70 backdrop-blur-sm border border-blue-600/30 dark:border-blue-500/30 shadow-lg hover:shadow-xl"
                                 title="Play question audio"
@@ -501,143 +591,201 @@ export default function QuestionsPage() {
                 </div>
               </div>
 
-              {/* Beautiful Answer Options */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
-                className="relative group mb-6 sm:mb-8"
-              >
-                {/* Gradient Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/3 to-pink-600/5 rounded-2xl blur-sm"></div>
+              {/* Question Type Specific Rendering */}
+              {currentQuestion.type === 'open-ended' ? (
+                <OpenEndedQuestion
+                  question={currentQuestion}
+                  onAnswer={(answer, validation) => {
+                    setSelectedAnswer(answer);
+                    setIsAnswerCorrect(validation.isCorrect);
+                    setValidationResult(validation);
+                    setShowExplanation(true);
+                    // Scroll to explanation section
+                    setTimeout(() => {
+                      const explanationElement = document.getElementById(
+                        'explanation-section'
+                      );
+                      if (explanationElement) {
+                        explanationElement.scrollIntoView({
+                          behavior: 'smooth',
+                          block: 'start',
+                          inline: 'nearest',
+                        });
+                      }
+                    }, 100);
+                  }}
+                  isAnswered={selectedAnswer !== null}
+                  userAnswer={
+                    typeof selectedAnswer === 'string' ? selectedAnswer : ''
+                  }
+                  validationResult={validationResult}
+                />
+              ) : (
+                /* Beautiful Answer Options for Multiple Choice */
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+                  className="relative group mb-6 sm:mb-8"
+                >
+                  {/* Gradient Background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/3 to-pink-600/5 rounded-2xl blur-sm"></div>
 
-                {/* Main Container */}
-                <div className="relative space-y-4 sm:space-y-5 bg-gradient-to-br from-white/90 via-gray-50/90 to-white/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-6 sm:p-8 border border-gray-200/50 dark:border-gray-600/50 shadow-xl backdrop-blur-sm">
-                  <div className="mb-6">
-                    <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">
-                      Choose your answer:
-                    </h3>
-                    {selectedAnswer !== null && !showExplanation && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-2"
-                      >
-                        {(() => {
-                          const isCorrect = Array.isArray(selectedAnswer)
-                            ? selectedAnswer.every(answerId =>
-                                currentQuestion.correctAnswers.includes(
-                                  answerId
-                                )
-                              ) &&
-                              selectedAnswer.length ===
-                                currentQuestion.correctAnswers.length
-                            : currentQuestion.correctAnswers.includes(
-                                selectedAnswer as string
-                              );
+                  {/* Main Container */}
+                  <div className="relative space-y-4 sm:space-y-5 bg-gradient-to-br from-white/90 via-gray-50/90 to-white/90 dark:from-gray-800/90 dark:via-gray-700/90 dark:to-gray-800/90 rounded-2xl p-6 sm:p-8 border border-gray-200/50 dark:border-gray-600/50 shadow-xl backdrop-blur-sm">
+                    <div className="mb-6">
+                      <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">
+                        Choose your answer:
+                      </h3>
+                      {selectedAnswer !== null && !showExplanation && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="mt-2"
+                        >
+                          {(() => {
+                            const isCorrect = Array.isArray(selectedAnswer)
+                              ? selectedAnswer.every(answerId =>
+                                  currentQuestion.correctAnswers.includes(
+                                    answerId
+                                  )
+                                ) &&
+                                selectedAnswer.length ===
+                                  currentQuestion.correctAnswers.length
+                              : currentQuestion.correctAnswers.includes(
+                                  selectedAnswer as string
+                                );
 
-                          return (
-                            <div
-                              className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                                isCorrect
-                                  ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                                  : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                              }`}
-                            >
-                              <svg
-                                className={`w-4 h-4 mr-2 ${
+                            return (
+                              <div
+                                className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                                   isCorrect
-                                    ? 'text-green-600 dark:text-green-400'
-                                    : 'text-red-600 dark:text-red-400'
+                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                                    : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                                 }`}
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
                               >
-                                {isCorrect ? (
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                    clipRule="evenodd"
-                                  />
-                                ) : (
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                    clipRule="evenodd"
-                                  />
-                                )}
-                              </svg>
-                              {isCorrect ? 'Correct!' : 'Incorrect'}
-                            </div>
-                          );
-                        })()}
-                      </motion.div>
-                    )}
-                  </div>
-                  {currentQuestion.options.map((option, index) => {
-                    const isSelected = Array.isArray(selectedAnswer)
-                      ? selectedAnswer.includes(option.id)
-                      : selectedAnswer === option.id;
+                                <svg
+                                  className={`w-4 h-4 mr-2 ${
+                                    isCorrect
+                                      ? 'text-green-600 dark:text-green-400'
+                                      : 'text-red-600 dark:text-red-400'
+                                  }`}
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  {isCorrect ? (
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  ) : (
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                      clipRule="evenodd"
+                                    />
+                                  )}
+                                </svg>
+                                {isCorrect ? 'Correct!' : 'Incorrect'}
+                              </div>
+                            );
+                          })()}
+                        </motion.div>
+                      )}
+                    </div>
+                    {currentQuestion.options.map((option, index) => {
+                      const isSelected = Array.isArray(selectedAnswer)
+                        ? selectedAnswer.includes(option.id)
+                        : selectedAnswer === option.id;
 
-                    const isCorrect = currentQuestion.correctAnswers.includes(
-                      option.id
-                    );
-                    const showCorrectness = selectedAnswer !== null;
+                      const isCorrect = currentQuestion.correctAnswers.includes(
+                        option.id
+                      );
+                      const showCorrectness = selectedAnswer !== null;
 
-                    return (
-                      <motion.button
-                        key={option.id || `option-${index}`}
-                        onClick={() => handleAnswerSelect(index)}
-                        whileHover={{ scale: 1.02, y: -2 }}
-                        whileTap={{ scale: 0.98 }}
-                        className={`relative w-full text-left p-6 sm:p-7 rounded-2xl border-2 transition-all duration-300 overflow-hidden ${
-                          showCorrectness
-                            ? isCorrect
-                              ? 'border-green-400 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 shadow-lg shadow-green-500/20'
-                              : isSelected
-                                ? 'border-red-400 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/30 dark:to-rose-900/30 shadow-lg shadow-red-500/20'
-                                : 'border-gray-200 dark:border-gray-600 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 shadow-sm'
-                            : isSelected
-                              ? 'border-blue-400 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 shadow-lg shadow-blue-500/20'
-                              : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 hover:shadow-lg hover:shadow-blue-500/10'
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <motion.span
-                            className={`flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-base sm:text-lg font-bold mr-5 sm:mr-6 transition-all duration-300 shadow-lg ${
-                              showCorrectness
-                                ? isCorrect
-                                  ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/30'
-                                  : isSelected
-                                    ? 'bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/30'
-                                    : 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-600 dark:text-gray-300 shadow-gray-500/20'
+                      return (
+                        <motion.button
+                          key={option.id || `option-${index}`}
+                          onClick={() => handleAnswerSelect(index)}
+                          whileHover={{ scale: 1.02, y: -2 }}
+                          whileTap={{ scale: 0.98 }}
+                          className={`relative w-full text-left p-6 sm:p-7 rounded-2xl border-2 transition-all duration-300 overflow-hidden ${
+                            showCorrectness
+                              ? isCorrect
+                                ? 'border-green-400 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 shadow-lg shadow-green-500/20'
                                 : isSelected
-                                  ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-blue-500/30'
-                                  : 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-600 dark:text-gray-300 shadow-gray-500/20'
-                            }`}
-                            animate={
-                              isSelected
-                                ? { scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }
-                                : {}
-                            }
-                            transition={{ duration: 0.4 }}
-                          >
-                            {String.fromCharCode(65 + index)}
-                          </motion.span>
-                          <div className="text-lg sm:text-xl text-gray-900 dark:text-gray-100 font-semibold">
-                            {option.text}
-                          </div>
-                          {isSelected && (
-                            <motion.div
-                              className="ml-auto"
-                              initial={{ opacity: 0, scale: 0 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: 0.1 }}
+                                  ? 'border-red-400 bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/30 dark:to-rose-900/30 shadow-lg shadow-red-500/20'
+                                  : 'border-gray-200 dark:border-gray-600 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 shadow-sm'
+                              : isSelected
+                                ? 'border-blue-400 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 shadow-lg shadow-blue-500/20'
+                                : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 hover:shadow-lg hover:shadow-blue-500/10'
+                          }`}
+                        >
+                          <div className="flex items-center">
+                            <motion.span
+                              className={`flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-base sm:text-lg font-bold mr-5 sm:mr-6 transition-all duration-300 shadow-lg ${
+                                showCorrectness
+                                  ? isCorrect
+                                    ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/30'
+                                    : isSelected
+                                      ? 'bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/30'
+                                      : 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-600 dark:text-gray-300 shadow-gray-500/20'
+                                  : isSelected
+                                    ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-blue-500/30'
+                                    : 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-600 dark:text-gray-300 shadow-gray-500/20'
+                              }`}
+                              animate={
+                                isSelected
+                                  ? {
+                                      scale: [1, 1.1, 1],
+                                      rotate: [0, 5, -5, 0],
+                                    }
+                                  : {}
+                              }
+                              transition={{ duration: 0.4 }}
                             >
-                              {showCorrectness ? (
-                                isCorrect ? (
+                              {String.fromCharCode(65 + index)}
+                            </motion.span>
+                            <div className="text-lg sm:text-xl text-gray-900 dark:text-gray-100 font-semibold">
+                              {option.text}
+                            </div>
+                            {isSelected && (
+                              <motion.div
+                                className="ml-auto"
+                                initial={{ opacity: 0, scale: 0 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.1 }}
+                              >
+                                {showCorrectness ? (
+                                  isCorrect ? (
+                                    <svg
+                                      className="w-5 h-5 text-green-500"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  ) : (
+                                    <svg
+                                      className="w-5 h-5 text-red-500"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  )
+                                ) : (
                                   <svg
-                                    className="w-5 h-5 text-green-500"
+                                    className="w-5 h-5 text-blue-500"
                                     fill="currentColor"
                                     viewBox="0 0 20 20"
                                   >
@@ -647,41 +795,16 @@ export default function QuestionsPage() {
                                       clipRule="evenodd"
                                     />
                                   </svg>
-                                ) : (
-                                  <svg
-                                    className="w-5 h-5 text-red-500"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                )
-                              ) : (
-                                <svg
-                                  className="w-5 h-5 text-blue-500"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              )}
-                            </motion.div>
-                          )}
-                        </div>
-                      </motion.button>
-                    );
-                  })}
-                </div>
-              </motion.div>
-
+                                )}
+                              </motion.div>
+                            )}
+                          </div>
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
 
               {/* Explanation */}
               <AnimatePresence>
@@ -703,9 +826,15 @@ export default function QuestionsPage() {
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                          transition={{
+                            delay: 0.2,
+                            type: 'spring',
+                            stiffness: 200,
+                          }}
                           className={`w-4 h-4 rounded-full mr-4 shadow-lg ${
-                            isAnswerCorrect ? 'bg-gradient-to-r from-green-500 to-emerald-500' : 'bg-gradient-to-r from-red-500 to-rose-500'
+                            isAnswerCorrect
+                              ? 'bg-gradient-to-r from-green-500 to-emerald-500'
+                              : 'bg-gradient-to-r from-red-500 to-rose-500'
                           }`}
                         ></motion.div>
                         <motion.h3
@@ -723,17 +852,20 @@ export default function QuestionsPage() {
                       </div>
 
                       {/* Audio Answer Button */}
-                      {currentQuestion.audioAnswer ? (
+                      {audioStates[currentQuestion.id]?.showAnswerAudio &&
+                      audioStates[currentQuestion.id]?.hasAnswerAudio ? (
                         <button
                           onClick={() => {
-                            const audio = new Audio(
-                              currentQuestion.audioAnswer
-                            );
-                            audio
-                              .play()
-                              .catch(e =>
-                                console.error('Error playing audio:', e)
-                              );
+                            const audioPath =
+                              audioStates[currentQuestion.id]?.answerAudioPath;
+                            if (audioPath) {
+                              const audio = new Audio(audioPath);
+                              audio
+                                .play()
+                                .catch(e =>
+                                  console.error('Error playing audio:', e)
+                                );
+                            }
                           }}
                           className="flex items-center justify-center w-12 h-12 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 rounded-full transition-all duration-200 group shadow-lg hover:shadow-xl"
                           title="Play answer explanation audio"
@@ -775,20 +907,32 @@ export default function QuestionsPage() {
                     >
                       {/* Explanation Header */}
                       <div className="flex items-center justify-between mb-4">
-                        <h4 className={`text-lg font-semibold ${
-                          isAnswerCorrect
-                            ? 'text-green-800 dark:text-green-200'
-                            : 'text-red-800 dark:text-red-200'
-                        }`}>
+                        <h4
+                          className={`text-lg font-semibold ${
+                            isAnswerCorrect
+                              ? 'text-green-800 dark:text-green-200'
+                              : 'text-red-800 dark:text-red-200'
+                          }`}
+                        >
                           Explanation
                         </h4>
-                        
+
                         {/* Audio Button */}
-                        {currentQuestion.audioAnswer ? (
+                        {audioStates[currentQuestion.id]?.showAnswerAudio &&
+                        audioStates[currentQuestion.id]?.hasAnswerAudio ? (
                           <button
                             onClick={() => {
-                              const audio = new Audio(currentQuestion.audioAnswer);
-                              audio.play().catch(e => console.error('Error playing audio:', e));
+                              const audioPath =
+                                audioStates[currentQuestion.id]
+                                  ?.answerAudioPath;
+                              if (audioPath) {
+                                const audio = new Audio(audioPath);
+                                audio
+                                  .play()
+                                  .catch(e =>
+                                    console.error('Error playing audio:', e)
+                                  );
+                              }
                             }}
                             className={`p-2 rounded-lg transition-all duration-200 ${
                               isAnswerCorrect
@@ -797,15 +941,25 @@ export default function QuestionsPage() {
                             }`}
                             title="Play answer audio"
                           >
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <svg
+                              className="w-5 h-5"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
                               <path d="M8 5v14l11-7z" />
                             </svg>
                           </button>
                         ) : (
-                          <div className={`p-2 rounded-lg opacity-50 ${
-                            isAnswerCorrect ? 'bg-green-300' : 'bg-red-300'
-                          }`}>
-                            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <div
+                            className={`p-2 rounded-lg opacity-50 ${
+                              isAnswerCorrect ? 'bg-green-300' : 'bg-red-300'
+                            }`}
+                          >
+                            <svg
+                              className="w-5 h-5 text-white"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
                               <path d="M8 5v14l11-7z" />
                             </svg>
                           </div>
