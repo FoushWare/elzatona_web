@@ -461,6 +461,7 @@ export default function Navbar() {
                 {/* More Dropdown Menu */}
                 {activeDropdown === 'More' && (
                   <div className="fixed top-16 left-0 right-0 w-full bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200">
+                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* More Section Header */}
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-t-xl">
                       <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
@@ -848,6 +849,7 @@ export default function Navbar() {
                       <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
                         💡 Click any item to explore more features
                       </p>
+                    </div>
                     </div>
                   </div>
                 )}
