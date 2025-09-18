@@ -197,7 +197,7 @@ export default function ChatGPT() {
       {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-110 hover:rotate-3 flex items-center justify-center group"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-110 hover:rotate-3 flex items-center justify-center group"
         aria-label="Open AI Chat Assistant"
       >
         {/* Animated background glow */}
@@ -205,12 +205,12 @@ export default function ChatGPT() {
 
         {/* Main button content */}
         <div className="relative z-10 flex items-center justify-center">
-          <MessageCircle size={28} className="drop-shadow-lg" />
+          <MessageCircle size={24} className="drop-shadow-lg sm:w-7 sm:h-7" />
         </div>
 
         {/* Floating notification dot */}
         <div
-          className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-bounce shadow-lg"
+          className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full animate-bounce shadow-lg"
           role="status"
           aria-label="New message notification"
         >
@@ -223,7 +223,7 @@ export default function ChatGPT() {
 
       {/* Chat Popup */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-end p-0 md:p-4 lg:p-6">
+        <div className="fixed inset-0 z-50 flex items-end justify-end p-0 sm:p-2 md:p-4 lg:p-6">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black bg-opacity-50"
@@ -231,9 +231,9 @@ export default function ChatGPT() {
           />
 
           {/* Chat Window */}
-          <div className="relative w-full h-full md:max-w-lg md:h-[700px] lg:h-[700px] bg-white dark:bg-gray-900 rounded-none md:rounded-t-2xl shadow-2xl flex flex-col border border-gray-200 dark:border-gray-700">
+          <div className="relative w-full h-full sm:max-w-md sm:h-[600px] md:max-w-lg md:h-[700px] lg:h-[700px] bg-white dark:bg-gray-900 rounded-none sm:rounded-t-2xl shadow-2xl flex flex-col border border-gray-200 dark:border-gray-700">
             {/* Header */}
-            <div className="relative flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-none md:rounded-t-2xl">
+            <div className="relative flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-none sm:rounded-t-2xl">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
                   <Bot size={20} className="text-white" />
