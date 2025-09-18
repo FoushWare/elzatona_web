@@ -197,7 +197,7 @@ export default function ChatGPT() {
       {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-6 lg:right-6 z-50 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-16 lg:h-16 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-110 hover:rotate-3 flex items-center justify-center group"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-6 md:right-6 lg:bottom-6 lg:right-6 z-50 w-14 h-14 sm:w-16 sm:h-16 md:w-16 md:h-16 lg:w-16 lg:h-16 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-110 hover:rotate-3 flex items-center justify-center group"
         aria-label="Open AI Chat Assistant"
       >
         {/* Animated background glow */}
@@ -207,13 +207,13 @@ export default function ChatGPT() {
         <div className="relative z-10 flex items-center justify-center">
           <MessageCircle
             size={24}
-            className="drop-shadow-lg sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-7 lg:h-7"
+            className="drop-shadow-lg sm:w-7 sm:h-7 md:w-7 md:h-7 lg:w-7 lg:h-7"
           />
         </div>
 
         {/* Floating notification dot */}
         <div
-          className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-bounce shadow-lg"
+          className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-bounce shadow-lg"
           role="status"
           aria-label="New message notification"
         >
