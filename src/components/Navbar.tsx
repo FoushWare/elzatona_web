@@ -312,6 +312,13 @@ export default function Navbar() {
           >
             {/* Show limited menus based on screen size */}
             {dropdownMenus
+              .filter(menu => {
+                // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
+                if (screenSize !== 'desktop' && menu.label === 'Interview Prep') {
+                  return false;
+                }
+                return true;
+              })
               .slice(
                 0,
                 screenSize === 'desktop' ? 4 : screenSize === 'laptop' ? 3 : 2
@@ -404,7 +411,14 @@ export default function Navbar() {
               ))}
 
             {/* More Dropdown - Show when there are hidden menus or Job Aggregator */}
-            {(dropdownMenus.length >
+            {(dropdownMenus
+              .filter(menu => {
+                // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
+                if (screenSize !== 'desktop' && menu.label === 'Interview Prep') {
+                  return false;
+                }
+                return true;
+              }).length >
               (screenSize === 'desktop'
                 ? 4
                 : screenSize === 'laptop'
@@ -446,13 +460,21 @@ export default function Navbar() {
                         </span>
                         More Features
                         <span className="ml-1 lg:ml-2 text-xs bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full">
-                          {dropdownMenus.slice(
-                            screenSize === 'desktop'
-                              ? 4
-                              : screenSize === 'laptop'
-                                ? 3
-                                : 2
-                          ).length +
+                          {dropdownMenus
+                            .filter(menu => {
+                              // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
+                              if (screenSize !== 'desktop' && menu.label === 'Interview Prep') {
+                                return false;
+                              }
+                              return true;
+                            })
+                            .slice(
+                              screenSize === 'desktop'
+                                ? 4
+                                : screenSize === 'laptop'
+                                  ? 3
+                                  : 2
+                            ).length +
                             (screenSize !== 'desktop' ? 1 : 0) +
                             11}{' '}
                           items
@@ -561,6 +583,13 @@ export default function Navbar() {
                       <div className="mx-3 my-2 border-t border-gray-200 dark:border-gray-700"></div>
 
                       {dropdownMenus
+                        .filter(menu => {
+                          // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
+                          if (screenSize !== 'desktop' && menu.label === 'Interview Prep') {
+                            return false;
+                          }
+                          return true;
+                        })
                         .slice(
                           screenSize === 'desktop'
                             ? 4
