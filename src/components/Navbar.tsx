@@ -591,7 +591,7 @@ export default function Navbar() {
 
                 {/* User Dropdown Menu */}
                 {isUserDropdownOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-56 md:w-64 lg:w-64 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200">
+                  <div className="absolute right-0 top-full mt-2 w-52 md:w-56 lg:w-64 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200">
                     {/* User Info Header */}
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
                       <div className="flex items-center space-x-3">
@@ -692,20 +692,20 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/auth"
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center mr-4 ${
+                className={`px-3 md:px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center ${
                   isScrolled
                     ? 'bg-green-600 text-white hover:bg-green-700'
                     : 'bg-green-500 text-white hover:bg-green-600'
                 }`}
               >
-                <span className="hidden lg:inline text-sm">Save Progress</span>
-                <span className="lg:hidden text-sm">Save</span>
+                <span className="hidden md:inline text-sm">Save Progress</span>
+                <span className="md:hidden text-xs">Save</span>
               </Link>
             )}
           </div>
 
           {/* Theme Toggle */}
-          <div className="flex items-center space-x-3 lg:space-x-4 xl:space-x-6">
+          <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6">
             <button
               onClick={toggleDarkMode}
               className={`p-2 rounded-lg transition-colors duration-200 ${
