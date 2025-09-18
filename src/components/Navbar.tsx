@@ -280,14 +280,14 @@ export default function Navbar() {
 
           {/* Desktop Navigation with Dropdowns */}
           <div
-            className="hidden md:flex items-center space-x-6"
+            className="hidden md:flex items-center space-x-2 lg:space-x-4 xl:space-x-6"
             ref={dropdownRef}
           >
             {dropdownMenus.map(menu => (
               <div key={menu.label} className="relative">
                 <button
                   onClick={() => toggleDropdown(menu.label)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
+                  className={`flex items-center space-x-1 lg:space-x-2 px-2 lg:px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
                     isScrolled
                       ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                       : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
@@ -297,8 +297,10 @@ export default function Navbar() {
                       : ''
                   }`}
                 >
-                  <span className="text-lg">{menu.icon}</span>
-                  <span className="font-medium text-sm">{menu.label}</span>
+                  <span className="text-base lg:text-lg">{menu.icon}</span>
+                  <span className="font-medium text-xs lg:text-sm hidden lg:inline">
+                    {menu.label}
+                  </span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
                       activeDropdown === menu.label ? 'rotate-180' : ''
@@ -308,17 +310,19 @@ export default function Navbar() {
 
                 {/* Dropdown Menu */}
                 {activeDropdown === menu.label && (
-                  <div className="absolute top-full left-0 mt-2 w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200">
+                  <div className="absolute top-full left-0 mt-2 w-80 md:w-96 lg:w-96 xl:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 md:left-0 lg:left-0 xl:left-0 right-auto md:right-auto lg:right-auto xl:right-auto">
                     {/* Parent Section Header */}
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
-                      <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-lg">
-                        <span className="mr-3 text-xl">{menu.icon}</span>
+                      <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
+                        <span className="mr-2 lg:mr-3 text-lg lg:text-xl">
+                          {menu.icon}
+                        </span>
                         {menu.label}
-                        <span className="ml-2 text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
+                        <span className="ml-1 lg:ml-2 text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
                           {menu.items.length} items
                         </span>
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 ml-8">
+                      <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400 mt-1 ml-6 lg:ml-8">
                         Explore all {menu.label.toLowerCase()} resources
                       </p>
                     </div>
@@ -329,20 +333,20 @@ export default function Navbar() {
                         <Link
                           key={item.href}
                           href={item.href}
-                          className="flex items-start px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
+                          className="flex items-start px-3 lg:px-4 py-2 lg:py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
                           onClick={() => setActiveDropdown(null)}
                         >
-                          <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
+                          <span className="text-base lg:text-lg mr-2 lg:mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
                             {item.icon}
                           </span>
                           <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 flex items-center">
+                            <div className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 flex items-center text-sm lg:text-base">
                               {item.label}
-                              <span className="ml-2 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-0.5 rounded-full">
+                              <span className="ml-1 lg:ml-2 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1 lg:px-2 py-0.5 rounded-full">
                                 #{index + 1}
                               </span>
                             </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
+                            <div className="text-xs lg:text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
                               {item.description}
                             </div>
                           </div>
@@ -396,7 +400,7 @@ export default function Navbar() {
 
                 {/* User Dropdown Menu */}
                 {isUserDropdownOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200">
+                  <div className="absolute right-0 top-full mt-2 w-56 md:w-64 lg:w-64 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200">
                     {/* User Info Header */}
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
                       <div className="flex items-center space-x-3">
@@ -426,14 +430,16 @@ export default function Navbar() {
                     <div className="py-2">
                       <Link
                         href="/dashboard"
-                        className="flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
+                        className="flex items-center px-3 lg:px-4 py-2 lg:py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
                         onClick={() => setIsUserDropdownOpen(false)}
                       >
-                        <span className="mr-3 text-lg group-hover:scale-110 transition-transform duration-200">
+                        <span className="mr-2 lg:mr-3 text-base lg:text-lg group-hover:scale-110 transition-transform duration-200">
                           📊
                         </span>
                         <div className="flex-1">
-                          <div className="font-medium">Dashboard</div>
+                          <div className="font-medium text-sm lg:text-base">
+                            Dashboard
+                          </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">
                             View your progress
                           </div>
@@ -442,14 +448,16 @@ export default function Navbar() {
 
                       <Link
                         href="/flashcards"
-                        className="flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500"
+                        className="flex items-center px-3 lg:px-4 py-2 lg:py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500"
                         onClick={() => setIsUserDropdownOpen(false)}
                       >
-                        <span className="mr-3 text-lg group-hover:scale-110 transition-transform duration-200">
+                        <span className="mr-2 lg:mr-3 text-base lg:text-lg group-hover:scale-110 transition-transform duration-200">
                           🃏
                         </span>
                         <div className="flex-1">
-                          <div className="font-medium">Flashcards</div>
+                          <div className="font-medium text-sm lg:text-base">
+                            Flashcards
+                          </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">
                             Review saved questions
                           </div>
@@ -464,14 +472,16 @@ export default function Navbar() {
                           signOut();
                           setIsUserDropdownOpen(false);
                         }}
-                        className="flex items-center w-full px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 group border-l-2 border-transparent hover:border-red-400 dark:hover:border-red-500"
+                        className="flex items-center w-full px-3 lg:px-4 py-2 lg:py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 group border-l-2 border-transparent hover:border-red-400 dark:hover:border-red-500"
                       >
                         <LogOut
                           size={16}
-                          className="mr-3 group-hover:scale-110 transition-transform duration-200"
+                          className="mr-2 lg:mr-3 group-hover:scale-110 transition-transform duration-200"
                         />
                         <div className="flex-1 text-left">
-                          <div className="font-medium">Sign Out</div>
+                          <div className="font-medium text-sm lg:text-base">
+                            Sign Out
+                          </div>
                           <div className="text-xs text-red-500 dark:text-red-400">
                             End your session
                           </div>
@@ -504,7 +514,7 @@ export default function Navbar() {
           </div>
 
           {/* Theme Toggle */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-2 lg:space-x-4 xl:space-x-6">
             <button
               onClick={toggleDarkMode}
               className={`p-2 rounded-lg transition-colors duration-200 ${
