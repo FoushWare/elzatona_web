@@ -53,7 +53,7 @@ export default function RootLayout({
           <FirebaseAuthProvider>
             <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
               <Navbar />
-              <main className="pt-16">{children}</main>
+              <main className="pt-20">{children}</main>
               <ChatGPT />
             </div>
           </FirebaseAuthProvider>
