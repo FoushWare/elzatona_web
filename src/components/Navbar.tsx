@@ -294,7 +294,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16 sm:h-18 md:h-20 space-x-2 sm:space-x-3 md:space-x-4 lg:space-x-6">
+        <div className="flex items-center h-16 sm:h-18 md:h-20 space-x-2 sm:space-x-2 md:space-x-3 lg:space-x-4">
           {/* Logo */}
           <Link
             href="/"
@@ -399,7 +399,7 @@ export default function Navbar() {
                           </div>
                           {/* Arrow indicator */}
                           <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                            <ChevronDown className="w-4 h-4 text-gray-400 rotate-[-90deg]" />
+                            <ChevronDown className="w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-4 lg:h-4 text-gray-400 rotate-[-90deg]" />
                           </div>
                         </Link>
                       ))}
@@ -590,7 +590,7 @@ export default function Navbar() {
                             </div>
                           </div>
                           <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                            <ChevronDown className="w-4 h-4 text-gray-400 rotate-[-90deg]" />
+                            <ChevronDown className="w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-4 lg:h-4 text-gray-400 rotate-[-90deg]" />
                           </div>
                         </Link>
                       </div>
