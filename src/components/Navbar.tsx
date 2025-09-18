@@ -25,7 +25,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const [screenSize, setScreenSize] = useState<'tablet' | 'laptop' | 'desktop'>(
+  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'laptop' | 'desktop'>(
     'desktop'
   );
   const { isDarkMode, toggleDarkMode } = useTheme();
@@ -203,12 +203,14 @@ export default function Navbar() {
 
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width >= 1024) {
+      if (width >= 1440) {
         setScreenSize('desktop');
-      } else if (width >= 768) {
+      } else if (width >= 1024) {
         setScreenSize('laptop');
-      } else {
+      } else if (width >= 640) {
         setScreenSize('tablet');
+      } else {
+        setScreenSize('mobile');
       }
     };
 
@@ -292,7 +294,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-20 space-x-4 lg:space-x-6">
+        <div className="flex items-center h-16 sm:h-18 md:h-20 space-x-2 sm:space-x-3 md:space-x-4 lg:space-x-6">
           {/* Logo */}
           <Link
             href="/"
@@ -307,13 +309,13 @@ export default function Navbar() {
 
           {/* Desktop Navigation with Dropdowns */}
           <div
-            className="hidden md:flex items-center space-x-2 lg:space-x-3 xl:space-x-4 flex-1 justify-center"
+            className="hidden sm:flex items-center space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6 flex-1 justify-center"
             ref={dropdownRef}
           >
             {/* Show limited menus based on screen size */}
             {dropdownMenus
               .filter(menu => {
-                // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
+                // For mobile, tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
                 if (
                   screenSize !== 'desktop' &&
                   menu.label === 'Interview Prep'
@@ -324,98 +326,100 @@ export default function Navbar() {
               })
               .slice(
                 0,
-                screenSize === 'desktop' ? 4 : screenSize === 'laptop' ? 3 : 2
+                screenSize === 'desktop' ? 4 : 
+                screenSize === 'laptop' ? 3 : 
+                screenSize === 'tablet' ? 2 : 1
               )
               .map(menu => (
-                <div key={menu.label} className="relative">
-                  <button
-                    onClick={() => toggleDropdown(menu.label)}
-                    className={`flex items-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
-                      isScrolled
-                        ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                        : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
-                    } ${
-                      activeDropdown === menu.label
-                        ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                        : ''
+              <div key={menu.label} className="relative">
+                <button
+                  onClick={() => toggleDropdown(menu.label)}
+                    className={`flex items-center space-x-1 sm:space-x-1 md:space-x-2 px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
+                    isScrolled
+                      ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                      : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+                  } ${
+                    activeDropdown === menu.label
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                      : ''
+                  }`}
+                >
+                      <span className="text-sm sm:text-base md:text-lg">{menu.icon}</span>
+                      <span className="font-medium text-xs sm:text-xs md:text-sm hidden sm:inline">
+                        {menu.label}
+                      </span>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      activeDropdown === menu.label ? 'rotate-180' : ''
                     }`}
-                  >
-                    <span className="text-base md:text-lg">{menu.icon}</span>
-                    <span className="font-medium text-xs md:text-sm hidden md:inline">
-                      {menu.label}
-                    </span>
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        activeDropdown === menu.label ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
+                  />
+                </button>
 
-                  {/* Dropdown Menu */}
-                  {activeDropdown === menu.label && (
+                {/* Dropdown Menu */}
+                {activeDropdown === menu.label && (
                     <div className="absolute top-full left-0 mt-2 w-80 md:w-96 lg:w-96 xl:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 md:left-0 lg:left-0 xl:left-0 right-auto md:right-auto lg:right-auto xl:right-auto">
-                      {/* Parent Section Header */}
-                      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
+                    {/* Parent Section Header */}
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
                         <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
                           <span className="mr-2 lg:mr-3 text-lg lg:text-xl">
                             {menu.icon}
                           </span>
-                          {menu.label}
+                        {menu.label}
                           <span className="ml-1 lg:ml-2 text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
-                            {menu.items.length} items
-                          </span>
-                        </h3>
+                          {menu.items.length} items
+                        </span>
+                      </h3>
                         <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400 mt-1 ml-6 lg:ml-8">
-                          Explore all {menu.label.toLowerCase()} resources
-                        </p>
-                      </div>
+                        Explore all {menu.label.toLowerCase()} resources
+                      </p>
+                    </div>
 
-                      {/* Child Items */}
-                      <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-                        {menu.items.map((item, index) => (
-                          <Link
-                            key={item.href}
-                            href={item.href}
+                    {/* Child Items */}
+                    <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                      {menu.items.map((item, index) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
                             className="flex items-start px-3 lg:px-4 py-2 lg:py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
-                            onClick={() => setActiveDropdown(null)}
-                          >
+                          onClick={() => setActiveDropdown(null)}
+                        >
                             <span className="text-base lg:text-lg mr-2 lg:mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
-                              {item.icon}
-                            </span>
-                            <div className="flex-1 min-w-0">
+                            {item.icon}
+                          </span>
+                          <div className="flex-1 min-w-0">
                               <div className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 flex items-center text-sm lg:text-base">
-                                {item.label}
+                              {item.label}
                                 <span className="ml-1 lg:ml-2 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1 lg:px-2 py-0.5 rounded-full">
-                                  #{index + 1}
-                                </span>
-                              </div>
+                                #{index + 1}
+                              </span>
+                            </div>
                               <div className="text-xs lg:text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-                                {item.description}
-                              </div>
+                              {item.description}
                             </div>
-                            {/* Arrow indicator */}
-                            <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                              <ChevronDown className="w-4 h-4 text-gray-400 rotate-[-90deg]" />
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
+                          </div>
+                          {/* Arrow indicator */}
+                          <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <ChevronDown className="w-4 h-4 text-gray-400 rotate-[-90deg]" />
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
 
-                      {/* Footer */}
-                      <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-b-xl">
-                        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                    {/* Footer */}
+                    <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-b-xl">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
                           💡 Click any item to explore{' '}
                           {menu.label.toLowerCase()} content
-                        </p>
-                      </div>
+                      </p>
                     </div>
-                  )}
-                </div>
-              ))}
+                  </div>
+                )}
+              </div>
+            ))}
 
             {/* More Dropdown - Show when there are hidden menus or Job Aggregator */}
             {(dropdownMenus.filter(menu => {
-              // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
+              // For mobile, tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
               if (screenSize !== 'desktop' && menu.label === 'Interview Prep') {
                 return false;
               }
@@ -425,13 +429,15 @@ export default function Navbar() {
                 ? 4
                 : screenSize === 'laptop'
                   ? 3
-                  : 2) ||
+                  : screenSize === 'tablet'
+                    ? 2
+                    : 1) ||
               screenSize !== 'desktop' ||
               !isAuthenticated) && (
               <div className="relative">
                 <button
                   onClick={() => toggleDropdown('More')}
-                  className={`flex items-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
+                  className={`flex items-center space-x-1 sm:space-x-1 md:space-x-2 px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
                     isScrolled
                       ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                       : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
@@ -441,10 +447,10 @@ export default function Navbar() {
                       : ''
                   }`}
                 >
-                  <span className="text-base md:text-lg">⚡</span>
-                  <span className="font-medium text-xs md:text-sm hidden md:inline">
-                    More
-                  </span>
+                    <span className="text-sm sm:text-base md:text-lg">⚡</span>
+                    <span className="font-medium text-xs sm:text-xs md:text-sm hidden sm:inline">
+                      More
+                    </span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
                       activeDropdown === 'More' ? 'rotate-180' : ''
@@ -465,7 +471,7 @@ export default function Navbar() {
                         <span className="ml-1 lg:ml-2 text-xs bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full">
                           {dropdownMenus
                             .filter(menu => {
-                              // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
+                              // For mobile, tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
                               if (
                                 screenSize !== 'desktop' &&
                                 menu.label === 'Interview Prep'
@@ -479,7 +485,9 @@ export default function Navbar() {
                                 ? 4
                                 : screenSize === 'laptop'
                                   ? 3
-                                  : 2
+                                  : screenSize === 'tablet'
+                                    ? 2
+                                    : 1
                             ).length +
                             (screenSize !== 'desktop' ? 1 : 0) +
                             (!isAuthenticated ? 1 : 0) +
@@ -848,17 +856,17 @@ export default function Navbar() {
 
             {/* Job Aggregator - Show on desktop only, hide on tablet/laptop */}
             {screenSize === 'desktop' && (
-              <Link
-                href="/jobs"
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 font-medium ${
-                  isScrolled
-                    ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                    : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
-                }`}
-              >
-                <span className="text-lg">💼</span>
-                <span className="text-sm">Job Aggregator</span>
-              </Link>
+            <Link
+              href="/jobs"
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 font-medium ${
+                isScrolled
+                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                  : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+              }`}
+            >
+              <span className="text-lg">💼</span>
+              <span className="text-sm">Job Aggregator</span>
+            </Link>
             )}
 
             {/* User Dropdown */}
@@ -980,10 +988,10 @@ export default function Navbar() {
           </div>
 
           {/* Theme Toggle */}
-          <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6">
+          <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6">
             <button
               onClick={toggleDarkMode}
-              className={`p-2 rounded-lg transition-colors duration-200 ${
+              className={`p-1 sm:p-2 rounded-lg transition-colors duration-200 ${
                 isScrolled
                   ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                   : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
@@ -996,7 +1004,7 @@ export default function Navbar() {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`md:hidden p-2 rounded-lg transition-colors duration-200 ${
+              className={`sm:hidden p-1 sm:p-2 rounded-lg transition-colors duration-200 ${
                 isScrolled
                   ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                   : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
@@ -1012,7 +1020,7 @@ export default function Navbar() {
       {/* Mobile Navigation - Full Screen Overlay */}
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 top-16 bg-white dark:bg-gray-900 z-40 overflow-hidden animate-in slide-in-from-top-4 duration-300"
+          className="sm:hidden fixed inset-0 top-16 bg-white dark:bg-gray-900 z-40 overflow-hidden animate-in slide-in-from-top-4 duration-300"
           onClick={e => {
             // Close menu when clicking on the backdrop (not on content)
             if (e.target === e.currentTarget) {
