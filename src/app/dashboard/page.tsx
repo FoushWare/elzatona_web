@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useCookieAuth } from '@/contexts/CookieAuthContext';
 import EnhancedDashboard from '@/components/EnhancedDashboard';
 import {
   BookOpen,
@@ -58,7 +58,7 @@ const dashboardCards = [
 // Dashboard cards data only - other data moved to EnhancedDashboard
 
 export default function DashboardPage() {
-  const { user, isAuthenticated, isLoading } = useFirebaseAuth();
+  const { user, isAuthenticated, isLoading } = useCookieAuth();
   const [showStats, setShowStats] = useState(false);
   const [forceShowDashboard, setForceShowDashboard] = useState(false);
 

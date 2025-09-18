@@ -1,6 +1,6 @@
 'use client';
 
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useCookieAuth } from '@/contexts/CookieAuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
@@ -14,7 +14,7 @@ export default function ProtectedRoute({
   children,
   fallback,
 }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useFirebaseAuth();
+  const { isAuthenticated, isLoading } = useCookieAuth();
   const router = useRouter();
 
   useEffect(() => {
