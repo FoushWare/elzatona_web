@@ -25,6 +25,9 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [screenSize, setScreenSize] = useState<'tablet' | 'laptop' | 'desktop'>(
+    'desktop'
+  );
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { isAuthenticated, user, signOut } = useFirebaseAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -198,8 +201,26 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 10);
     };
 
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 1024) {
+        setScreenSize('desktop');
+      } else if (width >= 768) {
+        setScreenSize('laptop');
+      } else {
+        setScreenSize('tablet');
+      }
+    };
+
+    // Set initial screen size
+    handleResize();
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   // Prevent body scroll when mobile menu is open
@@ -286,95 +307,230 @@ export default function Navbar() {
 
           {/* Desktop Navigation with Dropdowns */}
           <div
-            className="hidden md:flex items-center space-x-3 lg:space-x-4 xl:space-x-6"
+            className="hidden md:flex items-center space-x-2 lg:space-x-3 xl:space-x-4"
             ref={dropdownRef}
           >
-            {dropdownMenus.map(menu => (
-              <div key={menu.label} className="relative">
+            {/* Show limited menus based on screen size */}
+            {dropdownMenus
+              .slice(
+                0,
+                screenSize === 'desktop' ? 4 : screenSize === 'laptop' ? 3 : 2
+              )
+              .map(menu => (
+                <div key={menu.label} className="relative">
+                  <button
+                    onClick={() => toggleDropdown(menu.label)}
+                    className={`flex items-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
+                      isScrolled
+                        ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                        : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+                    } ${
+                      activeDropdown === menu.label
+                        ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                        : ''
+                    }`}
+                  >
+                    <span className="text-base md:text-lg">{menu.icon}</span>
+                    <span className="font-medium text-xs md:text-sm hidden md:inline">
+                      {menu.label}
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        activeDropdown === menu.label ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {activeDropdown === menu.label && (
+                    <div className="absolute top-full left-0 mt-2 w-80 md:w-96 lg:w-96 xl:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 md:left-0 lg:left-0 xl:left-0 right-auto md:right-auto lg:right-auto xl:right-auto">
+                      {/* Parent Section Header */}
+                      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
+                        <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
+                          <span className="mr-2 lg:mr-3 text-lg lg:text-xl">
+                            {menu.icon}
+                          </span>
+                          {menu.label}
+                          <span className="ml-1 lg:ml-2 text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
+                            {menu.items.length} items
+                          </span>
+                        </h3>
+                        <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400 mt-1 ml-6 lg:ml-8">
+                          Explore all {menu.label.toLowerCase()} resources
+                        </p>
+                      </div>
+
+                      {/* Child Items */}
+                      <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                        {menu.items.map((item, index) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="flex items-start px-3 lg:px-4 py-2 lg:py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-base lg:text-lg mr-2 lg:mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
+                              {item.icon}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <div className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 flex items-center text-sm lg:text-base">
+                                {item.label}
+                                <span className="ml-1 lg:ml-2 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1 lg:px-2 py-0.5 rounded-full">
+                                  #{index + 1}
+                                </span>
+                              </div>
+                              <div className="text-xs lg:text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
+                                {item.description}
+                              </div>
+                            </div>
+                            {/* Arrow indicator */}
+                            <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                              <ChevronDown className="w-4 h-4 text-gray-400 rotate-[-90deg]" />
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+
+                      {/* Footer */}
+                      <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-b-xl">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                          💡 Click any item to explore{' '}
+                          {menu.label.toLowerCase()} content
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+            {/* More Dropdown - Show when there are hidden menus */}
+            {dropdownMenus.length >
+              (screenSize === 'desktop'
+                ? 4
+                : screenSize === 'laptop'
+                  ? 3
+                  : 2) && (
+              <div className="relative">
                 <button
-                  onClick={() => toggleDropdown(menu.label)}
+                  onClick={() => toggleDropdown('More')}
                   className={`flex items-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
                     isScrolled
                       ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                       : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
                   } ${
-                    activeDropdown === menu.label
+                    activeDropdown === 'More'
                       ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
                       : ''
                   }`}
                 >
-                  <span className="text-base md:text-lg">{menu.icon}</span>
+                  <span className="text-base md:text-lg">⚡</span>
                   <span className="font-medium text-xs md:text-sm hidden md:inline">
-                    {menu.label}
+                    More
                   </span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
-                      activeDropdown === menu.label ? 'rotate-180' : ''
+                      activeDropdown === 'More' ? 'rotate-180' : ''
                     }`}
                   />
                 </button>
 
-                {/* Dropdown Menu */}
-                {activeDropdown === menu.label && (
+                {/* More Dropdown Menu */}
+                {activeDropdown === 'More' && (
                   <div className="absolute top-full left-0 mt-2 w-80 md:w-96 lg:w-96 xl:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 md:left-0 lg:left-0 xl:left-0 right-auto md:right-auto lg:right-auto xl:right-auto">
-                    {/* Parent Section Header */}
-                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
+                    {/* More Section Header */}
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-t-xl">
                       <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
                         <span className="mr-2 lg:mr-3 text-lg lg:text-xl">
-                          {menu.icon}
+                          ⚡
                         </span>
-                        {menu.label}
-                        <span className="ml-1 lg:ml-2 text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
-                          {menu.items.length} items
+                        More Features
+                        <span className="ml-1 lg:ml-2 text-xs bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full">
+                          {
+                            dropdownMenus.slice(
+                              screenSize === 'desktop'
+                                ? 4
+                                : screenSize === 'laptop'
+                                  ? 3
+                                  : 2
+                            ).length
+                          }{' '}
+                          items
                         </span>
                       </h3>
                       <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400 mt-1 ml-6 lg:ml-8">
-                        Explore all {menu.label.toLowerCase()} resources
+                        Additional features and resources
                       </p>
                     </div>
 
-                    {/* Child Items */}
+                    {/* Hidden Menu Items */}
                     <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-                      {menu.items.map((item, index) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="flex items-start px-3 lg:px-4 py-2 lg:py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          <span className="text-base lg:text-lg mr-2 lg:mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
-                            {item.icon}
-                          </span>
-                          <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 flex items-center text-sm lg:text-base">
-                              {item.label}
-                              <span className="ml-1 lg:ml-2 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1 lg:px-2 py-0.5 rounded-full">
-                                #{index + 1}
+                      {dropdownMenus
+                        .slice(
+                          screenSize === 'desktop'
+                            ? 4
+                            : screenSize === 'laptop'
+                              ? 3
+                              : 2
+                        )
+                        .map((menu, index) => (
+                          <div
+                            key={menu.label}
+                            className="px-3 lg:px-4 py-2 lg:py-3"
+                          >
+                            {/* Sub-menu Header */}
+                            <div className="flex items-center mb-2 px-2 py-1 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                              <span className="text-base lg:text-lg mr-2 lg:mr-3">
+                                {menu.icon}
                               </span>
+                              <div className="flex-1">
+                                <div className="font-semibold text-gray-900 dark:text-white text-sm lg:text-base">
+                                  {menu.label}
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  {menu.items.length} items
+                                </div>
+                              </div>
                             </div>
-                            <div className="text-xs lg:text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-                              {item.description}
+
+                            {/* Sub-menu Items */}
+                            <div className="ml-4 space-y-1">
+                              {menu.items.slice(0, 3).map((item, itemIndex) => (
+                                <Link
+                                  key={item.href}
+                                  href={item.href}
+                                  className="flex items-start px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
+                                  onClick={() => setActiveDropdown(null)}
+                                >
+                                  <span className="text-sm mr-2 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
+                                    {item.icon}
+                                  </span>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-xs lg:text-sm">
+                                      {item.label}
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
+                              {menu.items.length > 3 && (
+                                <div className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
+                                  +{menu.items.length - 3} more items
+                                </div>
+                              )}
                             </div>
                           </div>
-                          {/* Arrow indicator */}
-                          <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                            <ChevronDown className="w-4 h-4 text-gray-400 rotate-[-90deg]" />
-                          </div>
-                        </Link>
-                      ))}
+                        ))}
                     </div>
 
                     {/* Footer */}
                     <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-b-xl">
                       <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                        💡 Click any item to explore {menu.label.toLowerCase()}{' '}
-                        content
+                        💡 Click any item to explore more features
                       </p>
                     </div>
                   </div>
                 )}
               </div>
-            ))}
+            )}
 
             {/* Job Aggregator - Standalone Link */}
             <Link
