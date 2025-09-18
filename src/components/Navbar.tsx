@@ -424,7 +424,8 @@ export default function Navbar() {
                 : screenSize === 'laptop'
                   ? 3
                   : 2) ||
-              screenSize !== 'desktop') && (
+              screenSize !== 'desktop' ||
+              !isAuthenticated) && (
               <div className="relative">
                 <button
                   onClick={() => toggleDropdown('More')}
@@ -476,6 +477,7 @@ export default function Navbar() {
                                   : 2
                             ).length +
                             (screenSize !== 'desktop' ? 1 : 0) +
+                            (!isAuthenticated ? 1 : 0) +
                             11}{' '}
                           items
                         </span>
@@ -858,8 +860,8 @@ export default function Navbar() {
               </Link>
             )}
 
-            {/* User Dropdown or Auth Button */}
-            {isAuthenticated ? (
+            {/* User Dropdown */}
+            {isAuthenticated && (
               <div className="relative" ref={userDropdownRef}>
                 <button
                   onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
@@ -973,18 +975,6 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-            ) : (
-              <Link
-                href="/auth"
-                className={`px-3 md:px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center ${
-                  isScrolled
-                    ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-green-500 text-white hover:bg-green-600'
-                }`}
-              >
-                <span className="hidden md:inline text-sm">Save Progress</span>
-                <span className="md:hidden text-xs">Save</span>
-              </Link>
             )}
           </div>
 
