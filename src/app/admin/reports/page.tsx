@@ -6,30 +6,27 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { LearningResourcesService, LearningResourcesStats } from '@/lib/learning-resources-service';
-// Remove tabs import
+import { 
+  allWebsiteFeatures, 
+  getFeatureStats
+} from '@/lib/website-features';
 import {
   CheckCircle,
   Clock,
   AlertCircle,
-  TrendingUp,
-  Code,
-  Users,
   FileText,
-  Zap,
-  Smartphone,
-  Brain,
-  BarChart3,
-  Calendar,
-  Target,
   ExternalLink,
   BookOpen,
+  Eye,
+  Edit,
+  Globe,
+  Shield,
 } from 'lucide-react';
 
 export default function ReportsPage() {
-  const [showCompletedDetails, setShowCompletedDetails] = useState(false);
-  const [showInProgressDetails, setShowInProgressDetails] = useState(false);
-  const [showPendingDetails, setShowPendingDetails] = useState(false);
   const [learningResources, setLearningResources] = useState<LearningResourcesStats | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'Website' | 'Admin'>('all');
+  const [selectedSection, setSelectedSection] = useState<string>('all');
 
   // Fetch learning resources data
   useEffect(() => {
@@ -37,7 +34,6 @@ export default function ReportsPage() {
       try {
         const resources = await LearningResourcesService.getResourcesStats();
         setLearningResources(resources);
-        
       } catch (error) {
         console.error('Failed to fetch learning resources:', error);
       }
@@ -46,300 +42,18 @@ export default function ReportsPage() {
     fetchLearningResources();
   }, []);
 
-  // Feature data
-  const completedFeatures = [
-    {
-      id: 'open-ended-questions',
-      title: 'Open-Ended Questions with AI Validation',
-      description: 'Implemented new question type with AI-powered answer validation using Google Gemini',
-      status: 'completed',
-      priority: 'High',
-      completionDate: 'Dec 2024',
-      impact: 'Enables flexible assessment beyond multiple-choice questions',
-      files: ['AI Validation Service', 'OpenEndedQuestion Component', 'API Endpoint'],
-      icon: Brain,
-    },
-    {
-      id: 'admin-interface',
-      title: 'Enhanced Admin Interface',
-      description: 'Improved admin dashboard with clickable buttons, debug toggles, and responsive design',
-      status: 'completed',
-      priority: 'High',
-      completionDate: 'Dec 2024',
-      impact: 'Significantly improved admin workflow and debugging capabilities',
-      files: ['Admin Dashboard', 'Question Management', 'Debug Panel'],
-      icon: Users,
-    },
-    {
-      id: 'audio-management',
-      title: 'Audio Management System',
-      description: 'Smart audio button display based on admin controls and question types',
-      status: 'completed',
-      priority: 'Medium',
-      completionDate: 'Dec 2024',
-      impact: 'Better control over audio content display and improved user experience',
-      files: ['Audio Utils', 'Conditional Rendering', 'Admin Controls'],
-      icon: Zap,
-    },
-    {
-      id: 'learning-path-ids',
-      title: 'Learning Path ID Management',
-      description: 'Fixed critical learning path ID mismatch issues between Firebase and static resources',
-      status: 'completed',
-      priority: 'High',
-      completionDate: 'Dec 2024',
-      impact: 'Resolved core issue preventing questions from appearing in learning paths',
-      files: ['Migration Tools', 'Firebase Schema', 'ID Mapping'],
-      icon: Target,
-    },
-    {
-      id: 'question-management',
-      title: 'Question Management System',
-      description: 'Enhanced question creation, editing, and bulk import capabilities',
-      status: 'completed',
-      priority: 'High',
-      completionDate: 'Dec 2024',
-      impact: 'Streamlined question creation and management workflow',
-      files: ['Question Schema', 'Markdown Import', 'Edit Modal'],
-      icon: FileText,
-    },
-    {
-      id: 'github-issues-resolved',
-      title: 'GitHub Issues Resolution',
-      description: 'Resolved multiple GitHub issues including ChatGPT API, Firebase Auth, and UI enhancements',
-      status: 'completed',
-      priority: 'High',
-      completionDate: 'Dec 2024',
-      impact: 'Fixed critical functionality and improved user experience',
-      files: ['Issue #24', 'Issue #23', 'Issue #34', 'Issue #33', 'Issue #32', 'Issue #30'],
-      icon: CheckCircle,
-    },
-    {
-      id: 'responsive-design',
-      title: 'Responsive Design Implementation',
-      description: 'Made admin buttons and components responsive for mobile devices',
-      status: 'completed',
-      priority: 'Medium',
-      completionDate: 'Dec 2024',
-      impact: 'Improved mobile user experience and accessibility',
-      files: ['Admin Dashboard', 'Question Management', 'Button Components'],
-      icon: Smartphone,
-    },
-    {
-      id: 'debug-system',
-      title: 'Debug Information System',
-      description: 'Implemented toggleable debug panels with comprehensive system information',
-      status: 'completed',
-      priority: 'Medium',
-      completionDate: 'Dec 2024',
-      impact: 'Enhanced debugging capabilities and system monitoring',
-      files: ['Debug Panel', 'Floating UI', 'System Stats'],
-      icon: AlertCircle,
-    },
-  ];
+  // Get feature statistics
+  const featureStats = getFeatureStats();
 
-  const inProgressFeatures = [
-    {
-      id: 'markdown-testing',
-      title: 'Markdown Question Upload Testing',
-      description: 'Step-by-step testing of markdown question upload process',
-      status: 'in-progress',
-      priority: 'High',
-      progress: 75,
-      estimatedCompletion: '1-2 days',
-      nextSteps: ['Execute upload test', 'Verify website display', 'Test AI validation'],
-      icon: Code,
-    },
-  ];
+  // Get unique sections for filtering
+  const allSections = Array.from(new Set(allWebsiteFeatures.map(f => f.section))).sort();
 
-  const pendingFeatures = [
-    {
-      id: 'website-verification',
-      title: 'Website Display Verification',
-      description: 'Verify that uploaded questions correctly appear on the website',
-      status: 'pending',
-      priority: 'High',
-      dependencies: ['Markdown upload testing completion'],
-      estimatedEffort: '2-4 hours',
-      icon: ExternalLink,
-    },
-    {
-      id: 'missing-tutorials-page',
-      title: 'Create Tutorials Page (/tutorials)',
-      description: 'Missing core learning feature - step-by-step tutorials for HTML, CSS, JavaScript, React',
-      status: 'pending',
-      priority: 'Critical',
-      dependencies: ['Core platform stabilization'],
-      estimatedEffort: '2-3 weeks',
-      icon: BookOpen,
-    },
-    {
-      id: 'missing-video-courses-page',
-      title: 'Create Video Courses Page (/video-courses)',
-      description: 'Missing promised navigation feature - video course catalog with categories and progress tracking',
-      status: 'pending',
-      priority: 'Critical',
-      dependencies: ['Tutorials page completion'],
-      estimatedEffort: '3-4 weeks',
-      icon: FileText,
-    },
-    {
-      id: 'missing-documentation-page',
-      title: 'Create Documentation Page (/documentation)',
-      description: 'Missing reference material - organized documentation by technology with search functionality',
-      status: 'pending',
-      priority: 'High',
-      dependencies: ['Core content completion'],
-      estimatedEffort: '1-2 weeks',
-      icon: FileText,
-    },
-    {
-      id: 'missing-coding-exercises-page',
-      title: 'Create Coding Exercises Page (/practice/coding-exercises)',
-      description: 'Missing core practice feature - coding challenges with instant feedback and code editor',
-      status: 'pending',
-      priority: 'Critical',
-      dependencies: ['Question system completion'],
-      estimatedEffort: '3-4 weeks',
-      icon: Code,
-    },
-    {
-      id: 'missing-projects-page',
-      title: 'Create Projects Page (/practice/projects)',
-      description: 'Missing real-world practice - project gallery with templates and submission system',
-      status: 'pending',
-      priority: 'Critical',
-      dependencies: ['Coding exercises completion'],
-      estimatedEffort: '2-3 weeks',
-      icon: Target,
-    },
-    {
-      id: 'missing-quiz-page',
-      title: 'Create Quiz Page (/practice/quiz)',
-      description: 'Missing knowledge testing - quiz interface with multiple question types and scoring',
-      status: 'pending',
-      priority: 'High',
-      dependencies: ['Question system completion'],
-      estimatedEffort: '1-2 weeks',
-      icon: BarChart3,
-    },
-    {
-      id: 'fix-advanced-practice-pages',
-      title: 'Fix Advanced Practice Pages',
-      description: 'Fix disabled content in performance optimization and other advanced practice pages',
-      status: 'pending',
-      priority: 'High',
-      dependencies: ['Core practice pages completion'],
-      estimatedEffort: '1 week',
-      icon: AlertCircle,
-    },
-    {
-      id: 'performance-optimization',
-      title: 'Performance Optimization',
-      description: 'Optimize application performance and loading times',
-      status: 'pending',
-      priority: 'Medium',
-      dependencies: ['Core functionality completion'],
-      estimatedEffort: '1-2 weeks',
-      icon: TrendingUp,
-    },
-    {
-      id: 'advanced-ai-features',
-      title: 'Advanced AI Features',
-      description: 'Enhance AI validation with additional features and providers',
-      status: 'pending',
-      priority: 'Low',
-      dependencies: ['Basic AI validation completion'],
-      estimatedEffort: '2-3 weeks',
-      icon: Brain,
-    },
-    {
-      id: 'mobile-app',
-      title: 'Mobile App Integration',
-      description: 'Develop mobile application for the learning platform',
-      status: 'pending',
-      priority: 'Low',
-      dependencies: ['Web platform stabilization'],
-      estimatedEffort: '4-6 weeks',
-      icon: Smartphone,
-    },
-    {
-      id: 'comprehensive-testing',
-      title: 'Comprehensive Testing Suite',
-      description: 'Add unit tests, integration tests, and E2E tests',
-      status: 'pending',
-      priority: 'Medium',
-      dependencies: ['Core features completion'],
-      estimatedEffort: '2-3 weeks',
-      icon: BarChart3,
-    },
-    {
-      id: 'documentation',
-      title: 'Documentation Updates',
-      description: 'Create user guides, API docs, and deployment instructions',
-      status: 'pending',
-      priority: 'Medium',
-      dependencies: ['Feature stabilization'],
-      estimatedEffort: '1 week',
-      icon: FileText,
-    },
-    // GitHub Issues - Add your open issues here
-    {
-      id: 'github-issue-1',
-      title: '[GitHub Issue] Bug: Learning path questions not displaying',
-      description: 'Questions uploaded via bulk import are not appearing in learning path questions page',
-      status: 'pending',
-      priority: 'Critical',
-      dependencies: ['Question system debugging'],
-      estimatedEffort: '1-2 days',
-      icon: AlertCircle,
-      githubUrl: 'https://github.com/your-username/Great-frontendHub/issues/1',
-    },
-    {
-      id: 'github-issue-2',
-      title: '[GitHub Issue] Feature: Add dark mode toggle',
-      description: 'Implement dark mode toggle in the main navigation for better user experience',
-      status: 'pending',
-      priority: 'High',
-      dependencies: ['Theme system implementation'],
-      estimatedEffort: '3-5 days',
-      icon: Zap,
-      githubUrl: 'https://github.com/your-username/Great-frontendHub/issues/2',
-    },
-    {
-      id: 'github-issue-3',
-      title: '[GitHub Issue] Enhancement: Improve mobile responsiveness',
-      description: 'Several pages need better mobile responsiveness and touch interactions',
-      status: 'pending',
-      priority: 'High',
-      dependencies: ['UI/UX audit completion'],
-      estimatedEffort: '1-2 weeks',
-      icon: Smartphone,
-      githubUrl: 'https://github.com/your-username/Great-frontendHub/issues/3',
-    },
-    {
-      id: 'github-issue-4',
-      title: '[GitHub Issue] Bug: Audio files not playing on mobile',
-      description: 'Audio buttons work on desktop but fail to play on mobile devices',
-      status: 'pending',
-      priority: 'Medium',
-      dependencies: ['Mobile testing completion'],
-      estimatedEffort: '2-3 days',
-      icon: AlertCircle,
-      githubUrl: 'https://github.com/your-username/Great-frontendHub/issues/4',
-    },
-    {
-      id: 'github-issue-5',
-      title: '[GitHub Issue] Feature: Add progress tracking',
-      description: 'Implement user progress tracking across learning paths and questions',
-      status: 'pending',
-      priority: 'Medium',
-      dependencies: ['User authentication system'],
-      estimatedEffort: '1-2 weeks',
-      icon: BarChart3,
-      githubUrl: 'https://github.com/your-username/Great-frontendHub/issues/5',
-    },
-  ];
+  // Filter features based on selected category and section
+  const filteredFeatures = allWebsiteFeatures.filter(feature => {
+    const categoryMatch = selectedCategory === 'all' || feature.category === selectedCategory;
+    const sectionMatch = selectedSection === 'all' || feature.section === selectedSection;
+    return categoryMatch && sectionMatch;
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -357,435 +71,317 @@ export default function ReportsPage() {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case 'Critical':
-        return <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 border-red-300 dark:border-red-700">{priority}</Badge>;
+        return <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">Critical</Badge>;
       case 'High':
-        return <Badge variant="destructive">{priority}</Badge>;
+        return <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">High</Badge>;
       case 'Medium':
-        return <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">{priority}</Badge>;
+        return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">Medium</Badge>;
       case 'Low':
-        return <Badge variant="secondary">{priority}</Badge>;
+        return <Badge className="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">Low</Badge>;
       default:
-        return <Badge variant="outline">{priority}</Badge>;
+        return <Badge variant="secondary">{priority}</Badge>;
+    }
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'Website':
+        return <Globe className="w-4 h-4" />;
+      case 'Admin':
+        return <Shield className="w-4 h-4" />;
+      default:
+        return <FileText className="w-4 h-4" />;
     }
   };
 
   return (
     <AdminLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-4 sm:space-y-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Header */}
-        <div className="flex flex-col gap-3 sm:gap-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-            <div className="min-w-0">
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white truncate">Feature Reports</h1>
-              <p className="text-xs sm:text-sm lg:text-base text-gray-600 dark:text-gray-400 mt-1 sm:mt-2">
-                Comprehensive overview of project features, progress, and status
-              </p>
-            </div>
-            <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">
-              <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">Last Updated: {new Date().toLocaleDateString()}</span>
-              <span className="sm:hidden">{new Date().toLocaleDateString()}</span>
-            </div>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold">Website Features Report</h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Comprehensive overview of all features across website and admin sections
+            </p>
           </div>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card>
-            <CardContent className="p-3 sm:p-4 lg:p-6">
-              <div className="flex items-center">
-                <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-green-500 flex-shrink-0" />
-                <div className="ml-2 sm:ml-3 lg:ml-4 min-w-0">
-                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 truncate">Completed</p>
-                  <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
-                    {completedFeatures.length}
-                    {learningResources && (
-                      <span className="text-xs sm:text-sm font-normal text-green-600 ml-1">
-                        (+{learningResources.closed} GitHub)
-                      </span>
-                    )}
-                  </p>
-                </div>
-              </div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Features</CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{featureStats.total}</div>
+              <p className="text-xs text-muted-foreground">
+                {featureStats.website} Website • {featureStats.admin} Admin
+              </p>
             </CardContent>
           </Card>
+
           <Card>
-            <CardContent className="p-3 sm:p-4 lg:p-6">
-              <div className="flex items-center">
-                <Clock className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-blue-500 flex-shrink-0" />
-                <div className="ml-2 sm:ml-3 lg:ml-4 min-w-0">
-                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 truncate">In Progress</p>
-                  <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
-                    {inProgressFeatures.length}
-                    {learningResources && (
-                      <span className="text-xs sm:text-sm font-normal text-blue-600 ml-1">
-                        (+{learningResources.open} GitHub)
-                      </span>
-                    )}
-                  </p>
-                </div>
-              </div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Completed</CardTitle>
+              <CheckCircle className="h-4 w-4 text-green-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">{featureStats.completed}</div>
+              <p className="text-xs text-muted-foreground">
+                {featureStats.completionRate}% completion rate
+              </p>
             </CardContent>
           </Card>
+
           <Card>
-            <CardContent className="p-3 sm:p-4 lg:p-6">
-              <div className="flex items-center">
-                <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-yellow-500 flex-shrink-0" />
-                <div className="ml-2 sm:ml-3 lg:ml-4 min-w-0">
-                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 truncate">Pending</p>
-                  <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
-                    {pendingFeatures.length}
-                    {learningResources && (
-                      <span className="text-xs sm:text-sm font-normal text-yellow-600 ml-1">
-                        (+{learningResources.open} GitHub)
-                      </span>
-                    )}
-                  </p>
-                </div>
-              </div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+              <Clock className="h-4 w-4 text-blue-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-blue-600">{featureStats.inProgress}</div>
+              <p className="text-xs text-muted-foreground">
+                Currently being developed
+              </p>
             </CardContent>
           </Card>
+
           <Card>
-            <CardContent className="p-3 sm:p-4 lg:p-6">
-              <div className="flex items-center">
-                <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-purple-500 flex-shrink-0" />
-                <div className="ml-2 sm:ml-3 lg:ml-4 min-w-0">
-                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 truncate">Total</p>
-                  <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
-                    {completedFeatures.length + inProgressFeatures.length + pendingFeatures.length}
-                    {learningResources && (
-                      <span className="text-xs sm:text-sm font-normal text-purple-600 ml-1">
-                        (+{learningResources.total} GitHub)
-                      </span>
-                    )}
-                  </p>
-                </div>
-              </div>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Pending</CardTitle>
+              <AlertCircle className="h-4 w-4 text-yellow-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-yellow-600">{featureStats.pending}</div>
+              <p className="text-xs text-muted-foreground">
+                Planned for future development
+              </p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-          {/* Completed Features Chart */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center text-sm sm:text-base">
-                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0" />
-                <span className="truncate">Completed Features</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {/* Simple Bar Chart */}
-              <div className="space-y-3 sm:space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Features</span>
-                  <span className="text-xs sm:text-sm font-bold text-green-600">
-                    {completedFeatures.length}
-                    {learningResources && (
-                      <span className="ml-1 text-gray-500">(+{learningResources.closed} GitHub)</span>
-                    )}
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 sm:h-4">
-                  <div 
-                    className="bg-green-500 h-3 sm:h-4 rounded-full transition-all duration-500"
-                    style={{ width: `${(completedFeatures.length / (completedFeatures.length + inProgressFeatures.length + pendingFeatures.length)) * 100}%` }}
-                  ></div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg sm:text-2xl font-bold text-green-600">
-                    {Math.round((completedFeatures.length / (completedFeatures.length + inProgressFeatures.length + pendingFeatures.length)) * 100)}%
-                  </div>
-                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Completion Rate</div>
-                </div>
-              </div>
-              <Button 
-                onClick={() => setShowCompletedDetails(!showCompletedDetails)}
-                className="w-full mt-3 sm:mt-4 text-xs sm:text-sm"
-                variant="outline"
-                size="sm"
-              >
-                <span className="hidden sm:inline">
-                  {showCompletedDetails ? 'Hide Details' : 'Show Details'} ({completedFeatures.length})
-                </span>
-                <span className="sm:hidden">
-                  {showCompletedDetails ? 'Hide' : 'Show'} ({completedFeatures.length})
-                </span>
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* In Progress Chart */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center text-sm sm:text-base">
-                <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 mr-2 flex-shrink-0" />
-                <span className="truncate">In Progress</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 sm:space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Active Tasks</span>
-                  <span className="text-xs sm:text-sm font-bold text-blue-600">
-                    {inProgressFeatures.length}
-                    {learningResources && (
-                      <span className="ml-1 text-gray-500">(+{learningResources.open} GitHub)</span>
-                    )}
-                  </span>
-                </div>
-                {inProgressFeatures.map((feature) => (
-                  <div key={feature.id} className="space-y-2">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-gray-600 dark:text-gray-400 truncate pr-2">{feature.title}</span>
-                      <span className="text-blue-600 flex-shrink-0">{feature.progress}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                      <div
-                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${feature.progress}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <Button 
-                onClick={() => setShowInProgressDetails(!showInProgressDetails)}
-                className="w-full mt-3 sm:mt-4 text-xs sm:text-sm"
-                variant="outline"
-                size="sm"
-              >
-                <span className="hidden sm:inline">
-                  {showInProgressDetails ? 'Hide Details' : 'Show Details'} ({inProgressFeatures.length})
-                </span>
-                <span className="sm:hidden">
-                  {showInProgressDetails ? 'Hide' : 'Show'} ({inProgressFeatures.length})
-                </span>
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Pending Features Chart */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center text-sm sm:text-base">
-                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 mr-2 flex-shrink-0" />
-                <span className="truncate">Pending Features</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 sm:space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Waiting Tasks</span>
-                  <span className="text-xs sm:text-sm font-bold text-yellow-600">
-                    {pendingFeatures.length}
-                    {learningResources && (
-                      <span className="ml-1 text-gray-500">(+{learningResources.open} GitHub)</span>
-                    )}
-                  </span>
-                </div>
-                {/* Priority Breakdown */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 dark:text-gray-400">Critical</span>
-                    <span className="text-red-600">{pendingFeatures.filter(f => f.priority === 'Critical').length}</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 dark:text-gray-400">High</span>
-                    <span className="text-orange-600">{pendingFeatures.filter(f => f.priority === 'High').length}</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 dark:text-gray-400">Medium</span>
-                    <span className="text-yellow-600">{pendingFeatures.filter(f => f.priority === 'Medium').length}</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 dark:text-gray-400">Low</span>
-                    <span className="text-gray-600">{pendingFeatures.filter(f => f.priority === 'Low').length}</span>
-                  </div>
-                </div>
-              </div>
-              <Button 
-                onClick={() => setShowPendingDetails(!showPendingDetails)}
-                className="w-full mt-3 sm:mt-4 text-xs sm:text-sm"
-                variant="outline"
-                size="sm"
-              >
-                <span className="hidden sm:inline">
-                  {showPendingDetails ? 'Hide Details' : 'Show Details'} ({pendingFeatures.length})
-                </span>
-                <span className="sm:hidden">
-                  {showPendingDetails ? 'Hide' : 'Show'} ({pendingFeatures.length})
-                </span>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Details Sections */}
-        {showCompletedDetails && (
+        {/* Learning Resources Integration */}
+        {learningResources && (
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center text-sm sm:text-base">
-                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0" />
-                <span className="truncate">Completed Features Details</span>
+              <CardTitle className="flex items-center gap-2">
+                <BookOpen className="w-5 h-5" />
+                Learning Resources Progress
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3 sm:space-y-4">
-                {completedFeatures.map((feature) => {
-                  const IconComponent = feature.icon;
-                  return (
-                    <div key={feature.id} className="border border-green-200 dark:border-green-800 rounded-lg p-3 sm:p-4">
-                      <div className="flex items-start space-x-2 sm:space-x-3 lg:space-x-4">
-                        <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-green-600 dark:text-green-400 mt-0.5 sm:mt-1 flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-col gap-2 mb-2">
-                            <h4 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white break-words">{feature.title}</h4>
-                            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
-                              {getStatusBadge(feature.status)}
-                              {getPriorityBadge(feature.priority)}
-                            </div>
-                          </div>
-                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 break-words">{feature.description}</p>
-                          <div className="space-y-1 sm:space-y-2">
-                            <div>
-                              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Impact: </span>
-                              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-words">{feature.impact}</span>
-                            </div>
-                            <div>
-                              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Files Modified: </span>
-                              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-words">{feature.files.join(', ')}</span>
-                            </div>
-                            <div>
-                              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Completed: </span>
-                              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{feature.completionDate}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600">{learningResources.open}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Resources to Complete</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">{learningResources.closed}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Resources Completed</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-600">{learningResources.total}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Total Resources</div>
+                </div>
               </div>
             </CardContent>
           </Card>
         )}
 
-        {showInProgressDetails && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-sm sm:text-base">
-                <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 mr-2 flex-shrink-0" />
-                <span className="truncate">In Progress Details</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 sm:space-y-4">
-                {inProgressFeatures.map((feature) => {
-                  const IconComponent = feature.icon;
-                  return (
-                    <div key={feature.id} className="border border-blue-200 dark:border-blue-800 rounded-lg p-3 sm:p-4">
-                      <div className="flex items-start space-x-2 sm:space-x-3 lg:space-x-4">
-                        <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600 dark:text-blue-400 mt-0.5 sm:mt-1 flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-col gap-2 mb-2">
-                            <h4 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white break-words">{feature.title}</h4>
-                            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
-                              {getStatusBadge(feature.status)}
-                              {getPriorityBadge(feature.priority)}
+        {/* Filters */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Filter Features</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-4">
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium">Category:</label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value as 'all' | 'Website' | 'Admin')}
+                  className="px-3 py-1 border rounded-md text-sm"
+                >
+                  <option value="all">All Categories</option>
+                  <option value="Website">Website Features</option>
+                  <option value="Admin">Admin Features</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium">Section:</label>
+                <select
+                  value={selectedSection}
+                  onChange={(e) => setSelectedSection(e.target.value)}
+                  className="px-3 py-1 border rounded-md text-sm"
+                >
+                  <option value="all">All Sections</option>
+                  {allSections.map(section => (
+                    <option key={section} value={section}>{section}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Features List */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Eye className="w-5 h-5" />
+              All Features ({filteredFeatures.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {filteredFeatures.map((feature) => {
+                const IconComponent = feature.icon;
+                return (
+                  <div
+                    key={feature.id}
+                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    <div className="flex items-center gap-4 flex-1">
+                      <div className="flex items-center gap-2">
+                        <IconComponent className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        {getCategoryIcon(feature.category)}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold">{feature.title}</h3>
+                          {getStatusBadge(feature.status)}
+                          {getPriorityBadge(feature.priority)}
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                          {feature.description}
+                        </p>
+                        <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-500">
+                          <span className="flex items-center gap-1">
+                            <span className="font-medium">Category:</span> {feature.category}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <span className="font-medium">Section:</span> {feature.section}
+                          </span>
+                          {feature.url && (
+                            <span className="flex items-center gap-1">
+                              <span className="font-medium">URL:</span> 
+                              <a 
+                                href={feature.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline"
+                              >
+                                {feature.url}
+                              </a>
+                            </span>
+                          )}
+                        </div>
+                        {feature.status === 'in-progress' && feature.progress && (
+                          <div className="mt-2">
+                            <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                              <span>Progress: {feature.progress}%</span>
+                              {feature.estimatedCompletion && (
+                                <span>• ETA: {feature.estimatedCompletion}</span>
+                              )}
                             </div>
-                          </div>
-                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 break-words">{feature.description}</p>
-                          <div className="space-y-1 sm:space-y-2">
-                            <div>
-                              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Progress: </span>
-                              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{feature.progress}%</span>
-                            </div>
-                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                              <div
-                                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                            <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                              <div 
+                                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                                 style={{ width: `${feature.progress}%` }}
                               ></div>
                             </div>
-                            <div>
-                              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Next Steps: </span>
-                              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-words">{feature.nextSteps.join(', ')}</span>
-                            </div>
-                            <div>
-                              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">ETA: </span>
-                              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{feature.estimatedCompletion}</span>
-                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {showPendingDetails && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-sm sm:text-base">
-                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 mr-2 flex-shrink-0" />
-                <span className="truncate">Pending Features Details</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 sm:space-y-4">
-                {pendingFeatures.map((feature) => {
-                  const IconComponent = feature.icon;
-                  return (
-                    <div key={feature.id} className="border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 sm:p-4">
-                      <div className="flex items-start space-x-2 sm:space-x-3 lg:space-x-4">
-                        <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-yellow-600 dark:text-yellow-400 mt-0.5 sm:mt-1 flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-col gap-2 mb-2">
-                            <h4 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white break-words">{feature.title}</h4>
-                            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
-                              {getStatusBadge(feature.status)}
-                              {getPriorityBadge(feature.priority)}
-                            </div>
-                          </div>
-                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 break-words">{feature.description}</p>
-                          <div className="space-y-1 sm:space-y-2">
-                            <div>
-                              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Dependencies: </span>
-                              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-words">{feature.dependencies}</span>
-                            </div>
-                            <div>
-                              <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Estimated Effort: </span>
-                              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{feature.estimatedEffort}</span>
-                            </div>
-                            {'githubUrl' in feature && feature.githubUrl && (
-                              <div>
-                                <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">GitHub Issue: </span>
-                                <a 
-                                  href={feature.githubUrl as string} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1 break-words"
-                                >
-                                  View Issue <ExternalLink className="w-3 h-3 flex-shrink-0" />
-                                </a>
-                              </div>
+                        )}
+                        {feature.status === 'pending' && feature.estimatedEffort && (
+                          <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                            <span className="font-medium">Estimated Effort:</span> {feature.estimatedEffort}
+                            {feature.dependencies && feature.dependencies.length > 0 && (
+                              <span className="ml-2">
+                                <span className="font-medium">Dependencies:</span> {feature.dependencies.join(', ')}
+                              </span>
                             )}
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-        </div>
+                    <div className="flex items-center gap-2">
+                      {feature.url && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => window.open(feature.url!, '_blank')}
+                          className="flex items-center gap-1"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          View
+                        </Button>
+                      )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          // TODO: Implement feature editing functionality
+                          console.log('Edit feature:', feature.id);
+                        }}
+                        className="flex items-center gap-1"
+                      >
+                        <Edit className="w-3 h-3" />
+                        Edit
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Actions */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-4">
+              <Button
+                onClick={() => setSelectedCategory('Website')}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Globe className="w-4 h-4" />
+                View Website Features
+              </Button>
+              <Button
+                onClick={() => setSelectedCategory('Admin')}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Shield className="w-4 h-4" />
+                View Admin Features
+              </Button>
+              <Button
+                onClick={() => setSelectedCategory('all')}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Eye className="w-4 h-4" />
+                View All Features
+              </Button>
+              <Button
+                onClick={() => {
+                  // TODO: Implement feature status update functionality
+                  console.log('Update feature statuses');
+                }}
+                className="flex items-center gap-2"
+              >
+                <Edit className="w-4 h-4" />
+                Update Statuses
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </AdminLayout>
   );
