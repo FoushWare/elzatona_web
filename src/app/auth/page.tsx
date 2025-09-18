@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useCookieAuth } from '@/contexts/CookieAuthContext';
 import {
   ArrowLeft,
   User,
@@ -34,7 +34,7 @@ export default function AuthPage() {
     signInWithEmail,
     signUpWithEmail,
     isAuthenticated,
-  } = useFirebaseAuth();
+  } = useCookieAuth();
   const router = useRouter();
 
   // Redirect if already authenticated

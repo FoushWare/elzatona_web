@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useUserProgress } from '@/hooks/useUserProgress';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useCookieAuth } from '@/contexts/CookieAuthContext';
 import {
   BookOpen,
   Code,
@@ -62,7 +62,7 @@ interface Recommendation {
 }
 
 export default function EnhancedDashboard() {
-  const { user, signOut } = useFirebaseAuth();
+  const { user, signOut } = useCookieAuth();
   const {
     progress,
     dashboardStats,
