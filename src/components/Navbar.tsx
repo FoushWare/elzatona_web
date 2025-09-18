@@ -454,7 +454,7 @@ export default function Navbar() {
                                 : 2
                           ).length +
                             (screenSize !== 'desktop' ? 1 : 0) +
-                            6}{' '}
+                            10}{' '}
                           items
                         </span>
                       </h3>
@@ -615,6 +615,92 @@ export default function Navbar() {
                             </div>
                           </div>
                         ))}
+
+                      {/* Interview Prep Section */}
+                      <div className="px-3 lg:px-4 py-2 mt-3">
+                        <div className="flex items-center px-2 py-1 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg mb-2">
+                          <span className="text-base mr-2">🎯</span>
+                          <div className="font-semibold text-gray-900 dark:text-white text-sm">
+                            Interview Prep
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <Link
+                            href="/mock-interviews"
+                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                              🎬
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
+                                Mock Interviews
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                Video mock interviews and practice sessions
+                              </div>
+                            </div>
+                          </Link>
+
+                          <Link
+                            href="/ai-mock-interview"
+                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                              🤖
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
+                                AI Mock Interview
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                Practice with AI interviewer and get real-time
+                                feedback
+                              </div>
+                            </div>
+                          </Link>
+
+                          <Link
+                            href="/culture-fit-interviews"
+                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                              🌟
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
+                                Culture Fit Questions
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                Master culture fit questions and demonstrate
+                                your values
+                              </div>
+                            </div>
+                          </Link>
+
+                          <Link
+                            href="/preparation-guides"
+                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                              📖
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
+                                Preparation Guides
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                Comprehensive interview preparation resources
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
 
                       {/* Tools & Resources Section */}
                       <div className="px-3 lg:px-4 py-2 mt-3">
