@@ -452,7 +452,9 @@ export default function Navbar() {
                               : screenSize === 'laptop'
                                 ? 3
                                 : 2
-                          ).length + (screenSize !== 'desktop' ? 1 : 0)}{' '}
+                          ).length +
+                            (screenSize !== 'desktop' ? 1 : 0) +
+                            6}{' '}
                           items
                         </span>
                       </h3>
@@ -461,8 +463,75 @@ export default function Navbar() {
                       </p>
                     </div>
 
-                    {/* Hidden Menu Items */}
+                    {/* Quick Access Section */}
                     <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                      {/* Quick Access Header */}
+                      <div className="px-3 lg:px-4 py-2 mb-2">
+                        <div className="flex items-center px-2 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg">
+                          <span className="text-base mr-2">🚀</span>
+                          <div className="font-semibold text-gray-900 dark:text-white text-sm">
+                            Quick Access
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Quick Access Items */}
+                      <div className="px-3 lg:px-4 space-y-1 mb-3">
+                        <Link
+                          href="/dashboard"
+                          className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                            📊
+                          </span>
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 text-sm">
+                              Dashboard
+                            </div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                              Your learning progress
+                            </div>
+                          </div>
+                        </Link>
+
+                        <Link
+                          href="/progress"
+                          className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                            📈
+                          </span>
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 text-sm">
+                              Progress Tracking
+                            </div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                              Track your achievements
+                            </div>
+                          </div>
+                        </Link>
+
+                        <Link
+                          href="/reports"
+                          className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                            📋
+                          </span>
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 text-sm">
+                              Feature Reports
+                            </div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                              Platform capabilities overview
+                            </div>
+                          </div>
+                        </Link>
+                      </div>
+
                       {/* Job Aggregator - Special section */}
                       <div className="px-3 lg:px-4 py-2 lg:py-3 mb-2">
                         <Link
@@ -546,6 +615,72 @@ export default function Navbar() {
                             </div>
                           </div>
                         ))}
+
+                      {/* Tools & Resources Section */}
+                      <div className="px-3 lg:px-4 py-2 mt-3">
+                        <div className="flex items-center px-2 py-1 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg mb-2">
+                          <span className="text-base mr-2">🛠️</span>
+                          <div className="font-semibold text-gray-900 dark:text-white text-sm">
+                            Tools & Resources
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <Link
+                            href="/cheatsheet"
+                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-orange-400 dark:hover:border-orange-500 rounded"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                              📚
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-200 text-sm">
+                                Cheatsheet
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                Quick reference guides
+                              </div>
+                            </div>
+                          </Link>
+
+                          <Link
+                            href="/articles"
+                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-orange-400 dark:hover:border-orange-500 rounded"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                              📰
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-200 text-sm">
+                                Articles
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                Latest frontend insights
+                              </div>
+                            </div>
+                          </Link>
+
+                          <Link
+                            href="/resources"
+                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-orange-400 dark:hover:border-orange-500 rounded"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                              🔗
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-200 text-sm">
+                                Resources
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                Curated learning materials
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Footer */}
