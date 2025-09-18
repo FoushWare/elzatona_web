@@ -403,13 +403,14 @@ export default function Navbar() {
                 </div>
               ))}
 
-            {/* More Dropdown - Show when there are hidden menus */}
-            {dropdownMenus.length >
+            {/* More Dropdown - Show when there are hidden menus or Job Aggregator */}
+            {(dropdownMenus.length >
               (screenSize === 'desktop'
                 ? 4
                 : screenSize === 'laptop'
                   ? 3
-                  : 2) && (
+                  : 2) ||
+              screenSize !== 'desktop') && (
               <div className="relative">
                 <button
                   onClick={() => toggleDropdown('More')}
@@ -445,15 +446,13 @@ export default function Navbar() {
                         </span>
                         More Features
                         <span className="ml-1 lg:ml-2 text-xs bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full">
-                          {
-                            dropdownMenus.slice(
-                              screenSize === 'desktop'
-                                ? 4
-                                : screenSize === 'laptop'
-                                  ? 3
-                                  : 2
-                            ).length
-                          }{' '}
+                          {dropdownMenus.slice(
+                            screenSize === 'desktop'
+                              ? 4
+                              : screenSize === 'laptop'
+                                ? 3
+                                : 2
+                          ).length + (screenSize !== 'desktop' ? 1 : 0)}{' '}
                           items
                         </span>
                       </h3>
@@ -464,6 +463,34 @@ export default function Navbar() {
 
                     {/* Hidden Menu Items */}
                     <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                      {/* Job Aggregator - Special section */}
+                      <div className="px-3 lg:px-4 py-2 lg:py-3 mb-2">
+                        <Link
+                          href="/jobs"
+                          className="flex items-center px-3 py-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-900/30 dark:hover:to-emerald-900/30 transition-all duration-200 group border-l-4 border-transparent hover:border-green-400 dark:hover:border-green-500 rounded-lg shadow-sm hover:shadow-md"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          <span className="text-2xl mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
+                            💼
+                          </span>
+                          <div className="flex-1">
+                            <div className="font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200 text-sm lg:text-base">
+                              Job Aggregator
+                            </div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              Find frontend development jobs from multiple
+                              sources
+                            </div>
+                          </div>
+                          <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <ChevronDown className="w-4 h-4 text-gray-400 rotate-[-90deg]" />
+                          </div>
+                        </Link>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="mx-3 my-2 border-t border-gray-200 dark:border-gray-700"></div>
+
                       {dropdownMenus
                         .slice(
                           screenSize === 'desktop'
@@ -532,18 +559,20 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* Job Aggregator - Standalone Link */}
-            <Link
-              href="/jobs"
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 font-medium ${
-                isScrolled
-                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                  : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
-              }`}
-            >
-              <span className="text-lg">💼</span>
-              <span className="text-sm">Job Aggregator</span>
-            </Link>
+            {/* Job Aggregator - Show on desktop only, hide on tablet/laptop */}
+            {screenSize === 'desktop' && (
+              <Link
+                href="/jobs"
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 font-medium ${
+                  isScrolled
+                    ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                    : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+                }`}
+              >
+                <span className="text-lg">💼</span>
+                <span className="text-sm">Job Aggregator</span>
+              </Link>
+            )}
 
             {/* User Dropdown or Auth Button */}
             {isAuthenticated ? (
