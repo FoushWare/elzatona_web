@@ -461,7 +461,7 @@ export default function Navbar() {
                 {/* More Dropdown Menu */}
                 {activeDropdown === 'More' && (
                   <div className="fixed top-16 left-0 right-0 w-full bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200">
-                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* More Section Header */}
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-t-xl">
                       <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
@@ -502,9 +502,9 @@ export default function Navbar() {
                     </div>
 
                     {/* Quick Access Section */}
-                    <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                    <div className="py-2 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
                       {/* Quick Access Header */}
-                      <div className="px-3 lg:px-4 py-2 mb-2">
+                      <div className="px-3 py-2 mb-2">
                         <div className="flex items-center px-2 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg">
                           <span className="text-base mr-2">🚀</span>
                           <div className="font-semibold text-gray-900 dark:text-white text-sm">
@@ -571,7 +571,7 @@ export default function Navbar() {
                       </div>
 
                       {/* Job Aggregator - Special section */}
-                      <div className="px-3 lg:px-4 py-2 lg:py-3 mb-2">
+                      <div className="px-3 py-2 mb-2">
                         <Link
                           href="/jobs"
                           className="flex items-center px-3 py-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-900/30 dark:hover:to-emerald-900/30 transition-all duration-200 group border-l-4 border-transparent hover:border-green-400 dark:hover:border-green-500 rounded-lg shadow-sm hover:shadow-md"
@@ -619,7 +619,7 @@ export default function Navbar() {
                         .map((menu, index) => (
                           <div
                             key={menu.label}
-                            className="px-3 lg:px-4 py-2 lg:py-3"
+                            className="px-3 py-2"
                           >
                             {/* Sub-menu Header */}
                             <div className="flex items-center mb-2 px-2 py-1 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -665,7 +665,7 @@ export default function Navbar() {
                         ))}
 
                       {/* Interview Prep Section */}
-                      <div className="px-3 lg:px-4 py-2 mt-3">
+                      <div className="px-3 py-2 mt-3">
                         <div className="flex items-center px-2 py-1 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg mb-2">
                           <span className="text-base mr-2">🎯</span>
                           <div className="font-semibold text-gray-900 dark:text-white text-sm">
@@ -751,7 +751,7 @@ export default function Navbar() {
                       </div>
 
                       {/* Tools & Resources Section */}
-                      <div className="px-3 lg:px-4 py-2 mt-3">
+                      <div className="px-3 py-2 mt-3">
                         <div className="flex items-center px-2 py-1 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg mb-2">
                           <span className="text-base mr-2">🛠️</span>
                           <div className="font-semibold text-gray-900 dark:text-white text-sm">
@@ -818,7 +818,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Save Progress Section */}
-                    <div className="px-3 lg:px-4 py-2 mt-3">
+                    <div className="px-3 py-2 mt-3">
                       <div className="flex items-center px-2 py-1 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg mb-2">
                         <span className="text-base mr-2">💾</span>
                         <div className="font-semibold text-gray-900 dark:text-white text-sm">
