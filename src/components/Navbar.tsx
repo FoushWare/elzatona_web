@@ -280,14 +280,14 @@ export default function Navbar() {
 
           {/* Desktop Navigation with Dropdowns */}
           <div
-            className="hidden md:flex items-center space-x-2 lg:space-x-4 xl:space-x-6"
+            className="hidden md:flex items-center space-x-3 lg:space-x-4 xl:space-x-6"
             ref={dropdownRef}
           >
             {dropdownMenus.map(menu => (
               <div key={menu.label} className="relative">
                 <button
                   onClick={() => toggleDropdown(menu.label)}
-                  className={`flex items-center space-x-1 lg:space-x-2 px-2 lg:px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
+                  className={`flex items-center space-x-1 md:space-x-2 px-2 md:px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
                     isScrolled
                       ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                       : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
@@ -297,8 +297,8 @@ export default function Navbar() {
                       : ''
                   }`}
                 >
-                  <span className="text-base lg:text-lg">{menu.icon}</span>
-                  <span className="font-medium text-xs lg:text-sm hidden lg:inline">
+                  <span className="text-base md:text-lg">{menu.icon}</span>
+                  <span className="font-medium text-xs md:text-sm hidden md:inline">
                     {menu.label}
                   </span>
                   <ChevronDown
@@ -514,7 +514,7 @@ export default function Navbar() {
           </div>
 
           {/* Theme Toggle */}
-          <div className="flex items-center space-x-2 lg:space-x-4 xl:space-x-6">
+          <div className="flex items-center space-x-3 lg:space-x-4 xl:space-x-6">
             <button
               onClick={toggleDarkMode}
               className={`p-2 rounded-lg transition-colors duration-200 ${
