@@ -26,12 +26,17 @@ export interface UnifiedQuestion {
   // Basic Question Info
   title: string;
   content: string;
-  type: 'single' | 'multiple' | 'text' | 'code';
+  type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended';
 
   // Answer Structure
   options: QuestionOption[];
   correctAnswers: string[]; // Array of option IDs for correct answers
   explanation: string;
+
+  // Open-ended Question Fields
+  expectedAnswer?: string; // Expected answer for open-ended questions
+  aiValidationPrompt?: string; // Custom prompt for AI validation
+  acceptPartialCredit?: boolean; // Whether to accept partially correct answers
 
   // Metadata
   category: string;
@@ -46,6 +51,8 @@ export interface UnifiedQuestion {
   // Audio Support
   audioQuestion?: string; // Path to question audio file (e.g., '/audio/question.mp3')
   audioAnswer?: string; // Path to answer audio file (e.g., '/audio/answer.mp3')
+  showQuestionAudio?: boolean; // Admin control: whether to show question audio button
+  showAnswerAudio?: boolean; // Admin control: whether to show answer audio button
 
   // Scoring & Timing
   points: number;
@@ -99,7 +106,7 @@ export interface QuestionStats {
 export interface BulkQuestionData {
   title: string;
   content: string;
-  type: 'single' | 'multiple' | 'text' | 'code';
+  type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended';
   options: QuestionOption[];
   correctAnswers: string[];
   explanation: string;
@@ -111,10 +118,17 @@ export interface BulkQuestionData {
   sectionId?: string;
   points: number;
   timeLimit?: number;
-  
+
   // Audio Support
   audioQuestion?: string; // Path to question audio file (e.g., '/audio/question.mp3')
   audioAnswer?: string; // Path to answer audio file (e.g., '/audio/answer.mp3')
+  showQuestionAudio?: boolean; // Admin control: whether to show question audio button
+  showAnswerAudio?: boolean; // Admin control: whether to show answer audio button
+
+  // Open-ended Question Fields
+  expectedAnswer?: string; // Expected answer for open-ended questions
+  aiValidationPrompt?: string; // Custom prompt for AI validation
+  acceptPartialCredit?: boolean; // Whether to accept partially correct answers
 }
 
 // Question Service Class
@@ -172,27 +186,32 @@ export class UnifiedQuestionService {
   ): Promise<void> {
     try {
       // Get the next question number for this section
-      const nextNumberResult = await AudioCollectionService.getNextQuestionNumber(
-        learningPath,
-        sectionId
-      );
+      const nextNumberResult =
+        await AudioCollectionService.getNextQuestionNumber(
+          learningPath,
+          sectionId
+        );
 
       if (!nextNumberResult.success) {
-        console.warn('Could not get next question number:', nextNumberResult.error);
+        console.warn(
+          'Could not get next question number:',
+          nextNumberResult.error
+        );
         return;
       }
 
       const questionNumber = nextNumberResult.nextNumber || 1;
 
       // Create the audio mapping
-      const audioResult = await AudioCollectionService.createOrUpdateAudioMapping(
-        questionId,
-        learningPath,
-        sectionId,
-        questionNumber,
-        questionAudioPath,
-        answerAudioPath
-      );
+      const audioResult =
+        await AudioCollectionService.createOrUpdateAudioMapping(
+          questionId,
+          learningPath,
+          sectionId,
+          questionNumber,
+          questionAudioPath,
+          answerAudioPath
+        );
 
       if (!audioResult.success) {
         console.warn('Could not create audio mapping:', audioResult.error);
@@ -372,13 +391,26 @@ export class UnifiedQuestionService {
 
     for (const questionData of questionsData) {
       try {
-        const questionRef = await addDoc(collection(db, this.COLLECTION_NAME), {
+        const questionDoc = {
           ...questionData,
           isActive: true,
           isComplete: this.checkQuestionCompleteness(questionData),
           createdAt: timestamp,
           updatedAt: timestamp,
+        };
+
+        console.log('Creating question:', {
+          title: questionDoc.title,
+          isActive: questionDoc.isActive,
+          isComplete: questionDoc.isComplete,
+          correctAnswers: questionDoc.correctAnswers,
+          options: questionDoc.options,
         });
+
+        const questionRef = await addDoc(
+          collection(db, this.COLLECTION_NAME),
+          questionDoc
+        );
 
         results.success++;
 
@@ -631,6 +663,45 @@ export class UnifiedQuestionService {
   }
 
   /**
+   * Create learning path with specific ID
+   */
+  static async createLearningPathWithId(pathData: {
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    color: string;
+    order: number;
+    isActive: boolean;
+  }): Promise<string> {
+    if (!db) {
+      throw new Error('Firestore not available');
+    }
+
+    try {
+      const timestamp = new Date().toISOString();
+      const pathRef = doc(db, this.LEARNING_PATHS_COLLECTION, pathData.id);
+
+      await setDoc(pathRef, {
+        name: pathData.name,
+        description: pathData.description,
+        icon: pathData.icon,
+        color: pathData.color,
+        order: pathData.order,
+        isActive: pathData.isActive,
+        questionCount: 0,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      });
+
+      return pathData.id;
+    } catch (error) {
+      console.error('Error creating learning path with ID:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Update learning path question count
    */
   private static async updateLearningPathQuestionCount(
@@ -697,14 +768,20 @@ export class UnifiedQuestionService {
   }
 
   /**
-   * Initialize default learning paths
+   * Initialize default learning paths with static resource IDs
    */
   static async initializeDefaultLearningPaths(): Promise<void> {
-    const defaultPaths: Omit<
-      LearningPath,
-      'id' | 'questionCount' | 'createdAt' | 'updatedAt'
-    >[] = [
+    const defaultPaths: Array<{
+      id: string;
+      name: string;
+      description: string;
+      icon: string;
+      color: string;
+      order: number;
+      isActive: boolean;
+    }> = [
       {
+        id: 'frontend-basics',
         name: 'Frontend Fundamentals',
         description: 'Learn the basics of frontend development',
         icon: '🎨',
@@ -713,6 +790,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'css-mastery',
         name: 'Advanced CSS Mastery',
         description: 'Master advanced CSS techniques and layouts',
         icon: '🎨',
@@ -721,6 +799,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'javascript-deep-dive',
         name: 'JavaScript Deep Dive',
         description: 'Deep understanding of JavaScript concepts',
         icon: '⚡',
@@ -729,6 +808,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'react-mastery',
         name: 'React Mastery',
         description: 'Master React development patterns',
         icon: '⚛️',
@@ -737,6 +817,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'typescript-essentials',
         name: 'TypeScript Essentials',
         description: 'Learn TypeScript for better JavaScript',
         icon: '📘',
@@ -745,6 +826,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'testing-strategies',
         name: 'Testing Strategies',
         description: 'Learn testing methodologies and tools',
         icon: '🧪',
@@ -753,6 +835,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'performance-optimization',
         name: 'Performance Optimization',
         description: 'Optimize frontend performance',
         icon: '🚀',
@@ -761,6 +844,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'security-essentials',
         name: 'Security Essentials',
         description: 'Frontend security best practices',
         icon: '🔒',
@@ -769,6 +853,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'frontend-system-design',
         name: 'Frontend System Design',
         description: 'Design scalable frontend architectures',
         icon: '🏗️',
@@ -777,6 +862,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'build-tools-devops',
         name: 'Build Tools & DevOps',
         description: 'Modern build tools and deployment',
         icon: '⚙️',
@@ -785,6 +871,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'api-integration',
         name: 'API Integration & Communication',
         description: 'Working with APIs and data fetching',
         icon: '🔌',
@@ -793,6 +880,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'ai-tools-frontend',
         name: 'AI Tools for Frontend',
         description: 'Leverage AI tools in frontend development',
         icon: '🤖',
@@ -801,6 +889,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'frontend-interview-prep',
         name: 'Frontend Interview Prep',
         description: 'Prepare for frontend interviews',
         icon: '💼',
@@ -809,6 +898,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'advanced-frontend-architectures',
         name: 'Advanced Frontend Architectures',
         description: 'Advanced architectural patterns',
         icon: '🏛️',
@@ -817,6 +907,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'javascript-practice',
         name: 'JavaScript Practice & Interview Prep',
         description: 'Practice JavaScript for interviews',
         icon: '📝',
@@ -825,6 +916,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'css-practice',
         name: 'CSS Practice & Layout Mastery',
         description: 'Master CSS layouts and styling',
         icon: '🎨',
@@ -833,6 +925,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'html-practice',
         name: 'HTML Practice & Semantic Mastery',
         description: 'Master HTML semantics and structure',
         icon: '📄',
@@ -841,6 +934,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'react-practice',
         name: 'React Practice & Advanced Patterns',
         description: 'Advanced React patterns and practices',
         icon: '⚛️',
@@ -849,6 +943,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'comprehensive-interview-prep',
         name: 'Comprehensive Interview Preparation',
         description: 'Complete interview preparation',
         icon: '🎯',
@@ -857,6 +952,7 @@ export class UnifiedQuestionService {
         isActive: true,
       },
       {
+        id: 'improve-english',
         name: 'Improve Your English',
         description: 'English language learning for developers',
         icon: '🌍',
@@ -868,7 +964,7 @@ export class UnifiedQuestionService {
 
     for (const pathData of defaultPaths) {
       try {
-        await this.upsertLearningPath(pathData);
+        await this.createLearningPathWithId(pathData);
       } catch (error) {
         console.error(
           `Failed to initialize learning path "${pathData.name}":`,
