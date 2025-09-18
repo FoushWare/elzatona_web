@@ -309,7 +309,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation with Dropdowns */}
           <div
-            className="hidden sm:flex items-center space-x-1 sm:space-x-1 md:space-x-2 lg:space-x-4 xl:space-x-6 flex-1 justify-center"
+            className="hidden sm:flex items-center space-x-1 sm:space-x-1 md:space-x-2 lg:space-x-4 xl:space-x-6 flex-1"
             ref={dropdownRef}
           >
             {/* Show limited menus based on screen size */}
