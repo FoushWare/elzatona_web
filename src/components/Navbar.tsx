@@ -309,7 +309,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation with Dropdowns */}
           <div
-            className="hidden sm:flex items-center space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6 flex-1 justify-center"
+            className="hidden sm:flex items-center space-x-1 sm:space-x-1 md:space-x-2 lg:space-x-4 xl:space-x-6 flex-1 justify-center"
             ref={dropdownRef}
           >
             {/* Show limited menus based on screen size */}
@@ -334,7 +334,7 @@ export default function Navbar() {
               <div key={menu.label} className="relative">
                 <button
                   onClick={() => toggleDropdown(menu.label)}
-                    className={`flex items-center space-x-1 sm:space-x-1 md:space-x-2 px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
+                    className={`flex items-center space-x-1 sm:space-x-1 md:space-x-1 lg:space-x-2 px-1 sm:px-1 md:px-2 lg:px-3 py-1 sm:py-1 md:py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
                     isScrolled
                       ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                       : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
@@ -344,12 +344,12 @@ export default function Navbar() {
                       : ''
                   }`}
                 >
-                      <span className="text-sm sm:text-base md:text-lg">{menu.icon}</span>
-                      <span className="font-medium text-xs sm:text-xs md:text-sm hidden sm:inline">
+                      <span className="text-sm sm:text-sm md:text-base lg:text-lg">{menu.icon}</span>
+                      <span className="font-medium text-xs sm:text-xs md:text-xs lg:text-sm hidden sm:inline">
                         {menu.label}
                       </span>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${
+                    className={`w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-4 lg:h-4 transition-transform duration-200 ${
                       activeDropdown === menu.label ? 'rotate-180' : ''
                     }`}
                   />
@@ -357,7 +357,7 @@ export default function Navbar() {
 
                 {/* Dropdown Menu */}
                 {activeDropdown === menu.label && (
-                    <div className="absolute top-full left-0 mt-2 w-80 md:w-96 lg:w-96 xl:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 md:left-0 lg:left-0 xl:left-0 right-auto md:right-auto lg:right-auto xl:right-auto">
+                    <div className="absolute top-full left-0 mt-2 w-72 sm:w-80 md:w-80 lg:w-96 xl:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 sm:left-0 md:left-0 lg:left-0 xl:left-0 right-auto sm:right-auto md:right-auto lg:right-auto xl:right-auto">
                     {/* Parent Section Header */}
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
                         <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
@@ -437,7 +437,7 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => toggleDropdown('More')}
-                  className={`flex items-center space-x-1 sm:space-x-1 md:space-x-2 px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
+                  className={`flex items-center space-x-1 sm:space-x-1 md:space-x-1 lg:space-x-2 px-1 sm:px-1 md:px-2 lg:px-3 py-1 sm:py-1 md:py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
                     isScrolled
                       ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
                       : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
@@ -447,12 +447,12 @@ export default function Navbar() {
                       : ''
                   }`}
                 >
-                    <span className="text-sm sm:text-base md:text-lg">⚡</span>
-                    <span className="font-medium text-xs sm:text-xs md:text-sm hidden sm:inline">
-                      More
-                    </span>
+                  <span className="text-sm sm:text-sm md:text-base lg:text-lg">⚡</span>
+                  <span className="font-medium text-xs sm:text-xs md:text-xs lg:text-sm hidden sm:inline">
+                    More
+                  </span>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${
+                    className={`w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-4 lg:h-4 transition-transform duration-200 ${
                       activeDropdown === 'More' ? 'rotate-180' : ''
                     }`}
                   />
@@ -990,30 +990,30 @@ export default function Navbar() {
           </div>
 
           {/* Theme Toggle */}
-          <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6">
+          <div className="flex items-center space-x-1 sm:space-x-1 md:space-x-2 lg:space-x-4 xl:space-x-6">
             <button
               onClick={toggleDarkMode}
-              className={`p-1 sm:p-2 rounded-lg transition-colors duration-200 ${
+              className={`p-1 sm:p-1 md:p-2 lg:p-2 rounded-lg transition-colors duration-200 ${
                 isScrolled
                   ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                   : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
               }`}
               aria-label="Toggle theme"
             >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {isDarkMode ? <Sun size={16} className="sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5" /> : <Moon size={16} className="sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5" />}
             </button>
 
             {/* Mobile menu button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`sm:hidden p-1 sm:p-2 rounded-lg transition-colors duration-200 ${
+              className={`sm:hidden p-1 rounded-lg transition-colors duration-200 ${
                 isScrolled
                   ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                   : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
               }`}
               aria-label="Toggle mobile menu"
             >
-              {isOpen ? <X size={20} /> : <Menu size={20} />}
+              {isOpen ? <X size={16} className="w-4 h-4" /> : <Menu size={16} className="w-4 h-4" />}
             </button>
           </div>
         </div>
