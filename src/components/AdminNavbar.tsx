@@ -100,6 +100,18 @@ export default function AdminNavbar() {
       description: 'Manage question backups by section',
     },
     {
+      href: '/admin/reports',
+      label: 'Feature Reports',
+      icon: BarChart3,
+      description: 'View project features, progress, and status',
+    },
+    {
+      href: '/admin/learning-resources',
+      label: 'Website Resources Checklist',
+      icon: BookOpen,
+      description: 'Track and manage website development resources',
+    },
+    {
       href: '/admin/settings',
       label: 'System Settings',
       icon: Shield,

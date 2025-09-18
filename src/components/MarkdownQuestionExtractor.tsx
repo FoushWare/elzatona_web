@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useUnifiedQuestions } from '@/hooks/useUnifiedQuestions';
 import { BulkQuestionData } from '@/lib/unified-question-schema';
 
 interface ExtractedQuestion {
   content: string;
-  type: 'single' | 'multiple';
+  type: 'single' | 'multiple' | 'open-ended';
   options: Array<{
     id: string;
     text: string;
@@ -19,6 +19,10 @@ interface ExtractedQuestion {
   difficulty: 'easy' | 'medium' | 'hard';
   audioQuestion?: string;
   audioAnswer?: string;
+  // Open-ended question fields
+  expectedAnswer?: string;
+  aiValidationPrompt?: string;
+  acceptPartialCredit?: boolean;
 }
 
 interface MarkdownQuestionExtractorProps {
@@ -26,93 +30,174 @@ interface MarkdownQuestionExtractorProps {
   onClose: () => void;
 }
 
-export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQuestionExtractorProps) {
+export function MarkdownQuestionExtractor({
+  learningPaths,
+  onClose,
+}: MarkdownQuestionExtractorProps) {
   const [markdownContent, setMarkdownContent] = useState('');
   const [selectedLearningPath, setSelectedLearningPath] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
-  const [extractedQuestions, setExtractedQuestions] = useState<ExtractedQuestion[]>([]);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<
+    'easy' | 'medium' | 'hard'
+  >('easy');
+  const [selectedQuestionType, setSelectedQuestionType] = useState<
+    'single' | 'multiple' | 'open-ended'
+  >('single');
+  const [extractedQuestions, setExtractedQuestions] = useState<
+    ExtractedQuestion[]
+  >([]);
   const [isExtracting, setIsExtracting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   // Debug: Log learning paths
   console.log('MarkdownQuestionExtractor - Learning Paths:', learningPaths);
-  console.log('MarkdownQuestionExtractor - Learning Paths Length:', learningPaths.length);
-  console.log('MarkdownQuestionExtractor - Learning Paths Structure:', learningPaths.map(p => ({ id: p.id, name: p.name })));
+  console.log(
+    'MarkdownQuestionExtractor - Learning Paths Length:',
+    learningPaths.length
+  );
+  console.log(
+    'MarkdownQuestionExtractor - Learning Paths Structure:',
+    learningPaths.map(p => ({ id: p.id, name: p.name }))
+  );
 
   const { bulkImportQuestions } = useUnifiedQuestions();
 
   const categories = [
-    'JavaScript', 'CSS', 'React', 'TypeScript', 'Testing', 
-    'Performance', 'Security', 'HTML', 'Node.js', 'General'
+    'JavaScript',
+    'CSS',
+    'React',
+    'TypeScript',
+    'Testing',
+    'Performance',
+    'Security',
+    'HTML',
+    'Node.js',
+    'General',
   ];
 
   const difficulties = [
     { value: 'easy', label: 'Easy' },
     { value: 'medium', label: 'Medium' },
-    { value: 'hard', label: 'Hard' }
+    { value: 'hard', label: 'Hard' },
   ] as const;
 
   // Parse markdown content to extract questions
   const parseMarkdownQuestions = (content: string): ExtractedQuestion[] => {
     const questions: ExtractedQuestion[] = [];
-    
-    // Split content by question markers
-    const questionBlocks = content.split(/(?=##?\s*Question\s*\d*)/i);
-    
+
+    // Split content by question markers - handle both formats
+    const questionBlocks = content.split(
+      /(?=######?\s*\d+\.|##?\s*Question\s*\d*)/i
+    );
+
     questionBlocks.forEach((block, index) => {
       if (index === 0) return; // Skip the first block (usually content before first question)
-      
-      const lines = block.split('\n').map(line => line.trim()).filter(line => line);
-      
+
+      const lines = block
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line);
+
       if (lines.length === 0) return;
-      
-      // Extract question content
-      const questionMatch = lines[0].match(/##?\s*Question\s*\d*:?\s*(.+)/i);
+
+      // Extract question content - handle both formats
+      let questionContent = '';
+      let questionMatch = lines[0].match(/######?\s*\d+\.\s*(.+)/i);
+
+      if (!questionMatch) {
+        questionMatch = lines[0].match(/##?\s*Question\s*\d*:?\s*(.+)/i);
+      }
+
       if (!questionMatch) return;
-      
-      const questionContent = questionMatch[1];
-      
+
+      questionContent = questionMatch[1];
+
+      // Find code blocks (```javascript or ```)
+      const codeBlockStart = lines.findIndex(line => /^```/.test(line));
+      let codeBlock = '';
+      if (codeBlockStart !== -1) {
+        const codeBlockEnd = lines.findIndex(
+          (line, idx) => idx > codeBlockStart && /^```/.test(line)
+        );
+        if (codeBlockEnd !== -1) {
+          codeBlock = lines.slice(codeBlockStart + 1, codeBlockEnd).join('\n');
+          questionContent += '\n\n```javascript\n' + codeBlock + '\n```';
+        }
+      }
+
       // Find options (lines starting with -, *, or A), B), C), D))
-      const optionLines = lines.filter(line => 
-        /^[-*]\s/.test(line) || 
-        /^[A-D]\)\s/.test(line) ||
-        /^\d+\.\s/.test(line)
+      const optionLines = lines.filter(
+        line =>
+          /^[-*]\s/.test(line) ||
+          /^[A-D]\)\s/.test(line) ||
+          /^\d+\.\s/.test(line)
       );
-      
+
       // Find explanation (usually after options, before next question)
-      const explanationStart = lines.findIndex(line => 
+      const explanationStart = lines.findIndex(line =>
         /explanation|answer|solution/i.test(line)
       );
-      
+
       let explanation = '';
       if (explanationStart !== -1) {
-        explanation = lines.slice(explanationStart + 1).join(' ').trim();
+        explanation = lines
+          .slice(explanationStart + 1)
+          .join(' ')
+          .trim();
       }
-      
+
       // Parse options
       const options = optionLines.map((line, optIndex) => {
-        const cleanLine = line.replace(/^[-*]\s*/, '').replace(/^[A-D]\)\s*/, '').replace(/^\d+\.\s*/, '');
-        const isCorrect = /✓|correct|true|yes/i.test(cleanLine) || 
-                         /\[x\]|\[X\]/.test(line) ||
-                         cleanLine.includes('(correct)') ||
-                         cleanLine.includes('(answer)');
-        
-        const cleanText = cleanLine.replace(/✓|correct|true|yes|\(correct\)|\(answer\)/gi, '').trim();
-        
+        const cleanLine = line
+          .replace(/^[-*]\s*/, '')
+          .replace(/^[A-D]\)\s*/, '')
+          .replace(/^\d+\.\s*/, '');
+        const isCorrect =
+          /✓|correct|true|yes/i.test(cleanLine) ||
+          /\[x\]|\[X\]/.test(line) ||
+          cleanLine.includes('(correct)') ||
+          cleanLine.includes('(answer)');
+
+        const cleanText = cleanLine
+          .replace(/✓|correct|true|yes|\(correct\)|\(answer\)/gi, '')
+          .trim();
+
         return {
           id: `opt${optIndex + 1}`,
           text: cleanText,
-          isCorrect: isCorrect
+          isCorrect: isCorrect,
         };
       });
-      
-      // Determine question type
-      const correctOptions = options.filter(opt => opt.isCorrect);
-      const questionType = correctOptions.length > 1 ? 'multiple' : 'single';
-      
-      if (options.length >= 2 && questionContent) {
+
+      // Use selected question type or determine from options
+      let questionType = selectedQuestionType;
+      if (
+        selectedQuestionType === 'single' ||
+        selectedQuestionType === 'multiple'
+      ) {
+        const correctOptions = options.filter(opt => opt.isCorrect);
+        questionType = correctOptions.length > 1 ? 'multiple' : 'single';
+      }
+
+      // For open-ended questions, we don't need options
+      if (selectedQuestionType === 'open-ended' && questionContent) {
+        questions.push({
+          content: questionContent,
+          type: 'open-ended',
+          options: [], // No options for open-ended questions
+          explanation: explanation || 'No explanation provided.',
+          learningPath: selectedLearningPath,
+          category: selectedCategory,
+          difficulty: selectedDifficulty,
+          audioQuestion: `/audio/${selectedLearningPath}/questions/question-${questions.length + 1}.mp3`,
+          audioAnswer: `/audio/${selectedLearningPath}/questions/answer-${questions.length + 1}.mp3`,
+          // Open-ended question fields
+          expectedAnswer: explanation || '', // Use explanation as expected answer
+          aiValidationPrompt: '', // Default empty
+          acceptPartialCredit: true, // Default to true
+        });
+      } else if (options.length >= 2 && questionContent) {
         questions.push({
           content: questionContent,
           type: questionType,
@@ -122,11 +207,11 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
           category: selectedCategory,
           difficulty: selectedDifficulty,
           audioQuestion: `/audio/${selectedLearningPath}/questions/question-${questions.length + 1}.mp3`,
-          audioAnswer: `/audio/${selectedLearningPath}/questions/answer-${questions.length + 1}.mp3`
+          audioAnswer: `/audio/${selectedLearningPath}/questions/answer-${questions.length + 1}.mp3`,
         });
       }
     });
-    
+
     return questions;
   };
 
@@ -140,32 +225,34 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
       selectedLearningPathType: typeof selectedLearningPath,
       selectedLearningPathLength: selectedLearningPath.length,
       isEmpty: selectedLearningPath === '',
-      isFalsy: !selectedLearningPath
+      isFalsy: !selectedLearningPath,
     });
-    
+
     if (!markdownContent.trim()) {
       setError('Please enter markdown content');
       return;
     }
-    
+
     if (!selectedLearningPath || selectedLearningPath === '') {
       setError('Please select a learning path');
       return;
     }
-    
+
     if (!selectedCategory) {
       setError('Please select a category');
       return;
     }
-    
+
     setIsExtracting(true);
     setError(null);
-    
+
     try {
       const questions = parseMarkdownQuestions(markdownContent);
-      
+
       if (questions.length === 0) {
-        setError('No valid questions found in the markdown content. Please check the format.');
+        setError(
+          'No valid questions found in the markdown content. Please check the format.'
+        );
       } else {
         setExtractedQuestions(questions);
         setSuccess(`Successfully extracted ${questions.length} questions!`);
@@ -179,51 +266,126 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
 
   const handleImportQuestions = async () => {
     if (extractedQuestions.length === 0) return;
-    
+
     setIsExtracting(true);
     setError(null);
-    
+
     try {
       const bulkData: BulkQuestionData[] = extractedQuestions.map(q => ({
+        title:
+          q.content.substring(0, 100) + (q.content.length > 100 ? '...' : ''), // Use content as title, truncated
         content: q.content,
         type: q.type,
         options: q.options,
+        correctAnswers: q.options
+          .filter(opt => opt.isCorrect)
+          .map(opt => opt.id),
         explanation: q.explanation,
-        learningPath: q.learningPath,
         category: q.category,
+        subcategory: q.category, // Use category as subcategory
         difficulty: q.difficulty,
+        tags: [q.category, q.difficulty], // Add category and difficulty as tags
+        learningPath: q.learningPath,
+        sectionId: 'default', // Default section
+        points:
+          q.difficulty === 'easy' ? 10 : q.difficulty === 'medium' ? 20 : 30,
+        timeLimit: 300, // 5 minutes default
         audioQuestion: q.audioQuestion,
-        audioAnswer: q.audioAnswer
+        audioAnswer: q.audioAnswer,
+        // Open-ended question fields
+        expectedAnswer: q.expectedAnswer,
+        aiValidationPrompt: q.aiValidationPrompt,
+        acceptPartialCredit: q.acceptPartialCredit,
       }));
-      
-      await bulkImportQuestions(bulkData);
-      setSuccess(`Successfully imported ${extractedQuestions.length} questions!`);
-      setExtractedQuestions([]);
-      setMarkdownContent('');
+
+      console.log('Importing questions to Firebase:', {
+        count: bulkData.length,
+        sampleQuestion: bulkData[0],
+        learningPath: selectedLearningPath,
+      });
+
+      const result = await bulkImportQuestions(bulkData);
+
+      console.log('Import result:', result);
+
+      if (result.success > 0) {
+        setSuccess(
+          `Successfully imported ${result.success} questions to Firebase! ${result.failed > 0 ? `${result.failed} failed.` : ''}`
+        );
+        setExtractedQuestions([]);
+        setMarkdownContent('');
+      } else {
+        setError(`Failed to import questions: ${result.errors.join(', ')}`);
+      }
     } catch (err) {
-      setError('Error importing questions. Please try again.');
+      console.error('Import error:', err);
+      setError(
+        `Error importing questions: ${err instanceof Error ? err.message : 'Unknown error'}`
+      );
     } finally {
       setIsExtracting(false);
     }
   };
 
-  const sampleMarkdown = `## Question 1: What is the correct way to declare a variable in JavaScript?
+  const sampleMarkdown = `###### 1. What's the output?
 
-- var myVar = 10; ✓
-- variable myVar = 10;
-- v myVar = 10;
-- declare myVar = 10;
+\`\`\`javascript
+function sayHi() {
+  console.log(name);
+  console.log(age);
+  var name = 'Lydia';
+  let age = 21;
+}
 
-**Explanation:** In JavaScript, variables are declared using 'var', 'let', or 'const' keywords. The correct syntax is 'var variableName = value;'
+sayHi();
+\`\`\`
 
-## Question 2: Which CSS property is used to change the text color?
+- A: \`Lydia\` and \`undefined\`
+- B: \`Lydia\` and \`ReferenceError\`
+- C: \`ReferenceError\` and \`21\`
+- D: \`undefined\` and \`ReferenceError\` ✓
 
-- text-color
-- color ✓
-- font-color
-- text-style
+<details><summary><b>Answer</b></summary>
+<p>
 
-**Explanation:** The 'color' property in CSS is used to set the color of text content.`;
+#### Answer: D
+
+Within the function, we first declare the \`name\` variable with the \`var\` keyword. This means that the variable gets hoisted (memory space is set up during the creation phase) with the default value of \`undefined\`, until we actually get to the line where we define the variable. We haven't defined the variable yet on the line where we try to log the \`name\` variable, so it still holds the value of \`undefined\`.
+
+Variables with the \`let\` keyword (and \`const\`) are hoisted, but unlike \`var\`, don't get <i>initialized</i>. They are not accessible before the line we declare (initialize) them. This is called the "temporal dead zone". When we try to access the variables before they are declared, JavaScript throws a \`ReferenceError\`.
+
+</p>
+</details>
+
+---
+
+###### 2. Explain the difference between \`var\`, \`let\`, and \`const\` in JavaScript.
+
+<details><summary><b>Answer</b></summary>
+<p>
+
+#### Answer: Key Differences
+
+**var:**
+- Function-scoped or globally-scoped
+- Hoisted and initialized with \`undefined\`
+- Can be redeclared
+- Can be reassigned
+
+**let:**
+- Block-scoped
+- Hoisted but not initialized (temporal dead zone)
+- Cannot be redeclared in same scope
+- Can be reassigned
+
+**const:**
+- Block-scoped
+- Hoisted but not initialized (temporal dead zone)
+- Cannot be redeclared in same scope
+- Cannot be reassigned (immutable binding)
+
+</p>
+</details>`;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
@@ -242,28 +404,40 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
             onClick={onClose}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
           {/* Configuration */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Learning Path
               </label>
               <select
                 value={selectedLearningPath}
-                onChange={(e) => setSelectedLearningPath(e.target.value)}
+                onChange={e => setSelectedLearningPath(e.target.value)}
                 className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 required
               >
                 <option value="">Select Learning Path</option>
                 {learningPaths.length === 0 ? (
-                  <option value="" disabled>Loading learning paths...</option>
+                  <option value="" disabled>
+                    Loading learning paths...
+                  </option>
                 ) : (
                   learningPaths.map(path => (
                     <option key={path.id} value={path.id}>
@@ -280,7 +454,7 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
               </label>
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={e => setSelectedCategory(e.target.value)}
                 className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="">Select Category</option>
@@ -298,7 +472,11 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
               </label>
               <select
                 value={selectedDifficulty}
-                onChange={(e) => setSelectedDifficulty(e.target.value as 'easy' | 'medium' | 'hard')}
+                onChange={e =>
+                  setSelectedDifficulty(
+                    e.target.value as 'easy' | 'medium' | 'hard'
+                  )
+                }
                 className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 {difficulties.map(diff => (
@@ -306,6 +484,25 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
                     {diff.label}
                   </option>
                 ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Question Type
+              </label>
+              <select
+                value={selectedQuestionType}
+                onChange={e =>
+                  setSelectedQuestionType(
+                    e.target.value as 'single' | 'multiple' | 'open-ended'
+                  )
+                }
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              >
+                <option value="single">Single Choice</option>
+                <option value="multiple">Multiple Choice</option>
+                <option value="open-ended">Open-ended (AI Validated)</option>
               </select>
             </div>
           </div>
@@ -325,7 +522,7 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
             </div>
             <textarea
               value={markdownContent}
-              onChange={(e) => setMarkdownContent(e.target.value)}
+              onChange={e => setMarkdownContent(e.target.value)}
               placeholder="Paste your markdown content here..."
               className="w-full h-64 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm resize-none"
             />
@@ -333,12 +530,19 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
 
           {/* Debug Info */}
           <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Debug Info:</h4>
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Debug Info:
+            </h4>
             <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
               <div>Learning Paths Count: {learningPaths.length}</div>
-              <div>Selected Learning Path: "{selectedLearningPath}"</div>
-              <div>Selected Category: "{selectedCategory}"</div>
-              <div>Selected Difficulty: "{selectedDifficulty}"</div>
+              <div>
+                Selected Learning Path: &quot;{selectedLearningPath}&quot;
+              </div>
+              <div>Selected Category: &quot;{selectedCategory}&quot;</div>
+              <div>Selected Difficulty: &quot;{selectedDifficulty}&quot;</div>
+              <div>
+                Selected Question Type: &quot;{selectedQuestionType}&quot;
+              </div>
               <div>Markdown Length: {markdownContent.length}</div>
             </div>
           </div>
@@ -365,14 +569,16 @@ export function MarkdownQuestionExtractor({ learningPaths, onClose }: MarkdownQu
             >
               {isExtracting ? 'Extracting...' : 'Extract Questions'}
             </button>
-            
+
             {extractedQuestions.length > 0 && (
               <button
                 onClick={handleImportQuestions}
                 disabled={isExtracting}
                 className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:cursor-not-allowed"
               >
-                {isExtracting ? 'Importing...' : `Import ${extractedQuestions.length} Questions`}
+                {isExtracting
+                  ? 'Importing...'
+                  : `Import ${extractedQuestions.length} Questions`}
               </button>
             )}
           </div>
