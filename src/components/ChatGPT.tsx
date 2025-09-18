@@ -226,7 +226,7 @@ export default function ChatGPT() {
 
       {/* Chat Popup */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-end p-0 sm:p-2 md:p-4 lg:p-6">
+        <div className="fixed inset-0 z-50 flex items-end justify-end p-0 sm:p-2 md:p-4 lg:p-6 xl:p-8">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black bg-opacity-50"
@@ -234,7 +234,7 @@ export default function ChatGPT() {
           />
 
           {/* Chat Window */}
-          <div className="relative w-full h-full sm:max-w-md sm:h-[600px] md:max-w-lg md:h-[700px] lg:h-[700px] bg-white dark:bg-gray-900 rounded-none sm:rounded-t-2xl shadow-2xl flex flex-col border border-gray-200 dark:border-gray-700">
+          <div className="relative w-full h-full sm:w-full sm:h-full sm:max-w-md sm:max-h-[600px] md:w-full md:h-full md:max-w-lg md:max-h-[700px] lg:w-full lg:h-full lg:max-w-lg lg:max-h-[700px] xl:w-full xl:h-full xl:max-w-xl xl:max-h-[800px] bg-white dark:bg-gray-900 rounded-none sm:rounded-t-2xl shadow-2xl flex flex-col border border-gray-200 dark:border-gray-700">
             {/* Header */}
             <div className="relative flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-none sm:rounded-t-2xl">
               <div className="flex items-center gap-3">
