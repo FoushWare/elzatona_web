@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useCookieAuth } from '@/contexts/CookieAuthContext';
 import FirebaseQuestion from '@/components/FirebaseQuestion';
 import QuestionManager from '@/components/QuestionManager';
 import {
@@ -18,7 +18,7 @@ import {
 type ViewMode = 'demo' | 'manager' | 'quiz';
 
 export default function FirebaseQuestionsPage() {
-  const { user, isAuthenticated, isLoading } = useFirebaseAuth();
+  const { user, isAuthenticated, isLoading } = useCookieAuth();
   const [currentView, setCurrentView] = useState<ViewMode>('demo');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [quizResults, setQuizResults] = useState<any[]>([]);

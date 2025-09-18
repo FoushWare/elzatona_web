@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
+import { CookieAuthProvider } from '@/contexts/CookieAuthContext';
 import Navbar from '@/components/Navbar';
 import ChatGPT from '@/components/ChatGPT';
 
@@ -50,13 +50,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
-          <FirebaseAuthProvider>
+          <CookieAuthProvider>
             <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
               <Navbar />
               <main className="pt-20">{children}</main>
               <ChatGPT />
             </div>
-          </FirebaseAuthProvider>
+          </CookieAuthProvider>
         </ThemeProvider>
       </body>
     </html>

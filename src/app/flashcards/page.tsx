@@ -12,12 +12,12 @@ import {
 } from 'lucide-react';
 import FlashcardDashboard from '@/components/FlashcardDashboard';
 import FlashcardSession from '@/components/FlashcardSession';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useCookieAuth } from '@/contexts/CookieAuthContext';
 
 type TabType = 'dashboard' | 'session' | 'manage';
 
 export default function FlashcardsPage() {
-  const { user } = useFirebaseAuth();
+  const { user } = useCookieAuth();
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
 
   const tabs = [
