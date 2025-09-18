@@ -314,7 +314,10 @@ export default function Navbar() {
             {dropdownMenus
               .filter(menu => {
                 // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
-                if (screenSize !== 'desktop' && menu.label === 'Interview Prep') {
+                if (
+                  screenSize !== 'desktop' &&
+                  menu.label === 'Interview Prep'
+                ) {
                   return false;
                 }
                 return true;
@@ -411,14 +414,13 @@ export default function Navbar() {
               ))}
 
             {/* More Dropdown - Show when there are hidden menus or Job Aggregator */}
-            {(dropdownMenus
-              .filter(menu => {
-                // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
-                if (screenSize !== 'desktop' && menu.label === 'Interview Prep') {
-                  return false;
-                }
-                return true;
-              }).length >
+            {(dropdownMenus.filter(menu => {
+              // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
+              if (screenSize !== 'desktop' && menu.label === 'Interview Prep') {
+                return false;
+              }
+              return true;
+            }).length >
               (screenSize === 'desktop'
                 ? 4
                 : screenSize === 'laptop'
@@ -452,7 +454,7 @@ export default function Navbar() {
 
                 {/* More Dropdown Menu */}
                 {activeDropdown === 'More' && (
-                  <div className="absolute top-full left-0 mt-2 w-screen max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 md:left-0 lg:left-0 xl:left-0 right-auto md:right-auto lg:right-auto xl:right-auto">
+                  <div className="absolute top-full left-0 mt-2 w-80 sm:w-96 md:w-[28rem] lg:w-[32rem] xl:w-[36rem] 2xl:w-[40rem] bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 md:left-0 lg:left-0 xl:left-0 right-auto md:right-auto lg:right-auto xl:right-auto">
                     {/* More Section Header */}
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-t-xl">
                       <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
@@ -464,7 +466,10 @@ export default function Navbar() {
                           {dropdownMenus
                             .filter(menu => {
                               // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
-                              if (screenSize !== 'desktop' && menu.label === 'Interview Prep') {
+                              if (
+                                screenSize !== 'desktop' &&
+                                menu.label === 'Interview Prep'
+                              ) {
                                 return false;
                               }
                               return true;
@@ -587,7 +592,10 @@ export default function Navbar() {
                       {dropdownMenus
                         .filter(menu => {
                           // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
-                          if (screenSize !== 'desktop' && menu.label === 'Interview Prep') {
+                          if (
+                            screenSize !== 'desktop' &&
+                            menu.label === 'Interview Prep'
+                          ) {
                             return false;
                           }
                           return true;
