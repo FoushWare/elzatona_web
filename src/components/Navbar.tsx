@@ -454,7 +454,7 @@ export default function Navbar() {
                                 : 2
                           ).length +
                             (screenSize !== 'desktop' ? 1 : 0) +
-                            10}{' '}
+                            11}{' '}
                           items
                         </span>
                       </h3>
@@ -766,6 +766,40 @@ export default function Navbar() {
                             </div>
                           </Link>
                         </div>
+                      </div>
+                    </div>
+
+                    {/* Save Progress Section */}
+                    <div className="px-3 lg:px-4 py-2 mt-3">
+                      <div className="flex items-center px-2 py-1 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg mb-2">
+                        <span className="text-base mr-2">💾</span>
+                        <div className="font-semibold text-gray-900 dark:text-white text-sm">
+                          Account Actions
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <Link
+                          href="/auth"
+                          className="flex items-center px-3 py-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-900/30 dark:hover:to-emerald-900/30 transition-all duration-200 group border-l-4 border-transparent hover:border-green-400 dark:hover:border-green-500 rounded-lg shadow-sm hover:shadow-md"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          <span className="text-2xl mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
+                            💾
+                          </span>
+                          <div className="flex-1">
+                            <div className="font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200 text-sm lg:text-base">
+                              Save Progress
+                            </div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              Sign in to save your learning progress and
+                              achievements
+                            </div>
+                          </div>
+                          <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <ChevronDown className="w-4 h-4 text-gray-400 rotate-[-90deg]" />
+                          </div>
+                        </Link>
                       </div>
                     </div>
 
