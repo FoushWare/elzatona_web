@@ -29,7 +29,7 @@ export default function Navbar() {
     'desktop'
   );
   const { isDarkMode, toggleDarkMode } = useTheme();
-  const { isAuthenticated, user, signOut } = useCookieAuth();
+  const { isAuthenticated, user, signOut, isLoading } = useCookieAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -433,7 +433,7 @@ export default function Navbar() {
                     ? 2
                     : 1) ||
               screenSize !== 'desktop' ||
-              !isAuthenticated) && (
+              (!isAuthenticated && !isLoading)) && (
               <div className="relative">
                 <button
                   onClick={() => toggleDropdown('More')}
@@ -827,20 +827,29 @@ export default function Navbar() {
                       </div>
 
                       <div className="space-y-1">
-                        <Link
-                          href="/auth"
-                          className="flex items-center justify-center px-4 py-3 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold rounded-lg shadow-sm hover:shadow-md transition-all duration-200 group"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          <div className="text-center">
-                            <div className="text-sm lg:text-base">
-                              Save Progress
-                            </div>
-                            <div className="text-xs text-green-100 mt-1">
-                              Sign in to save your learning progress
+                        {isLoading ? (
+                          <div className="flex items-center justify-center px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse">
+                            <div className="text-center">
+                              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-24 mb-2"></div>
+                              <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
                             </div>
                           </div>
-                        </Link>
+                        ) : (
+                          <Link
+                            href="/auth"
+                            className="flex items-center justify-center px-4 py-3 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold rounded-lg shadow-sm hover:shadow-md transition-all duration-200 group"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <div className="text-center">
+                              <div className="text-sm lg:text-base">
+                                Save Progress
+                              </div>
+                              <div className="text-xs text-green-100 mt-1">
+                                Sign in to save your learning progress
+                              </div>
+                            </div>
+                          </Link>
+                        )}
                       </div>
                     </div>
 
@@ -1033,7 +1042,15 @@ export default function Navbar() {
           <div className="flex flex-col h-full">
             {/* User Section - Right after logo */}
             <div className="px-4 pt-4 pb-2">
-              {isAuthenticated ? (
+              {isLoading ? (
+                <div className="space-y-2">
+                  {/* Loading skeleton */}
+                  <div className="px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                  </div>
+                </div>
+              ) : isAuthenticated ? (
                 <div className="space-y-2">
                   {/* User Info */}
                   <div className="px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
@@ -1079,6 +1096,10 @@ export default function Navbar() {
                   >
                     🚪 Sign Out
                   </button>
+                </div>
+              ) : isLoading ? (
+                <div className="block w-full px-4 py-3 rounded-lg text-base font-medium bg-gray-200 dark:bg-gray-700 animate-pulse">
+                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-24 mx-auto"></div>
                 </div>
               ) : (
                 <Link
