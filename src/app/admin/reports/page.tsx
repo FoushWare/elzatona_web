@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/button';
 import { LearningResourcesService, LearningResourcesStats } from '@/lib/learning-resources-service';
 import { 
   allWebsiteFeatures, 
-  getFeatureStats
+  getFeatureStats,
+  WebsiteFeature
 } from '@/lib/website-features';
+import FeatureDetailsModal from '@/components/FeatureDetailsModal';
 import {
   CheckCircle,
   Clock,
@@ -27,6 +29,8 @@ export default function ReportsPage() {
   const [learningResources, setLearningResources] = useState<LearningResourcesStats | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'Website' | 'Admin'>('all');
   const [selectedSection, setSelectedSection] = useState<string>('all');
+  const [selectedFeature, setSelectedFeature] = useState<WebsiteFeature | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   // Fetch learning resources data
   useEffect(() => {
@@ -44,6 +48,17 @@ export default function ReportsPage() {
 
   // Get feature statistics
   const featureStats = getFeatureStats();
+
+  // Handle feature details modal
+  const handleFeatureDetails = (feature: WebsiteFeature) => {
+    setSelectedFeature(feature);
+    setIsDetailsModalOpen(true);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setIsDetailsModalOpen(false);
+    setSelectedFeature(null);
+  };
 
   // Get unique sections for filtering
   const allSections = Array.from(new Set(allWebsiteFeatures.map(f => f.section))).sort();
@@ -307,6 +322,15 @@ export default function ReportsPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleFeatureDetails(feature)}
+                        className="flex items-center gap-1"
+                      >
+                        <Eye className="w-3 h-3" />
+                        Details
+                      </Button>
                       {feature.url && (
                         <Button
                           variant="outline"
@@ -382,6 +406,13 @@ export default function ReportsPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Feature Details Modal */}
+        <FeatureDetailsModal
+          feature={selectedFeature}
+          isOpen={isDetailsModalOpen}
+          onClose={handleCloseDetailsModal}
+        />
       </div>
     </AdminLayout>
   );
