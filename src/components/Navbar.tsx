@@ -78,6 +78,12 @@ export default function Navbar() {
           icon: '📚',
           description: 'Official docs and API references',
         },
+        {
+          href: '/reports',
+          label: 'Feature Reports',
+          icon: '📊',
+          description: 'View all features, development status, and stories',
+        },
       ],
     },
     {
