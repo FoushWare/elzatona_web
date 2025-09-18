@@ -452,7 +452,7 @@ export default function Navbar() {
 
                 {/* More Dropdown Menu */}
                 {activeDropdown === 'More' && (
-                  <div className="absolute top-full left-0 mt-2 w-80 md:w-96 lg:w-96 xl:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 md:left-0 lg:left-0 xl:left-0 right-auto md:right-auto lg:right-auto xl:right-auto">
+                  <div className="absolute top-full left-0 mt-2 w-screen max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 md:left-0 lg:left-0 xl:left-0 right-auto md:right-auto lg:right-auto xl:right-auto">
                     {/* More Section Header */}
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-t-xl">
                       <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
@@ -812,23 +812,16 @@ export default function Navbar() {
                       <div className="space-y-1">
                         <Link
                           href="/auth"
-                          className="flex items-center px-3 py-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-900/30 dark:hover:to-emerald-900/30 transition-all duration-200 group border-l-4 border-transparent hover:border-green-400 dark:hover:border-green-500 rounded-lg shadow-sm hover:shadow-md"
+                          className="flex items-center justify-center px-4 py-3 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold rounded-lg shadow-sm hover:shadow-md transition-all duration-200 group"
                           onClick={() => setActiveDropdown(null)}
                         >
-                          <span className="text-2xl mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
-                            💾
-                          </span>
-                          <div className="flex-1">
-                            <div className="font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200 text-sm lg:text-base">
+                          <div className="text-center">
+                            <div className="text-sm lg:text-base">
                               Save Progress
                             </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                              Sign in to save your learning progress and
-                              achievements
+                            <div className="text-xs text-green-100 mt-1">
+                              Sign in to save your learning progress
                             </div>
-                          </div>
-                          <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                            <ChevronDown className="w-4 h-4 text-gray-400 rotate-[-90deg]" />
                           </div>
                         </Link>
                       </div>
