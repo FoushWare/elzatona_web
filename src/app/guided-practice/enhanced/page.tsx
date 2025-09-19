@@ -17,6 +17,13 @@ import {
   Trophy,
   CheckSquare,
   Square,
+  ExternalLink,
+  Lightbulb,
+  Book,
+  FileText,
+  Play,
+  Code,
+  Link,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -38,6 +45,23 @@ interface Question {
   points: number;
   timeLimit?: number;
   tags: string[];
+  hints?: QuestionHint[];
+}
+
+interface QuestionHint {
+  id: string;
+  title: string;
+  description?: string;
+  url: string;
+  type:
+    | 'article'
+    | 'documentation'
+    | 'tutorial'
+    | 'video'
+    | 'example'
+    | 'reference';
+  category?: string;
+  priority?: number;
 }
 
 interface QuestionOption {
@@ -243,7 +267,7 @@ function EnhancedGuidedPracticeContent() {
 
       const currentQuestionId = availableQuestions[0];
 
-      // Mock question data
+      // Mock question data with hints
       const mockQuestion: Question = {
         id: currentQuestionId,
         title: 'What is JavaScript hoisting?',
@@ -270,6 +294,28 @@ function EnhancedGuidedPracticeContent() {
         points: 10,
         timeLimit: 120,
         tags: ['javascript', 'hoisting', 'scope'],
+        hints: [
+          {
+            id: 'hint-1',
+            title: 'JavaScript Hoisting Explained',
+            description:
+              'Comprehensive guide to understanding JavaScript hoisting',
+            url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting',
+            type: 'documentation',
+            category: 'javascript',
+            priority: 1,
+          },
+          {
+            id: 'hint-2',
+            title: 'JavaScript Hoisting Tutorial',
+            description:
+              'Video tutorial explaining hoisting with practical examples',
+            url: 'https://www.youtube.com/watch?v=example-hoisting',
+            type: 'video',
+            category: 'javascript',
+            priority: 2,
+          },
+        ],
       };
 
       setCurrentQuestion(mockQuestion);
@@ -749,6 +795,89 @@ function EnhancedGuidedPracticeContent() {
                       </p>
                     </div>
                   )}
+
+                  {/* Learning Hints Section */}
+                  {currentQuestion.hints &&
+                    currentQuestion.hints.length > 0 && (
+                      <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+                        <div className="flex items-center space-x-2 mb-3">
+                          <Lightbulb className="w-5 h-5 text-blue-500" />
+                          <h4 className="font-medium text-gray-900 dark:text-white">
+                            💡 Learn More About This Topic
+                          </h4>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                          Explore these resources to deepen your understanding:
+                        </p>
+                        <div className="space-y-2">
+                          {currentQuestion.hints
+                            .sort(
+                              (a, b) => (a.priority || 3) - (b.priority || 3)
+                            )
+                            .map(hint => {
+                              const getIcon = () => {
+                                switch (hint.type) {
+                                  case 'article':
+                                    return <FileText className="w-4 h-4" />;
+                                  case 'documentation':
+                                    return <Book className="w-4 h-4" />;
+                                  case 'tutorial':
+                                    return <Play className="w-4 h-4" />;
+                                  case 'video':
+                                    return <Play className="w-4 h-4" />;
+                                  case 'example':
+                                    return <Code className="w-4 h-4" />;
+                                  case 'reference':
+                                    return <Link className="w-4 h-4" />;
+                                  default:
+                                    return <ExternalLink className="w-4 h-4" />;
+                                }
+                              };
+
+                              return (
+                                <a
+                                  key={hint.id}
+                                  href={hint.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center space-x-3 p-3 rounded-lg bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-sm transition-all duration-200 group"
+                                >
+                                  <div className="text-blue-500 group-hover:text-blue-600">
+                                    {getIcon()}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <h5 className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors">
+                                      {hint.title}
+                                    </h5>
+                                    {hint.description && (
+                                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                        {hint.description}
+                                      </p>
+                                    )}
+                                    <div className="flex items-center space-x-2 mt-1">
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs px-2 py-0.5"
+                                      >
+                                        {hint.type}
+                                      </Badge>
+                                      {hint.category && (
+                                        <Badge
+                                          variant="secondary"
+                                          className="text-xs px-2 py-0.5"
+                                        >
+                                          {hint.category}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                </a>
+                              );
+                            })}
+                        </div>
+                      </div>
+                    )}
 
                   <div className="flex justify-between">
                     <div className="flex space-x-2">
