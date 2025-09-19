@@ -33,6 +33,8 @@ import {
   XCircle,
   Edit,
   Users,
+  Power,
+  PowerOff,
 } from 'lucide-react';
 
 // Enhanced Learning Plan Template Interface
@@ -688,9 +690,23 @@ export default function GuidedLearningAdminPage() {
                     <CardTitle className="text-xl text-gray-900 dark:text-white">
                       {plan.name}
                     </CardTitle>
-                    <div className="flex items-center space-x-2 mt-2">
+                    <div className="flex items-center space-x-2 mt-2 flex-wrap">
                       <Badge className={getDifficultyColor(plan.difficulty)}>
                         {plan.difficulty}
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="flex items-center gap-1"
+                      >
+                        <Clock className="w-3 h-3" />
+                        {plan.duration} day{plan.duration > 1 ? 's' : ''}
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="flex items-center gap-1"
+                      >
+                        <Target className="w-3 h-3" />
+                        {plan.totalQuestions} questions
                       </Badge>
                       <Badge variant={plan.isActive ? 'default' : 'secondary'}>
                         {plan.isActive ? 'Active' : 'Inactive'}
@@ -702,62 +718,114 @@ export default function GuidedLearningAdminPage() {
                       )}
                     </div>
                   </div>
-                  <div className="flex space-x-1">
+                  <div className="flex flex-wrap gap-2">
+                    {/* Status Toggle */}
                     <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() =>
-                        window.open(
-                          `/guided-practice/enhanced?plan=${plan.id}`,
-                          '_blank'
-                        )
-                      }
-                      title="View Plan"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() =>
-                        router.push(`/admin/guided-learning/${plan.id}/edit`)
-                      }
-                      title="Edit Plan"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
+                      variant={plan.isActive ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => {
-                        // Copy plan functionality
-                        const newPlan = {
-                          ...plan,
-                          id: `${plan.id}-copy-${Date.now()}`,
-                        };
-                        setPlans([...plans, newPlan]);
+                        const updatedPlans = plans.map(p =>
+                          p.id === plan.id ? { ...p, isActive: !p.isActive } : p
+                        );
+                        setPlans(updatedPlans);
+                        alert(
+                          `Plan "${plan.name}" has been ${!plan.isActive ? 'activated' : 'deactivated'} successfully!`
+                        );
                       }}
-                      title="Duplicate Plan"
+                      className={`flex items-center gap-1 ${
+                        plan.isActive
+                          ? 'bg-green-600 hover:bg-green-700 text-white'
+                          : 'text-gray-600 hover:text-gray-700 hover:bg-gray-50'
+                      }`}
+                      title={
+                        plan.isActive
+                          ? 'Deactivate this plan'
+                          : 'Activate this plan'
+                      }
                     >
-                      <Copy className="w-4 h-4" />
+                      {plan.isActive ? (
+                        <Power className="w-4 h-4" />
+                      ) : (
+                        <PowerOff className="w-4 h-4" />
+                      )}
+                      <span className="hidden sm:inline">
+                        {plan.isActive ? 'Active' : 'Inactive'}
+                      </span>
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-600 hover:text-red-700"
-                      onClick={() => {
-                        if (
-                          confirm(
-                            `Are you sure you want to delete "${plan.name}"?`
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          window.open(
+                            `/guided-practice/enhanced?plan=${plan.id}`,
+                            '_blank'
                           )
-                        ) {
-                          setPlans(plans.filter(p => p.id !== plan.id));
                         }
-                      }}
-                      title="Delete Plan"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                        className="flex items-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                        title="Preview this plan"
+                      >
+                        <Eye className="w-4 h-4" />
+                        <span className="hidden lg:inline">Preview</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          router.push(`/admin/guided-learning/${plan.id}/edit`)
+                        }
+                        className="flex items-center gap-1 text-green-600 hover:text-green-700 hover:bg-green-50"
+                        title="Edit plan details and questions"
+                      >
+                        <Edit className="w-4 h-4" />
+                        <span className="hidden lg:inline">Edit</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newPlan = {
+                            ...plan,
+                            id: `${plan.id}-copy-${Date.now()}`,
+                            name: `${plan.name} (Copy)`,
+                            isActive: false, // Start as inactive
+                          };
+                          setPlans([...plans, newPlan]);
+                          // Show success message
+                          alert(
+                            `Plan "${newPlan.name}" has been duplicated successfully!`
+                          );
+                        }}
+                        className="flex items-center gap-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                        title="Create a copy of this plan"
+                      >
+                        <Copy className="w-4 h-4" />
+                        <span className="hidden lg:inline">Copy</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          if (
+                            confirm(
+                              `⚠️ Are you sure you want to delete "${plan.name}"?\n\nThis action cannot be undone and will remove all associated data.`
+                            )
+                          ) {
+                            setPlans(plans.filter(p => p.id !== plan.id));
+                            alert(
+                              `Plan "${plan.name}" has been deleted successfully.`
+                            );
+                          }
+                        }}
+                        className="flex items-center gap-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        title="Permanently delete this plan"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        <span className="hidden lg:inline">Delete</span>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardHeader>
@@ -767,30 +835,70 @@ export default function GuidedLearningAdminPage() {
                 </p>
 
                 {/* Plan Stats */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {plan.duration} day{plan.duration > 1 ? 's' : ''}
-                    </span>
+                <div className="grid grid-cols-2 gap-4 py-3 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-1 text-blue-600">
+                      <Users className="w-4 h-4" />
+                      <span className="font-semibold">
+                        {plan.enrolledUsers || 0}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">Enrolled</p>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Target className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {plan.totalQuestions} questions
-                    </span>
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-1 text-green-600">
+                      <Target className="w-4 h-4" />
+                      <span className="font-semibold">
+                        {plan.completionRate || 0}%
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">Completion</p>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {plan.estimatedTime}
-                    </span>
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-1 text-purple-600">
+                      <Calendar className="w-4 h-4" />
+                      <span className="font-semibold">{plan.duration}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">Days</p>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Users className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {plan.enrolledUsers || 0} enrolled
-                    </span>
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-1 text-orange-600">
+                      <Target className="w-4 h-4" />
+                      <span className="font-semibold">
+                        {plan.totalQuestions}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">Questions</p>
+                  </div>
+                </div>
+
+                {/* Plan Features */}
+                {plan.features && plan.features.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Key Features:
+                    </h4>
+                    <div className="flex flex-wrap gap-1">
+                      {plan.features.map((feature, index) => (
+                        <Badge
+                          key={index}
+                          variant="secondary"
+                          className="text-xs"
+                        >
+                          {feature}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    <span>Estimated: {plan.estimatedTime}</span>
+                  </div>
+                  <div className="text-xs">
+                    {plan.dailyQuestions} questions/day
                   </div>
                 </div>
 
