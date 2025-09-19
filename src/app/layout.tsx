@@ -2,9 +2,17 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { CookieAuthProvider } from '@/contexts/CookieAuthContext';
-import Navbar from '@/components/Navbar';
+import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
+import { UserPreferencesProvider } from '@/contexts/UserPreferencesContext';
+import { UserTypeProvider } from '@/contexts/UserTypeContext';
+import { MobileMenuProvider } from '@/contexts/MobileMenuContext';
+import { OnboardingProvider } from '@/contexts/OnboardingContext';
+import { NavbarSimple } from '@/components/NavbarSimple';
 import ChatGPT from '@/components/ChatGPT';
+import { ComprehensiveGuidanceDetector } from '@/components/ComprehensiveGuidanceDetector';
+import { SignInGuidanceDetector } from '@/components/SignInGuidanceDetector';
+import { FirstTimeVisitorDetector } from '@/components/FirstTimeVisitorDetector';
+import { LearningModeDetector } from '@/components/LearningModeDetector';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -50,13 +58,27 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
-          <CookieAuthProvider>
-            <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-              <Navbar />
-              <main className="pt-20">{children}</main>
-              <ChatGPT />
-            </div>
-          </CookieAuthProvider>
+          <FirebaseAuthProvider>
+            <UserPreferencesProvider>
+              <UserTypeProvider>
+                <MobileMenuProvider>
+                  <OnboardingProvider>
+                    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white relative">
+                      <NavbarSimple />
+                      <main className="pt-16 sm:pt-18 lg:pt-20 relative">
+                        {children}
+                        <ChatGPT />
+                      </main>
+                      <ComprehensiveGuidanceDetector />
+                      <SignInGuidanceDetector />
+                      <FirstTimeVisitorDetector />
+                      <LearningModeDetector />
+                    </div>
+                  </OnboardingProvider>
+                </MobileMenuProvider>
+              </UserTypeProvider>
+            </UserPreferencesProvider>
+          </FirebaseAuthProvider>
         </ThemeProvider>
       </body>
     </html>

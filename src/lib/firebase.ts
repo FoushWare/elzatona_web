@@ -21,6 +21,9 @@ import {
   setDoc,
   getDoc,
   Firestore,
+  connectFirestoreEmulator,
+  enableNetwork,
+  disableNetwork,
 } from 'firebase/firestore';
 import { getStorage, Storage } from 'firebase/storage';
 
@@ -61,6 +64,26 @@ try {
   auth = getAuth(app);
   db = getFirestore(app);
   storage = getStorage(app);
+
+  // Configure Firestore for better connection management
+  if (db) {
+    // Enable network by default
+    enableNetwork(db).catch(error => {
+      console.warn('Failed to enable Firestore network:', error);
+    });
+
+    // Handle connection state changes
+    const handleConnectionChange = (connected: boolean) => {
+      if (connected) {
+        console.log('🔗 Firestore connected');
+      } else {
+        console.log('🔌 Firestore disconnected');
+      }
+    };
+
+    // Set up connection monitoring (this is a simplified approach)
+    // In production, you might want to use more sophisticated connection monitoring
+  }
 
   // Configure authentication persistence
   // This ensures users stay logged in across browser sessions

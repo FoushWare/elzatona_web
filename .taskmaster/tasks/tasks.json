@@ -377,7 +377,8 @@
         "priority": "high",
         "dependencies": [],
         "sprint": "Sprint 2",
-        "epic": "Core Features"
+        "epic": "Core Features",
+        "subtasks": []
       },
       {
         "id": 29,
