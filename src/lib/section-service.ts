@@ -6,6 +6,15 @@ export interface LearningSection {
   id: string;
   name: string;
   description: string;
+  category?:
+    | 'foundation'
+    | 'frontend'
+    | 'advanced'
+    | 'specialized'
+    | 'career'
+    | 'emerging';
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  estimatedTime?: string;
   order: number;
   isActive: boolean;
   questionCount: number;
@@ -167,39 +176,255 @@ export class SectionService {
   }
 
   /**
-   * Get default sections
+   * Get default sections - Comprehensive frontend development curriculum
    */
   private static getDefaultSections(): LearningSection[] {
-    const defaultSections = [
-      'Frontend Fundamentals',
-      'Advanced CSS Mastery',
-      'JavaScript Deep Dive',
-      'React Mastery',
-      'TypeScript Essentials',
-      'Testing Strategies',
-      'Performance Optimization',
-      'Security Essentials',
-      'Frontend System Design',
-      'Build Tools & DevOps',
-      'API Integration & Communication',
-      'AI Tools for Frontend',
-      'Frontend Interview Prep',
-      'Advanced Frontend Architectures',
-      'JavaScript Practice & Interview Prep',
-      'CSS Practice & Layout Mastery',
-      'HTML Practice & Semantic Mastery',
-      'React Practice & Advanced Patterns',
-      'Comprehensive Interview Preparation',
-      'Improve Your English',
+    const comprehensiveSections = [
+      // Foundation Level (Beginner)
+      {
+        id: 'html-fundamentals',
+        name: 'HTML Fundamentals',
+        description:
+          'Master HTML semantics, structure, accessibility, and modern HTML5 features',
+        category: 'foundation',
+        difficulty: 'beginner',
+        estimatedTime: '2-3 weeks',
+        questionCount: 0,
+        order: 1,
+      },
+      {
+        id: 'css-fundamentals',
+        name: 'CSS Fundamentals',
+        description:
+          'Learn CSS basics, selectors, layouts, and responsive design principles',
+        category: 'foundation',
+        difficulty: 'beginner',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 2,
+      },
+      {
+        id: 'javascript-fundamentals',
+        name: 'JavaScript Fundamentals',
+        description:
+          'Master JavaScript basics, ES6+, and core programming concepts',
+        category: 'foundation',
+        difficulty: 'beginner',
+        estimatedTime: '4-5 weeks',
+        questionCount: 0,
+        order: 3,
+      },
+
+      // Intermediate Level
+      {
+        id: 'advanced-css-mastery',
+        name: 'Advanced CSS Mastery',
+        description:
+          'Deep dive into advanced CSS techniques and modern layouts',
+        category: 'frontend',
+        difficulty: 'intermediate',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 4,
+      },
+      {
+        id: 'javascript-deep-dive',
+        name: 'JavaScript Deep Dive',
+        description:
+          'Advanced JavaScript concepts and modern development patterns',
+        category: 'frontend',
+        difficulty: 'intermediate',
+        estimatedTime: '4-5 weeks',
+        questionCount: 0,
+        order: 5,
+      },
+      {
+        id: 'typescript-essentials',
+        name: 'TypeScript Essentials',
+        description: 'Learn TypeScript for type-safe JavaScript development',
+        category: 'frontend',
+        difficulty: 'intermediate',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 6,
+      },
+      {
+        id: 'react-fundamentals',
+        name: 'React Fundamentals',
+        description:
+          'Master React core concepts and modern development patterns',
+        category: 'frontend',
+        difficulty: 'intermediate',
+        estimatedTime: '4-5 weeks',
+        questionCount: 0,
+        order: 7,
+      },
+
+      // Advanced Level
+      {
+        id: 'advanced-react-patterns',
+        name: 'Advanced React Patterns',
+        description: 'Advanced React concepts and enterprise-level patterns',
+        category: 'advanced',
+        difficulty: 'advanced',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 8,
+      },
+      {
+        id: 'nextjs-mastery',
+        name: 'Next.js Mastery',
+        description: 'Full-stack React development with Next.js',
+        category: 'advanced',
+        difficulty: 'advanced',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 9,
+      },
+      {
+        id: 'design-patterns-architecture',
+        name: 'Design Patterns & Architecture',
+        description:
+          'Software design patterns and frontend architecture principles',
+        category: 'advanced',
+        difficulty: 'advanced',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 10,
+      },
+      {
+        id: 'problem-solving-javascript',
+        name: 'Problem Solving with JavaScript',
+        description: 'Algorithmic thinking and problem-solving skills',
+        category: 'advanced',
+        difficulty: 'advanced',
+        estimatedTime: '4-5 weeks',
+        questionCount: 0,
+        order: 11,
+      },
+
+      // Specialized Topics
+      {
+        id: 'frontend-security',
+        name: 'Frontend Security',
+        description:
+          'Security best practices and vulnerabilities in frontend development',
+        category: 'specialized',
+        difficulty: 'intermediate',
+        estimatedTime: '2-3 weeks',
+        questionCount: 0,
+        order: 12,
+      },
+      {
+        id: 'performance-optimization',
+        name: 'Performance Optimization',
+        description: 'Frontend performance optimization techniques and tools',
+        category: 'specialized',
+        difficulty: 'intermediate',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 13,
+      },
+      {
+        id: 'testing-strategies',
+        name: 'Testing Strategies',
+        description:
+          'Comprehensive testing approaches for frontend applications',
+        category: 'specialized',
+        difficulty: 'intermediate',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 14,
+      },
+      {
+        id: 'build-tools-devops',
+        name: 'Build Tools & DevOps',
+        description: 'Modern build tools and deployment strategies',
+        category: 'specialized',
+        difficulty: 'intermediate',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 15,
+      },
+      {
+        id: 'api-integration-communication',
+        name: 'API Integration & Communication',
+        description: 'Working with APIs and data communication',
+        category: 'specialized',
+        difficulty: 'intermediate',
+        estimatedTime: '2-3 weeks',
+        questionCount: 0,
+        order: 16,
+      },
+
+      // Interview & Career Preparation
+      {
+        id: 'system-design-frontend',
+        name: 'System Design for Frontend',
+        description: 'Frontend system design and architecture decisions',
+        category: 'career',
+        difficulty: 'advanced',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 17,
+      },
+      {
+        id: 'frontend-interview-prep',
+        name: 'Frontend Interview Preparation',
+        description:
+          'Comprehensive preparation for frontend technical interviews',
+        category: 'career',
+        difficulty: 'intermediate',
+        estimatedTime: '4-5 weeks',
+        questionCount: 0,
+        order: 18,
+      },
+      {
+        id: 'behavioral-soft-skills',
+        name: 'Behavioral & Soft Skills',
+        description: 'Non-technical skills essential for frontend developers',
+        category: 'career',
+        difficulty: 'beginner',
+        estimatedTime: '2-3 weeks',
+        questionCount: 0,
+        order: 19,
+      },
+
+      // Emerging Technologies
+      {
+        id: 'ai-tools-frontend',
+        name: 'AI Tools for Frontend',
+        description:
+          'Leveraging AI tools and technologies in frontend development',
+        category: 'emerging',
+        difficulty: 'intermediate',
+        estimatedTime: '2-3 weeks',
+        questionCount: 0,
+        order: 20,
+      },
+      {
+        id: 'web3-blockchain-frontend',
+        name: 'Web3 & Blockchain Frontend',
+        description:
+          'Frontend development for Web3 and blockchain applications',
+        category: 'emerging',
+        difficulty: 'advanced',
+        estimatedTime: '3-4 weeks',
+        questionCount: 0,
+        order: 21,
+      },
     ];
 
-    return defaultSections.map((name, index) => ({
-      id: `section_${index + 1}`,
-      name,
-      description: `Learn and practice ${name.toLowerCase()}`,
-      order: index + 1,
+    return comprehensiveSections.map(section => ({
+      id: section.id,
+      name: section.name,
+      description: section.description,
+      category: section.category,
+      difficulty: section.difficulty,
+      estimatedTime: section.estimatedTime,
+      order: section.order,
       isActive: true,
-      questionCount: 0,
+      questionCount: section.questionCount,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }));
