@@ -26,7 +26,7 @@ export interface UnifiedQuestion {
   // Basic Question Info
   title: string;
   content: string;
-  type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended';
+  type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended' | 'yes-no';
 
   // Answer Structure
   options: QuestionOption[];

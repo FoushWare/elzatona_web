@@ -24,6 +24,8 @@ import {
   Play,
   Code,
   Link,
+  Check,
+  X,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -36,7 +38,7 @@ interface Question {
   id: string;
   title: string;
   content: string;
-  type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended';
+  type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended' | 'yes-no';
   options?: QuestionOption[];
   correctAnswers: string[];
   explanation: string;
@@ -267,33 +269,21 @@ function EnhancedGuidedPracticeContent() {
 
       const currentQuestionId = availableQuestions[0];
 
-      // Mock question data with hints
+      // Mock question data with hints - Yes/No Question
       const mockQuestion: Question = {
         id: currentQuestionId,
-        title: 'What is JavaScript hoisting?',
+        title: 'JavaScript Hoisting Behavior',
         content:
-          'Explain the concept of hoisting in JavaScript and provide an example.',
-        type: 'single',
-        options: [
-          {
-            id: 'a',
-            text: 'Variables and functions are moved to the top of their scope',
-          },
-          {
-            id: 'b',
-            text: 'Variables are initialized with undefined before assignment',
-          },
-          { id: 'c', text: 'Functions can be called before they are declared' },
-          { id: 'd', text: 'All of the above' },
-        ],
-        correctAnswers: ['d'],
+          'Is it possible to call a function before it is declared in JavaScript due to hoisting?',
+        type: 'yes-no',
+        correctAnswers: ['yes'],
         explanation:
-          'Hoisting is a JavaScript behavior where variable and function declarations are moved to the top of their containing scope during compilation. This allows variables to be accessed before they are declared and functions to be called before they are defined.',
+          'Yes, it is possible to call a function before it is declared in JavaScript due to hoisting. Function declarations are hoisted to the top of their scope, which means they can be called before they appear in the code.',
         category: 'javascript',
         difficulty: 'medium',
         points: 10,
-        timeLimit: 120,
-        tags: ['javascript', 'hoisting', 'scope'],
+        timeLimit: 60,
+        tags: ['javascript', 'hoisting', 'functions'],
         hints: [
           {
             id: 'hint-1',
@@ -336,6 +326,9 @@ function EnhancedGuidedPracticeContent() {
           ? prev.filter(id => id !== answerId)
           : [...prev, answerId]
       );
+    } else if (currentQuestion?.type === 'yes-no') {
+      // For yes/no questions, only one answer is allowed
+      setSelectedAnswers([answerId]);
     }
   };
 
@@ -737,38 +730,89 @@ function EnhancedGuidedPracticeContent() {
                     {currentQuestion.content}
                   </p>
 
-                  {currentQuestion.options && (
-                    <div className="space-y-3">
-                      {currentQuestion.options.map(option => (
-                        <button
-                          key={option.id}
-                          onClick={() => handleAnswerSelect(option.id)}
-                          className={`w-full p-4 text-left rounded-lg border-2 transition-colors ${
-                            selectedAnswers.includes(option.id)
-                              ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
-                              : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                  {/* Yes/No Question Type */}
+                  {currentQuestion.type === 'yes-no' && (
+                    <div className="flex gap-4 justify-center">
+                      <button
+                        onClick={() => handleAnswerSelect('yes')}
+                        className={`flex items-center space-x-3 px-8 py-4 rounded-lg border-2 transition-all duration-200 ${
+                          selectedAnswers.includes('yes')
+                            ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-lg'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-600 hover:shadow-md'
+                        }`}
+                      >
+                        <div
+                          className={`p-2 rounded-full ${
+                            selectedAnswers.includes('yes')
+                              ? 'bg-green-500 text-white'
+                              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
                           }`}
                         >
-                          <div className="flex items-center space-x-3">
-                            {currentQuestion.type === 'single' ? (
-                              selectedAnswers.includes(option.id) ? (
-                                <CheckCircle className="w-5 h-5 text-red-500" />
-                              ) : (
-                                <Square className="w-5 h-5 text-gray-400" />
-                              )
-                            ) : selectedAnswers.includes(option.id) ? (
-                              <CheckSquare className="w-5 h-5 text-red-500" />
-                            ) : (
-                              <Square className="w-5 h-5 text-gray-400" />
-                            )}
-                            <span className="text-gray-900 dark:text-white">
-                              {option.text}
-                            </span>
-                          </div>
-                        </button>
-                      ))}
+                          <Check className="w-6 h-6" />
+                        </div>
+                        <span className="text-lg font-medium text-gray-900 dark:text-white">
+                          Yes
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => handleAnswerSelect('no')}
+                        className={`flex items-center space-x-3 px-8 py-4 rounded-lg border-2 transition-all duration-200 ${
+                          selectedAnswers.includes('no')
+                            ? 'border-red-500 bg-red-50 dark:bg-red-900/20 shadow-lg'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-red-300 dark:hover:border-red-600 hover:shadow-md'
+                        }`}
+                      >
+                        <div
+                          className={`p-2 rounded-full ${
+                            selectedAnswers.includes('no')
+                              ? 'bg-red-500 text-white'
+                              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                          }`}
+                        >
+                          <X className="w-6 h-6" />
+                        </div>
+                        <span className="text-lg font-medium text-gray-900 dark:text-white">
+                          No
+                        </span>
+                      </button>
                     </div>
                   )}
+
+                  {/* Regular Multiple Choice Questions */}
+                  {currentQuestion.options &&
+                    currentQuestion.type !== 'yes-no' && (
+                      <div className="space-y-3">
+                        {currentQuestion.options.map(option => (
+                          <button
+                            key={option.id}
+                            onClick={() => handleAnswerSelect(option.id)}
+                            className={`w-full p-4 text-left rounded-lg border-2 transition-colors ${
+                              selectedAnswers.includes(option.id)
+                                ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                            }`}
+                          >
+                            <div className="flex items-center space-x-3">
+                              {currentQuestion.type === 'single' ? (
+                                selectedAnswers.includes(option.id) ? (
+                                  <CheckCircle className="w-5 h-5 text-red-500" />
+                                ) : (
+                                  <Square className="w-5 h-5 text-gray-400" />
+                                )
+                              ) : selectedAnswers.includes(option.id) ? (
+                                <CheckSquare className="w-5 h-5 text-red-500" />
+                              ) : (
+                                <Square className="w-5 h-5 text-gray-400" />
+                              )}
+                              <span className="text-gray-900 dark:text-white">
+                                {option.text}
+                              </span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
 
                   {showExplanation && (
                     <div
