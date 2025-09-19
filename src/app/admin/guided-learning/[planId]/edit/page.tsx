@@ -305,340 +305,250 @@ export default function PlanEditorPage() {
 
   // Load data on component mount
   useEffect(() => {
-    const mockPlan: LearningPlanTemplate = {
-      id: planId,
-      name:
-        planId === '1-day-plan'
-          ? '1-Day Frontend Quick Start'
-          : planId === '2-day-plan'
-            ? '2-Day Frontend Fundamentals'
-            : planId === '3-day-plan'
-              ? '3-Day React Development'
-              : planId === '4-day-plan'
-                ? '4-Day Vue.js Mastery'
-                : planId === '5-day-plan'
-                  ? '5-Day Angular Development'
-                  : planId === '6-day-plan'
-                    ? '6-Day Node.js Backend'
-                    : planId === '7-day-plan'
-                      ? '7-Day Full-Stack Mastery'
-                      : 'Learning Plan',
-      duration:
-        planId === '1-day-plan'
-          ? 1
-          : planId === '2-day-plan'
-            ? 2
-            : planId === '3-day-plan'
-              ? 3
-              : planId === '4-day-plan'
-                ? 4
-                : planId === '5-day-plan'
-                  ? 5
-                  : planId === '6-day-plan'
-                    ? 6
-                    : planId === '7-day-plan'
-                      ? 7
-                      : 1,
-      description:
-        planId === '1-day-plan'
-          ? 'Quick introduction to HTML, CSS, and JavaScript basics'
-          : planId === '2-day-plan'
-            ? 'Complete guide to HTML, CSS, and JavaScript fundamentals'
-            : planId === '3-day-plan'
-              ? 'Master React.js from basics to intermediate concepts'
-              : planId === '4-day-plan'
-                ? 'Complete Vue.js development course with composition API'
-                : planId === '5-day-plan'
-                  ? 'Comprehensive Angular framework development course'
-                  : planId === '6-day-plan'
-                    ? 'Complete Node.js backend development with Express and databases'
-                    : planId === '7-day-plan'
-                      ? 'Complete full-stack development with modern technologies'
-                      : 'Learning plan description',
-      difficulty:
-        planId === '1-day-plan' || planId === '2-day-plan'
-          ? 'Beginner'
-          : planId === '6-day-plan' || planId === '7-day-plan'
-            ? 'Advanced'
-            : 'Intermediate',
-      totalQuestions:
-        planId === '1-day-plan'
-          ? 15
-          : planId === '2-day-plan'
-            ? 30
-            : planId === '3-day-plan'
-              ? 45
-              : planId === '4-day-plan'
-                ? 60
-                : planId === '5-day-plan'
-                  ? 75
-                  : planId === '6-day-plan'
-                    ? 90
-                    : planId === '7-day-plan'
-                      ? 105
-                      : 15,
-      dailyQuestions: 15,
-      sections:
-        planId === '1-day-plan'
-          ? [
-              {
-                id: 'html',
-                name: 'HTML',
-                category: 'html',
-                questions: ['q1', 'q2', 'q3'],
-                weight: 33,
-                order: 1,
-              },
-              {
-                id: 'css',
-                name: 'CSS',
-                category: 'css',
-                questions: ['q4', 'q5', 'q6'],
-                weight: 33,
-                order: 2,
-              },
-              {
-                id: 'js',
-                name: 'JavaScript',
-                category: 'javascript',
-                questions: ['q7', 'q8', 'q9'],
-                weight: 34,
-                order: 3,
-              },
-            ]
-          : planId === '2-day-plan'
-            ? [
-                {
-                  id: 'html',
-                  name: 'HTML',
-                  category: 'html',
-                  questions: ['q1', 'q2', 'q3', 'q4', 'q5'],
-                  weight: 33,
-                  order: 1,
-                },
-                {
-                  id: 'css',
-                  name: 'CSS',
-                  category: 'css',
-                  questions: ['q6', 'q7', 'q8', 'q9', 'q10'],
-                  weight: 33,
-                  order: 2,
-                },
-                {
-                  id: 'js',
-                  name: 'JavaScript',
-                  category: 'javascript',
-                  questions: ['q11', 'q12', 'q13', 'q14', 'q15'],
-                  weight: 34,
-                  order: 3,
-                },
-              ]
-            : planId === '3-day-plan'
-              ? [
-                  {
-                    id: 'components',
-                    name: 'Components',
-                    category: 'react',
-                    questions: ['q16', 'q17', 'q18', 'q19', 'q20'],
-                    weight: 33,
-                    order: 1,
-                  },
-                  {
-                    id: 'hooks',
-                    name: 'Hooks',
-                    category: 'react',
-                    questions: ['q21', 'q22', 'q23', 'q24', 'q25'],
-                    weight: 33,
-                    order: 2,
-                  },
-                  {
-                    id: 'state',
-                    name: 'State Management',
-                    category: 'react',
-                    questions: ['q26', 'q27', 'q28', 'q29', 'q30'],
-                    weight: 34,
-                    order: 3,
-                  },
-                ]
-              : [
-                  {
-                    id: 'html-css',
-                    name: 'HTML & CSS',
-                    category: 'html',
-                    questions: ['q1', 'q2'],
-                    weight: 20,
-                    order: 1,
-                  },
-                  {
-                    id: 'javascript',
-                    name: 'JavaScript',
-                    category: 'javascript',
-                    questions: ['q3', 'q4', 'q5'],
-                    weight: 40,
-                    order: 2,
-                  },
-                  {
-                    id: 'react',
-                    name: 'React',
-                    category: 'react',
-                    questions: ['q6', 'q7'],
-                    weight: 20,
-                    order: 3,
-                  },
-                  {
-                    id: 'typescript',
-                    name: 'TypeScript',
-                    category: 'typescript',
-                    questions: ['q8', 'q9'],
-                    weight: 20,
-                    order: 4,
-                  },
-                ],
-      features:
-        planId === '1-day-plan'
-          ? ['Quick preparation', 'Essential topics', '2-3 hours']
-          : planId === '2-day-plan'
-            ? ['Fundamental concepts', 'Practical examples', '4-5 hours']
-            : planId === '3-day-plan'
-              ? ['React fundamentals', 'Modern patterns', '6-7 hours']
-              : planId === '4-day-plan'
-                ? ['Vue 3 mastery', 'Composition API', '8-9 hours']
-                : planId === '5-day-plan'
-                  ? ['Angular framework', 'Enterprise patterns', '10-12 hours']
-                  : planId === '6-day-plan'
-                    ? ['Backend mastery', 'Database integration', '12-15 hours']
-                    : planId === '7-day-plan'
+    const loadPlanData = async () => {
+      try {
+        // Fetch comprehensive sections from API
+        const response = await fetch('/api/admin/sections');
+        const sectionsData = await response.json();
+
+        if (!sectionsData.success || !sectionsData.data) {
+          console.error('Failed to fetch sections:', sectionsData);
+          return;
+        }
+
+        const comprehensiveSections = sectionsData.data;
+
+        const mockPlan: LearningPlanTemplate = {
+          id: planId,
+          name:
+            planId === '1-day-plan'
+              ? '1-Day Frontend Quick Start'
+              : planId === '2-day-plan'
+                ? '2-Day Frontend Fundamentals'
+                : planId === '3-day-plan'
+                  ? '3-Day React Development'
+                  : planId === '4-day-plan'
+                    ? '4-Day Vue.js Mastery'
+                    : planId === '5-day-plan'
+                      ? '5-Day Angular Development'
+                      : planId === '6-day-plan'
+                        ? '6-Day Node.js Backend'
+                        : planId === '7-day-plan'
+                          ? '7-Day Full-Stack Mastery'
+                          : 'Learning Plan',
+          duration:
+            planId === '1-day-plan'
+              ? 1
+              : planId === '2-day-plan'
+                ? 2
+                : planId === '3-day-plan'
+                  ? 3
+                  : planId === '4-day-plan'
+                    ? 4
+                    : planId === '5-day-plan'
+                      ? 5
+                      : planId === '6-day-plan'
+                        ? 6
+                        : planId === '7-day-plan'
+                          ? 7
+                          : 1,
+          description:
+            planId === '1-day-plan'
+              ? 'Quick introduction to HTML, CSS, and JavaScript basics'
+              : planId === '2-day-plan'
+                ? 'Complete guide to HTML, CSS, and JavaScript fundamentals'
+                : planId === '3-day-plan'
+                  ? 'Master React.js from basics to intermediate concepts'
+                  : planId === '4-day-plan'
+                    ? 'Complete Vue.js development course with composition API'
+                    : planId === '5-day-plan'
+                      ? 'Comprehensive Angular framework development course'
+                      : planId === '6-day-plan'
+                        ? 'Complete Node.js backend development with Express and databases'
+                        : planId === '7-day-plan'
+                          ? 'Complete full-stack development with modern technologies'
+                          : 'Learning plan description',
+          difficulty:
+            planId === '1-day-plan' || planId === '2-day-plan'
+              ? 'Beginner'
+              : planId === '6-day-plan' || planId === '7-day-plan'
+                ? 'Advanced'
+                : 'Intermediate',
+          totalQuestions: comprehensiveSections.length * 3,
+          dailyQuestions: Math.max(
+            15,
+            Math.floor((comprehensiveSections.length * 3) / 7)
+          ),
+          sections: comprehensiveSections.map((section, index) => ({
+            id: section.id,
+            name: section.name,
+            category: section.category || 'foundation',
+            questions: Array.from(
+              { length: 3 },
+              (_, i) => `q${index * 3 + i + 1}`
+            ),
+            weight: Math.floor(100 / comprehensiveSections.length),
+            order: index + 1,
+          })),
+          features:
+            planId === '1-day-plan'
+              ? ['Quick preparation', 'Essential topics', '2-3 hours']
+              : planId === '2-day-plan'
+                ? ['Fundamental concepts', 'Practical examples', '4-5 hours']
+                : planId === '3-day-plan'
+                  ? ['React fundamentals', 'Modern patterns', '6-7 hours']
+                  : planId === '4-day-plan'
+                    ? ['Vue 3 mastery', 'Composition API', '8-9 hours']
+                    : planId === '5-day-plan'
                       ? [
-                          'Full-stack mastery',
-                          'Production-ready',
-                          '15-18 hours',
+                          'Angular framework',
+                          'Enterprise patterns',
+                          '10-12 hours',
                         ]
-                      : [
-                          'Balanced coverage',
-                          'Daily milestones',
-                          'TypeScript basics',
-                        ],
-      estimatedTime:
-        planId === '1-day-plan'
-          ? '2-3 hours'
-          : planId === '2-day-plan'
-            ? '4-5 hours'
-            : planId === '3-day-plan'
-              ? '6-7 hours'
-              : planId === '4-day-plan'
-                ? '8-9 hours'
-                : planId === '5-day-plan'
-                  ? '10-12 hours'
-                  : planId === '6-day-plan'
-                    ? '12-15 hours'
-                    : planId === '7-day-plan'
-                      ? '15-18 hours'
-                      : '4-5 hours',
-      isRecommended: true,
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+                      : planId === '6-day-plan'
+                        ? [
+                            'Backend mastery',
+                            'Database integration',
+                            '12-15 hours',
+                          ]
+                        : planId === '7-day-plan'
+                          ? [
+                              'Full-stack mastery',
+                              'Production-ready',
+                              '15-18 hours',
+                            ]
+                          : [
+                              'Balanced coverage',
+                              'Daily milestones',
+                              'TypeScript basics',
+                            ],
+          estimatedTime:
+            planId === '1-day-plan'
+              ? '2-3 hours'
+              : planId === '2-day-plan'
+                ? '4-5 hours'
+                : planId === '3-day-plan'
+                  ? '6-7 hours'
+                  : planId === '4-day-plan'
+                    ? '8-9 hours'
+                    : planId === '5-day-plan'
+                      ? '10-12 hours'
+                      : planId === '6-day-plan'
+                        ? '12-15 hours'
+                        : planId === '7-day-plan'
+                          ? '15-18 hours'
+                          : '4-5 hours',
+          isRecommended: true,
+          isActive: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+
+        const mockQuestions: Question[] = [
+          {
+            id: 'q1',
+            title: 'What is HTML5 semantic markup?',
+            content:
+              'Explain the purpose and benefits of HTML5 semantic elements.',
+            type: 'text',
+            category: 'html',
+            difficulty: 'easy',
+            tags: ['html5', 'semantic', 'accessibility'],
+            isActive: true,
+          },
+          {
+            id: 'q2',
+            title: 'CSS Flexbox vs Grid',
+            content: 'Compare CSS Flexbox and Grid layout systems.',
+            type: 'text',
+            category: 'css',
+            difficulty: 'medium',
+            tags: ['css', 'flexbox', 'grid', 'layout'],
+            isActive: true,
+          },
+          {
+            id: 'q3',
+            title: 'JavaScript Hoisting',
+            content: 'Explain JavaScript hoisting with examples.',
+            type: 'code',
+            category: 'javascript',
+            difficulty: 'medium',
+            tags: ['javascript', 'hoisting', 'scope'],
+            isActive: true,
+          },
+          {
+            id: 'q4',
+            title: 'Closures in JavaScript',
+            content: 'What are closures and how do they work?',
+            type: 'text',
+            category: 'javascript',
+            difficulty: 'hard',
+            tags: ['javascript', 'closures', 'scope'],
+            isActive: true,
+          },
+          {
+            id: 'q5',
+            title: 'Promise vs Async/Await',
+            content: 'Compare Promise and async/await patterns.',
+            type: 'code',
+            category: 'javascript',
+            difficulty: 'medium',
+            tags: ['javascript', 'promises', 'async'],
+            isActive: true,
+          },
+          {
+            id: 'q6',
+            title: 'React Hooks Rules',
+            content: 'What are the rules of React hooks?',
+            type: 'text',
+            category: 'react',
+            difficulty: 'easy',
+            tags: ['react', 'hooks', 'rules'],
+            isActive: true,
+          },
+          {
+            id: 'q7',
+            title: 'React Performance Optimization',
+            content: 'How to optimize React application performance?',
+            type: 'text',
+            category: 'react',
+            difficulty: 'hard',
+            tags: ['react', 'performance', 'optimization'],
+            isActive: true,
+          },
+          {
+            id: 'q8',
+            title: 'TypeScript Generics',
+            content: 'Explain TypeScript generics with examples.',
+            type: 'code',
+            category: 'typescript',
+            difficulty: 'hard',
+            tags: ['typescript', 'generics', 'types'],
+            isActive: true,
+          },
+          {
+            id: 'q9',
+            title: 'TypeScript Interfaces vs Types',
+            content: 'Compare TypeScript interfaces and type aliases.',
+            type: 'text',
+            category: 'typescript',
+            difficulty: 'medium',
+            tags: ['typescript', 'interfaces', 'types'],
+            isActive: true,
+          },
+        ];
+
+        setPlan(mockPlan);
+      } catch (error) {
+        console.error('Error loading plan data:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const mockQuestions: Question[] = [
-      {
-        id: 'q1',
-        title: 'What is HTML5 semantic markup?',
-        content: 'Explain the purpose and benefits of HTML5 semantic elements.',
-        type: 'text',
-        category: 'html',
-        difficulty: 'easy',
-        tags: ['html5', 'semantic', 'accessibility'],
-        isActive: true,
-      },
-      {
-        id: 'q2',
-        title: 'CSS Flexbox vs Grid',
-        content: 'Compare CSS Flexbox and Grid layout systems.',
-        type: 'text',
-        category: 'css',
-        difficulty: 'medium',
-        tags: ['css', 'flexbox', 'grid', 'layout'],
-        isActive: true,
-      },
-      {
-        id: 'q3',
-        title: 'JavaScript Hoisting',
-        content: 'Explain JavaScript hoisting with examples.',
-        type: 'code',
-        category: 'javascript',
-        difficulty: 'medium',
-        tags: ['javascript', 'hoisting', 'scope'],
-        isActive: true,
-      },
-      {
-        id: 'q4',
-        title: 'Closures in JavaScript',
-        content: 'What are closures and how do they work?',
-        type: 'text',
-        category: 'javascript',
-        difficulty: 'hard',
-        tags: ['javascript', 'closures', 'scope'],
-        isActive: true,
-      },
-      {
-        id: 'q5',
-        title: 'Promise vs Async/Await',
-        content: 'Compare Promise and async/await patterns.',
-        type: 'code',
-        category: 'javascript',
-        difficulty: 'medium',
-        tags: ['javascript', 'promises', 'async'],
-        isActive: true,
-      },
-      {
-        id: 'q6',
-        title: 'React Hooks Rules',
-        content: 'What are the rules of React hooks?',
-        type: 'text',
-        category: 'react',
-        difficulty: 'easy',
-        tags: ['react', 'hooks', 'rules'],
-        isActive: true,
-      },
-      {
-        id: 'q7',
-        title: 'React Performance Optimization',
-        content: 'How to optimize React application performance?',
-        type: 'text',
-        category: 'react',
-        difficulty: 'hard',
-        tags: ['react', 'performance', 'optimization'],
-        isActive: true,
-      },
-      {
-        id: 'q8',
-        title: 'TypeScript Generics',
-        content: 'Explain TypeScript generics with examples.',
-        type: 'code',
-        category: 'typescript',
-        difficulty: 'hard',
-        tags: ['typescript', 'generics', 'types'],
-        isActive: true,
-      },
-      {
-        id: 'q9',
-        title: 'TypeScript Interfaces vs Types',
-        content: 'Compare TypeScript interfaces and type aliases.',
-        type: 'text',
-        category: 'typescript',
-        difficulty: 'medium',
-        tags: ['typescript', 'interfaces', 'types'],
-        isActive: true,
-      },
-    ];
-
-    setPlan(mockPlan);
-    setLoading(false);
-
-    // Fetch questions from API
+    loadPlanData();
     fetchQuestions();
-  }, [planId]);
+  }, [planId, fetchQuestions]);
 
   // Filter questions based on search and filters
   useEffect(() => {
@@ -899,12 +809,17 @@ export default function PlanEditorPage() {
           <div className="lg:col-span-1">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <BookOpen className="w-5 h-5" />
-                  <span>Plan Sections</span>
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <BookOpen className="w-5 h-5" />
+                    <span>Plan Sections</span>
+                  </div>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {plan.sections.length} sections
+                  </span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 max-h-96 overflow-y-auto pr-2">
                 {plan.sections.map(section => (
                   <Card
                     key={section.id}
