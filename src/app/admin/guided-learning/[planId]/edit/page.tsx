@@ -65,7 +65,7 @@ interface Question {
   id: string;
   title: string;
   content: string;
-  type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended';
+  type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended' | 'yes-no';
   options?: QuestionOption[];
   correctAnswers: string[];
   explanation: string;
