@@ -1,14 +1,14 @@
 'use client';
 
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import AdminLayout from '@/components/AdminLayout';
+
 import QuestionAudioManager from '@/components/QuestionAudioManager';
 
 export default function AdminQuestionsPage() {
   const { user } = useAdminAuth();
 
   return (
-    <AdminLayout>
+    
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -23,6 +23,6 @@ export default function AdminQuestionsPage() {
         {/* Question Audio Manager */}
         <QuestionAudioManager learningPathId="frontend-basics" />
       </div>
-    </AdminLayout>
+    
   );
 }

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import AdminLayout from '@/components/AdminLayout';
+
 import {
   BookOpen,
   Code,
@@ -66,7 +66,7 @@ export default function ContentManagementPage() {
   ]);
 
   return (
-    <AdminLayout>
+    
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
@@ -182,6 +182,6 @@ export default function ContentManagementPage() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    
   );
 }

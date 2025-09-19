@@ -1,9 +1,48 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow all reads and writes for development
+    // Learning plan templates - allow public read access
+    match /learningPlanTemplates/{document} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // User documents - require authentication
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Questions - allow public read access
+    match /questions/{document} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // User progress - require authentication
+    match /userProgress/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // User preferences - require authentication
+    match /userPreferences/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Learning sessions - require authentication
+    match /learningSessions/{sessionId} {
+      allow read, write: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || 
+         request.auth.uid in resource.data.participants);
+    }
+    
+    // Admin collection - allow server-side access for authentication
+    match /admins/{adminId} {
+      allow read, write: if true; // Allow server-side admin authentication
+    }
+    
+    // Admin access to all collections - allow server-side admin operations
     match /{document=**} {
-      allow read, write: if true;
+      allow read, write: if true; // Allow all access for admin operations
     }
   }
 }

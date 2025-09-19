@@ -245,6 +245,31 @@ function GuidedPracticeContent() {
 
   const handleNextQuestion = () => {
     if (sessionComplete) {
+      // Mark plan as completed
+      if (planId && typeof window !== 'undefined') {
+        const completedPlansData = localStorage.getItem(
+          'completed-guided-plans'
+        );
+        let completedPlans = [];
+
+        if (completedPlansData) {
+          try {
+            completedPlans = JSON.parse(completedPlansData);
+          } catch (error) {
+            console.error('Error parsing completed plans:', error);
+            completedPlans = [];
+          }
+        }
+
+        if (!completedPlans.includes(planId)) {
+          completedPlans.push(planId);
+          localStorage.setItem(
+            'completed-guided-plans',
+            JSON.stringify(completedPlans)
+          );
+        }
+      }
+
       // Session is complete, redirect to results or learning page
       router.push('/guided-learning');
       return;
@@ -255,6 +280,21 @@ function GuidedPracticeContent() {
   const getAccuracyPercentage = () => {
     if (sessionStats.total === 0) return 0;
     return Math.round((sessionStats.correct / sessionStats.total) * 100);
+  };
+
+  const getGradeLetter = (percentage: number) => {
+    if (percentage >= 90) return 'A+';
+    if (percentage >= 80) return 'A';
+    if (percentage >= 70) return 'B+';
+    if (percentage >= 60) return 'B';
+    if (percentage >= 50) return 'C';
+    return 'D';
+  };
+
+  const getGradeColor = (percentage: number) => {
+    if (percentage >= 80) return 'text-green-600 dark:text-green-400';
+    if (percentage >= 60) return 'text-yellow-600 dark:text-yellow-400';
+    return 'text-red-600 dark:text-red-400';
   };
 
   if (isAuthLoading) {
@@ -437,21 +477,88 @@ function GuidedPracticeContent() {
         {sessionComplete && (
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-xl border border-white/20 dark:border-gray-700/20 mb-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+              {/* Grade Display */}
+              <div className="mb-8">
+                <div
+                  className={`w-32 h-32 rounded-full flex flex-col items-center justify-center mx-auto mb-4 ${
+                    getAccuracyPercentage() >= 80
+                      ? 'bg-green-100 dark:bg-green-900/30'
+                      : getAccuracyPercentage() >= 60
+                        ? 'bg-yellow-100 dark:bg-yellow-900/30'
+                        : 'bg-red-100 dark:bg-red-900/30'
+                  }`}
+                >
+                  <span
+                    className={`text-4xl font-bold ${getGradeColor(getAccuracyPercentage())}`}
+                  >
+                    {getGradeLetter(getAccuracyPercentage())}
+                  </span>
+                  <span
+                    className={`text-lg font-semibold ${getGradeColor(getAccuracyPercentage())}`}
+                  >
+                    {getAccuracyPercentage()}%
+                  </span>
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  Session Complete! 🎉
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
+                  {getAccuracyPercentage() >= 80
+                    ? "Excellent work! You're mastering frontend concepts!"
+                    : getAccuracyPercentage() >= 60
+                      ? 'Good job! Keep practicing to improve your skills.'
+                      : 'Keep studying! Practice makes perfect.'}
+                </p>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                Session Complete! 🎉
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
-                You've completed all 5 questions in this practice session.
-              </p>
-              <div className="flex justify-center space-x-4">
+
+              {/* Detailed Results */}
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-8">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  Your Results
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {sessionStats.correct}/{sessionStats.total}
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      Correct Answers
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {getAccuracyPercentage()}%
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      Accuracy Rate
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {currentPlan?.title || 'Practice Session'}
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      Plan Completed
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <button
                   onClick={() => router.push('/guided-learning')}
-                  className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                  className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
                 >
-                  Back to Learning Plans
+                  <BookOpen className="w-5 h-5" />
+                  <span>Explore Other Plans</span>
+                </button>
+                <button
+                  onClick={() => router.push('/progress')}
+                  className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
+                >
+                  <TrendingUp className="w-5 h-5" />
+                  <span>View Progress</span>
                 </button>
                 <button
                   onClick={() => {
@@ -460,10 +567,20 @@ function GuidedPracticeContent() {
                     setSessionStats({ correct: 0, total: 0 });
                     loadNextQuestion();
                   }}
-                  className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
                 >
-                  Practice Again
+                  <Target className="w-5 h-5" />
+                  <span>Practice Again</span>
                 </button>
+              </div>
+
+              {/* Encouragement Message */}
+              <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                <p className="text-blue-800 dark:text-blue-200 font-medium">
+                  💡 <strong>Tip:</strong> Consistent practice is key to
+                  mastering frontend development. Try different learning plans
+                  to cover all topics comprehensively!
+                </p>
               </div>
             </div>
           </div>

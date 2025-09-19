@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '@/components/AdminLayout';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -165,7 +165,7 @@ export default function LearningResourcesPage() {
 
   if (loading) {
     return (
-      <AdminLayout>
+      
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-center h-64">
             <RefreshCw className="w-8 h-8 animate-spin text-gray-500" />
@@ -174,12 +174,12 @@ export default function LearningResourcesPage() {
             </span>
           </div>
         </div>
-      </AdminLayout>
+      
     );
   }
 
   return (
-    <AdminLayout>
+    
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-6">
           {/* Header */}
@@ -486,6 +486,6 @@ export default function LearningResourcesPage() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    
   );
 }
