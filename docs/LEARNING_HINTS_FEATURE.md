@@ -4,6 +4,17 @@
 
 The Learning Hints feature allows questions in the guided learning system to include external resources and links that help learners deepen their understanding of the topics. This feature provides additional context, tutorials, documentation, and examples related to each question.
 
+## Question Types
+
+The system now supports multiple question types including the new **Yes/No** question type:
+
+- **Single Choice**: Multiple choice with one correct answer
+- **Multiple Choice**: Multiple choice with multiple correct answers  
+- **Text**: Open-ended text input
+- **Code**: Code-based questions
+- **Open-ended**: Free-form answers
+- **Yes/No**: Simple true/false questions with visual Yes/No buttons
+
 ## Features
 
 ### 1. **Rich Hint Types**
@@ -47,6 +58,59 @@ interface UnifiedQuestion {
 
 ### UI Components
 
+#### Yes/No Question Interface
+
+Yes/No questions feature a clean, intuitive interface with large, clearly labeled buttons:
+
+```tsx
+{/* Yes/No Question Type */}
+{currentQuestion.type === 'yes-no' && (
+  <div className="flex gap-4 justify-center">
+    <button
+      onClick={() => handleAnswerSelect('yes')}
+      className={`flex items-center space-x-3 px-8 py-4 rounded-lg border-2 transition-all duration-200 ${
+        selectedAnswers.includes('yes')
+          ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-lg'
+          : 'border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-600 hover:shadow-md'
+      }`}
+    >
+      <div className={`p-2 rounded-full ${
+        selectedAnswers.includes('yes')
+          ? 'bg-green-500 text-white'
+          : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+      }`}>
+        <Check className="w-6 h-6" />
+      </div>
+      <span className="text-lg font-medium text-gray-900 dark:text-white">
+        Yes
+      </span>
+    </button>
+    
+    <button
+      onClick={() => handleAnswerSelect('no')}
+      className={`flex items-center space-x-3 px-8 py-4 rounded-lg border-2 transition-all duration-200 ${
+        selectedAnswers.includes('no')
+          ? 'border-red-500 bg-red-50 dark:bg-red-900/20 shadow-lg'
+          : 'border-gray-200 dark:border-gray-700 hover:border-red-300 dark:hover:border-red-600 hover:shadow-md'
+      }`}
+    >
+      <div className={`p-2 rounded-full ${
+        selectedAnswers.includes('no')
+          ? 'bg-red-500 text-white'
+          : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+      }`}>
+        <X className="w-6 h-6" />
+      </div>
+      <span className="text-lg font-medium text-gray-900 dark:text-white">
+        No
+      </span>
+    </button>
+  </div>
+)}
+```
+
+#### Learning Hints Interface
+
 The hints are displayed in a dedicated section after the question explanation:
 
 ```tsx
@@ -69,7 +133,36 @@ The hints are displayed in a dedicated section after the question explanation:
 
 ## Usage Examples
 
-### 1. React Rendering Patterns Question
+### 1. Yes/No Question Type
+
+```typescript
+{
+  id: 'javascript-hoisting-yes-no-1',
+  title: 'JavaScript Hoisting Behavior',
+  content: 'Is it possible to call a function before it is declared in JavaScript due to hoisting?',
+  type: 'yes-no',
+  options: [], // No options needed for yes/no questions
+  correctAnswers: ['yes'], // Either 'yes' or 'no'
+  explanation: 'Yes, it is possible to call a function before it is declared in JavaScript due to hoisting. Function declarations are hoisted to the top of their scope.',
+  category: 'javascript',
+  difficulty: 'easy',
+  points: 5,
+  timeLimit: 30,
+  hints: [
+    {
+      id: 'hint-1',
+      title: 'JavaScript Hoisting Explained',
+      description: 'Comprehensive guide to understanding JavaScript hoisting',
+      url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting',
+      type: 'documentation',
+      category: 'javascript',
+      priority: 1,
+    },
+  ],
+}
+```
+
+### 2. React Rendering Patterns Question
 
 ```typescript
 {

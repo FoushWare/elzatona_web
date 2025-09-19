@@ -3,6 +3,77 @@ import { UnifiedQuestion } from './unified-question-schema';
 
 export const sampleQuestionsWithHints: UnifiedQuestion[] = [
   {
+    id: 'javascript-hoisting-yes-no-1',
+    title: 'JavaScript Hoisting Behavior',
+    content:
+      'Is it possible to call a function before it is declared in JavaScript due to hoisting?',
+    type: 'yes-no',
+    options: [],
+    correctAnswers: ['yes'],
+    explanation:
+      'Yes, it is possible to call a function before it is declared in JavaScript due to hoisting. Function declarations are hoisted to the top of their scope, which means they can be called before they appear in the code.',
+    category: 'javascript',
+    subcategory: 'hoisting',
+    difficulty: 'easy',
+    tags: ['javascript', 'hoisting', 'functions'],
+    learningPath: 'javascript-deep-dive',
+    points: 5,
+    timeLimit: 30,
+    hints: [
+      {
+        id: 'hint-1',
+        title: 'JavaScript Hoisting Explained',
+        description: 'Comprehensive guide to understanding JavaScript hoisting',
+        url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting',
+        type: 'documentation',
+        category: 'javascript',
+        priority: 1,
+      },
+    ],
+    isActive: true,
+    isComplete: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    createdBy: 'admin',
+    order: 1,
+  },
+  {
+    id: 'css-flexbox-yes-no-1',
+    title: 'CSS Flexbox Properties',
+    content:
+      'Does the CSS flexbox property `flex-direction: column` arrange flex items vertically?',
+    type: 'yes-no',
+    options: [],
+    correctAnswers: ['yes'],
+    explanation:
+      'Yes, `flex-direction: column` arranges flex items vertically from top to bottom. The default `flex-direction: row` arranges items horizontally.',
+    category: 'css',
+    subcategory: 'flexbox',
+    difficulty: 'easy',
+    tags: ['css', 'flexbox', 'layout'],
+    learningPath: 'css-mastery',
+    points: 5,
+    timeLimit: 30,
+    hints: [
+      {
+        id: 'hint-2',
+        title: 'CSS Flexbox Complete Guide',
+        description:
+          'A complete guide to CSS Flexbox with examples and visual diagrams',
+        url: 'https://css-tricks.com/snippets/css/a-guide-to-flexbox/',
+        type: 'article',
+        category: 'css',
+        priority: 1,
+      },
+    ],
+    isActive: true,
+    isComplete: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    createdBy: 'admin',
+    order: 2,
+  },
+  {
     id: 'react-rendering-patterns-1',
     title: 'React Rendering Patterns',
     content:
