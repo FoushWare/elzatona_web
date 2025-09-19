@@ -24,6 +24,18 @@ import {
   Save,
   Eye,
   EyeOff,
+  Atom,
+  Cpu,
+  Server,
+  Building,
+  Gauge,
+  Wrench,
+  Network,
+  Building2,
+  UserCheck,
+  Users,
+  Bot,
+  Coins,
 } from 'lucide-react';
 
 interface Section {
@@ -31,7 +43,13 @@ interface Section {
   name: string;
   description: string;
   icon: React.ReactNode;
-  category: 'foundation' | 'frontend' | 'backend' | 'tools' | 'advanced';
+  category:
+    | 'foundation'
+    | 'frontend'
+    | 'advanced'
+    | 'specialized'
+    | 'career'
+    | 'emerging';
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   estimatedTime: string;
   questionCount: number;
@@ -53,10 +71,12 @@ export const FreeStyleRoadmapBuilder: React.FC<
   const [showPreview, setShowPreview] = useState(false);
 
   const sections: Section[] = [
+    // Foundation Level (Beginner)
     {
-      id: 'frontend-basics',
-      name: 'Frontend Basics',
-      description: 'HTML, CSS, and JavaScript fundamentals for web development',
+      id: 'html-fundamentals',
+      name: 'HTML Fundamentals',
+      description:
+        'Master HTML semantics, structure, accessibility, and modern HTML5 features',
       icon: <Globe className="w-5 h-5" />,
       category: 'foundation',
       difficulty: 'beginner',
@@ -65,166 +85,241 @@ export const FreeStyleRoadmapBuilder: React.FC<
       color: 'bg-blue-500',
     },
     {
-      id: 'javascript-deep-dive',
-      name: 'JavaScript Deep Dive',
+      id: 'css-fundamentals',
+      name: 'CSS Fundamentals',
       description:
-        'Advanced JavaScript concepts, ES6+, closures, and async programming',
-      icon: <Code className="w-5 h-5" />,
-      category: 'frontend',
-      difficulty: 'intermediate',
+        'Learn CSS basics, selectors, layouts, and responsive design principles',
+      icon: <Palette className="w-5 h-5" />,
+      category: 'foundation',
+      difficulty: 'beginner',
       estimatedTime: '3-4 weeks',
-      questionCount: 78,
-      color: 'bg-yellow-500',
+      questionCount: 50,
+      color: 'bg-purple-500',
     },
     {
-      id: 'react-mastery',
-      name: 'React Mastery',
+      id: 'javascript-fundamentals',
+      name: 'JavaScript Fundamentals',
       description:
-        'React fundamentals, hooks, state management, and best practices',
+        'Master JavaScript basics, ES6+, and core programming concepts',
+      icon: <Code className="w-5 h-5" />,
+      category: 'foundation',
+      difficulty: 'beginner',
+      estimatedTime: '4-5 weeks',
+      questionCount: 60,
+      color: 'bg-yellow-500',
+    },
+
+    // Intermediate Level
+    {
+      id: 'advanced-css-mastery',
+      name: 'Advanced CSS Mastery',
+      description: 'Deep dive into advanced CSS techniques and modern layouts',
       icon: <Layers className="w-5 h-5" />,
       category: 'frontend',
       difficulty: 'intermediate',
+      estimatedTime: '3-4 weeks',
+      questionCount: 40,
+      color: 'bg-indigo-500',
+    },
+    {
+      id: 'javascript-deep-dive',
+      name: 'JavaScript Deep Dive',
+      description:
+        'Advanced JavaScript concepts and modern development patterns',
+      icon: <Zap className="w-5 h-5" />,
+      category: 'frontend',
+      difficulty: 'intermediate',
       estimatedTime: '4-5 weeks',
-      questionCount: 92,
-      color: 'bg-cyan-500',
+      questionCount: 55,
+      color: 'bg-orange-500',
     },
     {
       id: 'typescript-essentials',
       name: 'TypeScript Essentials',
-      description:
-        'TypeScript basics, types, interfaces, and advanced features',
+      description: 'Learn TypeScript for type-safe JavaScript development',
       icon: <Settings className="w-5 h-5" />,
       category: 'frontend',
       difficulty: 'intermediate',
-      estimatedTime: '2-3 weeks',
-      questionCount: 56,
+      estimatedTime: '3-4 weeks',
+      questionCount: 45,
       color: 'bg-blue-600',
     },
     {
-      id: 'advanced-css',
-      name: 'Advanced CSS',
-      description: 'CSS Grid, Flexbox, animations, and modern CSS techniques',
-      icon: <Palette className="w-5 h-5" />,
+      id: 'react-fundamentals',
+      name: 'React Fundamentals',
+      description: 'Master React core concepts and modern development patterns',
+      icon: <Atom className="w-5 h-5" />,
       category: 'frontend',
       difficulty: 'intermediate',
-      estimatedTime: '2-3 weeks',
-      questionCount: 43,
-      color: 'bg-pink-500',
+      estimatedTime: '4-5 weeks',
+      questionCount: 50,
+      color: 'bg-cyan-500',
     },
+
+    // Advanced Level
     {
-      id: 'web-performance',
-      name: 'Web Performance',
-      description:
-        'Optimization techniques, Core Web Vitals, and performance monitoring',
-      icon: <Zap className="w-5 h-5" />,
+      id: 'advanced-react-patterns',
+      name: 'Advanced React Patterns',
+      description: 'Advanced React concepts and enterprise-level patterns',
+      icon: <Cpu className="w-5 h-5" />,
       category: 'advanced',
       difficulty: 'advanced',
-      estimatedTime: '2-3 weeks',
-      questionCount: 38,
-      color: 'bg-orange-500',
+      estimatedTime: '3-4 weeks',
+      questionCount: 45,
+      color: 'bg-teal-500',
     },
     {
-      id: 'accessibility',
-      name: 'Accessibility',
-      description: 'WCAG guidelines, ARIA, and inclusive design principles',
-      icon: <Eye className="w-5 h-5" />,
-      category: 'frontend',
-      difficulty: 'intermediate',
-      estimatedTime: '1-2 weeks',
-      questionCount: 34,
+      id: 'nextjs-mastery',
+      name: 'Next.js Mastery',
+      description: 'Full-stack React development with Next.js',
+      icon: <Server className="w-5 h-5" />,
+      category: 'advanced',
+      difficulty: 'advanced',
+      estimatedTime: '3-4 weeks',
+      questionCount: 40,
+      color: 'bg-gray-600',
+    },
+    {
+      id: 'design-patterns-architecture',
+      name: 'Design Patterns & Architecture',
+      description:
+        'Software design patterns and frontend architecture principles',
+      icon: <Building className="w-5 h-5" />,
+      category: 'advanced',
+      difficulty: 'advanced',
+      estimatedTime: '3-4 weeks',
+      questionCount: 35,
+      color: 'bg-red-500',
+    },
+    {
+      id: 'problem-solving-javascript',
+      name: 'Problem Solving with JavaScript',
+      description: 'Algorithmic thinking and problem-solving skills',
+      icon: <Brain className="w-5 h-5" />,
+      category: 'advanced',
+      difficulty: 'advanced',
+      estimatedTime: '4-5 weeks',
+      questionCount: 50,
       color: 'bg-green-500',
+    },
+
+    // Specialized Topics
+    {
+      id: 'frontend-security',
+      name: 'Frontend Security',
+      description:
+        'Security best practices and vulnerabilities in frontend development',
+      icon: <Shield className="w-5 h-5" />,
+      category: 'specialized',
+      difficulty: 'intermediate',
+      estimatedTime: '2-3 weeks',
+      questionCount: 30,
+      color: 'bg-red-600',
+    },
+    {
+      id: 'performance-optimization',
+      name: 'Performance Optimization',
+      description: 'Frontend performance optimization techniques and tools',
+      icon: <Gauge className="w-5 h-5" />,
+      category: 'specialized',
+      difficulty: 'intermediate',
+      estimatedTime: '3-4 weeks',
+      questionCount: 35,
+      color: 'bg-emerald-500',
     },
     {
       id: 'testing-strategies',
       name: 'Testing Strategies',
-      description:
-        'Unit testing, integration testing, and testing best practices',
+      description: 'Comprehensive testing approaches for frontend applications',
       icon: <TestTube className="w-5 h-5" />,
-      category: 'tools',
+      category: 'specialized',
       difficulty: 'intermediate',
-      estimatedTime: '2-3 weeks',
-      questionCount: 41,
-      color: 'bg-purple-500',
-    },
-    {
-      id: 'git-version-control',
-      name: 'Git & Version Control',
-      description: 'Git workflows, branching strategies, and collaboration',
-      icon: <GitBranch className="w-5 h-5" />,
-      category: 'tools',
-      difficulty: 'beginner',
-      estimatedTime: '1-2 weeks',
-      questionCount: 28,
-      color: 'bg-gray-500',
-    },
-    {
-      id: 'api-design',
-      name: 'API Design',
-      description: 'RESTful APIs, GraphQL, and API best practices',
-      icon: <Database className="w-5 h-5" />,
-      category: 'backend',
-      difficulty: 'intermediate',
-      estimatedTime: '2-3 weeks',
-      questionCount: 39,
-      color: 'bg-indigo-500',
-    },
-    {
-      id: 'api-integration',
-      name: 'API Integration',
-      description:
-        'Fetching data, error handling, and API integration patterns',
-      icon: <Rocket className="w-5 h-5" />,
-      category: 'frontend',
-      difficulty: 'intermediate',
-      estimatedTime: '1-2 weeks',
-      questionCount: 32,
-      color: 'bg-teal-500',
-    },
-    {
-      id: 'security',
-      name: 'Security',
-      description: 'Web security, authentication, and security best practices',
-      icon: <Shield className="w-5 h-5" />,
-      category: 'advanced',
-      difficulty: 'advanced',
-      estimatedTime: '2-3 weeks',
-      questionCount: 36,
-      color: 'bg-red-500',
-    },
-    {
-      id: 'system-design',
-      name: 'System Design',
-      description:
-        'Scalable architecture, design patterns, and system thinking',
-      icon: <Brain className="w-5 h-5" />,
-      category: 'advanced',
-      difficulty: 'advanced',
       estimatedTime: '3-4 weeks',
-      questionCount: 47,
+      questionCount: 40,
+      color: 'bg-pink-500',
+    },
+    {
+      id: 'build-tools-devops',
+      name: 'Build Tools & DevOps',
+      description: 'Modern build tools and deployment strategies',
+      icon: <Wrench className="w-5 h-5" />,
+      category: 'specialized',
+      difficulty: 'intermediate',
+      estimatedTime: '3-4 weeks',
+      questionCount: 35,
+      color: 'bg-amber-500',
+    },
+    {
+      id: 'api-integration-communication',
+      name: 'API Integration & Communication',
+      description: 'Working with APIs and data communication',
+      icon: <Network className="w-5 h-5" />,
+      category: 'specialized',
+      difficulty: 'intermediate',
+      estimatedTime: '2-3 weeks',
+      questionCount: 30,
       color: 'bg-violet-500',
     },
+
+    // Interview & Career Preparation
     {
-      id: 'deployment-devops',
-      name: 'Deployment & DevOps',
-      description: 'CI/CD, Docker, cloud deployment, and DevOps practices',
-      icon: <Rocket className="w-5 h-5" />,
-      category: 'tools',
+      id: 'system-design-frontend',
+      name: 'System Design for Frontend',
+      description: 'Frontend system design and architecture decisions',
+      icon: <Building2 className="w-5 h-5" />,
+      category: 'career',
       difficulty: 'advanced',
-      estimatedTime: '2-3 weeks',
-      questionCount: 29,
-      color: 'bg-emerald-500',
+      estimatedTime: '3-4 weeks',
+      questionCount: 40,
+      color: 'bg-slate-600',
     },
     {
-      id: 'english-learning',
-      name: 'English Learning',
+      id: 'frontend-interview-prep',
+      name: 'Frontend Interview Preparation',
       description:
-        'Technical English, communication skills, and interview preparation',
-      icon: <BookOpen className="w-5 h-5" />,
-      category: 'foundation',
+        'Comprehensive preparation for frontend technical interviews',
+      icon: <UserCheck className="w-5 h-5" />,
+      category: 'career',
+      difficulty: 'intermediate',
+      estimatedTime: '4-5 weeks',
+      questionCount: 60,
+      color: 'bg-rose-500',
+    },
+    {
+      id: 'behavioral-soft-skills',
+      name: 'Behavioral & Soft Skills',
+      description: 'Non-technical skills essential for frontend developers',
+      icon: <Users className="w-5 h-5" />,
+      category: 'career',
       difficulty: 'beginner',
-      estimatedTime: '1-2 weeks',
+      estimatedTime: '2-3 weeks',
       questionCount: 25,
-      color: 'bg-amber-500',
+      color: 'bg-sky-500',
+    },
+
+    // Emerging Technologies
+    {
+      id: 'ai-tools-frontend',
+      name: 'AI Tools for Frontend',
+      description:
+        'Leveraging AI tools and technologies in frontend development',
+      icon: <Bot className="w-5 h-5" />,
+      category: 'emerging',
+      difficulty: 'intermediate',
+      estimatedTime: '2-3 weeks',
+      questionCount: 25,
+      color: 'bg-fuchsia-500',
+    },
+    {
+      id: 'web3-blockchain-frontend',
+      name: 'Web3 & Blockchain Frontend',
+      description: 'Frontend development for Web3 and blockchain applications',
+      icon: <Coins className="w-5 h-5" />,
+      category: 'emerging',
+      difficulty: 'advanced',
+      estimatedTime: '3-4 weeks',
+      questionCount: 30,
+      color: 'bg-yellow-600',
     },
   ];
 
@@ -241,19 +336,24 @@ export const FreeStyleRoadmapBuilder: React.FC<
       count: sections.filter(s => s.category === 'frontend').length,
     },
     {
-      id: 'backend',
-      name: 'Backend',
-      count: sections.filter(s => s.category === 'backend').length,
-    },
-    {
-      id: 'tools',
-      name: 'Tools',
-      count: sections.filter(s => s.category === 'tools').length,
-    },
-    {
       id: 'advanced',
       name: 'Advanced',
       count: sections.filter(s => s.category === 'advanced').length,
+    },
+    {
+      id: 'specialized',
+      name: 'Specialized',
+      count: sections.filter(s => s.category === 'specialized').length,
+    },
+    {
+      id: 'career',
+      name: 'Career',
+      count: sections.filter(s => s.category === 'career').length,
+    },
+    {
+      id: 'emerging',
+      name: 'Emerging',
+      count: sections.filter(s => s.category === 'emerging').length,
     },
   ];
 
@@ -288,7 +388,7 @@ export const FreeStyleRoadmapBuilder: React.FC<
     return matchesSearch && matchesCategory && matchesDifficulty;
   });
 
-  const toggleSection = (sectionId: string) => {
+  const handleSectionToggle = (sectionId: string) => {
     setSelectedSections(prev =>
       prev.includes(sectionId)
         ? prev.filter(id => id !== sectionId)
@@ -296,279 +396,235 @@ export const FreeStyleRoadmapBuilder: React.FC<
     );
   };
 
-  const selectAll = () => {
-    setSelectedSections(filteredSections.map(s => s.id));
-  };
-
-  const clearAll = () => {
-    setSelectedSections([]);
-  };
-
-  const getSelectedSectionsData = () => {
-    return sections.filter(s => selectedSections.includes(s.id));
-  };
-
-  const getTotalEstimatedTime = () => {
-    const selectedData = getSelectedSectionsData();
-    return selectedData.reduce((total, section) => {
-      const timeRange =
-        section.estimatedTime.split('-')[1] ||
-        section.estimatedTime.split('-')[0];
-      return total + parseInt(timeRange.replace('weeks', '').trim());
-    }, 0);
-  };
-
-  const getTotalQuestions = () => {
-    return getSelectedSectionsData().reduce(
-      (total, section) => total + section.questionCount,
-      0
-    );
-  };
-
   const handleSave = () => {
     onSave(selectedSections);
   };
 
+  const selectedSectionsData = sections.filter(s =>
+    selectedSections.includes(s.id)
+  );
+  const totalQuestions = selectedSectionsData.reduce(
+    (total, section) => total + section.questionCount,
+    0
+  );
+  const totalTime = selectedSectionsData.reduce((total, section) => {
+    const timeRange =
+      section.estimatedTime.split('-')[1] ||
+      section.estimatedTime.split('-')[0];
+    return total + parseInt(timeRange.replace('weeks', '').trim());
+  }, 0);
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Build Your Free Style Roadmap
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Build Your Learning Roadmap
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Choose the sections you want to include in your personalized
-            learning journey. Select as many or as few as you'd like to create
-            your custom roadmap.
+          <p className="text-gray-600 dark:text-gray-400">
+            Select the sections you want to focus on for your frontend
+            development journey
           </p>
         </div>
 
-        {/* Controls */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-6">
+        {/* Filters */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Search */}
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search sections..."
-                  value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                />
-              </div>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search sections..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              />
             </div>
 
-            {/* Filters */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <select
-                value={filterCategory}
-                onChange={e => setFilterCategory(e.target.value)}
-                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500"
-              >
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.name} ({category.count})
-                  </option>
-                ))}
-              </select>
+            {/* Category Filter */}
+            <select
+              value={filterCategory}
+              onChange={e => setFilterCategory(e.target.value)}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+            >
+              {categories.map(category => (
+                <option key={category.id} value={category.id}>
+                  {category.name} ({category.count})
+                </option>
+              ))}
+            </select>
 
-              <select
-                value={filterDifficulty}
-                onChange={e => setFilterDifficulty(e.target.value)}
-                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500"
-              >
-                {difficulties.map(difficulty => (
-                  <option key={difficulty.id} value={difficulty.id}>
-                    {difficulty.name} ({difficulty.count})
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="flex flex-wrap gap-4 mt-6">
-            <button
-              onClick={selectAll}
-              className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            {/* Difficulty Filter */}
+            <select
+              value={filterDifficulty}
+              onChange={e => setFilterDifficulty(e.target.value)}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
             >
-              <Plus className="w-4 h-4" />
-              <span>Select All Visible</span>
-            </button>
-            <button
-              onClick={clearAll}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              <Minus className="w-4 h-4" />
-              <span>Clear All</span>
-            </button>
-            <button
-              onClick={() => setShowPreview(!showPreview)}
-              className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
-              {showPreview ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
-              )}
-              <span>{showPreview ? 'Hide' : 'Show'} Preview</span>
-            </button>
+              {difficulties.map(difficulty => (
+                <option key={difficulty.id} value={difficulty.id}>
+                  {difficulty.name} ({difficulty.count})
+                </option>
+              ))}
+            </select>
           </div>
         </div>
-
-        {/* Preview */}
-        {showPreview && selectedSections.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              Your Custom Roadmap Preview
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
-                  {selectedSections.length}
-                </div>
-                <div className="text-gray-600 dark:text-gray-300">
-                  Sections Selected
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                  {getTotalQuestions()}
-                </div>
-                <div className="text-gray-600 dark:text-gray-300">
-                  Total Questions
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                  {getTotalEstimatedTime()}
-                </div>
-                <div className="text-gray-600 dark:text-gray-300">
-                  Estimated Weeks
-                </div>
-              </div>
-            </div>
-            <div className="space-y-2">
-              {getSelectedSectionsData().map(section => (
-                <div
-                  key={section.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center ${section.color}`}
-                    >
-                      <div className="text-white">{section.icon}</div>
-                    </div>
-                    <div>
-                      <div className="font-medium text-gray-900 dark:text-white">
-                        {section.name}
-                      </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-300">
-                        {section.estimatedTime} • {section.questionCount}{' '}
-                        questions
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => toggleSection(section.id)}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Sections Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {filteredSections.map(section => (
             <div
               key={section.id}
-              className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 cursor-pointer transition-all duration-200 ${
+              className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border-2 transition-all duration-200 cursor-pointer ${
                 selectedSections.includes(section.id)
-                  ? 'ring-2 ring-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
-                  : 'hover:shadow-xl hover:scale-105'
+                  ? 'border-blue-500 ring-2 ring-blue-200 dark:ring-blue-800'
+                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
-              onClick={() => toggleSection(section.id)}
+              onClick={() => handleSectionToggle(section.id)}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div
-                  className={`w-12 h-12 rounded-lg flex items-center justify-center ${section.color}`}
-                >
-                  <div className="text-white">{section.icon}</div>
-                </div>
-                {selectedSections.includes(section.id) && (
-                  <div className="w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center">
-                    <Check className="w-4 h-4 text-white" />
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`p-3 rounded-lg ${section.color} text-white`}>
+                    {section.icon}
                   </div>
-                )}
-              </div>
-
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                {section.name}
-              </h3>
-
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                {section.description}
-              </p>
-
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center space-x-4">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      section.difficulty === 'beginner'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                        : section.difficulty === 'intermediate'
-                          ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                          : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                    }`}
-                  >
-                    {section.difficulty}
-                  </span>
-                  <span className="text-gray-500 dark:text-gray-400">
-                    {section.questionCount} questions
-                  </span>
+                  <div className="flex items-center space-x-2">
+                    <span
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        section.difficulty === 'beginner'
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                          : section.difficulty === 'intermediate'
+                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                            : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                      }`}
+                    >
+                      {section.difficulty}
+                    </span>
+                    {selectedSections.includes(section.id) && (
+                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                        <Check className="w-4 h-4 text-white" />
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <span className="text-gray-500 dark:text-gray-400">
-                  {section.estimatedTime}
-                </span>
+
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  {section.name}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                  {section.description}
+                </p>
+
+                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                  <span>{section.estimatedTime}</span>
+                  <span>{section.questionCount} questions</span>
+                </div>
               </div>
             </div>
           ))}
         </div>
 
+        {/* Selected Sections Summary */}
+        {selectedSections.length > 0 && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Selected Sections ({selectedSections.length})
+              </h3>
+              <button
+                onClick={() => setShowPreview(!showPreview)}
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              >
+                {showPreview ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
+                <span>{showPreview ? 'Hide' : 'Show'} Preview</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                  {totalQuestions}
+                </div>
+                <div className="text-sm text-blue-600 dark:text-blue-400">
+                  Total Questions
+                </div>
+              </div>
+              <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
+                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                  {totalTime}
+                </div>
+                <div className="text-sm text-green-600 dark:text-green-400">
+                  Weeks Estimated
+                </div>
+              </div>
+              <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
+                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                  {selectedSections.length}
+                </div>
+                <div className="text-sm text-purple-600 dark:text-purple-400">
+                  Sections Selected
+                </div>
+              </div>
+            </div>
+
+            {showPreview && (
+              <div className="space-y-2">
+                {selectedSectionsData.map(section => (
+                  <div
+                    key={section.id}
+                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div
+                        className={`p-2 rounded-lg ${section.color} text-white`}
+                      >
+                        {section.icon}
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-white">
+                          {section.name}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                          {section.estimatedTime} • {section.questionCount}{' '}
+                          questions
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleSectionToggle(section.id)}
+                      className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex items-center justify-between">
           <button
             onClick={onCancel}
-            className="px-8 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={selectedSections.length === 0}
-            className={`px-8 py-3 rounded-lg font-semibold transition-colors ${
-              selectedSections.length === 0
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-indigo-600 text-white hover:bg-indigo-700'
-            }`}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
           >
-            <Save className="w-5 h-5 inline mr-2" />
-            Save Roadmap ({selectedSections.length} sections)
+            <Save className="w-4 h-4" />
+            <span>Save Roadmap ({selectedSections.length} sections)</span>
           </button>
         </div>
       </div>
     </div>
   );
 };
-
-
-
-

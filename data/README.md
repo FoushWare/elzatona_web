@@ -9,8 +9,9 @@ data/
 ├── sections/
 │   └── sections.json          # Main sections configuration file
 └── questions/
-    ├── section_1-questions.json    # Questions for section 1
-    ├── section_2-questions.json    # Questions for section 2
+    ├── html-fundamentals-questions.json    # Questions for HTML Fundamentals
+    ├── css-fundamentals-questions.json     # Questions for CSS Fundamentals
+    ├── javascript-fundamentals-questions.json  # Questions for JavaScript Fundamentals
     └── ...                         # Questions for other sections
 ```
 
@@ -23,14 +24,17 @@ Contains the main configuration for all learning sections with the following str
 ```json
 [
   {
-    "id": "section_1",
-    "name": "Frontend Fundamentals",
-    "description": "Learn and practice frontend fundamentals",
+    "id": "html-fundamentals",
+    "name": "HTML Fundamentals",
+    "description": "Master HTML semantics, structure, accessibility, and modern HTML5 features",
+    "category": "foundation",
+    "difficulty": "beginner",
+    "estimatedTime": "2-3 weeks",
     "order": 1,
     "isActive": true,
     "questionCount": 0,
-    "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "createdAt": "2025-01-27T00:00:00.000Z",
+    "updatedAt": "2025-01-27T00:00:00.000Z"
   }
 ]
 ```
@@ -47,7 +51,7 @@ Contains all questions for a specific section with the following structure:
     "content": "Question content...",
     "type": "single",
     "difficulty": "easy",
-    "sectionId": "section_1",
+    "sectionId": "html-fundamentals",
     "options": [
       {
         "id": "a",
@@ -75,30 +79,63 @@ Contains all questions for a specific section with the following structure:
 - **Audio Support**: Audio fields are included but can be empty for later editing
 - **Bulk Operations**: Support for bulk question creation with incomplete structures
 
-## Default Sections
+## Comprehensive Section Structure
 
-The system comes with 20 predefined sections:
+The system now includes 21 comprehensive sections organized into 6 categories:
 
-1. Frontend Fundamentals
-2. Advanced CSS Mastery
-3. JavaScript Deep Dive
-4. React Mastery
-5. TypeScript Essentials
-6. Testing Strategies
-7. Performance Optimization
-8. Security Essentials
-9. Frontend System Design
-10. Build Tools & DevOps
-11. API Integration & Communication
-12. AI Tools for Frontend
-13. Frontend Interview Prep
-14. Advanced Frontend Architectures
-15. JavaScript Practice & Interview Prep
-16. CSS Practice & Layout Mastery
-17. HTML Practice & Semantic Mastery
-18. React Practice & Advanced Patterns
-19. Comprehensive Interview Preparation
-20. Improve Your English
+### 🏗️ Foundation Level (Beginner)
+
+1. **HTML Fundamentals** - Master HTML semantics, structure, accessibility, and modern HTML5 features
+2. **CSS Fundamentals** - Learn CSS basics, selectors, layouts, and responsive design principles
+3. **JavaScript Fundamentals** - Master JavaScript basics, ES6+, and core programming concepts
+
+### 🔧 Intermediate Level
+
+4. **Advanced CSS Mastery** - Deep dive into advanced CSS techniques and modern layouts
+5. **JavaScript Deep Dive** - Advanced JavaScript concepts and modern development patterns
+6. **TypeScript Essentials** - Learn TypeScript for type-safe JavaScript development
+7. **React Fundamentals** - Master React core concepts and modern development patterns
+
+### 🚀 Advanced Level
+
+8. **Advanced React Patterns** - Advanced React concepts and enterprise-level patterns
+9. **Next.js Mastery** - Full-stack React development with Next.js
+10. **Design Patterns & Architecture** - Software design patterns and frontend architecture principles
+11. **Problem Solving with JavaScript** - Algorithmic thinking and problem-solving skills
+
+### 🛡️ Specialized Topics
+
+12. **Frontend Security** - Security best practices and vulnerabilities in frontend development
+13. **Performance Optimization** - Frontend performance optimization techniques and tools
+14. **Testing Strategies** - Comprehensive testing approaches for frontend applications
+15. **Build Tools & DevOps** - Modern build tools and deployment strategies
+16. **API Integration & Communication** - Working with APIs and data communication
+
+### 🎯 Interview & Career Preparation
+
+17. **System Design for Frontend** - Frontend system design and architecture decisions
+18. **Frontend Interview Preparation** - Comprehensive preparation for frontend technical interviews
+19. **Behavioral & Soft Skills** - Non-technical skills essential for frontend developers
+
+### 🔮 Emerging Technologies
+
+20. **AI Tools for Frontend** - Leveraging AI tools and technologies in frontend development
+21. **Web3 & Blockchain Frontend** - Frontend development for Web3 and blockchain applications
+
+## Section Categories
+
+- **Foundation**: Core web development fundamentals (HTML, CSS, JavaScript)
+- **Frontend**: Frontend-specific technologies and frameworks
+- **Advanced**: Advanced concepts and enterprise-level patterns
+- **Specialized**: Specialized topics and tools
+- **Career**: Interview preparation and professional development
+- **Emerging**: Cutting-edge technologies and future trends
+
+## Difficulty Levels
+
+- **Beginner**: Entry-level concepts and fundamentals
+- **Intermediate**: Mid-level concepts requiring some experience
+- **Advanced**: Expert-level concepts and complex patterns
 
 ## Question Types
 
@@ -119,3 +156,32 @@ Questions can be created with incomplete structures. The `isComplete` field trac
 - **Incomplete**: Some required fields are missing and can be edited later
 
 Audio fields (`audioQuestion`, `audioAnswer`) are always optional and can be empty for later editing.
+
+## Learning Path Integration
+
+The sections are designed to work seamlessly with the learning paths system:
+
+- **Progressive Learning**: Sections are ordered from beginner to advanced
+- **Category Organization**: Sections are grouped by topic and difficulty
+- **Flexible Selection**: Users can choose any combination of sections
+- **Comprehensive Coverage**: All essential frontend development topics are covered
+
+## Implementation Notes
+
+- **Section IDs**: Use kebab-case for section IDs (e.g., `html-fundamentals`)
+- **Question Counts**: Estimated question counts are provided for planning
+- **Time Estimates**: Realistic time estimates for each section
+- **Category Colors**: Each section has a unique color for visual identification
+- **Icons**: Each section has a representative icon for better UX
+
+## Migration from Old Structure
+
+The new structure replaces the previous 20 sections with a more comprehensive and organized approach:
+
+- **Better Organization**: Clear progression from fundamentals to advanced topics
+- **Industry Relevance**: Focus on skills needed for modern frontend development
+- **Comprehensive Coverage**: All major frontend technologies and concepts included
+- **Career Focus**: Dedicated sections for interview preparation and professional development
+- **Future-Proof**: Includes emerging technologies and trends
+
+This comprehensive structure ensures that learners have access to all essential frontend development topics, organized in a logical progression from fundamentals to advanced concepts, with specialized topics and career preparation included.
