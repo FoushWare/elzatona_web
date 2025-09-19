@@ -3,21 +3,21 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react'],
+    // Add turbopack configuration to prevent build manifest errors
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
-  },
-  // Add proper turbopack configuration
-  turbopack: {
-    rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
-      },
-    },
   },
   // Image optimization configuration
   images: {
