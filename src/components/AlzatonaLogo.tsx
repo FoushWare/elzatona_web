@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 
 interface AlzatonaLogoProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   className?: string;
   showText?: boolean;
   variant?: 'horizontal' | 'stacked';
@@ -15,6 +15,7 @@ export const AlzatonaLogo: React.FC<AlzatonaLogoProps> = ({
   variant = 'horizontal',
 }) => {
   const sizeConfig = {
+    xs: { class: 'w-16 h-16', width: 64, height: 64 },
     sm: { class: 'w-24 h-24', width: 96, height: 96 },
     md: { class: 'w-32 h-32', width: 128, height: 128 },
     lg: { class: 'w-40 h-40', width: 160, height: 160 },

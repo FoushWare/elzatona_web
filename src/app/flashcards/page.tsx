@@ -12,12 +12,12 @@ import {
 } from 'lucide-react';
 import FlashcardDashboard from '@/components/FlashcardDashboard';
 import FlashcardSession from '@/components/FlashcardSession';
-import { useCookieAuth } from '@/contexts/CookieAuthContext';
+import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 
 type TabType = 'dashboard' | 'session' | 'manage';
 
 export default function FlashcardsPage() {
-  const { user } = useCookieAuth();
+  const { user } = useFirebaseAuth();
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
 
   const tabs = [
@@ -89,8 +89,9 @@ export default function FlashcardsPage() {
             transition={{ delay: 0.1 }}
             className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
           >
-            Reinforce your learning with spaced repetition. Review cards you&apos;ve
-            struggled with and discover new content to expand your knowledge.
+            Reinforce your learning with spaced repetition. Review cards
+            you&apos;ve struggled with and discover new content to expand your
+            knowledge.
           </motion.p>
         </div>
 

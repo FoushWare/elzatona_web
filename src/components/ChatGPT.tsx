@@ -14,6 +14,7 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { CHATGPT_CONFIG, ChatMessage } from '@/lib/chatgpt-config';
+import { useMobileMenu } from '@/contexts/MobileMenuContext';
 
 // TypeScript declarations for Web Speech API
 declare global {
@@ -26,6 +27,7 @@ declare global {
 
 export default function ChatGPT() {
   const [isOpen, setIsOpen] = useState(false);
+  const { isMobileMenuOpen } = useMobileMenu();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -197,7 +199,7 @@ export default function ChatGPT() {
       {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-6 md:right-6 lg:bottom-6 lg:right-6 xl:bottom-8 xl:right-8 z-[9999] w-14 h-14 sm:w-16 sm:h-16 md:w-16 md:h-16 lg:w-16 lg:h-16 xl:w-18 xl:h-18 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-110 hover:rotate-3 flex items-center justify-center group"
+        className={`fixed bottom-4 right-4 z-50 w-14 h-14 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-110 hover:rotate-3 flex items-center justify-center group ${isMobileMenuOpen ? 'hidden' : 'block'}`}
         aria-label="Open AI Chat Assistant"
       >
         {/* Animated background glow */}
@@ -206,8 +208,8 @@ export default function ChatGPT() {
         {/* Main button content */}
         <div className="relative z-10 flex items-center justify-center">
           <MessageCircle
-            size={24}
-            className="drop-shadow-lg w-6 h-6 sm:w-7 sm:h-7 md:w-7 md:h-7 lg:w-7 lg:h-7 xl:w-8 xl:h-8"
+            size={20}
+            className="drop-shadow-lg w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-7 lg:h-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9"
           />
         </div>
 
@@ -225,8 +227,8 @@ export default function ChatGPT() {
       </button>
 
       {/* Chat Popup */}
-      {isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-end justify-end p-0 sm:p-2 md:p-4 lg:p-6 xl:p-8">
+      {isOpen && !isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-end p-4">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black bg-opacity-50"

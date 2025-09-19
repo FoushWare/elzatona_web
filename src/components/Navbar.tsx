@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Menu, X, Sun, Moon, ChevronDown, User, LogOut } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useCookieAuth } from '@/contexts/CookieAuthContext';
+import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import AlzatonaLogo from './AlzatonaLogo';
 
 interface DropdownItem {
@@ -25,11 +25,11 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'laptop' | 'desktop'>(
-    'desktop'
-  );
+  const [screenSize, setScreenSize] = useState<
+    'mobile' | 'tablet' | 'laptop' | 'desktop'
+  >('desktop');
   const { isDarkMode, toggleDarkMode } = useTheme();
-  const { isAuthenticated, user, signOut, isLoading } = useCookieAuth();
+  const { isAuthenticated, user, signOut, isLoading } = useFirebaseAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -287,18 +287,18 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
         isScrolled
           ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-200 dark:border-gray-700'
           : 'bg-gradient-to-r from-blue-600 to-blue-800'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16 sm:h-18 md:h-20 space-x-2 sm:space-x-2 md:space-x-3 lg:space-x-4">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link
             href="/"
-            className={`flex items-center space-x-2 transition-colors duration-200 ${
+            className={`flex items-center transition-colors duration-200 ${
               isScrolled
                 ? 'text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400'
                 : 'text-white hover:text-blue-100'
@@ -307,115 +307,39 @@ export default function Navbar() {
             <AlzatonaLogo size="sm" showText={false} />
           </Link>
 
-          {/* Desktop Navigation with Dropdowns */}
-          <div
-            className="hidden sm:flex items-center space-x-1 sm:space-x-1 md:space-x-2 lg:space-x-4 xl:space-x-6 flex-1"
-            ref={dropdownRef}
-          >
-            {/* Show limited menus based on screen size */}
-            {dropdownMenus
-              .filter(menu => {
-                // For mobile, tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
-                if (
-                  screenSize !== 'desktop' &&
-                  menu.label === 'Interview Prep'
-                ) {
-                  return false;
-                }
-                return true;
-              })
-              .slice(
-                0,
-                screenSize === 'desktop' ? 4 : 
-                screenSize === 'laptop' ? 3 : 
-                screenSize === 'tablet' ? 2 : 1
-              )
-              .map(menu => (
-              <div key={menu.label} className="relative">
-                <button
-                  onClick={() => toggleDropdown(menu.label)}
-                    className={`flex items-center space-x-1 sm:space-x-1 md:space-x-1 lg:space-x-2 px-1 sm:px-1 md:px-2 lg:px-3 py-1 sm:py-1 md:py-2 rounded-lg transition-all duration-200 hover:scale-105 relative group font-medium ${
-                    isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                      : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
-                  } ${
-                    activeDropdown === menu.label
-                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                      : ''
-                  }`}
-                >
-                      <span className="text-sm sm:text-sm md:text-base lg:text-lg">{menu.icon}</span>
-                      <span className="font-medium text-xs sm:text-xs md:text-xs lg:text-sm hidden sm:inline">
-                        {menu.label}
-                      </span>
-                  <ChevronDown
-                    className={`w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-4 lg:h-4 transition-transform duration-200 ${
-                      activeDropdown === menu.label ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-
-                {/* Dropdown Menu */}
-                {activeDropdown === menu.label && (
-                    <div className="absolute top-full left-0 mt-2 w-72 sm:w-80 md:w-80 lg:w-96 xl:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200 sm:left-0 md:left-0 lg:left-0 xl:left-0 right-auto sm:right-auto md:right-auto lg:right-auto xl:right-auto">
-                    {/* Parent Section Header */}
-                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
-                        <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
-                          <span className="mr-2 lg:mr-3 text-lg lg:text-xl">
-                            {menu.icon}
-                          </span>
-                        {menu.label}
-                          <span className="ml-1 lg:ml-2 text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
-                          {menu.items.length} items
-                        </span>
-                      </h3>
-                        <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400 mt-1 ml-6 lg:ml-8">
-                        Explore all {menu.label.toLowerCase()} resources
-                      </p>
-                    </div>
-
-                    {/* Child Items */}
-                    <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-                      {menu.items.map((item, index) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                            className="flex items-start px-3 lg:px-4 py-2 lg:py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                            <span className="text-base lg:text-lg mr-2 lg:mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
-                            {item.icon}
-                          </span>
-                          <div className="flex-1 min-w-0">
-                              <div className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 flex items-center text-sm lg:text-base">
-                              {item.label}
-                                <span className="ml-1 lg:ml-2 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1 lg:px-2 py-0.5 rounded-full">
-                                #{index + 1}
-                              </span>
-                            </div>
-                              <div className="text-xs lg:text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-                              {item.description}
-                            </div>
-                          </div>
-                          {/* Arrow indicator */}
-                          <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                            <ChevronDown className="w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-4 lg:h-4 text-gray-400 rotate-[-90deg]" />
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-
-                    {/* Footer */}
-                    <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-b-xl">
-                      <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                          💡 Click any item to explore{' '}
-                          {menu.label.toLowerCase()} content
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+          {/* Desktop Navigation - Simple and Clean */}
+          <div className="hidden sm:flex items-center space-x-8 flex-1 justify-center">
+            {/* Simple Navigation Links */}
+            <Link
+              href="/learning-paths"
+              className={`font-medium transition-colors duration-200 ${
+                isScrolled
+                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  : 'text-white hover:text-blue-100'
+              }`}
+            >
+              Learning Paths
+            </Link>
+            <Link
+              href="/practice"
+              className={`font-medium transition-colors duration-200 ${
+                isScrolled
+                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  : 'text-white hover:text-blue-100'
+              }`}
+            >
+              Practice
+            </Link>
+            <Link
+              href="/interview-prep"
+              className={`font-medium transition-colors duration-200 ${
+                isScrolled
+                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  : 'text-white hover:text-blue-100'
+              }`}
+            >
+              Interview Prep
+            </Link>
 
             {/* More Dropdown - Show when there are hidden menus or Job Aggregator */}
             {(dropdownMenus.filter(menu => {
@@ -447,7 +371,9 @@ export default function Navbar() {
                       : ''
                   }`}
                 >
-                  <span className="text-sm sm:text-sm md:text-base lg:text-lg">⚡</span>
+                  <span className="text-sm sm:text-sm md:text-base lg:text-lg">
+                    ⚡
+                  </span>
                   <span className="font-medium text-xs sm:text-xs md:text-xs lg:text-sm hidden sm:inline">
                     More
                   </span>
@@ -462,403 +388,402 @@ export default function Navbar() {
                 {activeDropdown === 'More' && (
                   <div className="fixed top-16 left-0 right-0 w-full bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 animate-in slide-in-from-top-2 duration-200">
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* More Section Header */}
-                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-t-xl">
-                      <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
-                        <span className="mr-2 lg:mr-3 text-lg lg:text-xl">
-                          ⚡
-                        </span>
-                        More Features
-                        <span className="ml-1 lg:ml-2 text-xs bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full">
-                          {dropdownMenus
-                            .filter(menu => {
-                              // For mobile, tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
-                              if (
-                                screenSize !== 'desktop' &&
-                                menu.label === 'Interview Prep'
-                              ) {
-                                return false;
-                              }
-                              return true;
-                            })
-                            .slice(
-                              screenSize === 'desktop'
-                                ? 4
-                                : screenSize === 'laptop'
-                                  ? 3
-                                  : screenSize === 'tablet'
-                                    ? 2
-                                    : 1
-                            ).length +
-                            (screenSize !== 'desktop' ? 1 : 0) +
-                            (!isAuthenticated ? 1 : 0) +
-                            11}{' '}
-                          items
-                        </span>
-                      </h3>
-                      <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400 mt-1 ml-6 lg:ml-8">
-                        Additional features and resources
-                      </p>
-                    </div>
+                      {/* More Section Header */}
+                      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-t-xl">
+                        <h3 className="font-bold text-gray-900 dark:text-white flex items-center text-base lg:text-lg">
+                          <span className="mr-2 lg:mr-3 text-lg lg:text-xl">
+                            ⚡
+                          </span>
+                          More Features
+                          <span className="ml-1 lg:ml-2 text-xs bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full">
+                            {dropdownMenus
+                              .filter(menu => {
+                                // For mobile, tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
+                                if (
+                                  screenSize !== 'desktop' &&
+                                  menu.label === 'Interview Prep'
+                                ) {
+                                  return false;
+                                }
+                                return true;
+                              })
+                              .slice(
+                                screenSize === 'desktop'
+                                  ? 4
+                                  : screenSize === 'laptop'
+                                    ? 3
+                                    : screenSize === 'tablet'
+                                      ? 2
+                                      : 1
+                              ).length +
+                              (screenSize !== 'desktop' ? 1 : 0) +
+                              (!isAuthenticated ? 1 : 0) +
+                              11}{' '}
+                            items
+                          </span>
+                        </h3>
+                        <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400 mt-1 ml-6 lg:ml-8">
+                          Additional features and resources
+                        </p>
+                      </div>
 
-                    {/* Quick Access Section */}
-                    <div className="py-2 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-                      {/* Quick Access Header */}
-                      <div className="px-3 py-2 mb-2">
-                        <div className="flex items-center px-2 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg">
-                          <span className="text-base mr-2">🚀</span>
-                          <div className="font-semibold text-gray-900 dark:text-white text-sm">
-                            Quick Access
+                      {/* Quick Access Section */}
+                      <div className="py-2 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                        {/* Quick Access Header */}
+                        <div className="px-3 py-2 mb-2">
+                          <div className="flex items-center px-2 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg">
+                            <span className="text-base mr-2">🚀</span>
+                            <div className="font-semibold text-gray-900 dark:text-white text-sm">
+                              Quick Access
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Quick Access Items */}
-                      <div className="px-3 lg:px-4 space-y-1 mb-3">
-                        <Link
-                          href="/dashboard"
-                          className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
-                            📊
-                          </span>
-                          <div className="flex-1">
-                            <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 text-sm">
-                              Dashboard
-                            </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
-                              Your learning progress
-                            </div>
-                          </div>
-                        </Link>
-
-                        <Link
-                          href="/progress"
-                          className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
-                            📈
-                          </span>
-                          <div className="flex-1">
-                            <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 text-sm">
-                              Progress Tracking
-                            </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
-                              Track your achievements
-                            </div>
-                          </div>
-                        </Link>
-
-                        <Link
-                          href="/reports"
-                          className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
-                            📋
-                          </span>
-                          <div className="flex-1">
-                            <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 text-sm">
-                              Feature Reports
-                            </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
-                              Platform capabilities overview
-                            </div>
-                          </div>
-                        </Link>
-                      </div>
-
-                      {/* Job Aggregator - Special section */}
-                      <div className="px-3 py-2 mb-2">
-                        <Link
-                          href="/jobs"
-                          className="flex items-center px-3 py-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-900/30 dark:hover:to-emerald-900/30 transition-all duration-200 group border-l-4 border-transparent hover:border-green-400 dark:hover:border-green-500 rounded-lg shadow-sm hover:shadow-md"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          <span className="text-2xl mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
-                            💼
-                          </span>
-                          <div className="flex-1">
-                            <div className="font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200 text-sm lg:text-base">
-                              Job Aggregator
-                            </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                              Find frontend development jobs from multiple
-                              sources
-                            </div>
-                          </div>
-                          <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                            <ChevronDown className="w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-4 lg:h-4 text-gray-400 rotate-[-90deg]" />
-                          </div>
-                        </Link>
-                      </div>
-
-                      {/* Divider */}
-                      <div className="mx-3 my-2 border-t border-gray-200 dark:border-gray-700"></div>
-
-                      {dropdownMenus
-                        .filter(menu => {
-                          // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
-                          if (
-                            screenSize !== 'desktop' &&
-                            menu.label === 'Interview Prep'
-                          ) {
-                            return false;
-                          }
-                          return true;
-                        })
-                        .slice(
-                          screenSize === 'desktop'
-                            ? 4
-                            : screenSize === 'laptop'
-                              ? 3
-                              : 2
-                        )
-                        .map((menu, index) => (
-                          <div
-                            key={menu.label}
-                            className="px-3 py-2"
+                        {/* Quick Access Items */}
+                        <div className="px-3 lg:px-4 space-y-1 mb-3">
+                          <Link
+                            href="/dashboard"
+                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded"
+                            onClick={() => setActiveDropdown(null)}
                           >
-                            {/* Sub-menu Header */}
-                            <div className="flex items-center mb-2 px-2 py-1 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                              <span className="text-base lg:text-lg mr-2 lg:mr-3">
-                                {menu.icon}
+                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                              📊
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 text-sm">
+                                Dashboard
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                Your learning progress
+                              </div>
+                            </div>
+                          </Link>
+
+                          <Link
+                            href="/progress"
+                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                              📈
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 text-sm">
+                                Progress Tracking
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                Track your achievements
+                              </div>
+                            </div>
+                          </Link>
+
+                          <Link
+                            href="/reports"
+                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                              📋
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 text-sm">
+                                Feature Reports
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                Platform capabilities overview
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+
+                        {/* Job Aggregator - Special section */}
+                        <div className="px-3 py-2 mb-2">
+                          <Link
+                            href="/jobs"
+                            className="flex items-center px-3 py-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-900/30 dark:hover:to-emerald-900/30 transition-all duration-200 group border-l-4 border-transparent hover:border-green-400 dark:hover:border-green-500 rounded-lg shadow-sm hover:shadow-md"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <span className="text-2xl mr-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
+                              💼
+                            </span>
+                            <div className="flex-1">
+                              <div className="font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-200 text-sm lg:text-base">
+                                Job Aggregator
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                Find frontend development jobs from multiple
+                                sources
+                              </div>
+                            </div>
+                            <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                              <ChevronDown className="w-3 h-3 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-4 lg:h-4 text-gray-400 rotate-[-90deg]" />
+                            </div>
+                          </Link>
+                        </div>
+
+                        {/* Divider */}
+                        <div className="mx-3 my-2 border-t border-gray-200 dark:border-gray-700"></div>
+
+                        {dropdownMenus
+                          .filter(menu => {
+                            // For tablet and laptop, exclude Interview Prep from main nav since it's in More dropdown
+                            if (
+                              screenSize !== 'desktop' &&
+                              menu.label === 'Interview Prep'
+                            ) {
+                              return false;
+                            }
+                            return true;
+                          })
+                          .slice(
+                            screenSize === 'desktop'
+                              ? 4
+                              : screenSize === 'laptop'
+                                ? 3
+                                : 2
+                          )
+                          .map((menu, index) => (
+                            <div key={menu.label} className="px-3 py-2">
+                              {/* Sub-menu Header */}
+                              <div className="flex items-center mb-2 px-2 py-1 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <span className="text-base lg:text-lg mr-2 lg:mr-3">
+                                  {menu.icon}
+                                </span>
+                                <div className="flex-1">
+                                  <div className="font-semibold text-gray-900 dark:text-white text-sm lg:text-base">
+                                    {menu.label}
+                                  </div>
+                                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                                    {menu.items.length} items
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Sub-menu Items */}
+                              <div className="ml-4 space-y-1">
+                                {menu.items
+                                  .slice(0, 3)
+                                  .map((item, itemIndex) => (
+                                    <Link
+                                      key={item.href}
+                                      href={item.href}
+                                      className="flex items-start px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
+                                      onClick={() => setActiveDropdown(null)}
+                                    >
+                                      <span className="text-sm mr-2 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
+                                        {item.icon}
+                                      </span>
+                                      <div className="flex-1 min-w-0">
+                                        <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-xs lg:text-sm">
+                                          {item.label}
+                                        </div>
+                                      </div>
+                                    </Link>
+                                  ))}
+                                {menu.items.length > 3 && (
+                                  <div className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
+                                    +{menu.items.length - 3} more items
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+
+                        {/* Interview Prep Section */}
+                        <div className="px-3 py-2 mt-3">
+                          <div className="flex items-center px-2 py-1 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg mb-2">
+                            <span className="text-base mr-2">🎯</span>
+                            <div className="font-semibold text-gray-900 dark:text-white text-sm">
+                              Interview Prep
+                            </div>
+                          </div>
+
+                          <div className="space-y-1">
+                            <Link
+                              href="/mock-interviews"
+                              className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
+                              onClick={() => setActiveDropdown(null)}
+                            >
+                              <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                                🎬
                               </span>
                               <div className="flex-1">
-                                <div className="font-semibold text-gray-900 dark:text-white text-sm lg:text-base">
-                                  {menu.label}
+                                <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
+                                  Mock Interviews
                                 </div>
                                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                                  {menu.items.length} items
+                                  Video mock interviews and practice sessions
                                 </div>
                               </div>
-                            </div>
+                            </Link>
 
-                            {/* Sub-menu Items */}
-                            <div className="ml-4 space-y-1">
-                              {menu.items.slice(0, 3).map((item, itemIndex) => (
-                                <Link
-                                  key={item.href}
-                                  href={item.href}
-                                  className="flex items-start px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
-                                  onClick={() => setActiveDropdown(null)}
-                                >
-                                  <span className="text-sm mr-2 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
-                                    {item.icon}
-                                  </span>
-                                  <div className="flex-1 min-w-0">
-                                    <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-xs lg:text-sm">
-                                      {item.label}
-                                    </div>
-                                  </div>
-                                </Link>
-                              ))}
-                              {menu.items.length > 3 && (
-                                <div className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1">
-                                  +{menu.items.length - 3} more items
+                            <Link
+                              href="/ai-mock-interview"
+                              className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
+                              onClick={() => setActiveDropdown(null)}
+                            >
+                              <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                                🤖
+                              </span>
+                              <div className="flex-1">
+                                <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
+                                  AI Mock Interview
                                 </div>
-                              )}
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  Practice with AI interviewer and get real-time
+                                  feedback
+                                </div>
+                              </div>
+                            </Link>
+
+                            <Link
+                              href="/culture-fit-interviews"
+                              className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
+                              onClick={() => setActiveDropdown(null)}
+                            >
+                              <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                                🌟
+                              </span>
+                              <div className="flex-1">
+                                <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
+                                  Culture Fit Questions
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  Master culture fit questions and demonstrate
+                                  your values
+                                </div>
+                              </div>
+                            </Link>
+
+                            <Link
+                              href="/preparation-guides"
+                              className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
+                              onClick={() => setActiveDropdown(null)}
+                            >
+                              <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                                📖
+                              </span>
+                              <div className="flex-1">
+                                <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
+                                  Preparation Guides
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  Comprehensive interview preparation resources
+                                </div>
+                              </div>
+                            </Link>
+                          </div>
+                        </div>
+
+                        {/* Tools & Resources Section */}
+                        <div className="px-3 py-2 mt-3">
+                          <div className="flex items-center px-2 py-1 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg mb-2">
+                            <span className="text-base mr-2">🛠️</span>
+                            <div className="font-semibold text-gray-900 dark:text-white text-sm">
+                              Tools & Resources
                             </div>
                           </div>
-                        ))}
 
-                      {/* Interview Prep Section */}
+                          <div className="space-y-1">
+                            <Link
+                              href="/cheatsheet"
+                              className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-orange-400 dark:hover:border-orange-500 rounded"
+                              onClick={() => setActiveDropdown(null)}
+                            >
+                              <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                                📚
+                              </span>
+                              <div className="flex-1">
+                                <div className="font-medium text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-200 text-sm">
+                                  Cheatsheet
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  Quick reference guides
+                                </div>
+                              </div>
+                            </Link>
+
+                            <Link
+                              href="/articles"
+                              className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-orange-400 dark:hover:border-orange-500 rounded"
+                              onClick={() => setActiveDropdown(null)}
+                            >
+                              <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                                📰
+                              </span>
+                              <div className="flex-1">
+                                <div className="font-medium text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-200 text-sm">
+                                  Articles
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  Latest frontend insights
+                                </div>
+                              </div>
+                            </Link>
+
+                            <Link
+                              href="/resources"
+                              className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-orange-400 dark:hover:border-orange-500 rounded"
+                              onClick={() => setActiveDropdown(null)}
+                            >
+                              <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
+                                🔗
+                              </span>
+                              <div className="flex-1">
+                                <div className="font-medium text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-200 text-sm">
+                                  Resources
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  Curated learning materials
+                                </div>
+                              </div>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Save Progress Section */}
                       <div className="px-3 py-2 mt-3">
-                        <div className="flex items-center px-2 py-1 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg mb-2">
-                          <span className="text-base mr-2">🎯</span>
+                        <div className="flex items-center px-2 py-1 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg mb-2">
+                          <span className="text-base mr-2">💾</span>
                           <div className="font-semibold text-gray-900 dark:text-white text-sm">
-                            Interview Prep
+                            Account Actions
                           </div>
                         </div>
 
                         <div className="space-y-1">
-                          <Link
-                            href="/mock-interviews"
-                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
-                              🎬
-                            </span>
-                            <div className="flex-1">
-                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
-                                Mock Interviews
-                              </div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400">
-                                Video mock interviews and practice sessions
+                          {isLoading ? (
+                            <div className="flex items-center justify-center px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse">
+                              <div className="text-center">
+                                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-24 mb-2"></div>
+                                <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
                               </div>
                             </div>
-                          </Link>
-
-                          <Link
-                            href="/ai-mock-interview"
-                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
-                              🤖
-                            </span>
-                            <div className="flex-1">
-                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
-                                AI Mock Interview
+                          ) : (
+                            <Link
+                              href="/auth"
+                              className="flex items-center justify-center px-4 py-3 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold rounded-lg shadow-sm hover:shadow-md transition-all duration-200 group"
+                              onClick={() => setActiveDropdown(null)}
+                            >
+                              <div className="text-center">
+                                <div className="text-sm lg:text-base">
+                                  Save Progress
+                                </div>
+                                <div className="text-xs text-green-100 mt-1">
+                                  Sign in to save your learning progress
+                                </div>
                               </div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400">
-                                Practice with AI interviewer and get real-time
-                                feedback
-                              </div>
-                            </div>
-                          </Link>
-
-                          <Link
-                            href="/culture-fit-interviews"
-                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
-                              🌟
-                            </span>
-                            <div className="flex-1">
-                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
-                                Culture Fit Questions
-                              </div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400">
-                                Master culture fit questions and demonstrate
-                                your values
-                              </div>
-                            </div>
-                          </Link>
-
-                          <Link
-                            href="/preparation-guides"
-                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-purple-400 dark:hover:border-purple-500 rounded"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
-                              📖
-                            </span>
-                            <div className="flex-1">
-                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 text-sm">
-                                Preparation Guides
-                              </div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400">
-                                Comprehensive interview preparation resources
-                              </div>
-                            </div>
-                          </Link>
+                            </Link>
+                          )}
                         </div>
                       </div>
 
-                      {/* Tools & Resources Section */}
-                      <div className="px-3 py-2 mt-3">
-                        <div className="flex items-center px-2 py-1 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg mb-2">
-                          <span className="text-base mr-2">🛠️</span>
-                          <div className="font-semibold text-gray-900 dark:text-white text-sm">
-                            Tools & Resources
-                          </div>
-                        </div>
-
-                        <div className="space-y-1">
-                          <Link
-                            href="/cheatsheet"
-                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-orange-400 dark:hover:border-orange-500 rounded"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
-                              📚
-                            </span>
-                            <div className="flex-1">
-                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-200 text-sm">
-                                Cheatsheet
-                              </div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400">
-                                Quick reference guides
-                              </div>
-                            </div>
-                          </Link>
-
-                          <Link
-                            href="/articles"
-                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-orange-400 dark:hover:border-orange-500 rounded"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
-                              📰
-                            </span>
-                            <div className="flex-1">
-                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-200 text-sm">
-                                Articles
-                              </div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400">
-                                Latest frontend insights
-                              </div>
-                            </div>
-                          </Link>
-
-                          <Link
-                            href="/resources"
-                            className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 group border-l-2 border-transparent hover:border-orange-400 dark:hover:border-orange-500 rounded"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            <span className="text-lg mr-3 group-hover:scale-110 transition-transform duration-200">
-                              🔗
-                            </span>
-                            <div className="flex-1">
-                              <div className="font-medium text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-200 text-sm">
-                                Resources
-                              </div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400">
-                                Curated learning materials
-                              </div>
-                            </div>
-                          </Link>
-                        </div>
+                      {/* Footer */}
+                      <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-b-xl">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                          💡 Click any item to explore more features
+                        </p>
                       </div>
-                    </div>
-
-                    {/* Save Progress Section */}
-                    <div className="px-3 py-2 mt-3">
-                      <div className="flex items-center px-2 py-1 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg mb-2">
-                        <span className="text-base mr-2">💾</span>
-                        <div className="font-semibold text-gray-900 dark:text-white text-sm">
-                          Account Actions
-                        </div>
-                      </div>
-
-                      <div className="space-y-1">
-                        {isLoading ? (
-                          <div className="flex items-center justify-center px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse">
-                            <div className="text-center">
-                              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-24 mb-2"></div>
-                              <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
-                            </div>
-                          </div>
-                        ) : (
-                          <Link
-                            href="/auth"
-                            className="flex items-center justify-center px-4 py-3 bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold rounded-lg shadow-sm hover:shadow-md transition-all duration-200 group"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            <div className="text-center">
-                              <div className="text-sm lg:text-base">
-                                Save Progress
-                              </div>
-                              <div className="text-xs text-green-100 mt-1">
-                                Sign in to save your learning progress
-                              </div>
-                            </div>
-                          </Link>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Footer */}
-                    <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-b-xl">
-                      <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                        💡 Click any item to explore more features
-                      </p>
-                    </div>
                     </div>
                   </div>
                 )}
@@ -867,17 +792,17 @@ export default function Navbar() {
 
             {/* Job Aggregator - Show on desktop only, hide on tablet/laptop */}
             {screenSize === 'desktop' && (
-            <Link
-              href="/jobs"
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 font-medium ${
-                isScrolled
-                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                  : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
-              }`}
-            >
-              <span className="text-lg">💼</span>
-              <span className="text-sm">Job Aggregator</span>
-            </Link>
+              <Link
+                href="/jobs"
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 font-medium ${
+                  isScrolled
+                    ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                    : 'text-white hover:text-blue-100 hover:bg-blue-700/50'
+                }`}
+              >
+                <span className="text-lg">💼</span>
+                <span className="text-sm">Job Aggregator</span>
+              </Link>
             )}
 
             {/* User Dropdown */}
@@ -999,30 +924,30 @@ export default function Navbar() {
           </div>
 
           {/* Theme Toggle */}
-          <div className="flex items-center space-x-1 sm:space-x-1 md:space-x-2 lg:space-x-4 xl:space-x-6">
+          <div className="flex items-center space-x-4">
             <button
               onClick={toggleDarkMode}
-              className={`p-1 sm:p-1 md:p-2 lg:p-2 rounded-lg transition-colors duration-200 ${
+              className={`p-2 rounded-lg transition-colors duration-200 ${
                 isScrolled
                   ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                   : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
               }`}
               aria-label="Toggle theme"
             >
-              {isDarkMode ? <Sun size={16} className="sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5" /> : <Moon size={16} className="sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-5 lg:h-5" />}
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
             {/* Mobile menu button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`sm:hidden p-1 rounded-lg transition-colors duration-200 ${
+              className={`sm:hidden p-2 rounded-lg transition-colors duration-200 ${
                 isScrolled
                   ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                   : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
               }`}
               aria-label="Toggle mobile menu"
             >
-              {isOpen ? <X size={16} className="w-4 h-4" /> : <Menu size={16} className="w-4 h-4" />}
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
