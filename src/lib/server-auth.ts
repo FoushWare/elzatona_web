@@ -64,6 +64,13 @@ const verifyTokenWithRestAPI = async (token: string) => {
 // Verify Firebase token on server side
 export const verifyFirebaseToken = async (token: string) => {
   try {
+    // Check if Firebase Admin SDK is properly initialized
+    const apps = getApps();
+    if (apps.length === 0) {
+      console.warn('Firebase Admin SDK not initialized, using REST API fallback');
+      return await verifyTokenWithRestAPI(token);
+    }
+
     // Try Firebase Admin SDK first
     const decodedToken = await verifyIdToken(token);
     return decodedToken;

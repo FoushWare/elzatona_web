@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
-import { useLearningPlans } from '@/hooks/useLearningPlans';
+import { useLearningPlanTemplates } from '@/hooks/useLearningPlanTemplates';
 import {
   ArrowLeft,
   Clock,
@@ -26,15 +26,20 @@ export default function LearningPlanDetailPage() {
   const router = useRouter();
   const params = useParams();
   const { isAuthenticated, user } = useFirebaseAuth();
-  const { learningPlans, isLoading } = useLearningPlans();
+  const { templates, isLoading, getTemplate } = useLearningPlanTemplates();
   const [isStarting, setIsStarting] = useState(false);
 
   const planId = params.planId as string;
-  const plan = learningPlans.find(p => p.id === planId);
+  const plan = getTemplate(planId);
 
-  const handleStartPlan = async (selectedPlan: any) => {
+  const handleStartPlan = async (selectedPlan: NonNullable<typeof plan>) => {
     if (!isAuthenticated) {
       router.push('/auth');
+      return;
+    }
+
+    if (!selectedPlan) {
+      console.error('No plan selected');
       return;
     }
 
@@ -79,7 +84,7 @@ export default function LearningPlanDetailPage() {
             Plan Not Found
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
-            The learning plan you're looking for doesn't exist.
+            The learning plan you&apos;re looking for doesn&apos;t exist.
           </p>
           <button
             onClick={() => router.push('/guided-learning')}
@@ -231,7 +236,7 @@ export default function LearningPlanDetailPage() {
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-xl border border-white/20 dark:border-gray-700/20 mb-12">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
             <Zap className="w-6 h-6 mr-3 text-yellow-500" />
-            What You'll Get
+            What You&apos;ll Get
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -298,8 +303,8 @@ export default function LearningPlanDetailPage() {
         {/* Start Plan Button */}
         <div className="text-center">
           <button
-            onClick={() => handleStartPlan(plan)}
-            disabled={isStarting}
+            onClick={() => plan && handleStartPlan(plan)}
+            disabled={isStarting || !plan}
             className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-12 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-3 mx-auto"
           >
             {isStarting ? (
@@ -318,7 +323,7 @@ export default function LearningPlanDetailPage() {
 
           {!isAuthenticated && (
             <p className="text-gray-600 dark:text-gray-400 mt-4 text-sm">
-              You'll be prompted to sign in before starting
+              You&apos;ll be prompted to sign in before starting
             </p>
           )}
 
@@ -330,4 +335,3 @@ export default function LearningPlanDetailPage() {
     </div>
   );
 }
-

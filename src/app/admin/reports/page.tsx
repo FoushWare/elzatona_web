@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '@/components/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -110,8 +109,7 @@ export default function ReportsPage() {
   };
 
   return (
-    <AdminLayout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
@@ -414,6 +412,5 @@ export default function ReportsPage() {
           onClose={handleCloseDetailsModal}
         />
       </div>
-    </AdminLayout>
   );
 }

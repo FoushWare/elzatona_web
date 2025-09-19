@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import AdminLayout from '@/components/AdminLayout';
+
 import { ClientAudioUploadService } from '@/lib/audio-upload-client';
 import { BackupClientService } from '@/lib/backup-client';
 import {
@@ -198,7 +198,7 @@ export default function NewQuestionPage() {
   };
 
   return (
-    <AdminLayout>
+    
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
@@ -559,6 +559,6 @@ export default function NewQuestionPage() {
           </form>
         </div>
       </div>
-    </AdminLayout>
+    
   );
 }
