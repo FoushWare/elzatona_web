@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -147,6 +148,7 @@ const QUESTION_CATEGORIES: QuestionCategory[] = [
 ];
 
 export default function GuidedLearningAdminPage() {
+  const router = useRouter();
   const [plans, setPlans] = useState<LearningPlanTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -159,35 +161,35 @@ export default function GuidedLearningAdminPage() {
     const mockPlans: LearningPlanTemplate[] = [
       {
         id: '1-day-plan',
-        name: '1 Day Intensive',
+        name: '1-Day Frontend Quick Start',
         duration: 1,
-        description: 'Fast-track preparation for immediate interviews',
-        difficulty: 'Advanced',
-        totalQuestions: 50,
-        dailyQuestions: 50,
+        description: 'Quick introduction to HTML, CSS, and JavaScript basics',
+        difficulty: 'Beginner',
+        totalQuestions: 15,
+        dailyQuestions: 15,
         sections: [
           {
-            id: 'js-fundamentals',
-            name: 'JavaScript Fundamentals',
-            category: 'javascript',
+            id: 'html',
+            name: 'HTML',
+            category: 'html',
             questions: ['q1', 'q2', 'q3'],
-            weight: 40,
+            weight: 33,
             order: 1,
           },
           {
-            id: 'react-basics',
-            name: 'React Basics',
-            category: 'react',
-            questions: ['q4', 'q5'],
-            weight: 30,
+            id: 'css',
+            name: 'CSS',
+            category: 'css',
+            questions: ['q4', 'q5', 'q6'],
+            weight: 33,
             order: 2,
           },
           {
-            id: 'css-layout',
-            name: 'CSS Layout',
-            category: 'css',
-            questions: ['q6', 'q7'],
-            weight: 30,
+            id: 'js',
+            name: 'JavaScript',
+            category: 'javascript',
+            questions: ['q7', 'q8', 'q9'],
+            weight: 34,
             order: 3,
           },
         ],
@@ -201,52 +203,40 @@ export default function GuidedLearningAdminPage() {
         enrolledUsers: 120,
       },
       {
-        id: '3-day-plan',
-        name: '3 Day Comprehensive',
-        duration: 3,
-        description: 'Balanced preparation covering all major topics',
-        difficulty: 'Intermediate',
-        totalQuestions: 150,
-        dailyQuestions: 50,
+        id: '2-day-plan',
+        name: '2-Day Frontend Fundamentals',
+        duration: 2,
+        description: 'Complete guide to HTML, CSS, and JavaScript fundamentals',
+        difficulty: 'Beginner',
+        totalQuestions: 30,
+        dailyQuestions: 15,
         sections: [
           {
-            id: 'html-css',
-            name: 'HTML & CSS',
+            id: 'html',
+            name: 'HTML',
             category: 'html',
-            questions: ['q1', 'q2'],
-            weight: 20,
+            questions: ['q1', 'q2', 'q3', 'q4', 'q5'],
+            weight: 33,
             order: 1,
           },
           {
-            id: 'javascript',
-            name: 'JavaScript',
-            category: 'javascript',
-            questions: ['q3', 'q4', 'q5'],
-            weight: 40,
+            id: 'css',
+            name: 'CSS',
+            category: 'css',
+            questions: ['q6', 'q7', 'q8', 'q9', 'q10'],
+            weight: 33,
             order: 2,
           },
           {
-            id: 'react',
-            name: 'React',
-            category: 'react',
-            questions: ['q6', 'q7'],
-            weight: 20,
+            id: 'js',
+            name: 'JavaScript',
+            category: 'javascript',
+            questions: ['q11', 'q12', 'q13', 'q14', 'q15'],
+            weight: 34,
             order: 3,
           },
-          {
-            id: 'typescript',
-            name: 'TypeScript',
-            category: 'typescript',
-            questions: ['q8', 'q9'],
-            weight: 20,
-            order: 4,
-          },
         ],
-        features: [
-          'Balanced coverage',
-          'Daily milestones',
-          'TypeScript basics',
-        ],
+        features: ['Fundamental concepts', 'Practical examples', '4-5 hours'],
         estimatedTime: '4-5 hours',
         isRecommended: true,
         isActive: true,
@@ -256,79 +246,300 @@ export default function GuidedLearningAdminPage() {
         enrolledUsers: 89,
       },
       {
-        id: '7-day-plan',
-        name: '7 Day Mastery',
-        duration: 7,
-        description: 'Complete preparation with advanced topics',
-        difficulty: 'Advanced',
-        totalQuestions: 350,
-        dailyQuestions: 50,
+        id: '3-day-plan',
+        name: '3-Day React Development',
+        duration: 3,
+        description: 'Master React.js from basics to intermediate concepts',
+        difficulty: 'Intermediate',
+        totalQuestions: 45,
+        dailyQuestions: 15,
         sections: [
           {
-            id: 'html-css',
-            name: 'HTML & CSS',
-            category: 'html',
-            questions: ['q1', 'q2'],
-            weight: 15,
+            id: 'components',
+            name: 'Components',
+            category: 'react',
+            questions: ['q16', 'q17', 'q18', 'q19', 'q20'],
+            weight: 33,
             order: 1,
           },
           {
-            id: 'javascript',
-            name: 'JavaScript',
-            category: 'javascript',
-            questions: ['q3', 'q4', 'q5'],
-            weight: 25,
+            id: 'hooks',
+            name: 'Hooks',
+            category: 'react',
+            questions: ['q21', 'q22', 'q23', 'q24', 'q25'],
+            weight: 33,
             order: 2,
           },
           {
-            id: 'react',
-            name: 'React',
+            id: 'state',
+            name: 'State Management',
             category: 'react',
-            questions: ['q6', 'q7'],
-            weight: 20,
+            questions: ['q26', 'q27', 'q28', 'q29', 'q30'],
+            weight: 34,
             order: 3,
           },
-          {
-            id: 'typescript',
-            name: 'TypeScript',
-            category: 'typescript',
-            questions: ['q8', 'q9'],
-            weight: 15,
-            order: 4,
-          },
-          {
-            id: 'performance',
-            name: 'Performance',
-            category: 'performance',
-            questions: ['q10', 'q11'],
-            weight: 10,
-            order: 5,
-          },
-          {
-            id: 'system-design',
-            name: 'System Design',
-            category: 'system-design',
-            questions: ['q12'],
-            weight: 10,
-            order: 6,
-          },
-          {
-            id: 'security',
-            name: 'Security',
-            category: 'security',
-            questions: ['q13'],
-            weight: 5,
-            order: 7,
-          },
         ],
-        features: ['Complete coverage', 'Advanced topics', 'Master-level prep'],
-        estimatedTime: '8-10 hours',
+        features: ['React fundamentals', 'Modern patterns', '6-7 hours'],
+        estimatedTime: '6-7 hours',
         isRecommended: true,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
         completionRate: 68,
         enrolledUsers: 156,
+      },
+      {
+        id: '4-day-plan',
+        name: '4-Day Vue.js Mastery',
+        duration: 4,
+        description: 'Complete Vue.js development course with composition API',
+        difficulty: 'Intermediate',
+        totalQuestions: 60,
+        dailyQuestions: 15,
+        sections: [
+          {
+            id: 'basics',
+            name: 'Vue Basics',
+            category: 'vue',
+            questions: ['q31', 'q32', 'q33', 'q34', 'q35'],
+            weight: 25,
+            order: 1,
+          },
+          {
+            id: 'components',
+            name: 'Components',
+            category: 'vue',
+            questions: ['q36', 'q37', 'q38', 'q39', 'q40'],
+            weight: 25,
+            order: 2,
+          },
+          {
+            id: 'composition',
+            name: 'Composition API',
+            category: 'vue',
+            questions: ['q41', 'q42', 'q43', 'q44', 'q45'],
+            weight: 25,
+            order: 3,
+          },
+          {
+            id: 'routing',
+            name: 'Vue Router',
+            category: 'vue',
+            questions: ['q46', 'q47', 'q48', 'q49', 'q50'],
+            weight: 25,
+            order: 4,
+          },
+        ],
+        features: ['Vue 3 mastery', 'Composition API', '8-9 hours'],
+        estimatedTime: '8-9 hours',
+        isRecommended: true,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        completionRate: 70,
+        enrolledUsers: 78,
+      },
+      {
+        id: '5-day-plan',
+        name: '5-Day Angular Development',
+        duration: 5,
+        description: 'Comprehensive Angular framework development course',
+        difficulty: 'Intermediate',
+        totalQuestions: 75,
+        dailyQuestions: 15,
+        sections: [
+          {
+            id: 'basics',
+            name: 'Angular Basics',
+            category: 'angular',
+            questions: ['q51', 'q52', 'q53', 'q54', 'q55'],
+            weight: 20,
+            order: 1,
+          },
+          {
+            id: 'components',
+            name: 'Components & Services',
+            category: 'angular',
+            questions: ['q56', 'q57', 'q58', 'q59', 'q60'],
+            weight: 20,
+            order: 2,
+          },
+          {
+            id: 'routing',
+            name: 'Routing',
+            category: 'angular',
+            questions: ['q61', 'q62', 'q63', 'q64', 'q65'],
+            weight: 20,
+            order: 3,
+          },
+          {
+            id: 'forms',
+            name: 'Forms & Validation',
+            category: 'angular',
+            questions: ['q66', 'q67', 'q68', 'q69', 'q70'],
+            weight: 20,
+            order: 4,
+          },
+          {
+            id: 'http',
+            name: 'HTTP & APIs',
+            category: 'angular',
+            questions: ['q71', 'q72', 'q73', 'q74', 'q75'],
+            weight: 20,
+            order: 5,
+          },
+        ],
+        features: ['Angular framework', 'Enterprise patterns', '10-12 hours'],
+        estimatedTime: '10-12 hours',
+        isRecommended: true,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        completionRate: 68,
+        enrolledUsers: 92,
+      },
+      {
+        id: '6-day-plan',
+        name: '6-Day Node.js Backend',
+        duration: 6,
+        description:
+          'Complete Node.js backend development with Express and databases',
+        difficulty: 'Advanced',
+        totalQuestions: 90,
+        dailyQuestions: 15,
+        sections: [
+          {
+            id: 'basics',
+            name: 'Node.js Basics',
+            category: 'nodejs',
+            questions: ['q76', 'q77', 'q78', 'q79', 'q80'],
+            weight: 17,
+            order: 1,
+          },
+          {
+            id: 'express',
+            name: 'Express Framework',
+            category: 'nodejs',
+            questions: ['q81', 'q82', 'q83', 'q84', 'q85'],
+            weight: 17,
+            order: 2,
+          },
+          {
+            id: 'database',
+            name: 'Database Integration',
+            category: 'nodejs',
+            questions: ['q86', 'q87', 'q88', 'q89', 'q90'],
+            weight: 17,
+            order: 3,
+          },
+          {
+            id: 'auth',
+            name: 'Authentication',
+            category: 'nodejs',
+            questions: ['q91', 'q92', 'q93', 'q94', 'q95'],
+            weight: 17,
+            order: 4,
+          },
+          {
+            id: 'api',
+            name: 'RESTful APIs',
+            category: 'nodejs',
+            questions: ['q96', 'q97', 'q98', 'q99', 'q100'],
+            weight: 16,
+            order: 5,
+          },
+          {
+            id: 'deployment',
+            name: 'Deployment',
+            category: 'nodejs',
+            questions: ['q101', 'q102', 'q103', 'q104', 'q105'],
+            weight: 16,
+            order: 6,
+          },
+        ],
+        features: ['Backend mastery', 'Database integration', '12-15 hours'],
+        estimatedTime: '12-15 hours',
+        isRecommended: true,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        completionRate: 58,
+        enrolledUsers: 134,
+      },
+      {
+        id: '7-day-plan',
+        name: '7-Day Full-Stack Mastery',
+        duration: 7,
+        description: 'Complete full-stack development with modern technologies',
+        difficulty: 'Advanced',
+        totalQuestions: 105,
+        dailyQuestions: 15,
+        sections: [
+          {
+            id: 'frontend',
+            name: 'Frontend Development',
+            category: 'javascript',
+            questions: ['q106', 'q107', 'q108', 'q109', 'q110'],
+            weight: 14,
+            order: 1,
+          },
+          {
+            id: 'backend',
+            name: 'Backend Development',
+            category: 'nodejs',
+            questions: ['q111', 'q112', 'q113', 'q114', 'q115'],
+            weight: 14,
+            order: 2,
+          },
+          {
+            id: 'database',
+            name: 'Database Design',
+            category: 'database',
+            questions: ['q116', 'q117', 'q118', 'q119', 'q120'],
+            weight: 14,
+            order: 3,
+          },
+          {
+            id: 'api',
+            name: 'API Integration',
+            category: 'api',
+            questions: ['q121', 'q122', 'q123', 'q124', 'q125'],
+            weight: 14,
+            order: 4,
+          },
+          {
+            id: 'security',
+            name: 'Security',
+            category: 'security',
+            questions: ['q126', 'q127', 'q128', 'q129', 'q130'],
+            weight: 14,
+            order: 5,
+          },
+          {
+            id: 'deployment',
+            name: 'Deployment & DevOps',
+            category: 'devops',
+            questions: ['q131', 'q132', 'q133', 'q134', 'q135'],
+            weight: 15,
+            order: 6,
+          },
+          {
+            id: 'testing',
+            name: 'Testing',
+            category: 'testing',
+            questions: ['q136', 'q137', 'q138', 'q139', 'q140'],
+            weight: 15,
+            order: 7,
+          },
+        ],
+        features: ['Full-stack mastery', 'Production-ready', '15-18 hours'],
+        estimatedTime: '15-18 hours',
+        isRecommended: true,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        completionRate: 45,
+        enrolledUsers: 98,
       },
     ];
     setPlans(mockPlans);
@@ -492,19 +703,58 @@ export default function GuidedLearningAdminPage() {
                     </div>
                   </div>
                   <div className="flex space-x-1">
-                    <Button variant="ghost" size="sm">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() =>
+                        window.open(
+                          `/guided-practice/enhanced?plan=${plan.id}`,
+                          '_blank'
+                        )
+                      }
+                      title="View Plan"
+                    >
                       <Eye className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="sm">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() =>
+                        router.push(`/admin/guided-learning/${plan.id}/edit`)
+                      }
+                      title="Edit Plan"
+                    >
                       <Edit className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="sm">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        // Copy plan functionality
+                        const newPlan = {
+                          ...plan,
+                          id: `${plan.id}-copy-${Date.now()}`,
+                        };
+                        setPlans([...plans, newPlan]);
+                      }}
+                      title="Duplicate Plan"
+                    >
                       <Copy className="w-4 h-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       className="text-red-600 hover:text-red-700"
+                      onClick={() => {
+                        if (
+                          confirm(
+                            `Are you sure you want to delete "${plan.name}"?`
+                          )
+                        ) {
+                          setPlans(plans.filter(p => p.id !== plan.id));
+                        }
+                      }}
+                      title="Delete Plan"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
