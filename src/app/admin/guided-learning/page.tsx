@@ -22,19 +22,16 @@ import {
 } from '@/components/ui/dialog';
 import {
   Plus,
-  Edit,
   Trash2,
   Copy,
   Eye,
   Calendar,
   Clock,
-  Users,
   BookOpen,
   Target,
-  Settings,
-  CheckCircle,
   XCircle,
-  AlertCircle,
+  Edit,
+  Users,
 } from 'lucide-react';
 
 // Enhanced Learning Plan Template Interface
@@ -75,25 +72,84 @@ interface QuestionCategory {
 }
 
 const QUESTION_CATEGORIES: QuestionCategory[] = [
-  { id: 'html', name: 'HTML', description: 'HTML fundamentals and best practices', color: 'bg-orange-100 text-orange-800' },
-  { id: 'css', name: 'CSS', description: 'CSS styling, layout, and animations', color: 'bg-blue-100 text-blue-800' },
-  { id: 'javascript', name: 'JavaScript', description: 'JavaScript fundamentals and ES6+', color: 'bg-yellow-100 text-yellow-800' },
-  { id: 'typescript', name: 'TypeScript', description: 'TypeScript and type systems', color: 'bg-blue-100 text-blue-800' },
-  { id: 'react', name: 'React', description: 'React components, hooks, and patterns', color: 'bg-cyan-100 text-cyan-800' },
-  { id: 'performance', name: 'Performance', description: 'Web performance optimization', color: 'bg-green-100 text-green-800' },
-  { id: 'problem-solving', name: 'Problem Solving', description: 'Algorithm and problem-solving skills', color: 'bg-purple-100 text-purple-800' },
-  { id: 'patterns', name: 'Design Patterns', description: 'Frontend design patterns and architecture', color: 'bg-pink-100 text-pink-800' },
-  { id: 'system-design', name: 'System Design', description: 'Frontend system design and architecture', color: 'bg-indigo-100 text-indigo-800' },
-  { id: 'security', name: 'Security', description: 'Web security best practices', color: 'bg-red-100 text-red-800' },
-  { id: 'testing', name: 'Testing', description: 'Frontend testing strategies', color: 'bg-emerald-100 text-emerald-800' },
-  { id: 'accessibility', name: 'Accessibility', description: 'Web accessibility standards', color: 'bg-teal-100 text-teal-800' },
+  {
+    id: 'html',
+    name: 'HTML',
+    description: 'HTML fundamentals and best practices',
+    color: 'bg-orange-100 text-orange-800',
+  },
+  {
+    id: 'css',
+    name: 'CSS',
+    description: 'CSS styling, layout, and animations',
+    color: 'bg-blue-100 text-blue-800',
+  },
+  {
+    id: 'javascript',
+    name: 'JavaScript',
+    description: 'JavaScript fundamentals and ES6+',
+    color: 'bg-yellow-100 text-yellow-800',
+  },
+  {
+    id: 'typescript',
+    name: 'TypeScript',
+    description: 'TypeScript and type systems',
+    color: 'bg-blue-100 text-blue-800',
+  },
+  {
+    id: 'react',
+    name: 'React',
+    description: 'React components, hooks, and patterns',
+    color: 'bg-cyan-100 text-cyan-800',
+  },
+  {
+    id: 'performance',
+    name: 'Performance',
+    description: 'Web performance optimization',
+    color: 'bg-green-100 text-green-800',
+  },
+  {
+    id: 'problem-solving',
+    name: 'Problem Solving',
+    description: 'Algorithm and problem-solving skills',
+    color: 'bg-purple-100 text-purple-800',
+  },
+  {
+    id: 'patterns',
+    name: 'Design Patterns',
+    description: 'Frontend design patterns and architecture',
+    color: 'bg-pink-100 text-pink-800',
+  },
+  {
+    id: 'system-design',
+    name: 'System Design',
+    description: 'Frontend system design and architecture',
+    color: 'bg-indigo-100 text-indigo-800',
+  },
+  {
+    id: 'security',
+    name: 'Security',
+    description: 'Web security best practices',
+    color: 'bg-red-100 text-red-800',
+  },
+  {
+    id: 'testing',
+    name: 'Testing',
+    description: 'Frontend testing strategies',
+    color: 'bg-emerald-100 text-emerald-800',
+  },
+  {
+    id: 'accessibility',
+    name: 'Accessibility',
+    description: 'Web accessibility standards',
+    color: 'bg-teal-100 text-teal-800',
+  },
 ];
 
 export default function GuidedLearningAdminPage() {
   const [plans, setPlans] = useState<LearningPlanTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [editingPlan, setEditingPlan] = useState<LearningPlanTemplate | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDifficulty, setFilterDifficulty] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -110,9 +166,30 @@ export default function GuidedLearningAdminPage() {
         totalQuestions: 50,
         dailyQuestions: 50,
         sections: [
-          { id: 'js-fundamentals', name: 'JavaScript Fundamentals', category: 'javascript', questions: ['q1', 'q2', 'q3'], weight: 40, order: 1 },
-          { id: 'react-basics', name: 'React Basics', category: 'react', questions: ['q4', 'q5'], weight: 30, order: 2 },
-          { id: 'css-layout', name: 'CSS Layout', category: 'css', questions: ['q6', 'q7'], weight: 30, order: 3 },
+          {
+            id: 'js-fundamentals',
+            name: 'JavaScript Fundamentals',
+            category: 'javascript',
+            questions: ['q1', 'q2', 'q3'],
+            weight: 40,
+            order: 1,
+          },
+          {
+            id: 'react-basics',
+            name: 'React Basics',
+            category: 'react',
+            questions: ['q4', 'q5'],
+            weight: 30,
+            order: 2,
+          },
+          {
+            id: 'css-layout',
+            name: 'CSS Layout',
+            category: 'css',
+            questions: ['q6', 'q7'],
+            weight: 30,
+            order: 3,
+          },
         ],
         features: ['Quick preparation', 'Essential topics', '2-3 hours'],
         estimatedTime: '2-3 hours',
@@ -132,12 +209,44 @@ export default function GuidedLearningAdminPage() {
         totalQuestions: 150,
         dailyQuestions: 50,
         sections: [
-          { id: 'html-css', name: 'HTML & CSS', category: 'html', questions: ['q1', 'q2'], weight: 20, order: 1 },
-          { id: 'javascript', name: 'JavaScript', category: 'javascript', questions: ['q3', 'q4', 'q5'], weight: 40, order: 2 },
-          { id: 'react', name: 'React', category: 'react', questions: ['q6', 'q7'], weight: 20, order: 3 },
-          { id: 'typescript', name: 'TypeScript', category: 'typescript', questions: ['q8', 'q9'], weight: 20, order: 4 },
+          {
+            id: 'html-css',
+            name: 'HTML & CSS',
+            category: 'html',
+            questions: ['q1', 'q2'],
+            weight: 20,
+            order: 1,
+          },
+          {
+            id: 'javascript',
+            name: 'JavaScript',
+            category: 'javascript',
+            questions: ['q3', 'q4', 'q5'],
+            weight: 40,
+            order: 2,
+          },
+          {
+            id: 'react',
+            name: 'React',
+            category: 'react',
+            questions: ['q6', 'q7'],
+            weight: 20,
+            order: 3,
+          },
+          {
+            id: 'typescript',
+            name: 'TypeScript',
+            category: 'typescript',
+            questions: ['q8', 'q9'],
+            weight: 20,
+            order: 4,
+          },
         ],
-        features: ['Balanced coverage', 'Daily milestones', 'TypeScript basics'],
+        features: [
+          'Balanced coverage',
+          'Daily milestones',
+          'TypeScript basics',
+        ],
         estimatedTime: '4-5 hours',
         isRecommended: true,
         isActive: true,
@@ -155,13 +264,62 @@ export default function GuidedLearningAdminPage() {
         totalQuestions: 350,
         dailyQuestions: 50,
         sections: [
-          { id: 'html-css', name: 'HTML & CSS', category: 'html', questions: ['q1', 'q2'], weight: 15, order: 1 },
-          { id: 'javascript', name: 'JavaScript', category: 'javascript', questions: ['q3', 'q4', 'q5'], weight: 25, order: 2 },
-          { id: 'react', name: 'React', category: 'react', questions: ['q6', 'q7'], weight: 20, order: 3 },
-          { id: 'typescript', name: 'TypeScript', category: 'typescript', questions: ['q8', 'q9'], weight: 15, order: 4 },
-          { id: 'performance', name: 'Performance', category: 'performance', questions: ['q10', 'q11'], weight: 10, order: 5 },
-          { id: 'system-design', name: 'System Design', category: 'system-design', questions: ['q12'], weight: 10, order: 6 },
-          { id: 'security', name: 'Security', category: 'security', questions: ['q13'], weight: 5, order: 7 },
+          {
+            id: 'html-css',
+            name: 'HTML & CSS',
+            category: 'html',
+            questions: ['q1', 'q2'],
+            weight: 15,
+            order: 1,
+          },
+          {
+            id: 'javascript',
+            name: 'JavaScript',
+            category: 'javascript',
+            questions: ['q3', 'q4', 'q5'],
+            weight: 25,
+            order: 2,
+          },
+          {
+            id: 'react',
+            name: 'React',
+            category: 'react',
+            questions: ['q6', 'q7'],
+            weight: 20,
+            order: 3,
+          },
+          {
+            id: 'typescript',
+            name: 'TypeScript',
+            category: 'typescript',
+            questions: ['q8', 'q9'],
+            weight: 15,
+            order: 4,
+          },
+          {
+            id: 'performance',
+            name: 'Performance',
+            category: 'performance',
+            questions: ['q10', 'q11'],
+            weight: 10,
+            order: 5,
+          },
+          {
+            id: 'system-design',
+            name: 'System Design',
+            category: 'system-design',
+            questions: ['q12'],
+            weight: 10,
+            order: 6,
+          },
+          {
+            id: 'security',
+            name: 'Security',
+            category: 'security',
+            questions: ['q13'],
+            weight: 5,
+            order: 7,
+          },
         ],
         features: ['Complete coverage', 'Advanced topics', 'Master-level prep'],
         estimatedTime: '8-10 hours',
@@ -178,22 +336,30 @@ export default function GuidedLearningAdminPage() {
   }, []);
 
   const filteredPlans = plans.filter(plan => {
-    const matchesSearch = plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         plan.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDifficulty = filterDifficulty === 'all' || plan.difficulty.toLowerCase() === filterDifficulty;
-    const matchesStatus = filterStatus === 'all' || 
-                         (filterStatus === 'active' && plan.isActive) ||
-                         (filterStatus === 'inactive' && !plan.isActive);
-    
+    const matchesSearch =
+      plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      plan.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDifficulty =
+      filterDifficulty === 'all' ||
+      plan.difficulty.toLowerCase() === filterDifficulty;
+    const matchesStatus =
+      filterStatus === 'all' ||
+      (filterStatus === 'active' && plan.isActive) ||
+      (filterStatus === 'inactive' && !plan.isActive);
+
     return matchesSearch && matchesDifficulty && matchesStatus;
   });
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Beginner': return 'bg-green-100 text-green-800';
-      case 'Intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'Advanced': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Beginner':
+        return 'bg-green-100 text-green-800';
+      case 'Intermediate':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'Advanced':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -207,7 +373,9 @@ export default function GuidedLearningAdminPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading guided learning plans...</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading guided learning plans...
+          </p>
         </div>
       </div>
     );
@@ -227,7 +395,8 @@ export default function GuidedLearningAdminPage() {
                 </h1>
               </div>
               <p className="text-gray-600 dark:text-gray-400">
-                Create and manage structured learning plans with daily progress tracking
+                Create and manage structured learning plans with daily progress
+                tracking
               </p>
             </div>
             <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
@@ -241,12 +410,20 @@ export default function GuidedLearningAdminPage() {
                 <DialogHeader>
                   <DialogTitle>Create New Learning Plan</DialogTitle>
                 </DialogHeader>
-                <PlanEditor 
-                  plan={null} 
-                  onSave={(plan) => {
-                    setPlans(prev => [...prev, { ...plan, id: Date.now().toString(), createdAt: new Date(), updatedAt: new Date() }]);
+                <PlanEditor
+                  plan={null}
+                  onSave={plan => {
+                    setPlans(prev => [
+                      ...prev,
+                      {
+                        ...plan,
+                        id: Date.now().toString(),
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                      },
+                    ]);
                     setShowCreateDialog(false);
-                  }} 
+                  }}
                   onCancel={() => setShowCreateDialog(false)}
                 />
               </DialogContent>
@@ -260,7 +437,7 @@ export default function GuidedLearningAdminPage() {
             <Input
               placeholder="Search plans..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="w-full"
             />
           </div>
@@ -289,8 +466,11 @@ export default function GuidedLearningAdminPage() {
 
         {/* Plans Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredPlans.map((plan) => (
-            <Card key={plan.id} className="hover:shadow-lg transition-shadow duration-200">
+          {filteredPlans.map(plan => (
+            <Card
+              key={plan.id}
+              className="hover:shadow-lg transition-shadow duration-200"
+            >
               <CardHeader className="pb-3">
                 <div className="flex justify-between items-start">
                   <div>
@@ -321,7 +501,11 @@ export default function GuidedLearningAdminPage() {
                     <Button variant="ghost" size="sm">
                       <Copy className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-600 hover:text-red-700"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -331,7 +515,7 @@ export default function GuidedLearningAdminPage() {
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
                   {plan.description}
                 </p>
-                
+
                 {/* Plan Stats */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center space-x-2">
@@ -364,13 +548,15 @@ export default function GuidedLearningAdminPage() {
                 {plan.completionRate && (
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600 dark:text-gray-400">Completion Rate</span>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Completion Rate
+                      </span>
                       <span className="text-gray-900 dark:text-white font-medium">
                         {plan.completionRate}%
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                      <div 
+                      <div
                         className="bg-green-500 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${plan.completionRate}%` }}
                       />
@@ -384,9 +570,9 @@ export default function GuidedLearningAdminPage() {
                     Sections ({plan.sections.length})
                   </h4>
                   <div className="flex flex-wrap gap-2">
-                    {plan.sections.slice(0, 3).map((section) => (
-                      <Badge 
-                        key={section.id} 
+                    {plan.sections.slice(0, 3).map(section => (
+                      <Badge
+                        key={section.id}
                         className={`text-xs ${getCategoryColor(section.category)}`}
                       >
                         {section.name}
@@ -407,7 +593,10 @@ export default function GuidedLearningAdminPage() {
                   </h4>
                   <div className="flex flex-wrap gap-1">
                     {plan.features.slice(0, 2).map((feature, index) => (
-                      <span key={index} className="text-xs text-gray-600 dark:text-gray-400">
+                      <span
+                        key={index}
+                        className="text-xs text-gray-600 dark:text-gray-400"
+                      >
                         • {feature}
                       </span>
                     ))}
@@ -430,7 +619,9 @@ export default function GuidedLearningAdminPage() {
               No learning plans found
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              {searchTerm || filterDifficulty !== 'all' || filterStatus !== 'all'
+              {searchTerm ||
+              filterDifficulty !== 'all' ||
+              filterStatus !== 'all'
                 ? 'Try adjusting your search filters'
                 : 'Create your first learning plan to get started'}
             </p>
@@ -468,62 +659,74 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
   const addSection = () => {
     setFormData(prev => ({
       ...prev,
-      sections: [...prev.sections, {
-        id: `section-${Date.now()}`,
-        name: '',
-        category: '',
-        questions: [],
-        weight: 10,
-        order: prev.sections.length + 1,
-      }]
+      sections: [
+        ...prev.sections,
+        {
+          id: `section-${Date.now()}`,
+          name: '',
+          category: '',
+          questions: [],
+          weight: 10,
+          order: prev.sections.length + 1,
+        },
+      ],
     }));
   };
 
-  const updateSection = (index: number, field: string, value: any) => {
+  const updateSection = (
+    index: number,
+    field: string,
+    value: string | number
+  ) => {
     setFormData(prev => ({
       ...prev,
-      sections: prev.sections.map((section, i) => 
+      sections: prev.sections.map((section, i) =>
         i === index ? { ...section, [field]: value } : section
-      )
+      ),
     }));
   };
 
   const removeSection = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      sections: prev.sections.filter((_, i) => i !== index)
+      sections: prev.sections.filter((_, i) => i !== index),
     }));
   };
 
   const addFeature = () => {
     setFormData(prev => ({
       ...prev,
-      features: [...prev.features, '']
+      features: [...prev.features, ''],
     }));
   };
 
   const updateFeature = (index: number, value: string) => {
     setFormData(prev => ({
       ...prev,
-      features: prev.features.map((feature, i) => i === index ? value : feature)
+      features: prev.features.map((feature, i) =>
+        i === index ? value : feature
+      ),
     }));
   };
 
   const removeFeature = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      features: prev.features.filter((_, i) => i !== index)
+      features: prev.features.filter((_, i) => i !== index),
     }));
   };
 
   const calculateTotalQuestions = () => {
-    return formData.sections.reduce((total, section) => total + section.questions.length, 0);
+    return formData.sections.reduce(
+      (total, section) => total + section.questions.length,
+      0
+    );
   };
 
   const handleSave = () => {
     const totalQuestions = calculateTotalQuestions();
     const dailyQuestions = Math.ceil(totalQuestions / formData.duration);
-    
+
     onSave({
       ...formData,
       totalQuestions,
@@ -541,7 +744,9 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
           </label>
           <Input
             value={formData.name}
-            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+            onChange={e =>
+              setFormData(prev => ({ ...prev, name: e.target.value }))
+            }
             placeholder="e.g., 3 Day Comprehensive Plan"
           />
         </div>
@@ -549,9 +754,11 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Duration (days)
           </label>
-          <Select 
-            value={formData.duration.toString()} 
-            onValueChange={(value) => setFormData(prev => ({ ...prev, duration: parseInt(value) }))}
+          <Select
+            value={formData.duration.toString()}
+            onValueChange={value =>
+              setFormData(prev => ({ ...prev, duration: parseInt(value) }))
+            }
           >
             <SelectTrigger>
               <SelectValue />
@@ -573,7 +780,9 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
         </label>
         <Textarea
           value={formData.description}
-          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+          onChange={e =>
+            setFormData(prev => ({ ...prev, description: e.target.value }))
+          }
           placeholder="Describe what this plan covers and who it's for..."
           rows={3}
         />
@@ -584,9 +793,14 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Difficulty
           </label>
-          <Select 
-            value={formData.difficulty} 
-            onValueChange={(value: any) => setFormData(prev => ({ ...prev, difficulty: value }))}
+          <Select
+            value={formData.difficulty}
+            onValueChange={(value: string) =>
+              setFormData(prev => ({
+                ...prev,
+                difficulty: value as 'Beginner' | 'Intermediate' | 'Advanced',
+              }))
+            }
           >
             <SelectTrigger>
               <SelectValue />
@@ -604,7 +818,9 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
           </label>
           <Input
             value={formData.estimatedTime}
-            onChange={(e) => setFormData(prev => ({ ...prev, estimatedTime: e.target.value }))}
+            onChange={e =>
+              setFormData(prev => ({ ...prev, estimatedTime: e.target.value }))
+            }
             placeholder="e.g., 2-3 hours"
           />
         </div>
@@ -616,7 +832,12 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Features
           </label>
-          <Button type="button" variant="outline" size="sm" onClick={addFeature}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={addFeature}
+          >
             <Plus className="w-4 h-4 mr-1" />
             Add Feature
           </Button>
@@ -626,12 +847,12 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
             <div key={index} className="flex space-x-2">
               <Input
                 value={feature}
-                onChange={(e) => updateFeature(index, e.target.value)}
+                onChange={e => updateFeature(index, e.target.value)}
                 placeholder="e.g., Daily milestones, Progress tracking"
               />
-              <Button 
-                type="button" 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 size="sm"
                 onClick={() => removeFeature(index)}
               >
@@ -648,7 +869,12 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Learning Sections
           </label>
-          <Button type="button" variant="outline" size="sm" onClick={addSection}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={addSection}
+          >
             <Plus className="w-4 h-4 mr-1" />
             Add Section
           </Button>
@@ -663,7 +889,7 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
                   </label>
                   <Input
                     value={section.name}
-                    onChange={(e) => updateSection(index, 'name', e.target.value)}
+                    onChange={e => updateSection(index, 'name', e.target.value)}
                     placeholder="e.g., JavaScript Fundamentals"
                   />
                 </div>
@@ -671,9 +897,11 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Category
                   </label>
-                  <Select 
-                    value={section.category} 
-                    onValueChange={(value) => updateSection(index, 'category', value)}
+                  <Select
+                    value={section.category}
+                    onValueChange={value =>
+                      updateSection(index, 'category', value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
@@ -695,14 +923,20 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
                     <Input
                       type="number"
                       value={section.weight}
-                      onChange={(e) => updateSection(index, 'weight', parseInt(e.target.value) || 0)}
+                      onChange={e =>
+                        updateSection(
+                          index,
+                          'weight',
+                          parseInt(e.target.value) || 0
+                        )
+                      }
                       min="0"
                       max="100"
                     />
                   </div>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <Button
+                    type="button"
+                    variant="outline"
                     size="sm"
                     onClick={() => removeSection(index)}
                   >
@@ -717,15 +951,25 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
 
       {/* Plan Summary */}
       <Card className="p-4 bg-gray-50 dark:bg-gray-800">
-        <h4 className="font-medium text-gray-900 dark:text-white mb-2">Plan Summary</h4>
+        <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+          Plan Summary
+        </h4>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-gray-600 dark:text-gray-400">Total Questions:</span>
-            <span className="ml-2 font-medium">{calculateTotalQuestions()}</span>
+            <span className="text-gray-600 dark:text-gray-400">
+              Total Questions:
+            </span>
+            <span className="ml-2 font-medium">
+              {calculateTotalQuestions()}
+            </span>
           </div>
           <div>
-            <span className="text-gray-600 dark:text-gray-400">Daily Questions:</span>
-            <span className="ml-2 font-medium">{Math.ceil(calculateTotalQuestions() / formData.duration)}</span>
+            <span className="text-gray-600 dark:text-gray-400">
+              Daily Questions:
+            </span>
+            <span className="ml-2 font-medium">
+              {Math.ceil(calculateTotalQuestions() / formData.duration)}
+            </span>
           </div>
           <div>
             <span className="text-gray-600 dark:text-gray-400">Sections:</span>
@@ -733,7 +977,9 @@ function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
           </div>
           <div>
             <span className="text-gray-600 dark:text-gray-400">Features:</span>
-            <span className="ml-2 font-medium">{formData.features.filter(f => f.trim()).length}</span>
+            <span className="ml-2 font-medium">
+              {formData.features.filter(f => f.trim()).length}
+            </span>
           </div>
         </div>
       </Card>

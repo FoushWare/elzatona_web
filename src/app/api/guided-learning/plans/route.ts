@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { guidedLearningService } from '@/lib/guided-learning-service';
 
 // GET /api/guided-learning/plans - Get all learning plans
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const plans = await guidedLearningService.getAllPlans();
     return NextResponse.json({ success: true, plans });
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const planData = await request.json();
-    
+
     // Validate required fields
     if (!planData.name || !planData.duration || !planData.sections) {
       return NextResponse.json(

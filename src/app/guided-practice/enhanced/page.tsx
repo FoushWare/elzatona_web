@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowLeft,
@@ -13,22 +13,15 @@ import {
   TrendingUp,
   Award,
   Clock,
-  Users,
   BarChart3,
-  Star,
   Trophy,
-  Calendar,
   CheckSquare,
   Square,
-  Play,
-  Pause,
-  RotateCcw,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { useUserType } from '@/contexts/UserTypeContext';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { useSecureProgress } from '@/hooks/useSecureProgress';
 
@@ -83,11 +76,14 @@ interface UserProgress {
   currentSection: number;
   completedQuestions: string[];
   scores: Record<string, number>; // questionId -> score
-  sectionProgress: Record<string, {
-    completed: number;
-    total: number;
-    averageScore: number;
-  }>;
+  sectionProgress: Record<
+    string,
+    {
+      completed: number;
+      total: number;
+      averageScore: number;
+    }
+  >;
   overallProgress: number;
   totalScore: number;
   averageScore: number;
@@ -106,20 +102,23 @@ interface SessionStats {
 }
 
 function EnhancedGuidedPracticeContent() {
-  const { userType } = useUserType();
   const { isAuthenticated, isLoading: isAuthLoading } = useFirebaseAuth();
-  const { saveProgress, progress: userProgress } = useSecureProgress();
+  const { saveProgress } = useSecureProgress();
   const router = useRouter();
   const searchParams = useSearchParams();
   const planId = searchParams.get('plan');
 
   // State management
   const [currentPlan, setCurrentPlan] = useState<LearningPlan | null>(null);
-  const [userPlanProgress, setUserPlanProgress] = useState<UserProgress | null>(null);
+  const [userPlanProgress, setUserPlanProgress] = useState<UserProgress | null>(
+    null
+  );
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [showExplanation, setShowExplanation] = useState(false);
-  const [questionResult, setQuestionResult] = useState<'correct' | 'incorrect' | null>(null);
+  const [questionResult, setQuestionResult] = useState<
+    'correct' | 'incorrect' | null
+  >(null);
   const [sessionStats, setSessionStats] = useState<SessionStats>({
     currentSessionScore: 0,
     questionsAnswered: 0,
@@ -148,10 +147,38 @@ function EnhancedGuidedPracticeContent() {
       totalQuestions: 150,
       dailyQuestions: 50,
       sections: [
-        { id: 'html-css', name: 'HTML & CSS', category: 'html', questions: ['q1', 'q2', 'q3'], weight: 20, order: 1 },
-        { id: 'javascript', name: 'JavaScript', category: 'javascript', questions: ['q4', 'q5', 'q6', 'q7'], weight: 40, order: 2 },
-        { id: 'react', name: 'React', category: 'react', questions: ['q8', 'q9', 'q10'], weight: 20, order: 3 },
-        { id: 'typescript', name: 'TypeScript', category: 'typescript', questions: ['q11', 'q12'], weight: 20, order: 4 },
+        {
+          id: 'html-css',
+          name: 'HTML & CSS',
+          category: 'html',
+          questions: ['q1', 'q2', 'q3'],
+          weight: 20,
+          order: 1,
+        },
+        {
+          id: 'javascript',
+          name: 'JavaScript',
+          category: 'javascript',
+          questions: ['q4', 'q5', 'q6', 'q7'],
+          weight: 40,
+          order: 2,
+        },
+        {
+          id: 'react',
+          name: 'React',
+          category: 'react',
+          questions: ['q8', 'q9', 'q10'],
+          weight: 20,
+          order: 3,
+        },
+        {
+          id: 'typescript',
+          name: 'TypeScript',
+          category: 'typescript',
+          questions: ['q11', 'q12'],
+          weight: 20,
+          order: 4,
+        },
       ],
       features: ['Balanced coverage', 'Daily milestones', 'TypeScript basics'],
       estimatedTime: '4-5 hours',
@@ -165,12 +192,12 @@ function EnhancedGuidedPracticeContent() {
       currentDay: 1,
       currentSection: 0,
       completedQuestions: ['q1'],
-      scores: { 'q1': 85 },
+      scores: { q1: 85 },
       sectionProgress: {
         'html-css': { completed: 1, total: 3, averageScore: 85 },
-        'javascript': { completed: 0, total: 4, averageScore: 0 },
-        'react': { completed: 0, total: 3, averageScore: 0 },
-        'typescript': { completed: 0, total: 2, averageScore: 0 },
+        javascript: { completed: 0, total: 4, averageScore: 0 },
+        react: { completed: 0, total: 3, averageScore: 0 },
+        typescript: { completed: 0, total: 2, averageScore: 0 },
       },
       overallProgress: 8.3, // 1/12 questions
       totalScore: 85,
@@ -182,73 +209,84 @@ function EnhancedGuidedPracticeContent() {
 
     setCurrentPlan(mockPlan);
     setUserPlanProgress(mockUserProgress);
-    
+
     // Load current question
     loadCurrentQuestion(mockPlan, mockUserProgress);
     setIsLoading(false);
-  }, [planId, router]);
+  }, [planId, router, loadCurrentQuestion]);
 
-  const loadCurrentQuestion = (plan: LearningPlan, progress: UserProgress) => {
-    const currentSection = plan.sections[progress.currentSection];
-    if (!currentSection) return;
+  const loadCurrentQuestion = useCallback(
+    (plan: LearningPlan, progress: UserProgress) => {
+      const currentSection = plan.sections[progress.currentSection];
+      if (!currentSection) return;
 
-    const availableQuestions = currentSection.questions.filter(
-      qId => !progress.completedQuestions.includes(qId)
-    );
+      const availableQuestions = currentSection.questions.filter(
+        qId => !progress.completedQuestions.includes(qId)
+      );
 
-    if (availableQuestions.length === 0) {
-      // Move to next section or complete plan
-      if (progress.currentSection < plan.sections.length - 1) {
-        // Move to next section
-        const nextProgress = {
-          ...progress,
-          currentSection: progress.currentSection + 1,
-        };
-        setUserPlanProgress(nextProgress);
-        loadCurrentQuestion(plan, nextProgress);
-      } else {
-        // Plan completed
-        setShowResults(true);
+      if (availableQuestions.length === 0) {
+        // Move to next section or complete plan
+        if (progress.currentSection < plan.sections.length - 1) {
+          // Move to next section
+          const nextProgress = {
+            ...progress,
+            currentSection: progress.currentSection + 1,
+          };
+          setUserPlanProgress(nextProgress);
+          loadCurrentQuestion(plan, nextProgress);
+        } else {
+          // Plan completed
+          setShowResults(true);
+        }
+        return;
       }
-      return;
-    }
 
-    const currentQuestionId = availableQuestions[0];
-    
-    // Mock question data
-    const mockQuestion: Question = {
-      id: currentQuestionId,
-      title: 'What is JavaScript hoisting?',
-      content: 'Explain the concept of hoisting in JavaScript and provide an example.',
-      type: 'single',
-      options: [
-        { id: 'a', text: 'Variables and functions are moved to the top of their scope' },
-        { id: 'b', text: 'Variables are initialized with undefined before assignment' },
-        { id: 'c', text: 'Functions can be called before they are declared' },
-        { id: 'd', text: 'All of the above' },
-      ],
-      correctAnswers: ['d'],
-      explanation: 'Hoisting is a JavaScript behavior where variable and function declarations are moved to the top of their containing scope during compilation. This allows variables to be accessed before they are declared and functions to be called before they are defined.',
-      category: 'javascript',
-      difficulty: 'medium',
-      points: 10,
-      timeLimit: 120,
-      tags: ['javascript', 'hoisting', 'scope'],
-    };
+      const currentQuestionId = availableQuestions[0];
 
-    setCurrentQuestion(mockQuestion);
-    setSelectedAnswers([]);
-    setShowExplanation(false);
-    setQuestionResult(null);
-    setQuestionStartTime(new Date());
-  };
+      // Mock question data
+      const mockQuestion: Question = {
+        id: currentQuestionId,
+        title: 'What is JavaScript hoisting?',
+        content:
+          'Explain the concept of hoisting in JavaScript and provide an example.',
+        type: 'single',
+        options: [
+          {
+            id: 'a',
+            text: 'Variables and functions are moved to the top of their scope',
+          },
+          {
+            id: 'b',
+            text: 'Variables are initialized with undefined before assignment',
+          },
+          { id: 'c', text: 'Functions can be called before they are declared' },
+          { id: 'd', text: 'All of the above' },
+        ],
+        correctAnswers: ['d'],
+        explanation:
+          'Hoisting is a JavaScript behavior where variable and function declarations are moved to the top of their containing scope during compilation. This allows variables to be accessed before they are declared and functions to be called before they are defined.',
+        category: 'javascript',
+        difficulty: 'medium',
+        points: 10,
+        timeLimit: 120,
+        tags: ['javascript', 'hoisting', 'scope'],
+      };
+
+      setCurrentQuestion(mockQuestion);
+      setSelectedAnswers([]);
+      setShowExplanation(false);
+      setQuestionResult(null);
+      setQuestionStartTime(new Date());
+    },
+    []
+  );
 
   const handleAnswerSelect = (answerId: string) => {
     if (currentQuestion?.type === 'single') {
       setSelectedAnswers([answerId]);
     } else if (currentQuestion?.type === 'multiple') {
-      setSelectedAnswers(prev => 
-        prev.includes(answerId) 
+      setSelectedAnswers(prev =>
+        prev.includes(answerId)
           ? prev.filter(id => id !== answerId)
           : [...prev, answerId]
       );
@@ -256,11 +294,13 @@ function EnhancedGuidedPracticeContent() {
   };
 
   const submitAnswer = () => {
-    if (!currentQuestion || !userPlanProgress || selectedAnswers.length === 0) return;
+    if (!currentQuestion || !userPlanProgress || selectedAnswers.length === 0)
+      return;
 
-    const isCorrect = selectedAnswers.every(answer => 
-      currentQuestion.correctAnswers.includes(answer)
-    ) && selectedAnswers.length === currentQuestion.correctAnswers.length;
+    const isCorrect =
+      selectedAnswers.every(answer =>
+        currentQuestion.correctAnswers.includes(answer)
+      ) && selectedAnswers.length === currentQuestion.correctAnswers.length;
 
     const timeSpent = (Date.now() - questionStartTime.getTime()) / 1000;
     const score = isCorrect ? currentQuestion.points : 0;
@@ -279,7 +319,10 @@ function EnhancedGuidedPracticeContent() {
     // Update user progress
     const updatedProgress = {
       ...userPlanProgress,
-      completedQuestions: [...userPlanProgress.completedQuestions, currentQuestion.id],
+      completedQuestions: [
+        ...userPlanProgress.completedQuestions,
+        currentQuestion.id,
+      ],
       scores: {
         ...userPlanProgress.scores,
         [currentQuestion.id]: finalScore,
@@ -288,13 +331,22 @@ function EnhancedGuidedPracticeContent() {
         ...userPlanProgress.sectionProgress,
         [currentQuestion.category]: {
           ...userPlanProgress.sectionProgress[currentQuestion.category],
-          completed: userPlanProgress.sectionProgress[currentQuestion.category].completed + 1,
-          averageScore: calculateSectionAverageScore(userPlanProgress, currentQuestion.category, finalScore),
+          completed:
+            userPlanProgress.sectionProgress[currentQuestion.category]
+              .completed + 1,
+          averageScore: calculateSectionAverageScore(
+            userPlanProgress,
+            currentQuestion.category,
+            finalScore
+          ),
         },
       },
       totalScore: userPlanProgress.totalScore + finalScore,
       averageScore: calculateOverallAverageScore(userPlanProgress, finalScore),
-      overallProgress: ((userPlanProgress.completedQuestions.length + 1) / currentPlan!.totalQuestions) * 100,
+      overallProgress:
+        ((userPlanProgress.completedQuestions.length + 1) /
+          currentPlan!.totalQuestions) *
+        100,
       lastActivity: new Date(),
     };
 
@@ -312,15 +364,23 @@ function EnhancedGuidedPracticeContent() {
     });
   };
 
-  const calculateSectionAverageScore = (progress: UserProgress, sectionId: string, newScore: number) => {
+  const calculateSectionAverageScore = (
+    progress: UserProgress,
+    sectionId: string,
+    newScore: number
+  ) => {
     const section = progress.sectionProgress[sectionId];
     const totalScore = section.averageScore * section.completed + newScore;
     return Math.round(totalScore / (section.completed + 1));
   };
 
-  const calculateOverallAverageScore = (progress: UserProgress, newScore: number) => {
+  const calculateOverallAverageScore = (
+    progress: UserProgress,
+    newScore: number
+  ) => {
     const totalQuestions = progress.completedQuestions.length + 1;
-    const totalScore = progress.averageScore * progress.completedQuestions.length + newScore;
+    const totalScore =
+      progress.averageScore * progress.completedQuestions.length + newScore;
     return Math.round(totalScore / totalQuestions);
   };
 
@@ -331,10 +391,14 @@ function EnhancedGuidedPracticeContent() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'hard': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'easy':
+        return 'bg-green-100 text-green-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'hard':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -358,7 +422,9 @@ function EnhancedGuidedPracticeContent() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 animate-spin text-red-600 mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Loading practice session...</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading practice session...
+          </p>
         </div>
       </div>
     );
@@ -378,7 +444,7 @@ function EnhancedGuidedPracticeContent() {
             Plan Not Found
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            The learning plan you're looking for doesn't exist.
+            The learning plan you&apos;re looking for doesn&apos;t exist.
           </p>
           <Button onClick={() => router.push('/guided-learning')}>
             Back to Learning Plans
@@ -398,7 +464,7 @@ function EnhancedGuidedPracticeContent() {
               Congratulations!
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              You've completed the {currentPlan.name}
+              You&apos;ve completed the {currentPlan.name}
             </p>
           </div>
 
@@ -409,10 +475,14 @@ function EnhancedGuidedPracticeContent() {
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                   {getGradeLetter(userPlanProgress.averageScore)}
                 </h3>
-                <p className={`text-3xl font-bold ${getGradeColor(userPlanProgress.averageScore)}`}>
+                <p
+                  className={`text-3xl font-bold ${getGradeColor(userPlanProgress.averageScore)}`}
+                >
                   {userPlanProgress.averageScore}%
                 </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Final Grade</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Final Grade
+                </p>
               </CardContent>
             </Card>
 
@@ -422,7 +492,9 @@ function EnhancedGuidedPracticeContent() {
                 <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
                   {userPlanProgress.completedQuestions.length}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Questions Completed</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Questions Completed
+                </p>
               </CardContent>
             </Card>
 
@@ -432,7 +504,9 @@ function EnhancedGuidedPracticeContent() {
                 <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
                   {Math.round(sessionStats.timeSpent / 60)}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Minutes Spent</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Minutes Spent
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -446,21 +520,34 @@ function EnhancedGuidedPracticeContent() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {currentPlan.sections.map((section) => {
-                  const sectionProgress = userPlanProgress.sectionProgress[section.category];
+                {currentPlan.sections.map(section => {
+                  const sectionProgress =
+                    userPlanProgress.sectionProgress[section.category];
                   return (
-                    <div key={section.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div
+                      key={section.id}
+                      className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg"
+                    >
                       <div>
-                        <h4 className="font-medium text-gray-900 dark:text-white">{section.name}</h4>
+                        <h4 className="font-medium text-gray-900 dark:text-white">
+                          {section.name}
+                        </h4>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {sectionProgress.completed}/{sectionProgress.total} questions completed
+                          {sectionProgress.completed}/{sectionProgress.total}{' '}
+                          questions completed
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className={`text-2xl font-bold ${getGradeColor(sectionProgress.averageScore)}`}>
+                        <p
+                          className={`text-2xl font-bold ${getGradeColor(sectionProgress.averageScore)}`}
+                        >
                           {sectionProgress.averageScore}%
                         </p>
-                        <Badge className={getGradeColor(sectionProgress.averageScore)}>
+                        <Badge
+                          className={getGradeColor(
+                            sectionProgress.averageScore
+                          )}
+                        >
                           {getGradeLetter(sectionProgress.averageScore)}
                         </Badge>
                       </div>
@@ -472,7 +559,10 @@ function EnhancedGuidedPracticeContent() {
           </Card>
 
           <div className="flex justify-center space-x-4">
-            <Button onClick={() => router.push('/guided-learning')} variant="outline">
+            <Button
+              onClick={() => router.push('/guided-learning')}
+              variant="outline"
+            >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Plans
             </Button>
@@ -497,10 +587,14 @@ function EnhancedGuidedPracticeContent() {
                 {currentPlan.name}
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
-                Day {userPlanProgress.currentDay} • {currentPlan.sections[userPlanProgress.currentSection]?.name}
+                Day {userPlanProgress.currentDay} •{' '}
+                {currentPlan.sections[userPlanProgress.currentSection]?.name}
               </p>
             </div>
-            <Button variant="outline" onClick={() => router.push('/guided-learning')}>
+            <Button
+              variant="outline"
+              onClick={() => router.push('/guided-learning')}
+            >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Plans
             </Button>
@@ -517,31 +611,45 @@ function EnhancedGuidedPracticeContent() {
                   {Math.round(userPlanProgress.overallProgress)}%
                 </span>
               </div>
-              <Progress value={userPlanProgress.overallProgress} className="mb-4" />
+              <Progress
+                value={userPlanProgress.overallProgress}
+                className="mb-4"
+              />
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="text-center">
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
                     {userPlanProgress.completedQuestions.length}
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Completed</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Completed
+                  </p>
                 </div>
                 <div className="text-center">
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
                     {currentPlan.totalQuestions}
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Total</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Total
+                  </p>
                 </div>
                 <div className="text-center">
-                  <p className={`text-2xl font-bold ${getGradeColor(userPlanProgress.averageScore)}`}>
+                  <p
+                    className={`text-2xl font-bold ${getGradeColor(userPlanProgress.averageScore)}`}
+                  >
                     {userPlanProgress.averageScore}%
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Average Score</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Average Score
+                  </p>
                 </div>
                 <div className="text-center">
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {sessionStats.correctAnswers}/{sessionStats.questionsAnswered}
+                    {sessionStats.correctAnswers}/
+                    {sessionStats.questionsAnswered}
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Session Score</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Session Score
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -556,7 +664,11 @@ function EnhancedGuidedPracticeContent() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <Badge className={getDifficultyColor(currentQuestion.difficulty)}>
+                      <Badge
+                        className={getDifficultyColor(
+                          currentQuestion.difficulty
+                        )}
+                      >
                         {currentQuestion.difficulty}
                       </Badge>
                       <Badge variant="outline">
@@ -581,7 +693,7 @@ function EnhancedGuidedPracticeContent() {
 
                   {currentQuestion.options && (
                     <div className="space-y-3">
-                      {currentQuestion.options.map((option) => (
+                      {currentQuestion.options.map(option => (
                         <button
                           key={option.id}
                           onClick={() => handleAnswerSelect(option.id)}
@@ -598,12 +710,10 @@ function EnhancedGuidedPracticeContent() {
                               ) : (
                                 <Square className="w-5 h-5 text-gray-400" />
                               )
+                            ) : selectedAnswers.includes(option.id) ? (
+                              <CheckSquare className="w-5 h-5 text-red-500" />
                             ) : (
-                              selectedAnswers.includes(option.id) ? (
-                                <CheckSquare className="w-5 h-5 text-red-500" />
-                              ) : (
-                                <Square className="w-5 h-5 text-gray-400" />
-                              )
+                              <Square className="w-5 h-5 text-gray-400" />
                             )}
                             <span className="text-gray-900 dark:text-white">
                               {option.text}
@@ -615,11 +725,13 @@ function EnhancedGuidedPracticeContent() {
                   )}
 
                   {showExplanation && (
-                    <div className={`p-4 rounded-lg border-l-4 ${
-                      questionResult === 'correct' 
-                        ? 'bg-green-50 dark:bg-green-900/20 border-green-500' 
-                        : 'bg-red-50 dark:bg-red-900/20 border-red-500'
-                    }`}>
+                    <div
+                      className={`p-4 rounded-lg border-l-4 ${
+                        questionResult === 'correct'
+                          ? 'bg-green-50 dark:bg-green-900/20 border-green-500'
+                          : 'bg-red-50 dark:bg-red-900/20 border-red-500'
+                      }`}
+                    >
                       <div className="flex items-center space-x-2 mb-2">
                         {questionResult === 'correct' ? (
                           <CheckCircle className="w-5 h-5 text-green-500" />
@@ -627,7 +739,9 @@ function EnhancedGuidedPracticeContent() {
                           <XCircle className="w-5 h-5 text-red-500" />
                         )}
                         <h4 className="font-medium text-gray-900 dark:text-white">
-                          {questionResult === 'correct' ? 'Correct!' : 'Incorrect'}
+                          {questionResult === 'correct'
+                            ? 'Correct!'
+                            : 'Incorrect'}
                         </h4>
                       </div>
                       <p className="text-gray-700 dark:text-gray-300">
@@ -639,14 +753,18 @@ function EnhancedGuidedPracticeContent() {
                   <div className="flex justify-between">
                     <div className="flex space-x-2">
                       {currentQuestion.tags.map((tag, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="text-xs"
+                        >
                           {tag}
                         </Badge>
                       ))}
                     </div>
                     <div className="flex space-x-2">
                       {!showExplanation ? (
-                        <Button 
+                        <Button
                           onClick={submitAnswer}
                           disabled={selectedAnswers.length === 0}
                           className="bg-red-600 hover:bg-red-700"
@@ -678,20 +796,36 @@ function EnhancedGuidedPracticeContent() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Questions Answered</span>
-                  <span className="font-medium">{sessionStats.questionsAnswered}</span>
+                  <span className="text-gray-600 dark:text-gray-400">
+                    Questions Answered
+                  </span>
+                  <span className="font-medium">
+                    {sessionStats.questionsAnswered}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Correct Answers</span>
-                  <span className="font-medium text-green-600">{sessionStats.correctAnswers}</span>
+                  <span className="text-gray-600 dark:text-gray-400">
+                    Correct Answers
+                  </span>
+                  <span className="font-medium text-green-600">
+                    {sessionStats.correctAnswers}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Session Score</span>
-                  <span className="font-medium">{sessionStats.currentSessionScore}</span>
+                  <span className="text-gray-600 dark:text-gray-400">
+                    Session Score
+                  </span>
+                  <span className="font-medium">
+                    {sessionStats.currentSessionScore}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Time Spent</span>
-                  <span className="font-medium">{Math.round(sessionStats.timeSpent / 60)}m</span>
+                  <span className="text-gray-600 dark:text-gray-400">
+                    Time Spent
+                  </span>
+                  <span className="font-medium">
+                    {Math.round(sessionStats.timeSpent / 60)}m
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -706,12 +840,19 @@ function EnhancedGuidedPracticeContent() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {currentPlan.sections.map((section, index) => {
-                  const sectionProgress = userPlanProgress.sectionProgress[section.category];
-                  const isCurrentSection = index === userPlanProgress.currentSection;
+                  const sectionProgress =
+                    userPlanProgress.sectionProgress[section.category];
+                  const isCurrentSection =
+                    index === userPlanProgress.currentSection;
                   return (
-                    <div key={section.id} className={`p-3 rounded-lg ${
-                      isCurrentSection ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' : 'bg-gray-50 dark:bg-gray-800'
-                    }`}>
+                    <div
+                      key={section.id}
+                      className={`p-3 rounded-lg ${
+                        isCurrentSection
+                          ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
+                          : 'bg-gray-50 dark:bg-gray-800'
+                      }`}
+                    >
                       <div className="flex justify-between items-center mb-2">
                         <h4 className="font-medium text-gray-900 dark:text-white">
                           {section.name}
@@ -720,10 +861,20 @@ function EnhancedGuidedPracticeContent() {
                           {sectionProgress.completed}/{sectionProgress.total}
                         </span>
                       </div>
-                      <Progress value={(sectionProgress.completed / sectionProgress.total) * 100} className="mb-2" />
+                      <Progress
+                        value={
+                          (sectionProgress.completed / sectionProgress.total) *
+                          100
+                        }
+                        className="mb-2"
+                      />
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-600 dark:text-gray-400">Average Score</span>
-                        <span className={`font-medium ${getGradeColor(sectionProgress.averageScore)}`}>
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Average Score
+                        </span>
+                        <span
+                          className={`font-medium ${getGradeColor(sectionProgress.averageScore)}`}
+                        >
                           {sectionProgress.averageScore}%
                         </span>
                       </div>
@@ -741,14 +892,18 @@ function EnhancedGuidedPracticeContent() {
 
 export default function EnhancedGuidedPracticePage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 animate-spin text-red-600 mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Loading practice session...</p>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="w-12 h-12 animate-spin text-red-600 mx-auto mb-4" />
+            <p className="text-gray-600 dark:text-gray-400">
+              Loading practice session...
+            </p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <EnhancedGuidedPracticeContent />
     </Suspense>
   );

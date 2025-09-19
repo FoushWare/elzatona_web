@@ -4,31 +4,18 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   BookOpen,
-  Code,
   Target,
   Zap,
   BarChart3,
   CheckCircle,
   Trophy,
   Clock,
-  Calendar,
   TrendingUp,
   Award,
-  Star,
-  Users,
   Activity,
-  Play,
-  Pause,
-  RotateCcw,
-  ArrowRight,
-  Eye,
-  MessageSquare,
-  Download,
   Share,
   Settings,
-  Bell,
-  User,
-  LogOut,
+  Play,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -37,12 +24,18 @@ import { Progress } from '@/components/ui/progress';
 
 interface UserActivity {
   id: string;
-  type: 'question_answered' | 'plan_completed' | 'streak_milestone' | 'badge_earned' | 'session_started' | 'session_completed';
+  type:
+    | 'question_answered'
+    | 'plan_completed'
+    | 'streak_milestone'
+    | 'badge_earned'
+    | 'session_started'
+    | 'session_completed';
   title: string;
   description: string;
   timestamp: Date;
   points?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface LearningPlanProgress {
@@ -93,11 +86,15 @@ interface Achievement {
 
 export default function EnhancedUserDashboard() {
   const [userStats, setUserStats] = useState<UserStats | null>(null);
-  const [learningPlans, setLearningPlans] = useState<LearningPlanProgress[]>([]);
+  const [learningPlans, setLearningPlans] = useState<LearningPlanProgress[]>(
+    []
+  );
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [recentActivities, setRecentActivities] = useState<UserActivity[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'progress' | 'achievements' | 'activity'>('overview');
+  const [activeTab, setActiveTab] = useState<
+    'overview' | 'progress' | 'achievements' | 'activity'
+  >('overview');
 
   // Mock data for demonstration
   useEffect(() => {
@@ -113,12 +110,12 @@ export default function EnhancedUserDashboard() {
       weeklyProgress: [65, 72, 68, 75, 80, 85, 82],
       monthlyProgress: [70, 75, 80, 82],
       skillLevels: {
-        'HTML': 85,
-        'CSS': 78,
-        'JavaScript': 82,
-        'React': 75,
-        'TypeScript': 68,
-        'Performance': 70,
+        HTML: 85,
+        CSS: 78,
+        JavaScript: 82,
+        React: 75,
+        TypeScript: 68,
+        Performance: 70,
       },
       recentActivities: [],
     };
@@ -286,13 +283,20 @@ export default function EnhancedUserDashboard() {
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'question_answered': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'plan_completed': return <Trophy className="w-4 h-4 text-yellow-500" />;
-      case 'streak_milestone': return <Zap className="w-4 h-4 text-blue-500" />;
-      case 'badge_earned': return <Award className="w-4 h-4 text-purple-500" />;
-      case 'session_started': return <Play className="w-4 h-4 text-orange-500" />;
-      case 'session_completed': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      default: return <Activity className="w-4 h-4 text-gray-500" />;
+      case 'question_answered':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'plan_completed':
+        return <Trophy className="w-4 h-4 text-yellow-500" />;
+      case 'streak_milestone':
+        return <Zap className="w-4 h-4 text-blue-500" />;
+      case 'badge_earned':
+        return <Award className="w-4 h-4 text-purple-500" />;
+      case 'session_started':
+        return <Play className="w-4 h-4 text-orange-500" />;
+      case 'session_completed':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      default:
+        return <Activity className="w-4 h-4 text-gray-500" />;
     }
   };
 
@@ -301,7 +305,9 @@ export default function EnhancedUserDashboard() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading dashboard...</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading dashboard...
+          </p>
         </div>
       </div>
     );
@@ -361,10 +367,18 @@ export default function EnhancedUserDashboard() {
               { id: 'progress', label: 'Progress', icon: TrendingUp },
               { id: 'achievements', label: 'Achievements', icon: Award },
               { id: 'activity', label: 'Activity', icon: Activity },
-            ].map((tab) => (
+            ].map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() =>
+                  setActiveTab(
+                    tab.id as
+                      | 'overview'
+                      | 'progress'
+                      | 'achievements'
+                      | 'activity'
+                  )
+                }
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                   activeTab === tab.id
                     ? 'bg-red-600 text-white'
@@ -400,7 +414,13 @@ export default function EnhancedUserDashboard() {
                   </div>
                   <div className="mt-4">
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Accuracy: {Math.round((userStats.totalCorrectAnswers / userStats.totalQuestionsAnswered) * 100)}%
+                      Accuracy:{' '}
+                      {Math.round(
+                        (userStats.totalCorrectAnswers /
+                          userStats.totalQuestionsAnswered) *
+                          100
+                      )}
+                      %
                     </p>
                   </div>
                 </CardContent>
@@ -413,7 +433,9 @@ export default function EnhancedUserDashboard() {
                       <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                         Average Score
                       </p>
-                      <p className={`text-2xl font-bold ${getGradeColor(userStats.averageScore)}`}>
+                      <p
+                        className={`text-2xl font-bold ${getGradeColor(userStats.averageScore)}`}
+                      >
                         {userStats.averageScore}%
                       </p>
                     </div>
@@ -486,22 +508,30 @@ export default function EnhancedUserDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {learningPlans.map((plan) => (
-                    <div key={plan.planId} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                  {learningPlans.map(plan => (
+                    <div
+                      key={plan.planId}
+                      className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                    >
                       <div className="flex items-center justify-between mb-3">
                         <div>
                           <h3 className="font-medium text-gray-900 dark:text-white">
                             {plan.planName}
                           </h3>
                           <p className="text-sm text-gray-600 dark:text-gray-400">
-                            {plan.completedQuestions}/{plan.totalQuestions} questions completed
+                            {plan.completedQuestions}/{plan.totalQuestions}{' '}
+                            questions completed
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className={`text-lg font-bold ${getGradeColor(plan.averageScore)}`}>
+                          <p
+                            className={`text-lg font-bold ${getGradeColor(plan.averageScore)}`}
+                          >
                             {plan.averageScore}%
                           </p>
-                          <Badge variant={plan.isCompleted ? 'default' : 'secondary'}>
+                          <Badge
+                            variant={plan.isCompleted ? 'default' : 'secondary'}
+                          >
                             {plan.isCompleted ? 'Completed' : 'In Progress'}
                           </Badge>
                         </div>
@@ -510,9 +540,15 @@ export default function EnhancedUserDashboard() {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {plan.sections.map((section, index) => (
                           <div key={index} className="text-center">
-                            <p className="text-sm text-gray-600 dark:text-gray-400">{section.name}</p>
-                            <p className="font-medium text-gray-900 dark:text-white">{section.progress}%</p>
-                            <p className="text-xs text-gray-500">{section.averageScore}% avg</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              {section.name}
+                            </p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              {section.progress}%
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {section.averageScore}% avg
+                            </p>
                           </div>
                         ))}
                       </div>
@@ -532,17 +568,24 @@ export default function EnhancedUserDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {Object.entries(userStats.skillLevels).map(([skill, level]) => (
-                    <div key={skill} className="flex items-center justify-between">
-                      <span className="font-medium text-gray-900 dark:text-white">{skill}</span>
-                      <div className="flex items-center space-x-3">
-                        <Progress value={level} className="w-32" />
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 w-12">
-                          {level}%
+                  {Object.entries(userStats.skillLevels).map(
+                    ([skill, level]) => (
+                      <div
+                        key={skill}
+                        className="flex items-center justify-between"
+                      >
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {skill}
                         </span>
+                        <div className="flex items-center space-x-3">
+                          <Progress value={level} className="w-32" />
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400 w-12">
+                            {level}%
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -560,13 +603,18 @@ export default function EnhancedUserDashboard() {
                 <CardContent>
                   <div className="space-y-4">
                     {userStats.weeklyProgress.map((progress, index) => (
-                      <div key={index} className="flex items-center justify-between">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between"
+                      >
                         <span className="text-sm text-gray-600 dark:text-gray-400">
                           Day {index + 1}
                         </span>
                         <div className="flex items-center space-x-3">
                           <Progress value={progress} className="w-32" />
-                          <span className="text-sm font-medium w-12">{progress}%</span>
+                          <span className="text-sm font-medium w-12">
+                            {progress}%
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -581,13 +629,18 @@ export default function EnhancedUserDashboard() {
                 <CardContent>
                   <div className="space-y-4">
                     {userStats.monthlyProgress.map((progress, index) => (
-                      <div key={index} className="flex items-center justify-between">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between"
+                      >
                         <span className="text-sm text-gray-600 dark:text-gray-400">
                           Week {index + 1}
                         </span>
                         <div className="flex items-center space-x-3">
                           <Progress value={progress} className="w-32" />
-                          <span className="text-sm font-medium w-12">{progress}%</span>
+                          <span className="text-sm font-medium w-12">
+                            {progress}%
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -602,8 +655,11 @@ export default function EnhancedUserDashboard() {
         {activeTab === 'achievements' && (
           <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {achievements.map((achievement) => (
-                <Card key={achievement.id} className={`${achievement.earned ? 'ring-2 ring-yellow-400' : ''}`}>
+              {achievements.map(achievement => (
+                <Card
+                  key={achievement.id}
+                  className={`${achievement.earned ? 'ring-2 ring-yellow-400' : ''}`}
+                >
                   <CardContent className="p-6 text-center">
                     <div className="text-4xl mb-4">
                       {achievement.earned ? achievement.icon : '🔒'}
@@ -625,7 +681,13 @@ export default function EnhancedUserDashboard() {
                       </div>
                     ) : achievement.progress !== undefined ? (
                       <div>
-                        <Progress value={(achievement.progress / achievement.maxProgress!) * 100} className="mb-2" />
+                        <Progress
+                          value={
+                            (achievement.progress / achievement.maxProgress!) *
+                            100
+                          }
+                          className="mb-2"
+                        />
                         <p className="text-xs text-gray-500">
                           {achievement.progress}/{achievement.maxProgress}
                         </p>
@@ -652,8 +714,11 @@ export default function EnhancedUserDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {recentActivities.map((activity) => (
-                    <div key={activity.id} className="flex items-start space-x-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                  {recentActivities.map(activity => (
+                    <div
+                      key={activity.id}
+                      className="flex items-start space-x-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                    >
                       <div className="flex-shrink-0">
                         {getActivityIcon(activity.type)}
                       </div>
