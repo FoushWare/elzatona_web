@@ -718,7 +718,7 @@ export default function GuidedLearningAdminPage() {
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     {/* Status Toggle */}
                     <Button
                       variant={plan.isActive ? 'default' : 'outline'}
@@ -732,7 +732,7 @@ export default function GuidedLearningAdminPage() {
                           `Plan "${plan.name}" has been ${!plan.isActive ? 'activated' : 'deactivated'} successfully!`
                         );
                       }}
-                      className={`flex items-center gap-1 ${
+                      className={`flex items-center gap-1 w-full sm:w-auto ${
                         plan.isActive
                           ? 'bg-green-600 hover:bg-green-700 text-white'
                           : 'text-gray-600 hover:text-gray-700 hover:bg-gray-50'
@@ -748,13 +748,13 @@ export default function GuidedLearningAdminPage() {
                       ) : (
                         <PowerOff className="w-4 h-4" />
                       )}
-                      <span className="hidden sm:inline">
+                      <span className="text-sm">
                         {plan.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </Button>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-1">
+                    <div className="grid grid-cols-2 sm:flex gap-1 sm:gap-1">
                       <Button
                         variant="outline"
                         size="sm"
@@ -764,11 +764,13 @@ export default function GuidedLearningAdminPage() {
                             '_blank'
                           )
                         }
-                        className="flex items-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                        className="flex items-center justify-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-xs sm:text-sm"
                         title="Preview this plan"
                       >
                         <Eye className="w-4 h-4" />
-                        <span className="hidden lg:inline">Preview</span>
+                        <span className="hidden min-[475px]:inline sm:hidden md:inline">
+                          Preview
+                        </span>
                       </Button>
                       <Button
                         variant="outline"
@@ -776,11 +778,13 @@ export default function GuidedLearningAdminPage() {
                         onClick={() =>
                           router.push(`/admin/guided-learning/${plan.id}/edit`)
                         }
-                        className="flex items-center gap-1 text-green-600 hover:text-green-700 hover:bg-green-50"
+                        className="flex items-center justify-center gap-1 text-green-600 hover:text-green-700 hover:bg-green-50 text-xs sm:text-sm"
                         title="Edit plan details and questions"
                       >
                         <Edit className="w-4 h-4" />
-                        <span className="hidden lg:inline">Edit</span>
+                        <span className="hidden min-[475px]:inline sm:hidden md:inline">
+                          Edit
+                        </span>
                       </Button>
                       <Button
                         variant="outline"
@@ -798,11 +802,13 @@ export default function GuidedLearningAdminPage() {
                             `Plan "${newPlan.name}" has been duplicated successfully!`
                           );
                         }}
-                        className="flex items-center gap-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                        className="flex items-center justify-center gap-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50 text-xs sm:text-sm"
                         title="Create a copy of this plan"
                       >
                         <Copy className="w-4 h-4" />
-                        <span className="hidden lg:inline">Copy</span>
+                        <span className="hidden min-[475px]:inline sm:hidden md:inline">
+                          Copy
+                        </span>
                       </Button>
                       <Button
                         variant="outline"
@@ -819,11 +825,13 @@ export default function GuidedLearningAdminPage() {
                             );
                           }
                         }}
-                        className="flex items-center gap-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        className="flex items-center justify-center gap-1 text-red-600 hover:text-red-700 hover:bg-red-50 text-xs sm:text-sm"
                         title="Permanently delete this plan"
                       >
                         <Trash2 className="w-4 h-4" />
-                        <span className="hidden lg:inline">Delete</span>
+                        <span className="hidden min-[475px]:inline sm:hidden md:inline">
+                          Delete
+                        </span>
                       </Button>
                     </div>
                   </div>
