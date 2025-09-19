@@ -76,9 +76,15 @@ export default function AdminNavbar() {
       description: 'Add, edit, and manage questions',
     },
     {
+      href: '/admin/guided-learning',
+      label: 'Guided Learning',
+      icon: BookOpen,
+      description: 'Create and manage learning plans',
+    },
+    {
       href: '/admin/sections',
       label: 'Learning Sections',
-      icon: BookOpen,
+      icon: FileText,
       description: 'Manage learning path sections',
     },
     {
