@@ -34,4 +34,13 @@ sleep 3
 
 # Restart development server
 echo "🚀 Starting fresh development server..."
-npm run dev
+nohup npm run dev > dev.log 2>&1 &
+
+echo "✅ Clean build and server restart completed!"
+echo "📝 Server logs: tail -f dev.log"
+echo "🌐 Access: http://localhost:3000"
+
+# Kill current terminal and start fresh
+echo "🔄 Starting fresh terminal session..."
+sleep 2
+exec $SHELL
