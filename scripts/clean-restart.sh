@@ -43,4 +43,10 @@ echo "🌐 Access: http://localhost:3000"
 # Kill current terminal and start fresh
 echo "🔄 Starting fresh terminal session..."
 sleep 2
-exec $SHELL
+
+# Get the current shell or default to zsh
+current_shell=${SHELL:-/bin/zsh}
+
+# Kill current terminal session and start new one
+echo "💀 Killing current terminal session..."
+exec "$current_shell" -l
