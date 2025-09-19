@@ -26,6 +26,9 @@ postCommit:
 -   sleep 2
 -   nohup npm run dev > dev.log 2>&1 &
 -   echo "✅ Development server restarted!"
+-   echo "🔄 Starting fresh terminal session..."
+-   sleep 2
+-   exec $SHELL
 - else
 -   echo "ℹ️  On branch '$current_branch', skipping server restart"
 - fi
