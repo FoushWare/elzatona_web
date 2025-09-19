@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -23,16 +22,11 @@ import {
 } from '@/components/ui/dialog';
 import {
   Plus,
-  Edit,
-  Trash2,
-  Search,
-  Filter,
   ArrowLeft,
   Save,
   Eye,
   Target,
   Clock,
-  Users,
   CheckCircle,
   XCircle,
   AlertCircle,
@@ -72,10 +66,27 @@ interface Question {
   title: string;
   content: string;
   type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended';
+  options?: QuestionOption[];
+  correctAnswers: string[];
+  explanation: string;
   category: string;
+  subcategory?: string;
   difficulty: 'easy' | 'medium' | 'hard';
   tags: string[];
+  learningPath: string;
+  points: number;
+  timeLimit?: number;
   isActive: boolean;
+  isComplete: boolean;
+  createdAt: string;
+  updatedAt: string;
+  order?: number;
+}
+
+interface QuestionOption {
+  id: string;
+  text: string;
+  isCorrect: boolean;
 }
 
 interface QuestionCategory {
@@ -86,35 +97,196 @@ interface QuestionCategory {
 }
 
 const QUESTION_CATEGORIES: QuestionCategory[] = [
-  { id: 'html', name: 'HTML', description: 'HTML fundamentals and best practices', color: 'bg-orange-100 text-orange-800' },
-  { id: 'css', name: 'CSS', description: 'CSS styling, layout, and animations', color: 'bg-blue-100 text-blue-800' },
-  { id: 'javascript', name: 'JavaScript', description: 'JavaScript fundamentals and ES6+', color: 'bg-yellow-100 text-yellow-800' },
-  { id: 'typescript', name: 'TypeScript', description: 'TypeScript and type systems', color: 'bg-blue-100 text-blue-800' },
-  { id: 'react', name: 'React', description: 'React components, hooks, and patterns', color: 'bg-cyan-100 text-cyan-800' },
-  { id: 'performance', name: 'Performance', description: 'Web performance optimization', color: 'bg-green-100 text-green-800' },
-  { id: 'problem-solving', name: 'Problem Solving', description: 'Algorithm and problem-solving skills', color: 'bg-purple-100 text-purple-800' },
-  { id: 'patterns', name: 'Design Patterns', description: 'Frontend design patterns and architecture', color: 'bg-pink-100 text-pink-800' },
-  { id: 'system-design', name: 'System Design', description: 'Frontend system design and architecture', color: 'bg-indigo-100 text-indigo-800' },
-  { id: 'security', name: 'Security', description: 'Web security best practices', color: 'bg-red-100 text-red-800' },
-  { id: 'testing', name: 'Testing', description: 'Frontend testing strategies', color: 'bg-emerald-100 text-emerald-800' },
-  { id: 'accessibility', name: 'Accessibility', description: 'Web accessibility standards', color: 'bg-teal-100 text-teal-800' },
+  {
+    id: 'html',
+    name: 'HTML',
+    description: 'HTML fundamentals and best practices',
+    color: 'bg-orange-100 text-orange-800',
+  },
+  {
+    id: 'css',
+    name: 'CSS',
+    description: 'CSS styling, layout, and animations',
+    color: 'bg-blue-100 text-blue-800',
+  },
+  {
+    id: 'javascript',
+    name: 'JavaScript',
+    description: 'JavaScript fundamentals and ES6+',
+    color: 'bg-yellow-100 text-yellow-800',
+  },
+  {
+    id: 'typescript',
+    name: 'TypeScript',
+    description: 'TypeScript and type systems',
+    color: 'bg-blue-100 text-blue-800',
+  },
+  {
+    id: 'react',
+    name: 'React',
+    description: 'React components, hooks, and patterns',
+    color: 'bg-cyan-100 text-cyan-800',
+  },
+  {
+    id: 'performance',
+    name: 'Performance',
+    description: 'Web performance optimization',
+    color: 'bg-green-100 text-green-800',
+  },
+  {
+    id: 'problem-solving',
+    name: 'Problem Solving',
+    description: 'Algorithm and problem-solving skills',
+    color: 'bg-purple-100 text-purple-800',
+  },
+  {
+    id: 'patterns',
+    name: 'Design Patterns',
+    description: 'Frontend design patterns and architecture',
+    color: 'bg-pink-100 text-pink-800',
+  },
+  {
+    id: 'system-design',
+    name: 'System Design',
+    description: 'Frontend system design and architecture',
+    color: 'bg-indigo-100 text-indigo-800',
+  },
+  {
+    id: 'security',
+    name: 'Security',
+    description: 'Web security best practices',
+    color: 'bg-red-100 text-red-800',
+  },
+  {
+    id: 'testing',
+    name: 'Testing',
+    description: 'Frontend testing strategies',
+    color: 'bg-emerald-100 text-emerald-800',
+  },
+  {
+    id: 'accessibility',
+    name: 'Accessibility',
+    description: 'Web accessibility standards',
+    color: 'bg-teal-100 text-teal-800',
+  },
 ];
 
 export default function PlanEditorPage() {
   const params = useParams();
   const router = useRouter();
   const planId = params.planId as string;
-  
+
   const [plan, setPlan] = useState<LearningPlanTemplate | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterDifficulty, setFilterDifficulty] = useState('all');
+  const [filterLearningPath, setFilterLearningPath] = useState('all');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [showQuestionDialog, setShowQuestionDialog] = useState(false);
 
-  // Mock data for demonstration
+  // Fetch questions from the API
+  const fetchQuestions = useCallback(async () => {
+    try {
+      const response = await fetch(
+        '/api/questions/unified?isActive=true&isComplete=true'
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setAllQuestions(data.data || []);
+        setQuestions(data.data || []);
+      } else {
+        console.error('Failed to fetch questions');
+        // Fallback to mock data
+        loadMockQuestions();
+      }
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+      // Fallback to mock data
+      loadMockQuestions();
+    }
+  }, []);
+
+  // Mock data fallback
+  const loadMockQuestions = () => {
+    const mockData: Question[] = [
+      {
+        id: 'q1',
+        title: 'What is HTML5 semantic markup?',
+        content: 'Explain the purpose and benefits of HTML5 semantic elements.',
+        type: 'text',
+        options: [],
+        correctAnswers: [],
+        explanation:
+          'HTML5 semantic elements provide meaning to the structure of web pages.',
+        category: 'html',
+        difficulty: 'easy',
+        tags: ['html5', 'semantic', 'accessibility'],
+        learningPath: 'frontend-basics',
+        points: 10,
+        isActive: true,
+        isComplete: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'q2',
+        title: 'CSS Flexbox vs Grid',
+        content: 'Compare CSS Flexbox and Grid layout systems.',
+        type: 'text',
+        options: [],
+        correctAnswers: [],
+        explanation: 'Flexbox is for 1D layouts while Grid is for 2D layouts.',
+        category: 'css',
+        difficulty: 'medium',
+        tags: ['css', 'flexbox', 'grid', 'layout'],
+        learningPath: 'frontend-basics',
+        points: 15,
+        isActive: true,
+        isComplete: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: 'q3',
+        title: 'JavaScript Hoisting',
+        content: 'Explain JavaScript hoisting with examples.',
+        type: 'code',
+        options: [
+          { id: 'a', text: 'Variables are moved to the top', isCorrect: true },
+          {
+            id: 'b',
+            text: 'Functions can be called before declaration',
+            isCorrect: true,
+          },
+          { id: 'c', text: 'Only let and const are hoisted', isCorrect: false },
+          {
+            id: 'd',
+            text: 'Hoisting only works in strict mode',
+            isCorrect: false,
+          },
+        ],
+        correctAnswers: ['a', 'b'],
+        explanation:
+          'Hoisting moves variable and function declarations to the top of their scope.',
+        category: 'javascript',
+        difficulty: 'medium',
+        tags: ['javascript', 'hoisting', 'scope'],
+        learningPath: 'javascript-deep-dive',
+        points: 20,
+        isActive: true,
+        isComplete: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+    setAllQuestions(mockData);
+    setQuestions(mockData);
+  };
+
+  // Load data on component mount
   useEffect(() => {
     const mockPlan: LearningPlanTemplate = {
       id: planId,
@@ -125,10 +297,38 @@ export default function PlanEditorPage() {
       totalQuestions: 150,
       dailyQuestions: 50,
       sections: [
-        { id: 'html-css', name: 'HTML & CSS', category: 'html', questions: ['q1', 'q2'], weight: 20, order: 1 },
-        { id: 'javascript', name: 'JavaScript', category: 'javascript', questions: ['q3', 'q4', 'q5'], weight: 40, order: 2 },
-        { id: 'react', name: 'React', category: 'react', questions: ['q6', 'q7'], weight: 20, order: 3 },
-        { id: 'typescript', name: 'TypeScript', category: 'typescript', questions: ['q8', 'q9'], weight: 20, order: 4 },
+        {
+          id: 'html-css',
+          name: 'HTML & CSS',
+          category: 'html',
+          questions: ['q1', 'q2'],
+          weight: 20,
+          order: 1,
+        },
+        {
+          id: 'javascript',
+          name: 'JavaScript',
+          category: 'javascript',
+          questions: ['q3', 'q4', 'q5'],
+          weight: 40,
+          order: 2,
+        },
+        {
+          id: 'react',
+          name: 'React',
+          category: 'react',
+          questions: ['q6', 'q7'],
+          weight: 20,
+          order: 3,
+        },
+        {
+          id: 'typescript',
+          name: 'TypeScript',
+          category: 'typescript',
+          questions: ['q8', 'q9'],
+          weight: 20,
+          order: 4,
+        },
       ],
       features: ['Balanced coverage', 'Daily milestones', 'TypeScript basics'],
       estimatedTime: '4-5 hours',
@@ -232,26 +432,70 @@ export default function PlanEditorPage() {
     ];
 
     setPlan(mockPlan);
-    setQuestions(mockQuestions);
     setLoading(false);
+
+    // Fetch questions from API
+    fetchQuestions();
   }, [planId]);
 
-  const filteredQuestions = questions.filter(question => {
-    const matchesSearch = question.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         question.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         question.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = filterCategory === 'all' || question.category === filterCategory;
-    const matchesDifficulty = filterDifficulty === 'all' || question.difficulty === filterDifficulty;
-    
-    return matchesSearch && matchesCategory && matchesDifficulty;
-  });
+  // Filter questions based on search and filters
+  useEffect(() => {
+    let filtered = allQuestions;
+
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.filter(
+        question =>
+          question.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          question.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          question.tags.some(tag =>
+            tag.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+      );
+    }
+
+    // Apply category filter
+    if (filterCategory !== 'all') {
+      filtered = filtered.filter(
+        question => question.category === filterCategory
+      );
+    }
+
+    // Apply difficulty filter
+    if (filterDifficulty !== 'all') {
+      filtered = filtered.filter(
+        question => question.difficulty === filterDifficulty
+      );
+    }
+
+    // Apply learning path filter
+    if (filterLearningPath !== 'all') {
+      filtered = filtered.filter(
+        question => question.learningPath === filterLearningPath
+      );
+    }
+
+    setQuestions(filtered);
+  }, [
+    allQuestions,
+    searchTerm,
+    filterCategory,
+    filterDifficulty,
+    filterLearningPath,
+  ]);
+
+  // Questions are now filtered in useEffect, so we use the filtered questions directly
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'hard': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'easy':
+        return 'bg-green-100 text-green-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'hard':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -262,32 +506,35 @@ export default function PlanEditorPage() {
 
   const addQuestionToSection = (questionId: string, sectionId: string) => {
     if (!plan) return;
-    
+
     setPlan(prev => {
       if (!prev) return null;
       return {
         ...prev,
-        sections: prev.sections.map(section => 
-          section.id === sectionId 
+        sections: prev.sections.map(section =>
+          section.id === sectionId
             ? { ...section, questions: [...section.questions, questionId] }
             : section
-        )
+        ),
       };
     });
   };
 
   const removeQuestionFromSection = (questionId: string, sectionId: string) => {
     if (!plan) return;
-    
+
     setPlan(prev => {
       if (!prev) return null;
       return {
         ...prev,
-        sections: prev.sections.map(section => 
-          section.id === sectionId 
-            ? { ...section, questions: section.questions.filter(id => id !== questionId) }
+        sections: prev.sections.map(section =>
+          section.id === sectionId
+            ? {
+                ...section,
+                questions: section.questions.filter(id => id !== questionId),
+              }
             : section
-        )
+        ),
       };
     });
   };
@@ -309,7 +556,9 @@ export default function PlanEditorPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading plan editor...</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading plan editor...
+          </p>
         </div>
       </div>
     );
@@ -324,7 +573,7 @@ export default function PlanEditorPage() {
             Plan Not Found
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            The learning plan you're looking for doesn't exist.
+            The learning plan you&apos;re looking for doesn&apos;t exist.
           </p>
           <Button onClick={() => router.push('/admin/guided-learning')}>
             Back to Plans
@@ -340,8 +589,8 @@ export default function PlanEditorPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-4 mb-4">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => router.push('/admin/guided-learning')}
               className="flex items-center space-x-2"
             >
@@ -369,9 +618,14 @@ export default function PlanEditorPage() {
                 <div className="flex items-center space-x-2">
                   <Target className="w-5 h-5 text-blue-500" />
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Total Questions</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Total Questions
+                    </p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {plan.sections.reduce((total, section) => total + section.questions.length, 0)}
+                      {plan.sections.reduce(
+                        (total, section) => total + section.questions.length,
+                        0
+                      )}
                     </p>
                   </div>
                 </div>
@@ -382,9 +636,16 @@ export default function PlanEditorPage() {
                 <div className="flex items-center space-x-2">
                   <Clock className="w-5 h-5 text-green-500" />
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Daily Questions</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Daily Questions
+                    </p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {Math.ceil(plan.sections.reduce((total, section) => total + section.questions.length, 0) / plan.duration)}
+                      {Math.ceil(
+                        plan.sections.reduce(
+                          (total, section) => total + section.questions.length,
+                          0
+                        ) / plan.duration
+                      )}
                     </p>
                   </div>
                 </div>
@@ -395,7 +656,9 @@ export default function PlanEditorPage() {
                 <div className="flex items-center space-x-2">
                   <BookOpen className="w-5 h-5 text-purple-500" />
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Sections</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Sections
+                    </p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       {plan.sections.length}
                     </p>
@@ -408,10 +671,18 @@ export default function PlanEditorPage() {
                 <div className="flex items-center space-x-2">
                   <Settings className="w-5 h-5 text-orange-500" />
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Difficulty</p>
-                    <Badge className={plan.difficulty === 'Beginner' ? 'bg-green-100 text-green-800' : 
-                                     plan.difficulty === 'Intermediate' ? 'bg-yellow-100 text-yellow-800' : 
-                                     'bg-red-100 text-red-800'}>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Difficulty
+                    </p>
+                    <Badge
+                      className={
+                        plan.difficulty === 'Beginner'
+                          ? 'bg-green-100 text-green-800'
+                          : plan.difficulty === 'Intermediate'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-red-100 text-red-800'
+                      }
+                    >
                       {plan.difficulty}
                     </Badge>
                   </div>
@@ -432,18 +703,28 @@ export default function PlanEditorPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {plan.sections.map((section, index) => (
-                  <Card key={section.id} className={`cursor-pointer transition-colors ${
-                    selectedSection === section.id ? 'ring-2 ring-red-500 bg-red-50 dark:bg-red-900/20' : ''
-                  }`} onClick={() => setSelectedSection(section.id)}>
+                {plan.sections.map(section => (
+                  <Card
+                    key={section.id}
+                    className={`cursor-pointer transition-colors ${
+                      selectedSection === section.id
+                        ? 'ring-2 ring-red-500 bg-red-50 dark:bg-red-900/20'
+                        : ''
+                    }`}
+                    onClick={() => setSelectedSection(section.id)}
+                  >
                     <CardContent className="p-4">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h3 className="font-medium text-gray-900 dark:text-white">
                             {section.name}
                           </h3>
-                          <Badge className={`text-xs ${getCategoryColor(section.category)}`}>
-                            {QUESTION_CATEGORIES.find(cat => cat.id === section.category)?.name || section.category}
+                          <Badge
+                            className={`text-xs ${getCategoryColor(section.category)}`}
+                          >
+                            {QUESTION_CATEGORIES.find(
+                              cat => cat.id === section.category
+                            )?.name || section.category}
                           </Badge>
                         </div>
                         <Badge variant="secondary">
@@ -474,7 +755,10 @@ export default function PlanEditorPage() {
                     <Target className="w-5 h-5" />
                     <span>Available Questions</span>
                   </div>
-                  <Dialog open={showQuestionDialog} onOpenChange={setShowQuestionDialog}>
+                  <Dialog
+                    open={showQuestionDialog}
+                    onOpenChange={setShowQuestionDialog}
+                  >
                     <DialogTrigger asChild>
                       <Button size="sm">
                         <Plus className="w-4 h-4 mr-2" />
@@ -497,11 +781,14 @@ export default function PlanEditorPage() {
                     <Input
                       placeholder="Search questions..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={e => setSearchTerm(e.target.value)}
                       className="w-full"
                     />
                   </div>
-                  <Select value={filterCategory} onValueChange={setFilterCategory}>
+                  <Select
+                    value={filterCategory}
+                    onValueChange={setFilterCategory}
+                  >
                     <SelectTrigger className="w-48">
                       <SelectValue placeholder="Category" />
                     </SelectTrigger>
@@ -514,7 +801,10 @@ export default function PlanEditorPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                  <Select value={filterDifficulty} onValueChange={setFilterDifficulty}>
+                  <Select
+                    value={filterDifficulty}
+                    onValueChange={setFilterDifficulty}
+                  >
                     <SelectTrigger className="w-48">
                       <SelectValue placeholder="Difficulty" />
                     </SelectTrigger>
@@ -529,8 +819,11 @@ export default function PlanEditorPage() {
 
                 {/* Questions List */}
                 <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {filteredQuestions.map((question) => (
-                    <Card key={question.id} className="hover:shadow-md transition-shadow">
+                  {questions.map(question => (
+                    <Card
+                      key={question.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
@@ -541,14 +834,26 @@ export default function PlanEditorPage() {
                               {question.content}
                             </p>
                             <div className="flex flex-wrap gap-2 mb-3">
-                              <Badge className={getCategoryColor(question.category)}>
-                                {QUESTION_CATEGORIES.find(cat => cat.id === question.category)?.name || question.category}
+                              <Badge
+                                className={getCategoryColor(question.category)}
+                              >
+                                {QUESTION_CATEGORIES.find(
+                                  cat => cat.id === question.category
+                                )?.name || question.category}
                               </Badge>
-                              <Badge className={getDifficultyColor(question.difficulty)}>
+                              <Badge
+                                className={getDifficultyColor(
+                                  question.difficulty
+                                )}
+                              >
                                 {question.difficulty}
                               </Badge>
                               {question.tags.slice(0, 2).map((tag, index) => (
-                                <Badge key={index} variant="outline" className="text-xs">
+                                <Badge
+                                  key={index}
+                                  variant="outline"
+                                  className="text-xs"
+                                >
                                   {tag}
                                 </Badge>
                               ))}
@@ -563,16 +868,37 @@ export default function PlanEditorPage() {
                             {selectedSection && (
                               <Button
                                 size="sm"
-                                variant={isQuestionInSection(question.id, selectedSection) ? "destructive" : "default"}
+                                variant={
+                                  isQuestionInSection(
+                                    question.id,
+                                    selectedSection
+                                  )
+                                    ? 'destructive'
+                                    : 'default'
+                                }
                                 onClick={() => {
-                                  if (isQuestionInSection(question.id, selectedSection)) {
-                                    removeQuestionFromSection(question.id, selectedSection);
+                                  if (
+                                    isQuestionInSection(
+                                      question.id,
+                                      selectedSection
+                                    )
+                                  ) {
+                                    removeQuestionFromSection(
+                                      question.id,
+                                      selectedSection
+                                    );
                                   } else {
-                                    addQuestionToSection(question.id, selectedSection);
+                                    addQuestionToSection(
+                                      question.id,
+                                      selectedSection
+                                    );
                                   }
                                 }}
                               >
-                                {isQuestionInSection(question.id, selectedSection) ? (
+                                {isQuestionInSection(
+                                  question.id,
+                                  selectedSection
+                                ) ? (
                                   <>
                                     <XCircle className="w-4 h-4 mr-1" />
                                     Remove
@@ -603,7 +929,8 @@ export default function PlanEditorPage() {
                       No questions found
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400 mb-4">
-                      Try adjusting your search filters or create a new question.
+                      Try adjusting your search filters or create a new
+                      question.
                     </p>
                     <Button onClick={() => setShowQuestionDialog(true)}>
                       <Plus className="w-4 h-4 mr-2" />

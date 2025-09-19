@@ -1,24 +1,20 @@
 // v1.0 - Guided Learning Service
 // Handles guided learning plans, progress tracking, and user activities
 
-import { 
-  collection, 
-  doc, 
-  getDocs, 
-  getDoc, 
-  setDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
-  limit, 
-  addDoc, 
+import {
+  collection,
+  doc,
+  getDocs,
+  getDoc,
+  setDoc,
+  updateDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  addDoc,
   Timestamp,
-  writeBatch,
   increment,
-  arrayUnion,
-  arrayRemove,
 } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -60,11 +56,14 @@ export interface UserPlanProgress {
   currentSection: number;
   completedQuestions: string[];
   scores: Record<string, number>; // questionId -> score
-  sectionProgress: Record<string, {
-    completed: number;
-    total: number;
-    averageScore: number;
-  }>;
+  sectionProgress: Record<
+    string,
+    {
+      completed: number;
+      total: number;
+      averageScore: number;
+    }
+  >;
   overallProgress: number;
   totalScore: number;
   averageScore: number;
@@ -83,12 +82,19 @@ export interface UserPlanProgress {
 export interface UserActivity {
   id: string;
   userId: string;
-  type: 'question_answered' | 'plan_completed' | 'streak_milestone' | 'badge_earned' | 'session_started' | 'session_completed' | 'plan_started';
+  type:
+    | 'question_answered'
+    | 'plan_completed'
+    | 'streak_milestone'
+    | 'badge_earned'
+    | 'session_started'
+    | 'session_completed'
+    | 'plan_started';
   title: string;
   description: string;
   timestamp: Date;
   points?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   planId?: string;
   questionId?: string;
 }
@@ -118,7 +124,12 @@ export interface Achievement {
   icon: string;
   category: 'learning' | 'streak' | 'performance' | 'social';
   criteria: {
-    type: 'questions_answered' | 'streak_days' | 'plan_completed' | 'score_achieved' | 'time_studied';
+    type:
+      | 'questions_answered'
+      | 'streak_days'
+      | 'plan_completed'
+      | 'score_achieved'
+      | 'time_studied';
     target: number;
     timeframe?: 'daily' | 'weekly' | 'monthly' | 'all_time';
   };
@@ -156,7 +167,9 @@ export class GuidedLearningService {
   }
 
   // Learning Plans Management
-  async createPlan(planData: Omit<LearningPlanTemplate, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  async createPlan(
+    planData: Omit<LearningPlanTemplate, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<string> {
     try {
       const planRef = await addDoc(collection(db, this.COLLECTIONS.PLANS), {
         ...planData,
@@ -170,7 +183,10 @@ export class GuidedLearningService {
     }
   }
 
-  async updatePlan(planId: string, updates: Partial<LearningPlanTemplate>): Promise<void> {
+  async updatePlan(
+    planId: string,
+    updates: Partial<LearningPlanTemplate>
+  ): Promise<void> {
     try {
       const planRef = doc(db, this.COLLECTIONS.PLANS, planId);
       await updateDoc(planRef, {
@@ -187,7 +203,7 @@ export class GuidedLearningService {
     try {
       const planRef = doc(db, this.COLLECTIONS.PLANS, planId);
       const planSnap = await getDoc(planRef);
-      
+
       if (planSnap.exists()) {
         const data = planSnap.data();
         return {
@@ -211,7 +227,7 @@ export class GuidedLearningService {
         where('isActive', '==', true),
         orderBy('createdAt', 'desc')
       );
-      
+
       const plansSnap = await getDocs(plansQuery);
       return plansSnap.docs.map(doc => ({
         id: doc.id,
@@ -231,22 +247,32 @@ export class GuidedLearningService {
       const plan = await this.getPlan(planId);
       if (!plan) throw new Error('Plan not found');
 
-      const progressRef = doc(db, this.COLLECTIONS.USER_PROGRESS, `${userId}_${planId}`);
-      
+      const progressRef = doc(
+        db,
+        this.COLLECTIONS.USER_PROGRESS,
+        `${userId}_${planId}`
+      );
+
       // Initialize user progress
       const initialProgress: Omit<UserPlanProgress, 'planId' | 'userId'> = {
         currentDay: 1,
         currentSection: 0,
         completedQuestions: [],
         scores: {},
-        sectionProgress: plan.sections.reduce((acc, section) => {
-          acc[section.category] = {
-            completed: 0,
-            total: section.questions.length,
-            averageScore: 0,
-          };
-          return acc;
-        }, {} as Record<string, { completed: number; total: number; averageScore: number }>),
+        sectionProgress: plan.sections.reduce(
+          (acc, section) => {
+            acc[section.category] = {
+              completed: 0,
+              total: section.questions.length,
+              averageScore: 0,
+            };
+            return acc;
+          },
+          {} as Record<
+            string,
+            { completed: number; total: number; averageScore: number }
+          >
+        ),
         overallProgress: 0,
         totalScore: 0,
         averageScore: 0,
@@ -289,17 +315,21 @@ export class GuidedLearningService {
   }
 
   async submitAnswer(
-    userId: string, 
-    planId: string, 
-    questionId: string, 
-    score: number, 
-    timeSpent: number, 
+    userId: string,
+    planId: string,
+    questionId: string,
+    score: number,
+    timeSpent: number,
     isCorrect: boolean
   ): Promise<void> {
     try {
-      const progressRef = doc(db, this.COLLECTIONS.USER_PROGRESS, `${userId}_${planId}`);
+      const progressRef = doc(
+        db,
+        this.COLLECTIONS.USER_PROGRESS,
+        `${userId}_${planId}`
+      );
       const progressSnap = await getDoc(progressRef);
-      
+
       if (!progressSnap.exists()) {
         throw new Error('User progress not found');
       }
@@ -314,8 +344,11 @@ export class GuidedLearningService {
 
       // Update progress
       const updatedScores = { ...progress.scores, [questionId]: score };
-      const updatedCompletedQuestions = [...progress.completedQuestions, questionId];
-      
+      const updatedCompletedQuestions = [
+        ...progress.completedQuestions,
+        questionId,
+      ];
+
       // Calculate section progress
       const sectionProgress = { ...progress.sectionProgress };
       sectionProgress[section.category] = {
@@ -332,9 +365,12 @@ export class GuidedLearningService {
       const totalQuestions = plan.totalQuestions;
       const completedQuestions = updatedCompletedQuestions.length;
       const overallProgress = (completedQuestions / totalQuestions) * 100;
-      
+
       // Calculate total and average scores
-      const totalScore = Object.values(updatedScores).reduce((sum, s) => sum + s, 0);
+      const totalScore = Object.values(updatedScores).reduce(
+        (sum, s) => sum + s,
+        0
+      );
       const averageScore = totalScore / completedQuestions;
 
       // Update current session
@@ -413,9 +449,13 @@ export class GuidedLearningService {
 
   async completePlan(userId: string, planId: string): Promise<void> {
     try {
-      const progressRef = doc(db, this.COLLECTIONS.USER_PROGRESS, `${userId}_${planId}`);
+      const progressRef = doc(
+        db,
+        this.COLLECTIONS.USER_PROGRESS,
+        `${userId}_${planId}`
+      );
       const progressSnap = await getDoc(progressRef);
-      
+
       if (!progressSnap.exists()) {
         throw new Error('User progress not found');
       }
@@ -452,11 +492,18 @@ export class GuidedLearningService {
     }
   }
 
-  async getUserProgress(userId: string, planId: string): Promise<UserPlanProgress | null> {
+  async getUserProgress(
+    userId: string,
+    planId: string
+  ): Promise<UserPlanProgress | null> {
     try {
-      const progressRef = doc(db, this.COLLECTIONS.USER_PROGRESS, `${userId}_${planId}`);
+      const progressRef = doc(
+        db,
+        this.COLLECTIONS.USER_PROGRESS,
+        `${userId}_${planId}`
+      );
       const progressSnap = await getDoc(progressRef);
-      
+
       if (progressSnap.exists()) {
         const data = progressSnap.data();
         return {
@@ -464,10 +511,13 @@ export class GuidedLearningService {
           startDate: data.startDate?.toDate() || new Date(),
           lastActivity: data.lastActivity?.toDate() || new Date(),
           completionDate: data.completionDate?.toDate(),
-          currentSession: data.currentSession ? {
-            ...data.currentSession,
-            startTime: data.currentSession.startTime?.toDate() || new Date(),
-          } : undefined,
+          currentSession: data.currentSession
+            ? {
+                ...data.currentSession,
+                startTime:
+                  data.currentSession.startTime?.toDate() || new Date(),
+              }
+            : undefined,
         } as UserPlanProgress;
       }
       return null;
@@ -484,7 +534,7 @@ export class GuidedLearningService {
         where('userId', '==', userId),
         orderBy('startDate', 'desc')
       );
-      
+
       const progressSnap = await getDocs(progressQuery);
       return progressSnap.docs.map(doc => {
         const data = doc.data();
@@ -493,10 +543,13 @@ export class GuidedLearningService {
           startDate: data.startDate?.toDate() || new Date(),
           lastActivity: data.lastActivity?.toDate() || new Date(),
           completionDate: data.completionDate?.toDate(),
-          currentSession: data.currentSession ? {
-            ...data.currentSession,
-            startTime: data.currentSession.startTime?.toDate() || new Date(),
-          } : undefined,
+          currentSession: data.currentSession
+            ? {
+                ...data.currentSession,
+                startTime:
+                  data.currentSession.startTime?.toDate() || new Date(),
+              }
+            : undefined,
         } as UserPlanProgress;
       });
     } catch (error) {
@@ -510,7 +563,7 @@ export class GuidedLearningService {
     try {
       const statsRef = doc(db, this.COLLECTIONS.USER_STATS, userId);
       const statsSnap = await getDoc(statsRef);
-      
+
       if (statsSnap.exists()) {
         const data = statsSnap.data();
         return {
@@ -527,11 +580,14 @@ export class GuidedLearningService {
     }
   }
 
-  async updateUserStats(userId: string, updates: Partial<UserStats>): Promise<void> {
+  async updateUserStats(
+    userId: string,
+    updates: Partial<UserStats>
+  ): Promise<void> {
     try {
       const statsRef = doc(db, this.COLLECTIONS.USER_STATS, userId);
       const statsSnap = await getDoc(statsRef);
-      
+
       if (statsSnap.exists()) {
         await updateDoc(statsRef, {
           ...updates,
@@ -572,7 +628,10 @@ export class GuidedLearningService {
   }
 
   // Activity Logging
-  async logActivity(userId: string, activity: Omit<UserActivity, 'id' | 'userId' | 'timestamp'>): Promise<void> {
+  async logActivity(
+    userId: string,
+    activity: Omit<UserActivity, 'id' | 'userId' | 'timestamp'>
+  ): Promise<void> {
     try {
       await addDoc(collection(db, this.COLLECTIONS.USER_ACTIVITIES), {
         userId,
@@ -585,7 +644,10 @@ export class GuidedLearningService {
     }
   }
 
-  async getUserActivities(userId: string, limitCount: number = 50): Promise<UserActivity[]> {
+  async getUserActivities(
+    userId: string,
+    limitCount: number = 50
+  ): Promise<UserActivity[]> {
     try {
       const activitiesQuery = query(
         collection(db, this.COLLECTIONS.USER_ACTIVITIES),
@@ -593,7 +655,7 @@ export class GuidedLearningService {
         orderBy('timestamp', 'desc'),
         limit(limitCount)
       );
-      
+
       const activitiesSnap = await getDocs(activitiesQuery);
       return activitiesSnap.docs.map(doc => {
         const data = doc.data();
@@ -610,7 +672,11 @@ export class GuidedLearningService {
   }
 
   // Helper Methods
-  private calculateSectionAverageScore(currentAverage: number, currentCount: number, newScore: number): number {
+  private calculateSectionAverageScore(
+    currentAverage: number,
+    currentCount: number,
+    newScore: number
+  ): number {
     const totalScore = currentAverage * currentCount + newScore;
     return Math.round(totalScore / (currentCount + 1));
   }
