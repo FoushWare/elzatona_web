@@ -28,7 +28,9 @@ postCommit:
 -   echo "✅ Development server restarted!"
 -   echo "🔄 Starting fresh terminal session..."
 -   sleep 2
--   exec $SHELL
+-   current_shell=${SHELL:-/bin/zsh}
+-   echo "💀 Killing current terminal session..."
+-   exec "$current_shell" -l
 - else
 -   echo "ℹ️  On branch '$current_branch', skipping server restart"
 - fi
