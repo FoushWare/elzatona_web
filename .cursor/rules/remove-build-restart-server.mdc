@@ -1,0 +1,14 @@
+---
+description: Remove build, restart server after push to GitHub
+globs: ['**/*']
+alwaysApply: true
+---
+
+postPush:
+
+- echo "🧹 Removing old build..."
+- rm -rf build
+- echo "💀 Killing old server..."
+- pkill -f "node server.js" || true
+- echo "🚀 Restarting server..."
+- nohup npm run start > server.log 2>&1 &
