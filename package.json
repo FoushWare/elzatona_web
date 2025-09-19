@@ -4,7 +4,8 @@
   "description": "A platform for frontend developers to practice coding challenges and prepare for technical interviews",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
+    "dev:turbo": "next dev --turbopack",
     "build": "next build",
     "build:check": "next build --turbopack && echo '✅ Build successful' || (echo '❌ Build failed' && exit 1)",
     "start": "next start",
