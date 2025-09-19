@@ -76,6 +76,7 @@ interface Question {
   learningPath: string;
   points: number;
   timeLimit?: number;
+  hints?: QuestionHint[];
   isActive: boolean;
   isComplete: boolean;
   createdAt: string;
@@ -87,6 +88,22 @@ interface QuestionOption {
   id: string;
   text: string;
   isCorrect: boolean;
+}
+
+interface QuestionHint {
+  id: string;
+  title: string;
+  description?: string;
+  url: string;
+  type:
+    | 'article'
+    | 'documentation'
+    | 'tutorial'
+    | 'video'
+    | 'example'
+    | 'reference';
+  category?: string;
+  priority?: number;
 }
 
 interface QuestionCategory {
