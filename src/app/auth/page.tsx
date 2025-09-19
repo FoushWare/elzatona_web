@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useCookieAuth } from '@/contexts/CookieAuthContext';
+import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import {
   ArrowLeft,
   User,
@@ -34,13 +34,13 @@ export default function AuthPage() {
     signInWithEmail,
     signUpWithEmail,
     isAuthenticated,
-  } = useCookieAuth();
+  } = useFirebaseAuth();
   const router = useRouter();
 
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard');
+      router.push('/learning-mode');
     }
   }, [isAuthenticated, router]);
 
@@ -65,9 +65,9 @@ export default function AuthPage() {
           return;
         }
         const result = await signUpWithEmail(
-          formData.name,
           formData.email,
-          formData.password
+          formData.password,
+          formData.name
         );
         success = result.success;
         if (!success) {
@@ -76,7 +76,7 @@ export default function AuthPage() {
       }
 
       if (success) {
-        router.push('/dashboard');
+        router.push('/learning-mode');
       }
     } catch {
       setError('An unexpected error occurred. Please try again.');
@@ -98,7 +98,7 @@ export default function AuthPage() {
       }
 
       if (result.success) {
-        router.push('/dashboard');
+        router.push('/learning-mode');
       } else {
         setError(result.error || `Failed to sign in with ${provider}`);
       }

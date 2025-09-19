@@ -18,7 +18,15 @@ import {
   getUserFromFirestore,
   onAuthStateChangedWrapper,
 } from '@/lib/firebase';
-import { clearAuthData, setupTokenRefresh } from '@/lib/auth-utils';
+import { firestoreService } from '@/lib/firestore-service';
+import { cookieManager } from '@/lib/cookie-manager';
+import { firestoreConnectionManager } from '@/lib/firestore-connection-manager';
+import {
+  clearAuthData,
+  setupTokenRefresh,
+  setAuthCookie,
+  clearAuthCookie,
+} from '@/lib/auth-utils';
 
 interface FirebaseUser {
   uid: string;
@@ -106,7 +114,7 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
           // Get user data from Firestore with timeout
           let userData = null;
           try {
-            const firestorePromise = getUserFromFirestore(firebaseUser.uid);
+            const firestorePromise = firestoreService.getUser(firebaseUser.uid);
             const timeoutPromise = new Promise((_, reject) =>
               setTimeout(() => reject(new Error('Firestore timeout')), 5000)
             );
@@ -120,9 +128,12 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
 
           if (userData) {
             setUser(userData as FirebaseUser);
+
+            // Set HTTP-only cookie for existing users too
+            await cookieManager.ensureAuthCookie(firebaseUser);
           } else {
-            // Create basic user object if not in Firestore or if Firestore fails
-            const basicUser: FirebaseUser = {
+            // Create comprehensive user object if not in Firestore or if Firestore fails
+            const comprehensiveUser = {
               uid: firebaseUser.uid,
               email: firebaseUser.email,
               displayName: firebaseUser.displayName,
@@ -130,24 +141,58 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
               provider: firebaseUser.providerData[0]?.providerId || 'email',
               isEmailVerified: firebaseUser.emailVerified,
               preferences: {
-                theme: 'system',
-                notifications: true,
+                theme: 'system' as const,
+                notifications: {
+                  email: true,
+                  push: true,
+                  learningReminders: true,
+                  achievementAlerts: true,
+                },
                 language: 'en',
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                learningMode: null,
+                dailyGoal: 10,
+                studyHours: {
+                  start: '09:00',
+                  end: '17:00',
+                },
+                difficultyPreference: 'mixed' as const,
+                sections: ['HTML', 'CSS', 'JavaScript', 'React'],
               },
               progress: {
-                questionsCompleted: 0,
-                totalPoints: 0,
+                totalQuestions: 0,
+                correctAnswers: 0,
+                accuracy: 0,
+                totalTimeSpent: 0,
                 currentStreak: 0,
-                badges: [],
-                achievements: [],
+                longestStreak: 0,
+                lastActivityAt: new Date().toISOString(),
+                weeklyProgress: [],
+                monthlyProgress: [],
+                sectionProgress: [],
+                learningSessions: [],
               },
+              achievements: {
+                badges: [],
+                certificates: [],
+                milestones: [],
+                totalPoints: 0,
+                level: 1,
+                experience: 0,
+              },
+              learningPlans: [],
             };
-            setUser(basicUser);
+            setUser(comprehensiveUser as FirebaseUser);
 
-            // Try to save to Firestore (don't wait for it)
-            saveUserToFirestore(firebaseUser).catch(error =>
-              console.warn('Failed to save user to Firestore:', error)
-            );
+            // Try to save comprehensive user data to Firestore (don't wait for it)
+            firestoreService
+              .createUser(comprehensiveUser)
+              .catch(error =>
+                console.warn('Failed to save user to Firestore:', error)
+              );
+
+            // Set HTTP-only cookie for secure progress tracking
+            await cookieManager.ensureAuthCookie(firebaseUser);
           }
 
           // Return cleanup function for token refresh
@@ -155,6 +200,10 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
         } else {
           setFirebaseUser(null);
           setUser(null);
+          clearAuthData();
+          clearAuthCookie().catch(error =>
+            console.warn('Failed to clear auth cookie:', error)
+          );
         }
       } catch (error) {
         console.error('Error in auth state change:', error);

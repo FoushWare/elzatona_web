@@ -477,3 +477,32 @@ html.light {
 .animate-wave-gentle {
   animation: wave-gentle 25s ease-in-out infinite;
 }
+
+/* Simple responsive fixes */
+@media (max-width: 640px) {
+  .fixed {
+    position: fixed !important;
+  }
+}
+
+/* Enhanced color scheme */
+:root {
+  --primary-indigo: #4f46e5;
+  --primary-indigo-dark: #4338ca;
+  --primary-purple: #7c3aed;
+  --primary-blue: #2563eb;
+}
+
+/* Improved gradient backgrounds */
+.bg-gradient-indigo {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #2563eb 100%);
+}
+
+/* Enhanced shadows */
+.shadow-indigo {
+  box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.15);
+}
+
+.shadow-indigo-lg {
+  box-shadow: 0 10px 25px -3px rgba(79, 70, 229, 0.1), 0 4px 6px -2px rgba(79, 70, 229, 0.05);
+}

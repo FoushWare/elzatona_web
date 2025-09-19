@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useCookieAuth } from '@/contexts/CookieAuthContext';
+import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import QuestionWithProgress from '@/components/QuestionWithProgress';
 import ChallengeWithProgress from '@/components/ChallengeWithProgress';
 import LearningPathWithProgress from '@/components/LearningPathWithProgress';
@@ -114,7 +114,7 @@ const mockLearningPath = {
 type DemoMode = 'question' | 'challenge' | 'learning-path' | 'dashboard';
 
 export default function ProgressDemoPage() {
-  const { user, isAuthenticated, isLoading } = useCookieAuth();
+  const { user, isAuthenticated, isLoading } = useFirebaseAuth();
   const [currentMode, setCurrentMode] = useState<DemoMode>('dashboard');
   const [questionIndex, setQuestionIndex] = useState(0);
   const [challengeIndex, setChallengeIndex] = useState(0);
