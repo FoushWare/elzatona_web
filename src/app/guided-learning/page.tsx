@@ -65,6 +65,7 @@ export default function GuidedLearningPage() {
   const [currentPlan, setCurrentPlan] = useState<LearningPlan | null>(null);
   const [dailyGoals, setDailyGoals] = useState<DailyGoal[]>([]);
   const [currentDay, setCurrentDay] = useState(1);
+  const [completedPlans, setCompletedPlans] = useState<Set<string>>(new Set());
 
   // Check if user has an active plan
   useEffect(() => {
@@ -84,6 +85,21 @@ export default function GuidedLearningPage() {
       }
     }
   }, [isAuthenticated, user]);
+
+  // Load completed plans from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const completedPlansData = localStorage.getItem('completed-guided-plans');
+      if (completedPlansData) {
+        try {
+          const completed = JSON.parse(completedPlansData);
+          setCompletedPlans(new Set(completed));
+        } catch (error) {
+          console.error('Error parsing completed plans:', error);
+        }
+      }
+    }
+  }, []);
 
   const generateDailyGoals = (plan: LearningPlan) => {
     const goals: DailyGoal[] = [];
@@ -330,17 +346,32 @@ export default function GuidedLearningPage() {
           </div>
         )}
 
+        {/* Completion Statistics */}
+        {completedPlans.size > 0 && (
+          <div className="mb-8 text-center">
+            <div className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl">
+              <Award className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <span className="text-green-800 dark:text-green-200 font-semibold">
+                🎉 You&apos;ve completed {completedPlans.size} learning plan
+                {completedPlans.size > 1 ? 's' : ''}!
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Learning Plans */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
           {templates.map((plan, index) => (
             <div
               key={plan.id}
               className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border-2 transition-all duration-300 hover:shadow-2xl cursor-pointer ${
-                plan.isRecommended
-                  ? 'border-blue-500 dark:border-blue-400 ring-4 ring-blue-200 dark:ring-blue-800'
-                  : hoveredPlan === plan.id
-                    ? 'border-purple-300 dark:border-purple-600'
-                    : 'border-white/20 dark:border-gray-700/20 hover:border-gray-300 dark:hover:border-gray-600'
+                completedPlans.has(plan.id)
+                  ? 'border-green-500 dark:border-green-400 ring-4 ring-green-200 dark:ring-green-800 bg-green-50/50 dark:bg-green-900/20'
+                  : plan.isRecommended
+                    ? 'border-blue-500 dark:border-blue-400 ring-4 ring-blue-200 dark:ring-blue-800'
+                    : hoveredPlan === plan.id
+                      ? 'border-purple-300 dark:border-purple-600'
+                      : 'border-white/20 dark:border-gray-700/20 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
               onClick={() => router.push(`/guided-learning/${plan.id}`)}
               onMouseEnter={() => setHoveredPlan(plan.id)}
@@ -352,6 +383,16 @@ export default function GuidedLearningPage() {
                   <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
                     <Star className="w-3 h-3" />
                     <span>Recommended</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Completed Badge */}
+              {completedPlans.has(plan.id) && (
+                <div className="absolute -top-3 right-4">
+                  <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
+                    <CheckCircle className="w-3 h-3" />
+                    <span>Completed</span>
                   </div>
                 </div>
               )}
@@ -406,8 +447,18 @@ export default function GuidedLearningPage() {
 
               {/* Action Button */}
               <div className="flex justify-center">
-                <div className="flex items-center space-x-2 text-indigo-600 dark:text-indigo-400 font-semibold text-sm group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors">
-                  <span>View Details</span>
+                <div
+                  className={`flex items-center space-x-2 font-semibold text-sm transition-colors ${
+                    completedPlans.has(plan.id)
+                      ? 'text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300'
+                      : 'text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300'
+                  }`}
+                >
+                  <span>
+                    {completedPlans.has(plan.id)
+                      ? 'Review Plan'
+                      : 'View Details'}
+                  </span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>

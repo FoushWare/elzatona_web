@@ -195,7 +195,7 @@ class FirestoreService {
     }
   }
 
-  async updateWeeklyProgress(uid: string, questionData: any): Promise<void> {
+  async updateWeeklyProgress(uid: string, questionData: Record<string, unknown>): Promise<void> {
     try {
       const now = new Date();
       const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
@@ -226,7 +226,7 @@ class FirestoreService {
     }
   }
 
-  async updateMonthlyProgress(uid: string, questionData: any): Promise<void> {
+  async updateMonthlyProgress(uid: string, questionData: Record<string, unknown>): Promise<void> {
     try {
       const now = new Date();
       const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -313,7 +313,7 @@ class FirestoreService {
     }
   }
 
-  async addMilestone(uid: string, milestone: any): Promise<void> {
+  async addMilestone(uid: string, milestone: Record<string, unknown>): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid);
       await updateDoc(userRef, {
@@ -357,7 +357,7 @@ class FirestoreService {
   }
 
   // Learning Plan Templates (Admin)
-  async saveLearningPlanTemplate(planData: any): Promise<string> {
+  async saveLearningPlanTemplate(planData: Record<string, unknown>): Promise<string> {
     try {
       const plansRef = collection(db, 'learningPlanTemplates');
       const docRef = await addDoc(plansRef, {
@@ -372,7 +372,7 @@ class FirestoreService {
     }
   }
 
-  async updateLearningPlanTemplate(planId: string, updates: any): Promise<void> {
+  async updateLearningPlanTemplate(planId: string, updates: Record<string, unknown>): Promise<void> {
     try {
       const planRef = doc(db, 'learningPlanTemplates', planId);
       await updateDoc(planRef, {
@@ -386,6 +386,11 @@ class FirestoreService {
   }
 
   async getLearningPlanTemplates(): Promise<any[]> {
+    if (!db) {
+      console.warn('Firestore not available');
+      return [];
+    }
+
     try {
       const plansRef = collection(db, 'learningPlanTemplates');
       const q = query(plansRef, orderBy('createdAt', 'desc'));
@@ -396,11 +401,17 @@ class FirestoreService {
       }));
     } catch (error) {
       console.error('Error getting learning plan templates:', error);
-      throw error;
+      // Return empty array instead of throwing to prevent app crashes
+      return [];
     }
   }
 
   async getLearningPlanTemplate(planId: string): Promise<any | null> {
+    if (!db) {
+      console.warn('Firestore not available');
+      return null;
+    }
+
     try {
       const planRef = doc(db, 'learningPlanTemplates', planId);
       const planSnap = await getDoc(planRef);
@@ -414,7 +425,7 @@ class FirestoreService {
       return null;
     } catch (error) {
       console.error('Error getting learning plan template:', error);
-      throw error;
+      return null;
     }
   }
 

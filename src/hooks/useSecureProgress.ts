@@ -238,8 +238,15 @@ export function useSecureProgress(): UseSecureProgressReturn {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch progress');
+        try {
+          const errorData = await response.json();
+          console.warn('Progress fetch failed, but continuing with local cache:', errorData);
+          // Don't throw error, just return early and use local cache
+          return;
+        } catch (parseError) {
+          console.warn('Failed to parse error response, continuing with local cache');
+          return;
+        }
       }
 
       const result = await response.json();
