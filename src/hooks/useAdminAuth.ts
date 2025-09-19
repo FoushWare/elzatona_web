@@ -29,12 +29,31 @@ export const useAdminAuth = (): UseAdminAuthReturn => {
         if (sessionData) {
           const session: AdminSession = JSON.parse(sessionData);
 
-          // Validate session
-          if (await AdminAuthService.validateSession(session)) {
-            setUser(session);
-            setIsAuthenticated(true);
-          } else {
-            // Session expired, clear it
+          // Check if session has expired locally first
+          if (new Date() > new Date(session.expiresAt)) {
+            localStorage.removeItem(ADMIN_SESSION_KEY);
+            setIsLoading(false);
+            return;
+          }
+
+          // Validate session with timeout
+          try {
+            const isValid = await Promise.race([
+              AdminAuthService.validateSession(session),
+              new Promise<boolean>((_, reject) =>
+                setTimeout(() => reject(new Error('Timeout')), 5000)
+              ),
+            ]);
+
+            if (isValid) {
+              setUser(session);
+              setIsAuthenticated(true);
+            } else {
+              localStorage.removeItem(ADMIN_SESSION_KEY);
+            }
+          } catch (error) {
+            console.error('Session validation failed:', error);
+            // If validation fails, clear session but don't block the user
             localStorage.removeItem(ADMIN_SESSION_KEY);
           }
         }
