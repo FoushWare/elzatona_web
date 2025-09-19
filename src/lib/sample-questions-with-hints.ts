@@ -1,0 +1,165 @@
+// Sample questions with hints for testing the guided learning system
+import { UnifiedQuestion } from './unified-question-schema';
+
+export const sampleQuestionsWithHints: UnifiedQuestion[] = [
+  {
+    id: 'react-rendering-patterns-1',
+    title: 'React Rendering Patterns',
+    content:
+      'Which rendering pattern is best for a React application that needs to display personalized content for each user?',
+    type: 'single',
+    options: [
+      { id: 'a', text: 'Static Site Generation (SSG)', isCorrect: false },
+      { id: 'b', text: 'Server-Side Rendering (SSR)', isCorrect: true },
+      { id: 'c', text: 'Client-Side Rendering (CSR)', isCorrect: false },
+      {
+        id: 'd',
+        text: 'Incremental Static Regeneration (ISR)',
+        isCorrect: false,
+      },
+    ],
+    correctAnswers: ['b'],
+    explanation:
+      'Server-Side Rendering (SSR) is ideal for personalized content because it can render different HTML for each user based on their authentication state, cookies, or other request-specific data. This ensures each user sees content tailored to them.',
+    category: 'react',
+    subcategory: 'rendering-patterns',
+    difficulty: 'medium',
+    tags: ['react', 'rendering', 'ssr', 'personalization'],
+    learningPath: 'react-mastery',
+    points: 10,
+    timeLimit: 60,
+    hints: [
+      {
+        id: 'hint-1',
+        title: 'Rendering Patterns in React',
+        description:
+          'Comprehensive guide to different rendering patterns and when to use them',
+        url: 'https://www.patterns.dev/vanilla/rendering-patterns/',
+        type: 'article',
+        category: 'react',
+        priority: 1,
+      },
+      {
+        id: 'hint-2',
+        title: 'Next.js Rendering Methods',
+        description: 'Official Next.js documentation on rendering methods',
+        url: 'https://nextjs.org/docs/pages/building-your-application/rendering',
+        type: 'documentation',
+        category: 'react',
+        priority: 2,
+      },
+      {
+        id: 'hint-3',
+        title: 'Server-Side Rendering vs Static Generation',
+        description:
+          'Video tutorial explaining the differences between SSR and SSG',
+        url: 'https://www.youtube.com/watch?v=example-ssr-vs-ssg',
+        type: 'video',
+        category: 'react',
+        priority: 3,
+      },
+    ],
+    isActive: true,
+    isComplete: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    createdBy: 'admin',
+    order: 1,
+  },
+  {
+    id: 'css-layout-flexbox-1',
+    title: 'CSS Flexbox Layout',
+    content:
+      'Which CSS property is used to control the direction of flex items in a flex container?',
+    type: 'single',
+    options: [
+      { id: 'a', text: 'flex-direction', isCorrect: true },
+      { id: 'b', text: 'flex-wrap', isCorrect: false },
+      { id: 'c', text: 'justify-content', isCorrect: false },
+      { id: 'd', text: 'align-items', isCorrect: false },
+    ],
+    correctAnswers: ['a'],
+    explanation:
+      'The flex-direction property controls the direction of flex items within a flex container. It can be set to row, column, row-reverse, or column-reverse.',
+    category: 'css',
+    subcategory: 'flexbox',
+    difficulty: 'easy',
+    tags: ['css', 'flexbox', 'layout'],
+    learningPath: 'css-mastery',
+    points: 5,
+    timeLimit: 30,
+    hints: [
+      {
+        id: 'hint-4',
+        title: 'CSS Flexbox Complete Guide',
+        description:
+          'A complete guide to CSS Flexbox with examples and visual diagrams',
+        url: 'https://css-tricks.com/snippets/css/a-guide-to-flexbox/',
+        type: 'article',
+        category: 'css',
+        priority: 1,
+      },
+      {
+        id: 'hint-5',
+        title: 'Flexbox Froggy Game',
+        description: 'Interactive game to learn CSS Flexbox',
+        url: 'https://flexboxfroggy.com/',
+        type: 'tutorial',
+        category: 'css',
+        priority: 2,
+      },
+    ],
+    isActive: true,
+    isComplete: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    createdBy: 'admin',
+    order: 2,
+  },
+  {
+    id: 'javascript-closure-1',
+    title: 'JavaScript Closures',
+    content: 'What is a closure in JavaScript and why is it useful?',
+    type: 'open-ended',
+    correctAnswers: [],
+    explanation:
+      'A closure is a function that has access to variables in its outer (enclosing) scope even after the outer function has returned. Closures are useful for data privacy, creating function factories, and maintaining state in asynchronous operations.',
+    category: 'javascript',
+    subcategory: 'closures',
+    difficulty: 'medium',
+    tags: ['javascript', 'closures', 'scope', 'functions'],
+    learningPath: 'javascript-deep-dive',
+    points: 15,
+    timeLimit: 120,
+    expectedAnswer:
+      'A closure is a function that retains access to variables from its outer scope even after the outer function has finished executing.',
+    hints: [
+      {
+        id: 'hint-6',
+        title: 'JavaScript Closures Explained',
+        description: 'Detailed explanation of closures with practical examples',
+        url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures',
+        type: 'documentation',
+        category: 'javascript',
+        priority: 1,
+      },
+      {
+        id: 'hint-7',
+        title: 'Understanding Closures in JavaScript',
+        description: 'Video tutorial explaining closures with visual examples',
+        url: 'https://www.youtube.com/watch?v=example-closures',
+        type: 'video',
+        category: 'javascript',
+        priority: 2,
+      },
+    ],
+    isActive: true,
+    isComplete: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    createdBy: 'admin',
+    order: 3,
+  },
+];
+
+export default sampleQuestionsWithHints;

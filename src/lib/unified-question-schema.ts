@@ -44,6 +44,9 @@ export interface UnifiedQuestion {
   difficulty: 'easy' | 'medium' | 'hard';
   tags: string[];
 
+  // Learning Resources & Hints
+  hints?: QuestionHint[]; // External resources and hints for deeper learning
+
   // Learning Path Integration
   learningPath: string; // e.g., 'frontend-basics', 'javascript-deep-dive'
   sectionId?: string; // Links to learning sections
@@ -75,6 +78,22 @@ export interface QuestionOption {
   id: string; // 'a', 'b', 'c', 'd', etc.
   text: string;
   isCorrect: boolean;
+}
+
+export interface QuestionHint {
+  id: string;
+  title: string; // e.g., "React Rendering Patterns"
+  description?: string; // Brief description of the hint
+  url: string; // External link
+  type:
+    | 'article'
+    | 'documentation'
+    | 'tutorial'
+    | 'video'
+    | 'example'
+    | 'reference';
+  category?: string; // e.g., 'react', 'css', 'javascript'
+  priority?: number; // 1 = high priority, 2 = medium, 3 = low
 }
 
 // Learning Path Categories
