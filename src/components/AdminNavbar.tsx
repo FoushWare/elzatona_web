@@ -11,8 +11,6 @@ import {
   LogOut,
   Settings,
   BarChart3,
-  Upload,
-  Users,
   Shield,
   ChevronDown,
   FileText,
