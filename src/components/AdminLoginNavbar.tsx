@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useTheme } from '@/contexts/ThemeContext';
 
 export default function AdminLoginNavbar() {
-  const { theme, toggleTheme } = useTheme();
+  const { isDarkMode, toggleDarkMode } = useTheme();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gradient-to-r from-red-600 to-red-800 shadow-lg">
@@ -45,11 +45,11 @@ export default function AdminLoginNavbar() {
           <div className="flex items-center space-x-4">
             {/* Theme Toggle */}
             <button
-              onClick={toggleTheme}
+              onClick={toggleDarkMode}
               className="p-2 rounded-lg transition-colors duration-200 bg-white/20 text-white hover:bg-white/30 border border-white/30"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? (
+              {isDarkMode ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"

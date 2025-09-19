@@ -15,10 +15,10 @@ export default function AdminLoginPage() {
   const { isAuthenticated, isLoading, login } = useAdminAuth();
   const router = useRouter();
 
-  // Redirect if already authenticated
+  // Redirect if already authenticated - let admin layout handle this
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.push('/admin/dashboard');
+      router.push('/admin');
     }
   }, [isAuthenticated, isLoading, router]);
 
@@ -31,17 +31,18 @@ export default function AdminLoginPage() {
       const result = await login(email, password);
 
       if (result.success) {
-        router.push('/admin/dashboard');
+        router.push('/admin');
       } else {
         setError(result.error || 'Login failed');
       }
-    } catch (error) {
+    } catch {
       setError('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // Show loading state only briefly, then show login form
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-900 dark:to-gray-800">
