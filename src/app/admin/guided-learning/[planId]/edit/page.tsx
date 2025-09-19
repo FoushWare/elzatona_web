@@ -290,48 +290,233 @@ export default function PlanEditorPage() {
   useEffect(() => {
     const mockPlan: LearningPlanTemplate = {
       id: planId,
-      name: '3 Day Comprehensive Plan',
-      duration: 3,
-      description: 'Balanced preparation covering all major topics',
-      difficulty: 'Intermediate',
-      totalQuestions: 150,
-      dailyQuestions: 50,
-      sections: [
-        {
-          id: 'html-css',
-          name: 'HTML & CSS',
-          category: 'html',
-          questions: ['q1', 'q2'],
-          weight: 20,
-          order: 1,
-        },
-        {
-          id: 'javascript',
-          name: 'JavaScript',
-          category: 'javascript',
-          questions: ['q3', 'q4', 'q5'],
-          weight: 40,
-          order: 2,
-        },
-        {
-          id: 'react',
-          name: 'React',
-          category: 'react',
-          questions: ['q6', 'q7'],
-          weight: 20,
-          order: 3,
-        },
-        {
-          id: 'typescript',
-          name: 'TypeScript',
-          category: 'typescript',
-          questions: ['q8', 'q9'],
-          weight: 20,
-          order: 4,
-        },
-      ],
-      features: ['Balanced coverage', 'Daily milestones', 'TypeScript basics'],
-      estimatedTime: '4-5 hours',
+      name:
+        planId === '1-day-plan'
+          ? '1-Day Frontend Quick Start'
+          : planId === '2-day-plan'
+            ? '2-Day Frontend Fundamentals'
+            : planId === '3-day-plan'
+              ? '3-Day React Development'
+              : planId === '4-day-plan'
+                ? '4-Day Vue.js Mastery'
+                : planId === '5-day-plan'
+                  ? '5-Day Angular Development'
+                  : planId === '6-day-plan'
+                    ? '6-Day Node.js Backend'
+                    : planId === '7-day-plan'
+                      ? '7-Day Full-Stack Mastery'
+                      : 'Learning Plan',
+      duration:
+        planId === '1-day-plan'
+          ? 1
+          : planId === '2-day-plan'
+            ? 2
+            : planId === '3-day-plan'
+              ? 3
+              : planId === '4-day-plan'
+                ? 4
+                : planId === '5-day-plan'
+                  ? 5
+                  : planId === '6-day-plan'
+                    ? 6
+                    : planId === '7-day-plan'
+                      ? 7
+                      : 1,
+      description:
+        planId === '1-day-plan'
+          ? 'Quick introduction to HTML, CSS, and JavaScript basics'
+          : planId === '2-day-plan'
+            ? 'Complete guide to HTML, CSS, and JavaScript fundamentals'
+            : planId === '3-day-plan'
+              ? 'Master React.js from basics to intermediate concepts'
+              : planId === '4-day-plan'
+                ? 'Complete Vue.js development course with composition API'
+                : planId === '5-day-plan'
+                  ? 'Comprehensive Angular framework development course'
+                  : planId === '6-day-plan'
+                    ? 'Complete Node.js backend development with Express and databases'
+                    : planId === '7-day-plan'
+                      ? 'Complete full-stack development with modern technologies'
+                      : 'Learning plan description',
+      difficulty:
+        planId === '1-day-plan' || planId === '2-day-plan'
+          ? 'Beginner'
+          : planId === '6-day-plan' || planId === '7-day-plan'
+            ? 'Advanced'
+            : 'Intermediate',
+      totalQuestions:
+        planId === '1-day-plan'
+          ? 15
+          : planId === '2-day-plan'
+            ? 30
+            : planId === '3-day-plan'
+              ? 45
+              : planId === '4-day-plan'
+                ? 60
+                : planId === '5-day-plan'
+                  ? 75
+                  : planId === '6-day-plan'
+                    ? 90
+                    : planId === '7-day-plan'
+                      ? 105
+                      : 15,
+      dailyQuestions: 15,
+      sections:
+        planId === '1-day-plan'
+          ? [
+              {
+                id: 'html',
+                name: 'HTML',
+                category: 'html',
+                questions: ['q1', 'q2', 'q3'],
+                weight: 33,
+                order: 1,
+              },
+              {
+                id: 'css',
+                name: 'CSS',
+                category: 'css',
+                questions: ['q4', 'q5', 'q6'],
+                weight: 33,
+                order: 2,
+              },
+              {
+                id: 'js',
+                name: 'JavaScript',
+                category: 'javascript',
+                questions: ['q7', 'q8', 'q9'],
+                weight: 34,
+                order: 3,
+              },
+            ]
+          : planId === '2-day-plan'
+            ? [
+                {
+                  id: 'html',
+                  name: 'HTML',
+                  category: 'html',
+                  questions: ['q1', 'q2', 'q3', 'q4', 'q5'],
+                  weight: 33,
+                  order: 1,
+                },
+                {
+                  id: 'css',
+                  name: 'CSS',
+                  category: 'css',
+                  questions: ['q6', 'q7', 'q8', 'q9', 'q10'],
+                  weight: 33,
+                  order: 2,
+                },
+                {
+                  id: 'js',
+                  name: 'JavaScript',
+                  category: 'javascript',
+                  questions: ['q11', 'q12', 'q13', 'q14', 'q15'],
+                  weight: 34,
+                  order: 3,
+                },
+              ]
+            : planId === '3-day-plan'
+              ? [
+                  {
+                    id: 'components',
+                    name: 'Components',
+                    category: 'react',
+                    questions: ['q16', 'q17', 'q18', 'q19', 'q20'],
+                    weight: 33,
+                    order: 1,
+                  },
+                  {
+                    id: 'hooks',
+                    name: 'Hooks',
+                    category: 'react',
+                    questions: ['q21', 'q22', 'q23', 'q24', 'q25'],
+                    weight: 33,
+                    order: 2,
+                  },
+                  {
+                    id: 'state',
+                    name: 'State Management',
+                    category: 'react',
+                    questions: ['q26', 'q27', 'q28', 'q29', 'q30'],
+                    weight: 34,
+                    order: 3,
+                  },
+                ]
+              : [
+                  {
+                    id: 'html-css',
+                    name: 'HTML & CSS',
+                    category: 'html',
+                    questions: ['q1', 'q2'],
+                    weight: 20,
+                    order: 1,
+                  },
+                  {
+                    id: 'javascript',
+                    name: 'JavaScript',
+                    category: 'javascript',
+                    questions: ['q3', 'q4', 'q5'],
+                    weight: 40,
+                    order: 2,
+                  },
+                  {
+                    id: 'react',
+                    name: 'React',
+                    category: 'react',
+                    questions: ['q6', 'q7'],
+                    weight: 20,
+                    order: 3,
+                  },
+                  {
+                    id: 'typescript',
+                    name: 'TypeScript',
+                    category: 'typescript',
+                    questions: ['q8', 'q9'],
+                    weight: 20,
+                    order: 4,
+                  },
+                ],
+      features:
+        planId === '1-day-plan'
+          ? ['Quick preparation', 'Essential topics', '2-3 hours']
+          : planId === '2-day-plan'
+            ? ['Fundamental concepts', 'Practical examples', '4-5 hours']
+            : planId === '3-day-plan'
+              ? ['React fundamentals', 'Modern patterns', '6-7 hours']
+              : planId === '4-day-plan'
+                ? ['Vue 3 mastery', 'Composition API', '8-9 hours']
+                : planId === '5-day-plan'
+                  ? ['Angular framework', 'Enterprise patterns', '10-12 hours']
+                  : planId === '6-day-plan'
+                    ? ['Backend mastery', 'Database integration', '12-15 hours']
+                    : planId === '7-day-plan'
+                      ? [
+                          'Full-stack mastery',
+                          'Production-ready',
+                          '15-18 hours',
+                        ]
+                      : [
+                          'Balanced coverage',
+                          'Daily milestones',
+                          'TypeScript basics',
+                        ],
+      estimatedTime:
+        planId === '1-day-plan'
+          ? '2-3 hours'
+          : planId === '2-day-plan'
+            ? '4-5 hours'
+            : planId === '3-day-plan'
+              ? '6-7 hours'
+              : planId === '4-day-plan'
+                ? '8-9 hours'
+                : planId === '5-day-plan'
+                  ? '10-12 hours'
+                  : planId === '6-day-plan'
+                    ? '12-15 hours'
+                    : planId === '7-day-plan'
+                      ? '15-18 hours'
+                      : '4-5 hours',
       isRecommended: true,
       isActive: true,
       createdAt: new Date(),
