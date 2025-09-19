@@ -682,20 +682,21 @@ export default function GuidedLearningAdminPage() {
           </div>
         </div>
 
-        {/* Plans Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+        {/* Plans Grid - Better responsive layout with 2 cards per row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {filteredPlans.map(plan => (
             <Card
               key={plan.id}
-              className="hover:shadow-lg transition-shadow duration-200"
+              className="hover:shadow-lg transition-shadow duration-200 flex flex-col"
             >
               <CardHeader className="pb-3">
-                <div className="flex justify-between items-start">
+                {/* Header with title and badges */}
+                <div className="space-y-3">
                   <div>
-                    <CardTitle className="text-xl text-gray-900 dark:text-white">
+                    <CardTitle className="text-xl text-gray-900 dark:text-white mb-2">
                       {plan.name}
                     </CardTitle>
-                    <div className="flex items-center space-x-2 mt-2 flex-wrap">
+                    <div className="flex items-center space-x-2 flex-wrap gap-2">
                       <Badge className={getDifficultyColor(plan.difficulty)}>
                         {plan.difficulty}
                       </Badge>
@@ -721,123 +722,6 @@ export default function GuidedLearningAdminPage() {
                           Recommended
                         </Badge>
                       )}
-                    </div>
-                  </div>
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    {/* Status Toggle */}
-                    <Button
-                      variant={plan.isActive ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => {
-                        const updatedPlans = plans.map(p =>
-                          p.id === plan.id ? { ...p, isActive: !p.isActive } : p
-                        );
-                        setPlans(updatedPlans);
-                        alert(
-                          `Plan "${plan.name}" has been ${!plan.isActive ? 'activated' : 'deactivated'} successfully!`
-                        );
-                      }}
-                      className={`flex items-center gap-1 w-full sm:w-auto ${
-                        plan.isActive
-                          ? 'bg-green-600 hover:bg-green-700 text-white'
-                          : 'text-gray-600 hover:text-gray-700 hover:bg-gray-50'
-                      }`}
-                      title={
-                        plan.isActive
-                          ? 'Deactivate this plan'
-                          : 'Activate this plan'
-                      }
-                    >
-                      {plan.isActive ? (
-                        <Power className="w-4 h-4" />
-                      ) : (
-                        <PowerOff className="w-4 h-4" />
-                      )}
-                      <span className="text-sm">
-                        {plan.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                    </Button>
-
-                    {/* Action Buttons */}
-                    <div className="grid grid-cols-2 sm:flex gap-1 sm:gap-1">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          window.open(
-                            `/guided-practice/enhanced?plan=${plan.id}`,
-                            '_blank'
-                          )
-                        }
-                        className="flex items-center justify-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-xs sm:text-sm"
-                        title="Preview this plan"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span className="hidden min-[475px]:inline sm:hidden md:inline">
-                          Preview
-                        </span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          router.push(`/admin/guided-learning/${plan.id}/edit`)
-                        }
-                        className="flex items-center justify-center gap-1 text-green-600 hover:text-green-700 hover:bg-green-50 text-xs sm:text-sm"
-                        title="Edit plan details and questions"
-                      >
-                        <Edit className="w-4 h-4" />
-                        <span className="hidden min-[475px]:inline sm:hidden md:inline">
-                          Edit
-                        </span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          const newPlan = {
-                            ...plan,
-                            id: `${plan.id}-copy-${Date.now()}`,
-                            name: `${plan.name} (Copy)`,
-                            isActive: false, // Start as inactive
-                          };
-                          setPlans([...plans, newPlan]);
-                          // Show success message
-                          alert(
-                            `Plan "${newPlan.name}" has been duplicated successfully!`
-                          );
-                        }}
-                        className="flex items-center justify-center gap-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50 text-xs sm:text-sm"
-                        title="Create a copy of this plan"
-                      >
-                        <Copy className="w-4 h-4" />
-                        <span className="hidden min-[475px]:inline sm:hidden md:inline">
-                          Copy
-                        </span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          if (
-                            confirm(
-                              `⚠️ Are you sure you want to delete "${plan.name}"?\n\nThis action cannot be undone and will remove all associated data.`
-                            )
-                          ) {
-                            setPlans(plans.filter(p => p.id !== plan.id));
-                            alert(
-                              `Plan "${plan.name}" has been deleted successfully.`
-                            );
-                          }
-                        }}
-                        className="flex items-center justify-center gap-1 text-red-600 hover:text-red-700 hover:bg-red-50 text-xs sm:text-sm"
-                        title="Permanently delete this plan"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        <span className="hidden min-[475px]:inline sm:hidden md:inline">
-                          Delete
-                        </span>
-                      </Button>
                     </div>
                   </div>
                 </div>
@@ -976,6 +860,119 @@ export default function GuidedLearningAdminPage() {
                         +{plan.features.length - 2} more
                       </span>
                     )}
+                  </div>
+                </div>
+
+                {/* Action Buttons Section - Properly contained within card */}
+                <div className="border-t pt-4 space-y-3">
+                  {/* Status Toggle */}
+                  <div className="flex justify-center">
+                    <Button
+                      variant={plan.isActive ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => {
+                        const updatedPlans = plans.map(p =>
+                          p.id === plan.id ? { ...p, isActive: !p.isActive } : p
+                        );
+                        setPlans(updatedPlans);
+                        alert(
+                          `Plan "${plan.name}" has been ${!plan.isActive ? 'activated' : 'deactivated'} successfully!`
+                        );
+                      }}
+                      className={`flex items-center gap-2 w-full max-w-xs ${
+                        plan.isActive
+                          ? 'bg-green-600 hover:bg-green-700 text-white'
+                          : 'text-gray-600 hover:text-gray-700 hover:bg-gray-50'
+                      }`}
+                      title={
+                        plan.isActive
+                          ? 'Deactivate this plan'
+                          : 'Activate this plan'
+                      }
+                    >
+                      {plan.isActive ? (
+                        <Power className="w-4 h-4" />
+                      ) : (
+                        <PowerOff className="w-4 h-4" />
+                      )}
+                      <span className="text-sm">
+                        {plan.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </Button>
+                  </div>
+
+                  {/* Action Buttons Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        window.open(
+                          `/guided-practice/enhanced?plan=${plan.id}`,
+                          '_blank'
+                        )
+                      }
+                      className="flex items-center justify-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-xs sm:text-sm"
+                      title="Preview this plan"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span className="hidden sm:inline">Preview</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        router.push(`/admin/guided-learning/${plan.id}/edit`)
+                      }
+                      className="flex items-center justify-center gap-1 text-green-600 hover:text-green-700 hover:bg-green-50 text-xs sm:text-sm"
+                      title="Edit plan details and questions"
+                    >
+                      <Edit className="w-4 h-4" />
+                      <span className="hidden sm:inline">Edit</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const newPlan = {
+                          ...plan,
+                          id: `${plan.id}-copy-${Date.now()}`,
+                          name: `${plan.name} (Copy)`,
+                          isActive: false, // Start as inactive
+                        };
+                        setPlans([...plans, newPlan]);
+                        // Show success message
+                        alert(
+                          `Plan "${newPlan.name}" has been duplicated successfully!`
+                        );
+                      }}
+                      className="flex items-center justify-center gap-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50 text-xs sm:text-sm"
+                      title="Create a copy of this plan"
+                    >
+                      <Copy className="w-4 h-4" />
+                      <span className="hidden sm:inline">Copy</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        if (
+                          confirm(
+                            `⚠️ Are you sure you want to delete "${plan.name}"?\n\nThis action cannot be undone and will remove all associated data.`
+                          )
+                        ) {
+                          setPlans(plans.filter(p => p.id !== plan.id));
+                          alert(
+                            `Plan "${plan.name}" has been deleted successfully.`
+                          );
+                        }
+                      }}
+                      className="flex items-center justify-center gap-1 text-red-600 hover:text-red-700 hover:bg-red-50 text-xs sm:text-sm"
+                      title="Permanently delete this plan"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      <span className="hidden sm:inline">Delete</span>
+                    </Button>
                   </div>
                 </div>
               </CardContent>
