@@ -14,9 +14,8 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Step 1: Remove build directories (but keep .next for development)
-echo "📁 STEP 1: Cleaning build directories..."
-echo "   ℹ️  Keeping .next directory (required for Next.js development)"
+# Step 1: Remove build directories and files
+echo "📁 STEP 1: Cleaning build directories and files..."
 
 echo "   🗑️  Removing build directory..."
 if [ -d "build" ]; then
@@ -32,6 +31,22 @@ if [ -d "storybook-static" ]; then
     echo "   ✅ storybook-static directory removed"
 else
     echo "   ℹ️  storybook-static directory not found (already clean)"
+fi
+
+echo "   🗑️  Removing .next directory..."
+if [ -d ".next" ]; then
+    rm -rf .next
+    echo "   ✅ .next directory removed"
+else
+    echo "   ℹ️  .next directory not found (already clean)"
+fi
+
+echo "   🗑️  Removing tsconfig.tsbuildinfo..."
+if [ -f "tsconfig.tsbuildinfo" ]; then
+    rm -f tsconfig.tsbuildinfo
+    echo "   ✅ tsconfig.tsbuildinfo removed"
+else
+    echo "   ℹ️  tsconfig.tsbuildinfo not found (already clean)"
 fi
 
 echo "   🗑️  Removing test-results directory..."
@@ -51,29 +66,8 @@ else
 fi
 echo ""
 
-# Step 2: Remove build artifacts (but keep Next.js cache)
-echo "📄 STEP 2: Cleaning build artifacts..."
-echo "   ℹ️  Keeping TypeScript build info (helps with incremental builds)"
-
-echo "   🗑️  Removing .next cache..."
-if [ -d ".next/cache" ]; then
-    rm -rf .next/cache
-    echo "   ✅ .next/cache removed"
-else
-    echo "   ℹ️  .next/cache not found (already clean)"
-fi
-
-echo "   🗑️  Removing .next static files..."
-if [ -d ".next/static" ]; then
-    rm -rf .next/static
-    echo "   ✅ .next/static removed"
-else
-    echo "   ℹ️  .next/static not found (already clean)"
-fi
-echo ""
-
-# Step 3: Remove log files
-echo "📝 STEP 3: Cleaning log files..."
+# Step 2: Remove log files
+echo "📝 STEP 2: Cleaning log files..."
 echo "   🗑️  Removing dev.log..."
 if [ -f "dev.log" ]; then
     rm -f dev.log
@@ -99,8 +93,8 @@ else
 fi
 echo ""
 
-# Step 4: Kill running processes
-echo "💀 STEP 4: Stopping running development servers..."
+# Step 3: Kill running processes
+echo "💀 STEP 3: Stopping running development servers..."
 echo "   🔍 Checking for running processes..."
 
 if command_exists pkill; then
@@ -148,17 +142,17 @@ else
 fi
 echo ""
 
-# Step 5: Deep clean (optional)
+# Step 4: Deep clean (optional)
 if [ "$1" = "--deep" ]; then
-    echo "🧹 STEP 5: Deep cleaning npm cache..."
+    echo "🧹 STEP 4: Deep cleaning npm cache..."
     echo "   📦 Running: npm cache clean --force"
     npm cache clean --force
     echo "   ✅ npm cache cleaned"
     echo ""
 fi
 
-# Step 6: Restart development server
-echo "🚀 STEP 6: Starting fresh development server..."
+# Step 5: Restart development server
+echo "🚀 STEP 5: Starting fresh development server..."
 echo "   📝 Starting server in background..."
 nohup npm run dev > dev.log 2>&1 &
 SERVER_PID=$!
