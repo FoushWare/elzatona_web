@@ -822,36 +822,39 @@ export default function PlanEditorPage() {
           <div className="xl:col-span-2 order-1 xl:order-2">
             <Card className="h-fit">
               <CardHeader className="pb-4">
-                <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Target className="w-5 h-5 text-green-600" />
-                      <div>
-                        <span className="text-lg font-semibold">
-                          Available Questions
-                        </span>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                          {selectedSection
-                            ? `Select questions to add to "${plan.sections.find(s => s.id === selectedSection)?.name}"`
-                            : 'Select a section from the left to add questions to it'}
-                        </p>
-                      </div>
+                <div className="flex flex-col space-y-4">
+                  {/* Title and Description */}
+                  <div className="flex items-center space-x-2">
+                    <Target className="w-5 h-5 text-green-600" />
+                    <div>
+                      <span className="text-lg font-semibold">
+                        Available Questions
+                      </span>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        {selectedSection
+                          ? `Select questions to add to "${plan.sections.find(s => s.id === selectedSection)?.name}"`
+                          : 'Select a section from the left to add questions to it'}
+                      </p>
                     </div>
-                    {selectedSection && (
+                  </div>
+                  
+                  {/* Add Questions Button - Better positioned */}
+                  {selectedSection && (
+                    <div className="flex justify-end">
                       <Button
                         size="sm"
                         onClick={() => {
                           setEditingSectionId(selectedSection);
                           setShowAddQuestionsDialog(true);
                         }}
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 shadow-sm"
                       >
-                        <Plus className="w-4 h-4 mr-1" />
+                        <Plus className="w-4 h-4 mr-2" />
                         Add Questions
                       </Button>
-                    )}
-                  </div>
-                </CardTitle>
+                    </div>
+                  )}
+                </div>
               </CardHeader>
               <CardContent>
                 {/* Filters */}
