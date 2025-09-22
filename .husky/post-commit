@@ -94,31 +94,44 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   fi
   echo ""
   
-  # Step 4: Start development server
-  echo "🚀 STEP 4: Starting development server..."
+# Step 4: Start development server in separate terminal
+echo "🚀 STEP 4: Starting development server in separate terminal..."
+
+# Check if we're on macOS (Darwin) or Linux
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS - use osascript to open new terminal
+    echo "   🖥️  Opening new terminal window for development server..."
+    osascript -e 'tell application "Terminal" to do script "cd \"'$(pwd)'\" && npm run dev"'
+    echo "   ✅ Development server started in new Terminal window"
+elif command -v gnome-terminal &> /dev/null; then
+    # Linux with gnome-terminal
+    echo "   🖥️  Opening new terminal window for development server..."
+    gnome-terminal -- bash -c "cd '$(pwd)' && npm run dev; exec bash"
+    echo "   ✅ Development server started in new terminal window"
+elif command -v xterm &> /dev/null; then
+    # Linux with xterm
+    echo "   🖥️  Opening new terminal window for development server..."
+    xterm -e "cd '$(pwd)' && npm run dev" &
+    echo "   ✅ Development server started in new terminal window"
+else
+    # Fallback to background process
+    echo "   📝 Starting development server in background..."
+    nohup npm run dev > dev.log 2>&1 &
+    SERVER_PID=$!
+    echo "   📋 Server PID: $SERVER_PID"
+    echo "   ⏳ Server starting in background..."
+    echo "   💡 Check dev.log for server output"
+fi
+
+echo "   🌐 Server will be available at http://localhost:3000 when ready"
+echo "   ⚠️  Note: Server may take 10-30 seconds to fully start"
+echo ""
   
-  echo "   📝 Starting fresh development server..."
-  nohup npm run dev > dev.log 2>&1 &
-  SERVER_PID=$!
-  echo "   📋 Server PID: $SERVER_PID"
-  echo "   ⏳ Server starting in background..."
-  echo "   💡 Check dev.log for server output"
-  echo "   🌐 Server will be available at http://localhost:3000 when ready"
-  echo "   ⚠️  Note: Server may take 10-30 seconds to fully start"
-  echo ""
-  
-  # Step 5: Push to remote repository
-  echo "🚀 STEP 5: Pushing changes to remote repository..."
-  echo "   📤 Pushing branch '$current_branch' to origin..."
-  
-  # Push to remote with detailed output
-  if git push origin "$current_branch" --verbose; then
-    echo "   ✅ Successfully pushed to remote repository"
-    echo "   🌐 Changes are now available on GitHub"
-  else
-    echo "   ❌ Failed to push to remote repository"
-    echo "   💡 You may need to push manually: git push origin $current_branch"
-  fi
+  # Step 5: Skip auto-push (manual push recommended)
+  echo "🚀 STEP 5: Push to remote repository (manual)..."
+  echo "   ⏭️  Skipping auto-push to avoid blocking"
+  echo "   💡 Run 'git push origin $current_branch' when ready"
+  echo "   🌐 This allows you to review changes before pushing"
   echo ""
   
   # Step 6: Final status
@@ -126,14 +139,15 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   echo "   ✅ Build directories cleaned"
   echo "   ✅ Build artifacts removed"
   echo "   ✅ Old servers stopped"
-  echo "   🔄 New server starting in background"
-  echo "   ✅ Changes pushed to remote"
-  echo "   📝 Logs available in dev.log"
+  echo "   🖥️  New server started in separate terminal"
+  echo "   ⏭️  Manual push recommended"
+  echo "   📝 Check new terminal for server output"
   echo ""
   echo "════════════════════════════════════════════════════════════════"
   echo "✅ POST-COMMIT WORKFLOW COMPLETED SUCCESSFULLY!"
-  echo "🚀 Your changes are now live on GitHub!"
+  echo "🚀 Development server started in new terminal window"
   echo "🌐 Server will be ready shortly at http://localhost:3000"
+  echo "💡 Push changes manually when ready: git push origin $current_branch"
   echo "════════════════════════════════════════════════════════════════"
   echo ""
 else
