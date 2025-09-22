@@ -202,10 +202,9 @@ export default function PlanEditorPage() {
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('all');
   const [filterLearningPath] = useState('all');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
-  const [showQuestionDialog] = useState(false);
+  const [showQuestionDialog, setShowQuestionDialog] = useState(false);
   const [showSectionQuestionsManager, setShowSectionQuestionsManager] =
     useState(false);
   const [showAddQuestionsDialog, setShowAddQuestionsDialog] = useState(false);
@@ -387,7 +386,7 @@ export default function PlanEditorPage() {
             15,
             Math.floor((comprehensiveSections.length * 3) / 7)
           ),
-          sections: comprehensiveSections.map((section, index) => ({
+          sections: comprehensiveSections.map((section: any, index: number) => ({
             id: section.id,
             name: section.name,
             category: section.category || 'foundation',
@@ -532,12 +531,6 @@ export default function PlanEditorPage() {
       );
     }
 
-    // Apply category filter
-    if (filterCategory !== 'all') {
-      filtered = filtered.filter(
-        question => question.category === filterCategory
-      );
-    }
 
     // Apply learning path filter
     if (filterLearningPath !== 'all') {
@@ -552,7 +545,6 @@ export default function PlanEditorPage() {
     selectedSection,
     plan,
     searchTerm,
-    filterCategory,
     filterLearningPath,
   ]);
 
@@ -780,7 +772,9 @@ export default function PlanEditorPage() {
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
           {/* Left Column - Sections */}
-          <div className={`xl:col-span-1 order-2 xl:order-1 ${showMobileSections ? 'block' : 'hidden xl:block'}`}>
+          <div
+            className={`xl:col-span-1 order-2 xl:order-1 ${showMobileSections ? 'block' : 'hidden xl:block'}`}
+          >
             <Card className="h-fit">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center justify-between">
@@ -874,7 +868,8 @@ export default function PlanEditorPage() {
                           Select a section first
                         </p>
                         <p className="text-xs text-blue-600 dark:text-blue-300 mt-1">
-                          Use the "Show Plan Sections" button above to select a section and view its questions.
+                          Use the "Show Plan Sections" button above to select a
+                          section and view its questions.
                         </p>
                       </div>
                     </div>
@@ -924,29 +919,13 @@ export default function PlanEditorPage() {
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex-1">
                       <Input
-                        placeholder="Search questions..."
+                        placeholder="Search questions in this section..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                         className="w-full h-10"
                       />
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                      <Select
-                        value={filterCategory}
-                        onValueChange={setFilterCategory}
-                      >
-                        <SelectTrigger className="w-full sm:w-48 h-10">
-                          <SelectValue placeholder="Category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Categories</SelectItem>
-                          {QUESTION_CATEGORIES.map(category => (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
                     </div>
                   </div>
                 </div>
@@ -1078,7 +1057,6 @@ export default function PlanEditorPage() {
                           variant="outline"
                           onClick={() => {
                             setSearchTerm('');
-                            setFilterCategory('all');
                           }}
                           className="text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:border-blue-800 dark:hover:border-blue-700 dark:hover:bg-blue-900/20"
                         >
