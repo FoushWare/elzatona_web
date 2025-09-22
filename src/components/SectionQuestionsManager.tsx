@@ -489,7 +489,13 @@ export function SectionQuestionsManager({
                     Ready to Add Questions
                   </h4>
                   <p className="text-sm text-green-700 dark:text-green-300">
-                    You have selected <span className="font-bold">{selectedQuestions.length} from {filteredQuestions.length}</span> question{filteredQuestions.length === 1 ? '' : 's'} to add to "{sectionName}".
+                    You have selected{' '}
+                    <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full text-sm font-semibold">
+                      {selectedQuestions.length}
+                    </span>
+                    {' '}of{' '}
+                    <span className="font-bold">{filteredQuestions.length}</span>
+                    {' '}question{filteredQuestions.length === 1 ? '' : 's'} to add to "{sectionName}".
                   </p>
                 </div>
               </div>
@@ -500,15 +506,15 @@ export function SectionQuestionsManager({
           <DialogFooter className="mt-6 pt-6 border-t-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 -mx-6 -mb-6 px-6 pb-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4">
               <div className="flex items-center gap-3">
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  <span className="font-semibold text-blue-600 dark:text-blue-400">
+                <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
+                  <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full text-sm font-semibold">
                     {selectedQuestions.length}
-                  </span>{' '}
-                  of{' '}
+                  </span>
+                  <span>of</span>
                   <span className="font-semibold text-gray-800 dark:text-gray-200">
                     {filteredQuestions.length}
-                  </span>{' '}
-                  questions selected
+                  </span>
+                  <span>questions selected</span>
                 </div>
                 {selectedQuestions.length > 0 && (
                   <div className="text-xs text-gray-500 dark:text-gray-400 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
@@ -536,8 +542,26 @@ export function SectionQuestionsManager({
                 >
                   <Save className="w-5 h-5 mr-2" />
                   {selectedQuestions.length > 0 
-                    ? `${selectedQuestions.length} from ${filteredQuestions.length} question${filteredQuestions.length === 1 ? '' : 's'} added`
-                    : 'No Questions Selected'
+                    ? (
+                        <span className="flex items-center gap-2">
+                          <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full text-sm font-semibold">
+                            {selectedQuestions.length}
+                          </span>
+                          <span>of</span>
+                          <span className="font-semibold">{filteredQuestions.length}</span>
+                          <span>added</span>
+                        </span>
+                      )
+                    : (
+                        <span className="flex items-center gap-2">
+                          <span className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-full text-sm font-semibold">
+                            0
+                          </span>
+                          <span>of</span>
+                          <span className="font-semibold">{filteredQuestions.length}</span>
+                          <span>added</span>
+                        </span>
+                      )
                   }
                 </Button>
               </div>
@@ -553,7 +577,14 @@ export function SectionQuestionsManager({
               className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
             >
               <Save className="w-5 h-5 mr-2" />
-              {selectedQuestions.length} from {filteredQuestions.length} added
+              <span className="flex items-center gap-2">
+                <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full text-sm font-semibold">
+                  {selectedQuestions.length}
+                </span>
+                <span>of</span>
+                <span className="font-semibold">{filteredQuestions.length}</span>
+                <span>added</span>
+              </span>
             </Button>
           </div>
         )}
