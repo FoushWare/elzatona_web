@@ -774,7 +774,7 @@ export default function PlanEditorPage() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
           {/* Left Column - Sections */}
           <div
-            className={`xl:col-span-1 order-2 xl:order-1 ${showMobileSections ? 'block' : 'hidden xl:block'}`}
+            className={`xl:col-span-1 order-1 xl:order-1 ${showMobileSections ? 'block' : 'hidden xl:block'}`}
           >
             <Card className="h-fit">
               <CardHeader className="pb-4">
@@ -856,7 +856,38 @@ export default function PlanEditorPage() {
           </div>
 
           {/* Right Column - Questions */}
-          <div className="xl:col-span-2 order-1 xl:order-2">
+          <div className="xl:col-span-2 order-2 xl:order-2">
+            {/* Section Indicator */}
+            {selectedSection && (
+              <div className="mb-4">
+                <Card className="border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-800">
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="bg-green-100 dark:bg-green-800 rounded-full p-2">
+                        <Target className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-green-800 dark:text-green-200">
+                          Working on: <span className="font-bold">{plan.sections.find(s => s.id === selectedSection)?.name}</span>
+                        </p>
+                        <p className="text-xs text-green-600 dark:text-green-300 mt-1">
+                          {plan.sections.find(s => s.id === selectedSection)?.questions.length || 0} questions assigned
+                        </p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedSection(null)}
+                        className="text-green-600 hover:text-green-700 hover:bg-green-100 dark:hover:bg-green-800"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
             {/* Mobile Section Selection Notice */}
             {!selectedSection && (
               <div className="xl:hidden mb-4">
@@ -878,7 +909,10 @@ export default function PlanEditorPage() {
                 </Card>
               </div>
             )}
-            <Card className="h-fit">
+
+            {/* Available Questions Panel - Only show when section is selected */}
+            {selectedSection && (
+              <Card className="h-fit">
               <CardHeader className="pb-4">
                 <div className="flex flex-col space-y-4">
                   {/* Title and Description */}
@@ -1081,6 +1115,7 @@ export default function PlanEditorPage() {
                 )}
               </CardContent>
             </Card>
+            )}
           </div>
         </div>
       </div>
