@@ -442,15 +442,6 @@ export function SectionQuestionsManager({
                               <Filter className="w-3 h-3" />
                               {question.category}
                             </Badge>
-                            {question.learningPath && (
-                              <Badge
-                                variant="secondary"
-                                className="text-xs font-semibold px-3 py-1.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400 flex items-center gap-1"
-                              >
-                                <Clock className="w-3 h-3" />
-                                {question.learningPath}
-                              </Badge>
-                            )}
                             {question.isActive && (
                               <Badge className="text-xs font-medium px-2 py-1 bg-green-500 text-white">
                                 Active
