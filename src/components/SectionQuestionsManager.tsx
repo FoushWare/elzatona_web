@@ -494,8 +494,8 @@ export function SectionQuestionsManager({
                       {selectedQuestions.length}
                     </span>
                     of
-                    <span className="font-bold">{filteredQuestions.length}</span>
-                    question{filteredQuestions.length === 1 ? '' : 's'} to add to "{sectionName}".
+                    <span className="font-bold">{questions.length}</span>
+                    question{questions.length === 1 ? '' : 's'} to add to "{sectionName}".
                   </p>
                 </div>
               </div>
@@ -512,7 +512,7 @@ export function SectionQuestionsManager({
                   </span>
                   <span>of</span>
                   <span className="font-semibold text-gray-800 dark:text-gray-200">
-                    {filteredQuestions.length}
+                    {questions.length}
                   </span>
                   <span>questions selected</span>
                 </div>
@@ -550,7 +550,7 @@ export function SectionQuestionsManager({
                       {selectedQuestions.length}
                     </span>
                     <span>of</span>
-                    <span className="font-semibold">{filteredQuestions.length}</span>
+                    <span className="font-semibold">{questions.length}</span>
                     <span>added</span>
                   </span>
                 </Button>
@@ -572,7 +572,7 @@ export function SectionQuestionsManager({
                   {selectedQuestions.length}
                 </span>
                 <span>of</span>
-                <span className="font-semibold">{filteredQuestions.length}</span>
+                <span className="font-semibold">{questions.length}</span>
                 <span>added</span>
               </span>
             </Button>
