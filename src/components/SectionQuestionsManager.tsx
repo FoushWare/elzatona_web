@@ -489,7 +489,7 @@ export function SectionQuestionsManager({
                     Ready to Add Questions
                   </h4>
                   <p className="text-sm text-green-700 dark:text-green-300">
-                    You have selected <span className="font-bold">{selectedQuestions.length}</span> question{selectedQuestions.length === 1 ? '' : 's'} to add to "{sectionName}".
+                    You have selected <span className="font-bold">{selectedQuestions.length} from {filteredQuestions.length}</span> question{filteredQuestions.length === 1 ? '' : 's'} to add to "{sectionName}".
                   </p>
                 </div>
               </div>
@@ -504,7 +504,11 @@ export function SectionQuestionsManager({
                   <span className="font-semibold text-blue-600 dark:text-blue-400">
                     {selectedQuestions.length}
                   </span>{' '}
-                  questions selected for this section
+                  of{' '}
+                  <span className="font-semibold text-gray-800 dark:text-gray-200">
+                    {filteredQuestions.length}
+                  </span>{' '}
+                  questions selected
                 </div>
                 {selectedQuestions.length > 0 && (
                   <div className="text-xs text-gray-500 dark:text-gray-400 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
@@ -532,7 +536,7 @@ export function SectionQuestionsManager({
                 >
                   <Save className="w-5 h-5 mr-2" />
                   {selectedQuestions.length > 0 
-                    ? `Add ${selectedQuestions.length} Question${selectedQuestions.length === 1 ? '' : 's'} to Section`
+                    ? `${selectedQuestions.length} from ${filteredQuestions.length} question${filteredQuestions.length === 1 ? '' : 's'} added`
                     : 'No Questions Selected'
                   }
                 </Button>
@@ -549,7 +553,7 @@ export function SectionQuestionsManager({
               className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
             >
               <Save className="w-5 h-5 mr-2" />
-              Add {selectedQuestions.length} Question{selectedQuestions.length === 1 ? '' : 's'}
+              {selectedQuestions.length} from {filteredQuestions.length} added
             </Button>
           </div>
         )}
