@@ -17,7 +17,14 @@ export default function AdminLoginPage() {
 
   // Redirect if already authenticated
   useEffect(() => {
+    console.log('🔄 Login page useEffect triggered:', {
+      isLoading,
+      isAuthenticated,
+      isSubmitting
+    });
+    
     if (!isLoading && isAuthenticated && !isSubmitting) {
+      console.log('🚨 Login page redirecting to dashboard - user is authenticated');
       router.replace('/admin/dashboard');
     }
   }, [isAuthenticated, isLoading, isSubmitting, router]);
