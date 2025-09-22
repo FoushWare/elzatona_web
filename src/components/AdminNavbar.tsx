@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Menu,
   X,
@@ -29,6 +30,7 @@ export default function AdminNavbar() {
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { isAuthenticated, user, logout } = useAdminAuth();
+  const router = useRouter();
 
   // Handle scroll effect
   useEffect(() => {
@@ -56,8 +58,9 @@ export default function AdminNavbar() {
   const handleLogout = () => {
     logout();
     setIsUserDropdownOpen(false);
-    // Redirect to login page
-    window.location.href = '/admin/login';
+    setIsOpen(false); // Close mobile menu if open
+    // Redirect to login page using Next.js router
+    router.replace('/admin/login');
   };
 
   const adminMenuItems = [

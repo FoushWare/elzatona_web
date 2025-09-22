@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Bug } from 'lucide-react';
 import { useUnifiedQuestions } from '@/hooks/useUnifiedQuestions';
 import { BulkQuestionData } from '@/lib/unified-question-schema';
 
@@ -28,11 +29,13 @@ interface ExtractedQuestion {
 interface MarkdownQuestionExtractorProps {
   learningPaths: Array<{ id: string; name: string }>;
   onClose: () => void;
+  onRefreshLearningPaths?: () => void;
 }
 
 export function MarkdownQuestionExtractor({
   learningPaths,
   onClose,
+  onRefreshLearningPaths,
 }: MarkdownQuestionExtractorProps) {
   const [markdownContent, setMarkdownContent] = useState('');
   const [selectedLearningPath, setSelectedLearningPath] = useState('');
@@ -62,6 +65,45 @@ export function MarkdownQuestionExtractor({
   );
 
   const { bulkImportQuestions } = useUnifiedQuestions();
+
+  // Auto-set learning path when category is selected
+  useEffect(() => {
+    if (selectedCategory === 'JavaScript') {
+      // Find the JavaScript Deep Dive learning path
+      const jsDeepDivePath = learningPaths.find(
+        path => path.name === 'JavaScript Deep Dive'
+      );
+      if (jsDeepDivePath) {
+        setSelectedLearningPath(jsDeepDivePath.id);
+      }
+    }
+  }, [selectedCategory, learningPaths]);
+
+  // Cleanup duplicate learning paths
+  const handleCleanupDuplicates = async () => {
+    try {
+      const response = await fetch(
+        '/api/admin/learning-paths/cleanup-duplicates',
+        {
+          method: 'POST',
+        }
+      );
+      const result = await response.json();
+      if (result.success) {
+        setSuccess('Duplicate learning paths cleaned up successfully!');
+        // Refresh learning paths if callback provided
+        if (onRefreshLearningPaths) {
+          onRefreshLearningPaths();
+        }
+        // Clear success message after 3 seconds
+        setTimeout(() => setSuccess(null), 3000);
+      } else {
+        setError(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      setError(`Error cleaning up duplicates: ${error}`);
+    }
+  };
 
   const categories = [
     'JavaScript',
@@ -424,9 +466,28 @@ Variables with the \`let\` keyword (and \`const\`) are hoisted, but unlike \`var
           {/* Configuration */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Learning Path
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Learning Path
+                  {selectedCategory === 'JavaScript' &&
+                    selectedLearningPath && (
+                      <span className="ml-2 text-xs text-green-600 dark:text-green-400">
+                        (Auto-set for JavaScript)
+                      </span>
+                    )}
+                </label>
+                {learningPaths.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleCleanupDuplicates}
+                    className="text-xs text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300 flex items-center gap-1"
+                    title="Clean up duplicate learning paths"
+                  >
+                    <Bug className="w-3 h-3" />
+                    Cleanup
+                  </button>
+                )}
+              </div>
               <select
                 value={selectedLearningPath}
                 onChange={e => setSelectedLearningPath(e.target.value)}
@@ -439,11 +500,22 @@ Variables with the \`let\` keyword (and \`const\`) are hoisted, but unlike \`var
                     Loading learning paths...
                   </option>
                 ) : (
-                  learningPaths.map(path => (
-                    <option key={path.id} value={path.id}>
-                      {path.name}
-                    </option>
-                  ))
+                  // Deduplicate learning paths by name, keeping the first occurrence
+                  learningPaths
+                    .filter(
+                      (path, index, self) =>
+                        index ===
+                        self.findIndex(
+                          p =>
+                            p.name.toLowerCase().trim() ===
+                            path.name.toLowerCase().trim()
+                        )
+                    )
+                    .map(path => (
+                      <option key={path.id} value={path.id}>
+                        {path.name}
+                      </option>
+                    ))
                 )}
               </select>
             </div>

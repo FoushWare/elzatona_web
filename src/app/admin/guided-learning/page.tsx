@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SectionQuestionsManager } from '@/components/SectionQuestionsManager';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,6 +33,7 @@ import {
   Target,
   XCircle,
   Edit,
+  Edit3,
   Users,
   Power,
   PowerOff,
@@ -157,6 +159,10 @@ export default function GuidedLearningAdminPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDifficulty, setFilterDifficulty] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [showSectionQuestionsManager, setShowSectionQuestionsManager] =
+    useState(false);
+  const [editingPlanId, setEditingPlanId] = useState<string | null>(null);
+  const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
 
   // Fetch sections from API and create mock plans
   useEffect(() => {
@@ -588,6 +594,50 @@ export default function GuidedLearningAdminPage() {
     fetchSectionsAndCreatePlans();
   }, []);
 
+  // Handle section questions management
+  const handleManageSectionQuestions = (planId: string, sectionId: string) => {
+    setEditingPlanId(planId);
+    setEditingSectionId(sectionId);
+    setShowSectionQuestionsManager(true);
+  };
+
+  const handleSectionQuestionsChange = (questionIds: string[]) => {
+    if (!editingPlanId || !editingSectionId) return;
+
+    setPlans(prevPlans => {
+      return prevPlans.map(plan => {
+        if (plan.id !== editingPlanId) return plan;
+
+        const updatedSections = plan.sections.map(section =>
+          section.id === editingSectionId
+            ? { ...section, questions: questionIds }
+            : section
+        );
+
+        return {
+          ...plan,
+          sections: updatedSections,
+          totalQuestions: updatedSections.reduce(
+            (total, section) => total + section.questions.length,
+            0
+          ),
+          dailyQuestions: Math.ceil(
+            updatedSections.reduce(
+              (total, section) => total + section.questions.length,
+              0
+            ) / plan.duration
+          ),
+        };
+      });
+    });
+  };
+
+  const handleCloseSectionQuestionsManager = () => {
+    setShowSectionQuestionsManager(false);
+    setEditingPlanId(null);
+    setEditingSectionId(null);
+  };
+
   const filteredPlans = plans.filter(plan => {
     const matchesSearch =
       plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -942,7 +992,7 @@ export default function GuidedLearningAdminPage() {
                   </div>
 
                   {/* Action Buttons Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                     <Button
                       variant="outline"
                       size="sm"
@@ -969,6 +1019,28 @@ export default function GuidedLearningAdminPage() {
                     >
                       <Edit className="w-4 h-4" />
                       <span className="hidden sm:inline">Edit</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        // For now, just show the first section's questions manager
+                        // In a real implementation, you might want to show a section selector first
+                        const firstSection = plan.sections[0];
+                        if (firstSection) {
+                          handleManageSectionQuestions(
+                            plan.id,
+                            firstSection.id
+                          );
+                        } else {
+                          alert('No sections available for this plan.');
+                        }
+                      }}
+                      className="flex items-center justify-center gap-1 text-orange-600 hover:text-orange-700 hover:bg-orange-50 text-xs sm:text-sm"
+                      title="Manage questions for plan sections"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                      <span className="hidden sm:inline">Questions</span>
                     </Button>
                     <Button
                       variant="outline"
@@ -1040,6 +1112,30 @@ export default function GuidedLearningAdminPage() {
           </div>
         )}
       </div>
+
+      {/* Section Questions Manager Modal */}
+      {showSectionQuestionsManager && editingPlanId && editingSectionId && (
+        <SectionQuestionsManager
+          sectionId={editingSectionId}
+          sectionName={
+            plans
+              .find(p => p.id === editingPlanId)
+              ?.sections.find(s => s.id === editingSectionId)?.name || ''
+          }
+          currentQuestionIds={
+            plans
+              .find(p => p.id === editingPlanId)
+              ?.sections.find(s => s.id === editingSectionId)?.questions || []
+          }
+          onQuestionsChange={handleSectionQuestionsChange}
+          onClose={handleCloseSectionQuestionsManager}
+          sectionCategory={
+            plans
+              .find(p => p.id === editingPlanId)
+              ?.sections.find(s => s.id === editingSectionId)?.category
+          }
+        />
+      )}
     </div>
   );
 }

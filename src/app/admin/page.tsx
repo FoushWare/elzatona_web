@@ -12,11 +12,9 @@ export default function AdminPage() {
   useEffect(() => {
     if (!isLoading) {
       if (isAuthenticated) {
-        // User is logged in, redirect to dashboard
-        router.push('/admin/dashboard');
+        router.replace('/admin/dashboard');
       } else {
-        // User is not logged in, redirect to login
-        router.push('/admin/login');
+        router.replace('/admin/login');
       }
     }
   }, [isAuthenticated, isLoading, router]);

@@ -25,10 +25,13 @@ import {
   FileText,
   AlertCircle,
   RefreshCw,
+  Bug,
+  Tag,
 } from 'lucide-react';
 import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import { MarkdownQuestionExtractor } from '@/components/MarkdownQuestionExtractor';
 import { QuestionEditModal } from '@/components/QuestionEditModal';
+import { QuestionViewModal } from '@/components/QuestionViewModal';
 import { useEffect } from 'react';
 
 export default function QuestionsManagementPage() {
@@ -52,6 +55,8 @@ export default function QuestionsManagementPage() {
   const [showDebugInfo, setShowDebugInfo] = useState(false);
   const [showMarkdownExtractor, setShowMarkdownExtractor] = useState(false);
   const [editingQuestion, setEditingQuestion] =
+    useState<UnifiedQuestion | null>(null);
+  const [viewingQuestion, setViewingQuestion] =
     useState<UnifiedQuestion | null>(null);
 
   // Load learning paths when component mounts
@@ -117,8 +122,8 @@ export default function QuestionsManagementPage() {
 
   const migrateQuestionLearningPaths = async () => {
     try {
-      // Get all questions
-      const allQuestions = await getQuestions();
+      // Get all questions from current state
+      const allQuestions = questions;
 
       // Define the mapping from old IDs to new IDs
       const learningPathMapping = {
@@ -248,7 +253,7 @@ export default function QuestionsManagementPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="space-y-4">
         <div>
           <h1 className="text-3xl font-bold">Questions Management</h1>
           <p className="text-gray-600 dark:text-gray-400">
@@ -273,6 +278,33 @@ export default function QuestionsManagementPage() {
             <Plus className="w-4 h-4 mr-2" />
             <span className="hidden sm:inline">Initialize Learning Paths</span>
             <span className="sm:hidden">Init Paths</span>
+          </Button>
+          <Button
+            onClick={async () => {
+              try {
+                const response = await fetch(
+                  '/api/admin/learning-paths/cleanup-duplicates',
+                  {
+                    method: 'POST',
+                  }
+                );
+                const result = await response.json();
+                if (result.success) {
+                  alert('Duplicate learning paths cleaned up successfully!');
+                  await loadLearningPaths(); // Reload learning paths
+                } else {
+                  alert(`Error: ${result.error}`);
+                }
+              } catch (error) {
+                alert(`Error cleaning up duplicates: ${error}`);
+              }
+            }}
+            variant="outline"
+            className="bg-orange-50 hover:bg-orange-100 text-orange-700 border-orange-200 flex-shrink-0"
+          >
+            <Bug className="w-4 h-4 mr-2" />
+            <span className="hidden sm:inline">Cleanup Duplicates</span>
+            <span className="sm:hidden">Cleanup</span>
           </Button>
           <Button
             onClick={activateAllQuestions}
@@ -328,6 +360,74 @@ export default function QuestionsManagementPage() {
             <span className="sm:hidden">Unified</span>
           </Button>
           <Button
+            onClick={() => (window.location.href = '/admin/content/topics')}
+            variant="outline"
+            className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200 flex-shrink-0"
+          >
+            <Tag className="w-4 h-4 mr-2" />
+            <span className="hidden sm:inline">Manage Topics</span>
+            <span className="sm:hidden">Topics</span>
+          </Button>
+          <Button
+            onClick={async () => {
+              try {
+                const response = await fetch('/api/admin/topics/initialize', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ force: false }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                  alert(
+                    `Successfully initialized ${data.data.count} common topics!`
+                  );
+                } else {
+                  if (data.error.includes('already exist')) {
+                    const force = confirm(
+                      'Topics already exist. Do you want to overwrite them with common topics?'
+                    );
+                    if (force) {
+                      const forceResponse = await fetch(
+                        '/api/admin/topics/initialize',
+                        {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({ force: true }),
+                        }
+                      );
+
+                      const forceData = await forceResponse.json();
+                      if (forceData.success) {
+                        alert(
+                          `Successfully initialized ${forceData.data.count} common topics!`
+                        );
+                      } else {
+                        alert(`Error: ${forceData.error}`);
+                      }
+                    }
+                  } else {
+                    alert(`Error: ${data.error}`);
+                  }
+                }
+              } catch (error) {
+                alert('Failed to initialize topics');
+                console.error('Error initializing topics:', error);
+              }
+            }}
+            variant="outline"
+            className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200 flex-shrink-0"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            <span className="hidden sm:inline">Init Common Topics</span>
+            <span className="sm:hidden">Init Topics</span>
+          </Button>
+          <Button
             onClick={async () => {
               await loadStats();
               alert('Stats refreshed! Check the summary cards above.');
@@ -338,6 +438,21 @@ export default function QuestionsManagementPage() {
             <RefreshCw className="w-4 h-4 mr-2" />
             <span className="hidden sm:inline">Refresh Stats</span>
             <span className="sm:hidden">Refresh</span>
+          </Button>
+          <Button
+            onClick={() => setShowDebugInfo(!showDebugInfo)}
+            variant="outline"
+            className={`flex-shrink-0 ${
+              showDebugInfo
+                ? 'bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200'
+                : 'bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200'
+            }`}
+          >
+            <Bug className="w-4 h-4 mr-2" />
+            <span className="hidden sm:inline">
+              {showDebugInfo ? 'Hide Debug' : 'Show Debug'}
+            </span>
+            <span className="sm:hidden">Debug</span>
           </Button>
           <Button
             onClick={async () => {
@@ -590,7 +705,12 @@ export default function QuestionsManagementPage() {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setViewingQuestion(question)}
+                      title="View question details"
+                    >
                       <Eye className="w-4 h-4" />
                     </Button>
                     <Button
@@ -637,36 +757,39 @@ export default function QuestionsManagementPage() {
         </Alert>
       )}
 
-      {/* Debug Info */}
-      <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
-        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Debug Info:
-        </h4>
-        <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
-          <div>Total Questions: {questions.length}</div>
-          <div>
-            Active Questions: {questions.filter(q => q.isActive).length}
-          </div>
-          <div>Learning Paths: {learningPaths.length}</div>
-          <div>
-            Learning Path IDs: {learningPaths.map(p => p.id).join(', ')}
-          </div>
-          <div>Questions by Learning Path:</div>
-          {learningPaths.map(path => (
-            <div key={path.id} className="ml-4">
-              - {path.name} ({path.id}):{' '}
-              {questions.filter(q => q.learningPath === path.id).length}{' '}
-              questions
+      {/* Debug Info - Only show when debug toggle is enabled */}
+      {showDebugInfo && (
+        <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Debug Info:
+          </h4>
+          <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+            <div>Total Questions: {questions.length}</div>
+            <div>
+              Active Questions: {questions.filter(q => q.isActive).length}
             </div>
-          ))}
+            <div>Learning Paths: {learningPaths.length}</div>
+            <div>
+              Learning Path IDs: {learningPaths.map(p => p.id).join(', ')}
+            </div>
+            <div>Questions by Learning Path:</div>
+            {learningPaths.map(path => (
+              <div key={path.id} className="ml-4">
+                - {path.name} ({path.id}):{' '}
+                {questions.filter(q => q.learningPath === path.id).length}{' '}
+                questions
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Markdown Question Extractor Modal */}
       {showMarkdownExtractor && (
         <MarkdownQuestionExtractor
           learningPaths={learningPaths}
           onClose={() => setShowMarkdownExtractor(false)}
+          onRefreshLearningPaths={loadLearningPaths}
         />
       )}
 
@@ -683,75 +806,14 @@ export default function QuestionsManagementPage() {
         />
       )}
 
-      {/* Floating Debug Panel */}
-      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-        {/* Debug Toggle Button - Centered */}
-        <Button
-          onClick={() => setShowDebugInfo(!showDebugInfo)}
-          size="sm"
-          variant="outline"
-          className={`shadow-lg transition-all duration-200 ${
-            showDebugInfo
-              ? 'bg-blue-500 hover:bg-blue-600 text-white border-blue-500'
-              : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 dark:border-gray-600'
-          }`}
-        >
-          <AlertCircle className="w-4 h-4" />
-        </Button>
-
-        {/* Debug Info Popup */}
-        {showDebugInfo && (
-          <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-4 max-w-sm min-w-80">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Debug Info
-              </h4>
-              <Button
-                onClick={() => setShowDebugInfo(false)}
-                size="sm"
-                variant="ghost"
-                className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600"
-              >
-                ×
-              </Button>
-            </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1 max-h-64 overflow-y-auto">
-              <div className="font-medium text-gray-800 dark:text-gray-200">
-                Questions:
-              </div>
-              <div>Total: {questions.length}</div>
-              <div>Active: {questions.filter(q => q.isActive).length}</div>
-              <div>
-                Incomplete: {questions.filter(q => !q.isComplete).length}
-              </div>
-
-              <div className="font-medium text-gray-800 dark:text-gray-200 mt-2">
-                Stats:
-              </div>
-              <div>Total: {stats.totalQuestions}</div>
-              <div>Active: {stats.activeQuestions}</div>
-              <div>Incomplete: {stats.incompleteQuestions}</div>
-
-              <div className="font-medium text-gray-800 dark:text-gray-200 mt-2">
-                Learning Paths:
-              </div>
-              <div className="text-xs">
-                {learningPaths.map(p => p.id).join(', ')}
-              </div>
-
-              <div className="font-medium text-gray-800 dark:text-gray-200 mt-2">
-                By Path:
-              </div>
-              {learningPaths.map(path => (
-                <div key={path.id} className="ml-2">
-                  • {path.name}:{' '}
-                  {questions.filter(q => q.learningPath === path.id).length}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+      {/* Question View Modal */}
+      {viewingQuestion && (
+        <QuestionViewModal
+          question={viewingQuestion}
+          learningPaths={learningPaths}
+          onClose={() => setViewingQuestion(null)}
+        />
+      )}
     </div>
   );
 }
