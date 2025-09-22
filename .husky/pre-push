@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+
+echo "🚀 Pre-push checks starting..."
+
+# Get the current branch name
+current_branch=$(git branch --show-current)
+
+# Only run cleanup on development branches
+if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_branch" == "develop" ]] || [[ "$current_branch" == "main" ]]; then
+  echo "🔄 On main development branch, running pre-push cleanup..."
+  
+  # Quick build check
+  echo "🏗️  Running quick build check..."
+  npm run build:check
+  
+  if [ $? -ne 0 ]; then
+    echo "❌ Build check failed! Please fix build issues before pushing."
+    exit 1
+  fi
+  
+  # Clean up build files
+  echo "🧹 Cleaning up build files before push..."
+  rm -rf .next
+  rm -rf build
+  rm -rf storybook-static
+  rm -f tsconfig.tsbuildinfo
+  
+  echo "✅ Pre-push cleanup completed!"
+else
+  echo "ℹ️  On branch '$current_branch', skipping pre-push cleanup"
+fi
+
+echo "🚀 Ready to push!"

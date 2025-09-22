@@ -180,7 +180,7 @@ export function SectionQuestionsManager({
         <DialogHeader className="pb-4">
           <DialogTitle className="flex items-center gap-3 text-xl">
             <BookOpen className="w-6 h-6 text-blue-600" />
-            Add Questions to "{sectionName}"
+                Add Questions to &quot;{sectionName}&quot;
           </DialogTitle>
           <DialogDescription className="text-base">
             Choose from existing questions to add to this learning section. You

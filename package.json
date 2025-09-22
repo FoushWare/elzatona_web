@@ -58,7 +58,9 @@
     "pre-commit:switch": "bash scripts/switch-pre-commit.sh",
     "pre-commit:fast": "cp .husky/pre-commit-fast .husky/pre-commit && echo '✅ Switched to FAST pre-commit checks'",
     "pre-commit:standard": "cp .husky/pre-commit .husky/pre-commit && echo '✅ Switched to STANDARD pre-commit checks'",
-    "pre-commit:full": "cp .husky/pre-commit-full .husky/pre-commit && echo '✅ Switched to FULL pre-commit checks'"
+    "pre-commit:full": "cp .husky/pre-commit-full .husky/pre-commit && echo '✅ Switched to FULL pre-commit checks'",
+    "cleanup": "bash scripts/cleanup-build.sh",
+    "cleanup:deep": "bash scripts/cleanup-build.sh --deep"
   },
   "dependencies": {
     "@daily-co/daily-js": "^0.84.0",

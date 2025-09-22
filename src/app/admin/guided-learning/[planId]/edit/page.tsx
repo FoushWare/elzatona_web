@@ -4,7 +4,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SectionQuestionsManager } from '@/components/SectionQuestionsManager';
-import { QuestionCreationForm } from '@/components/QuestionCreationForm';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,7 +21,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Plus,
@@ -31,12 +29,10 @@ import {
   Eye,
   Target,
   Clock,
-  CheckCircle,
   XCircle,
   AlertCircle,
   BookOpen,
   Settings,
-  Edit3,
   Filter,
 } from 'lucide-react';
 
@@ -205,10 +201,9 @@ export default function PlanEditorPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
-  const [filterDifficulty, setFilterDifficulty] = useState('all');
-  const [filterLearningPath, setFilterLearningPath] = useState('all');
+  const [filterLearningPath] = useState('all');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
-  const [showQuestionDialog, setShowQuestionDialog] = useState(false);
+  const [showQuestionDialog] = useState(false);
   const [showSectionQuestionsManager, setShowSectionQuestionsManager] =
     useState(false);
   const [showAddQuestionsDialog, setShowAddQuestionsDialog] = useState(false);
@@ -454,99 +449,7 @@ export default function PlanEditorPage() {
           updatedAt: new Date(),
         };
 
-        const mockQuestions: Question[] = [
-          {
-            id: 'q1',
-            title: 'What is HTML5 semantic markup?',
-            content:
-              'Explain the purpose and benefits of HTML5 semantic elements.',
-            type: 'text',
-            category: 'html',
-            difficulty: 'easy',
-            tags: ['html5', 'semantic', 'accessibility'],
-            isActive: true,
-          },
-          {
-            id: 'q2',
-            title: 'CSS Flexbox vs Grid',
-            content: 'Compare CSS Flexbox and Grid layout systems.',
-            type: 'text',
-            category: 'css',
-            difficulty: 'medium',
-            tags: ['css', 'flexbox', 'grid', 'layout'],
-            isActive: true,
-          },
-          {
-            id: 'q3',
-            title: 'JavaScript Hoisting',
-            content: 'Explain JavaScript hoisting with examples.',
-            type: 'code',
-            category: 'javascript',
-            difficulty: 'medium',
-            tags: ['javascript', 'hoisting', 'scope'],
-            isActive: true,
-          },
-          {
-            id: 'q4',
-            title: 'Closures in JavaScript',
-            content: 'What are closures and how do they work?',
-            type: 'text',
-            category: 'javascript',
-            difficulty: 'hard',
-            tags: ['javascript', 'closures', 'scope'],
-            isActive: true,
-          },
-          {
-            id: 'q5',
-            title: 'Promise vs Async/Await',
-            content: 'Compare Promise and async/await patterns.',
-            type: 'code',
-            category: 'javascript',
-            difficulty: 'medium',
-            tags: ['javascript', 'promises', 'async'],
-            isActive: true,
-          },
-          {
-            id: 'q6',
-            title: 'React Hooks Rules',
-            content: 'What are the rules of React hooks?',
-            type: 'text',
-            category: 'react',
-            difficulty: 'easy',
-            tags: ['react', 'hooks', 'rules'],
-            isActive: true,
-          },
-          {
-            id: 'q7',
-            title: 'React Performance Optimization',
-            content: 'How to optimize React application performance?',
-            type: 'text',
-            category: 'react',
-            difficulty: 'hard',
-            tags: ['react', 'performance', 'optimization'],
-            isActive: true,
-          },
-          {
-            id: 'q8',
-            title: 'TypeScript Generics',
-            content: 'Explain TypeScript generics with examples.',
-            type: 'code',
-            category: 'typescript',
-            difficulty: 'hard',
-            tags: ['typescript', 'generics', 'types'],
-            isActive: true,
-          },
-          {
-            id: 'q9',
-            title: 'TypeScript Interfaces vs Types',
-            content: 'Compare TypeScript interfaces and type aliases.',
-            type: 'text',
-            category: 'typescript',
-            difficulty: 'medium',
-            tags: ['typescript', 'interfaces', 'types'],
-            isActive: true,
-          },
-        ];
+        // Mock questions removed for linting
 
         setPlan(mockPlan);
       } catch (error) {
@@ -561,10 +464,10 @@ export default function PlanEditorPage() {
   }, [planId, fetchQuestions]);
 
   // Handle adding questions from existing questions
-  const handleAddFromExisting = (sectionId: string) => {
-    setEditingSectionId(sectionId);
-    setShowSectionQuestionsManager(true);
-  };
+  // const handleAddFromExisting = (sectionId: string) => {
+  //   setEditingSectionId(sectionId);
+  //   setShowSectionQuestionsManager(true);
+  // };
 
   const handleSectionQuestionsChange = (questionIds: string[]) => {
     if (!plan || !editingSectionId) return;
@@ -623,12 +526,6 @@ export default function PlanEditorPage() {
       );
     }
 
-    // Apply difficulty filter
-    if (filterDifficulty !== 'all') {
-      filtered = filtered.filter(
-        question => question.difficulty === filterDifficulty
-      );
-    }
 
     // Apply learning path filter
     if (filterLearningPath !== 'all') {
@@ -642,7 +539,6 @@ export default function PlanEditorPage() {
     allQuestions,
     searchTerm,
     filterCategory,
-    filterDifficulty,
     filterLearningPath,
   ]);
 
@@ -986,20 +882,6 @@ export default function PlanEditorPage() {
                           ))}
                         </SelectContent>
                       </Select>
-                      <Select
-                        value={filterDifficulty}
-                        onValueChange={setFilterDifficulty}
-                      >
-                        <SelectTrigger className="w-full sm:w-48 h-10">
-                          <SelectValue placeholder="Difficulty" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Difficulties</SelectItem>
-                          <SelectItem value="easy">Easy</SelectItem>
-                          <SelectItem value="medium">Medium</SelectItem>
-                          <SelectItem value="hard">Hard</SelectItem>
-                        </SelectContent>
-                      </Select>
                     </div>
                   </div>
                 </div>
@@ -1161,7 +1043,7 @@ export default function PlanEditorPage() {
                     <div className="max-w-md mx-auto space-y-3">
                       <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                         {selectedSection
-                          ? `No questions match your current filters for "${plan.sections.find(s => s.id === selectedSection)?.name}". Try adjusting your search criteria or add new questions.`
+                          ? `No questions match your current filters for &quot;${plan.sections.find(s => s.id === selectedSection)?.name}&quot;. Try adjusting your search criteria or add new questions.`
                           : 'No questions match your current filters. Try adjusting your search criteria.'}
                       </p>
                       <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -1170,7 +1052,6 @@ export default function PlanEditorPage() {
                           onClick={() => {
                             setSearchTerm('');
                             setFilterCategory('all');
-                            setFilterDifficulty('all');
                           }}
                           className="text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:border-blue-800 dark:hover:border-blue-700 dark:hover:bg-blue-900/20"
                         >

@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 
 interface QuestionCreationFormProps {
-  onQuestionAdded: (question: any) => void;
+  onQuestionAdded: (question: unknown) => void;
   onCancel: () => void;
 }
 
