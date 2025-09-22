@@ -391,7 +391,11 @@ export function SectionQuestionsManager({
                             <input
                               type="checkbox"
                               checked={selectedQuestions.includes(question.id)}
-                              onChange={() => handleQuestionToggle(question.id)}
+                              onChange={(e) => {
+                                e.stopPropagation();
+                                handleQuestionToggle(question.id);
+                              }}
+                              onClick={(e) => e.stopPropagation()}
                               className="w-6 h-6 text-blue-600 rounded-lg focus:ring-blue-500 focus:ring-2 cursor-pointer"
                             />
                             {selectedQuestions.includes(question.id) && (
