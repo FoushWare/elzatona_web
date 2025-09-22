@@ -34,6 +34,8 @@ import {
   BookOpen,
   Settings,
   Filter,
+  Menu,
+  X,
 } from 'lucide-react';
 
 interface LearningPlanTemplate {
@@ -208,6 +210,7 @@ export default function PlanEditorPage() {
     useState(false);
   const [showAddQuestionsDialog, setShowAddQuestionsDialog] = useState(false);
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
+  const [showMobileSections, setShowMobileSections] = useState(false);
 
   // Fetch questions from the API
   const fetchQuestions = useCallback(async () => {
@@ -511,7 +514,7 @@ export default function PlanEditorPage() {
     if (selectedSection && plan) {
       const section = plan.sections.find(s => s.id === selectedSection);
       if (section) {
-        filtered = filtered.filter(question => 
+        filtered = filtered.filter(question =>
           section.questions.includes(question.id)
         );
       }
@@ -761,9 +764,23 @@ export default function PlanEditorPage() {
           </div>
         </div>
 
+        {/* Mobile Toggle Button */}
+        <div className="xl:hidden mb-4">
+          <Button
+            onClick={() => setShowMobileSections(!showMobileSections)}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            <Menu className="w-4 h-4 mr-2" />
+            {showMobileSections ? 'Hide' : 'Show'} Plan Sections
+            <Badge variant="secondary" className="ml-2 text-xs">
+              {plan.sections.length}
+            </Badge>
+          </Button>
+        </div>
+
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
           {/* Left Column - Sections */}
-          <div className="xl:col-span-1 order-2 xl:order-1">
+          <div className={`xl:col-span-1 order-2 xl:order-1 ${showMobileSections ? 'block' : 'hidden xl:block'}`}>
             <Card className="h-fit">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center justify-between">
@@ -771,9 +788,20 @@ export default function PlanEditorPage() {
                     <BookOpen className="w-5 h-5 text-blue-600" />
                     <span className="text-lg font-semibold">Plan Sections</span>
                   </div>
-                  <Badge variant="secondary" className="text-xs font-medium">
-                    {plan.sections.length} sections
-                  </Badge>
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="secondary" className="text-xs font-medium">
+                      {plan.sections.length} sections
+                    </Badge>
+                    {/* Mobile Close Button */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowMobileSections(false)}
+                      className="xl:hidden p-1 h-8 w-8"
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
@@ -785,7 +813,10 @@ export default function PlanEditorPage() {
                         ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
                         : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                     }`}
-                    onClick={() => setSelectedSection(section.id)}
+                    onClick={() => {
+                      setSelectedSection(section.id);
+                      setShowMobileSections(false); // Close mobile menu when section is selected
+                    }}
                   >
                     <CardContent className="p-4">
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-3">
@@ -831,6 +862,26 @@ export default function PlanEditorPage() {
 
           {/* Right Column - Questions */}
           <div className="xl:col-span-2 order-1 xl:order-2">
+            {/* Mobile Section Selection Notice */}
+            {!selectedSection && (
+              <div className="xl:hidden mb-4">
+                <Card className="border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800">
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                          Select a section first
+                        </p>
+                        <p className="text-xs text-blue-600 dark:text-blue-300 mt-1">
+                          Use the "Show Plan Sections" button above to select a section and view its questions.
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
             <Card className="h-fit">
               <CardHeader className="pb-4">
                 <div className="flex flex-col space-y-4">
@@ -848,7 +899,7 @@ export default function PlanEditorPage() {
                       </p>
                     </div>
                   </div>
-                  
+
                   {/* Add Questions Button - Better positioned */}
                   {selectedSection && (
                     <div className="flex justify-end">
