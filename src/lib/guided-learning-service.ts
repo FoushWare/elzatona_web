@@ -183,6 +183,22 @@ export class GuidedLearningService {
     }
   }
 
+  async createOrUpdatePlan(
+    planId: string,
+    planData: Omit<LearningPlanTemplate, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<void> {
+    try {
+      const planRef = doc(db, this.COLLECTIONS.PLANS, planId);
+      await setDoc(planRef, {
+        ...planData,
+        updatedAt: Timestamp.now(),
+      }, { merge: true });
+    } catch (error) {
+      console.error('Error creating/updating learning plan:', error);
+      throw new Error('Failed to create/update learning plan');
+    }
+  }
+
   async updatePlan(
     planId: string,
     updates: Partial<LearningPlanTemplate>
