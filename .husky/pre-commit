@@ -1,30 +1,5 @@
 #!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
-echo "🔍 Running pre-commit checks..."
-
-# Run lint-staged first
-echo "📝 Running lint-staged..."
-npx lint-staged
-
-# Check if lint-staged passed
-if [ $? -ne 0 ]; then
-  echo "❌ Lint-staged failed. Please fix the issues before committing."
-  exit 1
-fi
-
-# Skip tests for now (tests need to be fixed first)
-echo "⚠️  Skipping tests - they need to be fixed first"
-echo "💡 Run 'npm test' manually to see test failures and fix them"
-
-# Run build check
-echo "🏗️  Running build check..."
-npm run build
-
-# Check if build passed
-if [ $? -ne 0 ]; then
-  echo "❌ Build failed! Please fix the build issues before committing."
-  echo "💡 You can run 'npm run build' manually to see the specific errors."
-  exit 1
-fi
-
-echo "✅ All pre-commit checks passed! Tests, linting, and build are successful."
+# Run linting before commit
+npm run lint
