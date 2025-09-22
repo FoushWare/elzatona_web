@@ -386,17 +386,19 @@ export default function PlanEditorPage() {
             15,
             Math.floor((comprehensiveSections.length * 3) / 7)
           ),
-          sections: comprehensiveSections.map((section: any, index: number) => ({
-            id: section.id,
-            name: section.name,
-            category: section.category || 'foundation',
-            questions: Array.from(
-              { length: 3 },
-              (_, i) => `q${index * 3 + i + 1}`
-            ),
-            weight: Math.floor(100 / comprehensiveSections.length),
-            order: index + 1,
-          })),
+          sections: comprehensiveSections.map(
+            (section: any, index: number) => ({
+              id: section.id,
+              name: section.name,
+              category: section.category || 'foundation',
+              questions: Array.from(
+                { length: 3 },
+                (_, i) => `q${index * 3 + i + 1}`
+              ),
+              weight: Math.floor(100 / comprehensiveSections.length),
+              order: index + 1,
+            })
+          ),
           features:
             planId === '1-day-plan'
               ? ['Quick preparation', 'Essential topics', '2-3 hours']
@@ -545,13 +547,7 @@ export default function PlanEditorPage() {
     }
 
     setQuestions(filtered);
-  }, [
-    allQuestions,
-    selectedSection,
-    plan,
-    searchTerm,
-    filterLearningPath,
-  ]);
+  }, [allQuestions, selectedSection, plan, searchTerm, filterLearningPath]);
 
   // Questions are now filtered in useEffect, so we use the filtered questions directly
 
@@ -930,8 +926,7 @@ export default function PlanEditorPage() {
                         className="w-full h-10"
                       />
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4"></div>
                   </div>
                 </div>
 
