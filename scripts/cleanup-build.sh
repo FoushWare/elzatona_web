@@ -14,15 +14,9 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Step 1: Remove build directories
+# Step 1: Remove build directories (but keep .next for development)
 echo "📁 STEP 1: Cleaning build directories..."
-echo "   🗑️  Removing .next directory..."
-if [ -d ".next" ]; then
-    rm -rf .next
-    echo "   ✅ .next directory removed"
-else
-    echo "   ℹ️  .next directory not found (already clean)"
-fi
+echo "   ℹ️  Keeping .next directory (required for Next.js development)"
 
 echo "   🗑️  Removing build directory..."
 if [ -d "build" ]; then
@@ -57,15 +51,9 @@ else
 fi
 echo ""
 
-# Step 2: Remove build artifacts
+# Step 2: Remove build artifacts (but keep Next.js cache)
 echo "📄 STEP 2: Cleaning build artifacts..."
-echo "   🗑️  Removing TypeScript build info..."
-if [ -f "tsconfig.tsbuildinfo" ]; then
-    rm -f tsconfig.tsbuildinfo
-    echo "   ✅ tsconfig.tsbuildinfo removed"
-else
-    echo "   ℹ️  tsconfig.tsbuildinfo not found (already clean)"
-fi
+echo "   ℹ️  Keeping TypeScript build info (helps with incremental builds)"
 
 echo "   🗑️  Removing .next cache..."
 if [ -d ".next/cache" ]; then

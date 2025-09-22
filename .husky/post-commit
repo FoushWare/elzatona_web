@@ -16,15 +16,9 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   echo "🔄 Running cleanup on development branch..."
   echo ""
   
-  # Step 1: Remove build directories
+  # Step 1: Remove build directories (but keep .next for Next.js)
   echo "📁 STEP 1: Cleaning build directories..."
-  echo "   🗑️  Removing .next directory..."
-  if [ -d ".next" ]; then
-    rm -rf .next
-    echo "   ✅ .next directory removed"
-  else
-    echo "   ℹ️  .next directory not found (already clean)"
-  fi
+  echo "   ℹ️  Keeping .next directory (required for Next.js development)"
   
   echo "   🗑️  Removing build directory..."
   if [ -d "build" ]; then
@@ -43,15 +37,9 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   fi
   echo ""
   
-  # Step 2: Remove build artifacts
+  # Step 2: Remove build artifacts (but keep Next.js cache)
   echo "📄 STEP 2: Cleaning build artifacts..."
-  echo "   🗑️  Removing TypeScript build info..."
-  if [ -f "tsconfig.tsbuildinfo" ]; then
-    rm -f tsconfig.tsbuildinfo
-    echo "   ✅ tsconfig.tsbuildinfo removed"
-  else
-    echo "   ℹ️  tsconfig.tsbuildinfo not found (already clean)"
-  fi
+  echo "   ℹ️  Keeping TypeScript build info (helps with incremental builds)"
   
   echo "   🗑️  Removing test results..."
   if [ -d "test-results" ]; then
@@ -103,17 +91,22 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   fi
   echo ""
   
-  # Step 4: Restart development server
-  echo "🚀 STEP 4: Starting fresh development server..."
-  echo "   📝 Starting server in background..."
+  # Step 4: Restart development server (only if not already running)
+  echo "🚀 STEP 4: Checking development server status..."
   
-  # Start server in background and don't wait for it
-  nohup npm run dev > dev.log 2>&1 &
-  SERVER_PID=$!
-  echo "   📋 Server PID: $SERVER_PID"
-  echo "   ⏳ Server starting in background..."
-  echo "   💡 Check dev.log for server output"
-  echo "   🌐 Server will be available at http://localhost:3000 when ready"
+  # Check if server is already running
+  if pgrep -f "npm run dev" > /dev/null; then
+    echo "   ✅ Development server is already running"
+    echo "   🌐 Server should be available at http://localhost:3000"
+  else
+    echo "   📝 Starting server in background..."
+    nohup npm run dev > dev.log 2>&1 &
+    SERVER_PID=$!
+    echo "   📋 Server PID: $SERVER_PID"
+    echo "   ⏳ Server starting in background..."
+    echo "   💡 Check dev.log for server output"
+    echo "   🌐 Server will be available at http://localhost:3000 when ready"
+  fi
   echo ""
   
   # Step 5: Push to remote repository
