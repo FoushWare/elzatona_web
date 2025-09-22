@@ -23,9 +23,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const isPublicPage = isLoginPage || isAdminRootPage;
 
   useEffect(() => {
+    console.log('🔄 Admin Layout useEffect triggered:', {
+      isLoading,
+      isAuthenticated,
+      isPublicPage,
+      pathname
+    });
+    
     // Only redirect if we're sure about the authentication state
     if (!isLoading && !isAuthenticated && !isPublicPage) {
+      console.log('🚨 Redirecting to login - not authenticated and not on public page');
       router.replace('/admin/login');
+    } else if (!isLoading && isAuthenticated && isPublicPage) {
+      console.log('🚨 Redirecting to dashboard - authenticated but on public page');
+      router.replace('/admin/dashboard');
     }
   }, [isAuthenticated, isLoading, router, isPublicPage, pathname]);
 
