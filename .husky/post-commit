@@ -1,0 +1,48 @@
+#!/usr/bin/env sh
+
+echo "🧹 Post-commit cleanup starting..."
+
+# Get the current branch name
+current_branch=$(git branch --show-current)
+
+# Only run cleanup on development branches
+if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_branch" == "develop" ]] || [[ "$current_branch" == "main" ]]; then
+  echo "🔄 On main development branch, cleaning up build files..."
+  
+  # Remove build directories
+  echo "🗑️  Removing .next directory..."
+  rm -rf .next
+  
+  echo "🗑️  Removing build directory..."
+  rm -rf build
+  
+  echo "🗑️  Removing storybook-static directory..."
+  rm -rf storybook-static
+  
+  # Remove other build artifacts
+  echo "🗑️  Removing TypeScript build info..."
+  rm -f tsconfig.tsbuildinfo
+  
+  echo "🗑️  Removing test results..."
+  rm -rf test-results
+  
+  echo "🗑️  Removing coverage reports..."
+  rm -rf coverage
+  
+  # Kill any running development servers
+  echo "💀 Killing old development servers..."
+  pkill -f "npm run dev" || true
+  pkill -f "npm run start" || true
+  pkill -f "next-server" || true
+  
+  # Restart development server
+  echo "🚀 Restarting development server..."
+  nohup npm run dev > dev.log 2>&1 &
+  
+  echo "✅ Post-commit cleanup completed!"
+  echo "📝 Development server restarted and running in background"
+  echo "📋 Check dev.log for server output"
+else
+  echo "ℹ️  On branch '$current_branch', skipping build cleanup"
+  echo "💡 Build cleanup only runs on main development branches"
+fi
