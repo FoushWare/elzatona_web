@@ -1,48 +1,146 @@
 #!/usr/bin/env sh
 
-echo "🧹 Post-commit cleanup starting..."
+echo ""
+echo "════════════════════════════════════════════════════════════════"
+echo "🧹 POST-COMMIT HOOK STARTING..."
+echo "════════════════════════════════════════════════════════════════"
+echo ""
 
 # Get the current branch name
 current_branch=$(git branch --show-current)
+echo "📍 Current branch: $current_branch"
+echo ""
 
 # Only run cleanup on development branches
 if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_branch" == "develop" ]] || [[ "$current_branch" == "main" ]]; then
-  echo "🔄 On main development branch, cleaning up build files..."
+  echo "🔄 Running cleanup on development branch..."
+  echo ""
   
-  # Remove build directories
-  echo "🗑️  Removing .next directory..."
-  rm -rf .next
+  # Step 1: Remove build directories
+  echo "📁 STEP 1: Cleaning build directories..."
+  echo "   🗑️  Removing .next directory..."
+  if [ -d ".next" ]; then
+    rm -rf .next
+    echo "   ✅ .next directory removed"
+  else
+    echo "   ℹ️  .next directory not found (already clean)"
+  fi
   
-  echo "🗑️  Removing build directory..."
-  rm -rf build
+  echo "   🗑️  Removing build directory..."
+  if [ -d "build" ]; then
+    rm -rf build
+    echo "   ✅ build directory removed"
+  else
+    echo "   ℹ️  build directory not found (already clean)"
+  fi
   
-  echo "🗑️  Removing storybook-static directory..."
-  rm -rf storybook-static
+  echo "   🗑️  Removing storybook-static directory..."
+  if [ -d "storybook-static" ]; then
+    rm -rf storybook-static
+    echo "   ✅ storybook-static directory removed"
+  else
+    echo "   ℹ️  storybook-static directory not found (already clean)"
+  fi
+  echo ""
   
-  # Remove other build artifacts
-  echo "🗑️  Removing TypeScript build info..."
-  rm -f tsconfig.tsbuildinfo
+  # Step 2: Remove build artifacts
+  echo "📄 STEP 2: Cleaning build artifacts..."
+  echo "   🗑️  Removing TypeScript build info..."
+  if [ -f "tsconfig.tsbuildinfo" ]; then
+    rm -f tsconfig.tsbuildinfo
+    echo "   ✅ tsconfig.tsbuildinfo removed"
+  else
+    echo "   ℹ️  tsconfig.tsbuildinfo not found (already clean)"
+  fi
   
-  echo "🗑️  Removing test results..."
-  rm -rf test-results
+  echo "   🗑️  Removing test results..."
+  if [ -d "test-results" ]; then
+    rm -rf test-results
+    echo "   ✅ test-results directory removed"
+  else
+    echo "   ℹ️  test-results directory not found (already clean)"
+  fi
   
-  echo "🗑️  Removing coverage reports..."
-  rm -rf coverage
+  echo "   🗑️  Removing coverage reports..."
+  if [ -d "coverage" ]; then
+    rm -rf coverage
+    echo "   ✅ coverage directory removed"
+  else
+    echo "   ℹ️  coverage directory not found (already clean)"
+  fi
+  echo ""
   
-  # Kill any running development servers
-  echo "💀 Killing old development servers..."
-  pkill -f "npm run dev" || true
-  pkill -f "npm run start" || true
-  pkill -f "next-server" || true
+  # Step 3: Kill running servers
+  echo "💀 STEP 3: Stopping old development servers..."
+  echo "   🔍 Checking for running npm dev processes..."
   
-  # Restart development server
-  echo "🚀 Restarting development server..."
+  # Check if any dev servers are running
+  if pgrep -f "npm run dev" > /dev/null; then
+    echo "   🛑 Found running dev server, stopping..."
+    pkill -f "npm run dev" || true
+    sleep 1
+    echo "   ✅ Dev server stopped"
+  else
+    echo "   ℹ️  No dev server running"
+  fi
+  
+  if pgrep -f "npm run start" > /dev/null; then
+    echo "   🛑 Found running start server, stopping..."
+    pkill -f "npm run start" || true
+    sleep 1
+    echo "   ✅ Start server stopped"
+  else
+    echo "   ℹ️  No start server running"
+  fi
+  
+  if pgrep -f "next-server" > /dev/null; then
+    echo "   🛑 Found running next-server, stopping..."
+    pkill -f "next-server" || true
+    sleep 1
+    echo "   ✅ Next server stopped"
+  else
+    echo "   ℹ️  No next-server running"
+  fi
+  echo ""
+  
+  # Step 4: Restart development server
+  echo "🚀 STEP 4: Starting fresh development server..."
+  echo "   📝 Starting server in background..."
   nohup npm run dev > dev.log 2>&1 &
+  SERVER_PID=$!
+  echo "   📋 Server PID: $SERVER_PID"
+  echo "   ⏳ Waiting for server to initialize..."
   
-  echo "✅ Post-commit cleanup completed!"
-  echo "📝 Development server restarted and running in background"
-  echo "📋 Check dev.log for server output"
+  # Wait for server to start
+  sleep 3
+  
+  # Check if server is running
+  if ps -p $SERVER_PID > /dev/null; then
+    echo "   ✅ Development server started successfully"
+    echo "   🌐 Server should be available at http://localhost:3000"
+  else
+    echo "   ⚠️  Server may have failed to start, check dev.log"
+  fi
+  echo ""
+  
+  # Step 5: Final status
+  echo "📊 CLEANUP SUMMARY:"
+  echo "   ✅ Build directories cleaned"
+  echo "   ✅ Build artifacts removed"
+  echo "   ✅ Old servers stopped"
+  echo "   ✅ New server started"
+  echo "   📝 Logs available in dev.log"
+  echo ""
+  echo "════════════════════════════════════════════════════════════════"
+  echo "✅ POST-COMMIT CLEANUP COMPLETED SUCCESSFULLY!"
+  echo "════════════════════════════════════════════════════════════════"
+  echo ""
 else
-  echo "ℹ️  On branch '$current_branch', skipping build cleanup"
-  echo "💡 Build cleanup only runs on main development branches"
+  echo "ℹ️  Branch '$current_branch' is not a development branch"
+  echo "💡 Build cleanup only runs on: main, develop, release/v1.0.0-main-website"
+  echo ""
+  echo "════════════════════════════════════════════════════════════════"
+  echo "ℹ️  POST-COMMIT HOOK SKIPPED (Non-development branch)"
+  echo "════════════════════════════════════════════════════════════════"
+  echo ""
 fi
