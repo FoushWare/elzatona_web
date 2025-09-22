@@ -33,7 +33,6 @@ import {
   AlertCircle,
   BookOpen,
   Target,
-  Clock,
   Save,
   ChevronUp,
 } from 'lucide-react';
@@ -64,7 +63,6 @@ export function SectionQuestionsManager({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
-  const [selectedLearningPath, setSelectedLearningPath] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedQuestions, setSelectedQuestions] =
     useState<string[]>(currentQuestionIds);
@@ -77,10 +75,6 @@ export function SectionQuestionsManager({
   useEffect(() => {
     if (sectionCategory) {
       setSelectedCategory(sectionCategory);
-      // Also set learning path to JavaScript Deep Dive if category is javascript
-      if (sectionCategory === 'javascript') {
-        setSelectedLearningPath('JavaScript Deep Dive');
-      }
     }
   }, [sectionCategory]);
 
@@ -95,9 +89,6 @@ export function SectionQuestionsManager({
       question.difficulty === selectedDifficulty;
     const matchesType =
       selectedType === 'all' || question.type === selectedType;
-    const matchesLearningPath =
-      selectedLearningPath === 'all' ||
-      question.learningPath === selectedLearningPath;
     const matchesCategory =
       selectedCategory === 'all' ||
       question.category === selectedCategory ||
@@ -107,7 +98,6 @@ export function SectionQuestionsManager({
       matchesSearch &&
       matchesDifficulty &&
       matchesType &&
-      matchesLearningPath &&
       matchesCategory
     );
   });
@@ -117,9 +107,6 @@ export function SectionQuestionsManager({
   const types = Array.from(new Set(questions.map(q => q.type)));
   const categories = Array.from(
     new Set(questions.map(q => q.category).filter(Boolean))
-  );
-  const availableLearningPaths = Array.from(
-    new Set(questions.map(q => q.learningPath).filter(Boolean))
   );
 
   const handleQuestionToggle = (questionId: string) => {
@@ -226,7 +213,7 @@ export function SectionQuestionsManager({
             </div>
 
             {/* Filter Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
                   <Target className="w-4 h-4 text-orange-500" />
@@ -294,28 +281,6 @@ export function SectionQuestionsManager({
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
-                  <Clock className="w-4 h-4 text-indigo-500" />
-                  Learning Path
-                </label>
-                <Select
-                  value={selectedLearningPath}
-                  onValueChange={setSelectedLearningPath}
-                >
-                  <SelectTrigger className="h-10 border-2 border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400">
-                    <SelectValue placeholder="All Learning Paths" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Learning Paths</SelectItem>
-                    {availableLearningPaths.map(path => (
-                      <SelectItem key={path} value={path}>
-                        {path}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
 
               <div className="flex items-end">
                 <Button
@@ -325,7 +290,6 @@ export function SectionQuestionsManager({
                     setSelectedDifficulty('all');
                     setSelectedType('all');
                     setSelectedCategory('all');
-                    setSelectedLearningPath('all');
                   }}
                   className="w-full h-12 border-2 border-gray-300 dark:border-gray-600 hover:border-red-400 dark:hover:border-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 hover:text-red-700 font-medium rounded-lg transition-all duration-200"
                 >
