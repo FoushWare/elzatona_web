@@ -209,7 +209,7 @@ export default function PlanEditorPage() {
     useState(false);
   const [showAddQuestionsDialog, setShowAddQuestionsDialog] = useState(false);
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
-  const [showMobileSections, setShowMobileSections] = useState(false);
+  const [showMobileSections, setShowMobileSections] = useState(true);
 
   // Fetch questions from the API
   const fetchQuestions = useCallback(async () => {
