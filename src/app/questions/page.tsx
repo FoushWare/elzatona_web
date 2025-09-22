@@ -473,21 +473,52 @@ export default function QuestionsPage() {
             {/* Topics Filter */}
             <div className="bg-gray-800 rounded-lg p-4">
               <h3 className="text-lg font-semibold mb-4">Filter by Topics</h3>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                {availableTopics.slice(0, 20).map(topic => (
-                  <label
-                    key={topic}
-                    className="flex items-center space-x-2 cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedTopics.includes(topic)}
-                      onChange={() => toggleTopic(topic)}
-                      className="rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-gray-300">{topic}</span>
-                  </label>
-                ))}
+              <div className="space-y-3">
+                <select
+                  value=""
+                  onChange={e => {
+                    const topic = e.target.value;
+                    if (topic && !selectedTopics.includes(topic)) {
+                      toggleTopic(topic);
+                    }
+                    e.target.value = ''; // Reset dropdown
+                  }}
+                  className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select a topic to add...</option>
+                  {availableTopics
+                    .filter(topic => !selectedTopics.includes(topic))
+                    .slice(0, 50)
+                    .map(topic => (
+                      <option key={topic} value={topic}>
+                        {topic}
+                      </option>
+                    ))}
+                </select>
+
+                {selectedTopics.length > 0 && (
+                  <div className="space-y-2">
+                    <div className="text-sm text-gray-400">
+                      Selected topics:
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedTopics.map(topic => (
+                        <span
+                          key={topic}
+                          className="inline-flex items-center px-2 py-1 bg-blue-600 text-white text-xs rounded-full"
+                        >
+                          {topic}
+                          <button
+                            onClick={() => toggleTopic(topic)}
+                            className="ml-1 text-blue-200 hover:text-white"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

@@ -698,9 +698,18 @@ export class UnifiedQuestionService {
     }
 
     try {
-      const timestamp = new Date().toISOString();
+      // Check if learning path already exists
       const pathRef = doc(db, this.LEARNING_PATHS_COLLECTION, pathData.id);
+      const pathSnap = await getDoc(pathRef);
 
+      if (pathSnap.exists()) {
+        // Learning path already exists, return the existing ID
+        console.log(`Learning path "${pathData.name}" already exists, skipping creation`);
+        return pathData.id;
+      }
+
+      // Create new learning path
+      const timestamp = new Date().toISOString();
       await setDoc(pathRef, {
         name: pathData.name,
         description: pathData.description,
@@ -713,6 +722,7 @@ export class UnifiedQuestionService {
         updatedAt: timestamp,
       });
 
+      console.log(`Created new learning path: "${pathData.name}"`);
       return pathData.id;
     } catch (error) {
       console.error('Error creating learning path with ID:', error);
@@ -784,6 +794,60 @@ export class UnifiedQuestionService {
     isActive?: boolean;
   }): Promise<UnifiedQuestion[]> {
     return this.getQuestions(filters);
+  }
+
+  /**
+   * Remove duplicate learning paths (keep the first occurrence)
+   */
+  static async removeDuplicateLearningPaths(): Promise<void> {
+    if (!db) {
+      throw new Error('Firestore not available');
+    }
+
+    try {
+      const pathsRef = collection(db, this.LEARNING_PATHS_COLLECTION);
+      const pathsSnap = await getDocs(pathsRef);
+
+      const paths: LearningPath[] = [];
+      pathsSnap.forEach(doc => {
+        paths.push({ id: doc.id, ...doc.data() } as LearningPath);
+      });
+
+      // Group by name to find duplicates
+      const nameGroups = new Map<string, LearningPath[]>();
+      paths.forEach(path => {
+        const normalizedName = path.name.toLowerCase().trim();
+        if (!nameGroups.has(normalizedName)) {
+          nameGroups.set(normalizedName, []);
+        }
+        nameGroups.get(normalizedName)!.push(path);
+      });
+
+      // Remove duplicates (keep the first one, delete the rest)
+      for (const [name, duplicatePaths] of nameGroups) {
+        if (duplicatePaths.length > 1) {
+          console.log(`Found ${duplicatePaths.length} duplicates for "${name}"`);
+          
+          // Sort by creation date to keep the oldest one
+          duplicatePaths.sort((a, b) => 
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
+
+          // Delete all except the first one
+          for (let i = 1; i < duplicatePaths.length; i++) {
+            const pathToDelete = duplicatePaths[i];
+            const pathRef = doc(db, this.LEARNING_PATHS_COLLECTION, pathToDelete.id);
+            await deleteDoc(pathRef);
+            console.log(`Deleted duplicate learning path: "${pathToDelete.name}" (${pathToDelete.id})`);
+          }
+        }
+      }
+
+      console.log('Duplicate learning paths cleanup completed');
+    } catch (error) {
+      console.error('Error removing duplicate learning paths:', error);
+      throw error;
+    }
   }
 
   /**
