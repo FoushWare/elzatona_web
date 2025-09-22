@@ -4,10 +4,11 @@ import { guidedLearningService } from '@/lib/guided-learning-service';
 // GET /api/guided-learning/plans/[planId] - Get a specific learning plan
 export async function GET(
   request: NextRequest,
-  { params }: { params: { planId: string } }
+  { params }: { params: Promise<{ planId: string }> }
 ) {
   try {
-    const plan = await guidedLearningService.getPlan(params.planId);
+    const { planId } = await params;
+    const plan = await guidedLearningService.getPlan(planId);
     
     if (!plan) {
       return NextResponse.json(
@@ -29,11 +30,12 @@ export async function GET(
 // PUT /api/guided-learning/plans/[planId] - Update a learning plan
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { planId: string } }
+  { params }: { params: Promise<{ planId: string }> }
 ) {
   try {
+    const { planId } = await params;
     const updates = await request.json();
-    await guidedLearningService.updatePlan(params.planId, updates);
+    await guidedLearningService.updatePlan(planId, updates);
     
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -48,11 +50,12 @@ export async function PUT(
 // DELETE /api/guided-learning/plans/[planId] - Delete a learning plan
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { planId: string } }
+  { params }: { params: Promise<{ planId: string }> }
 ) {
   try {
+    const { planId } = await params;
     // For now, we'll just deactivate the plan instead of deleting it
-    await guidedLearningService.updatePlan(params.planId, { isActive: false });
+    await guidedLearningService.updatePlan(planId, { isActive: false });
     
     return NextResponse.json({ success: true });
   } catch (error) {
