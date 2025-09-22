@@ -616,6 +616,8 @@ export default function PlanEditorPage() {
     
     setIsSaving(true);
     try {
+      console.log('🔄 Attempting to save plan...', { planId, plan });
+      
       const response = await fetch(`/api/guided-learning/plans/${planId}`, {
         method: 'PUT',
         headers: {
@@ -624,11 +626,18 @@ export default function PlanEditorPage() {
         body: JSON.stringify(plan),
       });
 
+      console.log('📡 API Response status:', response.status);
+      console.log('📡 API Response headers:', response.headers);
+
       if (!response.ok) {
-        throw new Error('Failed to save plan');
+        const errorText = await response.text();
+        console.error('❌ API Error Response:', errorText);
+        throw new Error(`API Error (${response.status}): ${errorText}`);
       }
 
       const result = await response.json();
+      console.log('📦 API Response data:', result);
+      
       if (result.success) {
         console.log('✅ Plan saved successfully:', plan);
         router.push('/admin/guided-learning');
@@ -637,7 +646,9 @@ export default function PlanEditorPage() {
       }
     } catch (error) {
       console.error('❌ Error saving plan:', error);
-      alert('Failed to save plan. Please try again.');
+      console.error('❌ Plan data being sent:', plan);
+      console.error('❌ Plan ID:', planId);
+      alert(`Failed to save plan: ${error instanceof Error ? error.message : 'Unknown error'}. Please check the console for details.`);
     } finally {
       setIsSaving(false);
     }
