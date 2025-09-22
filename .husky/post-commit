@@ -106,21 +106,14 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   # Step 4: Restart development server
   echo "🚀 STEP 4: Starting fresh development server..."
   echo "   📝 Starting server in background..."
+  
+  # Start server in background and don't wait for it
   nohup npm run dev > dev.log 2>&1 &
   SERVER_PID=$!
   echo "   📋 Server PID: $SERVER_PID"
-  echo "   ⏳ Waiting for server to initialize..."
-  
-  # Wait for server to start
-  sleep 3
-  
-  # Check if server is running
-  if ps -p $SERVER_PID > /dev/null; then
-    echo "   ✅ Development server started successfully"
-    echo "   🌐 Server should be available at http://localhost:3000"
-  else
-    echo "   ⚠️  Server may have failed to start, check dev.log"
-  fi
+  echo "   ⏳ Server starting in background..."
+  echo "   💡 Check dev.log for server output"
+  echo "   🌐 Server will be available at http://localhost:3000 when ready"
   echo ""
   
   # Step 5: Push to remote repository
@@ -142,13 +135,14 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   echo "   ✅ Build directories cleaned"
   echo "   ✅ Build artifacts removed"
   echo "   ✅ Old servers stopped"
-  echo "   ✅ New server started"
+  echo "   🔄 New server starting in background"
   echo "   ✅ Changes pushed to remote"
   echo "   📝 Logs available in dev.log"
   echo ""
   echo "════════════════════════════════════════════════════════════════"
   echo "✅ POST-COMMIT WORKFLOW COMPLETED SUCCESSFULLY!"
   echo "🚀 Your changes are now live on GitHub!"
+  echo "🌐 Server will be ready shortly at http://localhost:3000"
   echo "════════════════════════════════════════════════════════════════"
   echo ""
 else
