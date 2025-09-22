@@ -123,16 +123,32 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   fi
   echo ""
   
-  # Step 5: Final status
-  echo "📊 CLEANUP SUMMARY:"
+  # Step 5: Push to remote repository
+  echo "🚀 STEP 5: Pushing changes to remote repository..."
+  echo "   📤 Pushing branch '$current_branch' to origin..."
+  
+  # Push to remote with detailed output
+  if git push origin "$current_branch" --verbose; then
+    echo "   ✅ Successfully pushed to remote repository"
+    echo "   🌐 Changes are now available on GitHub"
+  else
+    echo "   ❌ Failed to push to remote repository"
+    echo "   💡 You may need to push manually: git push origin $current_branch"
+  fi
+  echo ""
+  
+  # Step 6: Final status
+  echo "📊 COMPLETE SUMMARY:"
   echo "   ✅ Build directories cleaned"
   echo "   ✅ Build artifacts removed"
   echo "   ✅ Old servers stopped"
   echo "   ✅ New server started"
+  echo "   ✅ Changes pushed to remote"
   echo "   📝 Logs available in dev.log"
   echo ""
   echo "════════════════════════════════════════════════════════════════"
-  echo "✅ POST-COMMIT CLEANUP COMPLETED SUCCESSFULLY!"
+  echo "✅ POST-COMMIT WORKFLOW COMPLETED SUCCESSFULLY!"
+  echo "🚀 Your changes are now live on GitHub!"
   echo "════════════════════════════════════════════════════════════════"
   echo ""
 else
