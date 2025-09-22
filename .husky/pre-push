@@ -41,9 +41,8 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   fi
   echo ""
   
-  # Step 2: Clean up build files (but keep .next for development)
+  # Step 2: Clean up build files before push
   echo "🧹 STEP 2: Cleaning build files before push..."
-  echo "   ℹ️  Keeping .next directory (required for Next.js development)"
   
   echo "   🗑️  Removing build directory..."
   if [ -d "build" ]; then
@@ -61,7 +60,37 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
     echo "   ℹ️  storybook-static directory not found (already clean)"
   fi
   
-  echo "   ℹ️  Keeping TypeScript build info (helps with incremental builds)"
+  echo "   🗑️  Removing .next directory..."
+  if [ -d ".next" ]; then
+    rm -rf .next
+    echo "   ✅ .next directory removed"
+  else
+    echo "   ℹ️  .next directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing tsconfig.tsbuildinfo..."
+  if [ -f "tsconfig.tsbuildinfo" ]; then
+    rm -f tsconfig.tsbuildinfo
+    echo "   ✅ tsconfig.tsbuildinfo removed"
+  else
+    echo "   ℹ️  tsconfig.tsbuildinfo not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing test-results directory..."
+  if [ -d "test-results" ]; then
+    rm -rf test-results
+    echo "   ✅ test-results directory removed"
+  else
+    echo "   ℹ️  test-results directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing coverage directory..."
+  if [ -d "coverage" ]; then
+    rm -rf coverage
+    echo "   ✅ coverage directory removed"
+  else
+    echo "   ℹ️  coverage directory not found (already clean)"
+  fi
   echo ""
   
   # Step 3: Final status
