@@ -614,16 +614,33 @@ export default function PlanEditorPage() {
   const savePlan = async () => {
     if (!plan || isSaving) return;
     
+    console.log('🔄 Starting save plan process...');
+    console.log('📋 Plan ID:', planId);
+    console.log('📋 Plan data:', plan);
+    
     setIsSaving(true);
     try {
-      console.log('🔄 Attempting to save plan...', { planId, plan });
+      // For mock plans, we need to create them first or use a different approach
+      // Let's use POST to create/update the plan
+      const isMockPlan = ['1-day-plan', '2-day-plan', '3-day-plan', '4-day-plan', '5-day-plan', '6-day-plan', '7-day-plan'].includes(planId);
       
-      const response = await fetch(`/api/guided-learning/plans/${planId}`, {
-        method: 'PUT',
+      const url = isMockPlan 
+        ? '/api/guided-learning/plans' // POST to create
+        : `/api/guided-learning/plans/${planId}`; // PUT to update
+      
+      const method = isMockPlan ? 'POST' : 'PUT';
+      
+      console.log('🔄 Attempting to save plan...', { planId, method, url, isMockPlan });
+      
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(plan),
+        body: JSON.stringify({
+          ...plan,
+          id: planId, // Ensure the planId is included
+        }),
       });
 
       console.log('📡 API Response status:', response.status);

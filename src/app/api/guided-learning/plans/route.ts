@@ -15,7 +15,7 @@ export async function GET() {
   }
 }
 
-// POST /api/guided-learning/plans - Create a new learning plan
+// POST /api/guided-learning/plans - Create or update a learning plan
 export async function POST(request: NextRequest) {
   try {
     const planData = await request.json();
@@ -28,12 +28,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const planId = await guidedLearningService.createPlan(planData);
-    return NextResponse.json({ success: true, planId });
+    // If planId is provided, use createOrUpdatePlan, otherwise createPlan
+    if (planData.id) {
+      await guidedLearningService.createOrUpdatePlan(planData.id, planData);
+      return NextResponse.json({ success: true, planId: planData.id });
+    } else {
+      const planId = await guidedLearningService.createPlan(planData);
+      return NextResponse.json({ success: true, planId });
+    }
   } catch (error) {
-    console.error('Error creating learning plan:', error);
+    console.error('Error creating/updating learning plan:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create learning plan' },
+      { success: false, error: 'Failed to create/update learning plan' },
       { status: 500 }
     );
   }
