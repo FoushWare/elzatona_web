@@ -507,17 +507,23 @@ export default function PlanEditorPage() {
 
   // Filter questions based on selected section and search/filters
   useEffect(() => {
-    let filtered = allQuestions;
-
-    // If a section is selected, show only questions assigned to that section
-    if (selectedSection && plan) {
-      const section = plan.sections.find(s => s.id === selectedSection);
-      if (section) {
-        filtered = filtered.filter(question =>
-          section.questions.includes(question.id)
-        );
-      }
+    // If no section is selected, show no questions
+    if (!selectedSection || !plan) {
+      setQuestions([]);
+      return;
     }
+
+    // Find the selected section
+    const section = plan.sections.find(s => s.id === selectedSection);
+    if (!section) {
+      setQuestions([]);
+      return;
+    }
+
+    // Start with only questions assigned to the selected section
+    let filtered = allQuestions.filter(question =>
+      section.questions.includes(question.id)
+    );
 
     // Apply search filter
     if (searchTerm) {
@@ -530,7 +536,6 @@ export default function PlanEditorPage() {
           )
       );
     }
-
 
     // Apply learning path filter
     if (filterLearningPath !== 'all') {
