@@ -210,6 +210,7 @@ export default function PlanEditorPage() {
   const [showAddQuestionsDialog, setShowAddQuestionsDialog] = useState(false);
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
   const [showMobileSections, setShowMobileSections] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Fetch questions from the API
   const fetchQuestions = useCallback(async () => {
@@ -610,10 +611,36 @@ export default function PlanEditorPage() {
     return section?.questions.includes(questionId) || false;
   };
 
-  const savePlan = () => {
-    // Here you would save the plan to your backend
-    console.log('Saving plan:', plan);
-    router.push('/admin/guided-learning');
+  const savePlan = async () => {
+    if (!plan || isSaving) return;
+    
+    setIsSaving(true);
+    try {
+      const response = await fetch(`/api/guided-learning/plans/${planId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(plan),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save plan');
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        console.log('✅ Plan saved successfully:', plan);
+        router.push('/admin/guided-learning');
+      } else {
+        throw new Error(result.error || 'Failed to save plan');
+      }
+    } catch (error) {
+      console.error('❌ Error saving plan:', error);
+      alert('Failed to save plan. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (loading) {
@@ -670,9 +697,13 @@ export default function PlanEditorPage() {
                 Configure sections and assign questions to each section
               </p>
             </div>
-            <Button onClick={savePlan} className="bg-red-600 hover:bg-red-700">
+            <Button 
+              onClick={savePlan} 
+              disabled={isSaving}
+              className="bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <Save className="w-4 h-4 mr-2" />
-              Save Plan
+              {isSaving ? 'Saving...' : 'Save Plan'}
             </Button>
           </div>
 
