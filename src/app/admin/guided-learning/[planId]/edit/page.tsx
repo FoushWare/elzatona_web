@@ -613,25 +613,38 @@ export default function PlanEditorPage() {
 
   const savePlan = async () => {
     if (!plan || isSaving) return;
-    
+
     console.log('🔄 Starting save plan process...');
     console.log('📋 Plan ID:', planId);
     console.log('📋 Plan data:', plan);
-    
+
     setIsSaving(true);
     try {
       // For mock plans, we need to create them first or use a different approach
       // Let's use POST to create/update the plan
-      const isMockPlan = ['1-day-plan', '2-day-plan', '3-day-plan', '4-day-plan', '5-day-plan', '6-day-plan', '7-day-plan'].includes(planId);
-      
-      const url = isMockPlan 
+      const isMockPlan = [
+        '1-day-plan',
+        '2-day-plan',
+        '3-day-plan',
+        '4-day-plan',
+        '5-day-plan',
+        '6-day-plan',
+        '7-day-plan',
+      ].includes(planId);
+
+      const url = isMockPlan
         ? '/api/guided-learning/plans' // POST to create
         : `/api/guided-learning/plans/${planId}`; // PUT to update
-      
+
       const method = isMockPlan ? 'POST' : 'PUT';
-      
-      console.log('🔄 Attempting to save plan...', { planId, method, url, isMockPlan });
-      
+
+      console.log('🔄 Attempting to save plan...', {
+        planId,
+        method,
+        url,
+        isMockPlan,
+      });
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -654,7 +667,7 @@ export default function PlanEditorPage() {
 
       const result = await response.json();
       console.log('📦 API Response data:', result);
-      
+
       if (result.success) {
         console.log('✅ Plan saved successfully:', plan);
         router.push('/admin/guided-learning');
@@ -665,7 +678,9 @@ export default function PlanEditorPage() {
       console.error('❌ Error saving plan:', error);
       console.error('❌ Plan data being sent:', plan);
       console.error('❌ Plan ID:', planId);
-      alert(`Failed to save plan: ${error instanceof Error ? error.message : 'Unknown error'}. Please check the console for details.`);
+      alert(
+        `Failed to save plan: ${error instanceof Error ? error.message : 'Unknown error'}. Please check the console for details.`
+      );
     } finally {
       setIsSaving(false);
     }
@@ -725,8 +740,8 @@ export default function PlanEditorPage() {
                 Configure sections and assign questions to each section
               </p>
             </div>
-            <Button 
-              onClick={savePlan} 
+            <Button
+              onClick={savePlan}
               disabled={isSaving}
               className="bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -927,10 +942,18 @@ export default function PlanEditorPage() {
                       </div>
                       <div className="flex-1">
                         <p className="text-sm font-medium text-green-800 dark:text-green-200">
-                          Working on: <span className="font-bold">{plan.sections.find(s => s.id === selectedSection)?.name}</span>
+                          Working on:{' '}
+                          <span className="font-bold">
+                            {
+                              plan.sections.find(s => s.id === selectedSection)
+                                ?.name
+                            }
+                          </span>
                         </p>
                         <p className="text-xs text-green-600 dark:text-green-300 mt-1">
-                          {plan.sections.find(s => s.id === selectedSection)?.questions.length || 0} questions assigned
+                          {plan.sections.find(s => s.id === selectedSection)
+                            ?.questions.length || 0}{' '}
+                          questions assigned
                         </p>
                       </div>
                       <Button
@@ -972,208 +995,208 @@ export default function PlanEditorPage() {
             {/* Available Questions Panel - Only show when section is selected */}
             {selectedSection && (
               <Card className="h-fit">
-              <CardHeader className="pb-4">
-                <div className="flex flex-col space-y-4">
-                  {/* Title and Description */}
-                  <div className="flex items-center space-x-2">
-                    <Target className="w-5 h-5 text-green-600" />
-                    <div>
-                      <span className="text-lg font-semibold">
-                        Available Questions
-                      </span>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                        {selectedSection
-                          ? `Questions assigned to "${plan.sections.find(s => s.id === selectedSection)?.name}" section`
-                          : 'Select a section from the left to view its assigned questions'}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Add Questions Button - Better positioned */}
-                  {selectedSection && (
-                    <div className="flex justify-end">
-                      <Button
-                        size="sm"
-                        onClick={() => {
-                          setEditingSectionId(selectedSection);
-                          setShowAddQuestionsDialog(true);
-                        }}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 shadow-sm"
-                      >
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add Questions
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent>
-                {/* Filters */}
-                <div className="mb-6 space-y-4">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex-1">
-                      <Input
-                        placeholder="Search questions in this section..."
-                        value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
-                        className="w-full h-10"
-                      />
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4"></div>
-                  </div>
-                </div>
-
-                {/* Section Selection Notice */}
-                {!selectedSection && (
-                  <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-blue-100 dark:bg-blue-800 rounded-full p-2">
-                        <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                      </div>
+                <CardHeader className="pb-4">
+                  <div className="flex flex-col space-y-4">
+                    {/* Title and Description */}
+                    <div className="flex items-center space-x-2">
+                      <Target className="w-5 h-5 text-green-600" />
                       <div>
-                        <h4 className="font-semibold text-blue-900 dark:text-blue-100">
-                          Select a Section First
-                        </h4>
-                        <p className="text-sm text-blue-700 dark:text-blue-300">
-                          Choose a section from the left panel to start adding
-                          questions to it.
+                        <span className="text-lg font-semibold">
+                          Available Questions
+                        </span>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          {selectedSection
+                            ? `Questions assigned to "${plan.sections.find(s => s.id === selectedSection)?.name}" section`
+                            : 'Select a section from the left to view its assigned questions'}
                         </p>
                       </div>
                     </div>
-                  </div>
-                )}
 
-                {/* Questions List */}
-                <div className="space-y-4 max-h-[500px] overflow-y-auto">
-                  {questions.map(question => (
-                    <Card
-                      key={question.id}
-                      className="hover:shadow-md transition-all duration-200 border border-gray-200 dark:border-gray-700"
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-gray-900 dark:text-white mb-2 text-base leading-tight">
-                              {question.title}
-                            </h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2 leading-relaxed">
-                              {question.content}
-                            </p>
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              <Badge
-                                className={`text-xs font-medium px-2 py-1 rounded-full ${getCategoryColor(question.category)}`}
-                              >
-                                {QUESTION_CATEGORIES.find(
-                                  cat => cat.id === question.category
-                                )?.name || question.category}
-                              </Badge>
-                              <Badge
-                                className={`text-xs font-medium px-2 py-1 rounded-full ${getDifficultyColor(
-                                  question.difficulty
-                                )}`}
-                              >
-                                {question.difficulty}
-                              </Badge>
-                              {question.tags.slice(0, 2).map((tag, index) => (
-                                <Badge
-                                  key={index}
-                                  variant="outline"
-                                  className="text-xs font-medium px-2 py-1 rounded-full"
-                                >
-                                  {tag}
-                                </Badge>
-                              ))}
-                              {question.tags.length > 2 && (
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs font-medium px-2 py-1 rounded-full"
-                                >
-                                  +{question.tags.length - 2}
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex flex-col sm:flex-row lg:flex-col gap-2 lg:ml-4">
-                            {selectedSection ? (
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => {
-                                  removeQuestionFromSection(
-                                    question.id,
-                                    selectedSection
-                                  );
-                                }}
-                                className="bg-red-600 hover:bg-red-700 text-white"
-                              >
-                                <XCircle className="w-4 h-4 mr-1" />
-                                Remove from Section
-                              </Button>
-                            ) : (
-                              <div className="text-center py-2 px-3 bg-gray-100 dark:bg-gray-800 rounded-md">
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                  Select a section to add questions
-                                </p>
-                              </div>
-                            )}
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
-                            >
-                              <Eye className="w-4 h-4 mr-1" />
-                              View Details
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-
-                {questions.length === 0 && (
-                  <div className="text-center py-12">
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-700 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center shadow-lg">
-                      <Target className="w-10 h-10 text-blue-500 dark:text-blue-400" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                      No questions found
-                    </h3>
-                    <div className="max-w-md mx-auto space-y-3">
-                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        {selectedSection
-                          ? `No questions are currently assigned to &quot;${plan.sections.find(s => s.id === selectedSection)?.name}&quot; section. Use the &quot;Add Questions&quot; button to add questions to this section.`
-                          : 'Select a section from the left to view its assigned questions.'}
-                      </p>
-                      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    {/* Add Questions Button - Better positioned */}
+                    {selectedSection && (
+                      <div className="flex justify-end">
                         <Button
-                          variant="outline"
+                          size="sm"
                           onClick={() => {
-                            setSearchTerm('');
+                            setEditingSectionId(selectedSection);
+                            setShowAddQuestionsDialog(true);
                           }}
-                          className="text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:border-blue-800 dark:hover:border-blue-700 dark:hover:bg-blue-900/20"
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 shadow-sm"
                         >
-                          <Filter className="w-4 h-4 mr-2" />
-                          Clear Filters
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Questions
                         </Button>
-                        {selectedSection && (
-                          <Button
-                            onClick={() => {
-                              setEditingSectionId(selectedSection);
-                              setShowAddQuestionsDialog(true);
-                            }}
-                            className="bg-blue-600 hover:bg-blue-700 text-white"
-                          >
-                            <Plus className="w-4 h-4 mr-2" />
-                            Add Questions
-                          </Button>
-                        )}
+                      </div>
+                    )}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {/* Filters */}
+                  <div className="mb-6 space-y-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <div className="flex-1">
+                        <Input
+                          placeholder="Search questions in this section..."
+                          value={searchTerm}
+                          onChange={e => setSearchTerm(e.target.value)}
+                          className="w-full h-10"
+                        />
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4"></div>
+                    </div>
+                  </div>
+
+                  {/* Section Selection Notice */}
+                  {!selectedSection && (
+                    <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="bg-blue-100 dark:bg-blue-800 rounded-full p-2">
+                          <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-blue-900 dark:text-blue-100">
+                            Select a Section First
+                          </h4>
+                          <p className="text-sm text-blue-700 dark:text-blue-300">
+                            Choose a section from the left panel to start adding
+                            questions to it.
+                          </p>
+                        </div>
                       </div>
                     </div>
+                  )}
+
+                  {/* Questions List */}
+                  <div className="space-y-4 max-h-[500px] overflow-y-auto">
+                    {questions.map(question => (
+                      <Card
+                        key={question.id}
+                        className="hover:shadow-md transition-all duration-200 border border-gray-200 dark:border-gray-700"
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-gray-900 dark:text-white mb-2 text-base leading-tight">
+                                {question.title}
+                              </h3>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2 leading-relaxed">
+                                {question.content}
+                              </p>
+                              <div className="flex flex-wrap gap-2 mb-3">
+                                <Badge
+                                  className={`text-xs font-medium px-2 py-1 rounded-full ${getCategoryColor(question.category)}`}
+                                >
+                                  {QUESTION_CATEGORIES.find(
+                                    cat => cat.id === question.category
+                                  )?.name || question.category}
+                                </Badge>
+                                <Badge
+                                  className={`text-xs font-medium px-2 py-1 rounded-full ${getDifficultyColor(
+                                    question.difficulty
+                                  )}`}
+                                >
+                                  {question.difficulty}
+                                </Badge>
+                                {question.tags.slice(0, 2).map((tag, index) => (
+                                  <Badge
+                                    key={index}
+                                    variant="outline"
+                                    className="text-xs font-medium px-2 py-1 rounded-full"
+                                  >
+                                    {tag}
+                                  </Badge>
+                                ))}
+                                {question.tags.length > 2 && (
+                                  <Badge
+                                    variant="outline"
+                                    className="text-xs font-medium px-2 py-1 rounded-full"
+                                  >
+                                    +{question.tags.length - 2}
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex flex-col sm:flex-row lg:flex-col gap-2 lg:ml-4">
+                              {selectedSection ? (
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() => {
+                                    removeQuestionFromSection(
+                                      question.id,
+                                      selectedSection
+                                    );
+                                  }}
+                                  className="bg-red-600 hover:bg-red-700 text-white"
+                                >
+                                  <XCircle className="w-4 h-4 mr-1" />
+                                  Remove from Section
+                                </Button>
+                              ) : (
+                                <div className="text-center py-2 px-3 bg-gray-100 dark:bg-gray-800 rounded-md">
+                                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                                    Select a section to add questions
+                                  </p>
+                                </div>
+                              )}
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+                              >
+                                <Eye className="w-4 h-4 mr-1" />
+                                View Details
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
-                )}
-              </CardContent>
-            </Card>
+
+                  {questions.length === 0 && (
+                    <div className="text-center py-12">
+                      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-700 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center shadow-lg">
+                        <Target className="w-10 h-10 text-blue-500 dark:text-blue-400" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                        No questions found
+                      </h3>
+                      <div className="max-w-md mx-auto space-y-3">
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                          {selectedSection
+                            ? `No questions are currently assigned to &quot;${plan.sections.find(s => s.id === selectedSection)?.name}&quot; section. Use the &quot;Add Questions&quot; button to add questions to this section.`
+                            : 'Select a section from the left to view its assigned questions.'}
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setSearchTerm('');
+                            }}
+                            className="text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:border-blue-800 dark:hover:border-blue-700 dark:hover:bg-blue-900/20"
+                          >
+                            <Filter className="w-4 h-4 mr-2" />
+                            Clear Filters
+                          </Button>
+                          {selectedSection && (
+                            <Button
+                              onClick={() => {
+                                setEditingSectionId(selectedSection);
+                                setShowAddQuestionsDialog(true);
+                              }}
+                              className="bg-blue-600 hover:bg-blue-700 text-white"
+                            >
+                              <Plus className="w-4 h-4 mr-2" />
+                              Add Questions
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>
