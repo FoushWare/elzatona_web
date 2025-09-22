@@ -35,6 +35,7 @@ import {
   Target,
   Clock,
   Save,
+  ChevronUp,
 } from 'lucide-react';
 import { UnifiedQuestion } from '@/lib/unified-question-schema';
 import { useUnifiedQuestions } from '@/hooks/useUnifiedQuestions';
@@ -70,6 +71,7 @@ export function SectionQuestionsManager({
   const [viewingQuestion, setViewingQuestion] =
     useState<UnifiedQuestion | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   // Auto-set category filter based on section category
   useEffect(() => {
@@ -146,6 +148,18 @@ export function SectionQuestionsManager({
   const handleCancel = () => {
     setSelectedQuestions(currentQuestionIds);
     onClose();
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    setShowScrollToTop(target.scrollTop > 100);
+  };
+
+  const scrollToTop = () => {
+    const container = document.querySelector('.questions-container');
+    if (container) {
+      container.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -367,7 +381,10 @@ export function SectionQuestionsManager({
           </div>
 
           {/* Questions List */}
-          <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+          <div 
+            className="questions-container flex-1 overflow-y-auto space-y-4 pr-2 max-h-[500px] min-h-[300px] relative"
+            onScroll={handleScroll}
+          >
             {filteredQuestions.length === 0 ? (
               <div className="text-center py-16 text-gray-500 dark:text-gray-400">
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-700 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center shadow-lg">
@@ -481,6 +498,28 @@ export function SectionQuestionsManager({
                     </CardContent>
                   </Card>
                 ))}
+              </div>
+            )}
+            
+            {/* Scroll Indicator */}
+            {filteredQuestions.length > 10 && (
+              <div className="sticky bottom-0 bg-gradient-to-t from-white dark:from-gray-900 to-transparent h-8 flex items-center justify-center">
+                <div className="text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 shadow-sm">
+                  Scroll for more questions
+                </div>
+              </div>
+            )}
+            
+            {/* Scroll to Top Button */}
+            {showScrollToTop && (
+              <div className="absolute bottom-4 right-4 z-10">
+                <Button
+                  onClick={scrollToTop}
+                  className="bg-blue-600 hover:bg-blue-700 text-white rounded-full w-10 h-10 p-0 shadow-lg hover:shadow-xl transition-all duration-200"
+                  title="Scroll to top"
+                >
+                  <ChevronUp className="w-5 h-5" />
+                </Button>
               </div>
             )}
           </div>
