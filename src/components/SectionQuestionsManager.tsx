@@ -488,14 +488,14 @@ export function SectionQuestionsManager({
                   <h4 className="font-semibold text-green-800 dark:text-green-200">
                     Ready to Add Questions
                   </h4>
-                  <p className="text-sm text-green-700 dark:text-green-300">
+                  <p className="text-sm text-green-700 dark:text-green-300 flex items-center gap-1">
                     You have selected{' '}
                     <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full text-sm font-semibold">
                       {selectedQuestions.length}
                     </span>
-                    {' '}of{' '}
+                    of
                     <span className="font-bold">{filteredQuestions.length}</span>
-                    {' '}question{filteredQuestions.length === 1 ? '' : 's'} to add to "{sectionName}".
+                    question{filteredQuestions.length === 1 ? '' : 's'} to add to "{sectionName}".
                   </p>
                 </div>
               </div>
@@ -541,28 +541,18 @@ export function SectionQuestionsManager({
                   disabled={selectedQuestions.length === 0}
                 >
                   <Save className="w-5 h-5 mr-2" />
-                  {selectedQuestions.length > 0 
-                    ? (
-                        <span className="flex items-center gap-2">
-                          <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full text-sm font-semibold">
-                            {selectedQuestions.length}
-                          </span>
-                          <span>of</span>
-                          <span className="font-semibold">{filteredQuestions.length}</span>
-                          <span>added</span>
-                        </span>
-                      )
-                    : (
-                        <span className="flex items-center gap-2">
-                          <span className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-full text-sm font-semibold">
-                            0
-                          </span>
-                          <span>of</span>
-                          <span className="font-semibold">{filteredQuestions.length}</span>
-                          <span>added</span>
-                        </span>
-                      )
-                  }
+                  <span className="flex items-center gap-2">
+                    <span className={`px-2 py-1 rounded-full text-sm font-semibold ${
+                      selectedQuestions.length > 0 
+                        ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                    }`}>
+                      {selectedQuestions.length}
+                    </span>
+                    <span>of</span>
+                    <span className="font-semibold">{filteredQuestions.length}</span>
+                    <span>added</span>
+                  </span>
                 </Button>
               </div>
             </div>
