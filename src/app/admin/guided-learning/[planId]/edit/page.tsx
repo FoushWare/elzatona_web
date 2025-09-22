@@ -315,6 +315,22 @@ export default function PlanEditorPage() {
   useEffect(() => {
     const loadPlanData = async () => {
       try {
+        // First, try to load the plan from the database
+        console.log('🔄 Attempting to load plan from database...', planId);
+        
+        const planResponse = await fetch(`/api/guided-learning/plans/${planId}`);
+        if (planResponse.ok) {
+          const planData = await planResponse.json();
+          if (planData.success && planData.plan) {
+            console.log('✅ Plan loaded from database:', planData.plan);
+            setPlan(planData.plan);
+            return;
+          }
+        }
+        
+        console.log('⚠️ Plan not found in database, creating mock plan...');
+        
+        // If plan doesn't exist in database, create mock plan
         // Fetch comprehensive sections from API
         const response = await fetch('/api/admin/sections');
         const sectionsData = await response.json();
