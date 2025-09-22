@@ -20,15 +20,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   // Skip authentication check for login page and admin root page
   const isLoginPage = pathname === '/admin/login';
   const isAdminRootPage = pathname === '/admin';
+  const isPublicPage = isLoginPage || isAdminRootPage;
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !isLoginPage && !isAdminRootPage) {
-      router.push('/admin/login');
+    // Only redirect if we're sure about the authentication state
+    if (!isLoading && !isAuthenticated && !isPublicPage) {
+      router.replace('/admin/login');
     }
-  }, [isAuthenticated, isLoading, router, isLoginPage, isAdminRootPage]);
+  }, [isAuthenticated, isLoading, router, isPublicPage, pathname]);
 
   // For login page and admin root page, render immediately without waiting for auth check
-  if (isLoginPage || isAdminRootPage) {
+  if (isPublicPage) {
     return <>{children}</>;
   }
 

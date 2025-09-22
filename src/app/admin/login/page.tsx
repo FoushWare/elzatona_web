@@ -15,12 +15,12 @@ export default function AdminLoginPage() {
   const { isAuthenticated, isLoading, login } = useAdminAuth();
   const router = useRouter();
 
-  // Redirect if already authenticated - let admin layout handle this
+  // Redirect if already authenticated
   useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      router.push('/admin');
+    if (!isLoading && isAuthenticated && !isSubmitting) {
+      router.replace('/admin/dashboard');
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, isSubmitting, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +31,8 @@ export default function AdminLoginPage() {
       const result = await login(email, password);
 
       if (result.success) {
-        router.push('/admin');
+        // Don't redirect here - let the useEffect handle it
+        // This prevents double redirects
       } else {
         setError(result.error || 'Login failed');
       }
@@ -42,7 +43,7 @@ export default function AdminLoginPage() {
     }
   };
 
-  // Show loading state only briefly, then show login form
+  // Show loading state while checking authentication
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-900 dark:to-gray-800">

@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SectionQuestionsManager } from '@/components/SectionQuestionsManager';
+import { QuestionCreationForm } from '@/components/QuestionCreationForm';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +18,8 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -32,6 +36,8 @@ import {
   AlertCircle,
   BookOpen,
   Settings,
+  Edit3,
+  Filter,
 } from 'lucide-react';
 
 interface LearningPlanTemplate {
@@ -203,6 +209,10 @@ export default function PlanEditorPage() {
   const [filterLearningPath, setFilterLearningPath] = useState('all');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [showQuestionDialog, setShowQuestionDialog] = useState(false);
+  const [showSectionQuestionsManager, setShowSectionQuestionsManager] =
+    useState(false);
+  const [showAddQuestionsDialog, setShowAddQuestionsDialog] = useState(false);
+  const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
 
   // Fetch questions from the API
   const fetchQuestions = useCallback(async () => {
@@ -550,6 +560,46 @@ export default function PlanEditorPage() {
     fetchQuestions();
   }, [planId, fetchQuestions]);
 
+  // Handle adding questions from existing questions
+  const handleAddFromExisting = (sectionId: string) => {
+    setEditingSectionId(sectionId);
+    setShowSectionQuestionsManager(true);
+  };
+
+  const handleSectionQuestionsChange = (questionIds: string[]) => {
+    if (!plan || !editingSectionId) return;
+
+    setPlan(prevPlan => {
+      if (!prevPlan) return prevPlan;
+
+      const updatedSections = prevPlan.sections.map(section =>
+        section.id === editingSectionId
+          ? { ...section, questions: questionIds }
+          : section
+      );
+
+      return {
+        ...prevPlan,
+        sections: updatedSections,
+        totalQuestions: updatedSections.reduce(
+          (total, section) => total + section.questions.length,
+          0
+        ),
+        dailyQuestions: Math.ceil(
+          updatedSections.reduce(
+            (total, section) => total + section.questions.length,
+            0
+          ) / prevPlan.duration
+        ),
+      };
+    });
+  };
+
+  const handleCloseSectionQuestionsManager = () => {
+    setShowSectionQuestionsManager(false);
+    setEditingSectionId(null);
+  };
+
   // Filter questions based on search and filters
   useEffect(() => {
     let filtered = allQuestions;
@@ -804,57 +854,66 @@ export default function PlanEditorPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
           {/* Left Column - Sections */}
-          <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
+          <div className="xl:col-span-1 order-2 xl:order-1">
+            <Card className="h-fit">
+              <CardHeader className="pb-4">
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <BookOpen className="w-5 h-5" />
-                    <span>Plan Sections</span>
+                    <BookOpen className="w-5 h-5 text-blue-600" />
+                    <span className="text-lg font-semibold">Plan Sections</span>
                   </div>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                  <Badge variant="secondary" className="text-xs font-medium">
                     {plan.sections.length} sections
-                  </span>
+                  </Badge>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 max-h-96 overflow-y-auto pr-2">
+              <CardContent className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
                 {plan.sections.map(section => (
                   <Card
                     key={section.id}
-                    className={`cursor-pointer transition-colors ${
+                    className={`cursor-pointer transition-all duration-200 hover:shadow-md border-2 ${
                       selectedSection === section.id
-                        ? 'ring-2 ring-red-500 bg-red-50 dark:bg-red-900/20'
-                        : ''
+                        ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                     }`}
                     onClick={() => setSelectedSection(section.id)}
                   >
                     <CardContent className="p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h3 className="font-medium text-gray-900 dark:text-white">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-3">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-gray-900 dark:text-white text-base mb-2 truncate">
                             {section.name}
                           </h3>
-                          <Badge
-                            className={`text-xs ${getCategoryColor(section.category)}`}
-                          >
-                            {QUESTION_CATEGORIES.find(
-                              cat => cat.id === section.category
-                            )?.name || section.category}
-                          </Badge>
+                          <div className="flex flex-wrap gap-2">
+                            <Badge
+                              className={`text-xs font-medium px-2 py-1 rounded-full ${getCategoryColor(section.category)}`}
+                            >
+                              {QUESTION_CATEGORIES.find(
+                                cat => cat.id === section.category
+                              )?.name || section.category}
+                            </Badge>
+                            <Badge
+                              variant="secondary"
+                              className="text-xs font-medium px-2 py-1 rounded-full"
+                            >
+                              {section.questions.length} questions
+                            </Badge>
+                          </div>
                         </div>
-                        <Badge variant="secondary">
-                          {section.questions.length} questions
-                        </Badge>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          Weight: {section.weight}%
-                        </span>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          Order: {section.order}
-                        </span>
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <div className="flex items-center gap-4">
+                          <span className="flex items-center gap-1">
+                            <Target className="w-3 h-3" />
+                            Weight: {section.weight}%
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Settings className="w-3 h-3" />
+                            Order: {section.order}
+                          </span>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -864,104 +923,135 @@ export default function PlanEditorPage() {
           </div>
 
           {/* Right Column - Questions */}
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Target className="w-5 h-5" />
-                    <span>Available Questions</span>
-                  </div>
-                  <Dialog
-                    open={showQuestionDialog}
-                    onOpenChange={setShowQuestionDialog}
-                  >
-                    <DialogTrigger asChild>
-                      <Button size="sm">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add Question
+          <div className="xl:col-span-2 order-1 xl:order-2">
+            <Card className="h-fit">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Target className="w-5 h-5 text-green-600" />
+                      <div>
+                        <span className="text-lg font-semibold">
+                          Available Questions
+                        </span>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          {selectedSection
+                            ? `Select questions to add to "${plan.sections.find(s => s.id === selectedSection)?.name}"`
+                            : 'Select a section from the left to add questions to it'}
+                        </p>
+                      </div>
+                    </div>
+                    {selectedSection && (
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setEditingSectionId(selectedSection);
+                          setShowAddQuestionsDialog(true);
+                        }}
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        <Plus className="w-4 h-4 mr-1" />
+                        Add Questions
                       </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Add New Question</DialogTitle>
-                      </DialogHeader>
-                      <p>Question creation form would go here...</p>
-                    </DialogContent>
-                  </Dialog>
+                    )}
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {/* Filters */}
-                <div className="mb-4 flex flex-wrap gap-4">
-                  <div className="flex-1 min-w-64">
-                    <Input
-                      placeholder="Search questions..."
-                      value={searchTerm}
-                      onChange={e => setSearchTerm(e.target.value)}
-                      className="w-full"
-                    />
+                <div className="mb-6 space-y-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1">
+                      <Input
+                        placeholder="Search questions..."
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
+                        className="w-full h-10"
+                      />
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                      <Select
+                        value={filterCategory}
+                        onValueChange={setFilterCategory}
+                      >
+                        <SelectTrigger className="w-full sm:w-48 h-10">
+                          <SelectValue placeholder="Category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Categories</SelectItem>
+                          {QUESTION_CATEGORIES.map(category => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Select
+                        value={filterDifficulty}
+                        onValueChange={setFilterDifficulty}
+                      >
+                        <SelectTrigger className="w-full sm:w-48 h-10">
+                          <SelectValue placeholder="Difficulty" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Difficulties</SelectItem>
+                          <SelectItem value="easy">Easy</SelectItem>
+                          <SelectItem value="medium">Medium</SelectItem>
+                          <SelectItem value="hard">Hard</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                  <Select
-                    value={filterCategory}
-                    onValueChange={setFilterCategory}
-                  >
-                    <SelectTrigger className="w-48">
-                      <SelectValue placeholder="Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Categories</SelectItem>
-                      {QUESTION_CATEGORIES.map(category => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select
-                    value={filterDifficulty}
-                    onValueChange={setFilterDifficulty}
-                  >
-                    <SelectTrigger className="w-48">
-                      <SelectValue placeholder="Difficulty" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Difficulties</SelectItem>
-                      <SelectItem value="easy">Easy</SelectItem>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="hard">Hard</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
 
+                {/* Section Selection Notice */}
+                {!selectedSection && (
+                  <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-blue-100 dark:bg-blue-800 rounded-full p-2">
+                        <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-blue-900 dark:text-blue-100">
+                          Select a Section First
+                        </h4>
+                        <p className="text-sm text-blue-700 dark:text-blue-300">
+                          Choose a section from the left panel to start adding
+                          questions to it.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Questions List */}
-                <div className="space-y-4 max-h-96 overflow-y-auto">
+                <div className="space-y-4 max-h-[500px] overflow-y-auto">
                   {questions.map(question => (
                     <Card
                       key={question.id}
-                      className="hover:shadow-md transition-shadow"
+                      className="hover:shadow-md transition-all duration-200 border border-gray-200 dark:border-gray-700"
                     >
                       <CardContent className="p-4">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+                        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-gray-900 dark:text-white mb-2 text-base leading-tight">
                               {question.title}
                             </h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2 leading-relaxed">
                               {question.content}
                             </p>
                             <div className="flex flex-wrap gap-2 mb-3">
                               <Badge
-                                className={getCategoryColor(question.category)}
+                                className={`text-xs font-medium px-2 py-1 rounded-full ${getCategoryColor(question.category)}`}
                               >
                                 {QUESTION_CATEGORIES.find(
                                   cat => cat.id === question.category
                                 )?.name || question.category}
                               </Badge>
                               <Badge
-                                className={getDifficultyColor(
+                                className={`text-xs font-medium px-2 py-1 rounded-full ${getDifficultyColor(
                                   question.difficulty
-                                )}
+                                )}`}
                               >
                                 {question.difficulty}
                               </Badge>
@@ -969,20 +1059,23 @@ export default function PlanEditorPage() {
                                 <Badge
                                   key={index}
                                   variant="outline"
-                                  className="text-xs"
+                                  className="text-xs font-medium px-2 py-1 rounded-full"
                                 >
                                   {tag}
                                 </Badge>
                               ))}
                               {question.tags.length > 2 && (
-                                <Badge variant="outline" className="text-xs">
+                                <Badge
+                                  variant="outline"
+                                  className="text-xs font-medium px-2 py-1 rounded-full"
+                                >
                                   +{question.tags.length - 2}
                                 </Badge>
                               )}
                             </div>
                           </div>
-                          <div className="ml-4 flex flex-col space-y-2">
-                            {selectedSection && (
+                          <div className="flex flex-col sm:flex-row lg:flex-col gap-2 lg:ml-4">
+                            {selectedSection ? (
                               <Button
                                 size="sm"
                                 variant={
@@ -1011,6 +1104,14 @@ export default function PlanEditorPage() {
                                     );
                                   }
                                 }}
+                                className={
+                                  isQuestionInSection(
+                                    question.id,
+                                    selectedSection
+                                  )
+                                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                                }
                               >
                                 {isQuestionInSection(
                                   question.id,
@@ -1018,19 +1119,29 @@ export default function PlanEditorPage() {
                                 ) ? (
                                   <>
                                     <XCircle className="w-4 h-4 mr-1" />
-                                    Remove
+                                    Remove from Section
                                   </>
                                 ) : (
                                   <>
-                                    <CheckCircle className="w-4 h-4 mr-1" />
-                                    Add
+                                    <Plus className="w-4 h-4 mr-1" />
+                                    Add to Section
                                   </>
                                 )}
                               </Button>
+                            ) : (
+                              <div className="text-center py-2 px-3 bg-gray-100 dark:bg-gray-800 rounded-md">
+                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                  Select a section to add questions
+                                </p>
+                              </div>
                             )}
-                            <Button size="sm" variant="outline">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+                            >
                               <Eye className="w-4 h-4 mr-1" />
-                              View
+                              View Details
                             </Button>
                           </div>
                         </div>
@@ -1040,19 +1151,46 @@ export default function PlanEditorPage() {
                 </div>
 
                 {questions.length === 0 && (
-                  <div className="text-center py-8">
-                    <Target className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  <div className="text-center py-12">
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-700 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center shadow-lg">
+                      <Target className="w-10 h-10 text-blue-500 dark:text-blue-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
                       No questions found
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">
-                      Try adjusting your search filters or create a new
-                      question.
-                    </p>
-                    <Button onClick={() => setShowQuestionDialog(true)}>
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Question
-                    </Button>
+                    <div className="max-w-md mx-auto space-y-3">
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        {selectedSection
+                          ? `No questions match your current filters for "${plan.sections.find(s => s.id === selectedSection)?.name}". Try adjusting your search criteria or add new questions.`
+                          : 'No questions match your current filters. Try adjusting your search criteria.'}
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setSearchTerm('');
+                            setFilterCategory('all');
+                            setFilterDifficulty('all');
+                          }}
+                          className="text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:border-blue-800 dark:hover:border-blue-700 dark:hover:bg-blue-900/20"
+                        >
+                          <Filter className="w-4 h-4 mr-2" />
+                          Clear Filters
+                        </Button>
+                        {selectedSection && (
+                          <Button
+                            onClick={() => {
+                              setEditingSectionId(selectedSection);
+                              setShowAddQuestionsDialog(true);
+                            }}
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add Questions
+                          </Button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -1060,6 +1198,94 @@ export default function PlanEditorPage() {
           </div>
         </div>
       </div>
+
+      {/* Section Questions Manager Modal */}
+      {showSectionQuestionsManager && editingSectionId && plan && (
+        <SectionQuestionsManager
+          sectionId={editingSectionId}
+          sectionName={
+            plan.sections.find(s => s.id === editingSectionId)?.name || ''
+          }
+          currentQuestionIds={
+            plan.sections.find(s => s.id === editingSectionId)?.questions || []
+          }
+          onQuestionsChange={handleSectionQuestionsChange}
+          onClose={handleCloseSectionQuestionsManager}
+          sectionCategory={
+            plan.sections.find(s => s.id === editingSectionId)?.category
+          }
+        />
+      )}
+
+      {/* Add Questions Options Dialog */}
+      {showAddQuestionsDialog && editingSectionId && plan && (
+        <Dialog
+          open={showAddQuestionsDialog}
+          onOpenChange={setShowAddQuestionsDialog}
+        >
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Plus className="w-5 h-5 text-blue-600" />
+                Add Questions to "
+                {plan.sections.find(s => s.id === editingSectionId)?.name}"
+              </DialogTitle>
+              <DialogDescription>
+                Choose how you want to add questions to this section.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <Button
+                onClick={() => {
+                  setShowAddQuestionsDialog(false);
+                  setShowQuestionDialog(true);
+                }}
+                className="w-full h-16 text-left justify-start bg-green-50 hover:bg-green-100 text-green-800 border-green-200 hover:border-green-300 dark:bg-green-900/20 dark:hover:bg-green-900/30 dark:text-green-400 dark:border-green-800"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-green-100 dark:bg-green-900/40 rounded-lg">
+                    <Plus className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">Add Questions</div>
+                    <div className="text-sm text-green-600 dark:text-green-400">
+                      Create a new question
+                    </div>
+                  </div>
+                </div>
+              </Button>
+
+              <Button
+                onClick={() => {
+                  setShowAddQuestionsDialog(false);
+                  setShowSectionQuestionsManager(true);
+                }}
+                className="w-full h-16 text-left justify-start bg-blue-50 hover:bg-blue-100 text-blue-800 border-blue-200 hover:border-blue-300 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
+                    <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">Add from Existing</div>
+                    <div className="text-sm text-blue-600 dark:text-blue-400">
+                      Choose from existing questions
+                    </div>
+                  </div>
+                </div>
+              </Button>
+            </div>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setShowAddQuestionsDialog(false)}
+              >
+                Cancel
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

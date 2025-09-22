@@ -17,76 +17,54 @@ const ADMIN_SESSION_KEY = 'admin_session';
 
 export const useAdminAuth = (): UseAdminAuthReturn => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Start with false to prevent loading issues
+  const [isLoading, setIsLoading] = useState(true); // Start with true to properly handle initial state
   const [user, setUser] = useState<AdminSession | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Load session from localStorage on mount
   useEffect(() => {
-    const loadSession = async () => {
-      setIsLoading(true); // Set loading to true at the start
-
+    const checkSession = () => {
       try {
-        // Check if we're in the browser environment
         if (typeof window === 'undefined') {
           setIsLoading(false);
           return;
         }
 
         const sessionData = localStorage.getItem(ADMIN_SESSION_KEY);
+        
         if (sessionData) {
           const session: AdminSession = JSON.parse(sessionData);
-
+          
           // Check if session has expired locally first
           if (new Date() > new Date(session.expiresAt)) {
             localStorage.removeItem(ADMIN_SESSION_KEY);
-            setIsLoading(false);
-            return;
-          }
-
-          // For now, skip validation to prevent loading issues
-          // TODO: Re-enable validation once the basic flow works
-          setUser(session);
-          setIsAuthenticated(true);
-          setIsLoading(false);
-          return;
-
-          // Validate session with shorter timeout
-          try {
-            const isValid = await Promise.race([
-              AdminAuthService.validateSession(session),
-              new Promise<boolean>((_, reject) =>
-                setTimeout(() => reject(new Error('Timeout')), 1000)
-              ),
-            ]);
-
-            if (isValid) {
-              setUser(session);
-              setIsAuthenticated(true);
-            } else {
-              localStorage.removeItem(ADMIN_SESSION_KEY);
-            }
-          } catch (error) {
-            console.error('Session validation failed:', error);
-            // If validation fails, clear session but don't block the user
-            localStorage.removeItem(ADMIN_SESSION_KEY);
+            setIsAuthenticated(false);
+            setUser(null);
+          } else {
+            // Session exists and is not expired, set authenticated state
+            setUser(session);
+            setIsAuthenticated(true);
           }
         } else {
-          // No session data, set loading to false immediately
-          setIsLoading(false);
-          return;
+          // No session data found
+          setIsAuthenticated(false);
+          setUser(null);
         }
       } catch (error) {
-        console.error('Error loading admin session:', error);
+        console.error('Error checking session:', error);
         if (typeof window !== 'undefined') {
           localStorage.removeItem(ADMIN_SESSION_KEY);
         }
+        setIsAuthenticated(false);
+        setUser(null);
       } finally {
+        // Always set loading to false after checking
         setIsLoading(false);
       }
     };
 
-    loadSession();
+    // Run immediately
+    checkSession();
   }, []);
 
   // Login function
