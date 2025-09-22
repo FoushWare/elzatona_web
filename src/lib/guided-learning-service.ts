@@ -225,8 +225,8 @@ export class GuidedLearningService {
         return {
           id: planSnap.id,
           ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date(),
+          createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : new Date(),
+          updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate() : new Date(),
         } as LearningPlanTemplate;
       }
       return null;
@@ -245,12 +245,15 @@ export class GuidedLearningService {
       );
 
       const plansSnap = await getDocs(plansQuery);
-      return plansSnap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-        updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-      })) as LearningPlanTemplate[];
+      return plansSnap.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : new Date(),
+          updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate() : new Date(),
+        } as LearningPlanTemplate;
+      });
     } catch (error) {
       console.error('Error getting all learning plans:', error);
       throw new Error('Failed to get learning plans');
