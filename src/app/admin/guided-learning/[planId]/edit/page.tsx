@@ -503,9 +503,19 @@ export default function PlanEditorPage() {
     setEditingSectionId(null);
   };
 
-  // Filter questions based on search and filters
+  // Filter questions based on selected section and search/filters
   useEffect(() => {
     let filtered = allQuestions;
+
+    // If a section is selected, show only questions assigned to that section
+    if (selectedSection && plan) {
+      const section = plan.sections.find(s => s.id === selectedSection);
+      if (section) {
+        filtered = filtered.filter(question => 
+          section.questions.includes(question.id)
+        );
+      }
+    }
 
     // Apply search filter
     if (searchTerm) {
@@ -526,7 +536,6 @@ export default function PlanEditorPage() {
       );
     }
 
-
     // Apply learning path filter
     if (filterLearningPath !== 'all') {
       filtered = filtered.filter(
@@ -537,6 +546,8 @@ export default function PlanEditorPage() {
     setQuestions(filtered);
   }, [
     allQuestions,
+    selectedSection,
+    plan,
     searchTerm,
     filterCategory,
     filterLearningPath,
@@ -832,8 +843,8 @@ export default function PlanEditorPage() {
                       </span>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                         {selectedSection
-                          ? `Select questions to add to "${plan.sections.find(s => s.id === selectedSection)?.name}"`
-                          : 'Select a section from the left to add questions to it'}
+                          ? `Questions assigned to "${plan.sections.find(s => s.id === selectedSection)?.name}" section`
+                          : 'Select a section from the left to view its assigned questions'}
                       </p>
                     </div>
                   </div>
@@ -963,55 +974,17 @@ export default function PlanEditorPage() {
                             {selectedSection ? (
                               <Button
                                 size="sm"
-                                variant={
-                                  isQuestionInSection(
-                                    question.id,
-                                    selectedSection
-                                  )
-                                    ? 'destructive'
-                                    : 'default'
-                                }
+                                variant="destructive"
                                 onClick={() => {
-                                  if (
-                                    isQuestionInSection(
-                                      question.id,
-                                      selectedSection
-                                    )
-                                  ) {
-                                    removeQuestionFromSection(
-                                      question.id,
-                                      selectedSection
-                                    );
-                                  } else {
-                                    addQuestionToSection(
-                                      question.id,
-                                      selectedSection
-                                    );
-                                  }
-                                }}
-                                className={
-                                  isQuestionInSection(
+                                  removeQuestionFromSection(
                                     question.id,
                                     selectedSection
-                                  )
-                                    ? 'bg-red-600 hover:bg-red-700 text-white'
-                                    : 'bg-blue-600 hover:bg-blue-700 text-white'
-                                }
+                                  );
+                                }}
+                                className="bg-red-600 hover:bg-red-700 text-white"
                               >
-                                {isQuestionInSection(
-                                  question.id,
-                                  selectedSection
-                                ) ? (
-                                  <>
-                                    <XCircle className="w-4 h-4 mr-1" />
-                                    Remove from Section
-                                  </>
-                                ) : (
-                                  <>
-                                    <Plus className="w-4 h-4 mr-1" />
-                                    Add to Section
-                                  </>
-                                )}
+                                <XCircle className="w-4 h-4 mr-1" />
+                                Remove from Section
                               </Button>
                             ) : (
                               <div className="text-center py-2 px-3 bg-gray-100 dark:bg-gray-800 rounded-md">
@@ -1046,8 +1019,8 @@ export default function PlanEditorPage() {
                     <div className="max-w-md mx-auto space-y-3">
                       <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                         {selectedSection
-                          ? `No questions match your current filters for &quot;${plan.sections.find(s => s.id === selectedSection)?.name}&quot;. Try adjusting your search criteria or add new questions.`
-                          : 'No questions match your current filters. Try adjusting your search criteria.'}
+                          ? `No questions are currently assigned to &quot;${plan.sections.find(s => s.id === selectedSection)?.name}&quot; section. Use the &quot;Add Questions&quot; button to add questions to this section.`
+                          : 'Select a section from the left to view its assigned questions.'}
                       </p>
                       <div className="flex flex-col sm:flex-row gap-3 justify-center">
                         <Button
