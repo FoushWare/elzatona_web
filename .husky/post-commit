@@ -35,21 +35,9 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
     echo "   ℹ️  storybook-static directory not found (already clean)"
   fi
   
-  echo "   🗑️  Removing .next directory..."
-  if [ -d ".next" ]; then
-    rm -rf .next
-    echo "   ✅ .next directory removed"
-  else
-    echo "   ℹ️  .next directory not found (already clean)"
-  fi
+  echo "   ℹ️  Keeping .next directory (required for Next.js development)"
   
-  echo "   🗑️  Removing tsconfig.tsbuildinfo..."
-  if [ -f "tsconfig.tsbuildinfo" ]; then
-    rm -f tsconfig.tsbuildinfo
-    echo "   ✅ tsconfig.tsbuildinfo removed"
-  else
-    echo "   ℹ️  tsconfig.tsbuildinfo not found (already clean)"
-  fi
+  echo "   ℹ️  Keeping tsconfig.tsbuildinfo (helps with incremental builds)"
   echo ""
   
   # Step 2: Remove build artifacts (but keep Next.js cache)
