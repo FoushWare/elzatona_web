@@ -485,6 +485,23 @@ export function SectionQuestionsManager({
             )}
           </div>
 
+          {/* Confirmation Banner */}
+          {selectedQuestions.length > 0 && (
+            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mx-6">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <div className="flex-1">
+                  <h4 className="font-semibold text-green-800 dark:text-green-200">
+                    Ready to Add Questions
+                  </h4>
+                  <p className="text-sm text-green-700 dark:text-green-300">
+                    You have selected <span className="font-bold">{selectedQuestions.length}</span> question{selectedQuestions.length === 1 ? '' : 's'} to add to "{sectionName}".
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Footer */}
           <DialogFooter className="mt-6 pt-6 border-t-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 -mx-6 -mb-6 px-6 pb-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4">
@@ -512,16 +529,36 @@ export function SectionQuestionsManager({
                 </Button>
                 <Button
                   onClick={handleSave}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`px-8 py-3 font-bold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed ${
+                    selectedQuestions.length > 0
+                      ? 'bg-green-600 hover:bg-green-700 text-white'
+                      : 'bg-gray-400 text-gray-200'
+                  }`}
                   disabled={selectedQuestions.length === 0}
                 >
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Selection ({selectedQuestions.length})
+                  <Save className="w-5 h-5 mr-2" />
+                  {selectedQuestions.length > 0 
+                    ? `Add ${selectedQuestions.length} Question${selectedQuestions.length === 1 ? '' : 's'} to Section`
+                    : 'No Questions Selected'
+                  }
                 </Button>
               </div>
             </div>
           </DialogFooter>
         </div>
+
+        {/* Floating Action Button */}
+        {selectedQuestions.length > 0 && (
+          <div className="fixed bottom-6 right-6 z-50">
+            <Button
+              onClick={handleSave}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
+            >
+              <Save className="w-5 h-5 mr-2" />
+              Add {selectedQuestions.length} Question{selectedQuestions.length === 1 ? '' : 's'}
+            </Button>
+          </div>
+        )}
 
         {/* Question View Modal */}
         {viewingQuestion && (
