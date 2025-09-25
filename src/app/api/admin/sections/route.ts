@@ -1,9 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SectionService } from '@/lib/section-service';
+import { autoLinkingService } from '@/lib/auto-linking-service';
 
-// GET - Get all sections
-export async function GET() {
+// GET - Get all sections or questions for a specific section
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const sectionId = searchParams.get('sectionId');
+    const getQuestions = searchParams.get('getQuestions') === 'true';
+
+    // If requesting questions for a specific section
+    if (sectionId && getQuestions) {
+      const questions = await autoLinkingService.getQuestionsForSection(sectionId);
+      return NextResponse.json({
+        success: true,
+        data: questions,
+        count: questions.length
+      });
+    }
+
+    // Otherwise, get all sections
     const result = await SectionService.getSections();
 
     if (result.success) {

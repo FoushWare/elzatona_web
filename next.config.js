@@ -13,6 +13,8 @@ const nextConfig = {
       },
     },
   },
+  // Transpile Firebase packages for better compatibility
+  transpilePackages: ['firebase', 'firebase-admin'],
   eslint: {
     ignoreDuringBuilds: true,
   },

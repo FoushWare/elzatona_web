@@ -99,7 +99,7 @@ export const NavbarSimple: React.FC = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
         isScrolled
-          ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-200 dark:border-gray-700'
+          ? 'bg-white/98 dark:bg-gray-900/98 backdrop-blur-lg shadow-xl border-b border-gray-200 dark:border-gray-700'
           : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600'
       }`}
     >
@@ -166,6 +166,22 @@ export const NavbarSimple: React.FC = () => {
             >
               Progress
             </Link>
+            {isAuthenticated && (
+              <Link
+                href="/my-plans"
+                className={`font-medium transition-colors duration-200 ${
+                  isActiveLink('/my-plans')
+                    ? isScrolled
+                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
+                      : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
+                    : isScrolled
+                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
+                      : 'text-white hover:text-indigo-100'
+                }`}
+              >
+                My Plans
+              </Link>
+            )}
             <Link
               href={
                 userType === 'self-directed' ? '/free-style-roadmap' : '/learn'
@@ -190,8 +206,8 @@ export const NavbarSimple: React.FC = () => {
 
           {/* Right Section - Desktop Only */}
           <div className="hidden lg:flex items-center space-x-4">
-            {/* Learning Mode Switcher */}
-            {userType && <LearningModeSwitcher isScrolled={isScrolled} />}
+            {/* Learning Mode Switcher - Always show */}
+            <LearningModeSwitcher isScrolled={isScrolled} />
 
             {/* Sign In / Logout Link */}
             {isAuthLoading ? (
@@ -252,11 +268,9 @@ export const NavbarSimple: React.FC = () => {
           {/* Mobile/Tablet Menu Button */}
           <div className="flex items-center space-x-1 sm:space-x-2 lg:hidden">
             {/* Learning Mode Switcher for Mobile/Tablet - Hidden on very small screens */}
-            {userType && (
-              <div className="hidden xs:block">
-                <LearningModeSwitcher isScrolled={isScrolled} />
-              </div>
-            )}
+            <div className="hidden xs:block">
+              <LearningModeSwitcher isScrolled={isScrolled} />
+            </div>
 
             {/* Theme Toggle for Mobile/Tablet */}
             <button
@@ -335,6 +349,19 @@ export const NavbarSimple: React.FC = () => {
               >
                 Progress
               </Link>
+              {isAuthenticated && (
+                <Link
+                  href="/my-plans"
+                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
+                    isActiveLink('/my-plans')
+                      ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
+                      : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  My Plans
+                </Link>
+              )}
               <Link
                 href={
                   userType === 'self-directed'
@@ -355,48 +382,52 @@ export const NavbarSimple: React.FC = () => {
                 {userType === 'self-directed' ? 'My Roadmap' : 'Learn'}
               </Link>
 
-              {/* Mobile Learning Mode Switcher */}
-              {userType && (
-                <div className="pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3">
-                    Learning Mode
-                  </div>
-                  <div className="space-y-1 sm:space-y-2">
-                    <button
-                      onClick={() => {
-                        setUserType('guided');
-                        setIsOpen(false);
-                      }}
-                      className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
-                        userType === 'guided'
-                          ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
-                          : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
-                      }`}
-                    >
-                      <Compass className="w-4 h-4 flex-shrink-0" />
-                      <span className="text-sm sm:text-base font-medium">
-                        Guided Learning
-                      </span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setUserType('self-directed');
-                        setIsOpen(false);
-                      }}
-                      className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
-                        userType === 'self-directed'
-                          ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
-                          : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
-                      }`}
-                    >
-                      <Map className="w-4 h-4 flex-shrink-0" />
-                      <span className="text-sm sm:text-base font-medium">
-                        Free Style Learning
-                      </span>
-                    </button>
-                  </div>
+              {/* Mobile Learning Mode Switcher - Always show */}
+              <div className="pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3">
+                  Learning Mode
                 </div>
-              )}
+                <div className="space-y-1 sm:space-y-2">
+                  <button
+                    onClick={() => {
+                      setUserType('guided');
+                      setIsOpen(false);
+                    }}
+                    className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
+                      userType === 'guided'
+                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
+                        : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
+                    }`}
+                  >
+                    <Compass className="w-4 h-4 flex-shrink-0" />
+                    <span className="text-sm sm:text-base font-medium">
+                      Guided Learning
+                    </span>
+                    {userType === 'guided' && (
+                      <div className="w-2 h-2 bg-indigo-600 rounded-full ml-auto"></div>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setUserType('self-directed');
+                      setIsOpen(false);
+                    }}
+                    className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
+                      userType === 'self-directed'
+                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
+                        : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
+                    }`}
+                  >
+                    <Map className="w-4 h-4 flex-shrink-0" />
+                    <span className="text-sm sm:text-base font-medium">
+                      Free Style Learning
+                    </span>
+                    {userType === 'self-directed' && (
+                      <div className="w-2 h-2 bg-indigo-600 rounded-full ml-auto"></div>
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Mobile CTAs */}

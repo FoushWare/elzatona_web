@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import AdminLoginNavbar from '@/components/AdminLoginNavbar';
 
 export default function AdminLoginPage() {
@@ -15,19 +15,8 @@ export default function AdminLoginPage() {
   const { isAuthenticated, isLoading, login } = useAdminAuth();
   const router = useRouter();
 
-  // Redirect if already authenticated
-  useEffect(() => {
-    console.log('🔄 Login page useEffect triggered:', {
-      isLoading,
-      isAuthenticated,
-      isSubmitting
-    });
-    
-    if (!isLoading && isAuthenticated && !isSubmitting) {
-      console.log('🚨 Login page redirecting to dashboard - user is authenticated');
-      router.replace('/admin/dashboard');
-    }
-  }, [isAuthenticated, isLoading, isSubmitting, router]);
+  // Redirect is now handled by AdminAuthProvider context
+  // No need for local redirect logic here
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

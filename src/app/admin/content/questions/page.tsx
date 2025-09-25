@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,8 +19,6 @@ import {
   Edit,
   Eye,
   Plus,
-  Search,
-  Filter,
   Loader2,
   FileText,
   AlertCircle,
@@ -32,7 +30,6 @@ import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import { MarkdownQuestionExtractor } from '@/components/MarkdownQuestionExtractor';
 import { QuestionEditModal } from '@/components/QuestionEditModal';
 import { QuestionViewModal } from '@/components/QuestionViewModal';
-import { useEffect } from 'react';
 
 export default function QuestionsManagementPage() {
   const {
@@ -52,6 +49,7 @@ export default function QuestionsManagementPage() {
   const [selectedLearningPath, setSelectedLearningPath] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [appliedFilters, setAppliedFilters] = useState<string[]>([]);
   const [showDebugInfo, setShowDebugInfo] = useState(false);
   const [showMarkdownExtractor, setShowMarkdownExtractor] = useState(false);
   const [editingQuestion, setEditingQuestion] =
@@ -180,53 +178,70 @@ export default function QuestionsManagementPage() {
     }
   };
 
-  const difficulties = [
-    { id: 'all', name: 'All Difficulties' },
-    { id: 'easy', name: 'Easy' },
-    { id: 'medium', name: 'Medium' },
-    { id: 'hard', name: 'Hard' },
-  ];
+  const difficulties = useMemo(
+    () => [
+      { id: 'all', name: 'All Difficulties' },
+      { id: 'easy', name: 'Easy' },
+      { id: 'medium', name: 'Medium' },
+      { id: 'hard', name: 'Hard' },
+    ],
+    []
+  );
 
-  const categories = [
-    { id: 'all', name: 'All Categories' },
-    { id: 'CSS', name: 'CSS' },
-    { id: 'JavaScript', name: 'JavaScript' },
-    { id: 'React', name: 'React' },
-    { id: 'TypeScript', name: 'TypeScript' },
-    { id: 'Testing', name: 'Testing' },
-    { id: 'Performance', name: 'Performance' },
-    { id: 'Security', name: 'Security' },
-  ];
+  const categories = useMemo(
+    () => [
+      { id: 'all', name: 'All Categories' },
+      { id: 'CSS', name: 'CSS' },
+      { id: 'JavaScript', name: 'JavaScript' },
+      { id: 'React', name: 'React' },
+      { id: 'TypeScript', name: 'TypeScript' },
+      { id: 'Testing', name: 'Testing' },
+      { id: 'Performance', name: 'Performance' },
+      { id: 'Security', name: 'Security' },
+    ],
+    []
+  );
 
-  const handleSearch = () => {
-    loadQuestions({
-      category:
-        selectedCategory === 'all' ? undefined : selectedCategory || undefined,
-      difficulty:
-        selectedDifficulty === 'all'
-          ? undefined
-          : selectedDifficulty || undefined,
-      learningPath:
-        selectedLearningPath === 'all'
-          ? undefined
-          : selectedLearningPath || undefined,
-    });
-  };
+  // Auto-apply filters when values change
+  useEffect(() => {
+    const filters: string[] = [];
+    const queryFilters: any = {};
 
-  const handleFilterChange = () => {
-    loadQuestions({
-      category:
-        selectedCategory === 'all' ? undefined : selectedCategory || undefined,
-      difficulty:
-        selectedDifficulty === 'all'
-          ? undefined
-          : selectedDifficulty || undefined,
-      learningPath:
-        selectedLearningPath === 'all'
-          ? undefined
-          : selectedLearningPath || undefined,
-    });
-  };
+    // Category filter (independent)
+    if (selectedCategory !== 'all') {
+      queryFilters.category = selectedCategory;
+      const categoryName =
+        categories.find(c => c.id === selectedCategory)?.name ||
+        selectedCategory;
+      filters.push(`Category: ${categoryName}`);
+    }
+
+    // Learning Path filter (independent)
+    if (selectedLearningPath !== 'all') {
+      queryFilters.learningPath = selectedLearningPath;
+      const pathName =
+        learningPaths.find(p => p.id === selectedLearningPath)?.name ||
+        selectedLearningPath;
+      filters.push(`Learning Path: ${pathName}`);
+    }
+
+    // Difficulty filter (independent)
+    if (selectedDifficulty !== 'all') {
+      queryFilters.difficulty = selectedDifficulty;
+      const difficultyName =
+        difficulties.find(d => d.id === selectedDifficulty)?.name ||
+        selectedDifficulty;
+      filters.push(`Difficulty: ${difficultyName}`);
+    }
+
+    setAppliedFilters(filters);
+    loadQuestions(queryFilters);
+  }, [
+    selectedCategory,
+    selectedDifficulty,
+    selectedLearningPath,
+    loadQuestions,
+  ]);
 
   const handleDeleteQuestion = async (questionId: string) => {
     if (confirm('Are you sure you want to delete this question?')) {
@@ -234,6 +249,14 @@ export default function QuestionsManagementPage() {
       // Reload stats after deletion
       await loadStats();
     }
+  };
+
+  const clearAllFilters = () => {
+    setSelectedCategory('all');
+    setSelectedDifficulty('all');
+    setSelectedLearningPath('all');
+    setSearchTerm('');
+    setAppliedFilters([]);
   };
 
   // Reload stats when questions change
@@ -328,7 +351,6 @@ export default function QuestionsManagementPage() {
             variant="outline"
             className="bg-yellow-50 hover:bg-yellow-100 text-yellow-700 border-yellow-200 flex-shrink-0"
           >
-            <Search className="w-4 h-4 mr-2" />
             <span className="hidden sm:inline">Check JS Questions</span>
             <span className="sm:hidden">Check JS</span>
           </Button>
@@ -563,76 +585,148 @@ export default function QuestionsManagementPage() {
       {/* Search and Filters */}
       <Card>
         <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
-              <Input
-                placeholder="Search questions..."
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                onKeyPress={e => e.key === 'Enter' && handleSearch()}
-              />
+          <div className="space-y-4">
+            {/* Search Bar */}
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <Input
+                  placeholder="Search questions..."
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                />
+              </div>
+              {appliedFilters.length > 0 && (
+                <Button
+                  onClick={clearAllFilters}
+                  variant="outline"
+                  size="sm"
+                  className="flex-shrink-0"
+                >
+                  Clear All
+                </Button>
+              )}
             </div>
-            <Select
-              value={selectedCategory}
-              onValueChange={setSelectedCategory}
-            >
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map(category => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.name}
-                  </SelectItem>
+
+            {/* Applied Filters Display */}
+            {appliedFilters.length > 0 && (
+              <div className="flex flex-wrap gap-2 items-center">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Active filters:
+                </span>
+                {appliedFilters.map((filter, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300"
+                  >
+                    {filter}
+                  </span>
                 ))}
-              </SelectContent>
-            </Select>
-            <Select
-              value={selectedDifficulty}
-              onValueChange={setSelectedDifficulty}
-            >
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Difficulty" />
-              </SelectTrigger>
-              <SelectContent>
-                {difficulties.map(difficulty => (
-                  <SelectItem key={difficulty.id} value={difficulty.id}>
-                    {difficulty.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select
-              value={selectedLearningPath}
-              onValueChange={setSelectedLearningPath}
-            >
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Learning Path" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Paths</SelectItem>
-                {learningPaths.map(path => (
-                  <SelectItem key={path.id} value={path.name}>
-                    {path.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button onClick={handleSearch} disabled={isLoading}>
-              <Search className="w-4 h-4 mr-2" />
-              Search
-            </Button>
-            <Button
-              onClick={handleFilterChange}
-              variant="outline"
-              disabled={isLoading}
-            >
-              <Filter className="w-4 h-4 mr-2" />
-              Filter
-            </Button>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  ({questions.length} results)
+                </span>
+              </div>
+            )}
+
+            {/* Filter Controls */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Category
+                </label>
+                <Select
+                  value={selectedCategory}
+                  onValueChange={setSelectedCategory}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Categories" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {categories.map(category => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Learning Path
+                </label>
+                <Select
+                  value={selectedLearningPath}
+                  onValueChange={setSelectedLearningPath}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Learning Paths" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Learning Paths</SelectItem>
+                    {learningPaths.map(path => (
+                      <SelectItem key={path.id} value={path.id}>
+                        {path.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Difficulty
+                </label>
+                <Select
+                  value={selectedDifficulty}
+                  onValueChange={setSelectedDifficulty}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Difficulties" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Difficulties</SelectItem>
+                    {difficulties.map(difficulty => (
+                      <SelectItem key={difficulty.id} value={difficulty.id}>
+                        {difficulty.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Results Summary */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <h2 className="text-xl font-semibold">
+            Questions
+            {appliedFilters.length > 0 && (
+              <span className="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">
+                (filtered)
+              </span>
+            )}
+          </h2>
+          <Badge variant="outline" className="text-sm">
+            {filteredQuestions.length}{' '}
+            {filteredQuestions.length === 1 ? 'question' : 'questions'}
+            {appliedFilters.length > 0 && ' found'}
+          </Badge>
+        </div>
+        {appliedFilters.length > 0 && (
+          <Button
+            onClick={clearAllFilters}
+            variant="outline"
+            size="sm"
+            className="text-gray-600 hover:text-gray-800"
+          >
+            Clear Filters
+          </Button>
+        )}
+      </div>
 
       {/* Error Alert */}
       {error && (
@@ -738,10 +832,41 @@ export default function QuestionsManagementPage() {
       {filteredQuestions.length === 0 && !isLoading && (
         <Card>
           <CardContent className="p-8 text-center">
-            <p className="text-gray-500 dark:text-gray-400">
-              No questions found. Try adjusting your filters or create new
-              questions.
-            </p>
+            <div className="space-y-4">
+              <p className="text-gray-500 dark:text-gray-400">
+                {appliedFilters.length > 0
+                  ? `No questions found matching your filters.`
+                  : `No questions found.`}
+              </p>
+              {appliedFilters.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-400 dark:text-gray-500">
+                    Current filters:
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {appliedFilters.map((filter, index) => (
+                      <span
+                        key={index}
+                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+                      >
+                        {filter}
+                      </span>
+                    ))}
+                  </div>
+                  <Button
+                    onClick={clearAllFilters}
+                    variant="outline"
+                    size="sm"
+                    className="mt-2"
+                  >
+                    Clear All Filters
+                  </Button>
+                </div>
+              )}
+              <p className="text-sm text-gray-400 dark:text-gray-500">
+                Try adjusting your filters or create new questions.
+              </p>
+            </div>
           </CardContent>
         </Card>
       )}

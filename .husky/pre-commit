@@ -3,3 +3,6 @@
 
 # Run linting before commit
 npm run lint
+
+# Restart dev server after commit
+pkill -f "npm run dev" && npm run dev

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Bug } from 'lucide-react';
 import { useUnifiedQuestions } from '@/hooks/useUnifiedQuestions';
@@ -75,6 +75,12 @@ export function MarkdownQuestionExtractor({
       );
       if (jsDeepDivePath) {
         setSelectedLearningPath(jsDeepDivePath.id);
+        console.log('🔗 Auto-selected learning path:', jsDeepDivePath);
+      } else {
+        console.log(
+          '⚠️ JavaScript Deep Dive learning path not found. Available paths:',
+          learningPaths.map(p => ({ id: p.id, name: p.name }))
+        );
       }
     }
   }, [selectedCategory, learningPaths]);

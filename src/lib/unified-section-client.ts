@@ -7,6 +7,8 @@ export interface UnifiedSection {
   description: string;
   learningPathId: string;
   questionCount: number;
+  isActive: boolean;
+  category: string;
 }
 
 export interface UnifiedSectionApiResult {

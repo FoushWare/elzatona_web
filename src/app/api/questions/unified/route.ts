@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import UnifiedQuestionService, {
   BulkQuestionData,
 } from '@/lib/unified-question-schema';
+import { db } from '@/lib/firebase-server';
 
 // GET /api/questions/unified - Get questions with filters
 export async function GET(request: NextRequest) {

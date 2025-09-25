@@ -11,6 +11,14 @@ export const FirstVisitModal: React.FC<FirstVisitModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  // Don't show modal during testing
+  if (
+    typeof window !== 'undefined' &&
+    ((window as any).__DISABLE_GUIDANCE_MODALS__ || (window as any).__TEST_MODE__)
+  ) {
+    return null;
+  }
+
   const { setUserType, setHasCompletedOnboarding } = useUserType();
   const [selectedType, setSelectedType] = useState<
     'guided' | 'self-directed' | null

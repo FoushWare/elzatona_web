@@ -9,6 +9,7 @@ import {
 } from '@/lib/unified-section-client';
 import QuestionCreator from './QuestionCreator';
 import BulkQuestionUploader from './BulkQuestionUploader';
+import { autoLinkingService, QuestionData } from '@/lib/auto-linking-service';
 import {
   Plus,
   Edit,
@@ -50,6 +51,9 @@ export default function SectionManager() {
   const [sectionQuestions, setSectionQuestions] = useState<SectionQuestion[]>(
     []
   );
+  const [filteredQuestions, setFilteredQuestions] = useState<QuestionData[]>(
+    []
+  );
   const [editingQuestion, setEditingQuestion] =
     useState<SectionQuestion | null>(null);
 
@@ -78,6 +82,28 @@ export default function SectionManager() {
       }
     } catch (error) {
       setError('Failed to load sections');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadFilteredQuestions = async (section: UnifiedSection) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Get questions filtered by section's category and learning path
+      const questions = await autoLinkingService.getQuestionsForSection(
+        section.id
+      );
+      setFilteredQuestions(questions);
+
+      console.log(
+        `📋 Loaded ${questions.length} filtered questions for section: ${section.name}`
+      );
+    } catch (error) {
+      console.error('Error loading filtered questions:', error);
+      setError('Failed to load filtered questions');
     } finally {
       setLoading(false);
     }
@@ -187,18 +213,11 @@ export default function SectionManager() {
       setLoading(true);
       setError(null);
 
-      // Use unified section questions service
-      const result = await UnifiedSectionClientService.getSectionQuestions(
-        section.learningPathId
-      );
+      // Load filtered questions based on section's category and learning path
+      await loadFilteredQuestions(section);
 
-      if (result.success) {
-        setSectionQuestions(result.data);
-        setSelectedSection(section);
-        setShowQuestionsModal(true);
-      } else {
-        setError(result.error || 'Failed to load questions');
-      }
+      setSelectedSection(section);
+      setShowQuestionsModal(true);
     } catch (error) {
       setError('Failed to load questions');
     } finally {
@@ -641,7 +660,8 @@ export default function SectionManager() {
                       {selectedSection.name} Questions
                     </h2>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {sectionQuestions.length} questions
+                      {filteredQuestions.length} questions (filtered by category
+                      and learning path)
                     </p>
                   </div>
                 </div>
@@ -655,15 +675,21 @@ export default function SectionManager() {
             </div>
 
             <div className="p-6 overflow-y-auto max-h-[60vh]">
-              {sectionQuestions.length === 0 ? (
+              {filteredQuestions.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-gray-600 dark:text-gray-400">
-                    No questions found in this section
+                    No questions found for this section's category and learning
+                    path
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                    Questions are automatically linked based on category:{' '}
+                    {selectedSection.category} and learning path:{' '}
+                    {selectedSection.learningPathId}
                   </p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {sectionQuestions.map(question => (
+                  {filteredQuestions.map(question => (
                     <div
                       key={question.id}
                       className="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
@@ -679,17 +705,31 @@ export default function SectionManager() {
 
                           <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
                             <span
-                              className={`px-2 py-1 rounded ${SectionClientService.getDifficultyColor(question.difficulty)}`}
+                              className={`px-2 py-1 rounded ${
+                                question.difficulty === 'beginner'
+                                  ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                                  : question.difficulty === 'intermediate'
+                                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                                    : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                              }`}
                             >
                               {question.difficulty.charAt(0).toUpperCase() +
                                 question.difficulty.slice(1)}
                             </span>
                             <span
-                              className={`px-2 py-1 rounded ${SectionClientService.getQuestionTypeColor(question.type)}`}
+                              className={`px-2 py-1 rounded ${
+                                question.type === 'single'
+                                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+                                  : question.type === 'multiple'
+                                    ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
+                                    : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+                              }`}
                             >
                               {question.type === 'single'
                                 ? 'Single Choice'
-                                : 'Multiple Choice'}
+                                : question.type === 'multiple'
+                                  ? 'Multiple Choice'
+                                  : question.type}
                             </span>
                             <span
                               className={`px-2 py-1 rounded ${
@@ -700,11 +740,16 @@ export default function SectionManager() {
                             >
                               {question.isComplete ? 'Complete' : 'Incomplete'}
                             </span>
+                            <span className="px-2 py-1 rounded bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                              {question.category}
+                            </span>
                             <span>
                               Created:{' '}
-                              {new Date(
-                                question.createdAt
-                              ).toLocaleDateString()}
+                              {question.createdAt
+                                ? new Date(
+                                    question.createdAt
+                                  ).toLocaleDateString()
+                                : 'Unknown'}
                             </span>
                           </div>
                         </div>

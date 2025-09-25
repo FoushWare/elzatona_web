@@ -29,6 +29,15 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
 
   // Track user progress and trigger guidance
   useEffect(() => {
+    // Don't show guidance during testing
+    if (
+      typeof window !== 'undefined' &&
+      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as any).__TEST_MODE__)
+    ) {
+      return;
+    }
+
     const trackProgress = () => {
       // Check localStorage for progress
       const progress = localStorage.getItem('userProgress');
@@ -113,6 +122,15 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
 
   // Detect device switching
   useEffect(() => {
+    // Don't show guidance during testing
+    if (
+      typeof window !== 'undefined' &&
+      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as any).__TEST_MODE__)
+    ) {
+      return;
+    }
+
     const detectDeviceSwitch = () => {
       const lastDevice = localStorage.getItem('lastDeviceType');
       const currentDevice = getDeviceType();
@@ -155,6 +173,15 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
       | 'manual',
     context: any = {}
   ) => {
+    // Don't show guidance during testing
+    if (
+      typeof window !== 'undefined' &&
+      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as any).__TEST_MODE__)
+    ) {
+      return;
+    }
+
     setGuidanceTrigger(trigger);
     setGuidanceContext(context);
     setShowGuidance(true);
