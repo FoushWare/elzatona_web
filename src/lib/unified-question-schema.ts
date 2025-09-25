@@ -16,8 +16,9 @@ import {
   addDoc,
   Timestamp,
 } from 'firebase/firestore';
-import { db } from './firebase';
+import { db } from './firebase-server';
 import { AudioCollectionService } from './audio-collection-service';
+import { autoLinkingService, QuestionData } from './auto-linking-service';
 
 // Unified Question Interface - Single source of truth
 export interface UnifiedQuestion {
@@ -186,6 +187,56 @@ export class UnifiedQuestionService {
       // Update learning path question count
       await this.updateLearningPathQuestionCount(questionData.learningPath);
 
+      // Auto-link question to relevant sections and learning paths
+      try {
+        const autoLinkData: QuestionData = {
+          id: questionRef.id,
+          title: questionData.title,
+          content: questionData.content,
+          type: questionData.type,
+          difficulty: questionData.difficulty,
+          category: questionData.category,
+          subcategory: questionData.subcategory,
+          learningPath: questionData.learningPath,
+          sectionId: questionData.sectionId,
+          tags: questionData.tags,
+          options: questionData.options,
+          correctAnswers: questionData.correctAnswers,
+          explanation: questionData.explanation,
+          points: questionData.points || 1,
+          timeLimit: questionData.timeLimit || 60,
+          audioQuestion: questionData.audioQuestion,
+          audioAnswer: questionData.audioAnswer,
+          isActive: true,
+          isComplete: true,
+          createdBy: 'admin',
+          lastModifiedBy: 'admin'
+        };
+
+        await autoLinkingService.linkQuestionToSections(
+          questionRef.id,
+          questionData.category,
+          questionData.learningPath
+        );
+
+        await autoLinkingService.linkQuestionToSectors(
+          questionRef.id,
+          questionData.category,
+          questionData.learningPath
+        );
+
+        await autoLinkingService.linkQuestionToLearningPaths(
+          questionRef.id,
+          questionData.category,
+          questionData.learningPath
+        );
+
+        console.log('✅ Question auto-linked to sections and learning paths');
+      } catch (autoLinkError) {
+        console.error('⚠️ Auto-linking failed, but question was created:', autoLinkError);
+        // Don't throw error here as the question was successfully created
+      }
+
       return questionRef.id;
     } catch (error) {
       console.error('Error creating question:', error);
@@ -289,48 +340,54 @@ export class UnifiedQuestionService {
     }
 
     try {
-      let q = query(collection(db, this.COLLECTION_NAME));
-
+      // Build constraints array
+      const constraints = [];
+      
       // Apply filters
       if (filters?.category) {
-        q = query(q, where('category', '==', filters.category));
+        constraints.push(where('category', '==', filters.category));
       }
 
       if (filters?.subcategory) {
-        q = query(q, where('subcategory', '==', filters.subcategory));
+        constraints.push(where('subcategory', '==', filters.subcategory));
       }
 
       if (filters?.difficulty) {
-        q = query(q, where('difficulty', '==', filters.difficulty));
+        constraints.push(where('difficulty', '==', filters.difficulty));
       }
 
       if (filters?.learningPath) {
-        q = query(q, where('learningPath', '==', filters.learningPath));
+        constraints.push(where('learningPath', '==', filters.learningPath));
       }
 
       if (filters?.sectionId) {
-        q = query(q, where('sectionId', '==', filters.sectionId));
+        constraints.push(where('sectionId', '==', filters.sectionId));
       }
 
-      if (filters?.isActive !== undefined) {
-        q = query(q, where('isActive', '==', filters.isActive));
+      // Always filter for active questions unless explicitly disabled
+      if (filters?.isActive !== false) {
+        constraints.push(where('isActive', '==', true));
       }
 
       if (filters?.isComplete !== undefined) {
-        q = query(q, where('isComplete', '==', filters.isComplete));
+        constraints.push(where('isComplete', '==', filters.isComplete));
       }
 
       // Order by
       const orderByField = filters?.orderBy || 'createdAt';
       const orderDirection = filters?.orderDirection || 'desc';
-      q = query(q, orderBy(orderByField, orderDirection));
+      constraints.push(orderBy(orderByField, orderDirection));
 
       // Apply limit
       if (filters?.limit) {
-        q = query(q, limit(filters.limit));
+        constraints.push(limit(filters.limit));
       }
 
+      // Create the final query
+      const q = query(collection(db, this.COLLECTION_NAME), ...constraints);
+
       const querySnapshot = await getDocs(q);
+      
       const questions: UnifiedQuestion[] = [];
 
       querySnapshot.forEach(doc => {
@@ -407,6 +464,7 @@ export class UnifiedQuestionService {
 
     const results = { success: 0, failed: 0, errors: [] as string[] };
     const timestamp = new Date().toISOString();
+    const createdQuestionIds: string[] = [];
 
     for (const questionData of questionsData) {
       try {
@@ -431,6 +489,7 @@ export class UnifiedQuestionService {
           questionDoc
         );
 
+        createdQuestionIds.push(questionRef.id);
         results.success++;
 
         // Update learning path question count
@@ -440,6 +499,37 @@ export class UnifiedQuestionService {
         results.errors.push(
           `Failed to import question "${questionData.title}": ${error instanceof Error ? error.message : 'Unknown error'}`
         );
+      }
+    }
+
+    // Auto-link all successfully created questions to sections and learning paths
+    if (createdQuestionIds.length > 0) {
+      try {
+        console.log(`🔗 Auto-linking ${createdQuestionIds.length} questions to sections and learning paths`);
+        
+        for (let i = 0; i < createdQuestionIds.length; i++) {
+          const questionId = createdQuestionIds[i];
+          const questionData = questionsData[i];
+          
+          if (questionData) {
+            await autoLinkingService.linkQuestionToSections(
+              questionId,
+              questionData.category,
+              questionData.learningPath
+            );
+
+            await autoLinkingService.linkQuestionToLearningPaths(
+              questionId,
+              questionData.category,
+              questionData.learningPath
+            );
+          }
+        }
+        
+        console.log('✅ Bulk auto-linking completed successfully');
+      } catch (autoLinkError) {
+        console.error('⚠️ Auto-linking failed for bulk import:', autoLinkError);
+        results.errors.push(`Auto-linking failed: ${autoLinkError instanceof Error ? autoLinkError.message : 'Unknown error'}`);
       }
     }
 
@@ -549,6 +639,42 @@ export class UnifiedQuestionService {
     } catch (error) {
       console.error('Error searching questions:', error);
       return [];
+    }
+  }
+
+  /**
+   * Get questions by IDs
+   */
+  static async getQuestionsByIds(questionIds: string[]): Promise<{ success: boolean; questions?: UnifiedQuestion[]; error?: string }> {
+    try {
+      if (!questionIds || questionIds.length === 0) {
+        return { success: true, questions: [] };
+      }
+
+      const questions: UnifiedQuestion[] = [];
+      
+      // Fetch each question individually
+      for (const questionId of questionIds) {
+        try {
+          const docRef = doc(db, this.COLLECTION_NAME, questionId);
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            const questionData = docSnap.data() as UnifiedQuestion;
+            if (questionData.isActive) {
+              questions.push(questionData);
+            }
+          }
+        } catch (error) {
+          console.error(`Error fetching question ${questionId}:`, error);
+          // Continue with other questions
+        }
+      }
+
+      return { success: true, questions };
+    } catch (error: any) {
+      console.error('Error getting questions by IDs:', error);
+      return { success: false, error: error.message };
     }
   }
 
@@ -740,7 +866,7 @@ export class UnifiedQuestionService {
       const questions = await this.getQuestionsByLearningPath(learningPath);
       const paths = await this.getLearningPaths();
       const path = paths.find(
-        p => p.name.toLowerCase() === learningPath.toLowerCase()
+        p => p.id === learningPath || p.name.toLowerCase() === learningPath.toLowerCase()
       );
 
       if (path) {
@@ -749,9 +875,35 @@ export class UnifiedQuestionService {
           questionCount: questions.length,
           updatedAt: new Date().toISOString(),
         });
+        console.log(`✅ Updated ${path.name} with ${questions.length} questions`);
+      } else {
+        console.warn(`⚠️ Learning path not found: ${learningPath}`);
       }
     } catch (error) {
       console.error('Error updating learning path question count:', error);
+    }
+  }
+
+  /**
+   * Update learning path
+   */
+  static async updateLearningPath(
+    learningPathId: string,
+    updates: Partial<LearningPath>
+  ): Promise<void> {
+    try {
+      if (!db) {
+        throw new Error('Firestore not available');
+      }
+
+      const pathRef = doc(db, this.LEARNING_PATHS_COLLECTION, learningPathId);
+      await updateDoc(pathRef, {
+        ...updates,
+        updatedAt: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error('Error updating learning path:', error);
+      throw error;
     }
   }
 

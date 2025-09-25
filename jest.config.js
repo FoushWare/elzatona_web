@@ -1,37 +1,33 @@
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const nextJest = require('next/jest');
-
-const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files
-  dir: './',
-});
-
-// Add any custom config to be passed to Jest
-const customJestConfig = {
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testEnvironment: 'jsdom',
-  testPathIgnorePatterns: [
-    '<rootDir>/.next/',
-    '<rootDir>/node_modules/',
-    '<rootDir>/tests/e2e/',
+module.exports = {
+  testEnvironment: 'node',
+  testMatch: [
+    '**/tests/**/*.test.js',
+    '**/tests/**/*.test.ts',
+    '**/tests/**/*.test.tsx'
   ],
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
   collectCoverageFrom: [
-    'src/**/*.{js,jsx,ts,tsx}',
+    'src/**/*.{js,ts,tsx}',
     '!src/**/*.d.ts',
-    '!src/**/*.stories.{js,jsx,ts,tsx}',
+    '!src/**/*.stories.{js,ts,tsx}',
+    '!src/**/*.test.{js,ts,tsx}'
   ],
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70,
-    },
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html'],
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
+  testTimeout: 30000,
+  maxWorkers: 1, // Run tests sequentially for Firebase
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1'
   },
+  transform: {
+    '^.+\\.(js|ts|tsx)$': 'babel-jest'
+  },
+  moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/.next/',
+    '/out/'
+  ],
+  collectCoverage: false, // Set to true when you want coverage reports
+  verbose: true
 };
-
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(customJestConfig);

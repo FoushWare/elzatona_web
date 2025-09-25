@@ -1,10 +1,9 @@
 'use client';
 
 import React from 'react';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { AdminAuthProvider, useAdminAuth } from '@/contexts/AdminAuthContext';
 import AdminNavbar from '@/components/AdminNavbar';
-import { useRouter, usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 // ThemeProvider is already provided by root layout
 import '../globals.css';
 
@@ -12,33 +11,14 @@ interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+function AdminLayoutContent({ children }: AdminLayoutProps) {
   const { isAuthenticated, isLoading } = useAdminAuth();
-  const router = useRouter();
   const pathname = usePathname();
 
   // Skip authentication check for login page and admin root page
   const isLoginPage = pathname === '/admin/login';
   const isAdminRootPage = pathname === '/admin';
   const isPublicPage = isLoginPage || isAdminRootPage;
-
-  useEffect(() => {
-    console.log('🔄 Admin Layout useEffect triggered:', {
-      isLoading,
-      isAuthenticated,
-      isPublicPage,
-      pathname
-    });
-    
-    // Only redirect if we're sure about the authentication state
-    if (!isLoading && !isAuthenticated && !isPublicPage) {
-      console.log('🚨 Redirecting to login - not authenticated and not on public page');
-      router.replace('/admin/login');
-    } else if (!isLoading && isAuthenticated && isPublicPage) {
-      console.log('🚨 Redirecting to dashboard - authenticated but on public page');
-      router.replace('/admin/dashboard');
-    }
-  }, [isAuthenticated, isLoading, router, isPublicPage, pathname]);
 
   // For login page and admin root page, render immediately without waiting for auth check
   if (isPublicPage) {
@@ -59,7 +39,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   if (!isAuthenticated) {
-    return null; // Will redirect to login
+    return null; // Will redirect to login via AdminAuthProvider
   }
 
   return (
@@ -67,5 +47,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <AdminNavbar />
       <main className="pt-20">{children}</main>
     </div>
+  );
+}
+
+export default function AdminLayout({ children }: AdminLayoutProps) {
+  return (
+    <AdminAuthProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </AdminAuthProvider>
   );
 }

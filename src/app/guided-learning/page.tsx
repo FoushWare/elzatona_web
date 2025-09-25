@@ -58,14 +58,32 @@ export default function GuidedLearningPage() {
   const {
     templates,
     isLoading: templatesLoading,
+    error: templatesError,
     getTemplate,
   } = useLearningPlanTemplates();
   const router = useRouter();
+
+  // Debug logging
+  useEffect(() => {
+    console.log('🔍 GuidedLearning: Templates state changed:', {
+      templatesCount: templates.length,
+      templatesLoading,
+      templatesError,
+      templates: templates.map(t => ({ id: t.id, name: t.name })),
+    });
+  }, [templates, templatesLoading, templatesError]);
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
   const [currentPlan, setCurrentPlan] = useState<LearningPlan | null>(null);
   const [dailyGoals, setDailyGoals] = useState<DailyGoal[]>([]);
   const [currentDay, setCurrentDay] = useState(1);
   const [completedPlans, setCompletedPlans] = useState<Set<string>>(new Set());
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/get-started');
+    }
+  }, [isAuthenticated, router]);
 
   // Check if user has an active plan
   useEffect(() => {
@@ -273,6 +291,20 @@ export default function GuidedLearningPage() {
     );
   }
 
+  // Show loading state while checking authentication
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+          <p className="text-gray-600 dark:text-gray-300">
+            Redirecting to get started...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 py-8">
       <div className="container mx-auto px-4 max-w-6xl">
@@ -361,6 +393,31 @@ export default function GuidedLearningPage() {
 
         {/* Learning Plans */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+          {templatesLoading && (
+            <div className="col-span-full text-center py-8">
+              <div className="flex items-center justify-center space-x-2 text-gray-600 dark:text-gray-400">
+                <Loader2 className="w-6 h-6 animate-spin" />
+                <span>Loading learning plans...</span>
+              </div>
+            </div>
+          )}
+
+          {templatesError && (
+            <div className="col-span-full text-center py-8">
+              <div className="bg-red-100 dark:bg-red-900 border border-red-400 text-red-700 dark:text-red-300 px-4 py-3 rounded">
+                <strong>Error:</strong> {templatesError}
+              </div>
+            </div>
+          )}
+
+          {!templatesLoading && !templatesError && templates.length === 0 && (
+            <div className="col-span-full text-center py-8">
+              <div className="text-gray-600 dark:text-gray-400">
+                No learning plans found. Using fallback plans...
+              </div>
+            </div>
+          )}
+
           {templates.map((plan, index) => (
             <div
               key={plan.id}

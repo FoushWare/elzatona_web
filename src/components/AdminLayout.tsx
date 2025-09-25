@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import AdminNavbar from './AdminNavbar';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';

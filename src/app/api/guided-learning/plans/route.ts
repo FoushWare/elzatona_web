@@ -1,9 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { guidedLearningService } from '@/lib/guided-learning-service';
+import { autoLinkingService } from '@/lib/auto-linking-service';
 
-// GET /api/guided-learning/plans - Get all learning plans
-export async function GET() {
+// GET /api/guided-learning/plans - Get all learning plans or filtered content
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const getSections = searchParams.get('getSections') === 'true';
+    const getQuestions = searchParams.get('getQuestions') === 'true';
+    const category = searchParams.get('category');
+    const learningPath = searchParams.get('learningPath');
+
+    // If requesting sections for plan creation
+    if (getSections) {
+      const sections = await autoLinkingService.getSectionsForPlan(category || undefined, learningPath || undefined);
+      return NextResponse.json({
+        success: true,
+        data: sections,
+        count: sections.length
+      });
+    }
+
+    // If requesting questions for plan creation
+    if (getQuestions) {
+      // This would need to be implemented based on your requirements
+      // For now, return empty array
+      return NextResponse.json({
+        success: true,
+        data: [],
+        count: 0
+      });
+    }
+
+    // Otherwise, get all learning plans
     const plans = await guidedLearningService.getAllPlans();
     return NextResponse.json({ success: true, plans });
   } catch (error) {

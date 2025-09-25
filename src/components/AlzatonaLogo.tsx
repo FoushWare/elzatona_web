@@ -1,11 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface AlzatonaLogoProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
   className?: string;
   showText?: boolean;
   variant?: 'horizontal' | 'stacked';
+  forceDarkMode?: boolean; // For cases where we need to force dark mode logo
 }
 
 export const AlzatonaLogo: React.FC<AlzatonaLogoProps> = ({
@@ -13,22 +15,33 @@ export const AlzatonaLogo: React.FC<AlzatonaLogoProps> = ({
   className = '',
   showText = true,
   variant = 'horizontal',
+  forceDarkMode = false,
 }) => {
+  const { isDarkMode } = useTheme();
+
   const sizeConfig = {
-    xs: { class: 'w-16 h-16', width: 64, height: 64 },
-    sm: { class: 'w-24 h-24', width: 96, height: 96 },
-    md: { class: 'w-32 h-32', width: 128, height: 128 },
-    lg: { class: 'w-40 h-40', width: 160, height: 160 },
+    xs: { class: 'w-20 h-20', width: 80, height: 80 }, // Increased from 16x16
+    sm: { class: 'w-28 h-28', width: 112, height: 112 }, // Increased from 24x24
+    md: { class: 'w-36 h-36', width: 144, height: 144 }, // Increased from 32x32
+    lg: { class: 'w-44 h-44', width: 176, height: 176 }, // Increased from 40x40
   };
 
   const config = sizeConfig[size];
 
-  // Icon only - using the zatona-web-blue01.png as icon (no text)
+  // Determine which logo to use based on dark mode
+  const shouldUseDarkLogo = forceDarkMode || isDarkMode;
+  const logoSrc = shouldUseDarkLogo
+    ? '/Elzatona-web01.png'
+    : '/Elzatona-black-all.png';
+  const logoAlt = shouldUseDarkLogo
+    ? 'Frontend Development Platform Icon (Dark Mode)'
+    : 'Frontend Development Platform Icon (Light Mode)';
+
   return (
     <div className={`${className}`}>
       <Image
-        src="/zatona-web-blue01.png"
-        alt="Frontend Development Platform Icon"
+        src={logoSrc}
+        alt={logoAlt}
         width={config.width}
         height={config.height}
         className={`${config.class} object-contain`}

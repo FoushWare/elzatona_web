@@ -31,7 +31,13 @@ export const LearningModeSwitcher: React.FC<LearningModeSwitcherProps> = ({
     },
   ];
 
-  const currentMode = modes.find(mode => mode.id === userType) || modes[0];
+  const currentMode = modes.find(mode => mode.id === userType) || {
+    id: 'guided',
+    name: 'Select Mode',
+    description: 'Choose your learning style',
+    icon: <Compass className="w-4 h-4" />,
+    color: 'text-gray-600',
+  };
 
   const handleModeChange = (modeId: 'guided' | 'self-directed') => {
     setUserType(modeId);
@@ -54,7 +60,7 @@ export const LearningModeSwitcher: React.FC<LearningModeSwitcherProps> = ({
         aria-label="Switch learning mode"
       >
         <div
-          className={`${currentMode.color} ${isScrolled ? '' : 'text-white'}`}
+          className={`${userType ? currentMode.color : 'text-gray-500'} ${isScrolled ? '' : 'text-white'}`}
         >
           {currentMode.icon}
         </div>
@@ -147,7 +153,3 @@ export const LearningModeSwitcher: React.FC<LearningModeSwitcherProps> = ({
     </div>
   );
 };
-
-
-
-

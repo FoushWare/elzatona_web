@@ -65,6 +65,43 @@ export function learningPathIdToSectionName(learningPathId: string): string | nu
 }
 
 /**
+ * Map learning path names to categories
+ */
+function getCategoryForLearningPath(title: string): string {
+  const titleLower = title.toLowerCase();
+  
+  if (titleLower.includes('javascript') || titleLower.includes('js')) {
+    return 'javascript';
+  } else if (titleLower.includes('react')) {
+    return 'react';
+  } else if (titleLower.includes('css') || titleLower.includes('styling')) {
+    return 'css';
+  } else if (titleLower.includes('typescript') || titleLower.includes('ts')) {
+    return 'typescript';
+  } else if (titleLower.includes('html') || titleLower.includes('fundamentals')) {
+    return 'html';
+  } else if (titleLower.includes('testing')) {
+    return 'testing';
+  } else if (titleLower.includes('performance') || titleLower.includes('optimization')) {
+    return 'performance';
+  } else if (titleLower.includes('security')) {
+    return 'security';
+  } else if (titleLower.includes('ai') || titleLower.includes('tools')) {
+    return 'ai-tools';
+  } else if (titleLower.includes('system') || titleLower.includes('design') || titleLower.includes('architecture')) {
+    return 'system-design';
+  } else if (titleLower.includes('api') || titleLower.includes('integration')) {
+    return 'api';
+  } else if (titleLower.includes('build') || titleLower.includes('devops')) {
+    return 'build-tools';
+  } else if (titleLower.includes('interview') || titleLower.includes('preparation')) {
+    return 'interview';
+  } else {
+    return 'general';
+  }
+}
+
+/**
  * Get default sections for admin (based on learning paths)
  */
 export function getDefaultAdminSections(): Array<{
@@ -73,6 +110,8 @@ export function getDefaultAdminSections(): Array<{
   description: string;
   learningPathId: string;
   questionCount: number;
+  isActive: boolean;
+  category: string;
 }> {
   return learningPaths.map(path => ({
     id: path.id,
@@ -80,6 +119,8 @@ export function getDefaultAdminSections(): Array<{
     description: path.description,
     learningPathId: path.id,
     questionCount: 0, // Will be populated dynamically
+    isActive: true, // All sections are active by default
+    category: getCategoryForLearningPath(path.title), // Map based on title
   }));
 }
 

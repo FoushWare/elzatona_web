@@ -6,10 +6,11 @@ import UnifiedQuestionService from '@/lib/unified-question-schema';
 // GET /api/questions/unified/[id] - Get single question
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const question = await UnifiedQuestionService.getQuestion(params.id);
+    const { id } = await params;
+    const question = await UnifiedQuestionService.getQuestion(id);
 
     if (!question) {
       return NextResponse.json(
@@ -34,11 +35,12 @@ export async function GET(
 // PUT /api/questions/unified/[id] - Update single question
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const updates = await request.json();
-    await UnifiedQuestionService.updateQuestion(params.id, updates);
+    await UnifiedQuestionService.updateQuestion(id, updates);
 
     return NextResponse.json({
       success: true,
@@ -56,10 +58,11 @@ export async function PUT(
 // DELETE /api/questions/unified/[id] - Delete single question
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await UnifiedQuestionService.deleteQuestion(params.id);
+    const { id } = await params;
+    await UnifiedQuestionService.deleteQuestion(id);
 
     return NextResponse.json({
       success: true,
