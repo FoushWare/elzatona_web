@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTheme } from '@/contexts/ThemeContext';
+import AlzatonaLogo from './AlzatonaLogo';
 
 export default function AdminLoginNavbar() {
   const { isDarkMode, toggleDarkMode } = useTheme();
@@ -16,19 +17,7 @@ export default function AdminLoginNavbar() {
             href="/"
             className="flex items-center space-x-2 transition-colors duration-200 text-white hover:text-red-100"
           >
-            <div className="">
-              <img
-                alt="Frontend Development Platform Icon"
-                width="96"
-                height="96"
-                decoding="async"
-                data-nimg="1"
-                className="w-24 h-24 object-contain"
-                style={{ color: 'transparent' }}
-                srcSet="/_next/image?url=%2Fzatona-web-blue01.png&w=96&q=75 1x, /_next/image?url=%2Fzatona-web-blue01.png&w=256&q=75 2x"
-                src="/_next/image?url=%2Fzatona-web-blue01.png&w=256&q=75"
-              />
-            </div>
+            <AlzatonaLogo size="sm" showText={false} forceDarkMode={false} />
           </Link>
 
           {/* Center Title */}

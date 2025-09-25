@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SectionQuestionsManager } from '@/components/SectionQuestionsManager';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { autoLinkingService } from '@/lib/auto-linking-service';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -317,8 +318,10 @@ export default function PlanEditorPage() {
       try {
         // First, try to load the plan from the database
         console.log('🔄 Attempting to load plan from database...', planId);
-        
-        const planResponse = await fetch(`/api/guided-learning/plans/${planId}`);
+
+        const planResponse = await fetch(
+          `/api/guided-learning/plans/${planId}`
+        );
         if (planResponse.ok) {
           const planData = await planResponse.json();
           if (planData.success && planData.plan) {
@@ -327,9 +330,9 @@ export default function PlanEditorPage() {
             return;
           }
         }
-        
+
         console.log('⚠️ Plan not found in database, creating mock plan...');
-        
+
         // If plan doesn't exist in database, create mock plan
         // Fetch comprehensive sections from API
         const response = await fetch('/api/admin/sections');

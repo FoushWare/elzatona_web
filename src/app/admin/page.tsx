@@ -2,22 +2,15 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { Loader2 } from 'lucide-react';
 
 export default function AdminPage() {
   const { isAuthenticated, isLoading } = useAdminAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!isLoading) {
-      if (isAuthenticated) {
-        router.replace('/admin/dashboard');
-      } else {
-        router.replace('/admin/login');
-      }
-    }
-  }, [isAuthenticated, isLoading, router]);
+  // Redirect is now handled by AdminAuthProvider context
+  // No need for local redirect logic here
 
   // Show loading state while checking authentication
   return (

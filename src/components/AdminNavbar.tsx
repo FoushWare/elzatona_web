@@ -20,7 +20,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import AlzatonaLogo from './AlzatonaLogo';
 
 export default function AdminNavbar() {
@@ -106,7 +106,7 @@ export default function AdminNavbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-200 dark:border-gray-700'
+          ? 'bg-white/98 dark:bg-gray-900/98 backdrop-blur-lg shadow-xl border-b border-gray-200 dark:border-gray-700'
           : 'bg-gradient-to-r from-red-600 to-red-800'
       }`}
     >

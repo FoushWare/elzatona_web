@@ -29,6 +29,15 @@ export default function HomePage() {
   const [activePlan, setActivePlan] = useState<any>(null);
 
   useEffect(() => {
+    // Don't show onboarding during testing
+    if (
+      typeof window !== 'undefined' &&
+      ((window as any).__TEST_MODE__ ||
+        (window as any).__DISABLE_GUIDANCE_MODALS__)
+    ) {
+      return;
+    }
+
     // Show onboarding prompt if user hasn't completed it and it's not a first visit
     if (!hasCompletedOnboarding && !userType && !isFirstVisit) {
       const timer = setTimeout(() => {
@@ -100,9 +109,22 @@ export default function HomePage() {
   const personalizedContent = getPersonalizedContent();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative">
+      {/* Watermark */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-40 dark:opacity-50">
+          {/* Background circle for better visibility */}
+          <div className="absolute inset-0 bg-white/10 dark:bg-gray-800/20 rounded-full blur-sm scale-110"></div>
+          <img
+            src="/elzatona-watermark.png"
+            alt="Elzatona Watermark"
+            className="w-[500px] h-[500px] object-contain relative z-10"
+          />
+        </div>
+      </div>
+
       {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8 z-10">
         <div className="max-w-7xl mx-auto text-center">
           <div className="mb-8">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
@@ -138,7 +160,7 @@ export default function HomePage() {
       </section>
 
       {/* Quick Actions */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-800">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-800 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
@@ -215,7 +237,7 @@ export default function HomePage() {
 
       {/* User Type Specific Content */}
       {userType && (
-        <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <section className="py-16 px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-7xl mx-auto">
             {userType === 'guided' ? (
               <div

@@ -59,79 +59,9 @@ function GuidedPracticeContent() {
   const [usedQuestions, setUsedQuestions] = useState<Set<string>>(new Set());
   const [sessionComplete, setSessionComplete] = useState(false);
 
-  // Mock questions data
-  const mockQuestions: Question[] = [
-    {
-      id: '1',
-      question: 'What is the purpose of the HTML `<meta>` tag?',
-      options: [
-        'To define the document title',
-        'To provide metadata about the HTML document',
-        'To create a link to external stylesheets',
-        'To define the document structure',
-      ],
-      correctAnswer: 1,
-      explanation:
-        'The `<meta>` tag provides metadata about the HTML document.',
-      section: 'HTML',
-      difficulty: 'easy',
-    },
-    {
-      id: '2',
-      question: 'Which CSS property is used to change the text color?',
-      options: ['font-color', 'text-color', 'color', 'text-style'],
-      correctAnswer: 2,
-      explanation:
-        'The `color` property is used to set the color of text in CSS.',
-      section: 'CSS',
-      difficulty: 'easy',
-    },
-    {
-      id: '3',
-      question: 'What is the difference between `let` and `var` in JavaScript?',
-      options: [
-        'No difference, they are identical',
-        '`let` has block scope, `var` has function scope',
-        '`var` has block scope, `let` has function scope',
-        '`let` is faster than `var`',
-      ],
-      correctAnswer: 1,
-      explanation:
-        "`let` has block scope (limited to the block where it's declared), while `var` has function scope (accessible throughout the entire function).",
-      section: 'JavaScript',
-      difficulty: 'medium',
-    },
-    {
-      id: '4',
-      question: "What is the purpose of React's `useEffect` hook?",
-      options: [
-        'To manage component state',
-        'To perform side effects in functional components',
-        'To create custom hooks',
-        'To handle form submissions',
-      ],
-      correctAnswer: 1,
-      explanation:
-        '`useEffect` is used to perform side effects in functional components, such as data fetching, subscriptions, or manually changing the DOM.',
-      section: 'React',
-      difficulty: 'medium',
-    },
-    {
-      id: '5',
-      question: 'What is the purpose of Next.js `getServerSideProps`?',
-      options: [
-        'To fetch data on the client side',
-        'To fetch data on the server side before rendering',
-        'To optimize images',
-        'To handle routing',
-      ],
-      correctAnswer: 1,
-      explanation:
-        '`getServerSideProps` is used to fetch data on the server side before rendering the page, ensuring the data is available when the page loads.',
-      section: 'Next.js',
-      difficulty: 'medium',
-    },
-  ];
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
+  const [questionsError, setQuestionsError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isAuthLoading && userType !== 'guided') {
@@ -160,10 +90,52 @@ function GuidedPracticeContent() {
         router.push('/guided-learning');
       }
     }
-
-    // Load first question
-    loadNextQuestion();
   }, [planId, userType, isAuthLoading, router]);
+
+  // Fetch questions from Firebase
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        setIsLoadingQuestions(true);
+        setQuestionsError(null);
+
+        // Fetch questions from Firebase
+        const response = await fetch('/api/questions/unified?isActive=true');
+        const data = await response.json();
+
+        if (!data.success) {
+          throw new Error(data.error || 'Failed to load questions');
+        }
+
+        // Transform Firebase questions to our Question interface
+        const transformedQuestions: Question[] = data.data.map((q: any) => ({
+          id: q.id,
+          question: q.content || q.title || q.question,
+          options: q.options?.map((opt: any) => opt.text) || [],
+          correctAnswer: q.options?.findIndex((opt: any) => opt.isCorrect) || 0,
+          explanation: q.explanation || 'No explanation available.',
+          section: q.category || q.section || 'General',
+          difficulty: q.difficulty || 'medium',
+        }));
+
+        setQuestions(transformedQuestions);
+      } catch (error: any) {
+        console.error('Error fetching questions:', error);
+        setQuestionsError(error.message || 'Failed to load questions');
+      } finally {
+        setIsLoadingQuestions(false);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
+
+  // Load first question when questions are available
+  useEffect(() => {
+    if (questions.length > 0 && !currentQuestion) {
+      loadNextQuestion();
+    }
+  }, [questions]);
 
   const loadNextQuestion = () => {
     // Check if session is complete (5 questions answered)
@@ -173,9 +145,7 @@ function GuidedPracticeContent() {
     }
 
     // Get available questions (not yet used)
-    const availableQuestions = mockQuestions.filter(
-      q => !usedQuestions.has(q.id)
-    );
+    const availableQuestions = questions.filter(q => !usedQuestions.has(q.id));
 
     // If no more questions available, complete the session
     if (availableQuestions.length === 0) {
@@ -297,13 +267,55 @@ function GuidedPracticeContent() {
     return 'text-red-600 dark:text-red-400';
   };
 
-  if (isAuthLoading) {
+  if (isAuthLoading || isLoadingQuestions) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
         <p className="ml-3 text-lg text-gray-700 dark:text-gray-300">
-          Loading guided practice...
+          {isAuthLoading
+            ? 'Loading guided practice...'
+            : 'Loading questions...'}
         </p>
+      </div>
+    );
+  }
+
+  if (questionsError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Error</h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            {questionsError}
+          </p>
+          <button
+            onClick={() => router.push('/guided-learning')}
+            className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+          >
+            Back to Learning Plans
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (questions.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            No Questions Available
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            There are no questions available for practice yet.
+          </p>
+          <button
+            onClick={() => router.push('/guided-learning')}
+            className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+          >
+            Back to Learning Plans
+          </button>
+        </div>
       </div>
     );
   }

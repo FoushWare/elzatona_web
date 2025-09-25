@@ -17,6 +17,15 @@ export const FirstTimeVisitorDetector: React.FC = () => {
       return;
     }
 
+    // Don't show onboarding during testing
+    if (
+      typeof window !== 'undefined' &&
+      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as any).__TEST_MODE__)
+    ) {
+      return;
+    }
+
     // Check if this is a first-time visitor
     // We'll use sessionStorage to track the current session
     if (typeof window !== 'undefined') {

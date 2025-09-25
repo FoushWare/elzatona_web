@@ -16,7 +16,7 @@ import {
   Timestamp,
   increment,
 } from 'firebase/firestore';
-import { db } from './firebase';
+import { db } from './firebase-server';
 
 // Enhanced Learning Plan Template Interface
 export interface LearningPlanTemplate {
