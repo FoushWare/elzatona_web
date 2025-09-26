@@ -502,8 +502,10 @@ export default function QuestionsManagementPage() {
       {/* Modals */}
       {showMarkdownExtractor && (
         <MarkdownQuestionExtractor
-          onExtract={handleMarkdownExtracted}
+          learningPaths={uniqueLearningPaths}
           onClose={() => setShowMarkdownExtractor(false)}
+          onRefreshLearningPaths={loadLearningPaths}
+          onExtract={handleMarkdownExtracted}
         />
       )}
 

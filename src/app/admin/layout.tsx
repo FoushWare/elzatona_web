@@ -18,7 +18,8 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   // Skip authentication check for login page and admin root page
   const isLoginPage = pathname === '/admin/login';
   const isAdminRootPage = pathname === '/admin';
-  const isPublicPage = isLoginPage || isAdminRootPage;
+  const isAuditLogsPage = pathname === '/admin/audit-logs';
+  const isPublicPage = isLoginPage || isAdminRootPage || isAuditLogsPage;
 
   // For login page and admin root page, render immediately without waiting for auth check
   if (isPublicPage) {
