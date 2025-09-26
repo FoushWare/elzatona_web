@@ -93,7 +93,10 @@ export default function QuestionSectionAssigner({
   };
 
   const handleAssignmentChange = (questionId: string, sectionId: string) => {
-    const newAssignments = { ...assignments, [questionId]: sectionId };
+    const newAssignments = {
+      ...assignments,
+      [questionId]: sectionId === 'none' ? undefined : sectionId,
+    };
     setAssignments(newAssignments);
     onAssignmentChange?.(newAssignments);
   };
@@ -226,7 +229,7 @@ export default function QuestionSectionAssigner({
                       <SelectValue placeholder="Select section" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">No Section</SelectItem>
+                      <SelectItem value="none">No Section</SelectItem>
                       {sections.map(section => (
                         <SelectItem key={section.id} value={section.id}>
                           {section.name} ({section.currentQuestionCount}/

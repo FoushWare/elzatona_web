@@ -30,12 +30,14 @@ interface MarkdownQuestionExtractorProps {
   learningPaths: Array<{ id: string; name: string }>;
   onClose: () => void;
   onRefreshLearningPaths?: () => void;
+  onExtract?: (questions: any[]) => void;
 }
 
 export function MarkdownQuestionExtractor({
   learningPaths,
   onClose,
   onRefreshLearningPaths,
+  onExtract,
 }: MarkdownQuestionExtractorProps) {
   const [markdownContent, setMarkdownContent] = useState('');
   const [selectedLearningPath, setSelectedLearningPath] = useState('');
@@ -362,6 +364,16 @@ export function MarkdownQuestionExtractor({
         );
         setExtractedQuestions([]);
         setMarkdownContent('');
+
+        // Call onExtract callback if provided
+        if (onExtract) {
+          onExtract(bulkData);
+        }
+
+        // Auto-close after successful import
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       } else {
         setError(`Failed to import questions: ${result.errors.join(', ')}`);
       }

@@ -7,7 +7,10 @@ import { EnhancedQuestionService, Topic } from '@/lib/enhanced-question-schema';
 // GET /api/topics - Get all topics
 export async function GET() {
   try {
+    console.log('🔄 API: Fetching topics...');
     const topics = await EnhancedQuestionService.getTopics();
+    console.log('📊 API: Topics fetched:', topics.length, 'topics');
+    console.log('📊 API: Topics data:', topics);
 
     return NextResponse.json({
       success: true,
@@ -15,7 +18,7 @@ export async function GET() {
       count: topics.length
     });
   } catch (error) {
-    console.error('Error fetching topics:', error);
+    console.error('❌ API: Error fetching topics:', error);
     return NextResponse.json(
       {
         success: false,
@@ -30,11 +33,13 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const topicData = await request.json();
+    console.log('🔄 API: Creating topic with data:', topicData);
     
     // Validate required fields
     const requiredFields = ['name', 'description', 'category', 'difficulty'];
     for (const field of requiredFields) {
       if (!topicData[field]) {
+        console.error('❌ API: Missing required field:', field);
         return NextResponse.json(
           {
             success: false,
@@ -45,7 +50,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    console.log('✅ API: All required fields present, creating topic...');
     const topicId = await EnhancedQuestionService.createTopic(topicData);
+    console.log('✅ API: Topic created with ID:', topicId);
 
     return NextResponse.json({
       success: true,
@@ -53,7 +60,7 @@ export async function POST(request: NextRequest) {
       message: 'Topic created successfully'
     });
   } catch (error) {
-    console.error('Error creating topic:', error);
+    console.error('❌ API: Error creating topic:', error);
     return NextResponse.json(
       {
         success: false,
