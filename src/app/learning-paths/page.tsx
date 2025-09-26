@@ -1,124 +1,157 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
-import { learningPaths } from '@/lib/resources';
-import { PageHeader } from '@/components/PageHeader';
-import { LearningPathsGrid } from '@/components/LearningPathsGrid';
-import { CallToAction } from '@/components/CallToAction';
+import React, { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useLearningPaths } from '@/hooks/useLearningPaths';
+import { LearningPathCard } from '@/components/LearningPathCard';
+import { LoadingTransition } from '@/components/LoadingTransition';
+import { useLearningPathStats } from '@/hooks/useLearningPathStats';
 
 export default function LearningPathsPage() {
-  const [collapsedCards, setCollapsedCards] = useState<Set<string>>(
-    new Set(learningPaths.map(path => path.id)) // All cards start closed
-  );
+  const router = useRouter();
+  const {
+    learningPaths: dynamicLearningPaths,
+    isLoading,
+    error,
+  } = useLearningPaths();
+  const {
+    stats,
+    isLoading: isStatsLoading,
+    getQuestionCount,
+  } = useLearningPathStats();
+  const [collapsedCards, setCollapsedCards] = useState<Set<string>>(new Set());
   const [lastOpenedCard, setLastOpenedCard] = useState<string | null>(null);
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  // Deduplicate learning paths by ID to prevent duplicate key errors
+  const deduplicatedDynamicPaths = dynamicLearningPaths.reduce(
+    (acc, path) => {
+      if (!acc.find(existingPath => existingPath.id === path.id)) {
+        acc.push(path);
+      }
+      return acc;
+    },
+    [] as typeof dynamicLearningPaths
+  );
 
   const toggleCard = (pathId: string) => {
     setCollapsedCards(prev => {
       const newSet = new Set(prev);
-      const wasCardClosed = newSet.has(pathId);
-
-      // If the clicked card is currently closed, close all others and open this one
-      if (wasCardClosed) {
-        // Close all cards first
-        newSet.clear();
-        // Then add all path IDs except the clicked one (keeping it open)
-        learningPaths.forEach(path => {
-          if (path.id !== pathId) {
-            newSet.add(path.id);
-          }
-        });
-        // Track that this card was just opened
+      if (newSet.has(pathId)) {
+        newSet.delete(pathId);
         setLastOpenedCard(pathId);
       } else {
-        // If the clicked card is currently open, close it (close all cards)
-        newSet.clear();
-        learningPaths.forEach(path => {
-          newSet.add(path.id);
-        });
-        setLastOpenedCard(null);
+        newSet.add(pathId);
       }
-
       return newSet;
     });
   };
 
-  // Scroll to the end of the card (flashcard icon) when a card is opened
-  useEffect(() => {
-    if (lastOpenedCard && cardRefs.current[lastOpenedCard]) {
-      // Wait for the card animation to complete before scrolling
-      const timer = setTimeout(() => {
-        const cardElement = cardRefs.current[lastOpenedCard];
-        if (cardElement) {
-          // Find the flashcard icon at the end of the card
-          const flashcardIcon = cardElement.querySelector(
-            '[data-flashcard-icon]'
-          );
-          if (flashcardIcon) {
-            flashcardIcon.scrollIntoView({
-              behavior: 'smooth',
-              block: 'end',
-              inline: 'nearest',
-            });
-          } else {
-            // Fallback: scroll to the end of the card
-            cardElement.scrollIntoView({
-              behavior: 'smooth',
-              block: 'end',
-              inline: 'nearest',
-            });
-          }
-        }
-      }, 350); // Wait for the card expansion animation (300ms + buffer)
-
-      return () => clearTimeout(timer);
-    }
-  }, [lastOpenedCard]);
+  const handleLearningPathSelect = (pathId: string) => {
+    router.push(`/learning-paths/${pathId}/sectors`);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-slate-50 dark:from-gray-900 dark:via-gray-800 dark:to-slate-900 py-4 sm:py-6 lg:py-8">
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 py-8">
+      <main className="max-w-6xl mx-auto px-4 relative z-10">
         {/* Header */}
-        <PageHeader
-          title="Learning Paths"
-          description="Your path to success in interviews"
-          showMobileButtons={false}
-        />
-
-        {/* Schedule Interview Button */}
-        <div className="mb-6 flex justify-center">
-          <Link
-            href="/schedule-interview"
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-purple-700 hover:shadow-xl hover:shadow-purple-500/25 dark:hover:shadow-purple-400/30 transform hover:-translate-y-0.5 transition-all duration-200 border border-blue-500/20 dark:border-purple-400/20"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-              />
-            </svg>
-            Schedule AI Mock Interview
-          </Link>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-white mb-4">Learning Paths</h1>
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+            Your path to success in interviews
+          </p>
         </div>
 
-        {/* Learning Paths Grid */}
-        <LearningPathsGrid
-          paths={learningPaths}
-          collapsedCards={collapsedCards}
-          onToggleCard={toggleCard}
-          cardRefs={cardRefs}
-        />
+        {/* Action Button */}
+        <div className="flex justify-center mb-12">
+          <button
+            onClick={() => router.push('/mock-interviews')}
+            className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-lg transition-all"
+          >
+            <span>📹</span>
+            <span>Mock Interview</span>
+          </button>
+        </div>
 
-        {/* Call to Action */}
-        <CallToAction />
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center items-center py-12">
+            <LoadingTransition
+              isVisible={true}
+              message="Loading learning paths..."
+            />
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 mb-8 max-w-4xl mx-auto">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-5 w-5 text-red-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
+                  Error loading learning paths
+                </h3>
+                <div className="mt-2 text-sm text-red-700 dark:text-red-300">
+                  {error}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Learning Paths Grid */}
+        {!isLoading && !error && deduplicatedDynamicPaths.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {deduplicatedDynamicPaths.map(path => {
+              // Convert API data to match original interface
+              const convertedPath = {
+                id: path.id,
+                title: path.name,
+                description: path.description,
+                difficulty: path.difficulty,
+                estimatedTime:
+                  path.estimatedTime || Math.ceil(path.questionCount / 10), // Convert to hours
+                questionCount: path.questionCount,
+                resources: [], // Empty for now, can be populated from API later
+                targetSkills: [], // Empty for now, can be populated from API later
+                prerequisites: [], // Empty for now, can be populated from API later
+              };
+
+              return (
+                <LearningPathCard
+                  key={path.id}
+                  path={convertedPath}
+                  isCollapsed={collapsedCards.has(path.id)}
+                  onToggle={toggleCard}
+                  cardRef={el => (cardRefs.current[path.id] = el)}
+                  dynamicQuestionCount={getQuestionCount(path.id)}
+                  isQuestionCountLoading={isStatsLoading}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && !error && deduplicatedDynamicPaths.length === 0 && (
+          <div className="text-center py-12 text-gray-300">
+            <p className="text-xl font-medium">No learning paths available.</p>
+            <p className="mt-2">Please check back later or contact support.</p>
+          </div>
+        )}
       </main>
     </div>
   );

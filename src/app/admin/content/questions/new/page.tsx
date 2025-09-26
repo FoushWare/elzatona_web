@@ -33,6 +33,7 @@ export default function NewQuestionPage() {
     category: '',
     learningPath: '',
     sector: '',
+    topicId: '', // Add topic selection
   });
 
   const [options, setOptions] = useState<QuestionOption[]>([
@@ -50,309 +51,260 @@ export default function NewQuestionPage() {
     answer: '',
   });
 
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState('');
-  const [error, setError] = useState('');
-  const [learningPaths, setLearningPaths] = useState<any[]>([]);
-  const [sectors, setSectors] = useState<any[]>([]);
-  const [loadingData, setLoadingData] = useState(true);
+  const [isPlaying, setIsPlaying] = useState({
+    question: false,
+    answer: false,
+  });
 
-  const sections = [
-    { id: 'learning', name: 'Learning' },
-    { id: 'practice', name: 'Practice' },
-    { id: 'interview-prep', name: 'Interview Prep' },
-    { id: 'media', name: 'Media' },
-  ];
-
-  const difficulties = [
-    { id: 'easy', name: 'Easy' },
-    { id: 'medium', name: 'Medium' },
-    { id: 'hard', name: 'Hard' },
-  ];
-
-  const categories = [
-    { id: 'javascript', name: 'JavaScript' },
-    { id: 'react', name: 'React' },
-    { id: 'css', name: 'CSS' },
-    { id: 'html', name: 'HTML' },
-    { id: 'performance', name: 'Performance' },
-    { id: 'testing', name: 'Testing' },
-    { id: 'general', name: 'General' },
-  ];
-
-  // Load learning paths and sectors on component mount
-  React.useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoadingData(true);
-
-        // Load learning paths
-        const pathsResponse = await fetch('/api/questions/learning-paths');
-        const pathsData = await pathsResponse.json();
-        if (pathsData.success) {
-          setLearningPaths(pathsData.data);
-        }
-
-        // Load sectors for the selected learning path
-        if (formData.learningPath) {
-          const sectorsResponse = await fetch(
-            `/api/sectors?learningPathId=${formData.learningPath}`
-          );
-          const sectorsData = await sectorsResponse.json();
-          if (sectorsData.success) {
-            setSectors(sectorsData.data);
-          }
-        }
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setLoadingData(false);
-      }
-    };
-
-    loadData();
-  }, [formData.learningPath]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const addOption = () => {
-    const newId = String.fromCharCode(97 + options.length); // a, b, c, d...
+    const newId = String.fromCharCode(97 + options.length); // a, b, c, d, etc.
     setOptions([...options, { id: newId, text: '', isCorrect: false }]);
   };
 
-  const removeOption = (index: number) => {
+  const removeOption = (id: string) => {
     if (options.length > 2) {
-      setOptions(options.filter((_, i) => i !== index));
+      setOptions(options.filter(option => option.id !== id));
     }
   };
 
   const updateOption = (
-    index: number,
+    id: string,
     field: keyof QuestionOption,
-    value: string | boolean
+    value: any
   ) => {
-    const newOptions = [...options];
-    newOptions[index] = { ...newOptions[index], [field]: value };
-    setOptions(newOptions);
+    setOptions(
+      options.map(option =>
+        option.id === id ? { ...option, [field]: value } : option
+      )
+    );
   };
 
   const handleAudioUpload = async (type: 'question' | 'answer', file: File) => {
-    try {
-      setLoading(true);
-      const result = await ClientAudioUploadService.uploadQuestionAudio(
-        'temp-question-id',
-        file
-      );
+    setIsUploading(true);
+    setError(null);
 
-      if (result.success) {
-        setAudioUrls(prev => ({ ...prev, [type]: result.url! }));
-        setAudioFiles(prev => ({ ...prev, [type]: file }));
-        setSuccess(`${type} audio uploaded successfully!`);
+    try {
+      const audioService = new ClientAudioUploadService();
+      const url = await audioService.uploadAudio(file);
+
+      setAudioUrls(prev => ({ ...prev, [type]: url }));
+      setAudioFiles(prev => ({ ...prev, [type]: file }));
+    } catch (err) {
+      setError(
+        `Failed to upload ${type} audio: ${err instanceof Error ? err.message : 'Unknown error'}`
+      );
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleAudioPlay = async (type: 'question' | 'answer') => {
+    const url = audioUrls[type];
+    if (!url) return;
+
+    try {
+      const audio = new Audio(url);
+      audio.onended = () => setIsPlaying(prev => ({ ...prev, [type]: false }));
+
+      if (isPlaying[type]) {
+        audio.pause();
+        setIsPlaying(prev => ({ ...prev, [type]: false }));
       } else {
-        setError(result.error || 'Failed to upload audio');
+        await audio.play();
+        setIsPlaying(prev => ({ ...prev, [type]: true }));
       }
     } catch (err) {
-      setError('Failed to upload audio file');
-    } finally {
-      setLoading(false);
+      setError(
+        `Failed to play ${type} audio: ${err instanceof Error ? err.message : 'Unknown error'}`
+      );
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccess('');
+    setIsSubmitting(true);
+    setError(null);
 
     try {
       // Validate form
       if (!formData.title.trim()) {
         throw new Error('Question title is required');
       }
-
       if (!formData.content.trim()) {
         throw new Error('Question content is required');
       }
-
-      if (!formData.category) {
-        throw new Error('Category is required');
+      if (options.length < 2) {
+        throw new Error('At least 2 options are required');
       }
-
-      if (!formData.learningPath) {
-        throw new Error('Learning path is required');
-      }
-
       if (options.some(opt => !opt.text.trim())) {
         throw new Error('All options must have text');
       }
-
-      const correctAnswers = options.filter(opt => opt.isCorrect);
-      if (correctAnswers.length === 0) {
+      if (!options.some(opt => opt.isCorrect)) {
         throw new Error('At least one option must be marked as correct');
       }
 
-      if (formData.type === 'single' && correctAnswers.length > 1) {
-        throw new Error(
-          'Single choice questions can only have one correct answer'
-        );
-      }
-
-      // Create question object for unified system
-      const question = {
-        title: formData.title,
-        content: formData.content,
+      // Prepare question data
+      const questionData = {
+        title: formData.title.trim(),
+        content: formData.content.trim(),
         type: formData.type,
-        category: formData.category,
+        section: formData.section,
         difficulty: formData.difficulty,
-        learningPath: formData.learningPath,
-        sectionId: formData.sector || undefined,
-        tags: [formData.category, formData.difficulty],
-        options,
-        correctAnswers: correctAnswers.map(opt => opt.id),
-        explanation: formData.explanation,
-        points: 1,
-        timeLimit: 60,
-        audioQuestion: audioUrls.question,
-        audioAnswer: audioUrls.answer,
-        isActive: true,
-        isComplete: true,
-        createdBy: 'admin',
-        lastModifiedBy: 'admin',
+        explanation: formData.explanation.trim(),
+        category: formData.category.trim(),
+        learningPath: formData.learningPath.trim(),
+        sector: formData.sector.trim(),
+        topicId: formData.topicId || undefined,
+        options: options.map(opt => ({
+          id: opt.id,
+          text: opt.text.trim(),
+          isCorrect: opt.isCorrect,
+        })),
+        audioUrls: {
+          question: audioUrls.question || undefined,
+          answer: audioUrls.answer || undefined,
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
-      console.log('Creating question with auto-linking:', question);
-
-      // Save to unified system (this will auto-link to sectors and learning paths)
+      // Submit to API
       const response = await fetch('/api/questions/unified', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(question),
+        body: JSON.stringify(questionData),
       });
 
-      const result = await response.json();
-
-      if (!result.success) {
-        throw new Error(result.error || 'Failed to create question');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create question');
       }
 
-      setSuccess(`Question created successfully! ID: ${result.data.id}`);
+      // Backup to local storage
+      try {
+        const backupService = new BackupClientService();
+        await backupService.backupQuestion(questionData);
+      } catch (backupErr) {
+        console.warn('Failed to backup question:', backupErr);
+      }
 
-      // Reset form
-      setFormData({
-        title: '',
-        content: '',
-        type: 'single',
-        section: 'learning',
-        difficulty: 'easy',
-        explanation: '',
-        category: '',
-        learningPath: '',
-        sector: '',
-      });
-      setOptions([
-        { id: 'a', text: '', isCorrect: false },
-        { id: 'b', text: '', isCorrect: false },
-      ]);
-      setAudioFiles({ question: null, answer: null });
-      setAudioUrls({ question: '', answer: '' });
-      setSectors([]);
+      setSuccess(true);
+      setTimeout(() => {
+        window.location.href = '/admin/content/questions';
+      }, 2000);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : 'Failed to create question'
       );
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-4 mb-4">
-            <Link
-              href="/admin/content/questions"
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Create New Question
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                Add a new question with audio support and multi-choice options
-              </p>
-            </div>
-          </div>
+  if (success) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="text-center py-8">
+          <div className="text-green-600 text-6xl mb-4">✓</div>
+          <h1 className="text-2xl font-bold text-green-600 mb-2">
+            Question Created!
+          </h1>
+          <p className="text-muted-foreground">
+            Redirecting to questions list...
+          </p>
         </div>
+      </div>
+    );
+  }
 
-        {/* Success/Error Messages */}
-        {success && (
-          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-6">
-            <p className="text-green-600 dark:text-green-400 text-sm">
-              {success}
-            </p>
-          </div>
-        )}
+  return (
+    <div className="container mx-auto p-6 space-y-6">
+      <div className="flex items-center gap-4">
+        <Link href="/admin/content/questions">
+          <Button variant="outline" size="sm">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Questions
+          </Button>
+        </Link>
+        <div>
+          <h1 className="text-3xl font-bold">Add New Question</h1>
+          <p className="text-muted-foreground mt-2">
+            Create a new question for the system
+          </p>
+        </div>
+      </div>
 
-        {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
-            <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
-          </div>
-        )}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-800">{error}</p>
+        </div>
+      )}
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-            {/* Basic Information */}
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-              Basic Information
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Question Title *
-                </label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={e =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="Enter question title"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Section *
-                </label>
-                <select
-                  value={formData.section}
-                  onChange={e =>
-                    setFormData({ ...formData, section: e.target.value })
-                  }
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                >
-                  {sections.map(section => (
-                    <option key={section.id} value={section.id}>
-                      {section.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left Column - Basic Info */}
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Question Title *
+              </label>
+              <input
+                type="text"
+                value={formData.title}
+                onChange={e =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter question title..."
+                required
+              />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Question Content *
+              </label>
+              <textarea
+                value={formData.content}
+                onChange={e =>
+                  setFormData({ ...formData, content: e.target.value })
+                }
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter the question content..."
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Explanation
+              </label>
+              <textarea
+                value={formData.explanation}
+                onChange={e =>
+                  setFormData({ ...formData, explanation: e.target.value })
+                }
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter explanation for the answer..."
+              />
+            </div>
+          </div>
+
+          {/* Right Column - Configuration */}
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Question Type *
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Type
                 </label>
                 <select
                   value={formData.type}
@@ -362,8 +314,7 @@ export default function NewQuestionPage() {
                       type: e.target.value as 'single' | 'multiple',
                     })
                   }
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="single">Single Choice</option>
                   <option value="multiple">Multiple Choice</option>
@@ -371,8 +322,8 @@ export default function NewQuestionPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Difficulty *
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Difficulty
                 </label>
                 <select
                   value={formData.difficulty}
@@ -382,326 +333,251 @@ export default function NewQuestionPage() {
                       difficulty: e.target.value as 'easy' | 'medium' | 'hard',
                     })
                   }
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  {difficulties.map(difficulty => (
-                    <option key={difficulty.id} value={difficulty.id}>
-                      {difficulty.name}
-                    </option>
-                  ))}
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
                 </select>
               </div>
             </div>
 
-            {/* Category and Learning Path Selection */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Category *
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category
                 </label>
-                <select
+                <input
+                  type="text"
                   value={formData.category}
                   onChange={e =>
                     setFormData({ ...formData, category: e.target.value })
                   }
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g., JavaScript, React"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Learning Path
+                </label>
+                <input
+                  type="text"
+                  value={formData.learningPath}
+                  onChange={e =>
+                    setFormData({ ...formData, learningPath: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g., frontend-basics"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Section
+                </label>
+                <select
+                  value={formData.section}
+                  onChange={e =>
+                    setFormData({ ...formData, section: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select a category</option>
-                  {categories.map(category => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
+                  <option value="learning">Learning</option>
+                  <option value="practice">Practice</option>
+                  <option value="assessment">Assessment</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Learning Path *
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Sector
                 </label>
-                <select
-                  value={formData.learningPath}
-                  onChange={e =>
-                    setFormData({
-                      ...formData,
-                      learningPath: e.target.value,
-                      sector: '',
-                    })
-                  }
-                  required
-                  disabled={loadingData}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white disabled:opacity-50"
-                >
-                  <option value="">Select a learning path</option>
-                  {learningPaths.map(path => (
-                    <option key={path.id} value={path.id}>
-                      {path.name || path.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Sector Selection */}
-            {formData.learningPath && (
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Sector (Optional)
-                </label>
-                <select
+                <input
+                  type="text"
                   value={formData.sector}
                   onChange={e =>
                     setFormData({ ...formData, sector: e.target.value })
                   }
-                  disabled={loadingData || sectors.length === 0}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g., fundamentals"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Topic ID (Optional)
+              </label>
+              <input
+                type="text"
+                value={formData.topicId}
+                onChange={e =>
+                  setFormData({ ...formData, topicId: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g., closure-in-javascript"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Options Section */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium">Answer Options</h3>
+            <Button
+              type="button"
+              onClick={addOption}
+              variant="outline"
+              size="sm"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Option
+            </Button>
+          </div>
+
+          {options.map((option, index) => (
+            <div
+              key={option.id}
+              className="flex items-center gap-4 p-4 border rounded-lg"
+            >
+              <div className="flex items-center gap-2">
+                <input
+                  type={formData.type === 'single' ? 'radio' : 'checkbox'}
+                  name={
+                    formData.type === 'single'
+                      ? 'correct'
+                      : `correct-${option.id}`
+                  }
+                  checked={option.isCorrect}
+                  onChange={e =>
+                    updateOption(option.id, 'isCorrect', e.target.checked)
+                  }
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="font-medium">{option.id.toUpperCase()}</span>
+              </div>
+              <input
+                type="text"
+                value={option.text}
+                onChange={e => updateOption(option.id, 'text', e.target.value)}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder={`Option ${option.id.toUpperCase()}...`}
+              />
+              {options.length > 2 && (
+                <Button
+                  type="button"
+                  onClick={() => removeOption(option.id)}
+                  variant="outline"
+                  size="sm"
+                  className="text-red-600 hover:text-red-700"
                 >
-                  <option value="">Auto-assign based on category</option>
-                  {sectors.map(sector => (
-                    <option key={sector.id} value={sector.id}>
-                      {sector.name} ({sector.totalQuestions || 0} questions)
-                    </option>
-                  ))}
-                </select>
-                {sectors.length === 0 && formData.learningPath && (
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    No sectors found for this learning path. Question will be
-                    auto-assigned.
-                  </p>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Audio Upload Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Audio Files (Optional)</h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Question Audio
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (file) handleAudioUpload('question', file);
+                  }}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {audioUrls.question && (
+                  <Button
+                    type="button"
+                    onClick={() => handleAudioPlay('question')}
+                    variant="outline"
+                    size="sm"
+                  >
+                    {isPlaying.question ? (
+                      <Pause className="h-4 w-4" />
+                    ) : (
+                      <Play className="h-4 w-4" />
+                    )}
+                  </Button>
                 )}
               </div>
-            )}
+            </div>
 
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Question Content *
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Answer Audio
               </label>
-              <textarea
-                value={formData.content}
-                onChange={e =>
-                  setFormData({ ...formData, content: e.target.value })
-                }
-                required
-                rows={4}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                placeholder="Enter the question content"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Explanation
-              </label>
-              <textarea
-                value={formData.explanation}
-                onChange={e =>
-                  setFormData({ ...formData, explanation: e.target.value })
-                }
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                placeholder="Explain why the correct answer is correct"
-              />
-            </div>
-          </div>
-
-          {/* Answer Options */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Answer Options
-              </h2>
-              <button
-                type="button"
-                onClick={addOption}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-2"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Add Option</span>
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {options.map((option, index) => (
-                <div key={option.id} className="flex items-center space-x-4">
-                  <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Option {option.id.toUpperCase()}
-                    </label>
-                    <input
-                      type="text"
-                      value={option.text}
-                      onChange={e =>
-                        updateOption(index, 'text', e.target.value)
-                      }
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                      placeholder={`Enter option ${option.id}`}
-                    />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={option.isCorrect}
-                        onChange={e =>
-                          updateOption(index, 'isCorrect', e.target.checked)
-                        }
-                        className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                        Correct
-                      </span>
-                    </label>
-                    {options.length > 2 && (
-                      <button
-                        type="button"
-                        onClick={() => removeOption(index)}
-                        className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-200"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+              <div className="flex items-center gap-2">
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (file) handleAudioUpload('answer', file);
+                  }}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {audioUrls.answer && (
+                  <Button
+                    type="button"
+                    onClick={() => handleAudioPlay('answer')}
+                    variant="outline"
+                    size="sm"
+                  >
+                    {isPlaying.answer ? (
+                      <Pause className="h-4 w-4" />
+                    ) : (
+                      <Play className="h-4 w-4" />
                     )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Audio Files */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-              Audio Files (Optional)
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Question Audio */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Question Audio
-                </label>
-                <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
-                  {audioFiles.question ? (
-                    <div className="space-y-2">
-                      <Volume2 className="w-8 h-8 text-green-500 mx-auto" />
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {audioFiles.question.name}
-                      </p>
-                      {audioUrls.question && (
-                        <button
-                          type="button"
-                          className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200"
-                        >
-                          <Play className="w-4 h-4 mx-auto" />
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <div>
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                        Upload question audio
-                      </p>
-                      <input
-                        type="file"
-                        accept="audio/*"
-                        onChange={e => {
-                          const file = e.target.files?.[0];
-                          if (file) handleAudioUpload('question', file);
-                        }}
-                        className="hidden"
-                        id="question-audio"
-                      />
-                      <label
-                        htmlFor="question-audio"
-                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 cursor-pointer"
-                      >
-                        Choose File
-                      </label>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Answer Audio */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Answer Audio
-                </label>
-                <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
-                  {audioFiles.answer ? (
-                    <div className="space-y-2">
-                      <Volume2 className="w-8 h-8 text-green-500 mx-auto" />
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {audioFiles.answer.name}
-                      </p>
-                      {audioUrls.answer && (
-                        <button
-                          type="button"
-                          className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200"
-                        >
-                          <Play className="w-4 h-4 mx-auto" />
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <div>
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                        Upload answer audio
-                      </p>
-                      <input
-                        type="file"
-                        accept="audio/*"
-                        onChange={e => {
-                          const file = e.target.files?.[0];
-                          if (file) handleAudioUpload('answer', file);
-                        }}
-                        className="hidden"
-                        id="answer-audio"
-                      />
-                      <label
-                        htmlFor="answer-audio"
-                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 cursor-pointer"
-                      >
-                        Choose File
-                      </label>
-                    </div>
-                  )}
-                </div>
+                  </Button>
+                )}
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-end space-x-4">
-            <Link
-              href="/admin/content/questions"
-              className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-            >
+        {/* Submit Button */}
+        <div className="flex justify-end gap-4">
+          <Link href="/admin/content/questions">
+            <Button type="button" variant="outline">
               Cancel
-            </Link>
-            <button
-              type="submit"
-              disabled={loading}
-              className="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
-            >
-              {loading ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Creating...</span>
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4" />
-                  <span>Create Question</span>
-                </>
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
+            </Button>
+          </Link>
+          <Button
+            type="submit"
+            disabled={isSubmitting || isUploading}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            {isSubmitting ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Creating...
+              </>
+            ) : (
+              <>
+                <Save className="h-4 w-4 mr-2" />
+                Create Question
+              </>
+            )}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }

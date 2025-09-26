@@ -177,7 +177,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
     try {
       const cacheKey = `progress_${user?.uid}`;
       const existingCache = localStorage.getItem(cacheKey);
-      let cachedData = existingCache ? JSON.parse(existingCache) : { data: null, cachedAt: Date.now() };
+      const cachedData = existingCache ? JSON.parse(existingCache) : { data: null, cachedAt: Date.now() };
 
       // Update the cached progress data
       if (!cachedData.data) {

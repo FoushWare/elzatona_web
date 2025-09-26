@@ -1,0 +1,27 @@
+{
+    "title": "What is React?",
+    "content": "React is a JavaScript library for building user interfaces, particularly web applications.",
+    "type": "single",
+    "difficulty": "easy",
+    "category": "react",
+    "learningPath": "react-mastery",
+    "points": 10,
+    "tags": [
+        "react",
+        "javascript",
+        "frontend",
+        "library"
+    ],
+    "options": [
+        "A JavaScript library for building user interfaces",
+        "A CSS framework for styling",
+        "A database management system",
+        "A server-side programming language"
+    ],
+    "correctAnswer": 0,
+    "explanation": "React is a JavaScript library developed by Facebook for building user interfaces, especially for web applications. It uses a component-based architecture and virtual DOM for efficient rendering.",
+    "isActive": true,
+    "isComplete": true,
+    "createdAt": "2024-01-15T10:00:00.000Z",
+    "updatedAt": "2024-01-15T10:00:00.000Z"
+}

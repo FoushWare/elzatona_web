@@ -389,9 +389,15 @@ export class UnifiedQuestionService {
       const querySnapshot = await getDocs(q);
       
       const questions: UnifiedQuestion[] = [];
+      const seenIds = new Set<string>();
 
       querySnapshot.forEach(doc => {
-        questions.push({ id: doc.id, ...doc.data() } as UnifiedQuestion);
+        const questionId = doc.id;
+        // Only add if we haven't seen this ID before
+        if (!seenIds.has(questionId)) {
+          seenIds.add(questionId);
+          questions.push({ id: questionId, ...doc.data() } as UnifiedQuestion);
+        }
       });
 
       // Filter by tags if specified (client-side filtering for array-contains-any)

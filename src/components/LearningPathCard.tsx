@@ -1,7 +1,7 @@
+'use client';
+
 import React from 'react';
-import Link from 'next/link';
-// import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import { getResourceById } from '@/lib/resources';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 export interface LearningPath {
   id: string;
@@ -9,376 +9,168 @@ export interface LearningPath {
   description: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   estimatedTime: number;
-  questionCount?: number;
-  resources: string[];
-  targetSkills: string[];
+  questionCount: number;
+  resources?: Array<{
+    id: string;
+    title: string;
+    url: string;
+    type: string;
+  }>;
+  targetSkills?: string[];
   prerequisites?: string[];
 }
 
-export interface LearningPathCardProps {
+interface LearningPathCardProps {
   path: LearningPath;
   isCollapsed: boolean;
   onToggle: (pathId: string) => void;
-  cardRef?: (el: HTMLDivElement | null) => void;
-  className?: string;
+  cardRef: (el: HTMLDivElement | null) => void;
   dynamicQuestionCount?: number;
   isQuestionCountLoading?: boolean;
 }
-
-const getCategoryIcon = (category: string): string => {
-  const icons: Record<string, string> = {
-    frontend: '🎨',
-    javascript: '⚡',
-    react: '⚛️',
-    css: '🎨',
-    typescript: '📘',
-    testing: '🧪',
-    performance: '⚡',
-    security: '🔒',
-    'system-design': '🏗️',
-    tools: '🛠️',
-    'ai-tools': '🤖',
-    interview: '💼',
-    english: '📚',
-  };
-  return icons[category] || '📚';
-};
-
-const getDifficultyIcon = (difficulty: string): string => {
-  const icons: Record<string, string> = {
-    beginner: '🌱',
-    intermediate: '🚀',
-    advanced: '⚡',
-  };
-  return icons[difficulty] || '📚';
-};
-
-const getDifficultyColor = (difficulty: string): string => {
-  switch (difficulty) {
-    case 'beginner':
-      return 'text-green-600 bg-green-100 dark:bg-green-900/20 dark:text-green-400';
-    case 'intermediate':
-      return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400';
-    case 'advanced':
-      return 'text-red-600 bg-red-100 dark:bg-red-900/20 dark:text-red-400';
-    default:
-      return 'text-muted-foreground bg-gray-100 dark:bg-gray-900/20';
-  }
-};
 
 export const LearningPathCard: React.FC<LearningPathCardProps> = ({
   path,
   isCollapsed,
   onToggle,
   cardRef,
-  className = '',
   dynamicQuestionCount,
   isQuestionCountLoading = false,
 }) => {
-  const category = path.id.split('-')[0];
+  const getPathIcon = (pathId: string) => {
+    const iconMap: Record<string, string> = {
+      'frontend-fundamentals': '🎨',
+      'javascript-deep-dive': '⚡',
+      'advanced-css-mastery': '📚',
+      'react-mastery': '⚛️',
+      'typescript-essentials': '🔷',
+      'testing-strategies': '✏️',
+      'performance-optimization': '📊',
+      'security-essentials': '🔒',
+      'frontend-system-design': '📚⚙️',
+      'build-tools-devops': '📚📚',
+    };
+    return iconMap[pathId] || '📖';
+  };
+
+  const displayQuestionCount =
+    dynamicQuestionCount !== undefined
+      ? dynamicQuestionCount
+      : path.questionCount;
 
   return (
-    <div className="relative">
-      <div
-        ref={cardRef}
-        data-testid="learning-path-card"
-        className={`bg-gradient-to-br from-gray-50 via-slate-50 via-gray-50 to-slate-50 dark:from-gray-800/20 dark:via-slate-800/20 dark:via-gray-800/20 dark:to-slate-800/20 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300 transform group hover:scale-[1.02] backdrop-blur-sm ${className}`}
-      >
-        {/* Header Row - Always Visible */}
-        <button
-          data-testid="card-header"
-          className="w-full p-4 cursor-pointer border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:via-slate-50 hover:to-gray-50 dark:hover:from-gray-800/30 dark:hover:via-slate-800/30 dark:hover:to-gray-800/30 transition-all duration-300 rounded-t-2xl text-left"
-          onClick={() => onToggle(path.id)}
-          aria-expanded={!isCollapsed}
-          aria-label={`Toggle ${path.title} learning path details`}
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3 min-w-0 flex-1">
-              <span className="text-xl flex-shrink-0">
-                {getCategoryIcon(category)}
-              </span>
-              <div className="text-lg font-bold bg-gradient-to-r from-gray-700 via-slate-700 to-gray-700 dark:from-gray-300 dark:via-slate-300 dark:to-gray-300 bg-clip-text text-transparent truncate drop-shadow-sm text-foreground">
-                {path.title}
-              </div>
-            </div>
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              {(dynamicQuestionCount !== undefined
-                ? dynamicQuestionCount
-                : path.questionCount) && (
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 text-white border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300 animate-pulse">
-                  {isQuestionCountLoading ? (
-                    <span className="flex items-center">
-                      <svg
-                        className="animate-spin -ml-1 mr-1 h-3 w-3 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Loading...
-                    </span>
-                  ) : (
-                    `#${dynamicQuestionCount !== undefined ? dynamicQuestionCount : path.questionCount} Q`
-                  )}
-                </span>
-              )}
-              <svg
-                className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ${
-                  isCollapsed ? '' : 'rotate-180'
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </div>
+    <div
+      ref={cardRef}
+      data-testid="learning-path-card"
+      className="bg-gray-800 hover:bg-gray-750 rounded-lg p-4 cursor-pointer transition-all duration-200 border border-gray-700"
+      onClick={() => onToggle(path.id)}
+    >
+      <div className="flex items-center justify-between">
+        {/* Left side - Icon and Title */}
+        <div className="flex items-center space-x-4">
+          <div className="text-2xl">{getPathIcon(path.id)}</div>
+          <h3 className="text-white font-medium text-lg">{path.title}</h3>
+        </div>
+
+        {/* Right side - Question count and dropdown */}
+        <div className="flex items-center space-x-3">
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+            {isQuestionCountLoading ? '...' : `#${displayQuestionCount} Q`}
           </div>
-        </button>
-
-        {/* Collapsible Content */}
-        <div
-          className={`overflow-hidden transition-all duration-300 ease-in-out ${
-            isCollapsed ? 'max-h-0 opacity-0' : 'max-h-[2000px] opacity-100'
-          }`}
-        >
-          <div className="p-4 sm:p-6">
-            {/* Description */}
-            <div className="mb-4">
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {path.description}
-              </p>
-            </div>
-
-            {/* Tags Badge - Only visible when expanded */}
-            <div className="mb-4">
-              <div className="flex flex-wrap gap-1">
-                {path.targetSkills.slice(0, 3).map((skill, index) => (
-                  <span
-                    key={`tag-${skill}-${index}`}
-                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 text-white border border-white dark:border-gray-800 shadow-lg"
-                  >
-                    {skill}
-                  </span>
-                ))}
-                {path.targetSkills.length > 3 && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-600 dark:to-gray-700 text-white border border-white dark:border-gray-800 shadow-lg">
-                    +{path.targetSkills.length - 3}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Difficulty Badge */}
-            <div className="mb-4">
-              <div className="flex items-center space-x-2">
-                <span className="text-lg text-foreground">
-                  {getDifficultyIcon(path.difficulty)}
-                </span>
-                <span
-                  className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold border-2 ${getDifficultyColor(path.difficulty)} shadow-sm`}
-                >
-                  {path.difficulty}
-                </span>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4 mb-3 sm:mb-4 lg:mb-6">
-              <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 dark:from-emerald-600 dark:via-teal-600 dark:to-cyan-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
-                <span className="text-lg sm:text-xl lg:text-2xl mb-1 text-foreground">
-                  📚
-                </span>
-                <span className="text-xs sm:text-sm font-semibold text-white">
-                  {path.resources.length} resources
-                </span>
-              </div>
-              <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 dark:from-orange-600 dark:via-red-600 dark:to-pink-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
-                <span className="text-lg sm:text-xl lg:text-2xl mb-1 text-foreground">
-                  ⏱️
-                </span>
-                <span className="text-xs sm:text-sm font-semibold text-white">
-                  {path.estimatedTime} hours
-                </span>
-              </div>
-              <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 dark:from-violet-600 dark:via-purple-600 dark:to-fuchsia-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
-                <span className="text-lg sm:text-xl lg:text-2xl mb-1 text-foreground">
-                  🎯
-                </span>
-                <span className="text-xs sm:text-sm font-semibold text-white">
-                  {path.targetSkills.length} skills
-                </span>
-              </div>
-              {(dynamicQuestionCount !== undefined
-                ? dynamicQuestionCount
-                : path.questionCount) && (
-                <div className="flex flex-col items-center text-center p-3 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 rounded-xl border-2 border-white dark:border-gray-800 shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300">
-                  <span className="text-lg sm:text-xl lg:text-2xl mb-1 text-foreground">
-                    🧠
-                  </span>
-                  <span className="text-xs sm:text-sm font-semibold text-white">
-                    {isQuestionCountLoading ? (
-                      <span className="flex items-center">
-                        <svg
-                          className="animate-spin -ml-1 mr-1 h-3 w-3 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        Loading...
-                      </span>
-                    ) : (
-                      `${dynamicQuestionCount !== undefined ? dynamicQuestionCount : path.questionCount} questions`
-                    )}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Target Skills */}
-            <div className="mb-3 sm:mb-4 lg:mb-6">
-              <div className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
-                Skills you&apos;ll learn:
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {path.targetSkills.slice(0, 4).map((skill, index) => (
-                  <span
-                    key={`skill-${skill}-${index}`}
-                    className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-gray-100 via-slate-100 to-gray-100 dark:from-gray-800/40 dark:via-slate-800/40 dark:to-gray-800/40 text-foreground border border-gray-200 dark:border-gray-600 shadow-sm"
-                  >
-                    {skill}
-                  </span>
-                ))}
-                {path.targetSkills.length > 4 && (
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-slate-100 via-gray-100 to-slate-100 dark:from-slate-800/40 dark:via-gray-800/40 dark:to-slate-800/40 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 shadow-sm">
-                    +{path.targetSkills.length - 4} more
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Prerequisites */}
-            {path.prerequisites && path.prerequisites.length > 0 && (
-              <div className="mb-3 sm:mb-4 lg:mb-6">
-                <div className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
-                  Prerequisites:
-                </div>
-                <div className="flex flex-wrap gap-1 sm:gap-2">
-                  {path.prerequisites.map(prereq => (
-                    <span
-                      key={prereq}
-                      className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-gray-100 text-muted-foreground dark:bg-gray-800"
-                    >
-                      {prereq}
-                    </span>
-                  ))}
-                </div>
-              </div>
+          <div className="text-white">
+            {isCollapsed ? (
+              <ChevronDown className="w-5 h-5" />
+            ) : (
+              <ChevronUp className="w-5 h-5" />
             )}
-
-            {/* Resources Preview */}
-            <div className="mb-3 sm:mb-4 lg:mb-6">
-              <div className="text-xs sm:text-sm font-medium text-card-foreground mb-2">
-                Featured Resources:
-              </div>
-              <div className="space-y-1 sm:space-y-2">
-                {path.resources.slice(0, 3).map(resourceId => {
-                  const resource = getResourceById(resourceId);
-                  return resource ? (
-                    <div
-                      key={resourceId}
-                      className="flex items-center space-x-2 text-xs sm:text-sm text-muted-foreground"
-                    >
-                      <span>📄</span>
-                      <span className="truncate">{resource.title}</span>
-                    </div>
-                  ) : null;
-                })}
-                {path.resources.length > 3 && (
-                  <div className="text-xs sm:text-sm text-muted-foreground">
-                    +{path.resources.length - 3} more resources
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div
-              data-action-buttons
-              className="flex flex-col sm:flex-row gap-3"
-            >
-              <Link
-                href={`/learning-paths/${path.id}/questions`}
-                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 hover:shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-blue-400/30 transform hover:-translate-y-0.5 transition-all duration-200 text-sm lg:text-base border border-blue-500/20 dark:border-blue-400/20"
-              >
-                🧠 Practice Questions
-              </Link>
-              <Link
-                href={`/learning-paths/${path.id}/resources`}
-                className="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 dark:from-purple-500 dark:to-purple-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-purple-800 dark:hover:from-purple-600 dark:hover:to-purple-700 hover:shadow-lg hover:shadow-purple-500/25 dark:hover:shadow-purple-400/30 transform hover:-translate-y-0.5 transition-all duration-200 text-sm lg:text-base border border-purple-500/20 dark:border-purple-400/20"
-              >
-                📚 View Resources
-              </Link>
-            </div>
-
-            {/* Flashcard Icon at the End */}
-            <div className="flex justify-end mt-4" data-flashcard-icon>
-              <Link
-                href={`/learning-paths/${path.id}/questions`}
-                className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 dark:from-yellow-600 dark:via-orange-600 dark:to-red-600 text-white shadow-lg hover:shadow-xl hover:shadow-orange-500/30 dark:hover:shadow-orange-400/40 hover:scale-105 transform hover:-translate-y-1 transition-all duration-200 border-2 border-white dark:border-gray-800 hover:border-yellow-300 dark:hover:border-yellow-400"
-                title="Add to Flashcards"
-                aria-label="Add learning path to flashcards"
-              >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                  />
-                </svg>
-              </Link>
-            </div>
           </div>
         </div>
       </div>
+
+      {/* Expanded Content */}
+      {!isCollapsed && (
+        <div className="mt-4 pt-4 border-t border-gray-700">
+          <p className="text-gray-300 text-sm mb-4">{path.description}</p>
+
+          {/* Target Skills */}
+          {path.targetSkills && path.targetSkills.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-white font-medium mb-2">Target Skills</h4>
+              <div className="flex flex-wrap gap-2">
+                {path.targetSkills.map((skill, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-blue-600 text-blue-100 rounded text-xs"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Prerequisites */}
+          {path.prerequisites && path.prerequisites.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-white font-medium mb-2">Prerequisites</h4>
+              <ul className="space-y-1">
+                {path.prerequisites.map((prereq, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center space-x-2 text-gray-300 text-sm"
+                  >
+                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                    <span>{prereq}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Resources */}
+          {path.resources && path.resources.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-white font-medium mb-2">Resources</h4>
+              <div className="space-y-2">
+                {path.resources.map(resource => (
+                  <a
+                    key={resource.id}
+                    href={resource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-2 p-2 bg-gray-700 hover:bg-gray-600 rounded text-sm text-gray-300 hover:text-white transition-colors"
+                  >
+                    <span className="text-lg">
+                      {resource.type === 'video'
+                        ? '🎥'
+                        : resource.type === 'documentation'
+                          ? '📚'
+                          : resource.type === 'tutorial'
+                            ? '📖'
+                            : '🔗'}
+                    </span>
+                    <span className="flex-1">{resource.title}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Action Button */}
+          <div className="mt-4">
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                // Navigate to learning path
+                window.location.href = `/learning-paths/${path.id}`;
+              }}
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200"
+            >
+              Start Learning Path
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
