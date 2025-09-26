@@ -3,11 +3,13 @@
 import { useLearningPathStats } from '@/hooks/useLearningPathStats';
 
 export default function DebugHookPage() {
-  const { learningPaths, isLoading, error } = useLearningPathStats();
+  const { stats, isLoading, error } = useLearningPathStats();
 
   console.log('Debug Hook - isLoading:', isLoading);
   console.log('Debug Hook - error:', error);
-  console.log('Debug Hook - learningPaths:', learningPaths);
+  console.log('Debug Hook - stats:', stats);
+
+  const learningPaths = Object.values(stats);
 
   if (isLoading) {
     return (
@@ -48,9 +50,14 @@ export default function DebugHookPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {learningPaths.map(path => (
           <div key={path.id} className="border p-4 rounded-lg">
-            <h3 className="font-bold">{path.title}</h3>
-            <p className="text-sm text-gray-600">{path.description}</p>
+            <h3 className="font-bold">Path ID: {path.id}</h3>
+            <p className="text-sm text-gray-600">
+              Loading: {path.isLoading ? 'Yes' : 'No'}
+            </p>
             <p className="text-sm">Questions: {path.questionCount}</p>
+            {path.error && (
+              <p className="text-sm text-red-600">Error: {path.error}</p>
+            )}
           </div>
         ))}
       </div>

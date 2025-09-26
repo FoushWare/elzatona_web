@@ -2,7 +2,7 @@
  * Server-side authentication utilities using Firebase Admin SDK
  */
 
-import { verifyIdToken } from 'firebase-admin/auth';
+import { getAuth } from 'firebase-admin/auth';
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
 
 // Initialize Firebase Admin SDK for server-side token verification
@@ -72,7 +72,8 @@ export const verifyFirebaseToken = async (token: string) => {
     }
 
     // Try Firebase Admin SDK first
-    const decodedToken = await verifyIdToken(token);
+    const auth = getAuth();
+    const decodedToken = await auth.verifyIdToken(token);
     return decodedToken;
   } catch (error) {
     console.warn('Firebase Admin SDK verification failed, trying REST API fallback:', error);

@@ -85,6 +85,31 @@ export async function POST(request: NextRequest) {
     // Single question creation
     const questionId = await UnifiedQuestionService.createQuestion(body);
 
+    // Auto-assign to section if learningPath is provided and no sectionId is specified
+    if (body.learningPath && !body.sectionId) {
+      try {
+        const autoAssignResponse = await fetch(`${request.nextUrl.origin}/api/sections/auto-assign`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            questionId,
+            learningPathId: body.learningPath,
+            sectionSize: 15 // Default section size
+          })
+        });
+        
+        if (autoAssignResponse.ok) {
+          const autoAssignData = await autoAssignResponse.json();
+          console.log('Auto-assigned question to section:', autoAssignData.data);
+        }
+      } catch (autoAssignError) {
+        console.warn('Failed to auto-assign question to section:', autoAssignError);
+        // Don't fail the question creation if auto-assignment fails
+      }
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Question created successfully',
@@ -102,8 +127,8 @@ export async function POST(request: NextRequest) {
 // PUT /api/questions/unified - Update question
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { id, ...updates } = body;
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
 
     if (!id) {
       return NextResponse.json(
@@ -112,7 +137,8 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    await UnifiedQuestionService.updateQuestion(id, updates);
+    const body = await request.json();
+    await UnifiedQuestionService.updateQuestion(id, body);
 
     return NextResponse.json({
       success: true,

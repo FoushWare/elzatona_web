@@ -13,10 +13,10 @@ import {
   CheckCircle,
   MessageSquare,
 } from 'lucide-react';
-import { BehaviorQuestion } from '@/lib/behaviorQuestions';
+import { BehaviorQuestion as BehaviorQuestionType } from '@/lib/behaviorQuestions';
 
 interface BehaviorQuestionProps {
-  question: BehaviorQuestion;
+  question: BehaviorQuestionType;
   onNext: () => void;
   onPrevious: () => void;
   onComplete: () => void;

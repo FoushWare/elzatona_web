@@ -1,28 +1,33 @@
-module.exports = {
-  testEnvironment: 'node',
+const nextJest = require('next/jest')
+
+const createJestConfig = nextJest({
+  // Provide the path to your Next.js app to load next.config.js and .env files
+  dir: './',
+})
+
+// Add any custom config to be passed to Jest
+const customJestConfig = {
+  testEnvironment: 'jsdom',
   testMatch: [
     '**/tests/**/*.test.js',
     '**/tests/**/*.test.ts',
     '**/tests/**/*.test.tsx'
   ],
-  collectCoverageFrom: [
-    'src/**/*.{js,ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/**/*.stories.{js,ts,tsx}',
-    '!src/**/*.test.{js,ts,tsx}'
-  ],
-  coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'lcov', 'html'],
   setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
-  testTimeout: 30000,
-  maxWorkers: 1, // Run tests sequentially for Firebase
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   },
-  transform: {
-    '^.+\\.(js|ts|tsx)$': 'babel-jest'
-  },
-  moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/*.stories.{ts,tsx}',
+    '!src/**/*.test.{ts,tsx}',
+  ],
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html'],
+  testTimeout: 30000,
+  maxWorkers: 1, // Run tests sequentially for Firebase
   testPathIgnorePatterns: [
     '/node_modules/',
     '/.next/',
@@ -30,4 +35,7 @@ module.exports = {
   ],
   collectCoverage: false, // Set to true when you want coverage reports
   verbose: true
-};
+}
+
+// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
+module.exports = createJestConfig(customJestConfig)
