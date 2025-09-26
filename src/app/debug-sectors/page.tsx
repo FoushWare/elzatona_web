@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useSectorGrading } from '@/hooks/useSectorGrading';
-import { useParams } from 'next/navigation';
 
 export default function DebugSectorsPage() {
-  const params = useParams();
-  const pathId = (params.id as string) || 'javascript-deep-dive';
+  const pathId = 'javascript-deep-dive';
   const { sectors, isLoading, error } = useSectorGrading(pathId);
   const [logs, setLogs] = useState<string[]>([]);
 

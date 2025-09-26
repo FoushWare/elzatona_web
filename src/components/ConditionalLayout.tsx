@@ -3,10 +3,6 @@
 import { usePathname } from 'next/navigation';
 import { NavbarSimple } from '@/components/NavbarSimple';
 import ChatGPT from '@/components/ChatGPT';
-import { ComprehensiveGuidanceDetector } from '@/components/ComprehensiveGuidanceDetector';
-import { SignInGuidanceDetector } from '@/components/SignInGuidanceDetector';
-import { FirstTimeVisitorDetector } from '@/components/FirstTimeVisitorDetector';
-import { LearningModeDetector } from '@/components/LearningModeDetector';
 
 interface ConditionalLayoutProps {
   children: React.ReactNode;
@@ -32,10 +28,6 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
         {children}
         <ChatGPT />
       </main>
-      <ComprehensiveGuidanceDetector />
-      <SignInGuidanceDetector />
-      <FirstTimeVisitorDetector />
-      <LearningModeDetector />
     </div>
   );
 }
