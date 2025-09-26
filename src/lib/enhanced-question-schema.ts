@@ -91,6 +91,7 @@ export interface SectionConfig {
 export class EnhancedQuestionService {
   private static readonly QUESTIONS_COLLECTION = 'enhancedQuestions';
   private static readonly TOPICS_COLLECTION = 'topics';
+  private static readonly CATEGORIES_COLLECTION = 'categories';
   private static readonly SECTIONS_COLLECTION = 'sections';
   private static readonly SECTION_CONFIG_COLLECTION = 'sectionConfig';
 
@@ -332,12 +333,12 @@ export class EnhancedQuestionService {
       const topicData = {
         ...topic,
         questionCount: 0,
+        isActive: true,
         createdAt: now,
         updatedAt: now
       };
 
       const docRef = await addDoc(topicsRef, topicData);
-      console.log(`✅ Topic created with ID: ${docRef.id}`);
       return docRef.id;
     } catch (error) {
       console.error('Error creating topic:', error);
@@ -375,16 +376,159 @@ export class EnhancedQuestionService {
 
     try {
       const topicsRef = collection(db, this.TOPICS_COLLECTION);
-      const q = query(topicsRef, where('isActive', '==', true), orderBy('name', 'asc'));
+      
+      // First try with isActive filter
+      try {
+        const q = query(topicsRef, where('isActive', '==', true), orderBy('name', 'asc'));
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.docs.length > 0) {
+          const topics = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          })) as Topic[];
+          return topics;
+        }
+      } catch (filterError) {
+        // Fallback to client-side filtering if server-side filter fails
+      }
+      
+      // Fallback: get all topics and filter client-side
+      const q = query(topicsRef, orderBy('name', 'asc'));
       const snapshot = await getDocs(q);
       
-      return snapshot.docs.map(doc => ({
+      const allTopics = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Topic[];
+      
+      // Filter client-side for isActive
+      return allTopics.filter(topic => topic.isActive === true);
     } catch (error) {
       console.error('Error getting topics:', error);
       return [];
+    }
+  }
+
+  // Get all categories
+  static async getCategories(): Promise<Category[]> {
+    if (!db) throw new Error('Firestore not available');
+
+    try {
+      console.log('🔄 Service: Getting categories from collection:', this.CATEGORIES_COLLECTION);
+      const categoriesRef = collection(db, this.CATEGORIES_COLLECTION);
+      
+      // Temporarily remove isActive filter to fix the issue
+      const q = query(categoriesRef, orderBy('name', 'asc'));
+      const snapshot = await getDocs(q);
+
+      console.log('📊 Service: Found', snapshot.docs.length, 'categories');
+      const categories = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Category[];
+
+      console.log('✅ Service: Returning', categories.length, 'categories');
+      return categories;
+    } catch (error) {
+      console.error('❌ Service: Error getting categories:', error);
+      return [];
+    }
+  }
+
+  // Create a new category
+  static async createCategory(category: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    if (!db) throw new Error('Firestore not available');
+
+    try {
+      console.log('🔄 Service: Creating category with data:', category);
+      const categoriesRef = collection(db, this.CATEGORIES_COLLECTION);
+      const now = new Date().toISOString();
+
+      const categoryData = {
+        ...category,
+        isActive: true,
+        createdAt: now,
+        updatedAt: now
+      };
+
+      console.log('📊 Service: Category data to save:', categoryData);
+      const docRef = await addDoc(categoriesRef, categoryData);
+      console.log(`✅ Service: Category created with ID: ${docRef.id}`);
+      return docRef.id;
+    } catch (error) {
+      console.error('❌ Service: Error creating category:', error);
+      throw error;
+    }
+  }
+
+  // Get topic by ID
+  static async getTopic(topicId: string): Promise<Topic | null> {
+    if (!db) throw new Error('Firestore not available');
+
+    try {
+      const topicRef = doc(db, this.TOPICS_COLLECTION, topicId);
+      const topicDoc = await getDoc(topicRef);
+      
+      if (!topicDoc.exists()) return null;
+      
+      return {
+        id: topicDoc.id,
+        ...topicDoc.data()
+      } as Topic;
+    } catch (error) {
+      console.error('Error getting topic:', error);
+      return null;
+    }
+  }
+
+  // Update topic
+  static async updateTopic(topicId: string, updateData: Partial<Topic>): Promise<Topic | null> {
+    if (!db) throw new Error('Firestore not available');
+
+    try {
+      const topicRef = doc(db, this.TOPICS_COLLECTION, topicId);
+      const topicDoc = await getDoc(topicRef);
+      
+      if (!topicDoc.exists()) return null;
+
+      await updateDoc(topicRef, {
+        ...updateData,
+        updatedAt: new Date().toISOString()
+      });
+
+      // Get the updated topic
+      const updatedDoc = await getDoc(topicRef);
+      return {
+        id: updatedDoc.id,
+        ...updatedDoc.data()
+      } as Topic;
+    } catch (error) {
+      console.error('Error updating topic:', error);
+      throw error;
+    }
+  }
+
+  // Delete topic
+  static async deleteTopic(topicId: string): Promise<boolean> {
+    if (!db) throw new Error('Firestore not available');
+
+    try {
+      const topicRef = doc(db, this.TOPICS_COLLECTION, topicId);
+      const topicDoc = await getDoc(topicRef);
+      
+      if (!topicDoc.exists()) return false;
+
+      // Soft delete by setting isActive to false
+      await updateDoc(topicRef, {
+        isActive: false,
+        updatedAt: new Date().toISOString()
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error deleting topic:', error);
+      throw error;
     }
   }
 

@@ -26,6 +26,7 @@ import {
   EnhancedQuestion,
   SectionConfig,
 } from '@/lib/enhanced-question-schema';
+import TopicManager from '@/components/admin/TopicManager';
 
 export default function EnhancedStructurePage() {
   const [sections, setSections] = useState<Section[]>([]);
@@ -275,51 +276,7 @@ export default function EnhancedStructurePage() {
 
         {/* Topics Tab */}
         <TabsContent value="topics" className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Topics Management</h2>
-            <Button className="flex items-center space-x-2">
-              <Plus className="w-4 h-4" />
-              <span>Create Topic</span>
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topics.map(topic => (
-              <Card key={topic.id}>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span>{topic.name}</span>
-                    <Badge variant="secondary">
-                      {topic.questionCount} questions
-                    </Badge>
-                  </CardTitle>
-                  <CardDescription>{topic.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Category:</span>
-                      <span className="font-medium">{topic.category}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Difficulty:</span>
-                      <Badge
-                        className={
-                          topic.difficulty === 'easy'
-                            ? 'bg-green-100 text-green-800'
-                            : topic.difficulty === 'medium'
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : 'bg-red-100 text-red-800'
-                        }
-                      >
-                        {topic.difficulty}
-                      </Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <TopicManager />
         </TabsContent>
       </Tabs>
     </div>

@@ -100,6 +100,12 @@ export default function AdminNavbar() {
       icon: FolderOpen,
       description: 'Manage question backups',
     },
+    {
+      href: '/admin/audit-logs',
+      label: 'Audit Logs',
+      icon: FileText,
+      description: 'Monitor admin actions and system events',
+    },
   ];
 
   return (
