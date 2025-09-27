@@ -7,6 +7,7 @@ import { UserPreferencesProvider } from '@/contexts/UserPreferencesContext';
 import { UserTypeProvider } from '@/contexts/UserTypeContext';
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext';
 import { OnboardingProvider } from '@/contexts/OnboardingContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 import { ConditionalLayout } from '@/components/ConditionalLayout';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -53,17 +54,19 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
-          <FirebaseAuthProvider>
-            <UserPreferencesProvider>
-              <UserTypeProvider>
-                <MobileMenuProvider>
-                  <OnboardingProvider>
-                    <ConditionalLayout>{children}</ConditionalLayout>
-                  </OnboardingProvider>
-                </MobileMenuProvider>
-              </UserTypeProvider>
-            </UserPreferencesProvider>
-          </FirebaseAuthProvider>
+          <LanguageProvider>
+            <FirebaseAuthProvider>
+              <UserPreferencesProvider>
+                <UserTypeProvider>
+                  <MobileMenuProvider>
+                    <OnboardingProvider>
+                      <ConditionalLayout>{children}</ConditionalLayout>
+                    </OnboardingProvider>
+                  </MobileMenuProvider>
+                </UserTypeProvider>
+              </UserPreferencesProvider>
+            </FirebaseAuthProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

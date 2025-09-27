@@ -161,7 +161,7 @@ export class UnifiedQuestionService {
    * Create a new question
    */
   static async createQuestion(
-    questionData: Omit<UnifiedQuestion, 'id' | 'createdAt' | 'updatedAt'>
+    questionData: Omit<UnifiedQuestion, 'id' | 'createdAt' | 'updatedAt' | 'isActive' | 'isComplete'>
   ): Promise<string> {
     if (!db) {
       throw new Error('Firestore not available');
@@ -171,6 +171,8 @@ export class UnifiedQuestionService {
       const timestamp = new Date().toISOString();
       const questionRef = await addDoc(collection(db, this.COLLECTION_NAME), {
         ...questionData,
+        isActive: true, // Default to active
+        isComplete: true, // Default to complete
         createdAt: timestamp,
         updatedAt: timestamp,
       });
@@ -207,8 +209,6 @@ export class UnifiedQuestionService {
           timeLimit: questionData.timeLimit || 60,
           audioQuestion: questionData.audioQuestion,
           audioAnswer: questionData.audioAnswer,
-          isActive: true,
-          isComplete: true,
           createdBy: 'admin',
           lastModifiedBy: 'admin'
         };

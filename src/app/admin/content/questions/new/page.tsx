@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -110,6 +110,18 @@ export default function NewQuestionPage() {
   const [topics, setTopics] = useState<Topic[]>([]);
   const [learningPaths, setLearningPaths] = useState<LearningPath[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Deduplicate learning paths by name to avoid duplicate keys
+  const uniqueLearningPaths = useMemo(() => {
+    const seen = new Set<string>();
+    return learningPaths.filter(path => {
+      if (seen.has(path.name)) {
+        return false;
+      }
+      seen.add(path.name);
+      return true;
+    });
+  }, [learningPaths]);
 
   useEffect(() => {
     loadDropdownData();
@@ -490,7 +502,7 @@ export default function NewQuestionPage() {
                     <SelectValue placeholder="Select a learning path" />
                   </SelectTrigger>
                   <SelectContent>
-                    {learningPaths.map(path => (
+                    {uniqueLearningPaths.map(path => (
                       <SelectItem key={path.id} value={path.name}>
                         {path.name}
                       </SelectItem>

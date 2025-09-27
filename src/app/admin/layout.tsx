@@ -19,10 +19,28 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   const isLoginPage = pathname === '/admin/login';
   const isAdminRootPage = pathname === '/admin';
   const isAuditLogsPage = pathname === '/admin/audit-logs';
-  const isPublicPage = isLoginPage || isAdminRootPage || isAuditLogsPage;
+  const isGuidedLearningPage = pathname === '/admin/guided-learning';
+  const isGuidedLearningEditPage =
+    pathname.startsWith('/admin/guided-learning/') &&
+    pathname.endsWith('/edit');
+  const isPublicPage =
+    isLoginPage ||
+    isAdminRootPage ||
+    isAuditLogsPage ||
+    isGuidedLearningPage ||
+    isGuidedLearningEditPage;
 
   // For login page and admin root page, render immediately without waiting for auth check
   if (isPublicPage) {
+    // Show navbar for guided learning pages even without auth
+    if (isGuidedLearningPage || isGuidedLearningEditPage) {
+      return (
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+          <AdminNavbar />
+          <main className="pt-20">{children}</main>
+        </div>
+      );
+    }
     return <>{children}</>;
   }
 

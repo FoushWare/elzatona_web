@@ -77,6 +77,9 @@ export default function GuidedLearningPage() {
   const [dailyGoals, setDailyGoals] = useState<DailyGoal[]>([]);
   const [currentDay, setCurrentDay] = useState(1);
   const [completedPlans, setCompletedPlans] = useState<Set<string>>(new Set());
+  const [isNavigatingToPlan, setIsNavigatingToPlan] = useState<string | null>(
+    null
+  );
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -394,11 +397,16 @@ export default function GuidedLearningPage() {
         {/* Learning Plans */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
           {templatesLoading && (
-            <div className="col-span-full text-center py-8">
-              <div className="flex items-center justify-center space-x-2 text-gray-600 dark:text-gray-400">
-                <Loader2 className="w-6 h-6 animate-spin" />
-                <span>Loading learning plans...</span>
+            <div className="col-span-full text-center py-16">
+              <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Loader2 className="w-10 h-10 animate-spin text-white" />
               </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Loading Learning Plans
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Fetching your personalized learning options...
+              </p>
             </div>
           )}
 
@@ -430,7 +438,10 @@ export default function GuidedLearningPage() {
                       ? 'border-purple-300 dark:border-purple-600'
                       : 'border-white/20 dark:border-gray-700/20 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
-              onClick={() => router.push(`/guided-learning/${plan.id}`)}
+              onClick={() => {
+                setIsNavigatingToPlan(plan.id);
+                router.push(`/guided-learning/${plan.id}`);
+              }}
               onMouseEnter={() => setHoveredPlan(plan.id)}
               onMouseLeave={() => setHoveredPlan(null)}
             >
@@ -506,17 +517,28 @@ export default function GuidedLearningPage() {
               <div className="flex justify-center">
                 <div
                   className={`flex items-center space-x-2 font-semibold text-sm transition-colors ${
-                    completedPlans.has(plan.id)
-                      ? 'text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300'
-                      : 'text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300'
+                    isNavigatingToPlan === plan.id
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : completedPlans.has(plan.id)
+                        ? 'text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300'
+                        : 'text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300'
                   }`}
                 >
-                  <span>
-                    {completedPlans.has(plan.id)
-                      ? 'Review Plan'
-                      : 'View Details'}
-                  </span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  {isNavigatingToPlan === plan.id ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Loading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>
+                        {completedPlans.has(plan.id)
+                          ? 'Review Plan'
+                          : 'View Details'}
+                      </span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
                 </div>
               </div>
             </div>

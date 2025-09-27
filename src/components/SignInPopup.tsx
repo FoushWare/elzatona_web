@@ -1,296 +1,300 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { X, Mail, Github, Chrome, Eye, EyeOff } from 'lucide-react';
+import React, { useState } from 'react';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Loader2, Mail, Github, BookOpen, Eye, EyeOff } from 'lucide-react';
 
 interface SignInPopupProps {
   isOpen: boolean;
   onClose: () => void;
-  onSkip: () => void;
   onSuccess: () => void;
 }
 
 export const SignInPopup: React.FC<SignInPopupProps> = ({
   isOpen,
   onClose,
-  onSkip,
   onSuccess,
 }) => {
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    displayName: '',
+    confirmPassword: '',
+    name: '',
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const {
     signInWithGoogle,
     signInWithGithub,
     signInWithEmail,
     signUpWithEmail,
+    isAuthenticated,
   } = useFirebaseAuth();
 
-  // Reset loading state when popup opens
-  useEffect(() => {
-    if (isOpen) {
-      setIsLoading(false);
-      setError('');
+  // Close popup and call success callback when authenticated
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      onSuccess();
     }
-  }, [isOpen]);
+  }, [isAuthenticated, onSuccess]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setError('');
-  };
-
-  const handleEmailAuth = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError('');
+    setIsSubmitting(true);
 
     try {
-      let result;
-      if (isSignUp) {
-        result = await signUpWithEmail(
-          formData.email,
-          formData.password,
-          formData.displayName
-        );
+      if (isLogin) {
+        await signInWithEmail(formData.email, formData.password);
       } else {
-        result = await signInWithEmail(formData.email, formData.password);
-      }
-
-      if (result.success) {
-        onSuccess();
-      } else {
-        setError(result.error || 'Authentication failed');
+        if (formData.password !== formData.confirmPassword) {
+          setError('Passwords do not match');
+          return;
+        }
+        await signUpWithEmail(formData.email, formData.password, formData.name);
       }
     } catch (err) {
-      setError('An unexpected error occurred');
+      setError(err instanceof Error ? err.message : 'Authentication failed');
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    setError('');
-
     try {
-      const result = await signInWithGoogle();
-      if (result.success) {
-        onSuccess();
-      } else {
-        setError(result.error || 'Google sign-in failed');
-      }
+      await signInWithGoogle();
     } catch (err) {
-      setError('Google sign-in failed');
-    } finally {
-      setIsLoading(false);
+      setError(err instanceof Error ? err.message : 'Google sign-in failed');
     }
   };
 
   const handleGithubSignIn = async () => {
-    setIsLoading(true);
-    setError('');
-
     try {
-      const result = await signInWithGithub();
-      if (result.success) {
-        onSuccess();
-      } else {
-        setError(result.error || 'GitHub sign-in failed');
-      }
+      await signInWithGithub();
     } catch (err) {
-      setError('GitHub sign-in failed');
-    } finally {
-      setIsLoading(false);
+      setError(err instanceof Error ? err.message : 'Github sign-in failed');
     }
   };
 
-  if (!isOpen) return null;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {isSignUp ? 'Create Account' : 'Sign In'}
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {isSignUp
-                ? 'Join Elzatona to access guided learning features'
-                : 'Sign in to access your personalized learning experience'}
-            </p>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="space-y-4">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <BookOpen className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+                {isLogin ? 'Welcome Back!' : 'Join Elzatona'}
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 dark:text-gray-400 text-base">
+                {isLogin
+                  ? 'Sign in to access your guided learning plans'
+                  : 'Create your account to start your learning journey'}
+              </DialogDescription>
+            </div>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5 text-gray-500" />
-          </button>
-        </div>
+        </DialogHeader>
 
-        {/* Content */}
-        <div className="p-6">
+        <div className="space-y-6 py-2">
           {/* Social Sign In */}
-          <div className="space-y-3 mb-6">
-            <button
+          <div className="space-y-3">
+            <Button
               onClick={handleGoogleSignIn}
-              disabled={isLoading}
-              className="w-full flex items-center justify-center space-x-3 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="outline"
+              className="w-full h-12 text-base font-medium border-2 border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 rounded-xl"
+              disabled={isSubmitting}
             >
-              <Chrome className="w-5 h-5 text-red-500" />
-              <span className="font-medium text-gray-700 dark:text-gray-300">
-                Continue with Google
-              </span>
-            </button>
-
-            <button
+              <Mail className="w-5 h-5 mr-3" />
+              Continue with Google
+            </Button>
+            <Button
               onClick={handleGithubSignIn}
-              disabled={isLoading}
-              className="w-full flex items-center justify-center space-x-3 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="outline"
+              className="w-full h-12 text-base font-medium border-2 border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 rounded-xl"
+              disabled={isSubmitting}
             >
-              <Github className="w-5 h-5 text-gray-900 dark:text-white" />
-              <span className="font-medium text-gray-700 dark:text-gray-300">
-                Continue with GitHub
-              </span>
-            </button>
+              <Github className="w-5 h-5 mr-3" />
+              Continue with Github
+            </Button>
           </div>
 
-          {/* Divider */}
-          <div className="relative mb-6">
+          <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+              <span className="w-full border-t border-gray-200 dark:border-gray-700" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">
-                or continue with email
+              <span className="bg-white dark:bg-gray-900 px-4 text-gray-500 dark:text-gray-400 font-medium">
+                Or continue with email
               </span>
             </div>
           </div>
 
           {/* Email Form */}
-          <form onSubmit={handleEmailAuth} className="space-y-4">
-            {isSignUp && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {!isLogin && (
+              <div className="space-y-2">
+                <Label
+                  htmlFor="name"
+                  className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
                   Full Name
-                </label>
-                <input
+                </Label>
+                <Input
+                  id="name"
+                  name="name"
                   type="text"
-                  name="displayName"
-                  value={formData.displayName}
+                  value={formData.name}
                   onChange={handleInputChange}
-                  required={isSignUp}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  required={!isLogin}
+                  disabled={isSubmitting}
+                  className="h-12 text-base border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 rounded-xl transition-colors duration-200"
                   placeholder="Enter your full name"
                 />
               </div>
             )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <div className="space-y-2">
+              <Label
+                htmlFor="email"
+                className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+              >
                 Email Address
-              </label>
-              <input
-                type="email"
+              </Label>
+              <Input
+                id="email"
                 name="email"
+                type="email"
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                placeholder="Enter your email"
+                disabled={isSubmitting}
+                className="h-12 text-base border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 rounded-xl transition-colors duration-200"
+                placeholder="Enter your email address"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <div className="space-y-2">
+              <Label
+                htmlFor="password"
+                className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+              >
                 Password
-              </label>
+              </Label>
               <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
+                <Input
+                  id="password"
                   name="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  disabled={isSubmitting}
+                  className="h-12 text-base border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 rounded-xl transition-colors duration-200 pr-12"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 >
                   {showPassword ? (
-                    <EyeOff className="w-4 h-4 text-gray-400" />
+                    <EyeOff className="w-5 h-5" />
                   ) : (
-                    <Eye className="w-4 h-4 text-gray-400" />
+                    <Eye className="w-5 h-5" />
                   )}
                 </button>
               </div>
             </div>
 
+            {!isLogin && (
+              <div className="space-y-2">
+                <Label
+                  htmlFor="confirmPassword"
+                  className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Confirm Password
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    required={!isLogin}
+                    disabled={isSubmitting}
+                    className="h-12 text-base border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 rounded-xl transition-colors duration-200 pr-12"
+                    placeholder="Confirm your password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+
             {error && (
-              <div className="text-red-600 dark:text-red-400 text-sm">
+              <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border border-red-200 dark:border-red-800">
                 {error}
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
-              disabled={isLoading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isSubmitting}
             >
-              {isLoading
-                ? 'Please wait...'
-                : isSignUp
-                  ? 'Create Account'
-                  : 'Sign In'}
-            </button>
+              {isSubmitting ? (
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              ) : null}
+              {isLogin ? 'Sign In' : 'Create Account'}
+            </Button>
           </form>
 
-          {/* Toggle Sign Up/Sign In */}
-          <div className="mt-6 text-center">
+          <div className="text-center">
             <button
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300"
+              type="button"
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium text-base transition-colors duration-200 hover:underline"
             >
-              {isSignUp
-                ? 'Already have an account? Sign in'
-                : "Don't have an account? Sign up"}
+              {isLogin
+                ? "Don't have an account? Sign up"
+                : 'Already have an account? Sign in'}
             </button>
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 rounded-b-2xl">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={onSkip}
-              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-            >
-              Skip for now
-            </button>
-            <button
-              onClick={onClose}
-              className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
-
-export default SignInPopup;

@@ -108,6 +108,7 @@
     "next": "15.5.1",
     "next-auth": "^4.24.11",
     "node-cron": "^4.2.1",
+    "node-fetch": "^2.7.0",
     "puppeteer": "^24.17.1",
     "react": "^18.3.1",
     "react-day-picker": "^9.11.0",

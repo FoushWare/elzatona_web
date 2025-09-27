@@ -30,6 +30,7 @@ import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import { MarkdownQuestionExtractor } from '@/components/MarkdownQuestionExtractor';
 import { QuestionEditModal } from '@/components/QuestionEditModal';
 import { QuestionViewModal } from '@/components/QuestionViewModal';
+import { EnhancedQuestionService } from '@/lib/enhanced-question-schema';
 
 export default function QuestionsManagementPage() {
   const {
@@ -54,13 +55,25 @@ export default function QuestionsManagementPage() {
   const [editingQuestion, setEditingQuestion] = useState<any>(null);
   const [viewingQuestion, setViewingQuestion] = useState<any>(null);
   const [showDebugInfo, setShowDebugInfo] = useState(false);
+  const [topics, setTopics] = useState([]);
+
+  // Load topics
+  const loadTopics = useCallback(async () => {
+    try {
+      const topicsData = await EnhancedQuestionService.getTopics();
+      setTopics(topicsData);
+    } catch (error) {
+      console.error('Failed to load topics:', error);
+    }
+  }, []);
 
   // Load data on component mount
   useEffect(() => {
     loadQuestions();
     loadLearningPaths();
     loadStats();
-  }, [loadQuestions, loadLearningPaths, loadStats]);
+    loadTopics();
+  }, [loadQuestions, loadLearningPaths, loadStats, loadTopics]);
 
   // Get unique categories and topics for filters
   const categories = useMemo(() => {
@@ -68,10 +81,14 @@ export default function QuestionsManagementPage() {
     return Array.from(cats).sort();
   }, [questions]);
 
-  const topics = useMemo(() => {
-    const tops = new Set(questions.map(q => q.topicId).filter(Boolean));
-    return Array.from(tops).sort();
-  }, [questions]);
+  // Helper function to get topic name by ID
+  const getTopicName = useCallback(
+    (topicId: string) => {
+      const topic = topics.find(t => t.id === topicId);
+      return topic?.name || topicId; // Fallback to ID if topic not found
+    },
+    [topics]
+  );
 
   // Deduplicate learning paths to avoid duplicate keys
   const uniqueLearningPaths = useMemo(() => {
@@ -364,8 +381,8 @@ export default function QuestionsManagementPage() {
                 <SelectContent>
                   <SelectItem value="all">All Topics</SelectItem>
                   {topics.map(topic => (
-                    <SelectItem key={topic} value={topic}>
-                      {topic}
+                    <SelectItem key={topic.id} value={topic.id}>
+                      {topic.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -418,16 +435,18 @@ export default function QuestionsManagementPage() {
               {filteredQuestions.map(question => (
                 <div
                   key={question.id}
-                  className="border rounded-lg p-4 hover:bg-gray-50"
+                  className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h3 className="font-medium mb-2">{question.question}</h3>
+                      <h3 className="font-medium mb-2">{question.title}</h3>
                       <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                        {question.answer}
+                        {question.content}
                       </p>
                       <div className="flex items-center gap-2">
-                        <Badge variant="outline">{question.category}</Badge>
+                        <Badge variant="outline">
+                          Category: {question.category}
+                        </Badge>
                         <Badge
                           variant={
                             question.difficulty === 'easy'
@@ -441,18 +460,20 @@ export default function QuestionsManagementPage() {
                         </Badge>
                         {question.learningPath && (
                           <Badge variant="outline">
-                            {question.learningPath}
+                            Path: {question.learningPath}
                           </Badge>
                         )}
                         {question.topicId && (
-                          <Badge variant="outline">{question.topicId}</Badge>
+                          <Badge variant="outline">
+                            Topic: {getTopicName(question.topicId)}
+                          </Badge>
                         )}
                         <span className="text-xs text-muted-foreground">
                           {new Date(question.createdAt).toLocaleDateString()}
                         </span>
                       </div>
                       {showDebugInfo && (
-                        <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
+                        <div className="mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded text-xs">
                           <p>
                             <strong>ID:</strong> {question.id}
                           </p>
@@ -512,7 +533,8 @@ export default function QuestionsManagementPage() {
       {editingQuestion && (
         <QuestionEditModal
           question={editingQuestion}
-          onSave={handleQuestionSaved}
+          learningPaths={uniqueLearningPaths}
+          onSuccess={handleQuestionSaved}
           onClose={() => setEditingQuestion(null)}
         />
       )}
