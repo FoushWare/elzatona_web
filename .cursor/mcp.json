@@ -25,6 +25,10 @@
 		  "firebase": {
 			"command": "npx",
 			"args": ["-y", "firebase-tools@latest", "experimental:mcp"]
+		  },
+		  "chrome-devtools": {
+			"command": "npx",
+			"args": ["-y", "chrome-devtools-mcp@latest"]
 		  }
 	}
 }

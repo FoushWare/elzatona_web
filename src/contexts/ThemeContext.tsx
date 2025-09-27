@@ -12,30 +12,39 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  // Always start with the same initial state (light) to prevent hydration mismatch
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     // Load theme preference from localStorage on mount (client-side only)
+    let theme = false; // default to light
+
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme) {
-        setIsDarkMode(savedTheme === 'dark');
+        theme = savedTheme === 'dark';
       } else {
-        // Default to dark mode
-        setIsDarkMode(true);
+        // Default to dark mode if no preference saved
+        theme = true;
+        localStorage.setItem('theme', 'dark');
       }
-      
+
       // Debug logging
       console.log(
         'ThemeContext: Initial theme loaded:',
         savedTheme || 'dark (default)'
       );
     }
+
+    setIsDarkMode(theme);
     setIsLoaded(true);
   }, []);
 
   useEffect(() => {
+    // Only run after initial load to prevent hydration mismatch
+    if (!isLoaded) return;
+
     // Save theme preference to localStorage whenever it changes (client-side only)
     if (typeof window !== 'undefined') {
       localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
@@ -58,10 +67,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Debug logging
-      console.log('ThemeContext: Theme applied:', isDarkMode ? 'dark' : 'light');
+      console.log(
+        'ThemeContext: Theme applied:',
+        isDarkMode ? 'dark' : 'light'
+      );
       console.log('ThemeContext: Root classes:', root.className);
     }
-  }, [isDarkMode]);
+  }, [isDarkMode, isLoaded]);
 
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;

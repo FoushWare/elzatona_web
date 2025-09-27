@@ -28,9 +28,16 @@ export default function LearningPlanDetailPage() {
   const { isAuthenticated, user } = useFirebaseAuth();
   const { templates, isLoading, getTemplate } = useLearningPlanTemplates();
   const [isStarting, setIsStarting] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const planId = params.planId as string;
   const plan = getTemplate(planId);
+
+  // Add loading state for navigation
+  const handleBackClick = () => {
+    setIsNavigating(true);
+    router.push('/guided-learning');
+  };
 
   const handleStartPlan = async (selectedPlan: NonNullable<typeof plan>) => {
     if (!isAuthenticated) {
@@ -67,9 +74,14 @@ export default function LearningPlanDetailPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 animate-spin text-indigo-600 mx-auto mb-4" />
+          <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <Loader2 className="w-10 h-10 animate-spin text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            Loading Plan Details
+          </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Loading plan details...
+            Fetching your learning plan...
           </p>
         </div>
       </div>
@@ -102,11 +114,16 @@ export default function LearningPlanDetailPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <button
-          onClick={() => router.push('/guided-learning')}
-          className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors mb-8"
+          onClick={handleBackClick}
+          disabled={isNavigating}
+          className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors mb-8 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Back to Learning Plans</span>
+          {isNavigating ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <ArrowLeft className="w-5 h-5" />
+          )}
+          <span>{isNavigating ? 'Loading...' : 'Back to Learning Plans'}</span>
         </button>
 
         {/* Plan Header */}
@@ -194,41 +211,66 @@ export default function LearningPlanDetailPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {plan.sections.map((section, index) => (
-              <div
-                key={section.id}
-                className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-sm font-bold text-indigo-600 dark:text-indigo-400">
-                      {index + 1}
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {section.name}
-                    </h3>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {section.questions}
-                    </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      questions
-                    </div>
-                  </div>
-                </div>
+            {plan.sections.map((section, index) => {
+              // Calculate dynamic question count based on section weight and total questions
+              const sectionQuestionCount = Math.round(
+                (plan.totalQuestions * section.weight) / 100
+              );
 
-                <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mb-2">
-                  <div
-                    className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-500"
-                    style={{ width: `${section.weight}%` }}
-                  />
+              return (
+                <div
+                  key={section.id}
+                  className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                  onClick={() => {
+                    // This will be used to auto-select category in questions manager
+                    console.log('Section clicked:', section);
+                    // Store the section category for use in questions manager
+                    if (section.category) {
+                      localStorage.setItem(
+                        'selectedSectionCategory',
+                        section.category
+                      );
+                    }
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                        {index + 1}
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                          {section.name}
+                        </h3>
+                        {section.category && (
+                          <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                            Category: {section.category}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                        {sectionQuestionCount}
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        questions
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mb-2">
+                    <div
+                      className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${section.weight}%` }}
+                    />
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    {section.weight}% of total plan
+                  </div>
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  {section.weight}% of total plan
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

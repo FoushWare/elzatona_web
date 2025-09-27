@@ -492,6 +492,74 @@ class FirestoreService {
       throw error;
     }
   }
+
+  // Learning Path Management
+  async getLearningPath(pathId: string): Promise<any | null> {
+    if (!db) {
+      console.warn('Firestore not available');
+      return null;
+    }
+
+    try {
+      const pathRef = doc(db, 'learningPaths', pathId);
+      const pathSnap = await getDoc(pathRef);
+      
+      if (pathSnap.exists()) {
+        return {
+          id: pathSnap.id,
+          ...pathSnap.data(),
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error getting learning path:', error);
+      return null;
+    }
+  }
+
+  async updateLearningPath(pathId: string, data: any): Promise<any | null> {
+    if (!db) {
+      console.warn('Firestore not available');
+      return null;
+    }
+
+    try {
+      const pathRef = doc(db, 'learningPaths', pathId);
+      await updateDoc(pathRef, {
+        ...data,
+        updatedAt: serverTimestamp(),
+      });
+      
+      // Return updated data
+      const updatedSnap = await getDoc(pathRef);
+      if (updatedSnap.exists()) {
+        return {
+          id: updatedSnap.id,
+          ...updatedSnap.data(),
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error updating learning path:', error);
+      return null;
+    }
+  }
+
+  async deleteLearningPath(pathId: string): Promise<boolean> {
+    if (!db) {
+      console.warn('Firestore not available');
+      return false;
+    }
+
+    try {
+      const pathRef = doc(db, 'learningPaths', pathId);
+      await pathRef.delete();
+      return true;
+    } catch (error) {
+      console.error('Error deleting learning path:', error);
+      return false;
+    }
+  }
 }
 
 export const firestoreService = new FirestoreService();
