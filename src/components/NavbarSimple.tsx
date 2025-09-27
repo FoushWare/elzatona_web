@@ -21,6 +21,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { LearningModeSwitcher } from './LearningModeSwitcher';
 import { OnboardingTrigger } from './OnboardingTrigger';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -206,6 +207,9 @@ export const NavbarSimple: React.FC = () => {
 
           {/* Right Section - Desktop Only */}
           <div className="hidden lg:flex items-center space-x-4">
+            {/* Language Switcher */}
+            <LanguageSwitcher isScrolled={isScrolled} />
+
             {/* Learning Mode Switcher - Always show */}
             <LearningModeSwitcher isScrolled={isScrolled} />
 
@@ -267,6 +271,9 @@ export const NavbarSimple: React.FC = () => {
 
           {/* Mobile/Tablet Menu Button */}
           <div className="flex items-center space-x-1 sm:space-x-2 lg:hidden">
+            {/* Language Switcher for Mobile/Tablet */}
+            <LanguageSwitcher isScrolled={isScrolled} />
+
             {/* Learning Mode Switcher for Mobile/Tablet - Hidden on very small screens */}
             <div className="hidden xs:block">
               <LearningModeSwitcher isScrolled={isScrolled} />

@@ -1,21 +1,29 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslation } from '@/hooks/useTranslation';
+import React, { useState } from 'react';
+import { Globe } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
-export default function LanguageSwitcher() {
-  const { t, locale, changeLanguage } = useTranslation();
+interface LanguageSwitcherProps {
+  isScrolled: boolean;
+}
+
+export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
+  isScrolled,
+}) => {
+  const { language, setLanguage, isRTL } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
   const languages = [
     { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'ar', name: 'العربية', flag: '🇸🇦' },
-  ];
+  ] as const;
 
-  const currentLanguage = languages.find(lang => lang.code === locale);
+  const currentLanguage =
+    languages.find(lang => lang.code === language) || languages[0];
 
-  const handleLanguageChange = (languageCode: string) => {
-    changeLanguage(languageCode);
+  const handleLanguageChange = (newLanguage: 'en' | 'ar') => {
+    setLanguage(newLanguage);
     setIsOpen(false);
   };
 
@@ -23,26 +31,16 @@ export default function LanguageSwitcher() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-        aria-label={t('navigation.language')}
+        className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors duration-200 ${
+          isScrolled
+            ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
+            : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+        }`}
+        aria-label="Change language"
       >
-        <span className="text-lg">{currentLanguage?.flag}</span>
-        <span className="hidden sm:inline">{currentLanguage?.name}</span>
-        <svg
-          className={`w-4 h-4 transition-transform duration-200 ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        <Globe size={18} />
+        <span className="text-sm font-medium">{currentLanguage.flag}</span>
+        <span className="text-xs">{currentLanguage.code.toUpperCase()}</span>
       </button>
 
       {isOpen && (
@@ -54,39 +52,33 @@ export default function LanguageSwitcher() {
           />
 
           {/* Dropdown */}
-          <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20">
-            <div className="py-1">
-              {languages.map(language => (
-                <button
-                  key={language.code}
-                  onClick={() => handleLanguageChange(language.code)}
-                  className={`w-full flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 ${
-                    locale === language.code
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'text-gray-700'
-                  }`}
-                >
-                  <span className="text-lg">{language.flag}</span>
-                  <span>{language.name}</span>
-                  {locale === language.code && (
-                    <svg
-                      className="w-4 h-4 ml-auto"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  )}
-                </button>
-              ))}
-            </div>
+          <div
+            className={`absolute top-full mt-2 z-20 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 min-w-[160px] ${
+              isRTL ? 'left-0 text-right' : 'right-0 text-left'
+            }`}
+          >
+            {languages.map(lang => (
+              <button
+                key={lang.code}
+                onClick={() => handleLanguageChange(lang.code as 'en' | 'ar')}
+                className={`w-full flex items-center space-x-3 px-4 py-3 text-sm transition-colors duration-200 first:rounded-t-lg last:rounded-b-lg ${
+                  language === lang.code
+                    ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                } ${isRTL ? 'flex-row-reverse space-x-reverse' : ''}`}
+              >
+                <span className="text-lg">{lang.flag}</span>
+                <span className="font-medium">{lang.name}</span>
+                {language === lang.code && (
+                  <span className="ml-auto text-indigo-600 dark:text-indigo-400">
+                    ✓
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
         </>
       )}
     </div>
   );
-}
+};

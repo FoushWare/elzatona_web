@@ -5,11 +5,19 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 
 export interface LearningPath {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  estimatedTime: number;
   questionCount: number;
+  icon: string;
+  color: string;
+  order: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  difficulty?: 'beginner' | 'intermediate' | 'advanced'; // optional
+  estimatedTime?: number; // in minutes - optional
+  category?: string; // optional
+  title?: string; // for backward compatibility
   resources?: Array<{
     id: string;
     title: string;
@@ -18,6 +26,11 @@ export interface LearningPath {
   }>;
   targetSkills?: string[];
   prerequisites?: string[];
+  sectors?: Array<{
+    id: string;
+    name: string;
+    questionCount: number;
+  }>;
 }
 
 interface LearningPathCardProps {
@@ -68,8 +81,10 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
       <div className="flex items-center justify-between">
         {/* Left side - Icon and Title */}
         <div className="flex items-center space-x-4">
-          <div className="text-2xl">{getPathIcon(path.id)}</div>
-          <h3 className="text-white font-medium text-lg">{path.title}</h3>
+          <div className="text-2xl">{path.icon || getPathIcon(path.id)}</div>
+          <h3 className="text-white font-medium text-lg">
+            {path.name || path.title}
+          </h3>
         </div>
 
         {/* Right side - Question count and dropdown */}
@@ -127,6 +142,36 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             </div>
           )}
 
+          {/* Sections */}
+          {path.sectors && path.sectors.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-white font-medium mb-2">Sections</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {path.sectors.map(section => (
+                  <div
+                    key={section.id}
+                    className="flex items-center justify-between p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <span className="text-lg">📚</span>
+                      <span className="text-gray-300 text-sm font-medium">
+                        {section.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <span className="text-blue-400 text-sm font-semibold">
+                        {section.questionCount}
+                      </span>
+                      <span className="text-gray-400 text-xs">
+                        {section.questionCount === 1 ? 'question' : 'questions'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Resources */}
           {path.resources && path.resources.length > 0 && (
             <div className="mb-4">
@@ -156,8 +201,8 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
             </div>
           )}
 
-          {/* Action Button */}
-          <div className="mt-4">
+          {/* Action Buttons */}
+          <div className="mt-4 space-y-2">
             <button
               onClick={e => {
                 e.stopPropagation();
@@ -167,6 +212,19 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
               className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200"
             >
               Start Learning Path
+            </button>
+
+            {/* Resources Button */}
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                // Navigate to resources page for this learning path
+                window.location.href = `/learning-paths/${path.id}/resources`;
+              }}
+              className="w-full bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2"
+            >
+              <span>📚</span>
+              <span>Resources</span>
             </button>
           </div>
         </div>

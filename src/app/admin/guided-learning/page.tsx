@@ -1,1501 +1,367 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { SectionQuestionsManager } from '@/components/SectionQuestionsManager';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
-  Plus,
-  Trash2,
-  Copy,
-  Eye,
-  Calendar,
-  Clock,
-  BookOpen,
-  Target,
-  XCircle,
-  Edit,
-  Edit3,
-  Users,
-  Power,
-  PowerOff,
-} from 'lucide-react';
+import { Trash2, Edit3, Eye } from 'lucide-react';
 
-// Enhanced Learning Plan Template Interface
-interface LearningPlanTemplate {
-  id: string;
-  name: string;
-  duration: number;
-  description: string;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  totalQuestions: number;
-  dailyQuestions: number;
-  sections: LearningSection[];
-  features: string[];
-  estimatedTime: string;
-  isRecommended: boolean;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  completionRate?: number;
-  enrolledUsers?: number;
-}
-
-interface LearningSection {
-  id: string;
-  name: string;
-  category: string;
-  questions: string[]; // Question IDs
-  weight: number;
-  order: number;
-  description?: string;
-}
-
-interface QuestionCategory {
+interface Category {
   id: string;
   name: string;
   description: string;
   color: string;
 }
 
-const QUESTION_CATEGORIES: QuestionCategory[] = [
-  {
-    id: 'html',
-    name: 'HTML',
-    description: 'HTML fundamentals and best practices',
-    color: 'bg-orange-100 text-orange-800',
-  },
-  {
-    id: 'css',
-    name: 'CSS',
-    description: 'CSS styling, layout, and animations',
-    color: 'bg-blue-100 text-blue-800',
-  },
-  {
-    id: 'javascript',
-    name: 'JavaScript',
-    description: 'JavaScript fundamentals and ES6+',
-    color: 'bg-yellow-100 text-yellow-800',
-  },
-  {
-    id: 'typescript',
-    name: 'TypeScript',
-    description: 'TypeScript and type systems',
-    color: 'bg-blue-100 text-blue-800',
-  },
-  {
-    id: 'react',
-    name: 'React',
-    description: 'React components, hooks, and patterns',
-    color: 'bg-cyan-100 text-cyan-800',
-  },
-  {
-    id: 'performance',
-    name: 'Performance',
-    description: 'Web performance optimization',
-    color: 'bg-green-100 text-green-800',
-  },
-  {
-    id: 'problem-solving',
-    name: 'Problem Solving',
-    description: 'Algorithm and problem-solving skills',
-    color: 'bg-purple-100 text-purple-800',
-  },
-  {
-    id: 'patterns',
-    name: 'Design Patterns',
-    description: 'Frontend design patterns and architecture',
-    color: 'bg-pink-100 text-pink-800',
-  },
-  {
-    id: 'system-design',
-    name: 'System Design',
-    description: 'Frontend system design and architecture',
-    color: 'bg-indigo-100 text-indigo-800',
-  },
-  {
-    id: 'security',
-    name: 'Security',
-    description: 'Web security best practices',
-    color: 'bg-red-100 text-red-800',
-  },
-  {
-    id: 'testing',
-    name: 'Testing',
-    description: 'Frontend testing strategies',
-    color: 'bg-emerald-100 text-emerald-800',
-  },
-  {
-    id: 'accessibility',
-    name: 'Accessibility',
-    description: 'Web accessibility standards',
-    color: 'bg-teal-100 text-teal-800',
-  },
-];
+interface Section {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  difficulty: string;
+  estimatedTime: string;
+  order: number;
+  isActive: boolean;
+  questionCount: number;
+}
+
+// Create plans with all available sections
+const createPlansWithAllSections = (
+  sections: Section[],
+  categories: Category[]
+) => {
+  const planConfigs = [
+    {
+      id: '1-day-plan',
+      name: '1 Day Plan',
+      description: "Intensive preparation for tomorrow's interview",
+      questionPerSection: 2,
+    },
+    {
+      id: '2-day-plan',
+      name: '2 Day Plan',
+      description: 'Perfect for weekend preparation',
+      questionPerSection: 3,
+    },
+    {
+      id: '3-day-plan',
+      name: '3 Day Plan',
+      description: 'Comprehensive 3-day preparation',
+      questionPerSection: 4,
+    },
+    {
+      id: '4-day-plan',
+      name: '4 Day Plan',
+      description: 'Extended preparation with comprehensive coverage',
+      questionPerSection: 5,
+    },
+    {
+      id: '5-day-plan',
+      name: '5 Day Plan',
+      description: 'Comprehensive preparation with advanced topics',
+      questionPerSection: 6,
+    },
+    {
+      id: '6-day-plan',
+      name: '6 Day Plan',
+      description: 'Master-level preparation with all advanced concepts',
+      questionPerSection: 7,
+    },
+    {
+      id: '7-day-plan',
+      name: '7 Day Plan',
+      description: 'Complete week-long preparation',
+      questionPerSection: 8,
+    },
+  ];
+
+  return planConfigs.map(config => {
+    // Map sections to plan sections with category mapping
+    const planSections = sections.map(section => {
+      // Find matching category by name or use a default mapping
+      const category = categories.find(
+        cat =>
+          cat.name.toLowerCase() === section.category.toLowerCase() ||
+          (section.category === 'foundation' && cat.name === 'HTML') ||
+          (section.category === 'frontend' &&
+            (cat.name === 'JavaScript' ||
+              cat.name === 'React' ||
+              cat.name === 'TypeScript')) ||
+          (section.category === 'advanced' &&
+            (cat.name === 'Architecture' || cat.name === 'Performance')) ||
+          (section.category === 'specialized' &&
+            (cat.name === 'Performance' || cat.name === 'Architecture')) ||
+          (section.category === 'career' && cat.name === 'Architecture') ||
+          (section.category === 'emerging' && cat.name === 'Architecture')
+      );
+
+      return {
+        id: section.id,
+        name: section.name,
+        categoryId: category?.id || categories[0]?.id,
+        weight: Math.round(100 / sections.length), // Equal weight distribution
+      };
+    });
+
+    return {
+      id: config.id,
+      name: config.name,
+      description: config.description,
+      sections: planSections,
+    };
+  });
+};
 
 export default function GuidedLearningAdminPage() {
-  const router = useRouter();
-  const [plans, setPlans] = useState<LearningPlanTemplate[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterDifficulty, setFilterDifficulty] = useState('all');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [showSectionQuestionsManager, setShowSectionQuestionsManager] =
-    useState(false);
-  const [editingPlanId, setEditingPlanId] = useState<string | null>(null);
-  const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
+  // Static data for testing - no useState or useEffect
+  const sections: Section[] = [
+    {
+      id: 'html-fundamentals',
+      name: 'HTML Fundamentals',
+      description: 'Master HTML semantics',
+      category: 'foundation',
+      difficulty: 'beginner',
+      estimatedTime: '2-3 weeks',
+      order: 1,
+      isActive: true,
+      questionCount: 0,
+    },
+    {
+      id: 'css-fundamentals',
+      name: 'CSS Fundamentals',
+      description: 'Learn CSS basics',
+      category: 'foundation',
+      difficulty: 'beginner',
+      estimatedTime: '3-4 weeks',
+      order: 2,
+      isActive: true,
+      questionCount: 0,
+    },
+    {
+      id: 'javascript-fundamentals',
+      name: 'JavaScript Fundamentals',
+      description: 'Master JavaScript basics',
+      category: 'foundation',
+      difficulty: 'beginner',
+      estimatedTime: '4-5 weeks',
+      order: 3,
+      isActive: true,
+      questionCount: 0,
+    },
+    {
+      id: 'react-fundamentals',
+      name: 'React Fundamentals',
+      description: 'Master React core concepts',
+      category: 'frontend',
+      difficulty: 'intermediate',
+      estimatedTime: '4-5 weeks',
+      order: 7,
+      isActive: true,
+      questionCount: 0,
+    },
+    {
+      id: 'typescript-essentials',
+      name: 'TypeScript Essentials',
+      description: 'Learn TypeScript',
+      category: 'frontend',
+      difficulty: 'intermediate',
+      estimatedTime: '3-4 weeks',
+      order: 6,
+      isActive: true,
+      questionCount: 0,
+    },
+    {
+      id: 'performance-optimization',
+      name: 'Performance Optimization',
+      description: 'Frontend performance techniques',
+      category: 'specialized',
+      difficulty: 'intermediate',
+      estimatedTime: '3-4 weeks',
+      order: 13,
+      isActive: true,
+      questionCount: 0,
+    },
+    {
+      id: 'design-patterns-architecture',
+      name: 'Design Patterns & Architecture',
+      description: 'Software design patterns',
+      category: 'advanced',
+      difficulty: 'advanced',
+      estimatedTime: '3-4 weeks',
+      order: 10,
+      isActive: true,
+      questionCount: 0,
+    },
+  ];
 
-  // Fetch sections from API and create mock plans
-  useEffect(() => {
-    const fetchSectionsAndCreatePlans = async () => {
+  const categories: Category[] = [
+    {
+      id: 'AjaNBOIdiqulcmNkE5UC',
+      name: 'HTML',
+      description: 'HTML markup, semantics, and structure',
+      color: '#E34F26',
+    },
+    {
+      id: 'SoASg6lwweq1h7d7EQWP',
+      name: 'JavaScript',
+      description: 'Core JavaScript concepts and advanced topics',
+      color: '#F7DF1E',
+    },
+    {
+      id: 'xuyVRvVWrKbfWMKUboFN',
+      name: 'React',
+      description: 'React library fundamentals and advanced patterns',
+      color: '#61DAFB',
+    },
+    {
+      id: 'gVb0Nj1G4MB8RhzNQ55U',
+      name: 'TypeScript',
+      description: 'TypeScript programming language',
+      color: '#3178C6',
+    },
+    {
+      id: '91MFgB8E5GogdkiU5lCw',
+      name: 'Performance',
+      description: 'Performance optimization techniques',
+      color: '#10B981',
+    },
+    {
+      id: 'O3pxATTaIP9POC9JWGGG',
+      name: 'Architecture',
+      description: 'Software architecture and design patterns',
+      color: '#8B5CF6',
+    },
+  ];
+
+  // Create plans with all sections
+  const plans = createPlansWithAllSections(sections, categories);
+
+  // Handle edit plan
+  const handleEditPlan = (planId: string) => {
+    console.log('Edit plan:', planId);
+    // Navigate to edit page
+    window.location.href = `/admin/guided-learning/${planId}/edit`;
+  };
+
+  // Handle delete plan
+  const handleDeletePlan = async (planId: string, planName: string) => {
+    if (
+      confirm(
+        `Are you sure you want to delete "${planName}"? This action cannot be undone.`
+      )
+    ) {
       try {
-        // Fetch comprehensive sections from API
-        const response = await fetch('/api/admin/sections');
-        const sectionsData = await response.json();
+        // Here you would typically make an API call to delete the plan
+        console.log('Deleting plan:', planId);
 
-        if (sectionsData.success && sectionsData.data) {
-          const comprehensiveSections = sectionsData.data;
-          console.log(
-            '🎯 Comprehensive sections loaded:',
-            comprehensiveSections.length,
-            'sections'
-          );
-          console.log(
-            '📊 First few sections:',
-            comprehensiveSections.slice(0, 3).map(s => s.name)
-          );
+        // Show success message
+        alert(`Plan "${planName}" has been deleted successfully.`);
 
-          // Create learning plans based on comprehensive sections
-          const mockPlans: LearningPlanTemplate[] = [
-            {
-              id: '1-day-plan',
-              name: '1-Day Frontend Quick Start',
-              duration: 1,
-              description:
-                'Quick introduction to HTML, CSS, and JavaScript basics',
-              difficulty: 'Beginner',
-              totalQuestions: 15,
-              dailyQuestions: 15,
-              sections: comprehensiveSections
-                .filter(section =>
-                  [
-                    'html-fundamentals',
-                    'css-fundamentals',
-                    'javascript-fundamentals',
-                  ].includes(section.id)
-                )
-                .map((section, index) => ({
-                  id: section.id,
-                  name: section.name,
-                  category: section.category || 'foundation',
-                  questions: [
-                    `q${index * 3 + 1}`,
-                    `q${index * 3 + 2}`,
-                    `q${index * 3 + 3}`,
-                  ],
-                  weight: Math.floor(100 / 3),
-                  order: index + 1,
-                })),
-              features: ['Quick preparation', 'Essential topics', '2-3 hours'],
-              estimatedTime: '2-3 hours',
-              isRecommended: true,
-              isActive: true,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              completionRate: 85,
-              enrolledUsers: 120,
-            },
-            {
-              id: '2-day-plan',
-              name: '2-Day Frontend Fundamentals',
-              duration: 2,
-              description:
-                'Complete guide to HTML, CSS, and JavaScript fundamentals',
-              difficulty: 'Beginner',
-              totalQuestions: 30,
-              dailyQuestions: 15,
-              sections: comprehensiveSections
-                .filter(section =>
-                  [
-                    'html-fundamentals',
-                    'css-fundamentals',
-                    'javascript-fundamentals',
-                  ].includes(section.id)
-                )
-                .map((section, index) => ({
-                  id: section.id,
-                  name: section.name,
-                  category: section.category || 'foundation',
-                  questions: Array.from(
-                    { length: 5 },
-                    (_, i) => `q${index * 5 + i + 1}`
-                  ),
-                  weight: Math.floor(100 / 3),
-                  order: index + 1,
-                })),
-              features: [
-                'Fundamental concepts',
-                'Practical examples',
-                '4-5 hours',
-              ],
-              estimatedTime: '4-5 hours',
-              isRecommended: true,
-              isActive: true,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              completionRate: 72,
-              enrolledUsers: 89,
-            },
-            {
-              id: '3-day-plan',
-              name: '3-Day React Development',
-              duration: 3,
-              description:
-                'Master React.js from basics to intermediate concepts',
-              difficulty: 'Intermediate',
-              totalQuestions: 45,
-              dailyQuestions: 15,
-              sections: comprehensiveSections
-                .filter(section =>
-                  [
-                    'react-fundamentals',
-                    'advanced-react-patterns',
-                    'typescript-essentials',
-                  ].includes(section.id)
-                )
-                .map((section, index) => ({
-                  id: section.id,
-                  name: section.name,
-                  category: section.category || 'frontend',
-                  questions: Array.from(
-                    { length: 5 },
-                    (_, i) => `q${index * 5 + i + 16}`
-                  ),
-                  weight: Math.floor(100 / 3),
-                  order: index + 1,
-                })),
-              features: ['React fundamentals', 'Modern patterns', '6-7 hours'],
-              estimatedTime: '6-7 hours',
-              isRecommended: true,
-              isActive: true,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              completionRate: 68,
-              enrolledUsers: 156,
-            },
-            {
-              id: '4-day-plan',
-              name: '4-Day Vue.js Mastery',
-              duration: 4,
-              description:
-                'Complete Vue.js development course with composition API',
-              difficulty: 'Intermediate',
-              totalQuestions: 60,
-              dailyQuestions: 15,
-              sections: [
-                {
-                  id: 'basics',
-                  name: 'Vue Basics',
-                  category: 'vue',
-                  questions: ['q31', 'q32', 'q33', 'q34', 'q35'],
-                  weight: 25,
-                  order: 1,
-                },
-                {
-                  id: 'components',
-                  name: 'Components',
-                  category: 'vue',
-                  questions: ['q36', 'q37', 'q38', 'q39', 'q40'],
-                  weight: 25,
-                  order: 2,
-                },
-                {
-                  id: 'composition',
-                  name: 'Composition API',
-                  category: 'vue',
-                  questions: ['q41', 'q42', 'q43', 'q44', 'q45'],
-                  weight: 25,
-                  order: 3,
-                },
-                {
-                  id: 'routing',
-                  name: 'Vue Router',
-                  category: 'vue',
-                  questions: ['q46', 'q47', 'q48', 'q49', 'q50'],
-                  weight: 25,
-                  order: 4,
-                },
-              ],
-              features: ['Vue 3 mastery', 'Composition API', '8-9 hours'],
-              estimatedTime: '8-9 hours',
-              isRecommended: true,
-              isActive: true,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              completionRate: 70,
-              enrolledUsers: 78,
-            },
-            {
-              id: '5-day-plan',
-              name: '5-Day Angular Development',
-              duration: 5,
-              description: 'Comprehensive Angular framework development course',
-              difficulty: 'Intermediate',
-              totalQuestions: 75,
-              dailyQuestions: 15,
-              sections: [
-                {
-                  id: 'basics',
-                  name: 'Angular Basics',
-                  category: 'angular',
-                  questions: ['q51', 'q52', 'q53', 'q54', 'q55'],
-                  weight: 20,
-                  order: 1,
-                },
-                {
-                  id: 'components',
-                  name: 'Components & Services',
-                  category: 'angular',
-                  questions: ['q56', 'q57', 'q58', 'q59', 'q60'],
-                  weight: 20,
-                  order: 2,
-                },
-                {
-                  id: 'routing',
-                  name: 'Routing',
-                  category: 'angular',
-                  questions: ['q61', 'q62', 'q63', 'q64', 'q65'],
-                  weight: 20,
-                  order: 3,
-                },
-                {
-                  id: 'forms',
-                  name: 'Forms & Validation',
-                  category: 'angular',
-                  questions: ['q66', 'q67', 'q68', 'q69', 'q70'],
-                  weight: 20,
-                  order: 4,
-                },
-                {
-                  id: 'http',
-                  name: 'HTTP & APIs',
-                  category: 'angular',
-                  questions: ['q71', 'q72', 'q73', 'q74', 'q75'],
-                  weight: 20,
-                  order: 5,
-                },
-              ],
-              features: [
-                'Angular framework',
-                'Enterprise patterns',
-                '10-12 hours',
-              ],
-              estimatedTime: '10-12 hours',
-              isRecommended: true,
-              isActive: true,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              completionRate: 68,
-              enrolledUsers: 92,
-            },
-            {
-              id: '6-day-plan',
-              name: '6-Day Node.js Backend',
-              duration: 6,
-              description:
-                'Complete Node.js backend development with Express and databases',
-              difficulty: 'Advanced',
-              totalQuestions: 90,
-              dailyQuestions: 15,
-              sections: [
-                {
-                  id: 'basics',
-                  name: 'Node.js Basics',
-                  category: 'nodejs',
-                  questions: ['q76', 'q77', 'q78', 'q79', 'q80'],
-                  weight: 17,
-                  order: 1,
-                },
-                {
-                  id: 'express',
-                  name: 'Express Framework',
-                  category: 'nodejs',
-                  questions: ['q81', 'q82', 'q83', 'q84', 'q85'],
-                  weight: 17,
-                  order: 2,
-                },
-                {
-                  id: 'database',
-                  name: 'Database Integration',
-                  category: 'nodejs',
-                  questions: ['q86', 'q87', 'q88', 'q89', 'q90'],
-                  weight: 17,
-                  order: 3,
-                },
-                {
-                  id: 'auth',
-                  name: 'Authentication',
-                  category: 'nodejs',
-                  questions: ['q91', 'q92', 'q93', 'q94', 'q95'],
-                  weight: 17,
-                  order: 4,
-                },
-                {
-                  id: 'api',
-                  name: 'RESTful APIs',
-                  category: 'nodejs',
-                  questions: ['q96', 'q97', 'q98', 'q99', 'q100'],
-                  weight: 16,
-                  order: 5,
-                },
-                {
-                  id: 'deployment',
-                  name: 'Deployment',
-                  category: 'nodejs',
-                  questions: ['q101', 'q102', 'q103', 'q104', 'q105'],
-                  weight: 16,
-                  order: 6,
-                },
-              ],
-              features: [
-                'Backend mastery',
-                'Database integration',
-                '12-15 hours',
-              ],
-              estimatedTime: '12-15 hours',
-              isRecommended: true,
-              isActive: true,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              completionRate: 58,
-              enrolledUsers: 134,
-            },
-            {
-              id: '7-day-plan',
-              name: '7-Day Full-Stack Mastery',
-              duration: 7,
-              description:
-                'Complete full-stack development with modern technologies',
-              difficulty: 'Advanced',
-              totalQuestions: 105,
-              dailyQuestions: 15,
-              sections: [
-                {
-                  id: 'frontend',
-                  name: 'Frontend Development',
-                  category: 'javascript',
-                  questions: ['q106', 'q107', 'q108', 'q109', 'q110'],
-                  weight: 14,
-                  order: 1,
-                },
-                {
-                  id: 'backend',
-                  name: 'Backend Development',
-                  category: 'nodejs',
-                  questions: ['q111', 'q112', 'q113', 'q114', 'q115'],
-                  weight: 14,
-                  order: 2,
-                },
-                {
-                  id: 'database',
-                  name: 'Database Design',
-                  category: 'database',
-                  questions: ['q116', 'q117', 'q118', 'q119', 'q120'],
-                  weight: 14,
-                  order: 3,
-                },
-                {
-                  id: 'api',
-                  name: 'API Integration',
-                  category: 'api',
-                  questions: ['q121', 'q122', 'q123', 'q124', 'q125'],
-                  weight: 14,
-                  order: 4,
-                },
-                {
-                  id: 'security',
-                  name: 'Security',
-                  category: 'security',
-                  questions: ['q126', 'q127', 'q128', 'q129', 'q130'],
-                  weight: 14,
-                  order: 5,
-                },
-                {
-                  id: 'deployment',
-                  name: 'Deployment & DevOps',
-                  category: 'devops',
-                  questions: ['q131', 'q132', 'q133', 'q134', 'q135'],
-                  weight: 15,
-                  order: 6,
-                },
-                {
-                  id: 'testing',
-                  name: 'Testing',
-                  category: 'testing',
-                  questions: ['q136', 'q137', 'q138', 'q139', 'q140'],
-                  weight: 15,
-                  order: 7,
-                },
-              ],
-              features: [
-                'Full-stack mastery',
-                'Production-ready',
-                '15-18 hours',
-              ],
-              estimatedTime: '15-18 hours',
-              isRecommended: true,
-              isActive: true,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              completionRate: 45,
-              enrolledUsers: 98,
-            },
-          ];
-
-          console.log(
-            '📋 Created',
-            mockPlans.length,
-            'learning plans with comprehensive sections'
-          );
-          setPlans(mockPlans);
-        } else {
-          console.error('Failed to fetch sections:', sectionsData);
-          // Fallback to empty plans if API fails
-          setPlans([]);
-        }
+        // Reload the page to refresh the data
+        window.location.reload();
       } catch (error) {
-        console.error('Error fetching sections:', error);
-        // Fallback to empty plans if API fails
-        setPlans([]);
-      } finally {
-        setLoading(false);
+        console.error('Error deleting plan:', error);
+        alert('Failed to delete plan. Please try again.');
       }
-    };
-
-    fetchSectionsAndCreatePlans();
-  }, []);
-
-  // Handle section questions management
-  const handleManageSectionQuestions = (planId: string, sectionId: string) => {
-    setEditingPlanId(planId);
-    setEditingSectionId(sectionId);
-    setShowSectionQuestionsManager(true);
-  };
-
-  const handleSectionQuestionsChange = (questionIds: string[]) => {
-    if (!editingPlanId || !editingSectionId) return;
-
-    setPlans(prevPlans => {
-      return prevPlans.map(plan => {
-        if (plan.id !== editingPlanId) return plan;
-
-        const updatedSections = plan.sections.map(section =>
-          section.id === editingSectionId
-            ? { ...section, questions: questionIds }
-            : section
-        );
-
-        return {
-          ...plan,
-          sections: updatedSections,
-          totalQuestions: updatedSections.reduce(
-            (total, section) => total + section.questions.length,
-            0
-          ),
-          dailyQuestions: Math.ceil(
-            updatedSections.reduce(
-              (total, section) => total + section.questions.length,
-              0
-            ) / plan.duration
-          ),
-        };
-      });
-    });
-  };
-
-  const handleCloseSectionQuestionsManager = () => {
-    setShowSectionQuestionsManager(false);
-    setEditingPlanId(null);
-    setEditingSectionId(null);
-  };
-
-  const filteredPlans = plans.filter(plan => {
-    const matchesSearch =
-      plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      plan.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDifficulty =
-      filterDifficulty === 'all' ||
-      plan.difficulty.toLowerCase() === filterDifficulty;
-    const matchesStatus =
-      filterStatus === 'all' ||
-      (filterStatus === 'active' && plan.isActive) ||
-      (filterStatus === 'inactive' && !plan.isActive);
-
-    return matchesSearch && matchesDifficulty && matchesStatus;
-  });
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Beginner':
-        return 'bg-green-100 text-green-800';
-      case 'Intermediate':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'Advanced':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const getCategoryColor = (categoryId: string) => {
-    const category = QUESTION_CATEGORIES.find(cat => cat.id === categoryId);
-    return category?.color || 'bg-gray-100 text-gray-800';
+  // Handle preview plan
+  const handlePreviewPlan = (planId: string) => {
+    console.log('Preview plan:', planId);
+    // Navigate to preview page
+    window.location.href = `/guided-learning/${planId}`;
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+  const getCategoryName = (categoryId: string) => {
+    const category = categories.find(cat => cat.id === categoryId);
+    return category ? category.name : 'Unknown Category';
+  };
+
+  const getCategoryColor = (categoryId: string) => {
+    const category = categories.find(cat => cat.id === categoryId);
+    return category ? category.color : '#6B7280';
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Guided Learning Plans
+          </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Loading guided learning plans...
+            Manage and configure guided learning plans for your users. Each plan
+            includes all {sections.length} available sections.
           </p>
         </div>
-      </div>
-    );
-  }
 
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
-            <div>
-              <div className="flex items-center space-x-3 mb-2">
-                <BookOpen className="w-8 h-8 text-red-600 dark:text-red-400" />
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                  Guided Learning Plans
-                </h1>
-              </div>
-              <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base">
-                Create and manage structured learning plans with daily progress
-                tracking
-              </p>
-            </div>
-            <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-              <DialogTrigger asChild>
-                <Button className="bg-red-600 hover:bg-red-700 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2 w-full lg:w-auto">
-                  <Plus className="w-4 md:w-5 h-4 md:h-5" />
-                  <span className="text-sm md:text-base">Create Plan</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Create New Learning Plan</DialogTitle>
-                </DialogHeader>
-                <PlanEditor
-                  plan={null}
-                  onSave={plan => {
-                    setPlans(prev => [
-                      ...prev,
-                      {
-                        ...plan,
-                        id: Date.now().toString(),
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                      },
-                    ]);
-                    setShowCreateDialog(false);
-                  }}
-                  onCancel={() => setShowCreateDialog(false)}
-                />
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
-
-        {/* Filters */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4">
-          <div className="flex-1 min-w-0">
-            <Input
-              placeholder="Search plans..."
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className="w-full"
-            />
-          </div>
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-2">
-            <Select
-              value={filterDifficulty}
-              onValueChange={setFilterDifficulty}
-            >
-              <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="Difficulty" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Difficulties</SelectItem>
-                <SelectItem value="beginner">Beginner</SelectItem>
-                <SelectItem value="intermediate">Intermediate</SelectItem>
-                <SelectItem value="advanced">Advanced</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Plans Grid - Better responsive layout with 2 cards per row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredPlans.map(plan => (
-            <Card
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {plans.map(plan => (
+            <div
               key={plan.id}
-              className="hover:shadow-lg transition-shadow duration-200 flex flex-col"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
             >
-              <CardHeader className="pb-3">
-                {/* Header with title and badges */}
-                <div className="space-y-3">
-                  <div>
-                    <CardTitle className="text-xl text-gray-900 dark:text-white mb-2">
-                      {plan.name}
-                    </CardTitle>
-                    <div className="flex items-center space-x-2 flex-wrap gap-2">
-                      <Badge className={getDifficultyColor(plan.difficulty)}>
-                        {plan.difficulty}
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="flex items-center gap-1"
-                      >
-                        <Clock className="w-3 h-3" />
-                        {plan.duration} day{plan.duration > 1 ? 's' : ''}
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="flex items-center gap-1"
-                      >
-                        <Target className="w-3 h-3" />
-                        {plan.totalQuestions} questions
-                      </Badge>
-                      <Badge variant={plan.isActive ? 'default' : 'secondary'}>
-                        {plan.isActive ? 'Active' : 'Inactive'}
-                      </Badge>
-                      {plan.isRecommended && (
-                        <Badge className="bg-yellow-100 text-yellow-800">
-                          Recommended
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  {plan.description}
-                </p>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  {plan.name}
+                </h3>
+                <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs font-medium">
+                  {plan.sections.length} sections
+                </span>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                {plan.description}
+              </p>
 
-                {/* Plan Stats */}
-                <div className="grid grid-cols-2 gap-4 py-3 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <div className="text-center">
-                    <div className="flex items-center justify-center gap-1 text-blue-600">
-                      <Users className="w-4 h-4" />
-                      <span className="font-semibold">
-                        {plan.enrolledUsers || 0}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">Enrolled</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="flex items-center justify-center gap-1 text-green-600">
-                      <Target className="w-4 h-4" />
-                      <span className="font-semibold">
-                        {plan.completionRate || 0}%
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">Completion</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="flex items-center justify-center gap-1 text-purple-600">
-                      <Calendar className="w-4 h-4" />
-                      <span className="font-semibold">{plan.duration}</span>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">Days</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="flex items-center justify-center gap-1 text-orange-600">
-                      <Target className="w-4 h-4" />
-                      <span className="font-semibold">
-                        {plan.totalQuestions}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">Questions</p>
-                  </div>
-                </div>
-
-                {/* Plan Features */}
-                {plan.features && plan.features.length > 0 && (
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Key Features:
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {plan.features.map((feature, index) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className="text-xs"
-                        >
-                          {feature}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span>Estimated: {plan.estimatedTime}</span>
-                  </div>
-                  <div className="text-xs">
-                    {plan.dailyQuestions} questions/day
-                  </div>
-                </div>
-
-                {/* Completion Rate */}
-                {plan.completionRate && (
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600 dark:text-gray-400">
-                        Completion Rate
-                      </span>
-                      <span className="text-gray-900 dark:text-white font-medium">
-                        {plan.completionRate}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                      <div
-                        className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${plan.completionRate}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Sections */}
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-                    Sections ({plan.sections.length})
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {plan.sections.slice(0, 3).map(section => (
-                      <Badge
-                        key={section.id}
-                        className={`text-xs ${getCategoryColor(section.category)}`}
-                      >
-                        {section.name}
-                      </Badge>
-                    ))}
-                    {plan.sections.length > 3 && (
-                      <Badge variant="secondary" className="text-xs">
-                        +{plan.sections.length - 3} more
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-
-                {/* Features */}
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-                    Features
-                  </h4>
-                  <div className="flex flex-wrap gap-1">
-                    {plan.features.slice(0, 2).map((feature, index) => (
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                <h4 className="font-medium text-gray-900 dark:text-white sticky top-0 bg-white dark:bg-gray-800 py-1">
+                  All Sections:
+                </h4>
+                {plan.sections.map(section => (
+                  <div
+                    key={section.id}
+                    className="flex items-center justify-between text-sm py-1"
+                  >
+                    <span className="text-gray-600 dark:text-gray-400 truncate flex-1 mr-2">
+                      • {section.name}
+                    </span>
+                    {section.categoryId && (
                       <span
-                        key={index}
-                        className="text-xs text-gray-600 dark:text-gray-400"
+                        className="px-2 py-1 rounded-full text-xs font-medium text-white flex-shrink-0"
+                        style={{
+                          backgroundColor: getCategoryColor(section.categoryId),
+                        }}
                       >
-                        • {feature}
-                      </span>
-                    ))}
-                    {plan.features.length > 2 && (
-                      <span className="text-xs text-gray-500">
-                        +{plan.features.length - 2} more
+                        {getCategoryName(section.categoryId)}
                       </span>
                     )}
                   </div>
-                </div>
+                ))}
+              </div>
 
-                {/* Action Buttons Section - Properly contained within card */}
-                <div className="border-t pt-4 space-y-3">
-                  {/* Status Toggle */}
-                  <div className="flex justify-center">
-                    <Button
-                      variant={plan.isActive ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => {
-                        const updatedPlans = plans.map(p =>
-                          p.id === plan.id ? { ...p, isActive: !p.isActive } : p
-                        );
-                        setPlans(updatedPlans);
-                        alert(
-                          `Plan "${plan.name}" has been ${!plan.isActive ? 'activated' : 'deactivated'} successfully!`
-                        );
-                      }}
-                      className={`flex items-center gap-2 w-full max-w-xs ${
-                        plan.isActive
-                          ? 'bg-green-600 hover:bg-green-700 text-white'
-                          : 'text-gray-600 hover:text-gray-700 hover:bg-gray-50'
-                      }`}
-                      title={
-                        plan.isActive
-                          ? 'Deactivate this plan'
-                          : 'Activate this plan'
-                      }
-                    >
-                      {plan.isActive ? (
-                        <Power className="w-4 h-4" />
-                      ) : (
-                        <PowerOff className="w-4 h-4" />
-                      )}
-                      <span className="text-sm">
-                        {plan.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                    </Button>
-                  </div>
-
-                  {/* Action Buttons Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        window.open(
-                          `/guided-practice/enhanced?plan=${plan.id}`,
-                          '_blank'
-                        )
-                      }
-                      className="flex items-center justify-center gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-xs sm:text-sm"
-                      title="Preview this plan"
-                    >
-                      <Eye className="w-4 h-4" />
-                      <span className="hidden sm:inline">Preview</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        router.push(`/admin/guided-learning/${plan.id}/edit`)
-                      }
-                      className="flex items-center justify-center gap-1 text-green-600 hover:text-green-700 hover:bg-green-50 text-xs sm:text-sm"
-                      title="Edit plan details and questions"
-                    >
-                      <Edit className="w-4 h-4" />
-                      <span className="hidden sm:inline">Edit</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        // For now, just show the first section's questions manager
-                        // In a real implementation, you might want to show a section selector first
-                        const firstSection = plan.sections[0];
-                        if (firstSection) {
-                          handleManageSectionQuestions(
-                            plan.id,
-                            firstSection.id
-                          );
-                        } else {
-                          alert('No sections available for this plan.');
-                        }
-                      }}
-                      className="flex items-center justify-center gap-1 text-orange-600 hover:text-orange-700 hover:bg-orange-50 text-xs sm:text-sm"
-                      title="Manage questions for plan sections"
-                    >
-                      <Edit3 className="w-4 h-4" />
-                      <span className="hidden sm:inline">Questions</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        const newPlan = {
-                          ...plan,
-                          id: `${plan.id}-copy-${Date.now()}`,
-                          name: `${plan.name} (Copy)`,
-                          isActive: false, // Start as inactive
-                        };
-                        setPlans([...plans, newPlan]);
-                        // Show success message
-                        alert(
-                          `Plan "${newPlan.name}" has been duplicated successfully!`
-                        );
-                      }}
-                      className="flex items-center justify-center gap-1 text-purple-600 hover:text-purple-700 hover:bg-purple-50 text-xs sm:text-sm"
-                      title="Create a copy of this plan"
-                    >
-                      <Copy className="w-4 h-4" />
-                      <span className="hidden sm:inline">Copy</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        if (
-                          confirm(
-                            `⚠️ Are you sure you want to delete "${plan.name}"?\n\nThis action cannot be undone and will remove all associated data.`
-                          )
-                        ) {
-                          setPlans(plans.filter(p => p.id !== plan.id));
-                          alert(
-                            `Plan "${plan.name}" has been deleted successfully.`
-                          );
-                        }
-                      }}
-                      className="flex items-center justify-center gap-1 text-red-600 hover:text-red-700 hover:bg-red-50 text-xs sm:text-sm"
-                      title="Permanently delete this plan"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      <span className="hidden sm:inline">Delete</span>
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {filteredPlans.length === 0 && (
-          <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              No learning plans found
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              {searchTerm ||
-              filterDifficulty !== 'all' ||
-              filterStatus !== 'all'
-                ? 'Try adjusting your search filters'
-                : 'Create your first learning plan to get started'}
-            </p>
-            <Button onClick={() => setShowCreateDialog(true)}>
-              <Plus className="w-4 h-4 mr-2" />
-              Create Plan
-            </Button>
-          </div>
-        )}
-      </div>
-
-      {/* Section Questions Manager Modal */}
-      {showSectionQuestionsManager && editingPlanId && editingSectionId && (
-        <SectionQuestionsManager
-          sectionId={editingSectionId}
-          sectionName={
-            plans
-              .find(p => p.id === editingPlanId)
-              ?.sections.find(s => s.id === editingSectionId)?.name || ''
-          }
-          currentQuestionIds={
-            plans
-              .find(p => p.id === editingPlanId)
-              ?.sections.find(s => s.id === editingSectionId)?.questions || []
-          }
-          onQuestionsChange={handleSectionQuestionsChange}
-          onClose={handleCloseSectionQuestionsManager}
-          sectionCategory={
-            plans
-              .find(p => p.id === editingPlanId)
-              ?.sections.find(s => s.id === editingSectionId)?.category
-          }
-        />
-      )}
-    </div>
-  );
-}
-
-// Plan Editor Component
-interface PlanEditorProps {
-  plan: LearningPlanTemplate | null;
-  onSave: (plan: LearningPlanTemplate) => void;
-  onCancel: () => void;
-}
-
-function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
-  const [formData, setFormData] = useState({
-    name: plan?.name || '',
-    duration: plan?.duration || 1,
-    description: plan?.description || '',
-    difficulty: plan?.difficulty || 'Beginner',
-    estimatedTime: plan?.estimatedTime || '',
-    features: plan?.features || [''],
-    sections: plan?.sections || [],
-    isRecommended: plan?.isRecommended || false,
-    isActive: plan?.isActive || true,
-  });
-
-  const addSection = () => {
-    setFormData(prev => ({
-      ...prev,
-      sections: [
-        ...prev.sections,
-        {
-          id: `section-${Date.now()}`,
-          name: '',
-          category: '',
-          questions: [],
-          weight: 10,
-          order: prev.sections.length + 1,
-        },
-      ],
-    }));
-  };
-
-  const updateSection = (
-    index: number,
-    field: string,
-    value: string | number
-  ) => {
-    setFormData(prev => ({
-      ...prev,
-      sections: prev.sections.map((section, i) =>
-        i === index ? { ...section, [field]: value } : section
-      ),
-    }));
-  };
-
-  const removeSection = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      sections: prev.sections.filter((_, i) => i !== index),
-    }));
-  };
-
-  const addFeature = () => {
-    setFormData(prev => ({
-      ...prev,
-      features: [...prev.features, ''],
-    }));
-  };
-
-  const updateFeature = (index: number, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      features: prev.features.map((feature, i) =>
-        i === index ? value : feature
-      ),
-    }));
-  };
-
-  const removeFeature = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      features: prev.features.filter((_, i) => i !== index),
-    }));
-  };
-
-  const calculateTotalQuestions = () => {
-    return formData.sections.reduce(
-      (total, section) => total + section.questions.length,
-      0
-    );
-  };
-
-  const handleSave = () => {
-    const totalQuestions = calculateTotalQuestions();
-    const dailyQuestions = Math.ceil(totalQuestions / formData.duration);
-
-    onSave({
-      ...formData,
-      totalQuestions,
-      dailyQuestions,
-    } as LearningPlanTemplate);
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Basic Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Plan Name
-          </label>
-          <Input
-            value={formData.name}
-            onChange={e =>
-              setFormData(prev => ({ ...prev, name: e.target.value }))
-            }
-            placeholder="e.g., 3 Day Comprehensive Plan"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Duration (days)
-          </label>
-          <Select
-            value={formData.duration.toString()}
-            onValueChange={value =>
-              setFormData(prev => ({ ...prev, duration: parseInt(value) }))
-            }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {[1, 2, 3, 4, 5, 6, 7].map(day => (
-                <SelectItem key={day} value={day.toString()}>
-                  {day} day{day > 1 ? 's' : ''}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Description
-        </label>
-        <Textarea
-          value={formData.description}
-          onChange={e =>
-            setFormData(prev => ({ ...prev, description: e.target.value }))
-          }
-          placeholder="Describe what this plan covers and who it's for..."
-          rows={3}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Difficulty
-          </label>
-          <Select
-            value={formData.difficulty}
-            onValueChange={(value: string) =>
-              setFormData(prev => ({
-                ...prev,
-                difficulty: value as 'Beginner' | 'Intermediate' | 'Advanced',
-              }))
-            }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Beginner">Beginner</SelectItem>
-              <SelectItem value="Intermediate">Intermediate</SelectItem>
-              <SelectItem value="Advanced">Advanced</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Estimated Time
-          </label>
-          <Input
-            value={formData.estimatedTime}
-            onChange={e =>
-              setFormData(prev => ({ ...prev, estimatedTime: e.target.value }))
-            }
-            placeholder="e.g., 2-3 hours"
-          />
-        </div>
-      </div>
-
-      {/* Features */}
-      <div>
-        <div className="flex justify-between items-center mb-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Features
-          </label>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={addFeature}
-          >
-            <Plus className="w-4 h-4 mr-1" />
-            Add Feature
-          </Button>
-        </div>
-        <div className="space-y-2">
-          {formData.features.map((feature, index) => (
-            <div key={index} className="flex space-x-2">
-              <Input
-                value={feature}
-                onChange={e => updateFeature(index, e.target.value)}
-                placeholder="e.g., Daily milestones, Progress tracking"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => removeFeature(index)}
-              >
-                <XCircle className="w-4 h-4" />
-              </Button>
+              <div className="mt-6 flex space-x-2">
+                <button
+                  onClick={() => handlePreviewPlan(plan.id)}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                >
+                  <Eye className="w-4 h-4" />
+                  Preview
+                </button>
+                <button
+                  onClick={() => handleEditPlan(plan.id)}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                >
+                  <Edit3 className="w-4 h-4" />
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeletePlan(plan.id, plan.name)}
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center"
+                  title="Delete Plan"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Sections */}
-      <div>
-        <div className="flex justify-between items-center mb-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Learning Sections
-          </label>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={addSection}
-          >
-            <Plus className="w-4 h-4 mr-1" />
-            Add Section
-          </Button>
-        </div>
-        <div className="space-y-4">
-          {formData.sections.map((section, index) => (
-            <Card key={section.id} className="p-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Section Name
-                  </label>
-                  <Input
-                    value={section.name}
-                    onChange={e => updateSection(index, 'name', e.target.value)}
-                    placeholder="e.g., JavaScript Fundamentals"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Category
-                  </label>
-                  <Select
-                    value={section.category}
-                    onValueChange={value =>
-                      updateSection(index, 'category', value)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {QUESTION_CATEGORIES.map(category => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-end space-x-2">
-                  <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Weight (%)
-                    </label>
-                    <Input
-                      type="number"
-                      value={section.weight}
-                      onChange={e =>
-                        updateSection(
-                          index,
-                          'weight',
-                          parseInt(e.target.value) || 0
-                        )
-                      }
-                      min="0"
-                      max="100"
-                    />
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => removeSection(index)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* Plan Summary */}
-      <Card className="p-4 bg-gray-50 dark:bg-gray-800">
-        <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-          Plan Summary
-        </h4>
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <span className="text-gray-600 dark:text-gray-400">
-              Total Questions:
-            </span>
-            <span className="ml-2 font-medium">
-              {calculateTotalQuestions()}
-            </span>
-          </div>
-          <div>
-            <span className="text-gray-600 dark:text-gray-400">
-              Daily Questions:
-            </span>
-            <span className="ml-2 font-medium">
-              {Math.ceil(calculateTotalQuestions() / formData.duration)}
-            </span>
-          </div>
-          <div>
-            <span className="text-gray-600 dark:text-gray-400">Sections:</span>
-            <span className="ml-2 font-medium">{formData.sections.length}</span>
-          </div>
-          <div>
-            <span className="text-gray-600 dark:text-gray-400">Features:</span>
-            <span className="ml-2 font-medium">
-              {formData.features.filter(f => f.trim()).length}
-            </span>
-          </div>
-        </div>
-      </Card>
-
-      {/* Actions */}
-      <div className="flex justify-end space-x-3">
-        <Button variant="outline" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button onClick={handleSave} className="bg-red-600 hover:bg-red-700">
-          {plan ? 'Update Plan' : 'Create Plan'}
-        </Button>
       </div>
     </div>
   );

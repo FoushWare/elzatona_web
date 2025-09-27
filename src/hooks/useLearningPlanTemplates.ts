@@ -22,41 +22,55 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
     setError(null);
 
     try {
-        // Try API endpoint first since we know it works
-        console.log('🔍 Hook: Calling API endpoint /api/test-firebase');
+        // Try the proper guided learning plans API endpoint
+        console.log('🔍 Hook: Calling API endpoint /api/guided-learning/plans');
         const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
-        const response = await fetch(`${baseUrl}/api/test-firebase`);
+        const response = await fetch(`${baseUrl}/api/guided-learning/plans`);
       const apiData = await response.json();
       
-      if (apiData.success && apiData.templates && apiData.templates.length > 0) {
-        console.log('✅ Hook: Successfully loaded templates from API:', apiData.templates.length);
+      if (apiData.success && apiData.plans && apiData.plans.length > 0) {
+        console.log('✅ Hook: Successfully loaded plans from API:', apiData.plans.length);
         
         // Convert API data to our format with safe defaults
-        const formattedTemplates: LearningPlanTemplate[] = apiData.templates.map((template: any) => ({
-          id: template.id,
-          name: template.name || `${template.duration} Day Plan`,
-          duration: template.duration || 1,
-          description: template.description || `${template.duration}-day intensive preparation plan`,
-          difficulty: template.difficulty || 'Intermediate',
-          totalQuestions: template.totalQuestions || 100,
-          dailyQuestions: template.dailyQuestions || Math.ceil((template.totalQuestions || 100) / (template.duration || 1)),
-          sections: template.sections || [
-            { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 25 },
-            { id: 'javascript', name: 'JavaScript', questions: [], weight: 35 },
-            { id: 'react', name: 'React', questions: [], weight: 25 },
-            { id: 'general', name: 'General', questions: [], weight: 15 },
-          ],
-          features: template.features || [
-            'Structured learning path',
-            'Progress tracking',
-            'Curated questions',
-          ],
-          estimatedTime: template.estimatedTime || `${Math.ceil((template.duration || 1) * 2)}-${Math.ceil((template.duration || 1) * 3)} hours`,
-          isRecommended: template.isRecommended || (template.duration === 3 || template.duration === 7),
-          isActive: template.isActive !== false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        }));
+        const formattedTemplates: LearningPlanTemplate[] = apiData.plans.map((plan: any) => {
+          // Handle Firestore timestamp format
+          const parseFirestoreTimestamp = (timestamp: any) => {
+            if (!timestamp) return new Date();
+            if (timestamp.seconds) {
+              return new Date(timestamp.seconds * 1000);
+            }
+            if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+              return timestamp.toDate();
+            }
+            return new Date(timestamp);
+          };
+
+          return {
+            id: plan.id,
+            name: plan.name || `${plan.duration} Day Plan`,
+            duration: plan.duration || 1,
+            description: plan.description || `${plan.duration}-day intensive preparation plan`,
+            difficulty: plan.difficulty || 'Intermediate',
+            totalQuestions: plan.totalQuestions || 100,
+            dailyQuestions: plan.dailyQuestions || Math.ceil((plan.totalQuestions || 100) / (plan.duration || 1)),
+            sections: plan.sections || [
+              { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 25 },
+              { id: 'javascript', name: 'JavaScript', questions: [], weight: 35 },
+              { id: 'react', name: 'React', questions: [], weight: 25 },
+              { id: 'general', name: 'General', questions: [], weight: 15 },
+            ],
+            features: plan.features || [
+              'Structured learning path',
+              'Progress tracking',
+              'Curated questions',
+            ],
+            estimatedTime: plan.estimatedTime || `${Math.ceil((plan.duration || 1) * 2)}-${Math.ceil((plan.duration || 1) * 3)} hours`,
+            isRecommended: plan.isRecommended || (plan.duration === 3 || plan.duration === 7),
+            isActive: plan.isActive !== false,
+            createdAt: parseFirestoreTimestamp(plan.createdAt),
+            updatedAt: parseFirestoreTimestamp(plan.updatedAt),
+          };
+        });
         
         setTemplates(formattedTemplates);
       } else {

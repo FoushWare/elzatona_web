@@ -346,7 +346,7 @@ export default function PracticePage() {
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {question.tags.slice(0, 3).map(tag => (
+                  {(question.tags || []).slice(0, 3).map(tag => (
                     <span
                       key={tag}
                       className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-md"
@@ -354,9 +354,9 @@ export default function PracticePage() {
                       {tag}
                     </span>
                   ))}
-                  {question.tags.length > 3 && (
+                  {(question.tags || []).length > 3 && (
                     <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-md">
-                      +{question.tags.length - 3}
+                      +{(question.tags || []).length - 3}
                     </span>
                   )}
                 </div>

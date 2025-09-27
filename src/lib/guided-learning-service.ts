@@ -16,7 +16,7 @@ import {
   Timestamp,
   increment,
 } from 'firebase/firestore';
-import { db } from './firebase-server';
+import { db } from './firebase';
 
 // Enhanced Learning Plan Template Interface
 export interface LearningPlanTemplate {
@@ -151,7 +151,7 @@ export interface UserAchievement {
 export class GuidedLearningService {
   private static instance: GuidedLearningService;
   private readonly COLLECTIONS = {
-    PLANS: 'learningPlans',
+    PLANS: 'learningPlanTemplates',
     USER_PROGRESS: 'userPlanProgress',
     USER_ACTIVITIES: 'userActivities',
     USER_STATS: 'userStats',

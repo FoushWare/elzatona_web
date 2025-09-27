@@ -1,475 +1,273 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { learningPaths } from '@/lib/resources';
-import { Resource, getResourcesForPath } from '@/lib/resources-parser';
-import VideoEmbed from '@/components/VideoEmbed';
+import { ArrowLeft, ExternalLink, BookOpen, Video, FileText, Code } from 'lucide-react';
 
-export default function ResourcesPage() {
+interface Resource {
+  id: string;
+  title: string;
+  url: string;
+  type: 'video' | 'documentation' | 'tutorial' | 'article' | 'code' | 'other';
+  description?: string;
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  estimatedTime?: number; // in minutes
+}
+
+interface LearningPath {
+  id: string;
+  name: string;
+  description: string;
+  questionCount: number;
+}
+
+export default function LearningPathResourcesPage() {
   const params = useParams();
   const router = useRouter();
   const pathId = params.id as string;
-
+  
+  const [learningPath, setLearningPath] = useState<LearningPath | null>(null);
   const [resources, setResources] = useState<Resource[]>([]);
-  const [filteredResources, setFilteredResources] = useState<Resource[]>([]);
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<'all' | 'video' | 'documentation' | 'tutorial' | 'article' | 'code'>('all');
 
-  const learningPath = learningPaths.find(path => path.id === pathId);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        
+        // Fetch learning path details
+        const pathResponse = await fetch(`/api/learning-paths/${pathId}`);
+        if (!pathResponse.ok) {
+          throw new Error('Failed to fetch learning path');
+        }
+        const pathData = await pathResponse.json();
+        setLearningPath(pathData);
 
-  const filterResources = useCallback(() => {
-    let filtered = resources;
+        // Fetch resources for this learning path
+        const resourcesResponse = await fetch(`/api/learning-paths/${pathId}/resources`);
+        if (!resourcesResponse.ok) {
+          throw new Error('Failed to fetch resources');
+        }
+        const resourcesData = await resourcesResponse.json();
+        setResources(resourcesData);
 
-    if (selectedType !== 'all') {
-      filtered = filtered.filter(resource => resource.type === selectedType);
-    }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    if (selectedDifficulty !== 'all') {
-      filtered = filtered.filter(
-        resource => resource.difficulty === selectedDifficulty
-      );
-    }
-
-    if (searchQuery) {
-      filtered = filtered.filter(
-        resource =>
-          resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          resource.description
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
-          resource.tags.some(tag =>
-            tag.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-      );
-    }
-
-    setFilteredResources(filtered);
-  }, [resources, selectedType, selectedDifficulty, searchQuery]);
-
-  const loadResources = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      // Mock resources data - in a real app, this would come from the resources.md files
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const mockResources: Resource[] = [
-        {
-          id: 'css-grid-guide',
-          title: 'Complete CSS Grid Guide',
-          description:
-            'A comprehensive guide to CSS Grid layout with practical examples and best practices.',
-          url: 'https://css-tricks.com/snippets/css/complete-guide-grid/',
-          type: 'article',
-          platform: 'CSS-Tricks',
-          difficulty: 'intermediate',
-          tags: ['CSS', 'Grid', 'Layout'],
-          category: 'CSS',
-        },
-        {
-          id: 'flexbox-course',
-          title: 'Flexbox Complete Course',
-          description:
-            'Learn Flexbox from basics to advanced techniques with interactive examples.',
-          url: 'https://www.youtube.com/watch?v=3YW65K6LcIA',
-          type: 'video',
-          platform: 'YouTube',
-          duration: '2h 30m',
-          difficulty: 'beginner',
-          tags: ['CSS', 'Flexbox', 'Layout'],
-          category: 'CSS',
-        },
-        {
-          id: 'javascript-fundamentals',
-          title: 'JavaScript Fundamentals Course',
-          description:
-            'Master JavaScript fundamentals including variables, functions, and DOM manipulation.',
-          url: 'https://www.udemy.com/course/javascript-fundamentals/',
-          type: 'course',
-          platform: 'Udemy',
-          duration: '8h 45m',
-          difficulty: 'beginner',
-          tags: ['JavaScript', 'Fundamentals', 'DOM'],
-          category: 'JavaScript',
-        },
-        {
-          id: 'react-docs',
-          title: 'React Official Documentation',
-          description:
-            'The official React documentation with guides, API reference, and tutorials.',
-          url: 'https://react.dev/',
-          type: 'documentation',
-          platform: 'React',
-          difficulty: 'intermediate',
-          tags: ['React', 'Documentation', 'Hooks'],
-          category: 'React',
-        },
-        {
-          id: 'typescript-handbook',
-          title: 'TypeScript Handbook',
-          description:
-            'Complete TypeScript handbook covering types, interfaces, and advanced features.',
-          url: 'https://www.typescriptlang.org/docs/',
-          type: 'documentation',
-          platform: 'TypeScript',
-          difficulty: 'intermediate',
-          tags: ['TypeScript', 'Types', 'Interfaces'],
-          category: 'TypeScript',
-        },
-      ];
-
-      const resourcesData = getResourcesForPath(pathId);
-      setResources(resourcesData);
-    } catch (error) {
-      console.error('Error loading resources:', error);
-    } finally {
-      setLoading(false);
+    if (pathId) {
+      fetchData();
     }
   }, [pathId]);
 
-  useEffect(() => {
-    if (pathId) {
-      loadResources();
-    }
-  }, [pathId, loadResources]);
-
-  useEffect(() => {
-    filterResources();
-  }, [
-    resources,
-    selectedType,
-    selectedDifficulty,
-    searchQuery,
-    filterResources,
-  ]);
-
-  const getTypeIcon = (type: string) => {
+  const getResourceIcon = (type: string) => {
     switch (type) {
       case 'video':
-        return '🎥';
-      case 'article':
-        return '📄';
-      case 'course':
-        return '🎓';
+        return <Video className="w-5 h-5" />;
       case 'documentation':
-        return '📚';
-      case 'tool':
-        return '🛠️';
-      case 'book':
-        return '📖';
+        return <BookOpen className="w-5 h-5" />;
+      case 'tutorial':
+        return <FileText className="w-5 h-5" />;
+      case 'code':
+        return <Code className="w-5 h-5" />;
       default:
-        return '📖';
+        return <ExternalLink className="w-5 h-5" />;
     }
   };
 
-  const getDifficultyColor = (difficulty: string) => {
+  const getDifficultyColor = (difficulty?: string) => {
     switch (difficulty) {
       case 'beginner':
-        return 'text-green-600 bg-green-100 dark:bg-green-900/20 dark:text-green-400';
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
       case 'intermediate':
-        return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400';
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
       case 'advanced':
-        return 'text-red-600 bg-red-100 dark:bg-red-900/20 dark:text-red-400';
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
       default:
-        return 'text-gray-600 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400';
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
     }
   };
 
-  const getPlatformIcon = (platform: string) => {
-    switch (platform.toLowerCase()) {
-      case 'youtube':
-        return '📺';
-      case 'udemy':
-        return '🎓';
-      case 'coursera':
-        return '🎓';
-      case 'freecodecamp':
-        return '🆓';
-      case 'mdn':
-        return '🌐';
-      case 'css-tricks':
-        return '🎨';
-      case 'react':
-        return '⚛️';
-      case 'typescript':
-        return '📘';
-      default:
-        return '🔗';
-    }
-  };
+  const filteredResources = resources.filter(resource => 
+    filter === 'all' || resource.type === filter
+  );
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">
-            Loading resources...
-          </p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 py-8">
+        <main className="max-w-6xl mx-auto px-4 relative z-10">
+          <div className="text-center py-12">
+            <div className="text-white text-lg">Loading resources...</div>
+          </div>
+        </main>
       </div>
     );
   }
 
-  if (!learningPath) {
+  if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Learning Path Not Found
-          </h1>
-          <button
-            onClick={() => router.back()}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Go Back
-          </button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 py-8">
+        <main className="max-w-6xl mx-auto px-4 relative z-10">
+          <div className="text-center py-12">
+            <div className="text-red-400 text-lg">Error: {error}</div>
+            <button
+              onClick={() => router.back()}
+              className="mt-4 text-blue-400 hover:text-blue-300"
+            >
+              Go Back
+            </button>
+          </div>
+        </main>
       </div>
     );
   }
-
-  const resourceTypes = [
-    'all',
-    'video',
-    'article',
-    'course',
-    'documentation',
-    'tool',
-    'book',
-  ];
-  const difficulties = ['all', 'beginner', 'intermediate', 'advanced'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 py-8">
+      <main className="max-w-6xl mx-auto px-4 relative z-10">
         {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => router.back()}
-            className="mb-4 inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+            className="flex items-center space-x-2 text-gray-300 hover:text-white mb-4 transition-colors"
           >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to Learning Path
+            <ArrowLeft className="w-5 h-5" />
+            <span>Back to Learning Paths</span>
           </button>
-
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            {learningPath.title} - Resources
+          
+          <h1 className="text-4xl font-bold text-white mb-2">
+            {learningPath?.name} Resources
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Curated resources to help you master {learningPath.title}
+          <p className="text-lg text-gray-300 max-w-2xl">
+            {learningPath?.description}
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Search */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Search Resources
-              </label>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search by title, description, or tags..."
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-              />
-            </div>
-
-            {/* Type Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Resource Type
-              </label>
-              <select
-                value={selectedType}
-                onChange={e => setSelectedType(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+        {/* Filter Buttons */}
+        <div className="mb-8">
+          <div className="flex flex-wrap gap-2">
+            {[
+              { key: 'all', label: 'All Resources' },
+              { key: 'video', label: 'Videos' },
+              { key: 'documentation', label: 'Documentation' },
+              { key: 'tutorial', label: 'Tutorials' },
+              { key: 'article', label: 'Articles' },
+              { key: 'code', label: 'Code Examples' },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setFilter(key as any)}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  filter === key
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                }`}
               >
-                {resourceTypes.map(type => (
-                  <option key={type} value={type}>
-                    {type === 'all'
-                      ? 'All Types'
-                      : type.charAt(0).toUpperCase() + type.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Difficulty Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Difficulty Level
-              </label>
-              <select
-                value={selectedDifficulty}
-                onChange={e => setSelectedDifficulty(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-              >
-                {difficulties.map(difficulty => (
-                  <option key={difficulty} value={difficulty}>
-                    {difficulty === 'all'
-                      ? 'All Levels'
-                      : difficulty.charAt(0).toUpperCase() +
-                        difficulty.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
+                {label}
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Resources Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredResources.map(resource => (
-            <div
-              key={resource.id}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
-            >
-              {/* Resource Header */}
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-2xl">
-                      {getTypeIcon(resource.type)}
-                    </span>
-                    <span className="text-lg">
-                      {getPlatformIcon(resource.platform)}
-                    </span>
+        {filteredResources.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredResources.map((resource) => (
+              <div
+                key={resource.id}
+                className="bg-gray-800 hover:bg-gray-750 rounded-lg p-6 border border-gray-700 transition-all duration-200"
+              >
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0 text-blue-400">
+                    {getResourceIcon(resource.type)}
                   </div>
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(resource.difficulty)}`}
-                  >
-                    {resource.difficulty}
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {resource.title}
-                </h3>
-
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
-                  {resource.description}
-                </p>
-
-                {/* Resource Meta */}
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-medium mr-2">Platform:</span>
-                    <span>{resource.platform}</span>
-                  </div>
-
-                  {resource.duration && (
-                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                      <span className="font-medium mr-2">Duration:</span>
-                      <span>{resource.duration}</span>
+                  
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-white font-medium text-lg mb-2 line-clamp-2">
+                      {resource.title}
+                    </h3>
+                    
+                    {resource.description && (
+                      <p className="text-gray-300 text-sm mb-3 line-clamp-3">
+                        {resource.description}
+                      </p>
+                    )}
+                    
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {resource.difficulty && (
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${getDifficultyColor(resource.difficulty)}`}>
+                          {resource.difficulty}
+                        </span>
+                      )}
+                      {resource.estimatedTime && (
+                        <span className="px-2 py-1 bg-gray-700 text-gray-300 rounded text-xs font-medium">
+                          {resource.estimatedTime} min
+                        </span>
+                      )}
+                      <span className="px-2 py-1 bg-blue-600 text-blue-100 rounded text-xs font-medium capitalize">
+                        {resource.type}
+                      </span>
                     </div>
-                  )}
-
-                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-medium mr-2">Type:</span>
-                    <span className="capitalize">{resource.type}</span>
+                    
+                    <a
+                      href={resource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors"
+                    >
+                      <span>Open Resource</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
                   </div>
                 </div>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {resource.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
               </div>
-
-              {/* Video Preview */}
-              {resource.type === 'video' && (
-                <div className="px-6 pb-4">
-                  <VideoEmbed url={resource.url} title={resource.title} />
-                </div>
-              )}
-
-              {/* Action Button */}
-              <div className="px-6 pb-6">
-                <a
-                  href={resource.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center group"
-                >
-                  <span>
-                    {resource.type === 'video'
-                      ? 'Watch on Platform'
-                      : 'Open Resource'}
-                  </span>
-                  <svg
-                    className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Empty State */}
-        {filteredResources.length === 0 && (
+            ))}
+          </div>
+        ) : (
           <div className="text-center py-12">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              No resources found
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Try adjusting your filters or search terms
+            <div className="text-gray-400 text-lg mb-4">
+              No resources found for this learning path.
+            </div>
+            <p className="text-gray-500">
+              Resources will be added soon. Check back later!
             </p>
-            <button
-              onClick={() => {
-                setSelectedType('all');
-                setSelectedDifficulty('all');
-                setSearchQuery('');
-              }}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Clear Filters
-            </button>
           </div>
         )}
 
-        {/* Resource Count */}
-        <div className="mt-8 text-center">
-          <p className="text-gray-600 dark:text-gray-400">
-            Showing {filteredResources.length} of {resources.length} resources
-          </p>
+        {/* Stats */}
+        <div className="mt-12 bg-gray-800 rounded-lg p-6 border border-gray-700">
+          <h3 className="text-white font-medium text-lg mb-4">Resource Statistics</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-400">{resources.length}</div>
+              <div className="text-gray-400 text-sm">Total Resources</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-400">
+                {resources.filter(r => r.type === 'video').length}
+              </div>
+              <div className="text-gray-400 text-sm">Videos</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-400">
+                {resources.filter(r => r.type === 'documentation').length}
+              </div>
+              <div className="text-gray-400 text-sm">Documentation</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-yellow-400">
+                {resources.filter(r => r.type === 'tutorial').length}
+              </div>
+              <div className="text-gray-400 text-sm">Tutorials</div>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
