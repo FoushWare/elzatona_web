@@ -5,7 +5,6 @@ import { SectionService } from '@/lib/section-service';
 
 // Mapping of learning paths to their relevant sections
 const learningPathSections: Record<string, string[]> = {
-  'frontend-interview-prep': ['frontend-interview-prep', 'behavioral-soft-skills'],
   'performance-optimization': ['performance-optimization'],
   'typescript-essentials': ['typescript-essentials'],
   'security-essentials': ['frontend-security'],
@@ -15,10 +14,8 @@ const learningPathSections: Record<string, string[]> = {
   'javascript-practice-interview': ['javascript-fundamentals', 'problem-solving-javascript'],
   'advanced-frontend-architectures': ['design-patterns-architecture', 'system-design-frontend'],
   'react-practice-advanced': ['react-fundamentals', 'advanced-react-patterns'],
-  'comprehensive-interview-prep': ['frontend-interview-prep', 'behavioral-soft-skills'],
   'css-mastery': ['css-fundamentals', 'advanced-css-mastery'],
   'react-mastery': ['react-fundamentals', 'advanced-react-patterns'],
-  'improve-english': ['behavioral-soft-skills'],
   'html-practice': ['html-fundamentals'],
   'html-practice-semantic': ['html-fundamentals'],
   'css-practice': ['css-fundamentals', 'advanced-css-mastery'],
@@ -37,14 +34,25 @@ export async function GET(request: NextRequest) {
       throw new Error('Firebase not initialized');
     }
 
-    // Fetch learning paths from Firebase
+    // Fetch learning paths from Firebase with ordering
     const learningPathsRef = collection(db, 'learningPaths');
     const snapshot = await getDocs(learningPathsRef);
     
     const learningPaths = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
-    }));
+    })).sort((a, b) => {
+      // Sort by order field if it exists, otherwise by name
+      const orderA = a.order || 999;
+      const orderB = b.order || 999;
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+      // If order is the same, prioritize JavaScript Deep Dive
+      if (a.id === 'javascript-deep-dive') return -1;
+      if (b.id === 'javascript-deep-dive') return 1;
+      return (a.name || '').localeCompare(b.name || '');
+    });
 
     // Fetch sections using SectionService
     const sectionsResult = await SectionService.getSections();
