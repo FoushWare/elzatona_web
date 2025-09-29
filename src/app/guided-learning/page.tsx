@@ -56,12 +56,26 @@ interface DailyGoal {
 export default function GuidedLearningPage() {
   const { user, isAuthenticated } = useFirebaseAuth();
   const {
-    templates,
+    templates: allTemplates,
     isLoading: templatesLoading,
     error: templatesError,
     getTemplate,
   } = useLearningPlanTemplates();
   const router = useRouter();
+
+  // Filter to only show day-based plans (1-day, 2-day, 3-day, 4-day, 5-day, 6-day, 7-day)
+  const templates = allTemplates.filter(plan => {
+    const dayBasedPlans = [
+      '1-day-plan',
+      '2-day-plan',
+      '3-day-plan',
+      '4-day-plan',
+      '5-day-plan',
+      '6-day-plan',
+      '7-day-plan',
+    ];
+    return dayBasedPlans.includes(plan.id);
+  });
 
   // Debug logging
   useEffect(() => {
@@ -77,6 +91,7 @@ export default function GuidedLearningPage() {
   const [dailyGoals, setDailyGoals] = useState<DailyGoal[]>([]);
   const [currentDay, setCurrentDay] = useState(1);
   const [completedPlans, setCompletedPlans] = useState<Set<string>>(new Set());
+  const [planGrades, setPlanGrades] = useState<Map<string, number>>(new Map());
   const [isNavigatingToPlan, setIsNavigatingToPlan] = useState<string | null>(
     null
   );
@@ -107,7 +122,7 @@ export default function GuidedLearningPage() {
     }
   }, [isAuthenticated, user]);
 
-  // Load completed plans from localStorage
+  // Load completed plans and grades from localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const completedPlansData = localStorage.getItem('completed-guided-plans');
@@ -119,8 +134,39 @@ export default function GuidedLearningPage() {
           console.error('Error parsing completed plans:', error);
         }
       }
+
+      // Load plan grades
+      const planGradesData = localStorage.getItem('plan-grades');
+      if (planGradesData) {
+        try {
+          const grades = JSON.parse(planGradesData);
+          setPlanGrades(new Map(Object.entries(grades)));
+        } catch (error) {
+          console.error('Error parsing plan grades:', error);
+        }
+      }
     }
   }, []);
+
+  const getGradeColor = (percentage: number) => {
+    if (percentage >= 90)
+      return 'border-yellow-500 dark:border-yellow-400 ring-4 ring-yellow-200 dark:ring-yellow-800 bg-yellow-50/50 dark:bg-yellow-900/20';
+    if (percentage >= 80)
+      return 'border-green-500 dark:border-green-400 ring-4 ring-green-200 dark:ring-green-800 bg-green-50/50 dark:bg-green-900/20';
+    if (percentage >= 70)
+      return 'border-blue-500 dark:border-blue-400 ring-4 ring-blue-200 dark:ring-blue-800 bg-blue-50/50 dark:bg-blue-900/20';
+    if (percentage >= 60)
+      return 'border-orange-500 dark:border-orange-400 ring-4 ring-orange-200 dark:ring-orange-800 bg-orange-50/50 dark:bg-orange-900/20';
+    return 'border-red-500 dark:border-red-400 ring-4 ring-red-200 dark:ring-red-800 bg-red-50/50 dark:bg-red-900/20';
+  };
+
+  const getGradeText = (percentage: number) => {
+    if (percentage >= 90) return 'A+ (Excellent!)';
+    if (percentage >= 80) return 'A (Great!)';
+    if (percentage >= 70) return 'B+ (Good!)';
+    if (percentage >= 60) return 'B (Not bad!)';
+    return 'C (Keep practicing!)';
+  };
 
   const generateDailyGoals = (plan: LearningPlan) => {
     const goals: DailyGoal[] = [];
@@ -434,123 +480,146 @@ export default function GuidedLearningPage() {
             </div>
           )}
 
-          {templates.map((plan, index) => (
-            <div
-              key={plan.id}
-              className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border-2 transition-all duration-300 hover:shadow-2xl cursor-pointer ${
-                completedPlans.has(plan.id)
-                  ? 'border-green-500 dark:border-green-400 ring-4 ring-green-200 dark:ring-green-800 bg-green-50/50 dark:bg-green-900/20'
-                  : plan.isRecommended
-                    ? 'border-blue-500 dark:border-blue-400 ring-4 ring-blue-200 dark:ring-blue-800'
-                    : hoveredPlan === plan.id
-                      ? 'border-purple-300 dark:border-purple-600'
-                      : 'border-white/20 dark:border-gray-700/20 hover:border-gray-300 dark:hover:border-gray-600'
-              }`}
-              onClick={() => {
-                setIsNavigatingToPlan(plan.id);
-                router.push(`/guided-learning/${plan.id}`);
-              }}
-              onMouseEnter={() => setHoveredPlan(plan.id)}
-              onMouseLeave={() => setHoveredPlan(null)}
-            >
-              {/* Recommended Badge */}
-              {plan.isRecommended && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
-                    <Star className="w-3 h-3" />
-                    <span>Recommended</span>
-                  </div>
-                </div>
-              )}
+          {templates.map((plan, index) => {
+            const planGrade = planGrades.get(plan.id);
+            const isCompleted = completedPlans.has(plan.id);
 
-              {/* Completed Badge */}
-              {completedPlans.has(plan.id) && (
-                <div className="absolute -top-3 right-4">
-                  <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
-                    <CheckCircle className="w-3 h-3" />
-                    <span>Completed</span>
+            return (
+              <div
+                key={plan.id}
+                className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border-2 transition-all duration-300 hover:shadow-2xl cursor-pointer ${
+                  isCompleted && planGrade !== undefined
+                    ? getGradeColor(planGrade)
+                    : plan.isRecommended
+                      ? 'border-blue-500 dark:border-blue-400 ring-4 ring-blue-200 dark:ring-blue-800'
+                      : hoveredPlan === plan.id
+                        ? 'border-purple-300 dark:border-purple-600'
+                        : 'border-white/20 dark:border-gray-700/20 hover:border-gray-300 dark:hover:border-gray-600'
+                }`}
+                onClick={() => {
+                  setIsNavigatingToPlan(plan.id);
+                  router.push(`/guided-learning/${plan.id}`);
+                }}
+                onMouseEnter={() => setHoveredPlan(plan.id)}
+                onMouseLeave={() => setHoveredPlan(null)}
+              >
+                {/* Recommended Badge */}
+                {plan.isRecommended && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
+                      <Star className="w-3 h-3" />
+                      <span>Recommended</span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Plan Header */}
-              <div className="text-center mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <Calendar className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                  {plan.name}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
-                  {plan.description}
-                </p>
-              </div>
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {plan.duration}
-                  </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                    Days
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {plan.totalQuestions}
-                  </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                    Questions
-                  </div>
-                </div>
-              </div>
-
-              {/* Difficulty Badge */}
-              <div className="flex justify-center mb-4">
-                <div
-                  className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    plan.difficulty === 'Beginner'
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                      : plan.difficulty === 'Intermediate'
-                        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
-                        : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                  }`}
-                >
-                  {plan.difficulty}
-                </div>
-              </div>
-
-              {/* Action Button */}
-              <div className="flex justify-center">
-                <div
-                  className={`flex items-center space-x-2 font-semibold text-sm transition-colors ${
-                    isNavigatingToPlan === plan.id
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : completedPlans.has(plan.id)
-                        ? 'text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300'
-                        : 'text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300'
-                  }`}
-                >
-                  {isNavigatingToPlan === plan.id ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Loading...</span>
-                    </>
-                  ) : (
-                    <>
+                {/* Completed Badge */}
+                {isCompleted && (
+                  <div className="absolute -top-3 right-4">
+                    <div
+                      className={`px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1 ${
+                        planGrade !== undefined
+                          ? planGrade >= 90
+                            ? 'bg-yellow-500 text-white'
+                            : planGrade >= 80
+                              ? 'bg-green-500 text-white'
+                              : planGrade >= 70
+                                ? 'bg-blue-500 text-white'
+                                : planGrade >= 60
+                                  ? 'bg-orange-500 text-white'
+                                  : 'bg-red-500 text-white'
+                          : 'bg-green-500 text-white'
+                      }`}
+                    >
+                      <CheckCircle className="w-3 h-3" />
                       <span>
-                        {completedPlans.has(plan.id)
-                          ? 'Review Plan'
-                          : 'View Details'}
+                        {planGrade !== undefined
+                          ? getGradeText(planGrade)
+                          : 'Completed'}
                       </span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </>
-                  )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Plan Header */}
+                <div className="text-center mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Calendar className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                    {plan.name}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                    {plan.description}
+                  </p>
+                </div>
+
+                {/* Quick Stats */}
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {plan.duration}
+                    </div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">
+                      Days
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {plan.totalQuestions}
+                    </div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">
+                      Questions
+                    </div>
+                  </div>
+                </div>
+
+                {/* Difficulty Badge */}
+                <div className="flex justify-center mb-4">
+                  <div
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      plan.difficulty === 'Beginner'
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                        : plan.difficulty === 'Intermediate'
+                          ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                          : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                    }`}
+                  >
+                    {plan.difficulty}
+                  </div>
+                </div>
+
+                {/* Action Button */}
+                <div className="flex justify-center">
+                  <div
+                    className={`flex items-center space-x-2 font-semibold text-sm transition-colors ${
+                      isNavigatingToPlan === plan.id
+                        ? 'text-blue-600 dark:text-blue-400'
+                        : completedPlans.has(plan.id)
+                          ? 'text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300'
+                          : 'text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300'
+                    }`}
+                  >
+                    {isNavigatingToPlan === plan.id ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Loading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>
+                          {completedPlans.has(plan.id)
+                            ? 'Review Plan'
+                            : 'View Details'}
+                        </span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Bottom Info */}

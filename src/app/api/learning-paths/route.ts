@@ -77,7 +77,9 @@ export async function GET(request: NextRequest) {
 
         acc.push({
           ...path,
-          sectors: pathSections
+          sectors: pathSections,
+          // Use the questionCount from the learning path itself
+          questionCount: path.questionCount || 0
         });
       }
       return acc;

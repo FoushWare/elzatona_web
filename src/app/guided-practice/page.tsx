@@ -15,15 +15,31 @@ import {
 import { useUserType } from '@/contexts/UserTypeContext';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { useSecureProgress } from '@/hooks/useSecureProgress';
+import CelebrationModal from '@/components/ui/CelebrationModal';
 
 interface Question {
   id: string;
   question: string;
+  content?: string;
+  title?: string;
   options: string[];
-  correctAnswer: number;
+  correctAnswer: number | string;
   explanation: string;
   section: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty:
+    | 'easy'
+    | 'medium'
+    | 'hard'
+    | 'beginner'
+    | 'intermediate'
+    | 'advanced';
+  type:
+    | 'multiple-choice'
+    | 'conceptual'
+    | 'open-ended'
+    | 'true-false'
+    | 'multiple-select';
+  answer?: string; // For conceptual/open-ended questions
 }
 
 interface LearningPlan {
@@ -58,6 +74,7 @@ function GuidedPracticeContent() {
   );
   const [usedQuestions, setUsedQuestions] = useState<Set<string>>(new Set());
   const [sessionComplete, setSessionComplete] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
@@ -92,43 +109,218 @@ function GuidedPracticeContent() {
     }
   }, [planId, userType, isAuthLoading, router]);
 
-  // Fetch questions from Firebase
+  // Fetch questions from Firebase based on the current plan
   useEffect(() => {
     const fetchQuestions = async () => {
+      if (!currentPlan) {
+        console.log('❌ No current plan, skipping question fetch');
+        return;
+      }
+
       try {
+        console.log('🔄 Starting to fetch questions for plan:', planId);
         setIsLoadingQuestions(true);
         setQuestionsError(null);
 
-        // Fetch questions from Firebase
-        const response = await fetch('/api/questions/unified?isActive=true');
-        const data = await response.json();
+        // First, get the plan details to understand its sections
+        const planResponse = await fetch(
+          `/api/guided-learning/plans/${planId}`
+        );
+        const planData = await planResponse.json();
 
-        if (!data.success) {
-          throw new Error(data.error || 'Failed to load questions');
+        if (!planData.success) {
+          throw new Error(planData.error || 'Failed to load plan details');
         }
 
+        const planDetails = planData.data;
+        console.log('📋 Plan details:', planDetails);
+
+        // Get all question IDs from plan sections
+        const allQuestionIds = [];
+        if (planDetails.sections) {
+          const sections = Array.isArray(planDetails.sections)
+            ? planDetails.sections
+            : Object.values(planDetails.sections);
+
+          sections.forEach((section: any) => {
+            if (section.questions && Array.isArray(section.questions)) {
+              allQuestionIds.push(...section.questions);
+            }
+          });
+        }
+
+        console.log('🔍 Question IDs from plan sections:', allQuestionIds);
+
+        // If no questions in plan sections, fetch questions by category
+        let questionsToFetch = [];
+        if (allQuestionIds.length > 0) {
+          // Fetch specific questions by IDs
+          const questionPromises = allQuestionIds.map(
+            async (questionId: string) => {
+              try {
+                const response = await fetch(
+                  `/api/questions/unified/${questionId}`
+                );
+                const data = await response.json();
+                return data.success ? data.data : null;
+              } catch (error) {
+                console.error(`Error fetching question ${questionId}:`, error);
+                return null;
+              }
+            }
+          );
+
+          const questionResults = await Promise.all(questionPromises);
+          questionsToFetch = questionResults.filter(Boolean);
+        } else {
+          // Fallback: fetch questions by categories related to the plan
+          const planCategories = getPlanCategories(planDetails);
+          console.log('📚 Plan categories for fallback:', planCategories);
+
+          // Fetch questions for each category separately and combine
+          const questionPromises = planCategories.map(
+            async (category: string) => {
+              try {
+                const response = await fetch(
+                  `/api/questions/unified?isActive=true&category=${encodeURIComponent(category)}`
+                );
+                const data = await response.json();
+                return data.success ? data.data : [];
+              } catch (error) {
+                console.error(
+                  `Error fetching questions for category ${category}:`,
+                  error
+                );
+                return [];
+              }
+            }
+          );
+
+          const questionResults = await Promise.all(questionPromises);
+          questionsToFetch = questionResults.flat();
+        }
+
+        console.log('✅ Questions to use:', questionsToFetch.length);
+
         // Transform Firebase questions to our Question interface
-        const transformedQuestions: Question[] = data.data.map((q: any) => ({
-          id: q.id,
-          question: q.content || q.title || q.question,
-          options: q.options?.map((opt: any) => opt.text) || [],
-          correctAnswer: q.options?.findIndex((opt: any) => opt.isCorrect) || 0,
-          explanation: q.explanation || 'No explanation available.',
-          section: q.category || q.section || 'General',
-          difficulty: q.difficulty || 'medium',
-        }));
+        const transformedQuestions: Question[] = questionsToFetch.map(
+          (q: any) => {
+            // Handle different question types
+            let options: string[] = [];
+            let correctAnswer: number | string = 0;
+
+            if (q.type === 'conceptual' || q.type === 'open-ended') {
+              // For conceptual questions, we don't need options
+              options = [];
+              correctAnswer = q.answer || '';
+            } else if (q.type === 'true-false') {
+              options = ['True', 'False'];
+              correctAnswer = q.correctAnswer === true ? 0 : 1;
+            } else if (q.type === 'multiple-select') {
+              options = q.options?.map((opt: any) => opt.text) || [];
+              correctAnswer = q.correctAnswer || [];
+            } else {
+              // Multiple choice (default)
+              options = q.options?.map((opt: any) => opt.text) || [];
+              correctAnswer =
+                q.options?.findIndex((opt: any) => opt.isCorrect) || 0;
+            }
+
+            return {
+              id: q.id,
+              question: q.content || q.title || q.question,
+              content: q.content,
+              title: q.title,
+              options,
+              correctAnswer,
+              explanation: q.explanation || 'No explanation available.',
+              section: q.category || q.section || 'General',
+              difficulty: q.difficulty || 'medium',
+              type: q.type || 'multiple-choice',
+              answer: q.answer,
+            };
+          }
+        );
 
         setQuestions(transformedQuestions);
+        console.log(
+          '✅ Successfully loaded questions:',
+          transformedQuestions.length
+        );
       } catch (error: any) {
-        console.error('Error fetching questions:', error);
+        console.error('❌ Error fetching questions:', error);
         setQuestionsError(error.message || 'Failed to load questions');
       } finally {
+        console.log('🏁 Finished loading questions');
         setIsLoadingQuestions(false);
       }
     };
 
     fetchQuestions();
-  }, []);
+  }, [currentPlan, planId]);
+
+  // Helper function to get plan categories based on plan details
+  const getPlanCategories = (planDetails: any) => {
+    const categories = new Set<string>();
+
+    if (planDetails.sections) {
+      const sections = Array.isArray(planDetails.sections)
+        ? planDetails.sections
+        : Object.values(planDetails.sections);
+
+      sections.forEach((section: any) => {
+        if (section.name) {
+          // Map section names to categories - use exact matches first
+          const sectionName = section.name;
+          if (sectionName === 'HTML & CSS') {
+            categories.add('HTML & CSS');
+          } else if (sectionName === 'JavaScript') {
+            categories.add('JavaScript (Core)');
+          } else if (sectionName === 'React') {
+            categories.add('React');
+          } else if (sectionName === 'TypeScript') {
+            categories.add('TypeScript');
+          } else if (sectionName === 'CSS & Styling') {
+            categories.add('CSS & Styling');
+          } else if (sectionName === 'Performance') {
+            categories.add('Performance');
+          } else if (sectionName === 'Security') {
+            categories.add('Security');
+          } else if (sectionName === 'Testing') {
+            categories.add('Testing');
+          } else {
+            // Fallback to partial matching
+            const sectionNameLower = sectionName.toLowerCase();
+            if (
+              sectionNameLower.includes('html') ||
+              sectionNameLower.includes('css')
+            ) {
+              categories.add('HTML & CSS');
+              categories.add('CSS & Styling');
+            } else if (
+              sectionNameLower.includes('javascript') ||
+              sectionNameLower.includes('js')
+            ) {
+              categories.add('JavaScript (Core)');
+            } else if (sectionNameLower.includes('react')) {
+              categories.add('React');
+            } else if (sectionNameLower.includes('typescript')) {
+              categories.add('TypeScript');
+            }
+          }
+        }
+      });
+    }
+
+    // If no categories found, use common ones
+    if (categories.size === 0) {
+      categories.add('JavaScript (Core)');
+      categories.add('React');
+      categories.add('HTML & CSS');
+    }
+
+    return Array.from(categories);
+  };
 
   // Load first question when questions are available
   useEffect(() => {
@@ -141,6 +333,7 @@ function GuidedPracticeContent() {
     // Check if session is complete (5 questions answered)
     if (sessionStats.total >= 5) {
       setSessionComplete(true);
+      setShowCelebration(true);
       return;
     }
 
@@ -153,25 +346,74 @@ function GuidedPracticeContent() {
       return;
     }
 
-    // Select a random question from available ones
-    const randomQuestion =
-      availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+    // Smart question selection based on plan sections and difficulty
+    let selectedQuestion;
+
+    // Try to select questions from different sections to provide variety
+    const usedSections = new Set();
+    questions.forEach(q => {
+      if (usedQuestions.has(q.id)) {
+        usedSections.add(q.section);
+      }
+    });
+
+    // First, try to find questions from sections not yet used
+    const unusedSectionQuestions = availableQuestions.filter(
+      q => !usedSections.has(q.section)
+    );
+
+    if (unusedSectionQuestions.length > 0) {
+      selectedQuestion =
+        unusedSectionQuestions[
+          Math.floor(Math.random() * unusedSectionQuestions.length)
+        ];
+    } else {
+      // If all sections used, select randomly from available questions
+      selectedQuestion =
+        availableQuestions[
+          Math.floor(Math.random() * availableQuestions.length)
+        ];
+    }
 
     // Mark this question as used
-    setUsedQuestions(prev => new Set([...prev, randomQuestion.id]));
+    setUsedQuestions(prev => new Set([...prev, selectedQuestion.id]));
 
-    setCurrentQuestion(randomQuestion);
+    setCurrentQuestion(selectedQuestion);
     setSelectedAnswer(null);
     setShowExplanation(false);
     setIsCorrect(null);
     setQuestionStartTime(Date.now());
   };
 
-  const handleAnswerSelect = async (answerIndex: number) => {
+  const handleAnswerSelect = async (answerIndex: number | string) => {
     if (showExplanation || !currentQuestion) return;
 
     setSelectedAnswer(answerIndex);
-    const correct = answerIndex === currentQuestion.correctAnswer;
+
+    // Check correctness based on question type
+    let correct = false;
+    if (
+      currentQuestion.type === 'conceptual' ||
+      currentQuestion.type === 'open-ended'
+    ) {
+      // For conceptual questions, we'll consider all answers as correct to show the explanation
+      correct = true;
+    } else if (currentQuestion.type === 'multiple-select') {
+      const selectedArray = Array.isArray(answerIndex)
+        ? answerIndex
+        : [answerIndex];
+      const correctArray = Array.isArray(currentQuestion.correctAnswer)
+        ? currentQuestion.correctAnswer
+        : [currentQuestion.correctAnswer];
+
+      correct =
+        selectedArray.length === correctArray.length &&
+        selectedArray.every(answer => correctArray.includes(answer));
+    } else {
+      // Multiple choice, true-false
+      correct = answerIndex === currentQuestion.correctAnswer;
+    }
+
     setIsCorrect(correct);
     setShowExplanation(true);
 
@@ -215,7 +457,7 @@ function GuidedPracticeContent() {
 
   const handleNextQuestion = () => {
     if (sessionComplete) {
-      // Mark plan as completed
+      // Mark plan as completed and save grade
       if (planId && typeof window !== 'undefined') {
         const completedPlansData = localStorage.getItem(
           'completed-guided-plans'
@@ -238,13 +480,51 @@ function GuidedPracticeContent() {
             JSON.stringify(completedPlans)
           );
         }
+
+        // Save the grade for this plan
+        const planGradesData = localStorage.getItem('plan-grades');
+        let planGrades = {};
+
+        if (planGradesData) {
+          try {
+            planGrades = JSON.parse(planGradesData);
+          } catch (error) {
+            console.error('Error parsing plan grades:', error);
+            planGrades = {};
+          }
+        }
+
+        planGrades[planId] = getAccuracyPercentage();
+        localStorage.setItem('plan-grades', JSON.stringify(planGrades));
       }
 
-      // Session is complete, redirect to results or learning page
-      router.push('/guided-learning');
+      // Show celebration modal instead of redirecting immediately
+      setShowCelebration(true);
       return;
     }
     loadNextQuestion();
+  };
+
+  const handleCelebrationClose = () => {
+    setShowCelebration(false);
+    router.push('/guided-learning');
+  };
+
+  const handleRetakeTest = () => {
+    setShowCelebration(false);
+    setSessionComplete(false);
+    setUsedQuestions(new Set());
+    setSessionStats({ correct: 0, total: 0 });
+    loadNextQuestion();
+  };
+
+  const handleViewPlans = () => {
+    setShowCelebration(false);
+    // Clear the active plan from localStorage
+    localStorage.removeItem('active-guided-plan');
+    // Clear current plan state
+    setCurrentPlan(null);
+    router.push('/guided-learning');
   };
 
   const getAccuracyPercentage = () => {
@@ -406,64 +686,135 @@ function GuidedPracticeContent() {
               {currentQuestion.question}
             </h3>
 
-            <div className="space-y-3 mb-6">
-              {currentQuestion.options.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerSelect(index)}
+            {/* Question Content */}
+            {currentQuestion.content && (
+              <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div
+                  className="text-gray-700 dark:text-gray-300 prose dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{
+                    __html: currentQuestion.content
+                      .replace(/\n/g, '<br>')
+                      .replace(
+                        /```([\s\S]*?)```/g,
+                        '<pre class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto my-4"><code>$1</code></pre>'
+                      )
+                      .replace(
+                        /`([^`]+)`/g,
+                        '<code class="bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded text-sm font-mono">$1</code>'
+                      ),
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Answer Options based on question type */}
+            {currentQuestion.type === 'conceptual' ||
+            currentQuestion.type === 'open-ended' ? (
+              <div className="space-y-4 mb-6">
+                <textarea
+                  value={(selectedAnswer as string) || ''}
+                  onChange={e => setSelectedAnswer(e.target.value)}
+                  placeholder="Type your answer here..."
+                  className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  rows={4}
                   disabled={showExplanation}
-                  className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200 ${
-                    showExplanation
-                      ? index === currentQuestion.correctAnswer
-                        ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                        : selectedAnswer === index
-                          ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
-                          : 'border-gray-200 dark:border-gray-700'
-                      : selectedAnswer === index
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                        showExplanation
-                          ? index === currentQuestion.correctAnswer
-                            ? 'border-green-500 bg-green-500'
-                            : selectedAnswer === index
-                              ? 'border-red-500 bg-red-500'
-                              : 'border-gray-300 dark:border-gray-600'
+                />
+                {!showExplanation && (
+                  <button
+                    onClick={() => handleAnswerSelect(selectedAnswer)}
+                    disabled={!selectedAnswer}
+                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Submit Answer
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-3 mb-6">
+                {currentQuestion.options.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerSelect(index)}
+                    disabled={showExplanation}
+                    className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200 ${
+                      showExplanation
+                        ? index === currentQuestion.correctAnswer
+                          ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
                           : selectedAnswer === index
-                            ? 'border-blue-500 bg-blue-500'
-                            : 'border-gray-300 dark:border-gray-600'
-                      }`}
-                    >
-                      {showExplanation &&
-                        index === currentQuestion.correctAnswer && (
-                          <CheckCircle className="w-4 h-4 text-white" />
-                        )}
-                      {showExplanation &&
-                        selectedAnswer === index &&
-                        index !== currentQuestion.correctAnswer && (
-                          <XCircle className="w-4 h-4 text-white" />
-                        )}
+                            ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                            : 'border-gray-200 dark:border-gray-700'
+                        : selectedAnswer === index
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div
+                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                          showExplanation
+                            ? index === currentQuestion.correctAnswer
+                              ? 'border-green-500 bg-green-500'
+                              : selectedAnswer === index
+                                ? 'border-red-500 bg-red-500'
+                                : 'border-gray-300 dark:border-gray-600'
+                            : selectedAnswer === index
+                              ? 'border-blue-500 bg-blue-500'
+                              : 'border-gray-300 dark:border-gray-600'
+                        }`}
+                      >
+                        {showExplanation &&
+                          index === currentQuestion.correctAnswer && (
+                            <CheckCircle className="w-4 h-4 text-white" />
+                          )}
+                        {showExplanation &&
+                          selectedAnswer === index &&
+                          index !== currentQuestion.correctAnswer && (
+                            <XCircle className="w-4 h-4 text-white" />
+                          )}
+                      </div>
+                      <span className="text-gray-900 dark:text-white">
+                        {option}
+                      </span>
                     </div>
-                    <span className="text-gray-900 dark:text-white">
-                      {option}
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
+                  </button>
+                ))}
+              </div>
+            )}
 
             {showExplanation && (
               <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+                {/* Show the correct answer for conceptual/open-ended questions */}
+                {(currentQuestion.type === 'conceptual' ||
+                  currentQuestion.type === 'open-ended') &&
+                  currentQuestion.answer && (
+                    <div className="mb-4">
+                      <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                        Correct Answer:
+                      </h4>
+                      <p className="text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 p-3 rounded-lg">
+                        {currentQuestion.answer}
+                      </p>
+                    </div>
+                  )}
+
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
                   Explanation:
                 </h4>
-                <p className="text-gray-700 dark:text-gray-300">
-                  {currentQuestion.explanation}
-                </p>
+                <div
+                  className="text-gray-700 dark:text-gray-300 prose dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{
+                    __html: currentQuestion.explanation
+                      .replace(/\n/g, '<br>')
+                      .replace(
+                        /```([\s\S]*?)```/g,
+                        '<pre class="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto my-4"><code>$1</code></pre>'
+                      )
+                      .replace(
+                        /`([^`]+)`/g,
+                        '<code class="bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded text-sm font-mono">$1</code>'
+                      ),
+                  }}
+                />
               </div>
             )}
 
@@ -485,118 +836,20 @@ function GuidedPracticeContent() {
           </div>
         )}
 
-        {/* Session Completion */}
-        {sessionComplete && (
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-xl border border-white/20 dark:border-gray-700/20 mb-8">
-            <div className="text-center">
-              {/* Grade Display */}
-              <div className="mb-8">
-                <div
-                  className={`w-32 h-32 rounded-full flex flex-col items-center justify-center mx-auto mb-4 ${
-                    getAccuracyPercentage() >= 80
-                      ? 'bg-green-100 dark:bg-green-900/30'
-                      : getAccuracyPercentage() >= 60
-                        ? 'bg-yellow-100 dark:bg-yellow-900/30'
-                        : 'bg-red-100 dark:bg-red-900/30'
-                  }`}
-                >
-                  <span
-                    className={`text-4xl font-bold ${getGradeColor(getAccuracyPercentage())}`}
-                  >
-                    {getGradeLetter(getAccuracyPercentage())}
-                  </span>
-                  <span
-                    className={`text-lg font-semibold ${getGradeColor(getAccuracyPercentage())}`}
-                  >
-                    {getAccuracyPercentage()}%
-                  </span>
-                </div>
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                  Session Complete! 🎉
-                </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
-                  {getAccuracyPercentage() >= 80
-                    ? "Excellent work! You're mastering frontend concepts!"
-                    : getAccuracyPercentage() >= 60
-                      ? 'Good job! Keep practicing to improve your skills.'
-                      : 'Keep studying! Practice makes perfect.'}
-                </p>
-              </div>
-
-              {/* Detailed Results */}
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                  Your Results
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {sessionStats.correct}/{sessionStats.total}
-                    </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Correct Answers
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {getAccuracyPercentage()}%
-                    </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Accuracy Rate
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {currentPlan?.title || 'Practice Session'}
-                    </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Plan Completed
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <button
-                  onClick={() => router.push('/guided-learning')}
-                  className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
-                >
-                  <BookOpen className="w-5 h-5" />
-                  <span>Explore Other Plans</span>
-                </button>
-                <button
-                  onClick={() => router.push('/progress')}
-                  className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
-                >
-                  <TrendingUp className="w-5 h-5" />
-                  <span>View Progress</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setSessionComplete(false);
-                    setUsedQuestions(new Set());
-                    setSessionStats({ correct: 0, total: 0 });
-                    loadNextQuestion();
-                  }}
-                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
-                >
-                  <Target className="w-5 h-5" />
-                  <span>Practice Again</span>
-                </button>
-              </div>
-
-              {/* Encouragement Message */}
-              <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
-                <p className="text-blue-800 dark:text-blue-200 font-medium">
-                  💡 <strong>Tip:</strong> Consistent practice is key to
-                  mastering frontend development. Try different learning plans
-                  to cover all topics comprehensively!
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Celebration Modal */}
+        <CelebrationModal
+          isOpen={showCelebration}
+          onClose={handleCelebrationClose}
+          results={{
+            correct: sessionStats.correct,
+            total: sessionStats.total,
+            percentage: getAccuracyPercentage(),
+            grade: getGradeLetter(getAccuracyPercentage()),
+            planName: currentPlan?.title || 'Practice Session',
+          }}
+          onRetake={handleRetakeTest}
+          onViewPlans={handleViewPlans}
+        />
 
         {/* Session Stats */}
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 dark:border-gray-700/20">
