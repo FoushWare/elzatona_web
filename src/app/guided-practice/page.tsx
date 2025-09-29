@@ -682,12 +682,8 @@ function GuidedPracticeContent() {
               </div>
             </div>
 
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-              {currentQuestion.question}
-            </h3>
-
             {/* Question Content */}
-            {currentQuestion.content && (
+            {currentQuestion.content ? (
               <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div
                   className="text-gray-700 dark:text-gray-300 prose dark:prose-invert max-w-none"
@@ -705,6 +701,10 @@ function GuidedPracticeContent() {
                   }}
                 />
               </div>
+            ) : (
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+                {currentQuestion.question}
+              </h3>
             )}
 
             {/* Answer Options based on question type */}
