@@ -211,67 +211,91 @@ export default function LearningPlanDetailPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {plan.sections.map((section, index) => {
-              // Calculate dynamic question count based on section weight and total questions
-              const sectionQuestionCount = Math.round(
-                (plan.totalQuestions * section.weight) / 100
-              );
+            {plan.sections
+              .filter(
+                section => section.questions && section.questions.length > 0
+              )
+              .map((section, index) => {
+                const actualQuestionCount = section.questions
+                  ? section.questions.length
+                  : 0;
 
-              return (
-                <div
-                  key={section.id}
-                  className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer"
-                  onClick={() => {
-                    // This will be used to auto-select category in questions manager
-                    console.log('Section clicked:', section);
-                    // Store the section category for use in questions manager
-                    if (section.category) {
-                      localStorage.setItem(
-                        'selectedSectionCategory',
-                        section.category
-                      );
-                    }
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-sm font-bold text-indigo-600 dark:text-indigo-400">
-                        {index + 1}
+                return (
+                  <div
+                    key={section.id}
+                    className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() => {
+                      // This will be used to auto-select category in questions manager
+                      console.log('Section clicked:', section);
+                      // Store the section category for use in questions manager
+                      if (section.category) {
+                        localStorage.setItem(
+                          'selectedSectionCategory',
+                          section.category
+                        );
+                      }
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            {section.name}
+                          </h3>
+                          {section.category && (
+                            <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                              Category: {section.category}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                          {section.name}
-                        </h3>
-                        {section.category && (
-                          <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">
-                            Category: {section.category}
-                          </div>
-                        )}
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                          {actualQuestionCount}
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          questions
+                        </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {sectionQuestionCount}
-                      </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        questions
-                      </div>
+
+                    <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mb-2">
+                      <div
+                        className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+                        style={{ width: `${section.weight}%` }}
+                      />
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      {section.weight}% of total plan
                     </div>
                   </div>
-
-                  <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mb-2">
-                    <div
-                      className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-500"
-                      style={{ width: `${section.weight}%` }}
-                    />
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {section.weight}% of total plan
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
+
+          {plan.sections.filter(
+            section => section.questions && section.questions.length > 0
+          ).length === 0 && (
+            <div className="text-center py-12">
+              <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                No Questions Added Yet
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Questions need to be added to the plan sections before you can
+                start learning.
+              </p>
+              <button
+                onClick={() => router.push('/admin/guided-learning')}
+                className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                Manage Plan Questions
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Features */}
