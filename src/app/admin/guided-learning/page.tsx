@@ -1,6 +1,10 @@
 'use client';
 
-import { Trash2, Edit3, Eye } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Trash2, Edit3, Eye, Loader2, Plus, Save, X } from 'lucide-react';
+import { useLearningPlanTemplates } from '@/hooks/useLearningPlanTemplates';
+import { notify } from '@/components/ui/Notification';
+import { useConfirmation } from '@/components/ui/ConfirmationDialog';
 
 interface Category {
   id: string;
@@ -21,216 +25,121 @@ interface Section {
   questionCount: number;
 }
 
-// Create plans with all available sections
-const createPlansWithAllSections = (
-  sections: Section[],
-  categories: Category[]
-) => {
-  const planConfigs = [
-    {
-      id: '1-day-plan',
-      name: '1 Day Plan',
-      description: "Intensive preparation for tomorrow's interview",
-      questionPerSection: 2,
-    },
-    {
-      id: '2-day-plan',
-      name: '2 Day Plan',
-      description: 'Perfect for weekend preparation',
-      questionPerSection: 3,
-    },
-    {
-      id: '3-day-plan',
-      name: '3 Day Plan',
-      description: 'Comprehensive 3-day preparation',
-      questionPerSection: 4,
-    },
-    {
-      id: '4-day-plan',
-      name: '4 Day Plan',
-      description: 'Extended preparation with comprehensive coverage',
-      questionPerSection: 5,
-    },
-    {
-      id: '5-day-plan',
-      name: '5 Day Plan',
-      description: 'Comprehensive preparation with advanced topics',
-      questionPerSection: 6,
-    },
-    {
-      id: '6-day-plan',
-      name: '6 Day Plan',
-      description: 'Master-level preparation with all advanced concepts',
-      questionPerSection: 7,
-    },
-    {
-      id: '7-day-plan',
-      name: '7 Day Plan',
-      description: 'Complete week-long preparation',
-      questionPerSection: 8,
-    },
-  ];
+// Helper function to get category name from categoryId
+const getCategoryName = (categoryId: string, sections: any[]) => {
+  const section = sections.find(s => s.categoryId === categoryId);
+  return section?.category || 'Unknown Category';
+};
 
-  return planConfigs.map(config => {
-    // Map sections to plan sections with category mapping
-    const planSections = sections.map(section => {
-      // Find matching category by name or use a default mapping
-      const category = categories.find(
-        cat =>
-          cat.name.toLowerCase() === section.category.toLowerCase() ||
-          (section.category === 'foundation' && cat.name === 'HTML') ||
-          (section.category === 'frontend' &&
-            (cat.name === 'JavaScript' ||
-              cat.name === 'React' ||
-              cat.name === 'TypeScript')) ||
-          (section.category === 'advanced' &&
-            (cat.name === 'Architecture' || cat.name === 'Performance')) ||
-          (section.category === 'specialized' &&
-            (cat.name === 'Performance' || cat.name === 'Architecture')) ||
-          (section.category === 'career' && cat.name === 'Architecture') ||
-          (section.category === 'emerging' && cat.name === 'Architecture')
-      );
-
-      return {
-        id: section.id,
-        name: section.name,
-        categoryId: category?.id || categories[0]?.id,
-        weight: Math.round(100 / sections.length), // Equal weight distribution
-      };
-    });
-
-    return {
-      id: config.id,
-      name: config.name,
-      description: config.description,
-      sections: planSections,
-    };
-  });
+// Helper function to get category color
+const getCategoryColor = (categoryId: string) => {
+  const colors = {
+    AjaNBOIdiqulcmNkE5UC: '#E34F26', // HTML
+    SoASg6lwweq1h7d7EQWP: '#F7DF1E', // JavaScript
+    xuyVRvVWrKbfWMKUboFN: '#61DAFB', // React
+    gVb0Nj1G4MB8RhzNQ55U: '#3178C6', // TypeScript
+    '91MFgB8E5GogdkiU5lCw': '#10B981', // Performance
+    O3pxATTaIP9POC9JWGGG: '#8B5CF6', // Architecture
+  };
+  return colors[categoryId as keyof typeof colors] || '#6B7280';
 };
 
 export default function GuidedLearningAdminPage() {
-  // Static data for testing - no useState or useEffect
-  const sections: Section[] = [
-    {
-      id: 'html-fundamentals',
-      name: 'HTML Fundamentals',
-      description: 'Master HTML semantics',
-      category: 'foundation',
-      difficulty: 'beginner',
-      estimatedTime: '2-3 weeks',
-      order: 1,
-      isActive: true,
-      questionCount: 0,
-    },
-    {
-      id: 'css-fundamentals',
-      name: 'CSS Fundamentals',
-      description: 'Learn CSS basics',
-      category: 'foundation',
-      difficulty: 'beginner',
-      estimatedTime: '3-4 weeks',
-      order: 2,
-      isActive: true,
-      questionCount: 0,
-    },
-    {
-      id: 'javascript-fundamentals',
-      name: 'JavaScript Fundamentals',
-      description: 'Master JavaScript basics',
-      category: 'foundation',
-      difficulty: 'beginner',
-      estimatedTime: '4-5 weeks',
-      order: 3,
-      isActive: true,
-      questionCount: 0,
-    },
-    {
-      id: 'react-fundamentals',
-      name: 'React Fundamentals',
-      description: 'Master React core concepts',
-      category: 'frontend',
-      difficulty: 'intermediate',
-      estimatedTime: '4-5 weeks',
-      order: 7,
-      isActive: true,
-      questionCount: 0,
-    },
-    {
-      id: 'typescript-essentials',
-      name: 'TypeScript Essentials',
-      description: 'Learn TypeScript',
-      category: 'frontend',
-      difficulty: 'intermediate',
-      estimatedTime: '3-4 weeks',
-      order: 6,
-      isActive: true,
-      questionCount: 0,
-    },
-    {
-      id: 'performance-optimization',
-      name: 'Performance Optimization',
-      description: 'Frontend performance techniques',
-      category: 'specialized',
-      difficulty: 'intermediate',
-      estimatedTime: '3-4 weeks',
-      order: 13,
-      isActive: true,
-      questionCount: 0,
-    },
-    {
-      id: 'design-patterns-architecture',
-      name: 'Design Patterns & Architecture',
-      description: 'Software design patterns',
-      category: 'advanced',
-      difficulty: 'advanced',
-      estimatedTime: '3-4 weeks',
-      order: 10,
-      isActive: true,
-      questionCount: 0,
-    },
-  ];
+  const {
+    templates: allPlans,
+    isLoading,
+    error,
+    refreshTemplates,
+  } = useLearningPlanTemplates();
+  const { showConfirmation, ConfirmationDialog } = useConfirmation();
 
-  const categories: Category[] = [
-    {
-      id: 'AjaNBOIdiqulcmNkE5UC',
-      name: 'HTML',
-      description: 'HTML markup, semantics, and structure',
-      color: '#E34F26',
-    },
-    {
-      id: 'SoASg6lwweq1h7d7EQWP',
-      name: 'JavaScript',
-      description: 'Core JavaScript concepts and advanced topics',
-      color: '#F7DF1E',
-    },
-    {
-      id: 'xuyVRvVWrKbfWMKUboFN',
-      name: 'React',
-      description: 'React library fundamentals and advanced patterns',
-      color: '#61DAFB',
-    },
-    {
-      id: 'gVb0Nj1G4MB8RhzNQ55U',
-      name: 'TypeScript',
-      description: 'TypeScript programming language',
-      color: '#3178C6',
-    },
-    {
-      id: '91MFgB8E5GogdkiU5lCw',
-      name: 'Performance',
-      description: 'Performance optimization techniques',
-      color: '#10B981',
-    },
-    {
-      id: 'O3pxATTaIP9POC9JWGGG',
-      name: 'Architecture',
-      description: 'Software architecture and design patterns',
-      color: '#8B5CF6',
-    },
-  ];
+  // Filter to only show day-based plans (1-day, 2-day, 3-day, 4-day, 5-day, 6-day, 7-day)
+  const plans = allPlans.filter(plan => {
+    const dayBasedPlans = [
+      '1-day-plan',
+      '2-day-plan',
+      '3-day-plan',
+      '4-day-plan',
+      '5-day-plan',
+      '6-day-plan',
+      '7-day-plan',
+    ];
+    return dayBasedPlans.includes(plan.id);
+  });
 
-  // Create plans with all sections
-  const plans = createPlansWithAllSections(sections, categories);
+  // State for creating/editing plans
+  const [isCreatingPlan, setIsCreatingPlan] = useState(false);
+  const [editingPlan, setEditingPlan] = useState<any>(null);
+  const [newPlan, setNewPlan] = useState({
+    name: '',
+    description: '',
+    duration: 1,
+    difficulty: 'Beginner',
+    features: [''],
+    estimatedTime: '2-3 hours',
+    isRecommended: false,
+  });
+
+  // Handle create new plan
+  const handleCreatePlan = () => {
+    setIsCreatingPlan(true);
+    setEditingPlan(null);
+    setNewPlan({
+      name: '',
+      description: '',
+      duration: 1,
+      difficulty: 'Beginner',
+      features: [''],
+      estimatedTime: '2-3 hours',
+      isRecommended: false,
+    });
+  };
+
+  // Handle save new plan
+  const handleSavePlan = async () => {
+    try {
+      const planData = {
+        ...newPlan,
+        features: newPlan.features.filter(f => f.trim() !== ''),
+        sections: [], // Will be managed separately
+        totalQuestions: 0,
+        dailyQuestions: 0,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      const response = await fetch('/api/guided-learning/plans', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(planData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        notify.success('Success!', 'Plan created successfully!');
+        setIsCreatingPlan(false);
+        setNewPlan({
+          name: '',
+          description: '',
+          duration: 1,
+          difficulty: 'Beginner',
+          features: [''],
+          estimatedTime: '2-3 hours',
+          isRecommended: false,
+        });
+        refreshTemplates();
+      } else {
+        notify.error('Error', `Failed to create plan: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error creating plan:', error);
+      notify.error('Error', 'Error creating plan. Please try again.');
+    }
+  };
 
   // Handle edit plan
   const handleEditPlan = (planId: string) => {
@@ -241,25 +150,45 @@ export default function GuidedLearningAdminPage() {
 
   // Handle delete plan
   const handleDeletePlan = async (planId: string, planName: string) => {
-    if (
-      confirm(
-        `Are you sure you want to delete "${planName}"? This action cannot be undone.`
-      )
-    ) {
-      try {
-        // Here you would typically make an API call to delete the plan
-        console.log('Deleting plan:', planId);
+    showConfirmation({
+      title: 'Delete Learning Plan',
+      message: `Are you sure you want to delete "${planName}"? This action cannot be undone and will remove all associated data.`,
+      confirmText: 'Delete Plan',
+      cancelText: 'Cancel',
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          console.log('Deleting plan:', planId, planName);
 
-        // Show success message
-        alert(`Plan "${planName}" has been deleted successfully.`);
+          const response = await fetch(
+            `/api/guided-learning/plans?id=${planId}`,
+            {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
 
-        // Reload the page to refresh the data
-        window.location.reload();
-      } catch (error) {
-        console.error('Error deleting plan:', error);
-        alert('Failed to delete plan. Please try again.');
-      }
-    }
+          console.log('Delete response status:', response.status);
+          const result = await response.json();
+          console.log('Delete response result:', result);
+
+          if (result.success) {
+            notify.success(
+              'Success!',
+              `Plan "${planName}" has been deleted successfully.`
+            );
+            refreshTemplates();
+          } else {
+            notify.error('Error', `Failed to delete plan: ${result.error}`);
+          }
+        } catch (error) {
+          console.error('Error deleting plan:', error);
+          notify.error('Error', 'Failed to delete plan. Please try again.');
+        }
+      },
+    });
   };
 
   // Handle preview plan
@@ -269,100 +198,328 @@ export default function GuidedLearningAdminPage() {
     window.location.href = `/guided-learning/${planId}`;
   };
 
-  const getCategoryName = (categoryId: string) => {
-    const category = categories.find(cat => cat.id === categoryId);
-    return category ? category.name : 'Unknown Category';
+  // Handle feature input changes
+  const handleFeatureChange = (index: number, value: string) => {
+    const newFeatures = [...newPlan.features];
+    newFeatures[index] = value;
+    setNewPlan({ ...newPlan, features: newFeatures });
   };
 
-  const getCategoryColor = (categoryId: string) => {
-    const category = categories.find(cat => cat.id === categoryId);
-    return category ? category.color : '#6B7280';
+  // Add new feature input
+  const addFeature = () => {
+    setNewPlan({ ...newPlan, features: [...newPlan.features, ''] });
+  };
+
+  // Remove feature input
+  const removeFeature = (index: number) => {
+    const newFeatures = newPlan.features.filter((_, i) => i !== index);
+    setNewPlan({ ...newPlan, features: newFeatures });
   };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Guided Learning Plans
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Manage and configure guided learning plans for your users. Each plan
-            includes all {sections.length} available sections.
-          </p>
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                Guided Learning Plans
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400">
+                Manage and configure guided learning plans for your users.
+                {isLoading
+                  ? 'Loading plans...'
+                  : `Found ${plans.length} learning plans.`}
+              </p>
+            </div>
+            <button
+              onClick={handleCreatePlan}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Create New Plan
+            </button>
+          </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {plans.map(plan => (
-            <div
-              key={plan.id}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  {plan.name}
-                </h3>
-                <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs font-medium">
-                  {plan.sections.length} sections
-                </span>
-              </div>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                {plan.description}
+        {isLoading && (
+          <div className="flex items-center justify-center py-16">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+              <p className="text-gray-600 dark:text-gray-400">
+                Loading learning plans...
               </p>
+            </div>
+          </div>
+        )}
 
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                <h4 className="font-medium text-gray-900 dark:text-white sticky top-0 bg-white dark:bg-gray-800 py-1">
-                  All Sections:
-                </h4>
-                {plan.sections.map(section => (
-                  <div
-                    key={section.id}
-                    className="flex items-center justify-between text-sm py-1"
-                  >
-                    <span className="text-gray-600 dark:text-gray-400 truncate flex-1 mr-2">
-                      • {section.name}
-                    </span>
-                    {section.categoryId && (
-                      <span
-                        className="px-2 py-1 rounded-full text-xs font-medium text-white flex-shrink-0"
-                        style={{
-                          backgroundColor: getCategoryColor(section.categoryId),
-                        }}
-                      >
-                        {getCategoryName(section.categoryId)}
-                      </span>
-                    )}
-                  </div>
-                ))}
+        {/* Create Plan Form */}
+        {isCreatingPlan && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Create New Learning Plan
+              </h2>
+              <button
+                onClick={() => setIsCreatingPlan(false)}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Plan Name
+                </label>
+                <input
+                  type="text"
+                  value={newPlan.name}
+                  onChange={e =>
+                    setNewPlan({ ...newPlan, name: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="e.g., React Fundamentals"
+                />
               </div>
 
-              <div className="mt-6 flex space-x-2">
-                <button
-                  onClick={() => handlePreviewPlan(plan.id)}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Duration (days)
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="30"
+                  value={newPlan.duration}
+                  onChange={e =>
+                    setNewPlan({
+                      ...newPlan,
+                      duration: parseInt(e.target.value) || 1,
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Difficulty
+                </label>
+                <select
+                  value={newPlan.difficulty}
+                  onChange={e =>
+                    setNewPlan({ ...newPlan, difficulty: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 >
-                  <Eye className="w-4 h-4" />
-                  Preview
-                </button>
-                <button
-                  onClick={() => handleEditPlan(plan.id)}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
-                >
-                  <Edit3 className="w-4 h-4" />
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeletePlan(plan.id, plan.name)}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center"
-                  title="Delete Plan"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Estimated Time
+                </label>
+                <input
+                  type="text"
+                  value={newPlan.estimatedTime}
+                  onChange={e =>
+                    setNewPlan({ ...newPlan, estimatedTime: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="e.g., 2-3 hours"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Description
+                </label>
+                <textarea
+                  value={newPlan.description}
+                  onChange={e =>
+                    setNewPlan({ ...newPlan, description: e.target.value })
+                  }
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="Describe what this plan covers..."
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Features
+                </label>
+                <div className="space-y-2">
+                  {newPlan.features.map((feature, index) => (
+                    <div key={index} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={feature}
+                        onChange={e =>
+                          handleFeatureChange(index, e.target.value)
+                        }
+                        className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                        placeholder="e.g., Interactive exercises"
+                      />
+                      {newPlan.features.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeFeature(index)}
+                          className="px-3 py-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addFeature}
+                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm flex items-center gap-1"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Feature
+                  </button>
+                </div>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={newPlan.isRecommended}
+                    onChange={e =>
+                      setNewPlan({
+                        ...newPlan,
+                        isRecommended: e.target.checked,
+                      })
+                    }
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Mark as recommended plan
+                  </span>
+                </label>
               </div>
             </div>
-          ))}
-        </div>
+
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => setIsCreatingPlan(false)}
+                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSavePlan}
+                disabled={!newPlan.name.trim() || !newPlan.description.trim()}
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2"
+              >
+                <Save className="w-4 h-4" />
+                Create Plan
+              </button>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <div className="bg-red-100 dark:bg-red-900 border border-red-400 text-red-700 dark:text-red-300 px-4 py-3 rounded mb-6">
+            <strong>Error:</strong> {error}
+          </div>
+        )}
+
+        {!isLoading && !error && (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {plans.map(plan => (
+              <div
+                key={plan.id}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    {plan.name}
+                  </h3>
+                  <div className="flex items-center space-x-2">
+                    <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs font-medium">
+                      {plan.sections?.length || 0} sections
+                    </span>
+                    <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs font-medium">
+                      {plan.totalQuestions || 0} questions
+                    </span>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  {plan.description}
+                </p>
+
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  <h4 className="font-medium text-gray-900 dark:text-white sticky top-0 bg-white dark:bg-gray-800 py-1">
+                    Sections:
+                  </h4>
+                  {plan.sections?.map((section: any) => (
+                    <div
+                      key={section.id}
+                      className="flex items-center justify-between text-sm py-1"
+                    >
+                      <span className="text-gray-600 dark:text-gray-400 truncate flex-1 mr-2">
+                        • {section.name}
+                      </span>
+                      {section.categoryId && (
+                        <span
+                          className="px-2 py-1 rounded-full text-xs font-medium text-white flex-shrink-0"
+                          style={{
+                            backgroundColor: getCategoryColor(
+                              section.categoryId
+                            ),
+                          }}
+                        >
+                          {getCategoryName(section.categoryId, plan.sections)}
+                        </span>
+                      )}
+                    </div>
+                  )) || (
+                    <p className="text-gray-500 text-sm">
+                      No sections available
+                    </p>
+                  )}
+                </div>
+
+                <div className="mt-6 flex space-x-2">
+                  <button
+                    onClick={() => handlePreviewPlan(plan.id)}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Eye className="w-4 h-4" />
+                    Preview
+                  </button>
+                  <button
+                    onClick={() => handleEditPlan(plan.id)}
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Edit3 className="w-4 h-4" />
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeletePlan(plan.id, plan.name)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center"
+                    title="Delete Plan"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Confirmation Dialog */}
+      {ConfirmationDialog}
     </div>
   );
 }

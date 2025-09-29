@@ -3,10 +3,10 @@ import { firestoreService } from '@/lib/firestore-service';
 
 export async function GET(
   request: Request,
-  { params }: { params: { planId: string } }
+  { params }: { params: Promise<{ planId: string }> }
 ) {
   try {
-    const { planId } = params;
+    const { planId } = await params;
 
     if (!planId) {
       return NextResponse.json({ success: false, error: 'Plan ID is required' }, { status: 400 });
@@ -28,10 +28,10 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { planId: string } }
+  { params }: { params: Promise<{ planId: string }> }
 ) {
   try {
-    const { planId } = params;
+    const { planId } = await params;
     const updateData = await request.json();
 
     if (!planId) {

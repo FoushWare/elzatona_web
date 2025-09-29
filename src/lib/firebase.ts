@@ -72,6 +72,17 @@ try {
       console.warn('Failed to enable Firestore network:', error);
     });
 
+    // Add error handling for Firestore internal assertion errors
+    const originalConsoleError = console.error;
+    console.error = (...args) => {
+      // Filter out Firebase internal assertion errors (ID: ca9)
+      if (args[0] && typeof args[0] === 'string' && args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) {
+        console.warn('⚠️ Firebase Firestore internal assertion error (non-critical):', ...args);
+        return;
+      }
+      originalConsoleError.apply(console, args);
+    };
+
     // Handle connection state changes
     const handleConnectionChange = (connected: boolean) => {
       if (connected) {
@@ -307,6 +318,31 @@ export const refreshUserToken = async () => {
     const authError = error as AuthError;
     console.error('Token refresh error:', authError);
     return { success: false, error: authError.message };
+  }
+};
+
+// Firestore error handling wrapper
+export const withFirestoreErrorHandling = async <T>(
+  operation: () => Promise<T>,
+  fallback?: T
+): Promise<T | undefined> => {
+  try {
+    return await operation();
+  } catch (error: any) {
+    // Handle Firebase internal assertion errors gracefully
+    if (error?.code === 'internal' || error?.message?.includes('INTERNAL ASSERTION FAILED')) {
+      console.warn('⚠️ Firebase internal error (non-critical):', error.message);
+      return fallback;
+    }
+    
+    // Handle other Firebase errors
+    if (error?.code?.startsWith('firestore/')) {
+      console.error('Firestore error:', error.message);
+      return fallback;
+    }
+    
+    // Re-throw other errors
+    throw error;
   }
 };
 

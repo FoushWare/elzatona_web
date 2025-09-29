@@ -343,7 +343,11 @@ export default function GuidedLearningPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
             <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-4">
               <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                100-400
+                {templatesLoading
+                  ? '...'
+                  : templates.length > 0
+                    ? `${Math.min(...templates.map(p => p.totalQuestions))}-${Math.max(...templates.map(p => p.totalQuestions))}`
+                    : '100-400'}
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 Questions per Plan
@@ -351,7 +355,11 @@ export default function GuidedLearningPage() {
             </div>
             <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-4">
               <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                1-7
+                {templatesLoading
+                  ? '...'
+                  : templates.length > 0
+                    ? `${Math.min(...templates.map(p => p.duration))}-${Math.max(...templates.map(p => p.duration))}`
+                    : '1-7'}
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 Days Available

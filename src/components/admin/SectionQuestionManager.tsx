@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -19,16 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  Plus,
-  Search,
-  Filter,
-  BookOpen,
-  Target,
-  Clock,
-  X,
-  Check,
-} from 'lucide-react';
+import { Search, Filter, BookOpen, Check } from 'lucide-react';
 
 interface Question {
   id: string;
@@ -87,7 +77,9 @@ export const SectionQuestionManager: React.FC<SectionQuestionManagerProps> = ({
       setSelectedQuestions(section.questions || []);
 
       // Auto-select category based on section category or localStorage
-      const sectionCategory = section.category?.toLowerCase();
+      const sectionCategory = section.category
+        ?.toLowerCase()
+        .replace(/[^a-z0-9]/g, '');
       const storedCategory = localStorage.getItem('selectedSectionCategory');
 
       if (sectionCategory) {
@@ -184,8 +176,18 @@ export const SectionQuestionManager: React.FC<SectionQuestionManagerProps> = ({
     const matchesSearch =
       question.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       question.content.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // Normalize category names for comparison
+    const questionCategory = question.category
+      ?.toLowerCase()
+      .replace(/[^a-z0-9]/g, '');
+    const filterCategoryNormalized =
+      filterCategory === 'all'
+        ? 'all'
+        : filterCategory.toLowerCase().replace(/[^a-z0-9]/g, '');
+
     const matchesCategory =
-      filterCategory === 'all' || question.category === filterCategory;
+      filterCategory === 'all' || questionCategory === filterCategoryNormalized;
     const matchesDifficulty =
       filterDifficulty === 'all' || question.difficulty === filterDifficulty;
 
@@ -209,17 +211,17 @@ export const SectionQuestionManager: React.FC<SectionQuestionManagerProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
-        <DialogHeader>
+      <DialogContent className="max-w-6xl max-h-[90vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center space-x-2">
             <BookOpen className="w-5 h-5" />
             <span>Manage Questions for: {section.name}</span>
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col flex-1 min-h-0">
           {/* Filters */}
-          <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg flex-shrink-0">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -239,7 +241,9 @@ export const SectionQuestionManager: React.FC<SectionQuestionManagerProps> = ({
                   {categories.map(category => (
                     <SelectItem
                       key={category.id}
-                      value={category.name.toLowerCase()}
+                      value={category.name
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]/g, '')}
                     >
                       {category.name}
                     </SelectItem>
@@ -275,7 +279,7 @@ export const SectionQuestionManager: React.FC<SectionQuestionManagerProps> = ({
           </div>
 
           {/* Selected Questions Summary */}
-          <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+          <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex-shrink-0">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
                 Selected Questions: {selectedQuestions.length}
@@ -292,7 +296,7 @@ export const SectionQuestionManager: React.FC<SectionQuestionManagerProps> = ({
           </div>
 
           {/* Questions List */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto min-h-0">
             {isLoading ? (
               <div className="flex items-center justify-center h-32">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
@@ -386,36 +390,36 @@ export const SectionQuestionManager: React.FC<SectionQuestionManagerProps> = ({
               </div>
             )}
           </div>
+        </div>
 
-          {/* Actions */}
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                {selectedQuestions.length} question
-                {selectedQuestions.length !== 1 ? 's' : ''} selected
-              </div>
-              <div className="flex space-x-2">
-                <Button variant="outline" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className="bg-indigo-600 hover:bg-indigo-700"
-                >
-                  {isSaving ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Saving...
-                    </>
-                  ) : (
-                    <>
-                      <Check className="w-4 h-4 mr-2" />
-                      Save Questions
-                    </>
-                  )}
-                </Button>
-              </div>
+        {/* Actions */}
+        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
+          <div className="flex justify-between items-center">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {selectedQuestions.length} question
+              {selectedQuestions.length !== 1 ? 's' : ''} selected
+            </div>
+            <div className="flex space-x-2">
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="bg-indigo-600 hover:bg-indigo-700"
+              >
+                {isSaving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-4 h-4 mr-2" />
+                    Save Questions
+                  </>
+                )}
+              </Button>
             </div>
           </div>
         </div>

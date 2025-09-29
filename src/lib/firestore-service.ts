@@ -9,6 +9,7 @@ import {
   setDoc,
   updateDoc,
   addDoc,
+  deleteDoc,
   query,
   where,
   orderBy,
@@ -392,13 +393,30 @@ class FirestoreService {
     }
 
     try {
+      console.log('📋 FirestoreService: Getting all learning plan templates...');
+      console.log('📋 FirestoreService: Using project ID:', db.app.options.projectId);
       const plansRef = collection(db, 'learningPlanTemplates');
       const q = query(plansRef, orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => ({
+      
+      const plans = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
       }));
+      
+      console.log('📋 FirestoreService: Found', plans.length, 'plans');
+      console.log('📋 FirestoreService: Plan IDs:', plans.map(p => p.id));
+      
+      // Check specifically for api-integration
+      const apiPlan = plans.find(p => p.id === 'api-integration');
+      if (apiPlan) {
+        console.log('⚠️ FirestoreService: api-integration plan found in list:', apiPlan.name);
+        console.log('⚠️ FirestoreService: api-integration plan data:', JSON.stringify(apiPlan, null, 2));
+      } else {
+        console.log('✅ FirestoreService: api-integration plan NOT found in list');
+      }
+      
+      return plans;
     } catch (error) {
       console.error('Error getting learning plan templates:', error);
       // Return empty array instead of throwing to prevent app crashes
@@ -431,10 +449,22 @@ class FirestoreService {
 
   async deleteLearningPlanTemplate(planId: string): Promise<void> {
     try {
+      console.log('🗑️ FirestoreService: Attempting to delete plan:', planId);
       const planRef = doc(db, 'learningPlanTemplates', planId);
-      await planRef.delete();
+      console.log('🗑️ FirestoreService: Plan reference created:', planRef.path);
+      
+      // Check if document exists before deleting
+      const docSnap = await getDoc(planRef);
+      if (!docSnap.exists()) {
+        console.log('⚠️ FirestoreService: Document does not exist, but continuing with delete');
+      } else {
+        console.log('✅ FirestoreService: Document exists, proceeding with delete');
+      }
+      
+      await deleteDoc(planRef);
+      console.log('✅ FirestoreService: Successfully deleted plan:', planId);
     } catch (error) {
-      console.error('Error deleting learning plan template:', error);
+      console.error('❌ FirestoreService: Error deleting learning plan template:', error);
       throw error;
     }
   }
@@ -558,6 +588,188 @@ class FirestoreService {
     } catch (error) {
       console.error('Error deleting learning path:', error);
       return false;
+    }
+  }
+
+  // Section Management
+  async getAllSections(): Promise<any[]> {
+    if (!db) {
+      console.warn('Firestore not available');
+      return [];
+    }
+
+    try {
+      const sectionsRef = collection(db, 'sections');
+      const q = query(sectionsRef, orderBy('order', 'asc'));
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        updatedAt: doc.data().updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+      }));
+    } catch (error) {
+      console.error('Error getting sections:', error);
+      return [];
+    }
+  }
+
+  async createSection(sectionData: any): Promise<any> {
+    if (!db) {
+      throw new Error('Firestore not available');
+    }
+
+    try {
+      const sectionsRef = collection(db, 'sections');
+      const docRef = await addDoc(sectionsRef, {
+        ...sectionData,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+
+      return {
+        id: docRef.id,
+        ...sectionData,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('Error creating section:', error);
+      throw error;
+    }
+  }
+
+  async updateSection(sectionId: string, updates: any): Promise<any> {
+    if (!db) {
+      throw new Error('Firestore not available');
+    }
+
+    try {
+      const sectionRef = doc(db, 'sections', sectionId);
+      await updateDoc(sectionRef, {
+        ...updates,
+        updatedAt: serverTimestamp(),
+      });
+
+      // Return updated data
+      const updatedSnap = await getDoc(sectionRef);
+      if (updatedSnap.exists()) {
+        return {
+          id: updatedSnap.id,
+          ...updatedSnap.data(),
+          createdAt: updatedSnap.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+          updatedAt: updatedSnap.data().updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error updating section:', error);
+      throw error;
+    }
+  }
+
+  async deleteSection(sectionId: string): Promise<void> {
+    if (!db) {
+      throw new Error('Firestore not available');
+    }
+
+    try {
+      const sectionRef = doc(db, 'sections', sectionId);
+      await sectionRef.delete();
+    } catch (error) {
+      console.error('Error deleting section:', error);
+      throw error;
+    }
+  }
+
+  // Category Management
+  async getAllCategories(): Promise<any[]> {
+    if (!db) {
+      console.warn('Firestore not available');
+      return [];
+    }
+
+    try {
+      const categoriesRef = collection(db, 'categories');
+      const q = query(categoriesRef, orderBy('name', 'asc'));
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        updatedAt: doc.data().updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+      }));
+    } catch (error) {
+      console.error('Error getting categories:', error);
+      return [];
+    }
+  }
+
+  async createCategory(categoryData: any): Promise<any> {
+    if (!db) {
+      throw new Error('Firestore not available');
+    }
+
+    try {
+      const categoriesRef = collection(db, 'categories');
+      const docRef = await addDoc(categoriesRef, {
+        ...categoryData,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+
+      return {
+        id: docRef.id,
+        ...categoryData,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('Error creating category:', error);
+      throw error;
+    }
+  }
+
+  async updateCategory(categoryId: string, updates: any): Promise<any> {
+    if (!db) {
+      throw new Error('Firestore not available');
+    }
+
+    try {
+      const categoryRef = doc(db, 'categories', categoryId);
+      await updateDoc(categoryRef, {
+        ...updates,
+        updatedAt: serverTimestamp(),
+      });
+
+      // Return updated data
+      const updatedSnap = await getDoc(categoryRef);
+      if (updatedSnap.exists()) {
+        return {
+          id: updatedSnap.id,
+          ...updatedSnap.data(),
+          createdAt: updatedSnap.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+          updatedAt: updatedSnap.data().updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error updating category:', error);
+      throw error;
+    }
+  }
+
+  async deleteCategory(categoryId: string): Promise<void> {
+    if (!db) {
+      throw new Error('Firestore not available');
+    }
+
+    try {
+      const categoryRef = doc(db, 'categories', categoryId);
+      await categoryRef.delete();
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      throw error;
     }
   }
 }
