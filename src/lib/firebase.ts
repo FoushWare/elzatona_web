@@ -142,16 +142,18 @@ try {
       }
     }, 10000); // Check every 10 seconds
 
-    // Add global error handler for unhandled Firestore errors
-    window.addEventListener('unhandledrejection', (event) => {
-      if (event.reason && event.reason.message && 
-          (event.reason.message.includes('FIRESTORE') || 
-           event.reason.message.includes('INTERNAL ASSERTION FAILED') ||
-           event.reason.message.includes('Unexpected state'))) {
-        console.warn('⚠️ Suppressed unhandled Firestore error:', event.reason);
-        event.preventDefault(); // Prevent the error from being logged to console
-      }
-    });
+    // Add global error handler for unhandled Firestore errors (only in browser)
+    if (typeof window !== 'undefined') {
+      window.addEventListener('unhandledrejection', (event) => {
+        if (event.reason && event.reason.message && 
+            (event.reason.message.includes('FIRESTORE') || 
+             event.reason.message.includes('INTERNAL ASSERTION FAILED') ||
+             event.reason.message.includes('Unexpected state'))) {
+          console.warn('⚠️ Suppressed unhandled Firestore error:', event.reason);
+          event.preventDefault(); // Prevent the error from being logged to console
+        }
+      });
+    }
   }
 
   // Configure authentication persistence
