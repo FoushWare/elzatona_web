@@ -286,9 +286,6 @@ export default function LearningPathDetailPage() {
                   </span>
                 </div>
 
-                <h3 className="text-lg font-semibold text-foreground mb-4">
-                  {currentQuestion.title}
-                </h3>
 
                 {/* Question Content */}
                 <div className="mb-6">
