@@ -67,19 +67,53 @@ export async function POST(request: NextRequest) {
       enrolledUsers: planData.enrolledUsers || 0,
     };
 
-    // For now, just return success since we're using mock data
-    // In a real implementation, you would save to Firestore here
-    console.log('Creating new plan:', newPlan);
+    // Save to Firestore
+    const planId = await firestoreService.saveLearningPlanTemplate(newPlan);
+    const createdPlan = { ...newPlan, id: planId };
     
     return NextResponse.json({
       success: true,
       message: 'Plan created successfully',
-      plan: newPlan
+      plan: createdPlan
     });
   } catch (error) {
     console.error('Error creating learning plan:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to create learning plan' },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE /api/guided-learning/plans - Delete a learning plan
+export async function DELETE(request: NextRequest) {
+  try {
+    console.log('DELETE request received');
+    const { searchParams } = new URL(request.url);
+    const planId = searchParams.get('id');
+    console.log('Plan ID to delete:', planId);
+
+    if (!planId) {
+      console.log('No plan ID provided');
+      return NextResponse.json(
+        { success: false, error: 'Plan ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Delete from Firestore
+    console.log('Attempting to delete from Firestore...');
+    await firestoreService.deleteLearningPlanTemplate(planId);
+    console.log('Successfully deleted from Firestore');
+    
+    return NextResponse.json({
+      success: true,
+      message: 'Plan deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting learning plan:', error);
+    return NextResponse.json(
+      { success: false, error: `Failed to delete learning plan: ${error.message}` },
       { status: 500 }
     );
   }

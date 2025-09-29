@@ -45,27 +45,37 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             return new Date(timestamp);
           };
 
+          // Calculate total questions from sections
+          const sections = plan.sections || [];
+          const totalQuestions = sections.reduce((total: number, section: any) => {
+            return total + (section.questions ? section.questions.length : 0);
+          }, 0);
+
+          // Calculate daily questions based on total questions and duration
+          const duration = plan.duration || 1;
+          const dailyQuestions = totalQuestions > 0 ? Math.ceil(totalQuestions / duration) : 0;
+
           return {
             id: plan.id,
             name: plan.name || `${plan.duration} Day Plan`,
-            duration: plan.duration || 1,
+            duration: duration,
             description: plan.description || `${plan.duration}-day intensive preparation plan`,
             difficulty: plan.difficulty || 'Intermediate',
-            totalQuestions: plan.totalQuestions || 100,
-            dailyQuestions: plan.dailyQuestions || Math.ceil((plan.totalQuestions || 100) / (plan.duration || 1)),
-            sections: plan.sections || [
-              { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 25 },
-              { id: 'javascript', name: 'JavaScript', questions: [], weight: 35 },
-              { id: 'react', name: 'React', questions: [], weight: 25 },
-              { id: 'general', name: 'General', questions: [], weight: 15 },
-            ],
+            totalQuestions: totalQuestions || plan.totalQuestions || 100,
+            dailyQuestions: dailyQuestions || plan.dailyQuestions || Math.ceil((plan.totalQuestions || 100) / duration),
+            sections: sections.map((section: any) => ({
+              id: section.id,
+              name: section.name,
+              questions: section.questions || [],
+              weight: section.weight || 0,
+            })),
             features: plan.features || [
               'Structured learning path',
               'Progress tracking',
               'Curated questions',
             ],
-            estimatedTime: plan.estimatedTime || `${Math.ceil((plan.duration || 1) * 2)}-${Math.ceil((plan.duration || 1) * 3)} hours`,
-            isRecommended: plan.isRecommended || (plan.duration === 3 || plan.duration === 7),
+            estimatedTime: plan.estimatedTime || `${Math.ceil(duration * 2)}-${Math.ceil(duration * 3)} hours`,
+            isRecommended: plan.isRecommended || (duration === 3 || duration === 7),
             isActive: plan.isActive !== false,
             createdAt: parseFirestoreTimestamp(plan.createdAt),
             updatedAt: parseFirestoreTimestamp(plan.updatedAt),
@@ -86,9 +96,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             totalQuestions: 100,
             dailyQuestions: 100,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 40 },
-              { id: 'javascript', name: 'JavaScript', questions: [], weight: 40 },
-              { id: 'react', name: 'React', questions: [], weight: 20 },
+              { id: 'html-css', name: 'HTML & CSS', questions: new Array(40).fill(null).map((_, i) => `q${i + 1}`), weight: 40 },
+              { id: 'javascript', name: 'JavaScript', questions: new Array(40).fill(null).map((_, i) => `q${i + 41}`), weight: 40 },
+              { id: 'react', name: 'React', questions: new Array(20).fill(null).map((_, i) => `q${i + 81}`), weight: 20 },
             ],
             features: ['Quick review', 'Essential concepts', 'Common questions'],
             estimatedTime: '2-3 hours',
@@ -106,9 +116,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             totalQuestions: 150,
             dailyQuestions: 75,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 40 },
-              { id: 'javascript', name: 'JavaScript', questions: [], weight: 40 },
-              { id: 'react', name: 'React', questions: [], weight: 20 },
+              { id: 'html-css', name: 'HTML & CSS', questions: new Array(60).fill(null).map((_, i) => `q${i + 1}`), weight: 40 },
+              { id: 'javascript', name: 'JavaScript', questions: new Array(60).fill(null).map((_, i) => `q${i + 61}`), weight: 40 },
+              { id: 'react', name: 'React', questions: new Array(30).fill(null).map((_, i) => `q${i + 121}`), weight: 20 },
             ],
             features: ['Balanced coverage', 'Practice sessions', 'Progress tracking'],
             estimatedTime: '3-4 hours',
@@ -126,10 +136,10 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             totalQuestions: 200,
             dailyQuestions: 67,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 20 },
-              { id: 'javascript', name: 'JavaScript', questions: [], weight: 40 },
-              { id: 'react', name: 'React', questions: [], weight: 20 },
-              { id: 'typescript', name: 'TypeScript', questions: [], weight: 20 },
+              { id: 'html-css', name: 'HTML & CSS', questions: new Array(40).fill(null).map((_, i) => `q${i + 1}`), weight: 20 },
+              { id: 'javascript', name: 'JavaScript', questions: new Array(80).fill(null).map((_, i) => `q${i + 41}`), weight: 40 },
+              { id: 'react', name: 'React', questions: new Array(40).fill(null).map((_, i) => `q${i + 121}`), weight: 20 },
+              { id: 'typescript', name: 'TypeScript', questions: new Array(40).fill(null).map((_, i) => `q${i + 161}`), weight: 20 },
             ],
             features: ['Extended coverage', 'Daily milestones', 'TypeScript basics'],
             estimatedTime: '4-5 hours',
