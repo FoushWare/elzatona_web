@@ -4,6 +4,7 @@ import React from 'react';
 import { AdminAuthProvider, useAdminAuth } from '@/contexts/AdminAuthContext';
 import AdminNavbar from '@/components/AdminNavbar';
 import { NotificationContainer } from '@/components/ui/Notification';
+import FirestoreErrorBoundary from '@/components/FirestoreErrorBoundary';
 import { usePathname } from 'next/navigation';
 // ThemeProvider is already provided by root layout
 import '../globals.css';
@@ -65,7 +66,11 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AdminNavbar />
-      <main className="pt-20">{children}</main>
+      <main className="pt-20">
+        <FirestoreErrorBoundary>
+          {children}
+        </FirestoreErrorBoundary>
+      </main>
       <NotificationContainer />
     </div>
   );
