@@ -28,7 +28,7 @@ interface Question {
   answer?: string;
 }
 
-export default function TestGuidedPracticePage() {
+function TestGuidedPracticeContent() {
   const searchParams = useSearchParams();
   const planId = searchParams.get('plan');
 
@@ -374,5 +374,13 @@ export default function TestGuidedPracticePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TestGuidedPracticePage() {
+  return (
+    <Suspense fallback={<div className="text-center">Loading...</div>}>
+      <TestGuidedPracticeContent />
+    </Suspense>
   );
 }
