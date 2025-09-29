@@ -3,6 +3,7 @@
 import React from 'react';
 import { AdminAuthProvider, useAdminAuth } from '@/contexts/AdminAuthContext';
 import AdminNavbar from '@/components/AdminNavbar';
+import { NotificationContainer } from '@/components/ui/Notification';
 import { usePathname } from 'next/navigation';
 // ThemeProvider is already provided by root layout
 import '../globals.css';
@@ -65,6 +66,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AdminNavbar />
       <main className="pt-20">{children}</main>
+      <NotificationContainer />
     </div>
   );
 }
