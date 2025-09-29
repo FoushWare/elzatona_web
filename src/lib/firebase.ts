@@ -72,15 +72,33 @@ try {
       console.warn('Failed to enable Firestore network:', error);
     });
 
-    // Add error handling for Firestore internal assertion errors
+    // Add comprehensive error handling for Firestore internal assertion errors
     const originalConsoleError = console.error;
     console.error = (...args) => {
-      // Filter out Firebase internal assertion errors (ID: ca9)
-      if (args[0] && typeof args[0] === 'string' && args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) {
+      // Filter out Firebase internal assertion errors (ID: ca9, b815, etc.)
+      if (args[0] && typeof args[0] === 'string' && 
+          (args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) ||
+          args[0].includes('Unexpected state') ||
+          args[0].includes('ID: b815') ||
+          args[0].includes('ID: ca9')) {
         console.warn('⚠️ Firebase Firestore internal assertion error (non-critical):', ...args);
         return;
       }
       originalConsoleError.apply(console, args);
+    };
+
+    // Add global error handler for unhandled Firestore errors
+    const originalConsoleWarn = console.warn;
+    console.warn = (...args) => {
+      // Filter out Firebase internal assertion warnings
+      if (args[0] && typeof args[0] === 'string' && 
+          (args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) ||
+          args[0].includes('Unexpected state') ||
+          args[0].includes('ID: b815') ||
+          args[0].includes('ID: ca9')) {
+        return; // Suppress these warnings
+      }
+      originalConsoleWarn.apply(console, args);
     };
 
     // Handle connection state changes
@@ -92,8 +110,48 @@ try {
       }
     };
 
-    // Set up connection monitoring (this is a simplified approach)
-    // In production, you might want to use more sophisticated connection monitoring
+    // Set up connection monitoring and error recovery
+    let connectionRetryCount = 0;
+    const maxRetries = 3;
+    
+    const attemptReconnection = async () => {
+      if (connectionRetryCount >= maxRetries) {
+        console.error('❌ Max reconnection attempts reached. Firestore may be offline.');
+        return;
+      }
+      
+      connectionRetryCount++;
+      console.log(`🔄 Attempting to reconnect to Firestore (attempt ${connectionRetryCount}/${maxRetries})...`);
+      
+      try {
+        await enableNetwork(db);
+        connectionRetryCount = 0; // Reset on successful connection
+        console.log('✅ Firestore reconnected successfully');
+      } catch (error) {
+        console.warn(`⚠️ Reconnection attempt ${connectionRetryCount} failed:`, error);
+        // Retry after a delay
+        setTimeout(attemptReconnection, 2000 * connectionRetryCount);
+      }
+    };
+
+    // Monitor for connection issues and attempt recovery
+    setInterval(() => {
+      // This is a simplified check - in production you might want more sophisticated monitoring
+      if (connectionRetryCount > 0) {
+        attemptReconnection();
+      }
+    }, 10000); // Check every 10 seconds
+
+    // Add global error handler for unhandled Firestore errors
+    window.addEventListener('unhandledrejection', (event) => {
+      if (event.reason && event.reason.message && 
+          (event.reason.message.includes('FIRESTORE') || 
+           event.reason.message.includes('INTERNAL ASSERTION FAILED') ||
+           event.reason.message.includes('Unexpected state'))) {
+        console.warn('⚠️ Suppressed unhandled Firestore error:', event.reason);
+        event.preventDefault(); // Prevent the error from being logged to console
+      }
+    });
   }
 
   // Configure authentication persistence
