@@ -54,18 +54,28 @@ export default function GuidedLearningAdminPage() {
   const { showConfirmation, ConfirmationDialog } = useConfirmation();
 
   // Filter to only show day-based plans (1-day, 2-day, 3-day, 4-day, 5-day, 6-day, 7-day)
-  const plans = allPlans.filter(plan => {
-    const dayBasedPlans = [
-      '1-day-plan',
-      '2-day-plan',
-      '3-day-plan',
-      '4-day-plan',
-      '5-day-plan',
-      '6-day-plan',
-      '7-day-plan',
-    ];
-    return dayBasedPlans.includes(plan.id);
-  });
+  const plans = allPlans
+    .filter(plan => {
+      const dayBasedPlans = [
+        '1-day-plan',
+        '2-day-plan',
+        '3-day-plan',
+        '4-day-plan',
+        '5-day-plan',
+        '6-day-plan',
+        '7-day-plan',
+      ];
+      return dayBasedPlans.includes(plan.id);
+    })
+    .sort((a, b) => {
+      // Extract day number from plan ID (e.g., "1-day-plan" -> 1)
+      const getDayNumber = (planId: string) => {
+        const match = planId.match(/(\d+)-day-plan/);
+        return match ? parseInt(match[1], 10) : 0;
+      };
+      
+      return getDayNumber(a.id) - getDayNumber(b.id);
+    });
 
   // State for creating/editing plans
   const [isCreatingPlan, setIsCreatingPlan] = useState(false);
