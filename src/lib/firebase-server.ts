@@ -1,6 +1,6 @@
 // Server-side Firebase configuration for Next.js 15 compatibility
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore } from 'firebase/firestore';
+import { getFirestore, Firestore, collection, getDocs, query, where, orderBy, limit, startAfter, doc, getDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -31,7 +31,5 @@ try {
   console.error('❌ Firebase server initialization failed:', error);
 }
 
-export { app, db };
-
-
-
+// Export Firebase utilities for server-side use
+export { app, db, collection, getDocs, query, where, orderBy, limit, startAfter, doc, getDoc, addDoc, updateDoc, deleteDoc };
