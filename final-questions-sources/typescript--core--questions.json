@@ -1,0 +1,331 @@
+{
+  "category": "TypeScript (Core)",
+  "totalQuestions": 12,
+  "exportedAt": "2025-09-30T00:28:57.749Z",
+  "questions": [
+    {
+      "id": "imported-typescript-essentials-1759191719956-2",
+      "content": "Explain TypeScript advanced types: Union, Intersection, Literal, and Discriminated Unions.",
+      "updatedAt": "2025-09-30T00:21:59.978Z",
+      "codeBlock": "type StringOrNumber = string | number;\ntype Status = 'loading' | 'success' | 'error';\n\nfunction processValue(value: StringOrNumber): string {\n  if (typeof value === 'string') {\n    return value.toUpperCase();\n  }\n  return value.toString();\n}\n\n// Union with different shapes\ntype Shape =\n  | { kind: 'circle'; radius: number }\n  | { kind: 'rectangle'; width: number; height: number }\n  | { kind: 'triangle'; base: number; height: number };\n\nfunction getArea(shape: Shape): number {\n  switch (shape.kind) {\n    case 'circle':\n      return Math.PI * shape.radius ** 2;\n    case 'rectangle':\n      return shape.width * shape.height;\n    case 'triangle':\n      return (shape.base * shape.height) / 2;\n  }\n}",
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "importedAt": "2025-09-30T00:21:59.956Z",
+      "difficulty": "intermediate",
+      "isActive": true,
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "title": "TypeScript Advanced Types",
+      "explanation": "**Union Types:**\n\ntype StringOrNumber = string | number;\ntype Status = 'loading' | 'success' | 'error';\n\nfunction processValue(value: StringOrNumber): string {\nif (typeof value === 'string') {\nreturn value.toUpperCase();\n}\nreturn value.toString();\n}\n\n// Union with different shapes\ntype Shape =\n| { kind: 'circle'; radius: number }\n| { kind: 'rectangle'; width: number; height: number }\n| { kind: 'triangle'; base: number; height: number };\n\nfunction getArea(shape: Shape): number {\nswitch (shape.kind) {\ncase 'circle':\nreturn Math.PI * shape.radius ** 2;\ncase 'rectangle':\nreturn shape.width * shape.height;\ncase 'triangle':\nreturn (shape.base * shape.height) / 2;\n}\n}\n\n**Intersection Types:**\n\ninterface Person {\nname: string;\nage: number;\n}\n\ninterface Employee {\nemployeeId: string;\ndepartment: string;\n}\n\ntype PersonEmployee = Person & Employee;\n\nconst john: PersonEmployee = {\nname: 'John',\nage: 30,\nemployeeId: 'EMP001',\ndepartment: 'Engineering',\n};\n\n// Mixin pattern\ntype Constructor<T = {}> = new (...args: any[]) => T;\n\nfunction Timestamped<TBase extends Constructor>(Base: TBase) {\nreturn class extends Base {\ntimestamp = Date.now();\n};\n}\n\nclass User {\nname: string;\nconstructor(name: string) {\nthis.name = name;\n}\n}\n\nconst TimestampedUser = Timestamped(User);\nconst user = new TimestampedUser('John');\nconsole.log(user.timestamp); // number\n\n**Literal Types:**\n\n// String literals\ntype Theme = 'light' | 'dark';\ntype Direction = 'up' | 'down' | 'left' | 'right';\n\n// Numeric literals\ntype DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;\n\n// Boolean literals\ntype Success = true;\ntype Failure = false;\n\n// Template literal types\ntype CSSProperty = `margin-${'top' | 'bottom' | 'left' | 'right'}`;\n// 'margin-top' | 'margin-bottom' | 'margin-left' | 'margin-right'\n\ntype EventHandler<T extends string> = `on${Capitalize<T>}`;\ntype ClickHandler = EventHandler<'click'>; // 'onClick'\n\n**Discriminated Unions:**\n\n// API Response discriminated union\ntype ApiResponse<T> =\n| { status: 'loading' }\n| { status: 'success'; data: T }\n| { status: 'error'; error: string };\n\nfunction handleResponse<T>(response: ApiResponse<T>) {\nswitch (response.status) {\ncase 'loading':\nconsole.log('Loading...');\nbreak;\ncase 'success':\nconsole.log('Data:', response.data);\nbreak;\ncase 'error':\nconsole.error('Error:', response.error);\nbreak;\n}\n}\n\n// Form state discriminated union\ntype FormState =\n| { type: 'idle' }\n| { type: 'submitting' }\n| { type: 'success'; message: string }\n| { type: 'error'; errors: string[] };\n\nfunction renderForm(state: FormState) {\nswitch (state.type) {\ncase 'idle':\nreturn <Form />;\ncase 'submitting':\nreturn <Spinner />;\ncase 'success':\nreturn <SuccessMessage message={state.message} />;\ncase 'error':\nreturn <ErrorMessage errors={state.errors} />;\n}\n}",
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "options": [],
+      "category": "TypeScript (Core)",
+      "type": "code",
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "isComplete": false
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719955-0",
+      "correctAnswer": null,
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "category": "TypeScript (Core)",
+      "isActive": true,
+      "explanation": "TypeScript utility types are built-in generic types that help manipulate existing types:\n\ninterface User {\nid: number;\nname: string;\nemail: string;\nage: number;\npassword: string;\n}\n\n// Pick: Select specific properties\ntype UserBasic = Pick<User, 'id' | 'name'>;\n// { id: number; name: string; }\n\n// Omit: Exclude specific properties\ntype UserWithoutId = Omit<User, 'id'>;\n// { name: string; email: string; age: number; password: string; }\n\n// Partial: Make all properties optional\ntype PartialUser = Partial<User>;\n// { id?: number; name?: string; email?: string; age?: number; password?: string; }\n\n// Required: Make all properties required\ntype RequiredUser = Required<PartialUser>;\n// { id: number; name: string; email: string; age: number; password: string; }\n\n// Record: Create object type with specific keys and values\ntype UserRoles = Record<string, string[]>;\n// { [key: string]: string[] }\n\n// Exclude: Exclude types from union\ntype Status = 'loading' | 'success' | 'error';\ntype NonErrorStatus = Exclude<Status, 'error'>; // 'loading' | 'success'\n\n// Extract: Extract types from union\ntype StringOrNumber = string | number;\ntype OnlyString = Extract<StringOrNumber, string>; // string\n\n**Practical Examples:**\n\n// API Response types\ninterface ApiResponse<T> {\ndata: T;\nstatus: number;\nmessage: string;\n}\n\ntype UserResponse = ApiResponse<User>;\ntype UserListResponse = ApiResponse<User[]>;\n\n// Form types\ntype CreateUserForm = Omit<User, 'id'>;\ntype UpdateUserForm = Partial<Pick<User, 'name' | 'email' | 'age'>>;\n\n// Component props\ninterface ButtonProps {\nvariant: 'primary' | 'secondary';\nsize: 'small' | 'medium' | 'large';\ndisabled?: boolean;\nonClick: () => void;\n}\n\ntype ButtonVariants = Pick<ButtonProps, 'variant'>;\ntype ButtonSizes = Pick<ButtonProps, 'size'>;",
+      "source": "QuestionsBank",
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "updatedAt": "2025-09-30T00:21:59.978Z",
+      "type": "code",
+      "title": "TypeScript Utility Types",
+      "content": "What are TypeScript utility types and provide examples of `Pick`, `Omit`, and `Partial`.",
+      "difficulty": "intermediate",
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "isComplete": false,
+      "importedAt": "2025-09-30T00:21:59.955Z",
+      "options": [],
+      "codeBlock": "interface User {\n  id: number;\n  name: string;\n  email: string;\n  age: number;\n  password: string;\n}\n\n// Pick: Select specific properties\ntype UserBasic = Pick<User, 'id' | 'name'>;\n// { id: number; name: string; }\n\n// Omit: Exclude specific properties\ntype UserWithoutId = Omit<User, 'id'>;\n// { name: string; email: string; age: number; password: string; }\n\n// Partial: Make all properties optional\ntype PartialUser = Partial<User>;\n// { id?: number; name?: string; email?: string; age?: number; password?: string; }\n\n// Required: Make all properties required\ntype RequiredUser = Required<PartialUser>;\n// { id: number; name: string; email: string; age: number; password: string; }\n\n// Record: Create object type with specific keys and values\ntype UserRoles = Record<string, string[]>;\n// { [key: string]: string[] }\n\n// Exclude: Exclude types from union\ntype Status = 'loading' | 'success' | 'error';\ntype NonErrorStatus = Exclude<Status, 'error'>; // 'loading' | 'success'\n\n// Extract: Extract types from union\ntype StringOrNumber = string | number;\ntype OnlyString = Extract<StringOrNumber, string>; // string"
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719956-5",
+      "importedAt": "2025-09-30T00:21:59.956Z",
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "difficulty": "intermediate",
+      "isComplete": false,
+      "correctAnswer": null,
+      "category": "TypeScript (Core)",
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "isActive": true,
+      "type": "code",
+      "title": "TypeScript Configuration and Tooling",
+      "codeBlock": "{\n  \"compilerOptions\": {\n    // Language and Environment\n    \"target\": \"ES2020\",\n    \"lib\": [\"ES2020\", \"DOM\", \"DOM.Iterable\"],\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"node\",\n\n    // Modules\n    \"esModuleInterop\": true,\n    \"allowSyntheticDefaultImports\": true,\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n\n    // Emit\n    \"declaration\": true,\n    \"declarationMap\": true,\n    \"sourceMap\": true,\n    \"outDir\": \"./dist\",\n    \"rootDir\": \"./src\",\n    \"removeComments\": true,\n\n    // Interop Constraints\n    \"allowJs\": true,\n    \"checkJs\": false,\n    \"skipLibCheck\": true,\n    \"forceConsistentCasingInFileNames\": true,\n\n    // Type Checking\n    \"strict\": true,\n    \"noImplicitAny\": true,\n    \"strictNullChecks\": true,\n    \"strictFunctionTypes\": true,\n    \"strictBindCallApply\": true,\n    \"strictPropertyInitialization\": true,\n    \"noImplicitReturns\": true,\n    \"noFallthroughCasesInSwitch\": true,\n    \"noUncheckedIndexedAccess\": true,\n\n    // Completeness\n    \"skipDefaultLibCheck\": true,\n    \"skipLibCheck\": true\n  },\n  \"include\": [\"src/**/*\"],\n  \"exclude\": [\"node_modules\", \"dist\", \"**/*.test.ts\", \"**/*.spec.ts\"],\n  \"ts-node\": {\n    \"esm\": true\n  }\n}",
+      "updatedAt": "2025-09-30T00:21:59.978Z",
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "source": "QuestionsBank",
+      "content": "How do you configure TypeScript for optimal development experience?",
+      "options": [],
+      "explanation": "**tsconfig.json Configuration:**\n\n{\n\"compilerOptions\": {\n// Language and Environment\n\"target\": \"ES2020\",\n\"lib\": [\"ES2020\", \"DOM\", \"DOM.Iterable\"],\n\"module\": \"ESNext\",\n\"moduleResolution\": \"node\",\n\n// Modules\n\"esModuleInterop\": true,\n\"allowSyntheticDefaultImports\": true,\n\"resolveJsonModule\": true,\n\"isolatedModules\": true,\n\n// Emit\n\"declaration\": true,\n\"declarationMap\": true,\n\"sourceMap\": true,\n\"outDir\": \"./dist\",\n\"rootDir\": \"./src\",\n\"removeComments\": true,\n\n// Interop Constraints\n\"allowJs\": true,\n\"checkJs\": false,\n\"skipLibCheck\": true,\n\"forceConsistentCasingInFileNames\": true,\n\n// Type Checking\n\"strict\": true,\n\"noImplicitAny\": true,\n\"strictNullChecks\": true,\n\"strictFunctionTypes\": true,\n\"strictBindCallApply\": true,\n\"strictPropertyInitialization\": true,\n\"noImplicitReturns\": true,\n\"noFallthroughCasesInSwitch\": true,\n\"noUncheckedIndexedAccess\": true,\n\n// Completeness\n\"skipDefaultLibCheck\": true,\n\"skipLibCheck\": true\n},\n\"include\": [\"src/**/*\"],\n\"exclude\": [\"node_modules\", \"dist\", \"**/*.test.ts\", \"**/*.spec.ts\"],\n\"ts-node\": {\n\"esm\": true\n}\n}\n\n**ESLint Configuration:**\n\n{\n\"extends\": [\n\"@typescript-eslint/recommended\",\n\"@typescript-eslint/recommended-requiring-type-checking\"\n],\n\"parser\": \"@typescript-eslint/parser\",\n\"parserOptions\": {\n\"ecmaVersion\": 2020,\n\"sourceType\": \"module\",\n\"project\": \"./tsconfig.json\"\n},\n\"plugins\": [\"@typescript-eslint\"],\n\"rules\": {\n\"@typescript-eslint/no-unused-vars\": \"error\",\n\"@typescript-eslint/no-explicit-any\": \"warn\",\n\"@typescript-eslint/explicit-function-return-type\": \"warn\",\n\"@typescript-eslint/no-non-null-assertion\": \"error\",\n\"@typescript-eslint/prefer-nullish-coalescing\": \"error\",\n\"@typescript-eslint/prefer-optional-chain\": \"error\"\n}\n}\n\n**Prettier Configuration:**\n\n{\n\"semi\": true,\n\"trailingComma\": \"es5\",\n\"singleQuote\": true,\n\"printWidth\": 80,\n\"tabWidth\": 2,\n\"useTabs\": false\n}\n\n**Package.json Scripts:**\n\n{\n\"scripts\": {\n\"build\": \"tsc\",\n\"build:watch\": \"tsc --watch\",\n\"type-check\": \"tsc --noEmit\",\n\"lint\": \"eslint src --ext .ts,.tsx\",\n\"lint:fix\": \"eslint src --ext .ts,.tsx --fix\",\n\"format\": \"prettier --write src/**/*.{ts,tsx}\",\n\"test\": \"jest\",\n\"test:watch\": \"jest --watch\",\n\"test:coverage\": \"jest --coverage\"\n}\n}\n\n**VS Code Settings:**\n\n{\n\"typescript.preferences.importModuleSpecifier\": \"relative\",\n\"typescript.suggest.autoImports\": true,\n\"typescript.updateImportsOnFileMove.enabled\": \"always\",\n\"editor.codeActionsOnSave\": {\n\"source.fixAll.eslint\": true,\n\"source.organizeImports\": true\n},\n\"editor.formatOnSave\": true,\n\"editor.defaultFormatter\": \"esbenp.prettier-vscode\"\n}"
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719955-1",
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "options": [],
+      "updatedAt": "2025-09-30T00:21:59.978Z",
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "difficulty": "intermediate",
+      "content": "Explain TypeScript generics and provide practical examples.",
+      "type": "code",
+      "importedAt": "2025-09-30T00:21:59.955Z",
+      "isComplete": false,
+      "codeBlock": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nconst stringResult = identity<string>('hello'); // string\nconst numberResult = identity<number>(42); // number\nconst inferredResult = identity('hello'); // TypeScript infers string",
+      "category": "TypeScript (Core)",
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "isActive": true,
+      "title": "TypeScript Generics",
+      "explanation": "Generics allow you to create reusable components that work with multiple types while maintaining type safety.\n\n**Basic Generic Function:**\n\nfunction identity<T>(arg: T): T {\nreturn arg;\n}\n\nconst stringResult = identity<string>('hello'); // string\nconst numberResult = identity<number>(42); // number\nconst inferredResult = identity('hello'); // TypeScript infers string\n\n**Generic Interface:**\n\ninterface Container<T> {\nvalue: T;\ngetValue(): T;\nsetValue(value: T): void;\n}\n\nclass Box<T> implements Container<T> {\nconstructor(public value: T) {}\n\ngetValue(): T {\nreturn this.value;\n}\n\nsetValue(value: T): void {\nthis.value = value;\n}\n}\n\nconst stringBox = new Box<string>('hello');\nconst numberBox = new Box<number>(42);\n\n**Generic Constraints:**\n\ninterface Lengthwise {\nlength: number;\n}\n\nfunction logLength<T extends Lengthwise>(arg: T): T {\nconsole.log(arg.length);\nreturn arg;\n}\n\nlogLength('hello'); // OK - string has length\nlogLength([1, 2, 3]); // OK - array has length\nlogLength(42); // Error - number doesn't have length\n\n// Multiple constraints\nfunction combine<T extends object, U extends object>(obj1: T, obj2: U): T & U {\nreturn { ...obj1, ...obj2 };\n}\n\nconst result = combine({ name: 'John' }, { age: 30 });\n// result: { name: string; age: number; }\n\n**Generic Classes:**\n\nclass Repository<T> {\nprivate items: T[] = [];\n\nadd(item: T): void {\nthis.items.push(item);\n}\n\nfindById(id: keyof T): T | undefined {\nreturn this.items.find(item => item[id] === id);\n}\n\ngetAll(): T[] {\nreturn [...this.items];\n}\n}\n\ninterface User {\nid: number;\nname: string;\n}\n\nconst userRepo = new Repository<User>();\nuserRepo.add({ id: 1, name: 'John' });\nconst user = userRepo.findById(1);\n\n**Advanced Generic Patterns:**\n\n// Conditional types\ntype NonNullable<T> = T extends null | undefined ? never : T;\n\n// Mapped types\ntype Readonly<T> = {\nreadonly [P in keyof T]: T[P];\n};\n\ntype Optional<T> = {\n[P in keyof T]?: T[P];\n};\n\n// Template literal types\ntype EventName<T extends string> = `on${Capitalize<T>}`;\ntype ClickEvent = EventName<'click'>; // 'onClick'\ntype ChangeEvent = EventName<'change'>; // 'onChange'\n\n// Utility type implementation\ntype MyPick<T, K extends keyof T> = {\n[P in K]: T[P];\n};\n\ntype MyOmit<T, K extends keyof T> = {\n[P in Exclude<keyof T, K>]: T[P];\n};",
+      "correctAnswer": null,
+      "source": "QuestionsBank"
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719956-3",
+      "correctAnswer": null,
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "isActive": true,
+      "category": "TypeScript (Core)",
+      "explanation": "**Functional Components:**\n\nimport React, { useState, useEffect } from 'react';\n\n// Props interface\ninterface UserCardProps {\nuser: {\nid: number;\nname: string;\nemail: string;\navatar?: string;\n};\nonEdit?: (user: UserCardProps['user']) => void;\nonDelete?: (id: number) => void;\n}\n\n// Functional component with TypeScript\nconst UserCard: React.FC<UserCardProps> = ({ user, onEdit, onDelete }) => {\nconst [isEditing, setIsEditing] = useState<boolean>(false);\n\nreturn (\n<div className=\"user-card\">\n<img src={user.avatar || '/default-avatar.png'} alt={user.name} />\n<h3>{user.name}</h3>\n<p>{user.email}</p>\n{onEdit && (\n<button onClick={() => onEdit(user)}>Edit</button>\n)}\n{onDelete && (\n<button onClick={() => onDelete(user.id)}>Delete</button>\n)}\n</div>\n);\n};\n\n// Generic component\ninterface ListProps<T> {\nitems: T[];\nrenderItem: (item: T) => React.ReactNode;\nkeyExtractor: (item: T) => string | number;\n}\n\nfunction List<T>({ items, renderItem, keyExtractor }: ListProps<T>) {\nreturn (\n<ul>\n{items.map(item => (\n<li key={keyExtractor(item)}>\n{renderItem(item)}\n</li>\n))}\n</ul>\n);\n}\n\n// Usage\nconst users = [\n{ id: 1, name: 'John', email: 'john@example.com' },\n{ id: 2, name: 'Jane', email: 'jane@example.com' }\n];\n\n<List\nitems={users}\nrenderItem={(user) => <UserCard user={user} />}\nkeyExtractor={(user) => user.id}\n/>\n\n**Class Components:**\n\ninterface CounterState {\ncount: number;\nisActive: boolean;\n}\n\ninterface CounterProps {\ninitialCount?: number;\nstep?: number;\nonCountChange?: (count: number) => void;\n}\n\nclass Counter extends React.Component<CounterProps, CounterState> {\nconstructor(props: CounterProps) {\nsuper(props);\nthis.state = {\ncount: props.initialCount || 0,\nisActive: true\n};\n}\n\nincrement = (): void => {\nconst newCount = this.state.count + (this.props.step || 1);\nthis.setState({ count: newCount });\nthis.props.onCountChange?.(newCount);\n};\n\ndecrement = (): void => {\nconst newCount = this.state.count - (this.props.step || 1);\nthis.setState({ count: newCount });\nthis.props.onCountChange?.(newCount);\n};\n\nrender(): React.ReactNode {\nreturn (\n<div>\n<p>Count: {this.state.count}</p>\n<button onClick={this.increment}>+</button>\n<button onClick={this.decrement}>-</button>\n</div>\n);\n}\n}\n\n**Custom Hooks with TypeScript:**\n\nimport { useState, useEffect, useCallback } from 'react';\n\n// Custom hook types\ninterface UseApiResult<T> {\ndata: T | null;\nloading: boolean;\nerror: string | null;\nrefetch: () => void;\n}\n\n// Generic custom hook\nfunction useApi<T>(url: string): UseApiResult<T> {\nconst [data, setData] = useState<T | null>(null);\nconst [loading, setLoading] = useState<boolean>(true);\nconst [error, setError] = useState<string | null>(null);\n\nconst fetchData = useCallback(async () => {\ntry {\nsetLoading(true);\nsetError(null);\nconst response = await fetch(url);\nif (!response.ok) {\nthrow new Error(`HTTP error! status: ${response.status}`);\n}\nconst result = await response.json();\nsetData(result);\n} catch (err) {\nsetError(err instanceof Error ? err.message : 'An error occurred');\n} finally {\nsetLoading(false);\n}\n}, [url]);\n\nuseEffect(() => {\nfetchData();\n}, [fetchData]);\n\nreturn { data, loading, error, refetch: fetchData };\n}\n\n// Usage\ninterface User {\nid: number;\nname: string;\nemail: string;\n}\n\nfunction UserProfile({ userId }: { userId: number }) {\nconst { data: user, loading, error, refetch } = useApi<User>(`/api/users/${userId}`);\n\nif (loading) return <div>Loading...</div>;\nif (error) return <div>Error: {error}</div>;\nif (!user) return <div>User not found</div>;\n\nreturn (\n<div>\n<h1>{user.name}</h1>\n<p>{user.email}</p>\n<button onClick={refetch}>Refresh</button>\n</div>\n);\n}\n\n**Context with TypeScript:**\n\ninterface ThemeContextType {\ntheme: 'light' | 'dark';\ntoggleTheme: () => void;\n}\n\nconst ThemeContext = React.createContext<ThemeContextType | undefined>(undefined);\n\nexport const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {\nconst [theme, setTheme] = useState<'light' | 'dark'>('light');\n\nconst toggleTheme = useCallback(() => {\nsetTheme(prev => prev === 'light' ? 'dark' : 'light');\n}, []);\n\nconst value: ThemeContextType = {\ntheme,\ntoggleTheme\n};\n\nreturn (\n<ThemeContext.Provider value={value}>\n{children}\n</ThemeContext.Provider>\n);\n};\n\nexport const useTheme = (): ThemeContextType => {\nconst context = useContext(ThemeContext);\nif (!context) {\nthrow new Error('useTheme must be used within ThemeProvider');\n}\nreturn context;\n};",
+      "source": "QuestionsBank",
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "updatedAt": "2025-09-30T00:21:59.978Z",
+      "type": "code",
+      "title": "TypeScript with React",
+      "content": "How do you use TypeScript effectively with React components?",
+      "difficulty": "intermediate",
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "isComplete": false,
+      "importedAt": "2025-09-30T00:21:59.956Z",
+      "options": [],
+      "codeBlock": "import React, { useState, useEffect } from 'react';\n\n// Props interface\ninterface UserCardProps {\n  user: {\n    id: number;\n    name: string;\n    email: string;\n    avatar?: string;\n  };\n  onEdit?: (user: UserCardProps['user']) => void;\n  onDelete?: (id: number) => void;\n}\n\n// Functional component with TypeScript\nconst UserCard: React.FC<UserCardProps> = ({ user, onEdit, onDelete }) => {\n  const [isEditing, setIsEditing] = useState<boolean>(false);\n\n  return (\n    <div className=\"user-card\">\n      <img src={user.avatar || '/default-avatar.png'} alt={user.name} />\n      <h3>{user.name}</h3>\n      <p>{user.email}</p>\n      {onEdit && (\n        <button onClick={() => onEdit(user)}>Edit</button>\n      )}\n      {onDelete && (\n        <button onClick={() => onDelete(user.id)}>Delete</button>\n      )}\n    </div>\n  );\n};\n\n// Generic component\ninterface ListProps<T> {\n  items: T[];\n  renderItem: (item: T) => React.ReactNode;\n  keyExtractor: (item: T) => string | number;\n}\n\nfunction List<T>({ items, renderItem, keyExtractor }: ListProps<T>) {\n  return (\n    <ul>\n      {items.map(item => (\n        <li key={keyExtractor(item)}>\n          {renderItem(item)}\n        </li>\n      ))}\n    </ul>\n  );\n}\n\n// Usage\nconst users = [\n  { id: 1, name: 'John', email: 'john@example.com' },\n  { id: 2, name: 'Jane', email: 'jane@example.com' }\n];\n\n<List\n  items={users}\n  renderItem={(user) => <UserCard user={user} />}\n  keyExtractor={(user) => user.id}\n/>"
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719957-10",
+      "isComplete": false,
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "difficulty": "intermediate",
+      "source": "QuestionsBank",
+      "content": "What is the key difference between `type` and `interface`?",
+      "correctAnswer": null,
+      "category": "TypeScript (Core)",
+      "explanation": "The key structural difference is that interface declarations can be merged (if you declare an interface with the same name twice, TypeScript will merge them), while type declarations must be unique. Use interface for public API definitions (like library types meant to be extended by users) and type for more complex type operations (unions, intersections, tuples) or domain modeling.\n\n**Interface Merging:**\n\n// Interface merging - multiple declarations are merged\ninterface User {\nname: string;\n}\n\ninterface User {\nage: number;\n}\n\n// Result: User has both name and age\nconst user: User = {\nname: 'John',\nage: 30,\n};\n\n// Type aliases cannot be merged\ntype UserType = {\nname: string;\n};\n\n// type UserType = {  // Error: Duplicate identifier 'UserType'\n//   age: number;\n// };\n\n**Extending vs Intersection:**\n\n// Interface extending\ninterface Animal {\nname: string;\n}\n\ninterface Dog extends Animal {\nbreed: string;\n}\n\n// Type intersection\ntype AnimalType = {\nname: string;\n};\n\ntype DogType = AnimalType & {\nbreed: string;\n};\n\n**When to Use Interface:**\n\n// Use interface for object shapes that might be extended\ninterface ComponentProps {\ntitle: string;\nchildren: React.ReactNode;\n}\n\ninterface ButtonProps extends ComponentProps {\nonClick: () => void;\nvariant?: 'primary' | 'secondary';\n}\n\n// Use interface for public APIs\ninterface DatabaseConnection {\nconnect(): Promise<void>;\ndisconnect(): Promise<void>;\nquery<T>(sql: string): Promise<T[]>;\n}\n\n// Interface can be implemented by classes\nclass MySQLConnection implements DatabaseConnection {\nasync connect(): Promise<void> {\n// Implementation\n}\n\nasync disconnect(): Promise<void> {\n// Implementation\n}\n\nasync query<T>(sql: string): Promise<T[]> {\n// Implementation\nreturn [];\n}\n}\n\n**When to Use Type:**\n\n// Use type for unions\ntype Status = 'loading' | 'success' | 'error';\n\n// Use type for complex operations\ntype NonNullable<T> = T extends null | undefined ? never : T;\n\n// Use type for tuples\ntype Coordinates = [number, number];\n\n// Use type for mapped types\ntype Partial<T> = {\n[P in keyof T]?: T[P];\n};\n\n// Use type for conditional types\ntype ApiResponse<T> = T extends string ? { message: T } : { data: T };\n\n// Use type for computed properties\ntype EventHandlers = {\n[K in keyof HTMLElementEventMap as `on${Capitalize<string & K>}`]: (\nevent: HTMLElementEventMap[K]\n) => void;\n};\n\n**Performance Considerations:**\n\n// Interface - better for performance in large codebases\ninterface User {\nid: number;\nname: string;\nemail: string;\n}\n\n// Type - can be slower for complex operations\ntype UserType = {\nid: number;\nname: string;\nemail: string;\n};\n\n// Interface is generally preferred for object shapes\n// Type is preferred for unions, intersections, and complex type operations\n\n**Declaration Merging with Modules:**\n\n// interfaces can be augmented in different files\n// user.d.ts\ninterface Window {\nmyCustomProperty: string;\n}\n\n// another-file.d.ts\ninterface Window {\nanotherProperty: number;\n}\n\n// Result: Window has both properties\ndeclare const window: Window;\nwindow.myCustomProperty; // string\nwindow.anotherProperty; // number",
+      "type": "code",
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "importedAt": "2025-09-30T00:21:59.957Z",
+      "title": "TypeScript `type` vs `interface`",
+      "options": [],
+      "codeBlock": "// Interface merging - multiple declarations are merged\ninterface User {\n  name: string;\n}\n\ninterface User {\n  age: number;\n}\n\n// Result: User has both name and age\nconst user: User = {\n  name: 'John',\n  age: 30,\n};\n\n// Type aliases cannot be merged\ntype UserType = {\n  name: string;\n};\n\n// type UserType = {  // Error: Duplicate identifier 'UserType'\n//   age: number;\n// };",
+      "updatedAt": "2025-09-30T00:21:59.978Z"
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719957-8",
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "difficulty": "intermediate",
+      "options": [],
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "category": "TypeScript (Core)",
+      "codeBlock": "class BankAccount {\n  private balance: number;\n  private accountNumber: string;\n\n  constructor(accountNumber: string, initialBalance: number = 0) {\n    this.accountNumber = accountNumber;\n    this.balance = initialBalance;\n  }\n\n  public deposit(amount: number): void {\n    if (amount > 0) {\n      this.balance += amount;\n    }\n  }\n\n  public withdraw(amount: number): boolean {\n    if (amount > 0 && amount <= this.balance) {\n      this.balance -= amount;\n      return true;\n    }\n    return false;\n  }\n\n  public getBalance(): number {\n    return this.balance;\n  }\n\n  public getAccountNumber(): string {\n    return this.accountNumber;\n  }\n}\n\nconst account = new BankAccount('123456789', 1000);\n\n// Public methods work\naccount.deposit(500);\nconsole.log(account.getBalance()); // 1500\n\n// Private properties are not accessible\n// console.log(account.balance); // Error: Property 'balance' is private\n// console.log(account.accountNumber); // Error: Property 'accountNumber' is private",
+      "source": "QuestionsBank",
+      "title": "TypeScript Private Access Modifier",
+      "content": "What does the private access modifier do?",
+      "updatedAt": "2025-09-30T00:21:59.978Z",
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:21:59.957Z",
+      "explanation": "The private modifier restricts access to a class member (property or method) so that it can only be accessed from within the class itself. This is a key principle of encapsulation in object-oriented programming, ensuring that internal implementation details are hidden from the outside world.\n\n**Basic Private Properties:**\n\nclass BankAccount {\nprivate balance: number;\nprivate accountNumber: string;\n\nconstructor(accountNumber: string, initialBalance: number = 0) {\nthis.accountNumber = accountNumber;\nthis.balance = initialBalance;\n}\n\npublic deposit(amount: number): void {\nif (amount > 0) {\nthis.balance += amount;\n}\n}\n\npublic withdraw(amount: number): boolean {\nif (amount > 0 && amount <= this.balance) {\nthis.balance -= amount;\nreturn true;\n}\nreturn false;\n}\n\npublic getBalance(): number {\nreturn this.balance;\n}\n\npublic getAccountNumber(): string {\nreturn this.accountNumber;\n}\n}\n\nconst account = new BankAccount('123456789', 1000);\n\n// Public methods work\naccount.deposit(500);\nconsole.log(account.getBalance()); // 1500\n\n// Private properties are not accessible\n// console.log(account.balance); // Error: Property 'balance' is private\n// console.log(account.accountNumber); // Error: Property 'accountNumber' is private\n\n**Private Methods:**\n\nclass UserService {\nprivate users: Map<string, User> = new Map();\n\npublic createUser(userData: CreateUserData): User {\nconst user = this.validateAndCreateUser(userData);\nthis.users.set(user.id, user);\nthis.logUserCreation(user);\nreturn user;\n}\n\nprivate validateAndCreateUser(userData: CreateUserData): User {\nif (!userData.email || !userData.name) {\nthrow new Error('Invalid user data');\n}\n\nreturn {\nid: this.generateUserId(),\nname: userData.name,\nemail: userData.email,\ncreatedAt: new Date(),\n};\n}\n\nprivate generateUserId(): string {\nreturn `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;\n}\n\nprivate logUserCreation(user: User): void {\nconsole.log(`User created: ${user.name} (${user.id})`);\n}\n}\n\n// Usage\nconst userService = new UserService();\nconst user = userService.createUser({\nname: 'John',\nemail: 'john@example.com',\n});\n\n// Private methods are not accessible\n// userService.validateAndCreateUser({ name: \"Jane\", email: \"jane@example.com\" }); // Error\n\n**Private vs Protected vs Public:**\n\nclass BaseClass {\npublic publicProperty: string = 'public';\nprotected protectedProperty: string = 'protected';\nprivate privateProperty: string = 'private';\n\npublic publicMethod(): string {\nreturn 'public method';\n}\n\nprotected protectedMethod(): string {\nreturn 'protected method';\n}\n\nprivate privateMethod(): string {\nreturn 'private method';\n}\n}\n\nclass DerivedClass extends BaseClass {\npublic testAccess(): void {\n// Public - accessible everywhere\nconsole.log(this.publicProperty); // OK\nconsole.log(this.publicMethod()); // OK\n\n// Protected - accessible in derived classes\nconsole.log(this.protectedProperty); // OK\nconsole.log(this.protectedMethod()); // OK\n\n// Private - only accessible in the same class\n// console.log(this.privateProperty); // Error\n// console.log(this.privateMethod()); // Error\n}\n}\n\n// Outside the class\nconst instance = new DerivedClass();\nconsole.log(instance.publicProperty); // OK\nconsole.log(instance.publicMethod()); // OK\n\n// console.log(instance.protectedProperty); // Error\n// console.log(instance.protectedMethod()); // Error\n// console.log(instance.privateProperty); // Error\n// console.log(instance.privateMethod()); // Error\n\n**Private Fields (ES2022):**\n\nclass ModernClass {\n// Private fields using # syntax (ES2022)\n#privateField: string = 'private';\n\n// Traditional private (TypeScript only)\nprivate traditionalPrivate: string = 'traditional private';\n\npublic getPrivateField(): string {\nreturn this.#privateField; // Access private field\n}\n\npublic setPrivateField(value: string): void {\nthis.#privateField = value; // Modify private field\n}\n}\n\nconst instance = new ModernClass();\nconsole.log(instance.getPrivateField()); // \"private\"\n\n// Both are inaccessible from outside\n// console.log(instance.#privateField); // Error\n// console.log(instance.traditionalPrivate); // Error",
+      "type": "code",
+      "isComplete": false,
+      "isActive": true
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719956-7",
+      "explanation": "`as const` is a TypeScript assertion that creates a deeply read-only (immutable) version of an object or array. It infers the most specific literal type possible and makes every property readonly, which is much more thorough than `Object.freeze()` (which only works at the top level at runtime).\n\n**Basic Usage:**\n\n// Without as const\nconst colors = ['red', 'green', 'blue'];\n// Type: string[]\n\n// With as const\nconst colors = ['red', 'green', 'blue'] as const;\n// Type: readonly [\"red\", \"green\", \"blue\"]\n\n**Object Properties:**\n\n// Without as const\nconst config = {\napiUrl: 'https://api.example.com',\ntimeout: 5000,\nretries: 3,\n};\n// Type: { apiUrl: string; timeout: number; retries: number; }\n\n// With as const\nconst config = {\napiUrl: 'https://api.example.com',\ntimeout: 5000,\nretries: 3,\n} as const;\n// Type: { readonly apiUrl: \"https://api.example.com\"; readonly timeout: 5000; readonly retries: 3; }\n\n**Deep Immutability:**\n\nconst user = {\nid: 1,\nname: 'John',\naddress: {\nstreet: '123 Main St',\ncity: 'New York',\ncoordinates: {\nlat: 40.7128,\nlng: -74.006,\n},\n},\n} as const;\n\n// All properties are readonly, including nested ones\n// user.name = \"Jane\"; // Error: Cannot assign to 'name' because it is a read-only property\n// user.address.city = \"Boston\"; // Error: Cannot assign to 'city' because it is a read-only property\n// user.address.coordinates.lat = 42.3601; // Error: Cannot assign to 'lat' because it is a read-only property\n\n**Union Types from Arrays:**\n\n// Create union types from arrays\nconst statuses = ['pending', 'approved', 'rejected'] as const;\ntype Status = (typeof statuses)[number]; // \"pending\" | \"approved\" | \"rejected\"\n\nconst permissions = ['read', 'write', 'admin'] as const;\ntype Permission = (typeof permissions)[number]; // \"read\" | \"write\" | \"admin\"\n\n// Usage in functions\nfunction updateStatus(status: Status) {\n// status can only be \"pending\", \"approved\", or \"rejected\"\nconsole.log(`Status updated to: ${status}`);\n}\n\n**Template Literal Types:**\n\nconst routes = ['/home', '/about', '/contact'] as const;\ntype Route = (typeof routes)[number]; // \"/home\" | \"/about\" | \"/contact\"\n\n// Create API endpoints\nconst apiEndpoints = ['users', 'posts', 'comments'] as const;\ntype ApiEndpoint = (typeof apiEndpoints)[number]; // \"users\" | \"posts\" | \"comments\"\n\nfunction createApiUrl(endpoint: ApiEndpoint): string {\nreturn `https://api.example.com/${endpoint}`;\n}\n\n**Comparison with Object.freeze():**\n\n// Object.freeze() - runtime only, shallow\nconst frozen = Object.freeze({\nname: 'John',\naddress: { city: 'New York' },\n});\n\n// frozen.name = \"Jane\"; // Runtime error\n// frozen.address.city = \"Boston\"; // This works! (shallow freeze)\n\n// as const - compile-time, deep\nconst immutable = {\nname: 'John',\naddress: { city: 'New York' },\n} as const;\n\n// immutable.name = \"Jane\"; // Compile error\n// immutable.address.city = \"Boston\"; // Compile error (deep immutability)",
+      "isActive": true,
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "importedAt": "2025-09-30T00:21:59.956Z",
+      "type": "code",
+      "isComplete": false,
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "codeBlock": "// Without as const\nconst colors = ['red', 'green', 'blue'];\n// Type: string[]\n\n// With as const\nconst colors = ['red', 'green', 'blue'] as const;\n// Type: readonly [\"red\", \"green\", \"blue\"]",
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "content": "What does `as const` do?",
+      "updatedAt": "2025-09-30T00:21:59.978Z",
+      "difficulty": "intermediate",
+      "title": "TypeScript `as const` Assertion",
+      "options": [],
+      "category": "TypeScript (Core)"
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719957-9",
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:21:59.978Z",
+      "category": "TypeScript (Core)",
+      "source": "QuestionsBank",
+      "title": "TypeScript Type Guards",
+      "codeBlock": "function isFish(pet: Fish | Bird): pet is Fish {\n  return (pet as Fish).swim !== undefined;\n}\n\ninterface Fish {\n  swim(): void;\n  name: string;\n}\n\ninterface Bird {\n  fly(): void;\n  name: string;\n}\n\nfunction move(pet: Fish | Bird) {\n  if (isFish(pet)) {\n    // TypeScript knows pet is Fish here\n    pet.swim();\n  } else {\n    // TypeScript knows pet is Bird here\n    pet.fly();\n  }\n}",
+      "options": [],
+      "isActive": true,
+      "content": "What is a Type Guard?",
+      "importedAt": "2025-09-30T00:21:59.957Z",
+      "difficulty": "intermediate",
+      "type": "code",
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "explanation": "A type guard is a function that helps TypeScript narrow down the type of a variable within a conditional block. It's typically used with union types to check which specific type you're working with.\n\n**Basic Type Guard:**\n\nfunction isFish(pet: Fish | Bird): pet is Fish {\nreturn (pet as Fish).swim !== undefined;\n}\n\ninterface Fish {\nswim(): void;\nname: string;\n}\n\ninterface Bird {\nfly(): void;\nname: string;\n}\n\nfunction move(pet: Fish | Bird) {\nif (isFish(pet)) {\n// TypeScript knows pet is Fish here\npet.swim();\n} else {\n// TypeScript knows pet is Bird here\npet.fly();\n}\n}\n\n**Using `in` Operator:**\n\nfunction move(pet: Fish | Bird) {\nif ('swim' in pet) {\n// TypeScript narrows to Fish\npet.swim();\n} else {\n// TypeScript narrows to Bird\npet.fly();\n}\n}\n\n**Using `typeof`:**\n\nfunction processValue(value: string | number) {\nif (typeof value === 'string') {\n// TypeScript knows value is string\nconsole.log(value.toUpperCase());\n} else {\n// TypeScript knows value is number\nconsole.log(value.toFixed(2));\n}\n}\n\n**Using `instanceof`:**\n\nclass Dog {\nbark(): void {\nconsole.log('Woof!');\n}\n}\n\nclass Cat {\nmeow(): void {\nconsole.log('Meow!');\n}\n}\n\nfunction makeSound(animal: Dog | Cat) {\nif (animal instanceof Dog) {\n// TypeScript knows animal is Dog\nanimal.bark();\n} else {\n// TypeScript knows animal is Cat\nanimal.meow();\n}\n}\n\n**Custom Type Guards for Complex Objects:**\n\ninterface User {\nid: number;\nname: string;\nemail: string;\n}\n\ninterface Admin {\nid: number;\nname: string;\npermissions: string[];\n}\n\nfunction isAdmin(user: User | Admin): user is Admin {\nreturn 'permissions' in user;\n}\n\nfunction handleUser(user: User | Admin) {\nif (isAdmin(user)) {\n// TypeScript knows user is Admin\nconsole.log(`Admin ${user.name} has permissions:`, user.permissions);\n} else {\n// TypeScript knows user is User\nconsole.log(`Regular user ${user.name} with email: ${user.email}`);\n}\n}\n\n**Type Guards with Arrays:**\n\nfunction isStringArray(value: unknown): value is string[] {\nreturn Array.isArray(value) && value.every(item => typeof item === 'string');\n}\n\nfunction processData(data: unknown) {\nif (isStringArray(data)) {\n// TypeScript knows data is string[]\ndata.forEach(item => console.log(item.toUpperCase()));\n} else {\nconsole.log('Data is not a string array');\n}\n}\n\n**Type Guards for API Responses:**\n\ninterface ApiResponse<T> {\ndata: T;\nsuccess: boolean;\nmessage: string;\n}\n\ninterface ErrorResponse {\nerror: string;\ncode: number;\n}\n\nfunction isErrorResponse(\nresponse: ApiResponse<any> | ErrorResponse\n): response is ErrorResponse {\nreturn 'error' in response;\n}\n\nfunction handleApiResponse(response: ApiResponse<User> | ErrorResponse) {\nif (isErrorResponse(response)) {\n// TypeScript knows response is ErrorResponse\nconsole.error(`Error ${response.code}: ${response.error}`);\n} else {\n// TypeScript knows response is ApiResponse<User>\nconsole.log('User data:', response.data);\n}\n}",
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "correctAnswer": null
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719956-6",
+      "updatedAt": "2025-09-30T00:21:59.978Z",
+      "source": "QuestionsBank",
+      "importedAt": "2025-09-30T00:21:59.956Z",
+      "type": "code",
+      "codeBlock": "function identity<T>(arg: T): T {\n  return arg;\n}\n\nlet output = identity<string>('myString'); // type of output will be 'string'\nlet numberOutput = identity<number>(42); // type of numberOutput will be 'number'\n\n// TypeScript can also infer the type\nlet inferred = identity('myString'); // TypeScript infers T as string",
+      "content": "What is a Generic in TypeScript? Write a simple example.",
+      "isActive": true,
+      "title": "TypeScript Generics",
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "correctAnswer": null,
+      "explanation": "Generics allow you to create reusable components and functions that can work with a variety of types rather than a single one. They provide a way to tell functions, classes, or interfaces what type you want to use when you call them.\n\n**Basic Generic Function:**\n\nfunction identity<T>(arg: T): T {\nreturn arg;\n}\n\nlet output = identity<string>('myString'); // type of output will be 'string'\nlet numberOutput = identity<number>(42); // type of numberOutput will be 'number'\n\n// TypeScript can also infer the type\nlet inferred = identity('myString'); // TypeScript infers T as string\n\n**Generic Interfaces:**\n\ninterface GenericResponse<T> {\ndata: T;\nstatus: number;\nmessage: string;\n}\n\ninterface User {\nid: number;\nname: string;\nemail: string;\n}\n\ninterface Product {\nid: number;\ntitle: string;\nprice: number;\n}\n\n// Usage\nconst userResponse: GenericResponse<User> = {\ndata: { id: 1, name: 'John', email: 'john@example.com' },\nstatus: 200,\nmessage: 'Success',\n};\n\nconst productResponse: GenericResponse<Product> = {\ndata: { id: 1, title: 'Laptop', price: 999 },\nstatus: 200,\nmessage: 'Success',\n};\n\n**Generic Classes:**\n\nclass GenericStack<T> {\nprivate items: T[] = [];\n\npush(item: T): void {\nthis.items.push(item);\n}\n\npop(): T | undefined {\nreturn this.items.pop();\n}\n\npeek(): T | undefined {\nreturn this.items[this.items.length - 1];\n}\n\nisEmpty(): boolean {\nreturn this.items.length === 0;\n}\n}\n\n// Usage\nconst numberStack = new GenericStack<number>();\nnumberStack.push(1);\nnumberStack.push(2);\nconsole.log(numberStack.pop()); // 2\n\nconst stringStack = new GenericStack<string>();\nstringStack.push('hello');\nstringStack.push('world');\nconsole.log(stringStack.pop()); // \"world\"\n\n**Generic Constraints:**\n\ninterface Lengthwise {\nlength: number;\n}\n\nfunction logLength<T extends Lengthwise>(arg: T): T {\nconsole.log(arg.length); // Now we know it has a .length property\nreturn arg;\n}\n\nlogLength('hello'); // OK, string has length\nlogLength([1, 2, 3]); // OK, array has length\nlogLength({ length: 10, value: 'test' }); // OK, object has length\n// logLength(123); // Error, number doesn't have length\n\n**Multiple Generic Parameters:**\n\nfunction merge<T, U>(obj1: T, obj2: U): T & U {\nreturn { ...obj1, ...obj2 };\n}\n\nconst result = merge(\n{ name: 'John', age: 30 },\n{ city: 'New York', country: 'USA' }\n);\n// result has type: { name: string; age: number; city: string; country: string; }\n\n**Generic Utility Types:**\n\n// Create a generic function that works with any object\nfunction updateObject<T extends Record<string, any>>(\nobj: T,\nupdates: Partial<T>\n): T {\nreturn { ...obj, ...updates };\n}\n\nconst user = { id: 1, name: 'John', email: 'john@example.com' };\nconst updatedUser = updateObject(user, { name: 'Jane' });\n// updatedUser has type: { id: number; name: string; email: string; }",
+      "difficulty": "intermediate",
+      "options": [],
+      "isComplete": false,
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "category": "TypeScript (Core)",
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ]
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719956-4",
+      "type": "code",
+      "correctAnswer": null,
+      "isComplete": false,
+      "importedAt": "2025-09-30T00:21:59.956Z",
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "options": [],
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "isActive": true,
+      "title": "TypeScript Error Handling",
+      "category": "TypeScript (Core)",
+      "codeBlock": "// Base error class\nabstract class AppError extends Error {\n  abstract readonly statusCode: number;\n  abstract readonly isOperational: boolean;\n\n  constructor(message: string) {\n    super(message);\n    this.name = this.constructor.name;\n    Error.captureStackTrace(this, this.constructor);\n  }\n}\n\n// Specific error types\nclass ValidationError extends AppError {\n  readonly statusCode = 400;\n  readonly isOperational = true;\n\n  constructor(\n    message: string,\n    public field?: string\n  ) {\n    super(message);\n  }\n}\n\nclass NotFoundError extends AppError {\n  readonly statusCode = 404;\n  readonly isOperational = true;\n}\n\nclass DatabaseError extends AppError {\n  readonly statusCode = 500;\n  readonly isOperational = false;\n}\n\n// Error handling utility\ntype ErrorHandler = (error: Error) => void;\n\nclass ErrorHandler {\n  private static instance: ErrorHandler;\n  private handlers: Map<string, ErrorHandler> = new Map();\n\n  static getInstance(): ErrorHandler {\n    if (!ErrorHandler.instance) {\n      ErrorHandler.instance = new ErrorHandler();\n    }\n    return ErrorHandler.instance;\n  }\n\n  register(errorType: string, handler: ErrorHandler): void {\n    this.handlers.set(errorType, handler);\n  }\n\n  handle(error: Error): void {\n    const handler = this.handlers.get(error.constructor.name);\n    if (handler) {\n      handler(error);\n    } else {\n      console.error('Unhandled error:', error);\n    }\n  }\n}",
+      "content": "How do you handle errors effectively in TypeScript?",
+      "explanation": "**Custom Error Classes:**\n\n// Base error class\nabstract class AppError extends Error {\nabstract readonly statusCode: number;\nabstract readonly isOperational: boolean;\n\nconstructor(message: string) {\nsuper(message);\nthis.name = this.constructor.name;\nError.captureStackTrace(this, this.constructor);\n}\n}\n\n// Specific error types\nclass ValidationError extends AppError {\nreadonly statusCode = 400;\nreadonly isOperational = true;\n\nconstructor(\nmessage: string,\npublic field?: string\n) {\nsuper(message);\n}\n}\n\nclass NotFoundError extends AppError {\nreadonly statusCode = 404;\nreadonly isOperational = true;\n}\n\nclass DatabaseError extends AppError {\nreadonly statusCode = 500;\nreadonly isOperational = false;\n}\n\n// Error handling utility\ntype ErrorHandler = (error: Error) => void;\n\nclass ErrorHandler {\nprivate static instance: ErrorHandler;\nprivate handlers: Map<string, ErrorHandler> = new Map();\n\nstatic getInstance(): ErrorHandler {\nif (!ErrorHandler.instance) {\nErrorHandler.instance = new ErrorHandler();\n}\nreturn ErrorHandler.instance;\n}\n\nregister(errorType: string, handler: ErrorHandler): void {\nthis.handlers.set(errorType, handler);\n}\n\nhandle(error: Error): void {\nconst handler = this.handlers.get(error.constructor.name);\nif (handler) {\nhandler(error);\n} else {\nconsole.error('Unhandled error:', error);\n}\n}\n}\n\n**Result Pattern:**\n\n// Result type for error handling\ntype Result<T, E = Error> =\n| { success: true; data: T }\n| { success: false; error: E };\n\n// Utility functions\nfunction success<T>(data: T): Result<T, never> {\nreturn { success: true, data };\n}\n\nfunction failure<E>(error: E): Result<never, E> {\nreturn { success: false, error };\n}\n\n// API function with Result\nasync function fetchUser(id: number): Promise<Result<User, string>> {\ntry {\nconst response = await fetch(`/api/users/${id}`);\nif (!response.ok) {\nreturn failure(`HTTP error! status: ${response.status}`);\n}\nconst user = await response.json();\nreturn success(user);\n} catch (error) {\nreturn failure(error instanceof Error ? error.message : 'Unknown error');\n}\n}\n\n// Usage\nasync function displayUser(id: number) {\nconst result = await fetchUser(id);\n\nif (result.success) {\nconsole.log('User:', result.data);\n} else {\nconsole.error('Error:', result.error);\n}\n}\n\n**Type Guards:**\n\n// Type guard functions\nfunction isString(value: unknown): value is string {\nreturn typeof value === 'string';\n}\n\nfunction isUser(value: unknown): value is User {\nreturn (\ntypeof value === 'object' &&\nvalue !== null &&\n'id' in value &&\n'name' in value &&\n'email' in value\n);\n}\n\n// API response type guard\nfunction isApiError(\nresponse: unknown\n): response is { error: string; code: number } {\nreturn (\ntypeof response === 'object' &&\nresponse !== null &&\n'error' in response &&\n'code' in response\n);\n}\n\n// Usage\nfunction processApiResponse(response: unknown) {\nif (isApiError(response)) {\nconsole.error(`API Error ${response.code}: ${response.error}`);\nreturn;\n}\n\nif (isUser(response)) {\nconsole.log('User:', response.name);\nreturn;\n}\n\nconsole.log('Unknown response type');\n}\n\n**Try-Catch with TypeScript:**\n\n// Error handling wrapper\nasync function safeAsync<T>(\noperation: () => Promise<T>\n): Promise<Result<T, Error>> {\ntry {\nconst result = await operation();\nreturn success(result);\n} catch (error) {\nreturn failure(error instanceof Error ? error : new Error(String(error)));\n}\n}\n\n// Usage\nasync function loadUserData(userId: number) {\nconst result = await safeAsync(async () => {\nconst response = await fetch(`/api/users/${userId}`);\nif (!response.ok) {\nthrow new Error(`Failed to fetch user: ${response.status}`);\n}\nreturn response.json();\n});\n\nif (result.success) {\nreturn result.data;\n} else {\nconsole.error('Failed to load user:', result.error.message);\nthrow result.error;\n}\n}",
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "difficulty": "intermediate",
+      "source": "QuestionsBank",
+      "updatedAt": "2025-09-30T00:21:59.978Z"
+    },
+    {
+      "id": "imported-typescript-essentials-1759191719957-11",
+      "codeBlock": "interface Point {\n  x: number;\n  y: number;\n}\n\ninterface Vector {\n  x: number;\n  y: number;\n}\n\n// These are structurally identical, so they're compatible\nconst point: Point = { x: 1, y: 2 };\nconst vector: Vector = point; // OK - same structure\n\nfunction movePoint(p: Point) {\n  console.log(`Moving to (${p.x}, ${p.y})`);\n}\n\nmovePoint(vector); // OK - Vector has the same structure as Point",
+      "content": "Does TypeScript use structural or nominal typing?",
+      "createdAt": "2025-09-30T00:21:59.978Z",
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "typescript-essentials"
+      ],
+      "explanation": "TypeScript uses structural typing. This means that if two objects have the same shape (the same properties and methods), they are considered the same type, regardless of their explicit type names or inheritance hierarchies. This is different from nominal typing (used in languages like Java or C#), where the explicit name of the type matters.\n\n**Structural Typing Examples:**\n\ninterface Point {\nx: number;\ny: number;\n}\n\ninterface Vector {\nx: number;\ny: number;\n}\n\n// These are structurally identical, so they're compatible\nconst point: Point = { x: 1, y: 2 };\nconst vector: Vector = point; // OK - same structure\n\nfunction movePoint(p: Point) {\nconsole.log(`Moving to (${p.x}, ${p.y})`);\n}\n\nmovePoint(vector); // OK - Vector has the same structure as Point\n\n**Duck Typing:**\n\n// \"If it walks like a duck and quacks like a duck, it's a duck\"\ninterface Duck {\nwalk(): void;\nquack(): void;\n}\n\nclass RealDuck implements Duck {\nwalk() {\nconsole.log('Walking like a duck');\n}\nquack() {\nconsole.log('Quack!');\n}\n}\n\nclass ToyDuck {\nwalk() {\nconsole.log('Walking like a toy');\n}\nquack() {\nconsole.log('Squeak!');\n}\n}\n\nfunction makeDuckSound(duck: Duck) {\nduck.quack();\n}\n\nconst realDuck = new RealDuck();\nconst toyDuck = new ToyDuck();\n\nmakeDuckSound(realDuck); // OK - implements Duck interface\nmakeDuckSound(toyDuck); // OK - has the same structure as Duck\n\n**Structural Typing with Classes:**\n\nclass Car {\nconstructor(\npublic brand: string,\npublic model: string\n) {}\n\nstart() {\nconsole.log(`${this.brand} ${this.model} started`);\n}\n}\n\nclass Motorcycle {\nconstructor(\npublic brand: string,\npublic model: string\n) {}\n\nstart() {\nconsole.log(`${this.brand} ${this.model} started`);\n}\n}\n\ninterface Vehicle {\nbrand: string;\nmodel: string;\nstart(): void;\n}\n\nfunction driveVehicle(vehicle: Vehicle) {\nvehicle.start();\n}\n\nconst car = new Car('Toyota', 'Camry');\nconst motorcycle = new Motorcycle('Honda', 'CBR');\n\ndriveVehicle(car); // OK - Car has the same structure as Vehicle\ndriveVehicle(motorcycle); // OK - Motorcycle has the same structure as Vehicle\n\n**Structural Typing with Functions:**\n\ntype MathOperation = (a: number, b: number) => number;\n\nfunction add(a: number, b: number): number {\nreturn a + b;\n}\n\nfunction multiply(a: number, b: number): number {\nreturn a * b;\n}\n\nfunction calculate(operation: MathOperation, a: number, b: number): number {\nreturn operation(a, b);\n}\n\n// Both functions have the same signature, so they're compatible\ncalculate(add, 5, 3); // 8\ncalculate(multiply, 5, 3); // 15\n\n**Excess Property Checking:**\n\ninterface User {\nname: string;\nage: number;\n}\n\nfunction createUser(user: User) {\nreturn user;\n}\n\n// This works - exact match\nconst user1 = createUser({ name: 'John', age: 30 });\n\n// This also works - extra properties are allowed in variables\nconst userData = { name: 'Jane', age: 25, email: 'jane@example.com' };\nconst user2 = createUser(userData);\n\n// This doesn't work - excess properties in object literals\n// const user3 = createUser({ name: \"Bob\", age: 35, email: \"bob@example.com\" }); // Error\n\n**Branded Types (Nominal Typing Simulation):**\n\n// Simulate nominal typing using branded types\ntype UserId = number & { readonly brand: unique symbol };\ntype ProductId = number & { readonly brand: unique symbol };\n\nfunction createUserId(id: number): UserId {\nreturn id as UserId;\n}\n\nfunction createProductId(id: number): ProductId {\nreturn id as ProductId;\n}\n\nfunction getUserById(id: UserId) {\n// Implementation\n}\n\nfunction getProductById(id: ProductId) {\n// Implementation\n}\n\nconst userId = createUserId(123);\nconst productId = createProductId(456);\n\ngetUserById(userId); // OK\ngetUserById(productId); // Error - different branded types\n\n**Structural Typing Benefits:**\n\n// Easy to create compatible types\ninterface ApiResponse<T> {\ndata: T;\nstatus: number;\nmessage: string;\n}\n\ninterface DatabaseResult<T> {\ndata: T;\nstatus: number;\nmessage: string;\n}\n\n// These are structurally identical, so they're compatible\nfunction handleResponse<T>(response: ApiResponse<T>) {\nif (response.status === 200) {\nreturn response.data;\n}\nthrow new Error(response.message);\n}\n\nconst dbResult: DatabaseResult<User> = {\ndata: { id: 1, name: 'John' },\nstatus: 200,\nmessage: 'Success',\n};\n\n// Can use DatabaseResult where ApiResponse is expected\nconst user = handleResponse(dbResult); // OK - same structure",
+      "updatedAt": "2025-09-30T00:21:59.978Z",
+      "topics": [
+        "Types",
+        "Interfaces",
+        "Generics",
+        "Decorators"
+      ],
+      "source": "QuestionsBank",
+      "type": "code",
+      "isComplete": false,
+      "importedAt": "2025-09-30T00:21:59.957Z",
+      "isActive": true,
+      "category": "TypeScript (Core)",
+      "title": "TypeScript Structural vs Nominal Typing",
+      "correctAnswer": null,
+      "options": []
+    }
+  ]
+}

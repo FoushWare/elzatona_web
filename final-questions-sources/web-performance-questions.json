@@ -1,0 +1,142 @@
+{
+  "category": "Web Performance",
+  "totalQuestions": 5,
+  "exportedAt": "2025-09-30T00:28:57.743Z",
+  "questions": [
+    {
+      "id": "imported-web-performance-1759191728611-1",
+      "updatedAt": "2025-09-30T00:22:08.634Z",
+      "explanation": "**1. Modern Image Formats:**\n\n<!-- WebP with fallback -->\n<picture>\n<source srcset=\"image.webp\" type=\"image/webp\" />\n<source srcset=\"image.avif\" type=\"image/avif\" />\n<img src=\"image.jpg\" alt=\"Description\" />\n</picture>\n\n<!-- Responsive images -->\n<img\nsrcset=\"image-320w.webp 320w, image-640w.webp 640w, image-1280w.webp 1280w\"\nsizes=\"(max-width: 320px) 280px, (max-width: 640px) 600px, 1200px\"\nsrc=\"image-640w.webp\"\nalt=\"Description\"\nloading=\"lazy\"\n/>\n\n**2. Lazy Loading:**\n\n// Native lazy loading\n<img src=\"image.jpg\" alt=\"Description\" loading=\"lazy\">\n\n// Intersection Observer for custom lazy loading\nconst imageObserver = new IntersectionObserver((entries, observer) => {\nentries.forEach(entry => {\nif (entry.isIntersecting) {\nconst img = entry.target;\nimg.src = img.dataset.src;\nimg.classList.remove('lazy');\nobserver.unobserve(img);\n}\n});\n});\n\ndocument.querySelectorAll('img[data-src]').forEach(img => {\nimageObserver.observe(img);\n});\n\n**3. Image Compression:**\n\n// Client-side compression\nfunction compressImage(file, maxWidth = 800, quality = 0.8) {\nreturn new Promise(resolve => {\nconst canvas = document.createElement('canvas');\nconst ctx = canvas.getContext('2d');\nconst img = new Image();\n\nimg.onload = () => {\nconst ratio = Math.min(maxWidth / img.width, maxWidth / img.height);\ncanvas.width = img.width * ratio;\ncanvas.height = img.height * ratio;\n\nctx.drawImage(img, 0, 0, canvas.width, canvas.height);\ncanvas.toBlob(resolve, 'image/jpeg', quality);\n};\n\nimg.src = URL.createObjectURL(file);\n});\n}\n\n// Usage\nconst input = document.getElementById('image-input');\ninput.addEventListener('change', async e => {\nconst file = e.target.files[0];\nconst compressed = await compressImage(file);\n// Upload compressed image\n});\n\n**4. Next.js Image Optimization:**\n\nimport Image from 'next/image';\n\nfunction OptimizedImage({ src, alt, width, height }) {\nreturn (\n<Image\nsrc={src}\nalt={alt}\nwidth={width}\nheight={height}\nplaceholder=\"blur\"\nblurDataURL=\"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ...\"\npriority={false} // Set to true for above-the-fold images\nquality={75}\nsizes=\"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw\"\n/>\n);\n}",
+      "source": "QuestionsBank",
+      "category": "Web Performance",
+      "title": "Image Optimization",
+      "isActive": true,
+      "options": [],
+      "createdAt": "2025-09-30T00:22:08.634Z",
+      "isComplete": false,
+      "type": "code",
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "web-performance"
+      ],
+      "codeBlock": "<!-- WebP with fallback -->\n<picture>\n  <source srcset=\"image.webp\" type=\"image/webp\" />\n  <source srcset=\"image.avif\" type=\"image/avif\" />\n  <img src=\"image.jpg\" alt=\"Description\" />\n</picture>\n\n<!-- Responsive images -->\n<img\n  srcset=\"image-320w.webp 320w, image-640w.webp 640w, image-1280w.webp 1280w\"\n  sizes=\"(max-width: 320px) 280px, (max-width: 640px) 600px, 1200px\"\n  src=\"image-640w.webp\"\n  alt=\"Description\"\n  loading=\"lazy\"\n/>",
+      "importedAt": "2025-09-30T00:22:08.611Z",
+      "topics": [
+        "Core Web Vitals",
+        "Optimization",
+        "Caching",
+        "Bundle Size"
+      ],
+      "correctAnswer": null,
+      "content": "How do you optimize images for web performance?"
+    },
+    {
+      "id": "imported-web-performance-1759191728611-3",
+      "codeBlock": "<!-- Inline critical CSS -->\n<style>\n  .header {\n    background: #333;\n  }\n  .hero {\n    padding: 2rem;\n  }\n  .nav {\n    display: flex;\n  }\n</style>\n\n<!-- Load non-critical CSS asynchronously -->\n<link\n  rel=\"preload\"\n  href=\"styles.css\"\n  as=\"style\"\n  onload=\"this.onload=null;this.rel='stylesheet'\"\n/>\n<noscript><link rel=\"stylesheet\" href=\"styles.css\" /></noscript>",
+      "topics": [
+        "Core Web Vitals",
+        "Optimization",
+        "Caching",
+        "Bundle Size"
+      ],
+      "category": "Web Performance",
+      "content": "How do you optimize CSS for better performance?",
+      "learningPaths": [
+        "web-performance"
+      ],
+      "options": [],
+      "explanation": "**1. Critical CSS:**\n\n<!-- Inline critical CSS -->\n<style>\n.header {\nbackground: #333;\n}\n.hero {\npadding: 2rem;\n}\n.nav {\ndisplay: flex;\n}\n</style>\n\n<!-- Load non-critical CSS asynchronously -->\n<link\nrel=\"preload\"\nhref=\"styles.css\"\nas=\"style\"\nonload=\"this.onload=null;this.rel='stylesheet'\"\n/>\n<noscript><link rel=\"stylesheet\" href=\"styles.css\" /></noscript>\n\n**2. CSS Optimization:**\n\n/* Use efficient selectors */\n.header .nav-item {\n} /* Good - specific and fast */\n* {\n} /* Bad - too generic */\ndiv div div div div {\n} /* Bad - complex descendant */\n\n/* Use CSS containment */\n.component {\ncontain: layout style paint;\n}\n\n/* Avoid expensive properties */\n.element {\n/* Expensive - causes reflow */\nwidth: 100px;\nheight: 100px;\n\n/* Better - uses transform */\ntransform: scale(1.1);\n}\n\n/* Use will-change sparingly */\n.animated-element {\nwill-change: transform;\n}\n\n**3. CSS-in-JS Optimization:**\n\n// Styled-components with babel plugin\nconst Button = styled.button`\nbackground: ${props => (props.primary ? 'blue' : 'gray')};\npadding: 1rem;\n`;\n\n// Emotion with css prop\nconst styles = css`\nbackground: blue;\npadding: 1rem;\n`;\n\nfunction Component() {\nreturn <div css={styles}>Content</div>;\n}",
+      "importedAt": "2025-09-30T00:22:08.611Z",
+      "createdAt": "2025-09-30T00:22:08.634Z",
+      "source": "QuestionsBank",
+      "difficulty": "intermediate",
+      "correctAnswer": null,
+      "updatedAt": "2025-09-30T00:22:08.634Z",
+      "isComplete": false,
+      "isActive": true,
+      "type": "code",
+      "title": "CSS Performance"
+    },
+    {
+      "id": "imported-web-performance-1759191728612-5",
+      "learningPaths": [
+        "web-performance"
+      ],
+      "title": "Performance Monitoring",
+      "source": "QuestionsBank",
+      "content": "How do you monitor and measure web performance?",
+      "explanation": "**1. Performance API:**\n\n// Navigation timing\nwindow.addEventListener('load', () => {\nconst perfData = performance.getEntriesByType('navigation')[0];\nconsole.log('Page load time:', perfData.loadEventEnd - perfData.fetchStart);\nconsole.log(\n'DOM content loaded:',\nperfData.domContentLoadedEventEnd - perfData.fetchStart\n);\n});\n\n// Resource timing\nperformance.getEntriesByType('resource').forEach(resource => {\nconsole.log(`${resource.name}: ${resource.duration}ms`);\n});\n\n// User timing\nperformance.mark('start-processing');\n// ... processing code ...\nperformance.mark('end-processing');\nperformance.measure('processing-time', 'start-processing', 'end-processing');\n\n**2. Real User Monitoring (RUM):**\n\n// Custom performance monitoring\nclass PerformanceMonitor {\nconstructor() {\nthis.metrics = {};\nthis.observeWebVitals();\n}\n\nobserveWebVitals() {\n// LCP\nnew PerformanceObserver(entryList => {\nconst entries = entryList.getEntries();\nconst lastEntry = entries[entries.length - 1];\nthis.metrics.lcp = lastEntry.startTime;\n}).observe({ entryTypes: ['largest-contentful-paint'] });\n\n// FID\nnew PerformanceObserver(entryList => {\nconst entries = entryList.getEntries();\nentries.forEach(entry => {\nthis.metrics.fid = entry.processingStart - entry.startTime;\n});\n}).observe({ entryTypes: ['first-input'] });\n\n// CLS\nlet clsValue = 0;\nnew PerformanceObserver(entryList => {\nfor (const entry of entryList.getEntries()) {\nif (!entry.hadRecentInput) {\nclsValue += entry.value;\n}\n}\nthis.metrics.cls = clsValue;\n}).observe({ entryTypes: ['layout-shift'] });\n}\n\nsendMetrics() {\nfetch('/api/metrics', {\nmethod: 'POST',\nheaders: { 'Content-Type': 'application/json' },\nbody: JSON.stringify({\nurl: window.location.href,\ntimestamp: Date.now(),\nmetrics: this.metrics,\n}),\n});\n}\n}\n\n// Initialize monitoring\nconst monitor = new PerformanceMonitor();\nwindow.addEventListener('beforeunload', () => monitor.sendMetrics());\n\n**3. Performance Budgets:**\n\n// webpack-bundle-analyzer\nconst BundleAnalyzerPlugin =\nrequire('webpack-bundle-analyzer').BundleAnalyzerPlugin;\n\nmodule.exports = {\nplugins: [\nnew BundleAnalyzerPlugin({\nanalyzerMode: 'static',\nopenAnalyzer: false,\nreportFilename: 'bundle-report.html',\n}),\n],\n};\n\n// Performance budget configuration\nmodule.exports = {\nperformance: {\nmaxAssetSize: 250000,\nmaxEntrypointSize: 250000,\nhints: 'warning',\n},\n};\n\n**4. Lighthouse CI:**\n\n# .lighthouserc.js\nmodule.exports = {\nci: {\ncollect: {\nurl: ['http://localhost:3000'],\nnumberOfRuns: 3\n},\nassert: {\nassertions: {\n'categories:performance': ['error', { minScore: 0.9 }],\n'categories:accessibility': ['error', { minScore: 0.9 }],\n'categories:best-practices': ['error', { minScore: 0.9 }],\n'categories:seo': ['error', { minScore: 0.9 }]\n}\n},\nupload: {\ntarget: 'temporary-public-storage'\n}\n}\n};",
+      "codeBlock": "// Navigation timing\nwindow.addEventListener('load', () => {\n  const perfData = performance.getEntriesByType('navigation')[0];\n  console.log('Page load time:', perfData.loadEventEnd - perfData.fetchStart);\n  console.log(\n    'DOM content loaded:',\n    perfData.domContentLoadedEventEnd - perfData.fetchStart\n  );\n});\n\n// Resource timing\nperformance.getEntriesByType('resource').forEach(resource => {\n  console.log(`${resource.name}: ${resource.duration}ms`);\n});\n\n// User timing\nperformance.mark('start-processing');\n// ... processing code ...\nperformance.mark('end-processing');\nperformance.measure('processing-time', 'start-processing', 'end-processing');",
+      "difficulty": "intermediate",
+      "category": "Web Performance",
+      "type": "code",
+      "isComplete": false,
+      "options": [],
+      "importedAt": "2025-09-30T00:22:08.612Z",
+      "createdAt": "2025-09-30T00:22:08.634Z",
+      "correctAnswer": null,
+      "updatedAt": "2025-09-30T00:22:08.634Z",
+      "topics": [
+        "Core Web Vitals",
+        "Optimization",
+        "Caching",
+        "Bundle Size"
+      ],
+      "isActive": true
+    },
+    {
+      "id": "imported-web-performance-1759191728611-2",
+      "type": "code",
+      "isActive": true,
+      "correctAnswer": null,
+      "category": "Web Performance",
+      "explanation": "**1. Code Splitting:**\n\n// Dynamic imports\nconst LazyComponent = React.lazy(() => import('./LazyComponent'));\n\n// Route-based splitting\nconst Home = React.lazy(() => import('./pages/Home'));\nconst About = React.lazy(() => import('./pages/About'));\n\n// Conditional loading\nasync function loadFeature() {\nif (userHasPermission) {\nconst { heavyFeature } = await import('./heavy-feature');\nheavyFeature.init();\n}\n}\n\n**2. Bundle Optimization:**\n\n// webpack.config.js\nmodule.exports = {\noptimization: {\nsplitChunks: {\nchunks: 'all',\ncacheGroups: {\nvendor: {\ntest: /[\\\\/]node_modules[\\\\/]/,\nname: 'vendors',\nchunks: 'all',\n},\ncommon: {\nname: 'common',\nminChunks: 2,\nchunks: 'all',\nenforce: true,\n},\n},\n},\n},\n};\n\n// Tree shaking\nimport { debounce } from 'lodash-es'; // Good - only imports debounce\nimport _ from 'lodash'; // Bad - imports entire library\n\n**3. Memory Management:**\n\n// Avoid memory leaks\nclass Component {\nconstructor() {\nthis.intervalId = setInterval(this.update, 1000);\nthis.eventListener = this.handleClick.bind(this);\ndocument.addEventListener('click', this.eventListener);\n}\n\ndestroy() {\nclearInterval(this.intervalId);\ndocument.removeEventListener('click', this.eventListener);\n}\n}\n\n// Object pooling\nclass ObjectPool {\nconstructor(createFn, resetFn) {\nthis.createFn = createFn;\nthis.resetFn = resetFn;\nthis.pool = [];\n}\n\nget() {\nreturn this.pool.pop() || this.createFn();\n}\n\nrelease(obj) {\nthis.resetFn(obj);\nthis.pool.push(obj);\n}\n}\n\n// Usage\nconst pool = new ObjectPool(\n() => ({ x: 0, y: 0, active: false }),\nobj => {\nobj.x = 0;\nobj.y = 0;\nobj.active = false;\n}\n);\n\n**4. Debouncing and Throttling:**\n\n// Debounce - delay execution until after events stop\nfunction debounce(func, wait) {\nlet timeout;\nreturn function executedFunction(...args) {\nconst later = () => {\nclearTimeout(timeout);\nfunc(...args);\n};\nclearTimeout(timeout);\ntimeout = setTimeout(later, wait);\n};\n}\n\n// Throttle - limit execution frequency\nfunction throttle(func, limit) {\nlet inThrottle;\nreturn function () {\nconst args = arguments;\nconst context = this;\nif (!inThrottle) {\nfunc.apply(context, args);\ninThrottle = true;\nsetTimeout(() => (inThrottle = false), limit);\n}\n};\n}\n\n// Usage\nconst debouncedSearch = debounce(searchFunction, 300);\nconst throttledScroll = throttle(scrollFunction, 100);",
+      "options": [],
+      "topics": [
+        "Core Web Vitals",
+        "Optimization",
+        "Caching",
+        "Bundle Size"
+      ],
+      "importedAt": "2025-09-30T00:22:08.611Z",
+      "updatedAt": "2025-09-30T00:22:08.634Z",
+      "title": "JavaScript Performance",
+      "difficulty": "intermediate",
+      "isComplete": false,
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "web-performance"
+      ],
+      "content": "How do you optimize JavaScript performance?",
+      "codeBlock": "// Dynamic imports\nconst LazyComponent = React.lazy(() => import('./LazyComponent'));\n\n// Route-based splitting\nconst Home = React.lazy(() => import('./pages/Home'));\nconst About = React.lazy(() => import('./pages/About'));\n\n// Conditional loading\nasync function loadFeature() {\n  if (userHasPermission) {\n    const { heavyFeature } = await import('./heavy-feature');\n    heavyFeature.init();\n  }\n}",
+      "createdAt": "2025-09-30T00:22:08.634Z"
+    },
+    {
+      "id": "imported-web-performance-1759191728612-4",
+      "source": "QuestionsBank",
+      "options": [],
+      "isComplete": false,
+      "content": "How do you optimize network performance?",
+      "category": "Web Performance",
+      "createdAt": "2025-09-30T00:22:08.634Z",
+      "learningPaths": [
+        "web-performance"
+      ],
+      "importedAt": "2025-09-30T00:22:08.612Z",
+      "correctAnswer": null,
+      "explanation": "**1. HTTP/2 and HTTP/3:**\n\n// HTTP/2 server push\napp.get('/', (req, res) => {\nres.writeHead(200, {\n'Content-Type': 'text/html',\nLink: '</styles.css>; rel=preload; as=style',\n});\nres.end(html);\n});\n\n// HTTP/3 with QUIC\n// Automatically handled by modern browsers\n\n**2. Compression:**\n\n// Gzip compression\nconst compression = require('compression');\napp.use(compression());\n\n// Brotli compression\napp.use(\ncompression({\nfilter: (req, res) => {\nif (req.headers['no-transform']) {\nreturn false;\n}\nreturn compression.filter(req, res);\n},\nlevel: 6,\nthreshold: 1024,\n})\n);\n\n**3. Caching Strategies:**\n\n// Service Worker caching\nself.addEventListener('fetch', event => {\nif (event.request.destination === 'image') {\nevent.respondWith(\ncaches.open('images').then(cache => {\nreturn cache.match(event.request).then(response => {\nif (response) {\nreturn response;\n}\nreturn fetch(event.request).then(fetchResponse => {\ncache.put(event.request, fetchResponse.clone());\nreturn fetchResponse;\n});\n});\n})\n);\n}\n});\n\n// HTTP caching headers\napp.use((req, res, next) => {\nif (req.url.match(/\\.(css|js|png|jpg|jpeg|gif|ico|svg)$/)) {\nres.setHeader('Cache-Control', 'public, max-age=31536000');\n}\nnext();\n});\n\n**4. Resource Hints:**\n\n<!-- DNS prefetch -->\n<link rel=\"dns-prefetch\" href=\"//fonts.googleapis.com\" />\n\n<!-- Preconnect -->\n<link rel=\"preconnect\" href=\"https://api.example.com\" />\n\n<!-- Preload critical resources -->\n<link\nrel=\"preload\"\nhref=\"/fonts/main.woff2\"\nas=\"font\"\ntype=\"font/woff2\"\ncrossorigin\n/>\n<link rel=\"preload\" href=\"/images/hero.webp\" as=\"image\" />\n\n<!-- Prefetch next page -->\n<link rel=\"prefetch\" href=\"/next-page.html\" />",
+      "isActive": true,
+      "title": "Network Optimization",
+      "type": "code",
+      "topics": [
+        "Core Web Vitals",
+        "Optimization",
+        "Caching",
+        "Bundle Size"
+      ],
+      "difficulty": "intermediate",
+      "updatedAt": "2025-09-30T00:22:08.634Z",
+      "codeBlock": "// HTTP/2 server push\napp.get('/', (req, res) => {\n  res.writeHead(200, {\n    'Content-Type': 'text/html',\n    Link: '</styles.css>; rel=preload; as=style',\n  });\n  res.end(html);\n});\n\n// HTTP/3 with QUIC\n// Automatically handled by modern browsers"
+    }
+  ]
+}

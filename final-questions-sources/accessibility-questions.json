@@ -1,0 +1,142 @@
+{
+  "category": "Accessibility",
+  "totalQuestions": 5,
+  "exportedAt": "2025-09-30T00:28:57.755Z",
+  "questions": [
+    {
+      "id": "imported-accessibility-1759191581561-4",
+      "content": "How do you create accessible forms?",
+      "learningPaths": [
+        "accessibility"
+      ],
+      "codeBlock": "<form>\n  <fieldset>\n    <legend>Personal Information</legend>\n\n    <div class=\"field\">\n      <label for=\"first-name\">First Name *</label>\n      <input\n        type=\"text\"\n        id=\"first-name\"\n        name=\"firstName\"\n        required\n        aria-describedby=\"first-name-help\"\n      />\n      <div id=\"first-name-help\" class=\"help-text\">\n        Enter your legal first name\n      </div>\n    </div>\n\n    <div class=\"field\">\n      <label for=\"email\">Email Address *</label>\n      <input\n        type=\"email\"\n        id=\"email\"\n        name=\"email\"\n        required\n        aria-describedby=\"email-help email-error\"\n        aria-invalid=\"false\"\n      />\n      <div id=\"email-help\" class=\"help-text\">We'll never share your email</div>\n      <div id=\"email-error\" class=\"error-text\" role=\"alert\" aria-live=\"polite\">\n        <!-- Error messages appear here -->\n      </div>\n    </div>\n\n    <fieldset>\n      <legend>Newsletter Preferences</legend>\n      <div class=\"checkbox-group\">\n        <input type=\"checkbox\" id=\"newsletter\" name=\"newsletter\" />\n        <label for=\"newsletter\">Subscribe to newsletter</label>\n      </div>\n    </fieldset>\n\n    <button type=\"submit\">Submit</button>\n  </fieldset>\n</form>",
+      "isComplete": false,
+      "options": [],
+      "correctAnswer": null,
+      "updatedAt": "2025-09-30T00:19:41.665Z",
+      "isActive": true,
+      "difficulty": "intermediate",
+      "importedAt": "2025-09-30T00:19:41.561Z",
+      "type": "code",
+      "createdAt": "2025-09-30T00:19:41.665Z",
+      "source": "QuestionsBank",
+      "title": "Form Accessibility",
+      "explanation": "**Proper Form Structure:**\n\n<form>\n<fieldset>\n<legend>Personal Information</legend>\n\n<div class=\"field\">\n<label for=\"first-name\">First Name *</label>\n<input\ntype=\"text\"\nid=\"first-name\"\nname=\"firstName\"\nrequired\naria-describedby=\"first-name-help\"\n/>\n<div id=\"first-name-help\" class=\"help-text\">\nEnter your legal first name\n</div>\n</div>\n\n<div class=\"field\">\n<label for=\"email\">Email Address *</label>\n<input\ntype=\"email\"\nid=\"email\"\nname=\"email\"\nrequired\naria-describedby=\"email-help email-error\"\naria-invalid=\"false\"\n/>\n<div id=\"email-help\" class=\"help-text\">We'll never share your email</div>\n<div id=\"email-error\" class=\"error-text\" role=\"alert\" aria-live=\"polite\">\n<!-- Error messages appear here -->\n</div>\n</div>\n\n<fieldset>\n<legend>Newsletter Preferences</legend>\n<div class=\"checkbox-group\">\n<input type=\"checkbox\" id=\"newsletter\" name=\"newsletter\" />\n<label for=\"newsletter\">Subscribe to newsletter</label>\n</div>\n</fieldset>\n\n<button type=\"submit\">Submit</button>\n</fieldset>\n</form>\n\n**Form Validation:**\n\nclass AccessibleForm {\nconstructor(form) {\nthis.form = form;\nthis.setupValidation();\n}\n\nsetupValidation() {\nthis.form.addEventListener('submit', e => {\ne.preventDefault();\nthis.validateForm();\n});\n\n// Real-time validation\nthis.form.addEventListener(\n'blur',\ne => {\nif (e.target.matches('input, select, textarea')) {\nthis.validateField(e.target);\n}\n},\ntrue\n);\n}\n\nvalidateField(field) {\nconst errorElement = document.getElementById(`${field.id}-error`);\nconst isValid = field.checkValidity();\n\nfield.setAttribute('aria-invalid', !isValid);\n\nif (!isValid) {\nconst errorMessage = this.getErrorMessage(field);\nerrorElement.textContent = errorMessage;\nerrorElement.setAttribute('role', 'alert');\n} else {\nerrorElement.textContent = '';\nerrorElement.removeAttribute('role');\n}\n}\n\ngetErrorMessage(field) {\nif (field.validity.valueMissing) {\nreturn `${field.labels[0].textContent} is required`;\n}\nif (field.validity.typeMismatch) {\nreturn `Please enter a valid ${field.type}`;\n}\nif (field.validity.patternMismatch) {\nreturn `Please match the requested format`;\n}\nreturn 'Please correct this field';\n}\n\nvalidateForm() {\nconst fields = this.form.querySelectorAll('input, select, textarea');\nlet isValid = true;\n\nfields.forEach(field => {\nthis.validateField(field);\nif (!field.checkValidity()) {\nisValid = false;\n}\n});\n\nif (isValid) {\nthis.submitForm();\n} else {\n// Focus first invalid field\nconst firstInvalid = this.form.querySelector('[aria-invalid=\"true\"]');\nif (firstInvalid) {\nfirstInvalid.focus();\n}\n}\n}\n}",
+      "topics": [
+        "WCAG",
+        "ARIA",
+        "Screen Readers",
+        "Keyboard Navigation"
+      ],
+      "category": "Accessibility"
+    },
+    {
+      "id": "imported-accessibility-1759191581561-5",
+      "title": "Testing Accessibility",
+      "codeBlock": "// axe-core testing\nimport { axe, toHaveNoViolations } from 'jest-axe';\n\nexpect.extend(toHaveNoViolations);\n\ntest('should not have accessibility violations', async () => {\n  const { container } = render(<MyComponent />);\n  const results = await axe(container);\n  expect(results).toHaveNoViolations();\n});\n\n// React Testing Library accessibility\nimport { render, screen } from '@testing-library/react';\nimport userEvent from '@testing-library/user-event';\n\ntest('form is accessible', async () => {\n  const user = userEvent.setup();\n  render(<ContactForm />);\n\n  // Test keyboard navigation\n  await user.tab();\n  expect(screen.getByLabelText(/name/i)).toHaveFocus();\n\n  await user.tab();\n  expect(screen.getByLabelText(/email/i)).toHaveFocus();\n\n  // Test form submission\n  await user.type(screen.getByLabelText(/name/i), 'John Doe');\n  await user.type(screen.getByLabelText(/email/i), 'john@example.com');\n  await user.click(screen.getByRole('button', { name: /submit/i }));\n\n  expect(screen.getByText(/thank you/i)).toBeInTheDocument();\n});",
+      "learningPaths": [
+        "accessibility"
+      ],
+      "source": "QuestionsBank",
+      "category": "Accessibility",
+      "topics": [
+        "WCAG",
+        "ARIA",
+        "Screen Readers",
+        "Keyboard Navigation"
+      ],
+      "options": [],
+      "isActive": true,
+      "importedAt": "2025-09-30T00:19:41.561Z",
+      "correctAnswer": null,
+      "explanation": "**Automated Testing:**\n\n// axe-core testing\nimport { axe, toHaveNoViolations } from 'jest-axe';\n\nexpect.extend(toHaveNoViolations);\n\ntest('should not have accessibility violations', async () => {\nconst { container } = render(<MyComponent />);\nconst results = await axe(container);\nexpect(results).toHaveNoViolations();\n});\n\n// React Testing Library accessibility\nimport { render, screen } from '@testing-library/react';\nimport userEvent from '@testing-library/user-event';\n\ntest('form is accessible', async () => {\nconst user = userEvent.setup();\nrender(<ContactForm />);\n\n// Test keyboard navigation\nawait user.tab();\nexpect(screen.getByLabelText(/name/i)).toHaveFocus();\n\nawait user.tab();\nexpect(screen.getByLabelText(/email/i)).toHaveFocus();\n\n// Test form submission\nawait user.type(screen.getByLabelText(/name/i), 'John Doe');\nawait user.type(screen.getByLabelText(/email/i), 'john@example.com');\nawait user.click(screen.getByRole('button', { name: /submit/i }));\n\nexpect(screen.getByText(/thank you/i)).toBeInTheDocument();\n});\n\n**Manual Testing Checklist:**\n\n// Keyboard navigation test\nfunction testKeyboardNavigation() {\nconst focusableElements = document.querySelectorAll(\n'button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])'\n);\n\nconsole.log('Focusable elements:', focusableElements.length);\n\n// Test tab order\nfocusableElements.forEach((element, index) => {\nelement.addEventListener('focus', () => {\nconsole.log(`Element ${index} focused:`, element);\n});\n});\n}\n\n// Screen reader testing\nfunction testScreenReader() {\n// Check for proper heading structure\nconst headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');\nconsole.log('Headings found:', headings.length);\n\n// Check for alt text on images\nconst images = document.querySelectorAll('img');\nimages.forEach(img => {\nif (!img.alt && !img.getAttribute('aria-label')) {\nconsole.warn('Image without alt text:', img);\n}\n});\n\n// Check for form labels\nconst inputs = document.querySelectorAll('input, select, textarea');\ninputs.forEach(input => {\nconst hasLabel = input.labels.length > 0;\nconst hasAriaLabel = input.hasAttribute('aria-label');\nconst hasAriaLabelledBy = input.hasAttribute('aria-labelledby');\n\nif (!hasLabel && !hasAriaLabel && !hasAriaLabelledBy) {\nconsole.warn('Input without label:', input);\n}\n});\n}\n\n**Accessibility Testing Tools:**\n\n// Lighthouse accessibility audit\nconst lighthouse = require('lighthouse');\nconst chromeLauncher = require('chrome-launcher');\n\nasync function runAccessibilityAudit(url) {\nconst chrome = await chromeLauncher.launch({ chromeFlags: ['--headless'] });\nconst options = {\nlogLevel: 'info',\noutput: 'html',\nonlyCategories: ['accessibility'],\nport: chrome.port,\n};\n\nconst runnerResult = await lighthouse(url, options);\nawait chrome.kill();\n\nreturn runnerResult;\n}\n\n// Pa11y command line testing\n// npm install -g pa11y\n// pa11y http://localhost:3000\n\n// WAVE browser extension\n// https://wave.webaim.org/extension/",
+      "type": "code",
+      "isComplete": false,
+      "difficulty": "intermediate",
+      "createdAt": "2025-09-30T00:19:41.665Z",
+      "content": "How do you test web accessibility?",
+      "updatedAt": "2025-09-30T00:19:41.665Z"
+    },
+    {
+      "id": "imported-accessibility-1759191581561-2",
+      "codeBlock": "<!-- Use proper heading hierarchy -->\n<h1>Page Title</h1>\n<h2>Section Title</h2>\n<h3>Subsection Title</h3>\n<h2>Another Section</h2>\n\n<!-- Use semantic elements -->\n<main>\n  <article>\n    <header>\n      <h1>Article Title</h1>\n      <time datetime=\"2023-12-01\">December 1, 2023</time>\n    </header>\n    <p>Article content...</p>\n    <footer>\n      <p>Author: John Doe</p>\n    </footer>\n  </article>\n</main>\n\n<!-- Form labels -->\n<label for=\"username\">Username</label>\n<input type=\"text\" id=\"username\" name=\"username\" required />\n\n<!-- Or use aria-label -->\n<input type=\"text\" aria-label=\"Username\" required />",
+      "createdAt": "2025-09-30T00:19:41.665Z",
+      "content": "How do you make content accessible to screen readers?",
+      "updatedAt": "2025-09-30T00:19:41.665Z",
+      "topics": [
+        "WCAG",
+        "ARIA",
+        "Screen Readers",
+        "Keyboard Navigation"
+      ],
+      "source": "QuestionsBank",
+      "category": "Accessibility",
+      "importedAt": "2025-09-30T00:19:41.561Z",
+      "isComplete": false,
+      "learningPaths": [
+        "accessibility"
+      ],
+      "difficulty": "intermediate",
+      "correctAnswer": null,
+      "type": "code",
+      "title": "Screen Reader Support",
+      "explanation": "**Semantic HTML:**\n\n<!-- Use proper heading hierarchy -->\n<h1>Page Title</h1>\n<h2>Section Title</h2>\n<h3>Subsection Title</h3>\n<h2>Another Section</h2>\n\n<!-- Use semantic elements -->\n<main>\n<article>\n<header>\n<h1>Article Title</h1>\n<time datetime=\"2023-12-01\">December 1, 2023</time>\n</header>\n<p>Article content...</p>\n<footer>\n<p>Author: John Doe</p>\n</footer>\n</article>\n</main>\n\n<!-- Form labels -->\n<label for=\"username\">Username</label>\n<input type=\"text\" id=\"username\" name=\"username\" required />\n\n<!-- Or use aria-label -->\n<input type=\"text\" aria-label=\"Username\" required />\n\n**Live Regions:**\n\n<!-- Announce dynamic content -->\n<div aria-live=\"polite\" id=\"status\">\n<!-- Status messages will be announced -->\n</div>\n\n<div aria-live=\"assertive\" id=\"error\">\n<!-- Error messages will be announced immediately -->\n</div>\n\n<script>\nfunction updateStatus(message) {\ndocument.getElementById('status').textContent = message;\n}\n\nfunction showError(message) {\ndocument.getElementById('error').textContent = message;\n// Clear after announcement\nsetTimeout(() => {\ndocument.getElementById('error').textContent = '';\n}, 1000);\n}\n</script>\n\n**Alternative Text:**\n\n<!-- Descriptive alt text -->\n<img src=\"chart.png\" alt=\"Sales increased by 25% in Q3 2023\" />\n\n<!-- Decorative images -->\n<img src=\"decoration.png\" alt=\"\" role=\"presentation\" />\n\n<!-- Complex images -->\n<img\nsrc=\"infographic.png\"\nalt=\"Infographic showing web accessibility statistics. 15% of the world's population has a disability. 71% of users with disabilities leave a website that is not accessible.\"\n/>\n\n<!-- Long descriptions -->\n<img\nsrc=\"complex-diagram.png\"\nalt=\"System architecture diagram\"\nlongdesc=\"system-architecture.html\"\n/>\n\n**Hidden Content:**\n\n<!-- Visually hidden but accessible -->\n<span class=\"sr-only\">Required field</span>\n\n<style>\n.sr-only {\nposition: absolute;\nwidth: 1px;\nheight: 1px;\npadding: 0;\nmargin: -1px;\noverflow: hidden;\nclip: rect(0, 0, 0, 0);\nwhite-space: nowrap;\nborder: 0;\n}\n</style>",
+      "isActive": true,
+      "options": []
+    },
+    {
+      "id": "imported-accessibility-1759191581561-1",
+      "updatedAt": "2025-09-30T00:19:41.665Z",
+      "source": "QuestionsBank",
+      "content": "How do you implement proper keyboard navigation?",
+      "learningPaths": [
+        "accessibility"
+      ],
+      "importedAt": "2025-09-30T00:19:41.561Z",
+      "isActive": true,
+      "options": [],
+      "explanation": "**Focus Management:**\n\n// Focus trap for modals\nclass FocusTrap {\nconstructor(element) {\nthis.element = element;\nthis.focusableElements = this.getFocusableElements();\nthis.firstFocusable = this.focusableElements[0];\nthis.lastFocusable =\nthis.focusableElements[this.focusableElements.length - 1];\n}\n\ngetFocusableElements() {\nconst selector =\n'button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])';\nreturn Array.from(this.element.querySelectorAll(selector));\n}\n\ntrapFocus(e) {\nif (e.key === 'Tab') {\nif (e.shiftKey) {\nif (document.activeElement === this.firstFocusable) {\ne.preventDefault();\nthis.lastFocusable.focus();\n}\n} else {\nif (document.activeElement === this.lastFocusable) {\ne.preventDefault();\nthis.firstFocusable.focus();\n}\n}\n}\n}\n\nactivate() {\nthis.element.addEventListener('keydown', this.trapFocus.bind(this));\nthis.firstFocusable.focus();\n}\n\ndeactivate() {\nthis.element.removeEventListener('keydown', this.trapFocus.bind(this));\n}\n}\n\n// Usage\nconst modal = document.getElementById('modal');\nconst focusTrap = new FocusTrap(modal);\nfocusTrap.activate();\n\n**Custom Keyboard Navigation:**\n\n// Arrow key navigation for custom components\nclass CustomSelect {\nconstructor(element) {\nthis.element = element;\nthis.options = Array.from(element.querySelectorAll('[role=\"option\"]'));\nthis.selectedIndex = 0;\nthis.setupKeyboardNavigation();\n}\n\nsetupKeyboardNavigation() {\nthis.element.addEventListener('keydown', e => {\nswitch (e.key) {\ncase 'ArrowDown':\ne.preventDefault();\nthis.selectNext();\nbreak;\ncase 'ArrowUp':\ne.preventDefault();\nthis.selectPrevious();\nbreak;\ncase 'Enter':\ncase ' ':\ne.preventDefault();\nthis.activateOption();\nbreak;\ncase 'Escape':\nthis.close();\nbreak;\ncase 'Home':\ne.preventDefault();\nthis.selectFirst();\nbreak;\ncase 'End':\ne.preventDefault();\nthis.selectLast();\nbreak;\n}\n});\n}\n\nselectNext() {\nthis.selectedIndex = Math.min(\nthis.selectedIndex + 1,\nthis.options.length - 1\n);\nthis.updateSelection();\n}\n\nselectPrevious() {\nthis.selectedIndex = Math.max(this.selectedIndex - 1, 0);\nthis.updateSelection();\n}\n\nupdateSelection() {\nthis.options.forEach((option, index) => {\noption.setAttribute('aria-selected', index === this.selectedIndex);\nif (index === this.selectedIndex) {\noption.focus();\n}\n});\n}\n}\n\n**Skip Links:**\n\n<!-- Skip to main content -->\n<a href=\"#main-content\" class=\"skip-link\"> Skip to main content </a>\n\n<style>\n.skip-link {\nposition: absolute;\ntop: -40px;\nleft: 6px;\nbackground: #000;\ncolor: #fff;\npadding: 8px;\ntext-decoration: none;\nz-index: 1000;\n}\n\n.skip-link:focus {\ntop: 6px;\n}\n</style>",
+      "type": "code",
+      "correctAnswer": null,
+      "codeBlock": "// Focus trap for modals\nclass FocusTrap {\n  constructor(element) {\n    this.element = element;\n    this.focusableElements = this.getFocusableElements();\n    this.firstFocusable = this.focusableElements[0];\n    this.lastFocusable =\n      this.focusableElements[this.focusableElements.length - 1];\n  }\n\n  getFocusableElements() {\n    const selector =\n      'button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])';\n    return Array.from(this.element.querySelectorAll(selector));\n  }\n\n  trapFocus(e) {\n    if (e.key === 'Tab') {\n      if (e.shiftKey) {\n        if (document.activeElement === this.firstFocusable) {\n          e.preventDefault();\n          this.lastFocusable.focus();\n        }\n      } else {\n        if (document.activeElement === this.lastFocusable) {\n          e.preventDefault();\n          this.firstFocusable.focus();\n        }\n      }\n    }\n  }\n\n  activate() {\n    this.element.addEventListener('keydown', this.trapFocus.bind(this));\n    this.firstFocusable.focus();\n  }\n\n  deactivate() {\n    this.element.removeEventListener('keydown', this.trapFocus.bind(this));\n  }\n}\n\n// Usage\nconst modal = document.getElementById('modal');\nconst focusTrap = new FocusTrap(modal);\nfocusTrap.activate();",
+      "title": "Keyboard Navigation",
+      "category": "Accessibility",
+      "difficulty": "intermediate",
+      "topics": [
+        "WCAG",
+        "ARIA",
+        "Screen Readers",
+        "Keyboard Navigation"
+      ],
+      "isComplete": false,
+      "createdAt": "2025-09-30T00:19:41.665Z"
+    },
+    {
+      "id": "imported-accessibility-1759191581560-0",
+      "source": "QuestionsBank",
+      "difficulty": "intermediate",
+      "createdAt": "2025-09-30T00:19:41.665Z",
+      "content": "Explain ARIA attributes and roles for web accessibility.",
+      "correctAnswer": null,
+      "updatedAt": "2025-09-30T00:19:41.665Z",
+      "options": [],
+      "title": "ARIA Attributes and Roles",
+      "topics": [
+        "WCAG",
+        "ARIA",
+        "Screen Readers",
+        "Keyboard Navigation"
+      ],
+      "importedAt": "2025-09-30T00:19:41.560Z",
+      "category": "Accessibility",
+      "isComplete": false,
+      "learningPaths": [
+        "accessibility"
+      ],
+      "explanation": "ARIA (Accessible Rich Internet Applications) provides semantic information to assistive technologies.\n\n**ARIA Roles:**\n\n<!-- Landmark roles -->\n<nav role=\"navigation\">\n<ul>\n<li><a href=\"/\">Home</a></li>\n<li><a href=\"/about\">About</a></li>\n</ul>\n</nav>\n\n<main role=\"main\">\n<article role=\"article\">\n<h1>Article Title</h1>\n<p>Article content...</p>\n</article>\n</main>\n\n<aside role=\"complementary\">\n<h2>Related Links</h2>\n</aside>\n\n<!-- Widget roles -->\n<button role=\"button\" aria-pressed=\"false\">Toggle</button>\n<div role=\"tablist\">\n<button role=\"tab\" aria-selected=\"true\" aria-controls=\"panel1\">Tab 1</button>\n<button role=\"tab\" aria-selected=\"false\" aria-controls=\"panel2\">Tab 2</button>\n</div>\n\n<div role=\"tabpanel\" id=\"panel1\" aria-labelledby=\"tab1\">Panel 1 content</div>\n\n**ARIA Properties and States:**\n\n<!-- Form accessibility -->\n<label for=\"email\">Email Address</label>\n<input\ntype=\"email\"\nid=\"email\"\nname=\"email\"\naria-required=\"true\"\naria-describedby=\"email-error\"\naria-invalid=\"false\"\n/>\n<div id=\"email-error\" role=\"alert\" aria-live=\"polite\">\nPlease enter a valid email address\n</div>\n\n<!-- Dynamic content -->\n<div role=\"status\" aria-live=\"polite\" aria-atomic=\"true\">Loading...</div>\n\n<!-- Expandable content -->\n<button aria-expanded=\"false\" aria-controls=\"menu\" aria-haspopup=\"true\">\nMenu\n</button>\n<ul id=\"menu\" role=\"menu\" aria-hidden=\"true\">\n<li role=\"menuitem\">Option 1</li>\n<li role=\"menuitem\">Option 2</li>\n</ul>\n\n**ARIA Labels and Descriptions:**\n\n<!-- aria-label -->\n<button aria-label=\"Close dialog\">×</button>\n\n<!-- aria-labelledby -->\n<h2 id=\"section-title\">User Settings</h2>\n<section aria-labelledby=\"section-title\">\n<!-- Section content -->\n</section>\n\n<!-- aria-describedby -->\n<input type=\"password\" aria-describedby=\"password-help\" />\n<div id=\"password-help\">Password must be at least 8 characters long</div>\n\n<!-- aria-hidden -->\n<div aria-hidden=\"true\">\n<span class=\"icon\">🎉</span>\n<span>Congratulations!</span>\n</div>",
+      "codeBlock": "<!-- Landmark roles -->\n<nav role=\"navigation\">\n  <ul>\n    <li><a href=\"/\">Home</a></li>\n    <li><a href=\"/about\">About</a></li>\n  </ul>\n</nav>\n\n<main role=\"main\">\n  <article role=\"article\">\n    <h1>Article Title</h1>\n    <p>Article content...</p>\n  </article>\n</main>\n\n<aside role=\"complementary\">\n  <h2>Related Links</h2>\n</aside>\n\n<!-- Widget roles -->\n<button role=\"button\" aria-pressed=\"false\">Toggle</button>\n<div role=\"tablist\">\n  <button role=\"tab\" aria-selected=\"true\" aria-controls=\"panel1\">Tab 1</button>\n  <button role=\"tab\" aria-selected=\"false\" aria-controls=\"panel2\">Tab 2</button>\n</div>\n\n<div role=\"tabpanel\" id=\"panel1\" aria-labelledby=\"tab1\">Panel 1 content</div>",
+      "type": "code",
+      "isActive": true
+    }
+  ]
+}
