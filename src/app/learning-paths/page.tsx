@@ -50,6 +50,14 @@ export default function LearningPathsPage() {
     deduplicatedDynamicPaths: deduplicatedDynamicPaths?.length,
   });
 
+  // Initialize all cards as collapsed when learning paths are loaded
+  useEffect(() => {
+    if (deduplicatedDynamicPaths.length > 0 && collapsedCards.size === 0) {
+      const allPathIds = new Set(deduplicatedDynamicPaths.map(path => path.id));
+      setCollapsedCards(allPathIds);
+    }
+  }, [deduplicatedDynamicPaths, collapsedCards.size]);
+
   // Force render for debugging
   if (typeof window !== 'undefined') {
     console.log('Client-side render:', {
