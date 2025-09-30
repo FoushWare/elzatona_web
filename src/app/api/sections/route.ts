@@ -2,12 +2,16 @@
 // v2.0 - Enhanced section management
 
 import { NextRequest, NextResponse } from 'next/server';
-import { EnhancedQuestionService, Section } from '@/lib/enhanced-question-schema';
+import { db } from '@/lib/firebase-server';
 
 // GET /api/sections - Get all sections
 export async function GET() {
   try {
-    const sections = await EnhancedQuestionService.getSections();
+    const snapshot = await db.collection('sections').get();
+    const sections = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
 
     return NextResponse.json({
       success: true,
@@ -56,7 +60,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const sectionId = await EnhancedQuestionService.createSection(sectionData);
+    const docRef = db.collection('sections').doc();
+    const sectionWithTimestamps = {
+      ...sectionData,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    await docRef.set(sectionWithTimestamps);
+    const sectionId = docRef.id;
 
     return NextResponse.json({
       success: true,

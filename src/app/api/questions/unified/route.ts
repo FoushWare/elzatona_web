@@ -2,10 +2,7 @@
 // Single endpoint for all question operations
 
 import { NextRequest, NextResponse } from 'next/server';
-import UnifiedQuestionService, {
-  BulkQuestionData,
-} from '@/lib/unified-question-schema';
-import { db } from '@/lib/firebase-server';
+import { db, collection, getDocs, query, where, orderBy, limit, startAfter, addDoc, updateDoc, deleteDoc, doc } from '@/lib/firebase-server';
 
 // GET /api/questions/unified - Get questions with filters
 export async function GET(request: NextRequest) {
@@ -51,18 +48,40 @@ export async function GET(request: NextRequest) {
       Object.entries(filters).filter(([_, value]) => value !== undefined)
     );
 
-    const questions = await UnifiedQuestionService.getQuestions(cleanFilters);
+    // Get questions from Firestore
+    let q = query(collection(db, 'unifiedQuestions'));
     
-    // Get total count for pagination (without limit)
-    const totalCountFilters = { ...cleanFilters };
-    delete totalCountFilters.limit;
-    const allQuestions = await UnifiedQuestionService.getQuestions(totalCountFilters);
-    const totalCount = allQuestions.length;
+    // Apply filters
+    if (cleanFilters.category) {
+      q = query(q, where('category', '==', cleanFilters.category));
+    }
+    if (cleanFilters.difficulty) {
+      q = query(q, where('difficulty', '==', cleanFilters.difficulty));
+    }
     
-    // Calculate pagination metadata
+    // Order by createdAt descending
+    q = query(q, orderBy('createdAt', 'desc'));
+    
+    // Get total count
+    const totalSnapshot = await getDocs(q);
+    const totalCount = totalSnapshot.size;
+    
+    // Apply pagination
+    if (offset > 0) {
+      const offsetSnapshot = await getDocs(query(q, limit(offset)));
+      const lastDoc = offsetSnapshot.docs[offsetSnapshot.docs.length - 1];
+      q = query(q, startAfter(lastDoc));
+    }
+    
+    q = query(q, limit(pageSize));
+    
+    const snapshot = await getDocs(q);
+    const questions = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
     const totalPages = Math.ceil(totalCount / pageSize);
-    const hasNextPage = page < totalPages;
-    const hasPrevPage = page > 1;
 
     return NextResponse.json({
       success: true,
@@ -72,11 +91,9 @@ export async function GET(request: NextRequest) {
         pageSize,
         totalCount,
         totalPages,
-        hasNextPage,
-        hasPrevPage,
-        offset,
+        hasNext: page < totalPages,
+        hasPrev: page > 1,
       },
-      count: questions.length,
     });
   } catch (error) {
     console.error('Error fetching questions:', error);
@@ -87,71 +104,58 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/questions/unified - Create new question or bulk import
+// POST /api/questions/unified - Create questions (bulk import or single)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const { questions, isBulkImport = false } = body;
 
-    // Check if it's a bulk import
-    if (body.bulk && Array.isArray(body.questions)) {
-      const results = await UnifiedQuestionService.bulkImportQuestions(
-        body.questions
+    if (!questions || !Array.isArray(questions)) {
+      return NextResponse.json(
+        { success: false, error: 'Questions array is required' },
+        { status: 400 }
       );
-
-      return NextResponse.json({
-        success: true,
-        message: `Bulk import completed: ${results.success} successful, ${results.failed} failed`,
-        data: results,
-      });
     }
 
-    // Single question creation
-    const questionId = await UnifiedQuestionService.createQuestion(body);
+    const results = [];
+    const errors = [];
 
-    // Auto-assign to section if learningPath is provided and no sectionId is specified
-    if (body.learningPath && !body.sectionId) {
+    for (const questionData of questions) {
       try {
-        const autoAssignResponse = await fetch(`${request.nextUrl.origin}/api/sections/auto-assign`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            questionId,
-            learningPathId: body.learningPath,
-            sectionSize: 15 // Default section size
-          })
-        });
-        
-        if (autoAssignResponse.ok) {
-          const autoAssignData = await autoAssignResponse.json();
-          console.log('Auto-assigned question to section:', autoAssignData.data);
-        }
-      } catch (autoAssignError) {
-        console.warn('Failed to auto-assign question to section:', autoAssignError);
-        // Don't fail the question creation if auto-assignment fails
+        const questionWithTimestamps = {
+          ...questionData,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+
+        const docRef = await addDoc(collection(db, 'unifiedQuestions'), questionWithTimestamps);
+        results.push({ id: docRef.id, ...questionData });
+      } catch (error) {
+        console.error('Error creating question:', error);
+        errors.push({ question: questionData, error: error.message });
       }
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Question created successfully',
-      data: { id: questionId },
+      data: results,
+      errors: errors.length > 0 ? errors : undefined,
+      message: `Successfully ${isBulkImport ? 'imported' : 'created'} ${results.length} questions`,
     });
   } catch (error) {
-    console.error('Error creating question:', error);
+    console.error('Error creating questions:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create question' },
+      { success: false, error: 'Failed to create questions' },
       { status: 500 }
     );
   }
 }
 
-// PUT /api/questions/unified - Update question
+// PUT /api/questions/unified - Update a question
 export async function PUT(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+    const body = await request.json();
+    const { id, ...updateData } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -160,8 +164,12 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
-    await UnifiedQuestionService.updateQuestion(id, body);
+    const updateWithTimestamps = {
+      ...updateData,
+      updatedAt: new Date(),
+    };
+
+    await updateDoc(doc(db, 'unifiedQuestions', id), updateWithTimestamps);
 
     return NextResponse.json({
       success: true,
@@ -176,7 +184,7 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-// DELETE /api/questions/unified - Delete question
+// DELETE /api/questions/unified - Delete a question
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -189,7 +197,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await UnifiedQuestionService.deleteQuestion(id);
+    await deleteDoc(doc(db, 'unifiedQuestions', id));
 
     return NextResponse.json({
       success: true,

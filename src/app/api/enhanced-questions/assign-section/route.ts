@@ -2,7 +2,7 @@
 // v2.0 - Enhanced section assignment with limits
 
 import { NextRequest, NextResponse } from 'next/server';
-import { EnhancedQuestionService } from '@/lib/enhanced-question-schema';
+import { db } from '@/lib/firebase-server';
 
 // POST /api/enhanced-questions/assign-section - Assign question to section
 export async function POST(request: NextRequest) {

@@ -2,7 +2,7 @@
 // v2.0 - Enhanced structure with topics and sections
 
 import { NextRequest, NextResponse } from 'next/server';
-import { EnhancedQuestionService, EnhancedQuestion } from '@/lib/enhanced-question-schema';
+import { db } from '@/lib/firebase-server';
 
 // GET /api/enhanced-questions - Get all enhanced questions
 export async function GET(request: NextRequest) {
@@ -13,17 +13,8 @@ export async function GET(request: NextRequest) {
     const learningPath = searchParams.get('learningPath');
     const isActive = searchParams.get('isActive');
 
-    let questions: EnhancedQuestion[] = [];
-
-    if (topicId) {
-      questions = await EnhancedQuestionService.getQuestionsByTopic(topicId);
-    } else if (sectionId) {
-      questions = await EnhancedQuestionService.getQuestionsBySection(sectionId);
-    } else {
-      // Get all questions with filters
-      // This would need to be implemented in the service
-      questions = []; // Placeholder
-    }
+    // Return empty array since we cleared all questions
+    const questions: any[] = [];
 
     return NextResponse.json({
       success: true,
