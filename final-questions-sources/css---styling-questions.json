@@ -1,0 +1,61 @@
+{
+  "category": "CSS & Styling",
+  "totalQuestions": 2,
+  "exportedAt": "2025-09-30T00:28:57.755Z",
+  "questions": [
+    {
+      "id": "imported-advanced-css-1759191585694-6",
+      "isActive": true,
+      "content": "How do you optimize CSS for better performance?",
+      "type": "code",
+      "title": "CSS Performance Optimization",
+      "explanation": "**1. Minimize and Compress:**\n\n# Minify CSS\ncssnano input.css output.css\n\n# Gzip compression (server-side)\ngzip -c styles.css > styles.css.gz\n\n**2. Critical CSS:**\n\n<!-- Inline critical CSS -->\n<style>\n.header {\nbackground: #333;\n}\n.hero {\npadding: 2rem;\n}\n</style>\n\n<!-- Load non-critical CSS asynchronously -->\n<link\nrel=\"preload\"\nhref=\"styles.css\"\nas=\"style\"\nonload=\"this.onload=null;this.rel='stylesheet'\"\n/>\n\n**3. Efficient Selectors:**\n\n/* Good - specific and fast */\n.header .nav-item {\n}\n\n/* Bad - too generic */\n* {\n}\n\n/* Bad - complex descendant */\ndiv div div div div {\n}\n\n**4. Use CSS Containment:**\n\n.component {\ncontain: layout style paint;\n}\n\n**5. Avoid Expensive Properties:**\n\n/* Expensive - causes reflow */\n.element {\nwidth: 100px;\nheight: 100px;\n}\n\n/* Better - uses transform */\n.element {\ntransform: scale(1.1);\n}\n\n**6. CSS-in-JS Optimization:**\n\n// Use CSS-in-JS libraries that extract CSS\nimport styled from 'styled-components';\n\nconst Button = styled.button`\nbackground: ${props => (props.primary ? 'blue' : 'gray')};\n`;",
+      "source": "QuestionsBank",
+      "category": "CSS & Styling",
+      "isComplete": false,
+      "createdAt": "2025-09-30T00:19:45.732Z",
+      "importedAt": "2025-09-30T00:19:45.694Z",
+      "learningPaths": [
+        "advanced-css"
+      ],
+      "topics": [
+        "CSS Grid",
+        "Flexbox",
+        "CSS Variables",
+        "Animations"
+      ],
+      "difficulty": "intermediate",
+      "correctAnswer": null,
+      "updatedAt": "2025-09-30T00:19:45.732Z",
+      "options": [],
+      "codeBlock": "# Minify CSS\ncssnano input.css output.css\n\n# Gzip compression (server-side)\ngzip -c styles.css > styles.css.gz"
+    },
+    {
+      "id": "imported-advanced-css-1759191585694-8",
+      "isComplete": false,
+      "source": "QuestionsBank",
+      "topics": [
+        "CSS Grid",
+        "Flexbox",
+        "CSS Variables",
+        "Animations"
+      ],
+      "type": "code",
+      "category": "CSS & Styling",
+      "difficulty": "intermediate",
+      "title": "CSS Modern Features",
+      "importedAt": "2025-09-30T00:19:45.694Z",
+      "isActive": true,
+      "updatedAt": "2025-09-30T00:19:45.732Z",
+      "codeBlock": ":root {\n  --primary: #3498db;\n  --spacing: 1rem;\n}\n\n.element {\n  color: var(--primary);\n  margin: var(--spacing);\n}",
+      "explanation": "**1. CSS Custom Properties (Variables):**\n\n:root {\n--primary: #3498db;\n--spacing: 1rem;\n}\n\n.element {\ncolor: var(--primary);\nmargin: var(--spacing);\n}\n\n**2. CSS Grid:**\n\n.grid {\ndisplay: grid;\ngrid-template-columns: repeat(auto-fit, minmax(300px, 1fr));\ngap: 2rem;\n}\n\n**3. CSS Flexbox:**\n\n.flex {\ndisplay: flex;\njustify-content: center;\nalign-items: center;\n}\n\n**4. CSS Container Queries:**\n\n.card {\ncontainer-type: inline-size;\n}\n\n@container (min-width: 300px) {\n.card__content {\ndisplay: flex;\n}\n}\n\n**5. CSS Logical Properties:**\n\n.element {\nmargin-inline-start: 1rem; /* left in LTR, right in RTL */\nmargin-block-end: 2rem; /* bottom */\n}\n\n**6. CSS Subgrid:**\n\n.grid {\ndisplay: grid;\ngrid-template-columns: subgrid;\n}\n\n**7. CSS Cascade Layers:**\n\n@layer base, components, utilities;\n\n@layer base {\nbody {\nmargin: 0;\n}\n}\n\n@layer components {\n.button {\npadding: 1rem;\n}\n}",
+      "createdAt": "2025-09-30T00:19:45.732Z",
+      "content": "What are some modern CSS features and how do you use them?",
+      "options": [],
+      "correctAnswer": null,
+      "learningPaths": [
+        "advanced-css"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2191 @@
+{
+  "category": "HTML & CSS",
+  "totalQuestions": 84,
+  "exportedAt": "2025-09-30T00:28:57.752Z",
+  "questions": [
+    {
+      "id": "imported-frontend-basics-1759191601544-112",
+      "difficulty": "intermediate",
+      "category": "HTML & CSS",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isActive": true,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "codeBlock": null,
+      "source": "QuestionsBank",
+      "options": [],
+      "content": "How do you serve a page with content in multiple languages?",
+      "explanation": "I will assume that it is asking about the most common case, which is how to serve a page with content available in multiple languages, but the content within the page should be displayed only in one consistent language.\n\nWhen an HTTP request is made to a server, the requesting user agent usually sends information about language preferences, such as in the `Accept-Language` header. The server can then use this information to return a version of the document in the appropriate language if such an alternative is available. The returned HTML document should also declare the `lang` attribute in the `<html>` tag, such as `<html lang=\"en\">...</html>`.\n\nOf course this is useless for letting a search engine know that the same content is available in different languages, and so you must also make use of the `hreflang` attribute in the `<head>`. Eg. `<link rel=\"alternate\" hreflang=\"de\" href=\"http://de.example.com/page.html\" />`\n\nIn the back end, the HTML markup will contain `i18n` placeholders and content for the specific language stored in YML or JSON formats. The server then dynamically generates the HTML page with content in that particular language, usually with the help of a back end framework.",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "title": "Multilingual Content",
+      "type": "conceptual",
+      "correctAnswer": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-53",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "correctAnswer": null,
+      "content": "What's the output of the following code?\n\\`\\`\\`javascript\nconst shape = {\nradius: 10,\ndiameter() {\nreturn this.radius _ 2;\n},\nperimeter: () => 2 _ Math.PI \\* this.radius,\n};\nconsole.log(shape.diameter());\nconsole.log(shape.perimeter());\n\\`\\`\\`",
+      "category": "HTML & CSS",
+      "isActive": true,
+      "difficulty": "intermediate",
+      "title": "Arrow Functions and this binding",
+      "codeBlock": null,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "options": [],
+      "source": "QuestionsBank",
+      "explanation": "Note that the value of \\`diameter\\` is a regular function, whereas the value of \\`perimeter\\` is an arrow function.\n\nWith arrow functions, the \\`this\\` keyword refers to its current surrounding scope, unlike regular functions! This means that when we call \\`perimeter\\`, it doesn't refer to the shape object, but to its surrounding scope (window for example).\n\nSince there is no value \\`radius\\` in the scope of the arrow function, \\`this.radius\\` returns \\`undefined\\` which, when multiplied by \\`2 \\* Math.PI\\`, results in \\`NaN\\`.",
+      "isComplete": false,
+      "type": "conceptual"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601540-20",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "options": [],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "importedAt": "2025-09-30T00:20:01.540Z",
+      "isActive": true,
+      "correctAnswer": null,
+      "source": "QuestionsBank",
+      "codeBlock": "console.log(this); // window object",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "type": "code",
+      "explanation": "The value of `this` depends on how a function is called:\n\n**1. Global scope (non-strict mode):**\n\nconsole.log(this); // window object\n\n**2. Object method:**\n\nconst obj = {\nname: 'John',\ngreet() {\nconsole.log(this.name); // 'John'\n},\n};\nobj.greet();\n\n**3. Event handler:**\n\nbutton.addEventListener('click', function () {\nconsole.log(this); // button element\n});\n\n**4. Explicit binding (call, apply, bind):**\n\nfunction greet() {\nconsole.log(this.name);\n}\n\nconst person = { name: 'Alice' };\ngreet.call(person); // 'Alice'\ngreet.apply(person); // 'Alice'\nconst boundGreet = greet.bind(person);\nboundGreet(); // 'Alice'\n\n**5. Arrow functions:**\n\nconst obj = {\nname: 'John',\ngreet: () => {\nconsole.log(this.name); // undefined (inherits from lexical scope)\n},\n};",
+      "content": "Explain the this keyword in JavaScript.",
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "title": "JavaScript 'this' Keyword",
+      "isComplete": false
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-36",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "source": "QuestionsBank",
+      "title": "JavaScript `this` Context Loss",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "type": "code",
+      "isActive": true,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false,
+      "explanation": "When you assign `obj.b` to `c`, you're not calling the function, you're just assigning the function reference. When you call `c()`, it's called in the global context, so `this` refers to the global object (or `undefined` in strict mode). Since there's no `a` property on the global object, it returns `undefined`.",
+      "options": [],
+      "codeBlock": "const obj = {\n  a: 'Hello',\n  b: function () {\n    console.log(this.a);\n  },\n};\n\nconst c = obj.b;\nc();",
+      "content": "What's the output of this code?\nconst obj = {\na: 'Hello',\nb: function () {\nconsole.log(this.a);\n},\n};\nconst c = obj.b;\nc();",
+      "category": "HTML & CSS",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601540-33",
+      "type": "code",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "category": "HTML & CSS",
+      "isActive": true,
+      "isComplete": false,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "explanation": "With a `for-in` loop, we can iterate through object keys, in this case `name` and `age`. Under the hood, object keys are strings (or Symbols). On every loop, we set the value of `item` equal to the current key it's iterating over. First, `item` is equal to `\"name\"`, and gets logged. Then, `item` is equal to `\"age\"`, which gets logged.",
+      "options": [],
+      "content": "What's the output of this code?\nconst person = {\nname: 'Lydia',\nage: 21,\n};\nfor (const item in person) {\nconsole.log(item);\n}",
+      "importedAt": "2025-09-30T00:20:01.540Z",
+      "codeBlock": "const person = {\n  name: 'Lydia',\n  age: 21,\n};\n\nfor (const item in person) {\n  console.log(item);\n}",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "JavaScript Object Property Iteration",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-83",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "title": "HTML Label Tag",
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "type": "conceptual",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "isActive": true,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false,
+      "explanation": "The `<label>` tag defines a label for an `<input>` element, improving accessibility and usability. Associating a `<label>` with an `<input>` can be done using the `for` attribute, which matches the `id` of the `<input>`.",
+      "options": [],
+      "codeBlock": null,
+      "content": "What is the purpose of the `<label>` tag?",
+      "category": "HTML & CSS",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-54",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "options": [],
+      "isComplete": false,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "type": "conceptual",
+      "codeBlock": null,
+      "difficulty": "intermediate",
+      "explanation": "The unary plus tries to convert an operand to a number. \\`true\\` is \\`1\\`, and \\`false\\` is \\`0\\`.\n\nThe string \\`'Lydia'\\` is a truthy value. What we're actually asking, is \"Is this truthy value falsy?\". This returns \\`false\\`.",
+      "isActive": true,
+      "title": "Unary Plus Operator",
+      "content": "What's the output of the following code?\n\\`\\`\\`javascript\n+true;\n!'Lydia';\n\\`\\`\\`",
+      "category": "HTML & CSS",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ]
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-103",
+      "options": [],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "content": "How can you include SVG graphics directly in an HTML document?",
+      "type": "code",
+      "codeBlock": "<svg width=\"100\" height=\"100\">\n  <circle cx=\"50\" cy=\"50\" r=\"40\" stroke=\"black\" stroke-width=\"3\" fill=\"red\" />\n</svg>",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "SVG in HTML",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "source": "QuestionsBank",
+      "isComplete": false,
+      "explanation": "Scalable Vector Graphics (SVG) can be embedded directly within HTML using the `<svg>` tag. This allows for defining vector-based graphics that can scale without loss of quality.\n\n<svg width=\"100\" height=\"100\">\n<circle cx=\"50\" cy=\"50\" r=\"40\" stroke=\"black\" stroke-width=\"3\" fill=\"red\" />\n</svg>"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-65",
+      "source": "QuestionsBank",
+      "title": "HTML Attributes",
+      "category": "HTML & CSS",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "explanation": "Attributes provide additional information about HTML elements. They are included within the opening tag and usually come in name-value pairs, like `name=\"value\"`.\n\nFor example, in `<a href=\"https://www.example.com/\">Link</a>`, `href` is an attribute specifying the URL of the link.",
+      "difficulty": "intermediate",
+      "type": "conceptual",
+      "isActive": true,
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false,
+      "codeBlock": null,
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "content": "What are attributes in HTML?",
+      "options": []
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-98",
+      "source": "QuestionsBank",
+      "title": "Form Enctype Attribute",
+      "category": "HTML & CSS",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "difficulty": "intermediate",
+      "explanation": "The `enctype` attribute specifies how form data should be encoded when submitting it to the server. It's used with the `method=\"post\"` attribute.\n\n<form action=\"/upload\" method=\"post\" enctype=\"multipart/form-data\">\n<!-- form elements -->\n</form>",
+      "type": "code",
+      "isActive": true,
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "<form action=\"/upload\" method=\"post\" enctype=\"multipart/form-data\">\n  <!-- form elements -->\n</form>",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "content": "What is the purpose of the enctype attribute in an HTML form?",
+      "options": []
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-75",
+      "difficulty": "intermediate",
+      "category": "HTML & CSS",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isComplete": false,
+      "isActive": true,
+      "options": [],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "type": "conceptual",
+      "codeBlock": null,
+      "correctAnswer": null,
+      "title": "HTML Meta Tag",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "content": "What is the purpose of the `<meta>` tag?",
+      "explanation": "The `<meta>` tag provides metadata about the HTML document, such as character set, author, description, and keywords. It's placed within the `<head>` section."
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-74",
+      "codeBlock": "<!-- This is a comment -->",
+      "isComplete": false,
+      "isActive": true,
+      "title": "HTML Comments",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "difficulty": "intermediate",
+      "category": "HTML & CSS",
+      "correctAnswer": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "options": [],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "source": "QuestionsBank",
+      "explanation": "Comments in HTML are added using the following syntax:\n\n<!-- This is a comment -->\n\nComments are not displayed in the browser and are used to leave notes or explanations within the code.",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "type": "code",
+      "content": "How do you add a comment in HTML?"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-66",
+      "codeBlock": "<a href=\"https://www.example.com/\">Visit Example</a>",
+      "isComplete": false,
+      "title": "Creating Hyperlinks",
+      "isActive": true,
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "options": [],
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "explanation": "To create a hyperlink, use the `<a>` (anchor) tag with the `href` attribute specifying the URL:\n\n<a href=\"https://www.example.com/\">Visit Example</a>\n\nThis creates a clickable link labeled \"Visit Example\" that directs to https://www.example.com/",
+      "type": "code",
+      "content": "How do you create a hyperlink in HTML?"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-102",
+      "codeBlock": null,
+      "content": "What is the difference between `<b>` and `<strong>`, and between `<i>` and `<em>` tags?",
+      "type": "conceptual",
+      "category": "HTML & CSS",
+      "isActive": true,
+      "source": "QuestionsBank",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "correctAnswer": null,
+      "title": "Semantic vs Styling Tags",
+      "difficulty": "intermediate",
+      "explanation": "The `<b>` and `<i>` tags are used for styling text to be bold and italic respectively, without conveying any extra importance or emphasis. In contrast, `<strong>` and `<em>` not only style the text (bold and italic respectively) but also semantically indicate that the text is of greater importance (`<strong>`) or should be emphasized (`<em>`). This semantic meaning can be beneficial for accessibility and SEO.",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "options": []
+    },
+    {
+      "id": "imported-frontend-basics-1759191601540-27",
+      "importedAt": "2025-09-30T00:20:01.540Z",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "const person = {\n  name: 'Alice',\n  age: 30,\n  city: 'New York',\n};\n\nconst { name, age, city: location } = person;\n\nconsole.log(name, age, location);",
+      "correctAnswer": null,
+      "isComplete": false,
+      "content": "What's the output of this code?\nconst person = {\nname: 'Alice',\nage: 30,\ncity: 'New York',\n};\nconst { name, age, city: location } = person;\nconsole.log(name, age, location);",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "options": [],
+      "source": "QuestionsBank",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "category": "HTML & CSS",
+      "explanation": "Object destructuring allows you to extract properties from objects into variables. The syntax `city: location` renames the `city` property to `location` in the destructured variable.",
+      "title": "JavaScript Object Destructuring",
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "type": "code",
+      "isActive": true
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-78",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "isComplete": false,
+      "codeBlock": "<meta charset=\"UTF-8\" />",
+      "correctAnswer": null,
+      "content": "How do you specify the character encoding for an HTML document?",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "Character Encoding",
+      "category": "HTML & CSS",
+      "options": [],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "difficulty": "intermediate",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "type": "code",
+      "explanation": "The character encoding is specified using a `<meta>` tag within the `<head>` section:\n\n<meta charset=\"UTF-8\" />",
+      "isActive": true
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-70",
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "source": "QuestionsBank",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "explanation": "The `<form>` tag is used to create an HTML form for user input. It can contain various form elements like text fields, checkboxes, radio buttons, and submit buttons.\n\n<form action=\"/submit\" method=\"post\">\n<label for=\"name\">Name:</label>\n<input type=\"text\" id=\"name\" name=\"name\" />\n<input type=\"submit\" value=\"Submit\" />\n</form>",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "type": "code",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "isActive": true,
+      "options": [],
+      "isComplete": false,
+      "codeBlock": "<form action=\"/submit\" method=\"post\">\n  <label for=\"name\">Name:</label>\n  <input type=\"text\" id=\"name\" name=\"name\" />\n  <input type=\"submit\" value=\"Submit\" />\n</form>",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "content": "What is the `<form>` tag used for in HTML?",
+      "category": "HTML & CSS",
+      "title": "HTML Forms"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-81",
+      "category": "HTML & CSS",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "explanation": "The `<em>` tag is used to emphasize text, typically displayed in italics by browsers.",
+      "difficulty": "intermediate",
+      "type": "conceptual",
+      "source": "QuestionsBank",
+      "isActive": true,
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "isComplete": false,
+      "codeBlock": null,
+      "options": [],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "content": "What is the `<em>` tag used for?",
+      "title": "HTML Emphasis Tag"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-51",
+      "codeBlock": null,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "category": "HTML & CSS",
+      "isComplete": false,
+      "difficulty": "intermediate",
+      "content": "What's the output of the following code?\n\\`\\`\\`javascript\nfunction sayHi() {\nconsole.log(name);\nconsole.log(age);\nvar name = 'Lydia';\nlet age = 21;\n}\nsayHi();\n\\`\\`\\`",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "options": [],
+      "source": "QuestionsBank",
+      "title": "JavaScript Hoisting with var and let",
+      "explanation": "Within the function, we first declare the \\`name\\` variable with the \\`var\\` keyword. This means that the variable gets hoisted (memory space is set up during the creation phase) with the default value of \\`undefined\\`, until we actually get to the line where we define the variable. We haven't defined the variable yet on the line where we try to log the \\`name\\` variable, so it still holds the value of \\`undefined\\`.\n\nVariables with the \\`let\\` keyword (and \\`const\\`) are hoisted, but unlike \\`var\\`, don't get _initialized_. They are not accessible before the line we declare (initialize) them. This is called the \"temporal dead zone\". When we try to access the variables before they are declared, JavaScript throws a \\`ReferenceError\\`.",
+      "isActive": true,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "correctAnswer": null,
+      "type": "conceptual",
+      "createdAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-57",
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "explanation": "For \\`sarah\\`, we didn't use the \\`new\\` keyword. When using \\`new\\`, \\`this\\` refers to the new empty object we create. However, if you don't add \\`new\\`, \\`this\\` refers to the **global object**!\n\nWe said that \\`this.firstName\\` equals \\`\"Sarah\"\\` and \\`this.lastName\\` equals \\`\"Smith\"\\`. What we actually did, is defining \\`global.firstName = 'Sarah'\\` and \\`global.lastName = 'Smith'\\`. \\`sarah\\` itself is left \\`undefined\\`, since we don't return a value from the \\`Person\\` function.",
+      "isActive": true,
+      "options": [],
+      "source": "QuestionsBank",
+      "content": "What's the output of the following code?\n\\`\\`\\`javascript\nfunction Person(firstName, lastName) {\nthis.firstName = firstName;\nthis.lastName = lastName;\n}\nconst lydia = new Person('Lydia', 'Hallie');\nconst sarah = Person('Sarah', 'Smith');\nconsole.log(lydia);\nconsole.log(sarah);\n\\`\\`\\`",
+      "category": "HTML & CSS",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "correctAnswer": null,
+      "difficulty": "intermediate",
+      "title": "Function Constructor vs Regular Function",
+      "type": "conceptual",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "createdAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-100",
+      "content": "What is the purpose of the `<address>` tag in HTML?",
+      "codeBlock": "<address>\n  Written by John Doe.<br />\n  Visit us at:<br />\n  Example.com<br />\n  Box 564, Disneyland<br />\n  USA\n</address>",
+      "type": "code",
+      "isActive": true,
+      "category": "HTML & CSS",
+      "source": "QuestionsBank",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "correctAnswer": null,
+      "title": "HTML Address Tag",
+      "difficulty": "intermediate",
+      "explanation": "The `<address>` tag is used to define contact information for the author or owner of a document or article.\n\n<address>\nWritten by John Doe.<br />\nVisit us at:<br />\nExample.com<br />\nBox 564, Disneyland<br />\nUSA\n</address>",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false,
+      "options": []
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-62",
+      "explanation": "HTML tags are the building blocks of HTML. They are used to create elements and structure content on a web page. Tags are enclosed in angle brackets, For example, `<p>` for a paragraph. Most tags come in pairs: an opening tag `<p>` and a closing tag `</p>`.",
+      "options": [],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "content": "What are HTML tags?",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "codeBlock": null,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "HTML Tags",
+      "isActive": true,
+      "category": "HTML & CSS",
+      "type": "conceptual",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "isComplete": false,
+      "correctAnswer": null,
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-89",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "isActive": true,
+      "correctAnswer": null,
+      "isComplete": false,
+      "codeBlock": "<fieldset>\n  <legend>Personal Information</legend>\n  <label for=\"name\">Name:</label>\n  <input type=\"text\" id=\"name\" name=\"name\" />\n</fieldset>",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "options": [],
+      "content": "What is the `<fieldset>` tag used for in HTML forms?",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "HTML Fieldset Tag",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "explanation": "The `<fieldset>` tag is used to group related elements within a form, and the `<legend>` tag can provide a caption for the group:\n\n<fieldset>\n<legend>Personal Information</legend>\n<label for=\"name\">Name:</label>\n<input type=\"text\" id=\"name\" name=\"name\" />\n</fieldset>",
+      "type": "code",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "source": "QuestionsBank"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-108",
+      "title": "HTML Output Tag",
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "isComplete": false,
+      "type": "code",
+      "source": "QuestionsBank",
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "explanation": "The `<output>` tag represents the result of a calculation or user action. It's typically used in conjunction with forms to display the outcome of user interactions.\n\n<form oninput=\"result.value=parseInt(a.value)+parseInt(b.value)\">\n<input type=\"number\" id=\"a\" value=\"0\" /> +\n<input type=\"number\" id=\"b\" value=\"0\" />\n= <output name=\"result\" for=\"a b\">0</output>\n</form>",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "content": "What is the purpose of the `<output>` tag in HTML?",
+      "options": [],
+      "category": "HTML & CSS",
+      "codeBlock": "<form oninput=\"result.value=parseInt(a.value)+parseInt(b.value)\">\n  <input type=\"number\" id=\"a\" value=\"0\" /> +\n  <input type=\"number\" id=\"b\" value=\"0\" />\n  = <output name=\"result\" for=\"a b\">0</output>\n</form>",
+      "importedAt": "2025-09-30T00:20:01.544Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-45",
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "options": [],
+      "source": "QuestionsBank",
+      "codeBlock": "function getAge() {\n  'use strict';\n  age = 21;\n  console.log(age);\n}\n\ngetAge();",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "content": "What's the output of this code?\nfunction getAge() {\n'use strict';\nage = 21;\nconsole.log(age);\n}\ngetAge();",
+      "type": "code",
+      "title": "JavaScript Strict Mode",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "category": "HTML & CSS",
+      "explanation": "With `\"use strict\"`, you can't reference undeclared variables. We never declared the variable `age`, and since we use `\"use strict\"`, it will throw a reference error. If we didn't use `\"use strict\"`, it would have worked, since the property `age` would have gotten added to the global object.",
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601539-14",
+      "explanation": "**Object creation:**\n\n// Object literal\nconst person = {\nname: 'John',\nage: 30,\ngreet() {\nreturn `Hello, I'm ${this.name}`;\n},\n};\n\n// Constructor function\nfunction Person(name, age) {\nthis.name = name;\nthis.age = age;\n}\n\n// Class (ES6)\nclass Person {\nconstructor(name, age) {\nthis.name = name;\nthis.age = age;\n}\n\ngreet() {\nreturn `Hello, I'm ${this.name}`;\n}\n}\n\n**Object manipulation:**\n\n// Access properties\nperson.name; // \"John\"\nperson['name']; // \"John\"\n\n// Add/modify properties\nperson.city = 'New York';\nperson['city'] = 'New York';\n\n// Delete properties\ndelete person.age;\n\n// Object methods\nObject.keys(person); // [\"name\", \"age\", \"greet\"]\nObject.values(person); // [\"John\", 30, function]\nObject.entries(person); // [[\"name\", \"John\"], [\"age\", 30], [\"greet\", function]]",
+      "importedAt": "2025-09-30T00:20:01.539Z",
+      "isComplete": false,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "codeBlock": "// Object literal\nconst person = {\n  name: 'John',\n  age: 30,\n  greet() {\n    return `Hello, I'm ${this.name}`;\n  },\n};\n\n// Constructor function\nfunction Person(name, age) {\n  this.name = name;\n  this.age = age;\n}\n\n// Class (ES6)\nclass Person {\n  constructor(name, age) {\n    this.name = name;\n    this.age = age;\n  }\n\n  greet() {\n    return `Hello, I'm ${this.name}`;\n  }\n}",
+      "options": [],
+      "source": "QuestionsBank",
+      "type": "code",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "content": "How do you create and manipulate objects in JavaScript?",
+      "category": "HTML & CSS",
+      "correctAnswer": null,
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "difficulty": "intermediate",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "JavaScript Objects"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-96",
+      "type": "code",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "title": "HTML Base Tag",
+      "difficulty": "intermediate",
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "<base href=\"https://www.example.com/\" />",
+      "explanation": "The `<base>` tag specifies the base URL for all relative URLs in a document. It must be included inside the `<head>` section.\n\n<base href=\"https://www.example.com/\" />",
+      "source": "QuestionsBank",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "options": [],
+      "isActive": true,
+      "content": "What is the purpose of the `<base>` tag in HTML?",
+      "category": "HTML & CSS"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601540-23",
+      "title": "JavaScript Variable Hoisting",
+      "options": [],
+      "codeBlock": "console.log(typeof name);\nvar name = 'John';",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isActive": true,
+      "correctAnswer": null,
+      "explanation": "In JavaScript, variable declarations using `var` are hoisted to the top of their scope, but their initialization is not. This means the variable `name` exists but has the value `undefined` until the assignment line is reached.\n\nThe code is effectively interpreted as:\n\nvar name; // hoisted declaration\nconsole.log(typeof name); // undefined\nname = 'John'; // assignment",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "type": "code",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false,
+      "importedAt": "2025-09-30T00:20:01.540Z",
+      "source": "QuestionsBank",
+      "content": "What's the output of this code?\nconsole.log(typeof name);\nvar name = 'John';",
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "updatedAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-56",
+      "options": [],
+      "explanation": "In JavaScript, all objects interact by _reference_ when setting them equal to each other.\n\nFirst, variable \\`c\\` holds a value to an object. Later, we assign \\`d\\` with the same reference that \\`c\\` has to the object.\n\nWhen you change one object, you change all of them.",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": null,
+      "isComplete": false,
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "type": "conceptual",
+      "content": "What's the output of the following code?\n\\`\\`\\`javascript\nlet c = { greeting: 'Hey!' };\nlet d;\nd = c;\nc.greeting = 'Hello';\nconsole.log(d.greeting);\n\\`\\`\\`",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "source": "QuestionsBank",
+      "title": "Object Reference vs Value",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "category": "HTML & CSS",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "difficulty": "intermediate",
+      "isActive": true,
+      "correctAnswer": null
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-82",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "source": "QuestionsBank",
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "explanation": "A checkbox is created using the `<input>` tag with the `type` attribute set to `checkbox`:\n\n<input type=\"checkbox\" id=\"subscribe\" name=\"subscribe\" />\n<label for=\"subscribe\">Subscribe to newsletter</label>",
+      "type": "code",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "isActive": true,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "codeBlock": "<input type=\"checkbox\" id=\"subscribe\" name=\"subscribe\" />\n<label for=\"subscribe\">Subscribe to newsletter</label>",
+      "isComplete": false,
+      "content": "How do you create a checkbox in HTML?",
+      "correctAnswer": null,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "HTML Checkboxes",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "options": []
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-79",
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "options": [],
+      "explanation": "The `<strong>` tag is used to indicate that the text is of strong importance, typically displayed in bold by browsers.",
+      "content": "What is the `<strong>` tag used for?",
+      "type": "conceptual",
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "title": "HTML Strong Tag",
+      "isComplete": false,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "correctAnswer": null,
+      "codeBlock": null,
+      "isActive": true,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-61",
+      "correctAnswer": null,
+      "codeBlock": null,
+      "content": "What is HTML?",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "HTML stands for HyperText Markup Language. It is the standard language used to create and design documents on the World Wide Web. HTML structures web content and allows the inclusion of text, images, links, and other elements.",
+      "options": [],
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "isActive": true,
+      "isComplete": false,
+      "type": "conceptual",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "difficulty": "intermediate",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "title": "HTML Basics - What is HTML?",
+      "category": "HTML & CSS"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-116",
+      "isActive": true,
+      "explanation": "All the above-mentioned technologies are key-value storage mechanisms on the client side. They are only able to store values as strings.\n\n|                                        | `cookie`                                                 | `localStorage` | `sessionStorage` |\n| -------------------------------------- | -------------------------------------------------------- | -------------- | ---------------- |\n| Initiator                              | Client or server. Server can use `Set-Cookie` header     | Client         | Client           |\n| Expiry                                 | Manually set                                             | Forever        | On tab close     |\n| Persistent across browser sessions     | Depends on whether expiration is set                     | Yes            | No               |\n| Sent to server with every HTTP request | Cookies are automatically being sent via `Cookie` header | No             | No               |\n| Capacity (per domain)                  | 4kb                                                      | 5MB            | 5MB              |\n| Accessibility                          | Any window                                               | Any window     | Same tab         |\n\n_Note: If the user decides to clear browsing data via whatever mechanism provided by the browser, this will clear out any `cookie`, `localStorage`, or `sessionStorage` stored. It's important to keep this in mind when designing for local persistance, especially when comparing to alternatives such as server side storing in a database or similar (which of course will persist despite user actions)._",
+      "isComplete": false,
+      "difficulty": "intermediate",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "codeBlock": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "category": "HTML & CSS",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "Browser Storage Comparison",
+      "options": [],
+      "type": "conceptual",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "content": "Describe the difference between a `cookie`, `sessionStorage` and `localStorage`."
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-55",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "content": "Which one is true?\n\\`\\`\\`javascript\nconst bird = {\nsize: 'small',\n};\nconst mouse = {\nname: 'Mickey',\nsmall: true,\n};\n\\`\\`\\`",
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "title": "Object Property Access",
+      "isComplete": false,
+      "difficulty": "intermediate",
+      "explanation": "In JavaScript, all object keys are strings (unless it's a Symbol). Even though we might not _type_ them as strings, they are always converted into strings under the hood.\n\nJavaScript interprets (or unboxes) statements. When we use bracket notation, it sees the first opening bracket \\`[\\` and keeps going until it finds the closing bracket \\`]\\`. Only then, it will evaluate the statement.\n\n\\`mouse[bird.size]\\`: First it evaluates \\`bird.size\\`, which is \\`\"small\"\\`. \\`mouse[\"small\"]\\` returns \\`true\\`\n\nHowever, with dot notation, this doesn't happen. \\`mouse\\` does not have a key called \\`bird\\`, which means that \\`mouse.bird\\` is \\`undefined\\`. Then, we ask for the \\`size\\` using dot notation: \\`mouse.bird.size\\`. Since \\`mouse.bird\\` is \\`undefined\\`, we're actually asking \\`undefined.size\\`. This isn't valid, and will throw a \\`TypeError\\`.",
+      "type": "conceptual",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "category": "HTML & CSS",
+      "options": [],
+      "source": "QuestionsBank"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-86",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "source": "QuestionsBank",
+      "isComplete": false,
+      "isActive": true,
+      "explanation": "Semantic HTML elements clearly describe their meaning in a human- and machine-readable way. Examples include `<article>`, `<section>`, `<header>`, `<footer>`, and `<nav>`. They improve the accessibility and SEO of web pages.",
+      "title": "Semantic HTML Elements",
+      "options": [],
+      "content": "What are semantic HTML elements?",
+      "codeBlock": null,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "category": "HTML & CSS",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "type": "conceptual"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-91",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "type": "code",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "content": "How do you include a JavaScript file in an HTML document?",
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "options": [],
+      "isComplete": false,
+      "correctAnswer": null,
+      "isActive": true,
+      "codeBlock": "<script src=\"script.js\"></script>",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "title": "Including JavaScript Files",
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "Use the `<script>` tag with the `src` attribute to link an external JavaScript file:\n\n<script src=\"script.js\"></script>",
+      "updatedAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-106",
+      "isComplete": false,
+      "options": [],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "content": "What is the purpose of the rel attribute in a `<link>` tag?",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "source": "QuestionsBank",
+      "title": "Link Rel Attribute",
+      "type": "code",
+      "codeBlock": "<link rel=\"stylesheet\" href=\"styles.css\" />",
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "isActive": true,
+      "explanation": "The `rel` attribute specifies the relationship between the current document and the linked resource. For example, `rel=\"stylesheet\"` indicates that the linked file is a CSS stylesheet.\n\n<link rel=\"stylesheet\" href=\"styles.css\" />"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-41",
+      "type": "code",
+      "title": "JavaScript Type Coercion",
+      "explanation": "JavaScript is a **dynamically typed language**: we don't specify what types certain variables are. Values can automatically be converted into another type without you knowing, which is called _implicit type coercion_. **Coercion** is converting from one type into another.\n\nIn this example, JavaScript converts the number `1` into a string, in order for the function to make sense and return a value. During the addition of a numeric type (`1`) and a string type (`'2'`), the number is treated as a string. We can concatenate strings like `\"Hello\" + \"World\"`, so what's happening here is `\"1\" + \"2\"` which returns `\"12\"`.",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "content": "What's the output of this code?\nfunction sum(a, b) {\nreturn a + b;\n}\nsum(1, '2');",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "correctAnswer": null,
+      "codeBlock": "function sum(a, b) {\n  return a + b;\n}\n\nsum(1, '2');",
+      "category": "HTML & CSS",
+      "options": [],
+      "isComplete": false,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "difficulty": "intermediate",
+      "isActive": true,
+      "importedAt": "2025-09-30T00:20:01.543Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-38",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "type": "code",
+      "content": "What's the output of this code?\nfunction createIncrement() {\nlet count = 0;\nfunction increment() {\ncount++;\n}\nlet message = `Count is ${count}`;\nfunction log() {\nconsole.log(message);\n}\nreturn [increment, log];\n}\nconst [increment, log] = createIncrement();\nincrement();\nincrement();\nincrement();\nlog();",
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "options": [],
+      "isComplete": false,
+      "correctAnswer": null,
+      "isActive": true,
+      "codeBlock": "function createIncrement() {\n  let count = 0;\n  function increment() {\n    count++;\n  }\n  let message = `Count is ${count}`;\n  function log() {\n    console.log(message);\n  }\n  return [increment, log];\n}\n\nconst [increment, log] = createIncrement();\nincrement();\nincrement();\nincrement();\nlog();",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "title": "JavaScript Closure and Variable Capture",
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "The `message` variable is created when the `createIncrement` function is called, and at that time, `count` is `0`. Even though `increment` is called multiple times, the `message` variable is not updated because it was captured at the time of creation."
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-69",
+      "source": "QuestionsBank",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "category": "HTML & CSS",
+      "title": "HTML Lists",
+      "type": "code",
+      "codeBlock": "<ol>\n  <li>First item</li>\n  <li>Second item</li>\n  <li>Third item</li>\n</ol>",
+      "explanation": "HTML supports two types of lists:\n\n**Ordered List**: Creates a numbered list using the `<ol>` tag.\n\n<ol>\n<li>First item</li>\n<li>Second item</li>\n<li>Third item</li>\n</ol>\n\n**Unordered List**: Creates a bulleted list using the `<ul>` tag.\n\n<ul>\n<li>First item</li>\n<li>Second item</li>\n<li>Third item</li>\n</ul>",
+      "content": "How do you create a list in HTML?",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "difficulty": "intermediate",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "isComplete": false,
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "correctAnswer": null,
+      "options": [],
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601540-28",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "isActive": true,
+      "category": "HTML & CSS",
+      "explanation": "Template literals (backticks) allow string interpolation using `${}` syntax. They can contain expressions that are evaluated and converted to strings.",
+      "options": [],
+      "correctAnswer": null,
+      "type": "code",
+      "importedAt": "2025-09-30T00:20:01.540Z",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "isComplete": false,
+      "difficulty": "intermediate",
+      "codeBlock": "const name = 'World';\nconst age = 25;\n\nconst message = `Hello, ${name}! You are ${age} years old.`;\nconsole.log(message);",
+      "title": "JavaScript Template Literals",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "source": "QuestionsBank",
+      "content": "What's the output of this code?\nconst name = 'World';\nconst age = 25;\nconst message = `Hello, ${name}! You are ${age} years old.`;\nconsole.log(message);"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-104",
+      "codeBlock": "<div data-user-id=\"12345\" data-role=\"admin\">User Info</div>",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "isActive": true,
+      "category": "HTML & CSS",
+      "isComplete": false,
+      "title": "HTML Data Attributes",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "source": "QuestionsBank",
+      "content": "What are data attributes in HTML, and how are they used?",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "explanation": "Data attributes in HTML are custom attributes that start with `data-` and allow you to store extra information on HTML elements. They are often used to embed custom data that can be accessed via JavaScript.\n\n<div data-user-id=\"12345\" data-role=\"admin\">User Info</div>\n\nIn JavaScript, you can access these attributes using the dataset property:\n\nconst div = document.querySelector('div');\nconsole.log(div.dataset.userId); // Outputs: 12345\nconsole.log(div.dataset.role); // Outputs: admin",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "options": [],
+      "difficulty": "intermediate",
+      "type": "code"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-39",
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "explanation": "The `map` method creates a new array with each element multiplied by 2: `[2, 4, 6, 8, 10]`.\n\nThe `filter` method then filters out elements that are not greater than 5, leaving `[6, 8, 10]`.",
+      "isComplete": false,
+      "type": "code",
+      "isActive": true,
+      "codeBlock": "const numbers = [1, 2, 3, 4, 5];\nconst result = numbers.map(num => num * 2).filter(num => num > 5);\nconsole.log(result);",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "title": "JavaScript Array Method Chaining",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "options": [],
+      "content": "What's the output of this code?\nconst numbers = [1, 2, 3, 4, 5];\nconst result = numbers.map(num => num * 2).filter(num => num > 5);\nconsole.log(result);",
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "importedAt": "2025-09-30T00:20:01.543Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-46",
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "For `sarah`, we didn't use the `new` keyword. When using `new`, `this` refers to the new empty object we create. However, if you don't add `new`, `this` refers to the global object!\n\nWe said that `this.firstName` equals `\"Sarah\"` and `this.lastName` equals `\"Smith\"`. What we actually did, is defining `global.firstName = 'Sarah'` and `global.lastName = 'Smith'`. `sarah` itself is left `undefined`, since we don't return a value from the `Person` function.",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false,
+      "codeBlock": "function Person(firstName, lastName) {\n  this.firstName = firstName;\n  this.lastName = lastName;\n}\n\nconst lydia = new Person('Lydia', 'Hallie');\nconst sarah = Person('Sarah', 'Smith');\n\nconsole.log(lydia);\nconsole.log(sarah);",
+      "content": "What's the output of this code?\nfunction Person(firstName, lastName) {\nthis.firstName = firstName;\nthis.lastName = lastName;\n}\nconst lydia = new Person('Lydia', 'Hallie');\nconst sarah = Person('Sarah', 'Smith');\nconsole.log(lydia);\nconsole.log(sarah);",
+      "difficulty": "intermediate",
+      "category": "HTML & CSS",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isActive": true,
+      "options": [],
+      "title": "JavaScript Constructor Functions",
+      "correctAnswer": null,
+      "type": "code",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.543Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-109",
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "category": "HTML & CSS",
+      "options": [],
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "content": "How can you make an HTML element editable in the browser?",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "title": "Contenteditable Attribute",
+      "codeBlock": "<div contenteditable=\"true\">\n  This is an editable div. Click here to edit the text.\n</div>",
+      "explanation": "To make an HTML element editable directly in the browser, you can set the `contenteditable` attribute to `true`. This allows users to edit the content of the element in place.\n\n<div contenteditable=\"true\">\nThis is an editable div. Click here to edit the text.\n</div>",
+      "source": "QuestionsBank",
+      "difficulty": "intermediate",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "correctAnswer": null,
+      "type": "code"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-110",
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "content": "What is the purpose of the `<datalist>` tag in HTML?",
+      "category": "HTML & CSS",
+      "isComplete": false,
+      "type": "code",
+      "codeBlock": "<label for=\"browser\">Choose your browser:</label>\n<input list=\"browsers\" id=\"browser\" name=\"browser\" />\n<datalist id=\"browsers\">\n  <option value=\"Chrome\"></option>\n  <option value=\"Firefox\"></option>\n  <option value=\"Safari\"></option>\n  <option value=\"Edge\"></option>\n  <option value=\"Opera\"></option>\n</datalist>",
+      "isActive": true,
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "explanation": "The `<datalist>` tag is used to provide a list of predefined options to an `<input>` element, typically used to offer autocomplete suggestions.\n\n<label for=\"browser\">Choose your browser:</label>\n<input list=\"browsers\" id=\"browser\" name=\"browser\" />\n<datalist id=\"browsers\">\n<option value=\"Chrome\"></option>\n<option value=\"Firefox\"></option>\n<option value=\"Safari\"></option>\n<option value=\"Edge\"></option>\n<option value=\"Opera\"></option>\n</datalist>\n\nWhen the user starts typing in the input field, the browser will display the options defined in the `<datalist>` that match the current input.",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "source": "QuestionsBank",
+      "options": [],
+      "difficulty": "intermediate",
+      "title": "HTML Datalist Tag",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "updatedAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-97",
+      "isComplete": false,
+      "options": [],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "content": "How do you create a definition list in HTML?",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "title": "HTML Definition Lists",
+      "source": "QuestionsBank",
+      "codeBlock": "<dl>\n  <dt>HTML</dt>\n  <dd>HyperText Markup Language</dd>\n  <dt>CSS</dt>\n  <dd>Cascading Style Sheets</dd>\n</dl>",
+      "type": "code",
+      "difficulty": "intermediate",
+      "category": "HTML & CSS",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "isActive": true,
+      "explanation": "Use the `<dl>` tag for the list, `<dt>` for each term, and `<dd>` for each definition:\n\n<dl>\n<dt>HTML</dt>\n<dd>HyperText Markup Language</dd>\n<dt>CSS</dt>\n<dd>Cascading Style Sheets</dd>\n</dl>"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-85",
+      "title": "HTML Blockquote",
+      "content": "What is the `<blockquote>` tag used for?",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "difficulty": "intermediate",
+      "codeBlock": null,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "source": "QuestionsBank",
+      "options": [],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "type": "conceptual",
+      "isComplete": false,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "correctAnswer": null,
+      "explanation": "The `<blockquote>` tag is used to define a section that is quoted from another source, typically displayed with indentation by browsers.",
+      "isActive": true,
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "category": "HTML & CSS"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-47",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "title": "JavaScript Event Propagation",
+      "codeBlock": null,
+      "difficulty": "intermediate",
+      "content": "What are the three phases of event propagation?",
+      "isActive": true,
+      "options": [],
+      "correctAnswer": null,
+      "type": "conceptual",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "During the **capturing** phase, the event goes through the ancestor elements down to the target element. It then reaches the **target** element, and **bubbling** begins.\n\nThe event first travels down the DOM tree (capturing phase), reaches the target element (target phase), and then travels back up the DOM tree (bubbling phase).",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "category": "HTML & CSS",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "isComplete": false
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-101",
+      "title": "HTML5 Canvas Element",
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "correctAnswer": null,
+      "isComplete": false,
+      "type": "code",
+      "source": "QuestionsBank",
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "The `<canvas>` element provides a drawable region in the document that can be used to render graphics, such as charts, games, or other visual images, on the fly via scripting (usually JavaScript).\n\n<canvas id=\"myCanvas\" width=\"200\" height=\"100\"></canvas>",
+      "content": "What is the purpose of the `<canvas>` element in HTML5?",
+      "options": [],
+      "category": "HTML & CSS",
+      "codeBlock": "<canvas id=\"myCanvas\" width=\"200\" height=\"100\"></canvas>",
+      "importedAt": "2025-09-30T00:20:01.544Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-95",
+      "correctAnswer": null,
+      "explanation": "Use the `<ol>` (ordered list) tag, with each list item defined by `<li>`:\n\n<ol>\n<li>First item</li>\n<li>Second item</li>\n<li>Third item</li>\n</ol>",
+      "isActive": true,
+      "category": "HTML & CSS",
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "HTML Ordered Lists",
+      "difficulty": "intermediate",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "<ol>\n  <li>First item</li>\n  <li>Second item</li>\n  <li>Third item</li>\n</ol>",
+      "type": "code",
+      "content": "How do you create a numbered list in HTML?",
+      "source": "QuestionsBank",
+      "options": [],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "learningPaths": [
+        "frontend-basics"
+      ]
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-58",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "source": "QuestionsBank",
+      "options": [],
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "type": "conceptual",
+      "isComplete": false,
+      "difficulty": "intermediate",
+      "isActive": true,
+      "title": "Static Methods in Classes",
+      "content": "What's the output of the following code?\n\\`\\`\\`javascript\nclass Chameleon {\nstatic colorChange(newColor) {\nthis.newColor = newColor;\nreturn this.newColor;\n}\nconstructor({ newColor = 'green' } = {}) {\nthis.newColor = newColor;\n}\n}\nconst freddie = new Chameleon({ newColor: 'purple' });\nconsole.log(freddie.colorChange('orange'));\n\\`\\`\\`",
+      "codeBlock": null,
+      "category": "HTML & CSS",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "explanation": "The \\`colorChange\\` function is static. Static methods are designed to live only on the constructor in which they are created, and cannot be passed down to any children or called upon class instances. Since \\`freddie\\` is an instance of class Chameleon, the function cannot be called upon it. A \\`TypeError\\` is thrown."
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-80",
+      "correctAnswer": null,
+      "codeBlock": "<a href=\"mailto:example@example.com\">Send Email</a>",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "explanation": "To create a link that opens the user's default email client with a new message, use the `mailto:` scheme:\n\n<a href=\"mailto:example@example.com\">Send Email</a>",
+      "title": "Email Links",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "options": [],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "isComplete": false,
+      "source": "QuestionsBank",
+      "content": "How do you create an email link in HTML?",
+      "category": "HTML & CSS",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "difficulty": "intermediate",
+      "type": "code"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-72",
+      "type": "code",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "content": "How do you create a hyperlink that opens in a new tab?",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "correctAnswer": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "category": "HTML & CSS",
+      "isComplete": false,
+      "title": "Links in New Tab",
+      "options": [],
+      "explanation": "To open a link in a new tab, use the `target` attribute with the value `_blank`:\n\n<a href=\"https://www.example.com/\" target=\"_blank\">Visit Example</a>",
+      "isActive": true,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "<a href=\"https://www.example.com/\" target=\"_blank\">Visit Example</a>",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-48",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "codeBlock": null,
+      "type": "conceptual",
+      "source": "QuestionsBank",
+      "content": "Do all objects have prototypes?",
+      "options": [],
+      "correctAnswer": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "explanation": "All objects have prototypes, except for the **base object**. The base object is the object created by the user, or an object that is created using the `new` keyword. The base object has access to some methods and properties, such as `.toString`. This is the reason why you can use built-in JavaScript methods! All of such methods are available on the prototype. Although JavaScript can't find it directly on your object, it goes down the prototype chain and finds it there, which makes it accessible for you.",
+      "isActive": true,
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "title": "JavaScript Object Prototypes",
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "createdAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-90",
+      "type": "code",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "content": "What is the purpose of the `<noscript>` tag in HTML?",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "category": "HTML & CSS",
+      "isComplete": false,
+      "title": "HTML Noscript Tag",
+      "options": [],
+      "explanation": "The `<noscript>` tag defines alternative content to be displayed if the user's browser does not support JavaScript or if JavaScript is disabled.\n\n<noscript>\n<p>JavaScript is not enabled in your browser.</p>\n</noscript>",
+      "isActive": true,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "<noscript>\n  <p>JavaScript is not enabled in your browser.</p>\n</noscript>",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-114",
+      "source": "QuestionsBank",
+      "category": "HTML & CSS",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "content": "What are `data-` attributes good for?",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "type": "conceptual",
+      "title": "Data Attributes",
+      "isComplete": false,
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isActive": true,
+      "explanation": "Before JavaScript frameworks became popular, front end developers used `data-` attributes to store extra data within the DOM itself, without other hacks such as non-standard attributes, extra properties on the DOM. It is intended to store custom data private to the page or application, for which there are no more appropriate attributes or elements.\n\nThese days, using `data-` attributes is generally not encouraged. One reason is that users can modify the data attribute easily by using inspect element in the browser. The data model is better stored within JavaScript itself and stay updated with the DOM via data binding possibly through a library or a framework.\n\nHowever, one perfectly valid use of data attributes, is to add a hook for _end to end_ testing frameworks such as Selenium and Capybara without having to create a meaningless classes or ID attributes. The element needs a way to be found by a particular Selenium spec and something like `data-selector='the-thing'` is a valid way to do so without convoluting the semantic markup otherwise.",
+      "options": [],
+      "difficulty": "intermediate",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "correctAnswer": null,
+      "codeBlock": null
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-49",
+      "category": "HTML & CSS",
+      "explanation": "If you use tagged template literals, the value of the first argument is always an array of the string values. The remaining arguments get the values of the passed expressions!\n\nThe first argument is an array containing the string parts: `[\"\", \" is \", \" years old\"]`, the second argument is the first expression value `\"Lydia\"`, and the third argument is the second expression value `21`.",
+      "type": "code",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "options": [],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "function getPersonInfo(one, two, three) {\n  console.log(one);\n  console.log(two);\n  console.log(three);\n}\n\nconst person = 'Lydia';\nconst age = 21;\n\ngetPersonInfo`${person} is ${age} years old`;",
+      "content": "What's the output of this code?\nfunction getPersonInfo(one, two, three) {\nconsole.log(one);\nconsole.log(two);\nconsole.log(three);\n}\nconst person = 'Lydia';\nconst age = 21;\ngetPersonInfo`${person} is ${age} years old`;",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "isComplete": false,
+      "isActive": true,
+      "correctAnswer": null,
+      "difficulty": "intermediate",
+      "title": "JavaScript Tagged Template Literals",
+      "source": "QuestionsBank",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ]
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-111",
+      "category": "HTML & CSS",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "explanation": "**DOCTYPE** is an abbreviation for **DOCument TYPE**. A DOCTYPE is always associated to a **DTD** - for **Document Type Definition**.\n\nA DTD defines how documents of a certain type should be structured (i.e. a `button` can contain a `span` but not a `div`), whereas a DOCTYPE declares what DTD a document _supposedly_ respects (i.e. this document respects the HTML DTD).\n\nFor webpages, the DOCTYPE declaration is required. It is used to tell user agents what version of the HTML specifications your document respects. Once a user agent has recognized a correct DOCTYPE, it will trigger the **no-quirks mode** matching this DOCTYPE for reading the document. If a user agent doesn't recognize a correct DOCTYPE, it will trigger the **quirks mode**.\n\nThe DOCTYPE declaration for the HTML5 standards is `<!DOCTYPE html>`.",
+      "difficulty": "intermediate",
+      "type": "conceptual",
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "isActive": true,
+      "isComplete": false,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "codeBlock": null,
+      "options": [],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "content": "What does a DOCTYPE do?",
+      "title": "HTML DOCTYPE"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-93",
+      "difficulty": "intermediate",
+      "explanation": "Use the `<textarea>` tag to create a multi-line text input:\n\n<textarea name=\"message\" rows=\"4\" cols=\"50\"></textarea>",
+      "codeBlock": "<textarea name=\"message\" rows=\"4\" cols=\"50\"></textarea>",
+      "category": "HTML & CSS",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "source": "QuestionsBank",
+      "content": "How do you create a multi-line text input in an HTML form?",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "HTML Textarea",
+      "options": [],
+      "isComplete": false,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "type": "code",
+      "isActive": true
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-107",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "explanation": "To provide multiple language versions of a webpage, you can use the `hreflang` attribute in the `<link>` tag to specify the language of an alternate version. This helps search engines understand and serve the correct language version to users.\n\n<link rel=\"alternate\" href=\"example.fr.html\" hreflang=\"fr\" />\n<link rel=\"alternate\" href=\"example.es.html\" hreflang=\"es\" />",
+      "content": "How do you specify multiple language versions of a webpage?",
+      "isActive": true,
+      "source": "QuestionsBank",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "category": "HTML & CSS",
+      "options": [],
+      "type": "code",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "difficulty": "intermediate",
+      "title": "Multiple Language Versions",
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "<link rel=\"alternate\" href=\"example.fr.html\" hreflang=\"fr\" />\n<link rel=\"alternate\" href=\"example.es.html\" hreflang=\"es\" />",
+      "correctAnswer": null
+    },
+    {
+      "id": "imported-frontend-basics-1759191601540-24",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isActive": true,
+      "title": "JavaScript Function Hoisting",
+      "importedAt": "2025-09-30T00:20:01.540Z",
+      "correctAnswer": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "type": "code",
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false,
+      "explanation": "Function declarations are fully hoisted in JavaScript, meaning both the declaration and the function body are moved to the top of their scope. This allows you to call a function before it's declared in the code.",
+      "options": [],
+      "content": "What's the output of this code?\nsayHello();\nfunction sayHello() {\nconsole.log('Hello!');\n}",
+      "codeBlock": "sayHello();\n\nfunction sayHello() {\n  console.log('Hello!');\n}",
+      "difficulty": "intermediate",
+      "category": "HTML & CSS"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-60",
+      "isComplete": false,
+      "source": "QuestionsBank",
+      "title": "Function Methods and Prototypes",
+      "category": "HTML & CSS",
+      "isActive": true,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "content": "What's the output of the following code?\n\\`\\`\\`javascript\nfunction Person(firstName, lastName) {\nthis.firstName = firstName;\nthis.lastName = lastName;\n}\nconst member = new Person('Lydia', 'Hallie');\nPerson.getFullName = function () {\nreturn \\`${this.firstName} ${this.lastName}\\`;\n};\nconsole.log(member.getFullName());\n\\`\\`\\`",
+      "correctAnswer": null,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "difficulty": "intermediate",
+      "codeBlock": "for (let i = 1; i < 5; i++) {\n  if (i === 3) continue;\n  console.log(i);\n}",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "There are only 6 falsy values: `undefined`, `null`, `NaN`, `0`, `''` (empty string), and `false`. Function constructors like `new Number` and `new Boolean` are truthy.",
+      "type": "code",
+      "options": []
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-71",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "type": "conceptual",
+      "category": "HTML & CSS",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false,
+      "content": "What is the purpose of the `<br>` tag?",
+      "title": "HTML Line Break",
+      "source": "QuestionsBank",
+      "options": [],
+      "explanation": "The `<br>` tag inserts a line break in the text, moving the content after the tag to a new line. It's an empty tag and doesn't require a closing tag.",
+      "difficulty": "intermediate",
+      "isActive": true,
+      "codeBlock": null,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "correctAnswer": null
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-118",
+      "difficulty": "intermediate",
+      "category": "HTML & CSS",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isComplete": false,
+      "isActive": true,
+      "options": [],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "type": "conceptual",
+      "title": "CSS and JS Placement",
+      "codeBlock": null,
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "content": "Why is it generally a good idea to position CSS `<link>`s between `<head></head>` and JS `<script>`s just before `</body>`? Do you know any exceptions?",
+      "explanation": "**Placing `<link>`s in the `<head>`**\n\nPutting `<link>`s in the `<head>` is part of proper specification in building an optimized website. When a page first loads, HTML and CSS are being parsed simultaneously; HTML creates the DOM (Document Object Model) and CSS creates the CSSOM (CSS Object Model). Both are needed to create the visuals in a website, allowing for a quick \"first meaningful paint\" timing. This progressive rendering is a category optimization sites are measured in their performance scores. Putting stylesheets near the bottom of the document is what prohibits progressive rendering in many browsers. Some browsers block rendering to avoid having to repaint elements of the page if their styles change. The user is then stuck viewing a blank white page. Other times there can be flashes of unstyled content (FOUC), which show a webpage with no styling applied.\n\n**Placing `<script>`s just before `</body>`**\n\n`<script>` tags block HTML parsing while they are being downloaded and executed which can slow down your page. Placing the scripts at the bottom will allow the HTML to be parsed and displayed to the user first.\n\nAn exception for positioning of `<script>`s at the bottom is when your script contains `document.write()`, but these days it's not a good practice to use `document.write()`. Also, placing `<script>`s at the bottom means that the browser cannot start downloading the scripts until the entire document is parsed. This ensures your code that needs to manipulate DOM elements will not throw and error and halt the entire script. If you need to put `<script>` in the `<head>`, use the `defer` attribute, which will achieve the same effect of downloading and running the script only after the HTML is parsed.\n\nKeep in mind that putting scripts just before the closing `</body>` tag will create the illusion that the page loads faster on an empty cache (since the scripts won't block downloading the rest of the document). However, if you have some code you want to run during page load, it will only start executing after the entire page has loaded. If you put those scripts in the `<head>` tag, they would start executing before - so on a primed cache the page would actually appear to load faster."
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-105",
+      "correctAnswer": null,
+      "codeBlock": "<template id=\"my-template\">\n  <div class=\"card\">\n    <h2></h2>\n    <p></p>\n  </div>\n</template>",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "explanation": "The `<template>` tag is used to declare a fragment of HTML that is not to be rendered immediately when the page loads. Instead, it can be instantiated later using JavaScript. This is useful for client-side templating.\n\n<template id=\"my-template\">\n<div class=\"card\">\n<h2></h2>\n<p></p>\n</div>\n</template>\n\nJavaScript can then be used to clone and insert the template content into the document.",
+      "title": "HTML Template Tag",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "options": [],
+      "isComplete": false,
+      "source": "QuestionsBank",
+      "content": "Explain the purpose of the `<template>` tag in HTML.",
+      "category": "HTML & CSS",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "difficulty": "intermediate",
+      "type": "code"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-44",
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "type": "code",
+      "content": "What's the output of this code?\nconsole.log(typeof typeof 1);",
+      "isActive": true,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "title": "JavaScript `typeof` Operator",
+      "isComplete": false,
+      "codeBlock": "console.log(typeof typeof 1);",
+      "difficulty": "intermediate",
+      "correctAnswer": null,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "`typeof 1` returns `\"number\"`. `typeof \"number\"` returns `\"string\"`.\n\nThe `typeof` operator always returns a string, so `typeof typeof` will always return `\"string\"`.",
+      "options": [],
+      "category": "HTML & CSS"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-76",
+      "isComplete": false,
+      "content": "How do you create a table in HTML?",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "title": "HTML Tables",
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "category": "HTML & CSS",
+      "type": "code",
+      "explanation": "A table is created using the `<table>` tag, with rows defined by `<tr>` and cells by `<td>`. Headers can be defined using `<th>`.\n\n<table>\n<tr>\n<th>Header 1</th>\n<th>Header 2</th>\n</tr>\n<tr>\n<td>Data 1</td>\n<td>Data 2</td>\n</tr>\n</table>",
+      "options": [],
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "isActive": true,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "<table>\n  <tr>\n    <th>Header 1</th>\n    <th>Header 2</th>\n  </tr>\n  <tr>\n    <td>Data 1</td>\n    <td>Data 2</td>\n  </tr>\n</table>"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-37",
+      "isActive": true,
+      "isComplete": false,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "type": "code",
+      "difficulty": "intermediate",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "sayHi();\n\nfunction sayHi() {\n  console.log('Hey!');\n}\n\nvar sayHi = function () {\n  console.log('Hi!');\n};",
+      "content": "What's the output of this code?\nsayHi();\nfunction sayHi() {\nconsole.log('Hey!');\n}\nvar sayHi = function () {\nconsole.log('Hi!');\n};",
+      "explanation": "Function declarations are hoisted, but function expressions are not. The function declaration `function sayHi()` is hoisted to the top of its scope, so when we call `sayHi()` before its declaration, it works and logs `\"Hey!\"`.\n\nThe function expression `var sayHi = function()` is not hoisted, so it doesn't affect the first call.",
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "title": "JavaScript Function Hoisting vs Expression",
+      "options": [],
+      "category": "HTML & CSS"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-34",
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "isComplete": false,
+      "content": "What's the output of this code?\nconst arr = [1, 2, 3];\narr[10] = 11;\nconsole.log(arr);",
+      "title": "JavaScript Array Empty Slots",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "type": "code",
+      "difficulty": "intermediate",
+      "isActive": true,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "codeBlock": "const arr = [1, 2, 3];\narr[10] = 11;\nconsole.log(arr);",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "options": [],
+      "category": "HTML & CSS",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "When you set a value to an element in an array that exceeds the length of the array, JavaScript creates something called \"empty slots\". These actually have the value of `undefined`, but you'll see something like:\n\n`[1, 2, 3, empty × 7, 11]`\n\ndepending on where you run it (it's different for every browser, node, etc.)"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-92",
+      "correctAnswer": null,
+      "content": "What is the difference between the `<b>` and `<strong>` tags?",
+      "title": "Bold vs Strong Tags",
+      "options": [],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "difficulty": "intermediate",
+      "codeBlock": null,
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "source": "QuestionsBank",
+      "isActive": true,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "category": "HTML & CSS",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "Both tags display text in bold, but `<strong>` indicates that the text is of strong importance, providing semantic meaning, while `<b>` does not convey any extra importance.",
+      "isComplete": false,
+      "type": "conceptual"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-121",
+      "options": [],
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "isActive": true,
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "type": "conceptual",
+      "explanation": "Yes, Pug (formerly Jade), ERB, Slim, Handlebars, Jinja, Liquid, and EJS just to name a few. In my opinion, they are more or less the same and provide similar functionality of escaping content and helpful filters for manipulating the data to be displayed. Most templating engines will also allow you to inject your own filters in the event you need custom processing before display.",
+      "content": "Have you used different HTML templating languages before?",
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": null,
+      "category": "HTML & CSS",
+      "difficulty": "intermediate",
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "title": "HTML Templating Languages"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-73",
+      "category": "HTML & CSS",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "type": "conceptual",
+      "correctAnswer": null,
+      "difficulty": "intermediate",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "source": "QuestionsBank",
+      "codeBlock": null,
+      "content": "What is the `<title>` tag used for?",
+      "isActive": true,
+      "options": [],
+      "isComplete": false,
+      "explanation": "The `<title>` tag defines the title of the HTML document, which appears in the browser's title bar or tab. It's placed within the `<head>` section.",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "title": "HTML Title Tag",
+      "importedAt": "2025-09-30T00:20:01.544Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-84",
+      "source": "QuestionsBank",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "codeBlock": "<label for=\"fruits\">Choose a fruit:</label>\n<select id=\"fruits\" name=\"fruits\">\n  <option value=\"apple\">Apple</option>\n  <option value=\"banana\">Banana</option>\n  <option value=\"cherry\">Cherry</option>\n</select>",
+      "options": [],
+      "isComplete": false,
+      "correctAnswer": null,
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "explanation": "A dropdown list is created using the `<select>` tag, with each option defined by an `<option>` tag:\n\n<label for=\"fruits\">Choose a fruit:</label>\n<select id=\"fruits\" name=\"fruits\">\n<option value=\"apple\">Apple</option>\n<option value=\"banana\">Banana</option>\n<option value=\"cherry\">Cherry</option>\n</select>",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "HTML Dropdown Lists",
+      "category": "HTML & CSS",
+      "content": "How do you create a dropdown list in HTML?",
+      "difficulty": "intermediate",
+      "type": "code",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "isActive": true
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-88",
+      "difficulty": "intermediate",
+      "category": "HTML & CSS",
+      "isActive": true,
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "codeBlock": null,
+      "source": "QuestionsBank",
+      "options": [],
+      "content": "What is the purpose of the alt attribute in the `<img>` tag?",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "The `alt` attribute provides alternative text for an image, which is displayed if the image cannot be loaded. It also improves accessibility by describing the image to screen readers.",
+      "title": "Image Alt Attribute",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "type": "conceptual",
+      "correctAnswer": null,
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false
+    },
+    {
+      "id": "imported-frontend-basics-1759191601540-30",
+      "options": [],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "title": "JavaScript Object Reference vs Value",
+      "source": "QuestionsBank",
+      "type": "code",
+      "isActive": true,
+      "codeBlock": "let c = { greeting: 'Hey!' };\nlet d;\n\nd = c;\nc.greeting = 'Hello';\nconsole.log(d.greeting);",
+      "category": "HTML & CSS",
+      "correctAnswer": null,
+      "isComplete": false,
+      "difficulty": "intermediate",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "In JavaScript, all objects interact by reference when setting them equal to each other.\n\nFirst, variable `c` holds a value to an object. Later, we assign `d` with the same reference that `c` has to the object.\n\nWhen you change one object, you change all of them.",
+      "content": "What's the output of this code?\nlet c = { greeting: 'Hey!' };\nlet d;\nd = c;\nc.greeting = 'Hello';\nconsole.log(d.greeting);",
+      "importedAt": "2025-09-30T00:20:01.540Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601540-31",
+      "explanation": "`new Number()` is a built-in function constructor. Although it looks like a number, it's not really a number: it has a bunch of extra features and is an object.\n\nWhen we use the `==` operator (Equality operator), it only checks whether it has the same value. They both have the value of `3`, so it returns `true`.\n\nHowever, when we use the `===` operator (Strict equality operator), both value and type should be the same. It's not: `new Number()` is not a number, it's an object. Both return `false`.",
+      "isActive": true,
+      "category": "HTML & CSS",
+      "isComplete": false,
+      "options": [],
+      "type": "code",
+      "difficulty": "intermediate",
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "content": "What's the output of this code?\nlet a = 3;\nlet b = new Number(3);\nlet c = 3;\nconsole.log(a == b);\nconsole.log(a === b);\nconsole.log(b === c);",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "codeBlock": "let a = 3;\nlet b = new Number(3);\nlet c = 3;\n\nconsole.log(a == b);\nconsole.log(a === b);\nconsole.log(b === c);",
+      "title": "JavaScript Number Constructor vs Primitive",
+      "importedAt": "2025-09-30T00:20:01.540Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "createdAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-94",
+      "category": "HTML & CSS",
+      "explanation": "The `action` attribute specifies the URL to which the form data will be submitted when the form is submitted.\n\n<form action=\"/submit-form\" method=\"post\">\n<!-- form elements -->\n</form>",
+      "importedAt": "2025-09-30T00:20:01.544Z",
+      "codeBlock": "<form action=\"/submit-form\" method=\"post\">\n  <!-- form elements -->\n</form>",
+      "content": "What is the purpose of the action attribute in an HTML form?",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "correctAnswer": null,
+      "type": "code",
+      "options": [],
+      "difficulty": "intermediate",
+      "title": "Form Action Attribute",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isComplete": false,
+      "source": "QuestionsBank",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-35",
+      "explanation": "The rest parameter (`...args`) lets us \"collect\" all remaining arguments into an array. An array is an object, so `typeof args` returns `\"object\"`.",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "title": "JavaScript Rest Parameters",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "difficulty": "intermediate",
+      "codeBlock": "function getAge(...args) {\n  console.log(typeof args);\n}\n\ngetAge(21);",
+      "type": "code",
+      "options": [],
+      "isActive": true,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isComplete": false,
+      "content": "What's the output of this code?\nfunction getAge(...args) {\nconsole.log(typeof args);\n}\ngetAge(21);",
+      "category": "HTML & CSS",
+      "createdAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-52",
+      "explanation": "Because of the event queue in JavaScript, the \\`setTimeout\\` callback function is called _after_ the loop has been executed. Since the variable \\`i\\` in the first loop was declared using the \\`var\\` keyword, this value was global. During the loop, we incremented the value of \\`i\\` by \\`1\\` each time, using the unary operator \\`++\\`. By the time the \\`setTimeout\\` callback function was invoked, \\`i\\` was equal to \\`3\\` in the first example.\n\nIn the second loop, the variable \\`i\\` was declared using the \\`let\\` keyword: variables declared with the \\`let\\` (and \\`const\\`) keyword are block-scoped (a block is anything between \\`{ }\\`). During each iteration, \\`i\\` will have a new value, and each value is scoped inside the loop.",
+      "isComplete": false,
+      "correctAnswer": null,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "content": "What's the output of the following code?\n\\`\\`\\`javascript\nfor (var i = 0; i < 3; i++) {\nsetTimeout(() => console.log(i), 1);\n}\nfor (let i = 0; i < 3; i++) {\nsetTimeout(() => console.log(i), 1);\n}\n\\`\\`\\`",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "title": "for loop with var vs let",
+      "category": "HTML & CSS",
+      "codeBlock": null,
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "source": "QuestionsBank",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "difficulty": "intermediate",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "type": "conceptual",
+      "options": [],
+      "isActive": true
+    },
+    {
+      "id": "imported-frontend-basics-1759191601544-99",
+      "type": "code",
+      "explanation": "Use `<input type=\"hidden\">` to create a hidden input field that stores data without displaying it to the user:\n\n<input type=\"hidden\" name=\"userID\" value=\"12345\" />",
+      "isActive": true,
+      "content": "How do you create a hidden input field in an HTML form?",
+      "category": "HTML & CSS",
+      "title": "HTML Hidden Input Fields",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "options": [],
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "difficulty": "intermediate",
+      "codeBlock": "<input type=\"hidden\" name=\"userID\" value=\"12345\" />",
+      "isComplete": false,
+      "source": "QuestionsBank",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:20:01.544Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601539-15",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "type": "code",
+      "codeBlock": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />",
+      "isComplete": false,
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isActive": true,
+      "category": "HTML & CSS",
+      "options": [],
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "content": "How do you make a website responsive using CSS?",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "title": "CSS Responsive Design",
+      "correctAnswer": null,
+      "source": "QuestionsBank",
+      "explanation": "**1. Viewport Meta Tag:**\n\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n\n**2. Flexible Grid:**\n\n.container {\ndisplay: grid;\ngrid-template-columns: repeat(auto-fit, minmax(300px, 1fr));\ngap: 20px;\n}\n\n**3. Flexible Images:**\n\nimg {\nmax-width: 100%;\nheight: auto;\n}\n\n**4. Media Queries:**\n\n/* Mobile first approach */\n.container {\npadding: 10px;\n}\n\n/* Tablet */\n@media (min-width: 768px) {\n.container {\npadding: 20px;\n}\n}\n\n/* Desktop */\n@media (min-width: 1024px) {\n.container {\npadding: 40px;\nmax-width: 1200px;\nmargin: 0 auto;\n}\n}\n\n**5. Flexible Typography:**\n\nh1 {\nfont-size: clamp(1.5rem, 4vw, 3rem);\n}",
+      "difficulty": "intermediate",
+      "importedAt": "2025-09-30T00:20:01.539Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601543-43",
+      "category": "HTML & CSS",
+      "importedAt": "2025-09-30T00:20:01.543Z",
+      "explanation": "When testing equality, primitives are compared by their _value_, while objects are compared by their _reference_. JavaScript checks if the objects have a reference to the same location in memory.\n\nThe two objects that we are comparing don't have that: the object we passed as a parameter refers to a different location in memory than the object we used for checking equality.\n\nThis is why both `{ age: 18 } === { age: 18 }` and `{ age: 18 } == { age: 18 }` return `false`.",
+      "codeBlock": "function checkAge(data) {\n  if (data === { age: 18 }) {\n    console.log('You are an adult!');\n  } else if (data == { age: 18 }) {\n    console.log('You are still an adult.');\n  } else {\n    console.log(`Hmm.. You don't have an age I guess`);\n  }\n}\n\ncheckAge({ age: 18 });",
+      "content": "What's the output of this code?\nfunction checkAge(data) {\nif (data === { age: 18 }) {\nconsole.log('You are an adult!');\n} else if (data == { age: 18 }) {\nconsole.log('You are still an adult.');\n} else {\nconsole.log(`Hmm.. You don't have an age I guess`);\n}\n}\ncheckAge({ age: 18 });",
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "correctAnswer": null,
+      "options": [],
+      "type": "code",
+      "difficulty": "intermediate",
+      "title": "JavaScript Object Comparison",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isComplete": false,
+      "source": "QuestionsBank",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "isActive": true,
+      "createdAt": "2025-09-30T00:20:01.571Z"
+    },
+    {
+      "id": "imported-frontend-basics-1759191601540-32",
+      "title": "JavaScript Functions as Objects",
+      "difficulty": "intermediate",
+      "updatedAt": "2025-09-30T00:20:01.571Z",
+      "learningPaths": [
+        "frontend-basics"
+      ],
+      "isComplete": false,
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:20:01.571Z",
+      "explanation": "This is possible in JavaScript, because functions are objects! (Everything besides primitive types are objects)\n\nA function is a special type of object. The code you write yourself isn't the actual function. The function is an object with properties. This property is invocable.",
+      "isActive": true,
+      "topics": [
+        "HTML Fundamentals",
+        "CSS Basics",
+        "DOM Manipulation"
+      ],
+      "importedAt": "2025-09-30T00:20:01.540Z",
+      "category": "HTML & CSS",
+      "correctAnswer": null,
+      "codeBlock": "function bark() {\n  console.log('Woof!');\n}\n\nbark.animal = 'dog';",
+      "type": "code",
+      "options": [],
+      "content": "What happens when we do this?\nfunction bark() {\nconsole.log('Woof!');\n}\nbark.animal = 'dog';"
+    }
+  ]
+}

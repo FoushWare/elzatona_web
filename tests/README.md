@@ -1,305 +1,261 @@
-# Auto-linking System Integration Tests
+# Content Management Test Suite
 
-This directory contains comprehensive integration tests for the auto-linking system that connects questions, sections, and guided learning plans.
+This comprehensive test suite covers the complete flow of content management in the Elzatona learning platform, including creating and linking categories, topics, learning paths, questions, and plans.
 
-## Test Structure
+## 🎯 Test Coverage
 
-```
-tests/
-├── integration/
-│   ├── auto-linking.test.js      # Core auto-linking functionality tests
-│   └── api-integration.test.js   # API endpoint integration tests
-├── e2e/
-│   └── auto-linking-workflow.test.js  # End-to-end user workflow tests
-├── setup.js                      # Jest setup and mocks
-└── README.md                     # This file
-```
+### 1. **Unit Tests** (`tests/unit/`)
 
-## Test Categories
+- **Content Linking Logic** (`content-linking.test.ts`)
+  - Category management
+  - Topic management with category linking
+  - Learning path management with category linking
+  - Question management with multi-entity linking
+  - Content validation and consistency checks
 
-### 1. Integration Tests (`tests/integration/`)
+### 2. **API Tests** (`tests/api/`)
 
-#### Auto-linking Tests (`auto-linking.test.js`)
+- **Content Management Endpoints** (`content-management-api.test.ts`)
+  - Categories API (POST, GET, PUT, DELETE)
+  - Topics API (POST, GET, PUT, DELETE)
+  - Learning Paths API (POST, GET, PUT, DELETE)
+  - Questions API (POST, GET, PUT, DELETE, bulk operations)
+  - Learning Plans API (POST, GET, PUT, DELETE)
+  - Content linking validation
+  - Error handling and edge cases
 
-Tests the core auto-linking functionality:
+### 3. **Integration Tests** (`tests/integration/`)
 
-- **Question Creation and Auto-linking**: Verifies that questions are automatically linked to matching sections based on category and learning path
-- **Section Management**: Tests section creation, question filtering, and relationship management
-- **Guided Learning Plan Integration**: Tests plan creation with sections and questions
-- **Bulk Question Import**: Tests auto-linking when importing multiple questions
-- **Error Handling**: Tests edge cases and error scenarios
+- **Content Management Flow** (`content-management-flow.test.ts`)
+  - Complete workflow from category creation to plan execution
+  - Data consistency across all entities
+  - Bulk operations and performance
+  - End-to-end content linking validation
 
-#### API Integration Tests (`api-integration.test.js`)
+### 4. **End-to-End Tests** (`tests/e2e/`)
 
-Tests the complete API flow:
+- **Content Management UI Flow** (`content-management-e2e.test.ts`)
+  - Complete user journey through admin interface
+  - UI interactions and form submissions
+  - Learning paths page functionality
+  - Guided learning plans workflow
+  - Question practice flow
 
-- **Question Creation API**: Tests POST `/api/admin/questions` with auto-linking
-- **Sections API**: Tests GET `/api/admin/sections` with filtering
-- **Guided Learning API**: Tests plan creation and management endpoints
-- **Error Handling**: Tests API error responses and validation
-
-### 2. End-to-End Tests (`tests/e2e/`)
-
-#### Workflow Tests (`auto-linking-workflow.test.js`)
-
-Tests complete user journeys:
-
-- **Admin Login and Navigation**: Tests admin panel access
-- **Question Creation**: Tests both form-based and bulk import workflows
-- **Section Management**: Tests viewing and managing sections with questions
-- **Guided Learning**: Tests plan creation, editing, and question assignment
-- **User Experience**: Tests the user-facing guided learning interface
-- **Performance**: Tests with large datasets and load scenarios
-
-## Running Tests
+## 🚀 Running Tests
 
 ### Prerequisites
 
-1. **Node.js and npm**: Ensure Node.js 18+ and npm are installed
-2. **Development Server**: For E2E tests, start the development server:
+1. Start the development server:
+
    ```bash
    npm run dev
    ```
 
-### Quick Start
+2. Ensure all dependencies are installed:
+   ```bash
+   npm install
+   ```
+
+### Running All Tests
 
 ```bash
-# Run all tests
-npm test
+# Run the comprehensive test suite
+node scripts/run-content-tests.js
 
-# Run specific test categories
-npm test -- tests/integration/
-npm test -- tests/e2e/
-
-# Run with coverage
-npm test -- --coverage
-
-# Run tests in watch mode
-npm test -- --watch
+# Or run individual test suites
+npm run test:unit
+npm run test:api
+npm run test:integration
+npm run test:e2e
 ```
 
-### Using the Test Runner Script
+### Running Specific Tests
 
 ```bash
-# Make script executable (first time only)
-chmod +x scripts/run-tests.sh
+# Unit tests only
+jest tests/unit/content-linking.test.ts
 
-# Run comprehensive test suite
-./scripts/run-tests.sh
+# API tests only
+jest tests/api/content-management-api.test.ts
+
+# Integration tests only
+jest tests/integration/content-management-flow.test.ts
+
+# E2E tests only
+playwright test tests/e2e/content-management-e2e.test.ts
 ```
 
-## Test Configuration
+## 📋 Test Scenarios
 
-### Jest Configuration (`jest.config.js`)
+### 1. **Category Management Flow**
 
-- **Test Environment**: Node.js
-- **Test Timeout**: 30 seconds
-- **Coverage**: HTML and LCOV reports
-- **Module Mapping**: Supports `@/` imports
-- **Transform**: Babel for TypeScript/JSX
+- ✅ Create categories
+- ✅ Retrieve all categories
+- ✅ Update category details
+- ✅ Delete categories
+- ✅ Validate category data
 
-### Setup File (`tests/setup.js`)
+### 2. **Topic Management Flow**
 
-- **Firebase Mocking**: Mocks Firebase services for testing
-- **Next.js Mocking**: Mocks Next.js server components
-- **Environment Variables**: Sets up test environment
-- **Global Utilities**: Provides test helper functions
+- ✅ Create topics linked to categories
+- ✅ Retrieve topics by category
+- ✅ Update topic details
+- ✅ Delete topics
+- ✅ Validate topic-category relationships
 
-## Test Data
+### 3. **Learning Path Management Flow**
 
-### Mock Data Structure
+- ✅ Create learning paths linked to categories
+- ✅ Retrieve learning paths with proper ordering
+- ✅ Update learning path details
+- ✅ Delete learning paths
+- ✅ Validate learning path-category relationships
 
-```javascript
-// Questions
-{
-  title: "Test Question",
-  content: "Question content",
-  type: "single",
-  difficulty: "medium",
-  category: "JavaScript",
-  learningPath: "frontend",
-  options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-  correctAnswers: ["Option 1"],
-  explanation: "Explanation text",
-  points: 1,
-  timeLimit: 60,
-  isActive: true,
-  isComplete: true
-}
+### 4. **Question Management Flow**
 
-// Sections
-{
-  title: "Test Section",
-  description: "Section description",
-  category: "JavaScript",
-  learningPathId: "frontend",
-  order: 1,
-  weight: 25,
-  isActive: true,
-  questions: []
-}
+- ✅ Create questions with multiple entity links
+- ✅ Link questions to categories, topics, and learning paths
+- ✅ Retrieve questions by various filters
+- ✅ Bulk question creation
+- ✅ Update question details
+- ✅ Delete questions
+- ✅ Validate question-entity relationships
 
-// Learning Plans
-{
-  title: "Test Learning Plan",
-  description: "Plan description",
-  difficulty: "beginner",
-  totalQuestions: 0,
-  dailyQuestions: 0,
-  sections: [],
-  isActive: true
-}
+### 5. **Plan Management Flow**
+
+- ✅ Create learning plans
+- ✅ Add questions to plan sections
+- ✅ Retrieve plans with questions
+- ✅ Update plan sections
+- ✅ Delete plans
+- ✅ Validate plan-question relationships
+
+### 6. **Learning Paths Page Integration**
+
+- ✅ Display questions in learning paths
+- ✅ Show topics in learning path detail pages
+- ✅ Maintain question counts
+- ✅ Proper ordering and filtering
+
+### 7. **Data Consistency Validation**
+
+- ✅ All entities properly linked
+- ✅ Referential integrity maintained
+- ✅ No orphaned records
+- ✅ Consistent data across all views
+
+## 🔧 Test Configuration
+
+### Environment Variables
+
+```bash
+TEST_BASE_URL=http://localhost:3000  # Base URL for API tests
+NODE_ENV=test                        # Test environment
 ```
 
-## Testing Scenarios
+### Test Data Management
 
-### 1. Question Auto-linking Flow
+- Tests use isolated test data with unique IDs
+- Automatic cleanup after test completion
+- No interference with production data
+- Consistent test data across all test suites
 
-1. **Create Question**: Add question with category "JavaScript" and learning path "frontend"
-2. **Auto-link to Section**: System automatically finds matching section
-3. **Verify Linking**: Confirm question appears in section's question list
-4. **Test Filtering**: Verify questions are filtered correctly by section
+### Mock Data
 
-### 2. Bulk Import Flow
+- Comprehensive test data for all entity types
+- Realistic relationships between entities
+- Edge cases and error scenarios
+- Performance test data for bulk operations
 
-1. **Prepare Markdown**: Create markdown with multiple questions
-2. **Import Questions**: Use bulk import functionality
-3. **Verify Auto-linking**: Confirm all questions are linked to appropriate sections
-4. **Check Relationships**: Verify section-question relationships are correct
+## 📊 Test Results
 
-### 3. Guided Learning Plan Flow
+### Expected Outcomes
 
-1. **Create Plan**: Create new learning plan
-2. **Select Sections**: Choose sections based on category/learning path filters
-3. **Assign Questions**: Add questions to plan sections
-4. **Save Plan**: Persist plan with all relationships
-5. **Verify Plan**: Confirm plan displays correctly with all questions
+- **Unit Tests**: 100% pass rate for core logic
+- **API Tests**: 100% pass rate for all endpoints
+- **Integration Tests**: 100% pass rate for workflows
+- **E2E Tests**: 100% pass rate for user journeys
 
-### 4. User Experience Flow
+### Performance Benchmarks
 
-1. **Access Plan**: Navigate to guided learning plan
-2. **View Sections**: See all plan sections
-3. **Start Section**: Click on a section to begin
-4. **Answer Questions**: Interact with questions in the section
-5. **Progress Tracking**: Verify progress is tracked correctly
+- Category creation: < 100ms
+- Topic creation: < 150ms
+- Learning path creation: < 200ms
+- Question creation: < 300ms
+- Bulk question creation (10 questions): < 2s
+- Plan creation with questions: < 500ms
 
-## Error Scenarios
-
-### Network Errors
-
-- Offline mode handling
-- API timeout scenarios
-- Connection failure recovery
-
-### Data Validation
-
-- Invalid question data
-- Missing required fields
-- Duplicate entries
-
-### Edge Cases
-
-- Empty sections
-- Non-existent references
-- Circular dependencies
-
-## Performance Testing
-
-### Load Testing
-
-- Large number of questions (1000+)
-- Multiple concurrent users
-- Database query optimization
-
-### Memory Testing
-
-- Memory usage with large datasets
-- Garbage collection efficiency
-- Memory leak detection
-
-## Coverage Goals
-
-- **Statements**: > 90%
-- **Branches**: > 85%
-- **Functions**: > 90%
-- **Lines**: > 90%
-
-## Continuous Integration
-
-### GitHub Actions (if applicable)
-
-```yaml
-name: Auto-linking Tests
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: npm install
-      - run: npm test
-      - run: npm run test:coverage
-```
-
-## Debugging Tests
+## 🐛 Troubleshooting
 
 ### Common Issues
 
-1. **Firebase Connection**: Ensure Firebase is properly mocked
-2. **Async Operations**: Use proper async/await patterns
-3. **Timeouts**: Increase timeout for slow operations
-4. **Memory Leaks**: Clean up resources after tests
+1. **Server not running**: Ensure `npm run dev` is running
+2. **Database connection**: Check Firebase configuration
+3. **Test data conflicts**: Run cleanup scripts
+4. **Timeout errors**: Increase test timeout values
 
-### Debug Commands
+### Debug Mode
 
 ```bash
+# Run tests with debug output
+DEBUG=true node scripts/run-content-tests.js
+
 # Run specific test with verbose output
-npm test -- --verbose tests/integration/auto-linking.test.js
-
-# Run tests in debug mode
-node --inspect-brk node_modules/.bin/jest --runInBand
-
-# Run tests with coverage and detailed output
-npm test -- --coverage --verbose
+jest tests/unit/content-linking.test.ts --verbose --detectOpenHandles
 ```
 
-## Contributing
+### Cleanup
+
+```bash
+# Clean up test data manually
+node scripts/cleanup-test-data.js
+
+# Reset test environment
+npm run test:cleanup
+```
+
+## 📈 Continuous Integration
+
+### GitHub Actions
+
+The test suite is designed to run in CI/CD pipelines:
+
+- Automated test execution on pull requests
+- Test result reporting
+- Performance monitoring
+- Coverage reporting
+
+### Test Reports
+
+- Detailed test results in console
+- HTML reports for E2E tests
+- Coverage reports for unit tests
+- Performance metrics
+
+## 🔄 Maintenance
 
 ### Adding New Tests
 
-1. **Follow Naming Convention**: Use descriptive test names
-2. **Group Related Tests**: Use `describe` blocks for organization
-3. **Use Mock Data**: Leverage the provided mock utilities
-4. **Clean Up**: Ensure tests clean up after themselves
-5. **Document**: Add comments for complex test scenarios
+1. Follow the existing test structure
+2. Use consistent naming conventions
+3. Include proper cleanup
+4. Add to the test runner script
+5. Update this documentation
 
-### Test Best Practices
+### Updating Test Data
 
-1. **Arrange-Act-Assert**: Structure tests clearly
-2. **Single Responsibility**: One test per scenario
-3. **Independent Tests**: Tests should not depend on each other
-4. **Fast Execution**: Keep tests fast and efficient
-5. **Clear Assertions**: Use specific, meaningful assertions
+1. Modify test data in the respective test files
+2. Ensure data consistency across all tests
+3. Update cleanup procedures if needed
+4. Test the changes thoroughly
 
-## Troubleshooting
+### Performance Optimization
 
-### Common Problems
-
-1. **Tests Hanging**: Check for unclosed async operations
-2. **Firebase Errors**: Verify Firebase mocking is working
-3. **Import Errors**: Check module path mappings
-4. **Timeout Issues**: Increase timeout or optimize test code
-
-### Getting Help
-
-1. Check test logs for specific error messages
-2. Verify all dependencies are installed
-3. Ensure development server is running for E2E tests
-4. Check Jest configuration for any issues
+1. Monitor test execution times
+2. Optimize slow tests
+3. Use parallel execution where possible
+4. Cache test data when appropriate
 
 ---
 
-For more information about the auto-linking system, see the main project documentation.
+**Note**: This test suite ensures the reliability and consistency of the content management system. All tests should pass before deploying changes to production.

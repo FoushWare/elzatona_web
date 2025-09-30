@@ -1,0 +1,125 @@
+{
+  "timestamp": "2025-09-30T00:22:54.365Z",
+  "totalQuestions": 214,
+  "categoryCounts": {
+    "Web Performance": 5,
+    "TypeScript (Core)": 12,
+    "Testing Strategies": 8,
+    "System Design": 8,
+    "Security": 6,
+    "React.js (Core)": 12,
+    "JavaScript (Core)": 47,
+    "Git & Version Control": 6,
+    "HTML & CSS": 84,
+    "English Learning": 1,
+    "Deployment & DevOps": 9,
+    "API Design": 9,
+    "CSS & Styling": 2,
+    "Accessibility": 5
+  },
+  "updateResults": [
+    {
+      "id": "performance-optimization",
+      "name": "Performance Optimization",
+      "questionCount": 5,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "typescript-essentials",
+      "name": "TypeScript Essentials",
+      "questionCount": 12,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "testing-strategies",
+      "name": "Testing Strategies",
+      "questionCount": 8,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "frontend-system-design",
+      "name": "Frontend System Design",
+      "questionCount": 8,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "security-essentials",
+      "name": "Security Essentials",
+      "questionCount": 6,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "react-mastery",
+      "name": "React Mastery",
+      "questionCount": 12,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "javascript-deep-dive",
+      "name": "JavaScript Deep Dive",
+      "questionCount": 47,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "frontend-basics",
+      "name": "Frontend Fundamentals",
+      "questionCount": 6,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "frontend-basics",
+      "name": "Frontend Fundamentals",
+      "questionCount": 84,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "improve-english",
+      "name": "Improve Your English",
+      "questionCount": 1,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "build-tools-devops",
+      "name": "Build Tools & DevOps",
+      "questionCount": 9,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "api-integration",
+      "name": "API Integration & Communication",
+      "questionCount": 9,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "css-mastery",
+      "name": "Advanced CSS Mastery",
+      "questionCount": 2,
+      "success": false,
+      "error": "HTTP 404"
+    },
+    {
+      "id": "frontend-basics",
+      "name": "Frontend Fundamentals",
+      "questionCount": 5,
+      "success": false,
+      "error": "HTTP 404"
+    }
+  ],
+  "summary": {
+    "successful": 0,
+    "failed": 14,
+    "totalProcessed": 14
+  }
+}
