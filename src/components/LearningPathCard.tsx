@@ -75,7 +75,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
     <div
       ref={cardRef}
       data-testid="learning-path-card"
-      className="bg-gray-800 hover:bg-gray-750 rounded-lg p-4 cursor-pointer transition-all duration-200 border border-gray-700"
+      className="bg-gray-800 hover:bg-gray-750 rounded-lg p-4 cursor-pointer transition-all duration-200 border border-gray-700 hover:border-gray-600 hover:shadow-lg"
       onClick={() => onToggle(path.id)}
     >
       <div className="flex items-center justify-between">
@@ -92,7 +92,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
           <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
             {isQuestionCountLoading ? '...' : `#${displayQuestionCount} Q`}
           </div>
-          <div className="text-white">
+          <div className="text-white transition-transform duration-200">
             {isCollapsed ? (
               <ChevronDown className="w-5 h-5" />
             ) : (
@@ -104,7 +104,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({
 
       {/* Expanded Content */}
       {!isCollapsed && (
-        <div className="mt-4 pt-4 border-t border-gray-700">
+        <div className="mt-4 pt-4 border-t border-gray-700 animate-in slide-in-from-top-2 duration-200">
           <p className="text-gray-300 text-sm mb-4">{path.description}</p>
 
           {/* Target Skills */}
