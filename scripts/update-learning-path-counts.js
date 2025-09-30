@@ -1,191 +1,88 @@
-#!/usr/bin/env node
+const { initializeApp } = require('firebase/app');
+const {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+} = require('firebase/firestore');
 
-/**
- * Update Learning Path Counts Script
- * 
- * Updates question counts for learning paths based on imported questions
- */
-
-const BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:3000';
-
-// Mapping from question categories to learning path IDs
-const CATEGORY_TO_LEARNING_PATH = {
-  'HTML & CSS': 'frontend-basics',
-  'JavaScript (Core)': 'javascript-deep-dive',
-  'React.js (Core)': 'react-mastery',
-  'TypeScript (Core)': 'typescript-essentials',
-  'CSS & Styling': 'css-mastery',
-  'Deployment & DevOps': 'build-tools-devops',
-  'API Design': 'api-integration',
-  'Web Performance': 'performance-optimization',
-  'Testing Strategies': 'testing-strategies',
-  'Security': 'security-essentials',
-  'System Design': 'frontend-system-design',
-  'Accessibility': 'frontend-basics', // Map to frontend-basics
-  'English Learning': 'improve-english',
-  'Git & Version Control': 'frontend-basics', // Map to frontend-basics
-  'Build Tools': 'build-tools-devops'
+// Firebase config - using the same config as the app
+const firebaseConfig = {
+  apiKey: 'AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y',
+  authDomain: 'fir-demo-project-adffb.firebaseapp.com',
+  projectId: 'fir-demo-project-adffb',
+  storageBucket: 'fir-demo-project-adffb.firebasestorage.app',
+  messagingSenderId: '76366138630',
+  appId: '1:76366138630:web:0f3381c2f5a62e0401e287',
+  measurementId: 'G-XZ5VKFGG4Y',
 };
 
 async function updateLearningPathCounts() {
-  console.log('🔄 Updating learning path question counts...\n');
-  
   try {
-    // Get all questions
-    const questionsResponse = await fetch(`${BASE_URL}/api/questions/unified`);
-    if (!questionsResponse.ok) {
-      throw new Error(`Failed to fetch questions: ${questionsResponse.status}`);
-    }
-    
-    const questionsData = await questionsResponse.json();
-    const questions = questionsData.data || [];
-    
-    console.log(`📊 Found ${questions.length} questions to categorize`);
-    
-    // Count questions by category
-    const categoryCounts = {};
+    console.log('🔥 Initializing Firebase...');
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    console.log('📚 Fetching all questions...');
+    const questionsRef = collection(db, 'unifiedQuestions');
+    const questionsSnapshot = await getDocs(questionsRef);
+    const questions = questionsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    console.log(`Found ${questions.length} questions`);
+
+    // Count questions by learning path
+    const questionCountsByPath = {};
     questions.forEach(question => {
-      const category = question.category;
-      if (!categoryCounts[category]) {
-        categoryCounts[category] = 0;
+      if (question.learningPath && question.learningPath !== 'null') {
+        questionCountsByPath[question.learningPath] = (questionCountsByPath[question.learningPath] || 0) + 1;
       }
-      categoryCounts[category]++;
     });
-    
-    console.log('\n📋 Questions by category:');
-    Object.entries(categoryCounts).forEach(([category, count]) => {
-      console.log(`   ${category}: ${count} questions`);
-    });
-    
-    // Get all learning paths
-    const pathsResponse = await fetch(`${BASE_URL}/api/learning-paths`);
-    if (!pathsResponse.ok) {
-      throw new Error(`Failed to fetch learning paths: ${pathsResponse.status}`);
-    }
-    
-    const pathsData = await pathsResponse.json();
-    const learningPaths = pathsData.data || [];
-    
-    console.log(`\n📚 Found ${learningPaths.length} learning paths`);
-    
-    // Update learning path counts
-    const updateResults = [];
-    
-    for (const [category, count] of Object.entries(categoryCounts)) {
-      const learningPathId = CATEGORY_TO_LEARNING_PATH[category];
-      
-      if (!learningPathId) {
-        console.log(`⚠️  No learning path mapping for category: ${category}`);
-        continue;
-      }
-      
-      // Find the learning path
-      const learningPath = learningPaths.find(lp => lp.id === learningPathId);
-      
-      if (!learningPath) {
-        console.log(`⚠️  Learning path not found: ${learningPathId}`);
-        continue;
-      }
-      
-      // Update the learning path
-      try {
-        const updateResponse = await fetch(`${BASE_URL}/api/learning-paths/${learningPathId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            questionCount: count
-          })
+
+    console.log('📊 Question counts by learning path:', questionCountsByPath);
+
+    console.log('📚 Fetching all learning paths...');
+    const learningPathsRef = collection(db, 'learningPaths');
+    const learningPathsSnapshot = await getDocs(learningPathsRef);
+    const learningPaths = learningPathsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    console.log(`Found ${learningPaths.length} learning paths`);
+
+    let updatedCount = 0;
+
+    for (const learningPath of learningPaths) {
+      const actualQuestionCount = questionCountsByPath[learningPath.id] || 0;
+      const currentQuestionCount = learningPath.questionCount || 0;
+
+      if (actualQuestionCount !== currentQuestionCount) {
+        const learningPathRef = doc(db, 'learningPaths', learningPath.id);
+        await updateDoc(learningPathRef, {
+          questionCount: actualQuestionCount,
+          updatedAt: new Date().toISOString(),
         });
-        
-        if (updateResponse.ok) {
-          console.log(`✅ Updated ${learningPath.name}: ${count} questions`);
-          updateResults.push({
-            id: learningPathId,
-            name: learningPath.name,
-            questionCount: count,
-            success: true
-          });
-        } else {
-          console.log(`❌ Failed to update ${learningPath.name}: ${updateResponse.status}`);
-          updateResults.push({
-            id: learningPathId,
-            name: learningPath.name,
-            questionCount: count,
-            success: false,
-            error: `HTTP ${updateResponse.status}`
-          });
-        }
-      } catch (error) {
-        console.log(`❌ Error updating ${learningPath.name}: ${error.message}`);
-        updateResults.push({
-          id: learningPathId,
-          name: learningPath.name,
-          questionCount: count,
-          success: false,
-          error: error.message
-        });
+        console.log(
+          `✅ Updated ${learningPath.name} (${learningPath.id}): ${currentQuestionCount} → ${actualQuestionCount} questions`
+        );
+        updatedCount++;
+      } else {
+        console.log(
+          `⏭️  Skipping ${learningPath.name} (${learningPath.id}): already has correct count (${actualQuestionCount})`
+        );
       }
     }
-    
-    // Print summary
-    console.log('\n📊 UPDATE SUMMARY');
-    console.log('='.repeat(50));
-    
-    const successful = updateResults.filter(r => r.success);
-    const failed = updateResults.filter(r => !r.success);
-    
-    console.log(`Successfully updated: ${successful.length}`);
-    console.log(`Failed to update: ${failed.length}`);
-    
-    if (successful.length > 0) {
-      console.log('\n✅ Successfully updated learning paths:');
-      successful.forEach(result => {
-        console.log(`   ${result.name}: ${result.questionCount} questions`);
-      });
-    }
-    
-    if (failed.length > 0) {
-      console.log('\n❌ Failed to update learning paths:');
-      failed.forEach(result => {
-        console.log(`   ${result.name}: ${result.error}`);
-      });
-    }
-    
-    // Save update report
-    const updateReport = {
-      timestamp: new Date().toISOString(),
-      totalQuestions: questions.length,
-      categoryCounts,
-      updateResults,
-      summary: {
-        successful: successful.length,
-        failed: failed.length,
-        totalProcessed: updateResults.length
-      }
-    };
-    
-    require('fs').writeFileSync(
-      require('path').join(process.cwd(), 'learning-path-update-report.json'),
-      JSON.stringify(updateReport, null, 2)
-    );
-    
-    console.log('\n💾 Update report saved to: learning-path-update-report.json');
-    console.log('\n✅ Learning path counts updated successfully!');
-    
+
+    console.log('\n🎉 Update completed!');
+    console.log(`📊 Updated: ${updatedCount} learning paths`);
   } catch (error) {
-    console.error('❌ Error updating learning path counts:', error.message);
-    throw error;
+    console.error('Error updating learning path counts:', error);
   }
 }
 
-// Run the update
-if (require.main === module) {
-  updateLearningPathCounts().catch(error => {
-    console.error('❌ Update process failed:', error);
-    process.exit(1);
-  });
-}
+updateLearningPathCounts();
 
-module.exports = { updateLearningPathCounts };

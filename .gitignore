@@ -63,4 +63,10 @@ node_modules/
 
 # Task files
 # tasks.json
-# tasks/ 
+# tasks/
+
+# Temporary files and debug files
+temp/
+debug/
+*.tmp
+*.temp 

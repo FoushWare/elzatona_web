@@ -26,6 +26,20 @@ A platform for frontend developers to practice coding challenges and prepare for
 - **Deployment**: Vercel ✅
 - **Monitoring**: Sentry (planned)
 
+## 📁 Project Structure
+
+```
+├── config/           # Configuration files (Next.js, ESLint, Jest, etc.)
+├── docs/            # Documentation and implementation guides
+├── scripts/         # Build and utility scripts
+├── temp/            # Temporary files and debug logs (gitignored)
+├── reports/         # Analysis reports and generated data
+├── tests/           # Test files and testing utilities
+├── src/             # Source code
+├── public/          # Static assets
+└── QuestionsBank/   # Question data sources
+```
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -208,4 +222,5 @@ If you have any questions or need help, please open an issue on GitHub or contac
 ---
 
 **Happy Coding! 🎉**
+
 # Git Hooks Setup Complete
