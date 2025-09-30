@@ -77,11 +77,11 @@ try {
     console.error = (...args) => {
       // Filter out Firebase internal assertion errors (ID: ca9, b815, etc.)
       if (args[0] && typeof args[0] === 'string' && 
-          (args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) ||
+          ((args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) ||
           args[0].includes('Unexpected state') ||
           args[0].includes('ID: b815') ||
-          args[0].includes('ID: ca9')) {
-        console.warn('⚠️ Firebase Firestore internal assertion error (non-critical):', ...args);
+          args[0].includes('ID: ca9'))) {
+        // Completely suppress these errors as they are non-critical
         return;
       }
       originalConsoleError.apply(console, args);
@@ -92,10 +92,10 @@ try {
     console.warn = (...args) => {
       // Filter out Firebase internal assertion warnings
       if (args[0] && typeof args[0] === 'string' && 
-          (args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) ||
+          ((args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) ||
           args[0].includes('Unexpected state') ||
           args[0].includes('ID: b815') ||
-          args[0].includes('ID: ca9')) {
+          args[0].includes('ID: ca9'))) {
         return; // Suppress these warnings
       }
       originalConsoleWarn.apply(console, args);

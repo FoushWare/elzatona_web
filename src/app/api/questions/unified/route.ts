@@ -12,6 +12,11 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
+    // Pagination parameters
+    const page = parseInt(searchParams.get('page') || '1');
+    const pageSize = parseInt(searchParams.get('pageSize') || '10');
+    const offset = (page - 1) * pageSize;
+
     const filters = {
       category: searchParams.get('category') || undefined,
       subcategory: searchParams.get('subcategory') || undefined,
@@ -30,9 +35,7 @@ export async function GET(request: NextRequest) {
           : searchParams.get('isComplete') === 'false'
             ? false
             : undefined,
-      limit: searchParams.get('limit')
-        ? parseInt(searchParams.get('limit')!)
-        : undefined,
+      limit: pageSize,
       orderBy:
         (searchParams.get('orderBy') as
           | 'createdAt'
@@ -49,10 +52,30 @@ export async function GET(request: NextRequest) {
     );
 
     const questions = await UnifiedQuestionService.getQuestions(cleanFilters);
+    
+    // Get total count for pagination (without limit)
+    const totalCountFilters = { ...cleanFilters };
+    delete totalCountFilters.limit;
+    const allQuestions = await UnifiedQuestionService.getQuestions(totalCountFilters);
+    const totalCount = allQuestions.length;
+    
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const hasNextPage = page < totalPages;
+    const hasPrevPage = page > 1;
 
     return NextResponse.json({
       success: true,
       data: questions,
+      pagination: {
+        page,
+        pageSize,
+        totalCount,
+        totalPages,
+        hasNextPage,
+        hasPrevPage,
+        offset,
+      },
       count: questions.length,
     });
   } catch (error) {
