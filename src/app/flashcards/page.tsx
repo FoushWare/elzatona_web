@@ -1,227 +1,372 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import {
-  BookOpen,
-  BarChart3,
-  Play,
-  Settings,
-  Plus,
-  Database,
-} from 'lucide-react';
-import FlashcardDashboard from '@/components/FlashcardDashboard';
-import FlashcardSession from '@/components/FlashcardSession';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { RotateCcw, CheckCircle, XCircle, Clock, BookOpen, Star } from 'lucide-react';
 
-type TabType = 'dashboard' | 'session' | 'manage';
+interface Flashcard {
+  id: string;
+  questionId: string;
+  question: string;
+  answer: string;
+  explanation: string;
+  category: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  status: 'new' | 'learning' | 'review' | 'mastered';
+  interval: number;
+  repetitions: number;
+  easeFactor: number;
+  lastReviewed: string | null;
+  nextReview: string;
+  createdAt: string;
+  updatedAt: string;
+  tags: string[];
+  source: 'wrong_answer' | 'manual' | 'bookmark';
+}
 
 export default function FlashcardsPage() {
-  const { user } = useFirebaseAuth();
-  const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+  const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('due');
+  const [stats, setStats] = useState({
+    total: 0,
+    new: 0,
+    learning: 0,
+    review: 0,
+    mastered: 0,
+    due: 0
+  });
 
-  const tabs = [
-    {
-      id: 'dashboard' as TabType,
-      label: 'Dashboard',
-      icon: BarChart3,
-      description: 'View your progress and start sessions',
-    },
-    {
-      id: 'session' as TabType,
-      label: 'Study Session',
-      icon: Play,
-      description: 'Active study session',
-    },
-    {
-      id: 'manage' as TabType,
-      label: 'Manage Cards',
-      icon: Settings,
-      description: 'Create and edit flashcards',
-    },
-  ];
+  useEffect(() => {
+    fetchFlashcards();
+  }, [filter]);
 
-  if (!user) {
+  const fetchFlashcards = async () => {
+    try {
+      setLoading(true);
+      const userId = 'test-user'; // In real app, get from auth
+      
+      let url = `/api/flashcards?userId=${userId}`;
+      if (filter === 'due') {
+        url += '&due=true';
+      } else if (filter !== 'all') {
+        url += `&status=${filter}`;
+      }
+
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data.success) {
+        setFlashcards(data.data);
+        setCurrentCardIndex(0);
+        setShowAnswer(false);
+      }
+    } catch (error) {
+      console.error('Error fetching flashcards:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      const userId = 'test-user';
+      const response = await fetch(`/api/flashcards?userId=${userId}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        const allCards = data.data;
+        const now = new Date().toISOString();
+        
+        setStats({
+          total: allCards.length,
+          new: allCards.filter(card => card.status === 'new').length,
+          learning: allCards.filter(card => card.status === 'learning').length,
+          review: allCards.filter(card => card.status === 'review').length,
+          mastered: allCards.filter(card => card.status === 'mastered').length,
+          due: allCards.filter(card => card.nextReview <= now).length
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const handleReview = async (quality: number) => {
+    if (currentCardIndex >= flashcards.length) return;
+
+    const currentCard = flashcards[currentCardIndex];
+    
+    try {
+      const response = await fetch(`/api/flashcards/${currentCard.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quality })
+      });
+
+      if (response.ok) {
+        // Move to next card
+        if (currentCardIndex < flashcards.length - 1) {
+          setCurrentCardIndex(currentCardIndex + 1);
+        } else {
+          // All cards reviewed, fetch new ones
+          await fetchFlashcards();
+        }
+        setShowAnswer(false);
+        await fetchStats(); // Update stats
+      }
+    } catch (error) {
+      console.error('Error reviewing flashcard:', error);
+    }
+  };
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case 'easy': return 'bg-green-100 text-green-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'hard': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'new': return 'bg-blue-100 text-blue-800';
+      case 'learning': return 'bg-orange-100 text-orange-800';
+      case 'review': return 'bg-purple-100 text-purple-800';
+      case 'mastered': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              Sign In Required
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Please sign in to access your flashcard dashboard and track your
-              learning progress.
-            </p>
-            <a
-              href="/auth"
-              className="inline-flex items-center px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
-            >
-              Sign In
-            </a>
-          </div>
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-center space-x-3 mb-4"
-          >
-            <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-              <BookOpen className="w-8 h-8 text-blue-500" />
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Interactive Flashcards
-            </h1>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
-          >
-            Reinforce your learning with spaced repetition. Review cards
-            you&apos;ve struggled with and discover new content to expand your
-            knowledge.
-          </motion.p>
+  if (flashcards.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center py-12">
+          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No flashcards found</h3>
+          <p className="text-gray-600 mb-4">
+            Start adding flashcards by bookmarking questions or adding wrong answers to your collection.
+          </p>
+          <Button onClick={() => window.location.href = '/learning-paths'}>
+            <BookOpen className="h-4 w-4 mr-2" />
+            Browse Questions
+          </Button>
         </div>
-
-        {/* Tab Navigation */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 mb-8"
-        >
-          <div className="flex flex-col sm:flex-row">
-            {tabs.map((tab, index) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center space-x-3 px-6 py-4 transition-all duration-200 ${
-                  activeTab === tab.id
-                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-b-2 border-blue-500'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700'
-                }`}
-              >
-                <tab.icon className="w-5 h-5" />
-                <div className="text-left">
-                  <div className="font-medium">{tab.label}</div>
-                  <div className="text-xs opacity-75 hidden sm:block">
-                    {tab.description}
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Tab Content */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {activeTab === 'dashboard' && <FlashcardDashboard />}
-
-          {activeTab === 'session' && <FlashcardSession />}
-
-          {activeTab === 'manage' && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-              <div className="text-center py-12">
-                <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                  Card Management
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Create, edit, and organize your flashcards. This feature is
-                  coming soon!
-                </p>
-                <div className="flex justify-center space-x-4">
-                  <button
-                    disabled
-                    className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-400 rounded-lg cursor-not-allowed"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Create Card</span>
-                  </button>
-                  <button
-                    disabled
-                    className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-400 rounded-lg cursor-not-allowed"
-                  >
-                    <Database className="w-4 h-4" />
-                    <span>Import Cards</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Features Overview */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                <BookOpen className="w-5 h-5 text-green-500" />
-              </div>
-              <h3 className="font-semibold text-gray-900 dark:text-white">
-                Spaced Repetition
-              </h3>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Cards you struggle with appear more frequently, while mastered
-              cards are scheduled for longer intervals using proven learning
-              algorithms.
-            </p>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                <BarChart3 className="w-5 h-5 text-blue-500" />
-              </div>
-              <h3 className="font-semibold text-gray-900 dark:text-white">
-                Progress Tracking
-              </h3>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Monitor your learning progress with detailed statistics, accuracy
-              rates, and study streaks to stay motivated.
-            </p>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
-                <Play className="w-5 h-5 text-purple-500" />
-              </div>
-              <h3 className="font-semibold text-gray-900 dark:text-white">
-                Adaptive Sessions
-              </h3>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Smart session modes that adapt to your learning needs - review due
-              cards, learn new content, or mix both for optimal retention.
-            </p>
-          </div>
-        </motion.div>
       </div>
+    );
+  }
+
+  const currentCard = flashcards[currentCardIndex];
+  const progress = ((currentCardIndex + 1) / flashcards.length) * 100;
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Flashcards</h1>
+          <p className="text-gray-600">Review and master your learning with spaced repetition</p>
+        </div>
+        <div className="mt-4 md:mt-0">
+          <Button onClick={fetchFlashcards} variant="outline">
+            <RotateCcw className="h-4 w-4 mr-2" />
+            Refresh
+          </Button>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
+            <div className="text-sm text-gray-600">Total</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-blue-600">{stats.new}</div>
+            <div className="text-sm text-gray-600">New</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-orange-600">{stats.learning}</div>
+            <div className="text-sm text-gray-600">Learning</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-purple-600">{stats.review}</div>
+            <div className="text-sm text-gray-600">Review</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-green-600">{stats.mastered}</div>
+            <div className="text-sm text-gray-600">Mastered</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-red-600">{stats.due}</div>
+            <div className="text-sm text-gray-600">Due</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filters */}
+      <div className="flex gap-2 mb-6">
+        <Button
+          variant={filter === 'due' ? 'default' : 'outline'}
+          onClick={() => setFilter('due')}
+          size="sm"
+        >
+          Due Now
+        </Button>
+        <Button
+          variant={filter === 'new' ? 'default' : 'outline'}
+          onClick={() => setFilter('new')}
+          size="sm"
+        >
+          New
+        </Button>
+        <Button
+          variant={filter === 'learning' ? 'default' : 'outline'}
+          onClick={() => setFilter('learning')}
+          size="sm"
+        >
+          Learning
+        </Button>
+        <Button
+          variant={filter === 'all' ? 'default' : 'outline'}
+          onClick={() => setFilter('all')}
+          size="sm"
+        >
+          All
+        </Button>
+      </div>
+
+      {/* Progress */}
+      <div className="mb-6">
+        <div className="flex justify-between text-sm text-gray-600 mb-2">
+          <span>Progress</span>
+          <span>{currentCardIndex + 1} of {flashcards.length}</span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div 
+            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      </div>
+
+      {/* Flashcard */}
+      <Card className="mb-6">
+        <CardHeader>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex gap-2">
+              <Badge className={getDifficultyColor(currentCard.difficulty)}>
+                {currentCard.difficulty}
+              </Badge>
+              <Badge className={getStatusColor(currentCard.status)}>
+                {currentCard.status}
+              </Badge>
+            </div>
+            <div className="text-sm text-gray-500">
+              {currentCard.repetitions} reviews
+            </div>
+          </div>
+          <CardTitle className="text-xl">Question</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-6">
+            <p className="text-lg leading-relaxed">{currentCard.question}</p>
+          </div>
+
+          {showAnswer ? (
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-lg mb-2">Answer:</h3>
+                <p className="text-gray-700 leading-relaxed">{currentCard.answer}</p>
+              </div>
+              
+              {currentCard.explanation && (
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Explanation:</h3>
+                  <p className="text-gray-700 leading-relaxed">{currentCard.explanation}</p>
+                </div>
+              )}
+
+              <div className="pt-4">
+                <h3 className="font-semibold text-lg mb-3">How well did you know this?</h3>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => handleReview(1)}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    <XCircle className="h-4 w-4 mr-2" />
+                    Again (1)
+                  </Button>
+                  <Button
+                    onClick={() => handleReview(2)}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    <Clock className="h-4 w-4 mr-2" />
+                    Hard (2)
+                  </Button>
+                  <Button
+                    onClick={() => handleReview(3)}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Good (3)
+                  </Button>
+                  <Button
+                    onClick={() => handleReview(4)}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    <Star className="h-4 w-4 mr-2" />
+                    Easy (4)
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Button 
+              onClick={() => setShowAnswer(true)}
+              className="w-full"
+              size="lg"
+            >
+              Show Answer
+            </Button>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

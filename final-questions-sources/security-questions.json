@@ -1,0 +1,169 @@
+{
+  "category": "Security",
+  "totalQuestions": 6,
+  "exportedAt": "2025-09-30T00:28:57.750Z",
+  "questions": [
+    {
+      "id": "imported-security-1759191703988-1",
+      "updatedAt": "2025-09-30T00:21:44.036Z",
+      "source": "QuestionsBank",
+      "importedAt": "2025-09-30T00:21:43.988Z",
+      "type": "code",
+      "codeBlock": "const csrf = require('csurf');\nconst cookieParser = require('cookie-parser');\n\napp.use(cookieParser());\napp.use(csrf({ cookie: true }));\n\n// Generate CSRF token\napp.get('/form', (req, res) => {\n  res.render('form', { csrfToken: req.csrfToken() });\n});\n\n// Verify CSRF token\napp.post('/submit', (req, res) => {\n  // CSRF token is automatically verified\n  res.send('Form submitted successfully');\n});",
+      "isActive": true,
+      "content": "What is CSRF and how do you prevent it?",
+      "title": "Cross-Site Request Forgery (CSRF)",
+      "createdAt": "2025-09-30T00:21:44.036Z",
+      "correctAnswer": null,
+      "explanation": "CSRF attacks trick users into performing unwanted actions on websites where they're authenticated.\n\n**CSRF Protection:**\n\n**1. CSRF Tokens:**\n\nconst csrf = require('csurf');\nconst cookieParser = require('cookie-parser');\n\napp.use(cookieParser());\napp.use(csrf({ cookie: true }));\n\n// Generate CSRF token\napp.get('/form', (req, res) => {\nres.render('form', { csrfToken: req.csrfToken() });\n});\n\n// Verify CSRF token\napp.post('/submit', (req, res) => {\n// CSRF token is automatically verified\nres.send('Form submitted successfully');\n});\n\n**2. SameSite Cookies:**\n\napp.use(\nsession({\nsecret: 'your-secret-key',\ncookie: {\nsecure: true, // HTTPS only\nhttpOnly: true, // Not accessible via JavaScript\nsameSite: 'strict', // CSRF protection\n},\n})\n);\n\n**3. Double Submit Cookie:**\n\n// Generate random token\nfunction generateCSRFToken() {\nreturn crypto.randomBytes(32).toString('hex');\n}\n\n// Set token in cookie and form\napp.get('/form', (req, res) => {\nconst token = generateCSRFToken();\nres.cookie('csrf-token', token, {\nhttpOnly: false, // Allow JavaScript access\nsameSite: 'strict',\n});\nres.render('form', { csrfToken: token });\n});\n\n// Verify token matches cookie\napp.post('/submit', (req, res) => {\nconst tokenFromForm = req.body.csrfToken;\nconst tokenFromCookie = req.cookies['csrf-token'];\n\nif (tokenFromForm !== tokenFromCookie) {\nreturn res.status(403).json({ error: 'CSRF token mismatch' });\n}\n\nres.send('Form submitted successfully');\n});\n\n**4. Custom Headers:**\n\n// Require custom header for API requests\napp.use('/api', (req, res, next) => {\nif (\nreq.method === 'POST' ||\nreq.method === 'PUT' ||\nreq.method === 'DELETE'\n) {\nconst customHeader = req.get('X-Requested-With');\nif (customHeader !== 'XMLHttpRequest') {\nreturn res.status(403).json({ error: 'Missing required header' });\n}\n}\nnext();\n});",
+      "difficulty": "intermediate",
+      "options": [],
+      "isComplete": false,
+      "learningPaths": [
+        "security"
+      ],
+      "category": "Security",
+      "topics": [
+        "XSS",
+        "CSRF",
+        "Authentication",
+        "Authorization"
+      ]
+    },
+    {
+      "id": "imported-security-1759191703988-2",
+      "isActive": true,
+      "source": "QuestionsBank",
+      "options": [],
+      "updatedAt": "2025-09-30T00:21:44.036Z",
+      "title": "SQL Injection",
+      "explanation": "SQL injection occurs when malicious SQL code is inserted into application queries.\n\n**Vulnerable Code:**\n\n// Vulnerable - direct string concatenation\napp.get('/user', (req, res) => {\nconst userId = req.query.id;\nconst query = `SELECT * FROM users WHERE id = ${userId}`;\ndb.query(query, (err, result) => {\nres.json(result);\n});\n});\n\n// Vulnerable - string formatting\napp.get('/search', (req, res) => {\nconst searchTerm = req.query.q;\nconst query = `SELECT * FROM products WHERE name LIKE '%${searchTerm}%'`;\ndb.query(query, (err, result) => {\nres.json(result);\n});\n});\n\n**Prevention Methods:**\n\n**1. Parameterized Queries:**\n\n// Safe - parameterized queries\napp.get('/user', (req, res) => {\nconst userId = req.query.id;\nconst query = 'SELECT * FROM users WHERE id = ?';\ndb.query(query, [userId], (err, result) => {\nres.json(result);\n});\n});\n\n// Safe - named parameters\napp.get('/search', (req, res) => {\nconst searchTerm = req.query.q;\nconst query = 'SELECT * FROM products WHERE name LIKE ?';\ndb.query(query, [`%${searchTerm}%`], (err, result) => {\nres.json(result);\n});\n});\n\n**2. ORM/Query Builder:**\n\n// Using Sequelize ORM\nconst User = require('./models/User');\n\napp.get('/user', async (req, res) => {\ntry {\nconst userId = req.query.id;\nconst user = await User.findByPk(userId);\nres.json(user);\n} catch (error) {\nres.status(500).json({ error: 'Database error' });\n}\n});\n\n// Using Knex query builder\nconst knex = require('knex')(config);\n\napp.get('/search', async (req, res) => {\ntry {\nconst searchTerm = req.query.q;\nconst products = await knex('products')\n.where('name', 'like', `%${searchTerm}%`)\n.select('*');\nres.json(products);\n} catch (error) {\nres.status(500).json({ error: 'Database error' });\n}\n});\n\n**3. Input Validation:**\n\nconst Joi = require('joi');\n\nconst userSchema = Joi.object({\nid: Joi.number().integer().positive().required(),\n});\n\napp.get('/user', (req, res) => {\nconst { error, value } = userSchema.validate(req.query);\nif (error) {\nreturn res.status(400).json({ error: 'Invalid user ID' });\n}\n\nconst query = 'SELECT * FROM users WHERE id = ?';\ndb.query(query, [value.id], (err, result) => {\nres.json(result);\n});\n});",
+      "content": "What is SQL injection and how do you prevent it?",
+      "createdAt": "2025-09-30T00:21:44.036Z",
+      "difficulty": "intermediate",
+      "topics": [
+        "XSS",
+        "CSRF",
+        "Authentication",
+        "Authorization"
+      ],
+      "learningPaths": [
+        "security"
+      ],
+      "type": "code",
+      "isComplete": false,
+      "codeBlock": "// Vulnerable - direct string concatenation\napp.get('/user', (req, res) => {\n  const userId = req.query.id;\n  const query = `SELECT * FROM users WHERE id = ${userId}`;\n  db.query(query, (err, result) => {\n    res.json(result);\n  });\n});\n\n// Vulnerable - string formatting\napp.get('/search', (req, res) => {\n  const searchTerm = req.query.q;\n  const query = `SELECT * FROM products WHERE name LIKE '%${searchTerm}%'`;\n  db.query(query, (err, result) => {\n    res.json(result);\n  });\n});",
+      "category": "Security",
+      "importedAt": "2025-09-30T00:21:43.988Z",
+      "correctAnswer": null
+    },
+    {
+      "id": "imported-security-1759191703988-4",
+      "title": "HTTPS and Transport Security",
+      "updatedAt": "2025-09-30T00:21:44.036Z",
+      "type": "code",
+      "topics": [
+        "XSS",
+        "CSRF",
+        "Authentication",
+        "Authorization"
+      ],
+      "isComplete": false,
+      "codeBlock": "const https = require('https');\nconst fs = require('fs');\n\n// Load SSL certificates\nconst options = {\n  key: fs.readFileSync('path/to/private-key.pem'),\n  cert: fs.readFileSync('path/to/certificate.pem'),\n  ca: fs.readFileSync('path/to/ca-bundle.pem'),\n};\n\n// Create HTTPS server\nconst server = https.createServer(options, app);\n\n// Security headers middleware\napp.use((req, res, next) => {\n  // Force HTTPS\n  if (req.header('x-forwarded-proto') !== 'https') {\n    res.redirect(`https://${req.header('host')}${req.url}`);\n  } else {\n    next();\n  }\n});\n\n// Security headers\napp.use((req, res, next) => {\n  res.setHeader(\n    'Strict-Transport-Security',\n    'max-age=31536000; includeSubDomains; preload'\n  );\n  res.setHeader('X-Content-Type-Options', 'nosniff');\n  res.setHeader('X-Frame-Options', 'DENY');\n  res.setHeader('X-XSS-Protection', '1; mode=block');\n  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');\n  next();\n});",
+      "difficulty": "intermediate",
+      "isActive": true,
+      "learningPaths": [
+        "security"
+      ],
+      "content": "How do you implement HTTPS and secure transport?",
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "createdAt": "2025-09-30T00:21:44.036Z",
+      "category": "Security",
+      "options": [],
+      "importedAt": "2025-09-30T00:21:43.988Z",
+      "explanation": "**HTTPS Configuration:**\n\nconst https = require('https');\nconst fs = require('fs');\n\n// Load SSL certificates\nconst options = {\nkey: fs.readFileSync('path/to/private-key.pem'),\ncert: fs.readFileSync('path/to/certificate.pem'),\nca: fs.readFileSync('path/to/ca-bundle.pem'),\n};\n\n// Create HTTPS server\nconst server = https.createServer(options, app);\n\n// Security headers middleware\napp.use((req, res, next) => {\n// Force HTTPS\nif (req.header('x-forwarded-proto') !== 'https') {\nres.redirect(`https://${req.header('host')}${req.url}`);\n} else {\nnext();\n}\n});\n\n// Security headers\napp.use((req, res, next) => {\nres.setHeader(\n'Strict-Transport-Security',\n'max-age=31536000; includeSubDomains; preload'\n);\nres.setHeader('X-Content-Type-Options', 'nosniff');\nres.setHeader('X-Frame-Options', 'DENY');\nres.setHeader('X-XSS-Protection', '1; mode=block');\nres.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');\nnext();\n});\n\n**CORS Configuration:**\n\nconst cors = require('cors');\n\nconst corsOptions = {\norigin: function (origin, callback) {\n// Allow requests with no origin (mobile apps, etc.)\nif (!origin) return callback(null, true);\n\nconst allowedOrigins = [\n'https://yourdomain.com',\n'https://www.yourdomain.com',\n'https://app.yourdomain.com',\n];\n\nif (allowedOrigins.indexOf(origin) !== -1) {\ncallback(null, true);\n} else {\ncallback(new Error('Not allowed by CORS'));\n}\n},\ncredentials: true,\noptionsSuccessStatus: 200,\nmethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],\nallowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],\n};\n\napp.use(cors(corsOptions));\n\n**Content Security Policy:**\n\napp.use((req, res, next) => {\nconst csp = [\n\"default-src 'self'\",\n\"script-src 'self' 'unsafe-inline' https://trusted-cdn.com\",\n\"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com\",\n\"font-src 'self' https://fonts.gstatic.com\",\n\"img-src 'self' data: https:\",\n\"connect-src 'self' https://api.yourdomain.com\",\n\"frame-ancestors 'none'\",\n\"base-uri 'self'\",\n\"form-action 'self'\",\n].join('; ');\n\nres.setHeader('Content-Security-Policy', csp);\nnext();\n});"
+    },
+    {
+      "id": "imported-security-1759191703989-5",
+      "type": "code",
+      "updatedAt": "2025-09-30T00:21:44.036Z",
+      "isActive": true,
+      "content": "How do you validate and sanitize user input?",
+      "isComplete": false,
+      "topics": [
+        "XSS",
+        "CSRF",
+        "Authentication",
+        "Authorization"
+      ],
+      "options": [],
+      "explanation": "**Input Validation with Joi:**\n\nconst Joi = require('joi');\n\n// User registration schema\nconst userRegistrationSchema = Joi.object({\nusername: Joi.string().alphanum().min(3).max(30).required().messages({\n'string.alphanum': 'Username must contain only alphanumeric characters',\n'string.min': 'Username must be at least 3 characters long',\n'string.max': 'Username cannot exceed 30 characters',\n}),\n\nemail: Joi.string().email().required().messages({\n'string.email': 'Please provide a valid email address',\n}),\n\npassword: Joi.string()\n.min(8)\n.pattern(\nnew RegExp(\n'^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@$!%*?&])[A-Za-z\\\\d@$!%*?&]'\n)\n)\n.required()\n.messages({\n'string.min': 'Password must be at least 8 characters long',\n'string.pattern.base':\n'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character',\n}),\n\nage: Joi.number().integer().min(13).max(120).optional(),\n});\n\n// Validation middleware\nfunction validateUserRegistration(req, res, next) {\nconst { error, value } = userRegistrationSchema.validate(req.body, {\nabortEarly: false,\nstripUnknown: true,\n});\n\nif (error) {\nconst errorMessages = error.details.map(detail => detail.message);\nreturn res.status(400).json({\nerror: 'Validation failed',\ndetails: errorMessages,\n});\n}\n\nreq.validatedData = value;\nnext();\n}\n\napp.post('/register', validateUserRegistration, (req, res) => {\n// Use req.validatedData instead of req.body\nconst { username, email, password, age } = req.validatedData;\n// Process registration...\n});\n\n**HTML Sanitization:**\n\nconst DOMPurify = require('dompurify');\nconst { JSDOM } = require('jsdom');\n\n// Create DOMPurify instance\nconst window = new JSDOM('').window;\nconst purify = DOMPurify(window);\n\n// Sanitize HTML content\nfunction sanitizeHTML(input) {\nreturn purify.sanitize(input, {\nALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br'],\nALLOWED_ATTR: [],\n});\n}\n\n// Rich text input sanitization\napp.post('/comment', (req, res) => {\nconst { content } = req.body;\n\n// Sanitize HTML content\nconst sanitizedContent = sanitizeHTML(content);\n\n// Additional validation\nif (sanitizedContent.length > 1000) {\nreturn res.status(400).json({ error: 'Comment too long' });\n}\n\n// Store sanitized content\nComment.create({ content: sanitizedContent });\nres.json({ message: 'Comment posted successfully' });\n});\n\n**File Upload Security:**\n\nconst multer = require('multer');\nconst path = require('path');\n\n// Configure multer for secure file uploads\nconst storage = multer.diskStorage({\ndestination: function (req, file, cb) {\ncb(null, 'uploads/');\n},\nfilename: function (req, file, cb) {\n// Generate unique filename\nconst uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);\ncb(\nnull,\nfile.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)\n);\n},\n});\n\nconst fileFilter = (req, file, cb) => {\n// Define allowed file types\nconst allowedTypes = /jpeg|jpg|png|gif|pdf|doc|docx/;\nconst extname = allowedTypes.test(\npath.extname(file.originalname).toLowerCase()\n);\nconst mimetype = allowedTypes.test(file.mimetype);\n\nif (mimetype && extname) {\nreturn cb(null, true);\n} else {\ncb(new Error('Invalid file type'));\n}\n};\n\nconst upload = multer({\nstorage: storage,\nlimits: {\nfileSize: 5 * 1024 * 1024, // 5MB limit\n},\nfileFilter: fileFilter,\n});\n\n// File upload endpoint\napp.post('/upload', upload.single('file'), (req, res) => {\nif (!req.file) {\nreturn res.status(400).json({ error: 'No file uploaded' });\n}\n\n// Additional security checks\nconst filePath = req.file.path;\nconst fileExtension = path.extname(req.file.originalname).toLowerCase();\n\n// Scan file for malware (implement with antivirus service)\n// scanFile(filePath);\n\nres.json({\nmessage: 'File uploaded successfully',\nfilename: req.file.filename,\nsize: req.file.size,\n});\n});",
+      "importedAt": "2025-09-30T00:21:43.989Z",
+      "source": "QuestionsBank",
+      "category": "Security",
+      "codeBlock": "const Joi = require('joi');\n\n// User registration schema\nconst userRegistrationSchema = Joi.object({\n  username: Joi.string().alphanum().min(3).max(30).required().messages({\n    'string.alphanum': 'Username must contain only alphanumeric characters',\n    'string.min': 'Username must be at least 3 characters long',\n    'string.max': 'Username cannot exceed 30 characters',\n  }),\n\n  email: Joi.string().email().required().messages({\n    'string.email': 'Please provide a valid email address',\n  }),\n\n  password: Joi.string()\n    .min(8)\n    .pattern(\n      new RegExp(\n        '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@$!%*?&])[A-Za-z\\\\d@$!%*?&]'\n      )\n    )\n    .required()\n    .messages({\n      'string.min': 'Password must be at least 8 characters long',\n      'string.pattern.base':\n        'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character',\n    }),\n\n  age: Joi.number().integer().min(13).max(120).optional(),\n});\n\n// Validation middleware\nfunction validateUserRegistration(req, res, next) {\n  const { error, value } = userRegistrationSchema.validate(req.body, {\n    abortEarly: false,\n    stripUnknown: true,\n  });\n\n  if (error) {\n    const errorMessages = error.details.map(detail => detail.message);\n    return res.status(400).json({\n      error: 'Validation failed',\n      details: errorMessages,\n    });\n  }\n\n  req.validatedData = value;\n  next();\n}\n\napp.post('/register', validateUserRegistration, (req, res) => {\n  // Use req.validatedData instead of req.body\n  const { username, email, password, age } = req.validatedData;\n  // Process registration...\n});",
+      "correctAnswer": null,
+      "learningPaths": [
+        "security"
+      ],
+      "difficulty": "intermediate",
+      "title": "Input Validation and Sanitization",
+      "createdAt": "2025-09-30T00:21:44.036Z"
+    },
+    {
+      "id": "imported-security-1759191703988-3",
+      "codeBlock": "const bcrypt = require('bcrypt');\nconst crypto = require('crypto');\n\n// Password hashing\nasync function hashPassword(password) {\n  const saltRounds = 12;\n  return await bcrypt.hash(password, saltRounds);\n}\n\n// Password verification\nasync function verifyPassword(password, hash) {\n  return await bcrypt.compare(password, hash);\n}\n\n// Registration\napp.post('/register', async (req, res) => {\n  try {\n    const { username, email, password } = req.body;\n\n    // Validate password strength\n    if (!isStrongPassword(password)) {\n      return res.status(400).json({ error: 'Password too weak' });\n    }\n\n    const hashedPassword = await hashPassword(password);\n    const user = await User.create({\n      username,\n      email,\n      password: hashedPassword,\n    });\n\n    res.status(201).json({ message: 'User created successfully' });\n  } catch (error) {\n    res.status(500).json({ error: 'Registration failed' });\n  }\n});\n\nfunction isStrongPassword(password) {\n  const minLength = 8;\n  const hasUpperCase = /[A-Z]/.test(password);\n  const hasLowerCase = /[a-z]/.test(password);\n  const hasNumbers = /\\d/.test(password);\n  const hasSpecialChar = /[!@#$%^&*(),.?\":{}|<>]/.test(password);\n\n  return (\n    password.length >= minLength &&\n    hasUpperCase &&\n    hasLowerCase &&\n    hasNumbers &&\n    hasSpecialChar\n  );\n}",
+      "source": "QuestionsBank",
+      "correctAnswer": null,
+      "importedAt": "2025-09-30T00:21:43.988Z",
+      "explanation": "**Secure Password Handling:**\n\nconst bcrypt = require('bcrypt');\nconst crypto = require('crypto');\n\n// Password hashing\nasync function hashPassword(password) {\nconst saltRounds = 12;\nreturn await bcrypt.hash(password, saltRounds);\n}\n\n// Password verification\nasync function verifyPassword(password, hash) {\nreturn await bcrypt.compare(password, hash);\n}\n\n// Registration\napp.post('/register', async (req, res) => {\ntry {\nconst { username, email, password } = req.body;\n\n// Validate password strength\nif (!isStrongPassword(password)) {\nreturn res.status(400).json({ error: 'Password too weak' });\n}\n\nconst hashedPassword = await hashPassword(password);\nconst user = await User.create({\nusername,\nemail,\npassword: hashedPassword,\n});\n\nres.status(201).json({ message: 'User created successfully' });\n} catch (error) {\nres.status(500).json({ error: 'Registration failed' });\n}\n});\n\nfunction isStrongPassword(password) {\nconst minLength = 8;\nconst hasUpperCase = /[A-Z]/.test(password);\nconst hasLowerCase = /[a-z]/.test(password);\nconst hasNumbers = /\\d/.test(password);\nconst hasSpecialChar = /[!@#$%^&*(),.?\":{}|<>]/.test(password);\n\nreturn (\npassword.length >= minLength &&\nhasUpperCase &&\nhasLowerCase &&\nhasNumbers &&\nhasSpecialChar\n);\n}\n\n**Secure Session Management:**\n\nconst session = require('express-session');\nconst RedisStore = require('connect-redis')(session);\n\napp.use(\nsession({\nstore: new RedisStore({\nhost: 'localhost',\nport: 6379,\nttl: 86400, // 24 hours\n}),\nsecret: process.env.SESSION_SECRET,\nresave: false,\nsaveUninitialized: false,\ncookie: {\nsecure: process.env.NODE_ENV === 'production', // HTTPS only in production\nhttpOnly: true, // Prevent XSS\nmaxAge: 24 * 60 * 60 * 1000, // 24 hours\nsameSite: 'strict', // CSRF protection\n},\nname: 'sessionId', // Don't use default 'connect.sid'\n})\n);\n\n**JWT Implementation:**\n\nconst jwt = require('jsonwebtoken');\n\n// Generate JWT\nfunction generateToken(user) {\nconst payload = {\nuserId: user.id,\nusername: user.username,\nrole: user.role,\n};\n\nreturn jwt.sign(payload, process.env.JWT_SECRET, {\nexpiresIn: '15m', // Short expiration\nissuer: 'your-app',\naudience: 'your-app-users',\n});\n}\n\n// Generate refresh token\nfunction generateRefreshToken(user) {\nconst payload = { userId: user.id };\nreturn jwt.sign(payload, process.env.REFRESH_SECRET, {\nexpiresIn: '7d',\nissuer: 'your-app',\n});\n}\n\n// Login endpoint\napp.post('/login', async (req, res) => {\ntry {\nconst { username, password } = req.body;\nconst user = await User.findOne({ where: { username } });\n\nif (!user || !(await verifyPassword(password, user.password))) {\nreturn res.status(401).json({ error: 'Invalid credentials' });\n}\n\nconst accessToken = generateToken(user);\nconst refreshToken = generateRefreshToken(user);\n\n// Store refresh token securely\nawait RefreshToken.create({\ntoken: refreshToken,\nuserId: user.id,\nexpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),\n});\n\nres.json({\naccessToken,\nrefreshToken,\nexpiresIn: 900, // 15 minutes\n});\n} catch (error) {\nres.status(500).json({ error: 'Login failed' });\n}\n});\n\n**Rate Limiting:**\n\nconst rateLimit = require('express-rate-limit');\n\n// Login rate limiting\nconst loginLimiter = rateLimit({\nwindowMs: 15 * 60 * 1000, // 15 minutes\nmax: 5, // 5 attempts per window\nmessage: 'Too many login attempts, please try again later',\nstandardHeaders: true,\nlegacyHeaders: false,\nskipSuccessfulRequests: true,\n});\n\napp.use('/login', loginLimiter);\n\n// General API rate limiting\nconst apiLimiter = rateLimit({\nwindowMs: 15 * 60 * 1000, // 15 minutes\nmax: 100, // 100 requests per window\nmessage: 'Too many requests from this IP',\n});\n\napp.use('/api', apiLimiter);",
+      "difficulty": "intermediate",
+      "createdAt": "2025-09-30T00:21:44.036Z",
+      "isActive": true,
+      "type": "code",
+      "options": [],
+      "topics": [
+        "XSS",
+        "CSRF",
+        "Authentication",
+        "Authorization"
+      ],
+      "title": "Authentication and Session Security",
+      "updatedAt": "2025-09-30T00:21:44.036Z",
+      "category": "Security",
+      "isComplete": false,
+      "learningPaths": [
+        "security"
+      ],
+      "content": "How do you implement secure authentication and session management?"
+    },
+    {
+      "id": "imported-security-1759191703988-0",
+      "type": "code",
+      "content": "What is XSS and how do you prevent it?",
+      "options": [],
+      "codeBlock": "// Vulnerable code\napp.post('/comment', (req, res) => {\n  const comment = req.body.comment; // User input\n  // Directly storing without sanitization\n  db.comments.insert({ text: comment });\n  res.redirect('/comments');\n});\n\n// Safe code\nconst DOMPurify = require('dompurify');\nconst { JSDOM } = require('jsdom');\n\napp.post('/comment', (req, res) => {\n  const comment = req.body.comment;\n  // Sanitize HTML\n  const cleanComment = DOMPurify.sanitize(comment);\n  db.comments.insert({ text: cleanComment });\n  res.redirect('/comments');\n});",
+      "isComplete": false,
+      "updatedAt": "2025-09-30T00:21:44.036Z",
+      "learningPaths": [
+        "security"
+      ],
+      "explanation": "XSS (Cross-Site Scripting) occurs when malicious scripts are injected into web pages and executed in users' browsers.\n\n**Types of XSS:**\n\n**1. Stored XSS (Persistent):**\n\n// Vulnerable code\napp.post('/comment', (req, res) => {\nconst comment = req.body.comment; // User input\n// Directly storing without sanitization\ndb.comments.insert({ text: comment });\nres.redirect('/comments');\n});\n\n// Safe code\nconst DOMPurify = require('dompurify');\nconst { JSDOM } = require('jsdom');\n\napp.post('/comment', (req, res) => {\nconst comment = req.body.comment;\n// Sanitize HTML\nconst cleanComment = DOMPurify.sanitize(comment);\ndb.comments.insert({ text: cleanComment });\nres.redirect('/comments');\n});\n\n**2. Reflected XSS (Non-Persistent):**\n\n// Vulnerable code\napp.get('/search', (req, res) => {\nconst query = req.query.q;\nres.send(`<h1>Search results for: ${query}</h1>`);\n});\n\n// Safe code\napp.get('/search', (req, res) => {\nconst query = req.query.q;\n// Escape HTML characters\nconst escapedQuery = query.replace(/[&<>\"']/g, match => {\nconst escapeMap = {\n'&': '&amp;',\n'<': '&lt;',\n'>': '&gt;',\n'\"': '&quot;',\n\"'\": '&#x27;',\n};\nreturn escapeMap[match];\n});\nres.send(`<h1>Search results for: ${escapedQuery}</h1>`);\n});\n\n**3. DOM-based XSS:**\n\n// Vulnerable code\nfunction displayUser() {\nconst username = new URLSearchParams(window.location.search).get('user');\ndocument.getElementById('welcome').innerHTML = `Welcome ${username}!`;\n}\n\n// Safe code\nfunction displayUser() {\nconst username = new URLSearchParams(window.location.search).get('user');\n// Use textContent instead of innerHTML\ndocument.getElementById('welcome').textContent = `Welcome ${username}!`;\n\n// Or sanitize if HTML is needed\nconst sanitizedUsername = DOMPurify.sanitize(username);\ndocument.getElementById('welcome').innerHTML =\n`Welcome ${sanitizedUsername}!`;\n}\n\n**Prevention Strategies:**\n\n// Content Security Policy (CSP)\napp.use((req, res, next) => {\nres.setHeader(\n'Content-Security-Policy',\n\"default-src 'self'; \" +\n\"script-src 'self' 'unsafe-inline'; \" +\n\"style-src 'self' 'unsafe-inline'; \" +\n\"img-src 'self' data: https:;\"\n);\nnext();\n});\n\n// Input validation\nconst Joi = require('joi');\n\nconst userSchema = Joi.object({\nname: Joi.string().alphanum().min(3).max(30).required(),\nemail: Joi.string().email().required(),\nage: Joi.number().integer().min(0).max(120),\n});\n\napp.post('/user', (req, res) => {\nconst { error, value } = userSchema.validate(req.body);\nif (error) {\nreturn res.status(400).json({ error: error.details[0].message });\n}\n// Process validated data\n});",
+      "difficulty": "intermediate",
+      "topics": [
+        "XSS",
+        "CSRF",
+        "Authentication",
+        "Authorization"
+      ],
+      "title": "Cross-Site Scripting (XSS)",
+      "category": "Security",
+      "source": "QuestionsBank",
+      "createdAt": "2025-09-30T00:21:44.036Z",
+      "importedAt": "2025-09-30T00:21:43.988Z",
+      "correctAnswer": null,
+      "isActive": true
+    }
+  ]
+}
