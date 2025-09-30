@@ -78,7 +78,10 @@
     "pre-commit:full": "cp .husky/pre-commit-full .husky/pre-commit && echo '✅ Switched to FULL pre-commit checks'",
     "pre-commit:e2e": "cp .husky/pre-commit-e2e .husky/pre-commit && echo '✅ Switched to E2E pre-commit checks with auto-resolution'",
     "cleanup": "bash scripts/cleanup-build.sh",
-    "cleanup:deep": "bash scripts/cleanup-build.sh --deep"
+    "cleanup:deep": "bash scripts/cleanup-build.sh --deep",
+    "cleanup:project": "node scripts/cleanup-project.js",
+    "health-check": "node scripts/project-health-check.js",
+    "maintenance": "npm run cleanup:project && npm run health-check"
   },
   "dependencies": {
     "@daily-co/daily-js": "^0.84.0",
