@@ -284,14 +284,14 @@ export default function QuestionsManagementPage() {
 
   // Filter questions based on search and category
   const filteredQuestions = questions.filter(question => {
-    const matchesSearch =
+      const matchesSearch =
       !searchTerm ||
       question.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       question.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       question.question?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesCategory =
-      selectedCategory === 'all' || question.category === selectedCategory;
+      const matchesCategory =
+        selectedCategory === 'all' || question.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
@@ -318,24 +318,24 @@ export default function QuestionsManagementPage() {
   }
 
   if (error) {
-    return (
+  return (
       <div className="container mx-auto p-6">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
             {error}
-            <Button
-              variant="outline"
-              size="sm"
+          <Button
+            variant="outline"
+            size="sm"
               className="ml-2"
               onClick={() => loadQuestions()}
-            >
+          >
               <RefreshCw className="h-4 w-4 mr-1" />
               Retry
-            </Button>
+          </Button>
           </AlertDescription>
         </Alert>
-      </div>
+                </div>
     );
   }
 
@@ -347,7 +347,22 @@ export default function QuestionsManagementPage() {
           <RefreshCw className="h-4 w-4 mr-2" />
           Refresh
         </Button>
-      </div>
+              </div>
+
+      {/* Total Questions Card */}
+      <Card className="mb-6">
+            <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-blue-600">{totalCount}</h2>
+              <p className="text-sm text-gray-600">Total Questions</p>
+                </div>
+            <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <span className="text-blue-600 font-bold text-xl">Q</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
       {/* Filters */}
       <Card className="mb-6">
@@ -390,7 +405,7 @@ export default function QuestionsManagementPage() {
       {/* Questions List */}
       <div className="space-y-4">
         {filteredQuestions.length === 0 ? (
-          <Card>
+      <Card>
             <CardContent className="text-center py-8">
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 No questions found
@@ -410,18 +425,25 @@ export default function QuestionsManagementPage() {
               </Button>
             </CardContent>
           </Card>
-        ) : (
-          filteredQuestions.map(question => (
+          ) : (
+          filteredQuestions.map((question, index) => (
             <Card
-              key={question.id}
+                  key={question.id}
               className="hover:shadow-md transition-shadow"
-            >
+                >
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold mb-2">
-                      {question.title || 'Untitled Question'}
-                    </h3>
+                    <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span className="text-blue-600 font-semibold text-sm">
+                          {(currentPage - 1) * pageSize + index + 1}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-semibold">
+                        {question.title || 'Untitled Question'}
+                      </h3>
+                    </div>
                     <p className="text-gray-600 mb-3 line-clamp-2">
                       {question.content ||
                         question.question ||
@@ -434,9 +456,9 @@ export default function QuestionsManagementPage() {
                       <Badge variant="outline">
                         {question.difficulty || 'Unknown'}
                       </Badge>
-                      <Badge variant="outline">
+                        <Badge variant="outline">
                         {question.type || 'Unknown Type'}
-                      </Badge>
+                        </Badge>
                       {question.learningPath && (
                         <Badge
                           variant="outline"
@@ -466,7 +488,7 @@ export default function QuestionsManagementPage() {
                                     className="text-xs bg-green-50 text-green-700 border-green-200"
                                   >
                                     {topicName}
-                                  </Badge>
+                          </Badge>
                                 )
                               )}
                             </div>
@@ -487,41 +509,41 @@ export default function QuestionsManagementPage() {
                                   className="text-xs bg-purple-50 text-purple-700 border-purple-200"
                                 >
                                   #{tag}
-                                </Badge>
+                          </Badge>
                               ))}
                             </div>
                           </div>
                         )}
-                      </div>
-                    )}
-                  </div>
+                        </div>
+                      )}
+                    </div>
                   <div className="flex space-x-2 ml-4">
-                    <Button
-                      variant="outline"
-                      size="sm"
+                      <Button
+                        variant="outline"
+                        size="sm"
                       onClick={() => handlePreviewQuestion(question)}
                       title="Preview Question"
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEditQuestion(question)}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEditQuestion(question)}
                       title="Edit Question"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
                       onClick={() => deleteQuestion(question.id)}
                       title="Delete Question"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
               </CardContent>
             </Card>
           ))
@@ -611,8 +633,8 @@ export default function QuestionsManagementPage() {
                 </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
       )}
 
       {/* Edit Modal */}
