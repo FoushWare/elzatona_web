@@ -2,13 +2,17 @@
 // v2.0 - Enhanced topic management
 
 import { NextRequest, NextResponse } from 'next/server';
-import { EnhancedQuestionService, Topic } from '@/lib/enhanced-question-schema';
+import { db, collection, getDocs, addDoc } from '@/lib/firebase-server';
 
 // GET /api/topics - Get all topics
 export async function GET() {
   try {
     console.log('🔄 API: Fetching topics...');
-    const topics = await EnhancedQuestionService.getTopics();
+    const snapshot = await getDocs(collection(db, 'topics'));
+    const topics = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
     console.log('📊 API: Topics fetched:', topics.length, 'topics');
     console.log('📊 API: Topics data:', topics);
 
@@ -51,7 +55,13 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('✅ API: All required fields present, creating topic...');
-    const topicId = await EnhancedQuestionService.createTopic(topicData);
+    const topicWithTimestamps = {
+      ...topicData,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const docRef = await addDoc(collection(db, 'topics'), topicWithTimestamps);
+    const topicId = docRef.id;
     console.log('✅ API: Topic created with ID:', topicId);
 
     return NextResponse.json({

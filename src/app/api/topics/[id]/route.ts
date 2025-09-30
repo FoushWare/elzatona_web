@@ -2,7 +2,7 @@
 // v1.0 - Handle individual topic operations (GET, PUT, DELETE)
 
 import { NextRequest, NextResponse } from 'next/server';
-import { EnhancedQuestionService } from '@/lib/enhanced-question-schema';
+import { db } from '@/lib/firebase-server';
 
 // GET /api/topics/[id] - Get a specific topic
 export async function GET(
