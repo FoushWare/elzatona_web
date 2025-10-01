@@ -4,6 +4,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, collection, getDocs, query, where, orderBy, limit, startAfter, addDoc, updateDoc, deleteDoc, doc } from '@/lib/firebase-server';
 
+// Simple in-memory cache for questions (resets on server restart)
+let questionsCache: any[] | null = null;
+let cacheTimestamp: number = 0;
+const CACHE_DURATION = 30000; // 30 seconds
+
 // GET /api/questions/unified - Get questions with filters
 export async function GET(request: NextRequest) {
   try {
@@ -52,38 +57,48 @@ export async function GET(request: NextRequest) {
       Object.entries(filters).filter(([, value]) => value !== undefined)
     );
 
-    // Get questions from Firestore
-    let q = query(collection(db, 'unifiedQuestions'));
+    // Check cache first
+    const now = Date.now();
+    let allQuestions: any[];
     
-    // Apply filters
-    if (cleanFilters.category) {
-      q = query(q, where('category', '==', cleanFilters.category));
+    if (questionsCache && (now - cacheTimestamp) < CACHE_DURATION) {
+      // Use cached data
+      allQuestions = questionsCache;
+      console.log('📦 Using cached questions:', allQuestions.length);
+    } else {
+      // Fetch from Firestore
+      let q = query(collection(db, 'unifiedQuestions'));
+      
+      // Apply filters
+      if (cleanFilters.category) {
+        q = query(q, where('category', '==', cleanFilters.category));
+      }
+      if (cleanFilters.difficulty) {
+        q = query(q, where('difficulty', '==', cleanFilters.difficulty));
+      }
+      
+      // Order by createdAt descending
+      q = query(q, orderBy('createdAt', 'desc'));
+      
+      // For small datasets, get all and paginate in memory (more efficient)
+      const allSnapshot = await getDocs(q);
+      allQuestions = allSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      // Update cache
+      questionsCache = allQuestions;
+      cacheTimestamp = now;
+      console.log('🔄 Fetched fresh questions from Firestore:', allQuestions.length);
     }
-    if (cleanFilters.difficulty) {
-      q = query(q, where('difficulty', '==', cleanFilters.difficulty));
-    }
     
-    // Order by createdAt descending
-    q = query(q, orderBy('createdAt', 'desc'));
+    const totalCount = allQuestions.length;
     
-    // Get total count
-    const totalSnapshot = await getDocs(q);
-    const totalCount = totalSnapshot.size;
-    
-    // Apply pagination
-    if (offset > 0) {
-      const offsetSnapshot = await getDocs(query(q, limit(offset)));
-      const lastDoc = offsetSnapshot.docs[offsetSnapshot.docs.length - 1];
-      q = query(q, startAfter(lastDoc));
-    }
-    
-    q = query(q, limit(pageSize));
-    
-    const snapshot = await getDocs(q);
-    const questions = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    // Apply pagination in memory
+    const startIndex = offset;
+    const endIndex = startIndex + pageSize;
+    const questions = allQuestions.slice(startIndex, endIndex);
 
     const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -144,6 +159,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Invalidate cache after creating questions
+    questionsCache = null;
+
     return NextResponse.json({
       success: true,
       data: results,
@@ -183,6 +201,9 @@ export async function PUT(request: NextRequest) {
 
     await updateDoc(doc(db, 'unifiedQuestions', id), updateWithTimestamps);
 
+    // Invalidate cache after updating question
+    questionsCache = null;
+
     return NextResponse.json({
       success: true,
       message: 'Question updated successfully',
@@ -214,6 +235,9 @@ export async function DELETE(request: NextRequest) {
     }
 
     await deleteDoc(doc(db, 'unifiedQuestions', id));
+
+    // Invalidate cache after deleting question
+    questionsCache = null;
 
     return NextResponse.json({
       success: true,
