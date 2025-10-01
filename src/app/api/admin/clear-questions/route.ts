@@ -43,18 +43,23 @@ export async function DELETE(request: NextRequest) {
         );
 
         // Use batch operations for better performance
+        if (!db) {
+          throw new Error('Firebase not initialized');
+        }
         const batch = writeBatch(db);
         let batchCount = 0;
         const batchSize = 500; // Firestore batch limit
 
         snapshot.forEach(docSnapshot => {
-          batch.delete(doc(db, collectionName, docSnapshot.id));
-          batchCount++;
+          if (db) {
+            batch.delete(doc(db, collectionName, docSnapshot.id));
+            batchCount++;
 
-          // Commit batch when it reaches the limit
-          if (batchCount >= batchSize) {
-            batch.commit();
-            batchCount = 0;
+            // Commit batch when it reaches the limit
+            if (batchCount >= batchSize) {
+              batch.commit();
+              batchCount = 0;
+            }
           }
         });
 
