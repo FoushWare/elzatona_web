@@ -13,7 +13,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: 'Path ID is required'
+          error: 'Path ID is required',
         },
         { status: 400 }
       );
@@ -25,24 +25,28 @@ export async function GET(
 
     // Fetch sectors for the specific learning path
     const sectorsRef = collection(db, 'sectors');
-    const q = query(sectorsRef, where('pathId', '==', pathId), orderBy('order'));
+    const q = query(
+      sectorsRef,
+      where('pathId', '==', pathId),
+      orderBy('order')
+    );
     const snapshot = await getDocs(q);
-    
+
     const sectors = snapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
 
     return NextResponse.json({
       success: true,
-      data: sectors
+      data: sectors,
     });
   } catch (error) {
     console.error('Error fetching sectors:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch sectors'
+        error: 'Failed to fetch sectors',
       },
       { status: 500 }
     );

@@ -236,7 +236,3 @@ export const SignInGuidance: React.FC<SignInGuidanceProps> = ({
     </div>
   );
 };
-
-
-
-

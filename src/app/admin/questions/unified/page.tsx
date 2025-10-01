@@ -12,10 +12,8 @@ export const metadata: Metadata = {
 
 export default function UnifiedQuestionsPage() {
   return (
-    
-      <div className="container mx-auto py-6">
-        <UnifiedQuestionManager />
-      </div>
-    
+    <div className="container mx-auto py-6">
+      <UnifiedQuestionManager />
+    </div>
   );
 }

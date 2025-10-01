@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Challenge } from "@/types/challenge";
+import { Challenge } from '@/types/challenge';
 
 interface ChallengeCardProps {
   challenge: Challenge;
@@ -13,47 +13,44 @@ export default function ChallengeCard({
 }: ChallengeCardProps) {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "easy":
-        return "badge-success";
-      case "medium":
-        return "badge-warning";
-      case "hard":
-        return "badge-destructive";
+      case 'easy':
+        return 'badge-success';
+      case 'medium':
+        return 'badge-warning';
+      case 'hard':
+        return 'badge-destructive';
       default:
-        return "badge-secondary";
+        return 'badge-secondary';
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "html":
-        return "bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-300";
-      case "css":
-        return "bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300";
-      case "javascript":
-        return "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300";
+      case 'html':
+        return 'bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-300';
+      case 'css':
+        return 'bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300';
+      case 'javascript':
+        return 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300';
       default:
-        return "badge-secondary";
+        return 'badge-secondary';
     }
   };
 
   return (
-    <div
-      className="card cursor-pointer transition-smooth"
-      onClick={onClick}
-    >
+    <div className="card cursor-pointer transition-smooth" onClick={onClick}>
       <div className="p-6">
         <div className="flex items-start justify-between mb-4">
           <h3 className="text-lg font-semibold text-card-foreground mb-2 leading-tight">
             {challenge.title}
           </h3>
           <div className="flex gap-2">
-            <span className={`badge ${getDifficultyColor(challenge.difficulty)}`}>
+            <span
+              className={`badge ${getDifficultyColor(challenge.difficulty)}`}
+            >
               {challenge.difficulty}
             </span>
-            <span
-              className={`badge ${getCategoryColor(challenge.category)}`}
-            >
+            <span className={`badge ${getCategoryColor(challenge.category)}`}>
               {challenge.category.toUpperCase()}
             </span>
           </div>

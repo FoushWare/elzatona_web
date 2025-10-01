@@ -64,7 +64,7 @@ class FirestoreService {
     return firestoreConnectionManager.executeWithRetry(async () => {
       const userRef = doc(db, 'users', uid);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         return userSnap.data() as FirestoreUser;
       }
@@ -72,7 +72,10 @@ class FirestoreService {
     });
   }
 
-  async updateUser(uid: string, updates: Partial<FirestoreUser>): Promise<void> {
+  async updateUser(
+    uid: string,
+    updates: Partial<FirestoreUser>
+  ): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid);
       await updateDoc(userRef, {
@@ -98,11 +101,14 @@ class FirestoreService {
   }
 
   // User Preferences
-  async updateUserPreferences(uid: string, preferences: Partial<UserPreferences>): Promise<void> {
+  async updateUserPreferences(
+    uid: string,
+    preferences: Partial<UserPreferences>
+  ): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid);
       await updateDoc(userRef, {
-        'preferences': preferences,
+        preferences: preferences,
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
@@ -126,7 +132,7 @@ class FirestoreService {
   ): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid);
-      
+
       // Update overall progress
       await updateDoc(userRef, {
         'progress.totalQuestions': increment(1),
@@ -137,9 +143,15 @@ class FirestoreService {
       });
 
       // Update section progress
-      const sectionProgressRef = doc(db, 'users', uid, 'sectionProgress', questionData.section);
+      const sectionProgressRef = doc(
+        db,
+        'users',
+        uid,
+        'sectionProgress',
+        questionData.section
+      );
       const sectionSnap = await getDoc(sectionProgressRef);
-      
+
       if (sectionSnap.exists()) {
         await updateDoc(sectionProgressRef, {
           totalQuestions: increment(1),
@@ -176,16 +188,24 @@ class FirestoreService {
       // Update weekly and monthly progress
       await this.updateWeeklyProgress(uid, questionData);
       await this.updateMonthlyProgress(uid, questionData);
-
     } catch (error) {
       console.error('Error saving question progress:', error);
       throw error;
     }
   }
 
-  async saveLearningSession(uid: string, session: LearningSession): Promise<void> {
+  async saveLearningSession(
+    uid: string,
+    session: LearningSession
+  ): Promise<void> {
     try {
-      const sessionRef = doc(db, 'users', uid, 'learningSessions', session.sessionId);
+      const sessionRef = doc(
+        db,
+        'users',
+        uid,
+        'learningSessions',
+        session.sessionId
+      );
       await setDoc(sessionRef, {
         ...session,
         createdAt: serverTimestamp(),
@@ -196,15 +216,18 @@ class FirestoreService {
     }
   }
 
-  async updateWeeklyProgress(uid: string, questionData: Record<string, unknown>): Promise<void> {
+  async updateWeeklyProgress(
+    uid: string,
+    questionData: Record<string, unknown>
+  ): Promise<void> {
     try {
       const now = new Date();
       const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
       const weekStartStr = weekStart.toISOString().split('T')[0];
-      
+
       const weeklyRef = doc(db, 'users', uid, 'weeklyProgress', weekStartStr);
       const weeklySnap = await getDoc(weeklyRef);
-      
+
       if (weeklySnap.exists()) {
         await updateDoc(weeklyRef, {
           questionsAnswered: increment(1),
@@ -214,7 +237,9 @@ class FirestoreService {
       } else {
         await setDoc(weeklyRef, {
           weekStart: weekStartStr,
-          weekEnd: new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          weekEnd: new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split('T')[0],
           questionsAnswered: 1,
           correctAnswers: questionData.isCorrect ? 1 : 0,
           timeSpent: questionData.timeSpent,
@@ -227,14 +252,17 @@ class FirestoreService {
     }
   }
 
-  async updateMonthlyProgress(uid: string, questionData: Record<string, unknown>): Promise<void> {
+  async updateMonthlyProgress(
+    uid: string,
+    questionData: Record<string, unknown>
+  ): Promise<void> {
     try {
       const now = new Date();
       const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-      
+
       const monthlyRef = doc(db, 'users', uid, 'monthlyProgress', monthStr);
       const monthlySnap = await getDoc(monthlyRef);
-      
+
       if (monthlySnap.exists()) {
         await updateDoc(monthlyRef, {
           questionsAnswered: increment(1),
@@ -258,7 +286,10 @@ class FirestoreService {
   }
 
   // Learning Plans
-  async startLearningPlan(uid: string, planData: LearningPlanProgress): Promise<void> {
+  async startLearningPlan(
+    uid: string,
+    planData: LearningPlanProgress
+  ): Promise<void> {
     try {
       const planRef = doc(db, 'users', uid, 'learningPlans', planData.planId);
       await setDoc(planRef, {
@@ -271,7 +302,11 @@ class FirestoreService {
     }
   }
 
-  async updateLearningPlan(uid: string, planId: string, updates: Partial<LearningPlanProgress>): Promise<void> {
+  async updateLearningPlan(
+    uid: string,
+    planId: string,
+    updates: Partial<LearningPlanProgress>
+  ): Promise<void> {
     try {
       const planRef = doc(db, 'users', uid, 'learningPlans', planId);
       await updateDoc(planRef, {
@@ -284,11 +319,14 @@ class FirestoreService {
     }
   }
 
-  async getLearningPlan(uid: string, planId: string): Promise<LearningPlanProgress | null> {
+  async getLearningPlan(
+    uid: string,
+    planId: string
+  ): Promise<LearningPlanProgress | null> {
     try {
       const planRef = doc(db, 'users', uid, 'learningPlans', planId);
       const planSnap = await getDoc(planRef);
-      
+
       if (planSnap.exists()) {
         return planSnap.data() as LearningPlanProgress;
       }
@@ -305,7 +343,15 @@ class FirestoreService {
       const userRef = doc(db, 'users', uid);
       await updateDoc(userRef, {
         'achievements.badges': arrayUnion(badge),
-        'achievements.totalPoints': increment(badge.rarity === 'legendary' ? 100 : badge.rarity === 'epic' ? 50 : badge.rarity === 'rare' ? 25 : 10),
+        'achievements.totalPoints': increment(
+          badge.rarity === 'legendary'
+            ? 100
+            : badge.rarity === 'epic'
+              ? 50
+              : badge.rarity === 'rare'
+                ? 25
+                : 10
+        ),
         updatedAt: serverTimestamp(),
       });
     } catch (error) {
@@ -314,7 +360,10 @@ class FirestoreService {
     }
   }
 
-  async addMilestone(uid: string, milestone: Record<string, unknown>): Promise<void> {
+  async addMilestone(
+    uid: string,
+    milestone: Record<string, unknown>
+  ): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid);
       await updateDoc(userRef, {
@@ -328,7 +377,10 @@ class FirestoreService {
   }
 
   // Analytics
-  async saveUserAnalytics(uid: string, analytics: UserAnalytics): Promise<void> {
+  async saveUserAnalytics(
+    uid: string,
+    analytics: UserAnalytics
+  ): Promise<void> {
     try {
       const analyticsRef = doc(db, 'userAnalytics', `${uid}_${analytics.date}`);
       await setDoc(analyticsRef, {
@@ -358,7 +410,9 @@ class FirestoreService {
   }
 
   // Learning Plan Templates (Admin)
-  async saveLearningPlanTemplate(planData: Record<string, unknown>): Promise<string> {
+  async saveLearningPlanTemplate(
+    planData: Record<string, unknown>
+  ): Promise<string> {
     try {
       const plansRef = collection(db, 'learningPlanTemplates');
       const docRef = await addDoc(plansRef, {
@@ -373,7 +427,10 @@ class FirestoreService {
     }
   }
 
-  async updateLearningPlanTemplate(planId: string, updates: Record<string, unknown>): Promise<void> {
+  async updateLearningPlanTemplate(
+    planId: string,
+    updates: Record<string, unknown>
+  ): Promise<void> {
     try {
       const planRef = doc(db, 'learningPlanTemplates', planId);
       await updateDoc(planRef, {
@@ -393,29 +450,45 @@ class FirestoreService {
     }
 
     try {
-      console.log('📋 FirestoreService: Getting all learning plan templates...');
-      console.log('📋 FirestoreService: Using project ID:', db.app.options.projectId);
+      console.log(
+        '📋 FirestoreService: Getting all learning plan templates...'
+      );
+      console.log(
+        '📋 FirestoreService: Using project ID:',
+        db.app.options.projectId
+      );
       const plansRef = collection(db, 'learningPlanTemplates');
       const q = query(plansRef, orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
-      
+
       const plans = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
       }));
-      
+
       console.log('📋 FirestoreService: Found', plans.length, 'plans');
-      console.log('📋 FirestoreService: Plan IDs:', plans.map(p => p.id));
-      
+      console.log(
+        '📋 FirestoreService: Plan IDs:',
+        plans.map(p => p.id)
+      );
+
       // Check specifically for api-integration
       const apiPlan = plans.find(p => p.id === 'api-integration');
       if (apiPlan) {
-        console.log('⚠️ FirestoreService: api-integration plan found in list:', apiPlan.name);
-        console.log('⚠️ FirestoreService: api-integration plan data:', JSON.stringify(apiPlan, null, 2));
+        console.log(
+          '⚠️ FirestoreService: api-integration plan found in list:',
+          apiPlan.name
+        );
+        console.log(
+          '⚠️ FirestoreService: api-integration plan data:',
+          JSON.stringify(apiPlan, null, 2)
+        );
       } else {
-        console.log('✅ FirestoreService: api-integration plan NOT found in list');
+        console.log(
+          '✅ FirestoreService: api-integration plan NOT found in list'
+        );
       }
-      
+
       return plans;
     } catch (error) {
       console.error('Error getting learning plan templates:', error);
@@ -433,7 +506,7 @@ class FirestoreService {
     try {
       const planRef = doc(db, 'learningPlanTemplates', planId);
       const planSnap = await getDoc(planRef);
-      
+
       if (planSnap.exists()) {
         return {
           id: planSnap.id,
@@ -452,24 +525,34 @@ class FirestoreService {
       console.log('🗑️ FirestoreService: Attempting to delete plan:', planId);
       const planRef = doc(db, 'learningPlanTemplates', planId);
       console.log('🗑️ FirestoreService: Plan reference created:', planRef.path);
-      
+
       // Check if document exists before deleting
       const docSnap = await getDoc(planRef);
       if (!docSnap.exists()) {
-        console.log('⚠️ FirestoreService: Document does not exist, but continuing with delete');
+        console.log(
+          '⚠️ FirestoreService: Document does not exist, but continuing with delete'
+        );
       } else {
-        console.log('✅ FirestoreService: Document exists, proceeding with delete');
+        console.log(
+          '✅ FirestoreService: Document exists, proceeding with delete'
+        );
       }
-      
+
       await deleteDoc(planRef);
       console.log('✅ FirestoreService: Successfully deleted plan:', planId);
     } catch (error) {
-      console.error('❌ FirestoreService: Error deleting learning plan template:', error);
+      console.error(
+        '❌ FirestoreService: Error deleting learning plan template:',
+        error
+      );
       throw error;
     }
   }
 
-  async getQuestionsBySection(section: string, limitCount: number = 10): Promise<FirestoreQuestion[]> {
+  async getQuestionsBySection(
+    section: string,
+    limitCount: number = 10
+  ): Promise<FirestoreQuestion[]> {
     try {
       const questionsRef = collection(db, 'questions');
       const q = query(
@@ -479,7 +562,7 @@ class FirestoreService {
         orderBy('usageCount', 'desc'),
         limit(limitCount)
       );
-      
+
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => doc.data() as FirestoreQuestion);
     } catch (error) {
@@ -492,7 +575,7 @@ class FirestoreService {
   async updateStreak(uid: string, isNewDay: boolean = false): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid);
-      
+
       if (isNewDay) {
         await updateDoc(userRef, {
           'progress.currentStreak': increment(1),
@@ -511,7 +594,7 @@ class FirestoreService {
     try {
       const userRef = doc(db, 'users', uid);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         const userData = userSnap.data() as FirestoreUser;
         return userData.progress;
@@ -533,7 +616,7 @@ class FirestoreService {
     try {
       const pathRef = doc(db, 'learningPaths', pathId);
       const pathSnap = await getDoc(pathRef);
-      
+
       if (pathSnap.exists()) {
         return {
           id: pathSnap.id,
@@ -559,7 +642,7 @@ class FirestoreService {
         ...data,
         updatedAt: serverTimestamp(),
       });
-      
+
       // Return updated data
       const updatedSnap = await getDoc(pathRef);
       if (updatedSnap.exists()) {
@@ -605,8 +688,12 @@ class FirestoreService {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-        updatedAt: doc.data().updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        createdAt:
+          doc.data().createdAt?.toDate?.()?.toISOString() ||
+          new Date().toISOString(),
+        updatedAt:
+          doc.data().updatedAt?.toDate?.()?.toISOString() ||
+          new Date().toISOString(),
       }));
     } catch (error) {
       console.error('Error getting sections:', error);
@@ -657,8 +744,12 @@ class FirestoreService {
         return {
           id: updatedSnap.id,
           ...updatedSnap.data(),
-          createdAt: updatedSnap.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-          updatedAt: updatedSnap.data().updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+          createdAt:
+            updatedSnap.data().createdAt?.toDate?.()?.toISOString() ||
+            new Date().toISOString(),
+          updatedAt:
+            updatedSnap.data().updatedAt?.toDate?.()?.toISOString() ||
+            new Date().toISOString(),
         };
       }
       return null;
@@ -696,8 +787,12 @@ class FirestoreService {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-        updatedAt: doc.data().updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        createdAt:
+          doc.data().createdAt?.toDate?.()?.toISOString() ||
+          new Date().toISOString(),
+        updatedAt:
+          doc.data().updatedAt?.toDate?.()?.toISOString() ||
+          new Date().toISOString(),
       }));
     } catch (error) {
       console.error('Error getting categories:', error);
@@ -748,8 +843,12 @@ class FirestoreService {
         return {
           id: updatedSnap.id,
           ...updatedSnap.data(),
-          createdAt: updatedSnap.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-          updatedAt: updatedSnap.data().updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+          createdAt:
+            updatedSnap.data().createdAt?.toDate?.()?.toISOString() ||
+            new Date().toISOString(),
+          updatedAt:
+            updatedSnap.data().updatedAt?.toDate?.()?.toISOString() ||
+            new Date().toISOString(),
         };
       }
       return null;

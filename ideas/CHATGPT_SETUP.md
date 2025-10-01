@@ -5,6 +5,7 @@ This guide explains how to set up the ChatGPT integration for the AI Learning As
 ## Features
 
 The AI Learning Assistant provides:
+
 - 🤖 Real-time ChatGPT-powered responses
 - 💬 Interactive chat interface on all pages
 - 🎯 Frontend development focused assistance
@@ -49,40 +50,46 @@ yarn dev
 ## How It Works
 
 ### Frontend Component
+
 - **Location**: `src/components/ChatGPT.tsx`
 - **Features**: Floating chat button, popup interface, message history
 - **Styling**: TailwindCSS with dark/light mode support
 
 ### API Route
+
 - **Location**: `src/app/api/chatgpt/route.ts`
 - **Function**: Handles communication with OpenAI API
 - **Security**: API key stored server-side only
 
 ### Configuration
+
 - **Location**: `src/lib/chatgpt-config.ts`
 - **Customization**: System prompts, error messages, suggested questions
 
 ## Customization Options
 
 ### System Prompt
+
 Edit the system prompt in `src/lib/chatgpt-config.ts` to change the AI's behavior:
 
 ```typescript
-SYSTEM_PROMPT: `You are an expert frontend development tutor...`
+SYSTEM_PROMPT: `You are an expert frontend development tutor...`;
 ```
 
 ### Suggested Questions
+
 Modify the suggested questions for new users:
 
 ```typescript
 SUGGESTED_QUESTIONS: [
-  "What are the key differences between HTML4 and HTML5?",
-  "How do I center a div both horizontally and vertically?",
+  'What are the key differences between HTML4 and HTML5?',
+  'How do I center a div both horizontally and vertically?',
   // Add your own questions here
-]
+];
 ```
 
 ### API Settings
+
 Adjust model parameters:
 
 ```typescript
@@ -101,16 +108,19 @@ TEMPERATURE: 0.5,         // More focused responses
 ## Troubleshooting
 
 ### API Key Issues
+
 - Ensure `OPENAI_API_KEY` is set in `.env.local`
 - Check that the API key is valid and has sufficient credits
 - Verify the key has access to the specified model
 
 ### Rate Limiting
+
 - OpenAI has rate limits for API calls
 - Consider implementing caching for common questions
 - Monitor your API usage in the OpenAI dashboard
 
 ### Network Issues
+
 - Check your internet connection
 - Verify the API endpoint is accessible
 - Check browser console for error messages
@@ -135,6 +145,7 @@ For production deployment:
 ## Support
 
 If you encounter issues:
+
 1. Check the browser console for errors
 2. Verify your API key configuration
 3. Test the API endpoint directly

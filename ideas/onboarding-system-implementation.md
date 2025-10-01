@@ -305,7 +305,3 @@ interface OnboardingContextType {
 **User Benefit**: New users can discover and understand all features without confusion! 🎯✨
 
 The onboarding system provides a professional, accessible, and privacy-first introduction to the platform that enhances user discovery and engagement! 🚀📱💻
-
-
-
-

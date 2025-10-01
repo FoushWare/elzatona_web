@@ -177,7 +177,3 @@ const Navbar = () => {
 ```
 
 This platform-based approach handles all mobile browser quirks automatically.
-
-
-
-

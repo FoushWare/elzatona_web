@@ -3,18 +3,34 @@
  * Tests the complete flow of questions, sections, and guided learning integration
  */
 
-const { describe, test, expect, beforeAll, afterAll, beforeEach } = require('@jest/globals');
+const {
+  describe,
+  test,
+  expect,
+  beforeAll,
+  afterAll,
+  beforeEach,
+} = require('@jest/globals');
 const { initializeApp } = require('firebase/app');
-const { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } = require('firebase/firestore');
+const {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  doc,
+} = require('firebase/firestore');
 
 // Mock Firebase configuration for testing
 const firebaseConfig = {
-  apiKey: "test-api-key",
-  authDomain: "test-project.firebaseapp.com",
-  projectId: "test-project",
-  storageBucket: "test-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "test-app-id"
+  apiKey: 'test-api-key',
+  authDomain: 'test-project.firebaseapp.com',
+  projectId: 'test-project',
+  storageBucket: 'test-project.appspot.com',
+  messagingSenderId: '123456789',
+  appId: 'test-app-id',
 };
 
 let app;
@@ -24,81 +40,83 @@ let db;
 const testData = {
   questions: [
     {
-      title: "JavaScript Fundamentals Test Question",
-      content: "What is the output of console.log(typeof null)?",
-      type: "single",
-      difficulty: "medium",
-      category: "JavaScript",
-      subcategory: "Fundamentals",
-      learningPath: "frontend",
-      sectionId: "javascript-fundamentals",
-      tags: ["javascript", "fundamentals"],
-      options: ["object", "null", "undefined", "string"],
-      correctAnswers: ["object"],
-      explanation: "typeof null returns 'object' due to a historical bug in JavaScript.",
+      title: 'JavaScript Fundamentals Test Question',
+      content: 'What is the output of console.log(typeof null)?',
+      type: 'single',
+      difficulty: 'medium',
+      category: 'JavaScript',
+      subcategory: 'Fundamentals',
+      learningPath: 'frontend',
+      sectionId: 'javascript-fundamentals',
+      tags: ['javascript', 'fundamentals'],
+      options: ['object', 'null', 'undefined', 'string'],
+      correctAnswers: ['object'],
+      explanation:
+        "typeof null returns 'object' due to a historical bug in JavaScript.",
       points: 1,
       timeLimit: 60,
       isActive: true,
       isComplete: true,
-      createdBy: "test-admin",
-      lastModifiedBy: "test-admin"
+      createdBy: 'test-admin',
+      lastModifiedBy: 'test-admin',
     },
     {
-      title: "React Hooks Test Question",
-      content: "Which hook is used for side effects in React?",
-      type: "single",
-      difficulty: "easy",
-      category: "React",
-      subcategory: "Hooks",
-      learningPath: "frontend",
-      sectionId: "react-fundamentals",
-      tags: ["react", "hooks"],
-      options: ["useState", "useEffect", "useContext", "All of the above"],
-      correctAnswers: ["useEffect"],
-      explanation: "useEffect is specifically designed for side effects in React components.",
+      title: 'React Hooks Test Question',
+      content: 'Which hook is used for side effects in React?',
+      type: 'single',
+      difficulty: 'easy',
+      category: 'React',
+      subcategory: 'Hooks',
+      learningPath: 'frontend',
+      sectionId: 'react-fundamentals',
+      tags: ['react', 'hooks'],
+      options: ['useState', 'useEffect', 'useContext', 'All of the above'],
+      correctAnswers: ['useEffect'],
+      explanation:
+        'useEffect is specifically designed for side effects in React components.',
       points: 1,
       timeLimit: 45,
       isActive: true,
       isComplete: true,
-      createdBy: "test-admin",
-      lastModifiedBy: "test-admin"
-    }
+      createdBy: 'test-admin',
+      lastModifiedBy: 'test-admin',
+    },
   ],
   sections: [
     {
-      title: "JavaScript Fundamentals",
-      description: "Core JavaScript concepts and fundamentals",
-      category: "JavaScript",
-      learningPathId: "frontend",
+      title: 'JavaScript Fundamentals',
+      description: 'Core JavaScript concepts and fundamentals',
+      category: 'JavaScript',
+      learningPathId: 'frontend',
       order: 1,
       weight: 25,
       isActive: true,
-      questions: []
+      questions: [],
     },
     {
-      title: "React Fundamentals",
-      description: "React basics and component lifecycle",
-      category: "React",
-      learningPathId: "frontend",
+      title: 'React Fundamentals',
+      description: 'React basics and component lifecycle',
+      category: 'React',
+      learningPathId: 'frontend',
       order: 2,
       weight: 25,
       isActive: true,
-      questions: []
-    }
+      questions: [],
+    },
   ],
   learningPlans: [
     {
-      title: "1-Day Frontend Quick Start",
-      description: "Quick start guide for frontend development",
-      difficulty: "beginner",
+      title: '1-Day Frontend Quick Start',
+      description: 'Quick start guide for frontend development',
+      difficulty: 'beginner',
       totalQuestions: 0,
       dailyQuestions: 0,
       sections: [],
       isActive: true,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }
-  ]
+      updatedAt: new Date().toISOString(),
+    },
+  ],
 };
 
 describe('Auto-linking System Integration Tests', () => {
@@ -106,7 +124,7 @@ describe('Auto-linking System Integration Tests', () => {
     // Initialize Firebase for testing
     app = initializeApp(firebaseConfig);
     db = getFirestore(app);
-    
+
     // Clean up any existing test data
     await cleanupTestData();
   });
@@ -124,20 +142,23 @@ describe('Auto-linking System Integration Tests', () => {
   describe('Question Creation and Auto-linking', () => {
     test('should create question and auto-link to matching section', async () => {
       // Create a section first
-      const sectionRef = await addDoc(collection(db, 'sections'), testData.sections[0]);
+      const sectionRef = await addDoc(
+        collection(db, 'sections'),
+        testData.sections[0]
+      );
       const sectionId = sectionRef.id;
 
       // Create a question that should match the section
       const questionData = {
         ...testData.questions[0],
-        category: "JavaScript",
-        learningPath: "frontend"
+        category: 'JavaScript',
+        learningPath: 'frontend',
       };
 
       const questionRef = await addDoc(collection(db, 'unifiedQuestions'), {
         ...questionData,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
 
       // Simulate auto-linking process
@@ -149,26 +170,34 @@ describe('Auto-linking System Integration Tests', () => {
       );
 
       const sectionsSnapshot = await getDocs(sectionsQuery);
-      const sections = sectionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const sections = sectionsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       // Verify section was found
       expect(sections).toHaveLength(1);
-      expect(sections[0].title).toBe("JavaScript Fundamentals");
+      expect(sections[0].title).toBe('JavaScript Fundamentals');
 
       // Verify auto-linking would work
       const sectionData = sections[0];
-      const updatedQuestions = [...(sectionData.questions || []), questionRef.id];
-      
+      const updatedQuestions = [
+        ...(sectionData.questions || []),
+        questionRef.id,
+      ];
+
       // Update section with question ID
       await updateDoc(doc(db, 'sections', sectionId), {
         questions: updatedQuestions,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
 
       // Verify the question was added to the section
-      const updatedSectionSnapshot = await getDoc(doc(db, 'sections', sectionId));
+      const updatedSectionSnapshot = await getDoc(
+        doc(db, 'sections', sectionId)
+      );
       const updatedSection = updatedSectionSnapshot.data();
-      
+
       expect(updatedSection.questions).toContain(questionRef.id);
       expect(updatedSection.questions).toHaveLength(1);
     });
@@ -177,20 +206,20 @@ describe('Auto-linking System Integration Tests', () => {
       // Create a section with different category
       const sectionRef = await addDoc(collection(db, 'sections'), {
         ...testData.sections[0],
-        category: "Python" // Different from question category
+        category: 'Python', // Different from question category
       });
 
       // Create a JavaScript question
       const questionData = {
         ...testData.questions[0],
-        category: "JavaScript",
-        learningPath: "frontend"
+        category: 'JavaScript',
+        learningPath: 'frontend',
       };
 
       const questionRef = await addDoc(collection(db, 'unifiedQuestions'), {
         ...questionData,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
 
       // Query for matching sections
@@ -202,7 +231,10 @@ describe('Auto-linking System Integration Tests', () => {
       );
 
       const sectionsSnapshot = await getDocs(sectionsQuery);
-      const sections = sectionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const sections = sectionsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       // Verify no matching sections found
       expect(sections).toHaveLength(0);
@@ -212,39 +244,50 @@ describe('Auto-linking System Integration Tests', () => {
   describe('Section Management and Question Filtering', () => {
     test('should filter questions by section category and learning path', async () => {
       // Create sections
-      const jsSectionRef = await addDoc(collection(db, 'sections'), testData.sections[0]);
-      const reactSectionRef = await addDoc(collection(db, 'sections'), testData.sections[1]);
+      const jsSectionRef = await addDoc(
+        collection(db, 'sections'),
+        testData.sections[0]
+      );
+      const reactSectionRef = await addDoc(
+        collection(db, 'sections'),
+        testData.sections[1]
+      );
 
       // Create questions
       const jsQuestionRef = await addDoc(collection(db, 'unifiedQuestions'), {
         ...testData.questions[0],
-        category: "JavaScript",
-        learningPath: "frontend",
+        category: 'JavaScript',
+        learningPath: 'frontend',
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
 
-      const reactQuestionRef = await addDoc(collection(db, 'unifiedQuestions'), {
-        ...testData.questions[1],
-        category: "React",
-        learningPath: "frontend",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      });
+      const reactQuestionRef = await addDoc(
+        collection(db, 'unifiedQuestions'),
+        {
+          ...testData.questions[1],
+          category: 'React',
+          learningPath: 'frontend',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }
+      );
 
       // Add questions to their respective sections
       await updateDoc(doc(db, 'sections', jsSectionRef.id), {
         questions: [jsQuestionRef.id],
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
 
       await updateDoc(doc(db, 'sections', reactSectionRef.id), {
         questions: [reactQuestionRef.id],
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
 
       // Test filtering for JavaScript section
-      const jsSectionSnapshot = await getDoc(doc(db, 'sections', jsSectionRef.id));
+      const jsSectionSnapshot = await getDoc(
+        doc(db, 'sections', jsSectionRef.id)
+      );
       const jsSection = jsSectionSnapshot.data();
       const jsQuestionIds = jsSection.questions || [];
 
@@ -254,13 +297,18 @@ describe('Auto-linking System Integration Tests', () => {
       );
 
       const jsQuestionsSnapshot = await getDocs(jsQuestionsQuery);
-      const jsQuestions = jsQuestionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const jsQuestions = jsQuestionsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       expect(jsQuestions).toHaveLength(1);
-      expect(jsQuestions[0].category).toBe("JavaScript");
+      expect(jsQuestions[0].category).toBe('JavaScript');
 
       // Test filtering for React section
-      const reactSectionSnapshot = await getDoc(doc(db, 'sections', reactSectionRef.id));
+      const reactSectionSnapshot = await getDoc(
+        doc(db, 'sections', reactSectionRef.id)
+      );
       const reactSection = reactSectionSnapshot.data();
       const reactQuestionIds = reactSection.questions || [];
 
@@ -270,10 +318,13 @@ describe('Auto-linking System Integration Tests', () => {
       );
 
       const reactQuestionsSnapshot = await getDocs(reactQuestionsQuery);
-      const reactQuestions = reactQuestionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const reactQuestions = reactQuestionsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       expect(reactQuestions).toHaveLength(1);
-      expect(reactQuestions[0].category).toBe("React");
+      expect(reactQuestions[0].category).toBe('React');
     });
   });
 
@@ -282,40 +333,43 @@ describe('Auto-linking System Integration Tests', () => {
       // Create sections with questions
       const jsSectionRef = await addDoc(collection(db, 'sections'), {
         ...testData.sections[0],
-        questions: []
+        questions: [],
       });
 
       const reactSectionRef = await addDoc(collection(db, 'sections'), {
         ...testData.sections[1],
-        questions: []
+        questions: [],
       });
 
       // Create questions and add to sections
       const jsQuestionRef = await addDoc(collection(db, 'unifiedQuestions'), {
         ...testData.questions[0],
-        category: "JavaScript",
-        learningPath: "frontend",
+        category: 'JavaScript',
+        learningPath: 'frontend',
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
 
-      const reactQuestionRef = await addDoc(collection(db, 'unifiedQuestions'), {
-        ...testData.questions[1],
-        category: "React",
-        learningPath: "frontend",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      });
+      const reactQuestionRef = await addDoc(
+        collection(db, 'unifiedQuestions'),
+        {
+          ...testData.questions[1],
+          category: 'React',
+          learningPath: 'frontend',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }
+      );
 
       // Update sections with questions
       await updateDoc(doc(db, 'sections', jsSectionRef.id), {
         questions: [jsQuestionRef.id],
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
 
       await updateDoc(doc(db, 'sections', reactSectionRef.id), {
         questions: [reactQuestionRef.id],
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       });
 
       // Create guided learning plan
@@ -325,23 +379,23 @@ describe('Auto-linking System Integration Tests', () => {
           {
             sectionId: jsSectionRef.id,
             order: 1,
-            weight: 50
+            weight: 50,
           },
           {
             sectionId: reactSectionRef.id,
             order: 2,
-            weight: 50
-          }
+            weight: 50,
+          },
         ],
         totalQuestions: 2,
-        dailyQuestions: 2
+        dailyQuestions: 2,
       });
 
       // Verify plan was created
       const planSnapshot = await getDoc(doc(db, 'learningPlans', planRef.id));
       const plan = planSnapshot.data();
 
-      expect(plan.title).toBe("1-Day Frontend Quick Start");
+      expect(plan.title).toBe('1-Day Frontend Quick Start');
       expect(plan.sections).toHaveLength(2);
       expect(plan.totalQuestions).toBe(2);
       expect(plan.dailyQuestions).toBe(2);
@@ -351,15 +405,15 @@ describe('Auto-linking System Integration Tests', () => {
       // Create sections with different categories and learning paths
       const jsSectionRef = await addDoc(collection(db, 'sections'), {
         ...testData.sections[0],
-        category: "JavaScript",
-        learningPathId: "frontend"
+        category: 'JavaScript',
+        learningPathId: 'frontend',
       });
 
       const pythonSectionRef = await addDoc(collection(db, 'sections'), {
         ...testData.sections[1],
-        title: "Python Fundamentals",
-        category: "Python",
-        learningPathId: "backend"
+        title: 'Python Fundamentals',
+        category: 'Python',
+        learningPathId: 'backend',
       });
 
       // Test filtering by category
@@ -370,10 +424,13 @@ describe('Auto-linking System Integration Tests', () => {
       );
 
       const frontendSectionsSnapshot = await getDocs(frontendSectionsQuery);
-      const frontendSections = frontendSectionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const frontendSections = frontendSectionsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       expect(frontendSections).toHaveLength(1);
-      expect(frontendSections[0].category).toBe("JavaScript");
+      expect(frontendSections[0].category).toBe('JavaScript');
 
       // Test filtering by learning path
       const frontendPathQuery = query(
@@ -383,40 +440,46 @@ describe('Auto-linking System Integration Tests', () => {
       );
 
       const frontendPathSnapshot = await getDocs(frontendPathQuery);
-      const frontendPathSections = frontendPathSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const frontendPathSections = frontendPathSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       expect(frontendPathSections).toHaveLength(1);
-      expect(frontendPathSections[0].learningPathId).toBe("frontend");
+      expect(frontendPathSections[0].learningPathId).toBe('frontend');
     });
   });
 
   describe('Bulk Question Import and Auto-linking', () => {
     test('should auto-link multiple questions from bulk import', async () => {
       // Create section
-      const sectionRef = await addDoc(collection(db, 'sections'), testData.sections[0]);
+      const sectionRef = await addDoc(
+        collection(db, 'sections'),
+        testData.sections[0]
+      );
       const sectionId = sectionRef.id;
 
       // Simulate bulk import of questions
       const bulkQuestions = [
         {
           ...testData.questions[0],
-          title: "JS Question 1",
-          category: "JavaScript",
-          learningPath: "frontend"
+          title: 'JS Question 1',
+          category: 'JavaScript',
+          learningPath: 'frontend',
         },
         {
           ...testData.questions[0],
-          title: "JS Question 2",
-          content: "What is hoisting in JavaScript?",
-          category: "JavaScript",
-          learningPath: "frontend"
+          title: 'JS Question 2',
+          content: 'What is hoisting in JavaScript?',
+          category: 'JavaScript',
+          learningPath: 'frontend',
         },
         {
           ...testData.questions[1],
-          title: "React Question 1",
-          category: "React",
-          learningPath: "frontend"
-        }
+          title: 'React Question 1',
+          category: 'React',
+          learningPath: 'frontend',
+        },
       ];
 
       const createdQuestionIds = [];
@@ -426,20 +489,23 @@ describe('Auto-linking System Integration Tests', () => {
         const questionRef = await addDoc(collection(db, 'unifiedQuestions'), {
           ...questionData,
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         });
 
         createdQuestionIds.push(questionRef.id);
 
         // Auto-link JavaScript questions to the section
-        if (questionData.category === "JavaScript") {
+        if (questionData.category === 'JavaScript') {
           const sectionSnapshot = await getDoc(doc(db, 'sections', sectionId));
           const sectionData = sectionSnapshot.data();
-          const updatedQuestions = [...(sectionData.questions || []), questionRef.id];
+          const updatedQuestions = [
+            ...(sectionData.questions || []),
+            questionRef.id,
+          ];
 
           await updateDoc(doc(db, 'sections', sectionId), {
             questions: updatedQuestions,
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           });
         }
       }
@@ -465,7 +531,10 @@ describe('Auto-linking System Integration Tests', () => {
       );
 
       const snapshot = await getDocs(nonExistentQuery);
-      const sections = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const sections = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       expect(sections).toHaveLength(0);
     });
@@ -474,7 +543,7 @@ describe('Auto-linking System Integration Tests', () => {
       // Create section with empty questions array
       const sectionRef = await addDoc(collection(db, 'sections'), {
         ...testData.sections[0],
-        questions: []
+        questions: [],
       });
 
       const sectionSnapshot = await getDoc(doc(db, 'sections', sectionRef.id));
@@ -489,7 +558,10 @@ describe('Auto-linking System Integration Tests', () => {
       );
 
       const questionsSnapshot = await getDocs(questionsQuery);
-      const questions = questionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const questions = questionsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       expect(questions).toHaveLength(0);
     });
@@ -517,9 +589,9 @@ async function cleanupTestData() {
       await deleteDoc(doc(db, 'learningPlans', docSnapshot.id));
     }
   } catch (error) {
-    console.warn('Cleanup error (expected in test environment):', error.message);
+    console.warn(
+      'Cleanup error (expected in test environment):',
+      error.message
+    );
   }
 }
-
-
-

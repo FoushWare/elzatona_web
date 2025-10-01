@@ -32,7 +32,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`Bulk updating topics for ${questionIds.length} questions:`, topics);
+    console.log(
+      `Bulk updating topics for ${questionIds.length} questions:`,
+      topics
+    );
 
     const batch = writeBatch(db);
     const results = [];
@@ -62,14 +65,18 @@ export async function POST(request: NextRequest) {
         });
       } catch (error) {
         console.error(`Error processing question ${questionId}:`, error);
-        errors.push(`Failed to update question ${questionId}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        errors.push(
+          `Failed to update question ${questionId}: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
 
     // Commit the batch
     if (results.length > 0) {
       await batch.commit();
-      console.log(`Successfully updated topics for ${results.length} questions`);
+      console.log(
+        `Successfully updated topics for ${results.length} questions`
+      );
     }
 
     return NextResponse.json({

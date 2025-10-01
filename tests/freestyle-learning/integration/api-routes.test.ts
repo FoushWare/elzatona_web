@@ -10,7 +10,7 @@ import { GET as getSectors } from '@/app/api/sectors/by-path/[id]/route';
 jest.mock('@/lib/firebase-server', () => ({
   db: {
     // Mock Firestore instance
-  }
+  },
 }));
 
 // Mock Firebase Firestore functions
@@ -19,7 +19,7 @@ jest.mock('firebase/firestore', () => ({
   getDocs: jest.fn(),
   query: jest.fn(),
   where: jest.fn(),
-  orderBy: jest.fn()
+  orderBy: jest.fn(),
 }));
 
 import { db } from '@/lib/firebase-server';
@@ -44,28 +44,30 @@ describe('API Routes Integration', () => {
           name: 'JavaScript Fundamentals',
           description: 'Learn the basics of JavaScript',
           questionCount: 50,
-          difficulty: 'beginner'
+          difficulty: 'beginner',
         },
         {
           id: 'path2',
           name: 'React Advanced',
           description: 'Advanced React concepts',
           questionCount: 75,
-          difficulty: 'advanced'
-        }
+          difficulty: 'advanced',
+        },
       ];
 
       const mockSnapshot = {
         docs: mockLearningPaths.map(path => ({
           id: path.id,
-          data: () => path
-        }))
+          data: () => path,
+        })),
       };
 
       mockCollection.mockReturnValue({} as any);
       mockGetDocs.mockResolvedValue(mockSnapshot as any);
 
-      const request = new NextRequest('http://localhost:3000/api/learning-paths');
+      const request = new NextRequest(
+        'http://localhost:3000/api/learning-paths'
+      );
       const response = await getLearningPaths(request);
       const data = await response.json();
 
@@ -78,7 +80,9 @@ describe('API Routes Integration', () => {
       mockCollection.mockReturnValue({} as any);
       mockGetDocs.mockRejectedValue(new Error('Firebase connection failed'));
 
-      const request = new NextRequest('http://localhost:3000/api/learning-paths');
+      const request = new NextRequest(
+        'http://localhost:3000/api/learning-paths'
+      );
       const response = await getLearningPaths(request);
       const data = await response.json();
 
@@ -99,7 +103,7 @@ describe('API Routes Integration', () => {
           questionCount: 10,
           difficulty: 'easy',
           order: 1,
-          pathId: pathId
+          pathId: pathId,
         },
         {
           id: 'sector2',
@@ -108,15 +112,15 @@ describe('API Routes Integration', () => {
           questionCount: 15,
           difficulty: 'medium',
           order: 2,
-          pathId: pathId
-        }
+          pathId: pathId,
+        },
       ];
 
       const mockSnapshot = {
         docs: mockSectors.map(sector => ({
           id: sector.id,
-          data: () => sector
-        }))
+          data: () => sector,
+        })),
       };
 
       mockCollection.mockReturnValue({} as any);
@@ -125,7 +129,9 @@ describe('API Routes Integration', () => {
       mockQuery.mockReturnValue({} as any);
       mockGetDocs.mockResolvedValue(mockSnapshot as any);
 
-      const request = new NextRequest(`http://localhost:3000/api/sectors/by-path/${pathId}`);
+      const request = new NextRequest(
+        `http://localhost:3000/api/sectors/by-path/${pathId}`
+      );
       const response = await getSectors(request, { params: { id: pathId } });
       const data = await response.json();
 
@@ -135,7 +141,9 @@ describe('API Routes Integration', () => {
     });
 
     test('should return 400 for missing path ID', async () => {
-      const request = new NextRequest('http://localhost:3000/api/sectors/by-path/');
+      const request = new NextRequest(
+        'http://localhost:3000/api/sectors/by-path/'
+      );
       const response = await getSectors(request, { params: { id: '' } });
       const data = await response.json();
 
@@ -146,14 +154,16 @@ describe('API Routes Integration', () => {
 
     test('should handle Firebase errors', async () => {
       const pathId = 'javascript-fundamentals';
-      
+
       mockCollection.mockReturnValue({} as any);
       mockWhere.mockReturnValue({} as any);
       mockOrderBy.mockReturnValue({} as any);
       mockQuery.mockReturnValue({} as any);
       mockGetDocs.mockRejectedValue(new Error('Firebase connection failed'));
 
-      const request = new NextRequest(`http://localhost:3000/api/sectors/by-path/${pathId}`);
+      const request = new NextRequest(
+        `http://localhost:3000/api/sectors/by-path/${pathId}`
+      );
       const response = await getSectors(request, { params: { id: pathId } });
       const data = await response.json();
 

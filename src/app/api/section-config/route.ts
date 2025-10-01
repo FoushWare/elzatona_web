@@ -11,7 +11,7 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      data: config
+      data: config,
     });
   } catch (error) {
     console.error('Error fetching section config:', error);

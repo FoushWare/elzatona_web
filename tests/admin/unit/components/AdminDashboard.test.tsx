@@ -17,13 +17,15 @@ jest.mock('@/hooks/useAdminAuth', () => ({
 global.fetch = jest.fn();
 
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<typeof useAdminAuth>;
+const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<
+  typeof useAdminAuth
+>;
 const mockFetch = fetch as jest.MockedFunction<typeof fetch>;
 
 describe('AdminDashboard Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     mockUseRouter.mockReturnValue({
       push: jest.fn(),
       replace: jest.fn(),
@@ -32,7 +34,7 @@ describe('AdminDashboard Component', () => {
       refresh: jest.fn(),
       prefetch: jest.fn(),
     });
-    
+
     mockUseAdminAuth.mockReturnValue({
       isAuthenticated: true,
       isLoading: false,
@@ -67,14 +69,14 @@ describe('AdminDashboard Component', () => {
 
   test('renders dashboard with welcome message', async () => {
     render(<AdminDashboard />);
-    
+
     expect(screen.getByText('Admin Dashboard')).toBeInTheDocument();
     expect(screen.getByText(/welcome back, admin user/i)).toBeInTheDocument();
   });
 
   test('displays statistics cards', async () => {
     render(<AdminDashboard />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('Total Questions')).toBeInTheDocument();
       expect(screen.getByText('150')).toBeInTheDocument();
@@ -85,7 +87,7 @@ describe('AdminDashboard Component', () => {
 
   test('displays learning plans statistics', async () => {
     render(<AdminDashboard />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('Learning Plans')).toBeInTheDocument();
       expect(screen.getByText('25')).toBeInTheDocument();
@@ -96,7 +98,7 @@ describe('AdminDashboard Component', () => {
 
   test('displays sections statistics', async () => {
     render(<AdminDashboard />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('Learning Sections')).toBeInTheDocument();
       expect(screen.getByText('8')).toBeInTheDocument();
@@ -107,7 +109,7 @@ describe('AdminDashboard Component', () => {
 
   test('renders quick action buttons', () => {
     render(<AdminDashboard />);
-    
+
     expect(screen.getByText('Quick Actions')).toBeInTheDocument();
     expect(screen.getByText('Add New Question')).toBeInTheDocument();
     expect(screen.getByText('Create Learning Plan')).toBeInTheDocument();
@@ -127,11 +129,11 @@ describe('AdminDashboard Component', () => {
     });
 
     render(<AdminDashboard />);
-    
+
     // Click on "Add New Question" button
     const addQuestionButton = screen.getByText('Add New Question');
     fireEvent.click(addQuestionButton);
-    
+
     expect(mockPush).toHaveBeenCalledWith('/admin/content/questions');
   });
 
@@ -140,7 +142,7 @@ describe('AdminDashboard Component', () => {
     mockFetch.mockRejectedValueOnce(new Error('API Error'));
 
     render(<AdminDashboard />);
-    
+
     await waitFor(() => {
       expect(screen.getByText(/error loading statistics/i)).toBeInTheDocument();
     });
@@ -148,7 +150,7 @@ describe('AdminDashboard Component', () => {
 
   test('shows loading state initially', () => {
     render(<AdminDashboard />);
-    
+
     expect(screen.getByText(/loading dashboard/i)).toBeInTheDocument();
   });
 
@@ -163,14 +165,14 @@ describe('AdminDashboard Component', () => {
     });
 
     render(<AdminDashboard />);
-    
+
     // Should redirect or show access denied
     expect(screen.queryByText('Admin Dashboard')).not.toBeInTheDocument();
   });
 
   test('displays recent activity section', async () => {
     render(<AdminDashboard />);
-    
+
     expect(screen.getByText('Recent Activity')).toBeInTheDocument();
     expect(screen.getByText('No recent activity')).toBeInTheDocument();
   });
@@ -193,8 +195,10 @@ describe('AdminDashboard Component', () => {
     });
 
     render(<AdminDashboard />);
-    
-    expect(screen.getByText(/welcome back, moderator user/i)).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/welcome back, moderator user/i)
+    ).toBeInTheDocument();
   });
 
   test('handles empty statistics data', async () => {
@@ -214,7 +218,7 @@ describe('AdminDashboard Component', () => {
       } as Response);
 
     render(<AdminDashboard />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('0')).toBeInTheDocument();
     });
@@ -230,7 +234,7 @@ describe('AdminDashboard Component', () => {
     );
 
     render(<AdminDashboard />);
-    
+
     await waitFor(() => {
       expect(screen.getByText(/error loading statistics/i)).toBeInTheDocument();
     });
@@ -244,7 +248,7 @@ describe('AdminDashboard Component', () => {
     } as Response);
 
     render(<AdminDashboard />);
-    
+
     await waitFor(() => {
       expect(screen.getByText(/error loading statistics/i)).toBeInTheDocument();
     });
@@ -252,7 +256,7 @@ describe('AdminDashboard Component', () => {
 
   test('displays system status indicators', () => {
     render(<AdminDashboard />);
-    
+
     expect(screen.getByText('System Status')).toBeInTheDocument();
     expect(screen.getByText('All systems operational')).toBeInTheDocument();
   });
@@ -269,16 +273,10 @@ describe('AdminDashboard Component', () => {
     });
 
     render(<AdminDashboard />);
-    
+
     const refreshButton = screen.getByText('Refresh Data');
     fireEvent.click(refreshButton);
-    
+
     expect(mockRefresh).toHaveBeenCalled();
   });
 });
-
-
-
-
-
-

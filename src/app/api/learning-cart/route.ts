@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
-import { collection, addDoc, getDocs, query, where, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from 'firebase/firestore';
 
 export interface LearningCartItem {
   id: string;
@@ -46,7 +56,7 @@ export async function POST(request: NextRequest) {
       type,
       priority = 'medium',
       estimatedTime = 5,
-      tags = []
+      tags = [],
     } = body;
 
     if (!userId || !questionId || !question || !category) {
@@ -62,7 +72,7 @@ export async function POST(request: NextRequest) {
       where('userId', '==', userId)
     );
     const existingCartSnapshot = await getDocs(existingCartQuery);
-    
+
     let cartId: string;
     let cart: LearningCart;
 
@@ -77,7 +87,7 @@ export async function POST(request: NextRequest) {
         topics: [],
         learningPaths: [],
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
 
       const cartRef = await addDoc(collection(db, 'learningCarts'), newCart);
@@ -91,7 +101,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if question already in cart
-    const existingItem = cart.items.find(item => item.questionId === questionId);
+    const existingItem = cart.items.find(
+      item => item.questionId === questionId
+    );
     if (existingItem) {
       return NextResponse.json(
         { error: 'Question already in cart' },
@@ -113,22 +125,27 @@ export async function POST(request: NextRequest) {
       addedAt: new Date().toISOString(),
       priority,
       estimatedTime,
-      tags
+      tags,
     };
 
     const updatedItems = [...cart.items, newItem];
     const updatedCategories = [...new Set([...cart.categories, category])];
     const updatedTopics = [...new Set([...cart.topics, topic || 'General'])];
-    const updatedLearningPaths = [...new Set([...cart.learningPaths, learningPath || 'General'])];
+    const updatedLearningPaths = [
+      ...new Set([...cart.learningPaths, learningPath || 'General']),
+    ];
 
     const updatedCart: Partial<LearningCart> = {
       items: updatedItems,
       totalQuestions: updatedItems.length,
-      estimatedTime: updatedItems.reduce((total, item) => total + item.estimatedTime, 0),
+      estimatedTime: updatedItems.reduce(
+        (total, item) => total + item.estimatedTime,
+        0
+      ),
       categories: updatedCategories,
       topics: updatedTopics,
       learningPaths: updatedLearningPaths,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     await updateDoc(doc(db, 'learningCarts', cartId), updatedCart);
@@ -138,10 +155,9 @@ export async function POST(request: NextRequest) {
       data: {
         cartId,
         item: newItem,
-        cart: { ...cart, ...updatedCart }
-      }
+        cart: { ...cart, ...updatedCart },
+      },
     });
-
   } catch (error) {
     console.error('Error adding item to cart:', error);
     return NextResponse.json(
@@ -184,8 +200,8 @@ export async function GET(request: NextRequest) {
           topics: [],
           learningPaths: [],
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        }
+          updatedAt: new Date().toISOString(),
+        },
       });
     }
 
@@ -194,10 +210,9 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         id: cart.id,
-        ...cart.data()
-      }
+        ...cart.data(),
+      },
     });
-
   } catch (error) {
     console.error('Error fetching learning cart:', error);
     return NextResponse.json(
@@ -228,16 +243,13 @@ export async function PUT(request: NextRequest) {
     const cartSnapshot = await getDocs(cartQuery);
 
     if (cartSnapshot.empty) {
-      return NextResponse.json(
-        { error: 'Cart not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
     }
 
     const cartDoc = cartSnapshot.docs[0];
     const cart = { id: cartDoc.id, ...cartDoc.data() } as LearningCart;
 
-    const updatedItems = cart.items.map(item => 
+    const updatedItems = cart.items.map(item =>
       item.id === itemId ? { ...item, ...updates } : item
     );
 
@@ -245,17 +257,19 @@ export async function PUT(request: NextRequest) {
       ...cart,
       items: updatedItems,
       totalQuestions: updatedItems.length,
-      estimatedTime: updatedItems.reduce((total, item) => total + item.estimatedTime, 0),
-      updatedAt: new Date().toISOString()
+      estimatedTime: updatedItems.reduce(
+        (total, item) => total + item.estimatedTime,
+        0
+      ),
+      updatedAt: new Date().toISOString(),
     };
 
     await updateDoc(doc(db, 'learningCarts', cart.id), updatedCart);
 
     return NextResponse.json({
       success: true,
-      data: updatedCart
+      data: updatedCart,
     });
-
   } catch (error) {
     console.error('Error updating cart item:', error);
     return NextResponse.json(
@@ -287,38 +301,41 @@ export async function DELETE(request: NextRequest) {
     const cartSnapshot = await getDocs(cartQuery);
 
     if (cartSnapshot.empty) {
-      return NextResponse.json(
-        { error: 'Cart not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
     }
 
     const cartDoc = cartSnapshot.docs[0];
     const cart = { id: cartDoc.id, ...cartDoc.data() } as LearningCart;
 
     const updatedItems = cart.items.filter(item => item.id !== itemId);
-    const updatedCategories = [...new Set(updatedItems.map(item => item.category))];
+    const updatedCategories = [
+      ...new Set(updatedItems.map(item => item.category)),
+    ];
     const updatedTopics = [...new Set(updatedItems.map(item => item.topic))];
-    const updatedLearningPaths = [...new Set(updatedItems.map(item => item.learningPath))];
+    const updatedLearningPaths = [
+      ...new Set(updatedItems.map(item => item.learningPath)),
+    ];
 
     const updatedCart = {
       ...cart,
       items: updatedItems,
       totalQuestions: updatedItems.length,
-      estimatedTime: updatedItems.reduce((total, item) => total + item.estimatedTime, 0),
+      estimatedTime: updatedItems.reduce(
+        (total, item) => total + item.estimatedTime,
+        0
+      ),
       categories: updatedCategories,
       topics: updatedTopics,
       learningPaths: updatedLearningPaths,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     await updateDoc(doc(db, 'learningCarts', cart.id), updatedCart);
 
     return NextResponse.json({
       success: true,
-      data: updatedCart
+      data: updatedCart,
     });
-
   } catch (error) {
     console.error('Error removing cart item:', error);
     return NextResponse.json(

@@ -132,10 +132,16 @@ export function useUnifiedQuestions(
         const response = await apiCall(url);
 
         if (response.success) {
-          console.log('✅ useUnifiedQuestions: Questions loaded successfully:', response.data);
+          console.log(
+            '✅ useUnifiedQuestions: Questions loaded successfully:',
+            response.data
+          );
           setQuestions(response.data);
         } else {
-          console.error('❌ useUnifiedQuestions: Failed to load questions:', response.error);
+          console.error(
+            '❌ useUnifiedQuestions: Failed to load questions:',
+            response.error
+          );
           throw new Error(response.error || 'Failed to load questions');
         }
       } catch (err) {

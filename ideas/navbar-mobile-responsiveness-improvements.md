@@ -263,7 +263,3 @@ className = "size={18} className='sm:w-5 sm:h-5'";
 **Total Impact**: The navbar is now fully responsive and provides an excellent user experience across all device sizes, from small mobile phones to large desktop screens! 🚀📱
 
 Mobile users now have a **touch-friendly, accessible, and visually appealing** navigation experience that adapts perfectly to their device! ✨
-
-
-
-

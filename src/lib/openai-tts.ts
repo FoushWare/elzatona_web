@@ -22,14 +22,19 @@ export class OpenAITTS {
   private baseUrl = 'https://api.openai.com/v1/audio/speech';
 
   constructor(apiKey?: string) {
-    this.apiKey = apiKey || process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY || '';
+    this.apiKey =
+      apiKey ||
+      process.env.OPENAI_API_KEY ||
+      process.env.NEXT_PUBLIC_OPENAI_API_KEY ||
+      '';
   }
 
   async synthesize(options: OpenAITTSOptions): Promise<TTSResponse> {
     if (!this.apiKey) {
       return {
         success: false,
-        error: 'OpenAI API key not provided. Please set OPENAI_API_KEY environment variable.'
+        error:
+          'OpenAI API key not provided. Please set OPENAI_API_KEY environment variable.',
       };
     }
 
@@ -37,7 +42,7 @@ export class OpenAITTS {
       const response = await fetch(this.baseUrl, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          Authorization: `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -53,7 +58,7 @@ export class OpenAITTS {
         const errorData = await response.json().catch(() => ({}));
         return {
           success: false,
-          error: `OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`
+          error: `OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`,
         };
       }
 
@@ -65,13 +70,12 @@ export class OpenAITTS {
         success: true,
         audioUrl,
         voice: options.voice || 'nova',
-        duration: audioBlob.size / 16000 // Rough estimate
+        duration: audioBlob.size / 16000, // Rough estimate
       };
-
     } catch (error) {
       return {
         success: false,
-        error: `Network error: ${error instanceof Error ? error.message : 'Unknown error'}`
+        error: `Network error: ${error instanceof Error ? error.message : 'Unknown error'}`,
       };
     }
   }
@@ -83,7 +87,11 @@ export class OpenAITTS {
       { id: 'echo', name: 'Echo', description: 'Clear, professional voice' },
       { id: 'fable', name: 'Fable', description: 'Warm, storytelling voice' },
       { id: 'onyx', name: 'Onyx', description: 'Deep, authoritative voice' },
-      { id: 'nova', name: 'Nova', description: 'Bright, energetic voice (Recommended)' },
+      {
+        id: 'nova',
+        name: 'Nova',
+        description: 'Bright, energetic voice (Recommended)',
+      },
       { id: 'shimmer', name: 'Shimmer', description: 'Soft, gentle voice' },
     ];
   }
@@ -106,6 +114,6 @@ export async function speakWithOpenAI(
     model: 'tts-1-hd', // Use HD model for best quality
     speed: 1.0,
     format: 'mp3',
-    ...options
+    ...options,
   });
 }

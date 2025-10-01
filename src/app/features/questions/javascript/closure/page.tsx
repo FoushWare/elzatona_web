@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState } from 'react';
+import Link from 'next/link';
 
 interface PracticeProblem {
   id: number;
@@ -23,9 +23,9 @@ export default function ClosurePracticePage() {
   const problems: PracticeProblem[] = [
     {
       id: 1,
-      title: "Basic Closure",
+      title: 'Basic Closure',
       description:
-        "Understanding how closures capture variables from their outer scope",
+        'Understanding how closures capture variables from their outer scope',
       code: `function outer() {
   let count = 0;
   
@@ -40,16 +40,16 @@ export default function ClosurePracticePage() {
 const counter = outer();
 console.log(counter()); // What will this output?
 console.log(counter()); // What will this output?`,
-      question: "What will be the output of the above code?",
-      options: ["1, 2", "0, 1", "1, 1", "undefined, undefined"],
+      question: 'What will be the output of the above code?',
+      options: ['1, 2', '0, 1', '1, 1', 'undefined, undefined'],
       correctAnswer: 0,
       explanation:
         "The output will be '1, 2'. The inner function forms a closure that captures the 'count' variable from its outer scope. Each time counter() is called, it increments and returns the current value of count.",
     },
     {
       id: 2,
-      title: "Closure with Parameters",
-      description: "Closures can capture parameters from their outer function",
+      title: 'Closure with Parameters',
+      description: 'Closures can capture parameters from their outer function',
       code: `function createMultiplier(factor) {
   return function(number) {
     return number * factor;
@@ -61,16 +61,16 @@ const triple = createMultiplier(3);
 
 console.log(double(5)); // What will this output?
 console.log(triple(5)); // What will this output?`,
-      question: "What will be the output of the above code?",
-      options: ["10, 15", "5, 5", "2, 3", "Error"],
+      question: 'What will be the output of the above code?',
+      options: ['10, 15', '5, 5', '2, 3', 'Error'],
       correctAnswer: 0,
       explanation:
         "The output will be '10, 15'. Each closure captures the 'factor' parameter from its outer function. double(5) returns 5 * 2 = 10, and triple(5) returns 5 * 3 = 15.",
     },
     {
       id: 3,
-      title: "Closure in Loop",
-      description: "Common pitfall with closures in loops",
+      title: 'Closure in Loop',
+      description: 'Common pitfall with closures in loops',
       code: `for (var i = 0; i < 3; i++) {
   setTimeout(function() {
     console.log(i);
@@ -78,12 +78,12 @@ console.log(triple(5)); // What will this output?`,
 }
 
 // What will be the output after 1 second?`,
-      question: "What will be the output after 1 second?",
+      question: 'What will be the output after 1 second?',
       options: [
-        "0, 1, 2",
-        "3, 3, 3",
-        "undefined, undefined, undefined",
-        "Error",
+        '0, 1, 2',
+        '3, 3, 3',
+        'undefined, undefined, undefined',
+        'Error',
       ],
       correctAnswer: 1,
       explanation:
@@ -91,8 +91,8 @@ console.log(triple(5)); // What will this output?`,
     },
     {
       id: 4,
-      title: "Closure with let",
-      description: "Using let to fix the loop closure issue",
+      title: 'Closure with let',
+      description: 'Using let to fix the loop closure issue',
       code: `for (let i = 0; i < 3; i++) {
   setTimeout(function() {
     console.log(i);
@@ -100,12 +100,12 @@ console.log(triple(5)); // What will this output?`,
 }
 
 // What will be the output after 1 second?`,
-      question: "What will be the output after 1 second?",
+      question: 'What will be the output after 1 second?',
       options: [
-        "0, 1, 2",
-        "3, 3, 3",
-        "undefined, undefined, undefined",
-        "Error",
+        '0, 1, 2',
+        '3, 3, 3',
+        'undefined, undefined, undefined',
+        'Error',
       ],
       correctAnswer: 0,
       explanation:
@@ -113,8 +113,8 @@ console.log(triple(5)); // What will this output?`,
     },
     {
       id: 5,
-      title: "Module Pattern",
-      description: "Using closures to create private variables",
+      title: 'Module Pattern',
+      description: 'Using closures to create private variables',
       code: `const counter = (function() {
   let privateCounter = 0;
   
@@ -138,8 +138,8 @@ console.log(triple(5)); // What will this output?`,
 counter.increment();
 counter.increment();
 console.log(counter.value()); // What will this output?`,
-      question: "What will be the output of the above code?",
-      options: ["0", "1", "2", "undefined"],
+      question: 'What will be the output of the above code?',
+      options: ['0', '1', '2', 'undefined'],
       correctAnswer: 2,
       explanation:
         "The output will be '2'. This is the module pattern where privateCounter is private and can only be accessed through the returned object's methods. Two increments result in a value of 2.",
@@ -177,11 +177,11 @@ console.log(counter.value()); // What will this output?`,
   const getScoreMessage = () => {
     const percentage = getScorePercentage();
     if (percentage >= 80)
-      return "Excellent! You have a strong understanding of closures.";
+      return 'Excellent! You have a strong understanding of closures.';
     if (percentage >= 60)
-      return "Good job! You understand the basics of closures.";
-    if (percentage >= 40) return "Not bad! Review the concepts and try again.";
-    return "Keep practicing! Closures can be tricky at first.";
+      return 'Good job! You understand the basics of closures.';
+    if (percentage >= 40) return 'Not bad! Review the concepts and try again.';
+    return 'Keep practicing! Closures can be tricky at first.';
   };
 
   if (practiceCompleted) {
@@ -293,9 +293,9 @@ console.log(counter.value()); // What will this output?`,
                 className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
                   selectedAnswer === index
                     ? selectedAnswer === currentP.correctAnswer
-                      ? "border-green-500 bg-green-50"
-                      : "border-red-500 bg-red-50"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
                 }`}
               >
                 <div className="flex items-center">
@@ -303,13 +303,13 @@ console.log(counter.value()); // What will this output?`,
                     className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${
                       selectedAnswer === index
                         ? selectedAnswer === currentP.correctAnswer
-                          ? "border-green-500 bg-green-500 text-white"
-                          : "border-red-500 bg-red-500 text-white"
-                        : "border-gray-300"
+                          ? 'border-green-500 bg-green-500 text-white'
+                          : 'border-red-500 bg-red-500 text-white'
+                        : 'border-gray-300'
                     }`}
                   >
                     {selectedAnswer === index &&
-                      (selectedAnswer === currentP.correctAnswer ? "✓" : "✗")}
+                      (selectedAnswer === currentP.correctAnswer ? '✓' : '✗')}
                   </div>
                   <span className="text-gray-900 font-mono">{option}</span>
                 </div>
@@ -333,8 +333,8 @@ console.log(counter.value()); // What will this output?`,
                 className="bg-blue-600 text-white px-8 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
               >
                 {currentProblem < problems.length - 1
-                  ? "Next Problem"
-                  : "Finish Practice"}
+                  ? 'Next Problem'
+                  : 'Finish Practice'}
               </button>
             </div>
           )}

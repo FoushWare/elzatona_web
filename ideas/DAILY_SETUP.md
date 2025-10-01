@@ -73,11 +73,13 @@ Daily.co SDK → Room Management → AI Evaluation
 ## 💰 Pricing
 
 ### Free Tier
+
 - **10,000 participant-minutes/month** (free)
 - Perfect for testing and small-scale usage
 - No credit card required
 
 ### Paid Plans
+
 - Usage-based pricing after free tier
 - Additional features like recording, transcription
 - Enterprise features and support
@@ -96,8 +98,8 @@ const interviewQuestions: InterviewQuestion[] = [
     category: 'Your Category',
     difficulty: 'intermediate',
     expectedKeywords: ['keyword1', 'keyword2'],
-    followUpQuestions: ['Follow-up question?']
-  }
+    followUpQuestions: ['Follow-up question?'],
+  },
 ];
 ```
 

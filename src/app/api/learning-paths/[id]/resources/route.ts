@@ -23,7 +23,8 @@ export async function GET(
         title: 'Complete Guide to Frontend Development',
         url: 'https://example.com/frontend-guide',
         type: 'documentation',
-        description: 'Comprehensive documentation covering all aspects of frontend development',
+        description:
+          'Comprehensive documentation covering all aspects of frontend development',
         difficulty: 'beginner',
         estimatedTime: 120,
       },
@@ -32,7 +33,8 @@ export async function GET(
         title: 'JavaScript Fundamentals Video Series',
         url: 'https://example.com/js-fundamentals',
         type: 'video',
-        description: 'Learn JavaScript from scratch with this comprehensive video series',
+        description:
+          'Learn JavaScript from scratch with this comprehensive video series',
         difficulty: 'beginner',
         estimatedTime: 180,
       },
@@ -59,7 +61,8 @@ export async function GET(
         title: 'Advanced Frontend Architecture Patterns',
         url: 'https://example.com/advanced-patterns',
         type: 'article',
-        description: 'Deep dive into advanced frontend architecture and design patterns',
+        description:
+          'Deep dive into advanced frontend architecture and design patterns',
         difficulty: 'advanced',
         estimatedTime: 150,
       },

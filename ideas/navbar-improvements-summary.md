@@ -145,7 +145,3 @@ The navbar now features:
 7. **✅ Professional appearance** with shadows and gradients
 
 The navbar now has a more sophisticated, modern look that matches current design trends while maintaining excellent usability and accessibility! 🎨✨
-
-
-
-

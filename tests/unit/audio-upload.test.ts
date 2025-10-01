@@ -31,10 +31,13 @@ describe('ClientAudioUploadService', () => {
 
       expect(result.success).toBe(true);
       expect(result.url).toBe('/audio/questions/question-123.mp3');
-      expect(global.fetch as jest.Mock).toHaveBeenCalledWith('/api/audio/upload', {
-        method: 'POST',
-        body: expect.any(FormData),
-      });
+      expect(global.fetch as jest.Mock).toHaveBeenCalledWith(
+        '/api/audio/upload',
+        {
+          method: 'POST',
+          body: expect.any(FormData),
+        }
+      );
     });
 
     it('should handle upload errors', async () => {
@@ -66,9 +69,7 @@ describe('ClientAudioUploadService', () => {
         type: 'audio/mpeg',
       });
 
-      global.fetch.mockRejectedValueOnce(
-        new Error('Network error')
-      );
+      global.fetch.mockRejectedValueOnce(new Error('Network error'));
 
       const result = await ClientAudioUploadService.uploadQuestionAudio(
         'question-123',
@@ -152,15 +153,18 @@ describe('ClientAudioUploadService', () => {
 
       expect(result.success).toBe(true);
       expect(result.message).toBe('Audio file deleted successfully');
-      expect(global.fetch as jest.Mock).toHaveBeenCalledWith('/api/audio/upload', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          audioUrl: '/audio/questions/question-123.mp3',
-        }),
-      });
+      expect(global.fetch as jest.Mock).toHaveBeenCalledWith(
+        '/api/audio/upload',
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            audioUrl: '/audio/questions/question-123.mp3',
+          }),
+        }
+      );
     });
 
     it('should handle deletion errors', async () => {

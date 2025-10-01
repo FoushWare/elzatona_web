@@ -19,7 +19,7 @@ export async function PUT(
       return NextResponse.json(
         {
           success: false,
-          error: 'Questions must be an array'
+          error: 'Questions must be an array',
         },
         { status: 400 }
       );
@@ -33,7 +33,7 @@ export async function PUT(
       return NextResponse.json(
         {
           success: false,
-          error: 'Plan not found'
+          error: 'Plan not found',
         },
         { status: 404 }
       );
@@ -67,14 +67,14 @@ export async function PUT(
         sectionId,
         questions,
         questionCount: questions.length,
-      }
+      },
     });
   } catch (error) {
     console.error('Error updating section questions:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to update section questions'
+        error: 'Failed to update section questions',
       },
       { status: 500 }
     );
@@ -100,7 +100,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: 'Plan not found'
+          error: 'Plan not found',
         },
         { status: 404 }
       );
@@ -116,7 +116,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: 'Section not found'
+          error: 'Section not found',
         },
         { status: 404 }
       );
@@ -124,14 +124,14 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      data: section
+      data: section,
     });
   } catch (error) {
     console.error('Error fetching section:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch section'
+        error: 'Failed to fetch section',
       },
       { status: 500 }
     );

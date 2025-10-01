@@ -30,7 +30,7 @@ const mockTopics = [
 describe('TopicManager Component - Advanced Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     mockFetch.mockResolvedValue({
       ok: true,
       json: async () => mockTopics,
@@ -104,7 +104,7 @@ describe('TopicManager Component - Advanced Tests', () => {
     });
 
     const searchInput = screen.getByPlaceholderText(/search topics/i);
-    
+
     // Rapid typing
     await user.type(searchInput, 'JavaScript');
     await user.clear(searchInput);
@@ -149,7 +149,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
   test('handles topic creation with very long name', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -157,7 +157,10 @@ describe('TopicManager Component - Advanced Tests', () => {
       } as Response)
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => [...mockTopics, { id: '3', name: 'Very Long Topic Name' }],
+        json: async () => [
+          ...mockTopics,
+          { id: '3', name: 'Very Long Topic Name' },
+        ],
       } as Response);
 
     render(<TopicManager />);
@@ -178,7 +181,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
   test('handles topic creation with very long description', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -207,7 +210,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
   test('handles topic creation with special characters', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -229,17 +232,22 @@ describe('TopicManager Component - Advanced Tests', () => {
 
     const nameInput = screen.getByLabelText(/topic name/i);
     const descriptionInput = screen.getByLabelText(/description/i);
-    
+
     await user.type(nameInput, 'Topic@#$%^&*()');
-    await user.type(descriptionInput, 'Description with special chars: @#$%^&*()');
+    await user.type(
+      descriptionInput,
+      'Description with special chars: @#$%^&*()'
+    );
 
     expect(nameInput).toHaveValue('Topic@#$%^&*()');
-    expect(descriptionInput).toHaveValue('Description with special chars: @#$%^&*()');
+    expect(descriptionInput).toHaveValue(
+      'Description with special chars: @#$%^&*()'
+    );
   });
 
   test('handles topic creation with unicode characters', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -261,7 +269,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
     const nameInput = screen.getByLabelText(/topic name/i);
     const descriptionInput = screen.getByLabelText(/description/i);
-    
+
     await user.type(nameInput, 'JavaScript 基础');
     await user.type(descriptionInput, 'JavaScript 基础概念和语法');
 
@@ -271,7 +279,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
   test('handles topic creation with emoji', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -293,7 +301,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
     const nameInput = screen.getByLabelText(/topic name/i);
     const descriptionInput = screen.getByLabelText(/description/i);
-    
+
     await user.type(nameInput, 'JavaScript 🚀');
     await user.type(descriptionInput, 'JavaScript concepts with emoji 🎯');
 
@@ -303,7 +311,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
   test('handles rapid topic creation attempts', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -321,7 +329,7 @@ describe('TopicManager Component - Advanced Tests', () => {
     });
 
     const addButton = screen.getByText('Add New Topic');
-    
+
     // Rapid clicks
     await user.click(addButton);
     await user.click(addButton);
@@ -333,7 +341,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
   test('handles topic deletion with confirmation', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -354,13 +362,17 @@ describe('TopicManager Component - Advanced Tests', () => {
     await user.click(deleteButton);
 
     // Should show confirmation dialog
-    expect(screen.getByText(/are you sure you want to delete/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/are you sure you want to delete/i)
+    ).toBeInTheDocument();
 
     const confirmButton = screen.getByText('Delete');
     await user.click(confirmButton);
 
     await waitFor(() => {
-      expect(screen.queryByText('JavaScript Fundamentals')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('JavaScript Fundamentals')
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -376,7 +388,9 @@ describe('TopicManager Component - Advanced Tests', () => {
     await user.click(deleteButton);
 
     // Should show confirmation dialog
-    expect(screen.getByText(/are you sure you want to delete/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/are you sure you want to delete/i)
+    ).toBeInTheDocument();
 
     const cancelButton = screen.getByText('Cancel');
     await user.click(cancelButton);
@@ -387,7 +401,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
   test('handles topic editing with validation', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -395,7 +409,10 @@ describe('TopicManager Component - Advanced Tests', () => {
       } as Response)
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => mockTopics.map(t => t.id === '1' ? { ...t, name: 'Updated Topic' } : t),
+        json: async () =>
+          mockTopics.map(t =>
+            t.id === '1' ? { ...t, name: 'Updated Topic' } : t
+          ),
       } as Response);
 
     render(<TopicManager />);
@@ -453,7 +470,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
     const nameInput = screen.getByDisplayValue('JavaScript Fundamentals');
     await user.clear(nameInput);
-    
+
     const longName = 'a'.repeat(1000);
     await user.type(nameInput, longName);
 
@@ -462,7 +479,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
   test('handles initialization with force overwrite', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -470,7 +487,10 @@ describe('TopicManager Component - Advanced Tests', () => {
       } as Response)
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => [...mockTopics, { id: '3', name: 'New Common Topic' }],
+        json: async () => [
+          ...mockTopics,
+          { id: '3', name: 'New Common Topic' },
+        ],
       } as Response);
 
     render(<TopicManager />);
@@ -500,7 +520,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
   test('handles initialization without force overwrite', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -570,7 +590,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
   test('handles enter key to submit forms', async () => {
     const user = userEvent.setup();
-    
+
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
@@ -592,7 +612,7 @@ describe('TopicManager Component - Advanced Tests', () => {
 
     const nameInput = screen.getByLabelText(/topic name/i);
     const descriptionInput = screen.getByLabelText(/description/i);
-    
+
     await user.type(nameInput, 'New Topic');
     await user.type(descriptionInput, 'A new topic description');
 
@@ -606,9 +626,3 @@ describe('TopicManager Component - Advanced Tests', () => {
     });
   });
 });
-
-
-
-
-
-

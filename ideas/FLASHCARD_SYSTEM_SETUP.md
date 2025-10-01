@@ -7,6 +7,7 @@ The Interactive Flashcard System is now fully implemented and ready to use! This
 ## ✨ Features Implemented
 
 ### 🃏 **Core Flashcard Features**
+
 - **Interactive flip animation** with smooth 3D transitions
 - **Question/Answer format** with visual feedback
 - **Difficulty levels** (beginner, intermediate, advanced)
@@ -14,24 +15,28 @@ The Interactive Flashcard System is now fully implemented and ready to use! This
 - **Tag system** for better organization
 
 ### 🧠 **Spaced Repetition Algorithm**
+
 - **SM-2 algorithm** implementation for optimal review scheduling
 - **Adaptive intervals** based on performance
 - **Ease factor adjustment** for personalized learning
 - **Streak tracking** for motivation
 
 ### 📊 **Progress Tracking**
+
 - **Real-time statistics** during sessions
 - **Accuracy tracking** and performance metrics
 - **Session history** and learning analytics
 - **Due cards identification** for efficient study
 
 ### 🎮 **Session Modes**
+
 - **Review Mode**: Study cards due for review
 - **New Cards Mode**: Learn new flashcards
 - **Mixed Mode**: Combine review and new cards
 - **Queue-based serving** for optimal learning flow
 
 ### 📱 **User Interface**
+
 - **Responsive design** for all devices
 - **Dark/Light mode** support
 - **Smooth animations** with Framer Motion
@@ -40,10 +45,12 @@ The Interactive Flashcard System is now fully implemented and ready to use! This
 ## 🚀 Quick Start
 
 ### 1. **Access the Flashcards**
+
 - Navigate to `/flashcards` in your application
 - Or click "Practice" → "Interactive Flashcards" in the navbar
 
 ### 2. **Start Your First Session**
+
 - Click "Start Study Session" on the dashboard
 - Choose your preferred session type:
   - **Review Due Cards**: Study cards that need review
@@ -51,6 +58,7 @@ The Interactive Flashcard System is now fully implemented and ready to use! This
   - **Mixed Session**: Combine both types
 
 ### 3. **Study Process**
+
 - **Read the question** on the front of the card
 - **Click to flip** and reveal the answer
 - **Rate your performance**:
@@ -61,6 +69,7 @@ The Interactive Flashcard System is now fully implemented and ready to use! This
 ## 📁 File Structure
 
 ### **Core Components**
+
 ```
 src/
 ├── lib/
@@ -77,6 +86,7 @@ src/
 ```
 
 ### **Database Collections**
+
 ```
 firestore/
 ├── flashcards/                         # Flashcard content
@@ -88,19 +98,24 @@ firestore/
 ## 🔧 Setup Instructions
 
 ### 1. **Firebase Configuration**
+
 The system uses your existing Firebase setup. Make sure you have:
+
 - ✅ Firebase project configured
 - ✅ Firestore database enabled
 - ✅ Authentication enabled
 - ✅ Updated Firestore rules (already included)
 
 ### 2. **Install Dependencies**
+
 The system uses existing dependencies:
+
 - ✅ Framer Motion (for animations)
 - ✅ Lucide React (for icons)
 - ✅ Firebase SDK (already configured)
 
 ### 3. **Seed Sample Data**
+
 Run the seeding script to add sample flashcards:
 
 ```bash
@@ -109,12 +124,14 @@ node scripts/seed-flashcards.mjs
 ```
 
 This will add 25 sample flashcards covering:
+
 - **JavaScript**: Variables, closures, promises, async programming
 - **React**: JSX, hooks, components, virtual DOM
 - **CSS**: Box model, flexbox, grid, layout
 - **HTML**: Semantic elements, structure
 
 ### 4. **Test the System**
+
 1. **Sign in** to your application
 2. **Navigate** to `/flashcards`
 3. **Start a session** and test the functionality
@@ -123,25 +140,29 @@ This will add 25 sample flashcards covering:
 ## 🎨 Customization Options
 
 ### **Adding New Flashcards**
+
 You can add flashcards through the Firebase console or by extending the seeding script:
 
 ```javascript
 const newFlashcard = {
-  question: "Your question here?",
-  answer: "Your answer here.",
-  category: "JavaScript", // or React, CSS, HTML
-  difficulty: "beginner", // or intermediate, advanced
-  tags: ["tag1", "tag2"] // relevant tags
+  question: 'Your question here?',
+  answer: 'Your answer here.',
+  category: 'JavaScript', // or React, CSS, HTML
+  difficulty: 'beginner', // or intermediate, advanced
+  tags: ['tag1', 'tag2'], // relevant tags
 };
 ```
 
 ### **Modifying Session Settings**
+
 Edit `src/hooks/useFlashcardSession.ts` to adjust:
+
 - **Default session sizes** (currently 10-20 cards)
 - **Review intervals** (SM-2 algorithm parameters)
 - **Session types** and their behavior
 
 ### **Styling Customization**
+
 - **Colors**: Modify the gradient backgrounds in `Flashcard.tsx`
 - **Animations**: Adjust Framer Motion settings
 - **Layout**: Update Tailwind classes for different layouts
@@ -149,6 +170,7 @@ Edit `src/hooks/useFlashcardSession.ts` to adjust:
 ## 📊 How It Works
 
 ### **Spaced Repetition Algorithm**
+
 1. **First Review**: Card appears after 1 day
 2. **Second Review**: Card appears after 6 days
 3. **Subsequent Reviews**: Interval = previous interval × ease factor
@@ -156,6 +178,7 @@ Edit `src/hooks/useFlashcardSession.ts` to adjust:
 5. **Incorrect Answers**: Reset interval to 1 day
 
 ### **Session Flow**
+
 1. **Card Selection**: System chooses cards based on session type
 2. **User Interaction**: User studies and rates their performance
 3. **Progress Update**: Firebase updates user's progress data
@@ -163,6 +186,7 @@ Edit `src/hooks/useFlashcardSession.ts` to adjust:
 5. **Analytics**: Session statistics tracked for insights
 
 ### **Data Flow**
+
 ```
 User Action → useFlashcardSession Hook → Firebase Service → Firestore Database
      ↓
@@ -172,18 +196,21 @@ Progress Tracking → Dashboard Display → Session Analytics
 ## 🎯 User Experience
 
 ### **Dashboard Features**
+
 - **Cards Due**: Shows how many cards need review
 - **New Cards**: Displays available new content
 - **Progress Stats**: Total cards studied, accuracy rates
 - **Session Controls**: Start different types of sessions
 
 ### **Study Session Features**
+
 - **Progress Tracking**: Real-time session statistics
 - **Card Navigation**: Smooth transitions between cards
 - **Performance Feedback**: Immediate response to user actions
 - **Session Completion**: Summary of performance and achievements
 
 ### **Mobile Experience**
+
 - **Touch-Optimized**: Large buttons and smooth gestures
 - **Responsive Design**: Works perfectly on all screen sizes
 - **Offline Capability**: Can work with cached data (future enhancement)
@@ -191,12 +218,14 @@ Progress Tracking → Dashboard Display → Session Analytics
 ## 🔒 Security & Privacy
 
 ### **Firestore Rules**
+
 - **Public Read**: Anyone can read flashcards (for learning)
 - **Authenticated Write**: Only signed-in users can create/edit cards
 - **User Data**: Progress and sessions are private to each user
 - **Deck Management**: Users can only modify their own decks
 
 ### **Data Privacy**
+
 - **User Progress**: Stored securely in user-specific collections
 - **Session History**: Private to each user
 - **No Cross-User Data**: Users cannot access others' progress
@@ -204,6 +233,7 @@ Progress Tracking → Dashboard Display → Session Analytics
 ## 🚀 Future Enhancements
 
 ### **Planned Features**
+
 - **Card Management Interface**: Create/edit flashcards in the UI
 - **Import/Export**: Bulk card management capabilities
 - **Deck Sharing**: Share custom decks with other users
@@ -212,6 +242,7 @@ Progress Tracking → Dashboard Display → Session Analytics
 - **Audio Support**: Text-to-speech for accessibility
 
 ### **Integration Opportunities**
+
 - **Progress Integration**: Connect with existing progress tracking
 - **Achievement System**: Badges for flashcard milestones
 - **Leaderboards**: Community challenges and rankings
@@ -220,6 +251,7 @@ Progress Tracking → Dashboard Display → Session Analytics
 ## 🧪 Testing
 
 ### **Manual Testing Checklist**
+
 - [ ] **Navigation**: Can access flashcards from navbar
 - [ ] **Authentication**: Requires sign-in to use
 - [ ] **Session Start**: Can start different session types
@@ -232,6 +264,7 @@ Progress Tracking → Dashboard Display → Session Analytics
 - [ ] **Dark Mode**: Supports theme switching
 
 ### **Performance Testing**
+
 - [ ] **Load Time**: Dashboard loads quickly
 - [ ] **Animation Smoothness**: 60fps transitions
 - [ ] **Firebase Queries**: Efficient data fetching

@@ -18,7 +18,7 @@ const Error: NextPage<ErrorProps> = ({ statusCode }) => {
             : 'An error occurred on client'}
         </p>
         <button
-          onClick={() => window.location.href = '/'}
+          onClick={() => (window.location.href = '/')}
           className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
         >
           Go Home

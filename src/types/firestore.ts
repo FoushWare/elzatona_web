@@ -227,4 +227,3 @@ export interface SystemAnalytics {
   completionRate: number;
   lastUpdated: string;
 }
-

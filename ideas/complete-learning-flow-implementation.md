@@ -1,11 +1,13 @@
 # Complete Learning Flow Implementation
 
 ## Overview
+
 This document outlines the complete implementation and testing of the learning flow system with both guided and free-style modes.
 
 ## Flow 1: Guided Learning Mode
 
 ### 1.1 User Journey
+
 1. User goes to `/get-started`
 2. User selects "I need guidance"
 3. Sign-in popup appears (if not authenticated)
@@ -14,6 +16,7 @@ This document outlines the complete implementation and testing of the learning f
 6. User can select and start any plan
 
 ### 1.2 Technical Implementation
+
 - ✅ Sign-in popup component (`SignInPopup.tsx`)
 - ✅ Authentication check in get-started page
 - ✅ Redirect to `/guided-learning` after successful sign-in
@@ -23,6 +26,7 @@ This document outlines the complete implementation and testing of the learning f
 ## Flow 2: Free-Style Learning Mode
 
 ### 2.1 User Journey
+
 1. User goes to `/get-started`
 2. User selects "I'm self-directed"
 3. User is redirected to `/practice-selection`
@@ -33,6 +37,7 @@ This document outlines the complete implementation and testing of the learning f
    - Practice Problem Solving → `/problem-solving`
 
 ### 2.2 Custom Roadmap Creation
+
 1. User clicks "Create Custom Roadmap" (requires authentication)
 2. User is redirected to `/custom-roadmap`
 3. User can:
@@ -44,6 +49,7 @@ This document outlines the complete implementation and testing of the learning f
 5. User is redirected to `/my-plans` to view saved plans
 
 ### 2.3 Technical Implementation
+
 - ✅ Practice selection page with multiple options
 - ✅ Browse practice questions page
 - ✅ Custom roadmap builder with topic/question selection
@@ -53,6 +59,7 @@ This document outlines the complete implementation and testing of the learning f
 ## Testing Strategy
 
 ### E2E Tests Required
+
 1. **Get Started Page Tests**
    - Display correct content
    - Show sign-in popup for guided learning
@@ -79,12 +86,14 @@ This document outlines the complete implementation and testing of the learning f
 ## Firebase Integration
 
 ### Collections Needed
+
 1. **learningPlanTemplates** - Pre-defined learning plans (1-7 days)
 2. **questions** - Individual practice questions by category
 3. **userCustomPlans** - User-created custom learning plans
 4. **userProgress** - User progress tracking
 
 ### API Endpoints
+
 - `/api/test-firebase` - Test Firebase connection
 - `/api/learning-plans` - Fetch learning plan templates
 - `/api/questions` - Fetch questions by category
@@ -93,6 +102,7 @@ This document outlines the complete implementation and testing of the learning f
 ## Current Status
 
 ### ✅ Completed
+
 - Browse practice questions page
 - Custom roadmap builder
 - User plans management
@@ -101,16 +111,19 @@ This document outlines the complete implementation and testing of the learning f
 - E2E test improvements
 
 ### 🔄 In Progress
+
 - E2E test fixes for modal handling
 - Firebase integration testing
 
 ### ⏳ Pending
+
 - Complete Firebase collections setup
 - User progress tracking
 - Plan execution and tracking
 - Advanced question filtering
 
 ## Next Steps
+
 1. Fix E2E tests with improved modal handling
 2. Test complete guided learning flow
 3. Test complete free-style learning flow

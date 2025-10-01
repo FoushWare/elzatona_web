@@ -46,7 +46,7 @@ const defaultProps = {
 describe('TopicSelector Component - Advanced Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     mockFetch.mockResolvedValue({
       ok: true,
       json: async () => mockTopics,
@@ -378,7 +378,9 @@ describe('TopicSelector Component - Advanced Tests', () => {
 
     // Dropdown should be closed
     await waitFor(() => {
-      expect(screen.queryByText('JavaScript Fundamentals')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('JavaScript Fundamentals')
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -398,7 +400,7 @@ describe('TopicSelector Component - Advanced Tests', () => {
     // Focus on first topic and press Enter
     const topic = screen.getByText('JavaScript Fundamentals');
     topic.focus();
-    
+
     const user = userEvent.setup();
     await user.keyboard('{Enter}');
 
@@ -415,7 +417,11 @@ describe('TopicSelector Component - Advanced Tests', () => {
   test('handles disabled state with selected topics', () => {
     const selectedTopics = ['1', '2'];
     render(
-      <TopicSelector {...defaultProps} selectedTopics={selectedTopics} disabled />
+      <TopicSelector
+        {...defaultProps}
+        selectedTopics={selectedTopics}
+        disabled
+      />
     );
 
     const trigger = screen.getByText('Choose topics...');
@@ -538,7 +544,7 @@ describe('TopicSelector Component - Advanced Tests', () => {
     });
 
     const categoryFilter = screen.getByDisplayValue('All Categories');
-    
+
     // Rapid category changes
     fireEvent.change(categoryFilter, { target: { value: 'JavaScript Core' } });
     fireEvent.change(categoryFilter, { target: { value: 'React & Frontend' } });
@@ -575,9 +581,3 @@ describe('TopicSelector Component - Advanced Tests', () => {
     expect(screen.getByText('2 topics selected')).toBeInTheDocument();
   });
 });
-
-
-
-
-
-

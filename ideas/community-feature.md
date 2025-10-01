@@ -409,7 +409,3 @@ components/community/
 **Team Size**: 2-3 developers
 
 This community feature will transform the platform from a solo learning experience into a collaborative, supportive learning ecosystem! 🌟👥🚀
-
-
-
-

@@ -375,4 +375,3 @@ export const GuidedAnalytics: React.FC = () => {
     </div>
   );
 };
-

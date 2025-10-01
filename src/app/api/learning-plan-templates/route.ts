@@ -7,14 +7,14 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      data: plans
+      data: plans,
     });
   } catch (error) {
     console.error('Error fetching learning plan templates:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch learning plan templates'
+        error: 'Failed to fetch learning plan templates',
       },
       { status: 500 }
     );
@@ -24,26 +24,26 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      id, 
-      name, 
-      description, 
-      duration, 
-      difficulty, 
-      totalQuestions, 
-      dailyQuestions, 
-      estimatedTime, 
-      features, 
-      sections, 
-      isRecommended, 
-      isActive 
+    const {
+      id,
+      name,
+      description,
+      duration,
+      difficulty,
+      totalQuestions,
+      dailyQuestions,
+      estimatedTime,
+      features,
+      sections,
+      isRecommended,
+      isActive,
     } = body;
 
     if (!name || !description) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Name and description are required'
+          error: 'Name and description are required',
         },
         { status: 400 }
       );
@@ -73,18 +73,17 @@ export async function POST(request: NextRequest) {
       success: true,
       data: {
         id: plan,
-        ...planData
-      }
+        ...planData,
+      },
     });
   } catch (error) {
     console.error('Error creating learning plan template:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to create learning plan template'
+        error: 'Failed to create learning plan template',
       },
       { status: 500 }
     );
   }
 }
-

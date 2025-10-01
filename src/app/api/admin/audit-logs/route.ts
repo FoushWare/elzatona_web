@@ -21,7 +21,10 @@ export async function GET(request: NextRequest) {
     if (action) {
       logs = await AuditLogService.getLogsByAction(action);
     } else if (resource) {
-      logs = await AuditLogService.getLogsForResource(resource, resourceId || undefined);
+      logs = await AuditLogService.getLogsForResource(
+        resource,
+        resourceId || undefined
+      );
     } else if (userId) {
       logs = await AuditLogService.getLogsByUser(userId);
     } else if (startDate && endDate) {
@@ -33,14 +36,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: logs,
-      count: logs.length
+      count: logs.length,
     });
   } catch (error) {
     console.error('Error fetching audit logs:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch audit logs'
+        error: 'Failed to fetch audit logs',
       },
       { status: 500 }
     );
@@ -51,13 +54,13 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const logData = await request.json();
-    
+
     // Validate required fields
     if (!logData.action || !logData.resource || !logData.details) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Missing required fields: action, resource, details'
+          error: 'Missing required fields: action, resource, details',
         },
         { status: 400 }
       );
@@ -68,14 +71,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: { id: logId },
-      message: 'Audit log created successfully'
+      message: 'Audit log created successfully',
     });
   } catch (error) {
     console.error('Error creating audit log:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to create audit log'
+        error: 'Failed to create audit log',
       },
       { status: 500 }
     );

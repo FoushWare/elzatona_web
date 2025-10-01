@@ -31,7 +31,9 @@ const mockRouter = {
 };
 
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<typeof useAdminAuth>;
+const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<
+  typeof useAdminAuth
+>;
 
 // Mock usePathname
 const { usePathname } = require('next/navigation');
@@ -40,7 +42,7 @@ const mockUsePathname = usePathname as jest.MockedFunction<typeof usePathname>;
 describe('AdminLayout Component - Advanced Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     mockUseRouter.mockReturnValue(mockRouter);
     mockUsePathname.mockReturnValue('/admin/dashboard');
   });
@@ -67,7 +69,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
         <div>Test Content</div>
       </AdminLayout>
     );
-    
+
     expect(screen.getByTestId('admin-navbar')).toBeInTheDocument();
     expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
@@ -87,7 +89,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
         <div>Test Content</div>
       </AdminLayout>
     );
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/login');
     });
@@ -109,7 +111,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
         <div>Login Page Content</div>
       </AdminLayout>
     );
-    
+
     expect(screen.getByText('Login Page Content')).toBeInTheDocument();
     expect(mockRouter.replace).not.toHaveBeenCalled();
   });
@@ -130,7 +132,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
         <div>Admin Root Content</div>
       </AdminLayout>
     );
-    
+
     expect(screen.getByText('Admin Root Content')).toBeInTheDocument();
     expect(mockRouter.replace).not.toHaveBeenCalled();
   });
@@ -150,7 +152,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
         <div>Test Content</div>
       </AdminLayout>
     );
-    
+
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 
@@ -169,7 +171,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
         <div>Test Content</div>
       </AdminLayout>
     );
-    
+
     expect(screen.getByText(/authentication failed/i)).toBeInTheDocument();
   });
 
@@ -206,7 +208,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
           <div>Content for {route}</div>
         </AdminLayout>
       );
-      
+
       expect(screen.getByText(`Content for ${route}`)).toBeInTheDocument();
       unmount();
     });
@@ -235,7 +237,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
         <div>Nested Route Content</div>
       </AdminLayout>
     );
-    
+
     expect(screen.getByText('Nested Route Content')).toBeInTheDocument();
     expect(screen.getByTestId('admin-navbar')).toBeInTheDocument();
   });
@@ -262,7 +264,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
         <div>Moderator Content</div>
       </AdminLayout>
     );
-    
+
     expect(screen.getByText('Moderator Content')).toBeInTheDocument();
     expect(screen.getByTestId('admin-navbar')).toBeInTheDocument();
   });
@@ -289,7 +291,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
         <div>Test Content</div>
       </AdminLayout>
     );
-    
+
     expect(mockRouter.replace).toHaveBeenCalledWith('/admin/login');
   });
 
@@ -369,7 +371,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
         <div>Child 3</div>
       </AdminLayout>
     );
-    
+
     expect(screen.getByText('Child 1')).toBeInTheDocument();
     expect(screen.getByText('Child 2')).toBeInTheDocument();
     expect(screen.getByText('Child 3')).toBeInTheDocument();
@@ -393,7 +395,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
     });
 
     render(<AdminLayout></AdminLayout>);
-    
+
     expect(screen.getByTestId('admin-navbar')).toBeInTheDocument();
   });
 
@@ -415,7 +417,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
     });
 
     render(<AdminLayout>{null}</AdminLayout>);
-    
+
     expect(screen.getByTestId('admin-navbar')).toBeInTheDocument();
   });
 
@@ -437,7 +439,7 @@ describe('AdminLayout Component - Advanced Tests', () => {
     });
 
     render(<AdminLayout>{undefined}</AdminLayout>);
-    
+
     expect(screen.getByTestId('admin-navbar')).toBeInTheDocument();
   });
 
@@ -470,16 +472,10 @@ describe('AdminLayout Component - Advanced Tests', () => {
         </div>
       </AdminLayout>
     );
-    
+
     expect(screen.getByText('Header')).toBeInTheDocument();
     expect(screen.getByText('Section 1')).toBeInTheDocument();
     expect(screen.getByText('Section 2')).toBeInTheDocument();
     expect(screen.getByText('Footer')).toBeInTheDocument();
   });
 });
-
-
-
-
-
-

@@ -199,7 +199,3 @@ className = 'text-white/80 font-medium'; // Secondary items
 6. **Gather user feedback** on navigation experience
 
 By adopting GreatFrontend's proven design principles, we can create a more effective and user-friendly navigation experience that drives engagement and conversions.
-
-
-
-

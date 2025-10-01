@@ -26,7 +26,6 @@ export async function POST() {
     });
 
     return response;
-
   } catch (error) {
     console.error('Error clearing auth cookie:', error);
     return NextResponse.json(

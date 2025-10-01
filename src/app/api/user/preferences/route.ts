@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     // Get the Firebase token from cookies
     const cookieStore = cookies();
     const token = cookieStore.get('firebase-token')?.value;
-    
+
     if (!token) {
       return NextResponse.json(
         { error: 'Authentication required' },
@@ -28,19 +28,15 @@ export async function GET(request: NextRequest) {
 
     // Get user data from Firestore
     const userData = await firestoreService.getUser(decodedToken.uid);
-    
+
     if (!userData) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     return NextResponse.json({
       success: true,
       preferences: userData.preferences,
     });
-
   } catch (error) {
     console.error('Error fetching user preferences:', error);
     return NextResponse.json(
@@ -55,7 +51,7 @@ export async function PUT(request: NextRequest) {
     // Get the Firebase token from cookies
     const cookieStore = cookies();
     const token = cookieStore.get('firebase-token')?.value;
-    
+
     if (!token) {
       return NextResponse.json(
         { error: 'Authentication required' },
@@ -73,7 +69,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const preferences: Partial<UserPreferences> = await request.json();
-    
+
     // Validate preferences data
     if (!preferences) {
       return NextResponse.json(
@@ -89,7 +85,6 @@ export async function PUT(request: NextRequest) {
       success: true,
       message: 'Preferences updated successfully',
     });
-
   } catch (error) {
     console.error('Error updating user preferences:', error);
     return NextResponse.json(
@@ -98,4 +93,3 @@ export async function PUT(request: NextRequest) {
     );
   }
 }
-

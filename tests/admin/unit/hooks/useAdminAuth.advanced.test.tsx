@@ -423,9 +423,3 @@ describe('useAdminAuth Hook - Advanced Tests', () => {
     expect(result.current.isAuthenticated).toBe(false);
   });
 });
-
-
-
-
-
-

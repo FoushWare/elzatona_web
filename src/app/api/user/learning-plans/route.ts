@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     // Get the Firebase token from cookies
     const cookieStore = cookies();
     const token = cookieStore.get('firebase-token')?.value;
-    
+
     if (!token) {
       return NextResponse.json(
         { error: 'Authentication required' },
@@ -31,8 +31,11 @@ export async function GET(request: NextRequest) {
 
     if (planId) {
       // Get specific learning plan
-      const plan = await firestoreService.getLearningPlan(decodedToken.uid, planId);
-      
+      const plan = await firestoreService.getLearningPlan(
+        decodedToken.uid,
+        planId
+      );
+
       if (!plan) {
         return NextResponse.json(
           { error: 'Learning plan not found' },
@@ -47,12 +50,9 @@ export async function GET(request: NextRequest) {
     } else {
       // Get all learning plans for user
       const userData = await firestoreService.getUser(decodedToken.uid);
-      
+
       if (!userData) {
-        return NextResponse.json(
-          { error: 'User not found' },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
 
       return NextResponse.json({
@@ -60,7 +60,6 @@ export async function GET(request: NextRequest) {
         plans: userData.learningPlans,
       });
     }
-
   } catch (error) {
     console.error('Error fetching learning plans:', error);
     return NextResponse.json(
@@ -75,7 +74,7 @@ export async function POST(request: NextRequest) {
     // Get the Firebase token from cookies
     const cookieStore = cookies();
     const token = cookieStore.get('firebase-token')?.value;
-    
+
     if (!token) {
       return NextResponse.json(
         { error: 'Authentication required' },
@@ -93,7 +92,7 @@ export async function POST(request: NextRequest) {
     }
 
     const planData: LearningPlanProgress = await request.json();
-    
+
     // Validate plan data
     if (!planData.planId || !planData.planName) {
       return NextResponse.json(
@@ -110,7 +109,6 @@ export async function POST(request: NextRequest) {
       message: 'Learning plan started successfully',
       planId: planData.planId,
     });
-
   } catch (error) {
     console.error('Error starting learning plan:', error);
     return NextResponse.json(
@@ -125,7 +123,7 @@ export async function PUT(request: NextRequest) {
     // Get the Firebase token from cookies
     const cookieStore = cookies();
     const token = cookieStore.get('firebase-token')?.value;
-    
+
     if (!token) {
       return NextResponse.json(
         { error: 'Authentication required' },
@@ -144,7 +142,7 @@ export async function PUT(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const planId = searchParams.get('planId');
-    
+
     if (!planId) {
       return NextResponse.json(
         { error: 'Plan ID is required' },
@@ -153,15 +151,18 @@ export async function PUT(request: NextRequest) {
     }
 
     const updates: Partial<LearningPlanProgress> = await request.json();
-    
+
     // Update learning plan
-    await firestoreService.updateLearningPlan(decodedToken.uid, planId, updates);
+    await firestoreService.updateLearningPlan(
+      decodedToken.uid,
+      planId,
+      updates
+    );
 
     return NextResponse.json({
       success: true,
       message: 'Learning plan updated successfully',
     });
-
   } catch (error) {
     console.error('Error updating learning plan:', error);
     return NextResponse.json(
@@ -170,4 +171,3 @@ export async function PUT(request: NextRequest) {
     );
   }
 }
-

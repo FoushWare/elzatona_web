@@ -2,16 +2,16 @@
 // v1.0 - Comprehensive admin action logging
 
 import { db } from './firebase-server';
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  getDocs, 
-  query, 
-  orderBy, 
+import {
+  collection,
+  doc,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
   limit,
   where,
-  Timestamp 
+  Timestamp,
 } from 'firebase/firestore';
 
 export interface AuditLog {
@@ -36,20 +36,24 @@ export class AuditLogService {
   private static readonly COLLECTION = 'admin-audit-logs';
 
   // Create a new audit log entry
-  static async logAction(logData: Omit<AuditLog, 'id' | 'timestamp'>): Promise<string> {
+  static async logAction(
+    logData: Omit<AuditLog, 'id' | 'timestamp'>
+  ): Promise<string> {
     if (!db) throw new Error('Firestore not available');
 
     try {
       const auditRef = collection(db, this.COLLECTION);
       const now = new Date().toISOString();
-      
+
       const logEntry: Omit<AuditLog, 'id'> = {
         ...logData,
-        timestamp: now
+        timestamp: now,
       };
 
       const docRef = await addDoc(auditRef, logEntry);
-      console.log(`📝 Audit log created: ${logData.action} on ${logData.resource} (${docRef.id})`);
+      console.log(
+        `📝 Audit log created: ${logData.action} on ${logData.resource} (${docRef.id})`
+      );
       return docRef.id;
     } catch (error) {
       console.error('Error creating audit log:', error);
@@ -65,10 +69,10 @@ export class AuditLogService {
       const logsRef = collection(db, this.COLLECTION);
       const q = query(logsRef, orderBy('timestamp', 'desc'), limit(limitCount));
       const snapshot = await getDocs(q);
-      
+
       return snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as AuditLog[];
     } catch (error) {
       console.error('Error fetching audit logs:', error);
@@ -77,33 +81,36 @@ export class AuditLogService {
   }
 
   // Get audit logs for a specific resource
-  static async getLogsForResource(resource: string, resourceId?: string): Promise<AuditLog[]> {
+  static async getLogsForResource(
+    resource: string,
+    resourceId?: string
+  ): Promise<AuditLog[]> {
     if (!db) throw new Error('Firestore not available');
 
     try {
       const logsRef = collection(db, this.COLLECTION);
       let q;
-      
+
       if (resourceId) {
         q = query(
-          logsRef, 
+          logsRef,
           where('resource', '==', resource),
           where('resourceId', '==', resourceId),
           orderBy('timestamp', 'desc')
         );
       } else {
         q = query(
-          logsRef, 
+          logsRef,
           where('resource', '==', resource),
           orderBy('timestamp', 'desc')
         );
       }
-      
+
       const snapshot = await getDocs(q);
-      
+
       return snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as AuditLog[];
     } catch (error) {
       console.error('Error fetching resource audit logs:', error);
@@ -118,15 +125,15 @@ export class AuditLogService {
     try {
       const logsRef = collection(db, this.COLLECTION);
       const q = query(
-        logsRef, 
+        logsRef,
         where('action', '==', action),
         orderBy('timestamp', 'desc')
       );
       const snapshot = await getDocs(q);
-      
+
       return snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as AuditLog[];
     } catch (error) {
       console.error('Error fetching action audit logs:', error);
@@ -141,15 +148,15 @@ export class AuditLogService {
     try {
       const logsRef = collection(db, this.COLLECTION);
       const q = query(
-        logsRef, 
+        logsRef,
         where('userId', '==', userId),
         orderBy('timestamp', 'desc')
       );
       const snapshot = await getDocs(q);
-      
+
       return snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as AuditLog[];
     } catch (error) {
       console.error('Error fetching user audit logs:', error);
@@ -158,22 +165,25 @@ export class AuditLogService {
   }
 
   // Get audit logs within a date range
-  static async getLogsByDateRange(startDate: string, endDate: string): Promise<AuditLog[]> {
+  static async getLogsByDateRange(
+    startDate: string,
+    endDate: string
+  ): Promise<AuditLog[]> {
     if (!db) throw new Error('Firestore not available');
 
     try {
       const logsRef = collection(db, this.COLLECTION);
       const q = query(
-        logsRef, 
+        logsRef,
         where('timestamp', '>=', startDate),
         where('timestamp', '<=', endDate),
         orderBy('timestamp', 'desc')
       );
       const snapshot = await getDocs(q);
-      
+
       return snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as AuditLog[];
     } catch (error) {
       console.error('Error fetching date range audit logs:', error);

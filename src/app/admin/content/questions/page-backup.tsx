@@ -115,7 +115,7 @@ export default function QuestionsManagementPage() {
           dataLength: data.data?.length,
           totalCount: data.pagination?.totalCount,
           page: data.pagination?.page,
-          error: data.error
+          error: data.error,
         });
 
         if (data.success) {
@@ -177,7 +177,7 @@ export default function QuestionsManagementPage() {
   // Load data on mount and when category changes
   useEffect(() => {
     setCurrentPage(1); // Reset to first page when category changes
-    
+
     // Add a small delay to ensure hydration is complete
     const timer = setTimeout(() => {
       console.log('🔄 useEffect triggered - loading questions with timeout');
@@ -362,8 +362,8 @@ export default function QuestionsManagementPage() {
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => {
               console.log('🔄 Manual load triggered');
               loadQuestions(1, selectedCategory, pageSize);

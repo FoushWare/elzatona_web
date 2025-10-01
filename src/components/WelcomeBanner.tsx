@@ -78,7 +78,3 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ onClose }) => {
     </div>
   );
 };
-
-
-
-

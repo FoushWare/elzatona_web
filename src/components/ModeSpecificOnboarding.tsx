@@ -459,4 +459,3 @@ export const ModeSpecificOnboarding: React.FC<ModeSpecificOnboardingProps> = ({
     </div>
   );
 };
-

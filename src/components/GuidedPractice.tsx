@@ -442,4 +442,3 @@ export const GuidedPractice: React.FC = () => {
     </div>
   );
 };
-

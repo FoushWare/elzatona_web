@@ -13,11 +13,14 @@ export async function GET(request: NextRequest) {
 
     // If requesting sections for plan creation
     if (getSections) {
-      const sections = await autoLinkingService.getSectionsForPlan(category || undefined, learningPath || undefined);
+      const sections = await autoLinkingService.getSectionsForPlan(
+        category || undefined,
+        learningPath || undefined
+      );
       return NextResponse.json({
         success: true,
         data: sections,
-        count: sections.length
+        count: sections.length,
       });
     }
 
@@ -28,7 +31,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         data: [],
-        count: 0
+        count: 0,
       });
     }
 
@@ -70,11 +73,11 @@ export async function POST(request: NextRequest) {
     // Save to Firestore
     const planId = await firestoreService.saveLearningPlanTemplate(newPlan);
     const createdPlan = { ...newPlan, id: planId };
-    
+
     return NextResponse.json({
       success: true,
       message: 'Plan created successfully',
-      plan: createdPlan
+      plan: createdPlan,
     });
   } catch (error) {
     console.error('Error creating learning plan:', error);
@@ -105,15 +108,18 @@ export async function DELETE(request: NextRequest) {
     console.log('Attempting to delete from Firestore...');
     await firestoreService.deleteLearningPlanTemplate(planId);
     console.log('Successfully deleted from Firestore');
-    
+
     return NextResponse.json({
       success: true,
-      message: 'Plan deleted successfully'
+      message: 'Plan deleted successfully',
     });
   } catch (error) {
     console.error('Error deleting learning plan:', error);
     return NextResponse.json(
-      { success: false, error: `Failed to delete learning plan: ${error.message}` },
+      {
+        success: false,
+        error: `Failed to delete learning plan: ${error.message}`,
+      },
       { status: 500 }
     );
   }

@@ -4,8 +4,23 @@
 import { AuditLogService } from './audit-log-schema';
 
 export interface LogActionParams {
-  action: 'CREATE' | 'UPDATE' | 'DELETE' | 'VIEW' | 'LOGIN' | 'LOGOUT' | 'EXPORT' | 'IMPORT';
-  resource: 'TOPIC' | 'CATEGORY' | 'QUESTION' | 'SECTION' | 'LEARNING_PATH' | 'USER' | 'SYSTEM';
+  action:
+    | 'CREATE'
+    | 'UPDATE'
+    | 'DELETE'
+    | 'VIEW'
+    | 'LOGIN'
+    | 'LOGOUT'
+    | 'EXPORT'
+    | 'IMPORT';
+  resource:
+    | 'TOPIC'
+    | 'CATEGORY'
+    | 'QUESTION'
+    | 'SECTION'
+    | 'LEARNING_PATH'
+    | 'USER'
+    | 'SYSTEM';
   resourceId?: string;
   resourceName?: string;
   details: string;
@@ -27,10 +42,10 @@ export class AuditLogger {
       const cleanParams = Object.fromEntries(
         Object.entries(params).filter(([_, value]) => value !== undefined)
       );
-      
+
       await AuditLogService.logAction({
         ...cleanParams,
-        success: true
+        success: true,
       });
     } catch (error) {
       console.error('Failed to log audit action:', error);
@@ -38,16 +53,18 @@ export class AuditLogger {
   }
 
   // Log a failed action
-  static async logError(params: LogActionParams & { errorMessage: string }): Promise<void> {
+  static async logError(
+    params: LogActionParams & { errorMessage: string }
+  ): Promise<void> {
     try {
       // Clean up undefined values to prevent Firebase errors
       const cleanParams = Object.fromEntries(
         Object.entries(params).filter(([_, value]) => value !== undefined)
       );
-      
+
       await AuditLogService.logAction({
         ...cleanParams,
-        success: false
+        success: false,
       });
     } catch (error) {
       console.error('Failed to log audit action:', error);
@@ -72,7 +89,7 @@ export class AuditLogger {
       details,
       changes,
       ipAddress: this.getClientIP(),
-      userAgent: this.getUserAgent()
+      userAgent: this.getUserAgent(),
     };
 
     // Only add user info if provided
@@ -100,7 +117,7 @@ export class AuditLogger {
       details,
       changes,
       ipAddress: this.getClientIP(),
-      userAgent: this.getUserAgent()
+      userAgent: this.getUserAgent(),
     };
 
     // Only add user info if provided
@@ -128,7 +145,7 @@ export class AuditLogger {
       details,
       changes,
       ipAddress: this.getClientIP(),
-      userAgent: this.getUserAgent()
+      userAgent: this.getUserAgent(),
     };
 
     // Only add user info if provided
@@ -156,7 +173,7 @@ export class AuditLogger {
       details,
       changes,
       ipAddress: this.getClientIP(),
-      userAgent: this.getUserAgent()
+      userAgent: this.getUserAgent(),
     };
 
     // Only add user info if provided
@@ -184,7 +201,7 @@ export class AuditLogger {
       details,
       changes,
       ipAddress: this.getClientIP(),
-      userAgent: this.getUserAgent()
+      userAgent: this.getUserAgent(),
     };
 
     // Only add user info if provided
@@ -212,7 +229,7 @@ export class AuditLogger {
       userId,
       userEmail,
       ipAddress: this.getClientIP(),
-      userAgent: this.getUserAgent()
+      userAgent: this.getUserAgent(),
     });
   }
 
@@ -230,7 +247,7 @@ export class AuditLogger {
       details,
       metadata,
       ipAddress: this.getClientIP(),
-      userAgent: this.getUserAgent()
+      userAgent: this.getUserAgent(),
     };
 
     // Only add user info if provided

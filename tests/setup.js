@@ -6,7 +6,7 @@
 jest.mock('firebase/app', () => ({
   initializeApp: jest.fn(() => ({})),
   getApps: jest.fn(() => []),
-  getApp: jest.fn(() => ({}))
+  getApp: jest.fn(() => ({})),
 }));
 
 jest.mock('firebase/firestore', () => ({
@@ -14,7 +14,9 @@ jest.mock('firebase/firestore', () => ({
   collection: jest.fn(() => ({})),
   doc: jest.fn(() => ({})),
   addDoc: jest.fn(() => Promise.resolve({ id: 'mock-id' })),
-  getDoc: jest.fn(() => Promise.resolve({ exists: () => true, data: () => ({}) })),
+  getDoc: jest.fn(() =>
+    Promise.resolve({ exists: () => true, data: () => ({}) })
+  ),
   getDocs: jest.fn(() => Promise.resolve({ docs: [] })),
   updateDoc: jest.fn(() => Promise.resolve()),
   deleteDoc: jest.fn(() => Promise.resolve()),
@@ -22,27 +24,27 @@ jest.mock('firebase/firestore', () => ({
   where: jest.fn(() => ({})),
   orderBy: jest.fn(() => ({})),
   Timestamp: {
-    now: jest.fn(() => ({ toDate: () => new Date() }))
-  }
+    now: jest.fn(() => ({ toDate: () => new Date() })),
+  },
 }));
 
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn(() => ({})),
   signInWithEmailAndPassword: jest.fn(() => Promise.resolve({})),
-  signOut: jest.fn(() => Promise.resolve())
+  signOut: jest.fn(() => Promise.resolve()),
 }));
 
 jest.mock('firebase/storage', () => ({
-  getStorage: jest.fn(() => ({}))
+  getStorage: jest.fn(() => ({})),
 }));
 
 // Mock Next.js
 jest.mock('next/server', () => ({
   NextRequest: jest.fn(),
   NextResponse: {
-    json: jest.fn((data) => ({ json: () => data })),
-    redirect: jest.fn((url) => ({ redirect: () => url }))
-  }
+    json: jest.fn(data => ({ json: () => data })),
+    redirect: jest.fn(url => ({ redirect: () => url })),
+  },
 }));
 
 // Mock environment variables
@@ -71,9 +73,9 @@ global.testUtils = {
     isComplete: true,
     createdBy: 'test-admin',
     lastModifiedBy: 'test-admin',
-    ...overrides
+    ...overrides,
   }),
-  
+
   createMockSection: (overrides = {}) => ({
     title: 'Test Section',
     description: 'Test section description',
@@ -83,9 +85,9 @@ global.testUtils = {
     weight: 25,
     isActive: true,
     questions: [],
-    ...overrides
+    ...overrides,
   }),
-  
+
   createMockLearningPlan: (overrides = {}) => ({
     title: 'Test Learning Plan',
     description: 'Test learning plan description',
@@ -96,8 +98,8 @@ global.testUtils = {
     isActive: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    ...overrides
-  })
+    ...overrides,
+  }),
 };
 
 // Console suppression for cleaner test output
@@ -106,8 +108,5 @@ global.console = {
   ...originalConsole,
   log: jest.fn(),
   warn: jest.fn(),
-  error: jest.fn()
+  error: jest.fn(),
 };
-
-
-
