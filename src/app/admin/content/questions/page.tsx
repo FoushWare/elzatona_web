@@ -52,6 +52,7 @@ interface Topic {
 export default function QuestionsManagementPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingCount, setIsLoadingCount] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -103,6 +104,7 @@ export default function QuestionsManagementPage() {
         const params = new URLSearchParams({
           page: page.toString(),
           pageSize: size.toString(),
+          includePagination: 'false', // Disable pagination for faster loading
         });
 
         if (category !== 'all') {
@@ -116,15 +118,7 @@ export default function QuestionsManagementPage() {
         if (data.success) {
           console.log('✅ Questions loaded:', data.data.length);
           setQuestions(data.data || []);
-
-          // Update pagination state
-          if (data.pagination) {
-            setTotalCount(data.pagination.totalCount);
-            setTotalPages(data.pagination.totalPages);
-            setHasNextPage(data.pagination.hasNextPage);
-            setHasPrevPage(data.pagination.hasPrevPage);
-            setCurrentPage(data.pagination.page);
-          }
+          // Pagination will be loaded separately by loadTotalCount
         } else {
           console.error('❌ API error:', data.error);
           setError(data.error || 'Failed to load questions');
@@ -151,6 +145,34 @@ export default function QuestionsManagementPage() {
     },
     [currentPage, selectedCategory, pageSize]
   );
+
+  // Load total count separately after questions are loaded
+  const loadTotalCount = useCallback(async () => {
+    try {
+      console.log('📊 Loading total count...');
+      setIsLoadingCount(true);
+      
+      // Use the fast count-only endpoint
+      const params = new URLSearchParams();
+      if (selectedCategory !== 'all') {
+        params.append('category', selectedCategory);
+      }
+      
+      const response = await fetch(`/api/questions/count?${params}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        console.log('✅ Total count loaded:', data.data.totalCount);
+        setTotalCount(data.data.totalCount);
+        setTotalPages(Math.ceil(data.data.totalCount / pageSize));
+      }
+    } catch (err) {
+      console.error('❌ Error loading total count:', err);
+      // Don't set error for total count failure, just log it
+    } finally {
+      setIsLoadingCount(false);
+    }
+  }, [selectedCategory, pageSize]);
 
   // Load topics
   const loadTopics = useCallback(async () => {
@@ -191,6 +213,18 @@ export default function QuestionsManagementPage() {
       loadQuestions(currentPage, selectedCategory, pageSize);
     }
   }, [currentPage]);
+
+  // Load total count after questions are loaded (with a small delay)
+  useEffect(() => {
+    if (questions.length > 0) {
+      // Load total count after a short delay to not block the UI
+      const timer = setTimeout(() => {
+        loadTotalCount();
+      }, 500); // 500ms delay
+      
+      return () => clearTimeout(timer);
+    }
+  }, [questions.length, loadTotalCount]);
 
   // Pagination functions
   const handlePageChange = (newPage: number) => {
@@ -374,7 +408,16 @@ export default function QuestionsManagementPage() {
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-blue-600">{totalCount}</h2>
+              <h2 className="text-2xl font-bold text-blue-600">
+                {isLoadingCount ? (
+                  <div className="flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+                    <span>Loading...</span>
+                  </div>
+                ) : (
+                  totalCount
+                )}
+              </h2>
               <p className="text-sm text-gray-600">Total Questions</p>
             </div>
             <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
