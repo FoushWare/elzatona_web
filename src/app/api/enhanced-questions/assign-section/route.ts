@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'questionId and sectionId are required'
+          error: 'questionId and sectionId are required',
         },
         { status: 400 }
       );
@@ -28,13 +28,13 @@ export async function POST(request: NextRequest) {
     if (success) {
       return NextResponse.json({
         success: true,
-        message: 'Question assigned to section successfully'
+        message: 'Question assigned to section successfully',
       });
     } else {
       return NextResponse.json(
         {
           success: false,
-          error: 'Failed to assign question to section'
+          error: 'Failed to assign question to section',
         },
         { status: 500 }
       );
@@ -44,7 +44,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to assign question to section'
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to assign question to section',
       },
       { status: 500 }
     );
@@ -61,7 +64,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'questionId is required'
+          error: 'questionId is required',
         },
         { status: 400 }
       );
@@ -71,14 +74,17 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Question removed from section successfully'
+      message: 'Question removed from section successfully',
     });
   } catch (error) {
     console.error('Error removing question from section:', error);
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to remove question from section'
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to remove question from section',
       },
       { status: 500 }
     );

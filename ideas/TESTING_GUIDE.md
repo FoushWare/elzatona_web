@@ -92,6 +92,7 @@ npx playwright install
 **Purpose**: Test individual components and functions in isolation.
 
 **Coverage**:
+
 - Component rendering
 - User interactions
 - State management
@@ -100,6 +101,7 @@ npx playwright install
 - Loading states
 
 **Example**:
+
 ```typescript
 // tests/unit/auth-page.test.tsx
 test('renders login form by default', () => {
@@ -110,6 +112,7 @@ test('renders login form by default', () => {
 ```
 
 **Running**:
+
 ```bash
 npm run test:unit
 ```
@@ -119,6 +122,7 @@ npm run test:unit
 **Purpose**: Test component interactions and data flow between different parts of the application.
 
 **Coverage**:
+
 - Firebase authentication flow
 - Dashboard data loading
 - User progress tracking
@@ -126,18 +130,19 @@ npm run test:unit
 - State synchronization
 
 **Example**:
+
 ```typescript
 // tests/integration/firebase-auth-integration.test.tsx
 test('completes full email login flow', async () => {
   mockFirebaseAuth.signInWithEmail.mockResolvedValue({ success: true });
-  
+
   render(<AuthPage />);
-  
-  fireEvent.change(screen.getByLabelText('Email Address'), { 
-    target: { value: 'test@example.com' } 
+
+  fireEvent.change(screen.getByLabelText('Email Address'), {
+    target: { value: 'test@example.com' }
   });
   fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
-  
+
   await waitFor(() => {
     expect(mockPush).toHaveBeenCalledWith('/dashboard');
   });
@@ -145,6 +150,7 @@ test('completes full email login flow', async () => {
 ```
 
 **Running**:
+
 ```bash
 npm run test:integration
 ```
@@ -154,6 +160,7 @@ npm run test:integration
 **Purpose**: Test complete user journeys across the application.
 
 **Coverage**:
+
 - Authentication flow (login, signup, social auth)
 - Dashboard navigation and interactions
 - Responsive design across devices
@@ -162,11 +169,12 @@ npm run test:integration
 - Error handling in real browser environment
 
 **Example**:
+
 ```typescript
 // tests/e2e/auth-flow.spec.ts
 test('should render authentication page correctly', async ({ page }) => {
   await page.goto('/auth');
-  
+
   await expect(page.getByText('Welcome Back!')).toBeVisible();
   await expect(page.getByLabel('Email Address')).toBeVisible();
   await expect(page.getByRole('button', { name: /sign in/i })).toBeVisible();
@@ -174,6 +182,7 @@ test('should render authentication page correctly', async ({ page }) => {
 ```
 
 **Running**:
+
 ```bash
 npm run test:e2e
 ```
@@ -183,6 +192,7 @@ npm run test:e2e
 **Purpose**: Test component variations, visual regression, and component documentation.
 
 **Coverage**:
+
 - Component states (loading, error, success)
 - Different props and configurations
 - Responsive design variations
@@ -190,6 +200,7 @@ npm run test:e2e
 - Interactive component behavior
 
 **Example**:
+
 ```typescript
 // src/stories/AuthPage.stories.tsx
 export const Default: Story = {
@@ -197,7 +208,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Default view showing the login form with email/password fields and social login options.',
+        story:
+          'Default view showing the login form with email/password fields and social login options.',
       },
     },
   },
@@ -205,6 +217,7 @@ export const Default: Story = {
 ```
 
 **Running**:
+
 ```bash
 npm run storybook
 npm run test:storybook
@@ -215,6 +228,7 @@ npm run test:storybook
 ### Authentication Tests
 
 #### Unit Tests
+
 - ✅ Form rendering and validation
 - ✅ User input handling
 - ✅ Password visibility toggle
@@ -224,6 +238,7 @@ npm run test:storybook
 - ✅ Social login buttons
 
 #### Integration Tests
+
 - ✅ Complete email authentication flow
 - ✅ Social authentication flow
 - ✅ Form validation integration
@@ -232,6 +247,7 @@ npm run test:storybook
 - ✅ Loading state coordination
 
 #### E2E Tests
+
 - ✅ Complete user authentication journey
 - ✅ Responsive design testing
 - ✅ Accessibility compliance
@@ -242,6 +258,7 @@ npm run test:storybook
 ### Dashboard Tests
 
 #### Unit Tests
+
 - ✅ Component rendering
 - ✅ User progress display
 - ✅ Quick action navigation
@@ -250,6 +267,7 @@ npm run test:storybook
 - ✅ User profile display
 
 #### Integration Tests
+
 - ✅ Authentication state integration
 - ✅ Progress data loading
 - ✅ User interaction flow
@@ -258,6 +276,7 @@ npm run test:storybook
 - ✅ State synchronization
 
 #### E2E Tests
+
 - ✅ Complete dashboard user journey
 - ✅ Responsive design across devices
 - ✅ Navigation and interaction testing
@@ -313,6 +332,7 @@ npm run test:unit -- --coverage
 ```
 
 Coverage reports are generated in:
+
 - `coverage/lcov-report/index.html` - HTML report
 - `coverage/lcov.info` - LCOV format for CI
 
@@ -323,6 +343,7 @@ npm run test:e2e
 ```
 
 Reports are generated in:
+
 - `playwright-report/index.html` - HTML report with screenshots and videos
 
 ## 🚀 CI/CD Integration
@@ -358,11 +379,7 @@ jobs:
     }
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write",
-      "git add"
-    ]
+    "*.{ts,tsx}": ["eslint --fix", "prettier --write", "git add"]
   }
 }
 ```
@@ -410,24 +427,27 @@ npm run build-storybook
 ### Best Practices
 
 1. **Test Behavior, Not Implementation**
+
    ```typescript
    // Good: Test what the user sees
    expect(screen.getByText('Welcome Back!')).toBeInTheDocument();
-   
+
    // Bad: Test implementation details
    expect(component.state.isLogin).toBe(true);
    ```
 
 2. **Use Descriptive Test Names**
+
    ```typescript
    // Good
    test('should show error when passwords do not match in signup', () => {
-   
+
    // Bad
    test('password validation', () => {
    ```
 
 3. **Test Edge Cases**
+
    ```typescript
    test('handles empty progress data gracefully', () => {
      mockUserProgress.setState({
@@ -443,6 +463,7 @@ npm run build-storybook
    ```
 
 4. **Mock External Dependencies**
+
    ```typescript
    // Mock Firebase
    jest.mock('@/contexts/FirebaseAuthContext', () => ({
@@ -491,18 +512,21 @@ describe('ComponentName', () => {
 ### Common Issues
 
 1. **Tests failing due to missing mocks**
+
    ```bash
    # Check if all dependencies are mocked
    npm run test:unit -- --verbose
    ```
 
 2. **E2E tests timing out**
+
    ```bash
    # Increase timeout in playwright.config.ts
    testTimeout: 30000
    ```
 
 3. **Coverage below threshold**
+
    ```bash
    # Check coverage report
    open coverage/lcov-report/index.html
@@ -518,12 +542,14 @@ describe('ComponentName', () => {
 ### Performance Optimization
 
 1. **Parallel Test Execution**
+
    ```bash
    # Run tests in parallel
    npm run test:unit -- --maxWorkers=4
    ```
 
 2. **Selective Test Running**
+
    ```bash
    # Run only changed tests
    npm run test:unit -- --onlyChanged

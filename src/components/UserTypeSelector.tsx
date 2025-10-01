@@ -138,7 +138,3 @@ export const UserTypeSelector: React.FC<UserTypeSelectorProps> = ({
 };
 
 export default UserTypeSelector;
-
-
-
-

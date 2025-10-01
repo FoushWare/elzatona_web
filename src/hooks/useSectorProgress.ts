@@ -38,13 +38,19 @@ export function useSectorProgress(): UseSectorProgressReturn {
     }
   }, []);
 
-  const getSectorProgress = useCallback((sectorId: string): SectorProgress | null => {
-    return progress[sectorId] || null;
-  }, [progress]);
+  const getSectorProgress = useCallback(
+    (sectorId: string): SectorProgress | null => {
+      return progress[sectorId] || null;
+    },
+    [progress]
+  );
 
-  const getPathProgress = useCallback((pathId: string): SectorProgress[] => {
-    return Object.values(progress).filter(p => p.pathId === pathId);
-  }, [progress]);
+  const getPathProgress = useCallback(
+    (pathId: string): SectorProgress[] => {
+      return Object.values(progress).filter(p => p.pathId === pathId);
+    },
+    [progress]
+  );
 
   const saveProgress = useCallback((newProgress: SectorProgress) => {
     try {
@@ -68,7 +74,10 @@ export function useSectorProgress(): UseSectorProgressReturn {
       localStorage.removeItem(STORAGE_KEY);
     } catch (error) {
       setError('Failed to clear progress from local storage.');
-      console.error('Failed to clear sector progress from localStorage:', error);
+      console.error(
+        'Failed to clear sector progress from localStorage:',
+        error
+      );
     }
   }, []);
 

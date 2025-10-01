@@ -230,7 +230,3 @@ interface LearningModeSwitcherProps {
 **Total Impact**: The learning mode switcher gives users complete control over their learning experience, allowing them to switch between guided and free-style learning modes at any time! 🚀✨
 
 Users can now pause their guided learning journey and switch to free-style exploration whenever they want, or vice versa, creating a truly flexible and personalized learning experience! 🎯
-
-
-
-

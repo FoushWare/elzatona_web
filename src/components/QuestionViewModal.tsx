@@ -324,9 +324,3 @@ export function QuestionViewModal({
     </div>
   );
 }
-
-
-
-
-
-

@@ -24,17 +24,20 @@ This guide will help you set up Firebase authentication for the Frontend KodDev 
 4. Enable the following providers:
 
 ### Email/Password Authentication
+
 - Click "Email/Password"
 - Enable "Email/Password"
 - Click "Save"
 
 ### Google Authentication
+
 - Click "Google"
 - Enable "Google"
 - Add your support email
 - Click "Save"
 
 ### GitHub Authentication
+
 - Click "GitHub"
 - Enable "GitHub"
 - You'll need to create a GitHub OAuth app first (see GitHub setup below)
@@ -101,12 +104,12 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // Public read access to learning content
     match /learning-paths/{document=**} {
       allow read: if true;
     }
-    
+
     match /questions/{document=**} {
       allow read: if true;
     }

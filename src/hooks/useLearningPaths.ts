@@ -30,53 +30,54 @@ interface UseLearningPathsReturn {
   refetch: () => void;
 }
 
-       export function useLearningPaths(): UseLearningPathsReturn {
-         console.log('🚀 useLearningPaths hook called');
-         const [learningPaths, setLearningPaths] = useState<LearningPath[]>([]);
-         const [isLoading, setIsLoading] = useState(true);
-         const [error, setError] = useState<string | null>(null);
+export function useLearningPaths(): UseLearningPathsReturn {
+  console.log('🚀 useLearningPaths hook called');
+  const [learningPaths, setLearningPaths] = useState<LearningPath[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-        const fetchLearningPaths = useCallback(async () => {
-          try {
-            console.log('🔄 Fetching learning paths...');
-            setIsLoading(true);
-            setError(null);
+  const fetchLearningPaths = useCallback(async () => {
+    try {
+      console.log('🔄 Fetching learning paths...');
+      setIsLoading(true);
+      setError(null);
 
-            const response = await fetch('/api/learning-paths', {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-            
-            console.log('📡 API response status:', response.status);
-            
-            if (!response.ok) {
-              throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
+      const response = await fetch('/api/learning-paths', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-            const data = await response.json();
-            console.log('📊 API response data:', data);
+      console.log('📡 API response status:', response.status);
 
-            if (data.success && Array.isArray(data.data)) {
-              console.log('✅ Learning paths loaded:', data.data.length);
-              setLearningPaths(data.data);
-            } else {
-              throw new Error(data.error || 'Invalid response format');
-            }
-          } catch (err) {
-            console.error('❌ Error fetching learning paths:', err);
-            const errorMessage = err instanceof Error ? err.message : 'Failed to fetch learning paths';
-            setError(errorMessage);
-            setLearningPaths([]);
-          } finally {
-            setIsLoading(false);
-          }
-        }, []);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
-         const refetch = useCallback(() => {
-           fetchLearningPaths();
-         }, [fetchLearningPaths]);
+      const data = await response.json();
+      console.log('📊 API response data:', data);
+
+      if (data.success && Array.isArray(data.data)) {
+        console.log('✅ Learning paths loaded:', data.data.length);
+        setLearningPaths(data.data);
+      } else {
+        throw new Error(data.error || 'Invalid response format');
+      }
+    } catch (err) {
+      console.error('❌ Error fetching learning paths:', err);
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch learning paths';
+      setError(errorMessage);
+      setLearningPaths([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const refetch = useCallback(() => {
+    fetchLearningPaths();
+  }, [fetchLearningPaths]);
 
   useEffect(() => {
     // Only run on client side

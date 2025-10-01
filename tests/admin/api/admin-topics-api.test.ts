@@ -323,7 +323,9 @@ describe('Admin Topics API Tests', () => {
       mockFetch.mockResolvedValue({
         ok: false,
         status: 409,
-        json: async () => ({ error: 'Cannot delete topic with associated questions' }),
+        json: async () => ({
+          error: 'Cannot delete topic with associated questions',
+        }),
       } as Response);
 
       const response = await fetch(`${BASE_URL}/${topicId}`, {
@@ -362,9 +364,9 @@ describe('Admin Topics API Tests', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
-        json: async () => ({ 
+        json: async () => ({
           message: 'Topics initialized successfully',
-          topics: initializedTopics 
+          topics: initializedTopics,
         }),
       } as Response);
 
@@ -386,9 +388,9 @@ describe('Admin Topics API Tests', () => {
     test('should handle force initialization', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
-        json: async () => ({ 
+        json: async () => ({
           message: 'Topics initialized successfully (forced)',
-          topics: []
+          topics: [],
         }),
       } as Response);
 
@@ -410,7 +412,9 @@ describe('Admin Topics API Tests', () => {
       mockFetch.mockResolvedValue({
         ok: false,
         status: 409,
-        json: async () => ({ error: 'Topics already exist. Use force=true to overwrite.' }),
+        json: async () => ({
+          error: 'Topics already exist. Use force=true to overwrite.',
+        }),
       } as Response);
 
       const response = await fetch(`${BASE_URL}/initialize`, {
@@ -424,7 +428,9 @@ describe('Admin Topics API Tests', () => {
       const data = await response.json();
 
       expect(response.ok).toBe(false);
-      expect(data.error).toBe('Topics already exist. Use force=true to overwrite.');
+      expect(data.error).toBe(
+        'Topics already exist. Use force=true to overwrite.'
+      );
     });
   });
 
@@ -435,7 +441,8 @@ describe('Admin Topics API Tests', () => {
         {
           id: '1',
           title: 'JavaScript Variables',
-          content: 'What are the different ways to declare variables in JavaScript?',
+          content:
+            'What are the different ways to declare variables in JavaScript?',
           difficulty: 'beginner',
           category: 'JavaScript',
           topics: ['JavaScript Core'],
@@ -450,7 +457,9 @@ describe('Admin Topics API Tests', () => {
         json: async () => questions,
       } as Response);
 
-      const response = await fetch(`http://localhost:3000/api/questions/by-topic/${topicId}`);
+      const response = await fetch(
+        `http://localhost:3000/api/questions/by-topic/${topicId}`
+      );
       const data = await response.json();
 
       expect(response.ok).toBe(true);
@@ -465,7 +474,9 @@ describe('Admin Topics API Tests', () => {
         json: async () => [],
       } as Response);
 
-      const response = await fetch(`http://localhost:3000/api/questions/by-topic/${topicId}`);
+      const response = await fetch(
+        `http://localhost:3000/api/questions/by-topic/${topicId}`
+      );
       const data = await response.json();
 
       expect(response.ok).toBe(true);
@@ -480,20 +491,23 @@ describe('Admin Topics API Tests', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
-        json: async () => ({ 
+        json: async () => ({
           message: 'Question topics updated successfully',
           questionId,
-          topics 
+          topics,
         }),
       } as Response);
 
-      const response = await fetch(`http://localhost:3000/api/questions/question-topics/${questionId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ topics }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/questions/question-topics/${questionId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ topics }),
+        }
+      );
 
       const data = await response.json();
 
@@ -512,13 +526,16 @@ describe('Admin Topics API Tests', () => {
         json: async () => ({ error: 'Invalid topic IDs provided' }),
       } as Response);
 
-      const response = await fetch(`http://localhost:3000/api/questions/question-topics/${questionId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ topics: invalidTopics }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/questions/question-topics/${questionId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ topics: invalidTopics }),
+        }
+      );
 
       const data = await response.json();
 
@@ -536,20 +553,23 @@ describe('Admin Topics API Tests', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
-        json: async () => ({ 
+        json: async () => ({
           message: 'Bulk topic update completed successfully',
           updatedCount: 3,
-          failedCount: 0 
+          failedCount: 0,
         }),
       } as Response);
 
-      const response = await fetch('http://localhost:3000/api/questions/bulk-topics', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bulkUpdate),
-      });
+      const response = await fetch(
+        'http://localhost:3000/api/questions/bulk-topics',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bulkUpdate),
+        }
+      );
 
       const data = await response.json();
 
@@ -567,21 +587,24 @@ describe('Admin Topics API Tests', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
-        json: async () => ({ 
+        json: async () => ({
           message: 'Bulk topic update completed with some failures',
           updatedCount: 2,
           failedCount: 1,
-          failedQuestionIds: ['999']
+          failedQuestionIds: ['999'],
         }),
       } as Response);
 
-      const response = await fetch('http://localhost:3000/api/questions/bulk-topics', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bulkUpdate),
-      });
+      const response = await fetch(
+        'http://localhost:3000/api/questions/bulk-topics',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bulkUpdate),
+        }
+      );
 
       const data = await response.json();
 
@@ -592,9 +615,3 @@ describe('Admin Topics API Tests', () => {
     });
   });
 });
-
-
-
-
-
-

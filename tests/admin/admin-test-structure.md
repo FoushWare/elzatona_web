@@ -204,9 +204,3 @@ npm run test:admin:backup    # Backup & reports tests
 - Mock Firebase services
 - Test API endpoints
 - Clean state between tests
-
-
-
-
-
-

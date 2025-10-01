@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { getChallengeById } from "@/lib/challenges";
-import { Challenge } from "@/types/challenge";
-import { notFound } from "next/navigation";
-import CodeEditor from "@/components/CodeEditor";
-import TestRunner from "@/components/TestRunner";
+import { useState, useEffect } from 'react';
+import { getChallengeById } from '@/lib/challenges';
+import { Challenge } from '@/types/challenge';
+import { notFound } from 'next/navigation';
+import CodeEditor from '@/components/CodeEditor';
+import TestRunner from '@/components/TestRunner';
 
 interface EditorPageProps {
   params: {
@@ -15,9 +15,9 @@ interface EditorPageProps {
 
 export default function EditorPage({ params }: EditorPageProps) {
   const [challenge, setChallenge] = useState<Challenge | null>(null);
-  const [htmlCode, setHtmlCode] = useState("");
-  const [cssCode, setCssCode] = useState("");
-  const [javascriptCode, setJavascriptCode] = useState("");
+  const [htmlCode, setHtmlCode] = useState('');
+  const [cssCode, setCssCode] = useState('');
+  const [javascriptCode, setJavascriptCode] = useState('');
   const [isPreviewVisible, setIsPreviewVisible] = useState(true);
   const [isConsoleVisible, setIsConsoleVisible] = useState(false);
   const [isTestRunnerVisible, setIsTestRunnerVisible] = useState(false);
@@ -46,7 +46,7 @@ export default function EditorPage({ params }: EditorPageProps) {
       <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>${challenge?.title || "Challenge Preview"}</title>
+          <title>${challenge?.title || 'Challenge Preview'}</title>
           <style>
               ${cssCode}
           </style>
@@ -117,11 +117,11 @@ export default function EditorPage({ params }: EditorPageProps) {
             <div className="flex space-x-2">
               <span
                 className={`px-2 py-1 rounded text-xs font-medium ${
-                  challenge.difficulty === "easy"
-                    ? "bg-green-600 text-white"
-                    : challenge.difficulty === "medium"
-                    ? "bg-yellow-600 text-white"
-                    : "bg-red-600 text-white"
+                  challenge.difficulty === 'easy'
+                    ? 'bg-green-600 text-white'
+                    : challenge.difficulty === 'medium'
+                      ? 'bg-yellow-600 text-white'
+                      : 'bg-red-600 text-white'
                 }`}
               >
                 {challenge.difficulty}
@@ -137,31 +137,31 @@ export default function EditorPage({ params }: EditorPageProps) {
               onClick={() => setIsPreviewVisible(!isPreviewVisible)}
               className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
                 isPreviewVisible
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-600 text-gray-300 hover:bg-gray-500"
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
               }`}
             >
-              {isPreviewVisible ? "Hide" : "Show"} Preview
+              {isPreviewVisible ? 'Hide' : 'Show'} Preview
             </button>
             <button
               onClick={() => setIsConsoleVisible(!isConsoleVisible)}
               className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
                 isConsoleVisible
-                  ? "bg-green-600 text-white"
-                  : "bg-gray-600 text-gray-300 hover:bg-gray-500"
+                  ? 'bg-green-600 text-white'
+                  : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
               }`}
             >
-              {isConsoleVisible ? "Hide" : "Show"} Console
+              {isConsoleVisible ? 'Hide' : 'Show'} Console
             </button>
             <button
               onClick={() => setIsTestRunnerVisible(!isTestRunnerVisible)}
               className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
                 isTestRunnerVisible
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-600 text-gray-300 hover:bg-gray-500"
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
               }`}
             >
-              {isTestRunnerVisible ? "Hide" : "Show"} Tests
+              {isTestRunnerVisible ? 'Hide' : 'Show'} Tests
             </button>
           </div>
         </div>
@@ -171,7 +171,7 @@ export default function EditorPage({ params }: EditorPageProps) {
       <div className="flex-1 flex">
         {/* Editor */}
         <div
-          className={`${isPreviewVisible ? "w-1/2" : "w-full"} flex flex-col`}
+          className={`${isPreviewVisible ? 'w-1/2' : 'w-full'} flex flex-col`}
         >
           <CodeEditor challenge={challenge} onCodeChange={handleCodeChange} />
         </div>
@@ -217,8 +217,8 @@ export default function EditorPage({ params }: EditorPageProps) {
                     css: cssCode,
                     javascript: javascriptCode,
                   }}
-                  onTestComplete={(results) => {
-                    console.log("Test results:", results);
+                  onTestComplete={results => {
+                    console.log('Test results:', results);
                   }}
                 />
               </div>

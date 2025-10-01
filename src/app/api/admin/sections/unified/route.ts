@@ -9,16 +9,16 @@ import UnifiedQuestionService from '@/lib/unified-question-schema';
 export async function GET() {
   try {
     const sections = getDefaultAdminSections();
-    
+
     // Get question counts for each section from unified system
     const sectionsWithCounts = await Promise.all(
-      sections.map(async (section) => {
+      sections.map(async section => {
         try {
           const questions = await UnifiedQuestionService.getQuestions({
             learningPath: section.learningPathId,
             isActive: true,
           });
-          
+
           return {
             ...section,
             questionCount: questions.length,
@@ -36,13 +36,14 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       data: sectionsWithCounts,
-      message: 'Admin sections with unified question counts retrieved successfully',
+      message:
+        'Admin sections with unified question counts retrieved successfully',
     });
   } catch (error) {
     console.error('Unified admin sections API error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to retrieve admin sections',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
@@ -71,7 +72,9 @@ export async function POST(request: NextRequest) {
       isActive: true,
     };
 
-    const result = await UnifiedQuestionService.createQuestion(questionWithLearningPath);
+    const result = await UnifiedQuestionService.createQuestion(
+      questionWithLearningPath
+    );
 
     if (result.success) {
       return NextResponse.json({
@@ -88,8 +91,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Add question to section API error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to add question to section',
         details: error instanceof Error ? error.message : 'Unknown error',
       },

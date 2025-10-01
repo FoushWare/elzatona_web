@@ -24,10 +24,9 @@ export async function GET(
       success: true,
       data: {
         id: flashcardSnap.id,
-        ...flashcardSnap.data()
-      }
+        ...flashcardSnap.data(),
+      },
     });
-
   } catch (error) {
     console.error('Error fetching flashcard:', error);
     return NextResponse.json(
@@ -74,10 +73,13 @@ export async function PUT(
       } else {
         newInterval = Math.round(newInterval * newEaseFactor);
       }
-      
+
       newRepetitions += 1;
-      newEaseFactor = Math.max(1.3, newEaseFactor + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
-      
+      newEaseFactor = Math.max(
+        1.3,
+        newEaseFactor + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)
+      );
+
       if (newRepetitions >= 3) {
         newStatus = 'mastered';
       } else if (newRepetitions >= 1) {
@@ -91,7 +93,9 @@ export async function PUT(
       newStatus = 'new';
     }
 
-    const nextReview = new Date(now.getTime() + newInterval * 24 * 60 * 60 * 1000);
+    const nextReview = new Date(
+      now.getTime() + newInterval * 24 * 60 * 60 * 1000
+    );
 
     const updates = {
       status: newStatus,
@@ -100,7 +104,7 @@ export async function PUT(
       easeFactor: newEaseFactor,
       lastReviewed: now.toISOString(),
       nextReview: nextReview.toISOString(),
-      updatedAt: now.toISOString()
+      updatedAt: now.toISOString(),
     };
 
     await updateDoc(flashcardRef, updates);
@@ -115,11 +119,10 @@ export async function PUT(
           newInterval,
           newRepetitions,
           newEaseFactor,
-          newStatus
-        }
-      }
+          newStatus,
+        },
+      },
     });
-
   } catch (error) {
     console.error('Error updating flashcard:', error);
     return NextResponse.json(
@@ -142,9 +145,8 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: 'Flashcard deleted successfully'
+      message: 'Flashcard deleted successfully',
     });
-
   } catch (error) {
     console.error('Error deleting flashcard:', error);
     return NextResponse.json(

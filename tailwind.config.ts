@@ -216,7 +216,7 @@ const config: Config = {
         'safe-top': 'env(safe-area-inset-top, 0px)',
       },
       zIndex: {
-        'chat': '50',
+        chat: '50',
       },
       borderRadius: {
         '4xl': '2rem',

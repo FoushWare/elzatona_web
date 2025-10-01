@@ -34,8 +34,8 @@ export async function GET(
   } catch (error) {
     console.error('Unified section questions API error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to retrieve section questions',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
@@ -67,7 +67,9 @@ export async function POST(
       isActive: true,
     };
 
-    const result = await UnifiedQuestionService.createQuestion(questionWithLearningPath);
+    const result = await UnifiedQuestionService.createQuestion(
+      questionWithLearningPath
+    );
 
     if (result.success) {
       return NextResponse.json({
@@ -84,8 +86,8 @@ export async function POST(
   } catch (error) {
     console.error('Add question to unified section API error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to add question to section',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
@@ -127,8 +129,8 @@ export async function DELETE(
   } catch (error) {
     console.error('Delete question from unified section API error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to delete question from section',
         details: error instanceof Error ? error.message : 'Unknown error',
       },

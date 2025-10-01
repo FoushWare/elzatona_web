@@ -19,7 +19,9 @@ interface UseSectorsReturn {
   refetch: () => void;
 }
 
-export function useSectors(pathId: string | null | undefined): UseSectorsReturn {
+export function useSectors(
+  pathId: string | null | undefined
+): UseSectorsReturn {
   const [sectors, setSectors] = useState<Sector[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +38,7 @@ export function useSectors(pathId: string | null | undefined): UseSectorsReturn 
       setIsLoading(true);
       setError(null);
 
-           const response = await fetch(`/api/sectors/by-path/${pathId}`);
+      const response = await fetch(`/api/sectors/by-path/${pathId}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch sectors');
@@ -50,7 +52,8 @@ export function useSectors(pathId: string | null | undefined): UseSectorsReturn 
         throw new Error(data.error || 'Failed to fetch sectors');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch sectors';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch sectors';
       setError(errorMessage);
       setSectors([]);
     } finally {

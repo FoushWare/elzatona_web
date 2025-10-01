@@ -145,7 +145,9 @@ describe('Admin Authentication Flow Integration Tests', () => {
       );
 
       expect(secondAttempt.success).toBe(true);
-      expect(secondAttempt.admin?.email).toBe('afouadsoftwareengineer@gmail.com');
+      expect(secondAttempt.admin?.email).toBe(
+        'afouadsoftwareengineer@gmail.com'
+      );
     });
 
     it('should handle session expiration and re-authentication', async () => {
@@ -198,7 +200,8 @@ describe('Admin Authentication Flow Integration Tests', () => {
         expiresAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // Expired
       };
 
-      const validationResult = await AdminAuthService.validateSession(expiredSession);
+      const validationResult =
+        await AdminAuthService.validateSession(expiredSession);
 
       expect(validationResult).toBe(false);
 
@@ -209,7 +212,9 @@ describe('Admin Authentication Flow Integration Tests', () => {
       );
 
       expect(reAuthResult.success).toBe(true);
-      expect(reAuthResult.admin?.email).toBe('afouadsoftwareengineer@gmail.com');
+      expect(reAuthResult.admin?.email).toBe(
+        'afouadsoftwareengineer@gmail.com'
+      );
     });
   });
 

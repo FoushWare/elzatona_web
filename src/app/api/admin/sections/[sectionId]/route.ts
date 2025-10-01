@@ -20,7 +20,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: 'Section not found'
+          error: 'Section not found',
         },
         { status: 404 }
       );
@@ -30,20 +30,24 @@ export async function GET(
     const section = {
       id: sectionDoc.id,
       ...sectionData,
-      createdAt: sectionData.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-      updatedAt: sectionData.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+      createdAt:
+        sectionData.createdAt?.toDate?.()?.toISOString() ||
+        new Date().toISOString(),
+      updatedAt:
+        sectionData.updatedAt?.toDate?.()?.toISOString() ||
+        new Date().toISOString(),
     };
 
     return NextResponse.json({
       success: true,
-      data: section
+      data: section,
     });
   } catch (error) {
     console.error('Error fetching section:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch section'
+        error: 'Failed to fetch section',
       },
       { status: 500 }
     );

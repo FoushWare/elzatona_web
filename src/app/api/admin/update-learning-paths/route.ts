@@ -11,7 +11,7 @@ const learningPathUpdates = [
   { id: 'typescript-essentials', questionCount: 2 },
   { id: 'performance-optimization', questionCount: 2 },
   { id: 'security-essentials', questionCount: 2 },
-  { id: 'testing-strategies', questionCount: 2 }
+  { id: 'testing-strategies', questionCount: 2 },
 ];
 
 export async function POST(request: NextRequest) {
@@ -29,14 +29,16 @@ export async function POST(request: NextRequest) {
         const pathRef = doc(db, 'learningPaths', update.id);
         await updateDoc(pathRef, {
           questionCount: update.questionCount,
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         });
-        
-        console.log(`✅ Updated ${update.id}: ${update.questionCount} questions`);
+
+        console.log(
+          `✅ Updated ${update.id}: ${update.questionCount} questions`
+        );
         results.push({
           id: update.id,
           questionCount: update.questionCount,
-          success: true
+          success: true,
         });
       } catch (error) {
         console.error(`❌ Failed to update ${update.id}:`, error);
@@ -44,7 +46,7 @@ export async function POST(request: NextRequest) {
           id: update.id,
           questionCount: update.questionCount,
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }
@@ -52,18 +54,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Learning paths updated successfully',
-      results
+      results,
     });
-
   } catch (error) {
     console.error('Error updating learning paths:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to update learning paths'
+        error: 'Failed to update learning paths',
       },
       { status: 500 }
     );
   }
 }
-

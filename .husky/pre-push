@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
 echo ""
 echo "════════════════════════════════════════════════════════════════"
@@ -11,24 +12,24 @@ current_branch=$(git branch --show-current)
 echo "📍 Current branch: $current_branch"
 echo ""
 
-# Only run cleanup on development branches
+# Only run build check on development branches
 if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_branch" == "develop" ]] || [[ "$current_branch" == "main" ]]; then
   echo "🔄 Running pre-push checks on development branch..."
   echo ""
   
   # Step 1: Build check
   echo "🏗️  STEP 1: Running build validation..."
-  echo "   📦 Executing: npm run build:check"
+  echo "   📦 Executing: npm run build"
   echo "   ⏳ This may take a moment..."
   echo ""
   
-  # Run build check with detailed output
-  npm run build:check
+  # Run build with detailed output
+  npm run build
   BUILD_EXIT_CODE=$?
   
   echo ""
   if [ $BUILD_EXIT_CODE -ne 0 ]; then
-    echo "   ❌ Build check failed with exit code: $BUILD_EXIT_CODE"
+    echo "   ❌ Build failed with exit code: $BUILD_EXIT_CODE"
     echo "   💡 Please fix build issues before pushing"
     echo ""
     echo "════════════════════════════════════════════════════════════════"
@@ -37,12 +38,20 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
     echo ""
     exit 1
   else
-    echo "   ✅ Build check passed successfully!"
+    echo "   ✅ Build completed successfully!"
   fi
   echo ""
   
-  # Step 2: Clean up build files before push
-  echo "🧹 STEP 2: Cleaning build files before push..."
+  # Step 2: Clean up build files after successful build
+  echo "🧹 STEP 2: Cleaning build files..."
+  
+  echo "   🗑️  Removing .next directory..."
+  if [ -d ".next" ]; then
+    rm -rf .next
+    echo "   ✅ .next directory removed"
+  else
+    echo "   ℹ️  .next directory not found (already clean)"
+  fi
   
   echo "   🗑️  Removing build directory..."
   if [ -d "build" ]; then
@@ -60,10 +69,6 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
     echo "   ℹ️  storybook-static directory not found (already clean)"
   fi
   
-  echo "   ℹ️  Keeping .next directory (required for Next.js development)"
-  
-  echo "   ℹ️  Keeping tsconfig.tsbuildinfo (helps with incremental builds)"
-  
   echo "   🗑️  Removing test-results directory..."
   if [ -d "test-results" ]; then
     rm -rf test-results
@@ -79,6 +84,8 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   else
     echo "   ℹ️  coverage directory not found (already clean)"
   fi
+  
+  echo "   ℹ️  Keeping tsconfig.tsbuildinfo (helps with incremental builds)"
   echo ""
   
   # Step 3: Final status

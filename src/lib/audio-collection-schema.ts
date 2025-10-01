@@ -2,12 +2,12 @@ import { Timestamp } from 'firebase/firestore';
 
 /**
  * Audio Collection Schema
- * 
+ *
  * This collection stores audio file mappings for questions, creating a relational
  * structure between questions and their audio files.
- * 
+ *
  * Collection: 'questionAudio'
- * 
+ *
  * Structure:
  * - questionId: string (references the question document)
  * - learningPath: string (e.g., 'javascript-deep-dive')
@@ -64,7 +64,7 @@ export function generateAudioPaths(
   answerAudio: string;
 } {
   const basePath = `/audio/${learningPath}/${sectionId}`;
-  
+
   return {
     questionAudio: `${basePath}/question-${questionNumber}.mp3`,
     answerAudio: `${basePath}/answer-${questionNumber}.mp3`,

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
     // Build query
     let q = query(collection(db, 'unifiedQuestions'));
-    
+
     if (category && category !== 'all') {
       q = query(q, where('category', '==', category));
     }
@@ -29,8 +29,8 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         totalCount,
-        category: category || 'all'
-      }
+        category: category || 'all',
+      },
     });
   } catch (error) {
     console.error('Error fetching question count:', error);

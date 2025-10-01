@@ -2,16 +2,16 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  ArrowRight, 
-  RotateCcw, 
-  CheckCircle, 
+import {
+  ArrowLeft,
+  ArrowRight,
+  RotateCcw,
+  CheckCircle,
   XCircle,
   Clock,
   Target,
   TrendingUp,
-  BookOpen
+  BookOpen,
 } from 'lucide-react';
 import Flashcard from './Flashcard';
 import { useFlashcardSession } from '@/hooks/useFlashcardSession';
@@ -20,7 +20,9 @@ interface FlashcardSessionProps {
   className?: string;
 }
 
-export default function FlashcardSession({ className = '' }: FlashcardSessionProps) {
+export default function FlashcardSession({
+  className = '',
+}: FlashcardSessionProps) {
   const {
     currentCard,
     sessionCards,
@@ -32,13 +34,14 @@ export default function FlashcardSession({ className = '' }: FlashcardSessionPro
     handleAnswer,
     skipCard,
     isLoading,
-    error
+    error,
   } = useFlashcardSession();
 
   const [showSessionComplete, setShowSessionComplete] = useState(false);
 
   // Check if session is complete
-  const isSessionComplete = isSessionActive && currentIndex >= sessionCards.length;
+  const isSessionComplete =
+    isSessionActive && currentIndex >= sessionCards.length;
 
   const handleSessionComplete = () => {
     setShowSessionComplete(true);
@@ -53,11 +56,15 @@ export default function FlashcardSession({ className = '' }: FlashcardSessionPro
 
   if (error) {
     return (
-      <div className={`bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 ${className}`}>
+      <div
+        className={`bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 ${className}`}
+      >
         <div className="flex items-center space-x-3">
           <XCircle className="w-6 h-6 text-red-500" />
           <div>
-            <h3 className="text-lg font-semibold text-red-800 dark:text-red-200">Session Error</h3>
+            <h3 className="text-lg font-semibold text-red-800 dark:text-red-200">
+              Session Error
+            </h3>
             <p className="text-red-600 dark:text-red-400">{error}</p>
           </div>
         </div>
@@ -99,39 +106,55 @@ export default function FlashcardSession({ className = '' }: FlashcardSessionPro
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
           >
             <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
           </motion.div>
-          
+
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Session Complete!
           </h2>
-          
+
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-gray-700 mb-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Session Summary
             </h3>
-            
+
             <div className="grid grid-cols-2 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold text-blue-500">{sessionStats.cardsReviewed}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Cards Reviewed</div>
+                <div className="text-2xl font-bold text-blue-500">
+                  {sessionStats.cardsReviewed}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Cards Reviewed
+                </div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-green-500">{sessionStats.correctAnswers}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Correct</div>
+                <div className="text-2xl font-bold text-green-500">
+                  {sessionStats.correctAnswers}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Correct
+                </div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-red-500">{sessionStats.incorrectAnswers}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Incorrect</div>
+                <div className="text-2xl font-bold text-red-500">
+                  {sessionStats.incorrectAnswers}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Incorrect
+                </div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-purple-500">{Math.round(sessionStats.accuracy)}%</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Accuracy</div>
+                <div className="text-2xl font-bold text-purple-500">
+                  {Math.round(sessionStats.accuracy)}%
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Accuracy
+                </div>
               </div>
             </div>
-            
+
             <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-center space-x-2 text-gray-600 dark:text-gray-400">
                 <Clock className="w-4 h-4" />
@@ -139,7 +162,7 @@ export default function FlashcardSession({ className = '' }: FlashcardSessionPro
               </div>
             </div>
           </div>
-          
+
           <div className="flex space-x-4 justify-center">
             <button
               onClick={handleStartNewSession}
@@ -173,38 +196,46 @@ export default function FlashcardSession({ className = '' }: FlashcardSessionPro
               <span>End Session</span>
             </button>
           </div>
-          
+
           <div className="flex items-center space-x-6">
             <div className="text-center">
-              <div className="text-sm text-gray-600 dark:text-gray-400">Progress</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Progress
+              </div>
               <div className="font-semibold text-gray-900 dark:text-white">
                 {currentIndex + 1} / {sessionCards.length}
               </div>
             </div>
-            
+
             <div className="text-center">
-              <div className="text-sm text-gray-600 dark:text-gray-400">Accuracy</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Accuracy
+              </div>
               <div className="font-semibold text-gray-900 dark:text-white">
                 {Math.round(sessionStats.accuracy)}%
               </div>
             </div>
-            
+
             <div className="text-center">
-              <div className="text-sm text-gray-600 dark:text-gray-400">Time</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Time
+              </div>
               <div className="font-semibold text-gray-900 dark:text-white">
                 {sessionStats.timeSpent}m
               </div>
             </div>
           </div>
         </div>
-        
+
         {/* Progress Bar */}
         <div className="mt-4">
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
             <motion.div
               className="bg-blue-500 h-2 rounded-full"
               initial={{ width: 0 }}
-              animate={{ width: `${((currentIndex + 1) / sessionCards.length) * 100}%` }}
+              animate={{
+                width: `${((currentIndex + 1) / sessionCards.length) * 100}%`,
+              }}
               transition={{ duration: 0.3 }}
             />
           </div>
@@ -243,7 +274,8 @@ export default function FlashcardSession({ className = '' }: FlashcardSessionPro
               Session Complete!
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              You&apos;ve reviewed all {sessionCards.length} cards in this session.
+              You&apos;ve reviewed all {sessionCards.length} cards in this
+              session.
             </p>
             <button
               onClick={handleSessionComplete}
@@ -259,16 +291,28 @@ export default function FlashcardSession({ className = '' }: FlashcardSessionPro
       <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-lg border border-gray-200 dark:border-gray-700">
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
-            <div className="text-lg font-bold text-green-500">{sessionStats.correctAnswers}</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">Correct</div>
+            <div className="text-lg font-bold text-green-500">
+              {sessionStats.correctAnswers}
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Correct
+            </div>
           </div>
           <div>
-            <div className="text-lg font-bold text-red-500">{sessionStats.incorrectAnswers}</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">Incorrect</div>
+            <div className="text-lg font-bold text-red-500">
+              {sessionStats.incorrectAnswers}
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Incorrect
+            </div>
           </div>
           <div>
-            <div className="text-lg font-bold text-blue-500">{sessionStats.cardsReviewed}</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">Reviewed</div>
+            <div className="text-lg font-bold text-blue-500">
+              {sessionStats.cardsReviewed}
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Reviewed
+            </div>
           </div>
         </div>
       </div>

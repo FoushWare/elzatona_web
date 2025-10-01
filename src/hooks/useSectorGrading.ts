@@ -57,9 +57,12 @@ export const useSectorGrading = (pathId?: string) => {
 
   // Use immediate execution instead of useEffect to avoid hydration issues
   if (isLoading && pathId && !hasStartedFetch.current) {
-    console.log('🚀 useSectorGrading immediate execution triggered with pathId:', pathId);
+    console.log(
+      '🚀 useSectorGrading immediate execution triggered with pathId:',
+      pathId
+    );
     hasStartedFetch.current = true;
-    
+
     const fetchSectorData = async () => {
       try {
         console.log('🔄 Setting loading to true and error to null');
@@ -68,7 +71,9 @@ export const useSectorGrading = (pathId?: string) => {
 
         // Fetch sectors for the learning path
         console.log('🔄 Fetching sectors for pathId:', pathId);
-        const sectorsResponse = await fetch(`/api/sectors?learningPathId=${pathId}`);
+        const sectorsResponse = await fetch(
+          `/api/sectors?learningPathId=${pathId}`
+        );
         console.log('📡 Sectors response received');
         const sectorsData = await sectorsResponse.json();
         console.log('📊 Sectors data:', sectorsData);
@@ -91,7 +96,9 @@ export const useSectorGrading = (pathId?: string) => {
           throw new Error(pathsData.error || 'Failed to load learning paths');
         }
 
-        const currentPath = pathsData.data.find((path: any) => path.id === pathId);
+        const currentPath = pathsData.data.find(
+          (path: any) => path.id === pathId
+        );
         console.log('🔍 Current path found:', currentPath);
         if (!currentPath) {
           throw new Error('Learning path not found');
@@ -100,12 +107,12 @@ export const useSectorGrading = (pathId?: string) => {
         // Convert sectors to SectorGrade format
         const sectorGrades: SectorGrade[] = sectorsList.map((sector: any) => {
           const totalQuestions = sector.totalQuestions || 0;
-          
+
           // TODO: Replace with real user progress data from Firebase
           // For now, initialize with 0 progress
           const correctAnswers = 0;
           const percentage = 0;
-          
+
           return {
             sectorId: sector.id,
             sectorName: sector.name,
@@ -122,9 +129,18 @@ export const useSectorGrading = (pathId?: string) => {
         sectorGrades.sort((a, b) => a.sectorOrder - b.sectorOrder);
 
         // Calculate overall grade
-        const totalQuestionsOverall = sectorGrades.reduce((sum, sector) => sum + sector.totalQuestions, 0);
-        const totalCorrectOverall = sectorGrades.reduce((sum, sector) => sum + sector.correctAnswers, 0);
-        const overallPercentage = totalQuestionsOverall > 0 ? Math.round((totalCorrectOverall / totalQuestionsOverall) * 100) : 0;
+        const totalQuestionsOverall = sectorGrades.reduce(
+          (sum, sector) => sum + sector.totalQuestions,
+          0
+        );
+        const totalCorrectOverall = sectorGrades.reduce(
+          (sum, sector) => sum + sector.correctAnswers,
+          0
+        );
+        const overallPercentage =
+          totalQuestionsOverall > 0
+            ? Math.round((totalCorrectOverall / totalQuestionsOverall) * 100)
+            : 0;
 
         console.log('✅ Setting sectors data:', {
           pathId,
@@ -147,7 +163,6 @@ export const useSectorGrading = (pathId?: string) => {
         });
 
         console.log('✅ Sectors data set successfully');
-
       } catch (err: any) {
         console.error('❌ Error fetching sector data:', err);
         setError(err.message || 'Failed to load sector data');

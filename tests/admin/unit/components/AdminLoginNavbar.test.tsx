@@ -121,9 +121,3 @@ describe('AdminLoginNavbar Component', () => {
     expect(container).toBeInTheDocument();
   });
 });
-
-
-
-
-
-

@@ -32,14 +32,14 @@ const mockPath = jest.mocked(require('path'));
 describe('BackupService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     // Reset all fs mocks to default successful state
     Object.values(mockFs.promises).forEach(mock => {
       if (typeof mock === 'function' && 'mockResolvedValue' in mock) {
         mock.mockResolvedValue(undefined);
       }
     });
-    
+
     // Reset synchronous fs mocks
     mockFs.mkdirSync.mockImplementation(() => {});
     mockFs.readFileSync.mockReturnValue('[]');
@@ -48,7 +48,7 @@ describe('BackupService', () => {
     mockFs.readdirSync.mockReturnValue([]);
     mockFs.statSync.mockReturnValue({ isDirectory: () => true });
     mockFs.unlinkSync.mockImplementation(() => {});
-    
+
     // Reset path mocks
     mockPath.join.mockImplementation((...args) => args.join('/'));
     mockPath.resolve.mockImplementation((...args) => args.join('/'));
@@ -65,7 +65,7 @@ describe('BackupService', () => {
         section: 'frontend-fundamentals',
         options: [
           { id: 'a', text: 'Option 1', isCorrect: true },
-          { id: 'b', text: 'Option 2', isCorrect: false }
+          { id: 'b', text: 'Option 2', isCorrect: false },
         ],
         correctAnswers: ['a'],
         explanation: 'This is the explanation',
@@ -75,14 +75,18 @@ describe('BackupService', () => {
       };
 
       const existingQuestions = [];
-      mockFs.promises.readFile.mockResolvedValue(JSON.stringify(existingQuestions));
+      mockFs.promises.readFile.mockResolvedValue(
+        JSON.stringify(existingQuestions)
+      );
       mockFs.promises.writeFile.mockResolvedValue(undefined);
 
       const result = await BackupService.backupQuestion(mockQuestion);
 
       expect(result.success).toBe(true);
       expect(mockFs.promises.writeFile).toHaveBeenCalledWith(
-        expect.stringContaining('backup/questions/frontend-fundamentals-questions.json'),
+        expect.stringContaining(
+          'backup/questions/frontend-fundamentals-questions.json'
+        ),
         expect.stringContaining('Test Question')
       );
     });
@@ -97,7 +101,7 @@ describe('BackupService', () => {
         section: 'frontend-fundamentals',
         options: [
           { id: 'a', text: 'Option 1', isCorrect: true },
-          { id: 'b', text: 'Option 2', isCorrect: false }
+          { id: 'b', text: 'Option 2', isCorrect: false },
         ],
         correctAnswers: ['a'],
         explanation: 'This is the explanation',
@@ -130,7 +134,7 @@ describe('BackupService', () => {
           section: 'frontend-fundamentals',
           options: [
             { id: 'a', text: 'Option 1', isCorrect: true },
-            { id: 'b', text: 'Option 2', isCorrect: false }
+            { id: 'b', text: 'Option 2', isCorrect: false },
           ],
           correctAnswers: ['a'],
           explanation: 'This is the explanation',
@@ -149,7 +153,7 @@ describe('BackupService', () => {
         section: 'frontend-fundamentals',
         options: [
           { id: 'a', text: 'Option A', isCorrect: false },
-          { id: 'b', text: 'Option B', isCorrect: true }
+          { id: 'b', text: 'Option B', isCorrect: true },
         ],
         correctAnswers: ['b'],
         explanation: 'This is the new explanation',
@@ -158,7 +162,9 @@ describe('BackupService', () => {
         isActive: true,
       };
 
-      mockFs.promises.readFile.mockResolvedValue(JSON.stringify(existingQuestions));
+      mockFs.promises.readFile.mockResolvedValue(
+        JSON.stringify(existingQuestions)
+      );
       mockFs.promises.writeFile.mockResolvedValue(undefined);
 
       const result = await BackupService.backupQuestion(newQuestion);
@@ -180,7 +186,9 @@ describe('BackupService', () => {
         'react-mastery-questions.json',
       ];
 
-      mockFs.promises.readdir.mockResolvedValue(mockFiles as unknown as string[]);
+      mockFs.promises.readdir.mockResolvedValue(
+        mockFiles as unknown as string[]
+      );
       mockFs.promises.readFile.mockImplementation(filePath => {
         if (filePath.includes('frontend-fundamentals')) {
           return Promise.resolve(JSON.stringify([{ id: 'q1' }, { id: 'q2' }])); // 2 questions
@@ -206,7 +214,9 @@ describe('BackupService', () => {
     });
 
     it('should return empty stats if backup directory does not exist', async () => {
-      mockFs.promises.readdir.mockRejectedValue(new Error('Directory not found'));
+      mockFs.promises.readdir.mockRejectedValue(
+        new Error('Directory not found')
+      );
 
       const result = await BackupService.getBackupStats();
 
@@ -230,7 +240,7 @@ describe('BackupService', () => {
           section: 'frontend-fundamentals',
           options: [
             { id: 'a', text: 'Option 1', isCorrect: true },
-            { id: 'b', text: 'Option 2', isCorrect: false }
+            { id: 'b', text: 'Option 2', isCorrect: false },
           ],
           correctAnswers: ['a'],
           explanation: 'This is the explanation',
@@ -270,7 +280,9 @@ describe('BackupService', () => {
 
       expect(result.success).toBe(true);
       expect(mockFs.promises.unlink).toHaveBeenCalledWith(
-        expect.stringContaining('backup/questions/frontend-fundamentals-questions.json')
+        expect.stringContaining(
+          'backup/questions/frontend-fundamentals-questions.json'
+        )
       );
     });
 
@@ -309,7 +321,7 @@ describe('BackupService', () => {
           section: 'frontend-fundamentals',
           options: [
             { id: 'a', text: 'Option 1', isCorrect: true },
-            { id: 'b', text: 'Option 2', isCorrect: false }
+            { id: 'b', text: 'Option 2', isCorrect: false },
           ],
           correctAnswers: ['a'],
           explanation: 'This is the explanation',
@@ -319,7 +331,9 @@ describe('BackupService', () => {
         },
       ];
 
-      mockFs.promises.readFile.mockResolvedValue(JSON.stringify(mockBackupQuestions));
+      mockFs.promises.readFile.mockResolvedValue(
+        JSON.stringify(mockBackupQuestions)
+      );
 
       const result = await BackupService.restoreFromBackup(
         'frontend-fundamentals'

@@ -41,7 +41,8 @@ export const UserGuidanceSystem: React.FC<UserGuidanceSystemProps> = ({
   // Don't show guidance during testing
   if (
     typeof window !== 'undefined' &&
-    ((window as any).__DISABLE_GUIDANCE_MODALS__ || (window as any).__TEST_MODE__)
+    ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
+      (window as any).__TEST_MODE__)
   ) {
     return null;
   }

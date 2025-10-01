@@ -145,4 +145,3 @@ setPersistence(auth, browserLocalPersistence);
 - **Biometric Authentication**: Support for biometric login
 - **Two-Factor Authentication**: Enhanced security with 2FA
 - **Device Management**: Manage active sessions across devices
-

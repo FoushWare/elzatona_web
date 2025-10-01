@@ -32,6 +32,7 @@ src/
 ## 🚀 Running Tests
 
 ### Unit Tests
+
 ```bash
 # Run all unit tests
 npm run test
@@ -44,6 +45,7 @@ npm run test:coverage
 ```
 
 ### E2E Tests
+
 ```bash
 # Run E2E tests
 npm run test:e2e
@@ -56,6 +58,7 @@ npm run test:e2e:headed
 ```
 
 ### All Tests
+
 ```bash
 # Run both unit and E2E tests
 npm run test:all
@@ -64,6 +67,7 @@ npm run test:all
 ## 📚 Storybook
 
 ### Running Storybook
+
 ```bash
 # Start Storybook development server
 npm run storybook
@@ -73,6 +77,7 @@ npm run build-storybook
 ```
 
 ### Storybook Features
+
 - **Component Documentation**: Interactive component examples
 - **Visual Testing**: Visual regression testing with Chromatic
 - **Accessibility Testing**: Built-in a11y addon
@@ -81,6 +86,7 @@ npm run build-storybook
 ## 🎯 Test Coverage
 
 The project aims for 70% test coverage across:
+
 - **Branches**: 70%
 - **Functions**: 70%
 - **Lines**: 70%
@@ -89,6 +95,7 @@ The project aims for 70% test coverage across:
 ## 📝 Writing Tests
 
 ### Unit Tests
+
 Unit tests focus on testing individual components in isolation:
 
 ```typescript
@@ -100,7 +107,7 @@ describe('LearningPathCard', () => {
   it('should expand when header is clicked', async () => {
     const user = userEvent.setup()
     render(<LearningPathCard {...props} />)
-    
+
     await user.click(screen.getByText('Frontend Basics'))
     expect(screen.getByText('Learn HTML, CSS...')).toBeVisible()
   })
@@ -108,35 +115,39 @@ describe('LearningPathCard', () => {
 ```
 
 ### Integration Tests
+
 Integration tests verify API routes and data flow:
 
 ```typescript
-import { GET } from '@/app/api/questions/[pathId]/route'
+import { GET } from '@/app/api/questions/[pathId]/route';
 
 describe('Questions API', () => {
   it('should return questions for valid learning path', async () => {
-    const response = await GET(request, { params: { pathId: 'frontend-basics' } })
-    const data = await response.json()
-    
-    expect(response.status).toBe(200)
-    expect(data.questions).toHaveLength(3)
-  })
-})
+    const response = await GET(request, {
+      params: { pathId: 'frontend-basics' },
+    });
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.questions).toHaveLength(3);
+  });
+});
 ```
 
 ### E2E Tests
+
 E2E tests verify complete user workflows:
 
 ```typescript
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 
 test('should navigate to questions page', async ({ page }) => {
-  await page.goto('/learning-paths')
-  await page.getByText('Frontend Basics').click()
-  await page.getByRole('link', { name: 'Practice Questions' }).click()
-  
-  await expect(page).toHaveURL(/\/learning-paths\/frontend-basics\/questions/)
-})
+  await page.goto('/learning-paths');
+  await page.getByText('Frontend Basics').click();
+  await page.getByRole('link', { name: 'Practice Questions' }).click();
+
+  await expect(page).toHaveURL(/\/learning-paths\/frontend-basics\/questions/);
+});
 ```
 
 ## 🔧 Configuration Files
@@ -157,12 +168,13 @@ export const Collapsed: Story = {
     isCollapsed: true,
     onToggle: () => {},
   },
-}
+};
 ```
 
 ## 🚦 CI/CD Integration
 
 Tests are designed to run in CI/CD pipelines:
+
 - Unit tests run on every commit
 - E2E tests run on pull requests
 - Storybook builds for visual regression testing
@@ -176,6 +188,7 @@ Tests are designed to run in CI/CD pipelines:
 ## 🐛 Debugging Tests
 
 ### Unit Tests
+
 ```bash
 # Debug specific test
 npm run test -- --testNamePattern="should expand card"
@@ -185,6 +198,7 @@ npm run test -- --verbose
 ```
 
 ### E2E Tests
+
 ```bash
 # Debug with browser dev tools
 npm run test:e2e:headed

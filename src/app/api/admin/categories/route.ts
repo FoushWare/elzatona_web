@@ -7,14 +7,14 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      data: categories
+      data: categories,
     });
   } catch (error) {
     console.error('Error fetching categories:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch categories'
+        error: 'Failed to fetch categories',
       },
       { status: 500 }
     );
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Name is required'
+          error: 'Name is required',
         },
         { status: 400 }
       );
@@ -46,17 +46,16 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: category
+      data: category,
     });
   } catch (error) {
     console.error('Error creating category:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to create category'
+        error: 'Failed to create category',
       },
       { status: 500 }
     );
   }
 }
-

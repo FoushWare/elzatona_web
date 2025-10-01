@@ -6,7 +6,7 @@ import { authOptions } from '@/lib/auth-config';
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (session?.user) {
       return NextResponse.json({
         isAuthenticated: true,
@@ -59,18 +59,22 @@ export async function POST(request: NextRequest) {
     });
 
     // Set user data cookie (non-sensitive data only)
-    response.cookies.set('user-data', JSON.stringify({
-      id: user.uid,
-      email: user.email,
-      name: user.displayName,
-      image: user.photoURL,
-    }), {
-      httpOnly: false, // Allow client-side access for display
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: '/',
-    });
+    response.cookies.set(
+      'user-data',
+      JSON.stringify({
+        id: user.uid,
+        email: user.email,
+        name: user.displayName,
+        image: user.photoURL,
+      }),
+      {
+        httpOnly: false, // Allow client-side access for display
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/',
+      }
+    );
 
     return response;
   } catch (error) {

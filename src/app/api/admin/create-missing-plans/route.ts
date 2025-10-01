@@ -17,19 +17,19 @@ export async function POST(request: NextRequest) {
           { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 20 },
           { id: 'javascript', name: 'JavaScript', questions: [], weight: 35 },
           { id: 'react', name: 'React', questions: [], weight: 25 },
-          { id: 'typescript', name: 'TypeScript', questions: [], weight: 20 }
+          { id: 'typescript', name: 'TypeScript', questions: [], weight: 20 },
         ],
         features: [
           'Advanced concepts',
           'Daily practice',
           'TypeScript mastery',
-          'React patterns'
+          'React patterns',
         ],
         estimatedTime: '5-6 hours',
         isRecommended: true,
         isActive: true,
         createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now()
+        updatedAt: Timestamp.now(),
       },
       {
         id: '5-day-plan',
@@ -44,19 +44,19 @@ export async function POST(request: NextRequest) {
           { id: 'javascript', name: 'JavaScript', questions: [], weight: 35 },
           { id: 'react', name: 'React', questions: [], weight: 25 },
           { id: 'typescript', name: 'TypeScript', questions: [], weight: 15 },
-          { id: 'testing', name: 'Testing', questions: [], weight: 10 }
+          { id: 'testing', name: 'Testing', questions: [], weight: 10 },
         ],
         features: [
           'Complete coverage',
           'Testing fundamentals',
           'Advanced patterns',
-          'Performance optimization'
+          'Performance optimization',
         ],
         estimatedTime: '6-7 hours',
         isRecommended: true,
         isActive: true,
         createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now()
+        updatedAt: Timestamp.now(),
       },
       {
         id: '6-day-plan',
@@ -72,39 +72,42 @@ export async function POST(request: NextRequest) {
           { id: 'react', name: 'React', questions: [], weight: 25 },
           { id: 'typescript', name: 'TypeScript', questions: [], weight: 15 },
           { id: 'testing', name: 'Testing', questions: [], weight: 10 },
-          { id: 'performance', name: 'Performance', questions: [], weight: 5 }
+          { id: 'performance', name: 'Performance', questions: [], weight: 5 },
         ],
         features: [
           'Expert-level topics',
           'Performance mastery',
           'Advanced testing',
-          'System design basics'
+          'System design basics',
         ],
         estimatedTime: '7-8 hours',
         isRecommended: true,
         isActive: true,
         createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now()
-      }
+        updatedAt: Timestamp.now(),
+      },
     ];
 
     console.log('Creating missing learning plans...');
-    
+
     for (const plan of missingPlans) {
       await setDoc(doc(db, 'learningPlanTemplates', plan.id), plan);
       console.log(`✅ Created ${plan.name}`);
     }
-    
-    return NextResponse.json({ 
-      success: true, 
+
+    return NextResponse.json({
+      success: true,
       message: 'All missing plans created successfully!',
-      plans: missingPlans.map(p => p.name)
+      plans: missingPlans.map(p => p.name),
     });
   } catch (error) {
     console.error('❌ Error creating plans:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Failed to create plans' 
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to create plans',
+      },
+      { status: 500 }
+    );
   }
 }

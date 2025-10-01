@@ -7,6 +7,7 @@ This guide explains how to set up automatic deployments to Vercel when pushing t
 To enable automatic deployments, you need to add the following secrets to your GitHub repository:
 
 ### 1. Go to GitHub Repository Settings
+
 - Navigate to your repository: `https://github.com/FoushWare/GreatFrontendHub`
 - Click on **Settings** tab
 - In the left sidebar, click on **Secrets and variables** → **Actions**
@@ -14,11 +15,13 @@ To enable automatic deployments, you need to add the following secrets to your G
 ### 2. Add the following secrets:
 
 #### `VERCEL_TOKEN`
+
 - Go to [Vercel Dashboard](https://vercel.com/account/tokens)
 - Create a new token with appropriate permissions
 - Copy the token and add it as `VERCEL_TOKEN` in GitHub secrets
 
 #### `VERCEL_ORG_ID`
+
 - This is already configured: `team_37TwfMgTsNtHQQjY8VhXPSkx`
 - Add this as `VERCEL_ORG_ID` in GitHub secrets
 
@@ -40,12 +43,14 @@ Once set up, your applications will be automatically deployed to:
 If you need to deploy manually:
 
 ### Main Website:
+
 ```bash
 npx vercel link --project zatona-web
 npx vercel --prod
 ```
 
 ### Storybook:
+
 ```bash
 npx vercel link --project zatona-web-storybook
 npx vercel --prod

@@ -18,19 +18,29 @@ const main = async () => {
   // Ensure Next.js server is running for E2E tests
   console.log('\n--- Checking if Next.js server is running ---');
   try {
-    execSync('curl -s http://localhost:3000/admin/login | grep -q "Admin Login"', { stdio: 'ignore' });
+    execSync(
+      'curl -s http://localhost:3000/admin/login | grep -q "Admin Login"',
+      { stdio: 'ignore' }
+    );
     console.log('✅ Next.js server is running.');
   } catch (error) {
-    console.log('⚠️ Next.js server not detected. Starting it in the background...');
+    console.log(
+      '⚠️ Next.js server not detected. Starting it in the background...'
+    );
     // Start Next.js server in the background
     execSync('npm run dev > /dev/null 2>&1 &', { stdio: 'ignore' });
     // Give it some time to start
     await new Promise(resolve => setTimeout(10000, resolve));
     try {
-      execSync('curl -s http://localhost:3000/admin/login | grep -q "Admin Login"', { stdio: 'ignore' });
+      execSync(
+        'curl -s http://localhost:3000/admin/login | grep -q "Admin Login"',
+        { stdio: 'ignore' }
+      );
       console.log('✅ Next.js server started successfully.');
     } catch (startError) {
-      console.error('❌ Failed to start Next.js server. Please start it manually with `npm run dev`.');
+      console.error(
+        '❌ Failed to start Next.js server. Please start it manually with `npm run dev`.'
+      );
       process.exit(1);
     }
   }

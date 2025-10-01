@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState } from 'react';
+import Link from 'next/link';
 
 interface PracticeProblem {
   id: number;
@@ -23,8 +23,8 @@ export default function PromisesPracticePage() {
   const problems: PracticeProblem[] = [
     {
       id: 1,
-      title: "Basic Promise Creation",
-      description: "Understanding how to create and use promises",
+      title: 'Basic Promise Creation',
+      description: 'Understanding how to create and use promises',
       code: `const promise = new Promise((resolve, reject) => {
   setTimeout(() => {
     resolve("Success!");
@@ -34,39 +34,39 @@ export default function PromisesPracticePage() {
 promise.then(result => {
   console.log(result);
 });`,
-      question: "What will be logged to the console?",
-      options: ["Success!", "undefined", "Error", "Nothing"],
+      question: 'What will be logged to the console?',
+      options: ['Success!', 'undefined', 'Error', 'Nothing'],
       correctAnswer: 0,
       explanation:
         "The promise resolves with 'Success!' after 1 second, and the .then() callback logs this value to the console.",
     },
     {
       id: 2,
-      title: "Promise Chaining",
-      description: "Understanding promise chaining and data flow",
+      title: 'Promise Chaining',
+      description: 'Understanding promise chaining and data flow',
       code: `Promise.resolve(5)
   .then(x => x * 2)
   .then(x => x + 3)
   .then(x => console.log(x));`,
-      question: "What will be logged to the console?",
-      options: ["5", "10", "13", "15"],
+      question: 'What will be logged to the console?',
+      options: ['5', '10', '13', '15'],
       correctAnswer: 2,
       explanation:
-        "The promise chain: 5 → 5*2=10 → 10+3=13. The final value 13 is logged to the console.",
+        'The promise chain: 5 → 5*2=10 → 10+3=13. The final value 13 is logged to the console.',
     },
     {
       id: 3,
-      title: "Promise Error Handling",
-      description: "Understanding how to handle promise rejections",
+      title: 'Promise Error Handling',
+      description: 'Understanding how to handle promise rejections',
       code: `Promise.reject("Error occurred")
   .then(result => console.log("Success:", result))
   .catch(error => console.log("Caught:", error));`,
-      question: "What will be logged to the console?",
+      question: 'What will be logged to the console?',
       options: [
-        "Success: Error occurred",
-        "Caught: Error occurred",
-        "Nothing",
-        "Error",
+        'Success: Error occurred',
+        'Caught: Error occurred',
+        'Nothing',
+        'Error',
       ],
       correctAnswer: 1,
       explanation:
@@ -74,8 +74,8 @@ promise.then(result => {
     },
     {
       id: 4,
-      title: "Async/Await Basics",
-      description: "Understanding async/await syntax",
+      title: 'Async/Await Basics',
+      description: 'Understanding async/await syntax',
       code: `async function getData() {
   return "Hello World";
 }
@@ -86,27 +86,27 @@ async function main() {
 }
 
 main();`,
-      question: "What will be logged to the console?",
-      options: ["Hello World", "Promise { <pending> }", "undefined", "Error"],
+      question: 'What will be logged to the console?',
+      options: ['Hello World', 'Promise { <pending> }', 'undefined', 'Error'],
       correctAnswer: 0,
       explanation:
         "The async function getData() returns 'Hello World', which is awaited in main() and then logged to the console.",
     },
     {
       id: 5,
-      title: "Promise.all() Usage",
-      description: "Understanding Promise.all() for parallel execution",
+      title: 'Promise.all() Usage',
+      description: 'Understanding Promise.all() for parallel execution',
       code: `const promise1 = Promise.resolve(3);
 const promise2 = new Promise(resolve => setTimeout(() => resolve('foo'), 2000));
 const promise3 = Promise.resolve(42);
 
 Promise.all([promise1, promise2, promise3])
   .then(values => console.log(values));`,
-      question: "What will be logged to the console after 2 seconds?",
-      options: ["[3, 'foo', 42]", "[3, 42, 'foo']", "['foo', 3, 42]", "Error"],
+      question: 'What will be logged to the console after 2 seconds?',
+      options: ["[3, 'foo', 42]", "[3, 42, 'foo']", "['foo', 3, 42]", 'Error'],
       correctAnswer: 0,
       explanation:
-        "Promise.all() waits for all promises to resolve and returns an array with the resolved values in the same order as the input promises.",
+        'Promise.all() waits for all promises to resolve and returns an array with the resolved values in the same order as the input promises.',
     },
   ];
 
@@ -142,11 +142,11 @@ Promise.all([promise1, promise2, promise3])
   const getScoreMessage = () => {
     const percentage = getScorePercentage();
     if (percentage >= 80)
-      return "Excellent! You have a strong understanding of promises.";
+      return 'Excellent! You have a strong understanding of promises.';
     if (percentage >= 60)
-      return "Good job! You understand the basics of promises.";
-    if (percentage >= 40) return "Not bad! Review the concepts and try again.";
-    return "Keep practicing! Promises can be tricky at first.";
+      return 'Good job! You understand the basics of promises.';
+    if (percentage >= 40) return 'Not bad! Review the concepts and try again.';
+    return 'Keep practicing! Promises can be tricky at first.';
   };
 
   if (practiceCompleted) {
@@ -257,9 +257,9 @@ Promise.all([promise1, promise2, promise3])
                 className={`w-full text-left p-4 rounded-lg border transition-all duration-200 ${
                   selectedAnswer === index
                     ? selectedAnswer === currentP.correctAnswer
-                      ? "border-green-500 bg-green-50"
-                      : "border-red-500 bg-red-50"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
                 }`}
               >
                 <div className="flex items-center">
@@ -267,13 +267,13 @@ Promise.all([promise1, promise2, promise3])
                     className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${
                       selectedAnswer === index
                         ? selectedAnswer === currentP.correctAnswer
-                          ? "border-green-500 bg-green-500 text-white"
-                          : "border-red-500 bg-red-500 text-white"
-                        : "border-gray-300"
+                          ? 'border-green-500 bg-green-500 text-white'
+                          : 'border-red-500 bg-red-500 text-white'
+                        : 'border-gray-300'
                     }`}
                   >
                     {selectedAnswer === index &&
-                      (selectedAnswer === currentP.correctAnswer ? "✓" : "✗")}
+                      (selectedAnswer === currentP.correctAnswer ? '✓' : '✗')}
                   </div>
                   <span className="text-gray-900 font-mono">{option}</span>
                 </div>
@@ -297,8 +297,8 @@ Promise.all([promise1, promise2, promise3])
                 className="bg-blue-600 text-white px-8 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
               >
                 {currentProblem < problems.length - 1
-                  ? "Next Problem"
-                  : "Finish Practice"}
+                  ? 'Next Problem'
+                  : 'Finish Practice'}
               </button>
             </div>
           )}

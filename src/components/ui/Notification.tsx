@@ -151,4 +151,3 @@ export const notify = {
   info: (title: string, message: string, duration?: number) =>
     showNotification({ type: 'info', title, message, duration }),
 };
-

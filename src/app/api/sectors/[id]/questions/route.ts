@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    
+
     // Get the sector first
     const sectorResult = await SectorService.getSector(id);
     if (!sectorResult.success || !sectorResult.sector) {
@@ -20,7 +20,7 @@ export async function GET(
     }
 
     const sector = sectorResult.sector;
-    
+
     // If no questions in sector, return empty array
     if (!sector.questionIds || sector.questionIds.length === 0) {
       return NextResponse.json({
@@ -30,8 +30,10 @@ export async function GET(
     }
 
     // Fetch questions by IDs
-    const questionsResult = await UnifiedQuestionService.getQuestionsByIds(sector.questionIds);
-    
+    const questionsResult = await UnifiedQuestionService.getQuestionsByIds(
+      sector.questionIds
+    );
+
     if (questionsResult.success) {
       return NextResponse.json({
         success: true,
@@ -108,7 +110,10 @@ export async function DELETE(
       );
     }
 
-    const result = await SectorService.removeQuestionsFromSector(id, questionIds);
+    const result = await SectorService.removeQuestionsFromSector(
+      id,
+      questionIds
+    );
 
     if (result.success) {
       return NextResponse.json({

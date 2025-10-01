@@ -256,7 +256,3 @@ isActiveLink('/auth')
 **User Benefit**: Users can now easily identify which page they're currently viewing in the navbar! 🎯✨
 
 The navbar now provides professional, accessible active link indicators that enhance user navigation experience across all devices! 🚀📱💻
-
-
-
-

@@ -68,19 +68,19 @@ export default function EnhancedTTS({
     const scoreVoice = (voice: SpeechSynthesisVoice): number => {
       let score = 0;
       const name = voice.name.toLowerCase();
-      
+
       // Highest priority: Neural and AI voices (most human-like)
       if (name.includes('neural')) score += 100;
       if (name.includes('google')) score += 90;
       if (name.includes('cloud')) score += 85;
       if (name.includes('aria')) score += 80;
       if (name.includes('jenny')) score += 75;
-      
+
       // High priority: Premium voices
       if (name.includes('premium')) score += 70;
       if (name.includes('desktop')) score += 60;
       if (name.includes('enhanced')) score += 50;
-      
+
       // Medium priority: Natural voices
       if (name.includes('alex')) score += 40;
       if (name.includes('samantha')) score += 40;
@@ -91,21 +91,26 @@ export default function EnhancedTTS({
       if (name.includes('karen')) score += 25;
       if (name.includes('fiona')) score += 25;
       if (name.includes('veena')) score += 25;
-      
+
       // Prefer female voices for clarity
       if (name.includes('female')) score += 20;
-      if (name.includes('aria') || name.includes('jenny') || name.includes('samantha')) score += 15;
-      
+      if (
+        name.includes('aria') ||
+        name.includes('jenny') ||
+        name.includes('samantha')
+      )
+        score += 15;
+
       // Avoid robotic voices
       if (name.includes('compact')) score -= 50;
       if (name.includes('basic')) score -= 30;
       if (name.includes('standard')) score -= 20;
-      
+
       // Language preference
       if (voice.lang === 'en-US') score += 10;
       if (voice.lang === 'en-GB') score += 8;
       if (voice.lang === 'en-AU') score += 6;
-      
+
       return score;
     };
 
@@ -113,11 +118,13 @@ export default function EnhancedTTS({
     const sortedVoices = availableVoices
       .filter(voice => voice.lang.startsWith('en'))
       .sort((a, b) => scoreVoice(b) - scoreVoice(a));
-    
+
     const bestVoice = sortedVoices[0];
-    
+
     if (bestVoice) {
-      console.log(`EnhancedTTS using voice: ${bestVoice.name} (Score: ${scoreVoice(bestVoice)})`);
+      console.log(
+        `EnhancedTTS using voice: ${bestVoice.name} (Score: ${scoreVoice(bestVoice)})`
+      );
       return bestVoice;
     }
 
@@ -176,7 +183,7 @@ export default function EnhancedTTS({
     };
 
     // Add natural pauses and emphasis for human-like speech
-    utterance.onboundary = (event) => {
+    utterance.onboundary = event => {
       if (event.name === 'word') {
         // Add subtle pauses between words for natural flow
         utterance.rate = Math.random() * 0.1 + 0.75; // Slight variation in rate
@@ -205,13 +212,13 @@ export default function EnhancedTTS({
           voice: 'nova', // Most natural OpenAI voice
           model: 'tts-1-hd', // High definition model
           speed: 1.0, // Normal speed for natural speech
-          format: 'mp3'
+          format: 'mp3',
         }),
       });
 
       if (response.ok) {
         const result = await response.json();
-        
+
         if (result.success && result.audioUrl) {
           if (audioRef.current) {
             audioRef.current.src = result.audioUrl;
@@ -253,7 +260,6 @@ export default function EnhancedTTS({
       }
 
       throw new Error('All server TTS methods failed');
-
     } catch (error) {
       console.error('Server TTS error:', error);
       console.log('Falling back to browser TTS');

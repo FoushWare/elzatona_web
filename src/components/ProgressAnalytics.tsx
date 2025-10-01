@@ -314,7 +314,8 @@ export default function ProgressAnalytics() {
                 <div className="flex items-center space-x-2">
                   <span className="text-yellow-300">⏰</span>
                   <span>
-                    You&apos;ve invested significant time in learning. Well done!
+                    You&apos;ve invested significant time in learning. Well
+                    done!
                   </span>
                 </div>
               )}

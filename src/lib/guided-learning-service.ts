@@ -189,10 +189,14 @@ export class GuidedLearningService {
   ): Promise<void> {
     try {
       const planRef = doc(db, this.COLLECTIONS.PLANS, planId);
-      await setDoc(planRef, {
-        ...planData,
-        updatedAt: Timestamp.now(),
-      }, { merge: true });
+      await setDoc(
+        planRef,
+        {
+          ...planData,
+          updatedAt: Timestamp.now(),
+        },
+        { merge: true }
+      );
     } catch (error) {
       console.error('Error creating/updating learning plan:', error);
       throw new Error('Failed to create/update learning plan');
@@ -225,8 +229,12 @@ export class GuidedLearningService {
         return {
           id: planSnap.id,
           ...data,
-          createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : new Date(),
-          updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate() : new Date(),
+          createdAt: data.createdAt?.toDate
+            ? data.createdAt.toDate()
+            : new Date(),
+          updatedAt: data.updatedAt?.toDate
+            ? data.updatedAt.toDate()
+            : new Date(),
         } as LearningPlanTemplate;
       }
       return null;
@@ -250,8 +258,12 @@ export class GuidedLearningService {
         return {
           id: doc.id,
           ...data,
-          createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : new Date(),
-          updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate() : new Date(),
+          createdAt: data.createdAt?.toDate
+            ? data.createdAt.toDate()
+            : new Date(),
+          updatedAt: data.updatedAt?.toDate
+            ? data.updatedAt.toDate()
+            : new Date(),
         } as LearningPlanTemplate;
       });
     } catch (error) {

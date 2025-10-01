@@ -1,12 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, orderBy, where } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  query,
+  orderBy,
+  where,
+} from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export interface QuestionTopic {
   id: string;
   name: string;
   description: string;
-  category: 'javascript-core' | 'data-structures-algorithms' | 'browser-dom' | 'css-styling' | 'react' | 'nextjs-frameworks' | 'typescript' | 'testing' | 'build-tools-workflow' | 'security' | 'software-engineering' | 'performance-monitoring' | 'advanced-future';
+  category:
+    | 'javascript-core'
+    | 'data-structures-algorithms'
+    | 'browser-dom'
+    | 'css-styling'
+    | 'react'
+    | 'nextjs-frameworks'
+    | 'typescript'
+    | 'testing'
+    | 'build-tools-workflow'
+    | 'security'
+    | 'software-engineering'
+    | 'performance-monitoring'
+    | 'advanced-future';
   color: string;
   createdAt: string;
   updatedAt: string;
@@ -24,9 +47,9 @@ async function loadTopics(): Promise<QuestionTopic[]> {
     const topicsRef = collection(db, 'topics');
     const q = query(topicsRef, orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
-    
+
     const topics: QuestionTopic[] = [];
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach(doc => {
       topics.push({
         id: doc.id,
         ...doc.data(),
@@ -52,7 +75,10 @@ async function saveTopic(topic: Omit<QuestionTopic, 'id'>): Promise<string> {
 }
 
 // Update topic in Firebase
-async function updateTopic(topicId: string, topic: Partial<QuestionTopic>): Promise<void> {
+async function updateTopic(
+  topicId: string,
+  topic: Partial<QuestionTopic>
+): Promise<void> {
   if (!db) {
     throw new Error('Firestore not available');
   }

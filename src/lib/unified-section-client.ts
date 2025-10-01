@@ -45,7 +45,9 @@ export class UnifiedSectionClientService {
     sectionId: string
   ): Promise<UnifiedSectionApiResult> {
     try {
-      const response = await fetch(`${this.API_BASE.replace('/unified', '')}/${sectionId}/unified-questions`);
+      const response = await fetch(
+        `${this.API_BASE.replace('/unified', '')}/${sectionId}/unified-questions`
+      );
       const data = await response.json();
       return data;
     } catch (error) {
@@ -65,13 +67,16 @@ export class UnifiedSectionClientService {
     questionData: any
   ): Promise<UnifiedSectionApiResult> {
     try {
-      const response = await fetch(`${this.API_BASE.replace('/unified', '')}/${sectionId}/unified-questions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(questionData),
-      });
+      const response = await fetch(
+        `${this.API_BASE.replace('/unified', '')}/${sectionId}/unified-questions`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(questionData),
+        }
+      );
       const data = await response.json();
       return data;
     } catch (error) {
@@ -100,7 +105,10 @@ export class UnifiedSectionClientService {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Delete question from unified section client error:', error);
+      console.error(
+        'Delete question from unified section client error:',
+        error
+      );
       return {
         success: false,
         error: 'Failed to delete question from section',
@@ -116,23 +124,29 @@ export class UnifiedSectionClientService {
     questions: any[]
   ): Promise<UnifiedSectionApiResult> {
     try {
-      const response = await fetch(`${this.API_BASE.replace('/unified', '')}/${sectionId}/unified-questions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          questions: questions.map(q => ({
-            ...q,
-            learningPath: sectionId,
-            isActive: true,
-          })),
-        }),
-      });
+      const response = await fetch(
+        `${this.API_BASE.replace('/unified', '')}/${sectionId}/unified-questions`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            questions: questions.map(q => ({
+              ...q,
+              learningPath: sectionId,
+              isActive: true,
+            })),
+          }),
+        }
+      );
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Bulk add questions to unified section client error:', error);
+      console.error(
+        'Bulk add questions to unified section client error:',
+        error
+      );
       return {
         success: false,
         error: 'Failed to bulk add questions to section',

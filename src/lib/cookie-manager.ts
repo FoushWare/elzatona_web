@@ -18,7 +18,7 @@ export class CookieManager {
   async ensureAuthCookie(user: any): Promise<boolean> {
     if (this.isSettingCookie) {
       // Wait for the current cookie setting to complete
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         const checkInterval = setInterval(() => {
           if (!this.isSettingCookie) {
             clearInterval(checkInterval);
@@ -63,4 +63,3 @@ export class CookieManager {
 }
 
 export const cookieManager = CookieManager.getInstance();
-

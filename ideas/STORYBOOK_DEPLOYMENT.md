@@ -17,11 +17,13 @@ This project is configured to deploy Storybook to Vercel alongside the main appl
 #### Option 1: Deploy via Vercel CLI (Recommended)
 
 1. **Login to Vercel**:
+
    ```bash
    vercel login
    ```
 
 2. **Deploy Storybook**:
+
    ```bash
    vercel --prod
    ```
@@ -51,12 +53,14 @@ The following files are configured for Vercel deployment:
 ### Environment Variables
 
 If your Storybook uses environment variables, add them in:
+
 1. Vercel Dashboard → Project Settings → Environment Variables
 2. Or via CLI: `vercel env add VARIABLE_NAME`
 
 ### Automatic Deployment
 
 The GitHub Actions workflow (`.github/workflows/storybook-deploy.yml`) is set up for automatic deployment on:
+
 - Push to `main` or `develop` branches
 - Pull requests to `main`
 
@@ -65,16 +69,17 @@ The GitHub Actions workflow (`.github/workflows/storybook-deploy.yml`) is set up
 For automatic deployment, add these secrets to your GitHub repository:
 
 1. `VERCEL_TOKEN` - Your Vercel API token
-2. `VERCEL_ORG_ID` - Your Vercel organization ID  
+2. `VERCEL_ORG_ID` - Your Vercel organization ID
 3. `VERCEL_PROJECT_ID` - Your Vercel project ID
 
 ### Getting Vercel Credentials
 
-1. **Vercel Token**: 
+1. **Vercel Token**:
    - Go to Vercel Dashboard → Settings → Tokens
    - Create a new token
 
 2. **Organization ID**:
+
    ```bash
    vercel teams list
    ```
@@ -87,11 +92,13 @@ For automatic deployment, add these secrets to your GitHub repository:
 ### Local Development
 
 Run Storybook locally:
+
 ```bash
 npm run storybook
 ```
 
 Build Storybook for production:
+
 ```bash
 npm run build-storybook
 ```

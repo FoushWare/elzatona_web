@@ -156,7 +156,3 @@ layout.tsx (Server Component)
 **Total Impact**: The build error has been completely resolved, and the first-visit detection system is now fully functional! 🚀✨
 
 The application can now successfully build and deploy with all the new features working correctly! 🎉
-
-
-
-

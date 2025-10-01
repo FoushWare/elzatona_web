@@ -1,6 +1,6 @@
 /**
  * Unit Tests for Content Linking Logic
- * 
+ *
  * Tests the core logic for linking categories, topics, learning paths, and questions
  */
 
@@ -68,13 +68,15 @@ class ContentLinkingService {
     if (!this.categories.has(topic.category)) {
       throw new Error(`Category ${topic.category} does not exist`);
     }
-    
+
     this.topics.set(topic.id, topic);
     return topic.id;
   }
 
   getTopicsByCategory(categoryId: string): Topic[] {
-    return Array.from(this.topics.values()).filter(topic => topic.category === categoryId);
+    return Array.from(this.topics.values()).filter(
+      topic => topic.category === categoryId
+    );
   }
 
   getAllTopics(): Topic[] {
@@ -87,17 +89,21 @@ class ContentLinkingService {
     if (!this.categories.has(learningPath.category)) {
       throw new Error(`Category ${learningPath.category} does not exist`);
     }
-    
+
     this.learningPaths.set(learningPath.id, learningPath);
     return learningPath.id;
   }
 
   getLearningPathsByCategory(categoryId: string): LearningPath[] {
-    return Array.from(this.learningPaths.values()).filter(path => path.category === categoryId);
+    return Array.from(this.learningPaths.values()).filter(
+      path => path.category === categoryId
+    );
   }
 
   getAllLearningPaths(): LearningPath[] {
-    return Array.from(this.learningPaths.values()).sort((a, b) => a.order - b.order);
+    return Array.from(this.learningPaths.values()).sort(
+      (a, b) => a.order - b.order
+    );
   }
 
   // Question management
@@ -120,9 +126,9 @@ class ContentLinkingService {
         throw new Error(`Learning path ${pathId} does not exist`);
       }
     }
-    
+
     this.questions.set(question.id, question);
-    
+
     // Update question counts for learning paths
     for (const pathId of question.learningPaths) {
       const path = this.learningPaths.get(pathId);
@@ -130,20 +136,26 @@ class ContentLinkingService {
         path.questionCount = this.getQuestionsByLearningPath(pathId).length;
       }
     }
-    
+
     return question.id;
   }
 
   getQuestionsByCategory(categoryId: string): Question[] {
-    return Array.from(this.questions.values()).filter(q => q.category === categoryId);
+    return Array.from(this.questions.values()).filter(
+      q => q.category === categoryId
+    );
   }
 
   getQuestionsByTopic(topicId: string): Question[] {
-    return Array.from(this.questions.values()).filter(q => q.topics.includes(topicId));
+    return Array.from(this.questions.values()).filter(q =>
+      q.topics.includes(topicId)
+    );
   }
 
   getQuestionsByLearningPath(learningPathId: string): Question[] {
-    return Array.from(this.questions.values()).filter(q => q.learningPaths.includes(learningPathId));
+    return Array.from(this.questions.values()).filter(q =>
+      q.learningPaths.includes(learningPathId)
+    );
   }
 
   getAllQuestions(): Question[] {
@@ -157,39 +169,49 @@ class ContentLinkingService {
     // Check if all topics have valid categories
     for (const [topicId, topic] of this.topics) {
       if (!this.categories.has(topic.category)) {
-        errors.push(`Topic ${topicId} references non-existent category ${topic.category}`);
+        errors.push(
+          `Topic ${topicId} references non-existent category ${topic.category}`
+        );
       }
     }
 
     // Check if all learning paths have valid categories
     for (const [pathId, path] of this.learningPaths) {
       if (!this.categories.has(path.category)) {
-        errors.push(`Learning path ${pathId} references non-existent category ${path.category}`);
+        errors.push(
+          `Learning path ${pathId} references non-existent category ${path.category}`
+        );
       }
     }
 
     // Check if all questions have valid categories, topics, and learning paths
     for (const [questionId, question] of this.questions) {
       if (!this.categories.has(question.category)) {
-        errors.push(`Question ${questionId} references non-existent category ${question.category}`);
+        errors.push(
+          `Question ${questionId} references non-existent category ${question.category}`
+        );
       }
 
       for (const topicId of question.topics) {
         if (!this.topics.has(topicId)) {
-          errors.push(`Question ${questionId} references non-existent topic ${topicId}`);
+          errors.push(
+            `Question ${questionId} references non-existent topic ${topicId}`
+          );
         }
       }
 
       for (const pathId of question.learningPaths) {
         if (!this.learningPaths.has(pathId)) {
-          errors.push(`Question ${questionId} references non-existent learning path ${pathId}`);
+          errors.push(
+            `Question ${questionId} references non-existent learning path ${pathId}`
+          );
         }
       }
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 }
@@ -206,7 +228,7 @@ describe('Content Linking Service', () => {
       const category: Category = {
         id: 'js-core',
         name: 'JavaScript (Core)',
-        description: 'Core JavaScript concepts'
+        description: 'Core JavaScript concepts',
       };
 
       const categoryId = service.createCategory(category);
@@ -219,12 +241,16 @@ describe('Content Linking Service', () => {
     it('should return all categories', () => {
       const categories = [
         { id: 'js-core', name: 'JavaScript (Core)', description: 'Core JS' },
-        { id: 'react-core', name: 'React.js (Core)', description: 'React fundamentals' }
+        {
+          id: 'react-core',
+          name: 'React.js (Core)',
+          description: 'React fundamentals',
+        },
       ];
 
       categories.forEach(cat => service.createCategory(cat));
       const allCategories = service.getAllCategories();
-      
+
       expect(allCategories).toHaveLength(2);
       expect(allCategories.map(c => c.id)).toContain('js-core');
       expect(allCategories.map(c => c.id)).toContain('react-core');
@@ -237,7 +263,7 @@ describe('Content Linking Service', () => {
       service.createCategory({
         id: 'js-core',
         name: 'JavaScript (Core)',
-        description: 'Core JavaScript concepts'
+        description: 'Core JavaScript concepts',
       });
     });
 
@@ -247,7 +273,7 @@ describe('Content Linking Service', () => {
         name: 'Hoisting',
         description: 'JavaScript hoisting behavior',
         category: 'js-core',
-        difficulty: 'intermediate'
+        difficulty: 'intermediate',
       };
 
       const topicId = service.createTopic(topic);
@@ -260,21 +286,35 @@ describe('Content Linking Service', () => {
         name: 'Invalid Topic',
         description: 'This should fail',
         category: 'non-existent',
-        difficulty: 'beginner'
+        difficulty: 'beginner',
       };
 
-      expect(() => service.createTopic(topic)).toThrow('Category non-existent does not exist');
+      expect(() => service.createTopic(topic)).toThrow(
+        'Category non-existent does not exist'
+      );
     });
 
     it('should get topics by category', () => {
       const topics = [
-        { id: 'hoisting', name: 'Hoisting', description: 'Hoisting', category: 'js-core', difficulty: 'intermediate' as const },
-        { id: 'closures', name: 'Closures', description: 'Closures', category: 'js-core', difficulty: 'intermediate' as const }
+        {
+          id: 'hoisting',
+          name: 'Hoisting',
+          description: 'Hoisting',
+          category: 'js-core',
+          difficulty: 'intermediate' as const,
+        },
+        {
+          id: 'closures',
+          name: 'Closures',
+          description: 'Closures',
+          category: 'js-core',
+          difficulty: 'intermediate' as const,
+        },
       ];
 
       topics.forEach(topic => service.createTopic(topic));
       const jsTopics = service.getTopicsByCategory('js-core');
-      
+
       expect(jsTopics).toHaveLength(2);
       expect(jsTopics.map(t => t.id)).toContain('hoisting');
       expect(jsTopics.map(t => t.id)).toContain('closures');
@@ -286,7 +326,7 @@ describe('Content Linking Service', () => {
       service.createCategory({
         id: 'js-core',
         name: 'JavaScript (Core)',
-        description: 'Core JavaScript concepts'
+        description: 'Core JavaScript concepts',
       });
     });
 
@@ -297,7 +337,7 @@ describe('Content Linking Service', () => {
         description: 'Master advanced JavaScript',
         category: 'js-core',
         order: 1,
-        questionCount: 0
+        questionCount: 0,
       };
 
       const pathId = service.createLearningPath(learningPath);
@@ -306,14 +346,35 @@ describe('Content Linking Service', () => {
 
     it('should sort learning paths by order', () => {
       const paths = [
-        { id: 'path3', name: 'Path 3', description: 'Third', category: 'js-core', order: 3, questionCount: 0 },
-        { id: 'path1', name: 'Path 1', description: 'First', category: 'js-core', order: 1, questionCount: 0 },
-        { id: 'path2', name: 'Path 2', description: 'Second', category: 'js-core', order: 2, questionCount: 0 }
+        {
+          id: 'path3',
+          name: 'Path 3',
+          description: 'Third',
+          category: 'js-core',
+          order: 3,
+          questionCount: 0,
+        },
+        {
+          id: 'path1',
+          name: 'Path 1',
+          description: 'First',
+          category: 'js-core',
+          order: 1,
+          questionCount: 0,
+        },
+        {
+          id: 'path2',
+          name: 'Path 2',
+          description: 'Second',
+          category: 'js-core',
+          order: 2,
+          questionCount: 0,
+        },
       ];
 
       paths.forEach(path => service.createLearningPath(path));
       const allPaths = service.getAllLearningPaths();
-      
+
       expect(allPaths[0].id).toBe('path1');
       expect(allPaths[1].id).toBe('path2');
       expect(allPaths[2].id).toBe('path3');
@@ -323,9 +384,26 @@ describe('Content Linking Service', () => {
   describe('Question Management', () => {
     beforeEach(() => {
       // Set up test data
-      service.createCategory({ id: 'js-core', name: 'JavaScript (Core)', description: 'Core JS' });
-      service.createTopic({ id: 'hoisting', name: 'Hoisting', description: 'Hoisting', category: 'js-core', difficulty: 'intermediate' });
-      service.createLearningPath({ id: 'js-deep-dive', name: 'JS Deep Dive', description: 'Advanced JS', category: 'js-core', order: 1, questionCount: 0 });
+      service.createCategory({
+        id: 'js-core',
+        name: 'JavaScript (Core)',
+        description: 'Core JS',
+      });
+      service.createTopic({
+        id: 'hoisting',
+        name: 'Hoisting',
+        description: 'Hoisting',
+        category: 'js-core',
+        difficulty: 'intermediate',
+      });
+      service.createLearningPath({
+        id: 'js-deep-dive',
+        name: 'JS Deep Dive',
+        description: 'Advanced JS',
+        category: 'js-core',
+        order: 1,
+        questionCount: 0,
+      });
     });
 
     it('should create questions with proper links', () => {
@@ -337,7 +415,7 @@ describe('Content Linking Service', () => {
         category: 'js-core',
         topics: ['hoisting'],
         learningPaths: ['js-deep-dive'],
-        difficulty: 'intermediate'
+        difficulty: 'intermediate',
       };
 
       const questionId = service.createQuestion(question);
@@ -357,10 +435,12 @@ describe('Content Linking Service', () => {
         category: 'non-existent',
         topics: ['hoisting'],
         learningPaths: ['js-deep-dive'],
-        difficulty: 'intermediate'
+        difficulty: 'intermediate',
       };
 
-      expect(() => service.createQuestion(invalidQuestion)).toThrow('Category non-existent does not exist');
+      expect(() => service.createQuestion(invalidQuestion)).toThrow(
+        'Category non-existent does not exist'
+      );
     });
 
     it('should get questions by category', () => {
@@ -372,12 +452,12 @@ describe('Content Linking Service', () => {
         category: 'js-core',
         topics: ['hoisting'],
         learningPaths: ['js-deep-dive'],
-        difficulty: 'intermediate'
+        difficulty: 'intermediate',
       };
 
       service.createQuestion(question);
       const jsQuestions = service.getQuestionsByCategory('js-core');
-      
+
       expect(jsQuestions).toHaveLength(1);
       expect(jsQuestions[0].id).toBe('q1');
     });
@@ -391,12 +471,12 @@ describe('Content Linking Service', () => {
         category: 'js-core',
         topics: ['hoisting'],
         learningPaths: ['js-deep-dive'],
-        difficulty: 'intermediate'
+        difficulty: 'intermediate',
       };
 
       service.createQuestion(question);
       const pathQuestions = service.getQuestionsByLearningPath('js-deep-dive');
-      
+
       expect(pathQuestions).toHaveLength(1);
       expect(pathQuestions[0].id).toBe('q1');
     });
@@ -405,10 +485,27 @@ describe('Content Linking Service', () => {
   describe('Content Validation', () => {
     it('should validate all content links correctly', () => {
       // Create valid content
-      service.createCategory({ id: 'js-core', name: 'JavaScript (Core)', description: 'Core JS' });
-      service.createTopic({ id: 'hoisting', name: 'Hoisting', description: 'Hoisting', category: 'js-core', difficulty: 'intermediate' });
-      service.createLearningPath({ id: 'js-deep-dive', name: 'JS Deep Dive', description: 'Advanced JS', category: 'js-core', order: 1, questionCount: 0 });
-      
+      service.createCategory({
+        id: 'js-core',
+        name: 'JavaScript (Core)',
+        description: 'Core JS',
+      });
+      service.createTopic({
+        id: 'hoisting',
+        name: 'Hoisting',
+        description: 'Hoisting',
+        category: 'js-core',
+        difficulty: 'intermediate',
+      });
+      service.createLearningPath({
+        id: 'js-deep-dive',
+        name: 'JS Deep Dive',
+        description: 'Advanced JS',
+        category: 'js-core',
+        order: 1,
+        questionCount: 0,
+      });
+
       const question: Question = {
         id: 'q1',
         title: 'What is hoisting?',
@@ -417,9 +514,9 @@ describe('Content Linking Service', () => {
         category: 'js-core',
         topics: ['hoisting'],
         learningPaths: ['js-deep-dive'],
-        difficulty: 'intermediate'
+        difficulty: 'intermediate',
       };
-      
+
       service.createQuestion(question);
 
       const validation = service.validateContentLinks();
@@ -429,21 +526,27 @@ describe('Content Linking Service', () => {
 
     it('should detect invalid content links', () => {
       // Create content with invalid links
-      service.createCategory({ id: 'js-core', name: 'JavaScript (Core)', description: 'Core JS' });
-      
+      service.createCategory({
+        id: 'js-core',
+        name: 'JavaScript (Core)',
+        description: 'Core JS',
+      });
+
       // Create topic with invalid category
       service.topics.set('invalid-topic', {
         id: 'invalid-topic',
         name: 'Invalid Topic',
         description: 'Invalid',
         category: 'non-existent',
-        difficulty: 'intermediate'
+        difficulty: 'intermediate',
       });
 
       const validation = service.validateContentLinks();
       expect(validation.isValid).toBe(false);
       expect(validation.errors.length).toBeGreaterThan(0);
-      expect(validation.errors[0]).toContain('references non-existent category');
+      expect(validation.errors[0]).toContain(
+        'references non-existent category'
+      );
     });
   });
 });

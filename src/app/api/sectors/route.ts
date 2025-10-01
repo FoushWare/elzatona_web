@@ -53,7 +53,11 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!name || !description || !learningPathId || order === undefined) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields: name, description, learningPathId, order' },
+        {
+          success: false,
+          error:
+            'Missing required fields: name, description, learningPathId, order',
+        },
         { status: 400 }
       );
     }

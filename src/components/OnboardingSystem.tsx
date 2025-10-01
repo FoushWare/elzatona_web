@@ -392,7 +392,3 @@ export const OnboardingSystem: React.FC<OnboardingSystemProps> = ({
     </div>
   );
 };
-
-
-
-

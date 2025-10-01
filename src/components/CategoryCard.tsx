@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { ResourceCategoryInfo } from "@/types/resource";
+import { ResourceCategoryInfo } from '@/types/resource';
 
 interface CategoryCardProps {
   category: ResourceCategoryInfo;
@@ -17,8 +17,8 @@ export default function CategoryCard({
     <div
       className={`p-4 rounded-lg border cursor-pointer transition-all ${
         isSelected
-          ? "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 shadow-md"
-          : "bg-card border-border hover:border-border/60 hover:shadow-sm"
+          ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 shadow-md'
+          : 'bg-card border-border hover:border-border/60 hover:shadow-sm'
       }`}
       onClick={onClick}
     >
@@ -26,7 +26,7 @@ export default function CategoryCard({
         {/* Icon */}
         <div
           className={`text-3xl mb-2 ${
-            isSelected ? "scale-110" : ""
+            isSelected ? 'scale-110' : ''
           } transition-transform`}
         >
           {category.icon}
@@ -36,8 +36,8 @@ export default function CategoryCard({
         <h3
           className={`font-medium text-sm mb-1 ${
             isSelected
-              ? "text-blue-900 dark:text-blue-100"
-              : "text-card-foreground"
+              ? 'text-blue-900 dark:text-blue-100'
+              : 'text-card-foreground'
           }`}
         >
           {category.name}
@@ -47,8 +47,8 @@ export default function CategoryCard({
         <p
           className={`text-xs ${
             isSelected
-              ? "text-blue-600 dark:text-blue-300"
-              : "text-muted-foreground"
+              ? 'text-blue-600 dark:text-blue-300'
+              : 'text-muted-foreground'
           }`}
         >
           {category.count} resources

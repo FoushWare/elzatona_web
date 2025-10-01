@@ -213,7 +213,3 @@ const { isMobileMenuOpen } = useMobileMenu();
 **Total Impact**: The ChatGPT icon now intelligently hides when the mobile menu is open, providing a clean, focused navigation experience without UI conflicts! 🚀📱
 
 Mobile users now have a **distraction-free navigation experience** with the chat icon automatically hiding when the mobile menu is open! ✨
-
-
-
-

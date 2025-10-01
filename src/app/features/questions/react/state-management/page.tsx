@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState } from 'react';
+import Link from 'next/link';
 
 interface PracticeProblem {
   id: number;
@@ -23,8 +23,8 @@ export default function ReactStateManagementPage() {
   const problems: PracticeProblem[] = [
     {
       id: 1,
-      title: "useState Hook Basics",
-      description: "Understanding how useState works with primitive values",
+      title: 'useState Hook Basics',
+      description: 'Understanding how useState works with primitive values',
       code: `function Counter() {
   const [count, setCount] = useState(0);
   
@@ -40,21 +40,21 @@ export default function ReactStateManagementPage() {
     </div>
   );
 }`,
-      question: "What happens when the button is clicked?",
+      question: 'What happens when the button is clicked?',
       options: [
-        "Count increases by 1",
-        "Count increases by 2",
-        "Count stays the same",
-        "Error occurs",
+        'Count increases by 1',
+        'Count increases by 2',
+        'Count stays the same',
+        'Error occurs',
       ],
       correctAnswer: 0,
       explanation:
-        "Even though setCount is called twice, React batches state updates. The second setCount uses the same count value (0), so the final result is 1, not 2.",
+        'Even though setCount is called twice, React batches state updates. The second setCount uses the same count value (0), so the final result is 1, not 2.',
     },
     {
       id: 2,
-      title: "State Updates with Functions",
-      description: "Understanding functional state updates",
+      title: 'State Updates with Functions',
+      description: 'Understanding functional state updates',
       code: `function Counter() {
   const [count, setCount] = useState(0);
   
@@ -70,21 +70,21 @@ export default function ReactStateManagementPage() {
     </div>
   );
 }`,
-      question: "What happens when the button is clicked?",
+      question: 'What happens when the button is clicked?',
       options: [
-        "Count increases by 1",
-        "Count increases by 2",
-        "Count stays the same",
-        "Error occurs",
+        'Count increases by 1',
+        'Count increases by 2',
+        'Count stays the same',
+        'Error occurs',
       ],
       correctAnswer: 1,
       explanation:
-        "Using functional updates (prev => prev + 1) ensures each update is based on the previous state, so the count increases by 2.",
+        'Using functional updates (prev => prev + 1) ensures each update is based on the previous state, so the count increases by 2.',
     },
     {
       id: 3,
-      title: "Object State Updates",
-      description: "Understanding how to update object state correctly",
+      title: 'Object State Updates',
+      description: 'Understanding how to update object state correctly',
       code: `function UserProfile() {
   const [user, setUser] = useState({ name: 'John', age: 25 });
   
@@ -100,12 +100,12 @@ export default function ReactStateManagementPage() {
     </div>
   );
 }`,
-      question: "What happens when the button is clicked?",
+      question: 'What happens when the button is clicked?',
       options: [
-        "Age updates to 26",
-        "Age stays 25",
-        "Component re-renders",
-        "Error occurs",
+        'Age updates to 26',
+        'Age stays 25',
+        'Component re-renders',
+        'Error occurs',
       ],
       correctAnswer: 1,
       explanation:
@@ -113,8 +113,8 @@ export default function ReactStateManagementPage() {
     },
     {
       id: 4,
-      title: "useContext Hook",
-      description: "Understanding React Context for state sharing",
+      title: 'useContext Hook',
+      description: 'Understanding React Context for state sharing',
       code: `const ThemeContext = React.createContext('light');
 
 function App() {
@@ -134,12 +134,12 @@ function Header() {
   const theme = useContext(ThemeContext);
   return <h1>Current theme: {theme}</h1>;
 }`,
-      question: "What happens when the button is clicked?",
+      question: 'What happens when the button is clicked?',
       options: [
         "Header shows 'light'",
         "Header shows 'dark'",
-        "Nothing changes",
-        "Error occurs",
+        'Nothing changes',
+        'Error occurs',
       ],
       correctAnswer: 1,
       explanation:
@@ -147,8 +147,8 @@ function Header() {
     },
     {
       id: 5,
-      title: "useReducer Hook",
-      description: "Understanding useReducer for complex state logic",
+      title: 'useReducer Hook',
+      description: 'Understanding useReducer for complex state logic',
       code: `const initialState = { count: 0 };
 
 function reducer(state, action) {
@@ -176,16 +176,16 @@ function Counter() {
     </div>
   );
 }`,
-      question: "What is the advantage of using useReducer over useState?",
+      question: 'What is the advantage of using useReducer over useState?',
       options: [
-        "Better performance",
-        "Simpler syntax",
-        "Easier to manage complex state logic",
-        "More hooks available",
+        'Better performance',
+        'Simpler syntax',
+        'Easier to manage complex state logic',
+        'More hooks available',
       ],
       correctAnswer: 2,
       explanation:
-        "useReducer is better for managing complex state logic with multiple sub-values or when the next state depends on the previous one.",
+        'useReducer is better for managing complex state logic with multiple sub-values or when the next state depends on the previous one.',
     },
   ];
 
@@ -221,11 +221,11 @@ function Counter() {
   const getScoreMessage = () => {
     const percentage = getScorePercentage();
     if (percentage >= 80)
-      return "Excellent! You have a strong understanding of React state management.";
+      return 'Excellent! You have a strong understanding of React state management.';
     if (percentage >= 60)
-      return "Good job! You understand the basics of React state management.";
-    if (percentage >= 40) return "Not bad! Review the concepts and try again.";
-    return "Keep practicing! State management can be complex at first.";
+      return 'Good job! You understand the basics of React state management.';
+    if (percentage >= 40) return 'Not bad! Review the concepts and try again.';
+    return 'Keep practicing! State management can be complex at first.';
   };
 
   if (practiceCompleted) {
@@ -336,9 +336,9 @@ function Counter() {
                 className={`w-full text-left p-4 rounded-lg border transition-all duration-200 ${
                   selectedAnswer === index
                     ? selectedAnswer === currentP.correctAnswer
-                      ? "border-green-500 bg-green-50"
-                      : "border-red-500 bg-red-50"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
                 }`}
               >
                 <div className="flex items-center">
@@ -346,13 +346,13 @@ function Counter() {
                     className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${
                       selectedAnswer === index
                         ? selectedAnswer === currentP.correctAnswer
-                          ? "border-green-500 bg-green-500 text-white"
-                          : "border-red-500 bg-red-500 text-white"
-                        : "border-gray-300"
+                          ? 'border-green-500 bg-green-500 text-white'
+                          : 'border-red-500 bg-red-500 text-white'
+                        : 'border-gray-300'
                     }`}
                   >
                     {selectedAnswer === index &&
-                      (selectedAnswer === currentP.correctAnswer ? "✓" : "✗")}
+                      (selectedAnswer === currentP.correctAnswer ? '✓' : '✗')}
                   </div>
                   <span className="text-gray-900">{option}</span>
                 </div>
@@ -376,8 +376,8 @@ function Counter() {
                 className="bg-blue-600 text-white px-8 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
               >
                 {currentProblem < problems.length - 1
-                  ? "Next Problem"
-                  : "Finish Practice"}
+                  ? 'Next Problem'
+                  : 'Finish Practice'}
               </button>
             </div>
           )}

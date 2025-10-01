@@ -1,20 +1,20 @@
 // v1.0 - Unified Question Schema
 // Centralized type definitions for the unified question system
 
-import { 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
-  limit, 
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
   startAfter,
-  serverTimestamp 
+  serverTimestamp,
 } from 'firebase/firestore';
 
 export interface UnifiedQuestion {
@@ -191,47 +191,47 @@ export const QUESTION_TYPES: QuestionType[] = [
   'multiple-choice',
   'open-ended',
   'true-false',
-  'code'
+  'code',
 ];
 
 export const QUESTION_DIFFICULTIES: QuestionDifficulty[] = [
   'beginner',
   'intermediate',
-  'advanced'
+  'advanced',
 ];
 
 export const DEFAULT_QUESTION_METADATA = {
   source: 'manual',
   version: '1.0.0',
-  references: []
+  references: [],
 };
 
 export const QUESTION_VALIDATION_RULES = {
   title: {
     minLength: 10,
     maxLength: 200,
-    required: true
+    required: true,
   },
   content: {
     minLength: 20,
     maxLength: 2000,
-    required: true
+    required: true,
   },
   options: {
     minCount: 2,
     maxCount: 6,
-    requiredFor: ['multiple-choice']
+    requiredFor: ['multiple-choice'],
   },
   timeLimit: {
     min: 30, // 30 seconds
     max: 1800, // 30 minutes
-    default: 300 // 5 minutes
+    default: 300, // 5 minutes
   },
   points: {
     min: 1,
     max: 100,
-    default: 10
-  }
+    default: 10,
+  },
 };
 
 // Unified Question Service Class
@@ -245,9 +245,9 @@ export class UnifiedQuestionService {
   // Get all questions with optional filters
   async getQuestions(filters?: QuestionFilter): Promise<UnifiedQuestion[]> {
     if (!this.db) throw new Error('Firestore not initialized');
-    
+
     let q = query(collection(this.db, 'unifiedQuestions'));
-    
+
     if (filters?.category) {
       q = query(q, where('category', '==', filters.category));
     }
@@ -263,24 +263,27 @@ export class UnifiedQuestionService {
     if (filters?.isActive !== undefined) {
       q = query(q, where('isActive', '==', filters.isActive));
     }
-    
+
     q = query(q, orderBy('createdAt', 'desc'));
-    
+
     if (filters?.limit) {
       q = query(q, limit(filters.limit));
     }
-    
+
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as UnifiedQuestion));
+    return snapshot.docs.map(
+      doc =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        }) as UnifiedQuestion
+    );
   }
 
   // Get a single question by ID
   async getQuestion(id: string): Promise<UnifiedQuestion | null> {
     if (!this.db) throw new Error('Firestore not initialized');
-    
+
     const docSnap = await getDoc(doc(this.db, 'unifiedQuestions', id));
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() } as UnifiedQuestion;
@@ -289,29 +292,37 @@ export class UnifiedQuestionService {
   }
 
   // Create a new question
-  async createQuestion(question: Omit<UnifiedQuestion, 'id' | 'createdAt' | 'updatedAt'>): Promise<UnifiedQuestion> {
+  async createQuestion(
+    question: Omit<UnifiedQuestion, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<UnifiedQuestion> {
     if (!this.db) throw new Error('Firestore not initialized');
-    
+
     const questionWithTimestamps = {
       ...question,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
-    
-    const docRef = await addDoc(collection(this.db, 'unifiedQuestions'), questionWithTimestamps);
+
+    const docRef = await addDoc(
+      collection(this.db, 'unifiedQuestions'),
+      questionWithTimestamps
+    );
     const docSnap = await getDoc(docRef);
     return { id: docSnap.id, ...docSnap.data() } as UnifiedQuestion;
   }
 
   // Update an existing question
-  async updateQuestion(id: string, updates: Partial<UnifiedQuestion>): Promise<UnifiedQuestion> {
+  async updateQuestion(
+    id: string,
+    updates: Partial<UnifiedQuestion>
+  ): Promise<UnifiedQuestion> {
     if (!this.db) throw new Error('Firestore not initialized');
-    
+
     const updateWithTimestamps = {
       ...updates,
       updatedAt: serverTimestamp(),
     };
-    
+
     await updateDoc(doc(this.db, 'unifiedQuestions', id), updateWithTimestamps);
     const updatedDoc = await getDoc(doc(this.db, 'unifiedQuestions', id));
     return { id: updatedDoc.id, ...updatedDoc.data() } as UnifiedQuestion;
@@ -320,7 +331,7 @@ export class UnifiedQuestionService {
   // Delete a question
   async deleteQuestion(id: string): Promise<boolean> {
     if (!this.db) throw new Error('Firestore not initialized');
-    
+
     try {
       await deleteDoc(doc(this.db, 'unifiedQuestions', id));
       return true;
@@ -333,11 +344,13 @@ export class UnifiedQuestionService {
   // Get question statistics
   async getQuestionStats(): Promise<QuestionStats> {
     if (!this.db) throw new Error('Firestore not initialized');
-    
+
     // For small datasets, get all questions at once (more efficient than multiple queries)
     const snapshot = await getDocs(collection(this.db, 'unifiedQuestions'));
-    const questions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UnifiedQuestion));
-    
+    const questions = snapshot.docs.map(
+      doc => ({ id: doc.id, ...doc.data() }) as UnifiedQuestion
+    );
+
     const stats: QuestionStats = {
       totalQuestions: questions.length,
       questionsByCategory: {},
@@ -349,31 +362,35 @@ export class UnifiedQuestionService {
       averageDifficulty: 0,
       lastUpdated: new Date().toISOString(),
       topCategories: [],
-      recentActivity: []
+      recentActivity: [],
     };
-    
+
     // Process each question
     questions.forEach(question => {
       // Count by category
       if (question.category) {
-        stats.questionsByCategory[question.category] = (stats.questionsByCategory[question.category] || 0) + 1;
+        stats.questionsByCategory[question.category] =
+          (stats.questionsByCategory[question.category] || 0) + 1;
       }
-      
+
       // Count by difficulty
       if (question.difficulty) {
-        stats.questionsByDifficulty[question.difficulty] = (stats.questionsByDifficulty[question.difficulty] || 0) + 1;
+        stats.questionsByDifficulty[question.difficulty] =
+          (stats.questionsByDifficulty[question.difficulty] || 0) + 1;
       }
-      
+
       // Count by learning path
       if (question.learningPath) {
-        stats.questionsByLearningPath[question.learningPath] = (stats.questionsByLearningPath[question.learningPath] || 0) + 1;
+        stats.questionsByLearningPath[question.learningPath] =
+          (stats.questionsByLearningPath[question.learningPath] || 0) + 1;
       }
-      
+
       // Count by section
       if (question.sectionId) {
-        stats.questionsBySection[question.sectionId] = (stats.questionsBySection[question.sectionId] || 0) + 1;
+        stats.questionsBySection[question.sectionId] =
+          (stats.questionsBySection[question.sectionId] || 0) + 1;
       }
-      
+
       // Count active/inactive
       if (question.isActive) {
         stats.activeQuestions++;
@@ -381,50 +398,69 @@ export class UnifiedQuestionService {
         stats.inactiveQuestions++;
       }
     });
-    
+
     // Calculate average difficulty
-    const difficultyValues = { 'beginner': 1, 'intermediate': 2, 'advanced': 3 };
-    const totalDifficulty = questions.reduce((sum, q) => sum + (difficultyValues[q.difficulty] || 0), 0);
-    stats.averageDifficulty = questions.length > 0 ? totalDifficulty / questions.length : 0;
-    
+    const difficultyValues = { beginner: 1, intermediate: 2, advanced: 3 };
+    const totalDifficulty = questions.reduce(
+      (sum, q) => sum + (difficultyValues[q.difficulty] || 0),
+      0
+    );
+    stats.averageDifficulty =
+      questions.length > 0 ? totalDifficulty / questions.length : 0;
+
     // Get top categories
     stats.topCategories = Object.entries(stats.questionsByCategory)
-      .map(([category, count]) => ({ 
-        category, 
-        count, 
-        percentage: stats.totalQuestions > 0 ? (count / stats.totalQuestions) * 100 : 0 
+      .map(([category, count]) => ({
+        category,
+        count,
+        percentage:
+          stats.totalQuestions > 0 ? (count / stats.totalQuestions) * 100 : 0,
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
-    
+
     // Get recent activity (group by date)
-    const activityByDate: Record<string, { questionsAdded: number; questionsUpdated: number; questionsDeleted: number }> = {};
-    
+    const activityByDate: Record<
+      string,
+      {
+        questionsAdded: number;
+        questionsUpdated: number;
+        questionsDeleted: number;
+      }
+    > = {};
+
     questions.forEach(q => {
       const date = new Date(q.createdAt).toISOString().split('T')[0];
       if (!activityByDate[date]) {
-        activityByDate[date] = { questionsAdded: 0, questionsUpdated: 0, questionsDeleted: 0 };
+        activityByDate[date] = {
+          questionsAdded: 0,
+          questionsUpdated: 0,
+          questionsDeleted: 0,
+        };
       }
       activityByDate[date].questionsAdded++;
     });
-    
+
     stats.recentActivity = Object.entries(activityByDate)
       .map(([date, activity]) => ({ date, ...activity }))
       .sort((a, b) => b.date.localeCompare(a.date))
       .slice(0, 10);
-    
+
     return stats;
   }
 
   // Search questions
-  async searchQuestions(searchTerm: string, filters?: QuestionFilter): Promise<QuestionSearchResult> {
+  async searchQuestions(
+    searchTerm: string,
+    filters?: QuestionFilter
+  ): Promise<QuestionSearchResult> {
     if (!this.db) throw new Error('Firestore not initialized');
-    
+
     const startTime = Date.now();
-    
+
     // Get all questions first (Firestore doesn't support full-text search)
     let q = query(collection(this.db, 'unifiedQuestions'));
-    
+
     if (filters?.category) {
       q = query(q, where('category', '==', filters.category));
     }
@@ -440,141 +476,168 @@ export class UnifiedQuestionService {
     if (filters?.isActive !== undefined) {
       q = query(q, where('isActive', '==', filters.isActive));
     }
-    
+
     const snapshot = await getDocs(q);
-    let questions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UnifiedQuestion));
-    
+    let questions = snapshot.docs.map(
+      doc => ({ id: doc.id, ...doc.data() }) as UnifiedQuestion
+    );
+
     // Client-side search filtering
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
-      questions = questions.filter(q => 
-        q.title.toLowerCase().includes(searchLower) ||
-        q.content.toLowerCase().includes(searchLower) ||
-        (q.explanation && q.explanation.toLowerCase().includes(searchLower)) ||
-        (q.tags && q.tags.some(tag => tag.toLowerCase().includes(searchLower)))
+      questions = questions.filter(
+        q =>
+          q.title.toLowerCase().includes(searchLower) ||
+          q.content.toLowerCase().includes(searchLower) ||
+          (q.explanation &&
+            q.explanation.toLowerCase().includes(searchLower)) ||
+          (q.tags &&
+            q.tags.some(tag => tag.toLowerCase().includes(searchLower)))
       );
     }
-    
+
     // Apply limit if specified
     if (filters?.limit) {
       questions = questions.slice(0, filters.limit);
     }
-    
+
     const searchTime = Date.now() - startTime;
-    
+
     return {
       questions,
       totalCount: questions.length,
       hasMore: false, // Simplified for now
       filters: filters || {},
-      searchTime
+      searchTime,
     };
   }
 
   // Validate a question
-  validateQuestion(question: Partial<UnifiedQuestion>): QuestionValidationResult {
+  validateQuestion(
+    question: Partial<UnifiedQuestion>
+  ): QuestionValidationResult {
     const errors: QuestionValidationError[] = [];
     const warnings: QuestionValidationError[] = [];
-    
+
     // Validate title
     if (!question.title || question.title.trim().length === 0) {
-      errors.push({ field: 'title', message: 'Title is required', severity: 'error' });
-    } else if (question.title.length < QUESTION_VALIDATION_RULES.title.minLength) {
-      errors.push({ 
-        field: 'title', 
-        message: `Title must be at least ${QUESTION_VALIDATION_RULES.title.minLength} characters`, 
-        severity: 'error' 
+      errors.push({
+        field: 'title',
+        message: 'Title is required',
+        severity: 'error',
       });
-    } else if (question.title.length > QUESTION_VALIDATION_RULES.title.maxLength) {
-      warnings.push({ 
-        field: 'title', 
-        message: `Title is very long (${question.title.length} characters)`, 
-        severity: 'warning' 
+    } else if (
+      question.title.length < QUESTION_VALIDATION_RULES.title.minLength
+    ) {
+      errors.push({
+        field: 'title',
+        message: `Title must be at least ${QUESTION_VALIDATION_RULES.title.minLength} characters`,
+        severity: 'error',
+      });
+    } else if (
+      question.title.length > QUESTION_VALIDATION_RULES.title.maxLength
+    ) {
+      warnings.push({
+        field: 'title',
+        message: `Title is very long (${question.title.length} characters)`,
+        severity: 'warning',
       });
     }
-    
+
     // Validate content
     if (!question.content || question.content.trim().length === 0) {
-      errors.push({ field: 'content', message: 'Content is required', severity: 'error' });
-    } else if (question.content.length < QUESTION_VALIDATION_RULES.content.minLength) {
-      errors.push({ 
-        field: 'content', 
-        message: `Content must be at least ${QUESTION_VALIDATION_RULES.content.minLength} characters`, 
-        severity: 'error' 
+      errors.push({
+        field: 'content',
+        message: 'Content is required',
+        severity: 'error',
       });
-    } else if (question.content.length > QUESTION_VALIDATION_RULES.content.maxLength) {
-      warnings.push({ 
-        field: 'content', 
-        message: `Content is very long (${question.content.length} characters)`, 
-        severity: 'warning' 
+    } else if (
+      question.content.length < QUESTION_VALIDATION_RULES.content.minLength
+    ) {
+      errors.push({
+        field: 'content',
+        message: `Content must be at least ${QUESTION_VALIDATION_RULES.content.minLength} characters`,
+        severity: 'error',
+      });
+    } else if (
+      question.content.length > QUESTION_VALIDATION_RULES.content.maxLength
+    ) {
+      warnings.push({
+        field: 'content',
+        message: `Content is very long (${question.content.length} characters)`,
+        severity: 'warning',
       });
     }
-    
+
     // Validate options for multiple choice questions
     if (question.type === 'multiple-choice' && question.options) {
-      if (question.options.length < QUESTION_VALIDATION_RULES.options.minCount) {
-        errors.push({ 
-          field: 'options', 
-          message: `At least ${QUESTION_VALIDATION_RULES.options.minCount} options are required`, 
-          severity: 'error' 
+      if (
+        question.options.length < QUESTION_VALIDATION_RULES.options.minCount
+      ) {
+        errors.push({
+          field: 'options',
+          message: `At least ${QUESTION_VALIDATION_RULES.options.minCount} options are required`,
+          severity: 'error',
         });
-      } else if (question.options.length > QUESTION_VALIDATION_RULES.options.maxCount) {
-        warnings.push({ 
-          field: 'options', 
-          message: `Too many options (${question.options.length}), consider reducing`, 
-          severity: 'warning' 
+      } else if (
+        question.options.length > QUESTION_VALIDATION_RULES.options.maxCount
+      ) {
+        warnings.push({
+          field: 'options',
+          message: `Too many options (${question.options.length}), consider reducing`,
+          severity: 'warning',
         });
       }
-      
+
       // Check if at least one option is correct
       const hasCorrectOption = question.options.some(opt => opt.isCorrect);
       if (!hasCorrectOption) {
-        errors.push({ 
-          field: 'options', 
-          message: 'At least one option must be marked as correct', 
-          severity: 'error' 
+        errors.push({
+          field: 'options',
+          message: 'At least one option must be marked as correct',
+          severity: 'error',
         });
       }
     }
-    
+
     // Validate time limit
     if (question.timeLimit !== undefined) {
       if (question.timeLimit < QUESTION_VALIDATION_RULES.timeLimit.min) {
-        errors.push({ 
-          field: 'timeLimit', 
-          message: `Time limit must be at least ${QUESTION_VALIDATION_RULES.timeLimit.min} seconds`, 
-          severity: 'error' 
+        errors.push({
+          field: 'timeLimit',
+          message: `Time limit must be at least ${QUESTION_VALIDATION_RULES.timeLimit.min} seconds`,
+          severity: 'error',
         });
       } else if (question.timeLimit > QUESTION_VALIDATION_RULES.timeLimit.max) {
-        warnings.push({ 
-          field: 'timeLimit', 
-          message: `Time limit is very long (${question.timeLimit} seconds)`, 
-          severity: 'warning' 
+        warnings.push({
+          field: 'timeLimit',
+          message: `Time limit is very long (${question.timeLimit} seconds)`,
+          severity: 'warning',
         });
       }
     }
-    
+
     // Validate points
     if (question.points !== undefined) {
       if (question.points < QUESTION_VALIDATION_RULES.points.min) {
-        errors.push({ 
-          field: 'points', 
-          message: `Points must be at least ${QUESTION_VALIDATION_RULES.points.min}`, 
-          severity: 'error' 
+        errors.push({
+          field: 'points',
+          message: `Points must be at least ${QUESTION_VALIDATION_RULES.points.min}`,
+          severity: 'error',
         });
       } else if (question.points > QUESTION_VALIDATION_RULES.points.max) {
-        warnings.push({ 
-          field: 'points', 
-          message: `Points are very high (${question.points})`, 
-          severity: 'warning' 
+        warnings.push({
+          field: 'points',
+          message: `Points are very high (${question.points})`,
+          severity: 'warning',
         });
       }
     }
-    
+
     return {
       isValid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 }
