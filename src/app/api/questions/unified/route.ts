@@ -84,18 +84,29 @@ export async function GET(request: NextRequest) {
       console.log('📦 Using cached questions:', allQuestions.length);
     } else {
       // Fetch from Firestore
-      let q = query(collection(db, 'unifiedQuestions'));
+      const constraints = [];
 
       // Apply filters
       if (cleanFilters.category) {
-        q = query(q, where('category', '==', cleanFilters.category));
+        constraints.push(where('category', '==', cleanFilters.category));
       }
       if (cleanFilters.difficulty) {
-        q = query(q, where('difficulty', '==', cleanFilters.difficulty));
+        constraints.push(where('difficulty', '==', cleanFilters.difficulty));
+      }
+      if (cleanFilters.learningPath) {
+        constraints.push(
+          where('learningPath', '==', cleanFilters.learningPath)
+        );
+      }
+      if (cleanFilters.isActive !== undefined) {
+        constraints.push(where('isActive', '==', cleanFilters.isActive));
       }
 
       // Order by createdAt descending
-      q = query(q, orderBy('createdAt', 'desc'));
+      constraints.push(orderBy('createdAt', 'desc'));
+
+      // Create the query
+      const q = query(collection(db, 'unifiedQuestions'), ...constraints);
 
       // For small datasets, get all and paginate in memory (more efficient)
       const allSnapshot = await getDocs(q);
@@ -195,8 +206,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: results,
-      errors: errors.length > 0 ? errors : undefined,
+      data: {
+        success: results.length,
+        failed: errors.length,
+        errors: errors.map(e => e.error),
+        results: results,
+      },
       message: `Successfully ${isBulkImport ? 'imported' : 'created'} ${results.length} questions`,
     });
   } catch (error) {

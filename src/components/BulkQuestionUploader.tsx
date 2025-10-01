@@ -200,7 +200,7 @@ export default function BulkQuestionUploader({
           throw new Error(`Question ${index + 1}: options array is required`);
         }
 
-        if (!q.options.some((opt: any) => opt.isCorrect)) {
+        if (!q.options.some((opt: { isCorrect: boolean }) => opt.isCorrect)) {
           throw new Error(
             `Question ${index + 1}: at least one option must be marked as correct`
           );
@@ -215,11 +215,16 @@ export default function BulkQuestionUploader({
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          options: q.options.map((opt: any, optIndex: number) => ({
-            id: opt.id || String.fromCharCode(97 + optIndex), // a, b, c, d...
-            text: opt.text || '',
-            isCorrect: opt.isCorrect || false,
-          })),
+          options: q.options.map(
+            (
+              opt: { id: string; text: string; isCorrect: boolean },
+              optIndex: number
+            ) => ({
+              id: opt.id || String.fromCharCode(97 + optIndex), // a, b, c, d...
+              text: opt.text || '',
+              isCorrect: opt.isCorrect || false,
+            })
+          ),
           explanation: q.explanation || '',
           category: q.category || sectionName || 'General',
           learningPath: q.learningPath || sectionId || 'Default Learning Path',
@@ -247,9 +252,30 @@ export default function BulkQuestionUploader({
   // Handle Markdown input parsing
   const parseMarkdownInput = () => {
     try {
+      console.log('🔄 Starting markdown parsing...');
+      console.log('📝 Input length:', markdownInput.length);
+      console.log('📝 Input preview:', markdownInput.substring(0, 200));
+      console.log(
+        '🔧 MarkdownQuestionParser available:',
+        !!MarkdownQuestionParser
+      );
+      console.log(
+        '🔧 parseMarkdown method available:',
+        typeof MarkdownQuestionParser.parseMarkdown
+      );
+
       const result = MarkdownQuestionParser.parseMarkdown(markdownInput);
 
+      console.log('📊 Parse result:', {
+        questionsCount: result.questions.length,
+        errorsCount: result.errors.length,
+        warningsCount: result.warnings.length,
+        errors: result.errors,
+        warnings: result.warnings,
+      });
+
       if (result.errors.length > 0) {
+        console.error('❌ Markdown parsing errors:', result.errors);
         setError(`Markdown parsing errors:\n${result.errors.join('\n')}`);
         setSuccess(null);
         setMarkdownParsed(false);
@@ -257,12 +283,27 @@ export default function BulkQuestionUploader({
       }
 
       if (result.warnings.length > 0) {
-        console.warn('Markdown parsing warnings:', result.warnings);
+        console.warn('⚠️ Markdown parsing warnings:', result.warnings);
+      }
+
+      if (result.questions.length === 0) {
+        console.warn('⚠️ No questions found in markdown');
+        setError(
+          'No questions found in the markdown. Please check the format.'
+        );
+        setSuccess(null);
+        setMarkdownParsed(false);
+        return;
       }
 
       const bulkData = MarkdownQuestionParser.convertToBulkData(
         result.questions
       );
+
+      console.log('📦 Converted to bulk data:', {
+        questionsCount: bulkData.questions.length,
+        metadata: bulkData.metadata,
+      });
 
       // Validate the converted data
       const validatedQuestions = bulkData.questions.map((q, index) => {
@@ -282,7 +323,7 @@ export default function BulkQuestionUploader({
           );
         }
 
-        if (!q.options.some((opt: any) => opt.isCorrect)) {
+        if (!q.options.some((opt: { isCorrect: boolean }) => opt.isCorrect)) {
           throw new Error(
             `Question ${index + 1}: at least one option must be marked as correct`
           );
@@ -297,11 +338,16 @@ export default function BulkQuestionUploader({
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          options: q.options.map((opt: any, optIndex: number) => ({
-            id: opt.id || String.fromCharCode(97 + optIndex), // a, b, c, d...
-            text: opt.text || '',
-            isCorrect: opt.isCorrect || false,
-          })),
+          options: q.options.map(
+            (
+              opt: { id: string; text: string; isCorrect: boolean },
+              optIndex: number
+            ) => ({
+              id: opt.id || String.fromCharCode(97 + optIndex), // a, b, c, d...
+              text: opt.text || '',
+              isCorrect: opt.isCorrect || false,
+            })
+          ),
           explanation: q.explanation || '',
           category: q.category || sectionName || 'General',
           learningPath: q.learningPath || sectionId || 'Default Learning Path',
@@ -400,6 +446,12 @@ export default function BulkQuestionUploader({
       }));
 
       console.log('📤 Calling bulkImportQuestions with Firebase...');
+      console.log('📊 Firebase questions to send:', {
+        count: firebaseQuestions.length,
+        firstQuestion: firebaseQuestions[0]?.title || 'No title',
+        sampleQuestion: firebaseQuestions[0],
+      });
+
       const bulkData: BulkQuestionData = {
         questions: firebaseQuestions,
         metadata: {
@@ -422,6 +474,13 @@ export default function BulkQuestionUploader({
           warnings: [],
         },
       };
+
+      console.log('📦 Bulk data structure:', {
+        questionsCount: bulkData.questions.length,
+        metadata: bulkData.metadata,
+        validation: bulkData.validation,
+      });
+
       const result = await bulkImportQuestions([bulkData]);
 
       console.log('📥 Firebase Import Result:', result);

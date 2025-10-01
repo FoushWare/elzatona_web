@@ -89,6 +89,12 @@ export default function AdminNavbar() {
       description: 'Manage learning path sections',
     },
     {
+      href: '/admin/enhanced-structure',
+      label: 'Categories & Topics',
+      icon: Settings,
+      description: 'Create and manage topics and categories',
+    },
+    {
       href: '/admin/reports',
       label: 'Feature Reports',
       icon: BarChart3,
