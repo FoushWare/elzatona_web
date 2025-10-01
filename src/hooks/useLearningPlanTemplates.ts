@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { firestoreService } from '@/lib/firestore-service';
-import { LearningPlanTemplate } from '@/types/learning-plan';
+import { LearningPlanTemplate } from '@/lib/guided-learning-service';
 
 interface UseLearningPlanTemplatesReturn {
   templates: LearningPlanTemplate[];
@@ -121,20 +121,26 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
               {
                 id: 'html-css',
                 name: 'HTML & CSS',
+                category: 'frontend',
                 questions: new Array(40).fill(null).map((_, i) => `q${i + 1}`),
                 weight: 40,
+                order: 1,
               },
               {
                 id: 'javascript',
                 name: 'JavaScript',
+                category: 'frontend',
                 questions: new Array(40).fill(null).map((_, i) => `q${i + 41}`),
                 weight: 40,
+                order: 2,
               },
               {
                 id: 'react',
                 name: 'React',
+                category: 'frontend',
                 questions: new Array(20).fill(null).map((_, i) => `q${i + 81}`),
                 weight: 20,
+                order: 3,
               },
             ],
             features: [
@@ -160,22 +166,28 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
               {
                 id: 'html-css',
                 name: 'HTML & CSS',
+                category: 'frontend',
                 questions: new Array(60).fill(null).map((_, i) => `q${i + 1}`),
                 weight: 40,
+                order: 1,
               },
               {
                 id: 'javascript',
                 name: 'JavaScript',
+                category: 'frontend',
                 questions: new Array(60).fill(null).map((_, i) => `q${i + 61}`),
                 weight: 40,
+                order: 2,
               },
               {
                 id: 'react',
                 name: 'React',
+                category: 'frontend',
                 questions: new Array(30)
                   .fill(null)
                   .map((_, i) => `q${i + 121}`),
                 weight: 20,
+                order: 3,
               },
             ],
             features: [
@@ -201,30 +213,38 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
               {
                 id: 'html-css',
                 name: 'HTML & CSS',
+                category: 'frontend',
                 questions: new Array(40).fill(null).map((_, i) => `q${i + 1}`),
                 weight: 20,
+                order: 1,
               },
               {
                 id: 'javascript',
                 name: 'JavaScript',
+                category: 'frontend',
                 questions: new Array(80).fill(null).map((_, i) => `q${i + 41}`),
                 weight: 40,
+                order: 2,
               },
               {
                 id: 'react',
                 name: 'React',
+                category: 'frontend',
                 questions: new Array(40)
                   .fill(null)
                   .map((_, i) => `q${i + 121}`),
                 weight: 20,
+                order: 3,
               },
               {
                 id: 'typescript',
                 name: 'TypeScript',
+                category: 'frontend',
                 questions: new Array(40)
                   .fill(null)
                   .map((_, i) => `q${i + 161}`),
                 weight: 20,
+                order: 4,
               },
             ],
             features: [
@@ -247,15 +267,38 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             totalQuestions: 250,
             dailyQuestions: 63,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 25 },
+              {
+                id: 'html-css',
+                name: 'HTML & CSS',
+                category: 'frontend',
+                questions: [],
+                weight: 25,
+                order: 1,
+              },
               {
                 id: 'javascript',
                 name: 'JavaScript',
+                category: 'frontend',
                 questions: [],
                 weight: 35,
+                order: 2,
               },
-              { id: 'react', name: 'React', questions: [], weight: 25 },
-              { id: 'general', name: 'General', questions: [], weight: 15 },
+              {
+                id: 'react',
+                name: 'React',
+                category: 'frontend',
+                questions: [],
+                weight: 25,
+                order: 3,
+              },
+              {
+                id: 'general',
+                name: 'General',
+                category: 'general',
+                questions: [],
+                weight: 15,
+                order: 4,
+              },
             ],
             features: [
               'Structured learning path',
@@ -277,15 +320,38 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             totalQuestions: 300,
             dailyQuestions: 60,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 25 },
+              {
+                id: 'html-css',
+                name: 'HTML & CSS',
+                category: 'frontend',
+                questions: [],
+                weight: 25,
+                order: 1,
+              },
               {
                 id: 'javascript',
                 name: 'JavaScript',
+                category: 'frontend',
                 questions: [],
                 weight: 35,
+                order: 2,
               },
-              { id: 'react', name: 'React', questions: [], weight: 25 },
-              { id: 'general', name: 'General', questions: [], weight: 15 },
+              {
+                id: 'react',
+                name: 'React',
+                category: 'frontend',
+                questions: [],
+                weight: 25,
+                order: 3,
+              },
+              {
+                id: 'general',
+                name: 'General',
+                category: 'general',
+                questions: [],
+                weight: 15,
+                order: 4,
+              },
             ],
             features: [
               'Structured learning path',
@@ -307,15 +373,38 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             totalQuestions: 350,
             dailyQuestions: 58,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 25 },
+              {
+                id: 'html-css',
+                name: 'HTML & CSS',
+                category: 'frontend',
+                questions: [],
+                weight: 25,
+                order: 1,
+              },
               {
                 id: 'javascript',
                 name: 'JavaScript',
+                category: 'frontend',
                 questions: [],
                 weight: 35,
+                order: 2,
               },
-              { id: 'react', name: 'React', questions: [], weight: 25 },
-              { id: 'general', name: 'General', questions: [], weight: 15 },
+              {
+                id: 'react',
+                name: 'React',
+                category: 'frontend',
+                questions: [],
+                weight: 25,
+                order: 3,
+              },
+              {
+                id: 'general',
+                name: 'General',
+                category: 'general',
+                questions: [],
+                weight: 15,
+                order: 4,
+              },
             ],
             features: [
               'Structured learning path',
@@ -337,19 +426,37 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             totalQuestions: 400,
             dailyQuestions: 57,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 20 },
+              {
+                id: 'html-css',
+                name: 'HTML & CSS',
+                category: 'frontend',
+                questions: [],
+                weight: 20,
+                order: 1,
+              },
               {
                 id: 'javascript',
                 name: 'JavaScript',
+                category: 'frontend',
                 questions: [],
                 weight: 40,
+                order: 2,
               },
-              { id: 'react', name: 'React', questions: [], weight: 20 },
+              {
+                id: 'react',
+                name: 'React',
+                category: 'frontend',
+                questions: [],
+                weight: 20,
+                order: 3,
+              },
               {
                 id: 'typescript',
                 name: 'TypeScript',
+                category: 'frontend',
                 questions: [],
                 weight: 20,
+                order: 4,
               },
             ],
             features: [
@@ -385,9 +492,30 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
           totalQuestions: 100,
           dailyQuestions: 100,
           sections: [
-            { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 40 },
-            { id: 'javascript', name: 'JavaScript', questions: [], weight: 40 },
-            { id: 'react', name: 'React', questions: [], weight: 20 },
+            {
+              id: 'html-css',
+              name: 'HTML & CSS',
+              category: 'frontend',
+              questions: [],
+              weight: 40,
+              order: 1,
+            },
+            {
+              id: 'javascript',
+              name: 'JavaScript',
+              category: 'frontend',
+              questions: [],
+              weight: 40,
+              order: 2,
+            },
+            {
+              id: 'react',
+              name: 'React',
+              category: 'frontend',
+              questions: [],
+              weight: 20,
+              order: 3,
+            },
           ],
           features: ['Quick review', 'Essential concepts', 'Common questions'],
           estimatedTime: '2-3 hours',

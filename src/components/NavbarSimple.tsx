@@ -44,7 +44,7 @@ export const NavbarSimple: React.FC = () => {
     if (href === '/') {
       return pathname === '/';
     }
-    return pathname.startsWith(href);
+    return pathname?.startsWith(href) || false;
   };
 
   // Handle sign out
@@ -266,7 +266,7 @@ export const NavbarSimple: React.FC = () => {
             </button>
 
             {/* Onboarding Trigger - Hidden on admin pages */}
-            {!pathname.startsWith('/admin') && <OnboardingTrigger />}
+            {!pathname?.startsWith('/admin') && <OnboardingTrigger />}
           </div>
 
           {/* Mobile/Tablet Menu Button */}

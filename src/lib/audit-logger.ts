@@ -43,10 +43,16 @@ export class AuditLogger {
         Object.entries(params).filter(([_, value]) => value !== undefined)
       );
 
-      await AuditLogService.logAction({
+      // Ensure required properties are present
+      const auditLogData = {
+        action: cleanParams.action,
+        resource: cleanParams.resource,
+        details: cleanParams.details,
         ...cleanParams,
         success: true,
-      });
+      };
+
+      await AuditLogService.logAction(auditLogData);
     } catch (error) {
       console.error('Failed to log audit action:', error);
     }
@@ -62,10 +68,16 @@ export class AuditLogger {
         Object.entries(params).filter(([_, value]) => value !== undefined)
       );
 
-      await AuditLogService.logAction({
+      // Ensure required properties are present
+      const auditLogData = {
+        action: cleanParams.action,
+        resource: cleanParams.resource,
+        details: cleanParams.details,
         ...cleanParams,
         success: false,
-      });
+      };
+
+      await AuditLogService.logAction(auditLogData);
     } catch (error) {
       console.error('Failed to log audit action:', error);
     }
@@ -81,7 +93,7 @@ export class AuditLogger {
     userId?: string,
     userEmail?: string
   ): Promise<void> {
-    const logData: any = {
+    const logData: LogActionParams = {
       action,
       resource: 'TOPIC',
       resourceId: topicId,
@@ -109,7 +121,7 @@ export class AuditLogger {
     userId?: string,
     userEmail?: string
   ): Promise<void> {
-    const logData: any = {
+    const logData: LogActionParams = {
       action,
       resource: 'CATEGORY',
       resourceId: categoryId,
@@ -137,7 +149,7 @@ export class AuditLogger {
     userId?: string,
     userEmail?: string
   ): Promise<void> {
-    const logData: any = {
+    const logData: LogActionParams = {
       action,
       resource: 'QUESTION',
       resourceId: questionId,
@@ -165,7 +177,7 @@ export class AuditLogger {
     userId?: string,
     userEmail?: string
   ): Promise<void> {
-    const logData: any = {
+    const logData: LogActionParams = {
       action,
       resource: 'SECTION',
       resourceId: sectionId,
@@ -193,7 +205,7 @@ export class AuditLogger {
     userId?: string,
     userEmail?: string
   ): Promise<void> {
-    const logData: any = {
+    const logData: LogActionParams = {
       action,
       resource: 'LEARNING_PATH',
       resourceId: pathId,
@@ -241,7 +253,7 @@ export class AuditLogger {
     userId?: string,
     userEmail?: string
   ): Promise<void> {
-    const logData: any = {
+    const logData: LogActionParams = {
       action,
       resource: 'SYSTEM',
       details,

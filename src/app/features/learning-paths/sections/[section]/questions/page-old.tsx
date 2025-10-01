@@ -27,7 +27,7 @@ interface Question {
 
 export default function LearningPathQuestionsPage() {
   const params = useParams();
-  const section = params.section as string;
+  const section = params?.section as string;
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);

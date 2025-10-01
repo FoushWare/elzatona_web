@@ -30,7 +30,7 @@ export default function LearningPlanDetailPage() {
   const [isStarting, setIsStarting] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
 
-  const planId = params.planId as string;
+  const planId = params?.planId as string;
   const plan = getTemplate(planId);
 
   // Add loading state for navigation
@@ -213,9 +213,10 @@ export default function LearningPlanDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {plan.sections
               .filter(
-                section => section.questions && section.questions.length > 0
+                (section: any) =>
+                  section.questions && section.questions.length > 0
               )
-              .map((section, index) => {
+              .map((section: any, index: number) => {
                 const actualQuestionCount = section.questions
                   ? section.questions.length
                   : 0;
@@ -277,7 +278,7 @@ export default function LearningPlanDetailPage() {
           </div>
 
           {plan.sections.filter(
-            section => section.questions && section.questions.length > 0
+            (section: any) => section.questions && section.questions.length > 0
           ).length === 0 && (
             <div className="text-center py-12">
               <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
@@ -306,7 +307,7 @@ export default function LearningPlanDetailPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {plan.features.map((feature, index) => (
+            {plan.features.map((feature: any, index: number) => (
               <div
                 key={index}
                 className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
@@ -352,7 +353,7 @@ export default function LearningPlanDetailPage() {
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
                       {dailyQuestions} questions •{' '}
-                      {sectionsForDay.map(s => s.name).join(', ')}
+                      {sectionsForDay.map((s: any) => s.name).join(', ')}
                     </p>
                   </div>
                   <div className="text-right">

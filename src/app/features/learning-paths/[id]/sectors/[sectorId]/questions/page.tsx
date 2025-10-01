@@ -53,8 +53,8 @@ const mockQuestions = [
 export default function QuestionsPage() {
   const params = useParams();
   const router = useRouter();
-  const pathId = params.id as string;
-  const sectorId = params.sectorId as string;
+  const pathId = params?.id as string;
+  const sectorId = params?.sectorId as string;
 
   const { getSectorProgress, saveProgress } = useSectorProgress();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -109,6 +109,7 @@ export default function QuestionsPage() {
         score: finalScore,
         completedAt: new Date().toISOString(),
         timeSpent: totalTimeSpent,
+        isCompleted: true,
       });
 
       setIsCompleted(true);

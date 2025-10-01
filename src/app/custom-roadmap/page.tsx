@@ -858,7 +858,6 @@ export default function CustomRoadmapPage() {
         <SignInPopup
           isOpen={showSignInPopup}
           onClose={handleSignInClose}
-          onSkip={handleSignInSkip}
           onSuccess={handleSignInSuccess}
         />
       )}

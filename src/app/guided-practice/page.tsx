@@ -58,11 +58,12 @@ function GuidedPracticeContent() {
   const { saveProgress, progress: userProgress } = useSecureProgress();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const planId = searchParams.get('plan');
+  const planId = searchParams?.get('plan');
 
   const [currentPlan, setCurrentPlan] = useState<LearningPlan | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [textAnswer, setTextAnswer] = useState<string>('');
   const [showExplanation, setShowExplanation] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [sessionStats, setSessionStats] = useState({
@@ -136,7 +137,7 @@ function GuidedPracticeContent() {
         console.log('📋 Plan details:', planDetails);
 
         // Get all question IDs from plan sections
-        const allQuestionIds = [];
+        const allQuestionIds: string[] = [];
         if (planDetails.sections) {
           const sections = Array.isArray(planDetails.sections)
             ? planDetails.sections
@@ -388,7 +389,11 @@ function GuidedPracticeContent() {
   const handleAnswerSelect = async (answerIndex: number | string) => {
     if (showExplanation || !currentQuestion) return;
 
-    setSelectedAnswer(answerIndex);
+    if (typeof answerIndex === 'string') {
+      setTextAnswer(answerIndex);
+    } else {
+      setSelectedAnswer(answerIndex);
+    }
 
     // Check correctness based on question type
     let correct = false;
@@ -433,7 +438,15 @@ function GuidedPracticeContent() {
         const success = await saveProgress({
           sessionId: `guided_${Date.now()}`,
           questionId: currentQuestion.id,
-          answer: answerIndex,
+          answer:
+            currentQuestion.type === 'conceptual' ||
+            currentQuestion.type === 'open-ended'
+              ? textAnswer.length > 0
+                ? 1
+                : 0
+              : typeof answerIndex === 'string'
+                ? parseInt(answerIndex, 10)
+                : answerIndex,
           isCorrect: correct,
           timeSpent: Math.round(timeSpent / 1000), // Convert to seconds
           section: currentQuestion.section,
@@ -483,7 +496,7 @@ function GuidedPracticeContent() {
 
         // Save the grade for this plan
         const planGradesData = localStorage.getItem('plan-grades');
-        let planGrades = {};
+        let planGrades: Record<string, number> = {};
 
         if (planGradesData) {
           try {
@@ -712,8 +725,8 @@ function GuidedPracticeContent() {
             currentQuestion.type === 'open-ended' ? (
               <div className="space-y-4 mb-6">
                 <textarea
-                  value={(selectedAnswer as string) || ''}
-                  onChange={e => setSelectedAnswer(e.target.value)}
+                  value={textAnswer}
+                  onChange={e => setTextAnswer(e.target.value)}
                   placeholder="Type your answer here..."
                   className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   rows={4}
@@ -721,8 +734,8 @@ function GuidedPracticeContent() {
                 />
                 {!showExplanation && (
                   <button
-                    onClick={() => handleAnswerSelect(selectedAnswer)}
-                    disabled={!selectedAnswer}
+                    onClick={() => handleAnswerSelect(textAnswer)}
+                    disabled={!textAnswer.trim()}
                     className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
                   >
                     Submit Answer

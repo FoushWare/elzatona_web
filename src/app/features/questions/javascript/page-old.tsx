@@ -1,10 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  getJavaScriptQuestions,
-  // getJavaScriptQuestionById,
-} from '@/lib/javascriptQuestions';
+import { javascriptQuestions } from '@/lib/internalResources';
 // import JavaScriptQuestionCard from "@/components/JavaScriptQuestionCard";
 
 export default function JavaScriptQuestionsPage() {
@@ -14,7 +11,7 @@ export default function JavaScriptQuestionsPage() {
   const [score, setScore] = useState(0);
   const [totalAnswered, setTotalAnswered] = useState(0);
 
-  const questions = getJavaScriptQuestions();
+  const questions = javascriptQuestions;
   const currentQuestion = questions[currentQuestionIndex];
 
   const handleAnswerSelect = (answer: string) => {
@@ -25,7 +22,7 @@ export default function JavaScriptQuestionsPage() {
   const handleSubmitAnswer = () => {
     if (!selectedAnswer) return;
 
-    const isCorrect = selectedAnswer === currentQuestion.answer;
+    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
     if (isCorrect) {
       setScore(score + 1);
     }
@@ -146,26 +143,26 @@ export default function JavaScriptQuestionsPage() {
               </div>
             )}
             <div className="space-y-2">
-              {currentQuestion.options.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() =>
-                    handleAnswerSelect(String.fromCharCode(65 + index))
-                  }
-                  className={`w-full text-left p-3 rounded-lg border transition-colors ${
-                    selectedAnswer === String.fromCharCode(65 + index)
-                      ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
-                      : 'bg-card border-border hover:bg-muted'
-                  }`}
-                >
-                  {String.fromCharCode(65 + index)}. {option}
-                </button>
-              ))}
+              {Object.entries(currentQuestion.options).map(
+                ([key, option], index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerSelect(key)}
+                    className={`w-full text-left p-3 rounded-lg border transition-colors ${
+                      selectedAnswer === key
+                        ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
+                        : 'bg-card border-border hover:bg-muted'
+                    }`}
+                  >
+                    {key}. {option}
+                  </button>
+                )
+              )}
             </div>
             {showAnswer && (
               <div className="mt-4 p-4 bg-muted rounded-lg">
                 <p className="text-sm text-muted-foreground mb-2">
-                  {selectedAnswer === currentQuestion.answer
+                  {selectedAnswer === currentQuestion.correctAnswer
                     ? 'Correct!'
                     : 'Incorrect'}
                 </p>

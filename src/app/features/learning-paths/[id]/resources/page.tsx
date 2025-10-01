@@ -31,7 +31,7 @@ interface LearningPath {
 export default function LearningPathResourcesPage() {
   const params = useParams();
   const router = useRouter();
-  const pathId = params.id as string;
+  const pathId = params?.id as string;
 
   const [learningPath, setLearningPath] = useState<LearningPath | null>(null);
   const [resources, setResources] = useState<Resource[]>([]);

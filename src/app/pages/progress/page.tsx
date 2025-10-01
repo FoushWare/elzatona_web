@@ -43,8 +43,13 @@ export default function ProgressPage() {
 
   const handleCompleteQuestion = () => {
     completeQuestion('demo-question', 120); // 2 minutes
-    if (progress.completedQuestions % 3 === 0) {
-      addAchievement(`Completed ${progress.completedQuestions + 1} Questions!`);
+    if (
+      secureProgress?.totalQuestions &&
+      secureProgress.totalQuestions % 3 === 0
+    ) {
+      addAchievement(
+        `Completed ${secureProgress.totalQuestions + 1} Questions!`
+      );
     }
   };
 
@@ -126,7 +131,9 @@ export default function ProgressPage() {
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {progressData?.totalQuestions || 0}
+                    {(progressData as any)?.totalQuestions ||
+                      (progressData as any)?.completedQuestions ||
+                      0}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Questions
@@ -134,8 +141,8 @@ export default function ProgressPage() {
                 </div>
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                {progressData?.accuracy
-                  ? `${Math.round(progressData.accuracy)}% accuracy`
+                {(progressData as any)?.accuracy
+                  ? `${Math.round((progressData as any).accuracy)}% accuracy`
                   : 'Start practicing!'}
               </div>
             </div>
@@ -148,7 +155,9 @@ export default function ProgressPage() {
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {progressData?.currentStreak || 0}
+                    {(progressData as any)?.currentStreak ||
+                      (progressData as any)?.streak ||
+                      0}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Day Streak
@@ -156,7 +165,8 @@ export default function ProgressPage() {
                 </div>
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                {progressData?.currentStreak
+                {(progressData as any)?.currentStreak ||
+                (progressData as any)?.streak
                   ? 'Keep it up! 🔥'
                   : 'Start your streak today!'}
               </div>
@@ -170,8 +180,12 @@ export default function ProgressPage() {
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {progressData?.timeSpent
-                      ? Math.round(progressData.timeSpent / 60)
+                    {(progressData as any)?.timeSpent ||
+                    (progressData as any)?.totalTimeSpent
+                      ? Math.round(
+                          ((progressData as any)?.timeSpent ||
+                            (progressData as any)?.totalTimeSpent) / 60
+                        )
                       : 0}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -192,8 +206,8 @@ export default function ProgressPage() {
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {progressData?.currentPlan
-                      ? `${progressData.currentPlan.progress}%`
+                    {(progressData as any)?.currentPlan
+                      ? `${(progressData as any).currentPlan.progress}%`
                       : '0%'}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -202,7 +216,9 @@ export default function ProgressPage() {
                 </div>
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                {progressData?.currentPlan ? 'Active plan' : 'No active plan'}
+                {(progressData as any)?.currentPlan
+                  ? 'Active plan'
+                  : 'No active plan'}
               </div>
             </div>
           </div>
@@ -271,18 +287,20 @@ export default function ProgressPage() {
                   Achievements
                 </h3>
                 <div className="space-y-3">
-                  {progressData?.achievements?.badges?.length > 0 ? (
-                    progressData.achievements.badges.map((badge, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                      >
-                        <Award className="w-5 h-5 text-yellow-500" />
-                        <span className="text-gray-900 dark:text-white">
-                          {badge}
-                        </span>
-                      </div>
-                    ))
+                  {(progressData as any)?.achievements?.badges?.length > 0 ? (
+                    (progressData as any).achievements.badges.map(
+                      (badge: any, index: number) => (
+                        <div
+                          key={index}
+                          className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                        >
+                          <Award className="w-5 h-5 text-yellow-500" />
+                          <span className="text-gray-900 dark:text-white">
+                            {badge}
+                          </span>
+                        </div>
+                      )
+                    )
                   ) : (
                     <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                       <Trophy className="w-12 h-12 mx-auto mb-3 opacity-50" />

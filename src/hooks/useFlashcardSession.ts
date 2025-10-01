@@ -136,10 +136,12 @@ export function useFlashcardSession(): UseFlashcardSessionReturn {
             user.uid
           );
           const dueCardIds = dueProgress.map(p => p.flashcardId);
-          cards = await Promise.all(
+          const fetchedCards = await Promise.all(
             dueCardIds.map(id => flashcardService.getFlashcard(id))
           );
-          cards = cards.filter(card => card !== null) as Flashcard[];
+          cards = fetchedCards.filter(
+            (card): card is Flashcard => card !== null
+          );
         } else if (type === 'new') {
           // Get new cards
           cards = await progressService.getNewCards(user.uid, maxCards);

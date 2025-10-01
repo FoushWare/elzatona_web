@@ -72,6 +72,7 @@ export function UserPreferencesProvider({
           setPreferences({
             ...defaultPreferences,
             ...user.preferences,
+            theme: user.preferences.theme as 'light' | 'dark' | 'system',
           });
         } else {
           // Fallback to localStorage

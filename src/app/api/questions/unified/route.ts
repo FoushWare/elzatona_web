@@ -18,7 +18,7 @@ import {
 // Simple in-memory cache for questions (resets on server restart)
 let questionsCache: Array<{
   id: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }> | null = null;
 let cacheTimestamp: number = 0;
 const CACHE_DURATION = 30000; // 30 seconds
@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
     const now = Date.now();
     let allQuestions: Array<{
       id: string;
-      [key: string]: any;
+      [key: string]: unknown;
     }>;
 
     if (questionsCache && now - cacheTimestamp < CACHE_DURATION) {

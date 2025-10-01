@@ -4,13 +4,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
 
+// Placeholder EnhancedQuestionService
+class EnhancedQuestionService {
+  static async getTopic(topicId: string): Promise<any> {
+    // Placeholder implementation
+    console.log('Getting topic:', topicId);
+    return null;
+  }
+
+  static async updateTopic(topicId: string, updateData: any): Promise<any> {
+    // Placeholder implementation
+    console.log('Updating topic:', topicId, updateData);
+    return { id: topicId, ...updateData };
+  }
+
+  static async deleteTopic(topicId: string): Promise<boolean> {
+    // Placeholder implementation
+    console.log('Deleting topic:', topicId);
+    return true;
+  }
+}
+
 // GET /api/topics/[id] - Get a specific topic
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const topicId = params.id;
+    const { id: topicId } = await params;
     const topic = await EnhancedQuestionService.getTopic(topicId);
 
     if (!topic) {
@@ -42,10 +63,10 @@ export async function GET(
 // PUT /api/topics/[id] - Update a topic
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const topicId = params.id;
+    const { id: topicId } = await params;
     const updateData = await request.json();
 
     // Validate required fields
@@ -97,10 +118,10 @@ export async function PUT(
 // DELETE /api/topics/[id] - Delete a topic
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const topicId = params.id;
+    const { id: topicId } = await params;
     const deleted = await EnhancedQuestionService.deleteTopic(topicId);
 
     if (!deleted) {

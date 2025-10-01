@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import DashboardPage from '@/app/dashboard/page';
+import DashboardPage from '@/app/pages/dashboard/page';
 
 const meta: Meta<typeof DashboardPage> = {
   title: 'Pages/DashboardPage',

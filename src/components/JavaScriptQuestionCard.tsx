@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { JavaScriptQuestion } from '@/lib/javascriptQuestions';
+import { InternalQuestion } from '@/lib/internalResources';
 
 interface JavaScriptQuestionCardProps {
-  question: JavaScriptQuestion;
+  question: InternalQuestion;
   showAnswer?: boolean;
   onAnswerSelect?: (selectedAnswer: string) => void;
   selectedAnswer?: string;
@@ -20,14 +20,14 @@ export default function JavaScriptQuestionCard({
 }: JavaScriptQuestionCardProps) {
   const [showExplanation, setShowExplanation] = useState(false);
 
-  const getOptionLabel = (index: number) => {
-    return String.fromCharCode(65 + index); // A, B, C, D, etc.
+  const getOptionLabel = (key: string) => {
+    return key; // A, B, C, D, E
   };
 
-  const getOptionStyle = (index: number) => {
-    const optionLabel = getOptionLabel(index);
+  const getOptionStyle = (key: string) => {
+    const optionLabel = getOptionLabel(key);
     const isSelected = selectedAnswer === optionLabel;
-    const isCorrectAnswer = question.answer === optionLabel;
+    const isCorrectAnswer = question.correctAnswer === optionLabel;
 
     if (showAnswer) {
       if (isCorrectAnswer) {
@@ -102,15 +102,15 @@ export default function JavaScriptQuestionCard({
           🎯 Select the correct answer:
         </h4>
         <div className="space-y-3">
-          {question.options.map((option, index) => {
-            const optionLabel = getOptionLabel(index);
+          {Object.entries(question.options).map(([key, option], index) => {
+            const optionLabel = getOptionLabel(key);
             return (
               <button
                 key={index}
                 onClick={() => onAnswerSelect?.(optionLabel)}
                 disabled={showAnswer}
                 className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-300 transform hover:scale-[1.02] ${getOptionStyle(
-                  index
+                  key
                 )} ${!showAnswer ? 'cursor-pointer hover:shadow-lg' : 'cursor-default'}`}
               >
                 <div className="flex items-start space-x-4">
@@ -136,11 +136,11 @@ export default function JavaScriptQuestionCard({
                 🎯 Correct Answer:
               </span>
               <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-xl text-lg font-black shadow-lg border-2 border-green-400">
-                {question.answer}
+                {question.correctAnswer}
               </span>
             </div>
             <p className="text-green-800 dark:text-green-200 text-base font-semibold leading-relaxed">
-              {question.options[question.answer.charCodeAt(0) - 65]}
+              {question.options[question.correctAnswer]}
             </p>
           </div>
 

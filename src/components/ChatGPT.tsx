@@ -16,14 +16,9 @@ import {
 import { CHATGPT_CONFIG, ChatMessage } from '@/lib/chatgpt-config';
 import { useMobileMenu } from '@/contexts/MobileMenuContext';
 
-// TypeScript declarations for Web Speech API
-declare global {
-  interface Window {
-    webkitSpeechRecognition: typeof SpeechRecognition;
-    SpeechRecognition: typeof SpeechRecognition;
-    speechSynthesis: SpeechSynthesis;
-  }
-}
+// Import Web Speech API types
+import '@/types/speech-api';
+import type { SpeechRecognition } from '@/types/speech-api';
 
 export default function ChatGPT() {
   const [isOpen, setIsOpen] = useState(false);

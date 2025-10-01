@@ -37,7 +37,7 @@ export async function GET(
     if (questionsResult.success) {
       return NextResponse.json({
         success: true,
-        data: questionsResult.questions || [],
+        data: questionsResult.data || [],
       });
     } else {
       return NextResponse.json(

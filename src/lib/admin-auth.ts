@@ -79,6 +79,13 @@ export class AdminAuthService {
       const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
       // Create admin document
+      if (!db) {
+        return {
+          success: false,
+          error: 'Database not initialized',
+        };
+      }
+
       const adminId = this.generateAdminId();
       const adminData: Omit<AdminCredential, 'id'> = {
         email,
@@ -155,6 +162,13 @@ export class AdminAuthService {
       const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
       // Create admin document
+      if (!db) {
+        return {
+          success: false,
+          error: 'Database not initialized',
+        };
+      }
+
       const adminId = this.generateAdminId();
       const adminData: Omit<AdminCredential, 'id'> = {
         email,
@@ -185,6 +199,13 @@ export class AdminAuthService {
     adminId: string
   ): Promise<AdminDeactivationResult> {
     try {
+      if (!db) {
+        return {
+          success: false,
+          error: 'Database not initialized',
+        };
+      }
+
       await updateDoc(doc(db, this.COLLECTION_NAME, adminId), {
         isActive: false,
       });
@@ -202,6 +223,11 @@ export class AdminAuthService {
    */
   static async getAllAdmins(): Promise<AdminCredential[]> {
     try {
+      if (!db) {
+        console.error('Database not initialized');
+        return [];
+      }
+
       const querySnapshot = await getDocs(collection(db, this.COLLECTION_NAME));
       const admins: AdminCredential[] = [];
 
@@ -261,6 +287,11 @@ export class AdminAuthService {
     email: string
   ): Promise<AdminCredential | null> {
     try {
+      if (!db) {
+        console.error('Database not initialized');
+        return null;
+      }
+
       const q = query(
         collection(db, this.COLLECTION_NAME),
         where('email', '==', email)
@@ -296,6 +327,11 @@ export class AdminAuthService {
    */
   private static async updateLastLogin(adminId: string): Promise<void> {
     try {
+      if (!db) {
+        console.error('Database not initialized');
+        return;
+      }
+
       await updateDoc(doc(db, this.COLLECTION_NAME, adminId), {
         lastLogin: serverTimestamp(),
       });

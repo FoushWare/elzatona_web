@@ -127,7 +127,7 @@ export function SectionQuestionsManager({
   const types = Array.from(new Set(questions.map(q => q.type)));
   const categories = Array.from(
     new Set(questions.map(q => q.category).filter(Boolean))
-  );
+  ) as string[];
 
   const handleQuestionToggle = (questionId: string) => {
     setSelectedQuestions(prev => {
@@ -608,7 +608,10 @@ export function SectionQuestionsManager({
         {viewingQuestion && (
           <QuestionViewModal
             question={viewingQuestion}
-            learningPaths={learningPaths}
+            learningPaths={learningPaths.map(lp => ({
+              id: lp.id,
+              name: lp.title,
+            }))}
             onClose={() => setViewingQuestion(null)}
           />
         )}

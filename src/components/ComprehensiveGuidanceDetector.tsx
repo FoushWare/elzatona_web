@@ -18,7 +18,7 @@ export const ComprehensiveGuidanceDetector: React.FC = () => {
 
   useEffect(() => {
     // Don't show guidance on admin pages
-    if (pathname.startsWith('/admin')) {
+    if (pathname?.startsWith('/admin')) {
       return;
     }
 
@@ -57,7 +57,7 @@ export const ComprehensiveGuidanceDetector: React.FC = () => {
   };
 
   // Don't show guidance on admin pages
-  if (pathname.startsWith('/admin')) {
+  if (pathname?.startsWith('/admin')) {
     return null;
   }
 

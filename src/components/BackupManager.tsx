@@ -26,7 +26,7 @@ export default function BackupManager() {
       const result = await BackupClientService.getBackupStats();
 
       if (result.success) {
-        setStats(result.data);
+        setStats(result.data as BackupStats);
       } else {
         setError(result.error || 'Failed to load backup statistics');
       }
@@ -45,7 +45,7 @@ export default function BackupManager() {
       const result = await BackupClientService.getSectionBackup(section);
 
       if (result.success) {
-        setSectionQuestions(result.data);
+        setSectionQuestions(result.data as BackupQuestion[]);
         setSelectedSection(section);
         setShowSectionDetails(true);
       } else {

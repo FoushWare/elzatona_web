@@ -40,7 +40,7 @@ export interface JobFilters {
 }
 
 // Job sources configuration
-export const jobSources: JobSource[] = [
+const jobSources: JobSource[] = [
   {
     name: 'JS Guru Jobs',
     url: 'https://jsgurujobs.com',

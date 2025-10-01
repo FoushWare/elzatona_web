@@ -1,10 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { multipleChoiceQuestions } from '@/lib/multipleChoiceQuestions';
+import {
+  generalFrontendQuestions,
+  javascriptQuestions,
+  reactQuestions,
+  cssQuestions,
+} from '@/lib/internalResources';
 import { greatFrontendQuestions } from '@/lib/greatfrontendQuestions';
-import { javascriptQuestions } from '@/lib/javascriptQuestions';
-import { reactQuestions } from '@/lib/reactQuestions';
 import EnhancedTTS from '@/components/EnhancedTTS';
 
 interface LearningPathQuestionsProps {
@@ -28,24 +31,26 @@ export default function LearningPathQuestions({
   const [showStatistics, setShowStatistics] = useState(false);
 
   // Get questions based on category
-  const getQuestionsByCategory = () => {
+  const getQuestionsByCategory = (): any[] => {
     switch (category) {
       case 'javascript':
         return javascriptQuestions;
       case 'react':
         return reactQuestions;
       case 'css':
-        return multipleChoiceQuestions.filter(q => q.category === 'css');
+        return cssQuestions;
       case 'html':
-        return multipleChoiceQuestions.filter(q => q.category === 'html');
+        return generalFrontendQuestions.filter(q => q.category === 'html');
       case 'git':
-        return multipleChoiceQuestions.filter(q => q.category === 'git');
+        return generalFrontendQuestions.filter(q => q.category === 'git');
       case 'websockets':
-        return multipleChoiceQuestions.filter(q => q.category === 'websockets');
+        return generalFrontendQuestions.filter(q =>
+          q.tags.includes('websockets')
+        );
       case 'general':
-        return multipleChoiceQuestions.filter(q => q.category === 'general');
+        return generalFrontendQuestions;
       default:
-        return multipleChoiceQuestions;
+        return generalFrontendQuestions;
     }
   };
 
@@ -65,7 +70,7 @@ export default function LearningPathQuestions({
       }
     } else {
       // JavaScriptQuestion or ReactQuestion type
-      if (answer === currentQuestion.answer) {
+      if (answer === currentQuestion.correctAnswer) {
         setScore(prev => prev + 1);
       }
     }
@@ -234,7 +239,7 @@ export default function LearningPathQuestions({
               Select the correct answer:
             </h4>
             <div className="space-y-2">
-              {currentQuestion.options.map((option, index) => {
+              {currentQuestion.options.map((option: any, index: number) => {
                 const optionLabel = getOptionLabel(index);
                 const isSelected = selectedAnswer === optionLabel;
                 const isCorrect = optionLabel === getCorrectAnswer();

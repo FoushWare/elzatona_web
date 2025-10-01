@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation';
 
 export default function StudyPlanDetailPage() {
   const params = useParams();
-  const planId = params.id as string;
+  const planId = params?.id as string;
 
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
 

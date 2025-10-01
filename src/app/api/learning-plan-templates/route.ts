@@ -72,8 +72,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        id: plan,
         ...planData,
+        id: plan,
       },
     });
   } catch (error) {

@@ -8,6 +8,12 @@ import { db, collection, getDocs, addDoc } from '@/lib/firebase-server';
 export async function GET() {
   try {
     console.log('🔄 API: Fetching topics...');
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
     const snapshot = await getDocs(collection(db, 'topics'));
     const topics = snapshot.docs.map(doc => ({
       id: doc.id,
@@ -55,6 +61,12 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('✅ API: All required fields present, creating topic...');
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
     const topicWithTimestamps = {
       ...topicData,
       createdAt: new Date(),

@@ -14,6 +14,8 @@ interface InternalResourceCardProps {
     totalQuestions: number;
     estimatedTime: number;
     videoUrl?: string;
+    prerequisites?: string[];
+    learningOutcomes?: string[];
   }; // Temporarily disabled to isolate build error
 }
 
@@ -137,7 +139,7 @@ export default function InternalResourceCard({
               Prerequisites
             </h4>
             <div className="flex flex-wrap gap-2">
-              {resource.prerequisites.map((prereq, index) => (
+              {resource.prerequisites?.map((prereq, index) => (
                 <span
                   key={index}
                   className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded"
@@ -153,7 +155,7 @@ export default function InternalResourceCard({
               Learning Outcomes
             </h4>
             <ul className="space-y-1">
-              {resource.learningOutcomes.map((outcome, index) => (
+              {resource.learningOutcomes?.map((outcome, index) => (
                 <li
                   key={index}
                   className="text-sm text-muted-foreground font-medium flex items-start"

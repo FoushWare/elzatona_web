@@ -15,8 +15,17 @@ import {
   addDoc,
   Timestamp,
   increment,
+  Firestore,
 } from 'firebase/firestore';
 import { db } from './firebase';
+
+// Helper function to check database initialization
+const checkDb = (): Firestore => {
+  if (!db) {
+    throw new Error('Database not initialized');
+  }
+  return db;
+};
 
 // Enhanced Learning Plan Template Interface
 export interface LearningPlanTemplate {
@@ -171,11 +180,14 @@ export class GuidedLearningService {
     planData: Omit<LearningPlanTemplate, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<string> {
     try {
-      const planRef = await addDoc(collection(db, this.COLLECTIONS.PLANS), {
-        ...planData,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
-      });
+      const planRef = await addDoc(
+        collection(checkDb(), this.COLLECTIONS.PLANS),
+        {
+          ...planData,
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now(),
+        }
+      );
       return planRef.id;
     } catch (error) {
       console.error('Error creating learning plan:', error);
@@ -188,7 +200,7 @@ export class GuidedLearningService {
     planData: Omit<LearningPlanTemplate, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<void> {
     try {
-      const planRef = doc(db, this.COLLECTIONS.PLANS, planId);
+      const planRef = doc(checkDb(), this.COLLECTIONS.PLANS, planId);
       await setDoc(
         planRef,
         {
@@ -208,7 +220,7 @@ export class GuidedLearningService {
     updates: Partial<LearningPlanTemplate>
   ): Promise<void> {
     try {
-      const planRef = doc(db, this.COLLECTIONS.PLANS, planId);
+      const planRef = doc(checkDb(), this.COLLECTIONS.PLANS, planId);
       await updateDoc(planRef, {
         ...updates,
         updatedAt: Timestamp.now(),
@@ -221,7 +233,7 @@ export class GuidedLearningService {
 
   async getPlan(planId: string): Promise<LearningPlanTemplate | null> {
     try {
-      const planRef = doc(db, this.COLLECTIONS.PLANS, planId);
+      const planRef = doc(checkDb(), this.COLLECTIONS.PLANS, planId);
       const planSnap = await getDoc(planRef);
 
       if (planSnap.exists()) {
@@ -247,7 +259,7 @@ export class GuidedLearningService {
   async getAllPlans(): Promise<LearningPlanTemplate[]> {
     try {
       const plansQuery = query(
-        collection(db, this.COLLECTIONS.PLANS),
+        collection(checkDb(), this.COLLECTIONS.PLANS),
         where('isActive', '==', true),
         orderBy('createdAt', 'desc')
       );
@@ -279,7 +291,7 @@ export class GuidedLearningService {
       if (!plan) throw new Error('Plan not found');
 
       const progressRef = doc(
-        db,
+        checkDb(),
         this.COLLECTIONS.USER_PROGRESS,
         `${userId}_${planId}`
       );
@@ -355,7 +367,7 @@ export class GuidedLearningService {
   ): Promise<void> {
     try {
       const progressRef = doc(
-        db,
+        checkDb(),
         this.COLLECTIONS.USER_PROGRESS,
         `${userId}_${planId}`
       );
@@ -458,7 +470,8 @@ export class GuidedLearningService {
       });
 
       // Update user stats
-      await this.updateUserStats(userId, {
+      const statsRef = doc(checkDb(), this.COLLECTIONS.USER_STATS, userId);
+      await updateDoc(statsRef, {
         totalQuestionsAnswered: increment(1),
         totalCorrectAnswers: increment(isCorrect ? 1 : 0),
         totalStudyTime: increment(Math.round(timeSpent / 60)), // Convert to minutes
@@ -481,7 +494,7 @@ export class GuidedLearningService {
   async completePlan(userId: string, planId: string): Promise<void> {
     try {
       const progressRef = doc(
-        db,
+        checkDb(),
         this.COLLECTIONS.USER_PROGRESS,
         `${userId}_${planId}`
       );
@@ -510,7 +523,8 @@ export class GuidedLearningService {
       });
 
       // Update user stats
-      await this.updateUserStats(userId, {
+      const statsRef = doc(checkDb(), this.COLLECTIONS.USER_STATS, userId);
+      await updateDoc(statsRef, {
         plansCompleted: increment(1),
         lastActivity: new Date(),
       });
@@ -529,7 +543,7 @@ export class GuidedLearningService {
   ): Promise<UserPlanProgress | null> {
     try {
       const progressRef = doc(
-        db,
+        checkDb(),
         this.COLLECTIONS.USER_PROGRESS,
         `${userId}_${planId}`
       );
@@ -561,7 +575,7 @@ export class GuidedLearningService {
   async getAllUserProgress(userId: string): Promise<UserPlanProgress[]> {
     try {
       const progressQuery = query(
-        collection(db, this.COLLECTIONS.USER_PROGRESS),
+        collection(checkDb(), this.COLLECTIONS.USER_PROGRESS),
         where('userId', '==', userId),
         orderBy('startDate', 'desc')
       );
@@ -592,7 +606,7 @@ export class GuidedLearningService {
   // User Stats Management
   async getUserStats(userId: string): Promise<UserStats | null> {
     try {
-      const statsRef = doc(db, this.COLLECTIONS.USER_STATS, userId);
+      const statsRef = doc(checkDb(), this.COLLECTIONS.USER_STATS, userId);
       const statsSnap = await getDoc(statsRef);
 
       if (statsSnap.exists()) {
@@ -616,7 +630,7 @@ export class GuidedLearningService {
     updates: Partial<UserStats>
   ): Promise<void> {
     try {
-      const statsRef = doc(db, this.COLLECTIONS.USER_STATS, userId);
+      const statsRef = doc(checkDb(), this.COLLECTIONS.USER_STATS, userId);
       const statsSnap = await getDoc(statsRef);
 
       if (statsSnap.exists()) {
@@ -664,7 +678,7 @@ export class GuidedLearningService {
     activity: Omit<UserActivity, 'id' | 'userId' | 'timestamp'>
   ): Promise<void> {
     try {
-      await addDoc(collection(db, this.COLLECTIONS.USER_ACTIVITIES), {
+      await addDoc(collection(checkDb(), this.COLLECTIONS.USER_ACTIVITIES), {
         userId,
         ...activity,
         timestamp: Timestamp.now(),
@@ -681,7 +695,7 @@ export class GuidedLearningService {
   ): Promise<UserActivity[]> {
     try {
       const activitiesQuery = query(
-        collection(db, this.COLLECTIONS.USER_ACTIVITIES),
+        collection(checkDb(), this.COLLECTIONS.USER_ACTIVITIES),
         where('userId', '==', userId),
         orderBy('timestamp', 'desc'),
         limit(limitCount)

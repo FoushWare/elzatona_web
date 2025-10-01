@@ -1,20 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { UnifiedQuestionService } from '@/lib/unified-question-schema';
+import { db } from '@/lib/firebase-server';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const updatedQuestion = await request.json();
 
     console.log('🔄 Updating question:', id, updatedQuestion);
 
-    await UnifiedQuestionService.updateQuestion(id, updatedQuestion);
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
+    const service = new UnifiedQuestionService(db);
+    await service.updateQuestion(id, updatedQuestion);
 
     // Get the updated question to return
-    const updatedQuestionData = await UnifiedQuestionService.getQuestion(id);
+    const updatedQuestionData = await service.getQuestion(id);
 
     return NextResponse.json({
       success: true,
@@ -26,7 +35,7 @@ export async function PUT(
     return NextResponse.json(
       {
         success: false,
-        error: error.message || 'Internal server error',
+        error: error instanceof Error ? error.message : 'Internal server error',
       },
       { status: 500 }
     );
@@ -35,14 +44,22 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     console.log('🗑️ Deleting question:', id);
 
-    await UnifiedQuestionService.deleteQuestion(id);
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
+    const service = new UnifiedQuestionService(db);
+    await service.deleteQuestion(id);
 
     return NextResponse.json({
       success: true,
@@ -53,7 +70,7 @@ export async function DELETE(
     return NextResponse.json(
       {
         success: false,
-        error: error.message || 'Internal server error',
+        error: error instanceof Error ? error.message : 'Internal server error',
       },
       { status: 500 }
     );

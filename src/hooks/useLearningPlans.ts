@@ -27,15 +27,9 @@ export function useLearningPlans(): UseLearningPlansReturn {
 
   // Load plans from user context on mount
   useEffect(() => {
-    if (isAuthenticated && user?.learningPlans) {
-      setPlans(user.learningPlans);
-      // Find active plan
-      const activePlan = user.learningPlans.find(
-        plan => plan.status === 'active'
-      );
-      setCurrentPlan(activePlan || null);
-    }
-  }, [isAuthenticated, user?.learningPlans]);
+    // Note: learningPlans is not part of the simplified Firebase user type
+    // This will be loaded from Firestore separately
+  }, [isAuthenticated, user]);
 
   const startPlan = useCallback(
     async (planData: LearningPlanProgress): Promise<boolean> => {

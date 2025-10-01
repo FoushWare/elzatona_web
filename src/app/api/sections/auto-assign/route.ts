@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     // Update section question count
     const sectionRef = doc(db, 'sections', targetSection.id);
     await updateDoc(sectionRef, {
-      currentQuestionCount: targetSection.currentQuestionCount + 1,
+      currentQuestionCount: (targetSection as any).currentQuestionCount + 1,
       updatedAt: new Date(),
     });
 
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
       data: {
         questionId,
         sectionId: targetSection.id,
-        sectionName: targetSection.name,
+        sectionName: (targetSection as any).name,
         orderInSection: (questionIndex % sectionSize) + 1,
       },
     });

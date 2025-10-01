@@ -50,7 +50,7 @@ interface AuditLog {
   resourceId?: string;
   resourceName?: string;
   details: string;
-  changes?: Record<string, any>;
+  changes?: Record<string, unknown>;
   userId?: string;
   userEmail?: string;
   ipAddress?: string;
@@ -58,7 +58,7 @@ interface AuditLog {
   timestamp: string;
   success: boolean;
   errorMessage?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 const actionColors = {

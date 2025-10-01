@@ -67,8 +67,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if item already exists in cart
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
     const existingCartQuery = query(
-      collection(db, 'learningCarts'),
+      collection(db!, 'learningCarts'),
       where('userId', '==', userId)
     );
     const existingCartSnapshot = await getDocs(existingCartQuery);
@@ -148,7 +155,7 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date().toISOString(),
     };
 
-    await updateDoc(doc(db, 'learningCarts', cartId), updatedCart);
+    await updateDoc(doc(db!, 'learningCarts', cartId), updatedCart);
 
     return NextResponse.json({
       success: true,
@@ -181,7 +188,7 @@ export async function GET(request: NextRequest) {
     }
 
     const cartQuery = query(
-      collection(db, 'learningCarts'),
+      collection(db!, 'learningCarts'),
       where('userId', '==', userId)
     );
 
@@ -236,7 +243,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const cartQuery = query(
-      collection(db, 'learningCarts'),
+      collection(db!, 'learningCarts'),
       where('userId', '==', userId)
     );
 
@@ -264,7 +271,7 @@ export async function PUT(request: NextRequest) {
       updatedAt: new Date().toISOString(),
     };
 
-    await updateDoc(doc(db, 'learningCarts', cart.id), updatedCart);
+    await updateDoc(doc(db!, 'learningCarts', cart.id), updatedCart);
 
     return NextResponse.json({
       success: true,
@@ -294,7 +301,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const cartQuery = query(
-      collection(db, 'learningCarts'),
+      collection(db!, 'learningCarts'),
       where('userId', '==', userId)
     );
 
@@ -330,7 +337,7 @@ export async function DELETE(request: NextRequest) {
       updatedAt: new Date().toISOString(),
     };
 
-    await updateDoc(doc(db, 'learningCarts', cart.id), updatedCart);
+    await updateDoc(doc(db!, 'learningCarts', cart.id), updatedCart);
 
     return NextResponse.json({
       success: true,

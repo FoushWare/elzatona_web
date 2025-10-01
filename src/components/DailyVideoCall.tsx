@@ -29,16 +29,6 @@ export const DailyVideoCall: React.FC<DailyVideoCallProps> = ({
       showFullscreenButton: true,
       showLocalVideo: true,
       showParticipantsBar: true,
-      theme: {
-        accent: '#3b82f6',
-        accentText: '#ffffff',
-        background: '#ffffff',
-        backgroundAccent: '#f8fafc',
-        baseText: '#1e293b',
-        border: '#e2e8f0',
-        mainAreaBg: '#ffffff',
-        supportiveText: '#64748b',
-      },
     });
 
     // Event listeners
@@ -58,14 +48,6 @@ export const DailyVideoCall: React.FC<DailyVideoCallProps> = ({
         console.error('❌ Daily.co error:', event);
         setError(event.errorMsg || 'Failed to join meeting');
         setIsLoading(false);
-      })
-      .on('camera-error', event => {
-        console.error('📹 Camera error:', event);
-        setError('Camera access denied or unavailable');
-      })
-      .on('mic-error', event => {
-        console.error('🎤 Microphone error:', event);
-        setError('Microphone access denied or unavailable');
       });
 
     // Join the meeting

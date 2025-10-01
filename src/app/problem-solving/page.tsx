@@ -472,7 +472,6 @@ export default function ProblemSolvingPage() {
         <SignInPopup
           isOpen={showSignInPopup}
           onClose={handleSignInClose}
-          onSkip={handleSignInSkip}
           onSuccess={handleSignInSuccess}
         />
       )}

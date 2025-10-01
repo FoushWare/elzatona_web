@@ -132,7 +132,7 @@ function EnhancedGuidedPracticeContent() {
   const { saveProgress } = useSecureProgress();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const planId = searchParams.get('plan');
+  const planId = searchParams?.get('plan');
 
   // State management
   const [currentPlan, setCurrentPlan] = useState<LearningPlan | null>(null);
@@ -155,6 +155,82 @@ function EnhancedGuidedPracticeContent() {
   const [questionStartTime, setQuestionStartTime] = useState<Date>(new Date());
   const [isLoading, setIsLoading] = useState(true);
   const [showResults, setShowResults] = useState(false);
+
+  const loadCurrentQuestion = useCallback(
+    (plan: LearningPlan, progress: UserProgress) => {
+      const currentSection = plan.sections[progress.currentSection];
+      if (!currentSection) return;
+
+      const availableQuestions = currentSection.questions.filter(
+        qId => !progress.completedQuestions.includes(qId)
+      );
+
+      if (availableQuestions.length === 0) {
+        // Move to next section or complete plan
+        if (progress.currentSection < plan.sections.length - 1) {
+          // Move to next section
+          const nextProgress = {
+            ...progress,
+            currentSection: progress.currentSection + 1,
+          };
+          setUserPlanProgress(nextProgress);
+          loadCurrentQuestion(plan, nextProgress);
+        } else {
+          // Plan completed
+          setShowResults(true);
+        }
+        return;
+      }
+
+      const currentQuestionId = availableQuestions[0];
+
+      // Mock question data with hints - Yes/No Question
+      const mockQuestion: Question = {
+        id: currentQuestionId,
+        title: 'JavaScript Hoisting Behavior',
+        content:
+          'Is it possible to call a function before it is declared in JavaScript due to hoisting?',
+        type: 'yes-no',
+        correctAnswers: ['yes'],
+        explanation:
+          'Yes, it is possible to call a function before it is declared in JavaScript due to hoisting. Function declarations are hoisted to the top of their scope, which means they can be called before they appear in the code.',
+        category: 'javascript',
+        difficulty: 'medium',
+        points: 10,
+        timeLimit: 60,
+        tags: ['javascript', 'hoisting', 'functions'],
+        hints: [
+          {
+            id: 'hint-1',
+            title: 'JavaScript Hoisting Explained',
+            description:
+              'Comprehensive guide to understanding JavaScript hoisting',
+            url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting',
+            type: 'documentation',
+            category: 'javascript',
+            priority: 1,
+          },
+          {
+            id: 'hint-2',
+            title: 'JavaScript Hoisting Tutorial',
+            description:
+              'Video tutorial explaining hoisting with practical examples',
+            url: 'https://www.youtube.com/watch?v=example-hoisting',
+            type: 'video',
+            category: 'javascript',
+            priority: 2,
+          },
+        ],
+      };
+
+      setCurrentQuestion(mockQuestion);
+      setSelectedAnswers([]);
+      setShowExplanation(false);
+      setQuestionResult(null);
+      setQuestionStartTime(new Date());
+    },
+    []
+  );
 
   // Mock data for demonstration
   useEffect(() => {
@@ -241,82 +317,6 @@ function EnhancedGuidedPracticeContent() {
     setIsLoading(false);
   }, [planId, router, loadCurrentQuestion]);
 
-  const loadCurrentQuestion = useCallback(
-    (plan: LearningPlan, progress: UserProgress) => {
-      const currentSection = plan.sections[progress.currentSection];
-      if (!currentSection) return;
-
-      const availableQuestions = currentSection.questions.filter(
-        qId => !progress.completedQuestions.includes(qId)
-      );
-
-      if (availableQuestions.length === 0) {
-        // Move to next section or complete plan
-        if (progress.currentSection < plan.sections.length - 1) {
-          // Move to next section
-          const nextProgress = {
-            ...progress,
-            currentSection: progress.currentSection + 1,
-          };
-          setUserPlanProgress(nextProgress);
-          loadCurrentQuestion(plan, nextProgress);
-        } else {
-          // Plan completed
-          setShowResults(true);
-        }
-        return;
-      }
-
-      const currentQuestionId = availableQuestions[0];
-
-      // Mock question data with hints - Yes/No Question
-      const mockQuestion: Question = {
-        id: currentQuestionId,
-        title: 'JavaScript Hoisting Behavior',
-        content:
-          'Is it possible to call a function before it is declared in JavaScript due to hoisting?',
-        type: 'yes-no',
-        correctAnswers: ['yes'],
-        explanation:
-          'Yes, it is possible to call a function before it is declared in JavaScript due to hoisting. Function declarations are hoisted to the top of their scope, which means they can be called before they appear in the code.',
-        category: 'javascript',
-        difficulty: 'medium',
-        points: 10,
-        timeLimit: 60,
-        tags: ['javascript', 'hoisting', 'functions'],
-        hints: [
-          {
-            id: 'hint-1',
-            title: 'JavaScript Hoisting Explained',
-            description:
-              'Comprehensive guide to understanding JavaScript hoisting',
-            url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting',
-            type: 'documentation',
-            category: 'javascript',
-            priority: 1,
-          },
-          {
-            id: 'hint-2',
-            title: 'JavaScript Hoisting Tutorial',
-            description:
-              'Video tutorial explaining hoisting with practical examples',
-            url: 'https://www.youtube.com/watch?v=example-hoisting',
-            type: 'video',
-            category: 'javascript',
-            priority: 2,
-          },
-        ],
-      };
-
-      setCurrentQuestion(mockQuestion);
-      setSelectedAnswers([]);
-      setShowExplanation(false);
-      setQuestionResult(null);
-      setQuestionStartTime(new Date());
-    },
-    []
-  );
-
   const handleAnswerSelect = (answerId: string) => {
     if (currentQuestion?.type === 'single') {
       setSelectedAnswers([answerId]);
@@ -395,11 +395,18 @@ function EnhancedGuidedPracticeContent() {
 
     // Save progress to backend
     saveProgress({
+      sessionId: `session-${Date.now()}`, // Generate a unique session ID
       planId: currentPlan!.id,
       questionId: currentQuestion.id,
-      score: finalScore,
+      answer: selectedAnswers.length > 0 ? 1 : 0, // Convert to number
       timeSpent,
       isCorrect,
+      section:
+        currentPlan!.sections[userPlanProgress!.currentSection]?.name ||
+        'unknown',
+      difficulty: currentQuestion.difficulty || 'intermediate',
+      timestamp: Date.now(),
+      learningMode: 'guided',
     });
   };
 

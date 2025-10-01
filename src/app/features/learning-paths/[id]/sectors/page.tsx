@@ -11,7 +11,7 @@ import { LoadingTransition } from '@/components/LoadingTransition';
 export default function SectorsPage() {
   const params = useParams();
   const router = useRouter();
-  const pathId = params.id as string;
+  const pathId = params?.id as string;
 
   const { sectors, isLoading, error } = useSectors(pathId);
   const { getSectorProgress, getPathProgress } = useSectorProgress();

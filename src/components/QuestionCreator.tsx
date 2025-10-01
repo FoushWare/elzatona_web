@@ -84,25 +84,26 @@ export default function QuestionCreator({
 
   const handleAudioUpload = async (file: File, type: 'question' | 'answer') => {
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', type);
-      formData.append('questionId', `temp_${Date.now()}`);
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      uploadFormData.append('type', type);
+      uploadFormData.append('questionId', `temp_${Date.now()}`);
 
       const response = await fetch('/api/audio/upload', {
         method: 'POST',
-        body: formData,
+        body: uploadFormData,
       });
 
       const result = await response.json();
 
       if (result.success) {
+        const audioUrl = String(result.url || '');
         if (type === 'question') {
-          setFormData({ ...formData, audioQuestion: result.url });
+          setFormData(prev => ({ ...prev, audioQuestion: audioUrl }));
         } else {
-          setFormData({ ...formData, audioAnswer: result.url });
+          setFormData(prev => ({ ...prev, audioAnswer: audioUrl }));
         }
-        return result.url;
+        return audioUrl;
       } else {
         throw new Error(result.error || 'Upload failed');
       }
@@ -203,7 +204,7 @@ export default function QuestionCreator({
         setAnswerAudioFile(null);
 
         if (onQuestionAdded) {
-          onQuestionAdded(result.data);
+          onQuestionAdded(result.data as SectionQuestion);
         }
       } else {
         setError(result.error || 'Failed to add question');

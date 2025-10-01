@@ -101,14 +101,23 @@ export default function FreeStyleAnalyticsPage() {
           completed: 95,
           total: 100,
           accuracy: 94,
+          timeSpent: 180,
         },
-        { id: 'react', name: 'React', completed: 78, total: 90, accuracy: 87 },
+        {
+          id: 'react',
+          name: 'React',
+          completed: 78,
+          total: 90,
+          accuracy: 87,
+          timeSpent: 150,
+        },
         {
           id: 'typescript',
           name: 'TypeScript',
           completed: 45,
           total: 60,
           accuracy: 82,
+          timeSpent: 90,
         },
         {
           id: 'nextjs',
@@ -116,6 +125,7 @@ export default function FreeStyleAnalyticsPage() {
           completed: 32,
           total: 50,
           accuracy: 85,
+          timeSpent: 75,
         },
         {
           id: 'system-design',
@@ -123,6 +133,7 @@ export default function FreeStyleAnalyticsPage() {
           completed: 28,
           total: 40,
           accuracy: 78,
+          timeSpent: 60,
         },
       ],
       dailyProgress: [

@@ -16,7 +16,7 @@ interface Topic {
 
 export default function LearningPathDetailPage() {
   const params = useParams();
-  const pathId = params.id as string;
+  const pathId = params?.id as string;
 
   const learningPath = getLearningPathById(pathId);
 

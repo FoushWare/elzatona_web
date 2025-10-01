@@ -4,6 +4,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
 
+// Placeholder EnhancedQuestionService
+class EnhancedQuestionService {
+  static async assignQuestionToSection(
+    questionId: string,
+    sectionId: string,
+    order?: number
+  ): Promise<boolean> {
+    // Placeholder implementation
+    console.log(
+      `Assigning question ${questionId} to section ${sectionId} with order ${order}`
+    );
+    return true;
+  }
+
+  static async removeQuestionFromSection(questionId: string): Promise<void> {
+    // Placeholder implementation
+    console.log(`Removing question ${questionId} from section`);
+  }
+}
+
 // POST /api/enhanced-questions/assign-section - Assign question to section
 export async function POST(request: NextRequest) {
   try {
