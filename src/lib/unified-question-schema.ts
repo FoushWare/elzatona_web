@@ -334,6 +334,7 @@ export class UnifiedQuestionService {
   async getQuestionStats(): Promise<QuestionStats> {
     if (!this.db) throw new Error('Firestore not initialized');
     
+    // For small datasets, get all questions at once (more efficient than multiple queries)
     const snapshot = await getDocs(collection(this.db, 'unifiedQuestions'));
     const questions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UnifiedQuestion));
     
