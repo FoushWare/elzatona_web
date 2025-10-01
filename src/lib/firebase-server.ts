@@ -15,6 +15,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  writeBatch,
 } from 'firebase/firestore';
 
 // Firebase configuration
@@ -73,4 +74,5 @@ export {
   addDoc,
   updateDoc,
   deleteDoc,
+  writeBatch,
 };
