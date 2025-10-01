@@ -21,7 +21,39 @@ export function useUserPreferences(): UseUserPreferencesReturn {
   // Load preferences from user context on mount
   useEffect(() => {
     if (isAuthenticated && user?.preferences) {
-      setPreferences(user.preferences);
+      // Map user preferences to UserPreferences interface
+      const mappedPreferences: UserPreferences = {
+        theme: user.preferences.theme as 'light' | 'dark' | 'system',
+        notifications: {
+          email:
+            typeof user.preferences.notifications === 'boolean'
+              ? user.preferences.notifications
+              : true,
+          push:
+            typeof user.preferences.notifications === 'boolean'
+              ? user.preferences.notifications
+              : true,
+          learningReminders:
+            typeof user.preferences.notifications === 'boolean'
+              ? user.preferences.notifications
+              : true,
+          achievementAlerts:
+            typeof user.preferences.notifications === 'boolean'
+              ? user.preferences.notifications
+              : true,
+        },
+        language: user.preferences.language || 'en',
+        timezone: 'UTC',
+        learningMode: null,
+        dailyGoal: 10,
+        studyHours: {
+          start: '09:00',
+          end: '17:00',
+        },
+        difficultyPreference: 'medium',
+        sections: [],
+      };
+      setPreferences(mappedPreferences);
     }
   }, [isAuthenticated, user?.preferences]);
 

@@ -16,7 +16,7 @@ export async function DELETE(request: NextRequest) {
     console.log('📝 Clearing "questions" collection...');
     const questionsSnapshot = await getDocs(collection(db, 'questions'));
     const questionsDeletePromises = questionsSnapshot.docs.map(docSnapshot =>
-      deleteDoc(doc(db, 'questions', docSnapshot.id))
+      deleteDoc(doc(db!, 'questions', docSnapshot.id))
     );
 
     if (questionsDeletePromises.length > 0) {
@@ -31,10 +31,10 @@ export async function DELETE(request: NextRequest) {
     // Clear 'unifiedQuestions' collection
     console.log('📝 Clearing "unifiedQuestions" collection...');
     const unifiedQuestionsSnapshot = await getDocs(
-      collection(db, 'unifiedQuestions')
+      collection(db!, 'unifiedQuestions')
     );
     const unifiedQuestionsDeletePromises = unifiedQuestionsSnapshot.docs.map(
-      docSnapshot => deleteDoc(doc(db, 'unifiedQuestions', docSnapshot.id))
+      docSnapshot => deleteDoc(doc(db!, 'unifiedQuestions', docSnapshot.id))
     );
 
     if (unifiedQuestionsDeletePromises.length > 0) {

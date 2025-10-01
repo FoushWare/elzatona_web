@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     console.log('Creating missing learning plans...');
 
     for (const plan of missingPlans) {
-      await setDoc(doc(db, 'learningPlanTemplates', plan.id), plan);
+      await setDoc(doc(db!, 'learningPlanTemplates', plan.id), plan);
       console.log(`✅ Created ${plan.name}`);
     }
 

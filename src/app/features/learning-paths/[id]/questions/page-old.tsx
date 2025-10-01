@@ -25,7 +25,7 @@ import CustomAudioPlayer from '@/components/CustomAudioPlayer';
 export default function QuestionsPage() {
   const params = useParams();
   const router = useRouter();
-  const pathId = params.id as string;
+  const pathId = params?.id as string;
   const { user } = useFirebaseAuth();
   const { toasts, removeToast, showSuccess, showError } = useToast();
 
@@ -33,6 +33,9 @@ export default function QuestionsPage() {
   const [answeredQuestions, setAnsweredQuestions] = useState<Set<string>>(
     new Set()
   );
+  const [selectedAnswers, setSelectedAnswers] = useState<
+    Record<string, number>
+  >({});
 
   const learningPath = learningPaths.find(path => path.id === pathId);
 
@@ -181,7 +184,7 @@ export default function QuestionsPage() {
 
     // Filter only multiple-choice questions and ensure they have required fields
     const multipleChoiceQuestions = firebaseQuestions.filter(
-      q =>
+      (q: any) =>
         q.type === 'multiple-choice' &&
         q.question &&
         q.options &&
@@ -194,7 +197,7 @@ export default function QuestionsPage() {
       {
         id: 'main',
         title: 'Multiple Choice Questions',
-        questions: multipleChoiceQuestions.map(q => ({
+        questions: multipleChoiceQuestions.map((q: any) => ({
           id: q.id,
           title: q.title,
           question: q.question,
@@ -406,9 +409,16 @@ export default function QuestionsPage() {
                                 fallbackText={question.question}
                               />
                               <AddToFlashcard
-                                questionId={question.id}
-                                questionTitle={question.title}
-                                questionText={question.question}
+                                question={question.question}
+                                answer={
+                                  question.explanation ||
+                                  'No explanation available'
+                                }
+                                category={question.category || 'General'}
+                                difficulty={
+                                  question.difficulty || 'intermediate'
+                                }
+                                source="learning-path"
                                 onStatusChange={status => {
                                   if (status === 'added') {
                                     showSuccess(
@@ -445,6 +455,8 @@ export default function QuestionsPage() {
                               (option: unknown, index: number) => {
                                 const isCorrect =
                                   index === question.correctAnswer;
+                                const isSelected =
+                                  selectedAnswers[question.id] === index;
                                 const showResult = isAnswered;
 
                                 let buttonClass =
@@ -472,6 +484,10 @@ export default function QuestionsPage() {
                                     key={index}
                                     onClick={() => {
                                       if (!showResult) {
+                                        setSelectedAnswers(prev => ({
+                                          ...prev,
+                                          [question.id]: index,
+                                        }));
                                         handleLocalSubmit(index.toString());
                                       }
                                     }}
@@ -483,7 +499,7 @@ export default function QuestionsPage() {
                                         {String.fromCharCode(65 + index)}
                                       </span>
                                       <span className="text-gray-900 dark:text-white">
-                                        {option}
+                                        {option as string}
                                       </span>
                                       {showResult && isCorrect && (
                                         <span className="flex-shrink-0 text-green-600 dark:text-green-400">

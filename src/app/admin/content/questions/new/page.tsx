@@ -180,8 +180,8 @@ export default function NewQuestionPage() {
     setError(null);
 
     try {
-      const audioService = new ClientAudioUploadService();
-      const url = await audioService.uploadAudio(file);
+      const audioService = new ClientAudioUploadService('temp-question-id');
+      const url = await audioService.uploadAudio(file, type);
 
       setAudioUrls(prev => ({ ...prev, [type]: url }));
       setAudioFiles(prev => ({ ...prev, [type]: file }));
@@ -285,10 +285,21 @@ export default function NewQuestionPage() {
         throw new Error(errorData.error || 'Failed to create question');
       }
 
+      const responseData = await response.json();
+
       // Backup to local storage
       try {
-        const backupService = new BackupClientService();
-        await backupService.backupQuestion(questionData);
+        const correctAnswers = questionData.options
+          .filter(opt => opt.isCorrect)
+          .map(opt => opt.id);
+
+        const backupData = {
+          ...questionData,
+          id: responseData.data?.id || Date.now().toString(),
+          correctAnswers,
+          isActive: true,
+        };
+        await BackupClientService.backupQuestion(backupData);
       } catch (backupErr) {
         console.warn('Failed to backup question:', backupErr);
       }

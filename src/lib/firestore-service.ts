@@ -20,8 +20,17 @@ import {
   increment,
   arrayUnion,
   arrayRemove,
+  Firestore,
 } from 'firebase/firestore';
 import { db } from './firebase';
+
+// Helper function to check database initialization
+const checkDb = (): Firestore => {
+  if (!db) {
+    throw new Error('Database not initialized');
+  }
+  return db;
+};
 import { firestoreConnectionManager } from './firestore-connection-manager';
 import {
   FirestoreUser,
@@ -50,7 +59,7 @@ class FirestoreService {
   // User Management
   async createUser(userData: Partial<FirestoreUser>): Promise<void> {
     return firestoreConnectionManager.executeWithRetry(async () => {
-      const userRef = doc(db, 'users', userData.uid!);
+      const userRef = doc(checkDb(), 'users', userData.uid!);
       const userDoc = {
         ...userData,
         createdAt: serverTimestamp(),
@@ -62,7 +71,7 @@ class FirestoreService {
 
   async getUser(uid: string): Promise<FirestoreUser | null> {
     return firestoreConnectionManager.executeWithRetry(async () => {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(checkDb(), 'users', uid);
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists()) {
@@ -77,7 +86,7 @@ class FirestoreService {
     updates: Partial<FirestoreUser>
   ): Promise<void> {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(checkDb(), 'users', uid);
       await updateDoc(userRef, {
         ...updates,
         updatedAt: serverTimestamp(),
@@ -90,7 +99,7 @@ class FirestoreService {
 
   async updateLastLogin(uid: string): Promise<void> {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(checkDb(), 'users', uid);
       await updateDoc(userRef, {
         lastLoginAt: serverTimestamp(),
       });
@@ -106,7 +115,7 @@ class FirestoreService {
     preferences: Partial<UserPreferences>
   ): Promise<void> {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(checkDb(), 'users', uid);
       await updateDoc(userRef, {
         preferences: preferences,
         updatedAt: serverTimestamp(),
@@ -131,7 +140,7 @@ class FirestoreService {
     }
   ): Promise<void> {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(checkDb(), 'users', uid);
 
       // Update overall progress
       await updateDoc(userRef, {
@@ -144,7 +153,7 @@ class FirestoreService {
 
       // Update section progress
       const sectionProgressRef = doc(
-        db,
+        checkDb(),
         'users',
         uid,
         'sectionProgress',
@@ -200,7 +209,7 @@ class FirestoreService {
   ): Promise<void> {
     try {
       const sessionRef = doc(
-        db,
+        checkDb(),
         'users',
         uid,
         'learningSessions',
@@ -225,14 +234,20 @@ class FirestoreService {
       const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
       const weekStartStr = weekStart.toISOString().split('T')[0];
 
-      const weeklyRef = doc(db, 'users', uid, 'weeklyProgress', weekStartStr);
+      const weeklyRef = doc(
+        checkDb(),
+        'users',
+        uid,
+        'weeklyProgress',
+        weekStartStr
+      );
       const weeklySnap = await getDoc(weeklyRef);
 
       if (weeklySnap.exists()) {
         await updateDoc(weeklyRef, {
           questionsAnswered: increment(1),
           correctAnswers: increment(questionData.isCorrect ? 1 : 0),
-          timeSpent: increment(questionData.timeSpent),
+          timeSpent: increment(Number(questionData.timeSpent) || 0),
         });
       } else {
         await setDoc(weeklyRef, {
@@ -260,14 +275,20 @@ class FirestoreService {
       const now = new Date();
       const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
-      const monthlyRef = doc(db, 'users', uid, 'monthlyProgress', monthStr);
+      const monthlyRef = doc(
+        checkDb(),
+        'users',
+        uid,
+        'monthlyProgress',
+        monthStr
+      );
       const monthlySnap = await getDoc(monthlyRef);
 
       if (monthlySnap.exists()) {
         await updateDoc(monthlyRef, {
           questionsAnswered: increment(1),
           correctAnswers: increment(questionData.isCorrect ? 1 : 0),
-          timeSpent: increment(questionData.timeSpent),
+          timeSpent: increment(Number(questionData.timeSpent) || 0),
         });
       } else {
         await setDoc(monthlyRef, {
@@ -291,7 +312,13 @@ class FirestoreService {
     planData: LearningPlanProgress
   ): Promise<void> {
     try {
-      const planRef = doc(db, 'users', uid, 'learningPlans', planData.planId);
+      const planRef = doc(
+        checkDb(),
+        'users',
+        uid,
+        'learningPlans',
+        planData.planId
+      );
       await setDoc(planRef, {
         ...planData,
         createdAt: serverTimestamp(),
@@ -308,7 +335,7 @@ class FirestoreService {
     updates: Partial<LearningPlanProgress>
   ): Promise<void> {
     try {
-      const planRef = doc(db, 'users', uid, 'learningPlans', planId);
+      const planRef = doc(checkDb(), 'users', uid, 'learningPlans', planId);
       await updateDoc(planRef, {
         ...updates,
         updatedAt: serverTimestamp(),
@@ -324,7 +351,7 @@ class FirestoreService {
     planId: string
   ): Promise<LearningPlanProgress | null> {
     try {
-      const planRef = doc(db, 'users', uid, 'learningPlans', planId);
+      const planRef = doc(checkDb(), 'users', uid, 'learningPlans', planId);
       const planSnap = await getDoc(planRef);
 
       if (planSnap.exists()) {
@@ -340,7 +367,7 @@ class FirestoreService {
   // Achievements and Badges
   async addBadge(uid: string, badge: Badge): Promise<void> {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(checkDb(), 'users', uid);
       await updateDoc(userRef, {
         'achievements.badges': arrayUnion(badge),
         'achievements.totalPoints': increment(
@@ -365,7 +392,7 @@ class FirestoreService {
     milestone: Record<string, unknown>
   ): Promise<void> {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(checkDb(), 'users', uid);
       await updateDoc(userRef, {
         'achievements.milestones': arrayUnion(milestone),
         updatedAt: serverTimestamp(),
@@ -382,7 +409,11 @@ class FirestoreService {
     analytics: UserAnalytics
   ): Promise<void> {
     try {
-      const analyticsRef = doc(db, 'userAnalytics', `${uid}_${analytics.date}`);
+      const analyticsRef = doc(
+        checkDb(),
+        'userAnalytics',
+        `${uid}_${analytics.date}`
+      );
       await setDoc(analyticsRef, {
         ...analytics,
         createdAt: serverTimestamp(),
@@ -396,7 +427,7 @@ class FirestoreService {
   // Questions Management
   async saveQuestion(question: FirestoreQuestion): Promise<string> {
     try {
-      const questionsRef = collection(db, 'questions');
+      const questionsRef = collection(checkDb(), 'questions');
       const docRef = await addDoc(questionsRef, {
         ...question,
         createdAt: serverTimestamp(),
@@ -414,7 +445,7 @@ class FirestoreService {
     planData: Record<string, unknown>
   ): Promise<string> {
     try {
-      const plansRef = collection(db, 'learningPlanTemplates');
+      const plansRef = collection(checkDb(), 'learningPlanTemplates');
       const docRef = await addDoc(plansRef, {
         ...planData,
         createdAt: serverTimestamp(),
@@ -432,7 +463,7 @@ class FirestoreService {
     updates: Record<string, unknown>
   ): Promise<void> {
     try {
-      const planRef = doc(db, 'learningPlanTemplates', planId);
+      const planRef = doc(checkDb(), 'learningPlanTemplates', planId);
       await updateDoc(planRef, {
         ...updates,
         updatedAt: serverTimestamp(),
@@ -457,7 +488,7 @@ class FirestoreService {
         '📋 FirestoreService: Using project ID:',
         db.app.options.projectId
       );
-      const plansRef = collection(db, 'learningPlanTemplates');
+      const plansRef = collection(checkDb(), 'learningPlanTemplates');
       const q = query(plansRef, orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
 
@@ -477,7 +508,7 @@ class FirestoreService {
       if (apiPlan) {
         console.log(
           '⚠️ FirestoreService: api-integration plan found in list:',
-          apiPlan.name
+          (apiPlan as any).name
         );
         console.log(
           '⚠️ FirestoreService: api-integration plan data:',
@@ -504,7 +535,7 @@ class FirestoreService {
     }
 
     try {
-      const planRef = doc(db, 'learningPlanTemplates', planId);
+      const planRef = doc(checkDb(), 'learningPlanTemplates', planId);
       const planSnap = await getDoc(planRef);
 
       if (planSnap.exists()) {
@@ -523,7 +554,7 @@ class FirestoreService {
   async deleteLearningPlanTemplate(planId: string): Promise<void> {
     try {
       console.log('🗑️ FirestoreService: Attempting to delete plan:', planId);
-      const planRef = doc(db, 'learningPlanTemplates', planId);
+      const planRef = doc(checkDb(), 'learningPlanTemplates', planId);
       console.log('🗑️ FirestoreService: Plan reference created:', planRef.path);
 
       // Check if document exists before deleting
@@ -554,7 +585,7 @@ class FirestoreService {
     limitCount: number = 10
   ): Promise<FirestoreQuestion[]> {
     try {
-      const questionsRef = collection(db, 'questions');
+      const questionsRef = collection(checkDb(), 'questions');
       const q = query(
         questionsRef,
         where('section', '==', section),
@@ -574,7 +605,7 @@ class FirestoreService {
   // Streak Management
   async updateStreak(uid: string, isNewDay: boolean = false): Promise<void> {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(checkDb(), 'users', uid);
 
       if (isNewDay) {
         await updateDoc(userRef, {
@@ -592,7 +623,7 @@ class FirestoreService {
   // Get user's complete progress summary
   async getUserProgressSummary(uid: string): Promise<UserProgress | null> {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(checkDb(), 'users', uid);
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists()) {
@@ -614,7 +645,7 @@ class FirestoreService {
     }
 
     try {
-      const pathRef = doc(db, 'learningPaths', pathId);
+      const pathRef = doc(checkDb(), 'learningPaths', pathId);
       const pathSnap = await getDoc(pathRef);
 
       if (pathSnap.exists()) {
@@ -637,7 +668,7 @@ class FirestoreService {
     }
 
     try {
-      const pathRef = doc(db, 'learningPaths', pathId);
+      const pathRef = doc(checkDb(), 'learningPaths', pathId);
       await updateDoc(pathRef, {
         ...data,
         updatedAt: serverTimestamp(),
@@ -665,8 +696,8 @@ class FirestoreService {
     }
 
     try {
-      const pathRef = doc(db, 'learningPaths', pathId);
-      await pathRef.delete();
+      const pathRef = doc(checkDb(), 'learningPaths', pathId);
+      await deleteDoc(pathRef);
       return true;
     } catch (error) {
       console.error('Error deleting learning path:', error);
@@ -682,7 +713,7 @@ class FirestoreService {
     }
 
     try {
-      const sectionsRef = collection(db, 'sections');
+      const sectionsRef = collection(checkDb(), 'sections');
       const q = query(sectionsRef, orderBy('order', 'asc'));
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
@@ -707,7 +738,7 @@ class FirestoreService {
     }
 
     try {
-      const sectionsRef = collection(db, 'sections');
+      const sectionsRef = collection(checkDb(), 'sections');
       const docRef = await addDoc(sectionsRef, {
         ...sectionData,
         createdAt: serverTimestamp(),
@@ -732,7 +763,7 @@ class FirestoreService {
     }
 
     try {
-      const sectionRef = doc(db, 'sections', sectionId);
+      const sectionRef = doc(checkDb(), 'sections', sectionId);
       await updateDoc(sectionRef, {
         ...updates,
         updatedAt: serverTimestamp(),
@@ -765,8 +796,8 @@ class FirestoreService {
     }
 
     try {
-      const sectionRef = doc(db, 'sections', sectionId);
-      await sectionRef.delete();
+      const sectionRef = doc(checkDb(), 'sections', sectionId);
+      await deleteDoc(sectionRef);
     } catch (error) {
       console.error('Error deleting section:', error);
       throw error;
@@ -781,7 +812,7 @@ class FirestoreService {
     }
 
     try {
-      const categoriesRef = collection(db, 'categories');
+      const categoriesRef = collection(checkDb(), 'categories');
       const q = query(categoriesRef, orderBy('name', 'asc'));
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
@@ -806,7 +837,7 @@ class FirestoreService {
     }
 
     try {
-      const categoriesRef = collection(db, 'categories');
+      const categoriesRef = collection(checkDb(), 'categories');
       const docRef = await addDoc(categoriesRef, {
         ...categoryData,
         createdAt: serverTimestamp(),
@@ -831,7 +862,7 @@ class FirestoreService {
     }
 
     try {
-      const categoryRef = doc(db, 'categories', categoryId);
+      const categoryRef = doc(checkDb(), 'categories', categoryId);
       await updateDoc(categoryRef, {
         ...updates,
         updatedAt: serverTimestamp(),
@@ -864,8 +895,8 @@ class FirestoreService {
     }
 
     try {
-      const categoryRef = doc(db, 'categories', categoryId);
-      await categoryRef.delete();
+      const categoryRef = doc(checkDb(), 'categories', categoryId);
+      await deleteDoc(categoryRef);
     } catch (error) {
       console.error('Error deleting category:', error);
       throw error;

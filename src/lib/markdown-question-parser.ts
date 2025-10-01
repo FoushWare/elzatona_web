@@ -31,11 +31,11 @@ export interface ParseResult {
 export class MarkdownQuestionParser {
   private static readonly QUESTION_PATTERNS = {
     // Multiple choice with options
-    multipleChoice: /^(\d+\.?\s*.*?)\n((?:[a-zA-Z]\)\s*.*\n?)+)/gms,
+    multipleChoice: /^(\d+\.?\s*.*?)\n((?:[a-zA-Z]\)\s*.*\n?)+)/gm,
     // True/False questions
-    trueFalse: /^(\d+\.?\s*.*?)\n(?:True|False|T|F)/gms,
+    trueFalse: /^(\d+\.?\s*.*?)\n(?:True|False|T|F)/gm,
     // Open-ended questions
-    openEnded: /^(\d+\.?\s*.*?)\n(?:Explain|Describe|What|How|Why)/gms,
+    openEnded: /^(\d+\.?\s*.*?)\n(?:Explain|Describe|What|How|Why)/gm,
   };
 
   private static readonly OPTION_PATTERN =
@@ -270,7 +270,7 @@ export class MarkdownQuestionParser {
    */
   private static extractExplanation(section: string): string | undefined {
     const explanationMatch = section.match(
-      /explanation[:\s]+(.*?)(?:\n\n|\n$|$)/is
+      /explanation[:\s]+(.*?)(?:\n\n|\n$|$)/i
     );
     return explanationMatch ? explanationMatch[1].trim() : undefined;
   }
@@ -370,21 +370,55 @@ export class MarkdownQuestionParser {
   /**
    * Convert parsed questions to BulkQuestionData format
    */
-  static convertToBulkData(questions: MarkdownQuestion[]): BulkQuestionData[] {
-    return questions.map(question => ({
+  static convertToBulkData(questions: MarkdownQuestion[]): BulkQuestionData {
+    const unifiedQuestions = questions.map(question => ({
+      id: `md_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       title: question.title,
       content: question.content,
-      type: question.type,
-      difficulty: question.difficulty,
+      type: (question.type === 'single'
+        ? 'multiple-choice'
+        : question.type === 'multiple'
+          ? 'multiple-choice'
+          : 'open-ended') as
+        | 'multiple-choice'
+        | 'open-ended'
+        | 'true-false'
+        | 'code',
+      difficulty: (question.difficulty === 'easy'
+        ? 'beginner'
+        : question.difficulty === 'medium'
+          ? 'intermediate'
+          : 'advanced') as 'beginner' | 'intermediate' | 'advanced',
       options: question.options,
       correctAnswers: question.correctAnswers,
       explanation: question.explanation || '',
-      category: question.category || 'General', // Default category
-      learningPath: question.learningPath || 'Default Learning Path', // Default learning path
-      topic: question.topic || 'General Topic', // Default topic
+      category: question.category || 'General',
+      learningPath: question.learningPath || 'Default Learning Path',
+      topic: question.topic || 'General Topic',
       tags: question.tags || [],
       points: question.points || 1,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: 'markdown-parser',
     }));
+
+    return {
+      questions: unifiedQuestions,
+      metadata: {
+        source: 'markdown-parser',
+        version: '1.0.0',
+        totalCount: unifiedQuestions.length,
+        categories: [...new Set(unifiedQuestions.map(q => q.category))],
+        difficulties: [...new Set(unifiedQuestions.map(q => q.difficulty))],
+        learningPaths: [...new Set(unifiedQuestions.map(q => q.learningPath))],
+      },
+      validation: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+      },
+    };
   }
 
   /**

@@ -214,15 +214,6 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
       showLocalVideo: false, // AI agent doesn't need video
       showParticipantsBar: false,
       userName: 'AI Interviewer',
-      theme: {
-        accentText: '#ffffff',
-        background: '#f8fafc',
-        backgroundAccent: '#e2e8f0',
-        baseText: '#1e293b',
-        border: '#cbd5e1',
-        mainAreaBg: '#ffffff',
-        supportiveText: '#64748b',
-      },
     });
 
     // Event listeners for AI agent

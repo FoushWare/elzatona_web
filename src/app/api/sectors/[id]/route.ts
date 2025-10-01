@@ -4,10 +4,10 @@ import { SectorService } from '@/lib/sector-schema';
 // GET /api/sectors/[id] - Get a specific sector
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const result = await SectorService.getSector(id);
 
@@ -34,10 +34,10 @@ export async function GET(
 // PUT /api/sectors/[id] - Update a sector
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
 
     const result = await SectorService.updateSector(id, body);
@@ -65,10 +65,10 @@ export async function PUT(
 // DELETE /api/sectors/[id] - Delete a sector
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const result = await SectorService.deleteSector(id);
 

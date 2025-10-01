@@ -7,7 +7,7 @@ import { LearningPlanProgress } from '@/types/firestore';
 export async function GET(request: NextRequest) {
   try {
     // Get the Firebase token from cookies
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('firebase-token')?.value;
 
     if (!token) {
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // Get the Firebase token from cookies
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('firebase-token')?.value;
 
     if (!token) {
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     // Get the Firebase token from cookies
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('firebase-token')?.value;
 
     if (!token) {

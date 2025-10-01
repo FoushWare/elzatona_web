@@ -3,10 +3,10 @@ import { firestoreService } from '@/lib/firestore-service';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: pathId } = params;
+    const { id: pathId } = await params;
 
     if (!pathId) {
       return NextResponse.json(
@@ -84,10 +84,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: pathId } = params;
+    const { id: pathId } = await params;
     const body = await request.json();
 
     if (!pathId) {

@@ -108,8 +108,11 @@ export default function PodcastsPage() {
                       loading="lazy"
                       onError={e => {
                         e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling.style.display =
-                          'flex';
+                        (e.currentTarget.nextElementSibling as HTMLElement)
+                          ?.style &&
+                          ((
+                            e.currentTarget.nextElementSibling as HTMLElement
+                          ).style.display = 'flex');
                       }}
                     />
                   ) : null}

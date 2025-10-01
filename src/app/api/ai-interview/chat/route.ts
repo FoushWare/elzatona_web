@@ -199,8 +199,8 @@ export async function POST(request: NextRequest) {
     const conceptMatches = message.match(
       /(React|JavaScript|CSS|HTML|Node\.js|API|Database|Authentication|Security|Performance|Scalability|Testing|Deployment|Architecture|Design Pattern|Algorithm|Data Structure|Optimization|Microservice|Container|Docker|Kubernetes|AWS|Azure|GCP)/gi
     );
-    const mentionedConcepts = conceptMatches
-      ? [...new Set(conceptMatches.map(c => c.toLowerCase()))]
+    const mentionedConcepts: string[] = conceptMatches
+      ? [...new Set((conceptMatches as string[]).map(c => c.toLowerCase()))]
       : [];
 
     // Determine missing concepts based on category

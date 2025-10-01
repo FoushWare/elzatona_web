@@ -21,11 +21,11 @@ const colors = {
   cyan: '\x1b[36m',
 };
 
-function log(message, color = 'reset') {
+function log(message: string, color: keyof typeof colors = 'reset') {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
-function runCommand(command, description) {
+function runCommand(command: string, description: string) {
   log(`\n${colors.cyan}Running: ${description}${colors.reset}`);
   log(`${colors.yellow}Command: ${command}${colors.reset}`);
 
@@ -41,8 +41,10 @@ function runCommand(command, description) {
     return { success: true, output };
   } catch (error) {
     log(`${colors.red}❌ ${description} failed${colors.reset}`);
-    log(`${colors.red}Error: ${error.message}${colors.reset}`);
-    return { success: false, error: error.message };
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
+    log(`${colors.red}Error: ${errorMessage}${colors.reset}`);
+    return { success: false, error: errorMessage };
   }
 }
 
@@ -113,7 +115,12 @@ function runTests() {
     },
   ];
 
-  const results = [];
+  const results: Array<{
+    description: string;
+    success: boolean;
+    output?: string;
+    error?: string;
+  }> = [];
 
   testCommands.forEach(({ command, description }) => {
     const result = runCommand(command, description);
@@ -123,7 +130,14 @@ function runTests() {
   return results;
 }
 
-function generateTestReport(results) {
+function generateTestReport(
+  results: Array<{
+    description: string;
+    success: boolean;
+    output?: string;
+    error?: string;
+  }>
+) {
   log(`\n${colors.bright}${colors.blue}📊 Test Report Summary${colors.reset}`);
 
   const successful = results.filter(r => r.success).length;

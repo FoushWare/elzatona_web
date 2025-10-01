@@ -19,11 +19,18 @@ export async function GET(
     console.log(`Fetching questions for learning path: ${learningPath}`);
 
     // Query questions from Firebase
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
     const questionsRef = collection(db, 'questions');
     const q = query(questionsRef, where('learningPath', '==', learningPath));
 
     const querySnapshot = await getDocs(q);
-    const questions = [];
+    const questions: any[] = [];
 
     querySnapshot.forEach(doc => {
       questions.push({

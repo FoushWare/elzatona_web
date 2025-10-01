@@ -251,7 +251,7 @@ export default function SeniorDevPage() {
               <div
                 className="bg-white h-2 rounded-full"
                 style={{
-                  width: `${totalResources > 0 ? (filteredResources / totalResources) * 100 : 0}%`,
+                  width: `${totalResources > 0 ? (filteredResources.length / totalResources) * 100 : 0}%`,
                 }}
               ></div>
             </div>
@@ -271,7 +271,7 @@ export default function SeniorDevPage() {
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex items-center space-x-4">
                     <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg">
-                      {resource.icon}
+                      📚
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
@@ -305,26 +305,6 @@ export default function SeniorDevPage() {
                     </div>
                   </div>
                 </div>
-
-                {/* Video Tutorial Section */}
-                {resource.videoUrl && (
-                  <div className="mb-6">
-                    <div className="flex items-center space-x-3 bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-xl p-4 border-2 border-purple-200 dark:border-purple-800">
-                      <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5 text-white"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
-                        </svg>
-                      </div>
-                      <span className="text-lg font-bold text-purple-700 dark:text-purple-300">
-                        📹 Video Tutorial Available
-                      </span>
-                    </div>
-                  </div>
-                )}
 
                 <div className="mb-6">
                   <button className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-lg font-bold flex items-center space-x-2 transition-colors duration-200">

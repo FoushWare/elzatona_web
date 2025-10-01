@@ -106,10 +106,10 @@ const convertToLegacyQuestion = (unified: UnifiedQuestion): Question => {
     title: unified.title,
     content: unified.content,
     type: unified.type,
-    category: unified.category,
-    subcategory: unified.subcategory,
-    difficulty: unified.difficulty,
-    learningPath: unified.learningPath,
+    category: unified.category || '',
+    subcategory: unified.subcategory || '',
+    difficulty: unified.difficulty || 'intermediate',
+    learningPath: unified.learningPath || '',
     sectionId: unified.sectionId,
     isActive: unified.isActive,
     createdAt: unified.createdAt,
@@ -575,6 +575,3 @@ export const getQuizQuestions = async (
     throw error;
   }
 };
-
-// Export types for backward compatibility
-export type { Question, QuestionCategory, QuestionAttempt, QuestionStats };

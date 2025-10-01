@@ -178,6 +178,7 @@ export default function LearningPathsPage() {
                 // Convert API data to match original interface
                 const convertedPath = {
                   id: path.id,
+                  name: path.name,
                   title: path.name,
                   description: path.description,
                   difficulty: 'intermediate' as const, // Default difficulty since API doesn't provide it
@@ -187,6 +188,12 @@ export default function LearningPathsPage() {
                   resources: [], // Empty for now, can be populated from API later
                   targetSkills: [], // Empty for now, can be populated from API later
                   prerequisites: [], // Empty for now, can be populated from API later
+                  icon: 'book-open', // Default icon
+                  color: 'blue', // Default color
+                  order: 0, // Default order
+                  isActive: true, // Default active
+                  createdAt: new Date().toISOString(), // Default creation date
+                  updatedAt: new Date().toISOString(), // Default update date
                 };
 
                 return (

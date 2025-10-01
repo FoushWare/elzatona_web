@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 function ChallengesPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const category = searchParams.get('category');
+  const category = searchParams?.get('category');
 
   useEffect(() => {
     // Redirect to fundamentals page with category filter

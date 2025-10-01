@@ -79,6 +79,13 @@ export async function POST(request: NextRequest) {
       source,
     };
 
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
     const docRef = await addDoc(collection(db, 'flashcards'), flashcard);
 
     return NextResponse.json({
@@ -110,6 +117,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         { error: 'User ID is required' },
         { status: 400 }
+      );
+    }
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
       );
     }
 

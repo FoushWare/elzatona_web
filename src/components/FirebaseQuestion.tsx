@@ -94,7 +94,10 @@ export default function FirebaseQuestion({
     setIsSubmitting(true);
     try {
       const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-      const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+      const correctAnswerIndex = currentQuestion.options?.findIndex(
+        option => option.isCorrect
+      );
+      const isCorrect = selectedAnswer === correctAnswerIndex;
 
       await submitAnswer(
         currentQuestion.id,
@@ -104,7 +107,7 @@ export default function FirebaseQuestion({
       );
 
       const points = isCorrect
-        ? Math.max(1, currentQuestion.points - attempts * 2)
+        ? Math.max(1, (currentQuestion.points || 1) - attempts * 2)
         : 0;
 
       const result: QuestionResult = {
@@ -227,7 +230,7 @@ export default function FirebaseQuestion({
           <span className="text-sm text-gray-500 dark:text-gray-400">
             {currentQuestion.category}
           </span>
-          {currentQuestion.tags.length > 0 && (
+          {currentQuestion.tags && currentQuestion.tags.length > 0 && (
             <div className="flex items-center space-x-1">
               {currentQuestion.tags.slice(0, 2).map((tag, index) => (
                 <span
@@ -279,15 +282,18 @@ export default function FirebaseQuestion({
       {/* Question */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-          {currentQuestion.question}
+          {currentQuestion.content}
         </h2>
       </div>
 
       {/* Answer Options */}
       <div className="space-y-3 mb-8">
-        {currentQuestion.options.map((option, index) => {
+        {(currentQuestion.options || []).map((option, index) => {
           const isSelected = selectedAnswer === index;
-          const isCorrect = index === currentQuestion.correctAnswer;
+          const correctAnswerIndex = currentQuestion.options?.findIndex(
+            opt => opt.isCorrect
+          );
+          const isCorrect = index === correctAnswerIndex;
           const isWrong = showResult && isSelected && !isCorrect;
 
           let optionClasses =
@@ -317,7 +323,7 @@ export default function FirebaseQuestion({
               onClick={() => handleAnswerSelect(index)}
             >
               <div className="flex items-center justify-between">
-                <span className="font-medium">{option}</span>
+                <span className="font-medium">{option.text}</span>
                 {showResult && isCorrect && (
                   <CheckCircle className="w-5 h-5 text-green-500" />
                 )}

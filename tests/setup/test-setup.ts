@@ -20,7 +20,10 @@ beforeAll(async () => {
   console.log('🚀 Starting Content Management Test Suite');
 
   // Set up test environment
-  process.env.NODE_ENV = 'test';
+  Object.defineProperty(process.env, 'NODE_ENV', {
+    value: 'test',
+    writable: true,
+  });
   process.env.TEST_BASE_URL =
     process.env.TEST_BASE_URL || 'http://localhost:3000';
 

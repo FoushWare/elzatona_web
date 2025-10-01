@@ -36,6 +36,13 @@ export class AudioCollectionService {
     answerAudioPath?: string
   ): Promise<{ success: boolean; error?: string; mappingId?: string }> {
     try {
+      if (!db) {
+        return {
+          success: false,
+          error: 'Database not initialized',
+        };
+      }
+
       const mappingId = `${learningPath}_${sectionId}_${questionNumber}`;
       const audioPaths = generateAudioPaths(
         learningPath,
@@ -85,6 +92,13 @@ export class AudioCollectionService {
     error?: string;
   }> {
     try {
+      if (!db) {
+        return {
+          success: false,
+          error: 'Database not initialized',
+        };
+      }
+
       const q = query(
         collection(db, this.COLLECTION_NAME),
         where('questionId', '==', questionId),
@@ -119,6 +133,13 @@ export class AudioCollectionService {
     error?: string;
   }> {
     try {
+      if (!db) {
+        return {
+          success: false,
+          error: 'Database not initialized',
+        };
+      }
+
       const q = query(
         collection(db, this.COLLECTION_NAME),
         where('learningPath', '==', learningPath),
@@ -152,6 +173,13 @@ export class AudioCollectionService {
     error?: string;
   }> {
     try {
+      if (!db) {
+        return {
+          success: false,
+          error: 'Database not initialized',
+        };
+      }
+
       const q = query(
         collection(db, this.COLLECTION_NAME),
         where('learningPath', '==', learningPath),
@@ -183,6 +211,13 @@ export class AudioCollectionService {
     audioInfo: AudioFileInfo
   ): Promise<{ success: boolean; error?: string }> {
     try {
+      if (!db) {
+        return {
+          success: false,
+          error: 'Database not initialized',
+        };
+      }
+
       const mappingResult = await this.getAudioMapping(questionId);
 
       if (!mappingResult.success || !mappingResult.mapping) {
@@ -217,6 +252,13 @@ export class AudioCollectionService {
     questionId: string
   ): Promise<{ success: boolean; error?: string }> {
     try {
+      if (!db) {
+        return {
+          success: false,
+          error: 'Database not initialized',
+        };
+      }
+
       const mappingResult = await this.getAudioMapping(questionId);
 
       if (!mappingResult.success || !mappingResult.mapping) {
@@ -244,6 +286,13 @@ export class AudioCollectionService {
     sectionId: string
   ): Promise<{ success: boolean; nextNumber?: number; error?: string }> {
     try {
+      if (!db) {
+        return {
+          success: false,
+          error: 'Database not initialized',
+        };
+      }
+
       const q = query(
         collection(db, this.COLLECTION_NAME),
         where('learningPath', '==', learningPath),

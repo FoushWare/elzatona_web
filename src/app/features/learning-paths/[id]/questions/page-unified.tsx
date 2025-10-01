@@ -48,7 +48,7 @@ interface UnifiedQuestion {
 export default function QuestionsPage() {
   const params = useParams();
   const router = useRouter();
-  const pathId = params.id as string;
+  const pathId = params?.id as string;
   const { user } = useFirebaseAuth();
   const { toasts, removeToast, showSuccess, showError } = useToast();
 
@@ -97,14 +97,36 @@ export default function QuestionsPage() {
           ...q,
           // Convert unified format to expected format
           question: q.content,
-          answer: q.explanation,
-          options: q.options, // Keep full option structure with id, text, isCorrect
+          answer: q.explanation || 'No explanation available',
+          explanation: q.explanation || 'No explanation available',
+          options: q.options || [], // Keep full option structure with id, text, isCorrect
+          type:
+            q.type === 'multiple-choice'
+              ? 'single'
+              : q.type === 'true-false'
+                ? 'single'
+                : 'single',
+          difficulty:
+            q.difficulty === 'beginner'
+              ? 'easy'
+              : q.difficulty === 'intermediate'
+                ? 'medium'
+                : 'hard',
+          category: q.category || 'General',
+          learningPath: q.learningPath || 'general',
+          tags: q.tags || [],
+          points: q.points || 1,
           correctAnswer:
-            q.type === 'single'
-              ? q.options.findIndex(opt => opt.isCorrect)
-              : q.options
+            q.type === 'multiple-choice' || q.type === 'true-false'
+              ? (q.options || []).findIndex(opt => opt.isCorrect)
+              : (q.options || [])
                   .map((opt, index) => (opt.isCorrect ? index : -1))
                   .filter(i => i !== -1),
+          correctAnswers: (q.options || [])
+            .map((opt, index) => (opt.isCorrect ? index : -1))
+            .filter(i => i !== -1)
+            .map(i => i.toString()),
+          isComplete: true,
         })),
       },
     ];
@@ -209,12 +231,20 @@ export default function QuestionsPage() {
     if (!currentQuestion || !user) return;
 
     try {
-      await flashcardService.addFlashcard(user.uid, {
-        front: currentQuestion.question,
-        back: currentQuestion.explanation,
+      await flashcardService.createFlashcard({
+        question: currentQuestion.content,
+        answer: currentQuestion.explanation,
         category: currentQuestion.category,
-        difficulty: currentQuestion.difficulty,
+        difficulty:
+          currentQuestion.difficulty === 'easy'
+            ? 'beginner'
+            : currentQuestion.difficulty === 'medium'
+              ? 'intermediate'
+              : 'advanced',
         tags: currentQuestion.tags,
+        source: 'learning-path',
+        status: 'new',
+        addedBy: 'manual',
       });
       showSuccess('Added to flashcards! 📚');
     } catch (error) {
@@ -337,10 +367,16 @@ export default function QuestionsPage() {
                 <div className="flex items-center space-x-2">
                   {user && (
                     <AddToFlashcard
-                      question={currentQuestion.question}
+                      question={currentQuestion.content}
                       answer={currentQuestion.explanation || ''}
                       category={currentQuestion.category || 'General'}
-                      difficulty={currentQuestion.difficulty || 'beginner'}
+                      difficulty={
+                        currentQuestion.difficulty === 'easy'
+                          ? 'beginner'
+                          : currentQuestion.difficulty === 'medium'
+                            ? 'intermediate'
+                            : 'advanced'
+                      }
                       source={`Learning Path: ${learningPath?.title || 'Unknown'}`}
                       className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                       onStatusChange={status => {
@@ -359,13 +395,16 @@ export default function QuestionsPage() {
             {/* Question Content */}
             <div className="px-6 py-6">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-                <ExpandableText text={currentQuestion.question} />
+                <ExpandableText text={currentQuestion.content} />
               </h2>
 
               {/* Audio Question */}
               {currentQuestion.audioQuestion && (
                 <div className="mb-6">
-                  <CustomAudioPlayer src={currentQuestion.audioQuestion} />
+                  <CustomAudioPlayer
+                    audioUrl={currentQuestion.audioQuestion}
+                    fallbackText="Audio question not available"
+                  />
                 </div>
               )}
 
@@ -431,7 +470,10 @@ export default function QuestionsPage() {
                   {/* Audio Answer */}
                   {currentQuestion.audioAnswer && (
                     <div className="mt-4">
-                      <CustomAudioPlayer src={currentQuestion.audioAnswer} />
+                      <CustomAudioPlayer
+                        audioUrl={currentQuestion.audioAnswer}
+                        fallbackText="Audio answer not available"
+                      />
                     </div>
                   )}
                 </div>

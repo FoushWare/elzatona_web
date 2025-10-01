@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDefaultAdminSections } from '@/lib/learning-path-mapping';
 import UnifiedQuestionService from '@/lib/unified-question-schema';
+import { db } from '@/lib/firebase-server';
 
 // GET - Get all admin sections with question counts from unified system
 export async function GET() {
@@ -14,7 +15,8 @@ export async function GET() {
     const sectionsWithCounts = await Promise.all(
       sections.map(async section => {
         try {
-          const questions = await UnifiedQuestionService.getQuestions({
+          const service = new UnifiedQuestionService(db);
+          const questions = await service.getQuestions({
             learningPath: section.learningPathId,
             isActive: true,
           });
@@ -72,22 +74,14 @@ export async function POST(request: NextRequest) {
       isActive: true,
     };
 
-    const result = await UnifiedQuestionService.createQuestion(
-      questionWithLearningPath
-    );
+    const service = new UnifiedQuestionService(db);
+    const result = await service.createQuestion(questionWithLearningPath);
 
-    if (result.success) {
-      return NextResponse.json({
-        success: true,
-        data: result.data,
-        message: 'Question added to section successfully',
-      });
-    } else {
-      return NextResponse.json(
-        { success: false, error: result.error },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json({
+      success: true,
+      data: result,
+      message: 'Question added to section successfully',
+    });
   } catch (error) {
     console.error('Add question to section API error:', error);
     return NextResponse.json(

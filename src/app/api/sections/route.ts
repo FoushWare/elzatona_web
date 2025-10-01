@@ -3,11 +3,19 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 // GET /api/sections - Get all sections
 export async function GET() {
   try {
-    const snapshot = await db.collection('sections').get();
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
+    const snapshot = await getDocs(collection(db, 'sections'));
     const sections = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
@@ -65,13 +73,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const docRef = db.collection('sections').doc();
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
     const sectionWithTimestamps = {
       ...sectionData,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    await docRef.set(sectionWithTimestamps);
+    const docRef = await addDoc(
+      collection(db, 'sections'),
+      sectionWithTimestamps
+    );
     const sectionId = docRef.id;
 
     return NextResponse.json({

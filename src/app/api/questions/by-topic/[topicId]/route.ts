@@ -34,7 +34,7 @@ export async function GET(
     const q = query(questionsRef, where('topics', 'array-contains', topicId));
 
     const querySnapshot = await getDocs(q);
-    const questions = [];
+    const questions: any[] = [];
 
     querySnapshot.forEach(doc => {
       questions.push({

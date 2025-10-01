@@ -4,10 +4,10 @@ import { firestoreService } from '@/lib/firestore-service';
 // GET /api/guided-learning/plans/[planId]/sections - Get section configuration for a plan
 export async function GET(
   request: NextRequest,
-  { params }: { params: { planId: string } }
+  { params }: { params: Promise<{ planId: string }> }
 ) {
   try {
-    const { planId } = params;
+    const { planId } = await params;
 
     // Get the plan details
     const plans = await firestoreService.getLearningPlanTemplates();
@@ -42,10 +42,10 @@ export async function GET(
 // PUT /api/guided-learning/plans/[planId]/sections - Update section configuration for a plan
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { planId: string } }
+  { params }: { params: Promise<{ planId: string }> }
 ) {
   try {
-    const { planId } = params;
+    const { planId } = await params;
     const config = await request.json();
 
     // Get the current plan

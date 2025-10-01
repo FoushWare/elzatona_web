@@ -131,11 +131,25 @@ export default function UnifiedQuestionManager({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Map form type and difficulty to UnifiedQuestion types
+    const mappedFormData = {
+      ...formData,
+      type:
+        formData.type === 'single'
+          ? 'multiple-choice'
+          : ('multiple-choice' as const),
+      difficulty: (formData.difficulty === 'easy'
+        ? 'beginner'
+        : formData.difficulty === 'medium'
+          ? 'intermediate'
+          : 'advanced') as 'beginner' | 'intermediate' | 'advanced',
+    };
+
     if (editingQuestion) {
-      await updateQuestion(editingQuestion.id, formData);
+      await updateQuestion(editingQuestion.id, mappedFormData);
       setEditingQuestion(null);
     } else {
-      await createQuestion(formData);
+      await createQuestion(mappedFormData);
     }
 
     setShowCreateForm(false);
@@ -172,17 +186,27 @@ export default function UnifiedQuestionManager({
     setFormData({
       title: question.title,
       content: question.content,
-      type: question.type,
-      category: question.category,
-      difficulty: question.difficulty,
-      learningPath: question.learningPath,
-      points: question.points,
+      type:
+        question.type === 'multiple-choice'
+          ? 'single'
+          : ('multiple' as 'single' | 'multiple'),
+      category: question.category || '',
+      difficulty:
+        question.difficulty === 'beginner'
+          ? 'easy'
+          : question.difficulty === 'intermediate'
+            ? 'medium'
+            : ('hard' as 'easy' | 'medium' | 'hard'),
+      learningPath: question.learningPath || '',
+      points: question.points || 5,
       timeLimit: question.timeLimit || 30,
-      explanation: question.explanation,
-      options: question.options,
-      correctAnswers: question.correctAnswers,
-      tags: question.tags,
-      isActive: question.isActive,
+      explanation: question.explanation || '',
+      options: question.options || [],
+      correctAnswers: (question.options || [])
+        .filter(opt => opt.isCorrect)
+        .map(opt => opt.id),
+      tags: question.tags || [],
+      isActive: question.isActive ?? true,
     });
     setShowCreateForm(true);
   };
@@ -322,20 +346,20 @@ export default function UnifiedQuestionManager({
           <Card>
             <CardContent className="p-4">
               <div className="text-2xl font-bold">
-                {stats.incompleteQuestions}
+                {stats.inactiveQuestions}
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                Incomplete
+                Inactive
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4">
               <div className="text-2xl font-bold">
-                {stats.averagePoints.toFixed(1)}
+                {stats.averageDifficulty.toFixed(1)}
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                Avg Points
+                Avg Difficulty
               </div>
             </CardContent>
           </Card>
@@ -396,8 +420,8 @@ export default function UnifiedQuestionManager({
               <SelectContent>
                 <SelectItem value="all">All Paths</SelectItem>
                 {learningPaths.map(path => (
-                  <SelectItem key={path.id} value={path.name}>
-                    {path.name}
+                  <SelectItem key={path.id} value={path.title}>
+                    {path.title}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -650,8 +674,8 @@ export default function UnifiedQuestionManager({
                     </SelectTrigger>
                     <SelectContent>
                       {learningPaths.map(path => (
-                        <SelectItem key={path.id} value={path.name}>
-                          {path.name}
+                        <SelectItem key={path.id} value={path.title}>
+                          {path.title}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -787,13 +811,6 @@ export default function UnifiedQuestionManager({
                       >
                         {question.isActive ? 'Active' : 'Inactive'}
                       </Badge>
-                      <Badge
-                        variant={
-                          question.isComplete ? 'default' : 'destructive'
-                        }
-                      >
-                        {question.isComplete ? 'Complete' : 'Incomplete'}
-                      </Badge>
                     </div>
                     <p className="text-gray-600 dark:text-gray-400 mb-2">
                       {question.content}
@@ -805,7 +822,7 @@ export default function UnifiedQuestionManager({
                       <span>Points: {question.points}</span>
                       <span>Type: {question.type}</span>
                     </div>
-                    {question.tags.length > 0 && (
+                    {question.tags && question.tags.length > 0 && (
                       <div className="flex gap-1 mt-2">
                         {question.tags.map(tag => (
                           <Badge

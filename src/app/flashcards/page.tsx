@@ -97,11 +97,14 @@ export default function FlashcardsPage() {
 
         setStats({
           total: allCards.length,
-          new: allCards.filter(card => card.status === 'new').length,
-          learning: allCards.filter(card => card.status === 'learning').length,
-          review: allCards.filter(card => card.status === 'review').length,
-          mastered: allCards.filter(card => card.status === 'mastered').length,
-          due: allCards.filter(card => card.nextReview <= now).length,
+          new: allCards.filter((card: any) => card.status === 'new').length,
+          learning: allCards.filter((card: any) => card.status === 'learning')
+            .length,
+          review: allCards.filter((card: any) => card.status === 'review')
+            .length,
+          mastered: allCards.filter((card: any) => card.status === 'mastered')
+            .length,
+          due: allCards.filter((card: any) => card.nextReview <= now).length,
         });
       }
     } catch (error) {

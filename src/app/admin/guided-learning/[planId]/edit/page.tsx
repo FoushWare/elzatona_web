@@ -301,7 +301,7 @@ export default function PlanEditorPage() {
 
         console.log(
           '🔍 Plan sections:',
-          sections.map(s => ({
+          sections.map((s: any) => ({
             id: s.id,
             name: s.name,
             questions: s.questions,
@@ -321,7 +321,7 @@ export default function PlanEditorPage() {
             );
             console.log(
               '🔍 Plan questions found:',
-              planQuestionsData.map(q => ({
+              planQuestionsData.map((q: any) => ({
                 id: q.id,
                 title: q.title,
                 category: q.category,

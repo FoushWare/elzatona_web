@@ -44,9 +44,9 @@ export function OpenEndedQuestion({
         body: JSON.stringify({
           question: question.content,
           userAnswer: answer.trim(),
-          expectedAnswer: question.expectedAnswer,
-          customPrompt: question.aiValidationPrompt,
-          acceptPartialCredit: question.acceptPartialCredit,
+          expectedAnswer: (question as any).expectedAnswer || '',
+          customPrompt: (question as any).aiValidationPrompt || '',
+          acceptPartialCredit: (question as any).acceptPartialCredit || false,
         }),
       });
 
@@ -145,9 +145,10 @@ export function OpenEndedQuestion({
               AI Validation Result
             </h4>
             <div
-              className={`px-3 py-1 rounded-full text-sm font-medium ${getScoreColor(validationResult.score)}`}
+              className={`px-3 py-1 rounded-full text-sm font-medium ${getScoreColor((validationResult as any).score || 0)}`}
             >
-              {getScoreIcon(validationResult.score)} {validationResult.score}%
+              {getScoreIcon((validationResult as any).score || 0)}{' '}
+              {(validationResult as any).score || 0}%
             </div>
           </div>
 
@@ -175,29 +176,6 @@ export function OpenEndedQuestion({
                 </p>
               </div>
             </div>
-
-            {/* Suggestions */}
-            {validationResult.suggestions &&
-              validationResult.suggestions.length > 0 && (
-                <div>
-                  <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Suggestions:
-                  </h5>
-                  <ul className="space-y-1">
-                    {validationResult.suggestions.map(
-                      (suggestion: string, index: number) => (
-                        <li
-                          key={index}
-                          className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300"
-                        >
-                          <span className="text-blue-500 mt-0.5">•</span>
-                          {suggestion}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              )}
 
             {/* Explanation */}
             {question.explanation && (

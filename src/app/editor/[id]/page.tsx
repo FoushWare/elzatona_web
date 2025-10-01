@@ -8,12 +8,13 @@ import CodeEditor from '@/components/CodeEditor';
 import TestRunner from '@/components/TestRunner';
 
 interface EditorPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function EditorPage({ params }: EditorPageProps) {
+export default async function EditorPage({ params }: EditorPageProps) {
+  const { id } = await params;
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [htmlCode, setHtmlCode] = useState('');
   const [cssCode, setCssCode] = useState('');
@@ -23,7 +24,7 @@ export default function EditorPage({ params }: EditorPageProps) {
   const [isTestRunnerVisible, setIsTestRunnerVisible] = useState(false);
 
   useEffect(() => {
-    const foundChallenge = getChallengeById(params.id);
+    const foundChallenge = getChallengeById(id);
     if (!foundChallenge) {
       notFound();
     }
@@ -31,7 +32,7 @@ export default function EditorPage({ params }: EditorPageProps) {
     setHtmlCode(foundChallenge.starterCode.html);
     setCssCode(foundChallenge.starterCode.css);
     setJavascriptCode(foundChallenge.starterCode.javascript);
-  }, [params.id]);
+  }, [id]);
 
   const handleCodeChange = (html: string, css: string, javascript: string) => {
     setHtmlCode(html);

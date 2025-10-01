@@ -23,8 +23,8 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   const isAuditLogsPage = pathname === '/admin/audit-logs';
   const isGuidedLearningPage = pathname === '/admin/guided-learning';
   const isGuidedLearningEditPage =
-    pathname.startsWith('/admin/guided-learning/') &&
-    pathname.endsWith('/edit');
+    pathname?.startsWith('/admin/guided-learning/') &&
+    pathname?.endsWith('/edit');
   const isQuestionsPage = pathname === '/admin/content/questions';
   const isPublicPage =
     isLoginPage ||

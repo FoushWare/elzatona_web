@@ -407,7 +407,6 @@ export default function MyPlansPage() {
         <SignInPopup
           isOpen={showSignInPopup}
           onClose={handleSignInClose}
-          onSkip={handleSignInSkip}
           onSuccess={handleSignInSuccess}
         />
       )}

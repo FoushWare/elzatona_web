@@ -132,12 +132,35 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
             // Set HTTP-only cookie for existing users too
             await cookieManager.ensureAuthCookie(firebaseUser);
           } else {
-            // Create comprehensive user object if not in Firestore or if Firestore fails
-            const comprehensiveUser = {
+            // Create FirebaseUser object for context
+            const firebaseUserForContext: FirebaseUser = {
               uid: firebaseUser.uid,
               email: firebaseUser.email,
               displayName: firebaseUser.displayName,
               photoURL: firebaseUser.photoURL,
+              provider: firebaseUser.providerData[0]?.providerId || 'email',
+              isEmailVerified: firebaseUser.emailVerified,
+              preferences: {
+                theme: 'system',
+                notifications: true,
+                language: 'en',
+              },
+              progress: {
+                questionsCompleted: 0,
+                totalPoints: 0,
+                currentStreak: 0,
+                badges: [],
+                achievements: [],
+              },
+            };
+            setUser(firebaseUserForContext);
+
+            // Create comprehensive user object for Firestore
+            const comprehensiveUser = {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email || undefined,
+              displayName: firebaseUser.displayName || undefined,
+              photoURL: firebaseUser.photoURL || undefined,
               provider: firebaseUser.providerData[0]?.providerId || 'email',
               isEmailVerified: firebaseUser.emailVerified,
               preferences: {
@@ -182,7 +205,6 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
               },
               learningPlans: [],
             };
-            setUser(comprehensiveUser as FirebaseUser);
 
             // Try to save comprehensive user data to Firestore (don't wait for it)
             firestoreService

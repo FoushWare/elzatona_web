@@ -12,6 +12,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import { OpenEndedQuestion } from '@/components/OpenEndedQuestion';
 import { motion, AnimatePresence } from 'framer-motion';
 import { checkAudioExists } from '@/lib/audio-utils';
+import { UnifiedQuestion } from '@/lib/unified-question-schema';
 
 // Define QuestionGroup type locally
 interface QuestionGroup {
@@ -20,42 +21,10 @@ interface QuestionGroup {
   questions: UnifiedQuestion[];
 }
 
-interface UnifiedQuestion {
-  id: string;
-  title: string;
-  content: string;
-  type: 'single' | 'multiple' | 'text' | 'code' | 'open-ended';
-  difficulty: 'easy' | 'medium' | 'hard';
-  category: string;
-  learningPath: string;
-  options: Array<{
-    id: string;
-    text: string;
-    isCorrect: boolean;
-  }>;
-  correctAnswers: string[];
-  explanation: string;
-  audioQuestion?: string;
-  audioAnswer?: string;
-  showQuestionAudio?: boolean;
-  showAnswerAudio?: boolean;
-  // Open-ended question fields
-  expectedAnswer?: string;
-  aiValidationPrompt?: string;
-  acceptPartialCredit?: boolean;
-  tags: string[];
-  points: number;
-  timeLimit?: number;
-  createdAt: string;
-  updatedAt: string;
-  isActive: boolean;
-  isComplete: boolean;
-}
-
 export default function QuestionsPage() {
   const params = useParams();
   const router = useRouter();
-  const pathId = params.id as string;
+  const pathId = params?.id as string;
   const { user } = useFirebaseAuth();
   const { toasts, removeToast, showSuccess, showError } = useToast();
 
@@ -133,21 +102,26 @@ export default function QuestionsPage() {
           ...q,
           // Convert unified format to expected format
           question: q.content,
-          answer: q.explanation,
-          options: q.options, // Keep full option structure with id, text, isCorrect
+          answer: q.explanation || 'No explanation available',
+          explanation: q.explanation || 'No explanation available',
+          options: q.options || [], // Keep full option structure with id, text, isCorrect
+          type: q.type,
+          difficulty: q.difficulty,
+          category: q.category || 'General',
+          learningPath: q.learningPath || 'general',
+          tags: q.tags || [],
+          points: q.points || 1,
           correctAnswer:
-            q.type === 'single'
-              ? q.options.findIndex(opt => opt.isCorrect)
-              : q.options
+            q.type === 'multiple-choice' || q.type === 'true-false'
+              ? (q.options || []).findIndex(opt => opt.isCorrect)
+              : (q.options || [])
                   .map((opt, index) => (opt.isCorrect ? index : -1))
                   .filter(i => i !== -1),
-          // Use audio from question data or generate default paths
-          audioQuestion:
-            q.audioQuestion ||
-            `/audio/${learningPath?.id}/questions/question-${index + 1}.mp3`,
-          audioAnswer:
-            q.audioAnswer ||
-            `/audio/${learningPath?.id}/questions/answer-${index + 1}.mp3`,
+          correctAnswers: (q.options || [])
+            .map((opt, index) => (opt.isCorrect ? index : -1))
+            .filter(i => i !== -1)
+            .map(i => i.toString()),
+          isComplete: true,
         })),
       },
     ];
@@ -197,21 +171,13 @@ export default function QuestionsPage() {
         );
 
         for (const question of allQuestions) {
-          const questionAudio = question.audioQuestion;
-          const answerAudio = question.audioAnswer;
-
-          const [questionExists, answerExists] = await Promise.all([
-            questionAudio ? checkAudioExists(questionAudio) : false,
-            answerAudio ? checkAudioExists(answerAudio) : false,
-          ]);
-
           newAudioStates[question.id] = {
-            hasQuestionAudio: questionExists,
-            hasAnswerAudio: answerExists,
-            questionAudioPath: questionExists ? questionAudio : undefined,
-            answerAudioPath: answerExists ? answerAudio : undefined,
-            showQuestionAudio: question.showQuestionAudio ?? true,
-            showAnswerAudio: question.showAnswerAudio ?? true,
+            hasQuestionAudio: false,
+            hasAnswerAudio: false,
+            questionAudioPath: undefined,
+            answerAudioPath: undefined,
+            showQuestionAudio: false,
+            showAnswerAudio: false,
           };
         }
 
@@ -243,15 +209,18 @@ export default function QuestionsPage() {
 
     let newSelectedAnswer: string | string[];
 
-    if (currentQuestion.type === 'single') {
-      newSelectedAnswer = currentQuestion.options[answerIndex].id;
+    if (
+      currentQuestion.type === 'multiple-choice' ||
+      currentQuestion.type === 'true-false'
+    ) {
+      newSelectedAnswer = currentQuestion.options?.[answerIndex]?.id || '';
       setSelectedAnswer(newSelectedAnswer);
     } else {
       // Multiple choice - toggle selection
       const currentAnswers = Array.isArray(selectedAnswer)
         ? selectedAnswer
         : [];
-      const answerId = currentQuestion.options[answerIndex].id;
+      const answerId = currentQuestion.options?.[answerIndex]?.id || '';
 
       if (currentAnswers.includes(answerId)) {
         newSelectedAnswer = currentAnswers.filter(id => id !== answerId);
@@ -263,11 +232,16 @@ export default function QuestionsPage() {
     }
 
     // Check if answer is correct immediately
+    const correctAnswers =
+      currentQuestion.options
+        ?.map((opt, index) => (opt.isCorrect ? opt.id : null))
+        .filter(Boolean) || [];
+
     const isCorrect = Array.isArray(newSelectedAnswer)
       ? newSelectedAnswer.every(answerId =>
-          currentQuestion.correctAnswers.includes(answerId)
-        ) && newSelectedAnswer.length === currentQuestion.correctAnswers.length
-      : currentQuestion.correctAnswers.includes(newSelectedAnswer as string);
+          correctAnswers.includes(answerId)
+        ) && newSelectedAnswer.length === correctAnswers.length
+      : correctAnswers.includes(newSelectedAnswer as string);
 
     // Set correctness immediately for visual feedback
     setIsAnswerCorrect(isCorrect);
@@ -428,9 +402,9 @@ export default function QuestionsPage() {
                 <div className="flex items-center space-x-3">
                   <span
                     className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold ${
-                      currentQuestion.difficulty === 'easy'
+                      currentQuestion.difficulty === 'beginner'
                         ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                        : currentQuestion.difficulty === 'medium'
+                        : currentQuestion.difficulty === 'intermediate'
                           ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
                           : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                     }`}
@@ -445,10 +419,10 @@ export default function QuestionsPage() {
                 <div className="flex items-center space-x-2">
                   {user && (
                     <AddToFlashcard
-                      question={currentQuestion.question}
+                      question={currentQuestion.content}
                       answer={currentQuestion.explanation || ''}
                       category={currentQuestion.category || 'General'}
-                      difficulty={currentQuestion.difficulty || 'beginner'}
+                      difficulty={currentQuestion.difficulty}
                       source={`Learning Path: ${learningPath?.title || 'Unknown'}`}
                       className="p-3 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors bg-white dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-md"
                       onStatusChange={status => {
@@ -550,7 +524,7 @@ export default function QuestionsPage() {
                               className="p-2 text-gray-400 hover:text-white transition-all duration-200 bg-gray-800/50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-700/70 dark:hover:bg-gray-600/70 backdrop-blur-sm border border-gray-600/30 dark:border-gray-500/30"
                               onClick={() => {
                                 navigator.clipboard.writeText(
-                                  currentQuestion.question
+                                  currentQuestion.content
                                 );
                               }}
                               title="Copy question"
@@ -572,7 +546,7 @@ export default function QuestionsPage() {
                             {/* Syntax highlighting effect */}
                             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></span>
                             <span className="relative z-10">
-                              {currentQuestion.question}
+                              {currentQuestion.content}
                             </span>
                           </code>
                         </pre>
@@ -644,15 +618,19 @@ export default function QuestionsPage() {
                           className="mt-2"
                         >
                           {(() => {
+                            const correctAnswers =
+                              currentQuestion.options
+                                ?.map((opt, index) =>
+                                  opt.isCorrect ? opt.id : null
+                                )
+                                .filter(Boolean) || [];
+
                             const isCorrect = Array.isArray(selectedAnswer)
                               ? selectedAnswer.every(answerId =>
-                                  currentQuestion.correctAnswers.includes(
-                                    answerId
-                                  )
+                                  correctAnswers.includes(answerId)
                                 ) &&
-                                selectedAnswer.length ===
-                                  currentQuestion.correctAnswers.length
-                              : currentQuestion.correctAnswers.includes(
+                                selectedAnswer.length === correctAnswers.length
+                              : correctAnswers.includes(
                                   selectedAnswer as string
                                 );
 
@@ -694,14 +672,17 @@ export default function QuestionsPage() {
                         </motion.div>
                       )}
                     </div>
-                    {currentQuestion.options.map((option, index) => {
+                    {(currentQuestion.options || []).map((option, index) => {
                       const isSelected = Array.isArray(selectedAnswer)
                         ? selectedAnswer.includes(option.id)
                         : selectedAnswer === option.id;
 
-                      const isCorrect = currentQuestion.correctAnswers.includes(
-                        option.id
-                      );
+                      const correctAnswers =
+                        currentQuestion.options
+                          ?.map((opt, index) => (opt.isCorrect ? opt.id : null))
+                          .filter(Boolean) || [];
+
+                      const isCorrect = correctAnswers.includes(option.id);
                       const showCorrectness = selectedAnswer !== null;
 
                       return (
