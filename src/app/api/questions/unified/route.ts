@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
 
     const totalPages = Math.ceil(totalCount / pageSize);
     
-    // For faster response, don't include pagination details if not needed
+    // Include pagination by default, but allow disabling for performance
     const includePagination = searchParams.get('includePagination') !== 'false';
 
     return NextResponse.json({
