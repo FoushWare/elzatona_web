@@ -104,7 +104,7 @@ export default function QuestionsManagementPage() {
         const params = new URLSearchParams({
           page: page.toString(),
           pageSize: size.toString(),
-          includePagination: 'false', // Disable pagination for faster loading
+          includePagination: 'true', // Keep pagination for proper functionality
         });
 
         if (category !== 'all') {
@@ -118,7 +118,15 @@ export default function QuestionsManagementPage() {
         if (data.success) {
           console.log('✅ Questions loaded:', data.data.length);
           setQuestions(data.data || []);
-          // Pagination will be loaded separately by loadTotalCount
+
+          // Update pagination state from API response
+          if (data.pagination) {
+            setTotalCount(data.pagination.totalCount);
+            setTotalPages(data.pagination.totalPages);
+            setHasNextPage(data.pagination.hasNext);
+            setHasPrevPage(data.pagination.hasPrev);
+            setCurrentPage(data.pagination.page);
+          }
         } else {
           console.error('❌ API error:', data.error);
           setError(data.error || 'Failed to load questions');
@@ -163,8 +171,11 @@ export default function QuestionsManagementPage() {
       
       if (data.success) {
         console.log('✅ Total count loaded:', data.data.totalCount);
-        setTotalCount(data.data.totalCount);
-        setTotalPages(Math.ceil(data.data.totalCount / pageSize));
+        // Only update if we don't already have pagination data
+        if (totalCount === 0) {
+          setTotalCount(data.data.totalCount);
+          setTotalPages(Math.ceil(data.data.totalCount / pageSize));
+        }
       }
     } catch (err) {
       console.error('❌ Error loading total count:', err);
@@ -214,9 +225,9 @@ export default function QuestionsManagementPage() {
     }
   }, [currentPage]);
 
-  // Load total count after questions are loaded (with a small delay)
+  // Load total count only if we don't have pagination data from main API
   useEffect(() => {
-    if (questions.length > 0) {
+    if (questions.length > 0 && totalCount === 0) {
       // Load total count after a short delay to not block the UI
       const timer = setTimeout(() => {
         loadTotalCount();
@@ -224,7 +235,7 @@ export default function QuestionsManagementPage() {
       
       return () => clearTimeout(timer);
     }
-  }, [questions.length, loadTotalCount]);
+  }, [questions.length, totalCount, loadTotalCount]);
 
   // Pagination functions
   const handlePageChange = (newPage: number) => {
