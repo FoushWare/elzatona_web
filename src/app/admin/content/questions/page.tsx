@@ -180,17 +180,17 @@ export default function QuestionsManagementPage() {
     };
   }, [selectedCategory, pageSize]); // Remove loadQuestions from dependencies
 
+  // Load topics only once on mount (not on every category change)
+  useEffect(() => {
+    loadTopics();
+  }, [loadTopics]);
+
   // Load data when currentPage changes (for pagination)
   useEffect(() => {
     if (currentPage > 1) {
       loadQuestions(currentPage, selectedCategory, pageSize);
     }
   }, [currentPage]);
-
-  // Load topics on mount
-  useEffect(() => {
-    loadTopics();
-  }, [loadTopics]);
 
   // Pagination functions
   const handlePageChange = (newPage: number) => {
