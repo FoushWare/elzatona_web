@@ -8,14 +8,14 @@ import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 // GET /api/categories/[id] - Get a specific category
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     if (!db) {
       throw new Error('Firebase not initialized');
     }
 
-    const categoryId = params.id;
+    const { id: categoryId } = await params;
     const categoryRef = doc(db, 'categories', categoryId);
     const categorySnap = await getDoc(categoryRef);
 
@@ -56,14 +56,14 @@ export async function GET(
 // PUT /api/categories/[id] - Update a category
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     if (!db) {
       throw new Error('Firebase not initialized');
     }
 
-    const categoryId = params.id;
+    const { id: categoryId } = await params;
     const updateData = await request.json();
 
     // Validate required fields
@@ -126,14 +126,14 @@ export async function PUT(
 // DELETE /api/categories/[id] - Delete a category
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     if (!db) {
       throw new Error('Firebase not initialized');
     }
 
-    const categoryId = params.id;
+    const { id: categoryId } = await params;
     const categoryRef = doc(db, 'categories', categoryId);
     const categorySnap = await getDoc(categoryRef);
 
