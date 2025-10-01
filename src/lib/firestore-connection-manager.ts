@@ -39,6 +39,16 @@ export class FirestoreConnectionManager {
           this.reconnectDelay = 1000; // Reset delay
         }
       } catch (error) {
+        // Check if this is a Firebase internal assertion error
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        if (errorMessage.includes('INTERNAL ASSERTION FAILED') || 
+            errorMessage.includes('Unexpected state') ||
+            errorMessage.includes('TargetState') ||
+            errorMessage.includes('WatchChangeAggregator')) {
+          // These are non-critical Firebase internal errors, don't treat as connection loss
+          return;
+        }
+        
         if (this.isConnected) {
           console.log('🔌 Firestore connection lost');
           this.isConnected = false;

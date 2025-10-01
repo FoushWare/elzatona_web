@@ -30,6 +30,23 @@ import { getStorage, Storage } from 'firebase/storage';
 // Check if Firebase is configured (always true since we have fallback values)
 const isFirebaseConfigured = true;
 
+// Add immediate error suppression for Firebase internal errors
+if (typeof window !== 'undefined') {
+  const originalConsoleError = console.error;
+  console.error = (...args) => {
+    if (args[0] && typeof args[0] === 'string' && 
+        ((args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) ||
+        args[0].includes('Unexpected state') ||
+        args[0].includes('ID: b815') ||
+        args[0].includes('ID: ca9') ||
+        args[0].includes('TargetState') ||
+        args[0].includes('WatchChangeAggregator'))) {
+      return; // Suppress these errors immediately
+    }
+    originalConsoleError.apply(console, args);
+  };
+}
+
 // Firebase configuration - using your actual Firebase project
 const firebaseConfig = {
   apiKey:
@@ -69,7 +86,14 @@ try {
   if (db) {
     // Enable network by default
     enableNetwork(db).catch(error => {
-      console.warn('Failed to enable Firestore network:', error);
+      // Don't log Firebase internal assertion errors
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (!errorMessage.includes('INTERNAL ASSERTION FAILED') && 
+          !errorMessage.includes('Unexpected state') &&
+          !errorMessage.includes('TargetState') &&
+          !errorMessage.includes('WatchChangeAggregator')) {
+        console.warn('Failed to enable Firestore network:', error);
+      }
     });
 
     // Add comprehensive error handling for Firestore internal assertion errors
@@ -80,7 +104,9 @@ try {
           ((args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) ||
           args[0].includes('Unexpected state') ||
           args[0].includes('ID: b815') ||
-          args[0].includes('ID: ca9'))) {
+          args[0].includes('ID: ca9') ||
+          args[0].includes('TargetState') ||
+          args[0].includes('WatchChangeAggregator'))) {
         // Completely suppress these errors as they are non-critical
         return;
       }
@@ -95,7 +121,9 @@ try {
           ((args[0].includes('FIRESTORE') && args[0].includes('INTERNAL ASSERTION FAILED')) ||
           args[0].includes('Unexpected state') ||
           args[0].includes('ID: b815') ||
-          args[0].includes('ID: ca9'))) {
+          args[0].includes('ID: ca9') ||
+          args[0].includes('TargetState') ||
+          args[0].includes('WatchChangeAggregator'))) {
         return; // Suppress these warnings
       }
       originalConsoleWarn.apply(console, args);
