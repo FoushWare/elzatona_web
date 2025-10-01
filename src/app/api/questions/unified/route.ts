@@ -101,18 +101,23 @@ export async function GET(request: NextRequest) {
     const questions = allQuestions.slice(startIndex, endIndex);
 
     const totalPages = Math.ceil(totalCount / pageSize);
+    
+    // For faster response, don't include pagination details if not needed
+    const includePagination = searchParams.get('includePagination') !== 'false';
 
     return NextResponse.json({
       success: true,
       data: questions,
-      pagination: {
-        page,
-        pageSize,
-        totalCount,
-        totalPages,
-        hasNext: page < totalPages,
-        hasPrev: page > 1,
-      },
+      ...(includePagination && {
+        pagination: {
+          page,
+          pageSize,
+          totalCount,
+          totalPages,
+          hasNext: page < totalPages,
+          hasPrev: page > 1,
+        },
+      }),
     });
   } catch (error) {
     console.error('Error fetching questions:', error);
