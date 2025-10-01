@@ -4,14 +4,14 @@ import { doc, updateDoc, getDoc } from 'firebase/firestore';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { planId: string; sectionId: string } }
+  { params }: { params: Promise<{ planId: string; sectionId: string }> }
 ) {
   try {
     if (!db) {
       throw new Error('Firebase not initialized');
     }
 
-    const { planId, sectionId } = params;
+    const { planId, sectionId } = await params;
     const body = await request.json();
     const { questions } = body;
 

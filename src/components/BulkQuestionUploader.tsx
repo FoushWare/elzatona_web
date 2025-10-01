@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { BulkQuestionData } from '@/lib/unified-question-schema';
+import { MarkdownQuestionParser } from '@/lib/markdown-question-parser';
 import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import {
   Upload,
@@ -13,6 +14,7 @@ import {
   Plus,
   Trash2,
   Save,
+  FileCode,
 } from 'lucide-react';
 
 interface BulkQuestionUploaderProps {
@@ -28,7 +30,7 @@ export default function BulkQuestionUploader({
   onQuestionsAdded,
   onClose,
 }: BulkQuestionUploaderProps) {
-  const { bulkImportQuestions } = useUnifiedQuestions();
+  const { bulkImportQuestions } = useUnifiedQuestions({ autoLoad: false });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -53,8 +55,22 @@ export default function BulkQuestionUploader({
   ]);
 
   const [jsonInput, setJsonInput] = useState('');
-  const [inputMode, setInputMode] = useState<'form' | 'json'>('form');
+  const [markdownInput, setMarkdownInput] = useState('');
+  const [inputMode, setInputMode] = useState<'form' | 'json' | 'markdown'>(
+    'form'
+  );
   const [jsonParsed, setJsonParsed] = useState(false);
+  const [markdownParsed, setMarkdownParsed] = useState(false);
+
+  // Debug logging for state changes
+  React.useEffect(() => {
+    console.log('🔄 State changed:', {
+      inputMode,
+      markdownParsed,
+      questionsLength: questions.length,
+      markdownInputLength: markdownInput.length,
+    });
+  }, [inputMode, markdownParsed, questions.length, markdownInput.length]);
 
   const addQuestion = () => {
     setQuestions([
@@ -191,8 +207,9 @@ export default function BulkQuestionUploader({
             q.correctAnswers ||
             q.options.filter(opt => opt.isCorrect).map(opt => opt.id),
           explanation: q.explanation || '',
-          category: q.category || sectionName,
-          learningPath: q.learningPath || sectionId,
+          category: q.category || sectionName || 'General',
+          learningPath: q.learningPath || sectionId || 'Default Learning Path',
+          topic: q.topic || 'General Topic',
           tags: q.tags || [],
           points: q.points || 1,
         };
@@ -211,6 +228,105 @@ export default function BulkQuestionUploader({
       setSuccess(null);
       setJsonParsed(false);
     }
+  };
+
+  // Handle Markdown input parsing
+  const parseMarkdownInput = () => {
+    try {
+      const result = MarkdownQuestionParser.parseMarkdown(markdownInput);
+
+      if (result.errors.length > 0) {
+        setError(`Markdown parsing errors:\n${result.errors.join('\n')}`);
+        setSuccess(null);
+        setMarkdownParsed(false);
+        return;
+      }
+
+      if (result.warnings.length > 0) {
+        console.warn('Markdown parsing warnings:', result.warnings);
+      }
+
+      const bulkData = MarkdownQuestionParser.convertToBulkData(
+        result.questions
+      );
+
+      // Validate the converted data
+      const validatedQuestions = bulkData.map((q, index) => {
+        if (!q.title || !q.content) {
+          throw new Error(
+            `Question ${index + 1}: title and content are required`
+          );
+        }
+
+        if (!q.options || !Array.isArray(q.options)) {
+          throw new Error(`Question ${index + 1}: options array is required`);
+        }
+
+        if (q.options.length < 2) {
+          throw new Error(
+            `Question ${index + 1}: at least 2 options are required`
+          );
+        }
+
+        if (!q.correctAnswers || q.correctAnswers.length === 0) {
+          throw new Error(
+            `Question ${index + 1}: at least one option must be marked as correct`
+          );
+        }
+
+        return {
+          title: q.title,
+          content: q.content,
+          type: q.type || 'single',
+          difficulty: q.difficulty || 'easy',
+          options: q.options.map((opt, optIndex) => ({
+            id: opt.id || String.fromCharCode(97 + optIndex), // a, b, c, d...
+            text: opt.text || '',
+            isCorrect: opt.isCorrect || false,
+          })),
+          correctAnswers:
+            q.correctAnswers ||
+            q.options.filter(opt => opt.isCorrect).map(opt => opt.id),
+          explanation: q.explanation || '',
+          category: q.category || sectionName || 'General',
+          learningPath: q.learningPath || sectionId || 'Default Learning Path',
+          topic: q.topic || 'General Topic',
+          tags: q.tags || [],
+          points: q.points || 1,
+        };
+      });
+
+      setQuestions(validatedQuestions);
+      setError(null);
+      setSuccess(
+        `Successfully parsed ${validatedQuestions.length} questions from Markdown!`
+      );
+      setMarkdownParsed(true);
+
+      console.log('✅ Markdown parsing successful:', {
+        questionsCount: validatedQuestions.length,
+        firstQuestion: validatedQuestions[0]?.title || 'No title',
+      });
+    } catch (error) {
+      setError(
+        `Markdown parsing error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
+      setSuccess(null);
+      setMarkdownParsed(false);
+    }
+  };
+
+  const downloadMarkdownTemplate = () => {
+    const template = MarkdownQuestionParser.generateTemplate();
+    const blob = new Blob([template], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'questions-template.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   // Generate JSON from current questions
@@ -331,6 +447,12 @@ export default function BulkQuestionUploader({
           ],
           correctAnswers: ['a'],
           explanation: 'This is the correct answer because...',
+          category: 'Sample Category',
+          learningPath: 'Sample Learning Path',
+          topic: 'Sample Topic',
+          tags: ['sample', 'example'],
+          points: 5,
+          timeLimit: 300,
           audioQuestion: '/audio/question-audio.mp3',
           audioAnswer: '/audio/answer-audio.mp3',
         },
@@ -401,6 +523,7 @@ export default function BulkQuestionUploader({
               onClick={() => {
                 setInputMode('json');
                 setJsonParsed(false);
+                setMarkdownParsed(false);
               }}
               className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
                 inputMode === 'json'
@@ -409,6 +532,21 @@ export default function BulkQuestionUploader({
               }`}
             >
               JSON Array
+            </button>
+            <button
+              onClick={() => {
+                setInputMode('markdown');
+                setJsonParsed(false);
+                setMarkdownParsed(false);
+              }}
+              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                inputMode === 'markdown'
+                  ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              <FileCode className="w-4 h-4 mr-1 inline" />
+              Markdown
             </button>
           </div>
         </div>
@@ -453,6 +591,12 @@ export default function BulkQuestionUploader({
     ],
     "correctAnswers": ["a"],
     "explanation": "React is indeed a JavaScript library for building user interfaces.",
+    "category": "Frontend Development",
+    "learningPath": "React Fundamentals",
+    "topic": "JavaScript Libraries",
+    "tags": ["react", "javascript", "frontend"],
+    "points": 5,
+    "timeLimit": 300,
     "audioQuestion": "/audio/question-audio.mp3",
     "audioAnswer": "/audio/answer-audio.mp3"
   }
@@ -489,6 +633,123 @@ export default function BulkQuestionUploader({
                       : `Bulk Add ${questions.length} Questions`}
                   </span>
                 </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Markdown Input Mode */}
+        {inputMode === 'markdown' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Paste Markdown Questions:
+              </label>
+              <div className="flex space-x-2">
+                <button
+                  onClick={downloadMarkdownTemplate}
+                  className="px-3 py-1 text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-md hover:bg-green-200 dark:hover:bg-green-800 transition-colors"
+                >
+                  <Download className="w-3 h-3 mr-1 inline" />
+                  Download Template
+                </button>
+              </div>
+            </div>
+            <textarea
+              value={markdownInput}
+              onChange={e => setMarkdownInput(e.target.value)}
+              placeholder={`Paste your markdown questions here, for example:
+
+# Questions Template
+
+## Multiple Choice Questions
+
+1. What is the capital of France?
+a) London
+b) Berlin
+c) Paris [correct]
+d) Madrid
+
+Explanation: Paris is the capital and largest city of France.
+
+## True/False Questions
+
+2. The sun rises in the west.
+True
+False [correct]
+
+## Open-ended Questions
+
+3. Explain the concept of object-oriented programming.
+
+## Question with Metadata
+
+4. What is React? [5 points]
+a) A CSS framework
+b) A JavaScript library [correct]
+c) A database
+d) A server
+
+Category: Frontend Development
+Tags: #react #javascript #frontend
+Difficulty: easy
+
+Explanation: React is a JavaScript library for building user interfaces.`}
+              className="w-full h-64 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono text-sm"
+            />
+            <div className="flex space-x-2">
+              <button
+                onClick={parseMarkdownInput}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center space-x-2"
+              >
+                <CheckCircle className="w-4 h-4" />
+                <span>Parse Markdown</span>
+              </button>
+              <button
+                onClick={() => {
+                  setMarkdownInput('');
+                  setMarkdownParsed(false);
+                }}
+                className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
+              >
+                Clear
+              </button>
+              {markdownParsed && questions.length > 0 && (
+                <button
+                  onClick={submitQuestions}
+                  disabled={loading}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>
+                    {loading
+                      ? 'Adding Questions...'
+                      : `Add ${questions.length} Questions`}
+                  </span>
+                </button>
+              )}
+
+              {/* Debug info - remove this after testing */}
+              {inputMode === 'markdown' && (
+                <div className="text-xs text-gray-500 mt-2 p-2 bg-gray-100 rounded">
+                  <div>Debug Info:</div>
+                  <div>
+                    • markdownParsed: {markdownParsed ? '✅ true' : '❌ false'}
+                  </div>
+                  <div>• questions.length: {questions.length}</div>
+                  <div>
+                    • showSaveButton:{' '}
+                    {markdownParsed && questions.length > 0
+                      ? '✅ true'
+                      : '❌ false'}
+                  </div>
+                  {questions.length > 0 && (
+                    <div>
+                      • First question title: "
+                      {questions[0]?.title || 'No title'}"
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </div>

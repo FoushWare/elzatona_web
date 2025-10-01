@@ -7,6 +7,10 @@ import { db, collection, getDocs, query, where, orderBy, limit, startAfter, addD
 // GET /api/questions/unified - Get questions with filters
 export async function GET(request: NextRequest) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     const { searchParams } = new URL(request.url);
 
     // Pagination parameters
@@ -45,7 +49,7 @@ export async function GET(request: NextRequest) {
 
     // Remove undefined values
     const cleanFilters = Object.fromEntries(
-      Object.entries(filters).filter(([_, value]) => value !== undefined)
+      Object.entries(filters).filter(([, value]) => value !== undefined)
     );
 
     // Get questions from Firestore
@@ -107,6 +111,10 @@ export async function GET(request: NextRequest) {
 // POST /api/questions/unified - Create questions (bulk import or single)
 export async function POST(request: NextRequest) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     const body = await request.json();
     const { questions, isBulkImport = false } = body;
 
@@ -132,7 +140,7 @@ export async function POST(request: NextRequest) {
         results.push({ id: docRef.id, ...questionData });
       } catch (error) {
         console.error('Error creating question:', error);
-        errors.push({ question: questionData, error: error.message });
+        errors.push({ question: questionData, error: error instanceof Error ? error.message : 'Unknown error' });
       }
     }
 
@@ -154,6 +162,10 @@ export async function POST(request: NextRequest) {
 // PUT /api/questions/unified - Update a question
 export async function PUT(request: NextRequest) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     const body = await request.json();
     const { id, ...updateData } = body;
 
@@ -187,6 +199,10 @@ export async function PUT(request: NextRequest) {
 // DELETE /api/questions/unified - Delete a question
 export async function DELETE(request: NextRequest) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
