@@ -1,8 +1,13 @@
-// v1.0 - Clear Questions API Route
-// API endpoint to clear all questions from Firebase collections
-
+// API endpoint to clear all questions
 import { NextRequest, NextResponse } from 'next/server';
-import { db, collection, getDocs, deleteDoc, doc } from '@/lib/firebase-server';
+import {
+  db,
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  writeBatch,
+} from '@/lib/firebase-server';
 
 export async function DELETE(request: NextRequest) {
   try {
@@ -10,71 +15,79 @@ export async function DELETE(request: NextRequest) {
       throw new Error('Firebase not initialized');
     }
 
-    console.log('🧹 Starting to clear questions from Firebase...');
+    console.log('🗑️  Starting to clear all question collections...');
 
-    // Clear 'questions' collection
-    console.log('📝 Clearing "questions" collection...');
-    const questionsSnapshot = await getDocs(collection(db, 'questions'));
-    const questionsDeletePromises = questionsSnapshot.docs.map(docSnapshot =>
-      deleteDoc(doc(db!, 'questions', docSnapshot.id))
-    );
+    const collectionsToClear = [
+      'unifiedQuestions',
+      'questions',
+      'enhancedQuestions',
+      'customQuestions',
+    ];
+    let totalDeleted = 0;
 
-    if (questionsDeletePromises.length > 0) {
-      await Promise.all(questionsDeletePromises);
-      console.log(
-        `✅ Deleted ${questionsDeletePromises.length} documents from "questions" collection`
-      );
-    } else {
-      console.log('ℹ️  No documents found in "questions" collection');
+    for (const collectionName of collectionsToClear) {
+      try {
+        console.log(`📋 Fetching documents from ${collectionName}...`);
+        const collectionRef = collection(db, collectionName);
+        const snapshot = await getDocs(collectionRef);
+
+        console.log(`📊 Found ${snapshot.size} documents in ${collectionName}`);
+
+        if (snapshot.size === 0) {
+          console.log(`✅ ${collectionName} is already empty`);
+          continue;
+        }
+
+        console.log(
+          `🗑️  Deleting ${snapshot.size} documents from ${collectionName}...`
+        );
+
+        // Use batch operations for better performance
+        const batch = writeBatch(db);
+        let batchCount = 0;
+        const batchSize = 500; // Firestore batch limit
+
+        snapshot.forEach(docSnapshot => {
+          batch.delete(doc(db, collectionName, docSnapshot.id));
+          batchCount++;
+
+          // Commit batch when it reaches the limit
+          if (batchCount >= batchSize) {
+            batch.commit();
+            batchCount = 0;
+          }
+        });
+
+        // Commit any remaining documents
+        if (batchCount > 0) {
+          await batch.commit();
+        }
+
+        console.log(
+          `✅ Deleted ${snapshot.size} documents from ${collectionName}`
+        );
+        totalDeleted += snapshot.size;
+      } catch (error) {
+        console.error(`❌ Error clearing ${collectionName}:`, error);
+        // Continue with other collections even if one fails
+      }
     }
 
-    // Clear 'unifiedQuestions' collection
-    console.log('📝 Clearing "unifiedQuestions" collection...');
-    const unifiedQuestionsSnapshot = await getDocs(
-      collection(db!, 'unifiedQuestions')
-    );
-    const unifiedQuestionsDeletePromises = unifiedQuestionsSnapshot.docs.map(
-      docSnapshot => deleteDoc(doc(db!, 'unifiedQuestions', docSnapshot.id))
-    );
-
-    if (unifiedQuestionsDeletePromises.length > 0) {
-      await Promise.all(unifiedQuestionsDeletePromises);
-      console.log(
-        `✅ Deleted ${unifiedQuestionsDeletePromises.length} documents from "unifiedQuestions" collection`
-      );
-    } else {
-      console.log('ℹ️  No documents found in "unifiedQuestions" collection');
-    }
-
-    const totalDeleted =
-      questionsDeletePromises.length + unifiedQuestionsDeletePromises.length;
-
-    console.log('🎉 Successfully cleared all questions from Firebase!');
-    console.log('📊 Summary:');
     console.log(
-      `   - Questions collection: ${questionsDeletePromises.length} documents deleted`
+      `🎉 CLEARING COMPLETE! Total documents deleted: ${totalDeleted}`
     );
-    console.log(
-      `   - UnifiedQuestions collection: ${unifiedQuestionsDeletePromises.length} documents deleted`
-    );
-    console.log(`   - Total deleted: ${totalDeleted} documents`);
 
     return NextResponse.json({
       success: true,
-      message: 'Successfully cleared all questions from Firebase',
-      data: {
-        questionsDeleted: questionsDeletePromises.length,
-        unifiedQuestionsDeleted: unifiedQuestionsDeletePromises.length,
-        totalDeleted: totalDeleted,
-      },
+      message: `Successfully deleted ${totalDeleted} questions from all collections`,
+      totalDeleted,
     });
   } catch (error) {
     console.error('❌ Error clearing questions:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to clear questions',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

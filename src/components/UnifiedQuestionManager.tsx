@@ -34,6 +34,7 @@ import {
   UnifiedQuestion,
   BulkQuestionData,
 } from '@/lib/unified-question-schema';
+import BulkQuestionUploader from './BulkQuestionUploader';
 
 interface UnifiedQuestionManagerProps {
   className?: string;
@@ -42,9 +43,11 @@ interface UnifiedQuestionManagerProps {
 export default function UnifiedQuestionManager({
   className,
 }: UnifiedQuestionManagerProps) {
+  console.log('🔍 UnifiedQuestionManager: Component rendered');
+
   const {
     questions,
-    learningPaths,
+    learningPaths: hookLearningPaths,
     stats,
     isLoading,
     isCreating,
@@ -56,19 +59,114 @@ export default function UnifiedQuestionManager({
     bulkImportQuestions,
     searchQuestions,
     clearError,
+    // Pagination
+    currentPage,
+    pageSize,
+    totalCount,
+    totalPages,
+    hasNext,
+    hasPrev,
+    goToPage,
+    nextPage,
+    prevPage,
+    changePageSize,
   } = useUnifiedQuestions();
+
+  // Debug logging
+  console.log('🔍 UnifiedQuestionManager - questions:', questions);
+  console.log(
+    '🔍 UnifiedQuestionManager - questions.length:',
+    questions.length
+  );
+  console.log('🔍 UnifiedQuestionManager - isLoading:', isLoading);
+  console.log('🔍 UnifiedQuestionManager - error:', error);
+  console.log('🔍 UnifiedQuestionManager - questions type:', typeof questions);
+  console.log(
+    '🔍 UnifiedQuestionManager - questions is array:',
+    Array.isArray(questions)
+  );
 
   // Local state
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedLearningPath, setSelectedLearningPath] = useState('all');
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingQuestion, setEditingQuestion] =
     useState<UnifiedQuestion | null>(null);
   const [showBulkImport, setShowBulkImport] = useState(false);
-  const [bulkJsonInput, setBulkJsonInput] = useState('');
-  const [bulkInputMode, setBulkInputMode] = useState<'file' | 'json'>('file');
+
+  // Dynamic data state
+  const [categories, setCategories] = useState<string[]>([]);
+  const [topics, setTopics] = useState<string[]>([]);
+  const [dynamicLearningPaths, setDynamicLearningPaths] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+
+  // Load dynamic data on mount
+  React.useEffect(() => {
+    loadDynamicData();
+    // Questions are loaded automatically by useUnifiedQuestions hook
+    // But let's also call it manually to ensure it loads
+    loadQuestions();
+  }, [loadQuestions]);
+
+  // Fetch dynamic data
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/categories');
+      const data = await response.json();
+      if (data.success) {
+        setCategories(data.data.map((cat: any) => cat.name));
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchTopics = async () => {
+    try {
+      const response = await fetch('/api/topics');
+      const data = await response.json();
+      if (data.success) {
+        setTopics(data.data.map((topic: any) => topic.name));
+      }
+    } catch (error) {
+      console.error('Error fetching topics:', error);
+    }
+  };
+
+  const fetchLearningPaths = async () => {
+    try {
+      const response = await fetch('/api/learning-paths');
+      const data = await response.json();
+      if (data.success) {
+        setDynamicLearningPaths(
+          data.data.map((path: any) => ({ id: path.id, name: path.name }))
+        );
+      }
+    } catch (error) {
+      console.error('Error fetching learning paths:', error);
+    }
+  };
+
+  // Load all dynamic data
+  const loadDynamicData = async () => {
+    setIsLoadingData(true);
+    try {
+      await Promise.all([
+        fetchCategories(),
+        fetchTopics(),
+        fetchLearningPaths(),
+      ]);
+    } catch (error) {
+      console.error('Error loading dynamic data:', error);
+    } finally {
+      setIsLoadingData(false);
+    }
+  };
 
   // Form state
   const [formData, setFormData] = useState({
@@ -76,6 +174,7 @@ export default function UnifiedQuestionManager({
     content: '',
     type: 'single' as 'single' | 'multiple',
     category: '',
+    topic: '',
     difficulty: 'easy' as 'easy' | 'medium' | 'hard',
     learningPath: '',
     points: 5,
@@ -96,15 +195,21 @@ export default function UnifiedQuestionManager({
   const handleSearch = () => {
     if (searchTerm.trim()) {
       searchQuestions(searchTerm, {
-        category: selectedCategory || undefined,
-        difficulty: selectedDifficulty || undefined,
-        learningPath: selectedLearningPath || undefined,
+        category: selectedCategory !== 'all' ? selectedCategory : undefined,
+        difficulty:
+          selectedDifficulty !== 'all' ? selectedDifficulty : undefined,
+        learningPath:
+          selectedLearningPath !== 'all' ? selectedLearningPath : undefined,
+        topic: selectedTopic || undefined,
       });
     } else {
       loadQuestions({
-        category: selectedCategory || undefined,
-        difficulty: selectedDifficulty || undefined,
-        learningPath: selectedLearningPath || undefined,
+        category: selectedCategory !== 'all' ? selectedCategory : undefined,
+        difficulty:
+          selectedDifficulty !== 'all' ? selectedDifficulty : undefined,
+        learningPath:
+          selectedLearningPath !== 'all' ? selectedLearningPath : undefined,
+        topic: selectedTopic || undefined,
       });
     }
   };
@@ -124,6 +229,7 @@ export default function UnifiedQuestionManager({
         selectedLearningPath && selectedLearningPath !== 'all'
           ? selectedLearningPath
           : undefined,
+      topic: selectedTopic || undefined,
     });
   };
 
@@ -163,6 +269,7 @@ export default function UnifiedQuestionManager({
       content: '',
       type: 'single',
       category: '',
+      topic: '',
       difficulty: 'easy',
       learningPath: '',
       points: 5,
@@ -191,6 +298,7 @@ export default function UnifiedQuestionManager({
           ? 'single'
           : ('multiple' as 'single' | 'multiple'),
       category: question.category || '',
+      topic: question.topic || '',
       difficulty:
         question.difficulty === 'beginner'
           ? 'easy'
@@ -237,66 +345,6 @@ export default function UnifiedQuestionManager({
       options: newOptions,
       correctAnswers,
     });
-  };
-
-  // Handle bulk import from file
-  const handleBulkImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const text = await file.text();
-      const questionsData: BulkQuestionData[] = JSON.parse(text);
-
-      const results = await bulkImportQuestions(questionsData);
-      alert(
-        `Import completed: ${results.success} successful, ${results.failed} failed`
-      );
-
-      if (results.errors.length > 0) {
-        console.error('Import errors:', results.errors);
-      }
-    } catch (error) {
-      alert('Failed to import questions. Please check the file format.');
-      console.error('Import error:', error);
-    }
-  };
-
-  // Handle bulk import from JSON textarea
-  const handleBulkJsonImport = async () => {
-    try {
-      const parsed = JSON.parse(bulkJsonInput);
-
-      // Handle both array format and object with questions property
-      let questionsData: BulkQuestionData[];
-      if (Array.isArray(parsed)) {
-        questionsData = parsed;
-      } else if (parsed.questions && Array.isArray(parsed.questions)) {
-        questionsData = parsed.questions;
-      } else {
-        alert(
-          'Invalid format. Expected an array of questions or an object with a "questions" property.'
-        );
-        return;
-      }
-
-      const results = await bulkImportQuestions(questionsData);
-      alert(
-        `Import completed: ${results.success} successful, ${results.failed} failed`
-      );
-
-      if (results.errors.length > 0) {
-        console.error('Import errors:', results.errors);
-      }
-
-      // Clear the input
-      setBulkJsonInput('');
-    } catch (error) {
-      alert(
-        `JSON parsing error: ${error instanceof Error ? error.message : 'Invalid JSON format'}`
-      );
-      console.error('Import error:', error);
-    }
   };
 
   return (
@@ -387,13 +435,11 @@ export default function UnifiedQuestionManager({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="CSS">CSS</SelectItem>
-                <SelectItem value="JavaScript">JavaScript</SelectItem>
-                <SelectItem value="React">React</SelectItem>
-                <SelectItem value="TypeScript">TypeScript</SelectItem>
-                <SelectItem value="Testing">Testing</SelectItem>
-                <SelectItem value="Performance">Performance</SelectItem>
-                <SelectItem value="Security">Security</SelectItem>
+                {categories.map(category => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Select
@@ -419,9 +465,27 @@ export default function UnifiedQuestionManager({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Paths</SelectItem>
-                {learningPaths.map(path => (
-                  <SelectItem key={path.id} value={path.title}>
-                    {path.title}
+                {dynamicLearningPaths.map(path => (
+                  <SelectItem key={path.id} value={path.name}>
+                    {path.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select
+              value={selectedTopic || 'all'}
+              onValueChange={value =>
+                setSelectedTopic(value === 'all' ? null : value)
+              }
+            >
+              <SelectTrigger className="w-full md:w-48">
+                <SelectValue placeholder="Topic" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Topics</SelectItem>
+                {topics.map(topic => (
+                  <SelectItem key={topic} value={topic}>
+                    {topic}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -444,113 +508,18 @@ export default function UnifiedQuestionManager({
 
       {/* Bulk Import */}
       {showBulkImport && (
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Bulk Import Questions</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Import multiple questions at once using JSON format
-              </p>
-
-              {/* Input Mode Toggle */}
-              <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Import Method:
-                </span>
-                <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-                  <button
-                    onClick={() => setBulkInputMode('file')}
-                    className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                      bulkInputMode === 'file'
-                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                    }`}
-                  >
-                    Upload File
-                  </button>
-                  <button
-                    onClick={() => setBulkInputMode('json')}
-                    className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                      bulkInputMode === 'json'
-                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                    }`}
-                  >
-                    Paste JSON
-                  </button>
-                </div>
-              </div>
-
-              {/* File Upload Mode */}
-              {bulkInputMode === 'file' && (
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    Upload a JSON file containing an array of question objects
-                  </p>
-                  <input
-                    type="file"
-                    accept=".json"
-                    onChange={handleBulkImport}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                  />
-                </div>
-              )}
-
-              {/* JSON Input Mode */}
-              {bulkInputMode === 'json' && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-                      Paste JSON Array of Questions:
-                    </label>
-                    <textarea
-                      value={bulkJsonInput}
-                      onChange={e => setBulkJsonInput(e.target.value)}
-                      placeholder={`Paste your questions array here, for example:
-[
-  {
-    "title": "What is React?",
-    "content": "React is a JavaScript library for building user interfaces.",
-    "type": "single",
-    "difficulty": "easy",
-    "options": [
-      { "id": "a", "text": "A JavaScript library", "isCorrect": true },
-      { "id": "b", "text": "A CSS framework", "isCorrect": false },
-      { "id": "c", "text": "A database", "isCorrect": false },
-      { "id": "d", "text": "A server", "isCorrect": false }
-    ],
-    "correctAnswers": ["a"],
-    "explanation": "React is indeed a JavaScript library for building user interfaces.",
-    "category": "Frontend",
-    "learningPath": "react-mastery",
-    "tags": ["react", "javascript"],
-    "points": 1
-  }
-]`}
-                      className="w-full h-64 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono text-sm"
-                    />
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button
-                      onClick={handleBulkJsonImport}
-                      disabled={!bulkJsonInput.trim()}
-                      className="flex items-center space-x-2"
-                    >
-                      <Upload className="w-4 h-4" />
-                      <span>Import Questions</span>
-                    </Button>
-                    <Button
-                      onClick={() => setBulkJsonInput('')}
-                      variant="outline"
-                    >
-                      Clear
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <BulkQuestionUploader
+          sectionId="general-questions"
+          sectionName="General Questions"
+          onQuestionsAdded={questions => {
+            console.log('Questions added via bulk import:', questions);
+            // Refresh the questions list
+            loadQuestions();
+            // Close the bulk import modal
+            setShowBulkImport(false);
+          }}
+          onClose={() => setShowBulkImport(false)}
+        />
       )}
 
       {/* Error Alert */}
@@ -597,13 +566,23 @@ export default function UnifiedQuestionManager({
                   <label className="block text-sm font-medium mb-2">
                     Category
                   </label>
-                  <Input
+                  <Select
                     value={formData.category}
-                    onChange={e =>
-                      setFormData({ ...formData, category: e.target.value })
+                    onValueChange={value =>
+                      setFormData({ ...formData, category: value })
                     }
-                    required
-                  />
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map(category => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -673,9 +652,34 @@ export default function UnifiedQuestionManager({
                       <SelectValue placeholder="Select path" />
                     </SelectTrigger>
                     <SelectContent>
-                      {learningPaths.map(path => (
+                      {hookLearningPaths.map((path: any) => (
                         <SelectItem key={path.id} value={path.title}>
                           {path.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Topic
+                  </label>
+                  <Select
+                    value={formData.topic}
+                    onValueChange={value =>
+                      setFormData({ ...formData, topic: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select topic" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {topics.map(topic => (
+                        <SelectItem key={topic} value={topic}>
+                          {topic}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -796,7 +800,7 @@ export default function UnifiedQuestionManager({
           <div className="flex justify-center py-8">
             <Loader2 className="w-8 h-8 animate-spin" />
           </div>
-        ) : (
+        ) : questions.length > 0 ? (
           questions.map(question => (
             <Card key={question.id}>
               <CardContent className="p-4">
@@ -856,18 +860,93 @@ export default function UnifiedQuestionManager({
               </CardContent>
             </Card>
           ))
+        ) : (
+          <Card>
+            <CardContent className="p-8 text-center">
+              <p className="text-gray-500 dark:text-gray-400">
+                No questions found. Create your first question!
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between mt-6">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Showing {(currentPage - 1) * pageSize + 1} to{' '}
+                {Math.min(currentPage * pageSize, totalCount)} of {totalCount}{' '}
+                questions
+              </span>
+              <Select
+                value={String(pageSize)}
+                onValueChange={value => changePageSize(Number(value))}
+              >
+                <SelectTrigger className="w-20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
+              </Select>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                per page
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={prevPage}
+                disabled={!hasPrev}
+              >
+                Previous
+              </Button>
+
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => goToPage(pageNum)}
+                      className="w-8 h-8 p-0"
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={nextPage}
+                disabled={!hasNext}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
         )}
       </div>
-
-      {questions.length === 0 && !isLoading && (
-        <Card>
-          <CardContent className="p-8 text-center">
-            <p className="text-gray-500 dark:text-gray-400">
-              No questions found. Create your first question!
-            </p>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }

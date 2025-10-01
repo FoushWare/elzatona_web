@@ -431,7 +431,26 @@ export class UnifiedQuestionService {
     > = {};
 
     questions.forEach(q => {
-      const date = new Date(q.createdAt).toISOString().split('T')[0];
+      // Handle both string and Firestore timestamp formats
+      let date: string;
+      if (typeof q.createdAt === 'string') {
+        const parsedDate = new Date(q.createdAt);
+        date = isNaN(parsedDate.getTime())
+          ? new Date().toISOString().split('T')[0]
+          : parsedDate.toISOString().split('T')[0];
+      } else if (
+        q.createdAt &&
+        typeof q.createdAt === 'object' &&
+        'toDate' in q.createdAt
+      ) {
+        const parsedDate = (q.createdAt as any).toDate();
+        date = isNaN(parsedDate.getTime())
+          ? new Date().toISOString().split('T')[0]
+          : parsedDate.toISOString().split('T')[0];
+      } else {
+        date = new Date().toISOString().split('T')[0];
+      }
+
       if (!activityByDate[date]) {
         activityByDate[date] = {
           questionsAdded: 0,
