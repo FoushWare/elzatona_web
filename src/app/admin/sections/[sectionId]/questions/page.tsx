@@ -78,7 +78,7 @@ const DIFFICULTY_OPTIONS = [
 export default function SectionQuestionsPage() {
   const params = useParams();
   const router = useRouter();
-  const sectionId = params.sectionId as string;
+  const sectionId = params?.sectionId as string;
 
   const [section, setSection] = useState<Section | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -94,7 +94,7 @@ export default function SectionQuestionsPage() {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    difficulty: 'beginner' as const,
+    difficulty: 'beginner' as 'beginner' | 'intermediate' | 'advanced',
     category: '',
     topic: '',
     tags: '',

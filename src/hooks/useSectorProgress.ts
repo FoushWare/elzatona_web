@@ -63,7 +63,6 @@ export function useSectorProgress(): UseSectorProgressReturn {
         return updatedProgress;
       });
     } catch (error) {
-      setError('Failed to save progress to local storage.');
       console.error('Failed to save sector progress to localStorage:', error);
     }
   }, []);
@@ -73,7 +72,6 @@ export function useSectorProgress(): UseSectorProgressReturn {
       setProgress({});
       localStorage.removeItem(STORAGE_KEY);
     } catch (error) {
-      setError('Failed to clear progress from local storage.');
       console.error(
         'Failed to clear sector progress from localStorage:',
         error

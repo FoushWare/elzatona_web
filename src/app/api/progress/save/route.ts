@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     console.log('📥 Progress save API called');
 
     // Get the Firebase token from cookies
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('firebase_token')?.value;
 
     // Debug: Log all cookies

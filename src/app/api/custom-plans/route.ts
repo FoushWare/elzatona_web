@@ -69,7 +69,9 @@ export async function POST(request: NextRequest) {
       advanced: 1.2,
     };
     const estimatedTime = Math.round(
-      duration * baseTimePerDay * difficultyMultiplier[difficulty]
+      duration *
+        baseTimePerDay *
+        difficultyMultiplier[difficulty as keyof typeof difficultyMultiplier]
     );
 
     const customPlan: Omit<CustomPlan, 'id'> = {
@@ -92,6 +94,13 @@ export async function POST(request: NextRequest) {
       prerequisites,
       learningObjectives,
     };
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     const docRef = await addDoc(collection(db, 'customPlans'), customPlan);
 
@@ -120,6 +129,13 @@ export async function GET(request: NextRequest) {
     const isTemplate = searchParams.get('isTemplate') === 'true';
     const category = searchParams.get('category');
     const difficulty = searchParams.get('difficulty');
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     let q = query(collection(db, 'customPlans'));
 

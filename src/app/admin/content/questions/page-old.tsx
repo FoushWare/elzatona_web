@@ -121,20 +121,20 @@ export default function QuestionsManagementPage() {
           <Card>
             <CardContent className="p-4">
               <div className="text-2xl font-bold">
-                {stats.incompleteQuestions}
+                {stats.inactiveQuestions}
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                Incomplete
+                Inactive
               </div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4">
               <div className="text-2xl font-bold">
-                {stats.averagePoints.toFixed(1)}
+                {stats.averageDifficulty.toFixed(1)}
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                Avg Points
+                Avg Difficulty
               </div>
             </CardContent>
           </Card>
@@ -193,8 +193,8 @@ export default function QuestionsManagementPage() {
               <SelectContent>
                 <SelectItem value="all">All Paths</SelectItem>
                 {learningPaths.map(path => (
-                  <SelectItem key={path.id} value={path.name}>
-                    {path.name}
+                  <SelectItem key={path.id} value={path.title}>
+                    {path.title}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -249,16 +249,9 @@ export default function QuestionsManagementPage() {
                         {question.title}
                       </h3>
                       <Badge
-                        variant={question.isActive ? 'default' : 'secondary'}
+                        variant={question.isActive ? 'default' : 'destructive'}
                       >
                         {question.isActive ? 'Active' : 'Inactive'}
-                      </Badge>
-                      <Badge
-                        variant={
-                          question.isComplete ? 'default' : 'destructive'
-                        }
-                      >
-                        {question.isComplete ? 'Complete' : 'Incomplete'}
                       </Badge>
                     </div>
                     <p className="text-gray-600 dark:text-gray-400 mb-2">
@@ -271,7 +264,7 @@ export default function QuestionsManagementPage() {
                       <span>Points: {question.points}</span>
                       <span>Type: {question.type}</span>
                     </div>
-                    {question.tags.length > 0 && (
+                    {question.tags && question.tags.length > 0 && (
                       <div className="flex gap-1 mt-2">
                         {question.tags.map(tag => (
                           <Badge

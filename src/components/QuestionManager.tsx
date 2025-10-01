@@ -208,9 +208,11 @@ export default function QuestionManager() {
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow border border-gray-200 dark:border-gray-700">
             <div className="text-2xl font-bold text-purple-600">
-              {Math.round(stats.averagePoints)}
+              {stats.activeQuestions}
             </div>
-            <div className="text-gray-600 dark:text-gray-400">Avg Points</div>
+            <div className="text-gray-600 dark:text-gray-400">
+              Active Questions
+            </div>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow border border-gray-200 dark:border-gray-700">
             <div className="text-2xl font-bold text-orange-600">
@@ -305,10 +307,10 @@ export default function QuestionManager() {
                   <td className="px-6 py-4">
                     <div className="max-w-xs">
                       <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                        {question.question}
+                        {question.content}
                       </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {question.options.length} options
+                        {question.options?.length || 0} options
                       </div>
                     </div>
                   </td>

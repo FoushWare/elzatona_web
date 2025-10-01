@@ -13,7 +13,7 @@ export const FirstTimeVisitorDetector: React.FC = () => {
 
   useEffect(() => {
     // Don't show onboarding on admin pages
-    if (pathname.startsWith('/admin')) {
+    if (pathname?.startsWith('/admin')) {
       return;
     }
 
@@ -48,7 +48,7 @@ export const FirstTimeVisitorDetector: React.FC = () => {
   }, [startOnboarding, pathname]);
 
   // Don't show onboarding if user has already seen it in this session or on admin pages
-  if (!isFirstVisit || pathname.startsWith('/admin')) return null;
+  if (!isFirstVisit || pathname?.startsWith('/admin')) return null;
 
   return (
     <OnboardingSystem

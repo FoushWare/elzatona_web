@@ -3,11 +3,11 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { QuestionStats } from '@/lib/unified-question-schema';
 import {
   Question,
   QuestionCategory,
   QuestionAttempt,
-  QuestionStats,
   getQuestions,
   getQuestion,
   getRandomQuestions,
@@ -175,15 +175,21 @@ export const useQuestions = (): UseQuestionsReturn => {
           throw new Error('Question not found');
         }
 
-        const isCorrect = selectedAnswer === question.correctAnswer;
+        // Check if the selected answer is correct based on the options
+        const isCorrect =
+          question.options?.some(
+            option =>
+              option.id === selectedAnswer.toString() && option.isCorrect
+          ) || false;
 
         await saveQuestionAttempt({
           questionId,
           userId: user.uid,
-          selectedAnswer,
+          userAnswer: selectedAnswer,
           isCorrect,
           timeSpent,
-          attempts,
+          points: isCorrect ? 10 : 0,
+          hintsUsed: 0,
         });
 
         // Reload user attempts to show the new attempt
@@ -199,7 +205,7 @@ export const useQuestions = (): UseQuestionsReturn => {
     [user?.uid, loadUserAttempts]
   );
 
-  const searchQuestions = useCallback(
+  const searchQuestionsLocal = useCallback(
     async (searchTerm: string, filters?: any) => {
       setIsLoading(true);
       setError(null);
@@ -262,7 +268,7 @@ export const useQuestions = (): UseQuestionsReturn => {
     loadStats,
     loadUserAttempts,
     submitAnswer,
-    searchQuestions,
+    searchQuestions: searchQuestionsLocal,
     getQuiz,
     clearError,
   };

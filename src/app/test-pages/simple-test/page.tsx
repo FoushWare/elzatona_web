@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 export default function SimpleTestPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -21,7 +21,7 @@ export default function SimpleTestPage() {
         setLoading(false);
       } catch (err) {
         console.error('Simple test: Error:', err);
-        setError(err.message);
+        setError(err instanceof Error ? err.message : 'An error occurred');
         setLoading(false);
       }
     }

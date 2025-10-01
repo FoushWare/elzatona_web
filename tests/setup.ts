@@ -16,8 +16,10 @@ const localStorageMock = {
   setItem: jest.fn(),
   removeItem: jest.fn(),
   clear: jest.fn(),
+  length: 0,
+  key: jest.fn(),
 };
-global.localStorage = localStorageMock;
+global.localStorage = localStorageMock as any;
 
 // Mock sessionStorage
 const sessionStorageMock = {
@@ -25,8 +27,10 @@ const sessionStorageMock = {
   setItem: jest.fn(),
   removeItem: jest.fn(),
   clear: jest.fn(),
+  length: 0,
+  key: jest.fn(),
 };
-global.sessionStorage = sessionStorageMock;
+global.sessionStorage = sessionStorageMock as any;
 
 // Mock window.confirm
 global.confirm = jest.fn();
@@ -70,24 +74,16 @@ jest.mock('fs', () => ({
 }));
 
 // Mock File constructor
-global.File = class File {
-  constructor(
-    public content: string[],
-    public filename: string,
-    public options: { type: string }
-  ) {
-    this.name = filename;
-    this.type = options.type;
-    this.size = content.join('').length;
-  }
-  name: string;
-  type: string;
-  size: number;
-} as unknown as {
-  name: string;
-  type: string;
-  size: number;
-};
+global.File = jest
+  .fn()
+  .mockImplementation(
+    (fileBits: BlobPart[], fileName: string, options?: FilePropertyBag) => ({
+      name: fileName,
+      type: options?.type || '',
+      size: fileBits.join('').length,
+      lastModified: Date.now(),
+    })
+  ) as any;
 
 // Mock FormData
 global.FormData = class FormData {
@@ -124,7 +120,7 @@ global.FormData = class FormData {
   values() {
     return this.data.values();
   }
-} as unknown as FormData;
+} as unknown as typeof FormData;
 
 // Mock URL.createObjectURL
 global.URL.createObjectURL = jest.fn(() => 'mock-object-url');
@@ -172,7 +168,7 @@ export const createMockFile = (
 export const createMockFormData = (data: Record<string, unknown>) => {
   const formData = new FormData();
   Object.entries(data).forEach(([key, value]) => {
-    formData.append(key, value);
+    formData.append(key, value as string | Blob);
   });
   return formData;
 };

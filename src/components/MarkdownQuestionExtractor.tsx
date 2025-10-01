@@ -321,40 +321,52 @@ export function MarkdownQuestionExtractor({
     setError(null);
 
     try {
-      const bulkData: BulkQuestionData[] = extractedQuestions.map(q => ({
-        title:
-          q.content.substring(0, 100) + (q.content.length > 100 ? '...' : ''), // Use content as title, truncated
-        content: q.content,
-        type: q.type,
-        options: q.options,
-        correctAnswers: q.options
-          .filter(opt => opt.isCorrect)
-          .map(opt => opt.id),
-        explanation: q.explanation,
-        category: q.category,
-        subcategory: q.category, // Use category as subcategory
-        difficulty: q.difficulty,
-        tags: [q.category, q.difficulty], // Add category and difficulty as tags
-        learningPath: q.learningPath,
-        sectionId: 'default', // Default section
-        points:
-          q.difficulty === 'easy' ? 10 : q.difficulty === 'medium' ? 20 : 30,
-        timeLimit: 300, // 5 minutes default
-        audioQuestion: q.audioQuestion,
-        audioAnswer: q.audioAnswer,
-        // Open-ended question fields
-        expectedAnswer: q.expectedAnswer,
-        aiValidationPrompt: q.aiValidationPrompt,
-        acceptPartialCredit: q.acceptPartialCredit,
-      }));
+      const bulkData: BulkQuestionData = {
+        questions: extractedQuestions.map((q, index) => ({
+          ...q,
+          id: `extracted-${Date.now()}-${index}`,
+          title:
+            q.content.substring(0, 100) + (q.content.length > 100 ? '...' : ''),
+          type:
+            q.type === 'single'
+              ? 'multiple-choice'
+              : q.type === 'multiple'
+                ? 'multiple-choice'
+                : q.type,
+          difficulty:
+            q.difficulty === 'easy'
+              ? 'beginner'
+              : q.difficulty === 'medium'
+                ? 'intermediate'
+                : 'advanced',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        })),
+        metadata: {
+          source: 'markdown',
+          version: '1.0',
+          totalCount: extractedQuestions.length,
+          categories: [...new Set(extractedQuestions.map(q => q.category))],
+          difficulties: [...new Set(extractedQuestions.map(q => q.difficulty))],
+          learningPaths: [
+            ...new Set(extractedQuestions.map(q => q.learningPath)),
+          ],
+        },
+        validation: {
+          isValid: true,
+          errors: [],
+          warnings: [],
+        },
+      };
 
       console.log('Importing questions to Firebase:', {
-        count: bulkData.length,
-        sampleQuestion: bulkData[0],
+        count: bulkData.questions.length,
+        sampleQuestion: bulkData.questions[0],
         learningPath: selectedLearningPath,
       });
 
-      const result = await bulkImportQuestions(bulkData);
+      const result = await bulkImportQuestions([bulkData]);
 
       console.log('Import result:', result);
 
@@ -367,7 +379,7 @@ export function MarkdownQuestionExtractor({
 
         // Call onExtract callback if provided
         if (onExtract) {
-          onExtract(bulkData);
+          onExtract(bulkData.questions);
         }
 
         // Auto-close after successful import

@@ -99,6 +99,14 @@ export async function PUT(
     // Fetch the updated category
     const updatedSnap = await getDoc(categoryRef);
     const updatedData = updatedSnap.data();
+
+    if (!updatedData) {
+      return NextResponse.json(
+        { success: false, error: 'Category not found' },
+        { status: 404 }
+      );
+    }
+
     const updatedCategory = {
       id: updatedSnap.id,
       ...updatedData,

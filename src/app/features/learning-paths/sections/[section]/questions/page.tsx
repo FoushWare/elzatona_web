@@ -42,7 +42,7 @@ interface UnifiedQuestion {
 
 export default function LearningPathQuestionsPage() {
   const params = useParams();
-  const section = params.section as string;
+  const section = params?.section as string;
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<
@@ -94,14 +94,14 @@ export default function LearningPathQuestionsPage() {
     const currentQuestion = sectionQuestions[currentQuestionIndex];
     if (!currentQuestion) return;
 
-    if (currentQuestion.type === 'single') {
-      setSelectedAnswer(currentQuestion.options[answerIndex].id);
+    if (currentQuestion.type === 'multiple-choice') {
+      setSelectedAnswer(currentQuestion.options?.[answerIndex]?.id || '');
     } else {
       // Multiple choice - toggle selection
       const currentAnswers = Array.isArray(selectedAnswer)
         ? selectedAnswer
         : [];
-      const answerId = currentQuestion.options[answerIndex].id;
+      const answerId = currentQuestion.options?.[answerIndex]?.id || '';
 
       if (currentAnswers.includes(answerId)) {
         setSelectedAnswer(currentAnswers.filter(id => id !== answerId));
@@ -115,11 +115,15 @@ export default function LearningPathQuestionsPage() {
     const currentQuestion = sectionQuestions[currentQuestionIndex];
     if (!currentQuestion || !selectedAnswer) return;
 
+    const correctAnswers =
+      currentQuestion.options
+        ?.map((opt, index) => (opt.isCorrect ? opt.id : null))
+        .filter(Boolean) || [];
+
     const isCorrect = Array.isArray(selectedAnswer)
-      ? selectedAnswer.every(answerId =>
-          currentQuestion.correctAnswers.includes(answerId)
-        ) && selectedAnswer.length === currentQuestion.correctAnswers.length
-      : currentQuestion.correctAnswers.includes(selectedAnswer as string);
+      ? selectedAnswer.every(answerId => correctAnswers.includes(answerId)) &&
+        selectedAnswer.length === correctAnswers.length
+      : correctAnswers.includes(selectedAnswer as string);
 
     setIsAnswerCorrect(isCorrect);
     setShowAnswer(true);
@@ -315,9 +319,9 @@ export default function LearningPathQuestionsPage() {
                     {currentQuestion.points} points
                   </span>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
-                    {currentQuestion.type === 'single'
-                      ? 'Single Choice'
-                      : 'Multiple Choice'}
+                    {currentQuestion.type === 'multiple-choice'
+                      ? 'Multiple Choice'
+                      : 'Open Ended'}
                   </span>
                 </div>
                 <button
@@ -325,7 +329,7 @@ export default function LearningPathQuestionsPage() {
                   className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                   title="Read question aloud"
                 >
-                  <EnhancedTTS />
+                  <EnhancedTTS text={currentQuestion.content} />
                 </button>
               </div>
             </div>
@@ -336,22 +340,9 @@ export default function LearningPathQuestionsPage() {
                 {currentQuestion.content}
               </h2>
 
-              {/* Audio Question */}
-              {currentQuestion.audioQuestion && (
-                <div className="mb-6">
-                  <audio controls className="w-full">
-                    <source
-                      src={currentQuestion.audioQuestion}
-                      type="audio/mpeg"
-                    />
-                    Your browser does not support the audio element.
-                  </audio>
-                </div>
-              )}
-
               {/* Answer Options */}
               <div className="space-y-3 mb-6">
-                {currentQuestion.options.map((option, index) => {
+                {(currentQuestion.options || []).map((option, index) => {
                   const isSelected = Array.isArray(selectedAnswer)
                     ? selectedAnswer.includes(option.id)
                     : selectedAnswer === option.id;
@@ -407,19 +398,6 @@ export default function LearningPathQuestionsPage() {
                   <div className="text-gray-700 dark:text-gray-300">
                     <p className="mb-2">{currentQuestion.explanation}</p>
                   </div>
-
-                  {/* Audio Answer */}
-                  {currentQuestion.audioAnswer && (
-                    <div className="mt-4">
-                      <audio controls className="w-full">
-                        <source
-                          src={currentQuestion.audioAnswer}
-                          type="audio/mpeg"
-                        />
-                        Your browser does not support the audio element.
-                      </audio>
-                    </div>
-                  )}
                 </div>
               )}
 

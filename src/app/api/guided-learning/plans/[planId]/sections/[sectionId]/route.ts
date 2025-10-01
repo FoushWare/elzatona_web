@@ -83,14 +83,14 @@ export async function PUT(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { planId: string; sectionId: string } }
+  { params }: { params: Promise<{ planId: string; sectionId: string }> }
 ) {
   try {
     if (!db) {
       throw new Error('Firebase not initialized');
     }
 
-    const { planId, sectionId } = params;
+    const { planId, sectionId } = await params;
 
     // Get the plan document
     const planRef = doc(db, 'learningPlanTemplates', planId);

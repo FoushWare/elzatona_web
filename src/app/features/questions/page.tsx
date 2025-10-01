@@ -388,23 +388,7 @@ export default function QuestionsPage() {
                     <h3 className="text-lg font-semibold text-white hover:text-blue-400 transition-colors">
                       {question.title}
                     </h3>
-                    <div className="flex items-center space-x-2">
-                      {question.isWarmUp && (
-                        <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                          Warm up
-                        </span>
-                      )}
-                      {question.hasTestCases && (
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                          Test cases
-                        </span>
-                      )}
-                      {question.hasSolution && (
-                        <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
-                          Solution
-                        </span>
-                      )}
-                    </div>
+                    <div className="flex items-center space-x-2"></div>
                   </div>
 
                   <p className="text-gray-300 mb-4 line-clamp-2">

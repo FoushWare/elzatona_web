@@ -12,6 +12,7 @@ interface Question {
   correctAnswer: number;
   learningPath: string;
   order: number;
+  type?: string;
 }
 
 interface UseFirebaseQuestionsResult {

@@ -163,27 +163,9 @@ export function QuestionViewModal({
               </CardContent>
             </Card>
 
-            {/* Audio Question */}
-            {question.audioQuestion && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                    <Volume2 className="w-5 h-5" />
-                    Audio Question
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="prose dark:prose-invert max-w-none">
-                    <div className="whitespace-pre-wrap text-gray-800 dark:text-gray-200 leading-relaxed">
-                      {question.audioQuestion}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
             {/* Options (for single/multiple choice) */}
-            {question.type === 'single' || question.type === 'multiple' ? (
+            {question.type === 'multiple-choice' ||
+            question.type === 'true-false' ? (
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -247,43 +229,6 @@ export function QuestionViewModal({
               </Card>
             )}
 
-            {/* Additional Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {question.expectedAnswer && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-                      Expected Answer
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="prose dark:prose-invert max-w-none">
-                      <div className="whitespace-pre-wrap text-gray-800 dark:text-gray-200 leading-relaxed">
-                        {question.expectedAnswer}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {question.aiValidationPrompt && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-                      AI Validation Prompt
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="prose dark:prose-invert max-w-none">
-                      <div className="whitespace-pre-wrap text-gray-800 dark:text-gray-200 leading-relaxed">
-                        {question.aiValidationPrompt}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-
             {/* Question Status */}
             <Card>
               <CardHeader>
@@ -303,11 +248,6 @@ export function QuestionViewModal({
                   >
                     {question.isActive ? 'Active' : 'Inactive'}
                   </Badge>
-                  {question.acceptPartialCredit && (
-                    <Badge variant="outline" className="text-sm">
-                      Accepts Partial Credit
-                    </Badge>
-                  )}
                 </div>
               </CardContent>
             </Card>

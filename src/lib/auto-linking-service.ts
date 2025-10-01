@@ -106,6 +106,11 @@ class AutoLinkingService {
     learningPath: string
   ): Promise<void> {
     try {
+      if (!db) {
+        console.error('❌ Database not initialized');
+        return;
+      }
+
       console.log('🔗 Auto-linking question to sectors:', {
         questionId,
         category,
@@ -185,7 +190,7 @@ class AutoLinkingService {
       }
 
       // Add question to the target sector
-      const currentQuestionIds = targetSector.questionIds || [];
+      const currentQuestionIds = (targetSector as any).questionIds || [];
       if (!currentQuestionIds.includes(questionId)) {
         const updatedQuestionIds = [...currentQuestionIds, questionId];
 
@@ -197,11 +202,11 @@ class AutoLinkingService {
         });
 
         console.log(
-          `✅ Added question to sector: ${targetSector.name} (${targetSector.id})`
+          `✅ Added question to sector: ${(targetSector as any).name} (${targetSector.id})`
         );
       } else {
         console.log(
-          `ℹ️ Question already exists in sector: ${targetSector.name}`
+          `ℹ️ Question already exists in sector: ${(targetSector as any).name}`
         );
       }
 
@@ -221,6 +226,11 @@ class AutoLinkingService {
     learningPath: string
   ): Promise<void> {
     try {
+      if (!db) {
+        console.error('❌ Database not initialized');
+        return;
+      }
+
       console.log('🔗 Auto-linking question to learning paths:', {
         questionId,
         category,
@@ -284,6 +294,11 @@ class AutoLinkingService {
     questionData: QuestionData
   ): Promise<string> {
     try {
+      if (!db) {
+        console.error('❌ Database not initialized');
+        throw new Error('Database not initialized');
+      }
+
       console.log('🚀 Creating question with auto-linking:', questionData);
 
       // 1. Create question in unifiedQuestions
@@ -337,6 +352,11 @@ class AutoLinkingService {
     questionsData: QuestionData[]
   ): Promise<string[]> {
     try {
+      if (!db) {
+        console.error('❌ Database not initialized');
+        throw new Error('Database not initialized');
+      }
+
       console.log(
         `🚀 Bulk importing ${questionsData.length} questions with auto-linking`
       );
@@ -400,6 +420,11 @@ class AutoLinkingService {
     name: string
   ): Promise<string | null> {
     try {
+      if (!db) {
+        console.error('❌ Database not initialized');
+        return null;
+      }
+
       const pathsQuery = query(
         collection(db, this.COLLECTIONS.LEARNING_PATHS),
         where('name', '==', name),
@@ -427,6 +452,11 @@ class AutoLinkingService {
    */
   async getQuestionsForSection(sectionId: string): Promise<QuestionData[]> {
     try {
+      if (!db) {
+        console.error('❌ Database not initialized');
+        return [];
+      }
+
       console.log('📋 Getting questions for section:', sectionId);
 
       // For admin sections, the sectionId now directly matches the Firebase learning path ID
@@ -518,6 +548,11 @@ class AutoLinkingService {
    */
   async removeQuestionFromAllSections(questionId: string): Promise<void> {
     try {
+      if (!db) {
+        console.error('❌ Database not initialized');
+        return;
+      }
+
       console.log('🗑️ Removing question from all sections:', questionId);
 
       // Get all sections that contain this question

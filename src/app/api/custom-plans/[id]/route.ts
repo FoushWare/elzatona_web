@@ -5,10 +5,17 @@ import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 // Get a specific custom plan
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     const planRef = doc(db, 'customPlans', id);
     const planSnap = await getDoc(planRef);
@@ -39,11 +46,18 @@ export async function GET(
 // Update a custom plan
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const updates = await request.json();
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     const planRef = doc(db, 'customPlans', id);
 
@@ -71,10 +85,17 @@ export async function PUT(
 // Delete a custom plan
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     const planRef = doc(db, 'customPlans', id);
     await deleteDoc(planRef);

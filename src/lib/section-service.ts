@@ -419,8 +419,19 @@ export class SectionService {
       id: section.id,
       name: section.name,
       description: section.description,
-      category: section.category,
-      difficulty: section.difficulty,
+      category: section.category as
+        | 'frontend'
+        | 'advanced'
+        | 'foundation'
+        | 'specialized'
+        | 'career'
+        | 'emerging'
+        | undefined,
+      difficulty: section.difficulty as
+        | 'beginner'
+        | 'intermediate'
+        | 'advanced'
+        | undefined,
       estimatedTime: section.estimatedTime,
       order: section.order,
       isActive: true,
@@ -455,7 +466,7 @@ export class SectionService {
         return result;
       }
 
-      const sections: LearningSection[] = result.data;
+      const sections: LearningSection[] = result.data as LearningSection[];
 
       // Check if section name already exists
       const existingSection = sections.find(
@@ -515,7 +526,7 @@ export class SectionService {
         return result;
       }
 
-      const sections: LearningSection[] = result.data;
+      const sections: LearningSection[] = result.data as LearningSection[];
       const sectionIndex = sections.findIndex(s => s.id === sectionId);
 
       if (sectionIndex === -1) {
@@ -531,7 +542,7 @@ export class SectionService {
         const existingSection = sections.find(
           s =>
             s.id !== sectionId &&
-            s.name.toLowerCase() === updates.name.toLowerCase()
+            s.name.toLowerCase() === updates.name?.toLowerCase()
         );
         if (existingSection) {
           return {
@@ -578,7 +589,7 @@ export class SectionService {
         return result;
       }
 
-      const sections: LearningSection[] = result.data;
+      const sections: LearningSection[] = result.data as LearningSection[];
       const sectionIndex = sections.findIndex(s => s.id === sectionId);
 
       if (sectionIndex === -1) {
@@ -634,7 +645,7 @@ export class SectionService {
         return result;
       }
 
-      const sections: LearningSection[] = result.data;
+      const sections: LearningSection[] = result.data as LearningSection[];
 
       // Create a map of new orders
       const newOrderMap = new Map<string, number>();
@@ -719,7 +730,7 @@ export class SectionService {
         return result;
       }
 
-      const questions: SectionQuestion[] = result.data;
+      const questions: SectionQuestion[] = result.data as SectionQuestion[];
 
       // Create new question with incomplete structure handling
       const newQuestion: SectionQuestion = {
@@ -790,7 +801,8 @@ export class SectionService {
         return result;
       }
 
-      const existingQuestions: SectionQuestion[] = result.data;
+      const existingQuestions: SectionQuestion[] =
+        result.data as SectionQuestion[];
       const newQuestions: SectionQuestion[] = [];
 
       questionsData.forEach((questionData, index) => {
@@ -850,14 +862,21 @@ export class SectionService {
   private static checkQuestionCompleteness(
     questionData: Partial<BulkQuestionData>
   ): boolean {
-    const hasTitle = questionData.title && questionData.title.trim() !== '';
-    const hasContent =
-      questionData.content && questionData.content.trim() !== '';
-    const hasOptions = questionData.options && questionData.options.length > 0;
-    const hasCorrectAnswers =
-      questionData.correctAnswers && questionData.correctAnswers.length > 0;
-    const hasExplanation =
-      questionData.explanation && questionData.explanation.trim() !== '';
+    const hasTitle = Boolean(
+      questionData.title && questionData.title.trim() !== ''
+    );
+    const hasContent = Boolean(
+      questionData.content && questionData.content.trim() !== ''
+    );
+    const hasOptions = Boolean(
+      questionData.options && questionData.options.length > 0
+    );
+    const hasCorrectAnswers = Boolean(
+      questionData.correctAnswers && questionData.correctAnswers.length > 0
+    );
+    const hasExplanation = Boolean(
+      questionData.explanation && questionData.explanation.trim() !== ''
+    );
 
     return (
       hasTitle &&
@@ -878,7 +897,7 @@ export class SectionService {
     try {
       const result = await this.getSections();
       if (result.success) {
-        const sections: LearningSection[] = result.data;
+        const sections: LearningSection[] = result.data as LearningSection[];
         const sectionIndex = sections.findIndex(s => s.id === sectionId);
 
         if (sectionIndex !== -1) {

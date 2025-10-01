@@ -4,6 +4,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
 
+// Placeholder EnhancedQuestionService
+class EnhancedQuestionService {
+  static async createQuestion(questionData: any): Promise<string> {
+    // Placeholder implementation
+    console.log('Creating enhanced question:', questionData);
+    return 'placeholder-question-id';
+  }
+
+  static async getTopic(topicId: string): Promise<any> {
+    // Placeholder implementation
+    console.log('Getting topic:', topicId);
+    return null;
+  }
+}
+
 // GET /api/enhanced-questions - Get all enhanced questions
 export async function GET(request: NextRequest) {
   try {

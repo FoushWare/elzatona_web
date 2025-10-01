@@ -14,16 +14,16 @@ export default function QuestionDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (params.id) {
+    if (params?.id) {
       const foundQuestion = greatFrontendQuestions.find(
-        q => q.id === params.id
+        q => q.id === params?.id
       );
       if (foundQuestion) {
         setQuestion(foundQuestion);
       }
       setLoading(false);
     }
-  }, [params.id]);
+  }, [params?.id]);
 
   if (loading) {
     return (
@@ -137,12 +137,6 @@ export default function QuestionDetailPage() {
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-blue-500" />
                   <span>Asked at {question.companies.join(', ')}</span>
-                </div>
-              )}
-              {question.popularity && (
-                <div className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-yellow-500" />
-                  <span>Popularity: {question.popularity}</span>
                 </div>
               )}
             </div>

@@ -39,11 +39,18 @@ type Story = StoryObj<typeof meta>;
 
 const defaultLearningPath = {
   id: 'frontend-basics',
+  name: 'Frontend Basics',
   title: 'Frontend Basics',
   description: 'Learn HTML, CSS, and JavaScript fundamentals',
   difficulty: 'beginner' as const,
   estimatedTime: 40,
   questionCount: 25,
+  icon: 'book-open',
+  color: 'blue',
+  order: 1,
+  isActive: true,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
   resources: [
     {
       id: 'resource1',
@@ -184,6 +191,7 @@ export const MinimalData: Story = {
   args: {
     path: {
       id: 'minimal-path',
+      name: 'Minimal Path',
       title: 'Minimal Path',
       description: 'A path with minimal data',
       difficulty: 'beginner' as const,
@@ -192,6 +200,12 @@ export const MinimalData: Story = {
       resources: [],
       targetSkills: [],
       prerequisites: [],
+      icon: 'book',
+      color: 'gray',
+      order: 0,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     },
     isCollapsed: false,
     onToggle: () => {},

@@ -95,8 +95,14 @@ export default function QuestionSectionAssigner({
   const handleAssignmentChange = (questionId: string, sectionId: string) => {
     const newAssignments = {
       ...assignments,
-      [questionId]: sectionId === 'none' ? undefined : sectionId,
     };
+
+    if (sectionId === 'none') {
+      delete newAssignments[questionId];
+    } else {
+      newAssignments[questionId] = sectionId;
+    }
+
     setAssignments(newAssignments);
     onAssignmentChange?.(newAssignments);
   };

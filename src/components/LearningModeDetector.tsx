@@ -17,7 +17,7 @@ export const LearningModeDetector: React.FC = () => {
 
   useEffect(() => {
     // Don't show onboarding on admin pages
-    if (pathname.startsWith('/admin')) {
+    if (pathname?.startsWith('/admin')) {
       return;
     }
 
@@ -77,7 +77,7 @@ export const LearningModeDetector: React.FC = () => {
   };
 
   // Don't show onboarding on admin pages
-  if (pathname.startsWith('/admin')) {
+  if (pathname?.startsWith('/admin')) {
     return null;
   }
 

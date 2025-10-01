@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
         id: doc.id,
         ...doc.data(),
       }))
-      .sort((a, b) => {
+      .sort((a: any, b: any) => {
         // Sort by order field if it exists, otherwise by name
         const orderA = a.order || 999;
         const orderB = b.order || 999;
@@ -83,11 +83,11 @@ export async function GET(request: NextRequest) {
       throw new Error(sectionsResult.error || 'Failed to fetch sections');
     }
 
-    const sections = sectionsResult.data || [];
+    const sections: any[] = (sectionsResult.data as any[]) || [];
 
     // Create a map of sections for quick lookup
     const sectionsMap = sections.reduce(
-      (acc, section) => {
+      (acc: Record<string, any>, section: any) => {
         acc[section.id] = section;
         return acc;
       },
@@ -95,28 +95,31 @@ export async function GET(request: NextRequest) {
     );
 
     // Deduplicate learning paths by ID and add sections data
-    const uniqueLearningPaths = learningPaths.reduce((acc, path) => {
-      if (!acc.find(existingPath => existingPath.id === path.id)) {
-        // Get relevant sections for this learning path
-        const relevantSectionIds = learningPathSections[path.id] || [];
-        const pathSections = relevantSectionIds
-          .map(sectionId => sectionsMap[sectionId])
-          .filter(Boolean)
-          .map(section => ({
-            id: section.id,
-            name: section.name,
-            questionCount: section.questionCount || 0,
-          }));
+    const uniqueLearningPaths = learningPaths.reduce(
+      (acc: any[], path: any) => {
+        if (!acc.find(existingPath => existingPath.id === path.id)) {
+          // Get relevant sections for this learning path
+          const relevantSectionIds = learningPathSections[path.id] || [];
+          const pathSections = relevantSectionIds
+            .map(sectionId => sectionsMap[sectionId])
+            .filter(Boolean)
+            .map(section => ({
+              id: section.id,
+              name: section.name,
+              questionCount: section.questionCount || 0,
+            }));
 
-        acc.push({
-          ...path,
-          sectors: pathSections,
-          // Use the questionCount from the learning path itself
-          questionCount: path.questionCount || 0,
-        });
-      }
-      return acc;
-    }, [] as any[]);
+          acc.push({
+            ...path,
+            sectors: pathSections,
+            // Use the questionCount from the learning path itself
+            questionCount: path.questionCount || 0,
+          });
+        }
+        return acc;
+      },
+      [] as any[]
+    );
 
     return NextResponse.json({
       success: true,

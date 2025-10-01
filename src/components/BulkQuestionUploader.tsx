@@ -1,7 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BulkQuestionData } from '@/lib/unified-question-schema';
+import {
+  UnifiedQuestion,
+  BulkQuestionData,
+} from '@/lib/unified-question-schema';
 import { MarkdownQuestionParser } from '@/lib/markdown-question-parser';
 import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import {
@@ -35,22 +38,23 @@ export default function BulkQuestionUploader({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const [questions, setQuestions] = useState<BulkQuestionData[]>([
+  const [questions, setQuestions] = useState<UnifiedQuestion[]>([
     {
+      id: '',
       title: '',
       content: '',
-      type: 'single',
-      difficulty: 'easy',
+      type: 'multiple-choice',
+      difficulty: 'beginner',
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       options: [
         { id: 'a', text: '', isCorrect: false },
         { id: 'b', text: '', isCorrect: false },
         { id: 'c', text: '', isCorrect: false },
         { id: 'd', text: '', isCorrect: false },
       ],
-      correctAnswers: [],
       explanation: '',
-      audioQuestion: '',
-      audioAnswer: '',
     },
   ]);
 
@@ -76,20 +80,21 @@ export default function BulkQuestionUploader({
     setQuestions([
       ...questions,
       {
+        id: '',
         title: '',
         content: '',
-        type: 'single',
-        difficulty: 'easy',
+        type: 'multiple-choice',
+        difficulty: 'beginner',
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         options: [
           { id: 'a', text: '', isCorrect: false },
           { id: 'b', text: '', isCorrect: false },
           { id: 'c', text: '', isCorrect: false },
           { id: 'd', text: '', isCorrect: false },
         ],
-        correctAnswers: [],
         explanation: '',
-        audioQuestion: '',
-        audioAnswer: '',
       },
     ]);
   };
@@ -102,8 +107,16 @@ export default function BulkQuestionUploader({
 
   const updateQuestion = (
     index: number,
-    field: keyof BulkQuestionData,
-    value: string | 'single' | 'multiple' | 'easy' | 'medium' | 'hard'
+    field: keyof UnifiedQuestion,
+    value:
+      | string
+      | 'multiple-choice'
+      | 'open-ended'
+      | 'true-false'
+      | 'code'
+      | 'beginner'
+      | 'intermediate'
+      | 'advanced'
   ) => {
     const newQuestions = [...questions];
     newQuestions[index] = { ...newQuestions[index], [field]: value };
@@ -118,29 +131,31 @@ export default function BulkQuestionUploader({
   ) => {
     const newQuestions = [...questions];
     const question = newQuestions[questionIndex];
-    const newOptions = [...question.options];
+    const newOptions = [...(question.options || [])];
     newOptions[optionIndex] = { ...newOptions[optionIndex], [field]: value };
 
     // If this is single choice and we're marking an option as correct, unmark others
-    if (field === 'isCorrect' && value === true && question.type === 'single') {
+    if (
+      field === 'isCorrect' &&
+      value === true &&
+      question.type === 'multiple-choice'
+    ) {
       newOptions.forEach((option, i) => {
         if (i !== optionIndex) option.isCorrect = false;
       });
     }
 
     question.options = newOptions;
-    question.correctAnswers = newOptions
-      .filter(opt => opt.isCorrect)
-      .map(opt => opt.id);
     setQuestions(newQuestions);
   };
 
   const addOption = (questionIndex: number) => {
     const newQuestions = [...questions];
     const question = newQuestions[questionIndex];
-    const newId = String.fromCharCode(97 + question.options.length);
+    const currentOptions = question.options || [];
+    const newId = String.fromCharCode(97 + currentOptions.length);
     question.options = [
-      ...question.options,
+      ...currentOptions,
       { id: newId, text: '', isCorrect: false },
     ];
     setQuestions(newQuestions);
@@ -149,11 +164,9 @@ export default function BulkQuestionUploader({
   const removeOption = (questionIndex: number, optionIndex: number) => {
     const newQuestions = [...questions];
     const question = newQuestions[questionIndex];
-    if (question.options.length > 2) {
-      question.options = question.options.filter((_, i) => i !== optionIndex);
-      question.correctAnswers = question.options
-        .filter(opt => opt.isCorrect)
-        .map(opt => opt.id);
+    const currentOptions = question.options || [];
+    if (currentOptions.length > 2) {
+      question.options = currentOptions.filter((_, i) => i !== optionIndex);
       setQuestions(newQuestions);
     }
   };
@@ -164,7 +177,7 @@ export default function BulkQuestionUploader({
       const parsed = JSON.parse(jsonInput);
 
       // Handle both array format and object with questions property
-      let questionsArray: BulkQuestionData[];
+      let questionsArray: UnifiedQuestion[];
       if (Array.isArray(parsed)) {
         questionsArray = parsed;
       } else if (parsed.questions && Array.isArray(parsed.questions)) {
@@ -187,25 +200,26 @@ export default function BulkQuestionUploader({
           throw new Error(`Question ${index + 1}: options array is required`);
         }
 
-        if (!q.options.some(opt => opt.isCorrect)) {
+        if (!q.options.some((opt: any) => opt.isCorrect)) {
           throw new Error(
             `Question ${index + 1}: at least one option must be marked as correct`
           );
         }
 
         return {
-          title: q.title,
-          content: q.content,
-          type: q.type || 'single',
-          difficulty: q.difficulty || 'easy',
-          options: q.options.map((opt, optIndex) => ({
+          id: q.id || `q-${Date.now()}-${index}`,
+          title: q.title || '',
+          content: q.content || '',
+          type: q.type || 'multiple-choice',
+          difficulty: q.difficulty || 'beginner',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          options: q.options.map((opt: any, optIndex: number) => ({
             id: opt.id || String.fromCharCode(97 + optIndex), // a, b, c, d...
             text: opt.text || '',
             isCorrect: opt.isCorrect || false,
           })),
-          correctAnswers:
-            q.correctAnswers ||
-            q.options.filter(opt => opt.isCorrect).map(opt => opt.id),
           explanation: q.explanation || '',
           category: q.category || sectionName || 'General',
           learningPath: q.learningPath || sectionId || 'Default Learning Path',
@@ -251,7 +265,7 @@ export default function BulkQuestionUploader({
       );
 
       // Validate the converted data
-      const validatedQuestions = bulkData.map((q, index) => {
+      const validatedQuestions = bulkData.questions.map((q, index) => {
         if (!q.title || !q.content) {
           throw new Error(
             `Question ${index + 1}: title and content are required`
@@ -268,25 +282,26 @@ export default function BulkQuestionUploader({
           );
         }
 
-        if (!q.correctAnswers || q.correctAnswers.length === 0) {
+        if (!q.options.some((opt: any) => opt.isCorrect)) {
           throw new Error(
             `Question ${index + 1}: at least one option must be marked as correct`
           );
         }
 
         return {
-          title: q.title,
-          content: q.content,
-          type: q.type || 'single',
-          difficulty: q.difficulty || 'easy',
-          options: q.options.map((opt, optIndex) => ({
+          id: q.id || `q-${Date.now()}-${index}`,
+          title: q.title || '',
+          content: q.content || '',
+          type: q.type || 'multiple-choice',
+          difficulty: q.difficulty || 'beginner',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          options: q.options.map((opt: any, optIndex: number) => ({
             id: opt.id || String.fromCharCode(97 + optIndex), // a, b, c, d...
             text: opt.text || '',
             isCorrect: opt.isCorrect || false,
           })),
-          correctAnswers:
-            q.correctAnswers ||
-            q.options.filter(opt => opt.isCorrect).map(opt => opt.id),
           explanation: q.explanation || '',
           category: q.category || sectionName || 'General',
           learningPath: q.learningPath || sectionId || 'Default Learning Path',
@@ -337,7 +352,6 @@ export default function BulkQuestionUploader({
       type: q.type,
       difficulty: q.difficulty,
       options: q.options,
-      correctAnswers: q.correctAnswers,
       explanation: q.explanation,
       category: q.category || sectionName,
       learningPath: q.learningPath || sectionId,
@@ -358,8 +372,8 @@ export default function BulkQuestionUploader({
       q =>
         q.title.trim() &&
         q.content.trim() &&
-        q.options.some(opt => opt.text.trim()) &&
-        q.options.some(opt => opt.isCorrect)
+        q.options?.some(opt => opt.text.trim()) &&
+        q.options?.some(opt => opt.isCorrect)
     );
 
     console.log('Valid questions after filtering:', validQuestions);
@@ -386,7 +400,29 @@ export default function BulkQuestionUploader({
       }));
 
       console.log('📤 Calling bulkImportQuestions with Firebase...');
-      const result = await bulkImportQuestions(firebaseQuestions);
+      const bulkData: BulkQuestionData = {
+        questions: firebaseQuestions,
+        metadata: {
+          source: 'bulk-uploader',
+          version: '1.0.0',
+          totalCount: firebaseQuestions.length,
+          categories: [
+            ...new Set(firebaseQuestions.map(q => q.category).filter(Boolean)),
+          ],
+          difficulties: [...new Set(firebaseQuestions.map(q => q.difficulty))],
+          learningPaths: [
+            ...new Set(
+              firebaseQuestions.map(q => q.learningPath).filter(Boolean)
+            ),
+          ],
+        },
+        validation: {
+          isValid: true,
+          errors: [],
+          warnings: [],
+        },
+      };
+      const result = await bulkImportQuestions([bulkData]);
 
       console.log('📥 Firebase Import Result:', result);
 
@@ -396,17 +432,20 @@ export default function BulkQuestionUploader({
         );
         setQuestions([
           {
+            id: '',
             title: '',
             content: '',
-            type: 'single',
-            difficulty: 'easy',
+            type: 'multiple-choice',
+            difficulty: 'beginner',
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
             options: [
               { id: 'a', text: '', isCorrect: false },
               { id: 'b', text: '', isCorrect: false },
               { id: 'c', text: '', isCorrect: false },
               { id: 'd', text: '', isCorrect: false },
             ],
-            correctAnswers: [],
             explanation: '',
           },
         ]);
@@ -437,8 +476,8 @@ export default function BulkQuestionUploader({
         {
           title: 'Sample Question Title',
           content: 'What is the correct answer?',
-          type: 'single',
-          difficulty: 'easy',
+          type: 'multiple-choice',
+          difficulty: 'beginner',
           options: [
             { id: 'a', text: 'Option A', isCorrect: true },
             { id: 'b', text: 'Option B', isCorrect: false },
@@ -497,6 +536,54 @@ export default function BulkQuestionUploader({
             <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </button>
         )}
+      </div>
+
+      {/* Step-by-step guide */}
+      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-6">
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+          How to add questions:
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div className="flex items-start space-x-2">
+            <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full flex items-center justify-center text-xs font-bold">
+              1
+            </span>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">
+                Choose input method
+              </p>
+              <p className="text-gray-600 dark:text-gray-400">
+                Form, JSON, or Markdown
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start space-x-2">
+            <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full flex items-center justify-center text-xs font-bold">
+              2
+            </span>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">
+                Parse your questions
+              </p>
+              <p className="text-gray-600 dark:text-gray-400">
+                Click "Parse" to process them
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start space-x-2">
+            <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full flex items-center justify-center text-xs font-bold">
+              3
+            </span>
+            <div>
+              <p className="font-medium text-gray-900 dark:text-white">
+                Save to Firebase
+              </p>
+              <p className="text-gray-600 dark:text-gray-400">
+                Click "Save X Questions" to add them
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Input Mode Toggle */}
@@ -581,8 +668,8 @@ export default function BulkQuestionUploader({
   {
     "title": "What is React?",
     "content": "React is a JavaScript library for building user interfaces.",
-    "type": "single",
-    "difficulty": "easy",
+    "type": "multiple-choice",
+    "difficulty": "beginner",
     "options": [
       { "id": "a", "text": "A JavaScript library", "isCorrect": true },
       { "id": "b", "text": "A CSS framework", "isCorrect": false },
@@ -600,7 +687,10 @@ export default function BulkQuestionUploader({
     "audioQuestion": "/audio/question-audio.mp3",
     "audioAnswer": "/audio/answer-audio.mp3"
   }
-]`}
+]
+
+After pasting your JSON, click "Parse JSON" to process them, 
+then click "Add X Questions to Firebase" to save them.`}
               className="w-full h-64 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono text-sm"
             />
             <div className="flex space-x-2">
@@ -624,13 +714,13 @@ export default function BulkQuestionUploader({
                 <button
                   onClick={submitQuestions}
                   disabled={loading}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2"
+                  className="px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2 font-semibold shadow-lg"
                 >
-                  <Save className="w-4 h-4" />
+                  <Save className="w-5 h-5" />
                   <span>
                     {loading
                       ? 'Adding...'
-                      : `Bulk Add ${questions.length} Questions`}
+                      : `Add ${questions.length} Questions to Firebase`}
                   </span>
                 </button>
               )}
@@ -694,7 +784,12 @@ Category: Frontend Development
 Tags: #react #javascript #frontend
 Difficulty: easy
 
-Explanation: React is a JavaScript library for building user interfaces.`}
+Explanation: React is a JavaScript library for building user interfaces.
+
+---
+
+After pasting your questions, click "Parse Markdown" to process them, 
+then click "Save X Questions" to add them to Firebase.`}
               className="w-full h-64 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white font-mono text-sm"
             />
             <div className="flex space-x-2">
@@ -718,13 +813,13 @@ Explanation: React is a JavaScript library for building user interfaces.`}
                 <button
                   onClick={submitQuestions}
                   disabled={loading}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2"
+                  className="px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2 font-semibold shadow-lg"
                 >
-                  <Save className="w-4 h-4" />
+                  <Save className="w-5 h-5" />
                   <span>
                     {loading
                       ? 'Adding Questions...'
-                      : `Add ${questions.length} Questions`}
+                      : `Add ${questions.length} Questions to Firebase`}
                   </span>
                 </button>
               )}
@@ -773,6 +868,69 @@ Explanation: React is a JavaScript library for building user interfaces.`}
             <p className="text-green-600 dark:text-green-400 text-sm">
               {success}
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* Questions Summary - Show after parsing */}
+      {(markdownParsed || jsonParsed) && questions.length > 0 && (
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-blue-900 dark:text-blue-100">
+              Parsed Questions Summary
+            </h3>
+            <span className="px-3 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+              {questions.length} questions ready
+            </span>
+          </div>
+          <div className="space-y-2 max-h-40 overflow-y-auto">
+            {questions.slice(0, 5).map((question, index) => (
+              <div
+                key={index}
+                className="text-sm text-blue-700 dark:text-blue-300"
+              >
+                <span className="font-medium">{index + 1}.</span>{' '}
+                {question.title || 'Untitled Question'}
+                <span className="ml-2 text-xs bg-blue-200 dark:bg-blue-700 px-2 py-1 rounded">
+                  {question.type} • {question.difficulty}
+                </span>
+              </div>
+            ))}
+            {questions.length > 5 && (
+              <div className="text-sm text-blue-600 dark:text-blue-400 italic">
+                ... and {questions.length - 5} more questions
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Save Questions Call-to-Action - Show after parsing */}
+      {(markdownParsed || jsonParsed) && questions.length > 0 && (
+        <div className="bg-green-50 dark:bg-green-900/20 border-2 border-green-300 dark:border-green-700 rounded-lg p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-green-900 dark:text-green-100 mb-2">
+                Ready to Save Questions!
+              </h3>
+              <p className="text-green-700 dark:text-green-300 text-sm">
+                {questions.length} questions have been parsed and are ready to
+                be saved to Firebase. Click the button below to add them to the
+                unified questions collection.
+              </p>
+            </div>
+            <button
+              onClick={submitQuestions}
+              disabled={loading}
+              className="px-8 py-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-3 font-bold text-lg shadow-xl"
+            >
+              <Save className="w-6 h-6" />
+              <span>
+                {loading
+                  ? 'Saving to Firebase...'
+                  : `Save ${questions.length} Questions`}
+              </span>
+            </button>
           </div>
         </div>
       )}
@@ -867,7 +1025,7 @@ Explanation: React is a JavaScript library for building user interfaces.`}
                       }
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                     >
-                      <option value="single">Single Choice</option>
+                      <option value="multiple-choice">Multiple Choice</option>
                       <option value="multiple">Multiple Choice</option>
                     </select>
                   </div>
@@ -911,7 +1069,7 @@ Explanation: React is a JavaScript library for building user interfaces.`}
                   </div>
 
                   <div className="space-y-3">
-                    {question.options.map((option, optionIndex) => (
+                    {(question.options || []).map((option, optionIndex) => (
                       <div
                         key={option.id}
                         className="flex items-center space-x-3"
@@ -948,7 +1106,7 @@ Explanation: React is a JavaScript library for building user interfaces.`}
                           className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                           placeholder={`Option ${option.id.toUpperCase()}`}
                         />
-                        {question.options.length > 2 && (
+                        {(question.options || []).length > 2 && (
                           <button
                             type="button"
                             onClick={() =>
@@ -983,46 +1141,6 @@ Explanation: React is a JavaScript library for building user interfaces.`}
                     rows={2}
                   />
                 </div>
-
-                {/* Audio Fields */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Question Audio URL
-                    </label>
-                    <input
-                      type="url"
-                      value={question.audioQuestion || ''}
-                      onChange={e =>
-                        updateQuestion(
-                          questionIndex,
-                          'audioQuestion',
-                          e.target.value
-                        )
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                      placeholder="/audio/question-audio.mp3"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Answer Audio URL
-                    </label>
-                    <input
-                      type="url"
-                      value={question.audioAnswer || ''}
-                      onChange={e =>
-                        updateQuestion(
-                          questionIndex,
-                          'audioAnswer',
-                          e.target.value
-                        )
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                      placeholder="/audio/answer-audio.mp3"
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           ))}
@@ -1053,11 +1171,13 @@ Explanation: React is a JavaScript library for building user interfaces.`}
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2"
+              className="px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg transition-colors flex items-center space-x-2 font-semibold shadow-lg"
             >
-              <Save className="w-4 h-4" />
+              <Save className="w-5 h-5" />
               <span>
-                {loading ? 'Adding...' : `Add ${questions.length} Questions`}
+                {loading
+                  ? 'Adding...'
+                  : `Add ${questions.length} Questions to Firebase`}
               </span>
             </button>
           </div>

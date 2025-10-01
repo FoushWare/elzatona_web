@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 
 export default function SimpleHookTestPage() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     console.log('Simple hook test useEffect triggered');
@@ -20,7 +20,7 @@ export default function SimpleHookTestPage() {
         setLoading(false);
       } catch (err) {
         console.error('Error:', err);
-        setError(err.message);
+        setError(err instanceof Error ? err.message : 'An error occurred');
         setLoading(false);
       }
     };

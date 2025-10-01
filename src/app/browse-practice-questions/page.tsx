@@ -347,7 +347,6 @@ export default function BrowsePracticeQuestionsPage() {
         <SignInPopup
           isOpen={showSignInPopup}
           onClose={handleSignInClose}
-          onSkip={handleSignInSkip}
           onSuccess={handleSignInSuccess}
         />
       )}

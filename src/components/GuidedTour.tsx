@@ -181,14 +181,6 @@ export const GuidedTour: React.FC<GuidedTourProps> = props => {
       `}</style>
       <TourProvider
         steps={steps}
-        isOpen={props.isOpen}
-        onRequestClose={props.onComplete}
-        onAfterOpen={() => {
-          // Optional: Add any logic when tour opens
-        }}
-        onAfterClose={() => {
-          // Optional: Add any logic when tour closes
-        }}
         styles={{
           popover: base => ({
             ...base,

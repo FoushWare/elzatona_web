@@ -7,7 +7,7 @@ import { getPreparationGuideById } from '@/lib/preparationGuides';
 
 export default function PreparationGuideDetailPage() {
   const params = useParams();
-  const guideId = params.id as string;
+  const guideId = params?.id as string;
   const [expandedSections, setExpandedSections] = useState<Set<number>>(
     new Set()
   );

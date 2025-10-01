@@ -327,7 +327,6 @@ export default function PracticeSelectionPage() {
         <SignInPopup
           isOpen={showSignInPopup}
           onClose={handleSignInClose}
-          onSkip={handleSignInSkip}
           onSuccess={handleSignInSuccess}
         />
       )}

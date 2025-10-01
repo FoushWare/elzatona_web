@@ -44,11 +44,18 @@ type Story = StoryObj<typeof meta>;
 const mockLearningPaths = [
   {
     id: 'frontend-basics',
+    name: 'Frontend Basics',
     title: 'Frontend Basics',
     description: 'Learn HTML, CSS, and JavaScript fundamentals',
     difficulty: 'beginner' as const,
     estimatedTime: 40,
     questionCount: 25,
+    icon: 'book-open',
+    color: 'blue',
+    order: 1,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     resources: [
       {
         id: 'resource1',
@@ -62,11 +69,18 @@ const mockLearningPaths = [
   },
   {
     id: 'react-mastery',
+    name: 'React Mastery',
     title: 'React Mastery',
     description: 'Master React development with hooks and patterns',
     difficulty: 'intermediate' as const,
     estimatedTime: 60,
     questionCount: 30,
+    icon: 'code',
+    color: 'purple',
+    order: 2,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     resources: [
       {
         id: 'resource2',
@@ -80,11 +94,18 @@ const mockLearningPaths = [
   },
   {
     id: 'advanced-css',
+    name: 'Advanced CSS Mastery',
     title: 'Advanced CSS Mastery',
     description: 'Advanced CSS techniques and modern layouts',
     difficulty: 'advanced' as const,
     estimatedTime: 30,
     questionCount: 20,
+    icon: 'palette',
+    color: 'green',
+    order: 3,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     resources: [
       {
         id: 'resource3',
@@ -142,17 +163,21 @@ export const ManyCards: Story = {
   args: {
     paths: Array(6)
       .fill(null)
-      .map((_, index) => ({
-        ...mockLearningPaths[0],
-        id: `path-${index}`,
-        title: `Learning Path ${index + 1}`,
-        description: `Description for learning path ${index + 1}`,
-        difficulty: ['beginner', 'intermediate', 'advanced'][
-          index % 3
-        ] as const,
-        estimatedTime: 20 + index * 10,
-        questionCount: 10 + index * 5,
-      })),
+      .map((_, index) => {
+        const basePath = { ...mockLearningPaths[0] };
+        return {
+          ...basePath,
+          id: `path-${index}`,
+          title: `Learning Path ${index + 1}`,
+          description: `Description for learning path ${index + 1}`,
+          difficulty: ['beginner', 'intermediate', 'advanced'][index % 3] as
+            | 'beginner'
+            | 'intermediate'
+            | 'advanced',
+          estimatedTime: 20 + index * 10,
+          questionCount: 10 + index * 5,
+        };
+      }),
     collapsedCards: new Set(),
     onToggleCard: () => {},
     cardRefs: { current: {} },

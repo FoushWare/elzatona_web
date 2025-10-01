@@ -46,7 +46,7 @@ interface Question {
 export const GuidedPractice: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const planId = searchParams.get('plan');
+  const planId = searchParams?.get('plan');
 
   const [session, setSession] = useState<GuidedSession | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);

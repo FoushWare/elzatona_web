@@ -15,6 +15,7 @@ import {
   limit,
   startAfter,
   serverTimestamp,
+  Firestore,
 } from 'firebase/firestore';
 
 export interface UnifiedQuestion {
@@ -42,7 +43,7 @@ export interface UnifiedQuestion {
     source?: string;
     version?: string;
     references?: string[];
-    [key: string]: any;
+    [key: string]: unknown;
   };
   // For multiple choice questions
   options?: {
@@ -134,7 +135,7 @@ export interface LearningPath {
   metadata?: {
     version: string;
     tags: string[];
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -169,7 +170,7 @@ export interface QuestionValidationError {
   field: string;
   message: string;
   code?: string;
-  value?: any;
+  value?: unknown;
   severity?: 'error' | 'warning';
 }
 
@@ -236,9 +237,9 @@ export const QUESTION_VALIDATION_RULES = {
 
 // Unified Question Service Class
 export class UnifiedQuestionService {
-  private db: any;
+  private db: Firestore | null;
 
-  constructor(db: any) {
+  constructor(db: Firestore | null) {
     this.db = db;
   }
 
@@ -639,6 +640,46 @@ export class UnifiedQuestionService {
       errors,
       warnings,
     };
+  }
+
+  // Remove duplicate learning paths (placeholder implementation)
+  static async removeDuplicateLearningPaths(): Promise<void> {
+    // This is a placeholder implementation
+    // In a real implementation, this would:
+    // 1. Query all learning paths
+    // 2. Find duplicates based on name or other criteria
+    // 3. Merge or remove duplicates
+    // 4. Update questions that reference the removed paths
+    console.log(
+      'removeDuplicateLearningPaths called - placeholder implementation'
+    );
+  }
+
+  // Get learning paths (placeholder implementation)
+  static async getLearningPaths(): Promise<LearningPath[]> {
+    // This is a placeholder implementation
+    // In a real implementation, this would query the database for learning paths
+    console.log('getLearningPaths called - placeholder implementation');
+    return [];
+  }
+
+  // Initialize default learning paths (placeholder implementation)
+  static async initializeDefaultLearningPaths(): Promise<void> {
+    // This is a placeholder implementation
+    // In a real implementation, this would create default learning paths in the database
+    console.log(
+      'initializeDefaultLearningPaths called - placeholder implementation'
+    );
+  }
+
+  // Get questions by IDs (placeholder implementation)
+  static async getQuestionsByIds(
+    questionIds: string[]
+  ): Promise<{ success: boolean; data?: any[]; error?: string }> {
+    // This is a placeholder implementation
+    // In a real implementation, this would query the database for questions by their IDs
+    console.log('getQuestionsByIds called with IDs:', questionIds);
+    return { success: true, data: [] };
   }
 }
 

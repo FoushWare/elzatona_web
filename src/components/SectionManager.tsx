@@ -743,28 +743,45 @@ export default function SectionManager() {
                             <span className="px-2 py-1 rounded bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
                               {question.category}
                             </span>
-                            <span>
-                              Created:{' '}
-                              {question.createdAt
-                                ? new Date(
-                                    question.createdAt
-                                  ).toLocaleDateString()
-                                : 'Unknown'}
-                            </span>
+                            <span>Type: {question.type}</span>
                           </div>
                         </div>
 
                         {/* Edit and Delete Buttons */}
                         <div className="flex items-center space-x-2 ml-4">
                           <button
-                            onClick={() => handleEditQuestion(question)}
+                            onClick={() =>
+                              handleEditQuestion({
+                                ...question,
+                                difficulty:
+                                  question.difficulty === 'beginner'
+                                    ? 'easy'
+                                    : question.difficulty === 'intermediate'
+                                      ? 'medium'
+                                      : 'hard',
+                                createdAt: new Date().toISOString(),
+                                updatedAt: new Date().toISOString(),
+                              } as SectionQuestion)
+                            }
                             className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                             title="Edit question"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleDeleteQuestion(question)}
+                            onClick={() =>
+                              handleDeleteQuestion({
+                                ...question,
+                                difficulty:
+                                  question.difficulty === 'beginner'
+                                    ? 'easy'
+                                    : question.difficulty === 'intermediate'
+                                      ? 'medium'
+                                      : 'hard',
+                                createdAt: new Date().toISOString(),
+                                updatedAt: new Date().toISOString(),
+                              } as SectionQuestion)
+                            }
                             className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                             title="Delete question"
                           >

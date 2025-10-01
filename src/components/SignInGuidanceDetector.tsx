@@ -212,7 +212,7 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
   };
 
   // Don't show guidance on admin pages
-  if (pathname.startsWith('/admin')) {
+  if (pathname?.startsWith('/admin')) {
     return null;
   }
 

@@ -41,7 +41,11 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       // If user is authenticated, try to load from Firebase preferences first
-      if (user?.preferences?.learningMode) {
+      if (
+        user?.preferences &&
+        'learningMode' in user.preferences &&
+        user.preferences.learningMode
+      ) {
         setUserType(user.preferences.learningMode as UserType);
       } else {
         // Fallback to localStorage
@@ -66,17 +70,8 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
       if (userType) {
         localStorage.setItem('userType', userType);
 
-        // Sync with Firebase if user is authenticated
-        if (user && user.preferences?.learningMode !== userType) {
-          updateUserProfile({
-            preferences: {
-              ...user.preferences,
-              learningMode: userType,
-            },
-          }).catch(error => {
-            console.warn('Failed to sync learning mode to Firebase:', error);
-          });
-        }
+        // Note: learningMode is not part of the simplified Firebase user preferences
+        // This will be handled by the comprehensive user data in Firestore
       }
       localStorage.setItem(
         'hasCompletedOnboarding',

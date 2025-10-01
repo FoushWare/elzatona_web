@@ -26,7 +26,7 @@ export default function CodingChallengePage() {
   const [showSolution, setShowSolution] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
 
-  const challengeId = params.id as string;
+  const challengeId = params?.id as string;
   const challenge = codingChallenges.find(c => c.id === challengeId);
 
   useEffect(() => {

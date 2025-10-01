@@ -30,7 +30,7 @@ const main = async () => {
     // Start Next.js server in the background
     execSync('npm run dev > /dev/null 2>&1 &', { stdio: 'ignore' });
     // Give it some time to start
-    await new Promise(resolve => setTimeout(10000, resolve));
+    await new Promise(resolve => setTimeout(resolve, 10000));
     try {
       execSync(
         'curl -s http://localhost:3000/admin/login | grep -q "Admin Login"',

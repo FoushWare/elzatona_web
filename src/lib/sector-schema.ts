@@ -15,8 +15,17 @@ import {
   limit,
   addDoc,
   Timestamp,
+  Firestore,
 } from 'firebase/firestore';
 import { db } from './firebase-server';
+
+// Helper function to check database initialization
+const checkDb = (): Firestore => {
+  if (!db) {
+    throw new Error('Database not initialized');
+  }
+  return db;
+};
 
 // Sector Interface - Represents a sector within a learning path
 export interface Sector {
@@ -94,7 +103,10 @@ export class SectorService {
         updatedAt: now,
       };
 
-      const docRef = await addDoc(collection(db, this.COLLECTION_NAME), sector);
+      const docRef = await addDoc(
+        collection(checkDb(), this.COLLECTION_NAME),
+        sector
+      );
 
       // Update the sector with the generated ID
       await updateDoc(docRef, { id: docRef.id });
@@ -112,7 +124,7 @@ export class SectorService {
   ): Promise<{ success: boolean; sectors?: Sector[]; error?: string }> {
     try {
       const q = query(
-        collection(db, this.COLLECTION_NAME),
+        collection(checkDb(), this.COLLECTION_NAME),
         where('learningPathId', '==', learningPathId),
         where('isActive', '==', true)
       );
@@ -141,7 +153,7 @@ export class SectorService {
     sectorId: string
   ): Promise<{ success: boolean; sector?: Sector; error?: string }> {
     try {
-      const docRef = doc(db, this.COLLECTION_NAME, sectorId);
+      const docRef = doc(checkDb(), this.COLLECTION_NAME, sectorId);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
@@ -161,7 +173,7 @@ export class SectorService {
     updates: Partial<Omit<Sector, 'id' | 'createdAt'>>
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      const docRef = doc(db, this.COLLECTION_NAME, sectorId);
+      const docRef = doc(checkDb(), this.COLLECTION_NAME, sectorId);
       const updateData = {
         ...updates,
         updatedAt: new Date().toISOString(),
@@ -238,7 +250,7 @@ export class SectorService {
   ): Promise<{ success: boolean; progress?: SectorProgress; error?: string }> {
     try {
       const docId = `${userId}_${sectorId}`;
-      const docRef = doc(db, this.PROGRESS_COLLECTION_NAME, docId);
+      const docRef = doc(checkDb(), this.PROGRESS_COLLECTION_NAME, docId);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
@@ -267,7 +279,7 @@ export class SectorService {
         updatedAt: now,
       };
 
-      const docRef = doc(db, this.PROGRESS_COLLECTION_NAME, docId);
+      const docRef = doc(checkDb(), this.PROGRESS_COLLECTION_NAME, docId);
       await setDoc(docRef, progress);
 
       return { success: true };
@@ -321,7 +333,7 @@ export class SectorService {
     sectorId: string
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      const docRef = doc(db, this.COLLECTION_NAME, sectorId);
+      const docRef = doc(checkDb(), this.COLLECTION_NAME, sectorId);
       await deleteDoc(docRef);
       return { success: true };
     } catch (error: any) {

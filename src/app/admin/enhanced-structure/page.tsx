@@ -89,6 +89,7 @@ export default function EnhancedStructurePage() {
 
       return {
         ...section,
+        currentQuestionCount: sectionQuestions.length,
         capacity: Math.round(capacity),
         isFull: sectionQuestions.length >= section.questionLimit,
         isNearFull: capacity >= 80,

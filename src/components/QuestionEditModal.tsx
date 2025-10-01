@@ -27,14 +27,6 @@ export function QuestionEditModal({
     learningPath: question.learningPath,
     category: question.category,
     difficulty: question.difficulty,
-    audioQuestion: question.audioQuestion || '',
-    audioAnswer: question.audioAnswer || '',
-    showQuestionAudio: question.showQuestionAudio ?? true,
-    showAnswerAudio: question.showAnswerAudio ?? true,
-    // Open-ended question fields
-    expectedAnswer: question.expectedAnswer || '',
-    aiValidationPrompt: question.aiValidationPrompt || '',
-    acceptPartialCredit: question.acceptPartialCredit ?? true,
   });
 
   const [options, setOptions] = useState(question.options);
@@ -55,9 +47,9 @@ export function QuestionEditModal({
   ];
 
   const difficulties = [
-    { value: 'easy', label: 'Easy' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'hard', label: 'Hard' },
+    { value: 'beginner', label: 'Beginner' },
+    { value: 'intermediate', label: 'Intermediate' },
+    { value: 'advanced', label: 'Advanced' },
   ] as const;
 
   const handleOptionChange = (
@@ -65,7 +57,7 @@ export function QuestionEditModal({
     field: 'text' | 'isCorrect',
     value: string | boolean
   ) => {
-    const newOptions = [...options];
+    const newOptions = [...(options || [])];
     newOptions[index] = {
       ...newOptions[index],
       [field]: value,
@@ -75,16 +67,16 @@ export function QuestionEditModal({
 
   const addOption = () => {
     const newOption = {
-      id: `opt${options.length + 1}`,
+      id: `opt${(options || []).length + 1}`,
       text: '',
       isCorrect: false,
     };
-    setOptions([...options, newOption]);
+    setOptions([...(options || []), newOption]);
   };
 
   const removeOption = (index: number) => {
-    if (options.length > 2) {
-      const newOptions = options.filter((_, i) => i !== index);
+    if ((options || []).length > 2) {
+      const newOptions = (options || []).filter((_, i) => i !== index);
       setOptions(newOptions);
     }
   };
@@ -99,19 +91,19 @@ export function QuestionEditModal({
 
     // Validation for non-open-ended questions
     if (formData.type !== 'open-ended') {
-      if (options.length < 2) {
+      if ((options || []).length < 2) {
         setError('At least 2 options are required');
         return;
       }
 
-      const correctOptions = options.filter(opt => opt.isCorrect);
+      const correctOptions = (options || []).filter(opt => opt.isCorrect);
       if (correctOptions.length === 0) {
         setError('At least one option must be marked as correct');
         return;
       }
 
-      if (formData.type === 'single' && correctOptions.length > 1) {
-        setError('Single choice questions can only have one correct answer');
+      if (formData.type === 'multiple-choice' && correctOptions.length > 1) {
+        setError('Multiple choice questions can only have one correct answer');
         return;
       }
     }
@@ -128,14 +120,6 @@ export function QuestionEditModal({
         learningPath: formData.learningPath,
         category: formData.category,
         difficulty: formData.difficulty,
-        audioQuestion: formData.audioQuestion || undefined,
-        audioAnswer: formData.audioAnswer || undefined,
-        showQuestionAudio: formData.showQuestionAudio,
-        showAnswerAudio: formData.showAnswerAudio,
-        // Open-ended question fields
-        expectedAnswer: formData.expectedAnswer || undefined,
-        aiValidationPrompt: formData.aiValidationPrompt || undefined,
-        acceptPartialCredit: formData.acceptPartialCredit,
       };
 
       await updateQuestion(question.id, updatedQuestion);
@@ -236,7 +220,10 @@ export function QuestionEditModal({
                 onChange={e =>
                   setFormData({
                     ...formData,
-                    difficulty: e.target.value as 'easy' | 'medium' | 'hard',
+                    difficulty: e.target.value as
+                      | 'beginner'
+                      | 'intermediate'
+                      | 'advanced',
                   })
                 }
                 className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
@@ -276,35 +263,14 @@ export function QuestionEditModal({
               <label className="flex items-center">
                 <input
                   type="radio"
-                  value="single"
-                  checked={formData.type === 'single'}
+                  value="multiple-choice"
+                  checked={formData.type === 'multiple-choice'}
                   onChange={e =>
                     setFormData({
                       ...formData,
                       type: e.target.value as
-                        | 'single'
-                        | 'multiple'
-                        | 'text'
-                        | 'code'
-                        | 'open-ended',
-                    })
-                  }
-                  className="mr-2"
-                />
-                Single Choice
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  value="multiple"
-                  checked={formData.type === 'multiple'}
-                  onChange={e =>
-                    setFormData({
-                      ...formData,
-                      type: e.target.value as
-                        | 'single'
-                        | 'multiple'
-                        | 'text'
+                        | 'multiple-choice'
+                        | 'true-false'
                         | 'code'
                         | 'open-ended',
                     })
@@ -316,15 +282,33 @@ export function QuestionEditModal({
               <label className="flex items-center">
                 <input
                   type="radio"
+                  value="true-false"
+                  checked={formData.type === 'true-false'}
+                  onChange={e =>
+                    setFormData({
+                      ...formData,
+                      type: e.target.value as
+                        | 'multiple-choice'
+                        | 'true-false'
+                        | 'code'
+                        | 'open-ended',
+                    })
+                  }
+                  className="mr-2"
+                />
+                True/False
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="radio"
                   value="open-ended"
                   checked={formData.type === 'open-ended'}
                   onChange={e =>
                     setFormData({
                       ...formData,
                       type: e.target.value as
-                        | 'single'
-                        | 'multiple'
-                        | 'text'
+                        | 'multiple-choice'
+                        | 'true-false'
                         | 'code'
                         | 'open-ended',
                     })
@@ -352,7 +336,7 @@ export function QuestionEditModal({
             </div>
 
             <div className="space-y-3">
-              {options.map((option, index) => (
+              {(options || []).map((option, index) => (
                 <div
                   key={index}
                   className="flex items-center gap-3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg"
@@ -374,7 +358,7 @@ export function QuestionEditModal({
                     className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     placeholder={`Option ${index + 1}`}
                   />
-                  {options.length > 2 && (
+                  {(options || []).length > 2 && (
                     <button
                       type="button"
                       onClick={() => removeOption(index)}
@@ -415,166 +399,6 @@ export function QuestionEditModal({
               required
             />
           </div>
-
-          {/* Audio Files */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Question Audio Path
-              </label>
-              <input
-                type="text"
-                value={formData.audioQuestion}
-                onChange={e =>
-                  setFormData({ ...formData, audioQuestion: e.target.value })
-                }
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder="/audio/learning-path/questions/question-1.mp3"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Answer Audio Path
-              </label>
-              <input
-                type="text"
-                value={formData.audioAnswer}
-                onChange={e =>
-                  setFormData({ ...formData, audioAnswer: e.target.value })
-                }
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                placeholder="/audio/learning-path/questions/answer-1.mp3"
-              />
-            </div>
-          </div>
-
-          {/* Audio Display Controls */}
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Audio Display Controls
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  id="showQuestionAudio"
-                  checked={formData.showQuestionAudio}
-                  onChange={e =>
-                    setFormData({
-                      ...formData,
-                      showQuestionAudio: e.target.checked,
-                    })
-                  }
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label
-                  htmlFor="showQuestionAudio"
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Show Question Audio Button
-                </label>
-              </div>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  id="showAnswerAudio"
-                  checked={formData.showAnswerAudio}
-                  onChange={e =>
-                    setFormData({
-                      ...formData,
-                      showAnswerAudio: e.target.checked,
-                    })
-                  }
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label
-                  htmlFor="showAnswerAudio"
-                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Show Answer Audio Button
-                </label>
-              </div>
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-              💡 Tip: For code questions, you might want to disable question
-              audio but keep answer audio enabled.
-            </p>
-          </div>
-
-          {/* Open-ended Question Fields */}
-          {formData.type === 'open-ended' && (
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                AI Validation Settings
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Expected Answer (Optional)
-                  </label>
-                  <textarea
-                    value={formData.expectedAnswer}
-                    onChange={e =>
-                      setFormData({
-                        ...formData,
-                        expectedAnswer: e.target.value,
-                      })
-                    }
-                    className="w-full h-24 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
-                    placeholder="Enter the expected answer or key points that should be covered..."
-                  />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    This helps the AI provide better validation feedback.
-                  </p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Custom AI Validation Prompt (Optional)
-                  </label>
-                  <textarea
-                    value={formData.aiValidationPrompt}
-                    onChange={e =>
-                      setFormData({
-                        ...formData,
-                        aiValidationPrompt: e.target.value,
-                      })
-                    }
-                    className="w-full h-20 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
-                    placeholder="Custom instructions for AI validation (e.g., 'Focus on technical accuracy', 'Check for specific concepts')"
-                  />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    Leave empty to use default validation logic.
-                  </p>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    id="acceptPartialCredit"
-                    checked={formData.acceptPartialCredit}
-                    onChange={e =>
-                      setFormData({
-                        ...formData,
-                        acceptPartialCredit: e.target.checked,
-                      })
-                    }
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    htmlFor="acceptPartialCredit"
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Accept Partial Credit
-                  </label>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  🤖 AI will validate answers and provide detailed feedback with
-                  scoring.
-                </p>
-              </div>
-            </div>
-          )}
 
           {/* Error Message */}
           {error && (

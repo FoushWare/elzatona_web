@@ -1,6 +1,10 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+
+// Import Web Speech API types
+import '@/types/speech-api';
+import type { SpeechRecognition } from '@/types/speech-api';
 import {
   Mic,
   MicOff,
@@ -233,7 +237,7 @@ export default function AIMockInterviewPage() {
   );
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -260,7 +264,7 @@ export default function AIMockInterviewPage() {
       recognitionRef.current.lang = 'en-US';
       recognitionRef.current.maxAlternatives = 3;
 
-      recognitionRef.current.onresult = event => {
+      recognitionRef.current.onresult = (event: any) => {
         let finalTranscript = '';
         let interimTranscript = '';
 
@@ -285,7 +289,7 @@ export default function AIMockInterviewPage() {
         }
       };
 
-      recognitionRef.current.onerror = event => {
+      recognitionRef.current.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
         setIsRecording(false);
@@ -1044,7 +1048,7 @@ export default function AIMockInterviewPage() {
                     </button>
                   </div>
                   <button
-                    onClick={sendMessage}
+                    onClick={() => sendMessage()}
                     disabled={!currentMessage.trim() || isLoading}
                     className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
                   >

@@ -25,7 +25,7 @@ import {
   enableNetwork,
   disableNetwork,
 } from 'firebase/firestore';
-import { getStorage, Storage } from 'firebase/storage';
+import { getStorage } from 'firebase/storage';
 
 // Check if Firebase is configured (always true since we have fallback values)
 const isFirebaseConfigured = true;
@@ -77,7 +77,7 @@ const firebaseConfig = {
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
-let storage: Storage | null = null;
+let storage: any | null = null;
 
 try {
   // Force a fresh Firebase initialization
@@ -171,9 +171,11 @@ try {
       );
 
       try {
-        await enableNetwork(db);
-        connectionRetryCount = 0; // Reset on successful connection
-        console.log('✅ Firestore reconnected successfully');
+        if (db) {
+          await enableNetwork(db);
+          connectionRetryCount = 0; // Reset on successful connection
+          console.log('✅ Firestore reconnected successfully');
+        }
       } catch (error) {
         console.warn(
           `⚠️ Reconnection attempt ${connectionRetryCount} failed:`,

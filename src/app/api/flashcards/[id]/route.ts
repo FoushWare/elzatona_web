@@ -5,10 +5,17 @@ import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 // Get a specific flashcard
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     const flashcardRef = doc(db, 'flashcards', id);
     const flashcardSnap = await getDoc(flashcardRef);
@@ -39,11 +46,18 @@ export async function GET(
 // Update flashcard (for review results)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const { quality, reviewResult } = await request.json();
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     const flashcardRef = doc(db, 'flashcards', id);
     const flashcardSnap = await getDoc(flashcardRef);
@@ -135,10 +149,17 @@ export async function PUT(
 // Delete a flashcard
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     const flashcardRef = doc(db, 'flashcards', id);
     await deleteDoc(flashcardRef);

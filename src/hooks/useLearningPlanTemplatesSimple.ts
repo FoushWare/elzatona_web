@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LearningPlanTemplate } from '@/types/learning-plan';
+import { LearningPlanTemplate } from '@/lib/guided-learning-service';
 
 interface UseLearningPlanTemplatesReturn {
   templates: LearningPlanTemplate[];
@@ -103,16 +103,27 @@ export function useLearningPlanTemplatesSimple(): UseLearningPlanTemplatesReturn
                 {
                   id: 'html-css',
                   name: 'HTML & CSS',
+                  category: 'frontend',
                   questions: [],
                   weight: 40,
+                  order: 1,
                 },
                 {
                   id: 'javascript',
                   name: 'JavaScript',
+                  category: 'frontend',
                   questions: [],
                   weight: 40,
+                  order: 2,
                 },
-                { id: 'react', name: 'React', questions: [], weight: 20 },
+                {
+                  id: 'react',
+                  name: 'React',
+                  category: 'frontend',
+                  questions: [],
+                  weight: 20,
+                  order: 3,
+                },
               ],
               features: [
                 'Quick review',
@@ -150,14 +161,30 @@ export function useLearningPlanTemplatesSimple(): UseLearningPlanTemplatesReturn
             totalQuestions: 100,
             dailyQuestions: 100,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 40 },
+              {
+                id: 'html-css',
+                name: 'HTML & CSS',
+                category: 'frontend',
+                questions: [],
+                weight: 40,
+                order: 1,
+              },
               {
                 id: 'javascript',
                 name: 'JavaScript',
+                category: 'frontend',
                 questions: [],
                 weight: 40,
+                order: 2,
               },
-              { id: 'react', name: 'React', questions: [], weight: 20 },
+              {
+                id: 'react',
+                name: 'React',
+                category: 'frontend',
+                questions: [],
+                weight: 20,
+                order: 3,
+              },
             ],
             features: [
               'Quick review',
