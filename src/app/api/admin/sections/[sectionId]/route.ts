@@ -4,14 +4,14 @@ import { doc, getDoc } from 'firebase/firestore';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { sectionId: string } }
+  { params }: { params: Promise<{ sectionId: string }> }
 ) {
   try {
     if (!db) {
       throw new Error('Firebase not initialized');
     }
 
-    const { sectionId } = params;
+    const { sectionId } = await params;
 
     const sectionRef = doc(db, 'sections', sectionId);
     const sectionDoc = await getDoc(sectionRef);
