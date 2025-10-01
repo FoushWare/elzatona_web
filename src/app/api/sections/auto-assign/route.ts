@@ -1,10 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
-import { collection, getDocs, query, where, orderBy, addDoc, updateDoc, doc } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  addDoc,
+  updateDoc,
+  doc,
+} from 'firebase/firestore';
 
 export async function POST(request: NextRequest) {
   try {
-    const { questionId, learningPathId, sectionSize = 15 } = await request.json();
+    const {
+      questionId,
+      learningPathId,
+      sectionSize = 15,
+    } = await request.json();
 
     if (!db) {
       throw new Error('Firebase not initialized');
@@ -20,7 +33,7 @@ export async function POST(request: NextRequest) {
     const questionsSnapshot = await getDocs(q);
     const questions = questionsSnapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
 
     // Get existing sections for this learning path
@@ -33,15 +46,15 @@ export async function POST(request: NextRequest) {
     const sectionsSnapshot = await getDocs(sectionsQuery);
     const existingSections = sectionsSnapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
 
     // Calculate which section this question should go to
     const questionIndex = questions.findIndex(q => q.id === questionId);
     const sectionIndex = Math.floor(questionIndex / sectionSize);
-    
+
     let targetSection;
-    
+
     // Check if section exists
     if (existingSections[sectionIndex]) {
       targetSection = existingSections[sectionIndex];
@@ -55,9 +68,9 @@ export async function POST(request: NextRequest) {
         questionLimit: sectionSize,
         currentQuestionCount: 0,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
-      
+
       const sectionDoc = await addDoc(sectionsRef, newSection);
       targetSection = { id: sectionDoc.id, ...newSection };
     }
@@ -67,14 +80,14 @@ export async function POST(request: NextRequest) {
     await updateDoc(questionRef, {
       sectionId: targetSection.id,
       orderInSection: (questionIndex % sectionSize) + 1,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     // Update section question count
     const sectionRef = doc(db, 'sections', targetSection.id);
     await updateDoc(sectionRef, {
       currentQuestionCount: targetSection.currentQuestionCount + 1,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     return NextResponse.json({
@@ -83,16 +96,15 @@ export async function POST(request: NextRequest) {
         questionId,
         sectionId: targetSection.id,
         sectionName: targetSection.name,
-        orderInSection: (questionIndex % sectionSize) + 1
-      }
+        orderInSection: (questionIndex % sectionSize) + 1,
+      },
     });
-
   } catch (error) {
     console.error('Error auto-assigning question to section:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to auto-assign question to section'
+        error: 'Failed to auto-assign question to section',
       },
       { status: 500 }
     );

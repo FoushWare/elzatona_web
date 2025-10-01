@@ -285,7 +285,3 @@ After implementing these changes:
 - ✅ Mobile-optimized touch interactions
 - ✅ Consistent behavior across all devices
 - ✅ No positioning conflicts with other elements
-
-
-
-

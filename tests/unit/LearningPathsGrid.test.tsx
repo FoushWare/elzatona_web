@@ -28,7 +28,7 @@ jest.mock('@/hooks/useLearningPathStats', () => ({
     isLoading: false,
     error: null,
     refreshStats: jest.fn(),
-    getQuestionCount: jest.fn((pathId) => {
+    getQuestionCount: jest.fn(pathId => {
       // Return the static question count for each path
       const pathCounts: Record<string, number> = {
         'frontend-basics': 25,
@@ -313,7 +313,9 @@ describe('LearningPathsGrid', () => {
 
     expect(() => {
       act(() => {
-        render(<LearningPathsGrid {...defaultProps} paths={[incompletePath]} />);
+        render(
+          <LearningPathsGrid {...defaultProps} paths={[incompletePath]} />
+        );
       });
     }).not.toThrow();
   });

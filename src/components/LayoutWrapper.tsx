@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useTranslation } from "@/hooks/useTranslation";
-import { useEffect } from "react";
+import { useTranslation } from '@/hooks/useTranslation';
+import { useEffect } from 'react';
 
 interface LayoutWrapperProps {
   children: React.ReactNode;
@@ -12,20 +12,18 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
 
   useEffect(() => {
     // Update document direction and language
-    document.documentElement.dir = isRTL ? "rtl" : "ltr";
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
     document.documentElement.lang = locale;
-    
+
     // Add RTL-specific classes
     if (isRTL) {
-      document.documentElement.classList.add("rtl");
+      document.documentElement.classList.add('rtl');
     } else {
-      document.documentElement.classList.remove("rtl");
+      document.documentElement.classList.remove('rtl');
     }
   }, [locale, isRTL]);
 
   return (
-    <div className={`min-h-screen ${isRTL ? 'rtl' : 'ltr'}`}>
-      {children}
-    </div>
+    <div className={`min-h-screen ${isRTL ? 'rtl' : 'ltr'}`}>{children}</div>
   );
 }

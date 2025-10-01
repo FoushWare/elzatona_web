@@ -1,11 +1,13 @@
 # Dynamic Question Count Implementation
 
 ## 🎯 **Problem Solved**
+
 The learning paths were displaying hardcoded question counts that didn't reflect the actual number of questions available in Firebase. This created confusion when users saw counts like "122 questions" but found no questions when they visited the actual question pages.
 
 ## ✅ **Solution Implemented**
 
 ### **1. Created Dynamic Stats Hook** (`src/hooks/useLearningPathStats.ts`)
+
 - **Purpose**: Fetches real-time question counts from Firebase for each learning path
 - **Features**:
   - Fetches question counts from both unified questions API and legacy questions API
@@ -15,6 +17,7 @@ The learning paths were displaying hardcoded question counts that didn't reflect
   - Supports refreshing stats on demand
 
 ### **2. Enhanced Learning Path Card Component** (`src/components/LearningPathCard.tsx`)
+
 - **New Props**:
   - `dynamicQuestionCount?: number` - Real-time question count from Firebase
   - `isQuestionCountLoading?: boolean` - Loading state for question count
@@ -24,6 +27,7 @@ The learning paths were displaying hardcoded question counts that didn't reflect
   - Loading indicators in both collapsed and expanded views
 
 ### **3. Updated Learning Paths Grid** (`src/components/LearningPathsGrid.tsx`)
+
 - **Integration**: Uses the new `useLearningPathStats` hook
 - **Dynamic Data**: Passes real-time question counts to each card
 - **Loading States**: Manages loading states across all cards
@@ -31,6 +35,7 @@ The learning paths were displaying hardcoded question counts that didn't reflect
 ## 🔧 **How It Works**
 
 ### **Data Flow**:
+
 1. **LearningPathsGrid** loads and calls `useLearningPathStats()`
 2. **Hook** fetches question counts from Firebase for all learning paths
 3. **Hook** returns dynamic counts and loading states
@@ -38,10 +43,12 @@ The learning paths were displaying hardcoded question counts that didn't reflect
 5. **Cards** display real-time counts with loading indicators
 
 ### **API Endpoints Used**:
+
 - Primary: `/api/questions/unified?learningPath=${pathId}&isActive=true`
 - Fallback: `/api/questions/${pathId}` (legacy endpoint)
 
 ### **Fallback Strategy**:
+
 - If Firebase API fails → Shows static count from resources
 - If loading → Shows loading spinner
 - If no questions found → Shows 0 or hides count
@@ -49,12 +56,14 @@ The learning paths were displaying hardcoded question counts that didn't reflect
 ## 🚀 **Benefits**
 
 ### **For Users**:
+
 - ✅ **Accurate Counts**: See the real number of questions available
 - ✅ **Real-time Updates**: Counts update when questions are added/removed
 - ✅ **Better UX**: Loading indicators during data fetching
 - ✅ **Reliable**: Fallback to static counts if API fails
 
 ### **For Developers**:
+
 - ✅ **Maintainable**: No need to manually update static counts
 - ✅ **Extensible**: Easy to add more dynamic stats in the future
 - ✅ **Robust**: Handles errors and loading states gracefully
@@ -63,6 +72,7 @@ The learning paths were displaying hardcoded question counts that didn't reflect
 ## 📊 **Before vs After**
 
 ### **Before**:
+
 ```
 Frontend Fundamentals: 122 questions (hardcoded)
 ↓ User clicks to view questions
@@ -70,6 +80,7 @@ Frontend Fundamentals: 122 questions (hardcoded)
 ```
 
 ### **After**:
+
 ```
 Frontend Fundamentals: 0 questions (dynamic from Firebase)
 ↓ User clicks to view questions
@@ -79,6 +90,7 @@ Frontend Fundamentals: 0 questions (dynamic from Firebase)
 ## 🔍 **Testing**
 
 ### **Manual Testing Steps**:
+
 1. Visit `/learning-paths`
 2. Observe loading spinners on question counts
 3. Verify counts match actual questions in Firebase
@@ -86,6 +98,7 @@ Frontend Fundamentals: 0 questions (dynamic from Firebase)
 5. Verify fallback to static counts works
 
 ### **Expected Behavior**:
+
 - Question counts load dynamically from Firebase
 - Loading indicators show during fetch
 - Counts are accurate and match actual questions

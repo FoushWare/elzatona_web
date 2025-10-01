@@ -23,7 +23,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: 'Category not found'
+          error: 'Category not found',
         },
         { status: 404 }
       );
@@ -39,14 +39,14 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      data: category
+      data: category,
     });
   } catch (error) {
     console.error('Error fetching category:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch category'
+        error: 'Failed to fetch category',
       },
       { status: 500 }
     );
@@ -71,7 +71,7 @@ export async function PUT(
       return NextResponse.json(
         {
           success: false,
-          error: 'Category name is required'
+          error: 'Category name is required',
         },
         { status: 400 }
       );
@@ -84,7 +84,7 @@ export async function PUT(
       return NextResponse.json(
         {
           success: false,
-          error: 'Category not found'
+          error: 'Category not found',
         },
         { status: 404 }
       );
@@ -109,14 +109,14 @@ export async function PUT(
     return NextResponse.json({
       success: true,
       data: updatedCategory,
-      message: 'Category updated successfully'
+      message: 'Category updated successfully',
     });
   } catch (error) {
     console.error('Error updating category:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to update category'
+        error: 'Failed to update category',
       },
       { status: 500 }
     );
@@ -141,7 +141,7 @@ export async function DELETE(
       return NextResponse.json(
         {
           success: false,
-          error: 'Category not found'
+          error: 'Category not found',
         },
         { status: 404 }
       );
@@ -152,14 +152,14 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: 'Category deleted successfully'
+      message: 'Category deleted successfully',
     });
   } catch (error) {
     console.error('Error deleting category:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to delete category'
+        error: 'Failed to delete category',
       },
       { status: 500 }
     );

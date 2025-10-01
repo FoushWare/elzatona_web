@@ -16,7 +16,7 @@ import {
   saveQuestionAttempt,
   getUserQuestionAttempts,
   searchQuestions,
-  getQuizQuestions
+  getQuizQuestions,
 } from '@/lib/firebase-questions';
 
 export interface UseQuestionsReturn {
@@ -33,7 +33,12 @@ export interface UseQuestionsReturn {
   loadCategories: () => Promise<void>;
   loadStats: () => Promise<void>;
   loadUserAttempts: (questionId?: string) => Promise<void>;
-  submitAnswer: (questionId: string, selectedAnswer: number, timeSpent: number, attempts: number) => Promise<void>;
+  submitAnswer: (
+    questionId: string,
+    selectedAnswer: number,
+    timeSpent: number,
+    attempts: number
+  ) => Promise<void>;
   searchQuestions: (searchTerm: string, filters?: any) => Promise<void>;
   getQuiz: (config: any) => Promise<Question[]>;
   clearError: () => void;
@@ -79,20 +84,25 @@ export const useQuestions = (): UseQuestionsReturn => {
     }
   }, []);
 
-  const loadRandomQuestions = useCallback(async (count: number, filters?: any) => {
-    setIsLoading(true);
-    setError(null);
+  const loadRandomQuestions = useCallback(
+    async (count: number, filters?: any) => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const randomQuestions = await getRandomQuestions(count, filters);
-      setQuestions(randomQuestions);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load random questions');
-      console.error('Error loading random questions:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      try {
+        const randomQuestions = await getRandomQuestions(count, filters);
+        setQuestions(randomQuestions);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Failed to load random questions'
+        );
+        console.error('Error loading random questions:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
 
   const loadCategories = useCallback(async () => {
     setIsLoading(true);
@@ -102,7 +112,9 @@ export const useQuestions = (): UseQuestionsReturn => {
       const categoriesData = await getCategories();
       setCategories(categoriesData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load categories');
+      setError(
+        err instanceof Error ? err.message : 'Failed to load categories'
+      );
       console.error('Error loading categories:', err);
     } finally {
       setIsLoading(false);
@@ -124,73 +136,88 @@ export const useQuestions = (): UseQuestionsReturn => {
     }
   }, []);
 
-  const loadUserAttempts = useCallback(async (questionId?: string) => {
-    if (!user?.uid) return;
+  const loadUserAttempts = useCallback(
+    async (questionId?: string) => {
+      if (!user?.uid) return;
 
-    setIsLoading(true);
-    setError(null);
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const attempts = await getUserQuestionAttempts(user.uid, questionId);
-      setUserAttempts(attempts);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load user attempts');
-      console.error('Error loading user attempts:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user?.uid]);
+      try {
+        const attempts = await getUserQuestionAttempts(user.uid, questionId);
+        setUserAttempts(attempts);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Failed to load user attempts'
+        );
+        console.error('Error loading user attempts:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [user?.uid]
+  );
 
-  const submitAnswer = useCallback(async (
-    questionId: string,
-    selectedAnswer: number,
-    timeSpent: number,
-    attempts: number
-  ) => {
-    if (!user?.uid) {
-      throw new Error('User not authenticated');
-    }
-
-    try {
-      const question = await getQuestion(questionId);
-      if (!question) {
-        throw new Error('Question not found');
+  const submitAnswer = useCallback(
+    async (
+      questionId: string,
+      selectedAnswer: number,
+      timeSpent: number,
+      attempts: number
+    ) => {
+      if (!user?.uid) {
+        throw new Error('User not authenticated');
       }
 
-      const isCorrect = selectedAnswer === question.correctAnswer;
+      try {
+        const question = await getQuestion(questionId);
+        if (!question) {
+          throw new Error('Question not found');
+        }
 
-      await saveQuestionAttempt({
-        questionId,
-        userId: user.uid,
-        selectedAnswer,
-        isCorrect,
-        timeSpent,
-        attempts
-      });
+        const isCorrect = selectedAnswer === question.correctAnswer;
 
-      // Reload user attempts to show the new attempt
-      await loadUserAttempts(questionId);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to submit answer');
-      console.error('Error submitting answer:', err);
-      throw err;
-    }
-  }, [user?.uid, loadUserAttempts]);
+        await saveQuestionAttempt({
+          questionId,
+          userId: user.uid,
+          selectedAnswer,
+          isCorrect,
+          timeSpent,
+          attempts,
+        });
 
-  const searchQuestions = useCallback(async (searchTerm: string, filters?: any) => {
-    setIsLoading(true);
-    setError(null);
+        // Reload user attempts to show the new attempt
+        await loadUserAttempts(questionId);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Failed to submit answer'
+        );
+        console.error('Error submitting answer:', err);
+        throw err;
+      }
+    },
+    [user?.uid, loadUserAttempts]
+  );
 
-    try {
-      const searchResults = await searchQuestions(searchTerm, filters);
-      setQuestions(searchResults);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to search questions');
-      console.error('Error searching questions:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const searchQuestions = useCallback(
+    async (searchTerm: string, filters?: any) => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const searchResults = await searchQuestions(searchTerm, filters);
+        setQuestions(searchResults);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Failed to search questions'
+        );
+        console.error('Error searching questions:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
 
   const getQuiz = useCallback(async (config: any): Promise<Question[]> => {
     setIsLoading(true);
@@ -201,7 +228,9 @@ export const useQuestions = (): UseQuestionsReturn => {
       setQuestions(quizQuestions);
       return quizQuestions;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to get quiz questions');
+      setError(
+        err instanceof Error ? err.message : 'Failed to get quiz questions'
+      );
       console.error('Error getting quiz questions:', err);
       return [];
     } finally {
@@ -235,6 +264,6 @@ export const useQuestions = (): UseQuestionsReturn => {
     submitAnswer,
     searchQuestions,
     getQuiz,
-    clearError
+    clearError,
   };
 };

@@ -18,7 +18,3 @@ export const OnboardingTrigger: React.FC = () => {
     </button>
   );
 };
-
-
-
-

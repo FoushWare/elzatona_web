@@ -32,7 +32,3 @@ export const useMobileMenu = (): MobileMenuContextType => {
   }
   return context;
 };
-
-
-
-

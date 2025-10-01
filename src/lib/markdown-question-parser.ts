@@ -38,7 +38,8 @@ export class MarkdownQuestionParser {
     openEnded: /^(\d+\.?\s*.*?)\n(?:Explain|Describe|What|How|Why)/gms,
   };
 
-  private static readonly OPTION_PATTERN = /^([a-zA-Z])\)\s*(.*?)(?:\s*\[(?:correct|x|✓)\])?$/gm;
+  private static readonly OPTION_PATTERN =
+    /^([a-zA-Z])\)\s*(.*?)(?:\s*\[(?:correct|x|✓)\])?$/gm;
 
   /**
    * Parse markdown content to extract questions
@@ -53,7 +54,7 @@ export class MarkdownQuestionParser {
     try {
       // Split content into sections
       const sections = this.splitIntoSections(markdown);
-      
+
       for (const section of sections) {
         const questions = this.parseSection(section);
         result.questions.push(...questions);
@@ -61,9 +62,10 @@ export class MarkdownQuestionParser {
 
       // Validate questions
       this.validateQuestions(result.questions, result.errors, result.warnings);
-
     } catch (error) {
-      result.errors.push(`Parse error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      result.errors.push(
+        `Parse error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
 
     return result;
@@ -92,13 +94,17 @@ export class MarkdownQuestionParser {
    */
   private static parseSection(section: string): MarkdownQuestion[] {
     const questions: MarkdownQuestion[] = [];
-    
+
     // Try different question formats
     const multipleChoiceQuestions = this.parseMultipleChoice(section);
     const trueFalseQuestions = this.parseTrueFalse(section);
     const openEndedQuestions = this.parseOpenEnded(section);
 
-    questions.push(...multipleChoiceQuestions, ...trueFalseQuestions, ...openEndedQuestions);
+    questions.push(
+      ...multipleChoiceQuestions,
+      ...trueFalseQuestions,
+      ...openEndedQuestions
+    );
 
     return questions;
   }
@@ -108,7 +114,9 @@ export class MarkdownQuestionParser {
    */
   private static parseMultipleChoice(section: string): MarkdownQuestion[] {
     const questions: MarkdownQuestion[] = [];
-    const matches = [...section.matchAll(this.QUESTION_PATTERNS.multipleChoice)];
+    const matches = [
+      ...section.matchAll(this.QUESTION_PATTERNS.multipleChoice),
+    ];
 
     for (const match of matches) {
       const questionText = match[1].trim();
@@ -159,7 +167,7 @@ export class MarkdownQuestionParser {
       if (!nextLine || !nextLine.match(/^(True|False|T|F)$/i)) continue;
 
       const isTrue = /^(True|T)$/i.test(nextLine);
-      
+
       questions.push({
         title: this.extractTitle(line),
         content: line,
@@ -199,9 +207,7 @@ export class MarkdownQuestionParser {
         content: line,
         type: 'single',
         difficulty: this.extractDifficulty(line),
-        options: [
-          { id: 'a', text: 'Open-ended response', isCorrect: true },
-        ],
+        options: [{ id: 'a', text: 'Open-ended response', isCorrect: true }],
         correctAnswers: ['a'],
         explanation: this.extractExplanation(section),
         category: this.extractCategory(section),
@@ -218,16 +224,19 @@ export class MarkdownQuestionParser {
   /**
    * Parse options from text
    */
-  private static parseOptions(optionsText: string): Array<{ id: string; text: string; isCorrect: boolean }> {
+  private static parseOptions(
+    optionsText: string
+  ): Array<{ id: string; text: string; isCorrect: boolean }> {
     const options: Array<{ id: string; text: string; isCorrect: boolean }> = [];
     const matches = [...optionsText.matchAll(this.OPTION_PATTERN)];
 
     for (const match of matches) {
       const id = match[1].toLowerCase();
       const text = match[2].trim();
-      const isCorrect = match[0].includes('[correct]') || 
-                       match[0].includes('[x]') || 
-                       match[0].includes('[✓]');
+      const isCorrect =
+        match[0].includes('[correct]') ||
+        match[0].includes('[x]') ||
+        match[0].includes('[✓]');
 
       options.push({ id, text, isCorrect });
     }
@@ -249,8 +258,10 @@ export class MarkdownQuestionParser {
    */
   private static extractDifficulty(text: string): 'easy' | 'medium' | 'hard' {
     const lowerText = text.toLowerCase();
-    if (lowerText.includes('easy') || lowerText.includes('beginner')) return 'easy';
-    if (lowerText.includes('hard') || lowerText.includes('advanced')) return 'hard';
+    if (lowerText.includes('easy') || lowerText.includes('beginner'))
+      return 'easy';
+    if (lowerText.includes('hard') || lowerText.includes('advanced'))
+      return 'hard';
     return 'medium';
   }
 
@@ -258,7 +269,9 @@ export class MarkdownQuestionParser {
    * Extract explanation from section
    */
   private static extractExplanation(section: string): string | undefined {
-    const explanationMatch = section.match(/explanation[:\s]+(.*?)(?:\n\n|\n$|$)/is);
+    const explanationMatch = section.match(
+      /explanation[:\s]+(.*?)(?:\n\n|\n$|$)/is
+    );
     return explanationMatch ? explanationMatch[1].trim() : undefined;
   }
 
@@ -274,7 +287,9 @@ export class MarkdownQuestionParser {
    * Extract learning path from section
    */
   private static extractLearningPath(section: string): string | undefined {
-    const learningPathMatch = section.match(/(?:learning[_\s]?path|learningpath)[:\s]+(.*?)(?:\n|$)/i);
+    const learningPathMatch = section.match(
+      /(?:learning[_\s]?path|learningpath)[:\s]+(.*?)(?:\n|$)/i
+    );
     return learningPathMatch ? learningPathMatch[1].trim() : undefined;
   }
 
@@ -321,23 +336,33 @@ export class MarkdownQuestionParser {
       }
 
       if (question.correctAnswers.length === 0) {
-        errors.push(`Question ${index + 1}: Must have at least one correct answer`);
+        errors.push(
+          `Question ${index + 1}: Must have at least one correct answer`
+        );
       }
 
       // Check for valid option IDs
       const validIds = question.options.map(opt => opt.id);
-      const invalidAnswers = question.correctAnswers.filter(id => !validIds.includes(id));
+      const invalidAnswers = question.correctAnswers.filter(
+        id => !validIds.includes(id)
+      );
       if (invalidAnswers.length > 0) {
-        errors.push(`Question ${index + 1}: Invalid correct answer IDs: ${invalidAnswers.join(', ')}`);
+        errors.push(
+          `Question ${index + 1}: Invalid correct answer IDs: ${invalidAnswers.join(', ')}`
+        );
       }
 
       // Warnings
       if (question.title.length > 200) {
-        warnings.push(`Question ${index + 1}: Title is very long (${question.title.length} characters)`);
+        warnings.push(
+          `Question ${index + 1}: Title is very long (${question.title.length} characters)`
+        );
       }
 
       if (question.content.length > 1000) {
-        warnings.push(`Question ${index + 1}: Content is very long (${question.content.length} characters)`);
+        warnings.push(
+          `Question ${index + 1}: Content is very long (${question.content.length} characters)`
+        );
       }
     });
   }

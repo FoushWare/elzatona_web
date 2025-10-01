@@ -544,8 +544,8 @@ export default function ChatGPTTestPage() {
               in the bottom-right corner
             </p>
             <p>
-              4. <strong>Configure API key</strong> if tests show it&apos;s not set
-              (see CHATGPT_COMPLETE_SETUP.md)
+              4. <strong>Configure API key</strong> if tests show it&apos;s not
+              set (see CHATGPT_COMPLETE_SETUP.md)
             </p>
             <p>
               5. <strong>Test on mobile</strong> to ensure responsive design

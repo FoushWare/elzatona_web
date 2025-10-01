@@ -154,4 +154,3 @@ All flows are now implemented and ready for testing:
 - Proper error handling and loading states
 - Authentication context integration
 - Local storage for development (ready for Firebase)
-

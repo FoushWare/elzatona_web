@@ -24,10 +24,9 @@ export async function GET(
       success: true,
       data: {
         id: planSnap.id,
-        ...planSnap.data()
-      }
+        ...planSnap.data(),
+      },
     });
-
   } catch (error) {
     console.error('Error fetching custom plan:', error);
     return NextResponse.json(
@@ -47,20 +46,19 @@ export async function PUT(
     const updates = await request.json();
 
     const planRef = doc(db, 'customPlans', id);
-    
+
     // Add updatedAt timestamp
     const updatedData = {
       ...updates,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     await updateDoc(planRef, updatedData);
 
     return NextResponse.json({
       success: true,
-      message: 'Custom plan updated successfully'
+      message: 'Custom plan updated successfully',
     });
-
   } catch (error) {
     console.error('Error updating custom plan:', error);
     return NextResponse.json(
@@ -83,9 +81,8 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: 'Custom plan deleted successfully'
+      message: 'Custom plan deleted successfully',
     });
-
   } catch (error) {
     console.error('Error deleting custom plan:', error);
     return NextResponse.json(

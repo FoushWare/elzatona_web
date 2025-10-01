@@ -19,14 +19,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: questions,
-      count: questions.length
+      count: questions.length,
     });
   } catch (error) {
     console.error('Error fetching enhanced questions:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch enhanced questions'
+        error: 'Failed to fetch enhanced questions',
       },
       { status: 500 }
     );
@@ -37,34 +37,43 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const questionData = await request.json();
-    
+
     // Validate required fields
-    const requiredFields = ['title', 'content', 'type', 'difficulty', 'category', 'learningPath'];
+    const requiredFields = [
+      'title',
+      'content',
+      'type',
+      'difficulty',
+      'category',
+      'learningPath',
+    ];
     for (const field of requiredFields) {
       if (!questionData[field]) {
         return NextResponse.json(
           {
             success: false,
-            error: `Missing required field: ${field}`
+            error: `Missing required field: ${field}`,
           },
           { status: 400 }
         );
       }
     }
 
-    const questionId = await EnhancedQuestionService.createQuestion(questionData);
+    const questionId =
+      await EnhancedQuestionService.createQuestion(questionData);
 
     return NextResponse.json({
       success: true,
       data: { id: questionId },
-      message: 'Question created successfully'
+      message: 'Question created successfully',
     });
   } catch (error) {
     console.error('Error creating enhanced question:', error);
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to create question'
+        error:
+          error instanceof Error ? error.message : 'Failed to create question',
       },
       { status: 500 }
     );

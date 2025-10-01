@@ -9,7 +9,11 @@ import { initializeApp, getApps, cert } from 'firebase-admin/app';
 if (!getApps().length) {
   try {
     // Check if we have the required environment variables
-    if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
+    if (
+      process.env.FIREBASE_PROJECT_ID &&
+      process.env.FIREBASE_CLIENT_EMAIL &&
+      process.env.FIREBASE_PRIVATE_KEY
+    ) {
       initializeApp({
         credential: cert({
           projectId: process.env.FIREBASE_PROJECT_ID,
@@ -19,7 +23,9 @@ if (!getApps().length) {
       });
       console.log('✅ Firebase Admin SDK initialized successfully');
     } else {
-      console.warn('⚠️ Firebase Admin SDK environment variables not set. Using fallback authentication.');
+      console.warn(
+        '⚠️ Firebase Admin SDK environment variables not set. Using fallback authentication.'
+      );
     }
   } catch (error) {
     console.error('Firebase Admin initialization error:', error);
@@ -29,15 +35,18 @@ if (!getApps().length) {
 // Fallback token verification using Firebase REST API
 const verifyTokenWithRestAPI = async (token: string) => {
   try {
-    const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        idToken: token,
-      }),
-    });
+    const response = await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idToken: token,
+        }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error('Token verification failed');
@@ -67,7 +76,9 @@ export const verifyFirebaseToken = async (token: string) => {
     // Check if Firebase Admin SDK is properly initialized
     const apps = getApps();
     if (apps.length === 0) {
-      console.warn('Firebase Admin SDK not initialized, using REST API fallback');
+      console.warn(
+        'Firebase Admin SDK not initialized, using REST API fallback'
+      );
       return await verifyTokenWithRestAPI(token);
     }
 
@@ -76,8 +87,11 @@ export const verifyFirebaseToken = async (token: string) => {
     const decodedToken = await auth.verifyIdToken(token);
     return decodedToken;
   } catch (error) {
-    console.warn('Firebase Admin SDK verification failed, trying REST API fallback:', error);
-    
+    console.warn(
+      'Firebase Admin SDK verification failed, trying REST API fallback:',
+      error
+    );
+
     // Fallback to REST API verification
     try {
       const restApiResult = await verifyTokenWithRestAPI(token);
@@ -88,7 +102,7 @@ export const verifyFirebaseToken = async (token: string) => {
     } catch (restError) {
       console.error('REST API fallback also failed:', restError);
     }
-    
+
     // If both methods fail, return null
     console.error('All token verification methods failed');
     return null;

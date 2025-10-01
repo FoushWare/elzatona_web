@@ -11,7 +11,7 @@ export async function GET() {
     const snapshot = await getDocs(collection(db, 'topics'));
     const topics = snapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
     console.log('📊 API: Topics fetched:', topics.length, 'topics');
     console.log('📊 API: Topics data:', topics);
@@ -19,14 +19,14 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       data: topics,
-      count: topics.length
+      count: topics.length,
     });
   } catch (error) {
     console.error('❌ API: Error fetching topics:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch topics'
+        error: 'Failed to fetch topics',
       },
       { status: 500 }
     );
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
   try {
     const topicData = await request.json();
     console.log('🔄 API: Creating topic with data:', topicData);
-    
+
     // Validate required fields
     const requiredFields = ['name', 'description', 'category', 'difficulty'];
     for (const field of requiredFields) {
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: `Missing required field: ${field}`
+            error: `Missing required field: ${field}`,
           },
           { status: 400 }
         );
@@ -67,14 +67,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: { id: topicId },
-      message: 'Topic created successfully'
+      message: 'Topic created successfully',
     });
   } catch (error) {
     console.error('❌ API: Error creating topic:', error);
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to create topic'
+        error:
+          error instanceof Error ? error.message : 'Failed to create topic',
       },
       { status: 500 }
     );

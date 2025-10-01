@@ -50,7 +50,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
       try {
         // Check if user data exists in cookies (immediate, no flash)
         const userDataCookie = getCookie('user-data');
-        
+
         if (userDataCookie) {
           const userData = JSON.parse(userDataCookie);
           setUser(userData);
@@ -81,7 +81,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
   const signIn = async (provider: 'google' | 'github') => {
     try {
       setIsLoading(true);
-      
+
       // Redirect to NextAuth sign-in
       const signInUrl = `/api/auth/signin/${provider}`;
       window.location.href = signInUrl;
@@ -94,7 +94,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
   const signOut = async () => {
     try {
       setIsLoading(true);
-      
+
       // Clear cookies
       await fetch('/api/auth/session', {
         method: 'DELETE',
@@ -102,7 +102,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
 
       // Clear local state
       setUser(null);
-      
+
       // Redirect to NextAuth sign-out
       window.location.href = '/api/auth/signout';
     } catch (error) {
@@ -145,7 +145,7 @@ export function CookieAuthProvider({ children }: CookieAuthProviderProps) {
 // Helper function to get cookie value
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null;
-  
+
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) {

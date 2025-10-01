@@ -20,7 +20,7 @@ export const useProgressTracking = () => {
     streak: 0,
     achievements: [],
     roadmapSections: [],
-    learningMode: null
+    learningMode: null,
   });
 
   // Load progress from localStorage on mount
@@ -45,7 +45,7 @@ export const useProgressTracking = () => {
     setProgress(prev => ({
       ...prev,
       ...updates,
-      lastActivity: new Date().toISOString()
+      lastActivity: new Date().toISOString(),
     }));
   };
 
@@ -54,14 +54,19 @@ export const useProgressTracking = () => {
       ...prev,
       completedQuestions: prev.completedQuestions + 1,
       totalTimeSpent: prev.totalTimeSpent + timeSpent,
-      lastActivity: new Date().toISOString()
+      lastActivity: new Date().toISOString(),
     }));
 
     // Trigger sign-in guidance if needed
-    if (typeof window !== 'undefined' && (window as any).triggerSignInGuidance) {
+    if (
+      typeof window !== 'undefined' &&
+      (window as any).triggerSignInGuidance
+    ) {
       const newCount = progress.completedQuestions + 1;
       if (newCount % 5 === 0) {
-        (window as any).triggerSignInGuidance('progress', { progressCount: newCount });
+        (window as any).triggerSignInGuidance('progress', {
+          progressCount: newCount,
+        });
       }
     }
   };
@@ -69,12 +74,18 @@ export const useProgressTracking = () => {
   const addAchievement = (achievement: string) => {
     setProgress(prev => ({
       ...prev,
-      achievements: [...prev.achievements.filter(a => a !== achievement), achievement],
-      lastActivity: new Date().toISOString()
+      achievements: [
+        ...prev.achievements.filter(a => a !== achievement),
+        achievement,
+      ],
+      lastActivity: new Date().toISOString(),
     }));
 
     // Trigger sign-in guidance for achievements
-    if (typeof window !== 'undefined' && (window as any).triggerSignInGuidance) {
+    if (
+      typeof window !== 'undefined' &&
+      (window as any).triggerSignInGuidance
+    ) {
       (window as any).triggerSignInGuidance('achievement', { achievement });
     }
   };
@@ -83,12 +94,18 @@ export const useProgressTracking = () => {
     setProgress(prev => ({
       ...prev,
       roadmapSections: sections,
-      lastActivity: new Date().toISOString()
+      lastActivity: new Date().toISOString(),
     }));
 
     // Trigger sign-in guidance for roadmap
-    if (typeof window !== 'undefined' && (window as any).triggerSignInGuidance && sections.length >= 3) {
-      (window as any).triggerSignInGuidance('roadmap', { roadmapSections: sections.length });
+    if (
+      typeof window !== 'undefined' &&
+      (window as any).triggerSignInGuidance &&
+      sections.length >= 3
+    ) {
+      (window as any).triggerSignInGuidance('roadmap', {
+        roadmapSections: sections.length,
+      });
     }
   };
 
@@ -96,14 +113,14 @@ export const useProgressTracking = () => {
     setProgress(prev => ({
       ...prev,
       learningMode: mode,
-      lastActivity: new Date().toISOString()
+      lastActivity: new Date().toISOString(),
     }));
   };
 
   const updateStreak = () => {
     const today = new Date().toDateString();
     const lastActivity = new Date(progress.lastActivity).toDateString();
-    
+
     if (lastActivity === today) {
       // Already updated today
       return;
@@ -118,14 +135,14 @@ export const useProgressTracking = () => {
       setProgress(prev => ({
         ...prev,
         streak: prev.streak + 1,
-        lastActivity: new Date().toISOString()
+        lastActivity: new Date().toISOString(),
       }));
     } else {
       // Reset streak
       setProgress(prev => ({
         ...prev,
         streak: 1,
-        lastActivity: new Date().toISOString()
+        lastActivity: new Date().toISOString(),
       }));
     }
   };
@@ -138,7 +155,7 @@ export const useProgressTracking = () => {
       streak: 0,
       achievements: [],
       roadmapSections: [],
-      learningMode: null
+      learningMode: null,
     };
     setProgress(resetData);
     localStorage.setItem('userProgress', JSON.stringify(resetData));
@@ -152,10 +169,6 @@ export const useProgressTracking = () => {
     setRoadmapSections,
     setLearningMode,
     updateStreak,
-    resetProgress
+    resetProgress,
   };
 };
-
-
-
-

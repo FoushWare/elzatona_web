@@ -21,14 +21,14 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       data: categories,
-      count: categories.length
+      count: categories.length,
     });
   } catch (error) {
     console.error('Error fetching categories:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch categories'
+        error: 'Failed to fetch categories',
       },
       { status: 500 }
     );
@@ -39,13 +39,13 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const categoryData = await request.json();
-    
+
     // Validate required fields
     if (!categoryData.name || categoryData.name.trim() === '') {
       return NextResponse.json(
         {
           success: false,
-          error: 'Category name is required'
+          error: 'Category name is required',
         },
         { status: 400 }
       );
@@ -56,14 +56,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: category,
-      message: 'Category created successfully'
+      message: 'Category created successfully',
     });
   } catch (error) {
     console.error('Error creating category:', error);
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to create category'
+        error:
+          error instanceof Error ? error.message : 'Failed to create category',
       },
       { status: 500 }
     );

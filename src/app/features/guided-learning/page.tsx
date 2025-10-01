@@ -83,7 +83,7 @@ export default function GuidedLearningPage() {
         const match = planId.match(/(\d+)-day-plan/);
         return match ? parseInt(match[1], 10) : 0;
       };
-      
+
       return getDayNumber(a.id) - getDayNumber(b.id);
     });
 

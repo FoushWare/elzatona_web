@@ -11,7 +11,9 @@ test.describe('Admin Dashboard Flow', () => {
     await page.goto('/admin/login');
   });
 
-  test('should display dashboard with correct information after login', async ({ page }) => {
+  test('should display dashboard with correct information after login', async ({
+    page,
+  }) => {
     // 1. Login
     await page.fill('input[type="email"]', ADMIN_EMAIL);
     await page.fill('input[type="password"]', ADMIN_PASSWORD);
@@ -19,7 +21,9 @@ test.describe('Admin Dashboard Flow', () => {
 
     // 2. Should redirect to dashboard
     await expect(page).toHaveURL(/admin\/dashboard/);
-    await expect(page.getByRole('heading', { name: 'Admin Dashboard' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Admin Dashboard' })
+    ).toBeVisible();
 
     // 3. Check dashboard content
     await expect(page.getByText('Welcome back, Admin User')).toBeVisible();
@@ -32,7 +36,9 @@ test.describe('Admin Dashboard Flow', () => {
     await expect(page.getByText('Guided Learning')).toBeVisible();
   });
 
-  test('should navigate to different admin sections from dashboard', async ({ page }) => {
+  test('should navigate to different admin sections from dashboard', async ({
+    page,
+  }) => {
     // Login first
     await page.fill('input[type="email"]', ADMIN_EMAIL);
     await page.fill('input[type="password"]', ADMIN_PASSWORD);
@@ -66,7 +72,9 @@ test.describe('Admin Dashboard Flow', () => {
     await expect(page.getByText('Guided Learning Plans')).toBeVisible();
   });
 
-  test('should display user information correctly in dashboard', async ({ page }) => {
+  test('should display user information correctly in dashboard', async ({
+    page,
+  }) => {
     // Login
     await page.fill('input[type="email"]', ADMIN_EMAIL);
     await page.fill('input[type="password"]', ADMIN_PASSWORD);
@@ -140,10 +148,10 @@ test.describe('Admin Dashboard Flow', () => {
 
     // Test mobile view
     await page.setViewportSize({ width: 375, height: 667 });
-    
+
     // Mobile menu should be available
     await expect(page.getByRole('button', { name: /menu/i })).toBeVisible();
-    
+
     // Open mobile menu
     await page.getByRole('button', { name: /menu/i }).click();
     await expect(page.getByText('Dashboard')).toBeVisible();
@@ -162,7 +170,9 @@ test.describe('Admin Dashboard Flow', () => {
 
     // Should still be on dashboard
     await expect(page).toHaveURL(/admin\/dashboard/);
-    await expect(page.getByRole('heading', { name: 'Admin Dashboard' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Admin Dashboard' })
+    ).toBeVisible();
     await expect(page.getByText('Welcome back, Admin User')).toBeVisible();
   });
 
@@ -180,11 +190,13 @@ test.describe('Admin Dashboard Flow', () => {
 
     // Should redirect to login page
     await expect(page).toHaveURL(/admin\/login/);
-    await expect(page.getByRole('heading', { name: 'Admin Login' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Admin Login' })
+    ).toBeVisible();
 
     // Try to access dashboard directly
     await page.goto('/admin/dashboard');
-    
+
     // Should be redirected back to login
     await expect(page).toHaveURL(/admin\/login/);
   });
@@ -200,7 +212,9 @@ test.describe('Admin Dashboard Flow', () => {
 
     // Then show dashboard
     await expect(page).toHaveURL(/admin\/dashboard/);
-    await expect(page.getByRole('heading', { name: 'Admin Dashboard' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Admin Dashboard' })
+    ).toBeVisible();
   });
 
   test('should handle navigation breadcrumbs', async ({ page }) => {
@@ -259,9 +273,3 @@ test.describe('Admin Dashboard Flow', () => {
     await page.context().setOffline(false);
   });
 });
-
-
-
-
-
-

@@ -235,7 +235,3 @@ Sees personalized content from first page load
 **Total Impact**: Now you know every user's roadmap preference from their very first visit! 🎉✨
 
 The system provides **immediate personalization** while being **non-intrusive** and **user-friendly**. Users get a personalized experience from the moment they land on your website! 🚀
-
-
-
-

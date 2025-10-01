@@ -112,9 +112,18 @@ export default function UnifiedQuestionManager({
   // Handle filter change
   const handleFilterChange = () => {
     loadQuestions({
-      category: selectedCategory && selectedCategory !== 'all' ? selectedCategory : undefined,
-      difficulty: selectedDifficulty && selectedDifficulty !== 'all' ? selectedDifficulty : undefined,
-      learningPath: selectedLearningPath && selectedLearningPath !== 'all' ? selectedLearningPath : undefined,
+      category:
+        selectedCategory && selectedCategory !== 'all'
+          ? selectedCategory
+          : undefined,
+      difficulty:
+        selectedDifficulty && selectedDifficulty !== 'all'
+          ? selectedDifficulty
+          : undefined,
+      learningPath:
+        selectedLearningPath && selectedLearningPath !== 'all'
+          ? selectedLearningPath
+          : undefined,
     });
   };
 
@@ -233,7 +242,7 @@ export default function UnifiedQuestionManager({
   const handleBulkJsonImport = async () => {
     try {
       const parsed = JSON.parse(bulkJsonInput);
-      
+
       // Handle both array format and object with questions property
       let questionsData: BulkQuestionData[];
       if (Array.isArray(parsed)) {
@@ -241,7 +250,9 @@ export default function UnifiedQuestionManager({
       } else if (parsed.questions && Array.isArray(parsed.questions)) {
         questionsData = parsed.questions;
       } else {
-        alert('Invalid format. Expected an array of questions or an object with a "questions" property.');
+        alert(
+          'Invalid format. Expected an array of questions or an object with a "questions" property.'
+        );
         return;
       }
 
@@ -257,7 +268,9 @@ export default function UnifiedQuestionManager({
       // Clear the input
       setBulkJsonInput('');
     } catch (error) {
-      alert(`JSON parsing error: ${error instanceof Error ? error.message : 'Invalid JSON format'}`);
+      alert(
+        `JSON parsing error: ${error instanceof Error ? error.message : 'Invalid JSON format'}`
+      );
       console.error('Import error:', error);
     }
   };
@@ -414,7 +427,7 @@ export default function UnifiedQuestionManager({
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Import multiple questions at once using JSON format
               </p>
-              
+
               {/* Input Mode Toggle */}
               <div className="flex items-center space-x-4">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -468,7 +481,7 @@ export default function UnifiedQuestionManager({
                     </label>
                     <textarea
                       value={bulkJsonInput}
-                      onChange={(e) => setBulkJsonInput(e.target.value)}
+                      onChange={e => setBulkJsonInput(e.target.value)}
                       placeholder={`Paste your questions array here, for example:
 [
   {

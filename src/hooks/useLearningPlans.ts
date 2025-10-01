@@ -8,7 +8,10 @@ interface UseLearningPlansReturn {
   isLoading: boolean;
   error: string | null;
   startPlan: (planData: LearningPlanProgress) => Promise<boolean>;
-  updatePlan: (planId: string, updates: Partial<LearningPlanProgress>) => Promise<boolean>;
+  updatePlan: (
+    planId: string,
+    updates: Partial<LearningPlanProgress>
+  ) => Promise<boolean>;
   getPlan: (planId: string) => Promise<LearningPlanProgress | null>;
   syncPlans: () => Promise<void>;
 }
@@ -16,7 +19,9 @@ interface UseLearningPlansReturn {
 export function useLearningPlans(): UseLearningPlansReturn {
   const { user, isAuthenticated } = useFirebaseAuth();
   const [plans, setPlans] = useState<LearningPlanProgress[]>([]);
-  const [currentPlan, setCurrentPlan] = useState<LearningPlanProgress | null>(null);
+  const [currentPlan, setCurrentPlan] = useState<LearningPlanProgress | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,129 +30,158 @@ export function useLearningPlans(): UseLearningPlansReturn {
     if (isAuthenticated && user?.learningPlans) {
       setPlans(user.learningPlans);
       // Find active plan
-      const activePlan = user.learningPlans.find(plan => plan.status === 'active');
+      const activePlan = user.learningPlans.find(
+        plan => plan.status === 'active'
+      );
       setCurrentPlan(activePlan || null);
     }
   }, [isAuthenticated, user?.learningPlans]);
 
-  const startPlan = useCallback(async (planData: LearningPlanProgress): Promise<boolean> => {
-    if (!isAuthenticated) {
-      setError('User not authenticated');
-      return false;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch('/api/user/learning-plans', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(planData),
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to start learning plan');
+  const startPlan = useCallback(
+    async (planData: LearningPlanProgress): Promise<boolean> => {
+      if (!isAuthenticated) {
+        setError('User not authenticated');
+        return false;
       }
 
-      // Update local state
-      setPlans(prev => [...prev, planData]);
-      setCurrentPlan(planData);
+      setIsLoading(true);
+      setError(null);
 
-      return true;
+      try {
+        const response = await fetch('/api/user/learning-plans', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(planData),
+          credentials: 'include',
+        });
 
-    } catch (error) {
-      console.error('Error starting learning plan:', error);
-      setError(error instanceof Error ? error.message : 'Failed to start learning plan');
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [isAuthenticated]);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to start learning plan');
+        }
 
-  const updatePlan = useCallback(async (planId: string, updates: Partial<LearningPlanProgress>): Promise<boolean> => {
-    if (!isAuthenticated) {
-      setError('User not authenticated');
-      return false;
-    }
+        // Update local state
+        setPlans(prev => [...prev, planData]);
+        setCurrentPlan(planData);
 
-    setIsLoading(true);
-    setError(null);
+        return true;
+      } catch (error) {
+        console.error('Error starting learning plan:', error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : 'Failed to start learning plan'
+        );
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [isAuthenticated]
+  );
 
-    try {
-      const response = await fetch(`/api/user/learning-plans?planId=${planId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updates),
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update learning plan');
+  const updatePlan = useCallback(
+    async (
+      planId: string,
+      updates: Partial<LearningPlanProgress>
+    ): Promise<boolean> => {
+      if (!isAuthenticated) {
+        setError('User not authenticated');
+        return false;
       }
 
-      // Update local state
-      setPlans(prev => prev.map(plan => 
-        plan.planId === planId ? { ...plan, ...updates } : plan
-      ));
-      
-      if (currentPlan?.planId === planId) {
-        setCurrentPlan(prev => prev ? { ...prev, ...updates } : null);
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(
+          `/api/user/learning-plans?planId=${planId}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updates),
+            credentials: 'include',
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to update learning plan');
+        }
+
+        // Update local state
+        setPlans(prev =>
+          prev.map(plan =>
+            plan.planId === planId ? { ...plan, ...updates } : plan
+          )
+        );
+
+        if (currentPlan?.planId === planId) {
+          setCurrentPlan(prev => (prev ? { ...prev, ...updates } : null));
+        }
+
+        return true;
+      } catch (error) {
+        console.error('Error updating learning plan:', error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : 'Failed to update learning plan'
+        );
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [isAuthenticated, currentPlan?.planId]
+  );
+
+  const getPlan = useCallback(
+    async (planId: string): Promise<LearningPlanProgress | null> => {
+      if (!isAuthenticated) {
+        setError('User not authenticated');
+        return null;
       }
 
-      return true;
+      setIsLoading(true);
+      setError(null);
 
-    } catch (error) {
-      console.error('Error updating learning plan:', error);
-      setError(error instanceof Error ? error.message : 'Failed to update learning plan');
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [isAuthenticated, currentPlan?.planId]);
+      try {
+        const response = await fetch(
+          `/api/user/learning-plans?planId=${planId}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
 
-  const getPlan = useCallback(async (planId: string): Promise<LearningPlanProgress | null> => {
-    if (!isAuthenticated) {
-      setError('User not authenticated');
-      return null;
-    }
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to fetch learning plan');
+        }
 
-    setIsLoading(true);
-    setError(null);
+        const result = await response.json();
 
-    try {
-      const response = await fetch(`/api/user/learning-plans?planId=${planId}`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch learning plan');
+        if (result.success && result.plan) {
+          return result.plan;
+        }
+        return null;
+      } catch (error) {
+        console.error('Error getting learning plan:', error);
+        setError(
+          error instanceof Error ? error.message : 'Failed to get learning plan'
+        );
+        return null;
+      } finally {
+        setIsLoading(false);
       }
-
-      const result = await response.json();
-      
-      if (result.success && result.plan) {
-        return result.plan;
-      }
-      return null;
-
-    } catch (error) {
-      console.error('Error getting learning plan:', error);
-      setError(error instanceof Error ? error.message : 'Failed to get learning plan');
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [isAuthenticated]);
+    },
+    [isAuthenticated]
+  );
 
   const syncPlans = useCallback(async (): Promise<void> => {
     if (!isAuthenticated) {
@@ -169,17 +203,20 @@ export function useLearningPlans(): UseLearningPlansReturn {
       }
 
       const result = await response.json();
-      
+
       if (result.success && result.plans) {
         setPlans(result.plans);
         // Find active plan
-        const activePlan = result.plans.find((plan: LearningPlanProgress) => plan.status === 'active');
+        const activePlan = result.plans.find(
+          (plan: LearningPlanProgress) => plan.status === 'active'
+        );
         setCurrentPlan(activePlan || null);
       }
-
     } catch (error) {
       console.error('Error syncing learning plans:', error);
-      setError(error instanceof Error ? error.message : 'Failed to sync learning plans');
+      setError(
+        error instanceof Error ? error.message : 'Failed to sync learning plans'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -196,4 +233,3 @@ export function useLearningPlans(): UseLearningPlansReturn {
     syncPlans,
   };
 }
-

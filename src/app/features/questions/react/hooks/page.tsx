@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState } from 'react';
+import Link from 'next/link';
 
 interface PracticeProblem {
   id: number;
@@ -23,8 +23,8 @@ export default function ReactHooksPracticePage() {
   const problems: PracticeProblem[] = [
     {
       id: 1,
-      title: "useState Hook",
-      description: "Understanding how useState works for state management",
+      title: 'useState Hook',
+      description: 'Understanding how useState works for state management',
       code: `function Counter() {
   const [count, setCount] = useState(0);
   
@@ -39,21 +39,21 @@ export default function ReactHooksPracticePage() {
 }
 
 // What will happen when the button is clicked?`,
-      question: "What will happen when the button is clicked?",
+      question: 'What will happen when the button is clicked?',
       options: [
-        "The count will increment by 1",
-        "The count will stay the same",
-        "The component will re-render",
-        "Both A and C",
+        'The count will increment by 1',
+        'The count will stay the same',
+        'The component will re-render',
+        'Both A and C',
       ],
       correctAnswer: 3,
       explanation:
-        "Both A and C are correct. When setCount is called, it updates the state value (count increments by 1) and triggers a re-render of the component to display the new value.",
+        'Both A and C are correct. When setCount is called, it updates the state value (count increments by 1) and triggers a re-render of the component to display the new value.',
     },
     {
       id: 2,
-      title: "useEffect Hook",
-      description: "Understanding useEffect for side effects",
+      title: 'useEffect Hook',
+      description: 'Understanding useEffect for side effects',
       code: `function UserProfile({ userId }) {
   const [user, setUser] = useState(null);
   
@@ -65,21 +65,21 @@ export default function ReactHooksPracticePage() {
 }
 
 // What does the dependency array [userId] do?`,
-      question: "What does the dependency array [userId] do?",
+      question: 'What does the dependency array [userId] do?',
       options: [
         "Nothing - it's optional",
-        "Runs the effect only when userId changes",
-        "Runs the effect on every render",
-        "Prevents the effect from running",
+        'Runs the effect only when userId changes',
+        'Runs the effect on every render',
+        'Prevents the effect from running',
       ],
       correctAnswer: 1,
       explanation:
-        "The dependency array [userId] tells React to run the useEffect only when the userId value changes. This prevents unnecessary API calls when other props or state change.",
+        'The dependency array [userId] tells React to run the useEffect only when the userId value changes. This prevents unnecessary API calls when other props or state change.',
     },
     {
       id: 3,
-      title: "Custom Hook",
-      description: "Creating and using custom hooks",
+      title: 'Custom Hook',
+      description: 'Creating and using custom hooks',
       code: `function useCounter(initialValue = 0) {
   const [count, setCount] = useState(initialValue);
   
@@ -103,16 +103,16 @@ function App() {
 }
 
 // What will be the initial count value?`,
-      question: "What will be the initial count value?",
-      options: ["0", "5", "undefined", "Error"],
+      question: 'What will be the initial count value?',
+      options: ['0', '5', 'undefined', 'Error'],
       correctAnswer: 1,
       explanation:
-        "The initial count value will be 5. The useCounter hook is called with useCounter(5), which sets the initialValue parameter to 5, and useState(initialValue) initializes the state with this value.",
+        'The initial count value will be 5. The useCounter hook is called with useCounter(5), which sets the initialValue parameter to 5, and useState(initialValue) initializes the state with this value.',
     },
     {
       id: 4,
-      title: "useRef Hook",
-      description: "Using useRef for DOM references and mutable values",
+      title: 'useRef Hook',
+      description: 'Using useRef for DOM references and mutable values',
       code: `function FocusInput() {
   const inputRef = useRef(null);
   
@@ -129,21 +129,21 @@ function App() {
 }
 
 // What happens when the button is clicked?`,
-      question: "What happens when the button is clicked?",
+      question: 'What happens when the button is clicked?',
       options: [
-        "The input gets focus",
-        "The input value changes",
-        "The component re-renders",
-        "Nothing happens",
+        'The input gets focus',
+        'The input value changes',
+        'The component re-renders',
+        'Nothing happens',
       ],
       correctAnswer: 0,
       explanation:
-        "When the button is clicked, the input gets focus. useRef creates a mutable reference that persists across re-renders, and inputRef.current points to the actual DOM input element.",
+        'When the button is clicked, the input gets focus. useRef creates a mutable reference that persists across re-renders, and inputRef.current points to the actual DOM input element.',
     },
     {
       id: 5,
-      title: "useMemo Hook",
-      description: "Using useMemo for expensive calculations",
+      title: 'useMemo Hook',
+      description: 'Using useMemo for expensive calculations',
       code: `function ExpensiveComponent({ items }) {
   const expensiveValue = useMemo(() => {
     return items.reduce((sum, item) => sum + item.value, 0);
@@ -153,16 +153,16 @@ function App() {
 }
 
 // When will the expensive calculation run?`,
-      question: "When will the expensive calculation run?",
+      question: 'When will the expensive calculation run?',
       options: [
-        "On every render",
-        "Only when items array changes",
-        "Only on the first render",
-        "Never",
+        'On every render',
+        'Only when items array changes',
+        'Only on the first render',
+        'Never',
       ],
       correctAnswer: 1,
       explanation:
-        "The expensive calculation will only run when the items array changes. useMemo memoizes the result and only recalculates when the dependency (items) changes, preventing unnecessary recalculations on every render.",
+        'The expensive calculation will only run when the items array changes. useMemo memoizes the result and only recalculates when the dependency (items) changes, preventing unnecessary recalculations on every render.',
     },
   ];
 
@@ -197,11 +197,11 @@ function App() {
   const getScoreMessage = () => {
     const percentage = getScorePercentage();
     if (percentage >= 80)
-      return "Excellent! You have a strong understanding of React hooks.";
+      return 'Excellent! You have a strong understanding of React hooks.';
     if (percentage >= 60)
-      return "Good job! You understand the basics of React hooks.";
-    if (percentage >= 40) return "Not bad! Review the concepts and try again.";
-    return "Keep practicing! React hooks can be tricky at first.";
+      return 'Good job! You understand the basics of React hooks.';
+    if (percentage >= 40) return 'Not bad! Review the concepts and try again.';
+    return 'Keep practicing! React hooks can be tricky at first.';
   };
 
   if (practiceCompleted) {
@@ -313,9 +313,9 @@ function App() {
                 className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
                   selectedAnswer === index
                     ? selectedAnswer === currentP.correctAnswer
-                      ? "border-green-500 bg-green-50"
-                      : "border-red-500 bg-red-50"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
                 }`}
               >
                 <div className="flex items-center">
@@ -323,13 +323,13 @@ function App() {
                     className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${
                       selectedAnswer === index
                         ? selectedAnswer === currentP.correctAnswer
-                          ? "border-green-500 bg-green-500 text-white"
-                          : "border-red-500 bg-red-500 text-white"
-                        : "border-gray-300"
+                          ? 'border-green-500 bg-green-500 text-white'
+                          : 'border-red-500 bg-red-500 text-white'
+                        : 'border-gray-300'
                     }`}
                   >
                     {selectedAnswer === index &&
-                      (selectedAnswer === currentP.correctAnswer ? "✓" : "✗")}
+                      (selectedAnswer === currentP.correctAnswer ? '✓' : '✗')}
                   </div>
                   <span className="text-gray-900">{option}</span>
                 </div>
@@ -353,8 +353,8 @@ function App() {
                 className="bg-blue-600 text-white px-8 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
               >
                 {currentProblem < problems.length - 1
-                  ? "Next Problem"
-                  : "Finish Practice"}
+                  ? 'Next Problem'
+                  : 'Finish Practice'}
               </button>
             </div>
           )}

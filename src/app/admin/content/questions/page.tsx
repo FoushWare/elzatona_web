@@ -159,16 +159,16 @@ export default function QuestionsManagementPage() {
     try {
       console.log('📊 Loading total count...');
       setIsLoadingCount(true);
-      
+
       // Use the fast count-only endpoint
       const params = new URLSearchParams();
       if (selectedCategory !== 'all') {
         params.append('category', selectedCategory);
       }
-      
+
       const response = await fetch(`/api/questions/count?${params}`);
       const data = await response.json();
-      
+
       if (data.success) {
         console.log('✅ Total count loaded:', data.data.totalCount);
         // Only update if we don't already have pagination data
@@ -232,7 +232,7 @@ export default function QuestionsManagementPage() {
       const timer = setTimeout(() => {
         loadTotalCount();
       }, 500); // 500ms delay
-      
+
       return () => clearTimeout(timer);
     }
   }, [questions.length, totalCount, loadTotalCount]);

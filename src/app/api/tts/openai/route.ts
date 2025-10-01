@@ -7,10 +7,7 @@ export async function POST(request: NextRequest) {
     const { text, voice, model, speed, format } = body;
 
     if (!text) {
-      return NextResponse.json(
-        { error: 'Text is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Text is required' }, { status: 400 });
     }
 
     // Initialize OpenAI TTS
@@ -19,9 +16,10 @@ export async function POST(request: NextRequest) {
     // Check if API key is available
     if (!tts.isAvailable()) {
       return NextResponse.json(
-        { 
-          error: 'OpenAI API key not configured. Please add OPENAI_API_KEY to your environment variables.',
-          fallback: 'browser'
+        {
+          error:
+            'OpenAI API key not configured. Please add OPENAI_API_KEY to your environment variables.',
+          fallback: 'browser',
         },
         { status: 503 }
       );
@@ -33,14 +31,11 @@ export async function POST(request: NextRequest) {
       voice: voice || 'nova',
       model: model || 'tts-1-hd',
       speed: speed || 1.0,
-      format: format || 'mp3'
+      format: format || 'mp3',
     });
 
     if (!result.success) {
-      return NextResponse.json(
-        { error: result.error },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: result.error }, { status: 500 });
     }
 
     // Return the audio URL and metadata
@@ -49,9 +44,8 @@ export async function POST(request: NextRequest) {
       audioUrl: result.audioUrl,
       voice: result.voice,
       duration: result.duration,
-      provider: 'openai'
+      provider: 'openai',
     });
-
   } catch (error) {
     console.error('OpenAI TTS API error:', error);
     return NextResponse.json(
@@ -64,10 +58,10 @@ export async function POST(request: NextRequest) {
 // GET endpoint to check available voices
 export async function GET() {
   const tts = new OpenAITTS();
-  
+
   return NextResponse.json({
     available: tts.isAvailable(),
     voices: tts.getAvailableVoices(),
-    provider: 'openai'
+    provider: 'openai',
   });
 }

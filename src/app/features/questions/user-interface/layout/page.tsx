@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState } from 'react';
+import Link from 'next/link';
 
 interface PracticeProblem {
   id: number;
@@ -23,8 +23,8 @@ export default function CSSLayoutPracticePage() {
   const problems: PracticeProblem[] = [
     {
       id: 1,
-      title: "Flexbox Basics",
-      description: "Understanding flexbox layout properties",
+      title: 'Flexbox Basics',
+      description: 'Understanding flexbox layout properties',
       code: `.container {
   display: flex;
   justify-content: center;
@@ -37,61 +37,61 @@ export default function CSSLayoutPracticePage() {
   height: 50px;
   background: blue;
 }`,
-      question: "What will this CSS do to the layout?",
+      question: 'What will this CSS do to the layout?',
       options: [
-        "Center the item horizontally and vertically",
-        "Only center horizontally",
-        "Only center vertically",
-        "No centering effect",
+        'Center the item horizontally and vertically',
+        'Only center horizontally',
+        'Only center vertically',
+        'No centering effect',
       ],
       correctAnswer: 0,
       explanation:
-        "This CSS will center the item both horizontally and vertically. justify-content: center centers horizontally, and align-items: center centers vertically within the flex container.",
+        'This CSS will center the item both horizontally and vertically. justify-content: center centers horizontally, and align-items: center centers vertically within the flex container.',
     },
     {
       id: 2,
-      title: "Grid Layout",
-      description: "Understanding CSS Grid properties",
+      title: 'Grid Layout',
+      description: 'Understanding CSS Grid properties',
       code: `.grid-container {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   gap: 20px;
 }`,
-      question: "What does this grid layout create?",
+      question: 'What does this grid layout create?',
       options: [
-        "3 equal columns",
-        "3 columns with middle column twice as wide",
-        "2 columns with gap",
-        "Single column layout",
+        '3 equal columns',
+        '3 columns with middle column twice as wide',
+        '2 columns with gap',
+        'Single column layout',
       ],
       correctAnswer: 1,
       explanation:
-        "This creates 3 columns where the middle column (2fr) is twice as wide as the side columns (1fr each). The gap property adds 20px spacing between grid items.",
+        'This creates 3 columns where the middle column (2fr) is twice as wide as the side columns (1fr each). The gap property adds 20px spacing between grid items.',
     },
     {
       id: 3,
-      title: "Responsive Design",
-      description: "Understanding media queries",
+      title: 'Responsive Design',
+      description: 'Understanding media queries',
       code: `@media (max-width: 768px) {
   .container {
     flex-direction: column;
   }
 }`,
-      question: "When will this CSS take effect?",
+      question: 'When will this CSS take effect?',
       options: [
-        "Always",
-        "On screens wider than 768px",
-        "On screens 768px or narrower",
-        "Never",
+        'Always',
+        'On screens wider than 768px',
+        'On screens 768px or narrower',
+        'Never',
       ],
       correctAnswer: 2,
       explanation:
-        "This CSS will take effect on screens that are 768px wide or narrower. max-width: 768px means the styles apply when the viewport width is 768px or less.",
+        'This CSS will take effect on screens that are 768px wide or narrower. max-width: 768px means the styles apply when the viewport width is 768px or less.',
     },
     {
       id: 4,
-      title: "Positioning",
-      description: "Understanding CSS positioning",
+      title: 'Positioning',
+      description: 'Understanding CSS positioning',
       code: `.parent {
   position: relative;
 }
@@ -101,21 +101,21 @@ export default function CSSLayoutPracticePage() {
   top: 0;
   right: 0;
 }`,
-      question: "Where will the child element be positioned?",
+      question: 'Where will the child element be positioned?',
       options: [
-        "Top-left corner",
-        "Top-right corner",
-        "Bottom-left corner",
-        "Bottom-right corner",
+        'Top-left corner',
+        'Top-right corner',
+        'Bottom-left corner',
+        'Bottom-right corner',
       ],
       correctAnswer: 1,
       explanation:
-        "The child will be positioned at the top-right corner of its parent. position: absolute with top: 0 and right: 0 positions it at the top-right corner relative to the nearest positioned ancestor.",
+        'The child will be positioned at the top-right corner of its parent. position: absolute with top: 0 and right: 0 positions it at the top-right corner relative to the nearest positioned ancestor.',
     },
     {
       id: 5,
-      title: "Box Model",
-      description: "Understanding CSS box model",
+      title: 'Box Model',
+      description: 'Understanding CSS box model',
       code: `.box {
   width: 200px;
   padding: 20px;
@@ -123,11 +123,11 @@ export default function CSSLayoutPracticePage() {
   margin: 10px;
   box-sizing: border-box;
 }`,
-      question: "What is the total width of this element?",
-      options: ["200px", "250px", "270px", "290px"],
+      question: 'What is the total width of this element?',
+      options: ['200px', '250px', '270px', '290px'],
       correctAnswer: 0,
       explanation:
-        "The total width is 200px. With box-sizing: border-box, the width includes padding and border. Without it, the total width would be 200px + 40px padding + 10px border = 250px.",
+        'The total width is 200px. With box-sizing: border-box, the width includes padding and border. Without it, the total width would be 200px + 40px padding + 10px border = 250px.',
     },
   ];
 
@@ -162,11 +162,11 @@ export default function CSSLayoutPracticePage() {
   const getScoreMessage = () => {
     const percentage = getScorePercentage();
     if (percentage >= 80)
-      return "Excellent! You have a strong understanding of CSS layout.";
+      return 'Excellent! You have a strong understanding of CSS layout.';
     if (percentage >= 60)
-      return "Good job! You understand the basics of CSS layout.";
-    if (percentage >= 40) return "Not bad! Review the concepts and try again.";
-    return "Keep practicing! CSS layout can be tricky at first.";
+      return 'Good job! You understand the basics of CSS layout.';
+    if (percentage >= 40) return 'Not bad! Review the concepts and try again.';
+    return 'Keep practicing! CSS layout can be tricky at first.';
   };
 
   if (practiceCompleted) {
@@ -278,9 +278,9 @@ export default function CSSLayoutPracticePage() {
                 className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
                   selectedAnswer === index
                     ? selectedAnswer === currentP.correctAnswer
-                      ? "border-green-500 bg-green-50"
-                      : "border-red-500 bg-red-50"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
                 }`}
               >
                 <div className="flex items-center">
@@ -288,13 +288,13 @@ export default function CSSLayoutPracticePage() {
                     className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${
                       selectedAnswer === index
                         ? selectedAnswer === currentP.correctAnswer
-                          ? "border-green-500 bg-green-500 text-white"
-                          : "border-red-500 bg-red-500 text-white"
-                        : "border-gray-300"
+                          ? 'border-green-500 bg-green-500 text-white'
+                          : 'border-red-500 bg-red-500 text-white'
+                        : 'border-gray-300'
                     }`}
                   >
                     {selectedAnswer === index &&
-                      (selectedAnswer === currentP.correctAnswer ? "✓" : "✗")}
+                      (selectedAnswer === currentP.correctAnswer ? '✓' : '✗')}
                   </div>
                   <span className="text-gray-900">{option}</span>
                 </div>
@@ -318,8 +318,8 @@ export default function CSSLayoutPracticePage() {
                 className="bg-blue-600 text-white px-8 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
               >
                 {currentProblem < problems.length - 1
-                  ? "Next Problem"
-                  : "Finish Practice"}
+                  ? 'Next Problem'
+                  : 'Finish Practice'}
               </button>
             </div>
           )}

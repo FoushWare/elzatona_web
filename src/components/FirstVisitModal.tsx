@@ -14,7 +14,8 @@ export const FirstVisitModal: React.FC<FirstVisitModalProps> = ({
   // Don't show modal during testing
   if (
     typeof window !== 'undefined' &&
-    ((window as any).__DISABLE_GUIDANCE_MODALS__ || (window as any).__TEST_MODE__)
+    ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
+      (window as any).__TEST_MODE__)
   ) {
     return null;
   }

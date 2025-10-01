@@ -8,11 +8,13 @@ export async function GET(request: NextRequest) {
     // Get the Firebase token from cookies
     const cookieStore = cookies();
     const token = cookieStore.get('firebase_token')?.value;
-    
+
     if (!token) {
       // For development, return mock progress data
-      console.log('⚠️ No authentication token found, returning mock data for development');
-      
+      console.log(
+        '⚠️ No authentication token found, returning mock data for development'
+      );
+
       const mockProgress = {
         userId: 'dev-user',
         totalQuestions: 0,
@@ -52,8 +54,10 @@ export async function GET(request: NextRequest) {
     // Verify the Firebase token
     const decodedToken = await verifyFirebaseToken(token);
     if (!decodedToken) {
-      console.warn('Token verification failed, returning mock data for development');
-      
+      console.warn(
+        'Token verification failed, returning mock data for development'
+      );
+
       // Return mock progress data for development
       const mockProgress = {
         userId: 'dev-user',
@@ -92,17 +96,17 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const learningMode = searchParams.get('mode') as 'guided' | 'free-style' | null;
+    const learningMode = searchParams.get('mode') as
+      | 'guided'
+      | 'free-style'
+      | null;
     const planId = searchParams.get('planId');
 
     // Fetch user data from Firestore
     const userData = await firestoreService.getUser(decodedToken.uid);
-    
+
     if (!userData) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const progress = userData.progress;
@@ -112,7 +116,10 @@ export async function GET(request: NextRequest) {
     // Get current learning plan if guided mode
     let currentPlan = null;
     if (learningMode === 'guided' && planId) {
-      currentPlan = await firestoreService.getLearningPlan(decodedToken.uid, planId);
+      currentPlan = await firestoreService.getLearningPlan(
+        decodedToken.uid,
+        planId
+      );
     }
 
     const progressData = {
@@ -148,10 +155,9 @@ export async function GET(request: NextRequest) {
       success: true,
       progress: progressData,
     });
-
   } catch (error) {
     console.error('Error fetching progress:', error);
-    
+
     // Return mock data instead of error for development
     const mockProgress = {
       userId: 'dev-user',

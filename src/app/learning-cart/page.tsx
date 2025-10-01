@@ -1,10 +1,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Trash2, Clock, BookOpen, Star, Plus, Minus } from 'lucide-react';
+import {
+  ShoppingCart,
+  Trash2,
+  Clock,
+  BookOpen,
+  Star,
+  Plus,
+  Minus,
+} from 'lucide-react';
 import Link from 'next/link';
 
 interface LearningCartItem {
@@ -51,7 +65,7 @@ export default function LearningCartPage() {
       const userId = 'test-user'; // In real app, get from auth
       const response = await fetch(`/api/learning-cart?userId=${userId}`);
       const data = await response.json();
-      
+
       if (data.success) {
         setCart(data.data);
       }
@@ -65,10 +79,13 @@ export default function LearningCartPage() {
   const removeItem = async (itemId: string) => {
     try {
       const userId = 'test-user';
-      const response = await fetch(`/api/learning-cart?userId=${userId}&itemId=${itemId}`, {
-        method: 'DELETE'
-      });
-      
+      const response = await fetch(
+        `/api/learning-cart?userId=${userId}&itemId=${itemId}`,
+        {
+          method: 'DELETE',
+        }
+      );
+
       if (response.ok) {
         await fetchCart(); // Refresh cart
       }
@@ -77,7 +94,10 @@ export default function LearningCartPage() {
     }
   };
 
-  const updateItemPriority = async (itemId: string, priority: 'low' | 'medium' | 'high') => {
+  const updateItemPriority = async (
+    itemId: string,
+    priority: 'low' | 'medium' | 'high'
+  ) => {
     try {
       const userId = 'test-user';
       const response = await fetch('/api/learning-cart', {
@@ -88,10 +108,10 @@ export default function LearningCartPage() {
         body: JSON.stringify({
           userId,
           itemId,
-          updates: { priority }
-        })
+          updates: { priority },
+        }),
       });
-      
+
       if (response.ok) {
         await fetchCart(); // Refresh cart
       }
@@ -102,39 +122,53 @@ export default function LearningCartPage() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'hard': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'easy':
+        return 'bg-green-100 text-green-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'hard':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'low': return 'bg-gray-100 text-gray-800';
-      case 'medium': return 'bg-blue-100 text-blue-800';
-      case 'high': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'low':
+        return 'bg-gray-100 text-gray-800';
+      case 'medium':
+        return 'bg-blue-100 text-blue-800';
+      case 'high':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'single': return 'bg-blue-100 text-blue-800';
-      case 'multiple': return 'bg-purple-100 text-purple-800';
-      case 'conceptual': return 'bg-green-100 text-green-800';
-      case 'code': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'single':
+        return 'bg-blue-100 text-blue-800';
+      case 'multiple':
+        return 'bg-purple-100 text-purple-800';
+      case 'conceptual':
+        return 'bg-green-100 text-green-800';
+      case 'code':
+        return 'bg-orange-100 text-orange-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const filteredItems = cart?.items.filter(item => {
-    if (filter === 'all') return true;
-    if (filter === 'high') return item.priority === 'high';
-    if (filter === 'medium') return item.priority === 'medium';
-    if (filter === 'low') return item.priority === 'low';
-    return true;
-  }) || [];
+  const filteredItems =
+    cart?.items.filter(item => {
+      if (filter === 'all') return true;
+      if (filter === 'high') return item.priority === 'high';
+      if (filter === 'medium') return item.priority === 'medium';
+      if (filter === 'low') return item.priority === 'low';
+      return true;
+    }) || [];
 
   const sortedItems = [...filteredItems].sort((a, b) => {
     switch (sortBy) {
@@ -168,9 +202,12 @@ export default function LearningCartPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-12">
           <ShoppingCart className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Your learning cart is empty</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Your learning cart is empty
+          </h3>
           <p className="text-gray-600 mb-4">
-            Start building your personalized learning plan by adding questions from learning paths.
+            Start building your personalized learning plan by adding questions
+            from learning paths.
           </p>
           <Link href="/learning-paths">
             <Button>
@@ -187,7 +224,9 @@ export default function LearningCartPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Learning Cart</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Learning Cart
+          </h1>
           <p className="text-gray-600">Build your personalized learning plan</p>
         </div>
         <div className="mt-4 md:mt-0">
@@ -209,19 +248,27 @@ export default function LearningCartPage() {
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">{cart.totalQuestions}</div>
+              <div className="text-2xl font-bold text-blue-600">
+                {cart.totalQuestions}
+              </div>
               <div className="text-sm text-gray-600">Questions</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{cart.estimatedTime}</div>
+              <div className="text-2xl font-bold text-green-600">
+                {cart.estimatedTime}
+              </div>
               <div className="text-sm text-gray-600">Minutes</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{cart.categories.length}</div>
+              <div className="text-2xl font-bold text-purple-600">
+                {cart.categories.length}
+              </div>
               <div className="text-sm text-gray-600">Categories</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-orange-600">{cart.topics.length}</div>
+              <div className="text-2xl font-bold text-orange-600">
+                {cart.topics.length}
+              </div>
               <div className="text-sm text-gray-600">Topics</div>
             </div>
           </div>
@@ -260,11 +307,11 @@ export default function LearningCartPage() {
             Low Priority
           </Button>
         </div>
-        
+
         <div className="flex-1">
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
+            onChange={e => setSortBy(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="addedAt">Recently Added</option>
@@ -277,7 +324,7 @@ export default function LearningCartPage() {
 
       {/* Cart Items */}
       <div className="space-y-4">
-        {sortedItems.map((item) => (
+        {sortedItems.map(item => (
           <Card key={item.id} className="hover:shadow-md transition-shadow">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
@@ -293,9 +340,11 @@ export default function LearningCartPage() {
                       {item.priority} priority
                     </Badge>
                   </div>
-                  
-                  <h3 className="text-lg font-semibold mb-2">{item.question}</h3>
-                  
+
+                  <h3 className="text-lg font-semibold mb-2">
+                    {item.question}
+                  </h3>
+
                   <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
                     <div className="flex items-center gap-1">
                       <BookOpen className="h-4 w-4" />
@@ -313,7 +362,11 @@ export default function LearningCartPage() {
                   {item.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1">
                       {item.tags.map((tag, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="text-xs"
+                        >
                           {tag}
                         </Badge>
                       ))}
@@ -332,7 +385,9 @@ export default function LearningCartPage() {
                     </Button>
                     <Button
                       size="sm"
-                      variant={item.priority === 'medium' ? 'default' : 'outline'}
+                      variant={
+                        item.priority === 'medium' ? 'default' : 'outline'
+                      }
                       onClick={() => updateItemPriority(item.id, 'medium')}
                     >
                       Med
@@ -345,7 +400,7 @@ export default function LearningCartPage() {
                       High
                     </Button>
                   </div>
-                  
+
                   <Button
                     size="sm"
                     variant="outline"
@@ -365,7 +420,8 @@ export default function LearningCartPage() {
       <div className="mt-8 text-center">
         <Button size="lg" className="px-8">
           <Star className="h-5 w-5 mr-2" />
-          Create Learning Plan ({cart.totalQuestions} questions, {cart.estimatedTime} minutes)
+          Create Learning Plan ({cart.totalQuestions} questions,{' '}
+          {cart.estimatedTime} minutes)
         </Button>
       </div>
     </div>

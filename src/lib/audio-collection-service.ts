@@ -37,7 +37,11 @@ export class AudioCollectionService {
   ): Promise<{ success: boolean; error?: string; mappingId?: string }> {
     try {
       const mappingId = `${learningPath}_${sectionId}_${questionNumber}`;
-      const audioPaths = generateAudioPaths(learningPath, sectionId, questionNumber);
+      const audioPaths = generateAudioPaths(
+        learningPath,
+        sectionId,
+        questionNumber
+      );
 
       // Create audio file info objects
       const questionAudio: AudioFileInfo = questionAudioPath
@@ -75,9 +79,11 @@ export class AudioCollectionService {
   /**
    * Get audio mapping for a specific question
    */
-  static async getAudioMapping(
-    questionId: string
-  ): Promise<{ success: boolean; mapping?: QuestionAudioMapping; error?: string }> {
+  static async getAudioMapping(questionId: string): Promise<{
+    success: boolean;
+    mapping?: QuestionAudioMapping;
+    error?: string;
+  }> {
     try {
       const q = query(
         collection(db, this.COLLECTION_NAME),
@@ -86,7 +92,7 @@ export class AudioCollectionService {
       );
 
       const querySnapshot = await getDocs(q);
-      
+
       if (querySnapshot.empty) {
         return { success: true, mapping: undefined };
       }
@@ -107,9 +113,11 @@ export class AudioCollectionService {
   /**
    * Get all audio mappings for a learning path
    */
-  static async getAudioMappingsForLearningPath(
-    learningPath: string
-  ): Promise<{ success: boolean; mappings?: QuestionAudioMapping[]; error?: string }> {
+  static async getAudioMappingsForLearningPath(learningPath: string): Promise<{
+    success: boolean;
+    mappings?: QuestionAudioMapping[];
+    error?: string;
+  }> {
     try {
       const q = query(
         collection(db, this.COLLECTION_NAME),
@@ -119,7 +127,7 @@ export class AudioCollectionService {
 
       const querySnapshot = await getDocs(q);
       const mappings = querySnapshot.docs.map(
-        doc => ({ id: doc.id, ...doc.data() } as QuestionAudioMapping)
+        doc => ({ id: doc.id, ...doc.data() }) as QuestionAudioMapping
       );
 
       return { success: true, mappings };
@@ -138,7 +146,11 @@ export class AudioCollectionService {
   static async getAudioMappingsForSection(
     learningPath: string,
     sectionId: string
-  ): Promise<{ success: boolean; mappings?: QuestionAudioMapping[]; error?: string }> {
+  ): Promise<{
+    success: boolean;
+    mappings?: QuestionAudioMapping[];
+    error?: string;
+  }> {
     try {
       const q = query(
         collection(db, this.COLLECTION_NAME),
@@ -149,7 +161,7 @@ export class AudioCollectionService {
 
       const querySnapshot = await getDocs(q);
       const mappings = querySnapshot.docs.map(
-        doc => ({ id: doc.id, ...doc.data() } as QuestionAudioMapping)
+        doc => ({ id: doc.id, ...doc.data() }) as QuestionAudioMapping
       );
 
       return { success: true, mappings };
@@ -172,7 +184,7 @@ export class AudioCollectionService {
   ): Promise<{ success: boolean; error?: string }> {
     try {
       const mappingResult = await this.getAudioMapping(questionId);
-      
+
       if (!mappingResult.success || !mappingResult.mapping) {
         return {
           success: false,
@@ -206,7 +218,7 @@ export class AudioCollectionService {
   ): Promise<{ success: boolean; error?: string }> {
     try {
       const mappingResult = await this.getAudioMapping(questionId);
-      
+
       if (!mappingResult.success || !mappingResult.mapping) {
         return { success: true }; // Already deleted or doesn't exist
       }
@@ -241,7 +253,7 @@ export class AudioCollectionService {
       );
 
       const querySnapshot = await getDocs(q);
-      
+
       if (querySnapshot.empty) {
         return { success: true, nextNumber: 1 };
       }

@@ -224,7 +224,3 @@ Mobile Menu
 **Total Impact**: The responsive navigation now provides an optimal experience for each device type - clean and efficient for mobile/tablet users, and fully-featured for desktop users! 🚀✨
 
 Mobile and tablet users now get a clean, uncluttered navbar with all actions easily accessible through the hamburger menu, while desktop users retain direct access to all features! 📱💻
-
-
-
-

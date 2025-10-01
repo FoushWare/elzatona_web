@@ -23,12 +23,14 @@ const mockRouter = {
 };
 
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<typeof useAdminAuth>;
+const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<
+  typeof useAdminAuth
+>;
 
 describe('AdminPage Component - Advanced Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     mockUseRouter.mockReturnValue(mockRouter);
   });
 
@@ -50,7 +52,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -67,7 +69,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/login');
     });
@@ -84,7 +86,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 
@@ -99,13 +101,13 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     expect(screen.getByText(/authentication failed/i)).toBeInTheDocument();
   });
 
   test('handles different user roles', async () => {
     const roles = ['super_admin', 'admin', 'moderator', 'editor'];
-    
+
     for (const role of roles) {
       mockUseAdminAuth.mockReturnValue({
         isAuthenticated: true,
@@ -124,11 +126,11 @@ describe('AdminPage Component - Advanced Tests', () => {
       });
 
       const { unmount } = render(<AdminPage />);
-      
+
       await waitFor(() => {
         expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
       });
-      
+
       unmount();
       jest.clearAllMocks();
     }
@@ -152,7 +154,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/login');
     });
@@ -192,7 +194,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     rerender(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -216,7 +218,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -240,7 +242,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -264,7 +266,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -288,7 +290,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -312,7 +314,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -329,7 +331,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/login');
     });
@@ -346,7 +348,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/login');
     });
@@ -373,15 +375,16 @@ describe('AdminPage Component - Advanced Tests', () => {
       });
 
       const { unmount } = render(<AdminPage />);
-      
+
       expect(screen.getByText(error)).toBeInTheDocument();
       unmount();
     });
   });
 
   test('handles long error messages', () => {
-    const longError = 'This is a very long error message that should be displayed properly in the UI without breaking the layout or causing any visual issues. It should wrap correctly and maintain readability.';
-    
+    const longError =
+      'This is a very long error message that should be displayed properly in the UI without breaking the layout or causing any visual issues. It should wrap correctly and maintain readability.';
+
     mockUseAdminAuth.mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
@@ -392,7 +395,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     expect(screen.getByText(longError)).toBeInTheDocument();
   });
 
@@ -414,7 +417,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -438,7 +441,7 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -462,15 +465,9 @@ describe('AdminPage Component - Advanced Tests', () => {
     });
 
     render(<AdminPage />);
-    
+
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith('/admin/dashboard');
     });
   });
 });
-
-
-
-
-
-

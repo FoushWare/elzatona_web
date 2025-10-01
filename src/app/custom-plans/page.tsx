@@ -1,7 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Clock, Users, BookOpen, Star, Filter } from 'lucide-react';
@@ -42,7 +48,7 @@ export default function CustomPlansPage() {
     try {
       const response = await fetch('/api/custom-plans?isPublic=true');
       const data = await response.json();
-      
+
       if (data.success) {
         setCustomPlans(data.data);
       }
@@ -55,22 +61,30 @@ export default function CustomPlansPage() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'beginner':
+        return 'bg-green-100 text-green-800';
+      case 'intermediate':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'advanced':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const filteredPlans = customPlans.filter(plan => {
-    const matchesFilter = filter === 'all' || 
+    const matchesFilter =
+      filter === 'all' ||
       (filter === 'templates' && plan.isTemplate) ||
       (filter === 'public' && plan.isPublic && !plan.isTemplate);
-    
-    const matchesSearch = plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+
+    const matchesSearch =
+      plan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       plan.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      plan.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    
+      plan.tags.some(tag =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
     return matchesFilter && matchesSearch;
   });
 
@@ -88,8 +102,12 @@ export default function CustomPlansPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Custom Learning Plans</h1>
-          <p className="text-gray-600">Create and discover personalized learning paths</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Custom Learning Plans
+          </h1>
+          <p className="text-gray-600">
+            Create and discover personalized learning paths
+          </p>
         </div>
         <div className="mt-4 md:mt-0">
           <Link href="/custom-plans/create">
@@ -126,13 +144,13 @@ export default function CustomPlansPage() {
             Public Plans
           </Button>
         </div>
-        
+
         <div className="flex-1">
           <input
             type="text"
             placeholder="Search plans..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -140,7 +158,7 @@ export default function CustomPlansPage() {
 
       {/* Plans Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPlans.map((plan) => (
+        {filteredPlans.map(plan => (
           <Card key={plan.id} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="flex items-start justify-between">
@@ -155,7 +173,7 @@ export default function CustomPlansPage() {
                 </Badge>
               </div>
             </CardHeader>
-            
+
             <CardContent>
               <div className="space-y-3">
                 {/* Stats */}
@@ -177,10 +195,16 @@ export default function CustomPlansPage() {
                 {/* Categories */}
                 {plan.categories.length > 0 && (
                   <div>
-                    <p className="text-sm font-medium text-gray-700 mb-1">Categories:</p>
+                    <p className="text-sm font-medium text-gray-700 mb-1">
+                      Categories:
+                    </p>
                     <div className="flex flex-wrap gap-1">
                       {plan.categories.slice(0, 3).map((category, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
+                        <Badge
+                          key={index}
+                          variant="secondary"
+                          className="text-xs"
+                        >
                           {category}
                         </Badge>
                       ))}
@@ -196,10 +220,16 @@ export default function CustomPlansPage() {
                 {/* Tags */}
                 {plan.tags.length > 0 && (
                   <div>
-                    <p className="text-sm font-medium text-gray-700 mb-1">Tags:</p>
+                    <p className="text-sm font-medium text-gray-700 mb-1">
+                      Tags:
+                    </p>
                     <div className="flex flex-wrap gap-1">
                       {plan.tags.slice(0, 3).map((tag, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="text-xs"
+                        >
                           {tag}
                         </Badge>
                       ))}
@@ -219,7 +249,10 @@ export default function CustomPlansPage() {
                       View Details
                     </Button>
                   </Link>
-                  <Link href={`/custom-plans/${plan.id}/start`} className="flex-1">
+                  <Link
+                    href={`/custom-plans/${plan.id}/start`}
+                    className="flex-1"
+                  >
                     <Button variant="outline" className="w-full" size="sm">
                       Start Learning
                     </Button>
@@ -234,9 +267,13 @@ export default function CustomPlansPage() {
       {filteredPlans.length === 0 && (
         <div className="text-center py-12">
           <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No custom plans found</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            No custom plans found
+          </h3>
           <p className="text-gray-600 mb-4">
-            {searchTerm ? 'Try adjusting your search terms' : 'Be the first to create a custom learning plan!'}
+            {searchTerm
+              ? 'Try adjusting your search terms'
+              : 'Be the first to create a custom learning plan!'}
           </p>
           <Link href="/custom-plans/create">
             <Button>

@@ -8,11 +8,11 @@ export async function GET(
 ) {
   try {
     const { planId } = params;
-    
+
     // Get the plan details
     const plans = await firestoreService.getLearningPlanTemplates();
     const plan = plans.find(p => p.id === planId);
-    
+
     if (!plan) {
       return NextResponse.json(
         { success: false, error: 'Plan not found' },
@@ -28,7 +28,7 @@ export async function GET(
         sections: plan.sections || [],
         totalQuestions: plan.totalQuestions || 0,
         dailyQuestions: plan.dailyQuestions || 0,
-      }
+      },
     });
   } catch (error) {
     console.error('Error fetching plan sections:', error);
@@ -47,11 +47,11 @@ export async function PUT(
   try {
     const { planId } = params;
     const config = await request.json();
-    
+
     // Get the current plan
     const plans = await firestoreService.getLearningPlanTemplates();
     const plan = plans.find(p => p.id === planId);
-    
+
     if (!plan) {
       return NextResponse.json(
         { success: false, error: 'Plan not found' },
@@ -66,7 +66,10 @@ export async function PUT(
         id: section.sectionId || section.id,
         name: section.sectionName,
         category: section.category,
-        questions: Array.from({ length: section.questionCount }, (_, i) => `q${i + 1}`), // Generate question IDs
+        questions: Array.from(
+          { length: section.questionCount },
+          (_, i) => `q${i + 1}`
+        ), // Generate question IDs
         maxQuestions: section.maxQuestions,
         weight: section.weight,
         order: section.order,
@@ -84,7 +87,7 @@ export async function PUT(
     return NextResponse.json({
       success: true,
       message: 'Plan sections updated successfully',
-      plan: updatedPlan
+      plan: updatedPlan,
     });
   } catch (error) {
     console.error('Error updating plan sections:', error);

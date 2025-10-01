@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState } from 'react';
+import Link from 'next/link';
 
 interface PracticeProblem {
   id: number;
@@ -23,8 +23,8 @@ export default function GridFlexboxPracticePage() {
   const problems: PracticeProblem[] = [
     {
       id: 1,
-      title: "Flexbox Basics",
-      description: "Understanding flexbox container properties",
+      title: 'Flexbox Basics',
+      description: 'Understanding flexbox container properties',
       code: `.container {
   display: flex;
   justify-content: center;
@@ -36,21 +36,21 @@ export default function GridFlexboxPracticePage() {
   width: 100px;
   height: 50px;
 }`,
-      question: "How will the items be arranged in this flexbox container?",
+      question: 'How will the items be arranged in this flexbox container?',
       options: [
-        "Horizontally centered, vertically centered",
-        "Vertically stacked, horizontally centered",
-        "Horizontally stacked, vertically centered",
-        "Vertically stacked, left-aligned",
+        'Horizontally centered, vertically centered',
+        'Vertically stacked, horizontally centered',
+        'Horizontally stacked, vertically centered',
+        'Vertically stacked, left-aligned',
       ],
       correctAnswer: 1,
       explanation:
-        "flex-direction: column makes items stack vertically, justify-content: center centers them horizontally, and align-items: center centers them vertically within their space.",
+        'flex-direction: column makes items stack vertically, justify-content: center centers them horizontally, and align-items: center centers them vertically within their space.',
     },
     {
       id: 2,
-      title: "Flexbox Order",
-      description: "Understanding flexbox order property",
+      title: 'Flexbox Order',
+      description: 'Understanding flexbox order property',
       code: `.item1 { order: 3; }
 .item2 { order: 1; }
 .item3 { order: 2; }
@@ -60,42 +60,42 @@ export default function GridFlexboxPracticePage() {
   <div class="item2">Second</div>
   <div class="item3">Third</div>
 </div>`,
-      question: "What will be the visual order of the items?",
+      question: 'What will be the visual order of the items?',
       options: [
-        "First, Second, Third",
-        "Second, Third, First",
-        "Third, First, Second",
-        "Second, First, Third",
+        'First, Second, Third',
+        'Second, Third, First',
+        'Third, First, Second',
+        'Second, First, Third',
       ],
       correctAnswer: 1,
       explanation:
-        "The order property controls the visual order. Lower values appear first, so order: 1 (Second) comes first, then order: 2 (Third), then order: 3 (First).",
+        'The order property controls the visual order. Lower values appear first, so order: 1 (Second) comes first, then order: 2 (Third), then order: 3 (First).',
     },
     {
       id: 3,
-      title: "CSS Grid Basics",
-      description: "Understanding CSS Grid container setup",
+      title: 'CSS Grid Basics',
+      description: 'Understanding CSS Grid container setup',
       code: `.grid-container {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   grid-template-rows: 100px 200px;
   gap: 10px;
 }`,
-      question: "How many columns and rows will this grid have?",
+      question: 'How many columns and rows will this grid have?',
       options: [
-        "3 columns, 2 rows",
-        "2 columns, 3 rows",
-        "3 columns, 3 rows",
-        "2 columns, 2 rows",
+        '3 columns, 2 rows',
+        '2 columns, 3 rows',
+        '3 columns, 3 rows',
+        '2 columns, 2 rows',
       ],
       correctAnswer: 0,
       explanation:
-        "grid-template-columns defines 3 columns (1fr 2fr 1fr), and grid-template-rows defines 2 rows (100px 200px).",
+        'grid-template-columns defines 3 columns (1fr 2fr 1fr), and grid-template-rows defines 2 rows (100px 200px).',
     },
     {
       id: 4,
-      title: "Grid Areas",
-      description: "Understanding CSS Grid areas",
+      title: 'Grid Areas',
+      description: 'Understanding CSS Grid areas',
       code: `.grid-container {
   display: grid;
   grid-template-areas: 
@@ -108,31 +108,31 @@ export default function GridFlexboxPracticePage() {
 .sidebar { grid-area: sidebar; }
 .main { grid-area: main; }
 .footer { grid-area: footer; }`,
-      question: "How many grid areas are defined in this layout?",
-      options: ["3 areas", "4 areas", "5 areas", "6 areas"],
+      question: 'How many grid areas are defined in this layout?',
+      options: ['3 areas', '4 areas', '5 areas', '6 areas'],
       correctAnswer: 1,
       explanation:
-        "There are 4 distinct grid areas: header, sidebar, main, and footer. The header and footer span multiple columns but are single areas.",
+        'There are 4 distinct grid areas: header, sidebar, main, and footer. The header and footer span multiple columns but are single areas.',
     },
     {
       id: 5,
-      title: "Responsive Grid",
-      description: "Understanding responsive grid layouts",
+      title: 'Responsive Grid',
+      description: 'Understanding responsive grid layouts',
       code: `.responsive-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
 }`,
-      question: "What happens when the screen width changes?",
+      question: 'What happens when the screen width changes?',
       options: [
-        "Grid items stay the same size",
-        "Grid items automatically resize to fit",
-        "Number of columns automatically adjusts",
-        "Grid becomes a single column",
+        'Grid items stay the same size',
+        'Grid items automatically resize to fit',
+        'Number of columns automatically adjusts',
+        'Grid becomes a single column',
       ],
       correctAnswer: 2,
       explanation:
-        "auto-fit with minmax() automatically adjusts the number of columns based on available space. Each column is minimum 200px wide and expands to fill available space.",
+        'auto-fit with minmax() automatically adjusts the number of columns based on available space. Each column is minimum 200px wide and expands to fill available space.',
     },
   ];
 
@@ -168,11 +168,11 @@ export default function GridFlexboxPracticePage() {
   const getScoreMessage = () => {
     const percentage = getScorePercentage();
     if (percentage >= 80)
-      return "Excellent! You have a strong understanding of CSS Grid and Flexbox.";
+      return 'Excellent! You have a strong understanding of CSS Grid and Flexbox.';
     if (percentage >= 60)
-      return "Good job! You understand the basics of CSS Grid and Flexbox.";
-    if (percentage >= 40) return "Not bad! Review the concepts and try again.";
-    return "Keep practicing! CSS Grid and Flexbox can be complex at first.";
+      return 'Good job! You understand the basics of CSS Grid and Flexbox.';
+    if (percentage >= 40) return 'Not bad! Review the concepts and try again.';
+    return 'Keep practicing! CSS Grid and Flexbox can be complex at first.';
   };
 
   if (practiceCompleted) {
@@ -283,9 +283,9 @@ export default function GridFlexboxPracticePage() {
                 className={`w-full text-left p-4 rounded-lg border transition-all duration-200 ${
                   selectedAnswer === index
                     ? selectedAnswer === currentP.correctAnswer
-                      ? "border-green-500 bg-green-50"
-                      : "border-red-500 bg-red-50"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
                 }`}
               >
                 <div className="flex items-center">
@@ -293,13 +293,13 @@ export default function GridFlexboxPracticePage() {
                     className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${
                       selectedAnswer === index
                         ? selectedAnswer === currentP.correctAnswer
-                          ? "border-green-500 bg-green-500 text-white"
-                          : "border-red-500 bg-red-500 text-white"
-                        : "border-gray-300"
+                          ? 'border-green-500 bg-green-500 text-white'
+                          : 'border-red-500 bg-red-500 text-white'
+                        : 'border-gray-300'
                     }`}
                   >
                     {selectedAnswer === index &&
-                      (selectedAnswer === currentP.correctAnswer ? "✓" : "✗")}
+                      (selectedAnswer === currentP.correctAnswer ? '✓' : '✗')}
                   </div>
                   <span className="text-gray-900">{option}</span>
                 </div>
@@ -323,8 +323,8 @@ export default function GridFlexboxPracticePage() {
                 className="bg-blue-600 text-white px-8 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
               >
                 {currentProblem < problems.length - 1
-                  ? "Next Problem"
-                  : "Finish Practice"}
+                  ? 'Next Problem'
+                  : 'Finish Practice'}
               </button>
             </div>
           )}

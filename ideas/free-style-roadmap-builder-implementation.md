@@ -272,7 +272,3 @@ const filteredSections = sections.filter(section => {
 **Total Impact**: The free style roadmap builder gives users complete control over their learning journey, allowing them to create personalized paths that match their interests, skill level, and career goals! 🚀✨
 
 Self-directed learners can now build their own custom roadmap from 15+ sections, creating a truly personalized learning experience that adapts to their needs! 🎯
-
-
-
-

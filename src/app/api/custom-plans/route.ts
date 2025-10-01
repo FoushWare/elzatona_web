@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
-import { collection, addDoc, getDocs, query, where, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from 'firebase/firestore';
 
 export interface CustomPlan {
   id: string;
@@ -41,7 +51,7 @@ export async function POST(request: NextRequest) {
       isTemplate = false,
       tags = [],
       prerequisites = [],
-      learningObjectives = []
+      learningObjectives = [],
     } = body;
 
     if (!userId || !name || !description || !duration || !difficulty) {
@@ -56,9 +66,11 @@ export async function POST(request: NextRequest) {
     const difficultyMultiplier = {
       beginner: 0.8,
       intermediate: 1.0,
-      advanced: 1.2
+      advanced: 1.2,
     };
-    const estimatedTime = Math.round(duration * baseTimePerDay * difficultyMultiplier[difficulty]);
+    const estimatedTime = Math.round(
+      duration * baseTimePerDay * difficultyMultiplier[difficulty]
+    );
 
     const customPlan: Omit<CustomPlan, 'id'> = {
       userId,
@@ -78,7 +90,7 @@ export async function POST(request: NextRequest) {
       tags,
       estimatedTime,
       prerequisites,
-      learningObjectives
+      learningObjectives,
     };
 
     const docRef = await addDoc(collection(db, 'customPlans'), customPlan);
@@ -87,10 +99,9 @@ export async function POST(request: NextRequest) {
       success: true,
       data: {
         id: docRef.id,
-        ...customPlan
-      }
+        ...customPlan,
+      },
     });
-
   } catch (error) {
     console.error('Error creating custom plan:', error);
     return NextResponse.json(
@@ -137,14 +148,13 @@ export async function GET(request: NextRequest) {
     const snapshot = await getDocs(q);
     const customPlans = snapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
 
     return NextResponse.json({
       success: true,
-      data: customPlans
+      data: customPlans,
     });
-
   } catch (error) {
     console.error('Error fetching custom plans:', error);
     return NextResponse.json(

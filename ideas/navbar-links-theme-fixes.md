@@ -225,7 +225,3 @@ export const NavbarSimple: React.FC = () => {
 **Total Impact**: Both navbar links and theme toggle are now fully functional, providing users with a seamless navigation and theming experience! 🚀✨
 
 Users can now **navigate freely** between pages and **switch themes** without any issues! 🎨📱
-
-
-
-

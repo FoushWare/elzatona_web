@@ -31,17 +31,20 @@ export const useAdminAuth = (): UseAdminAuthReturn => {
         }
 
         const sessionData = localStorage.getItem(ADMIN_SESSION_KEY);
-        console.log('🔍 Checking session data:', sessionData ? 'Found' : 'Not found');
-        
+        console.log(
+          '🔍 Checking session data:',
+          sessionData ? 'Found' : 'Not found'
+        );
+
         if (sessionData) {
           const session: AdminSession = JSON.parse(sessionData);
           console.log('📋 Session details:', {
             id: session.id,
             email: session.email,
             expiresAt: session.expiresAt,
-            isExpired: new Date() > new Date(session.expiresAt)
+            isExpired: new Date() > new Date(session.expiresAt),
           });
-          
+
           // Check if session has expired locally first
           if (new Date() > new Date(session.expiresAt)) {
             console.log('⏰ Session expired, removing from localStorage');

@@ -40,15 +40,18 @@ export class FirestoreConnectionManager {
         }
       } catch (error) {
         // Check if this is a Firebase internal assertion error
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        if (errorMessage.includes('INTERNAL ASSERTION FAILED') || 
-            errorMessage.includes('Unexpected state') ||
-            errorMessage.includes('TargetState') ||
-            errorMessage.includes('WatchChangeAggregator')) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        if (
+          errorMessage.includes('INTERNAL ASSERTION FAILED') ||
+          errorMessage.includes('Unexpected state') ||
+          errorMessage.includes('TargetState') ||
+          errorMessage.includes('WatchChangeAggregator')
+        ) {
           // These are non-critical Firebase internal errors, don't treat as connection loss
           return;
         }
-        
+
         if (this.isConnected) {
           console.log('🔌 Firestore connection lost');
           this.isConnected = false;
@@ -63,12 +66,16 @@ export class FirestoreConnectionManager {
 
   private async handleReconnection() {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.warn('⚠️ Max reconnection attempts reached. Firestore may be offline.');
+      console.warn(
+        '⚠️ Max reconnection attempts reached. Firestore may be offline.'
+      );
       return;
     }
 
     this.reconnectAttempts++;
-    console.log(`🔄 Attempting to reconnect Firestore (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+    console.log(
+      `🔄 Attempting to reconnect Firestore (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`
+    );
 
     // Exponential backoff
     const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
@@ -118,19 +125,22 @@ export class FirestoreConnectionManager {
       try {
         // Ensure connection before operation
         await this.ensureConnection();
-        
+
         // Execute the operation
         const result = await operation();
         return result;
       } catch (error) {
         lastError = error as Error;
-        console.warn(`Operation failed (attempt ${attempt}/${maxRetries}):`, error);
+        console.warn(
+          `Operation failed (attempt ${attempt}/${maxRetries}):`,
+          error
+        );
 
         if (attempt < maxRetries) {
           // Wait before retry with exponential backoff
           const delay = 1000 * Math.pow(2, attempt - 1);
           await new Promise(resolve => setTimeout(resolve, delay));
-          
+
           // Try to reconnect
           await this.ensureConnection();
         }
@@ -141,5 +151,5 @@ export class FirestoreConnectionManager {
   }
 }
 
-export const firestoreConnectionManager = FirestoreConnectionManager.getInstance();
-
+export const firestoreConnectionManager =
+  FirestoreConnectionManager.getInstance();

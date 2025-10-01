@@ -20,29 +20,33 @@ interface ProgressData {
 export async function POST(request: NextRequest) {
   try {
     console.log('📥 Progress save API called');
-    
+
     // Get the Firebase token from cookies
     const cookieStore = cookies();
     const token = cookieStore.get('firebase_token')?.value;
-    
+
     // Debug: Log all cookies
-    console.log('🍪 All cookies:', cookieStore.getAll().map(c => `${c.name}=${c.value}`));
+    console.log(
+      '🍪 All cookies:',
+      cookieStore.getAll().map(c => `${c.name}=${c.value}`)
+    );
     console.log('🔑 Firebase token:', token ? 'Present' : 'Missing');
-    
+
     if (!token) {
       // For development, allow progress saving without authentication
       console.log('⚠️ No authentication token found, using development mode');
-      
+
       try {
         const progressData: ProgressData = await request.json();
         console.log('📄 Progress data received (dev mode):', progressData);
-        
+
         // Return success response for development
         return NextResponse.json({
           success: true,
           progressId: `progress_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           message: 'Progress saved successfully (development mode)',
-          warning: 'Using development mode - authentication not fully configured',
+          warning:
+            'Using development mode - authentication not fully configured',
         });
       } catch (parseError) {
         console.error('❌ Error parsing request body (dev mode):', parseError);
@@ -64,22 +68,23 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     // Verify the Firebase token
     const decodedToken = await verifyFirebaseToken(token);
     if (!decodedToken) {
       console.warn('Token verification failed, using development mode');
-      
+
       try {
         const progressData: ProgressData = await request.json();
         console.log('📄 Progress data received (dev mode):', progressData);
-        
+
         // Return success response for development
         return NextResponse.json({
           success: true,
           progressId: `progress_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           message: 'Progress saved successfully (development mode)',
-          warning: 'Using development mode - authentication not fully configured',
+          warning:
+            'Using development mode - authentication not fully configured',
         });
       } catch (parseError) {
         console.error('❌ Error parsing request body (dev mode):', parseError);
@@ -89,9 +94,12 @@ export async function POST(request: NextRequest) {
         );
       }
     }
-    
+
     // Validate the progress data
-    if (!progressData.questionId || typeof progressData.isCorrect !== 'boolean') {
+    if (
+      !progressData.questionId ||
+      typeof progressData.isCorrect !== 'boolean'
+    ) {
       return NextResponse.json(
         { error: 'Invalid progress data' },
         { status: 400 }
@@ -100,10 +108,7 @@ export async function POST(request: NextRequest) {
 
     // Ensure the userId matches the authenticated user
     if (progressData.userId !== decodedToken.uid) {
-      return NextResponse.json(
-        { error: 'User ID mismatch' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: 'User ID mismatch' }, { status: 403 });
     }
 
     // Save progress to Firestore
@@ -126,12 +131,23 @@ export async function POST(request: NextRequest) {
     // Update learning plan progress if guided mode
     if (progressData.learningMode === 'guided' && progressData.planId) {
       try {
-        const currentPlan = await firestoreService.getLearningPlan(decodedToken.uid, progressData.planId);
+        const currentPlan = await firestoreService.getLearningPlan(
+          decodedToken.uid,
+          progressData.planId
+        );
         if (currentPlan) {
-          await firestoreService.updateLearningPlan(decodedToken.uid, progressData.planId, {
-            questionsCompleted: currentPlan.questionsCompleted + 1,
-            progress: Math.round(((currentPlan.questionsCompleted + 1) / currentPlan.totalQuestions) * 100),
-          });
+          await firestoreService.updateLearningPlan(
+            decodedToken.uid,
+            progressData.planId,
+            {
+              questionsCompleted: currentPlan.questionsCompleted + 1,
+              progress: Math.round(
+                ((currentPlan.questionsCompleted + 1) /
+                  currentPlan.totalQuestions) *
+                  100
+              ),
+            }
+          );
           console.log('✅ Learning plan updated successfully');
         } else {
           console.warn('⚠️ Learning plan not found, skipping plan update');
@@ -172,15 +188,14 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-
   } catch (error) {
     console.error('❌ Error saving progress:', error);
-    
+
     // Return success response for development instead of error
     try {
       const progressData: ProgressData = await request.json();
       console.log('📄 Progress data received (error fallback):', progressData);
-      
+
       return NextResponse.json({
         success: true,
         progressId: `progress_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -188,8 +203,11 @@ export async function POST(request: NextRequest) {
         warning: 'Using development mode due to server error',
       });
     } catch (parseError) {
-      console.error('❌ Error parsing request body (error fallback):', parseError);
-      
+      console.error(
+        '❌ Error parsing request body (error fallback):',
+        parseError
+      );
+
       return NextResponse.json({
         success: true,
         progressId: `progress_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,

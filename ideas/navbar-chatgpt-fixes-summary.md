@@ -166,7 +166,3 @@ className =
 - ✅ **Z-index layering**: Proper stacking order
 
 The navbar and ChatGPT components now work consistently across all screen sizes with clean, simple positioning! 🎉
-
-
-
-

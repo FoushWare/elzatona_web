@@ -35,7 +35,7 @@ const mockPath = jest.mocked(require('path'));
 describe('Section Management Flow Integration Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
+
     // Reset all fs.promises mocks to successful defaults
     mockFs.promises.mkdir.mockResolvedValue(undefined);
     mockFs.promises.readFile.mockResolvedValue('[]');
@@ -44,7 +44,7 @@ describe('Section Management Flow Integration Tests', () => {
     mockFs.promises.readdir.mockResolvedValue([]);
     mockFs.promises.stat.mockResolvedValue({ isDirectory: () => true });
     mockFs.promises.unlink.mockResolvedValue(undefined);
-    
+
     // Reset synchronous fs mocks
     mockFs.mkdir.mockImplementation((path, options, callback) => {
       if (callback) callback(null);
@@ -56,7 +56,7 @@ describe('Section Management Flow Integration Tests', () => {
     mockFs.readdirSync.mockReturnValue([]);
     mockFs.statSync.mockReturnValue({ isDirectory: () => true });
     mockFs.unlinkSync.mockImplementation(() => {});
-    
+
     // Reset path mocks
     mockPath.join.mockImplementation((...args) => args.join('/'));
     mockPath.resolve.mockImplementation((...args) => args.join('/'));
@@ -77,7 +77,7 @@ describe('Section Management Flow Integration Tests', () => {
         difficulty: 'easy' as const,
         options: [
           { id: 'opt1', text: 'Option 1', isCorrect: true },
-          { id: 'opt2', text: 'Option 2', isCorrect: false }
+          { id: 'opt2', text: 'Option 2', isCorrect: false },
         ],
         correctAnswers: ['opt1'],
         explanation: 'This is the explanation',
@@ -125,7 +125,10 @@ describe('Section Management Flow Integration Tests', () => {
       await SectionService.initializeDefaultSections();
 
       // Step 2: Add new section
-      const addResult = await SectionService.addSection(newSection.name, newSection.description);
+      const addResult = await SectionService.addSection(
+        newSection.name,
+        newSection.description
+      );
       expect(addResult.success).toBe(true);
       expect(addResult.data).toMatchObject({
         name: 'Integration Test Section',
@@ -180,7 +183,7 @@ describe('Section Management Flow Integration Tests', () => {
           difficulty: 'easy' as const,
           options: [
             { id: 'opt1', text: 'Option 1', isCorrect: true },
-            { id: 'opt2', text: 'Option 2', isCorrect: false }
+            { id: 'opt2', text: 'Option 2', isCorrect: false },
           ],
           correctAnswers: ['opt1'],
           explanation: 'Explanation 1',
@@ -195,7 +198,7 @@ describe('Section Management Flow Integration Tests', () => {
           options: [
             { id: 'opt1', text: 'Option A', isCorrect: true },
             { id: 'opt2', text: 'Option B', isCorrect: true },
-            { id: 'opt3', text: 'Option C', isCorrect: false }
+            { id: 'opt3', text: 'Option C', isCorrect: false },
           ],
           correctAnswers: ['opt1', 'opt2'],
           explanation: 'Explanation 2',
@@ -209,7 +212,7 @@ describe('Section Management Flow Integration Tests', () => {
           difficulty: 'easy' as const,
           options: [
             { id: 'opt1', text: 'Option 1', isCorrect: true },
-            { id: 'opt2', text: '', isCorrect: false } // Empty second option
+            { id: 'opt2', text: '', isCorrect: false }, // Empty second option
           ],
           correctAnswers: ['opt1'],
           explanation: '', // Empty explanation
@@ -231,7 +234,9 @@ describe('Section Management Flow Integration Tests', () => {
       });
       mockFs.promises.writeFile.mockResolvedValue(undefined);
       mockFs.promises.mkdir.mockResolvedValue(undefined);
-      mockFs.promises.readdir.mockResolvedValue(['bulk-test-section-questions.json']);
+      mockFs.promises.readdir.mockResolvedValue([
+        'bulk-test-section-questions.json',
+      ]);
 
       // Add bulk questions
       const bulkResult = await SectionService.addBulkQuestions(
@@ -243,7 +248,10 @@ describe('Section Management Flow Integration Tests', () => {
 
       // Verify incomplete question was handled
       const incompleteQuestion = (
-        bulkResult.data as Array<{ title: string; options: Array<{ text: string }> }>
+        bulkResult.data as Array<{
+          title: string;
+          options: Array<{ text: string }>;
+        }>
       ).find(q => q.title === 'Incomplete Question');
       expect(incompleteQuestion.options).toHaveLength(2); // Should add empty second option
       expect(incompleteQuestion.options[1].text).toBe('');
@@ -276,7 +284,7 @@ describe('Section Management Flow Integration Tests', () => {
           difficulty: 'easy' as const,
           options: [
             { id: 'opt1', text: 'Option 1', isCorrect: true },
-            { id: 'opt2', text: 'Option 2', isCorrect: false }
+            { id: 'opt2', text: 'Option 2', isCorrect: false },
           ],
           correctAnswers: ['opt1'],
           explanation: 'Explanation 1',
@@ -294,7 +302,7 @@ describe('Section Management Flow Integration Tests', () => {
           difficulty: 'medium' as const,
           options: [
             { id: 'opt1', text: 'Option A', isCorrect: false },
-            { id: 'opt2', text: '', isCorrect: false } // Empty second option
+            { id: 'opt2', text: '', isCorrect: false }, // Empty second option
           ],
           correctAnswers: ['opt1'],
           explanation: 'Explanation 2',
@@ -327,16 +335,18 @@ describe('Section Management Flow Integration Tests', () => {
       mockFs.writeFileSync.mockImplementation(() => {});
       mockFs.promises.readFile.mockImplementation(filePath => {
         if (filePath.includes('sections.json')) {
-          return Promise.resolve(JSON.stringify([
-            {
-              id: sectionId,
-              name: 'Test Section',
-              description: 'Test description',
-              questionCount: 2,
-              createdAt: '2024-01-01T00:00:00Z',
-              updatedAt: '2024-01-01T00:00:00Z',
-            },
-          ]));
+          return Promise.resolve(
+            JSON.stringify([
+              {
+                id: sectionId,
+                name: 'Test Section',
+                description: 'Test description',
+                questionCount: 2,
+                createdAt: '2024-01-01T00:00:00Z',
+                updatedAt: '2024-01-01T00:00:00Z',
+              },
+            ])
+          );
         } else if (filePath.includes('questions.json')) {
           return Promise.resolve(JSON.stringify(mockQuestions));
         }
@@ -379,7 +389,7 @@ describe('Section Management Flow Integration Tests', () => {
         section: sectionId,
         options: [
           { id: 'opt1', text: 'Option 1', isCorrect: true },
-          { id: 'opt2', text: 'Option 2', isCorrect: false }
+          { id: 'opt2', text: 'Option 2', isCorrect: false },
         ],
         correctAnswers: ['opt1'],
         explanation: 'This is the explanation',
@@ -403,7 +413,9 @@ describe('Section Management Flow Integration Tests', () => {
       });
       mockFs.promises.writeFile.mockResolvedValue(undefined);
       mockFs.promises.mkdir.mockResolvedValue(undefined);
-      mockFs.promises.readdir.mockResolvedValue(['backup-restore-section-questions.json']);
+      mockFs.promises.readdir.mockResolvedValue([
+        'backup-restore-section-questions.json',
+      ]);
 
       // Backup question
       const backupResult = await BackupService.backupQuestion(mockQuestion);
@@ -438,7 +450,9 @@ describe('Section Management Flow Integration Tests', () => {
       mockFs.existsSync.mockReturnValue(true);
       mockFs.promises.mkdir.mockResolvedValue(undefined);
       mockFs.promises.readFile.mockResolvedValue('invalid json content');
-      mockFs.promises.writeFile.mockRejectedValue(new Error('JSON parsing failed'));
+      mockFs.promises.writeFile.mockRejectedValue(
+        new Error('JSON parsing failed')
+      );
 
       const result = await SectionService.getSections();
       expect(result.success).toBe(false);
@@ -454,7 +468,7 @@ describe('Section Management Flow Integration Tests', () => {
         difficulty: 'easy' as const,
         options: [
           { id: 'opt1', text: 'Option 1', isCorrect: true },
-          { id: 'opt2', text: 'Option 2', isCorrect: false }
+          { id: 'opt2', text: 'Option 2', isCorrect: false },
         ],
         correctAnswers: ['opt1'],
         explanation: 'This is the explanation',
@@ -516,7 +530,7 @@ describe('Section Management Flow Integration Tests', () => {
         difficulty: 'easy' as const,
         options: [
           { id: 'opt1', text: 'Option 1', isCorrect: true },
-          { id: 'opt2', text: 'Option 2', isCorrect: false }
+          { id: 'opt2', text: 'Option 2', isCorrect: false },
         ],
         correctAnswers: ['opt1'],
         explanation: 'This is the explanation',

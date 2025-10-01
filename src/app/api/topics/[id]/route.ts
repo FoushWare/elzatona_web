@@ -17,7 +17,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: 'Topic not found'
+          error: 'Topic not found',
         },
         { status: 404 }
       );
@@ -25,14 +25,14 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      data: topic
+      data: topic,
     });
   } catch (error) {
     console.error('Error fetching topic:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch topic'
+        error: 'Failed to fetch topic',
       },
       { status: 500 }
     );
@@ -55,20 +55,23 @@ export async function PUT(
         return NextResponse.json(
           {
             success: false,
-            error: `Missing required field: ${field}`
+            error: `Missing required field: ${field}`,
           },
           { status: 400 }
         );
       }
     }
 
-    const updatedTopic = await EnhancedQuestionService.updateTopic(topicId, updateData);
+    const updatedTopic = await EnhancedQuestionService.updateTopic(
+      topicId,
+      updateData
+    );
 
     if (!updatedTopic) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Topic not found'
+          error: 'Topic not found',
         },
         { status: 404 }
       );
@@ -77,14 +80,14 @@ export async function PUT(
     return NextResponse.json({
       success: true,
       data: updatedTopic,
-      message: 'Topic updated successfully'
+      message: 'Topic updated successfully',
     });
   } catch (error) {
     console.error('Error updating topic:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to update topic'
+        error: 'Failed to update topic',
       },
       { status: 500 }
     );
@@ -104,7 +107,7 @@ export async function DELETE(
       return NextResponse.json(
         {
           success: false,
-          error: 'Topic not found'
+          error: 'Topic not found',
         },
         { status: 404 }
       );
@@ -112,14 +115,14 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: 'Topic deleted successfully'
+      message: 'Topic deleted successfully',
     });
   } catch (error) {
     console.error('Error deleting topic:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to delete topic'
+        error: 'Failed to delete topic',
       },
       { status: 500 }
     );

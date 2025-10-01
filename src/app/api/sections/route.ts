@@ -10,20 +10,20 @@ export async function GET() {
     const snapshot = await db.collection('sections').get();
     const sections = snapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
 
     return NextResponse.json({
       success: true,
       data: sections,
-      count: sections.length
+      count: sections.length,
     });
   } catch (error) {
     console.error('Error fetching sections:', error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch sections'
+        error: 'Failed to fetch sections',
       },
       { status: 500 }
     );
@@ -34,15 +34,20 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const sectionData = await request.json();
-    
+
     // Validate required fields
-    const requiredFields = ['name', 'description', 'learningPath', 'questionLimit'];
+    const requiredFields = [
+      'name',
+      'description',
+      'learningPath',
+      'questionLimit',
+    ];
     for (const field of requiredFields) {
       if (!sectionData[field]) {
         return NextResponse.json(
           {
             success: false,
-            error: `Missing required field: ${field}`
+            error: `Missing required field: ${field}`,
           },
           { status: 400 }
         );
@@ -54,7 +59,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Question limit must be between 1 and 100'
+          error: 'Question limit must be between 1 and 100',
         },
         { status: 400 }
       );
@@ -72,14 +77,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: { id: sectionId },
-      message: 'Section created successfully'
+      message: 'Section created successfully',
     });
   } catch (error) {
     console.error('Error creating section:', error);
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to create section'
+        error:
+          error instanceof Error ? error.message : 'Failed to create section',
       },
       { status: 500 }
     );

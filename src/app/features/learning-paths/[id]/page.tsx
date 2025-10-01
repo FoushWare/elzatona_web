@@ -35,7 +35,7 @@ export default function LearningPathDetailPage() {
       try {
         setIsLoading(true);
         setError(null);
-        
+
         // Map learning path to category
         const categoryMap: Record<string, string> = {
           'javascript-deep-dive': 'JavaScript (Core)',
@@ -50,7 +50,7 @@ export default function LearningPathDetailPage() {
           'api-integration': 'API Integration',
           'frontend-system-design': 'System Design',
           'advanced-frontend-architectures': 'Architecture',
-          'ai-tools-frontend': 'AI Tools'
+          'ai-tools-frontend': 'AI Tools',
         };
 
         const category = categoryMap[pathId];
@@ -61,11 +61,11 @@ export default function LearningPathDetailPage() {
 
         const response = await fetch(`/api/topics`);
         const data = await response.json();
-        
+
         if (data.success) {
           // Filter topics by category
-          const filteredTopics = data.data.filter((topic: Topic) => 
-            topic.category === category
+          const filteredTopics = data.data.filter(
+            (topic: Topic) => topic.category === category
           );
           setTopics(filteredTopics);
         } else {
@@ -110,8 +110,8 @@ export default function LearningPathDetailPage() {
 
   const getTopicIcon = (topicName: string) => {
     const iconMap: Record<string, string> = {
-      'Hoisting': '⬆️',
-      'Closures': '🔒',
+      Hoisting: '⬆️',
+      Closures: '🔒',
       'Event Loop & Async/Await': '🔄',
       'Promises & Callbacks': '🤝',
       'Prototypes & Inheritance': '🧬',
@@ -122,29 +122,29 @@ export default function LearningPathDetailPage() {
       'Accessibility (a11y)': '♿',
       'Animations & Transitions': '🎬',
       'CSS Grid': '📐',
-      'Flexbox': '📏',
+      Flexbox: '📏',
       'CSS Variables': '🎨',
       'Responsive Design': '📱',
       'React Hooks': '🪝',
       'State Management': '🗃️',
       'Component Lifecycle': '♻️',
-      'JSX': '⚛️',
+      JSX: '⚛️',
       'Props & State': '📋',
       'TypeScript Basics': '📘',
       'Interfaces & Types': '🔗',
-      'Generics': '🔧',
-      'Enums': '📊',
+      Generics: '🔧',
+      Enums: '📊',
       'Performance Optimization': '⚡',
-      'Security': '🔐',
-      'Testing': '🧪',
+      Security: '🔐',
+      Testing: '🧪',
       'Build Tools': '🛠️',
-      'DevOps': '🚀',
+      DevOps: '🚀',
       'API Integration': '🔌',
       'System Design': '🏗️',
-      'Architecture': '🏛️',
-      'AI Tools': '🤖'
+      Architecture: '🏛️',
+      'AI Tools': '🤖',
     };
-    
+
     return iconMap[topicName] || '📚';
   };
 
@@ -260,7 +260,7 @@ export default function LearningPathDetailPage() {
 
             {/* Topics Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {topics.map((topic) => (
+              {topics.map(topic => (
                 <div
                   key={topic.id}
                   className="bg-muted/50 rounded-lg border border-border p-6 hover:shadow-md transition-shadow cursor-pointer group"
@@ -283,7 +283,7 @@ export default function LearningPathDetailPage() {
                   <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-blue-600 transition-colors">
                     {topic.name}
                   </h3>
-                  
+
                   <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
                     {topic.description}
                   </p>
@@ -293,7 +293,9 @@ export default function LearningPathDetailPage() {
                       {topic.category}
                     </span>
                     <div className="flex items-center text-blue-600 group-hover:text-blue-700 transition-colors">
-                      <span className="text-sm font-medium">Start Learning</span>
+                      <span className="text-sm font-medium">
+                        Start Learning
+                      </span>
                       <svg
                         className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"
                         fill="none"

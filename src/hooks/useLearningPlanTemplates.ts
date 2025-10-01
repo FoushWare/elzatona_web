@@ -22,66 +22,88 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
     setError(null);
 
     try {
-        // Try the proper guided learning plans API endpoint
-        console.log('🔍 Hook: Calling API endpoint /api/guided-learning/plans');
-        const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
-        const response = await fetch(`${baseUrl}/api/guided-learning/plans`);
+      // Try the proper guided learning plans API endpoint
+      console.log('🔍 Hook: Calling API endpoint /api/guided-learning/plans');
+      const baseUrl =
+        typeof window !== 'undefined'
+          ? window.location.origin
+          : 'http://localhost:3000';
+      const response = await fetch(`${baseUrl}/api/guided-learning/plans`);
       const apiData = await response.json();
-      
+
       if (apiData.success && apiData.plans && apiData.plans.length > 0) {
-        console.log('✅ Hook: Successfully loaded plans from API:', apiData.plans.length);
-        
+        console.log(
+          '✅ Hook: Successfully loaded plans from API:',
+          apiData.plans.length
+        );
+
         // Convert API data to our format with safe defaults
-        const formattedTemplates: LearningPlanTemplate[] = apiData.plans.map((plan: any) => {
-          // Handle Firestore timestamp format
-          const parseFirestoreTimestamp = (timestamp: any) => {
-            if (!timestamp) return new Date();
-            if (timestamp.seconds) {
-              return new Date(timestamp.seconds * 1000);
-            }
-            if (timestamp.toDate && typeof timestamp.toDate === 'function') {
-              return timestamp.toDate();
-            }
-            return new Date(timestamp);
-          };
+        const formattedTemplates: LearningPlanTemplate[] = apiData.plans.map(
+          (plan: any) => {
+            // Handle Firestore timestamp format
+            const parseFirestoreTimestamp = (timestamp: any) => {
+              if (!timestamp) return new Date();
+              if (timestamp.seconds) {
+                return new Date(timestamp.seconds * 1000);
+              }
+              if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+                return timestamp.toDate();
+              }
+              return new Date(timestamp);
+            };
 
-          // Calculate total questions from sections
-          const sections = plan.sections || [];
-          const totalQuestions = sections.reduce((total: number, section: any) => {
-            return total + (section.questions ? section.questions.length : 0);
-          }, 0);
+            // Calculate total questions from sections
+            const sections = plan.sections || [];
+            const totalQuestions = sections.reduce(
+              (total: number, section: any) => {
+                return (
+                  total + (section.questions ? section.questions.length : 0)
+                );
+              },
+              0
+            );
 
-          // Calculate daily questions based on total questions and duration
-          const duration = plan.duration || 1;
-          const dailyQuestions = totalQuestions > 0 ? Math.ceil(totalQuestions / duration) : 0;
+            // Calculate daily questions based on total questions and duration
+            const duration = plan.duration || 1;
+            const dailyQuestions =
+              totalQuestions > 0 ? Math.ceil(totalQuestions / duration) : 0;
 
-          return {
-            id: plan.id,
-            name: plan.name || `${plan.duration} Day Plan`,
-            duration: duration,
-            description: plan.description || `${plan.duration}-day intensive preparation plan`,
-            difficulty: plan.difficulty || 'Intermediate',
-            totalQuestions: totalQuestions || plan.totalQuestions || 100,
-            dailyQuestions: dailyQuestions || plan.dailyQuestions || Math.ceil((plan.totalQuestions || 100) / duration),
-            sections: sections.map((section: any) => ({
-              id: section.id,
-              name: section.name,
-              questions: section.questions || [],
-              weight: section.weight || 0,
-            })),
-            features: plan.features || [
-              'Structured learning path',
-              'Progress tracking',
-              'Curated questions',
-            ],
-            estimatedTime: plan.estimatedTime || `${Math.ceil(duration * 2)}-${Math.ceil(duration * 3)} hours`,
-            isRecommended: plan.isRecommended || (duration === 3 || duration === 7),
-            isActive: plan.isActive !== false,
-            createdAt: parseFirestoreTimestamp(plan.createdAt),
-            updatedAt: parseFirestoreTimestamp(plan.updatedAt),
-          };
-        });
-        
+            return {
+              id: plan.id,
+              name: plan.name || `${plan.duration} Day Plan`,
+              duration: duration,
+              description:
+                plan.description ||
+                `${plan.duration}-day intensive preparation plan`,
+              difficulty: plan.difficulty || 'Intermediate',
+              totalQuestions: totalQuestions || plan.totalQuestions || 100,
+              dailyQuestions:
+                dailyQuestions ||
+                plan.dailyQuestions ||
+                Math.ceil((plan.totalQuestions || 100) / duration),
+              sections: sections.map((section: any) => ({
+                id: section.id,
+                name: section.name,
+                questions: section.questions || [],
+                weight: section.weight || 0,
+              })),
+              features: plan.features || [
+                'Structured learning path',
+                'Progress tracking',
+                'Curated questions',
+              ],
+              estimatedTime:
+                plan.estimatedTime ||
+                `${Math.ceil(duration * 2)}-${Math.ceil(duration * 3)} hours`,
+              isRecommended:
+                plan.isRecommended || duration === 3 || duration === 7,
+              isActive: plan.isActive !== false,
+              createdAt: parseFirestoreTimestamp(plan.createdAt),
+              updatedAt: parseFirestoreTimestamp(plan.updatedAt),
+            };
+          }
+        );
+
         setTemplates(formattedTemplates);
       } else {
         console.log('⚠️ Hook: API failed, using mock data');
@@ -96,11 +118,30 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             totalQuestions: 100,
             dailyQuestions: 100,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: new Array(40).fill(null).map((_, i) => `q${i + 1}`), weight: 40 },
-              { id: 'javascript', name: 'JavaScript', questions: new Array(40).fill(null).map((_, i) => `q${i + 41}`), weight: 40 },
-              { id: 'react', name: 'React', questions: new Array(20).fill(null).map((_, i) => `q${i + 81}`), weight: 20 },
+              {
+                id: 'html-css',
+                name: 'HTML & CSS',
+                questions: new Array(40).fill(null).map((_, i) => `q${i + 1}`),
+                weight: 40,
+              },
+              {
+                id: 'javascript',
+                name: 'JavaScript',
+                questions: new Array(40).fill(null).map((_, i) => `q${i + 41}`),
+                weight: 40,
+              },
+              {
+                id: 'react',
+                name: 'React',
+                questions: new Array(20).fill(null).map((_, i) => `q${i + 81}`),
+                weight: 20,
+              },
             ],
-            features: ['Quick review', 'Essential concepts', 'Common questions'],
+            features: [
+              'Quick review',
+              'Essential concepts',
+              'Common questions',
+            ],
             estimatedTime: '2-3 hours',
             isRecommended: false,
             isActive: true,
@@ -116,11 +157,32 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             totalQuestions: 150,
             dailyQuestions: 75,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: new Array(60).fill(null).map((_, i) => `q${i + 1}`), weight: 40 },
-              { id: 'javascript', name: 'JavaScript', questions: new Array(60).fill(null).map((_, i) => `q${i + 61}`), weight: 40 },
-              { id: 'react', name: 'React', questions: new Array(30).fill(null).map((_, i) => `q${i + 121}`), weight: 20 },
+              {
+                id: 'html-css',
+                name: 'HTML & CSS',
+                questions: new Array(60).fill(null).map((_, i) => `q${i + 1}`),
+                weight: 40,
+              },
+              {
+                id: 'javascript',
+                name: 'JavaScript',
+                questions: new Array(60).fill(null).map((_, i) => `q${i + 61}`),
+                weight: 40,
+              },
+              {
+                id: 'react',
+                name: 'React',
+                questions: new Array(30)
+                  .fill(null)
+                  .map((_, i) => `q${i + 121}`),
+                weight: 20,
+              },
             ],
-            features: ['Balanced coverage', 'Practice sessions', 'Progress tracking'],
+            features: [
+              'Balanced coverage',
+              'Practice sessions',
+              'Progress tracking',
+            ],
             estimatedTime: '3-4 hours',
             isRecommended: true,
             isActive: true,
@@ -136,12 +198,40 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             totalQuestions: 200,
             dailyQuestions: 67,
             sections: [
-              { id: 'html-css', name: 'HTML & CSS', questions: new Array(40).fill(null).map((_, i) => `q${i + 1}`), weight: 20 },
-              { id: 'javascript', name: 'JavaScript', questions: new Array(80).fill(null).map((_, i) => `q${i + 41}`), weight: 40 },
-              { id: 'react', name: 'React', questions: new Array(40).fill(null).map((_, i) => `q${i + 121}`), weight: 20 },
-              { id: 'typescript', name: 'TypeScript', questions: new Array(40).fill(null).map((_, i) => `q${i + 161}`), weight: 20 },
+              {
+                id: 'html-css',
+                name: 'HTML & CSS',
+                questions: new Array(40).fill(null).map((_, i) => `q${i + 1}`),
+                weight: 20,
+              },
+              {
+                id: 'javascript',
+                name: 'JavaScript',
+                questions: new Array(80).fill(null).map((_, i) => `q${i + 41}`),
+                weight: 40,
+              },
+              {
+                id: 'react',
+                name: 'React',
+                questions: new Array(40)
+                  .fill(null)
+                  .map((_, i) => `q${i + 121}`),
+                weight: 20,
+              },
+              {
+                id: 'typescript',
+                name: 'TypeScript',
+                questions: new Array(40)
+                  .fill(null)
+                  .map((_, i) => `q${i + 161}`),
+                weight: 20,
+              },
             ],
-            features: ['Extended coverage', 'Daily milestones', 'TypeScript basics'],
+            features: [
+              'Extended coverage',
+              'Daily milestones',
+              'TypeScript basics',
+            ],
             estimatedTime: '4-5 hours',
             isRecommended: true,
             isActive: true,
@@ -158,11 +248,20 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             dailyQuestions: 63,
             sections: [
               { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 25 },
-              { id: 'javascript', name: 'JavaScript', questions: [], weight: 35 },
+              {
+                id: 'javascript',
+                name: 'JavaScript',
+                questions: [],
+                weight: 35,
+              },
               { id: 'react', name: 'React', questions: [], weight: 25 },
               { id: 'general', name: 'General', questions: [], weight: 15 },
             ],
-            features: ['Structured learning path', 'Progress tracking', 'Curated questions'],
+            features: [
+              'Structured learning path',
+              'Progress tracking',
+              'Curated questions',
+            ],
             estimatedTime: '6-8 hours',
             isRecommended: false,
             isActive: true,
@@ -179,11 +278,20 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             dailyQuestions: 60,
             sections: [
               { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 25 },
-              { id: 'javascript', name: 'JavaScript', questions: [], weight: 35 },
+              {
+                id: 'javascript',
+                name: 'JavaScript',
+                questions: [],
+                weight: 35,
+              },
               { id: 'react', name: 'React', questions: [], weight: 25 },
               { id: 'general', name: 'General', questions: [], weight: 15 },
             ],
-            features: ['Structured learning path', 'Progress tracking', 'Curated questions'],
+            features: [
+              'Structured learning path',
+              'Progress tracking',
+              'Curated questions',
+            ],
             estimatedTime: '8-10 hours',
             isRecommended: true,
             isActive: true,
@@ -200,11 +308,20 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             dailyQuestions: 58,
             sections: [
               { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 25 },
-              { id: 'javascript', name: 'JavaScript', questions: [], weight: 35 },
+              {
+                id: 'javascript',
+                name: 'JavaScript',
+                questions: [],
+                weight: 35,
+              },
               { id: 'react', name: 'React', questions: [], weight: 25 },
               { id: 'general', name: 'General', questions: [], weight: 15 },
             ],
-            features: ['Structured learning path', 'Progress tracking', 'Curated questions'],
+            features: [
+              'Structured learning path',
+              'Progress tracking',
+              'Curated questions',
+            ],
             estimatedTime: '10-12 hours',
             isRecommended: false,
             isActive: true,
@@ -221,9 +338,19 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             dailyQuestions: 57,
             sections: [
               { id: 'html-css', name: 'HTML & CSS', questions: [], weight: 20 },
-              { id: 'javascript', name: 'JavaScript', questions: [], weight: 40 },
+              {
+                id: 'javascript',
+                name: 'JavaScript',
+                questions: [],
+                weight: 40,
+              },
               { id: 'react', name: 'React', questions: [], weight: 20 },
-              { id: 'typescript', name: 'TypeScript', questions: [], weight: 20 },
+              {
+                id: 'typescript',
+                name: 'TypeScript',
+                questions: [],
+                weight: 20,
+              },
             ],
             features: [
               'Complete coverage',
@@ -241,8 +368,12 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
       }
     } catch (error) {
       console.error('❌ Hook: Error loading learning plan templates:', error);
-      setError(error instanceof Error ? error.message : 'Failed to load learning plan templates');
-      
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'Failed to load learning plan templates'
+      );
+
       // Fallback to mock data on error
       const mockTemplates: LearningPlanTemplate[] = [
         {
@@ -277,9 +408,12 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
     await loadTemplates();
   }, [loadTemplates]);
 
-  const getTemplate = useCallback((templateId: string): LearningPlanTemplate | null => {
-    return templates.find(template => template.id === templateId) || null;
-  }, [templates]);
+  const getTemplate = useCallback(
+    (templateId: string): LearningPlanTemplate | null => {
+      return templates.find(template => template.id === templateId) || null;
+    },
+    [templates]
+  );
 
   // Load templates on mount
   useEffect(() => {

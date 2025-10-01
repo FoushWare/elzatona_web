@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
-import { collection, addDoc, getDocs, query, where, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from 'firebase/firestore';
 
 export interface Flashcard {
   id: string;
@@ -36,7 +46,7 @@ export async function POST(request: NextRequest) {
       category,
       difficulty = 'medium',
       source = 'manual',
-      tags = []
+      tags = [],
     } = body;
 
     if (!userId || !questionId || !question || !answer) {
@@ -66,7 +76,7 @@ export async function POST(request: NextRequest) {
       createdAt: now.toISOString(),
       updatedAt: now.toISOString(),
       tags,
-      source
+      source,
     };
 
     const docRef = await addDoc(collection(db, 'flashcards'), flashcard);
@@ -75,10 +85,9 @@ export async function POST(request: NextRequest) {
       success: true,
       data: {
         id: docRef.id,
-        ...flashcard
-      }
+        ...flashcard,
+      },
     });
-
   } catch (error) {
     console.error('Error creating flashcard:', error);
     return NextResponse.json(
@@ -124,14 +133,13 @@ export async function GET(request: NextRequest) {
     const snapshot = await getDocs(q);
     const flashcards = snapshot.docs.map(doc => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
 
     return NextResponse.json({
       success: true,
-      data: flashcards
+      data: flashcards,
     });
-
   } catch (error) {
     console.error('Error fetching flashcards:', error);
     return NextResponse.json(

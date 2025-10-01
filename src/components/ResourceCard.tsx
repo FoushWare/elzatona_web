@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { LearningResource } from "@/types/resource";
-import { resourceCategories } from "@/lib/resources";
+import { useState } from 'react';
+import { LearningResource } from '@/types/resource';
+import { resourceCategories } from '@/lib/resources';
 
 interface ResourceCardProps {
   resource: LearningResource;
@@ -17,41 +17,39 @@ export default function ResourceCard({
     resource.isBookmarked || false
   );
 
-  const category = resourceCategories.find(
-    (cat) => cat.id === resource.category
-  );
+  const category = resourceCategories.find(cat => cat.id === resource.category);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "beginner":
-        return "text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/20";
-      case "intermediate":
-        return "text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/20";
-      case "advanced":
-        return "text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/20";
+      case 'beginner':
+        return 'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/20';
+      case 'intermediate':
+        return 'text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/20';
+      case 'advanced':
+        return 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/20';
       default:
-        return "text-muted-foreground bg-muted";
+        return 'text-muted-foreground bg-muted';
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "article":
-        return "📄";
-      case "video":
-        return "🎥";
-      case "tool":
-        return "⚙️";
-      case "course":
-        return "📚";
-      case "book":
-        return "📖";
-      case "cheatsheet":
-        return "📋";
-      case "documentation":
-        return "📝";
+      case 'article':
+        return '📄';
+      case 'video':
+        return '🎥';
+      case 'tool':
+        return '⚙️';
+      case 'course':
+        return '📚';
+      case 'book':
+        return '📖';
+      case 'cheatsheet':
+        return '📋';
+      case 'documentation':
+        return '📝';
       default:
-        return "🔗";
+        return '🔗';
     }
   };
 
@@ -62,13 +60,13 @@ export default function ResourceCard({
   };
 
   const handleCardClick = () => {
-    window.open(resource.url, "_blank", "noopener,noreferrer");
+    window.open(resource.url, '_blank', 'noopener,noreferrer');
   };
 
   return (
     <div
       className={`bg-card rounded-lg shadow-sm border border-border hover:shadow-md transition-shadow cursor-pointer ${
-        featured ? "ring-2 ring-blue-500" : ""
+        featured ? 'ring-2 ring-blue-500' : ''
       }`}
       onClick={handleCardClick}
     >
@@ -84,12 +82,12 @@ export default function ResourceCard({
           <button
             onClick={handleBookmark}
             className={`p-2 rounded-full hover:bg-muted transition-colors ${
-              isBookmarked ? "text-red-500" : "text-muted-foreground"
+              isBookmarked ? 'text-red-500' : 'text-muted-foreground'
             }`}
           >
             <svg
               className="w-5 h-5"
-              fill={isBookmarked ? "currentColor" : "none"}
+              fill={isBookmarked ? 'currentColor' : 'none'}
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
@@ -115,7 +113,7 @@ export default function ResourceCard({
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-4">
-          {resource.tags.slice(0, 3).map((tag) => (
+          {resource.tags.slice(0, 3).map(tag => (
             <span
               key={tag}
               className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground"

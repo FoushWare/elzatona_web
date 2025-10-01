@@ -1,17 +1,19 @@
-"use client";
+'use client';
 
-import { useParams, notFound } from "next/navigation";
-import Link from "next/link";
-import { useState } from "react";
-import { getPreparationGuideById } from "@/lib/preparationGuides";
+import { useParams, notFound } from 'next/navigation';
+import Link from 'next/link';
+import { useState } from 'react';
+import { getPreparationGuideById } from '@/lib/preparationGuides';
 
 export default function PreparationGuideDetailPage() {
   const params = useParams();
   const guideId = params.id as string;
-  const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
-  
+  const [expandedSections, setExpandedSections] = useState<Set<number>>(
+    new Set()
+  );
+
   const guide = getPreparationGuideById(guideId);
-  
+
   if (!guide) {
     notFound();
   }
@@ -60,7 +62,9 @@ export default function PreparationGuideDetailPage() {
     if (minutes >= 60) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;
-      return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
+      return remainingMinutes > 0
+        ? `${hours}h ${remainingMinutes}m`
+        : `${hours}h`;
     }
     return `${minutes}m`;
   };
@@ -68,45 +72,81 @@ export default function PreparationGuideDetailPage() {
   // Mock practice questions for each section
   const getPracticeQuestions = (sectionIndex: number) => {
     const questions = [
-      "What are the key differences between HTML4 and HTML5?",
-      "Explain the CSS Box Model and its components.",
-      "How does JavaScript handle asynchronous operations?",
-      "What are React Hooks and when should you use them?",
-      "How would you optimize a frontend application for performance?",
-      "Describe the STAR method for behavioral interviews."
+      'What are the key differences between HTML4 and HTML5?',
+      'Explain the CSS Box Model and its components.',
+      'How does JavaScript handle asynchronous operations?',
+      'What are React Hooks and when should you use them?',
+      'How would you optimize a frontend application for performance?',
+      'Describe the STAR method for behavioral interviews.',
     ];
-    return questions[sectionIndex] || "Practice questions coming soon...";
+    return questions[sectionIndex] || 'Practice questions coming soon...';
   };
 
   // Get the appropriate practice page URL based on question content
   const getPracticePageUrl = (question: string) => {
     const lowerQuestion = question.toLowerCase();
-    if (lowerQuestion.includes('html') || lowerQuestion.includes('html4') || lowerQuestion.includes('html5')) {
-      return "/practice/fundamentals/html";
-    } else if (lowerQuestion.includes('css') || lowerQuestion.includes('box model')) {
-      return "/practice/fundamentals/css";
-    } else if (lowerQuestion.includes('javascript') || lowerQuestion.includes('async')) {
-      return "/practice/fundamentals/javascript";
-    } else if (lowerQuestion.includes('react') || lowerQuestion.includes('hooks')) {
-      return "/practice/fundamentals/react";
-    } else if (lowerQuestion.includes('optimize') || lowerQuestion.includes('performance')) {
-      return "/practice/fundamentals/performance";
-    } else if (lowerQuestion.includes('star') || lowerQuestion.includes('behavioral') || lowerQuestion.includes('interview')) {
-      return "/practice/fundamentals/behavioral";
+    if (
+      lowerQuestion.includes('html') ||
+      lowerQuestion.includes('html4') ||
+      lowerQuestion.includes('html5')
+    ) {
+      return '/practice/fundamentals/html';
+    } else if (
+      lowerQuestion.includes('css') ||
+      lowerQuestion.includes('box model')
+    ) {
+      return '/practice/fundamentals/css';
+    } else if (
+      lowerQuestion.includes('javascript') ||
+      lowerQuestion.includes('async')
+    ) {
+      return '/practice/fundamentals/javascript';
+    } else if (
+      lowerQuestion.includes('react') ||
+      lowerQuestion.includes('hooks')
+    ) {
+      return '/practice/fundamentals/react';
+    } else if (
+      lowerQuestion.includes('optimize') ||
+      lowerQuestion.includes('performance')
+    ) {
+      return '/practice/fundamentals/performance';
+    } else if (
+      lowerQuestion.includes('star') ||
+      lowerQuestion.includes('behavioral') ||
+      lowerQuestion.includes('interview')
+    ) {
+      return '/practice/fundamentals/behavioral';
     } else {
-      return "/practice/fundamentals";
+      return '/practice/fundamentals';
     }
   };
 
   // Mock resources for each section
   const getResources = (sectionIndex: number) => {
     const resources = [
-      { title: "MDN Web Docs", url: "https://developer.mozilla.org/", type: "Documentation" },
-      { title: "JavaScript.info", url: "https://javascript.info/", type: "Tutorial" },
-      { title: "React Official Docs", url: "https://react.dev/", type: "Documentation" },
-      { title: "CSS-Tricks", url: "https://css-tricks.com/", type: "Blog" },
-      { title: "Frontend Masters", url: "https://frontendmasters.com/", type: "Course" },
-      { title: "LeetCode", url: "https://leetcode.com/", type: "Practice" }
+      {
+        title: 'MDN Web Docs',
+        url: 'https://developer.mozilla.org/',
+        type: 'Documentation',
+      },
+      {
+        title: 'JavaScript.info',
+        url: 'https://javascript.info/',
+        type: 'Tutorial',
+      },
+      {
+        title: 'React Official Docs',
+        url: 'https://react.dev/',
+        type: 'Documentation',
+      },
+      { title: 'CSS-Tricks', url: 'https://css-tricks.com/', type: 'Blog' },
+      {
+        title: 'Frontend Masters',
+        url: 'https://frontendmasters.com/',
+        type: 'Course',
+      },
+      { title: 'LeetCode', url: 'https://leetcode.com/', type: 'Practice' },
     ];
     return resources[sectionIndex] || resources[0];
   };
@@ -116,12 +156,22 @@ export default function PreparationGuideDetailPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="mb-8">
-          <Link 
-            href="/preparation-guides" 
+          <Link
+            href="/preparation-guides"
             className="text-muted-foreground hover:text-foreground transition-colors flex items-center"
           >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             Back to Preparation Guides
           </Link>
@@ -130,26 +180,33 @@ export default function PreparationGuideDetailPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(guide.difficulty)}`}>
-              {getDifficultyIcon(guide.difficulty)} {guide.difficulty.replace('-', ' ')}
+            <span
+              className={`px-3 py-1 rounded-full text-sm font-medium ${getDifficultyColor(guide.difficulty)}`}
+            >
+              {getDifficultyIcon(guide.difficulty)}{' '}
+              {guide.difficulty.replace('-', ' ')}
             </span>
             <span className="text-muted-foreground">•</span>
-            <span className="text-muted-foreground">{formatTime(guide.estimatedTime)}</span>
+            <span className="text-muted-foreground">
+              {formatTime(guide.estimatedTime)}
+            </span>
           </div>
-          
+
           <h1 className="text-4xl font-bold text-foreground mb-4">
             {guide.title}
           </h1>
-          
+
           <p className="text-xl text-muted-foreground mb-6">
             {guide.description}
           </p>
 
           {/* Target Skills */}
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-foreground mb-3">Target Skills</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-3">
+              Target Skills
+            </h3>
             <div className="flex flex-wrap gap-2">
-              {guide.targetSkills.map((skill) => (
+              {guide.targetSkills.map(skill => (
                 <span
                   key={skill}
                   className="px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium"
@@ -163,8 +220,10 @@ export default function PreparationGuideDetailPage() {
 
         {/* Interactive Sections */}
         <div className="bg-card rounded-xl shadow-sm border border-border p-8 mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Learning Sections</h2>
-          
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            Learning Sections
+          </h2>
+
           <div className="space-y-4">
             {guide.sections.map((section, index) => (
               <div
@@ -194,15 +253,20 @@ export default function PreparationGuideDetailPage() {
                       <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full">
                         {formatTime(section.readingTime)}
                       </span>
-                      <svg 
+                      <svg
                         className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ${
                           expandedSections.has(index) ? 'rotate-180' : ''
                         }`}
-                        fill="none" 
-                        stroke="currentColor" 
+                        fill="none"
+                        stroke="currentColor"
                         viewBox="0 0 24 24"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </div>
                   </div>
@@ -213,9 +277,11 @@ export default function PreparationGuideDetailPage() {
                   <div className="border-t border-border p-6 bg-muted/20">
                     {/* Topics */}
                     <div className="mb-6">
-                      <h4 className="font-semibold text-foreground mb-3">Topics Covered</h4>
+                      <h4 className="font-semibold text-foreground mb-3">
+                        Topics Covered
+                      </h4>
                       <div className="flex flex-wrap gap-2">
-                        {section.topics.map((topic) => (
+                        {section.topics.map(topic => (
                           <span
                             key={topic}
                             className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm"
@@ -226,28 +292,48 @@ export default function PreparationGuideDetailPage() {
                       </div>
                     </div>
 
-                                         {/* Practice Question */}
-                     <div className="mb-6">
-                       <h4 className="font-semibold text-foreground mb-3">Practice Question</h4>
-                       <div className="bg-background border border-border rounded-lg p-4">
-                         <p className="text-foreground mb-3">{getPracticeQuestions(index)}</p>
-                         <Link
-                           href={getPracticePageUrl(getPracticeQuestions(index))}
-                           className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                         >
-                           Practice Now
-                           <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                           </svg>
-                         </Link>
-                       </div>
-                     </div>
+                    {/* Practice Question */}
+                    <div className="mb-6">
+                      <h4 className="font-semibold text-foreground mb-3">
+                        Practice Question
+                      </h4>
+                      <div className="bg-background border border-border rounded-lg p-4">
+                        <p className="text-foreground mb-3">
+                          {getPracticeQuestions(index)}
+                        </p>
+                        <Link
+                          href={getPracticePageUrl(getPracticeQuestions(index))}
+                          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                        >
+                          Practice Now
+                          <svg
+                            className="w-4 h-4 ml-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M13 7l5 5m0 0l-5 5m5-5H6"
+                            />
+                          </svg>
+                        </Link>
+                      </div>
+                    </div>
 
                     {/* Resources */}
                     <div className="mb-6">
-                      <h4 className="font-semibold text-foreground mb-3">Recommended Resources</h4>
+                      <h4 className="font-semibold text-foreground mb-3">
+                        Recommended Resources
+                      </h4>
                       <div className="space-y-2">
-                        {[getResources(index), getResources((index + 1) % 6), getResources((index + 2) % 6)].map((resource, idx) => (
+                        {[
+                          getResources(index),
+                          getResources((index + 1) % 6),
+                          getResources((index + 2) % 6),
+                        ].map((resource, idx) => (
                           <Link
                             key={idx}
                             href={resource.url}
@@ -256,11 +342,25 @@ export default function PreparationGuideDetailPage() {
                             className="flex items-center justify-between p-3 bg-background border border-border rounded-lg hover:bg-muted/50 transition-colors"
                           >
                             <div>
-                              <p className="font-medium text-foreground">{resource.title}</p>
-                              <p className="text-sm text-muted-foreground">{resource.type}</p>
+                              <p className="font-medium text-foreground">
+                                {resource.title}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {resource.type}
+                              </p>
                             </div>
-                            <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            <svg
+                              className="w-4 h-4 text-muted-foreground"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                              />
                             </svg>
                           </Link>
                         ))}
@@ -297,8 +397,10 @@ export default function PreparationGuideDetailPage() {
 
         {/* Features */}
         <div className="bg-card rounded-xl shadow-sm border border-border p-8 mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Key Features</h2>
-          
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            Key Features
+          </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {guide.features.map((feature, index) => (
               <div
@@ -316,7 +418,8 @@ export default function PreparationGuideDetailPage() {
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 mb-8 text-white">
           <h2 className="text-2xl font-bold mb-4">Ready to Start Learning?</h2>
           <p className="text-blue-100 mb-6">
-            Choose your preferred learning path and begin your preparation journey
+            Choose your preferred learning path and begin your preparation
+            journey
           </p>
           <div className="flex flex-wrap gap-4">
             <Link

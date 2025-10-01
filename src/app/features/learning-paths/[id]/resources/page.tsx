@@ -2,7 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ExternalLink, BookOpen, Video, FileText, Code } from 'lucide-react';
+import {
+  ArrowLeft,
+  ExternalLink,
+  BookOpen,
+  Video,
+  FileText,
+  Code,
+} from 'lucide-react';
 
 interface Resource {
   id: string;
@@ -25,18 +32,20 @@ export default function LearningPathResourcesPage() {
   const params = useParams();
   const router = useRouter();
   const pathId = params.id as string;
-  
+
   const [learningPath, setLearningPath] = useState<LearningPath | null>(null);
   const [resources, setResources] = useState<Resource[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<'all' | 'video' | 'documentation' | 'tutorial' | 'article' | 'code'>('all');
+  const [filter, setFilter] = useState<
+    'all' | 'video' | 'documentation' | 'tutorial' | 'article' | 'code'
+  >('all');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        
+
         // Fetch learning path details
         const pathResponse = await fetch(`/api/learning-paths/${pathId}`);
         if (!pathResponse.ok) {
@@ -46,13 +55,14 @@ export default function LearningPathResourcesPage() {
         setLearningPath(pathData);
 
         // Fetch resources for this learning path
-        const resourcesResponse = await fetch(`/api/learning-paths/${pathId}/resources`);
+        const resourcesResponse = await fetch(
+          `/api/learning-paths/${pathId}/resources`
+        );
         if (!resourcesResponse.ok) {
           throw new Error('Failed to fetch resources');
         }
         const resourcesData = await resourcesResponse.json();
         setResources(resourcesData);
-
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
@@ -93,8 +103,8 @@ export default function LearningPathResourcesPage() {
     }
   };
 
-  const filteredResources = resources.filter(resource => 
-    filter === 'all' || resource.type === filter
+  const filteredResources = resources.filter(
+    resource => filter === 'all' || resource.type === filter
   );
 
   if (isLoading) {
@@ -139,7 +149,7 @@ export default function LearningPathResourcesPage() {
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Learning Paths</span>
           </button>
-          
+
           <h1 className="text-4xl font-bold text-white mb-2">
             {learningPath?.name} Resources
           </h1>
@@ -177,7 +187,7 @@ export default function LearningPathResourcesPage() {
         {/* Resources Grid */}
         {filteredResources.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredResources.map((resource) => (
+            {filteredResources.map(resource => (
               <div
                 key={resource.id}
                 className="bg-gray-800 hover:bg-gray-750 rounded-lg p-6 border border-gray-700 transition-all duration-200"
@@ -186,21 +196,23 @@ export default function LearningPathResourcesPage() {
                   <div className="flex-shrink-0 text-blue-400">
                     {getResourceIcon(resource.type)}
                   </div>
-                  
+
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-medium text-lg mb-2 line-clamp-2">
                       {resource.title}
                     </h3>
-                    
+
                     {resource.description && (
                       <p className="text-gray-300 text-sm mb-3 line-clamp-3">
                         {resource.description}
                       </p>
                     )}
-                    
+
                     <div className="flex flex-wrap gap-2 mb-4">
                       {resource.difficulty && (
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${getDifficultyColor(resource.difficulty)}`}>
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-medium ${getDifficultyColor(resource.difficulty)}`}
+                        >
                           {resource.difficulty}
                         </span>
                       )}
@@ -213,7 +225,7 @@ export default function LearningPathResourcesPage() {
                         {resource.type}
                       </span>
                     </div>
-                    
+
                     <a
                       href={resource.url}
                       target="_blank"
@@ -241,10 +253,14 @@ export default function LearningPathResourcesPage() {
 
         {/* Stats */}
         <div className="mt-12 bg-gray-800 rounded-lg p-6 border border-gray-700">
-          <h3 className="text-white font-medium text-lg mb-4">Resource Statistics</h3>
+          <h3 className="text-white font-medium text-lg mb-4">
+            Resource Statistics
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-400">{resources.length}</div>
+              <div className="text-2xl font-bold text-blue-400">
+                {resources.length}
+              </div>
               <div className="text-gray-400 text-sm">Total Resources</div>
             </div>
             <div className="text-center">

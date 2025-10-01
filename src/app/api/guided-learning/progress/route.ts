@@ -5,7 +5,8 @@ import { guidedLearningService } from '@/lib/guided-learning-service';
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const { action, userId, planId, questionId, score, timeSpent, isCorrect } = data;
+    const { action, userId, planId, questionId, score, timeSpent, isCorrect } =
+      data;
 
     if (!userId) {
       return NextResponse.json(
@@ -23,24 +24,33 @@ export async function POST(request: NextRequest) {
           );
         }
         await guidedLearningService.startPlan(userId, planId);
-        return NextResponse.json({ success: true, message: 'Plan started successfully' });
+        return NextResponse.json({
+          success: true,
+          message: 'Plan started successfully',
+        });
 
       case 'submit_answer':
         if (!planId || !questionId || score === undefined) {
           return NextResponse.json(
-            { success: false, error: 'Plan ID, question ID, and score are required' },
+            {
+              success: false,
+              error: 'Plan ID, question ID, and score are required',
+            },
             { status: 400 }
           );
         }
         await guidedLearningService.submitAnswer(
-          userId, 
-          planId, 
-          questionId, 
-          score, 
-          timeSpent || 0, 
+          userId,
+          planId,
+          questionId,
+          score,
+          timeSpent || 0,
           isCorrect || false
         );
-        return NextResponse.json({ success: true, message: 'Answer submitted successfully' });
+        return NextResponse.json({
+          success: true,
+          message: 'Answer submitted successfully',
+        });
 
       default:
         return NextResponse.json(
@@ -73,11 +83,15 @@ export async function GET(request: NextRequest) {
 
     if (planId) {
       // Get progress for specific plan
-      const progress = await guidedLearningService.getUserProgress(userId, planId);
+      const progress = await guidedLearningService.getUserProgress(
+        userId,
+        planId
+      );
       return NextResponse.json({ success: true, progress });
     } else {
       // Get all user progress
-      const allProgress = await guidedLearningService.getAllUserProgress(userId);
+      const allProgress =
+        await guidedLearningService.getAllUserProgress(userId);
       return NextResponse.json({ success: true, progress: allProgress });
     }
   } catch (error) {

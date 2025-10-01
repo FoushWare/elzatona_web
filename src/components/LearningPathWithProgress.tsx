@@ -355,7 +355,8 @@ export default function LearningPathWithProgress({
             <div className="text-4xl mb-4">🎉</div>
             <h3 className="text-2xl font-bold mb-2">Congratulations!</h3>
             <p className="opacity-90 mb-4">
-              You&apos;ve completed the &quot;{learningPath.title}&quot; learning path!
+              You&apos;ve completed the &quot;{learningPath.title}&quot;
+              learning path!
             </p>
             <div className="flex items-center justify-center space-x-4">
               <div className="text-center">
