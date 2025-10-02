@@ -20,16 +20,18 @@
       }
     },
     "serve": {
-      "executor": "@nx/next:serve",
+      "executor": "@nx/next:server",
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "web:build",
-        "dev": true
+        "dev": true,
+        "port": 3000
       },
       "configurations": {
         "development": {
           "buildTarget": "web:build:development",
-          "dev": true
+          "dev": true,
+          "port": 3000
         },
         "production": {
           "buildTarget": "web:build:production",

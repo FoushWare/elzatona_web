@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   // Nx and Vercel compatibility
   distDir: '.next',
 
-  // Output configuration for single domain deployment
-  output: 'standalone',
+  // Output configuration for single domain deployment (only for production)
+  ...(process.env.NODE_ENV === 'production' && { output: 'standalone' }),
 
   // Base path configuration (if needed for subdirectory deployment)
   // basePath: '', // Keep empty for root domain deployment
