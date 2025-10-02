@@ -3,6 +3,8 @@
 import React, { useState, useCallback } from 'react';
 import { TourProvider, useTour } from '@reactour/tour';
 import { ArrowRight, Play, BookOpen, Target, Award } from 'lucide-react';
+import { useRTLDetection } from '@/contexts/RTLContext';
+import { rtlClass } from '@/utils/rtl';
 
 interface GuidedTourProps {
   isOpen: boolean;
@@ -120,6 +122,8 @@ const TourContent: React.FC<GuidedTourProps> = ({
 };
 
 export const GuidedTour: React.FC<GuidedTourProps> = props => {
+  const isRTL = useRTLDetection();
+
   return (
     <>
       <style jsx global>{`
@@ -178,6 +182,34 @@ export const GuidedTour: React.FC<GuidedTourProps> = props => {
           background-color: var(--tour-disabled, #9ca3af) !important;
           cursor: not-allowed !important;
         }
+
+        /* RTL-specific tour styles */
+        [dir='rtl'] .tour-container .reactour__popover {
+          text-align: right !important;
+        }
+
+        [dir='rtl'] .tour-container .reactour__controls {
+          flex-direction: row-reverse !important;
+        }
+
+        [dir='rtl'] .tour-container .reactour__controls button {
+          margin-left: 8px !important;
+          margin-right: 0 !important;
+        }
+
+        [dir='rtl'] .tour-container .reactour__controls button:first-child {
+          margin-left: 0 !important;
+        }
+
+        [dir='rtl'] .tour-container .reactour__badge {
+          left: -0.8125em !important;
+          right: auto !important;
+        }
+
+        [dir='rtl'] .tour-container .reactour__close {
+          left: auto !important;
+          right: 8px !important;
+        }
       `}</style>
       <TourProvider
         steps={steps}
@@ -192,6 +224,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = props => {
             backgroundColor: 'var(--tour-bg, #ffffff)',
             color: 'var(--tour-text, #1f2937)',
             border: '1px solid var(--tour-border, #e5e7eb)',
+            textAlign: isRTL ? 'right' : 'left',
           }),
           maskArea: base => ({ ...base, rx: 12 }),
           maskWrapper: base => ({
@@ -200,19 +233,20 @@ export const GuidedTour: React.FC<GuidedTourProps> = props => {
           }),
           badge: base => ({
             ...base,
-            left: 'auto',
-            right: '-0.8125em',
+            left: isRTL ? '-0.8125em' : 'auto',
+            right: isRTL ? 'auto' : '-0.8125em',
             backgroundColor: '#6366f1',
             color: '#ffffff',
           }),
           controls: base => ({
             ...base,
             marginTop: 20,
+            flexDirection: isRTL ? 'row-reverse' : 'row',
           }),
           close: base => ({
             ...base,
-            right: 'auto',
-            left: 8,
+            right: isRTL ? 8 : 'auto',
+            left: isRTL ? 'auto' : 8,
             top: 8,
             color: 'var(--tour-close, #6b7280)',
           }),

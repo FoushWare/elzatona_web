@@ -8,24 +8,30 @@ import {
   Code,
   Target,
   BookOpen,
-  CheckCircle,
   Star,
-  Users,
   Award,
   Map,
   Compass,
   Sparkles,
   Zap,
-  TrendingUp,
 } from 'lucide-react';
 import { useUserType } from '@/contexts/UserTypeContext';
+import { useRTL } from '@/contexts/RTLContext';
 import { UserStatistics } from '@/components/UserStatistics';
 import { GuidedTour } from '@/components/GuidedTour';
+import { FloatingRTLToggle, RTLIndicator } from '@/components/RTLToggle';
+import { getPositionClass, rtlClass } from '@/utils/rtl';
 
 export default function HomePage() {
   const { userType } = useUserType();
+  const { isRTL } = useRTL();
   const [hasActivePlan, setHasActivePlan] = useState(false);
-  const [activePlan, setActivePlan] = useState<any>(null);
+  const [activePlan, setActivePlan] = useState<{
+    id: string;
+    name: string;
+    totalQuestions: number;
+    estimatedTime: string;
+  } | null>(null);
   const [showAnimation, setShowAnimation] = useState(false);
   const [showTour, setShowTour] = useState(false);
 
@@ -180,10 +186,12 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 z-10">
         {/* Tour Button */}
-        <div className="absolute top-4 right-4 z-20">
+        <div
+          className={`absolute top-4 z-20 ${getPositionClass(isRTL, 'right', '4')}`}
+        >
           <button
             onClick={startTour}
-            className="inline-flex items-center space-x-2 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-700 dark:text-gray-300 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-200 dark:border-gray-700"
+            className={`inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-700 dark:text-gray-300 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-200 dark:border-gray-700`}
           >
             <Play className="w-4 h-4" />
             <span className="text-sm font-medium">Take Tour</span>
@@ -210,13 +218,15 @@ export default function HomePage() {
               {/* Animated sparkles around title */}
               {showAnimation && (
                 <>
-                  <Sparkles className="absolute -top-4 -right-4 w-8 h-8 text-yellow-400 animate-pulse" />
+                  <Sparkles
+                    className={`absolute -top-4 w-8 h-8 text-yellow-400 animate-pulse ${getPositionClass(isRTL, 'right', '4')}`}
+                  />
                   <Zap
-                    className="absolute -bottom-2 -left-4 w-6 h-6 text-blue-400 animate-bounce"
+                    className={`absolute -bottom-2 w-6 h-6 text-blue-400 animate-bounce ${getPositionClass(isRTL, 'left', '4')}`}
                     style={{ animationDelay: '0.5s' }}
                   />
                   <Star
-                    className="absolute top-1/2 -right-8 w-5 h-5 text-purple-400 animate-ping"
+                    className={`absolute top-1/2 w-5 h-5 text-purple-400 animate-ping ${getPositionClass(isRTL, 'right', '8')}`}
                     style={{ animationDelay: '1s' }}
                   />
                 </>
@@ -257,16 +267,22 @@ export default function HomePage() {
                 {/* Animated background effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
 
-                <span className="relative z-10 flex items-center space-x-2">
+                <span
+                  className={`relative z-10 flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')}`}
+                >
                   {personalizedContent.icon}
                   <span>{personalizedContent.cta}</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRight
+                    className={`w-5 h-5 transition-transform duration-300 ${rtlClass(isRTL, 'group-hover:-translate-x-1 rtl-mirror-icon', 'group-hover:translate-x-1')}`}
+                  />
                 </span>
               </Link>
 
               {/* Animated pointing arrow */}
               {showAnimation && (
-                <div className="absolute -right-16 top-1/2 transform -translate-y-1/2 animate-bounce">
+                <div
+                  className={`absolute top-1/2 transform -translate-y-1/2 animate-bounce ${getPositionClass(isRTL, 'right', '16')}`}
+                >
                   <div className="flex flex-col items-center">
                     <div className="text-2xl animate-pulse">👆</div>
                     <div className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mt-1 animate-pulse">
@@ -278,11 +294,17 @@ export default function HomePage() {
 
               {/* Alternative animated arrow with CSS */}
               {showAnimation && (
-                <div className="absolute -right-20 top-1/2 transform -translate-y-1/2">
+                <div
+                  className={`absolute top-1/2 transform -translate-y-1/2 ${getPositionClass(isRTL, 'right', '20')}`}
+                >
                   <div className="relative">
-                    <ArrowRight className="w-8 h-8 text-indigo-500 animate-pulse" />
+                    <ArrowRight
+                      className={`w-8 h-8 text-indigo-500 animate-pulse ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
+                    />
                     <div className="absolute inset-0">
-                      <ArrowRight className="w-8 h-8 text-indigo-500 animate-ping opacity-75" />
+                      <ArrowRight
+                        className={`w-8 h-8 text-indigo-500 animate-ping opacity-75 ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
+                      />
                     </div>
                     <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-indigo-600 dark:text-indigo-400 animate-pulse whitespace-nowrap">
                       Start Learning!
@@ -405,11 +427,17 @@ export default function HomePage() {
 
                 {/* Animated arrow for Get Started card */}
                 {item.isHighlighted && showAnimation && (
-                  <div className="absolute -top-4 -right-4 z-10">
+                  <div
+                    className={`absolute -top-4 z-10 ${getPositionClass(isRTL, 'right', '4')}`}
+                  >
                     <div className="relative">
-                      <ArrowRight className="w-6 h-6 text-green-500 animate-bounce" />
+                      <ArrowRight
+                        className={`w-6 h-6 text-green-500 animate-bounce ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
+                      />
                       <div className="absolute inset-0">
-                        <ArrowRight className="w-6 h-6 text-green-500 animate-ping opacity-75" />
+                        <ArrowRight
+                          className={`w-6 h-6 text-green-500 animate-ping opacity-75 ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
+                        />
                       </div>
                     </div>
                   </div>
@@ -479,14 +507,16 @@ export default function HomePage() {
                   )}
                   <Link
                     href={personalizedContent.ctaLink}
-                    className={`inline-flex items-center space-x-2 px-6 py-3 ${
+                    className={`inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-6 py-3 ${
                       hasActivePlan
                         ? 'bg-green-600 hover:bg-green-700'
                         : 'bg-indigo-600 hover:bg-indigo-700'
                     } text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg`}
                   >
                     <span>{personalizedContent.cta}</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight
+                      className={`w-4 h-4 ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
+                    />
                   </Link>
                 </div>
               </div>
@@ -508,15 +538,17 @@ export default function HomePage() {
                     Self-Directed Learning
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 mb-6">
-                    You're creating your own roadmap. Explore content freely and
-                    build your personalized learning journey.
+                    You&apos;re creating your own roadmap. Explore content
+                    freely and build your personalized learning journey.
                   </p>
                   <Link
                     href="/free-style-roadmap"
-                    className="inline-flex items-center space-x-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                    className={`inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg`}
                   >
                     <span>View My Roadmap</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight
+                      className={`w-4 h-4 ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
+                    />
                   </Link>
                 </div>
               </div>
@@ -555,15 +587,17 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
                     href="/get-started"
-                    className="group inline-flex items-center space-x-2 px-8 py-4 bg-white text-indigo-600 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className={`group inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-8 py-4 bg-white text-indigo-600 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105`}
                   >
                     <Play className="w-5 h-5" />
                     <span>Start Learning Now</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                    <ArrowRight
+                      className={`w-5 h-5 transition-transform duration-300 ${rtlClass(isRTL, 'group-hover:-translate-x-1 rtl-mirror-icon', 'group-hover:translate-x-1')}`}
+                    />
                   </Link>
                   <Link
                     href="/learn"
-                    className="inline-flex items-center space-x-2 px-8 py-4 border-2 border-white/30 text-white rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 transform hover:scale-105"
+                    className={`inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-8 py-4 border-2 border-white/30 text-white rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 transform hover:scale-105`}
                   >
                     <BookOpen className="w-5 h-5" />
                     <span>Explore Learning Paths</span>
@@ -581,6 +615,10 @@ export default function HomePage() {
         onComplete={handleTourComplete}
         onSkip={handleTourSkip}
       />
+
+      {/* RTL Development Tools */}
+      <FloatingRTLToggle />
+      <RTLIndicator />
     </div>
   );
 }
