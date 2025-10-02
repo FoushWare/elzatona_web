@@ -1,10 +1,5 @@
 {
   "version": 2,
-  "functions": {
-    "apps/web/app/api/**/route.ts": {
-      "maxDuration": 10
-    }
-  },
   "buildCommand": "npx nx build web",
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm install",
