@@ -20,7 +20,8 @@ const nextConfig: NextConfig = {
 
   // Performance optimizations
   experimental: {
-    optimizeCss: true,
+    // Temporarily disable CSS optimization to fix styling issues
+    // optimizeCss: true,
     optimizePackageImports: ['@heroicons/react', 'lucide-react'],
   },
 
@@ -30,7 +31,12 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    domains: ['elzatona-web.com'], // Allow images from your domain
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'elzatona-web.com',
+      },
+    ],
   },
 
   // Compression
