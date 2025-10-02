@@ -5,9 +5,9 @@
       "maxDuration": 10
     }
   },
-  "buildCommand": "npx nx build web",
+  "buildCommand": "cd ../.. && npx nx build web",
   "outputDirectory": "apps/web/.next",
-  "installCommand": "npm install",
+  "installCommand": "cd ../.. && npm install",
   "framework": "nextjs",
   "env": {
     "NEXT_PUBLIC_DOMAIN": "elzatona-web.com",

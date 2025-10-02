@@ -777,6 +777,161 @@
         "isCorrect": false
       }
     ]
+  },
+  {
+    "id": "q95",
+    "title": "How to format date using React Intl?",
+    "content": "Use the `injectIntl()` HOC to access `formatDate()` via props. It returns a string representation of the formatted date.\n\n```jsx\nimport { injectIntl, intlShape } from \"react-intl\";\n\nconst MyComponent = ({ intl }) => {\n  const stringDate = intl.formatDate(new Date(), {\n    year: \"numeric\",\n    month: \"numeric\",\n    day: \"numeric\"\n  });\n  return <div>{`The formatted date is ${stringDate}`}</div>;\n};\n\nMyComponent.propTypes = { intl: intlShape.isRequired };\nexport default injectIntl(MyComponent);\n```",
+    "type": "open-ended",
+    "category": "React",
+    "subcategory": "Internationalization (i18n)",
+    "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
+    "topic": "Internationalization (i18n)",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": [
+      "react",
+      "react-intl",
+      "i18n",
+      "date-formatting",
+      "internationalization"
+    ],
+    "explanation": "`injectIntl` injects the `intl` object into a component’s props, which includes `formatDate`, `formatNumber`, and other localization utilities.",
+    "points": 6,
+    "sampleAnswers": [
+      "Use `injectIntl` to wrap your component and access `intl.formatDate()` with options like `{ year: 'numeric', month: 'short' }`.",
+      "Alternatively, in modern React, use the `useIntl()` hook instead of `injectIntl` for function components."
+    ]
+  },
+  {
+    "id": "q96",
+    "title": "What is Shallow Renderer in React testing?",
+    "content": "Shallow rendering renders a component one level deep without rendering child components, useful for unit testing isolated behavior.",
+    "type": "open-ended",
+    "category": "Testing",
+    "subcategory": "Unit Testing",
+    "difficulty": "intermediate",
+    "learningPath": "Testing & Quality Assurance",
+    "topic": "React Testing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "testing", "shallow-rendering", "unit-test"],
+    "explanation": "Shallow rendering lets you test a component’s output without instantiating or rendering its children, isolating the unit under test.",
+    "points": 6,
+    "sampleAnswers": [
+      "Shallow rendering tests only the current component’s render output, ignoring child component logic—ideal for pure unit tests.",
+      "It’s provided by `react-test-renderer/shallow` and useful for asserting structure without DOM or side effects."
+    ]
+  },
+  {
+    "id": "q97",
+    "title": "What is the `TestRenderer` package in React?",
+    "content": "`TestRenderer` renders React components to plain JavaScript objects (not DOM), enabling snapshot testing without a browser or jsdom.",
+    "type": "open-ended",
+    "category": "Testing",
+    "subcategory": "Unit Testing",
+    "difficulty": "intermediate",
+    "learningPath": "Testing & Quality Assurance",
+    "topic": "React Testing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "testrenderer", "snapshot-testing", "testing"],
+    "explanation": "It converts a React element tree into a serializable JavaScript object, perfect for snapshot comparisons in Jest.",
+    "points": 7,
+    "sampleAnswers": [
+      "`TestRenderer.create(<MyComponent />)` returns a renderer whose `.toJSON()` output can be snapshotted and compared across test runs.",
+      "Unlike DOM-based testing, it works in Node.js environments and supports both ReactDOM and React Native components."
+    ]
+  },
+  {
+    "id": "q98",
+    "title": "What is the purpose of ReactTestUtils package?",
+    "content": "`ReactTestUtils` provides utilities to simulate DOM interactions and inspect component behavior in unit tests.",
+    "type": "open-ended",
+    "category": "Testing",
+    "subcategory": "Unit Testing",
+    "difficulty": "intermediate",
+    "learningPath": "Testing & Quality Assurance",
+    "topic": "React Testing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["react", "reacttestutils", "testing", "dom-simulation"],
+    "explanation": "It includes methods like `Simulate.click()` and `findRenderedDOMComponentWithTag()` for testing event handling and component structure.",
+    "points": 6,
+    "sampleAnswers": [
+      "`ReactTestUtils` allows you to trigger synthetic events (e.g., clicks) and traverse rendered component trees for assertions.",
+      "Though largely superseded by React Testing Library and `@testing-library/react`, it was foundational in early React testing."
+    ]
+  },
+  {
+    "id": "q99",
+    "title": "What is Jest?",
+    "content": "Jest is a JavaScript testing framework created by Facebook, based on Jasmine, with built-in mocking, snapshot testing, and jsdom support.",
+    "type": "open-ended",
+    "category": "Testing",
+    "subcategory": "Unit Testing",
+    "difficulty": "beginner",
+    "learningPath": "Testing & Quality Assurance",
+    "topic": "Jest",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["jest", "testing", "facebook", "javascript", "unit-testing"],
+    "explanation": "Jest requires minimal configuration, runs tests in parallel, and integrates seamlessly with React via `@testing-library/react` or snapshot testing.",
+    "points": 5,
+    "sampleAnswers": [
+      "Jest is a zero-config test runner with built-in assertion library, mocking, coverage reports, and snapshot capabilities.",
+      "It uses `jsdom` to simulate a browser environment, enabling DOM-based tests to run in Node.js."
+    ]
+  },
+  {
+    "id": "q100",
+    "title": "What are the advantages of Jest over Jasmine?",
+    "content": "Jest offers automatic test discovery, auto-mocking, better async support, jsdom integration, and parallel test execution.",
+    "type": "multiple-choice",
+    "category": "Testing",
+    "subcategory": "Unit Testing",
+    "difficulty": "intermediate",
+    "learningPath": "Testing & Quality Assurance",
+    "topic": "Jest",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["jest", "jasmine", "testing", "comparison"],
+    "explanation": "Jest builds on Jasmine’s syntax but adds modern DX features like auto-mocking, snapshot testing, and zero-config setup.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "Jest requires more configuration than Jasmine",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Jest has no mocking support",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Jest auto-discovers tests, mocks dependencies, supports async, uses jsdom, and runs tests in parallel",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "Jasmine runs tests faster than Jest",
+        "isCorrect": false
+      }
+    ]
   }
-  // 95 - 100
 ]

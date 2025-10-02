@@ -1,31 +1,7 @@
 {
   "version": 2,
-  "name": "elzatona-web",
-  "builds": [
-    {
-      "src": "apps/web/package.json",
-      "use": "@vercel/next",
-      "config": {
-        "distDir": "apps/web/.next"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/admin/(.*)",
-      "dest": "/apps/web/app/admin/$1"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/apps/web/app/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/apps/web/$1"
-    }
-  ],
   "functions": {
-    "apps/web/app/api/**/*.ts": {
+    "apps/web/app/api/**/route.ts": {
       "maxDuration": 10
     }
   },
