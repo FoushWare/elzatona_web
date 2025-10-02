@@ -1,0 +1,440 @@
+/* RTL Support Styles */
+
+/* CSS Custom Properties for RTL */
+:root {
+  --direction: ltr;
+  --text-align-start: left;
+  --text-align-end: right;
+  --margin-start: margin-left;
+  --margin-end: margin-right;
+  --padding-start: padding-left;
+  --padding-end: padding-right;
+  --border-start: border-left;
+  --border-end: border-right;
+  --left: left;
+  --right: right;
+  --transform-x: 1;
+}
+
+[dir='rtl'] {
+  --direction: rtl;
+  --text-align-start: right;
+  --text-align-end: left;
+  --margin-start: margin-right;
+  --margin-end: margin-left;
+  --padding-start: padding-right;
+  --padding-end: padding-left;
+  --border-start: border-right;
+  --border-end: border-left;
+  --left: right;
+  --right: left;
+  --transform-x: -1;
+}
+
+/* RTL-aware utility classes */
+.text-start {
+  text-align: var(--text-align-start);
+}
+
+.text-end {
+  text-align: var(--text-align-end);
+}
+
+/* RTL-aware positioning */
+.rtl-left-0 {
+  left: 0;
+}
+
+[dir='rtl'] .rtl-left-0 {
+  left: auto;
+  right: 0;
+}
+
+.rtl-right-0 {
+  right: 0;
+}
+
+[dir='rtl'] .rtl-right-0 {
+  right: auto;
+  left: 0;
+}
+
+/* RTL-aware margins */
+.rtl-ml-auto {
+  margin-left: auto;
+}
+
+[dir='rtl'] .rtl-ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.rtl-mr-auto {
+  margin-right: auto;
+}
+
+[dir='rtl'] .rtl-mr-auto {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+/* RTL-aware padding */
+.rtl-pl-4 {
+  padding-left: 1rem;
+}
+
+[dir='rtl'] .rtl-pl-4 {
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+.rtl-pr-4 {
+  padding-right: 1rem;
+}
+
+[dir='rtl'] .rtl-pr-4 {
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+/* RTL-aware transforms */
+.rtl-transform-x {
+  transform: scaleX(var(--transform-x));
+}
+
+/* RTL-aware flex direction */
+.rtl-flex-row {
+  flex-direction: row;
+}
+
+[dir='rtl'] .rtl-flex-row {
+  flex-direction: row-reverse;
+}
+
+.rtl-flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .rtl-flex-row-reverse {
+  flex-direction: row;
+}
+
+/* RTL-aware animations */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+[dir='rtl'] .animate-slide-in-left {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+[dir='rtl'] .animate-slide-in-right {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+/* RTL-aware hover effects */
+.rtl-hover-translate-x-1:hover {
+  transform: translateX(0.25rem);
+}
+
+[dir='rtl'] .rtl-hover-translate-x-1:hover {
+  transform: translateX(-0.25rem);
+}
+
+.rtl-hover-translate-x-2:hover {
+  transform: translateX(0.5rem);
+}
+
+[dir='rtl'] .rtl-hover-translate-x-2:hover {
+  transform: translateX(-0.5rem);
+}
+
+/* RTL-aware border radius */
+.rtl-rounded-l-lg {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+[dir='rtl'] .rtl-rounded-l-lg {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.rtl-rounded-r-lg {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+[dir='rtl'] .rtl-rounded-r-lg {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+/* RTL-aware shadows */
+.rtl-shadow-left {
+  box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+[dir='rtl'] .rtl-shadow-left {
+  box-shadow: 4px 0 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.rtl-shadow-right {
+  box-shadow: 4px 0 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+[dir='rtl'] .rtl-shadow-right {
+  box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* RTL-aware grid layouts */
+.rtl-grid-flow-col {
+  grid-auto-flow: column;
+}
+
+[dir='rtl'] .rtl-grid-flow-col {
+  grid-auto-flow: column;
+  direction: ltr;
+}
+
+[dir='rtl'] .rtl-grid-flow-col > * {
+  direction: rtl;
+}
+
+/* RTL-aware icon mirroring */
+.rtl-mirror-icon {
+  transform: scaleX(1);
+}
+
+[dir='rtl'] .rtl-mirror-icon {
+  transform: scaleX(-1);
+}
+
+/* RTL-aware floating elements */
+.rtl-float-left {
+  float: left;
+}
+
+[dir='rtl'] .rtl-float-left {
+  float: right;
+}
+
+.rtl-float-right {
+  float: right;
+}
+
+[dir='rtl'] .rtl-float-right {
+  float: left;
+}
+
+/* RTL-aware clear */
+.rtl-clear-left {
+  clear: left;
+}
+
+[dir='rtl'] .rtl-clear-left {
+  clear: right;
+}
+
+.rtl-clear-right {
+  clear: right;
+}
+
+[dir='rtl'] .rtl-clear-right {
+  clear: left;
+}
+
+/* RTL-aware text decoration */
+.rtl-border-l {
+  border-left-width: 1px;
+}
+
+[dir='rtl'] .rtl-border-l {
+  border-left-width: 0;
+  border-right-width: 1px;
+}
+
+.rtl-border-r {
+  border-right-width: 1px;
+}
+
+[dir='rtl'] .rtl-border-r {
+  border-right-width: 0;
+  border-left-width: 1px;
+}
+
+/* RTL-aware list styles */
+.rtl-list-disc {
+  list-style-type: disc;
+  list-style-position: inside;
+}
+
+[dir='rtl'] .rtl-list-disc {
+  list-style-position: inside;
+}
+
+/* RTL-aware table styles */
+.rtl-table-auto {
+  table-layout: auto;
+}
+
+[dir='rtl'] .rtl-table-auto th,
+[dir='rtl'] .rtl-table-auto td {
+  text-align: right;
+}
+
+[dir='rtl'] .rtl-table-auto th:first-child,
+[dir='rtl'] .rtl-table-auto td:first-child {
+  text-align: right;
+}
+
+[dir='rtl'] .rtl-table-auto th:last-child,
+[dir='rtl'] .rtl-table-auto td:last-child {
+  text-align: left;
+}
+
+/* RTL-aware form elements */
+.rtl-form-input {
+  text-align: left;
+}
+
+[dir='rtl'] .rtl-form-input {
+  text-align: right;
+}
+
+/* RTL-aware tooltips and popovers */
+.rtl-tooltip-left {
+  transform-origin: right center;
+}
+
+[dir='rtl'] .rtl-tooltip-left {
+  transform-origin: left center;
+}
+
+.rtl-tooltip-right {
+  transform-origin: left center;
+}
+
+[dir='rtl'] .rtl-tooltip-right {
+  transform-origin: right center;
+}
+
+/* RTL-aware carousel/slider */
+.rtl-carousel {
+  direction: ltr;
+}
+
+[dir='rtl'] .rtl-carousel {
+  direction: rtl;
+}
+
+/* RTL-aware progress bars */
+.rtl-progress-bar {
+  transform-origin: left center;
+}
+
+[dir='rtl'] .rtl-progress-bar {
+  transform-origin: right center;
+}
+
+/* RTL-aware breadcrumbs */
+.rtl-breadcrumb::before {
+  content: '/';
+  margin: 0 0.5rem;
+}
+
+[dir='rtl'] .rtl-breadcrumb::before {
+  content: '\\';
+}
+
+/* RTL-aware navigation arrows */
+.rtl-nav-arrow-left::before {
+  content: '←';
+}
+
+[dir='rtl'] .rtl-nav-arrow-left::before {
+  content: '→';
+}
+
+.rtl-nav-arrow-right::before {
+  content: '→';
+}
+
+[dir='rtl'] .rtl-nav-arrow-right::before {
+  content: '←';
+}
+
+/* RTL-aware dropdown menus */
+.rtl-dropdown-menu {
+  left: 0;
+  right: auto;
+}
+
+[dir='rtl'] .rtl-dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+/* RTL-aware modal positioning */
+.rtl-modal-slide-in {
+  transform: translateX(-100%);
+}
+
+[dir='rtl'] .rtl-modal-slide-in {
+  transform: translateX(100%);
+}
+
+.rtl-modal-slide-in.open {
+  transform: translateX(0);
+}
+
+/* RTL-aware sticky positioning */
+.rtl-sticky-left {
+  position: sticky;
+  left: 0;
+}
+
+[dir='rtl'] .rtl-sticky-left {
+  left: auto;
+  right: 0;
+}
+
+.rtl-sticky-right {
+  position: sticky;
+  right: 0;
+}
+
+[dir='rtl'] .rtl-sticky-right {
+  right: auto;
+  left: 0;
+}

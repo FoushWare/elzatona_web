@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import '@/styles/rtl.css';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
 import { UserPreferencesProvider } from '@/contexts/UserPreferencesContext';
@@ -8,6 +9,7 @@ import { UserTypeProvider } from '@/contexts/UserTypeContext';
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext';
 import { OnboardingProvider } from '@/contexts/OnboardingContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import { RTLProvider } from '@/contexts/RTLContext';
 import { ConditionalLayout } from '@/components/ConditionalLayout';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -53,21 +55,23 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider>
-          <LanguageProvider>
-            <FirebaseAuthProvider>
-              <UserPreferencesProvider>
-                <UserTypeProvider>
-                  <MobileMenuProvider>
-                    <OnboardingProvider>
-                      <ConditionalLayout>{children}</ConditionalLayout>
-                    </OnboardingProvider>
-                  </MobileMenuProvider>
-                </UserTypeProvider>
-              </UserPreferencesProvider>
-            </FirebaseAuthProvider>
-          </LanguageProvider>
-        </ThemeProvider>
+        <RTLProvider>
+          <ThemeProvider>
+            <LanguageProvider>
+              <FirebaseAuthProvider>
+                <UserPreferencesProvider>
+                  <UserTypeProvider>
+                    <MobileMenuProvider>
+                      <OnboardingProvider>
+                        <ConditionalLayout>{children}</ConditionalLayout>
+                      </OnboardingProvider>
+                    </MobileMenuProvider>
+                  </UserTypeProvider>
+                </UserPreferencesProvider>
+              </FirebaseAuthProvider>
+            </LanguageProvider>
+          </ThemeProvider>
+        </RTLProvider>
       </body>
     </html>
   );

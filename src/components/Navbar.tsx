@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { Menu, X, Sun, Moon, ChevronDown, User, LogOut } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useRTL } from '@/contexts/RTLContext';
+import { rtlClass, getPositionClass } from '@/utils/rtl';
+import { RTLToggle } from './RTLToggle';
 import AlzatonaLogo from './AlzatonaLogo';
 
 interface DropdownItem {
@@ -30,6 +33,7 @@ export default function Navbar() {
   >('desktop');
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { isAuthenticated, user, signOut, isLoading } = useFirebaseAuth();
+  const { isRTL } = useRTL();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -923,8 +927,22 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Theme Toggle */}
-          <div className="flex items-center space-x-4">
+          {/* Theme & RTL Toggle */}
+          <div
+            className={`flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-4', 'space-x-4')}`}
+          >
+            {/* RTL Toggle */}
+            <RTLToggle
+              variant="icon"
+              className={`p-2 rounded-lg transition-colors duration-200 ${
+                isScrolled
+                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+              }`}
+              showLabel={false}
+            />
+
+            {/* Theme Toggle */}
             <button
               onClick={toggleDarkMode}
               className={`p-2 rounded-lg transition-colors duration-200 ${
