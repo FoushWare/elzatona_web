@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "name": "elzatona-web",
+  "buildCommand": "cd ../.. && npx nx build web",
+  "outputDirectory": ".next",
+  "installCommand": "cd ../.. && npm install",
+  "framework": "nextjs",
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 10
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_APP_NAME": "GreatFrontendHub"
+  },
+  "build": {
+    "env": {
+      "NX_DAEMON": "false",
+      "NX_PARALLEL": "1"
+    }
+  }
+}

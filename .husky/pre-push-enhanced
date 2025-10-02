@@ -1,0 +1,180 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo ""
+echo "════════════════════════════════════════════════════════════════"
+echo "🚀 PRE-PUSH HOOK STARTING (Nx Monorepo Enhanced)..."
+echo "════════════════════════════════════════════════════════════════"
+echo ""
+
+# Get the current branch name
+current_branch=$(git branch --show-current)
+echo "📍 Current branch: $current_branch"
+echo ""
+
+# Only run build check on development branches
+if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_branch" == "develop" ]] || [[ "$current_branch" == "main" ]]; then
+  echo "🔄 Running pre-push checks on development branch..."
+  echo ""
+  
+  # Step 1: Check what changed to determine what to build
+  echo "🔍 STEP 1: Analyzing changes..."
+  echo "   📊 Checking affected projects..."
+  
+  # Get affected projects (if nx affected works)
+  AFFECTED_PROJECTS=$(npx nx show projects --affected --base=HEAD~1 2>/dev/null || echo "web,admin")
+  echo "   📦 Affected projects: $AFFECTED_PROJECTS"
+  echo ""
+  
+  # Step 2: Build affected projects
+  echo "🏗️  STEP 2: Building affected projects..."
+  
+  if [[ "$AFFECTED_PROJECTS" == *"web"* ]] || [[ "$AFFECTED_PROJECTS" == "web,admin" ]]; then
+    echo "   📦 Building web app..."
+    echo "   🔧 Executing: npx nx build web"
+    
+    npx nx build web
+    WEB_BUILD_EXIT_CODE=$?
+    
+    if [ $WEB_BUILD_EXIT_CODE -ne 0 ]; then
+      echo "   ❌ Web app build failed with exit code: $WEB_BUILD_EXIT_CODE"
+      echo "   💡 Please fix web app build issues before pushing"
+      echo ""
+      echo "════════════════════════════════════════════════════════════════"
+      echo "❌ PRE-PUSH HOOK FAILED - WEB BUILD ERRORS DETECTED!"
+      echo "════════════════════════════════════════════════════════════════"
+      echo ""
+      exit 1
+    else
+      echo "   ✅ Web app build completed successfully!"
+    fi
+  else
+    echo "   ℹ️  Web app not affected, skipping build"
+  fi
+  
+  if [[ "$AFFECTED_PROJECTS" == *"admin"* ]] || [[ "$AFFECTED_PROJECTS" == "web,admin" ]]; then
+    echo "   📦 Building admin app..."
+    echo "   🔧 Executing: npx nx build admin"
+    
+    npx nx build admin
+    ADMIN_BUILD_EXIT_CODE=$?
+    
+    if [ $ADMIN_BUILD_EXIT_CODE -ne 0 ]; then
+      echo "   ❌ Admin app build failed with exit code: $ADMIN_BUILD_EXIT_CODE"
+      echo "   💡 Please fix admin app build issues before pushing"
+      echo ""
+      echo "════════════════════════════════════════════════════════════════"
+      echo "❌ PRE-PUSH HOOK FAILED - ADMIN BUILD ERRORS DETECTED!"
+      echo "════════════════════════════════════════════════════════════════"
+      echo ""
+      exit 1
+    else
+      echo "   ✅ Admin app build completed successfully!"
+    fi
+  else
+    echo "   ℹ️  Admin app not affected, skipping build"
+  fi
+  
+  echo ""
+  
+  # Step 3: Run affected tests (optional, can be enabled)
+  echo "🧪 STEP 3: Running affected tests..."
+  echo "   ℹ️  Test execution disabled for faster commits"
+  echo "   💡 Enable by uncommenting the test commands below"
+  echo ""
+  
+  # Uncomment these lines to enable testing in pre-push
+  # echo "   🔧 Executing: npx nx test --affected"
+  # npx nx test --affected
+  # TEST_EXIT_CODE=$?
+  # if [ $TEST_EXIT_CODE -ne 0 ]; then
+  #   echo "   ❌ Tests failed"
+  #   exit 1
+  # fi
+  
+  # Step 4: Clean up build files after successful build (Nx structure)
+  echo "🧹 STEP 4: Cleaning build files..."
+  
+  echo "   🗑️  Removing apps/web/.next directory..."
+  if [ -d "apps/web/.next" ]; then
+    rm -rf apps/web/.next
+    echo "   ✅ apps/web/.next directory removed"
+  else
+    echo "   ℹ️  apps/web/.next directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing apps/admin/.next directory..."
+  if [ -d "apps/admin/.next" ]; then
+    rm -rf apps/admin/.next
+    echo "   ✅ apps/admin/.next directory removed"
+  else
+    echo "   ℹ️  apps/admin/.next directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing dist directory..."
+  if [ -d "dist" ]; then
+    rm -rf dist
+    echo "   ✅ dist directory removed"
+  else
+    echo "   ℹ️  dist directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing nx cache temp files..."
+  if [ -d "tmp" ]; then
+    rm -rf tmp
+    echo "   ✅ tmp directory removed"
+  else
+    echo "   ℹ️  tmp directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing storybook-static directory..."
+  if [ -d "storybook-static" ]; then
+    rm -rf storybook-static
+    echo "   ✅ storybook-static directory removed"
+  else
+    echo "   ℹ️  storybook-static directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing test-results directory..."
+  if [ -d "test-results" ]; then
+    rm -rf test-results
+    echo "   ✅ test-results directory removed"
+  else
+    echo "   ℹ️  test-results directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing coverage directory..."
+  if [ -d "coverage" ]; then
+    rm -rf coverage
+    echo "   ✅ coverage directory removed"
+  else
+    echo "   ℹ️  coverage directory not found (already clean)"
+  fi
+  
+  echo "   ℹ️  Keeping .nx cache for faster future builds"
+  echo "   ℹ️  Keeping tsconfig.tsbuildinfo (helps with incremental builds)"
+  echo ""
+  
+  # Step 5: Final status
+  echo "📊 PRE-PUSH SUMMARY:"
+  echo "   ✅ Affected projects analyzed"
+  echo "   ✅ Build validation passed for all affected apps"
+  echo "   ✅ Build files cleaned"
+  echo "   ✅ Nx cache preserved for performance"
+  echo "   ✅ Ready for push"
+  echo ""
+  echo "════════════════════════════════════════════════════════════════"
+  echo "✅ PRE-PUSH CHECKS COMPLETED SUCCESSFULLY!"
+  echo "🚀 READY TO PUSH TO REMOTE REPOSITORY!"
+  echo "════════════════════════════════════════════════════════════════"
+  echo ""
+else
+  echo "ℹ️  Branch '$current_branch' is not a development branch"
+  echo "💡 Pre-push checks only run on: main, develop, release/v1.0.0-main-website"
+  echo ""
+  echo "════════════════════════════════════════════════════════════════"
+  echo "ℹ️  PRE-PUSH HOOK SKIPPED (Non-development branch)"
+  echo "🚀 READY TO PUSH!"
+  echo "════════════════════════════════════════════════════════════════"
+  echo ""
+fi

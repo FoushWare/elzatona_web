@@ -1,0 +1,61 @@
+{
+  "version": 2,
+  "name": "elzatona-web",
+  "builds": [
+    {
+      "src": "apps/web/package.json",
+      "use": "@vercel/next",
+      "config": {
+        "distDir": "apps/web/.next"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/admin/(.*)",
+      "dest": "/apps/web/app/admin/$1"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/apps/web/app/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/apps/web/$1"
+    }
+  ],
+  "functions": {
+    "apps/web/app/api/**/*.ts": {
+      "maxDuration": 10
+    }
+  },
+  "buildCommand": "npx nx build web",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_DOMAIN": "elzatona-web.com",
+    "NEXT_PUBLIC_APP_NAME": "GreatFrontendHub"
+  },
+  "build": {
+    "env": {
+      "NX_DAEMON": "false",
+      "NX_PARALLEL": "1"
+    }
+  },
+  "headers": [
+    {
+      "source": "/admin/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
+  ]
+}

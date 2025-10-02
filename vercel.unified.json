@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "functions": {
+    "apps/web/app/api/**/*.ts": {
+      "maxDuration": 10
+    }
+  },
+  "buildCommand": "npx nx build web",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_DOMAIN": "elzatona-web.com",
+    "NEXT_PUBLIC_APP_NAME": "GreatFrontendHub"
+  },
+  "build": {
+    "env": {
+      "NX_DAEMON": "false",
+      "NX_PARALLEL": "1"
+    }
+  },
+  "headers": [
+    {
+      "source": "/admin/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
+  ]
+}

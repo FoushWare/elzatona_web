@@ -7,9 +7,9 @@ echo "🔍 PRE-COMMIT HOOK STARTING..."
 echo "════════════════════════════════════════════════════════════════"
 echo ""
 
-# Step 1: Run Prettier formatting
+# Step 1: Run Prettier formatting (Nx-aware)
 echo "🎨 STEP 1: Running Prettier formatting..."
-echo "   📝 Executing: npm run format"
+echo "   📝 Executing: npm run format (Nx monorepo)"
 echo ""
 
 npm run format
@@ -29,12 +29,12 @@ else
 fi
 echo ""
 
-    # Step 2: Run ESLint for linting and errors (temporarily allowing errors to pass)
+    # Step 2: Run ESLint for linting and errors (Nx-aware)
     echo "🔍 STEP 2: Running ESLint linting and error checking..."
-    echo "   📝 Executing: npm run lint (allowing errors to pass for now)"
+    echo "   📝 Executing: npx nx lint web (Nx monorepo - allowing errors to pass for now)"
     echo ""
 
-    npm run lint || true  # Always succeed, even if ESLint finds errors
+    npx nx lint web || true  # Always succeed, even if ESLint finds errors
     LINT_EXIT_CODE=$?
 
     if [ $LINT_EXIT_CODE -ne 0 ]; then

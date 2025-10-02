@@ -1,0 +1,508 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "notFound": "Not Found",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "view": "View",
+    "learnMore": "Learn More",
+    "startLearning": "Start Learning",
+    "continue": "Continue",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add",
+    "remove": "Remove",
+    "close": "Close",
+    "open": "Open",
+    "submit": "Submit",
+    "reset": "Reset",
+    "clear": "Clear",
+    "done": "Done",
+    "pending": "Pending",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "comparison": "Comparison",
+    "features": "Features",
+    "hours": "hours",
+    "viewDetails": "View Details"
+  },
+  "navigation": {
+    "home": "Home",
+    "challenges": "Challenges",
+    "resources": "Resources",
+    "learningPaths": "Learning Paths",
+    "questions": "Practice Questions",
+    "internalResources": "Internal Resources",
+    "progress": "Progress",
+    "language": "Language",
+    "english": "English",
+    "arabic": "العربية"
+  },
+  "home": {
+    "title": "GreatFrontendHub",
+    "subtitle": "Master Frontend Development",
+    "description": "Your comprehensive platform for learning frontend development with interactive challenges, resources, and practice questions.",
+    "heroTitle": "Master Frontend Development",
+    "heroSubtitle": "Interactive challenges, comprehensive resources, and real-world practice questions to level up your skills.",
+    "getStarted": "Get Started",
+    "exploreChallenges": "Explore Challenges",
+    "browseResources": "Browse Resources",
+    "viewLearningPaths": "View Learning Paths",
+    "tryQuestions": "Try Practice Questions",
+    "trackProgress": "Track Your Progress",
+    "features": {
+      "title": "Why Choose GreatFrontendHub?",
+      "interactive": {
+        "title": "Interactive Challenges",
+        "description": "Hands-on coding challenges with real-time feedback and solutions."
+      },
+      "comprehensive": {
+        "title": "Comprehensive Resources",
+        "description": "Curated learning materials from the best sources in the industry."
+      },
+      "practice": {
+        "title": "Practice Questions",
+        "description": "Interview-style questions to prepare for technical assessments."
+      },
+      "progress": {
+        "title": "Progress Tracking",
+        "description": "Monitor your learning journey with detailed analytics and insights."
+      }
+    }
+  },
+  "challenges": {
+    "title": "Coding Challenges",
+    "subtitle": "Sharpen your skills with interactive coding challenges",
+    "description": "Practice with real-world scenarios and get instant feedback on your solutions.",
+    "searchPlaceholder": "Search challenges...",
+    "filterByDifficulty": "Filter by Difficulty",
+    "filterByCategory": "Filter by Category",
+    "sortBy": "Sort by",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "difficulty": "Difficulty",
+    "popularity": "Popularity",
+    "stats": {
+      "totalChallenges": "Total Challenges",
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "filteredResults": "Filtered Results"
+    },
+    "noResults": "No challenges found",
+    "noResultsDescription": "Try adjusting your search criteria or filters to find what you're looking for."
+  },
+  "resources": {
+    "title": "Learning Resources",
+    "subtitle": "Curated resources to accelerate your learning",
+    "description": "Discover the best tutorials, articles, and courses from around the web.",
+    "searchPlaceholder": "Search by title, description, or tags...",
+    "browseByCategory": "Browse by Category",
+    "filterByCategory": "Filter by Category",
+    "filterByDifficulty": "Filter by Difficulty",
+    "stats": {
+      "totalResources": "Total Resources",
+      "filteredResults": "Filtered Results",
+      "page": "Page",
+      "of": "of"
+    },
+    "noResults": "No resources found",
+    "noResultsDescription": "Try adjusting your search criteria or filters to find what you're looking for.",
+    "promoteInternal": {
+      "title": "Want More Structured Learning?",
+      "description": "Check out our internal resources with interactive questions and detailed explanations.",
+      "cta": "Explore Internal Resources"
+    }
+  },
+  "internalResources": {
+    "title": "Internal Learning Resources",
+    "subtitle": "Master frontend development with our comprehensive, self-contained learning resources",
+    "description": "No external links needed - everything you need is right here.",
+    "searchPlaceholder": "Search by title, description, or tags...",
+    "filterByCategory": "Filter by Category",
+    "filterByDifficulty": "Filter by Difficulty",
+    "stats": {
+      "totalResources": "Total Resources",
+      "totalQuestions": "Total Questions",
+      "totalMinutes": "Total Minutes",
+      "filteredResults": "Filtered Results",
+      "page": "Page",
+      "of": "of",
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "resources": "resources"
+    },
+    "noResults": "No resources found",
+    "noResultsDescription": "Try adjusting your search criteria or filters to find what you're looking for.",
+    "cta": {
+      "title": "Ready to Master Frontend Development?",
+      "description": "Start with our comprehensive learning resources and track your progress as you go.",
+      "viewProgress": "View Progress",
+      "learnMore": "Learn More"
+    }
+  },
+  "questions": {
+    "title": "Practice Questions",
+    "subtitle": "Prepare for technical interviews with real-world questions",
+    "description": "Practice with questions solved by ex-interviewers from top tech companies.",
+    "features": {
+      "solvedByExInterviewers": "Solved by ex-interviewers",
+      "testCases": "Test cases",
+      "codeInBrowser": "Code in browser"
+    },
+    "searchPlaceholder": "Search questions...",
+    "sortBy": "Sort by",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "difficulty": "Difficulty",
+    "popularity": "Popularity",
+    "tabs": {
+      "coding": "Coding",
+      "systemDesign": "System Design",
+      "quiz": "Quiz"
+    },
+    "subCategories": {
+      "javascriptFunctions": "JavaScript Functions",
+      "userInterfaceCoding": "User Interface Coding",
+      "algorithmicCoding": "Algorithmic Coding"
+    },
+    "stats": {
+      "totalQuestions": "Total Questions",
+      "completed": "Completed",
+      "filteredResults": "Filtered Results"
+    },
+    "filters": {
+      "topics": "Topics",
+      "company": "Company"
+    },
+    "noResults": "No questions found",
+    "noResultsDescription": "Try adjusting your search criteria or filters to find what you're looking for."
+  },
+  "learningPaths": {
+    "title": "Learning Paths",
+    "subtitle": "Structured learning journeys for different skill levels",
+    "description": "Follow curated paths designed to take you from beginner to advanced frontend developer.",
+    "selectDifficulty": "Select your difficulty level:",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "pathDescription": "This path will guide you through the fundamentals of frontend development, starting with HTML and CSS basics, then moving to JavaScript fundamentals, and finally introducing you to modern frameworks.",
+    "estimatedTime": "Estimated Time",
+    "topics": "Topics Covered",
+    "resources": "Resources",
+    "startPath": "Start This Path",
+    "continuePath": "Continue Path",
+    "completePath": "Complete Path"
+  },
+  "progress": {
+    "title": "Learning Progress",
+    "subtitle": "Track your learning journey and achievements",
+    "description": "Monitor your progress across all learning activities and set goals for continuous improvement.",
+    "tabs": {
+      "overview": "Overview",
+      "learningItems": "Learning Items",
+      "goals": "Goals",
+      "recommendations": "Recommendations"
+    },
+    "stats": {
+      "totalItems": "Total Items",
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "pending": "Pending",
+      "completionRate": "Completion Rate",
+      "totalTime": "Total Time Spent",
+      "streak": "Current Streak"
+    },
+    "goals": {
+      "title": "Learning Goals",
+      "addGoal": "Add New Goal",
+      "goalTitle": "Goal Title",
+      "goalDescription": "Goal Description",
+      "targetDate": "Target Date",
+      "priority": "Priority",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "recommendations": {
+      "title": "Recommended Next Steps",
+      "basedOnProgress": "Based on your progress, we recommend:",
+      "continueCurrent": "Continue your current learning path",
+      "tryNewChallenge": "Try a new challenge",
+      "reviewBasics": "Review fundamental concepts"
+    }
+  },
+  "questionDetail": {
+    "question": "Question",
+    "yourAnswer": "Your Answer",
+    "correctAnswer": "Correct Answer",
+    "explanation": "Explanation",
+    "difficulty": "Difficulty",
+    "category": "Category",
+    "tags": "Tags",
+    "relatedTopics": "Related Topics",
+    "nextQuestion": "Next Question",
+    "previousQuestion": "Previous Question",
+    "submitAnswer": "Submit Answer",
+    "checkAnswer": "Check Answer",
+    "score": "Score",
+    "correct": "Correct!",
+    "incorrect": "Incorrect. Try again!",
+    "questionNotFound": "Question not found",
+    "questionNotFoundDescription": "The question you're looking for doesn't exist or has been removed."
+  },
+  "resourceCard": {
+    "estimatedTime": "Estimated Time",
+    "questions": "Questions",
+    "difficulty": "Difficulty",
+    "category": "Category",
+    "tags": "Tags",
+    "viewDetails": "View Details",
+    "startLearning": "Start Learning"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "items": "items"
+  },
+  "studyPlans": {
+    "title": "Study Plans",
+    "subtitle": "Structured learning paths for your interview preparation",
+    "description": "Choose a study plan that fits your schedule and goals. Each plan is designed to help you master frontend development systematically.",
+    "oneWeek": {
+      "title": "1-Week Intensive Plan",
+      "subtitle": "2 hours daily • 14 hours total",
+      "description": "Fast-track your preparation with intensive daily practice. Perfect for last-minute interview preparation.",
+      "dailyGoal": "Daily Goal",
+      "totalHours": "Total Hours",
+      "topics": "Topics Covered",
+      "schedule": "Daily Schedule",
+      "day1": "Day 1: HTML & CSS Fundamentals",
+      "day2": "Day 2: JavaScript Basics",
+      "day3": "Day 3: DOM Manipulation",
+      "day4": "Day 4: React Fundamentals",
+      "day5": "Day 5: State Management",
+      "day6": "Day 6: API Integration",
+      "day7": "Day 7: Mock Interview Practice"
+    },
+    "oneMonth": {
+      "title": "1-Month Balanced Plan",
+      "subtitle": "6 hours weekly • 24 hours total",
+      "description": "Balanced approach with core concepts and practical exercises. Ideal for comprehensive preparation.",
+      "weeklyGoal": "Weekly Goal",
+      "totalHours": "Total Hours",
+      "topics": "Topics Covered",
+      "schedule": "Weekly Schedule",
+      "week1": "Week 1: Frontend Fundamentals",
+      "week2": "Week 2: JavaScript Deep Dive",
+      "week3": "Week 3: React & Modern Frameworks",
+      "week4": "Week 4: System Design & Optimization"
+    },
+    "threeMonths": {
+      "title": "3-Month Comprehensive Plan",
+      "subtitle": "3 hours weekly • 36 hours total",
+      "description": "Comprehensive preparation with deep dives into advanced topics. Perfect for thorough mastery.",
+      "weeklyGoal": "Weekly Goal",
+      "totalHours": "Total Hours",
+      "topics": "Topics Covered",
+      "schedule": "Monthly Schedule",
+      "month1": "Month 1: Core Fundamentals",
+      "month2": "Month 2: Advanced Concepts",
+      "month3": "Month 3: Expert Topics & Practice"
+    },
+    "features": {
+      "structuredLearning": "Structured Learning Path",
+      "progressTracking": "Progress Tracking",
+      "practiceExercises": "Practice Exercises",
+      "mockInterviews": "Mock Interviews",
+      "resourceLibrary": "Resource Library",
+      "communitySupport": "Community Support"
+    },
+    "startPlan": "Start This Plan",
+    "continuePlan": "Continue Plan",
+    "viewProgress": "View Progress",
+    "customizePlan": "Customize Plan"
+  },
+  "preparationGuides": {
+    "title": "Interview Preparation Guides",
+    "subtitle": "Strategic resources to ace your frontend interviews",
+    "description": "Comprehensive guides and strategies developed by experienced interviewers and industry experts.",
+    "frontendPlaybook": {
+      "title": "Frontend Interview Playbook",
+      "description": "Complete guide to frontend interview preparation with proven strategies and techniques.",
+      "sections": {
+        "overview": "Interview Overview",
+        "preparation": "Preparation Strategy",
+        "technical": "Technical Questions",
+        "systemDesign": "System Design",
+        "behavioral": "Behavioral Questions",
+        "mockInterviews": "Mock Interviews"
+      }
+    },
+    "gfe75": {
+      "title": "GFE75 - Essential Questions",
+      "description": "Curated list of 75 most important frontend questions that appear frequently in interviews.",
+      "categories": {
+        "javascript": "JavaScript (25 questions)",
+        "react": "React (20 questions)",
+        "css": "CSS (15 questions)",
+        "systemDesign": "System Design (15 questions)"
+      }
+    },
+    "blind75": {
+      "title": "Blind75 for Frontend",
+      "description": "Adaptation of Blind75 algorithm questions for frontend development and system design.",
+      "categories": {
+        "algorithms": "Algorithms (25 questions)",
+        "dataStructures": "Data Structures (25 questions)",
+        "systemDesign": "System Design (25 questions)"
+      }
+    },
+    "systemDesignPlaybook": {
+      "title": "Frontend System Design Playbook",
+      "description": "Comprehensive guide to frontend system design with architecture patterns and best practices.",
+      "topics": {
+        "architecture": "Architecture Patterns",
+        "scalability": "Scalability",
+        "performance": "Performance",
+        "security": "Security",
+        "testing": "Testing Strategies"
+      }
+    }
+  },
+  "questionBank": {
+    "title": "Practice Question Bank",
+    "subtitle": "500+ curated questions from top tech companies",
+    "description": "Comprehensive collection of frontend interview questions with detailed solutions and explanations.",
+    "stats": {
+      "totalQuestions": "Total Questions",
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "accuracy": "Accuracy Rate"
+    },
+    "categories": {
+      "javascript": "JavaScript Functions",
+      "ui": "User Interface Coding",
+      "algorithmic": "Algorithmic Coding",
+      "systemDesign": "System Design",
+      "quiz": "Quiz Questions"
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "companies": {
+      "google": "Google",
+      "amazon": "Amazon",
+      "apple": "Apple",
+      "microsoft": "Microsoft",
+      "meta": "Meta",
+      "netflix": "Netflix",
+      "airbnb": "Airbnb",
+      "uber": "Uber"
+    },
+    "topics": {
+      "oop": "Object-Oriented Programming",
+      "accessibility": "Accessibility",
+      "reactHooks": "React Hooks",
+      "networking": "Networking",
+      "array": "Array Manipulation",
+      "async": "Asynchronous Programming",
+      "bfs": "Breadth-First Search",
+      "binary": "Binary Operations",
+      "binarySearch": "Binary Search",
+      "bst": "Binary Search Tree",
+      "binaryTree": "Binary Tree",
+      "closure": "Closures",
+      "dfs": "Depth-First Search",
+      "dp": "Dynamic Programming",
+      "graph": "Graph Algorithms",
+      "greedy": "Greedy Algorithms",
+      "heap": "Heap Data Structure",
+      "intervals": "Interval Problems",
+      "linkedList": "Linked List",
+      "matrix": "Matrix Operations",
+      "queue": "Queue Data Structure",
+      "recursion": "Recursion",
+      "sorting": "Sorting Algorithms",
+      "stack": "Stack Data Structure",
+      "string": "String Manipulation",
+      "topological": "Topological Sort",
+      "tree": "Tree Data Structure",
+      "trie": "Trie Data Structure",
+      "webApis": "Web APIs"
+    },
+    "filters": {
+      "search": "Search questions...",
+      "sortBy": "Sort by",
+      "filterBy": "Filter by",
+      "clearFilters": "Clear Filters",
+      "applyFilters": "Apply Filters"
+    },
+    "questionCard": {
+      "difficulty": "Difficulty",
+      "category": "Category",
+      "company": "Company",
+      "completionRate": "Completion Rate",
+      "estimatedTime": "Estimated Time",
+      "startQuestion": "Start Question",
+      "viewSolution": "View Solution",
+      "markComplete": "Mark Complete"
+    }
+  },
+  "tasks": {
+    "title": "Project Tasks",
+    "subtitle": "Development roadmap and progress tracking",
+    "description": "Track the development progress of GreatFrontendHub features and improvements.",
+    "status": {
+      "todo": "To Do",
+      "inProgress": "In Progress",
+      "done": "Done",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "priority": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "epics": {
+      "projectFoundation": "Project Foundation",
+      "uiUxNavigation": "UI/UX & Navigation",
+      "challengeLibrary": "Challenge Library",
+      "inBrowserCodeEditor": "In-Browser Code Editor",
+      "solutionsExplanations": "Solutions & Explanations",
+      "deploymentMonitoring": "Deployment & Monitoring",
+      "openAccess": "Open Access",
+      "learningResources": "Learning Resources",
+      "coreFeatures": "Core Features",
+      "contentCreation": "Content Creation",
+      "learningManagement": "Learning Management"
+    },
+    "sprints": {
+      "sprint1": "Sprint 1",
+      "sprint2": "Sprint 2",
+      "sprint3": "Sprint 3",
+      "sprint4": "Sprint 4"
+    }
+  }
+}

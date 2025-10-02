@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#2d5016" stroke="#1a3009" stroke-width="2"/>
+  
+  <!-- Olive branch stem -->
+  <path d="M 100 50 Q 100 80 100 120 Q 100 140 100 150" 
+        stroke="#4a7c59" 
+        stroke-width="8" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <!-- Left olive leaves -->
+  <g transform="translate(100, 100)">
+    <!-- Leaf 1 -->
+    <ellipse cx="-25" cy="-15" rx="12" ry="25" 
+             fill="#6b8e23" 
+             transform="rotate(-30 -25 -15)"/>
+    <ellipse cx="-20" cy="-10" rx="8" ry="20" 
+             fill="#8fbc8f" 
+             transform="rotate(-30 -20 -10)"/>
+    
+    <!-- Leaf 2 -->
+    <ellipse cx="-35" cy="0" rx="10" ry="22" 
+             fill="#6b8e23" 
+             transform="rotate(-45 -35 0)"/>
+    <ellipse cx="-30" cy="5" rx="6" ry="18" 
+             fill="#8fbc8f" 
+             transform="rotate(-45 -30 5)"/>
+    
+    <!-- Leaf 3 -->
+    <ellipse cx="-20" cy="15" rx="11" ry="24" 
+             fill="#6b8e23" 
+             transform="rotate(-60 -20 15)"/>
+    <ellipse cx="-15" cy="20" rx="7" ry="19" 
+             fill="#8fbc8f" 
+             transform="rotate(-60 -15 20)"/>
+  </g>
+  
+  <!-- Right olive leaves -->
+  <g transform="translate(100, 100)">
+    <!-- Leaf 4 -->
+    <ellipse cx="25" cy="-15" rx="12" ry="25" 
+             fill="#6b8e23" 
+             transform="rotate(30 25 -15)"/>
+    <ellipse cx="20" cy="-10" rx="8" ry="20" 
+             fill="#8fbc8f" 
+             transform="rotate(30 20 -10)"/>
+    
+    <!-- Leaf 5 -->
+    <ellipse cx="35" cy="0" rx="10" ry="22" 
+             fill="#6b8e23" 
+             transform="rotate(45 35 0)"/>
+    <ellipse cx="30" cy="5" rx="6" ry="18" 
+             fill="#8fbc8f" 
+             transform="rotate(45 30 5)"/>
+    
+    <!-- Leaf 6 -->
+    <ellipse cx="20" cy="15" rx="11" ry="24" 
+             fill="#6b8e23" 
+             transform="rotate(60 20 15)"/>
+    <ellipse cx="15" cy="20" rx="7" ry="19" 
+             fill="#8fbc8f" 
+             transform="rotate(60 15 20)"/>
+  </g>
+  
+  <!-- Olive fruits -->
+  <g transform="translate(100, 100)">
+    <!-- Left olives -->
+    <ellipse cx="-15" cy="5" rx="3" ry="6" fill="#556b2f"/>
+    <ellipse cx="-10" cy="10" rx="2.5" ry="5" fill="#6b8e23"/>
+    
+    <!-- Right olives -->
+    <ellipse cx="15" cy="5" rx="3" ry="6" fill="#556b2f"/>
+    <ellipse cx="10" cy="10" rx="2.5" ry="5" fill="#6b8e23"/>
+  </g>
+  
+  <!-- Center text area -->
+  <circle cx="100" cy="100" r="35" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  
+  <!-- Optional: Add "Z" in the center -->
+  <text x="100" y="110" 
+        font-family="Arial, sans-serif" 
+        font-size="24" 
+        font-weight="bold" 
+        text-anchor="middle" 
+        fill="#f5f5dc">Z</text>
+</svg>

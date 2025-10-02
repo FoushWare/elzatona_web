@@ -17,14 +17,14 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   echo "🔄 Running pre-push checks on development branch..."
   echo ""
   
-  # Step 1: Build check
+  # Step 1: Build check (Nx monorepo)
   echo "🏗️  STEP 1: Running build validation..."
-  echo "   📦 Executing: npm run build"
+  echo "   📦 Executing: npx nx build web (Nx monorepo)"
   echo "   ⏳ This may take a moment..."
   echo ""
   
   # Run build with detailed output
-  npm run build
+  npx nx build web
   BUILD_EXIT_CODE=$?
   
   echo ""
@@ -42,15 +42,31 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   fi
   echo ""
   
-  # Step 2: Clean up build files after successful build
+  # Step 2: Clean up build files after successful build (Nx structure)
   echo "🧹 STEP 2: Cleaning build files..."
   
-  echo "   🗑️  Removing .next directory..."
-  if [ -d ".next" ]; then
-    rm -rf .next
-    echo "   ✅ .next directory removed"
+  echo "   🗑️  Removing apps/web/.next directory..."
+  if [ -d "apps/web/.next" ]; then
+    rm -rf apps/web/.next
+    echo "   ✅ apps/web/.next directory removed"
   else
-    echo "   ℹ️  .next directory not found (already clean)"
+    echo "   ℹ️  apps/web/.next directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing # Admin .next now in apps/web/.next directory..."
+  if [ -d "# Admin .next now in apps/web/.next" ]; then
+    rm -rf # Admin .next now in apps/web/.next
+    echo "   ✅ # Admin .next now in apps/web/.next directory removed"
+  else
+    echo "   ℹ️  # Admin .next now in apps/web/.next directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing dist directory..."
+  if [ -d "dist" ]; then
+    rm -rf dist
+    echo "   ✅ dist directory removed"
+  else
+    echo "   ℹ️  dist directory not found (already clean)"
   fi
   
   echo "   🗑️  Removing build directory..."

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Olive branch gradient -->
+    <linearGradient id="oliveBranchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d5016;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a3009;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Olive fruit gradient -->
+    <linearGradient id="oliveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6b8e23;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#556b2f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2f4f2f;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Olive highlight -->
+    <radialGradient id="oliveHighlight" cx="30%" cy="20%" r="40%">
+      <stop offset="0%" style="stop-color:#8fbc8f;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#6b8e23;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- Background shape gradient -->
+    <linearGradient id="bgShapeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0f8e8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e8f5e8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background shape (map-like contour) -->
+  <path d="M10 20 Q15 10 25 12 Q35 8 45 15 Q55 12 65 18 Q70 30 65 40 Q60 50 45 55 Q35 60 25 60 Q15 65 8 60 Q2 50 5 35 Q8 25 10 20 Z" 
+        fill="url(#bgShapeGrad)" 
+        stroke="#d4e6d4" 
+        stroke-width="0.5"/>
+  
+  <!-- Olive branch -->
+  <path d="M15 25 Q25 20 35 25 Q45 22 55 28 Q65 25 75 30" 
+        stroke="url(#oliveBranchGrad)" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <!-- Left leaf -->
+  <path d="M20 22 Q15 18 18 15 Q20 12 25 15 Q22 18 20 22" 
+        fill="url(#oliveBranchGrad)" 
+        stroke="#1a3009" 
+        stroke-width="0.5"/>
+  
+  <!-- Right leaf -->
+  <path d="M70 28 Q65 25 68 22 Q70 20 75 22 Q72 25 70 28" 
+        fill="url(#oliveBranchGrad)" 
+        stroke="#1a3009" 
+        stroke-width="0.5"/>
+  
+  <!-- First olive -->
+  <ellipse cx="30" cy="28" rx="4" ry="6" 
+           fill="url(#oliveGrad)" 
+           stroke="#2d5016" 
+           stroke-width="1"/>
+  <ellipse cx="28" cy="26" rx="2" ry="3" 
+           fill="url(#oliveHighlight)"/>
+  
+  <!-- Second olive -->
+  <ellipse cx="70" cy="33" rx="4" ry="6" 
+           fill="url(#oliveGrad)" 
+           stroke="#2d5016" 
+           stroke-width="1"/>
+  <ellipse cx="68" cy="31" rx="2" ry="3" 
+           fill="url(#oliveHighlight)"/>
+</svg>

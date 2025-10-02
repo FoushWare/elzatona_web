@@ -1,0 +1,508 @@
+{
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "notFound": "غير موجود",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "search": "بحث",
+    "filter": "تصفية",
+    "all": "الكل",
+    "view": "عرض",
+    "learnMore": "اعرف المزيد",
+    "startLearning": "ابدأ التعلم",
+    "continue": "استمر",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "add": "إضافة",
+    "remove": "إزالة",
+    "close": "إغلاق",
+    "open": "فتح",
+    "submit": "إرسال",
+    "reset": "إعادة تعيين",
+    "clear": "مسح",
+    "done": "تم",
+    "pending": "في الانتظار",
+    "inProgress": "قيد التنفيذ",
+    "completed": "مكتمل",
+    "beginner": "مبتدئ",
+    "intermediate": "متوسط",
+    "advanced": "متقدم",
+    "easy": "سهل",
+    "medium": "متوسط",
+    "hard": "صعب",
+    "comparison": "مقارنة",
+    "features": "الميزات",
+    "hours": "ساعات",
+    "viewDetails": "عرض التفاصيل"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "challenges": "التحديات",
+    "resources": "الموارد",
+    "learningPaths": "مسارات التعلم",
+    "questions": "أسئلة التدريب",
+    "internalResources": "الموارد الداخلية",
+    "progress": "التقدم",
+    "language": "اللغة",
+    "english": "English",
+    "arabic": "العربية"
+  },
+  "home": {
+    "title": "GreatFrontendHub",
+    "subtitle": "إتقان تطوير الواجهة الأمامية",
+    "description": "منصتك الشاملة لتعلم تطوير الواجهة الأمامية مع تحديات تفاعلية وموارد وأسئلة تدريبية.",
+    "heroTitle": "إتقان تطوير الواجهة الأمامية",
+    "heroSubtitle": "تحديات تفاعلية وموارد شاملة وأسئلة تدريبية من العالم الحقيقي لرفع مستوى مهاراتك.",
+    "getStarted": "ابدأ الآن",
+    "exploreChallenges": "استكشف التحديات",
+    "browseResources": "تصفح الموارد",
+    "viewLearningPaths": "عرض مسارات التعلم",
+    "tryQuestions": "جرب أسئلة التدريب",
+    "trackProgress": "تتبع تقدمك",
+    "features": {
+      "title": "لماذا تختار GreatFrontendHub؟",
+      "interactive": {
+        "title": "تحديات تفاعلية",
+        "description": "تحديات برمجة عملية مع تغذية راجعة فورية وحلول."
+      },
+      "comprehensive": {
+        "title": "موارد شاملة",
+        "description": "مواد تعليمية مختارة من أفضل المصادر في الصناعة."
+      },
+      "practice": {
+        "title": "أسئلة التدريب",
+        "description": "أسئلة بأسلوب المقابلة للتحضير للتقييمات التقنية."
+      },
+      "progress": {
+        "title": "تتبع التقدم",
+        "description": "راقب رحلة تعلمك مع تحليلات مفصلة ورؤى."
+      }
+    }
+  },
+  "challenges": {
+    "title": "تحديات البرمجة",
+    "subtitle": "شحذ مهاراتك مع تحديات برمجة تفاعلية",
+    "description": "تدرب على سيناريوهات من العالم الحقيقي واحصل على تغذية راجعة فورية لحلولك.",
+    "searchPlaceholder": "البحث في التحديات...",
+    "filterByDifficulty": "تصفية حسب الصعوبة",
+    "filterByCategory": "تصفية حسب الفئة",
+    "sortBy": "ترتيب حسب",
+    "newest": "الأحدث",
+    "oldest": "الأقدم",
+    "difficulty": "الصعوبة",
+    "popularity": "الشعبية",
+    "stats": {
+      "totalChallenges": "إجمالي التحديات",
+      "completed": "مكتمل",
+      "inProgress": "قيد التنفيذ",
+      "filteredResults": "النتائج المصفاة"
+    },
+    "noResults": "لم يتم العثور على تحديات",
+    "noResultsDescription": "حاول تعديل معايير البحث أو المرشحات للعثور على ما تبحث عنه."
+  },
+  "resources": {
+    "title": "الموارد التعليمية",
+    "subtitle": "موارد مختارة لتسريع تعلمك",
+    "description": "اكتشف أفضل البرامج التعليمية والمقالات والدورات من جميع أنحاء الويب.",
+    "searchPlaceholder": "البحث بالعنوان أو الوصف أو العلامات...",
+    "browseByCategory": "تصفح حسب الفئة",
+    "filterByCategory": "تصفية حسب الفئة",
+    "filterByDifficulty": "تصفية حسب الصعوبة",
+    "stats": {
+      "totalResources": "إجمالي الموارد",
+      "filteredResults": "النتائج المصفاة",
+      "page": "الصفحة",
+      "of": "من"
+    },
+    "noResults": "لم يتم العثور على موارد",
+    "noResultsDescription": "حاول تعديل معايير البحث أو المرشحات للعثور على ما تبحث عنه.",
+    "promoteInternal": {
+      "title": "تريد تعليماً أكثر تنظيماً؟",
+      "description": "تحقق من مواردنا الداخلية مع أسئلة تفاعلية وشروحات مفصلة.",
+      "cta": "استكشف الموارد الداخلية"
+    }
+  },
+  "internalResources": {
+    "title": "الموارد التعليمية الداخلية",
+    "subtitle": "أتقن تطوير الواجهة الأمامية مع مواردنا التعليمية الشاملة والمكتفية ذاتياً",
+    "description": "لا حاجة لروابط خارجية - كل ما تحتاجه موجود هنا.",
+    "searchPlaceholder": "البحث بالعنوان أو الوصف أو العلامات...",
+    "filterByCategory": "تصفية حسب الفئة",
+    "filterByDifficulty": "تصفية حسب الصعوبة",
+    "stats": {
+      "totalResources": "إجمالي الموارد",
+      "totalQuestions": "إجمالي الأسئلة",
+      "totalMinutes": "إجمالي الدقائق",
+      "filteredResults": "النتائج المصفاة",
+      "page": "الصفحة",
+      "of": "من",
+      "showing": "عرض",
+      "to": "إلى",
+      "of": "من",
+      "resources": "موارد"
+    },
+    "noResults": "لم يتم العثور على موارد",
+    "noResultsDescription": "حاول تعديل معايير البحث أو المرشحات للعثور على ما تبحث عنه.",
+    "cta": {
+      "title": "مستعد لإتقان تطوير الواجهة الأمامية؟",
+      "description": "ابدأ بمواردنا التعليمية الشاملة وتتبع تقدمك أثناء التعلم.",
+      "viewProgress": "عرض التقدم",
+      "learnMore": "اعرف المزيد"
+    }
+  },
+  "questions": {
+    "title": "أسئلة التدريب",
+    "subtitle": "استعد للمقابلات التقنية مع أسئلة من العالم الحقيقي",
+    "description": "تدرب مع أسئلة محلولة من قبل محاورين سابقين من أفضل شركات التكنولوجيا.",
+    "features": {
+      "solvedByExInterviewers": "محلولة من قبل محاورين سابقين",
+      "testCases": "حالات اختبار",
+      "codeInBrowser": "برمجة في المتصفح"
+    },
+    "searchPlaceholder": "البحث في الأسئلة...",
+    "sortBy": "ترتيب حسب",
+    "newest": "الأحدث",
+    "oldest": "الأقدم",
+    "difficulty": "الصعوبة",
+    "popularity": "الشعبية",
+    "tabs": {
+      "coding": "البرمجة",
+      "systemDesign": "تصميم النظام",
+      "quiz": "اختبار"
+    },
+    "subCategories": {
+      "javascriptFunctions": "دوال JavaScript",
+      "userInterfaceCoding": "برمجة واجهة المستخدم",
+      "algorithmicCoding": "البرمجة الخوارزمية"
+    },
+    "stats": {
+      "totalQuestions": "إجمالي الأسئلة",
+      "completed": "مكتمل",
+      "filteredResults": "النتائج المصفاة"
+    },
+    "filters": {
+      "topics": "المواضيع",
+      "company": "الشركة"
+    },
+    "noResults": "لم يتم العثور على أسئلة",
+    "noResultsDescription": "حاول تعديل معايير البحث أو المرشحات للعثور على ما تبحث عنه."
+  },
+  "learningPaths": {
+    "title": "مسارات التعلم",
+    "subtitle": "رحلات تعليمية منظمة لمستويات مهارة مختلفة",
+    "description": "اتبع مسارات مختارة مصممة لانتقالك من مبتدئ إلى مطور واجهة أمامية متقدم.",
+    "selectDifficulty": "اختر مستوى صعوبتك:",
+    "beginner": "مبتدئ",
+    "intermediate": "متوسط",
+    "advanced": "متقدم",
+    "pathDescription": "سيوجهك هذا المسار من خلال أساسيات تطوير الواجهة الأمامية، بدءاً من أساسيات HTML و CSS، ثم الانتقال إلى أساسيات JavaScript، وأخيراً تقديمك للإطارات الحديثة.",
+    "estimatedTime": "الوقت المقدر",
+    "topics": "المواضيع المغطاة",
+    "resources": "الموارد",
+    "startPath": "ابدأ هذا المسار",
+    "continuePath": "استمر في المسار",
+    "completePath": "أكمل المسار"
+  },
+  "progress": {
+    "title": "التقدم في التعلم",
+    "subtitle": "تتبع رحلة تعلمك وإنجازاتك",
+    "description": "راقب تقدمك في جميع الأنشطة التعليمية وحدد أهدافاً للتحسين المستمر.",
+    "tabs": {
+      "overview": "نظرة عامة",
+      "learningItems": "عناصر التعلم",
+      "goals": "الأهداف",
+      "recommendations": "التوصيات"
+    },
+    "stats": {
+      "totalItems": "إجمالي العناصر",
+      "completed": "مكتمل",
+      "inProgress": "قيد التنفيذ",
+      "pending": "في الانتظار",
+      "completionRate": "معدل الإكمال",
+      "totalTime": "إجمالي الوقت المستغرق",
+      "streak": "التسلسل الحالي"
+    },
+    "goals": {
+      "title": "أهداف التعلم",
+      "addGoal": "إضافة هدف جديد",
+      "goalTitle": "عنوان الهدف",
+      "goalDescription": "وصف الهدف",
+      "targetDate": "التاريخ المستهدف",
+      "priority": "الأولوية",
+      "high": "عالية",
+      "medium": "متوسطة",
+      "low": "منخفضة"
+    },
+    "recommendations": {
+      "title": "الخطوات التالية الموصى بها",
+      "basedOnProgress": "بناءً على تقدمك، نوصي بـ:",
+      "continueCurrent": "استمر في مسار التعلم الحالي",
+      "tryNewChallenge": "جرب تحدياً جديداً",
+      "reviewBasics": "راجع المفاهيم الأساسية"
+    }
+  },
+  "questionDetail": {
+    "question": "السؤال",
+    "yourAnswer": "إجابتك",
+    "correctAnswer": "الإجابة الصحيحة",
+    "explanation": "الشرح",
+    "difficulty": "الصعوبة",
+    "category": "الفئة",
+    "tags": "العلامات",
+    "relatedTopics": "المواضيع ذات الصلة",
+    "nextQuestion": "السؤال التالي",
+    "previousQuestion": "السؤال السابق",
+    "submitAnswer": "إرسال الإجابة",
+    "checkAnswer": "تحقق من الإجابة",
+    "score": "النتيجة",
+    "correct": "صحيح!",
+    "incorrect": "خطأ. حاول مرة أخرى!",
+    "questionNotFound": "السؤال غير موجود",
+    "questionNotFoundDescription": "السؤال الذي تبحث عنه غير موجود أو تم إزالته."
+  },
+  "resourceCard": {
+    "estimatedTime": "الوقت المقدر",
+    "questions": "الأسئلة",
+    "difficulty": "الصعوبة",
+    "category": "الفئة",
+    "tags": "العلامات",
+    "viewDetails": "عرض التفاصيل",
+    "startLearning": "ابدأ التعلم"
+  },
+  "pagination": {
+    "previous": "السابق",
+    "next": "التالي",
+    "page": "الصفحة",
+    "of": "من",
+    "showing": "عرض",
+    "to": "إلى",
+    "of": "من",
+    "items": "عناصر"
+  },
+  "studyPlans": {
+    "title": "خطط الدراسة",
+    "subtitle": "مسارات تعليمية منظمة لتحضيرك للمقابلة",
+    "description": "اختر خطة دراسة تناسب جدولك وأهدافك. كل خطة مصممة لمساعدتك في إتقان تطوير الواجهة الأمامية بشكل منهجي.",
+    "oneWeek": {
+      "title": "خطة الأسبوع الواحد المكثفة",
+      "subtitle": "ساعتان يومياً • 14 ساعة إجمالي",
+      "description": "سارع في تحضيرك مع التدريب اليومي المكثف. مثالية للتحضير السريع للمقابلة.",
+      "dailyGoal": "الهدف اليومي",
+      "totalHours": "إجمالي الساعات",
+      "topics": "المواضيع المغطاة",
+      "schedule": "الجدول اليومي",
+      "day1": "اليوم 1: أساسيات HTML و CSS",
+      "day2": "اليوم 2: أساسيات JavaScript",
+      "day3": "اليوم 3: التعامل مع DOM",
+      "day4": "اليوم 4: أساسيات React",
+      "day5": "اليوم 5: إدارة الحالة",
+      "day6": "اليوم 6: تكامل API",
+      "day7": "اليوم 7: تدريب مقابلة وهمية"
+    },
+    "oneMonth": {
+      "title": "خطة الشهر الواحد المتوازنة",
+      "subtitle": "6 ساعات أسبوعياً • 24 ساعة إجمالي",
+      "description": "نهج متوازن مع المفاهيم الأساسية والتمارين العملية. مثالية للتحضير الشامل.",
+      "weeklyGoal": "الهدف الأسبوعي",
+      "totalHours": "إجمالي الساعات",
+      "topics": "المواضيع المغطاة",
+      "schedule": "الجدول الأسبوعي",
+      "week1": "الأسبوع 1: أساسيات الواجهة الأمامية",
+      "week2": "الأسبوع 2: تعمق في JavaScript",
+      "week3": "الأسبوع 3: React والإطارات الحديثة",
+      "week4": "الأسبوع 4: تصميم النظام والتحسين"
+    },
+    "threeMonths": {
+      "title": "خطة الثلاثة أشهر الشاملة",
+      "subtitle": "3 ساعات أسبوعياً • 36 ساعة إجمالي",
+      "description": "تحضير شامل مع تعمق في المواضيع المتقدمة. مثالية للإتقان التام.",
+      "weeklyGoal": "الهدف الأسبوعي",
+      "totalHours": "إجمالي الساعات",
+      "topics": "المواضيع المغطاة",
+      "schedule": "الجدول الشهري",
+      "month1": "الشهر 1: الأساسيات الأساسية",
+      "month2": "الشهر 2: المفاهيم المتقدمة",
+      "month3": "الشهر 3: المواضيع المتخصصة والتدريب"
+    },
+    "features": {
+      "structuredLearning": "مسار تعليمي منظم",
+      "progressTracking": "تتبع التقدم",
+      "practiceExercises": "تمارين التدريب",
+      "mockInterviews": "مقابلات وهمية",
+      "resourceLibrary": "مكتبة الموارد",
+      "communitySupport": "دعم المجتمع"
+    },
+    "startPlan": "ابدأ هذه الخطة",
+    "continuePlan": "استمر في الخطة",
+    "viewProgress": "عرض التقدم",
+    "customizePlan": "تخصيص الخطة"
+  },
+  "preparationGuides": {
+    "title": "أدلة تحضير المقابلة",
+    "subtitle": "موارد استراتيجية لتفوق في مقابلات الواجهة الأمامية",
+    "description": "أدلة شاملة واستراتيجيات طورها محاورون ذوو خبرة وخبراء في الصناعة.",
+    "frontendPlaybook": {
+      "title": "دليل مقابلة الواجهة الأمامية",
+      "description": "دليل شامل لتحضير مقابلة الواجهة الأمامية مع استراتيجيات وتقنيات مثبتة.",
+      "sections": {
+        "overview": "نظرة عامة على المقابلة",
+        "preparation": "استراتيجية التحضير",
+        "technical": "الأسئلة التقنية",
+        "systemDesign": "تصميم النظام",
+        "behavioral": "الأسئلة السلوكية",
+        "mockInterviews": "المقابلات الوهمية"
+      }
+    },
+    "gfe75": {
+      "title": "GFE75 - الأسئلة الأساسية",
+      "description": "قائمة مختارة من 75 سؤالاً مهمة في الواجهة الأمامية تظهر بشكل متكرر في المقابلات.",
+      "categories": {
+        "javascript": "JavaScript (25 سؤال)",
+        "react": "React (20 سؤال)",
+        "css": "CSS (15 سؤال)",
+        "systemDesign": "تصميم النظام (15 سؤال)"
+      }
+    },
+    "blind75": {
+      "title": "Blind75 للواجهة الأمامية",
+      "description": "تكيف أسئلة خوارزمية Blind75 لتطوير الواجهة الأمامية وتصميم النظام.",
+      "categories": {
+        "algorithms": "الخوارزميات (25 سؤال)",
+        "dataStructures": "هياكل البيانات (25 سؤال)",
+        "systemDesign": "تصميم النظام (25 سؤال)"
+      }
+    },
+    "systemDesignPlaybook": {
+      "title": "دليل تصميم نظام الواجهة الأمامية",
+      "description": "دليل شامل لتصميم نظام الواجهة الأمامية مع أنماط البنية وأفضل الممارسات.",
+      "topics": {
+        "architecture": "أنماط البنية",
+        "scalability": "قابلية التوسع",
+        "performance": "الأداء",
+        "security": "الأمان",
+        "testing": "استراتيجيات الاختبار"
+      }
+    }
+  },
+  "questionBank": {
+    "title": "بنك أسئلة التدريب",
+    "subtitle": "500+ سؤال مختار من أفضل شركات التكنولوجيا",
+    "description": "مجموعة شاملة من أسئلة مقابلة الواجهة الأمامية مع حلول وتفسيرات مفصلة.",
+    "stats": {
+      "totalQuestions": "إجمالي الأسئلة",
+      "completed": "مكتمل",
+      "inProgress": "قيد التنفيذ",
+      "accuracy": "معدل الدقة"
+    },
+    "categories": {
+      "javascript": "دوال JavaScript",
+      "ui": "برمجة واجهة المستخدم",
+      "algorithmic": "البرمجة الخوارزمية",
+      "systemDesign": "تصميم النظام",
+      "quiz": "أسئلة الاختبار"
+    },
+    "difficulty": {
+      "easy": "سهل",
+      "medium": "متوسط",
+      "hard": "صعب"
+    },
+    "companies": {
+      "google": "جوجل",
+      "amazon": "أمازون",
+      "apple": "آبل",
+      "microsoft": "مايكروسوفت",
+      "meta": "ميتا",
+      "netflix": "نتفلكس",
+      "airbnb": "إير بي إن بي",
+      "uber": "أوبر"
+    },
+    "topics": {
+      "oop": "البرمجة كائنية التوجه",
+      "accessibility": "إمكانية الوصول",
+      "reactHooks": "React Hooks",
+      "networking": "الشبكات",
+      "array": "التعامل مع المصفوفات",
+      "async": "البرمجة غير المتزامنة",
+      "bfs": "البحث بالعرض",
+      "binary": "العمليات الثنائية",
+      "binarySearch": "البحث الثنائي",
+      "bst": "شجرة البحث الثنائي",
+      "binaryTree": "الشجرة الثنائية",
+      "closure": "الإغلاقات",
+      "dfs": "البحث بالعمق",
+      "dp": "البرمجة الديناميكية",
+      "graph": "خوارزميات الرسم البياني",
+      "greedy": "الخوارزميات الجشعة",
+      "heap": "هيكل بيانات الكومة",
+      "intervals": "مشاكل الفترات",
+      "linkedList": "القائمة المترابطة",
+      "matrix": "عمليات المصفوفة",
+      "queue": "هيكل بيانات الطابور",
+      "recursion": "الاستدعاء الذاتي",
+      "sorting": "خوارزميات الترتيب",
+      "stack": "هيكل بيانات المكدس",
+      "string": "التعامل مع النصوص",
+      "topological": "الترتيب الطوبولوجي",
+      "tree": "هيكل بيانات الشجرة",
+      "trie": "هيكل بيانات Trie",
+      "webApis": "واجهات برمجة الويب"
+    },
+    "filters": {
+      "search": "البحث في الأسئلة...",
+      "sortBy": "ترتيب حسب",
+      "filterBy": "تصفية حسب",
+      "clearFilters": "مسح المرشحات",
+      "applyFilters": "تطبيق المرشحات"
+    },
+    "questionCard": {
+      "difficulty": "الصعوبة",
+      "category": "الفئة",
+      "company": "الشركة",
+      "completionRate": "معدل الإكمال",
+      "estimatedTime": "الوقت المقدر",
+      "startQuestion": "ابدأ السؤال",
+      "viewSolution": "عرض الحل",
+      "markComplete": "تحديد كمكتمل"
+    }
+  },
+  "tasks": {
+    "title": "مهام المشروع",
+    "subtitle": "خريطة طريق التطوير وتتبع التقدم",
+    "description": "تتبع تقدم تطوير ميزات GreatFrontendHub والتحسينات.",
+    "status": {
+      "todo": "للتنفيذ",
+      "inProgress": "قيد التنفيذ",
+      "done": "مكتمل",
+      "pending": "في الانتظار",
+      "cancelled": "ملغي"
+    },
+    "priority": {
+      "high": "عالية",
+      "medium": "متوسطة",
+      "low": "منخفضة"
+    },
+    "epics": {
+      "projectFoundation": "أساسيات المشروع",
+      "uiUxNavigation": "واجهة المستخدم والتنقل",
+      "challengeLibrary": "مكتبة التحديات",
+      "inBrowserCodeEditor": "محرر الكود في المتصفح",
+      "solutionsExplanations": "الحلول والتفسيرات",
+      "deploymentMonitoring": "النشر والمراقبة",
+      "openAccess": "الوصول المفتوح",
+      "learningResources": "الموارد التعليمية",
+      "coreFeatures": "الميزات الأساسية",
+      "contentCreation": "إنشاء المحتوى",
+      "learningManagement": "إدارة التعلم"
+    },
+    "sprints": {
+      "sprint1": "السباق 1",
+      "sprint2": "السباق 2",
+      "sprint3": "السباق 3",
+      "sprint4": "السباق 4"
+    }
+  }
+}

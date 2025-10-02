@@ -1,0 +1,1367 @@
+[
+  {
+    "id": "js-q-126",
+    "title": "What's the output of Intl.NumberFormat with unit and currency?",
+    "content": "What's the output?\n\n```javascript\nfunction getFine(speed, amount) {\n  const formattedSpeed = new Intl.NumberFormat('en-US', {\n    style: 'unit',\n    unit: 'mile-per-hour'\n  }).format(speed);\n  const formattedAmount = new Intl.NumberFormat('en-US', {\n    style: 'currency',\n    currency: 'USD'\n  }).format(amount);\n  return `The driver drove ${formattedSpeed} and has to pay ${formattedAmount}`;\n}\nconsole.log(getFine(130, 300))\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Internationalization (i18n)",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "intl", "numberformat", "i18n", "formatting"],
+    "explanation": "`Intl.NumberFormat` with `unit: 'mile-per-hour'` formats `130` as `'130 mph'`. With `currency: 'USD'`, `300` becomes `'$300.00'`.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`The driver drove 130 and has to pay 300`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`The driver drove 130 mph and has to pay $300.00`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "`The driver drove undefined and has to pay undefined`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`The driver drove 130.00 and has to pay 300.00`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-127",
+    "title": "What's the output of object destructuring assignment to array index?",
+    "content": "What's the output?\n\n```javascript\nconst spookyItems = ['👻', '🎃', '🕸'];\n({ item: spookyItems[3] } = { item: '💀' });\nconsole.log(spookyItems);\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Destructuring",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "destructuring", "assignment", "arrays"],
+    "explanation": "Destructuring assignment can target array indices. `{ item: spookyItems[3] } = { item: '💀' }` assigns `'💀'` to `spookyItems[3]`, mutating the array.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`[\"👻\", \"🎃\", \"🕸\"]`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`[\"👻\", \"🎃\", \"🕸\", \"💀\"]`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "`[\"👻\", \"🎃\", \"🕸\", { item: \"💀\" }]`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`[\"👻\", \"🎃\", \"🕸\", \"[object Object]\"]`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-128",
+    "title": "What's the output of Number.isNaN vs isNaN?",
+    "content": "What's the output?\n\n```javascript\nconst name = 'Lydia Hallie';\nconst age = 21;\nconsole.log(Number.isNaN(name));\nconsole.log(Number.isNaN(age));\nconsole.log(isNaN(name));\nconsole.log(isNaN(age));\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Type System",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "isnan", "number", "coercion", "type-checking"],
+    "explanation": "`Number.isNaN` only returns `true` for actual `NaN` values. `isNaN` coerces the value first, so non-numbers like strings return `true`.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`true` `false` `true` `false`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`true` `false` `false` `false`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`false` `false` `true` `false`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`false` `true` `false` `true`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-129",
+    "title": "What's the output with TDZ inside function?",
+    "content": "What's the output?\n\n```javascript\nconst randomValue = 21;\nfunction getInfo() {\n  console.log(typeof randomValue);\n  const randomValue = 'Lydia Hallie';\n}\ngetInfo();\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Variables & Scope",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "let", "const", "temporal-dead-zone", "scope"],
+    "explanation": "The `randomValue` inside `getInfo` is block-scoped and hoisted but not initialized. Accessing it before declaration throws `ReferenceError` due to TDZ.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`\"number\"`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`\"string\"`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`undefined`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`ReferenceError`",
+        "isCorrect": true
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-130",
+    "title": "What's the output with async/await, try/catch, and finally?",
+    "content": "What's the output?\n\n```javascript\nconst myPromise = Promise.resolve('Woah some cool data');\n(async () => {\n  try {\n    console.log(await myPromise);\n  } catch {\n    throw new Error(`Oops didn't work`);\n  } finally {\n    console.log('Oh finally!');\n  }\n})();\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Async/Await",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "javascript",
+      "async",
+      "await",
+      "try-catch",
+      "finally",
+      "promises"
+    ],
+    "explanation": "`finally` always runs, regardless of success or failure. The promise resolves, so `'Woah some cool data'` and `'Oh finally!'` are logged.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`Woah some cool data`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`Oh finally!`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`Woah some cool data` `Oh finally!`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`Oops didn't work` `Oh finally!`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-131",
+    "title": "What's the output of Array.flat(1)?",
+    "content": "What's the output?\n\n```javascript\nconst emojis = ['🥑', ['✨', '✨', ['🍕', '🍕']]];\nconsole.log(emojis.flat(1));\n```",
+    "type": "multiple-choice",
+    "category": "Data Structures & Algorithms",
+    "topic": "Arrays",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "arrays", "flat", "methods"],
+    "explanation": "`flat(1)` flattens only one level deep. The innermost array `['🍕', '🍕']` remains nested.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "`['🥑', ['✨', '✨', ['🍕', '🍕']]]`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`['🥑', '✨', '✨', ['🍕', '🍕']]`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "`['🥑', ['✨', '✨', '🍕', '🍕']]`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`['🥑', '✨', '✨', '🍕', '🍕']`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-132",
+    "title": "What's the output when assigning object reference?",
+    "content": "What's the output?\n\n```javascript\nclass Counter {\n  constructor() {\n    this.count = 0;\n  }\n  increment() {\n    this.count++;\n  }\n}\nconst counterOne = new Counter();\ncounterOne.increment();\ncounterOne.increment();\nconst counterTwo = counterOne;\ncounterTwo.increment();\nconsole.log(counterOne.count);\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Objects",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "objects", "references", "classes"],
+    "explanation": "`counterTwo` is a reference to the same object as `counterOne`. Modifying via `counterTwo` affects `counterOne`.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`0`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`1`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`2`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`3`",
+        "isCorrect": true
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-133",
+    "title": "What's the output with microtasks and macrotasks ordering?",
+    "content": "What's the output?\n\n```javascript\nconst myPromise = Promise.resolve(Promise.resolve('Promise'));\nfunction funcOne() {\n  setTimeout(() => console.log('Timeout 1!'), 0);\n  myPromise.then(res => res).then(res => console.log(`${res} 1!`));\n  console.log('Last line 1!');\n}\nasync function funcTwo() {\n  const res = await myPromise;\n  console.log(`${res} 2!`)\n  setTimeout(() => console.log('Timeout 2!'), 0);\n  console.log('Last line 2!');\n}\nfuncOne();\nfuncTwo();\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Event Loop",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "advanced",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "javascript",
+      "eventloop",
+      "microtasks",
+      "macrotasks",
+      "promises",
+      "settimeout"
+    ],
+    "explanation": "Sync logs first (`Last line 1!`, `Promise 2!`, `Last line 2!`). Then microtasks (`Promise 1!`). Finally macrotasks (`Timeout 1!`, `Timeout 2!`).",
+    "points": 9,
+    "options": [
+      {
+        "id": "a",
+        "text": "`Promise 1! Last line 1! Promise 2! Last line 2! Timeout 1! Timeout 2!`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`Last line 1! Timeout 1! Promise 1! Last line 2! Promise2! Timeout 2! `",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`Last line 1! Promise 2! Last line 2! Promise 1! Timeout 1! Timeout 2!`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`Timeout 1! Promise 1! Last line 1! Promise 2! Timeout 2! Last line 2!`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-134",
+    "title": "How to invoke default export with import * as?",
+    "content": "How can we invoke `sum` in `sum.js` from `index.js`?\n\n```javascript\n// sum.js\nexport default function sum(x) {\n  return x + x;\n}\n// index.js\nimport * as sum from './sum';\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Modules (ESM, CommonJS)",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "esm", "import", "export", "default"],
+    "explanation": "`import * as` bundles all exports into an object. Default export is accessible via `.default`.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`sum(4)`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`sum.sum(4)`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`sum.default(4)`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`Default aren't imported with *`, only named exports",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-135",
+    "title": "What's the output with Proxy set and get traps?",
+    "content": "What's the output?\n\n```javascript\nconst handler = {\n  set: () => console.log('Added a new property!'),\n  get: () => console.log('Accessed a property!'),\n};\nconst person = new Proxy({}, handler);\nperson.name = 'Lydia';\nperson.name;\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Proxy",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "advanced",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "proxy", "metaprogramming", "traps"],
+    "explanation": "Proxy `set` trap triggers on assignment, `get` trap on property access. Both log messages.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "`Added a new property!`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`Accessed a property!`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`Added a new property!` `Accessed a property!`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`Nothing gets logged`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-136",
+    "title": "Which modifies object after Object.seal?",
+    "content": "Which of the following will modify the `person` object?\n\n```javascript\nconst person = { name: 'Lydia Hallie' };\nObject.seal(person);\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Objects",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "object", "seal", "immutability"],
+    "explanation": "`Object.seal` prevents adding/removing properties but allows modifying existing property values.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`person.name = \"Evan Bacon\"`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "`person.age = 21`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`delete person.name`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`Object.assign(person, { age: 21 })`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-137",
+    "title": "Which modifies object after Object.freeze?",
+    "content": "Which of the following will modify the `person` object?\n\n```javascript\nconst person = {\n  name: 'Lydia Hallie',\n  address: {\n    street: '100 Main St',\n  },\n};\nObject.freeze(person);\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Objects",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "javascript",
+      "object",
+      "freeze",
+      "shallow-freeze",
+      "immutability"
+    ],
+    "explanation": "`Object.freeze` is shallow. Nested objects like `address` can still be modified.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`person.name = \"Evan Bacon\"`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`delete person.address`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`person.address.street = \"101 Main St\"`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`person.pet = { name: \"Mara\" }`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-138",
+    "title": "What's the output with default parameter referencing another?",
+    "content": "What's the output?\n\n```javascript\nconst add = x => x + x;\nfunction myFunc(num = 2, value = add(num)) {\n  console.log(num, value);\n}\nmyFunc();\nmyFunc(3);\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Functions",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "functions", "default-parameters", "arguments"],
+    "explanation": "Default parameters are evaluated at call time. First call: `num=2`, `value=add(2)=4`. Second: `num=3`, `value=add(3)=6`.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`2` `4` and `3` `6`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "`2` `NaN` and `3` `NaN`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`2` `Error` and `3` `6`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`2` `4` and `3` `Error`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-139",
+    "title": "What's the output accessing private class field?",
+    "content": "What's the output?\n\n```javascript\nclass Counter {\n  #number = 10\n  increment() {\n    this.#number++\n  }\n  getNum() {\n    return this.#number\n  }\n}\nconst counter = new Counter()\ncounter.increment()\nconsole.log(counter.#number)\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Classes",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "classes", "private-fields", "syntaxerror"],
+    "explanation": "Private fields (prefixed with `#`) cannot be accessed outside the class. Attempting to do so throws a `SyntaxError`.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`10`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`11`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`undefined`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`SyntaxError`",
+        "isCorrect": true
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-140",
+    "title": "What's missing to yield nested generator values?",
+    "content": "What's missing?\n\n```javascript\nconst teams = [\n  { name: 'Team 1', members: ['Paul', 'Lisa'] },\n  { name: 'Team 2', members: ['Laura', 'Tim'] },\n];\nfunction* getMembers(members) {\n  for (let i = 0; i < members.length; i++) {\n    yield members[i];\n  }\n}\nfunction* getTeams(teams) {\n  for (let i = 0; i < teams.length; i++) {\n    // ✨ SOMETHING IS MISSING HERE ✨\n  }\n}\nconst obj = getTeams(teams);\nobj.next(); // { value: \"Paul\", done: false }\nobj.next(); // { value: \"Lisa\", done: false }\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Generators",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "advanced",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "generators", "yield-star", "delegation"],
+    "explanation": "`yield*` delegates to another generator or iterable, yielding its values directly.",
+    "points": 8,
+    "options": [
+      {
+        "id": "a",
+        "text": "`yield getMembers(teams[i].members)`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`yield* getMembers(teams[i].members)`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "`return getMembers(teams[i].members)`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`return yield getMembers(teams[i].members)`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-141",
+    "title": "What's the output with mutable default parameter?",
+    "content": "What's the output?\n\n```javascript\nconst person = {\n  name: 'Lydia Hallie',\n  hobbies: ['coding'],\n};\nfunction addHobby(hobby, hobbies = person.hobbies) {\n  hobbies.push(hobby);\n  return hobbies;\n}\naddHobby('running', []);\naddHobby('dancing');\naddHobby('baking', person.hobbies);\nconsole.log(person.hobbies);\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Functions",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "javascript",
+      "functions",
+      "default-parameters",
+      "mutation",
+      "side-effects"
+    ],
+    "explanation": "Second and third calls use the same `person.hobbies` array reference, so `'dancing'` and `'baking'` are added to it.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`[\"coding\"]`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`[\"coding\", \"dancing\"]`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`[\"coding\", \"dancing\", \"baking\"]`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`[\"coding\", \"running\", \"dancing\", \"baking\"]`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-142",
+    "title": "What's the output of class inheritance with super()?",
+    "content": "What's the output?\n\n```javascript\nclass Bird {\n  constructor() {\n    console.log(\"I'm a bird. 🦢\");\n  }\n}\nclass Flamingo extends Bird {\n  constructor() {\n    console.log(\"I'm pink. 🌸\");\n    super();\n  }\n}\nconst pet = new Flamingo();\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Classes",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "classes", "inheritance", "super", "constructors"],
+    "explanation": "Child constructor runs first (`I'm pink`), then `super()` calls parent constructor (`I'm a bird`).",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`I'm pink. 🌸`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`I'm pink. 🌸` `I'm a bird. 🦢`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "`I'm a bird. 🦢` `I'm pink. 🌸`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`Nothing, we didn't call any method`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-143",
+    "title": "Which option results in an error with const array?",
+    "content": "Which of the options result(s) in an error?\n\n```javascript\nconst emojis = ['🎄', '🎅🏼', '🎁', '⭐'];\n/* 1 */ emojis.push('🦌');\n/* 2 */ emojis.splice(0, 2);\n/* 3 */ emojis = [...emojis, '🥂'];\n/* 4 */ emojis.length = 0;\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Variables & Scope",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "const", "arrays", "mutability", "reassignment"],
+    "explanation": "`const` prevents reassignment (`emojis = ...`), but allows mutation of the array itself.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "`1`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`1 and 2`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`3 and 4`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`3`",
+        "isCorrect": true
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-144",
+    "title": "What to add to make object iterable with [...person]?",
+    "content": "What do we need to add to the `person` object to get `[\"Lydia Hallie\", 21]` as the output of `[...person]`?\n\n```javascript\nconst person = {\n  name: \"Lydia Hallie\",\n  age: 21\n}\n[...person] // [\"Lydia Hallie\", 21]\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Iterators",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "advanced",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "iterable", "symbol", "iterator", "generator"],
+    "explanation": "Objects aren't iterable by default. Adding `[Symbol.iterator]` that yields `Object.values(this)` makes it work.",
+    "points": 8,
+    "options": [
+      {
+        "id": "a",
+        "text": "`Nothing, object are iterable by default`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`*[Symbol.iterator]() { for (let x in this) yield* this[x] }`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`*[Symbol.iterator]() { yield* Object.values(this) }`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`*[Symbol.iterator]() { for (let x in this) yield this }`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-145",
+    "title": "What's the output of forEach with falsy check?",
+    "content": "What's the output?\n\n```javascript\nlet count = 0;\nconst nums = [0, 1, 2, 3];\nnums.forEach(num => {\n\tif (num) count += 1\n})\nconsole.log(count)\n```",
+    "type": "multiple-choice",
+    "category": "Data Structures & Algorithms",
+    "topic": "Arrays",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "arrays", "foreach", "falsy", "truthy"],
+    "explanation": "`0` is falsy, so skipped. `1`, `2`, `3` are truthy → `count = 3`.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "`1`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`2`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`3`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`4`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-146",
+    "title": "What's the output with optional chaining on nested arrays?",
+    "content": "What's the output?\n\n```javascript\nfunction getFruit(fruits) {\n\tconsole.log(fruits?.[1]?.[1])\n}\ngetFruit([['🍊', '🍌'], ['🍍']])\ngetFruit()\ngetFruit([['🍍'], ['🍊', '🍌']])\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Nullish Coalescing & Optional Chaining",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "optional-chaining", "arrays", "nullish"],
+    "explanation": "First: `['🍍'][1]` → `undefined`. Second: `fruits` is `undefined` → `undefined`. Third: `['🍊','🍌'][1]` → `'🍌'`.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`null`, `undefined`, 🍌",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`[]`, `null`, 🍌",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`[]`, `[]`, 🍌",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`undefined`, `undefined`, 🍌",
+        "isCorrect": true
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-147",
+    "title": "What's the output with separate class instances?",
+    "content": "What's the output?\n\n```javascript\nclass Calc {\n\tconstructor() {\n\t\tthis.count = 0 \n\t}\n\tincrease() {\n\t\tthis.count++\n\t}\n}\nconst calc = new Calc()\nnew Calc().increase()\nconsole.log(calc.count)\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Classes",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "classes", "instances", "state"],
+    "explanation": "`new Calc().increase()` creates a separate instance. `calc.count` remains `0`.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "`0`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "`1`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`undefined`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`ReferenceError`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-148",
+    "title": "What's the output of object reference equality?",
+    "content": "What's the output?\n\n```javascript\nconst user = {\n\temail: \"e@mail.com\",\n\tpassword: \"12345\"\n}\nconst updateUser = ({ email, password }) => {\n\tif (email) {\n\t\tObject.assign(user, { email })\n\t}\n\tif (password) {\n\t\tuser.password = password\n\t}\n\treturn user\n}\nconst updatedUser = updateUser({ email: \"new@email.com\" })\nconsole.log(updatedUser === user)\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Objects",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "javascript",
+      "objects",
+      "references",
+      "equality",
+      "object-assign"
+    ],
+    "explanation": "`updateUser` returns the same `user` object reference, so strict equality is `true`.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`false`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`true`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "`TypeError`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`ReferenceError`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-149",
+    "title": "What's the output with slice, splice, and unshift?",
+    "content": "What's the output?\n\n```javascript\nconst fruit = ['🍌', '🍊', '🍎']\nfruit.slice(0, 1)\nfruit.splice(0, 1)\nfruit.unshift('🍇')\nconsole.log(fruit)\n```",
+    "type": "multiple-choice",
+    "category": "Data Structures & Algorithms",
+    "topic": "Arrays",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "javascript",
+      "arrays",
+      "slice",
+      "splice",
+      "unshift",
+      "mutability"
+    ],
+    "explanation": "`slice` doesn’t mutate. `splice(0,1)` removes `'🍌'`. `unshift('🍇')` adds to front → `['🍇', '🍊', '🍎']`.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`['🍌', '🍊', '🍎']`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`['🍊', '🍎']`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`['🍇', '🍊', '🍎']`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`['🍇', '🍌', '🍊', '🍎']`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-150",
+    "title": "What's the output using objects as Map keys?",
+    "content": "What's the output?\n\n```javascript\nconst animals = {};\nlet dog = { emoji: '🐶' }\nlet cat = { emoji: '🐈' }\nanimals[dog] = { ...dog, name: \"Mara\" }\nanimals[cat] = { ...cat, name: \"Sara\" }\nconsole.log(animals[dog])\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Objects",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "objects", "keys", "coercion", "stringification"],
+    "explanation": "Object keys are stringified to `'[object Object]'`. Both `dog` and `cat` become the same key, so the second assignment overwrites the first.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`{ emoji: \"🐶\", name: \"Mara\" }`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`{ emoji: \"🐈\", name: \"Sara\" }`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "`undefined`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`ReferenceError`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-151",
+    "title": "What's the output with arrow function method and this?",
+    "content": "What's the output?\n\n```javascript\nconst user = {\n\temail: \"my@email.com\",\n\tupdateEmail: email => {\n\t\tthis.email = email\n\t}\n}\nuser.updateEmail(\"new@email.com\")\nconsole.log(user.email)\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "this Keyword",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "this", "arrow-functions", "methods", "scope"],
+    "explanation": "Arrow functions don’t bind `this`. `this.email = email` sets a global property, not `user.email`.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`my@email.com`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "`new@email.com`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`undefined`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`ReferenceError`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-152",
+    "title": "What's the output of Promise.all with one rejected promise?",
+    "content": "What's the output?\n\n```javascript\nconst promise1 = Promise.resolve('First')\nconst promise2 = Promise.resolve('Second')\nconst promise3 = Promise.reject('Third')\nconst promise4 = Promise.resolve('Fourth')\nconst runPromises = async () => {\n\tconst res1 = await Promise.all([promise1, promise2])\n\tconst res2  = await Promise.all([promise3, promise4])\n\treturn [res1, res2]\n}\nrunPromises()\n\t.then(res => console.log(res))\n\t.catch(err => console.log(err))\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Promises",
+    "learningPath": "Advanced JavaScript Concepts",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "promises", "promise-all", "error-handling"],
+    "explanation": "`Promise.all` rejects immediately if any promise rejects. The `catch` block logs the rejection reason `'Third'`.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`[['First', 'Second'], ['Fourth']]`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`[['First', 'Second'], ['Third', 'Fourth']]`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`[['First', 'Second']]`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`'Third'`",
+        "isCorrect": true
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-153",
+    "title": "What method creates object from key-value pairs?",
+    "content": "What should the value of `method` be to log `{ name: \"Lydia\", age: 22 }`? \n\n```javascript\nconst keys = [\"name\", \"age\"]\nconst values = [\"Lydia\", 22]\nconst method = /* ?? */\nObject[method](keys.map((_, i) => {\n\treturn [keys[i], values[i]]\n})) // { name: \"Lydia\", age: 22 }\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Objects",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "objects", "fromentries", "entries", "methods"],
+    "explanation": "`Object.fromEntries` converts an array of `[key, value]` pairs into an object.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`entries`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`values`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`fromEntries`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`forEach`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-154",
+    "title": "What's the output with default object parameter?",
+    "content": "What's the output?\n\n```javascript\nconst createMember = ({ email, address = {}}) => {\n\tconst validEmail = /.+\\@.+\\..+/.test(email)\n\tif (!validEmail) throw new Error(\"Valid email pls\")\n\treturn {\n\t\temail,\n\t\taddress: address ? address : null\n\t}\n}\nconst member = createMember({ email: \"my@email.com\" })\nconsole.log(member)\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Functions",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "javascript",
+      "functions",
+      "destructuring",
+      "default-parameters",
+      "truthy"
+    ],
+    "explanation": "Default `address = {}` is an empty object (truthy), so `address ? address : null` returns `{}`.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`{ email: \"my@email.com\", address: null }`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`{ email: \"my@email.com\" }`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`{ email: \"my@email.com\", address: {} }`",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "`{ email: \"my@email.com\", address: undefined }`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  },
+  {
+    "id": "js-q-155",
+    "title": "What's the output with !typeof comparison?",
+    "content": "What's the output?\n\n```javascript\nlet randomValue = { name: \"Lydia\" }\nrandomValue = 23\nif (!typeof randomValue === \"string\") {\n\tconsole.log(\"It's not a string!\")\n} else {\n\tconsole.log(\"Yay it's a string!\")\n}\n```",
+    "type": "multiple-choice",
+    "category": "JavaScript Core",
+    "topic": "Type System",
+    "learningPath": "JavaScript Fundamentals",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["javascript", "typeof", "operators", "boolean", "precedence"],
+    "explanation": "`typeof randomValue` is `'number'` (truthy). `!typeof randomValue` is `false`. `false === 'string'` is `false`, so `else` runs.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "`It's not a string!`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`Yay it's a string!`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "`TypeError`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`undefined`",
+        "isCorrect": false
+      }
+    ],
+    "metadata": {
+      "source": "javascript-questions-repo",
+      "version": "1.0.0"
+    }
+  }
+]
