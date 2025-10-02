@@ -33,15 +33,43 @@ export default function HomePage() {
     estimatedTime: string;
   } | null>(null);
   const [showAnimation, setShowAnimation] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const [showTour, setShowTour] = useState(false);
+
+  // Helper function for animation classes
+  const getAnimationClass = (delay = '') => {
+    const baseClass = `transition-all duration-1000 ${delay}`;
+    const animatedClass =
+      showAnimation || !isClient
+        ? 'opacity-100 translate-y-0'
+        : 'opacity-0 translate-y-8';
+    return `${baseClass} ${animatedClass}`;
+  };
+
+  // Ensure client-side rendering
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Trigger animation on mount
   useEffect(() => {
+    if (!isClient) return;
+
+    // Ensure DOM is ready and hydration is complete
     const timer = setTimeout(() => {
       setShowAnimation(true);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+    }, 100); // Reduced delay for faster animation
+
+    // Fallback to ensure animation shows even if timer fails
+    const fallbackTimer = setTimeout(() => {
+      setShowAnimation(true);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(fallbackTimer);
+    };
+  }, [isClient]);
 
   // Check if user should see the tour (first visit)
   useEffect(() => {
@@ -204,7 +232,7 @@ export default function HomePage() {
             <div className="relative inline-block">
               <h1
                 className={`hero-title text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-1000 ${
-                  showAnimation
+                  showAnimation || !isClient
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-8'
                 }`}
@@ -236,7 +264,7 @@ export default function HomePage() {
             {/* Animated subtitle */}
             <p
               className={`text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-300 ${
-                showAnimation
+                showAnimation || !isClient
                   ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-8'
               }`}
@@ -248,7 +276,7 @@ export default function HomePage() {
           {/* Animated CTA Button */}
           <div
             className={`mb-12 transition-all duration-1000 delay-500 ${
-              showAnimation
+              showAnimation || !isClient
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
             }`}
