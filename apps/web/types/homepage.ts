@@ -1,0 +1,92 @@
+/**
+ * TypeScript types and interfaces for homepage components
+ */
+
+import { ReactNode } from 'react';
+
+// User types
+export type UserType = 'guided' | 'self-directed' | null;
+
+// Personalized content
+export interface PersonalizedContent {
+  title: string;
+  subtitle: string;
+  cta: string;
+  ctaLink: string;
+  icon: string; // Icon type instead of ReactNode
+  color: 'indigo' | 'purple' | 'green';
+}
+
+// Active plan for guided users
+export interface ActivePlan {
+  id: string;
+  name: string;
+  totalQuestions: number;
+  estimatedTime: string;
+}
+
+// Animation configuration
+export interface AnimationConfig {
+  showAnimation: boolean;
+  isClient: boolean;
+  delay?: string;
+}
+
+// Homepage animation hook return type
+export interface UseHomepageAnimationsReturn {
+  showAnimation: boolean;
+  isClient: boolean;
+  showTour: boolean;
+  handleTourComplete: () => void;
+  handleTourSkip: () => void;
+  startTour: () => void;
+}
+
+// Personalized content hook return type
+export interface UsePersonalizedContentReturn {
+  hasActivePlan: boolean;
+  activePlan: ActivePlan | null;
+  personalizedContent: PersonalizedContent;
+}
+
+// Component props interfaces
+export interface HeroSectionProps {
+  personalizedContent: PersonalizedContent;
+  showAnimation: boolean;
+  isClient: boolean;
+  onStartTour: () => void;
+}
+
+export interface QuickActionsSectionProps {
+  showAnimation: boolean;
+}
+
+export interface UserContentSectionProps {
+  userType: UserType;
+  hasActivePlan: boolean;
+  activePlan: ActivePlan | null;
+  personalizedContent: PersonalizedContent;
+  showAnimation: boolean;
+}
+
+export interface CallToActionSectionProps {
+  showAnimation: boolean;
+}
+
+// Quick action item
+export interface QuickAction {
+  href: string;
+  icon: ReactNode;
+  title: string;
+  description: string;
+  color: string;
+  iconBg: string;
+  delay: number;
+  isHighlighted?: boolean;
+}
+
+// Animation presets
+export type AnimationPreset = keyof typeof import('@/utils/animations').animationPresets;
+
+// Animation delays
+export type AnimationDelay = keyof typeof import('@/utils/animations').animationDelays;

@@ -18,11 +18,11 @@
     "paths": {
       "@/*": ["./*"],
       "@/components/*": ["../../libs/shared/ui/src/components/*"],
-      "@/hooks/*": ["../../libs/shared/hooks/src/*"],
-      "@/contexts/*": ["../../libs/shared/contexts/src/*"],
+      "@/hooks/*": ["../../libs/shared/hooks/*"],
+      "@/contexts/*": ["../../libs/shared/contexts/*"],
       "@/lib/*": ["../../libs/data/firebase/src/*"],
-      "@/types/*": ["../../libs/shared/types/src/*"],
-      "@/utils/*": ["../../libs/shared/utils/src/*"]
+      "@/types/*": ["../../libs/shared/types/*"],
+      "@/utils/*": ["../../libs/shared/utils/*"]
     },
     "plugins": [
       {
