@@ -1,7 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Compass, Brain, ChevronDown } from 'lucide-react';
+import {
+  Compass,
+  Brain,
+  ChevronDown,
+  BookOpen,
+  Sparkles,
+  Target,
+  Zap,
+  Star,
+  Heart,
+  Shield,
+  Lightbulb,
+  GraduationCap,
+  Rocket,
+} from 'lucide-react';
 import { useUserType } from '@/contexts/UserTypeContext';
 
 interface LearningModeSwitcherProps {
@@ -19,14 +33,14 @@ export const LearningModeSwitcher: React.FC<LearningModeSwitcherProps> = ({
       id: 'guided',
       name: 'Guided',
       description: 'Structured learning with clear steps',
-      icon: <Compass className="w-4 h-4" />,
+      icon: <GraduationCap className="w-4 h-4" />,
       color: 'text-blue-600',
     },
     {
       id: 'self-directed',
       name: 'Free Style',
       description: 'Explore and learn at your own pace',
-      icon: <Brain className="w-4 h-4" />,
+      icon: <Rocket className="w-4 h-4" />,
       color: 'text-purple-600',
     },
   ];
@@ -35,7 +49,7 @@ export const LearningModeSwitcher: React.FC<LearningModeSwitcherProps> = ({
     id: 'guided',
     name: 'Select Mode',
     description: 'Choose your learning style',
-    icon: <Compass className="w-4 h-4" />,
+    icon: <Target className="w-4 h-4" />,
     color: 'text-gray-600',
   };
 

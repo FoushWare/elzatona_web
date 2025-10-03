@@ -2,17 +2,12 @@
 
 import React, { memo, useMemo } from 'react';
 import { useUserType } from '@/contexts/UserTypeContext';
-import { UserStatistics } from '@/components/UserStatistics';
-import { GuidedTour } from '@/components/GuidedTour';
-import { FloatingRTLToggle, RTLIndicator } from '@/components/RTLToggle';
-import { HeroSection } from '@/components/home/HeroSection';
-import { QuickActionsSection } from '@/components/home/QuickActionsSection';
-import { UserContentSection } from '@/components/home/UserContentSection';
-import { CallToActionSection } from '@/components/home/CallToActionSection';
-import { AnimatedBackground } from '@/components/home/AnimatedBackground';
+import { GuidedTour } from '@elzatona/shared/ui/components/GuidedTour';
+import { HeroSection } from '@elzatona/shared/ui/components/home/HeroSection';
+import { LearningOptionsSection } from '@elzatona/shared/ui/components/home/LearningOptionsSection';
+import { AnimatedBackground } from '@elzatona/shared/ui/components/home/AnimatedBackground';
 import { useHomepageAnimations } from '@/hooks/useHomepageAnimations';
 import { usePersonalizedContent } from '@/hooks/usePersonalizedContent';
-import { UserType } from '@/types/homepage';
 
 const HomePage = memo(function HomePage() {
   const { userType } = useUserType();
@@ -20,17 +15,24 @@ const HomePage = memo(function HomePage() {
     showAnimation,
     isClient,
     showTour,
+    hasSeenTour,
     handleTourComplete,
     handleTourSkip,
     startTour,
   } = useHomepageAnimations();
 
-  const { hasActivePlan, activePlan, personalizedContent } =
-    usePersonalizedContent(userType);
+  const { personalizedContent } = usePersonalizedContent(userType);
 
-  // Memoize expensive calculations
-  const shouldShowUserContent = useMemo(() => !!userType, [userType]);
-  const shouldShowCTA = useMemo(() => !userType, [userType]);
+  // Function to scroll to learning options section
+  const scrollToLearningOptions = () => {
+    const learningSection = document.getElementById('learning-options');
+    if (learningSection) {
+      learningSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden">
@@ -42,36 +44,17 @@ const HomePage = memo(function HomePage() {
         personalizedContent={personalizedContent}
         showAnimation={showAnimation}
         isClient={isClient}
-        onStartTour={startTour}
+        isFirstVisit={!hasSeenTour}
+        onStartTour={scrollToLearningOptions}
       />
 
-      {/* Animated stats */}
-      <div
-        className={`transition-all duration-1000 delay-700 ${
-          showAnimation
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-8'
-        }`}
-      >
-        <UserStatistics />
-      </div>
-
-      {/* Quick Actions Section */}
-      <QuickActionsSection showAnimation={showAnimation} />
-
-      {/* User Type Specific Content */}
-      {shouldShowUserContent && (
-        <UserContentSection
-          userType={userType}
-          hasActivePlan={hasActivePlan}
-          activePlan={activePlan}
-          personalizedContent={personalizedContent}
+      {/* Learning Options Section */}
+      <div id="learning-options">
+        <LearningOptionsSection
           showAnimation={showAnimation}
+          isClient={isClient}
         />
-      )}
-
-      {/* Call-to-Action Section (only for users without userType) */}
-      {shouldShowCTA && <CallToActionSection showAnimation={showAnimation} />}
+      </div>
 
       {/* Guided Tour */}
       <GuidedTour
@@ -79,10 +62,6 @@ const HomePage = memo(function HomePage() {
         onComplete={handleTourComplete}
         onSkip={handleTourSkip}
       />
-
-      {/* RTL Development Tools */}
-      <FloatingRTLToggle />
-      <RTLIndicator />
     </div>
   );
 });

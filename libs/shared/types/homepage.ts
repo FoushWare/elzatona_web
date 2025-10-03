@@ -37,6 +37,7 @@ export interface UseHomepageAnimationsReturn {
   showAnimation: boolean;
   isClient: boolean;
   showTour: boolean;
+  hasSeenTour: boolean;
   handleTourComplete: () => void;
   handleTourSkip: () => void;
   startTour: () => void;
@@ -54,6 +55,7 @@ export interface HeroSectionProps {
   personalizedContent: PersonalizedContent;
   showAnimation: boolean;
   isClient: boolean;
+  isFirstVisit: boolean;
   onStartTour: () => void;
 }
 
@@ -71,6 +73,7 @@ export interface UserContentSectionProps {
 
 export interface CallToActionSectionProps {
   showAnimation: boolean;
+  onStartTour: () => void;
 }
 
 // Quick action item

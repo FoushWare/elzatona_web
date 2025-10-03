@@ -7,7 +7,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { useRTL } from '@/contexts/RTLContext';
 import { rtlClass, getPositionClass } from '@/utils/rtl';
-import { RTLToggle } from './RTLToggle';
+import { RTLToggle } from '@elzatona/shared/ui/components/RTLToggle';
 import AlzatonaLogo from './AlzatonaLogo';
 
 interface DropdownItem {

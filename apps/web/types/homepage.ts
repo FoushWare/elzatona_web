@@ -37,6 +37,7 @@ export interface UseHomepageAnimationsReturn {
   showAnimation: boolean;
   isClient: boolean;
   showTour: boolean;
+  hasSeenTour: boolean;
   handleTourComplete: () => void;
   handleTourSkip: () => void;
   startTour: () => void;
@@ -54,36 +55,12 @@ export interface HeroSectionProps {
   personalizedContent: PersonalizedContent;
   showAnimation: boolean;
   isClient: boolean;
+  isFirstVisit: boolean;
   onStartTour: () => void;
 }
 
-export interface QuickActionsSectionProps {
-  showAnimation: boolean;
-}
 
-export interface UserContentSectionProps {
-  userType: UserType;
-  hasActivePlan: boolean;
-  activePlan: ActivePlan | null;
-  personalizedContent: PersonalizedContent;
-  showAnimation: boolean;
-}
 
-export interface CallToActionSectionProps {
-  showAnimation: boolean;
-}
-
-// Quick action item
-export interface QuickAction {
-  href: string;
-  icon: ReactNode;
-  title: string;
-  description: string;
-  color: string;
-  iconBg: string;
-  delay: number;
-  isHighlighted?: boolean;
-}
 
 // Animation presets
 export type AnimationPreset = keyof typeof import('@/utils/animations').animationPresets;

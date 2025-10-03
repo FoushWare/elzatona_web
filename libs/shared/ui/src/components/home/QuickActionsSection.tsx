@@ -2,17 +2,17 @@
 
 import React, { memo, useMemo } from 'react';
 import Link from 'next/link';
+import { ArrowRight, Code, BookOpen, Target, Award } from 'lucide-react';
+import { useRTL } from '@elzatona/shared/contexts/RTLContext';
+import { getPositionClass, rtlClass } from '@elzatona/shared/utils/rtl';
 import {
-  ArrowRight,
-  Code,
-  BookOpen,
-  Target,
-  Award,
-} from 'lucide-react';
-import { useRTL } from '@/contexts/RTLContext';
-import { getPositionClass, rtlClass } from '@/utils/rtl';
-import { AnimatedElement, AnimatedSection } from '@/components/ui/AnimatedElement';
-import { QuickActionsSectionProps, QuickAction } from '@/types/homepage';
+  AnimatedElement,
+  AnimatedSection,
+} from '@elzatona/shared/ui/components/ui/AnimatedElement';
+import {
+  QuickActionsSectionProps,
+  QuickAction,
+} from '@elzatona/shared/types/homepage';
 
 const quickActions: QuickAction[] = [
   {
@@ -20,7 +20,8 @@ const quickActions: QuickAction[] = [
     icon: <Code className="w-6 h-6 text-white" />,
     title: 'Practice Challenges',
     description: 'Solve real interview questions with our interactive editor',
-    color: 'from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20',
+    color:
+      'from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20',
     iconBg: 'bg-indigo-600',
     delay: 1000,
   },
@@ -29,7 +30,8 @@ const quickActions: QuickAction[] = [
     icon: <BookOpen className="w-6 h-6 text-white" />,
     title: 'Learning Paths',
     description: 'Follow structured paths or create your own roadmap',
-    color: 'from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20',
+    color:
+      'from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20',
     iconBg: 'bg-purple-600',
     delay: 1100,
   },
@@ -47,18 +49,22 @@ const quickActions: QuickAction[] = [
     icon: <Award className="w-6 h-6 text-white" />,
     title: 'Get Started',
     description: 'Take our interactive tour and choose your learning style',
-    color: 'from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20',
+    color:
+      'from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20',
     iconBg: 'bg-green-600',
     delay: 1300,
     isHighlighted: true,
   },
 ];
 
-export const QuickActionsSection = memo(function QuickActionsSection({ 
-  showAnimation 
+export const QuickActionsSection = memo(function QuickActionsSection({
+  showAnimation,
 }: QuickActionsSectionProps) {
   const { isRTL } = useRTL();
-  const animationConfig = useMemo(() => ({ showAnimation, isClient: true }), [showAnimation]);
+  const animationConfig = useMemo(
+    () => ({ showAnimation, isClient: true }),
+    [showAnimation]
+  );
 
   return (
     <AnimatedSection
@@ -91,7 +97,9 @@ export const QuickActionsSection = memo(function QuickActionsSection({
               <Link
                 href={item.href}
                 className={`group bg-gradient-to-br ${item.color} rounded-2xl p-6 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 ${
-                  showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  showAnimation
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-8'
                 } ${item.isHighlighted ? 'ring-2 ring-green-400 ring-opacity-50 shadow-lg get-started-card' : ''}`}
                 style={{ transitionDelay: `${item.delay}ms` }}
               >

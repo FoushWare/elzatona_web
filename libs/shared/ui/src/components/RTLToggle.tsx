@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Languages, RotateCcw } from 'lucide-react';
-import { useRTL } from '@/contexts/RTLContext';
-import { rtlClass } from '@/utils/rtl';
+import { useRTL } from '@elzatona/shared/contexts/RTLContext';
+import { rtlClass } from '@elzatona/shared/utils/rtl';
 
 interface RTLToggleProps {
   className?: string;

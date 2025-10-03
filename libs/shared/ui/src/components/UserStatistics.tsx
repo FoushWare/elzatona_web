@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Users, TrendingUp, Award, Clock } from 'lucide-react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useFirebaseAuth } from '@elzatona/shared/contexts/FirebaseAuthContext';
 
 interface UserStats {
   activeLearners: number;

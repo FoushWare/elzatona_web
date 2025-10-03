@@ -132,41 +132,6 @@ export const HeroSection = memo(function HeroSection({
                 />
               </span>
             </Link>
-
-            {/* Animated pointing arrow */}
-            {showAnimation && (
-              <div
-                className={`absolute top-1/2 transform -translate-y-1/2 animate-bounce ${getPositionClass(isRTL, 'right', '16')}`}
-              >
-                <div className="flex flex-col items-center">
-                  <div className="text-2xl animate-pulse">👆</div>
-                  <div className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mt-1 animate-pulse">
-                    Click here!
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Alternative animated arrow with CSS */}
-            {showAnimation && (
-              <div
-                className={`absolute top-1/2 transform -translate-y-1/2 ${getPositionClass(isRTL, 'right', '20')}`}
-              >
-                <div className="relative">
-                  <ArrowRight
-                    className={`w-8 h-8 text-indigo-500 animate-pulse ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
-                  />
-                  <div className="absolute inset-0">
-                    <ArrowRight
-                      className={`w-8 h-8 text-indigo-500 animate-ping opacity-75 ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
-                    />
-                  </div>
-                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-indigo-600 dark:text-indigo-400 animate-pulse whitespace-nowrap">
-                    Start Learning!
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </AnimatedElement>
       </div>

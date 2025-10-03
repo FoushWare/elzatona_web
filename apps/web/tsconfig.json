@@ -22,7 +22,12 @@
       "@/contexts/*": ["../../libs/shared/contexts/*"],
       "@/lib/*": ["../../libs/data/firebase/src/*"],
       "@/types/*": ["../../libs/shared/types/*"],
-      "@/utils/*": ["../../libs/shared/utils/*"]
+      "@/utils/*": ["../../libs/shared/utils/*"],
+      "@elzatona/shared/ui/components/*": ["../../libs/shared/ui/src/components/*"],
+      "@elzatona/shared/types/*": ["../../libs/shared/types/*"],
+      "@elzatona/shared/contexts/*": ["../../libs/shared/contexts/*"],
+      "@elzatona/shared/utils/*": ["../../libs/shared/utils/*"],
+      "@elzatona/shared/hooks/*": ["../../libs/shared/hooks/*"]
     },
     "plugins": [
       {

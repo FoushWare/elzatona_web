@@ -3,8 +3,8 @@
 import React, { useState, useCallback } from 'react';
 import { TourProvider, useTour } from '@reactour/tour';
 import { ArrowRight, Play, BookOpen, Target, Award } from 'lucide-react';
-import { useRTLDetection } from '@/contexts/RTLContext';
-import { rtlClass } from '@/utils/rtl';
+import { useRTLDetection } from '@elzatona/shared/contexts/RTLContext';
+import { rtlClass } from '@elzatona/shared/utils/rtl';
 
 interface GuidedTourProps {
   isOpen: boolean;
@@ -209,6 +209,153 @@ export const GuidedTour: React.FC<GuidedTourProps> = props => {
         [dir='rtl'] .tour-container .reactour__close {
           left: auto !important;
           right: 8px !important;
+        }
+
+        /* Arrow styles for light and dark modes */
+        .tour-container .reactour__arrow {
+          border-color: var(--tour-bg) !important;
+        }
+
+        .tour-container .reactour__arrow::before {
+          border-color: var(--tour-bg) !important;
+        }
+
+        .tour-container .reactour__arrow::after {
+          border-color: var(--tour-bg) !important;
+        }
+
+        /* Ensure arrow is visible in both light and dark modes */
+        .tour-container .reactour__arrow[data-placement*='top'] {
+          border-top-color: var(--tour-bg) !important;
+        }
+
+        .tour-container .reactour__arrow[data-placement*='bottom'] {
+          border-bottom-color: var(--tour-bg) !important;
+        }
+
+        .tour-container .reactour__arrow[data-placement*='left'] {
+          border-left-color: var(--tour-bg) !important;
+        }
+
+        .tour-container .reactour__arrow[data-placement*='right'] {
+          border-right-color: var(--tour-bg) !important;
+        }
+
+        /* Dark mode specific arrow styling - white arrows */
+        .dark .tour-container .reactour__arrow {
+          border-color: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container .reactour__arrow::before {
+          border-color: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container .reactour__arrow::after {
+          border-color: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container .reactour__arrow[data-placement*='top'] {
+          border-top-color: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container .reactour__arrow[data-placement*='bottom'] {
+          border-bottom-color: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container .reactour__arrow[data-placement*='left'] {
+          border-left-color: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container .reactour__arrow[data-placement*='right'] {
+          border-right-color: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        /* Override inline styles with higher specificity */
+        .dark .tour-container .reactour__arrow[style*='color'] {
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container .reactour__arrow[style*='border-color'] {
+          border-color: #ffffff !important;
+        }
+
+        /* Force white color for all arrow elements in dark mode */
+        .dark .tour-container .reactour__arrow,
+        .dark .tour-container .reactour__arrow * {
+          color: #ffffff !important;
+          border-color: #ffffff !important;
+        }
+
+        /* SVG Arrow styling for dark mode */
+        .dark .tour-container svg {
+          fill: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container svg path {
+          fill: #ffffff !important;
+          stroke: #ffffff !important;
+        }
+
+        .dark .tour-container svg polygon {
+          fill: #ffffff !important;
+          stroke: #ffffff !important;
+        }
+
+        .dark .tour-container svg line {
+          stroke: #ffffff !important;
+        }
+
+        /* Target all possible arrow selectors */
+        .dark .tour-container [class*='arrow'] {
+          fill: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container [class*='arrow'] svg {
+          fill: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container [class*='arrow'] svg path {
+          fill: #ffffff !important;
+          stroke: #ffffff !important;
+        }
+
+        /* Additional selectors for reactour arrows */
+        .dark [data-tour-elem='arrow'] {
+          fill: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark [data-tour-elem='arrow'] svg {
+          fill: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark [data-tour-elem='arrow'] svg path {
+          fill: #ffffff !important;
+          stroke: #ffffff !important;
+        }
+
+        /* Target any arrow-like elements */
+        .dark .tour-container [class*='arrow'],
+        .dark .tour-container [data-tour-elem='arrow'] {
+          fill: #ffffff !important;
+          color: #ffffff !important;
+        }
+
+        .dark .tour-container [class*='arrow'] *,
+        .dark .tour-container [data-tour-elem='arrow'] * {
+          fill: #ffffff !important;
+          color: #ffffff !important;
         }
       `}</style>
       <TourProvider

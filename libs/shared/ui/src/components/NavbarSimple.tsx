@@ -8,11 +8,21 @@ import {
   Moon,
   Menu,
   X,
-  Map,
+  MapPin,
   Compass,
   User,
   LogOut,
   Settings,
+  BookOpen,
+  Sparkles,
+  Zap,
+  Star,
+  Heart,
+  Shield,
+  Target,
+  Lightbulb,
+  GraduationCap,
+  Rocket,
 } from 'lucide-react';
 import { AlzatonaLogo } from './AlzatonaLogo';
 import { useUserType } from '@/contexts/UserTypeContext';
@@ -20,14 +30,10 @@ import { useMobileMenu } from '@/contexts/MobileMenuContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { LearningModeSwitcher } from './LearningModeSwitcher';
-import { OnboardingTrigger } from './OnboardingTrigger';
-import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const { userType, setUserType } = useUserType();
   const { setIsMobileMenuOpen } = useMobileMenu();
   const { isDarkMode, toggleDarkMode } = useTheme();
@@ -52,31 +58,21 @@ export const NavbarSimple: React.FC = () => {
     try {
       await signOut();
       setIsOpen(false);
-      setIsUserDropdownOpen(false);
     } catch (error) {
       console.error('Sign out error:', error);
     }
   };
 
-  // Handle scroll effect and mobile detection
+  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
 
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-
-    // Initial check
-    handleResize();
-
     window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -105,7 +101,7 @@ export const NavbarSimple: React.FC = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
+        <div className="flex items-center justify-between h-20 sm:h-22 lg:h-24">
           {/* Logo */}
           <Link
             href="/"
@@ -118,98 +114,29 @@ export const NavbarSimple: React.FC = () => {
             <AlzatonaLogo size="sm" showText={false} />
           </Link>
 
-          {/* Desktop Navigation - Get Started First */}
-          <div className="hidden lg:flex items-center space-x-6 flex-1 justify-center">
-            {/* Get Started Button - Primary CTA - Hidden when authenticated */}
-            {!isAuthLoading && !isAuthenticated && (
-              <Link
-                href="/get-started"
-                className={`px-6 py-2.5 rounded-lg font-semibold transition-colors duration-200 ${
-                  isActiveLink('/get-started')
-                    ? isScrolled
-                      ? 'bg-indigo-700 text-white shadow-lg ring-2 ring-indigo-300 dark:ring-indigo-500'
-                      : 'bg-indigo-100 text-indigo-800 shadow-lg ring-2 ring-indigo-300 dark:ring-indigo-500'
-                    : isScrolled
-                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg'
-                      : 'bg-white text-indigo-600 hover:bg-indigo-50 shadow-md hover:shadow-lg'
-                }`}
-              >
-                Get Started
-              </Link>
-            )}
-
-            {/* Navigation Links */}
+          {/* Desktop/Tablet Navigation - Learning Path Link */}
+          <div className="hidden md:flex items-center space-x-6 flex-1 justify-center">
             <Link
-              href="/practice"
-              className={`font-medium transition-colors duration-200 ${
-                isActiveLink('/practice')
+              href="/learning-path"
+              className={`font-semibold transition-all duration-500 px-6 py-3 rounded-xl flex items-center space-x-3 relative overflow-hidden group ${
+                isActiveLink('/learning-path')
                   ? isScrolled
-                    ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
-                    : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
+                    ? 'text-white dark:text-white font-bold bg-green-500 border-2 border-green-600 shadow-lg hover:shadow-2xl transform hover:scale-105'
+                    : 'text-white dark:text-white font-bold bg-green-500 border-2 border-green-400 shadow-lg hover:shadow-2xl transform hover:scale-105'
                   : isScrolled
-                    ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                    : 'text-white hover:text-indigo-100'
+                    ? 'text-white dark:text-white hover:text-white dark:hover:text-white hover:bg-green-600 hover:border-2 hover:border-green-200 hover:shadow-xl hover:transform hover:scale-105'
+                    : 'text-white dark:text-white hover:text-white dark:hover:text-white hover:bg-green-600 hover:border-2 hover:border-green-200 hover:shadow-xl hover:transform hover:scale-105'
               }`}
             >
-              Practice
-            </Link>
-            <Link
-              href="/progress"
-              className={`font-medium transition-colors duration-200 ${
-                isActiveLink('/progress')
-                  ? isScrolled
-                    ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
-                    : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
-                  : isScrolled
-                    ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                    : 'text-white hover:text-indigo-100'
-              }`}
-            >
-              Progress
-            </Link>
-            {isAuthenticated && (
-              <Link
-                href="/my-plans"
-                className={`font-medium transition-colors duration-200 ${
-                  isActiveLink('/my-plans')
-                    ? isScrolled
-                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
-                      : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
-                    : isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                      : 'text-white hover:text-indigo-100'
-                }`}
-              >
-                My Plans
-              </Link>
-            )}
-            <Link
-              href={
-                userType === 'self-directed' ? '/free-style-roadmap' : '/learn'
-              }
-              className={`font-medium transition-colors duration-200 ${
-                isActiveLink(
-                  userType === 'self-directed'
-                    ? '/free-style-roadmap'
-                    : '/learn'
-                )
-                  ? isScrolled
-                    ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
-                    : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
-                  : isScrolled
-                    ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                    : 'text-white hover:text-indigo-100'
-              }`}
-            >
-              {userType === 'self-directed' ? 'My Roadmap' : 'Learn'}
+              <BookOpen className="w-5 h-5 transition-transform duration-200 group-hover:rotate-6 group-hover:scale-105" />
+              <span className="relative z-10">Learning Path</span>
+              {/* Shimmer effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-500"></div>
             </Link>
           </div>
 
-          {/* Right Section - Desktop Only */}
-          <div className="hidden lg:flex items-center space-x-4">
-            {/* Language Switcher */}
-            <LanguageSwitcher isScrolled={isScrolled} />
-
+          {/* Right Section - Desktop/Tablet */}
+          <div className="hidden md:flex items-center space-x-3">
             {/* Learning Mode Switcher - Always show */}
             <LearningModeSwitcher isScrolled={isScrolled} />
 
@@ -227,53 +154,51 @@ export const NavbarSimple: React.FC = () => {
             ) : isAuthenticated ? (
               <button
                 onClick={handleSignOut}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                className={`px-5 py-2.5 rounded-xl font-semibold transition-all duration-300 flex items-center space-x-2 ${
                   isScrolled
-                    ? 'bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg'
-                    : 'bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg'
+                    ? 'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                    : 'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
                 }`}
               >
-                Logout
+                <LogOut className="w-4 h-4" />
+                <span>Logout</span>
               </button>
             ) : (
               <Link
                 href="/auth"
-                className={`font-medium transition-colors duration-200 ${
+                className={`font-semibold transition-all duration-500 px-5 py-2.5 rounded-xl flex items-center space-x-2 relative overflow-hidden group ${
                   isActiveLink('/auth')
                     ? isScrolled
-                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
-                      : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
+                      ? 'text-white dark:text-white font-bold bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg hover:shadow-2xl transform hover:scale-105'
+                      : 'text-white dark:text-white font-bold bg-gradient-to-r from-green-500/80 to-emerald-600/80 backdrop-blur-sm shadow-lg hover:shadow-2xl transform hover:scale-105'
                     : isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                      : 'text-white hover:text-indigo-100'
+                      ? 'text-white dark:text-white hover:text-white dark:hover:text-white hover:bg-green-500 hover:shadow-lg hover:transform hover:scale-105'
+                      : 'text-white dark:text-white hover:text-white dark:hover:text-white hover:bg-green-500 hover:shadow-lg hover:transform hover:scale-105'
                 }`}
               >
-                Sign In
+                <User className="w-4 h-4 transition-transform duration-200 group-hover:rotate-6 group-hover:scale-105" />
+                <span className="relative z-10">Sign In</span>
+                {/* Shimmer effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-500"></div>
               </Link>
             )}
 
             {/* Theme Toggle */}
             <button
               onClick={toggleDarkMode}
-              className={`p-2.5 rounded-lg transition-colors duration-200 ${
+              className={`p-3 rounded-xl transition-all duration-300 ${
                 isScrolled
-                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
-                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                  ? 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 hover:from-indigo-100 hover:to-purple-100 dark:hover:from-indigo-800 dark:hover:to-purple-800 shadow-lg hover:shadow-xl transform hover:scale-110'
+                  : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 shadow-lg hover:shadow-xl transform hover:scale-110'
               }`}
               aria-label="Toggle theme"
             >
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-
-            {/* Onboarding Trigger - Hidden on admin pages */}
-            {!pathname?.startsWith('/admin') && <OnboardingTrigger />}
           </div>
 
-          {/* Mobile/Tablet Menu Button */}
-          <div className="flex items-center space-x-1 sm:space-x-2 lg:hidden">
-            {/* Language Switcher for Mobile/Tablet */}
-            <LanguageSwitcher isScrolled={isScrolled} />
-
+          {/* Mobile Menu Button - Only visible on mobile */}
+          <div className="flex items-center space-x-1 sm:space-x-2 md:hidden">
             {/* Learning Mode Switcher for Mobile/Tablet - Hidden on very small screens */}
             <div className="hidden xs:block">
               <LearningModeSwitcher isScrolled={isScrolled} />
@@ -282,10 +207,10 @@ export const NavbarSimple: React.FC = () => {
             {/* Theme Toggle for Mobile/Tablet */}
             <button
               onClick={toggleDarkMode}
-              className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 ${
+              className={`p-3 rounded-xl transition-all duration-300 ${
                 isScrolled
-                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
-                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                  ? 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 hover:from-indigo-100 hover:to-purple-100 dark:hover:from-indigo-800 dark:hover:to-purple-800 shadow-lg hover:shadow-xl transform hover:scale-110'
+                  : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 shadow-lg hover:shadow-xl transform hover:scale-110'
               }`}
               aria-label="Toggle theme"
             >
@@ -296,13 +221,13 @@ export const NavbarSimple: React.FC = () => {
               )}
             </button>
 
-            {/* Mobile menu button */}
+            {/* Mobile menu button - Only visible on mobile/tablet */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 ${
+              className={`p-3 rounded-xl transition-all duration-300 ${
                 isScrolled
-                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
-                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                  ? 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 hover:from-indigo-100 hover:to-purple-100 dark:hover:from-indigo-800 dark:hover:to-purple-800 shadow-lg hover:shadow-xl transform hover:scale-110'
+                  : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 shadow-lg hover:shadow-xl transform hover:scale-110'
               }`}
               aria-label="Toggle mobile menu"
             >
@@ -318,14 +243,14 @@ export const NavbarSimple: React.FC = () => {
 
       {/* Mobile Navigation - Full Screen Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 lg:hidden">
+        <div className="fixed inset-0 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 z-50 lg:hidden">
           <div className="flex flex-col h-full">
             {/* Mobile Header */}
-            <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-700">
               <AlzatonaLogo size="sm" showText={false} />
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                className="p-3 rounded-xl bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 text-gray-700 dark:text-gray-300 hover:from-indigo-200 hover:to-purple-200 dark:hover:from-indigo-800 dark:hover:to-purple-800 transition-all duration-300 hover:scale-110 shadow-lg"
                 aria-label="Close mobile menu"
               >
                 <X size={20} />
@@ -334,59 +259,20 @@ export const NavbarSimple: React.FC = () => {
 
             {/* Mobile Navigation Links */}
             <div className="flex-1 px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4">
+              {/* Learning Path Link */}
               <Link
-                href="/practice"
-                className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                  isActiveLink('/practice')
-                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
-                    : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                href="/learning-path"
+                className={`block text-base sm:text-lg font-semibold py-4 px-6 rounded-xl transition-all duration-500 flex items-center space-x-3 relative overflow-hidden group ${
+                  isActiveLink('/learning-path')
+                    ? 'text-white dark:text-white font-bold bg-green-500 border-2 border-green-600 shadow-2xl transform scale-105'
+                    : 'text-black dark:text-white hover:text-white dark:hover:text-white hover:bg-green-600 hover:border-2 hover:border-green-200 hover:shadow-xl hover:transform hover:scale-105'
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                Practice
-              </Link>
-              <Link
-                href="/progress"
-                className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                  isActiveLink('/progress')
-                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
-                    : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                Progress
-              </Link>
-              {isAuthenticated && (
-                <Link
-                  href="/my-plans"
-                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink('/my-plans')
-                      ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
-                      : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  My Plans
-                </Link>
-              )}
-              <Link
-                href={
-                  userType === 'self-directed'
-                    ? '/free-style-roadmap'
-                    : '/learn'
-                }
-                className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                  isActiveLink(
-                    userType === 'self-directed'
-                      ? '/free-style-roadmap'
-                      : '/learn'
-                  )
-                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
-                    : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {userType === 'self-directed' ? 'My Roadmap' : 'Learn'}
+                <BookOpen className="w-5 h-5 transition-transform duration-200 group-hover:rotate-6 group-hover:scale-105" />
+                <span className="relative z-10">Learning Path</span>
+                {/* Shimmer effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-500"></div>
               </Link>
 
               {/* Mobile Learning Mode Switcher - Always show */}

@@ -3,10 +3,10 @@
 import React, { memo, useMemo } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Compass, Play, Map } from 'lucide-react';
-import { useRTL } from '@/contexts/RTLContext';
-import { rtlClass } from '@/utils/rtl';
-import { AnimatedSection } from '@/components/ui/AnimatedElement';
-import { UserContentSectionProps } from '@/types/homepage';
+import { useRTL } from '@elzatona/shared/contexts/RTLContext';
+import { rtlClass } from '@elzatona/shared/utils/rtl';
+import { AnimatedSection } from '@elzatona/shared/ui/components/ui/AnimatedElement';
+import { UserContentSectionProps } from '@elzatona/shared/types/homepage';
 
 export const UserContentSection = memo(function UserContentSection({
   userType,
@@ -19,7 +19,10 @@ export const UserContentSection = memo(function UserContentSection({
 
   if (!userType) return null;
 
-  const animationConfig = useMemo(() => ({ showAnimation, isClient: true }), [showAnimation]);
+  const animationConfig = useMemo(
+    () => ({ showAnimation, isClient: true }),
+    [showAnimation]
+  );
 
   // Render icon based on icon type
   const renderIcon = (iconType: string) => {
@@ -36,10 +39,7 @@ export const UserContentSection = memo(function UserContentSection({
   };
 
   return (
-    <AnimatedSection
-      delay="delay-1400"
-      {...animationConfig}
-    >
+    <AnimatedSection delay="delay-1400" {...animationConfig}>
       <div className="max-w-7xl mx-auto">
         {userType === 'guided' ? (
           <div
@@ -58,13 +58,13 @@ export const UserContentSection = memo(function UserContentSection({
             </div>
 
             <div className="text-center relative z-10">
-                <div
-                  className={`w-16 h-16 ${
-                    hasActivePlan ? 'bg-green-600' : 'bg-indigo-600'
-                  } rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse`}
-                >
-                  {renderIcon(personalizedContent.icon)}
-                </div>
+              <div
+                className={`w-16 h-16 ${
+                  hasActivePlan ? 'bg-green-600' : 'bg-indigo-600'
+                } rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse`}
+              >
+                {renderIcon(personalizedContent.icon)}
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                 {personalizedContent.title}
               </h3>
@@ -78,7 +78,8 @@ export const UserContentSection = memo(function UserContentSection({
                     <span className="font-semibold">{activePlan.name}</span>
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-300">
-                    {activePlan.totalQuestions} questions • {activePlan.estimatedTime}
+                    {activePlan.totalQuestions} questions •{' '}
+                    {activePlan.estimatedTime}
                   </div>
                 </div>
               )}
@@ -115,8 +116,8 @@ export const UserContentSection = memo(function UserContentSection({
                 Self-Directed Learning
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                You&apos;re creating your own roadmap. Explore content freely and
-                build your personalized learning journey.
+                You&apos;re creating your own roadmap. Explore content freely
+                and build your personalized learning journey.
               </p>
               <Link
                 href="/free-style-roadmap"
