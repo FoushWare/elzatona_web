@@ -9,6 +9,7 @@ import {
   Menu,
   X,
   MapPin,
+  Map,
   Compass,
   User,
   LogOut,

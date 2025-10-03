@@ -1013,35 +1013,35 @@ function App() {
     question:
       'What is Critical CSS and how can you implement it in a modern frontend project?',
     code: `// Next.js with Styled-Components SSR Example
-import Document from "next/document";
-import { ServerStyleSheet } from "styled-components";
+// import Document from "next/document";
+// import { ServerStyleSheet } from "styled-components";
 
-export default class MyDocument extends Document {
-  static async getInitialProps(ctx) {
-    const sheet = new ServerStyleSheet();
-    const originalRenderPage = ctx.renderPage;
+// export default class MyDocument extends Document {
+//   static async getInitialProps(ctx) {
+//     const sheet = new ServerStyleSheet();
+//     const originalRenderPage = ctx.renderPage;
 
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
-        });
+//     try {
+//       ctx.renderPage = () =>
+//         originalRenderPage({
+//           enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
+//         });
 
-      const initialProps = await Document.getInitialProps(ctx);
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
-      };
-    } finally {
-      sheet.seal();
-    }
-  }
-}`,
+//       const initialProps = await Document.getInitialProps(ctx);
+//       return {
+//         ...initialProps,
+//         styles: (
+//           <>
+//             {initialProps.styles}
+//             {sheet.getStyleElement()}
+//           </>
+//         ),
+//       };
+//     } finally {
+//       sheet.seal();
+//     }
+//   }
+// }`,
     options: {
       A: 'Critical CSS is only needed for large websites',
       B: 'Critical CSS is CSS required to render above-the-fold content, improving FCP and LCP by inlining essential styles',
