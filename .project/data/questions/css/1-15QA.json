@@ -1,0 +1,543 @@
+[
+    {
+        "id": "css-q1",
+        "title": "What does CSS stand for and what is its primary use?",
+        "content": "CSS stands for Cascading Style Sheets. It is primarily used to separate web page content (HTML) from its visual presentation (styling), enabling consistent and maintainable design across pages.",
+        "type": "open-ended",
+        "category": "CSS & Styling",
+        "subcategory": "Core Concepts",
+        "difficulty": "beginner",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "CSS Fundamentals",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "styling",
+            "web",
+            "frontend",
+            "interview"
+        ],
+        "explanation": "CSS allows developers to control layout, colors, fonts, and responsiveness without altering HTML structure, promoting separation of concerns.",
+        "points": 3,
+        "sampleAnswers": [
+            "CSS (Cascading Style Sheets) is used to style HTML elements—controlling layout, colors, fonts, spacing, and responsive behavior.",
+            "Its primary purpose is to decouple content from presentation, making websites easier to maintain and style consistently."
+        ]
+    },
+    {
+        "id": "css-q2",
+        "title": "How do you include CSS in your HTML document?",
+        "content": "There are four ways to include CSS: inline styles, embedded (internal) styles in a `<style>` tag, external stylesheets via `<link>`, and imported styles using `@import`.",
+        "type": "multiple-choice",
+        "category": "CSS & Styling",
+        "subcategory": "Core Concepts",
+        "difficulty": "beginner",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "CSS Integration",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "html",
+            "styling",
+            "integration"
+        ],
+        "explanation": "External stylesheets are preferred for maintainability and caching. Inline styles have highest specificity but hurt reusability.",
+        "points": 4,
+        "options": [
+            {
+                "id": "a",
+                "text": "Only via external files",
+                "isCorrect": false
+            },
+            {
+                "id": "b",
+                "text": "Inline, embedded, external, and @import",
+                "isCorrect": true
+            },
+            {
+                "id": "c",
+                "text": "CSS cannot be included in HTML",
+                "isCorrect": false
+            },
+            {
+                "id": "d",
+                "text": "Only with JavaScript",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": "css-q3",
+        "title": "Can you explain the difference between class and ID selectors?",
+        "content": "Class selectors (`.class`) can be reused on multiple elements. ID selectors (`#id`) should be unique to a single element per page.",
+        "type": "multiple-choice",
+        "category": "CSS & Styling",
+        "subcategory": "Selectors",
+        "difficulty": "beginner",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "CSS Selectors",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "selectors",
+            "class",
+            "id",
+            "specificity"
+        ],
+        "explanation": "IDs have higher specificity than classes. While HTML allows duplicate IDs, it’s invalid and breaks accessibility and JavaScript.",
+        "points": 5,
+        "options": [
+            {
+                "id": "a",
+                "text": "Class is for one element; ID is for many",
+                "isCorrect": false
+            },
+            {
+                "id": "b",
+                "text": "Class can be reused; ID should be unique",
+                "isCorrect": true
+            },
+            {
+                "id": "c",
+                "text": "They are functionally identical",
+                "isCorrect": false
+            },
+            {
+                "id": "d",
+                "text": "ID selectors are faster in all browsers",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": "css-q4",
+        "title": "What are pseudo-classes in CSS?",
+        "content": "Pseudo-classes (e.g., `:hover`, `:focus`, `:nth-child`) style elements based on state, position, or user interaction—not just tag/class/ID.",
+        "type": "open-ended",
+        "category": "CSS & Styling",
+        "subcategory": "Selectors",
+        "difficulty": "intermediate",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Pseudo-Classes",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "pseudo-classes",
+            "hover",
+            "focus",
+            "selectors"
+        ],
+        "explanation": "Pseudo-classes enable dynamic styling without JavaScript—e.g., `:hover` for interactivity, `:disabled` for form states, `:nth-child` for alternating rows.",
+        "points": 6,
+        "sampleAnswers": [
+            "Pseudo-classes like `:hover`, `:focus`, and `:nth-child` let you style elements based on their state or position in the DOM tree.",
+            "They are essential for interactive UIs—e.g., changing button color on hover or styling every odd table row."
+        ]
+    },
+    {
+        "id": "css-q5",
+        "title": "Describe how to implement a CSS reset and why it is useful.",
+        "content": "A CSS reset (or normalize) removes default browser styles (margins, paddings, font sizes) to ensure consistent rendering across browsers.",
+        "type": "open-ended",
+        "category": "CSS & Styling",
+        "subcategory": "Core Concepts",
+        "difficulty": "intermediate",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "CSS Reset & Normalize",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "reset",
+            "normalize",
+            "cross-browser",
+            "consistency"
+        ],
+        "explanation": "Browsers apply default styles differently. A reset (like Eric Meyer’s) or normalize.css creates a predictable baseline for styling.",
+        "points": 6,
+        "sampleAnswers": [
+            "A CSS reset removes default margins, paddings, and styles so your design looks consistent across all browsers.",
+            "Popular options include `normalize.css` (preserves useful defaults) or a full reset (strips all defaults)."
+        ]
+    },
+    {
+        "id": "css-q6",
+        "title": "How do you select elements by attribute in CSS?",
+        "content": "Use attribute selectors like `[attr]`, `[attr=value]`, `[attr^=value]`, or `[attr$=value]` to target elements based on HTML attributes.",
+        "type": "multiple-choice",
+        "category": "CSS & Styling",
+        "subcategory": "Selectors",
+        "difficulty": "intermediate",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Attribute Selectors",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "attribute-selectors",
+            "selectors",
+            "html"
+        ],
+        "explanation": "Attribute selectors are powerful for targeting form inputs, links, or custom data attributes without adding classes.",
+        "points": 6,
+        "options": [
+            {
+                "id": "a",
+                "text": "`[href]` selects elements with an href attribute",
+                "isCorrect": true
+            },
+            {
+                "id": "b",
+                "text": "`[class~='btn']` matches partial class names",
+                "isCorrect": true
+            },
+            {
+                "id": "c",
+                "text": "`[type='submit']` targets submit buttons",
+                "isCorrect": true
+            },
+            {
+                "id": "d",
+                "text": "All of the above",
+                "isCorrect": true
+            }
+        ]
+    },
+    {
+        "id": "css-q7",
+        "title": "What is a pseudo-element, and what are they used for?",
+        "content": "Pseudo-elements (`::before`, `::after`, `::first-line`, etc.) style parts of an element that aren’t real HTML nodes.",
+        "type": "open-ended",
+        "category": "CSS & Styling",
+        "subcategory": "Selectors",
+        "difficulty": "intermediate",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Pseudo-Elements",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "pseudo-elements",
+            "before",
+            "after",
+            "generated-content"
+        ],
+        "explanation": "`::before` and `::after` insert generated content for icons, quotes, or decorative elements without extra HTML.",
+        "points": 7,
+        "sampleAnswers": [
+            "Pseudo-elements like `::before` and `::after` let you insert and style content before/after an element’s actual content.",
+            "Common uses: adding icons to links, creating custom checkboxes, or clearing floats with `::after { content: ''; clear: both; }`."
+        ]
+    },
+    {
+        "id": "css-q8",
+        "title": "Explain the difference between the child combinator and the descendant combinator.",
+        "content": "Child combinator (`>`) selects direct children only. Descendant combinator (space) selects all nested descendants.",
+        "type": "multiple-choice",
+        "category": "CSS & Styling",
+        "subcategory": "Selectors",
+        "difficulty": "intermediate",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Combinators",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "combinators",
+            "child",
+            "descendant",
+            "selectors"
+        ],
+        "explanation": "`div > p` matches only `<p>` directly inside `<div>`. `div p` matches any `<p>` nested anywhere inside `<div>`.",
+        "points": 6,
+        "options": [
+            {
+                "id": "a",
+                "text": "`>` selects direct children; space selects all descendants",
+                "isCorrect": true
+            },
+            {
+                "id": "b",
+                "text": "They are the same",
+                "isCorrect": false
+            },
+            {
+                "id": "c",
+                "text": "`>` selects siblings",
+                "isCorrect": false
+            },
+            {
+                "id": "d",
+                "text": "Space only selects direct children",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": "css-q9",
+        "title": "How would you select all direct children elements of a particular type?",
+        "content": "Use the child combinator: `parent > child`. Example: `ul > li` selects only `<li>` that are direct children of `<ul>`.",
+        "type": "open-ended",
+        "category": "CSS & Styling",
+        "subcategory": "Selectors",
+        "difficulty": "beginner",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Combinators",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "child-selector",
+            "combinators",
+            "selectors"
+        ],
+        "explanation": "This avoids styling nested grandchildren, giving precise control over list or layout structures.",
+        "points": 5,
+        "sampleAnswers": [
+            "Use `ul > li` to select only direct `<li>` children of a `<ul>`, ignoring nested list items.",
+            "The `>` combinator ensures you only target immediate children, not deeper descendants."
+        ]
+    },
+    {
+        "id": "css-q10",
+        "title": "What are the universal selector and the sibling combinator, and when would you use them?",
+        "content": "Universal selector (`*`) matches all elements. Sibling combinator (`+`) matches an element immediately after another.",
+        "type": "multiple-choice",
+        "category": "CSS & Styling",
+        "subcategory": "Selectors",
+        "difficulty": "intermediate",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Combinators",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "universal-selector",
+            "sibling-combinator",
+            "selectors"
+        ],
+        "explanation": "Use `*` for resets; use `+` for styling elements that follow a specific sibling (e.g., `h2 + p` for paragraphs after headings).",
+        "points": 6,
+        "options": [
+            {
+                "id": "a",
+                "text": "`*` selects all elements; `+` selects immediate next sibling",
+                "isCorrect": true
+            },
+            {
+                "id": "b",
+                "text": "`*` is for classes; `+` is for IDs",
+                "isCorrect": false
+            },
+            {
+                "id": "c",
+                "text": "Both select parent elements",
+                "isCorrect": false
+            },
+            {
+                "id": "d",
+                "text": "They are deprecated",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": "css-q11",
+        "title": "What is the CSS Box Model?",
+        "content": "The Box Model describes an element’s structure: content, padding, border, and margin. Total width = content + padding + border + margin.",
+        "type": "open-ended",
+        "category": "CSS & Styling",
+        "subcategory": "Box Model",
+        "difficulty": "beginner",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Box Model",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "box-model",
+            "layout",
+            "padding",
+            "margin",
+            "border"
+        ],
+        "explanation": "Understanding the box model is essential for accurate layout. `box-sizing: border-box` includes padding/border in width/height.",
+        "points": 6,
+        "sampleAnswers": [
+            "The CSS Box Model consists of content, padding, border, and margin. By default, width/height apply only to content.",
+            "Using `box-sizing: border-box` makes width include padding and border, simplifying responsive layouts."
+        ]
+    },
+    {
+        "id": "css-q12",
+        "title": "Explain margin collapsing.",
+        "content": "Margin collapsing occurs when vertical margins of adjacent or nested block elements combine into a single margin (the larger one).",
+        "type": "open-ended",
+        "category": "CSS & Styling",
+        "subcategory": "Box Model",
+        "difficulty": "intermediate",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Margin Collapsing",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "margin-collapsing",
+            "layout",
+            "box-model"
+        ],
+        "explanation": "Only vertical margins collapse. Prevent it with borders, padding, flex/grid, or `overflow: hidden`.",
+        "points": 7,
+        "sampleAnswers": [
+            "When two vertical margins touch, they collapse into the larger margin—e.g., a 20px and 30px margin become 30px.",
+            "To prevent collapsing, add a border, padding, or use a flex/grid container between the elements."
+        ]
+    },
+    {
+        "id": "css-q13",
+        "title": "What are the different values for the box-sizing property and what do they do?",
+        "content": "`content-box` (default): width/height = content only. `border-box`: width/height = content + padding + border.",
+        "type": "multiple-choice",
+        "category": "CSS & Styling",
+        "subcategory": "Box Model",
+        "difficulty": "intermediate",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Box Model",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "box-sizing",
+            "layout",
+            "responsive"
+        ],
+        "explanation": "`border-box` is preferred in modern CSS because it makes sizing predictable when padding/border are added.",
+        "points": 6,
+        "options": [
+            {
+                "id": "a",
+                "text": "`content-box`: width excludes padding/border",
+                "isCorrect": true
+            },
+            {
+                "id": "b",
+                "text": "`border-box`: width includes padding/border",
+                "isCorrect": true
+            },
+            {
+                "id": "c",
+                "text": "`border-box` is the default",
+                "isCorrect": false
+            },
+            {
+                "id": "d",
+                "text": "Both A and B",
+                "isCorrect": true
+            }
+        ]
+    },
+    {
+        "id": "css-q14",
+        "title": "How do you center a block element with CSS?",
+        "content": "Horizontally: `margin: 0 auto` (with width). Vertically: use Flexbox (`align-items: center`) or Grid (`place-items: center`).",
+        "type": "open-ended",
+        "category": "CSS & Styling",
+        "subcategory": "Positioning",
+        "difficulty": "intermediate",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Centering Elements",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "centering",
+            "flexbox",
+            "grid",
+            "layout"
+        ],
+        "explanation": "Modern centering uses Flexbox or Grid. Legacy methods include absolute positioning with transforms.",
+        "points": 7,
+        "sampleAnswers": [
+            "Horizontally: `.box { width: 50%; margin: 0 auto; }`. Vertically: `.container { display: flex; align-items: center; justify-content: center; }`",
+            "CSS Grid: `.container { display: grid; place-items: center; }` centers both horizontally and vertically."
+        ]
+    },
+    {
+        "id": "css-q15",
+        "title": "What is the difference between block, inline, and inline-block elements?",
+        "content": "Block: full width, line break. Inline: flows in text, no width/height. Inline-block: flows inline but accepts width/height/padding.",
+        "type": "multiple-choice",
+        "category": "CSS & Styling",
+        "subcategory": "Display",
+        "difficulty": "beginner",
+        "learningPath": "Modern CSS Mastery",
+        "topic": "Display Property",
+        "isActive": true,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createdBy": "admin",
+        "tags": [
+            "css",
+            "display",
+            "block",
+            "inline",
+            "inline-block"
+        ],
+        "explanation": "`<div>` is block; `<span>` is inline; `inline-block` is used for navigation menus or icon grids.",
+        "points": 5,
+        "options": [
+            {
+                "id": "a",
+                "text": "Block: full width, line break; Inline: no width/height; Inline-block: inline with box model",
+                "isCorrect": true
+            },
+            {
+                "id": "b",
+                "text": "All behave the same",
+                "isCorrect": false
+            },
+            {
+                "id": "c",
+                "text": "Inline elements can have margins",
+                "isCorrect": false
+            },
+            {
+                "id": "d",
+                "text": "Block elements can’t have padding",
+                "isCorrect": false
+            }
+        ]
+    }
+]

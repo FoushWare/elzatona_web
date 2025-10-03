@@ -1,0 +1,988 @@
+[
+  {
+    "id": "react-q-051",
+    "title": "Do Hooks replace render props and higher-order components?",
+    "content": "Both render props and higher-order components render only a single child but in most of the cases Hooks are a simpler way to serve this by reducing nesting in your tree.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Hooks",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "hooks", "render-props", "hoc", "composition"],
+    "explanation": "Hooks simplify logic reuse without the nesting issues of render props or HOCs, though all three patterns can coexist.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "Yes, Hooks completely replace them and are always better",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Hooks provide a simpler way to share logic and reduce nesting, but render props and HOCs are still valid patterns",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "No, Hooks cannot replace render props or HOCs",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Hooks only work with class components",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-052",
+    "title": "What is a switching component?",
+    "content": "A _switching component_ is a component that renders one of many components. We need to use object to map prop values to components.\n\nFor example, a switching component to display different pages based on `page` prop:\n```jsx harmony\nimport HomePage from \"./HomePage\";\nimport AboutPage from \"./AboutPage\";\nimport ServicesPage from \"./ServicesPage\";\nimport ContactPage from \"./ContactPage\";\nconst PAGES = {\n  home: HomePage,\n  about: AboutPage,\n  services: ServicesPage,\n  contact: ContactPage,\n};\nconst Page = (props) => {\n  const Handler = PAGES[props.page] || ContactPage;\n  return <Handler {...props} />;\n};\n// The keys of the PAGES object can be used in the prop types to catch dev-time errors.\nPage.propTypes = {\n  page: PropTypes.oneOf(Object.keys(PAGES)).isRequired,\n};\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Components",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "switching-component", "dynamic-rendering", "components"],
+    "explanation": "A switching component uses a mapping object to dynamically render one of several components based on a prop, enabling clean page or view switching.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "A component that toggles between light and dark mode",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A component that renders one of many components based on a prop using an object map",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A component that switches between class and function syntax",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A built-in React component for routing",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-053",
+    "title": "What are React Mixins?",
+    "content": "_Mixins_ are a way to totally separate components to have a common functionality. Mixins **should not be used** and can be replaced with _higher-order components_ or _decorators_.\n\nOne of the most commonly used mixins is `PureRenderMixin`. You might be using it in some components to prevent unnecessary re-renders when the props and state are shallowly equal to the previous props and state:\n```javascript\nconst PureRenderMixin = require(\"react-addons-pure-render-mixin\");\nconst Button = React.createClass({\n  mixins: [PureRenderMixin],\n  // ...\n});\n```\n<!-- TODO: mixins are deprecated -->",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Higher-Order Components",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "mixins", "deprecated", "hoc", "reuse"],
+    "explanation": "Mixins were used in React.createClass to share logic but are deprecated. Modern alternatives include HOCs, render props, and Hooks.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "Mixins are the recommended way to share logic in modern React",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Mixins are deprecated and should be replaced with HOCs, render props, or Hooks",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Mixins work well with function components",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Mixins are required for performance optimization",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-054",
+    "title": "What are the Pointer Events supported in React?",
+    "content": "_Pointer Events_ provide a unified way of handling all input events. In the old days we had a mouse and respective event listeners to handle them but nowadays we have many devices which don't correlate to having a mouse, like phones with touch surface or pens. We need to remember that these events will only work in browsers that support the _Pointer Events_ specification.\n\nThe following event types are now available in _React DOM_:\n1. `onPointerDown`\n2. `onPointerMove`\n3. `onPointerUp`\n4. `onPointerCancel`\n5. `onGotPointerCapture`\n6. `onLostPointerCapture`\n7. `onPointerEnter`\n8. `onPointerLeave`\n9. `onPointerOver`\n10. `onPointerOut`",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "DOM Events",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "pointer-events", "touch", "mouse", "events"],
+    "explanation": "React supports Pointer Events for unified input handling across mouse, touch, and pen devices, but only in browsers that support the Pointer Events API.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "React only supports mouse and touch events separately",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "React supports Pointer Events like onPointerDown, onPointerMove, etc., for unified input handling",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Pointer Events are not supported in React",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Pointer Events only work in React Native",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-055",
+    "title": "Why should component names start with capital letter?",
+    "content": "If you are rendering your component using JSX, the name of that component has to begin with a capital letter otherwise React will throw an error as an unrecognized tag. This convention is because only HTML elements and SVG tags can begin with a lowercase letter.\n\n```jsx harmony\nfunction SomeComponent {\n  // Code goes here\n}\n```\nYou can define function component whose name starts with lowercase letter, but when it's imported it should have a capital letter. Here lowercase is fine:\n```jsx harmony\nfunction myComponent {\n  render() {\n    return <div />;\n  }\n}\nexport default myComponent;\n```\nWhile when imported in another file it should start with capital letter:\n```jsx harmony\nimport MyComponent from \"./myComponent\";\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "JSX",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "jsx", "component-naming", "capital-letter"],
+    "explanation": "JSX treats lowercase tags as HTML/SVG elements. Component names must start with a capital letter to be recognized as React components.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "It’s a JavaScript syntax requirement",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "JSX uses lowercase for HTML elements; capital letters distinguish React components",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It improves performance",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It’s only required for class components",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-056",
+    "title": "Are custom DOM attributes supported in React v16?",
+    "content": "Yes. In the past, React used to ignore unknown DOM attributes. If you wrote JSX with an attribute that React doesn't recognize, React would just skip it.\n\nFor example, let's take a look at the below attribute:\n```jsx harmony\n<div mycustomattribute={\"something\"} />\n```\nWould render an empty div to the DOM with React v15:\n```html\n<div />\n```\nIn React v16 any unknown attributes will end up in the DOM:\n```html\n<div mycustomattribute=\"something\" />\n```\nThis is useful for supplying browser-specific non-standard attributes, trying new DOM APIs, and integrating with opinionated third-party libraries.",
+    "type": "true-false",
+    "category": "React",
+    "topic": "DOM Manipulation",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "custom-attributes", "react-v16", "dom"],
+    "explanation": "React v16 passes unknown attributes to the DOM, unlike v15 which ignored them. This enables custom attributes for browser APIs or third-party libraries.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-057",
+    "title": "How to loop inside JSX?",
+    "content": "You can simply use `Array.prototype.map` with ES6 _arrow function_ syntax.\n\nFor example, the `items` array of objects is mapped into an array of components:\n```jsx harmony\n<tbody>\n  {items.map((item) => (\n    <SomeComponent key={item.id} name={item.name} />\n  ))}\n</tbody>\n```\nBut you can't iterate using `for` loop:\n```jsx harmony\n<tbody>\n  for (let i = 0; i < items.length; i++) {\n    <SomeComponent key={items[i].id} name={items[i].name} />\n  }\n</tbody>\n```\nThis is because JSX tags are transpiled into _function calls_, and you can't use statements inside expressions.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Lists and Keys",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "jsx", "map", "loops", "arrays"],
+    "explanation": "Use `Array.prototype.map()` to loop in JSX. `for` loops are statements and cannot be used inside JSX expressions.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `for` loops directly in JSX",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use `Array.prototype.map()` to transform arrays into JSX elements",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Loops are not supported in JSX",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use `forEach` to render elements",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-058",
+    "title": "How do you access props in attribute quotes?",
+    "content": "React (or JSX) doesn't support variable interpolation inside an attribute value. The below representation won't work:\n```jsx harmony\n<img className=\"image\" src=\"images/{this.props.image}\" />\n```\nBut you can put any JS expression inside curly braces as the entire attribute value. So the below expression works:\n```jsx harmony\n<img className=\"image\" src={\"images/\" + this.props.image} />\n```\nUsing _template strings_ will also work:\n```jsx harmony\n<img className=\"image\" src={`images/${this.props.image}`} />\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Props",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "jsx", "props", "template-strings", "attributes"],
+    "explanation": "In JSX, attribute values must be JavaScript expressions wrapped in `{}`, not string interpolation with `{}` inside quotes.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `{this.props.image}` inside quotes like `src=\"images/{this.props.image}\"`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use expressions like `src={\"images/\" + this.props.image}` or template literals `src={`images/${this.props.image}`}`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Only static strings are allowed in attributes",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use `src={this.props.image}` without any path",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-059",
+    "title": "What is React PropTypes array with shape?",
+    "content": "If you want to pass an array of objects to a component with a particular shape then use `React.PropTypes.shape()` as an argument to `React.PropTypes.arrayOf()`.\n\n```javascript\nReactComponent.propTypes = {\n  arrayWithShape: React.PropTypes.arrayOf(\n    React.PropTypes.shape({\n      color: React.PropTypes.string.isRequired,\n      fontSize: React.PropTypes.number.isRequired,\n    })\n  ).isRequired,\n};\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Props",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "proptypes", "validation", "array", "shape"],
+    "explanation": "Use `PropTypes.arrayOf(PropTypes.shape({ ... }))` to validate an array of objects with a specific structure.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "`PropTypes.array(PropTypes.shape({}))`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`PropTypes.arrayOf(PropTypes.shape({ color: PropTypes.string, fontSize: PropTypes.number }))`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "`PropTypes.objectOf(PropTypes.array)`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`PropTypes.shape([PropTypes.object])`",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-060",
+    "title": "How to conditionally apply class attributes?",
+    "content": "You shouldn't use curly braces inside quotes because it is going to be evaluated as a string.\n```jsx harmony\n<div className=\"btn-panel {this.props.visible ? 'show' : 'hidden'}\">\n```\nInstead you need to move curly braces outside (don't forget to include spaces between class names):\n```jsx harmony\n<div className={'btn-panel ' + (this.props.visible ? 'show' : 'hidden')}>\n```\n_Template strings_ will also work:\n```jsx harmony\n<div className={`btn-panel ${this.props.visible ? 'show' : 'hidden'}`}>\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "CSS & Styling",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "classname", "conditional-styling", "template-strings"],
+    "explanation": "Class names must be computed as JavaScript expressions outside quotes, using string concatenation or template literals.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `className=\"btn {visible ? 'active' : ''}\"`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use `className={'btn ' + (visible ? 'active' : '')}` or template literals",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Conditional classes are not supported",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use CSS-in-JS only for conditional styling",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-061",
+    "title": "What is the difference between React and ReactDOM?",
+    "content": "The `react` package contains `React.createElement()`, `React.Component`, `React.Children`, and other helpers related to elements and component classes. You can think of these as the isomorphic or universal helpers that you need to build components. The `react-dom` package contains `ReactDOM.render()`, and in `react-dom/server` we have _server-side rendering_ support with `ReactDOMServer.renderToString()` and `ReactDOMServer.renderToStaticMarkup()`.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "React DOM",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "react-dom", "isomorphic", "rendering"],
+    "explanation": "`react` contains core helpers for elements and components; `react-dom` contains DOM-specific methods like `render()` and SSR utilities.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "`react` handles DOM rendering; `react-dom` defines components",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "`react` provides core element/component APIs; `react-dom` provides DOM and SSR rendering methods",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "They are the same package",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`react-dom` is only for server-side rendering",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-062",
+    "title": "Why ReactDOM is separated from React?",
+    "content": "The React team worked on extracting all DOM-related features into a separate library called _ReactDOM_. React v0.14 is the first release in which the libraries are split. By looking at some of the packages, `react-native`, `react-art`, `react-canvas`, and `react-three`, it has become clear that the beauty and essence of React has nothing to do with browsers or the DOM.\n\nTo build more environments that React can render to, React team planned to split the main React package into two: `react` and `react-dom`. This paves the way to writing components that can be shared between the web version of React and React Native.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "React DOM",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "react-dom", "react-native", "cross-platform"],
+    "explanation": "Separating `react` from `react-dom` allows React to target multiple platforms (web, native, etc.) while sharing core logic.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "To reduce bundle size for web apps",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To enable React to work across platforms like web and React Native by separating core from DOM-specific code",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Because the DOM API is too complex",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "ReactDOM is deprecated",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-063",
+    "title": "How to use React label element?",
+    "content": "If you try to render a `<label>` element bound to a text input using the standard `for` attribute, then it produces HTML missing that attribute and prints a warning to the console.\n```jsx harmony\n<label for={'user'}>{'User'}</label>\n<input type={'text'} id={'user'} />\n```\nSince `for` is a reserved keyword in JavaScript, use `htmlFor` instead.\n```jsx harmony\n<label htmlFor={'user'}>{'User'}</label>\n<input type={'text'} id={'user'} />\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Forms",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "label", "htmlfor", "forms", "accessibility"],
+    "explanation": "Use `htmlFor` instead of `for` in JSX because `for` is a reserved JavaScript keyword.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `for` as in HTML",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use `htmlFor` because `for` is a reserved JavaScript keyword",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Labels are not supported in React",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use `labelFor`",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-064",
+    "title": "How to combine multiple inline style objects?",
+    "content": "You can use _spread operator_ in regular React:\n```jsx harmony\n<button style={{ ...styles.panel.button, ...styles.panel.submitButton }}>\n  {\"Submit\"}\n</button>\n```\nIf you're using React Native then you can use the array notation:\n```jsx harmony\n<button style={[styles.panel.button, styles.panel.submitButton]}>\n  {\"Submit\"}\n</button>\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "CSS & Styling",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "inline-styles", "spread", "styling"],
+    "explanation": "In React (web), use the spread operator `{...obj1, ...obj2}` to merge style objects. In React Native, use array notation `[obj1, obj2]`.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `Object.assign()` only",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use spread operator `{...style1, ...style2}` in React web; array `[style1, style2]` in React Native",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Inline styles cannot be combined",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use CSS classes instead",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-065",
+    "title": "How to re-render the view when the browser is resized?",
+    "content": "You can use the `useState` hook to manage the width and height state variables, and the `useEffect` hook to add and remove the `resize` event listener. The `[]` dependency array passed to useEffect ensures that the effect only runs once (on mount) and not on every re-render.\n```javascript\nimport React, { useState, useEffect } from \"react\";\nfunction WindowDimensions() {\n  const [dimensions, setDimensions] = useState({\n    width: window.innerWidth,\n    height: window.innerHeight,\n  });\n  useEffect(() => {\n    function handleResize() {\n      setDimensions({\n        width: window.innerWidth,\n        height: window.innerHeight,\n      });\n    }\n    window.addEventListener(\"resize\", handleResize);\n    return () => window.removeEventListener(\"resize\", handleResize);\n  }, []);\n  return (\n    <span>\n      {dimensions.width} x {dimensions.height}\n    </span>\n  );\n}\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Hooks",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "useeffect", "resize", "event-listeners", "hooks"],
+    "explanation": "Use `useEffect` to add a `resize` event listener on mount and remove it on unmount, updating state with new dimensions.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `window.onresize = () => {}` directly in render",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use `useEffect` to add/remove `resize` listener and update state",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Resize events are handled automatically by React",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use `setInterval` to check window size",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-066",
+    "title": "How to pretty print JSON with React?",
+    "content": "We can use `<pre>` tag so that the formatting of the `JSON.stringify()` is retained:\n```jsx harmony\nconst data = { name: \"John\", age: 42 };\nfunction User {\n    return <pre>{JSON.stringify(data, null, 2)}</pre>;\n}\nconst container = createRoot(document.getElementById(\"container\"));\ncontainer.render(<User />);\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Debugging",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "json", "debugging", "pre", "stringify"],
+    "explanation": "Wrap `JSON.stringify(data, null, 2)` in a `<pre>` tag to preserve indentation and formatting in the browser.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `console.log` inside JSX",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use `<pre>{JSON.stringify(data, null, 2)}</pre>` to preserve formatting",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "JSON cannot be displayed in React",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use `<code>` without `JSON.stringify`",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-067",
+    "title": "Why can't you update props in React?",
+    "content": "The React philosophy is that props should be _immutable_(read only) and _top-down_. This means that a parent can send any prop values to a child, but the child can't modify received props.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Props",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "props", "immutability", "data-flow"],
+    "explanation": "Props are read-only to enforce unidirectional data flow and prevent side effects. Children must request changes via callbacks.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Props are mutable and can be updated freely",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Props are immutable to enforce unidirectional data flow and predictability",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Only class components can update props",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Props are updated automatically by React",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-068",
+    "title": "How to focus an input element on page load?",
+    "content": "You need to use `useEffect` hook to set focus on input field during page load time for functional component.\n```jsx harmony\nimport React, { useEffect, useRef } from \"react\";\nconst App = () => {\n  const inputElRef = useRef(null);\n  useEffect(() => {\n    inputElRef.current.focus();\n  }, []);\n  return (\n    <div>\n      <input defaultValue={\"Won't focus\"} />\n      <input ref={inputElRef} defaultValue={\"Will focus\"} />\n    </div>\n  );\n};\nReactDOM.render(<App />, document.getElementById(\"app\"));\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Refs",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "useeffect", "useRef", "focus", "dom"],
+    "explanation": "Use `useRef` to get a reference to the input and `useEffect` to call `.focus()` on mount.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "Add `autoFocus` prop to the input",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Use `useRef` and `useEffect` to manually focus the input",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Both `autoFocus` and `useRef`/`useEffect` are valid approaches",
+        "isCorrect": true
+      },
+      {
+        "id": "d",
+        "text": "It's not possible to focus on page load",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-069",
+    "title": "How can we find the version of React at runtime in the browser?",
+    "content": "You can use `React.version` to get the version.\n```jsx harmony\nconst REACT_VERSION = React.version;\nReactDOM.render(\n  <div>{`React version: ${REACT_VERSION}`}</div>,\n  document.getElementById(\"app\")\n);\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Debugging",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "version", "debugging", "runtime"],
+    "explanation": "Access `React.version` to get the current React version at runtime.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "`React.version`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "`ReactDOM.version`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`process.env.REACT_VERSION`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`package.json` version",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-070",
+    "title": "How to add Google Analytics for React Router?",
+    "content": "Add a listener on the `history` object to record each page view:\n```javascript\nhistory.listen(function (location) {\n  window.ga(\"set\", \"page\", location.pathname + location.search);\n  window.ga(\"send\", \"pageview\", location.pathname + location.search);\n});\n```",
+    "type": "multiple-choice",
+    "category": "React Router",
+    "topic": "React Router",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "react-router", "analytics", "ga", "history"],
+    "explanation": "Use `history.listen()` to track route changes and send page views to Google Analytics.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "Add GA script to every component",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use `history.listen()` to track location changes and send page views",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "GA is automatically integrated with React Router",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use `useEffect` in every route component",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-071",
+    "title": "How do you apply vendor prefixes to inline styles in React?",
+    "content": "React _does not_ apply _vendor prefixes_ automatically. You need to add vendor prefixes manually.\n```jsx harmony\n<div\n  style={{\n    transform: \"rotate(90deg)\",\n    WebkitTransform: \"rotate(90deg)\", // note the capital 'W' here\n    msTransform: \"rotate(90deg)\", // 'ms' is the only lowercase vendor prefix\n  }}\n/>\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "CSS & Styling",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "react",
+      "vendor-prefixes",
+      "inline-styles",
+      "css",
+      "compatibility"
+    ],
+    "explanation": "React does not auto-prefix styles. Manually add prefixes like `WebkitTransform` (note capital 'W') and `msTransform`.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "React auto-prefixes all styles",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Manually add prefixes like `WebkitTransform` and `msTransform`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Use a CSS-in-JS library only",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Prefixes are not needed in modern browsers",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-072",
+    "title": "How to import and export components using React and ES6?",
+    "content": "You should use default for exporting the components\n```jsx harmony\nimport User from \"user\";\nexport default function MyProfile {\n    return <User type=\"customer\">//...</User>;\n}\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Components",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "es6", "import", "export", "modules"],
+    "explanation": "Use `export default` for components and `import Name from 'module'` to import them.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Only named exports are allowed",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use `export default` for components and `import Name from 'module'`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Components must be exported as constants",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use `require()` and `module.exports`",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-073",
+    "title": "What are the exceptions on React component naming?",
+    "content": "The component names should start with an uppercase letter but there are few exceptions to this convention. The lowercase tag names with a dot (property accessors) are still considered as valid component names.\n\nFor example, the below tag can be compiled to a valid component,\n```jsx harmony\n     render() {\n          return (\n            <obj.component/> // `React.createElement(obj.component)`\n          )\n    }\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "JSX",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "jsx", "component-naming", "exceptions"],
+    "explanation": "JSX tags with dots (e.g., `<obj.component />`) are valid because they are treated as property access, not HTML tags.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "All component names must be uppercase",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Tags with dots like `<obj.component />` are valid because they are property accessors",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Lowercase names are allowed for all components",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Naming exceptions are not supported",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-074",
+    "title": "Is it possible to use async/await in plain React?",
+    "content": "Yes, you can use `async/await` in plain React, as long as your JavaScript environment supports ES2017+. Nowadays most modern browsers and build tools support ES2017+ version. If you're using **Create React App**, **Next.js**, **Remix**, or any modern React setup, `async/await` is supported out of the box through **Babel**.\n\n### Example Usage\n```jsx\nimport { useEffect, useState } from 'react';\nfunction UserProfile() {\n  const [user, setUser] = useState(null);\n  useEffect(() => {\n    const fetchUser = async () => {\n      const response = await fetch('/api/user');\n      const data = await response.json();\n      setUser(data);\n    };\n    fetchUser();\n  }, []);\n  return user ? <div>Hello, {user.name}</div> : <div>Loading...</div>;\n}\n```",
+    "type": "true-false",
+    "category": "React",
+    "topic": "Hooks",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "async-await", "fetch", "hooks", "babel"],
+    "explanation": "Yes, `async/await` is fully supported in modern React environments via Babel transpilation.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-075",
+    "title": "What are the common folder structures for React?",
+    "content": "There are two common practices for React project file structure.\n1.  **Grouping by features or routes:**\n   One common way to structure projects is locate CSS, JS, and tests together, grouped by feature or route.\n   ```\n   common/\n   ├─ Avatar.js\n   ├─ Avatar.css\n   ├─ APIUtils.js\n   └─ APIUtils.test.js\n   feed/\n   ├─ index.js\n   ├─ Feed.js\n   ├─ Feed.css\n   ├─ FeedStory.js\n   ├─ FeedStory.test.js\n   └─ FeedAPI.js\n   profile/\n   ├─ index.js\n   ├─ Profile.js\n   ├─ ProfileHeader.js\n   ├─ ProfileHeader.css\n   └─ ProfileAPI.js\n   ```\n2.  **Grouping by file type:**\n   Another popular way to structure projects is to group similar files together.\n   ```\n   api/\n   ├─ APIUtils.js\n   ├─ APIUtils.test.js\n   ├─ ProfileAPI.js\n   └─ UserAPI.js\n   components/\n   ├─ Avatar.js\n   ├─ Avatar.css\n   ├─ Feed.js\n   ├─ Feed.css\n   ├─ FeedStory.js\n   ├─ FeedStory.test.js\n   ├─ Profile.js\n   ├─ ProfileHeader.js\n   └─ ProfileHeader.css\n   ```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Project Structure",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "folder-structure", "organization", "best-practices"],
+    "explanation": "Common structures are: (1) by feature/route (co-locate related files), or (2) by file type (group all components, all API files, etc.).",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Only grouping by file type is valid",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Group by feature/route or by file type are both common approaches",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "There is only one official React folder structure",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Folder structure doesn't matter in React",
+        "isCorrect": false
+      }
+    ]
+  }
+]
