@@ -36,11 +36,7 @@ export interface AnimationConfig {
 export interface UseHomepageAnimationsReturn {
   showAnimation: boolean;
   isClient: boolean;
-  showTour: boolean;
   hasSeenTour: boolean;
-  handleTourComplete: () => void;
-  handleTourSkip: () => void;
-  startTour: () => void;
 }
 
 // Personalized content hook return type

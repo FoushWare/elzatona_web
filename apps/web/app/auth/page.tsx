@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import {
+  getAuthRedirectUrl,
+  getAndClearIntendedRedirectUrl,
+} from '@elzatona/shared/utils/authRedirect';
+import {
   ArrowLeft,
   User,
   Lock,
@@ -40,7 +44,15 @@ export default function AuthPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/learning-mode');
+      // Check if there's an intended redirect URL (e.g., from a protected page)
+      const intendedUrl = getAndClearIntendedRedirectUrl();
+      if (intendedUrl) {
+        router.push(intendedUrl);
+      } else {
+        // Otherwise, redirect based on stored learning mode
+        const redirectUrl = getAuthRedirectUrl();
+        router.push(redirectUrl);
+      }
     }
   }, [isAuthenticated, router]);
 
@@ -76,7 +88,15 @@ export default function AuthPage() {
       }
 
       if (success) {
-        router.push('/learning-mode');
+        // Check if there's an intended redirect URL
+        const intendedUrl = getAndClearIntendedRedirectUrl();
+        if (intendedUrl) {
+          router.push(intendedUrl);
+        } else {
+          // Otherwise, redirect based on stored learning mode
+          const redirectUrl = getAuthRedirectUrl();
+          router.push(redirectUrl);
+        }
       }
     } catch {
       setError('An unexpected error occurred. Please try again.');
@@ -98,7 +118,15 @@ export default function AuthPage() {
       }
 
       if (result.success) {
-        router.push('/learning-mode');
+        // Check if there's an intended redirect URL
+        const intendedUrl = getAndClearIntendedRedirectUrl();
+        if (intendedUrl) {
+          router.push(intendedUrl);
+        } else {
+          // Otherwise, redirect based on stored learning mode
+          const redirectUrl = getAuthRedirectUrl();
+          router.push(redirectUrl);
+        }
       } else {
         setError(result.error || `Failed to sign in with ${provider}`);
       }

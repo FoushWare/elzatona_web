@@ -389,20 +389,6 @@ export const NavbarSimple: React.FC = () => {
                 </>
               ) : (
                 <>
-                  {/* Get Started Button - Hidden when authenticated */}
-                  {!isAuthLoading && !isAuthenticated && (
-                    <Link
-                      href="/get-started"
-                      className={`block w-full text-center py-2.5 sm:py-3 rounded-lg font-medium shadow-md transition-colors duration-200 text-sm sm:text-base ${
-                        isActiveLink('/get-started')
-                          ? 'bg-indigo-700 text-white ring-2 ring-indigo-300 dark:ring-indigo-500 font-semibold'
-                          : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-                      }`}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Get Started
-                    </Link>
-                  )}
                   {isAuthLoading ? (
                     <div className="block w-full text-center py-2.5 sm:py-3 font-medium text-sm sm:text-base rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
                       Loading...

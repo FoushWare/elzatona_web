@@ -45,7 +45,7 @@ const quickActions: QuickAction[] = [
     delay: 1200,
   },
   {
-    href: '/get-started',
+    href: '/',
     icon: <Award className="w-6 h-6 text-white" />,
     title: 'Get Started',
     description: 'Take our interactive tour and choose your learning style',

@@ -6,7 +6,6 @@ import { UseHomepageAnimationsReturn } from '@/types/homepage';
 export function useHomepageAnimations(): UseHomepageAnimationsReturn {
   const [showAnimation, setShowAnimation] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [showTour, setShowTour] = useState(false);
   const [hasSeenTour, setHasSeenTour] = useState(false);
 
   // Ensure client-side rendering
@@ -42,35 +41,10 @@ export function useHomepageAnimations(): UseHomepageAnimationsReturn {
     };
   }, [isClient]);
 
-  // Tour is now manually triggered, no automatic showing
-
-  const handleTourComplete = () => {
-    setShowTour(false);
-    setHasSeenTour(true);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('hasSeenHomepageTour', 'true');
-    }
-  };
-
-  const handleTourSkip = () => {
-    setShowTour(false);
-    setHasSeenTour(true);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('hasSeenHomepageTour', 'true');
-    }
-  };
-
-  const startTour = () => {
-    setShowTour(true);
-  };
 
   return {
     showAnimation,
     isClient,
-    showTour,
     hasSeenTour,
-    handleTourComplete,
-    handleTourSkip,
-    startTour,
   };
 }

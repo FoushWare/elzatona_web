@@ -67,6 +67,37 @@ const nextConfig: NextConfig = {
         destination: '/admin/dashboard',
         permanent: false,
       },
+      // Redirect old routes to new organized structure
+      {
+        source: '/guided-learning',
+        destination: '/features/learning/guided-learning',
+        permanent: false,
+      },
+      {
+        source: '/freestyle-learning',
+        destination: '/features/learning/free-style-roadmap',
+        permanent: false,
+      },
+      {
+        source: '/practice-selection',
+        destination: '/features/practice/practice-selection',
+        permanent: false,
+      },
+      {
+        source: '/browse-practice-questions',
+        destination: '/features/practice/browse-practice-questions',
+        permanent: false,
+      },
+      {
+        source: '/guided-practice',
+        destination: '/features/learning/guided-practice',
+        permanent: false,
+      },
+      {
+        source: '/guided-analytics',
+        destination: '/features/learning/guided-analytics',
+        permanent: false,
+      },
     ];
   },
 

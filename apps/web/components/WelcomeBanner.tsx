@@ -66,10 +66,7 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ onClose }) => {
           <p>
             Prepare for frontend interviews with our comprehensive learning
             platform.
-            <Link
-              href="/get-started"
-              className="underline hover:no-underline ml-1"
-            >
+            <Link href="/" className="underline hover:no-underline ml-1">
               Get started →
             </Link>
           </p>

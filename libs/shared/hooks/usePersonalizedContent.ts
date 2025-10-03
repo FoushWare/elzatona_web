@@ -64,7 +64,7 @@ export function usePersonalizedContent(userType: UserType): UsePersonalizedConte
         title: 'Master Frontend Development',
         subtitle: 'The complete platform to ace your frontend interviews',
         cta: 'Get Started',
-        ctaLink: '/get-started',
+        ctaLink: '/',
         icon: 'play', // Icon type instead of JSX
         color: 'indigo',
       };

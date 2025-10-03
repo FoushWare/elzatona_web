@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo, useState } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   BookOpen,
   Compass,
@@ -14,6 +14,7 @@ import {
 import { useRTL } from '@elzatona/shared/contexts/RTLContext';
 import { getPositionClass, rtlClass } from '@elzatona/shared/utils/rtl';
 import { AnimatedElement } from '@elzatona/shared/ui/components/ui/AnimatedElement';
+import { useUserType } from '@elzatona/shared/contexts/UserTypeContext';
 
 interface LearningOptionsSectionProps {
   showAnimation: boolean;
@@ -25,11 +26,28 @@ export const LearningOptionsSection = memo(function LearningOptionsSection({
   isClient,
 }: LearningOptionsSectionProps) {
   const { isRTL } = useRTL();
+  const { setUserType, setHasCompletedOnboarding } = useUserType();
+  const router = useRouter();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const animationConfig = {
     showAnimation,
     isClient,
+  };
+
+  const handleLearningModeSelection = (mode: 'guided' | 'freestyle') => {
+    // Set the user type in context
+    setUserType(mode);
+
+    // Mark onboarding as completed
+    setHasCompletedOnboarding(true);
+
+    // Redirect to the appropriate learning page
+    if (mode === 'guided') {
+      router.push('/guided-learning');
+    } else {
+      router.push('/freestyle-learning');
+    }
   };
 
   const learningOptions = [
@@ -49,7 +67,6 @@ export const LearningOptionsSection = memo(function LearningOptionsSection({
         'Progress tracking',
         'Personalized recommendations',
       ],
-      href: '/guided-learning',
     },
     {
       id: 'freestyle',
@@ -67,7 +84,6 @@ export const LearningOptionsSection = memo(function LearningOptionsSection({
         'Self-paced learning',
         'Personalized curriculum',
       ],
-      href: '/freestyle-learning',
     },
   ];
 
@@ -106,7 +122,12 @@ export const LearningOptionsSection = memo(function LearningOptionsSection({
                 {...animationConfig}
               >
                 <div
-                  onClick={() => setSelectedOption(option.id)}
+                  onClick={() => {
+                    setSelectedOption(option.id);
+                    handleLearningModeSelection(
+                      option.id as 'guided' | 'freestyle'
+                    );
+                  }}
                   className={`relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 cursor-pointer h-full flex flex-col ${
                     isSelected
                       ? 'border-indigo-500 dark:border-indigo-400 shadow-xl ring-2 ring-indigo-500/20 dark:ring-indigo-400/20'
@@ -161,8 +182,12 @@ export const LearningOptionsSection = memo(function LearningOptionsSection({
                   </div>
 
                   {/* CTA Button - Always active */}
-                  <Link
-                    href={option.href}
+                  <button
+                    onClick={() =>
+                      handleLearningModeSelection(
+                        option.id as 'guided' | 'freestyle'
+                      )
+                    }
                     className={`group/btn inline-flex items-center justify-center w-full px-6 py-4 bg-gradient-to-r ${option.color} ${option.hoverColor} text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${
                       isSelected ? 'animate-pulse' : ''
                     }`}
@@ -171,7 +196,7 @@ export const LearningOptionsSection = memo(function LearningOptionsSection({
                       <span>Get Started</span>
                       <Zap className="w-5 h-5 transition-transform duration-300 group-hover/btn:scale-110" />
                     </span>
-                  </Link>
+                  </button>
                 </div>
               </AnimatedElement>
             );

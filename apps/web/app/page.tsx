@@ -1,8 +1,7 @@
 'use client';
 
-import React, { memo, useMemo } from 'react';
+import React, { memo } from 'react';
 import { useUserType } from '@/contexts/UserTypeContext';
-import { GuidedTour } from '@elzatona/shared/ui/components/GuidedTour';
 import { HeroSection } from '@elzatona/shared/ui/components/home/HeroSection';
 import { LearningOptionsSection } from '@elzatona/shared/ui/components/home/LearningOptionsSection';
 import { AnimatedBackground } from '@elzatona/shared/ui/components/home/AnimatedBackground';
@@ -11,15 +10,7 @@ import { usePersonalizedContent } from '@/hooks/usePersonalizedContent';
 
 const HomePage = memo(function HomePage() {
   const { userType } = useUserType();
-  const {
-    showAnimation,
-    isClient,
-    showTour,
-    hasSeenTour,
-    handleTourComplete,
-    handleTourSkip,
-    startTour,
-  } = useHomepageAnimations();
+  const { showAnimation, isClient, hasSeenTour } = useHomepageAnimations();
 
   const { personalizedContent } = usePersonalizedContent(userType);
 
@@ -55,13 +46,6 @@ const HomePage = memo(function HomePage() {
           isClient={isClient}
         />
       </div>
-
-      {/* Guided Tour */}
-      <GuidedTour
-        isOpen={showTour}
-        onComplete={handleTourComplete}
-        onSkip={handleTourSkip}
-      />
     </div>
   );
 });

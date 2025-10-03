@@ -66,7 +66,7 @@ export const CallToActionSection = memo(function CallToActionSection({
                     />
                   </button>
                   <Link
-                    href="/get-started"
+                    href="/"
                     className={`inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-8 py-4 border-2 border-white/30 text-white rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 transform hover:scale-105`}
                   >
                     <Play className="w-5 h-5" />
@@ -85,7 +85,7 @@ export const CallToActionSection = memo(function CallToActionSection({
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
-                    href="/get-started"
+                    href="/"
                     className={`group inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-8 py-4 bg-white text-indigo-600 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105`}
                   >
                     <Play className="w-5 h-5" />
