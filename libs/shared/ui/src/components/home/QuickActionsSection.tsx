@@ -3,12 +3,9 @@
 import React, { memo, useMemo } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Code, BookOpen, Target, Award } from 'lucide-react';
-import { useRTL } from '@elzatona/shared/contexts/RTLContext';
-import { getPositionClass, rtlClass } from '@elzatona/shared/utils/rtl';
-import {
-  AnimatedElement,
-  AnimatedSection,
-} from '@elzatona/shared/ui/components/ui/AnimatedElement';
+import { useRTL } from '@elzatona/shared/contexts';
+import { getPositionClass, rtlClass } from '@elzatona/shared/utils';
+import { AnimatedElement, AnimatedSection } from '@elzatona/shared/ui';
 import {
   QuickActionsSectionProps,
   QuickAction,

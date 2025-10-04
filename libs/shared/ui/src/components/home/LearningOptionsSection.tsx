@@ -11,10 +11,10 @@ import {
   Settings,
   Check,
 } from 'lucide-react';
-import { useRTL } from '@elzatona/shared/contexts/RTLContext';
-import { getPositionClass, rtlClass } from '@elzatona/shared/utils/rtl';
-import { AnimatedElement } from '@elzatona/shared/ui/components/ui/AnimatedElement';
-import { useUserType } from '@elzatona/shared/contexts/UserTypeContext';
+import { useRTL } from '@elzatona/shared/contexts';
+import { getPositionClass, rtlClass } from '@elzatona/shared/utils';
+import { AnimatedElement } from '@elzatona/shared/ui';
+import { useUserType } from '@elzatona/shared/contexts';
 
 interface LearningOptionsSectionProps {
   showAnimation: boolean;
@@ -37,7 +37,7 @@ export const LearningOptionsSection = memo(function LearningOptionsSection({
 
   const handleLearningModeSelection = (mode: 'guided' | 'freestyle') => {
     // Set the user type in context
-    setUserType(mode);
+    setUserType(mode === 'freestyle' ? 'self-directed' : mode);
 
     // Mark onboarding as completed
     setHasCompletedOnboarding(true);

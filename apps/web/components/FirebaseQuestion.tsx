@@ -268,7 +268,7 @@ export default function FirebaseQuestion({
               >
                 <span className="text-blue-700 dark:text-blue-300">
                   Attempt {index + 1}:{' '}
-                  {attempt.isCorrect ? 'Correct' : 'Incorrect'}
+                  {(attempt as any).isCorrect ? 'Correct' : 'Incorrect'}
                 </span>
                 <span className="text-blue-600 dark:text-blue-400">
                   {attempt.timeSpent}s

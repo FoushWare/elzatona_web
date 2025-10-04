@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LearningPlanTemplate } from '@/lib/guided-learning-service';
+import { LearningPlanTemplate } from '@elzatona/data/firebase';
 
 interface UseLearningPlanTemplatesReturn {
   templates: LearningPlanTemplate[];

@@ -11,9 +11,9 @@ import {
   Map,
   Compass,
 } from 'lucide-react';
-import { useRTL } from '@elzatona/shared/contexts/RTLContext';
-import { getPositionClass, rtlClass } from '@elzatona/shared/utils/rtl';
-import { AnimatedElement } from '@elzatona/shared/ui/components/ui/AnimatedElement';
+import { useRTL } from '@elzatona/shared/contexts';
+import { getPositionClass, rtlClass } from '@elzatona/shared/utils';
+import { AnimatedElement } from '@elzatona/shared/ui';
 import { HeroSectionProps } from '@elzatona/shared/types/homepage';
 
 export const HeroSection = memo(function HeroSection({

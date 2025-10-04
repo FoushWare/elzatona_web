@@ -3,9 +3,9 @@
 import React, { memo, useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Play, BookOpen, Compass } from 'lucide-react';
-import { useRTL } from '@elzatona/shared/contexts/RTLContext';
-import { rtlClass } from '@elzatona/shared/utils/rtl';
-import { AnimatedSection } from '@elzatona/shared/ui/components/ui/AnimatedElement';
+import { useRTL } from '@elzatona/shared/contexts';
+import { rtlClass } from '@elzatona/shared/utils';
+import { AnimatedSection } from '@elzatona/shared/ui';
 import { CallToActionSectionProps } from '@elzatona/shared/types/homepage';
 
 export const CallToActionSection = memo(function CallToActionSection({

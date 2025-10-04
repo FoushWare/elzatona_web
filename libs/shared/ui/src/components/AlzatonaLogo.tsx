@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@elzatona/shared/contexts';
 
 interface AlzatonaLogoProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';

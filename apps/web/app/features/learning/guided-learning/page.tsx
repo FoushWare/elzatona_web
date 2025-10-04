@@ -5,6 +5,14 @@ import { useRouter } from 'next/navigation';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { useLearningPlanTemplates } from '@/hooks/useLearningPlanTemplates';
 import { setIntendedRedirectUrl } from '@elzatona/shared/utils/authRedirect';
+import { PlanCards } from '@elzatona/shared/ui/components/learning/PlanCards';
+import { SimpleOnboarding } from '@elzatona/shared/ui/components/onboarding/SimpleOnboarding';
+import {
+  LearningPlan,
+  PlanCard,
+  OnboardingData,
+  PlanCategory,
+} from '@elzatona/shared/types/learning-plans';
 import {
   Clock,
   Target,
@@ -26,24 +34,7 @@ import {
   X,
 } from 'lucide-react';
 
-interface LearningPlan {
-  id: string;
-  name: string;
-  duration: number; // in days
-  description: string;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  totalQuestions: number;
-  dailyQuestions: number;
-  sections: {
-    id: string;
-    name: string;
-    questions: number;
-    weight: number; // percentage of total
-  }[];
-  features: string[];
-  estimatedTime: string;
-  isRecommended: boolean;
-}
+// LearningPlan interface is imported from shared types
 
 interface DailyGoal {
   day: number;
@@ -65,6 +56,72 @@ export default function GuidedLearningPage() {
     getTemplate,
   } = useLearningPlanTemplates();
   const router = useRouter();
+
+  // Onboarding state
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingData, setOnboardingData] = useState<OnboardingData | null>(
+    null
+  );
+  const [selectedCategory, setSelectedCategory] = useState<
+    PlanCategory | undefined
+  >(undefined);
+  const [selectedPlanId, setSelectedPlanId] = useState<string | undefined>(
+    undefined
+  );
+
+  // Mock admin-managed plans - in real app, this would come from Firebase
+  const [adminPlans, setAdminPlans] = useState<PlanCard[]>([
+    {
+      id: '1',
+      planId: '1',
+      title: 'Frontend Fundamentals - 7 Days',
+      description:
+        'Complete frontend interview preparation covering HTML, CSS, and JavaScript',
+      category: 'questions',
+      questionCount: 95,
+      estimatedTime: 450,
+      difficulty: 'intermediate',
+      isRecommended: true,
+      tags: ['HTML', 'CSS', 'JavaScript', 'Fundamentals'],
+    },
+    {
+      id: '2',
+      planId: '2',
+      title: 'React Mastery - 5 Days',
+      description: 'Deep dive into React.js concepts and best practices',
+      category: 'framework',
+      questionCount: 60,
+      estimatedTime: 350,
+      difficulty: 'advanced',
+      isRecommended: false,
+      tags: ['React', 'Hooks', 'State Management', 'Components'],
+    },
+    {
+      id: '3',
+      planId: '3',
+      title: 'Problem Solving Bootcamp - 3 Days',
+      description: 'Master frontend algorithms and data structures',
+      category: 'problem-solving',
+      questionCount: 45,
+      estimatedTime: 300,
+      difficulty: 'intermediate',
+      isRecommended: true,
+      tags: ['Algorithms', 'Data Structures', 'Problem Solving'],
+    },
+    {
+      id: '4',
+      planId: '4',
+      title: 'System Design Essentials - 4 Days',
+      description:
+        'Learn to design scalable frontend systems like Facebook feeds',
+      category: 'system-design',
+      questionCount: 30,
+      estimatedTime: 240,
+      difficulty: 'advanced',
+      isRecommended: false,
+      tags: ['System Design', 'Architecture', 'Scalability'],
+    },
+  ]);
 
   // Filter to only show day-based plans (1-day, 2-day, 3-day, 4-day, 5-day, 6-day, 7-day)
   const templates = allTemplates
@@ -100,7 +157,7 @@ export default function GuidedLearningPage() {
     });
   }, [templates, templatesLoading, templatesError]);
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
-  const [currentPlan, setCurrentPlan] = useState<LearningPlan | null>(null);
+  const [currentPlan, setCurrentPlan] = useState<any | null>(null);
   const [dailyGoals, setDailyGoals] = useState<DailyGoal[]>([]);
   const [currentDay, setCurrentDay] = useState(1);
   const [completedPlans, setCompletedPlans] = useState<Set<string>>(new Set());
@@ -108,6 +165,50 @@ export default function GuidedLearningPage() {
   const [isNavigatingToPlan, setIsNavigatingToPlan] = useState<string | null>(
     null
   );
+
+  // Check if user needs onboarding
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hasCompletedOnboarding = localStorage.getItem(
+        'hasCompletedOnboarding'
+      );
+      if (!hasCompletedOnboarding) {
+        setShowOnboarding(true);
+      }
+    }
+  }, []);
+
+  // Handle onboarding completion
+  const handleOnboardingComplete = (data: OnboardingData) => {
+    setOnboardingData(data);
+    setShowOnboarding(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('hasCompletedOnboarding', 'true');
+      localStorage.setItem('onboardingData', JSON.stringify(data));
+    }
+
+    // Set category filter based on onboarding data
+    if (data.preferredTopics && data.preferredTopics.length > 0) {
+      setSelectedCategory(data.preferredTopics[0] as PlanCategory);
+    }
+  };
+
+  const handleOnboardingSkip = () => {
+    setShowOnboarding(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('hasCompletedOnboarding', 'true');
+    }
+  };
+
+  // Handle plan selection
+  const handleSelectPlan = (planId: string) => {
+    setSelectedPlanId(planId);
+    // Store selected plan and redirect to practice
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedPlanId', planId);
+    }
+    router.push(`/features/learning/guided-practice?plan=${planId}`);
+  };
 
   // No longer redirect unauthenticated users - allow them to browse
 
@@ -176,7 +277,7 @@ export default function GuidedLearningPage() {
     return 'C (Keep practicing!)';
   };
 
-  const generateDailyGoals = (plan: LearningPlan) => {
+  const generateDailyGoals = (plan: any) => {
     const goals: DailyGoal[] = [];
     const today = new Date();
 
@@ -353,6 +454,14 @@ export default function GuidedLearningPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 py-8">
+      {/* Onboarding Modal */}
+      {showOnboarding && (
+        <SimpleOnboarding
+          onComplete={handleOnboardingComplete}
+          onSkip={handleOnboardingSkip}
+        />
+      )}
+
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Enhanced Notification Modal for Unauthenticated Users */}
         {!isAuthenticated && showNotification && (
@@ -601,178 +710,45 @@ export default function GuidedLearningPage() {
           </div>
         )}
 
-        {/* Learning Plans */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-          {templatesLoading && (
-            <div className="col-span-full text-center py-16">
-              <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <Loader2 className="w-10 h-10 animate-spin text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Loading Learning Plans
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Fetching your personalized learning options...
-              </p>
-            </div>
-          )}
+        {/* Category Filter */}
+        <div className="mb-8">
+          <div className="flex flex-wrap gap-4 justify-center">
+            <button
+              onClick={() => setSelectedCategory(undefined)}
+              className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                !selectedCategory
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+              }`}
+            >
+              All Categories
+            </button>
+            {['questions', 'framework', 'problem-solving', 'system-design'].map(
+              category => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category as PlanCategory)}
+                  className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 capitalize ${
+                    selectedCategory === category
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  {category.replace('-', ' ')}
+                </button>
+              )
+            )}
+          </div>
+        </div>
 
-          {templatesError && (
-            <div className="col-span-full text-center py-8">
-              <div className="bg-red-100 dark:bg-red-900 border border-red-400 text-red-700 dark:text-red-300 px-4 py-3 rounded">
-                <strong>Error:</strong> {templatesError}
-              </div>
-            </div>
-          )}
-
-          {!templatesLoading && !templatesError && templates.length === 0 && (
-            <div className="col-span-full text-center py-8">
-              <div className="text-gray-600 dark:text-gray-400">
-                No learning plans found. Using fallback plans...
-              </div>
-            </div>
-          )}
-
-          {templates.map((plan, index) => {
-            const planGrade = planGrades.get(plan.id);
-            const isCompleted = completedPlans.has(plan.id);
-
-            return (
-              <div
-                key={plan.id}
-                className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border-2 transition-all duration-300 hover:shadow-2xl cursor-pointer ${
-                  isCompleted && planGrade !== undefined
-                    ? getGradeColor(planGrade)
-                    : plan.isRecommended
-                      ? 'border-blue-500 dark:border-blue-400 ring-4 ring-blue-200 dark:ring-blue-800'
-                      : hoveredPlan === plan.id
-                        ? 'border-purple-300 dark:border-purple-600'
-                        : 'border-white/20 dark:border-gray-700/20 hover:border-gray-300 dark:hover:border-gray-600'
-                }`}
-                onClick={() => {
-                  setIsNavigatingToPlan(plan.id);
-                  router.push(`/guided-learning/${plan.id}`);
-                }}
-                onMouseEnter={() => setHoveredPlan(plan.id)}
-                onMouseLeave={() => setHoveredPlan(null)}
-              >
-                {/* Recommended Badge */}
-                {plan.isRecommended && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
-                      <Star className="w-3 h-3" />
-                      <span>Recommended</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Completed Badge */}
-                {isCompleted && (
-                  <div className="absolute -top-3 right-4">
-                    <div
-                      className={`px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1 ${
-                        planGrade !== undefined
-                          ? planGrade >= 90
-                            ? 'bg-yellow-500 text-white'
-                            : planGrade >= 80
-                              ? 'bg-green-500 text-white'
-                              : planGrade >= 70
-                                ? 'bg-blue-500 text-white'
-                                : planGrade >= 60
-                                  ? 'bg-orange-500 text-white'
-                                  : 'bg-red-500 text-white'
-                          : 'bg-green-500 text-white'
-                      }`}
-                    >
-                      <CheckCircle className="w-3 h-3" />
-                      <span>
-                        {planGrade !== undefined
-                          ? getGradeText(planGrade)
-                          : 'Completed'}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Plan Header */}
-                <div className="text-center mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Calendar className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                    {plan.name}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
-                    {plan.description}
-                  </p>
-                </div>
-
-                {/* Quick Stats */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {plan.duration}
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">
-                      Days
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {plan.totalQuestions}
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">
-                      Questions
-                    </div>
-                  </div>
-                </div>
-
-                {/* Difficulty Badge */}
-                <div className="flex justify-center mb-4">
-                  <div
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      plan.difficulty === 'Beginner'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                        : plan.difficulty === 'Intermediate'
-                          ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
-                          : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                    }`}
-                  >
-                    {plan.difficulty}
-                  </div>
-                </div>
-
-                {/* Action Button */}
-                <div className="flex justify-center">
-                  <div
-                    className={`flex items-center space-x-2 font-semibold text-sm transition-colors ${
-                      isNavigatingToPlan === plan.id
-                        ? 'text-blue-600 dark:text-blue-400'
-                        : completedPlans.has(plan.id)
-                          ? 'text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300'
-                          : 'text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300'
-                    }`}
-                  >
-                    {isNavigatingToPlan === plan.id ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Loading...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>
-                          {completedPlans.has(plan.id)
-                            ? 'Review Plan'
-                            : 'View Details'}
-                        </span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        {/* Admin-Managed Learning Plans */}
+        <div className="mb-12">
+          <PlanCards
+            plans={adminPlans}
+            onSelectPlan={handleSelectPlan}
+            selectedPlanId={selectedPlanId}
+            category={selectedCategory}
+          />
         </div>
 
         {/* Bottom Info */}

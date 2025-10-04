@@ -9,7 +9,7 @@ import React, {
   ReactNode,
 } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { AdminAuthService, AdminSession } from '@/lib/admin-auth';
+import { AdminAuthService, AdminSession } from '@elzatona/data/firebase';
 
 interface AdminAuthContextType {
   isAuthenticated: boolean;

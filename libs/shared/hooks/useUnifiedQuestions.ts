@@ -7,7 +7,7 @@ import {
   BulkQuestionData,
   QuestionStats,
   LearningPath,
-} from '@/lib/unified-question-schema';
+} from '@elzatona/data/firebase';
 
 interface UseUnifiedQuestionsOptions {
   autoLoad?: boolean;

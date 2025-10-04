@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useFirebaseAuth } from '@elzatona/shared/contexts';
 
 interface ProgressData {
   userId: string;
@@ -117,7 +117,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
 
             // Try to get a fresh token and set the cookie
             try {
-              const { cookieManager } = await import('@/lib/cookie-manager');
+              const { cookieManager } = await import('@elzatona/data/firebase');
               const success = await cookieManager.retryAuthCookie(user);
               if (success) {
                 console.log(

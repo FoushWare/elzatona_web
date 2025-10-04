@@ -28,7 +28,7 @@ import {
 import { AlzatonaLogo } from './AlzatonaLogo';
 import { useUserType } from '@/contexts/UserTypeContext';
 import { useMobileMenu } from '@/contexts/MobileMenuContext';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@elzatona/shared/contexts';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { LearningModeSwitcher } from './LearningModeSwitcher';
 

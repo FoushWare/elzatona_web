@@ -467,5 +467,62 @@ export const withFirestoreErrorHandling = async <T>(
   }
 };
 
+// Additional utility functions
+export const clearAuthData = () => {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('firebase:authUser');
+    sessionStorage.clear();
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('firebase:') || key.startsWith('auth_')) {
+        localStorage.removeItem(key);
+      }
+    });
+  }
+};
+
+export const setupTokenRefresh = () => {
+  if (!auth) return () => {};
+  
+  const refreshInterval = setInterval(async () => {
+    if (auth?.currentUser) {
+      try {
+        await auth.currentUser.getIdToken(true);
+      } catch (error) {
+        console.warn('Token refresh failed:', error);
+      }
+    }
+  }, 55 * 60 * 1000); // Refresh every 55 minutes
+  
+  return () => clearInterval(refreshInterval);
+};
+
+export const setAuthCookie = async (token: string) => {
+  if (typeof window !== 'undefined') {
+    try {
+      await fetch('/api/auth/set-cookie', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      });
+    } catch (error) {
+      console.warn('Failed to set auth cookie:', error);
+    }
+  }
+};
+
+export const clearAuthCookie = async () => {
+  if (typeof window !== 'undefined') {
+    try {
+      await fetch('/api/auth/clear-cookie', {
+        method: 'POST',
+      });
+    } catch (error) {
+      console.warn('Failed to clear auth cookie:', error);
+    }
+  }
+};
+
 // Export auth and db for direct access (with fallbacks)
 export { app, auth, db, storage };

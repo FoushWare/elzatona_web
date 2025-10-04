@@ -29,6 +29,8 @@ export interface UnifiedQuestion {
   learningPath?: string; // Already optional
   sectionId?: string; // Already optional
   topic?: string; // Added topic field
+  learningCardId?: string; // Reference to learning card
+  cardType?: 'core-technologies' | 'framework-questions' | 'problem-solving' | 'system-design';
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

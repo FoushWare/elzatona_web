@@ -1,6 +1,6 @@
 'use client';
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@elzatona/shared/contexts';
 
 // Re-export the theme hook for backward compatibility
 export const useDarkMode = useTheme;

@@ -17,16 +17,11 @@ import {
   saveUserToFirestore,
   getUserFromFirestore,
   onAuthStateChangedWrapper,
-} from '@/lib/firebase';
-import { firestoreService } from '@/lib/firestore-service';
-import { cookieManager } from '@/lib/cookie-manager';
-import { firestoreConnectionManager } from '@/lib/firestore-connection-manager';
-import {
   clearAuthData,
   setupTokenRefresh,
   setAuthCookie,
   clearAuthCookie,
-} from '@/lib/auth-utils';
+} from '@elzatona/data/firebase';
 
 interface FirebaseUser {
   uid: string;
@@ -114,7 +109,7 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
           // Get user data from Firestore with timeout
           let userData = null;
           try {
-            const firestorePromise = firestoreService.getUser(firebaseUser.uid);
+            const firestorePromise = getUserFromFirestore(firebaseUser.uid);
             const timeoutPromise = new Promise((_, reject) =>
               setTimeout(() => reject(new Error('Firestore timeout')), 5000)
             );
@@ -130,7 +125,10 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
             setUser(userData as FirebaseUser);
 
             // Set HTTP-only cookie for existing users too
-            await cookieManager.ensureAuthCookie(firebaseUser);
+            // Cookie management not available - using localStorage fallback
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('firebase:authUser', JSON.stringify(firebaseUser));
+            }
           } else {
             // Create FirebaseUser object for context
             const firebaseUserForContext: FirebaseUser = {
@@ -207,14 +205,16 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
             };
 
             // Try to save comprehensive user data to Firestore (don't wait for it)
-            firestoreService
-              .createUser(comprehensiveUser)
+            saveUserToFirestore(firebaseUser, comprehensiveUser.displayName)
               .catch(error =>
                 console.warn('Failed to save user to Firestore:', error)
               );
 
             // Set HTTP-only cookie for secure progress tracking
-            await cookieManager.ensureAuthCookie(firebaseUser);
+            // Cookie management not available - using localStorage fallback
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('firebase:authUser', JSON.stringify(firebaseUser));
+            }
           }
 
           // Return cleanup function for token refresh

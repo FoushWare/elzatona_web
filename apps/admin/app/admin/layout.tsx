@@ -2,12 +2,10 @@
 
 import React from 'react';
 import { AdminAuthProvider, useAdminAuth } from '@/contexts/AdminAuthContext';
-import AdminNavbar from '@/components/AdminNavbar';
-import { NotificationContainer } from '@/components/ui/Notification';
-import FirestoreErrorBoundary from '@/components/FirestoreErrorBoundary';
+import AdminNavbarSimple from '../../../../libs/shared/ui/src/components/AdminNavbarSimple';
+import { NotificationContainer } from '@elzatona/shared/ui';
 import { usePathname } from 'next/navigation';
 // ThemeProvider is already provided by root layout
-import '../globals.css';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -26,21 +24,48 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     pathname?.startsWith('/admin/guided-learning/') &&
     pathname?.endsWith('/edit');
   const isQuestionsPage = pathname === '/admin/content/questions';
+  const isSimpleTestPage = pathname === '/admin/simple-test';
+  const isGuidedLearningMinimalPage =
+    pathname === '/admin/guided-learning-minimal';
+  const isGuidedLearningSimplePage =
+    pathname === '/admin/guided-learning-simple';
+  const isGuidedLearningDebugPage = pathname === '/admin/guided-learning-debug';
+  const isImportTestPage = pathname === '/admin/import-test';
+  const isGuidedLearningMinimal2Page =
+    pathname === '/admin/guided-learning-minimal2';
+  const isLearningPlansPage = pathname === '/admin/learning-plans';
+  const isLearningCardsPage = pathname === '/admin/learning-cards';
+  const isNavbarTestPage = pathname === '/admin/navbar-test';
   const isPublicPage =
     isLoginPage ||
     isAdminRootPage ||
     isAuditLogsPage ||
     isGuidedLearningPage ||
     isGuidedLearningEditPage ||
-    isQuestionsPage;
+    isQuestionsPage ||
+    isSimpleTestPage ||
+    isGuidedLearningMinimalPage ||
+    isGuidedLearningSimplePage ||
+    isGuidedLearningDebugPage ||
+    isImportTestPage ||
+    isGuidedLearningMinimal2Page ||
+    isLearningPlansPage ||
+    isLearningCardsPage ||
+    isNavbarTestPage;
 
   // For login page and admin root page, render immediately without waiting for auth check
   if (isPublicPage) {
     // Show navbar for guided learning pages and questions page even without auth
-    if (isGuidedLearningPage || isGuidedLearningEditPage || isQuestionsPage) {
+    if (
+      isGuidedLearningPage ||
+      isGuidedLearningEditPage ||
+      isQuestionsPage ||
+      isLearningPlansPage ||
+      isLearningCardsPage
+    ) {
       return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-          <AdminNavbar />
+          <AdminNavbarSimple />
           <main className="pt-20">{children}</main>
         </div>
       );
@@ -68,10 +93,8 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <AdminNavbar />
-      <main className="pt-20">
-        <FirestoreErrorBoundary>{children}</FirestoreErrorBoundary>
-      </main>
+      <AdminNavbarSimple />
+      <main className="pt-20">{children}</main>
       <NotificationContainer />
     </div>
   );

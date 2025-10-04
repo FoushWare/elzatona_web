@@ -64,7 +64,7 @@ export function useLearningPathStats(): UseLearningPathStatsReturn {
 
     try {
       // Get all learning paths from the resources
-      const { learningPaths } = await import('@/lib/resources');
+      const { learningPaths } = await import('@elzatona/data/firebase');
 
       const statsPromises = learningPaths.map(async path => {
         const questionCount = await fetchQuestionCount(path.id);

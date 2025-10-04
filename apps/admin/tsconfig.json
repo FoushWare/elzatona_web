@@ -14,6 +14,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@elzatona/shared/ui": ["../../libs/shared/ui/src/index.ts"],
+      "@elzatona/shared/utils": ["../../libs/shared/utils/index.ts"],
+      "@elzatona/shared/types": ["../../libs/shared/types/src/index.ts"],
+      "@elzatona/shared/contexts": ["../../libs/shared/contexts/index.ts"],
+      "@elzatona/shared/hooks": ["../../libs/shared/hooks/index.ts"],
+      "@elzatona/data/firebase": ["../../libs/data/firebase/src/index.ts"],
+      "@elzatona/data/api-client": ["../../libs/data/api-client/src/index.ts"],
+      "@elzatona/data/schemas": ["../../libs/data/schemas/src/index.ts"]
+    },
     "plugins": [
       {
         "name": "next"
@@ -21,11 +33,17 @@
     ]
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
-    "../../.next/types/**/*.ts"
+    "**/*.ts",
+    "**/*.tsx",
+    "../../.next/types/**/*.ts",
+    ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "jest.config.ts",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
 }

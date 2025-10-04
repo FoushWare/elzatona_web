@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { getAnimationClass, AnimationConfig } from '@/utils/animations';
+import { getAnimationClass, AnimationConfig } from '@elzatona/shared/utils';
 
 interface AnimatedElementProps extends AnimationConfig {
   children: React.ReactNode;

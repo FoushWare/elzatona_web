@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { AudioCollectionService } from '@/lib/audio-collection-service';
-import { QuestionAudioMapping } from '@/lib/audio-collection-schema';
+import { AudioCollectionService, QuestionAudioMapping } from '@elzatona/data/firebase';
 
 export interface UseAudioCollectionReturn {
   // State

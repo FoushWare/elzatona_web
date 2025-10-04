@@ -11,7 +11,7 @@ import {
   limit,
   Timestamp,
 } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from './firebase';
 import {
   QuestionAudioMapping,
   AudioFileInfo,

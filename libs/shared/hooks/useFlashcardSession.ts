@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useFirebaseAuth } from '@elzatona/shared/contexts';
 import {
   flashcardService,
   progressService,
@@ -9,7 +9,7 @@ import {
   Flashcard,
   FlashcardProgress,
   FlashcardSession,
-} from '@/lib/firebase-flashcards';
+} from '@elzatona/data/firebase';
 
 interface SessionStats {
   cardsReviewed: number;

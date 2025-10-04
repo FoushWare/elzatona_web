@@ -19,8 +19,8 @@ import {
   FolderOpen,
   BookOpen,
 } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
-import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import { useTheme } from '@elzatona/shared/contexts';
+import { useAdminAuth } from '@elzatona/shared/contexts';
 import AlzatonaLogo from './AlzatonaLogo';
 
 export default function AdminNavbar() {

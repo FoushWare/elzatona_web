@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@elzatona/shared/contexts';
 import AlzatonaLogo from './AlzatonaLogo';
 
 export default function AdminLoginNavbar() {

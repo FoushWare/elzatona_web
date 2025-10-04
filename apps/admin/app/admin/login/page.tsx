@@ -24,16 +24,11 @@ export default function AdminLoginPage() {
     setError('');
 
     try {
-      const result = await login(email, password);
-
-      if (result.success) {
-        // Don't redirect here - let the useEffect handle it
-        // This prevents double redirects
-      } else {
-        setError(result.error || 'Login failed');
-      }
-    } catch {
-      setError('An unexpected error occurred');
+      await login(email, password);
+      // Redirect to dashboard on successful login
+      router.push('/admin/dashboard');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Login failed');
     } finally {
       setIsSubmitting(false);
     }

@@ -13,9 +13,12 @@ import {
   doc,
   getDoc,
   addDoc,
+  setDoc,
   updateDoc,
   deleteDoc,
   writeBatch,
+  serverTimestamp,
+  Timestamp,
 } from 'firebase/firestore';
 
 // Firebase configuration
@@ -72,7 +75,10 @@ export {
   doc,
   getDoc,
   addDoc,
+  setDoc,
   updateDoc,
   deleteDoc,
   writeBatch,
+  serverTimestamp,
+  Timestamp,
 };

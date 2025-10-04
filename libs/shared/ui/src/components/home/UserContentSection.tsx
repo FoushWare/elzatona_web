@@ -3,9 +3,9 @@
 import React, { memo, useMemo } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Compass, Play, Map } from 'lucide-react';
-import { useRTL } from '@elzatona/shared/contexts/RTLContext';
-import { rtlClass } from '@elzatona/shared/utils/rtl';
-import { AnimatedSection } from '@elzatona/shared/ui/components/ui/AnimatedElement';
+import { useRTL } from '@elzatona/shared/contexts';
+import { rtlClass } from '@elzatona/shared/utils';
+import { AnimatedSection } from '@elzatona/shared/ui';
 import { UserContentSectionProps } from '@elzatona/shared/types/homepage';
 
 export const UserContentSection = memo(function UserContentSection({

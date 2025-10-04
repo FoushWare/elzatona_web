@@ -3,8 +3,8 @@
 import React, { useState, useCallback } from 'react';
 import { TourProvider, useTour } from '@reactour/tour';
 import { ArrowRight, Play, BookOpen, Target, Award } from 'lucide-react';
-import { useRTLDetection } from '@elzatona/shared/contexts/RTLContext';
-import { rtlClass } from '@elzatona/shared/utils/rtl';
+import { useRTLDetection } from '@elzatona/shared/contexts';
+import { rtlClass } from '@elzatona/shared/utils';
 
 interface GuidedTourProps {
   isOpen: boolean;

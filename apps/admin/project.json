@@ -20,7 +20,7 @@
       }
     },
     "serve": {
-      "executor": "@nx/next:dev",
+      "executor": "@nx/next:server",
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "admin:build",

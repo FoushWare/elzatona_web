@@ -2,10 +2,10 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useFirebaseAuth } from '@elzatona/shared/contexts';
 import {
   UserProgress,
-  QuestionAttempt,
+  ProgressQuestionAttempt as QuestionAttempt,
   ChallengeAttempt,
   DashboardStats,
   getUserProgress,
@@ -16,7 +16,7 @@ import {
   getDashboardStats,
   getContinueWhereLeftOff,
   updateUserPreferences,
-} from '@/lib/firebase-progress';
+} from '@elzatona/data/firebase';
 
 export interface ContinueData {
   recentPath?: {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { AdminAuthService, AdminSession } from '@/lib/admin-auth';
+import { AdminAuthService, AdminSession } from '@elzatona/data/firebase';
 
 interface UseAdminAuthReturn {
   isAuthenticated: boolean;

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Menu, X, Sun, Moon, ChevronDown, User, LogOut } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@elzatona/shared/contexts';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { useRTL } from '@/contexts/RTLContext';
 import { rtlClass, getPositionClass } from '@/utils/rtl';

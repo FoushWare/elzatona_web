@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useFirebaseAuth } from '@elzatona/shared/contexts';
 import { LearningPlanProgress } from '@/types/firestore';
 
 interface UseLearningPlansReturn {

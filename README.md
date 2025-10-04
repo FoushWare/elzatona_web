@@ -1,43 +1,76 @@
-# GreatFrontendHub 🚀
+# Elzatona - Frontend Interview Preparation Platform 🚀
 
-A platform for frontend developers to practice coding challenges and prepare for technical interviews. Master HTML, CSS, and JavaScript with hands-on projects and real-world scenarios.
+A comprehensive learning platform for frontend developers preparing for technical interviews. Master HTML, CSS, JavaScript, React, and system design with structured learning paths and admin-managed content.
 
 ## 🌐 Live Applications
 
 - **Main Website**: [https://zatona-web.vercel.app](https://zatona-web.vercel.app)
 - **Storybook (Component Library)**: [https://zatona-web-storybook.vercel.app](https://zatona-web-storybook.vercel.app)
 
-## ✨ Features
+## ✨ Key Features
 
-- **Open Access**: No signup required - start practicing immediately
-- **Coding Challenges**: HTML, CSS, and JavaScript challenges with varying difficulty levels
-- **In-Browser Editor**: Write, test, and preview code directly in your browser
-- **Live Preview**: See your code changes in real-time
-- **Test Cases**: Automated testing to validate your solutions
-- **Expert Solutions**: Detailed explanations and best practices for each challenge
-- **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
+### 🎯 **Guided-Freestyle Learning System**
+
+- **No Sign-in Required**: Start learning immediately with simple onboarding
+- **Two Learning Modes**:
+  - **Guided Learning**: Structured plans with admin-managed content
+  - **Free Style Learning**: Custom roadmaps and flexible scheduling
+- **Smart Onboarding**: 3-step process to personalize your learning journey
+
+### 📚 **Admin-Managed Learning Plans**
+
+- **Four Main Categories**:
+  - **Practice Questions**: HTML, CSS, JavaScript fundamentals
+  - **Framework Mastery**: React, Next.js, Vue, Svelte, Angular
+  - **Problem Solving**: Frontend algorithms and data structures
+  - **System Design**: Design Facebook feeds, Twitter clone, e-commerce systems
+- **Configurable Content**: Admin dashboard for managing plans and question counts
+- **Time-Based Plans**: 1-7 day preparation schedules
+- **Difficulty Levels**: Beginner, Intermediate, Advanced
+
+### 🎨 **Beautiful User Experience**
+
+- **Interactive Plan Cards**: Visual selection with category filtering
+- **Progress Tracking**: Local storage for offline progress
+- **Responsive Design**: Works perfectly on all devices
+- **Dark Mode Support**: Seamless theme switching
+- **Smooth Animations**: Engaging user interactions
 
 ## 🛠 Tech Stack
 
 - **Framework**: Next.js 15 with App Router
 - **Language**: TypeScript
 - **Styling**: TailwindCSS
-- **Code Editor**: Monaco Editor (planned)
+- **State Management**: React Context API
+- **Icons**: Lucide React
 - **Deployment**: Vercel ✅
-- **Monitoring**: Sentry (planned)
+- **Architecture**: Nx Monorepo with shared libraries
+- **Code Quality**: ESLint, Prettier, Husky pre-commit hooks
 
 ## 📁 Project Structure
 
 ```
-├── config/           # Configuration files (Next.js, ESLint, Jest, etc.)
-├── docs/            # Documentation and implementation guides
-├── scripts/         # Build and utility scripts
-├── temp/            # Temporary files and debug logs (gitignored)
-├── reports/         # Analysis reports and generated data
-├── tests/           # Test files and testing utilities
-├── src/             # Source code
-├── public/          # Static assets
-└── QuestionsBank/   # Question data sources
+├── apps/                    # Applications
+│   ├── web/                # Main web application
+│   │   ├── app/            # Next.js App Router pages
+│   │   │   ├── features/   # Feature-based pages
+│   │   │   │   ├── learning/    # Learning pages
+│   │   │   │   ├── practice/    # Practice pages
+│   │   │   │   └── admin/       # Admin dashboard
+│   │   │   └── auth/       # Authentication pages
+│   │   └── components/     # App-specific components
+│   └── admin/              # Admin application (future)
+├── libs/                   # Shared libraries
+│   ├── shared/            # Shared utilities and types
+│   │   ├── types/         # TypeScript type definitions
+│   │   ├── utils/         # Utility functions
+│   │   ├── hooks/         # Custom React hooks
+│   │   └── contexts/      # React contexts
+│   └── ui/                # UI component library
+│       └── src/components/ # Reusable UI components
+├── Info/                   # Documentation and features
+├── public/                 # Static assets
+└── QuestionsBank/          # Question data sources
 ```
 
 ## 🚀 Getting Started
@@ -78,6 +111,51 @@ npm run dev
 - `npm run lint` - Run ESLint
 - `npm run lint:fix` - Run ESLint with auto-fix
 - `npm run format` - Format code with Prettier
+- `npm run storybook` - Start Storybook for component development
+- `npm run build-storybook` - Build Storybook for deployment
+
+## 🎛 Admin Dashboard
+
+The platform includes a comprehensive admin dashboard for managing learning content:
+
+### Features
+
+- **Plan Management**: Create, edit, and delete learning plans
+- **Section Configuration**: Manage plan sections with custom question counts
+- **Category Organization**: Organize content by Questions, Framework, Problem Solving, System Design
+- **Real-time Statistics**: Track total plans, questions, and learning hours
+- **Search & Filtering**: Find and manage content efficiently
+- **Status Management**: Activate/deactivate plans as needed
+
+### Access
+
+- Navigate to `/admin/plans` to access the admin dashboard
+- Full CRUD operations for all learning content
+- Responsive design works on all devices
+
+## 🏗 Learning System Architecture
+
+### Onboarding Flow
+
+1. **First Visit**: User sees onboarding modal with learning style selection
+2. **Category Selection**: User chooses focus areas (Questions, Framework, etc.)
+3. **Personalization**: User sets experience level and interview date
+4. **Plan Display**: Admin-managed plans shown with category filtering
+5. **Plan Selection**: User clicks on plan card to start learning
+
+### Data Flow
+
+- **Local Storage**: Progress saved locally (no sign-in required)
+- **Admin Management**: Content managed through admin dashboard
+- **Real-time Updates**: Plan changes reflect immediately
+- **Category Filtering**: Dynamic content organization
+
+### Component Architecture
+
+- **Shared Libraries**: Reusable components and utilities
+- **Type Safety**: Full TypeScript coverage
+- **Context Management**: React Context for state management
+- **Responsive Design**: Mobile-first approach with TailwindCSS
 
 ### Code Quality & Pre-commit Hooks
 
@@ -111,40 +189,33 @@ src/
 
 ## 🎯 Development Roadmap
 
-### Sprint 1 (Weeks 1-3) - Core Foundation & Challenge Library ✅
+### Phase 1: Core Learning System ✅ (Completed)
 
-- [x] Project setup with Next.js and TailwindCSS
-- [x] Basic project structure and TypeScript configuration
-- [x] Homepage with categories and featured challenges
-- [x] Challenge listing page with filters
-- [x] Challenge detail pages
-- [x] Practice questions database (500+ questions from greatfrontend.com)
-- [x] Study plans system (1-week, 1-month, 3-month plans)
-- [x] Preparation guides (Frontend Playbook, GFE75, Blind75, System Design)
-- [x] Learning progress tracker
-- [x] Internal resources with interactive questions
-- [ ] Admin interface for challenge management
+- [x] **Guided-Freestyle Learning System**: Complete onboarding and learning mode selection
+- [x] **Admin-Managed Plans**: Full CRUD operations for learning plans and sections
+- [x] **Plan Categories**: Questions, Framework, Problem Solving, System Design
+- [x] **Interactive UI**: Beautiful plan cards with category filtering
+- [x] **No Sign-in Required**: Immediate access with local progress tracking
+- [x] **Responsive Design**: Mobile-first design with dark mode support
+- [x] **Nx Monorepo**: Organized codebase with shared libraries
 
-### Sprint 2 (Weeks 4-6) - Code Editor & Execution
+### Phase 2: Practice & Content System (In Progress)
 
-- [ ] Monaco Editor integration
-- [ ] Live preview pane
-- [ ] Test case execution system
-- [ ] Code reset functionality
-- [ ] Starter code templates
-- [ ] Search functionality
-- [ ] Question detail pages with solutions
+- [ ] **Practice Questions Engine**: Interactive question system with real-time feedback
+- [ ] **Code Editor Integration**: Monaco Editor for coding challenges
+- [ ] **Test Case Execution**: Automated testing and validation
+- [ ] **Progress Analytics**: Detailed learning insights and performance tracking
+- [ ] **Flashcard System**: Spaced repetition for difficult questions
+- [ ] **Question Bank**: 500+ curated questions across all categories
 
-### Sprint 3 (Weeks 7-9) - Solutions, Explanations & Deployment
+### Phase 3: Advanced Features (Planned)
 
-- [ ] Solution display system
-- [ ] Detailed explanations
-- [ ] Solution comparison view
-- [ ] Responsive design implementation
-- [ ] Dark/light mode toggle
-- [x] Vercel deployment ✅
-- [ ] CI/CD pipeline
-- [ ] Monitoring integration
+- [ ] **User Authentication**: Optional sign-in for cross-device sync
+- [ ] **Custom Question Creation**: User-generated content with admin moderation
+- [ ] **Community Features**: Question sharing and peer review
+- [ ] **AI-Powered Recommendations**: Personalized learning suggestions
+- [ ] **Gamification**: Badges, achievements, and leaderboards
+- [ ] **Advanced Analytics**: Comprehensive reporting and insights
 
 ### Future Enhancements
 
@@ -215,14 +286,33 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 🚀 Quick Start Guide
+
+### For Learners
+
+1. Visit the homepage - no signup required!
+2. Complete the 3-step onboarding process
+3. Choose your learning mode (Guided or Free Style)
+4. Select your focus categories
+5. Browse and select learning plans
+6. Start your frontend interview preparation journey!
+
+### For Admins
+
+1. Navigate to `/admin/plans`
+2. Create new learning plans with custom sections
+3. Configure question counts and difficulty levels
+4. Organize content by categories
+5. Monitor usage statistics and plan performance
+
 ## 🆘 Support
 
-If you have any questions or need help, please open an issue on GitHub or contact us at [support@greatfrontendhub.com](mailto:support@greatfrontendhub.com).
+If you have any questions or need help, please open an issue on GitHub or contact us at [support@elzatona.com](mailto:support@elzatona.com).
+
+## 🎉 What's Next?
+
+The platform is continuously evolving with new features and improvements. Check out our [development roadmap](#-development-roadmap) to see what's coming next!
 
 ---
 
-**Happy Coding! 🎉**
-
-# Git Hooks Setup Complete
-
-# Git Hooks Updated
+**Happy Learning! 🚀📚**

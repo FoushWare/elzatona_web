@@ -2,12 +2,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
-import { QuestionStats } from '@/lib/unified-question-schema';
+import { useFirebaseAuth } from '@elzatona/shared/contexts';
+import { QuestionStats } from '@elzatona/data/firebase';
 import {
   Question,
+  QuestionAttemptRecord as QuestionAttempt,
   QuestionCategory,
-  QuestionAttempt,
   getQuestions,
   getQuestion,
   getRandomQuestions,
@@ -17,7 +17,7 @@ import {
   getUserQuestionAttempts,
   searchQuestions,
   getQuizQuestions,
-} from '@/lib/firebase-questions';
+} from '@elzatona/data/firebase';
 
 export interface UseQuestionsReturn {
   questions: Question[];
