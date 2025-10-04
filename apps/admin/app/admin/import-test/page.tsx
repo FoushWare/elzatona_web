@@ -5,10 +5,10 @@ export default function ImportTestPage() {
   let testResults = [];
 
   try {
-    const { useLearningPlanTemplates } = require('@elzatona/shared/hooks');
-    testResults.push('✅ useLearningPlanTemplates imported successfully');
+    // Skip Firebase-dependent hooks in admin app
+    testResults.push('⚠️ Firebase hooks skipped in admin app');
   } catch (error) {
-    testResults.push(`❌ useLearningPlanTemplates failed: ${error.message}`);
+    testResults.push(`❌ Firebase hooks failed: ${error.message}`);
   }
 
   try {

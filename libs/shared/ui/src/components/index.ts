@@ -10,6 +10,9 @@ export * from './RTLToggle';
 export * from './AdminNavbar';
 export * from './AdminNavbarSimple';
 export * from './FirestoreErrorBoundary';
+export * from './AlzatonaLogo';
+export * from './ThemeToggle';
+export * from './UnifiedQuestionManager';
 
 // UI components
 export * from './ui';

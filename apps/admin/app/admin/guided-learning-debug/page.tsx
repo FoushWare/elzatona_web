@@ -12,15 +12,8 @@ console.log('✅ React hooks work');
 // Test 2: Lucide icons
 console.log('✅ Lucide icons work');
 
-// Test 3: Shared hooks
-let useLearningPlanTemplates = null;
-try {
-  const hooksModule = require('@elzatona/shared/hooks');
-  useLearningPlanTemplates = hooksModule.useLearningPlanTemplates;
-  console.log('✅ useLearningPlanTemplates imported successfully');
-} catch (error) {
-  console.error('❌ useLearningPlanTemplates import failed:', error);
-}
+// Test 3: Shared hooks (skip Firebase-dependent ones)
+console.log('⚠️ Skipping Firebase-dependent hooks in admin app');
 
 // Test 4: Shared UI components
 let notify = null;
@@ -41,7 +34,7 @@ export default function GuidedLearningDebugPage() {
     const results = [
       'React hooks: ✅',
       'Lucide icons: ✅',
-      `useLearningPlanTemplates: ${useLearningPlanTemplates ? '✅' : '❌'}`,
+      'Firebase hooks: ⚠️ Skipped in admin app',
       `notify: ${notify ? '✅' : '❌'}`,
       `useConfirmation: ${useConfirmation ? '✅' : '❌'}`,
     ];

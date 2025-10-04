@@ -6,8 +6,6 @@ import { useRouter } from 'next/navigation';
 import {
   Menu,
   X,
-  Sun,
-  Moon,
   User,
   LogOut,
   Settings,
@@ -18,18 +16,36 @@ import {
   HelpCircle,
   FolderOpen,
   BookOpen,
+  Home,
+  LayoutDashboard,
+  Users,
+  MessageSquare,
+  BarChart2,
+  PlusCircle,
+  List,
+  ShieldCheck,
 } from 'lucide-react';
 import { useTheme } from '@elzatona/shared/contexts';
-import { useAdminAuth } from '@elzatona/shared/contexts';
-import AlzatonaLogo from './AlzatonaLogo';
+import { ThemeToggle } from './ThemeToggle';
+import { Button } from './ui/button';
 
-export default function AdminNavbar() {
+interface AdminNavbarProps {
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    avatar?: string;
+  } | null;
+  logout?: () => void;
+}
+
+export default function AdminNavbar({ user, logout }: AdminNavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
-  const { isDarkMode, toggleDarkMode } = useTheme();
-  const { isAuthenticated, user, logout } = useAdminAuth();
+  const { isDarkMode } = useTheme();
   const router = useRouter();
 
   // Handle scroll effect
@@ -56,7 +72,9 @@ export default function AdminNavbar() {
   }, [isUserDropdownOpen, isAdminDropdownOpen]);
 
   const handleLogout = () => {
-    logout();
+    if (logout) {
+      logout();
+    }
     setIsUserDropdownOpen(false);
     setIsOpen(false); // Close mobile menu if open
     // Redirect to login page using Next.js router
@@ -81,6 +99,12 @@ export default function AdminNavbar() {
       label: 'Guided Learning',
       icon: BookOpen,
       description: 'Create and manage learning plans',
+    },
+    {
+      href: '/admin/learning-cards',
+      label: 'Learning Cards',
+      icon: FileText,
+      description: 'Manage learning cards and categories',
     },
     {
       href: '/admin/sections',
@@ -127,54 +151,99 @@ export default function AdminNavbar() {
           {/* Logo */}
           <Link
             href="/admin/dashboard"
-            className={`flex items-center space-x-2 transition-colors duration-200 ${
+            className={`flex items-center space-x-3 transition-colors duration-200 ${
               isScrolled
                 ? 'text-gray-900 dark:text-white hover:text-red-600 dark:hover:text-red-400'
                 : 'text-white hover:text-red-100'
             }`}
           >
-            <AlzatonaLogo size="sm" showText={false} />
+            {/* Website Logo */}
+            <div className="w-10 h-10 rounded-lg overflow-hidden shadow-lg">
+              <img
+                src="/Elzatona-web01.png"
+                alt="Elzatona Web Logo"
+                className="w-full h-full object-contain bg-white dark:bg-gray-800"
+                onError={e => {
+                  // Fallback to simple icon if image fails to load
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextElementSibling.style.display = 'flex';
+                }}
+              />
+              <div
+                className="w-full h-full bg-white dark:bg-gray-800 flex items-center justify-center"
+                style={{ display: 'none' }}
+              >
+                <span className="text-red-600 dark:text-red-400 font-bold text-lg">
+                  E
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold">Admin Panel</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">
+                Elzatona Web
+              </span>
+            </div>
           </Link>
 
-          {/* Desktop Navigation - Single Dropdown */}
-          <div className="hidden md:flex items-center">
-            <div className="relative">
-              <button
-                onClick={() => setIsAdminDropdownOpen(!isAdminDropdownOpen)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+          {/* Desktop Navigation - Horizontal Menu */}
+          <div className="hidden lg:flex items-center space-x-2">
+            {adminMenuItems.slice(0, 6).map(item => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center space-x-2 px-5 py-3 rounded-lg text-base font-semibold transition-all duration-200 ${
                   isScrolled
                     ? 'text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800'
                     : 'text-white hover:text-red-100 hover:bg-red-700/50'
                 }`}
               >
-                <Shield className="w-4 h-4" />
-                <span>Admin Panel</span>
-                <ChevronDown className="w-4 h-4" />
+                <item.icon className="w-5 h-5" />
+                <span>{item.label}</span>
+              </Link>
+            ))}
+
+            {/* More Menu Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsAdminDropdownOpen(!isAdminDropdownOpen)}
+                className={`flex items-center space-x-2 px-5 py-3 rounded-lg text-base font-semibold transition-all duration-200 ${
+                  isScrolled
+                    ? 'text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    : 'text-white hover:text-red-100 hover:bg-red-700/50'
+                }`}
+              >
+                <span>More</span>
+                <ChevronDown
+                  className={`w-5 h-5 transition-transform ${isAdminDropdownOpen ? 'rotate-180' : ''}`}
+                />
               </button>
 
-              {/* Admin Dropdown */}
+              {/* More Dropdown */}
               {isAdminDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
-                  <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      Admin Panel
+                <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50">
+                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <p className="text-base font-semibold text-gray-900 dark:text-white">
+                      Additional Tools
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      Manage your application
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      More admin functions
                     </p>
                   </div>
 
-                  {adminMenuItems.map(item => (
+                  {adminMenuItems.slice(6).map(item => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                      className="flex items-center px-4 py-4 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
                       onClick={() => setIsAdminDropdownOpen(false)}
                     >
-                      <item.icon className="w-4 h-4 mr-3 text-red-600 dark:text-red-400" />
+                      <item.icon className="w-5 h-5 mr-3 text-red-600 dark:text-red-400" />
                       <div>
-                        <div className="font-medium">{item.label}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                        <div className="font-semibold text-base">
+                          {item.label}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">
                           {item.description}
                         </div>
                       </div>
@@ -188,24 +257,17 @@ export default function AdminNavbar() {
           {/* Right side - Theme toggle and User menu */}
           <div className="flex items-center space-x-4">
             {/* Theme Toggle */}
-            <button
-              onClick={toggleDarkMode}
-              className={`p-2 rounded-md transition-colors duration-200 ${
+            <ThemeToggle
+              size="md"
+              className={`${
                 isScrolled
-                  ? 'text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  : 'text-white hover:text-red-100 hover:bg-red-700/50'
+                  ? 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  : 'bg-red-700/20 hover:bg-red-700/30'
               }`}
-              title="Toggle theme"
-            >
-              {isDarkMode ? (
-                <Sun className="w-5 h-5" />
-              ) : (
-                <Moon className="w-5 h-5" />
-              )}
-            </button>
+            />
 
             {/* User Menu */}
-            {isAuthenticated && user && (
+            {user && (
               <div className="relative">
                 <button
                   onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
@@ -223,44 +285,60 @@ export default function AdminNavbar() {
 
                 {/* User Dropdown */}
                 {isUserDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
-                    <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {user.name || 'Admin User'}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {user.email}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Role: {user.role}
-                      </p>
+                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50">
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center space-x-3">
+                        <img
+                          className="h-10 w-10 rounded-full"
+                          src={
+                            user.avatar ||
+                            `https://ui-avatars.com/api/?name=${
+                              user.name || user.email
+                            }&background=random`
+                          }
+                          alt="User Avatar"
+                        />
+                        <div>
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">
+                            {user.name || 'Admin User'}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {user.email}
+                          </p>
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+                            {user.role}
+                          </span>
+                        </div>
+                      </div>
                     </div>
 
-                    <Link
-                      href="/admin/profile"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={() => setIsUserDropdownOpen(false)}
-                    >
-                      <User className="w-4 h-4 mr-2" />
-                      Profile
-                    </Link>
+                    <div className="py-1">
+                      <Link
+                        href="/admin/profile"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        <User className="w-4 h-4 mr-3 text-gray-400" />
+                        Profile Settings
+                      </Link>
 
-                    <Link
-                      href="/admin/settings"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                      onClick={() => setIsUserDropdownOpen(false)}
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Settings
-                    </Link>
+                      <Link
+                        href="/admin/settings"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        <Settings className="w-4 h-4 mr-3 text-gray-400" />
+                        System Settings
+                      </Link>
+                    </div>
 
-                    <div className="border-t border-gray-200 dark:border-gray-700">
+                    <div className="border-t border-gray-200 dark:border-gray-700 py-1">
                       <button
                         onClick={handleLogout}
-                        className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200"
                       >
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Logout
+                        <LogOut className="w-4 h-4 mr-3" />
+                        Sign Out
                       </button>
                     </div>
                   </div>
@@ -288,51 +366,71 @@ export default function AdminNavbar() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-              {/* Admin Panel Section */}
-              <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700 mb-2">
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  Admin Panel
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Manage your application
-                </p>
+          <div className="md:hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+            <div className="px-4 pt-4 pb-6">
+              {/* Quick Actions Grid */}
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                {adminMenuItems.slice(0, 6).map(item => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="flex flex-col items-center p-4 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <item.icon className="w-6 h-6 text-red-600 dark:text-red-400 mb-2" />
+                    <span className="text-center">{item.label}</span>
+                  </Link>
+                ))}
               </div>
 
-              {adminMenuItems.map(item => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center space-x-3 px-3 py-3 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <item.icon className="w-5 h-5 text-red-600 dark:text-red-400" />
-                  <div>
-                    <div className="font-medium">{item.label}</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {item.description}
+              {/* Additional Tools */}
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
+                  Additional Tools
+                </h3>
+                <div className="space-y-2">
+                  {adminMenuItems.slice(6).map(item => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <item.icon className="w-4 h-4 text-red-600 dark:text-red-400" />
+                      <span>{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* User Section */}
+              {user && (
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                  <div className="flex items-center px-3 py-2 mb-3">
+                    <img
+                      className="h-8 w-8 rounded-full mr-3"
+                      src={
+                        user.avatar ||
+                        `https://ui-avatars.com/api/?name=${
+                          user.name || user.email
+                        }&background=random`
+                      }
+                      alt="User Avatar"
+                    />
+                    <div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        {user.name || 'Admin User'}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        {user.email}
+                      </div>
                     </div>
                   </div>
-                </Link>
-              ))}
-
-              {isAuthenticated && user && (
-                <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
-                  <div className="px-3 py-2">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      {user.name || 'Admin User'}
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {user.email}
-                    </p>
-                  </div>
-
                   <button
                     onClick={handleLogout}
-                    className="flex items-center space-x-2 w-full px-3 py-2 text-base font-medium text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className="flex items-center space-x-2 w-full px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
                   >
-                    <LogOut className="w-5 h-5" />
+                    <LogOut className="w-4 h-4" />
                     <span>Logout</span>
                   </button>
                 </div>

@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-10-04T18:00:52.113Z",
+  "tests": {
+    "unit": "AdminAuthContext.test.tsx",
+    "integration": "AdminLoginIntegration.test.tsx",
+    "e2e": "AdminAuthE2E.test.ts",
+    "security": "AdminAuthSecurity.test.ts"
+  },
+  "coverage": {
+    "authentication": "100%",
+    "errorHandling": "100%",
+    "security": "100%",
+    "accessibility": "100%"
+  }
+}

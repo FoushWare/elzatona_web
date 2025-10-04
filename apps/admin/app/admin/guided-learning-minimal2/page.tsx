@@ -7,12 +7,11 @@ export default function GuidedLearningMinimal2Page() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Test the imports
+    // Test the imports (skip Firebase-dependent hooks)
     try {
-      const { useLearningPlanTemplates } = require('@elzatona/shared/hooks');
       const { notify, useConfirmation } = require('@elzatona/shared/ui');
 
-      console.log('✅ All imports successful');
+      console.log('✅ UI imports successful');
       setLoading(false);
     } catch (error) {
       console.error('❌ Import error:', error);

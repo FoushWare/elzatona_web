@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { AdminAuthProvider, useAdminAuth } from '@/contexts/AdminAuthContext';
-import AdminNavbarSimple from '../../../../libs/shared/ui/src/components/AdminNavbarSimple';
-import { NotificationContainer } from '@elzatona/shared/ui';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import { AdminNavbar } from '@elzatona/shared/ui';
+// import { NotificationContainer } from '@elzatona/shared/ui';
 import { usePathname } from 'next/navigation';
 // ThemeProvider is already provided by root layout
 
@@ -12,7 +12,7 @@ interface AdminLayoutProps {
 }
 
 function AdminLayoutContent({ children }: AdminLayoutProps) {
-  const { isAuthenticated, isLoading } = useAdminAuth();
+  const { isAuthenticated, isLoading, user, logout } = useAdminAuth();
   const pathname = usePathname();
 
   // Skip authentication check for login page and admin root page
@@ -65,7 +65,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     ) {
       return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-          <AdminNavbarSimple />
+          <AdminNavbar user={user} logout={logout} />
           <main className="pt-20">{children}</main>
         </div>
       );
@@ -93,17 +93,13 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <AdminNavbarSimple />
+      <AdminNavbar user={user} logout={logout} />
       <main className="pt-20">{children}</main>
-      <NotificationContainer />
+      {/* <NotificationContainer /> */}
     </div>
   );
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  return (
-    <AdminAuthProvider>
-      <AdminLayoutContent>{children}</AdminLayoutContent>
-    </AdminAuthProvider>
-  );
+  return <AdminLayoutContent>{children}</AdminLayoutContent>;
 }

@@ -7,13 +7,7 @@ import { Trash2, Edit3, Eye, Loader2, Plus, Save, X } from 'lucide-react';
 console.log('Testing imports...');
 
 try {
-  const { useLearningPlanTemplates } = require('@elzatona/shared/hooks');
-  console.log('✅ useLearningPlanTemplates imported successfully');
-} catch (error) {
-  console.error('❌ useLearningPlanTemplates import failed:', error);
-}
-
-try {
+  // Test basic UI components
   const { notify } = require('@elzatona/shared/ui');
   console.log('✅ notify imported successfully');
 } catch (error) {
@@ -26,6 +20,9 @@ try {
 } catch (error) {
   console.error('❌ useConfirmation import failed:', error);
 }
+
+// Skip Firebase-dependent hooks for admin app
+console.log('⚠️ Skipping Firebase-dependent hooks in admin app');
 
 export default function TestComponentsPage() {
   return (
