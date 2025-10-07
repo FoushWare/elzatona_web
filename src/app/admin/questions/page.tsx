@@ -2,7 +2,7 @@
 
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 
-import QuestionAudioManager from '@/components/QuestionAudioManager';
+import QuestionAudioManager from '@/shared/components/learning/QuestionAudioManager';
 
 export default function AdminQuestionsPage() {
   const { user } = useAdminAuth();

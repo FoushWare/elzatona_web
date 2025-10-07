@@ -2,37 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* RTL Support */
-[dir='rtl'] {
-  direction: rtl;
-}
-
-[dir='ltr'] {
-  direction: ltr;
-}
-
-/* RTL-specific utilities */
-.rtl\:text-right {
-  direction: rtl;
-  text-align: right;
-}
-
-.rtl\:text-left {
-  direction: ltr;
-  text-align: left;
-}
-
-/* RTL dropdown positioning */
-[dir='rtl'] .dropdown-rtl {
-  right: auto;
-  left: 0;
-}
-
-[dir='ltr'] .dropdown-rtl {
-  left: auto;
-  right: 0;
-}
-
 /* Line clamp utilities for text truncation */
 .line-clamp-2 {
   display: -webkit-box;

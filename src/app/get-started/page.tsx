@@ -16,9 +16,9 @@ import {
   Compass,
   ExternalLink,
 } from 'lucide-react';
-import { UserTypeSelector } from '@/components/UserTypeSelector';
-import { LoadingTransition } from '@/components/LoadingTransition';
-import { SignInPopup } from '@/components/SignInPopup';
+import { UserTypeSelector } from '@/shared/components/common/UserTypeSelector';
+import { LoadingTransition } from '@/shared/components/common/LoadingTransition';
+import { SignInPopup } from '@/shared/components/auth/SignInPopup';
 import { useUserType } from '@/contexts/UserTypeContext';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 

@@ -47,7 +47,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       localStorage.setItem('language', language);
 
       // Update document direction and language
-      document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
       document.documentElement.lang = language;
     }
   }, [language, isLoaded]);

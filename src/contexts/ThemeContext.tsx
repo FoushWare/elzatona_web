@@ -12,13 +12,14 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Always start with the same initial state (light) to prevent hydration mismatch
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // Always start with dark mode to prevent hydration mismatch
+  // This matches the default theme preference
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     // Load theme preference from localStorage on mount (client-side only)
-    let theme = false; // default to light
+    let theme = true; // default to dark to prevent hydration mismatch
 
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme');
@@ -37,9 +38,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       );
     }
 
-    setIsDarkMode(theme);
+    // Only update if different from initial state to prevent flashing
+    if (theme !== isDarkMode) {
+      setIsDarkMode(theme);
+    }
     setIsLoaded(true);
-  }, []);
+  }, [isDarkMode]);
 
   useEffect(() => {
     // Only run after initial load to prevent hydration mismatch
