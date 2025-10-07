@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { AdminAuthProvider, useAdminAuth } from '@/contexts/AdminAuthContext';
-import AdminNavbar from '@/components/AdminNavbar';
-import { NotificationContainer } from '@/components/ui/Notification';
-import FirestoreErrorBoundary from '@/components/FirestoreErrorBoundary';
+import AdminNavbar from '@/shared/components/auth/AdminNavbar';
+import { NotificationContainer } from '@/shared/components/ui/Notification';
+import FirestoreErrorBoundary from '@/shared/components/common/FirestoreErrorBoundary';
 import { usePathname } from 'next/navigation';
 // ThemeProvider is already provided by root layout
 import '../globals.css';

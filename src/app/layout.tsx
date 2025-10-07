@@ -1,16 +1,14 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import '@/styles/rtl.css';
-import { ThemeProvider } from '@/contexts/ThemeContext';
+import { JotaiProvider } from '@/providers/JotaiProvider';
 import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
-import { UserPreferencesProvider } from '@/contexts/UserPreferencesContext';
 import { UserTypeProvider } from '@/contexts/UserTypeContext';
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext';
-import { OnboardingProvider } from '@/contexts/OnboardingContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
-import { RTLProvider } from '@/contexts/RTLContext';
-import { ConditionalLayout } from '@/components/ConditionalLayout';
+import { OnboardingProvider } from '@/contexts/OnboardingContext';
+import { ConditionalLayout } from '@/shared/components/common/ConditionalLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -55,23 +53,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <RTLProvider>
-          <ThemeProvider>
-            <LanguageProvider>
-              <FirebaseAuthProvider>
-                <UserPreferencesProvider>
-                  <UserTypeProvider>
-                    <MobileMenuProvider>
-                      <OnboardingProvider>
-                        <ConditionalLayout>{children}</ConditionalLayout>
-                      </OnboardingProvider>
-                    </MobileMenuProvider>
-                  </UserTypeProvider>
-                </UserPreferencesProvider>
-              </FirebaseAuthProvider>
-            </LanguageProvider>
-          </ThemeProvider>
-        </RTLProvider>
+        <JotaiProvider>
+          <FirebaseAuthProvider>
+            <UserTypeProvider>
+              <MobileMenuProvider>
+                <ThemeProvider>
+                  <LanguageProvider>
+                    <OnboardingProvider>
+                      <ConditionalLayout>{children}</ConditionalLayout>
+                    </OnboardingProvider>
+                  </LanguageProvider>
+                </ThemeProvider>
+              </MobileMenuProvider>
+            </UserTypeProvider>
+          </FirebaseAuthProvider>
+        </JotaiProvider>
       </body>
     </html>
   );

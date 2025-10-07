@@ -29,7 +29,6 @@ A platform for frontend developers to practice coding challenges and prepare for
 ## 📁 Project Structure
 
 ```
-├── config/           # Configuration files (Next.js, ESLint, Jest, etc.)
 ├── docs/            # Documentation and implementation guides
 ├── scripts/         # Build and utility scripts
 ├── temp/            # Temporary files and debug logs (gitignored)

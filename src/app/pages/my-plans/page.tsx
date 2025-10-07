@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
-import { SignInPopup } from '@/components/SignInPopup';
+import { SignInPopup } from '@/shared/components/auth/SignInPopup';
 import {
   Play,
   Edit,

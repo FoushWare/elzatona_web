@@ -2,10 +2,20 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
 import {
   ArrowLeft,
   Save,
@@ -19,9 +29,9 @@ import {
   Grid,
   Trash2,
 } from 'lucide-react';
-import { SectionQuestionManager } from '@/components/admin/SectionQuestionManager';
+import { SectionQuestionManager } from '@/shared/components/common/SectionQuestionManager';
 
-import type { LearningSection } from '@/components/admin/SectionQuestionManager';
+import type { LearningSection } from '@/shared/components/common/SectionQuestionManager';
 
 interface LearningPlanTemplate {
   id: string;

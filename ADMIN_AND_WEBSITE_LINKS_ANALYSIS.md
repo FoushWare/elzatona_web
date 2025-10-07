@@ -526,26 +526,12 @@ This document provides a comprehensive analysis of all admin and website links i
   - Purpose: ChatGPT integration
   - Methods: POST
 
-- **`/api/groq`** - Groq API
-  - Purpose: Groq AI integration
-  - Methods: POST
-
-- **`/api/deepseek`** - DeepSeek API
-  - Purpose: DeepSeek AI integration
-  - Methods: POST
-
-- **`/api/qwen`** - Qwen API
-  - Purpose: Qwen AI integration
-  - Methods: POST
-
 ### Media & Content APIs
 
 - **`/api/audio/upload`** - Audio Upload
   - Purpose: Upload audio files
   - Methods: POST
 
-- **`/api/tts`** - Text-to-Speech
-  - Purpose: Text-to-speech conversion
   - Methods: POST
 
 - **`/api/podcasts/rss`** - Podcast RSS

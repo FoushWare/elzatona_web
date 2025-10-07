@@ -83,8 +83,8 @@ import App from './App';
 import './styles.css';
 
 // App.js
-import Header from './components/Header';
-import Main from './components/Main';
+import Header from './shared/components/Header';
+import Main from './shared/components/Main';
 
 // Header.js
 import Logo from './Logo';

@@ -16,15 +16,10 @@ import {
   Zap,
 } from 'lucide-react';
 import { useUserType } from '@/contexts/UserTypeContext';
-import { useRTL } from '@/contexts/RTLContext';
-import { UserStatistics } from '@/components/UserStatistics';
-import { GuidedTour } from '@/components/GuidedTour';
-import { FloatingRTLToggle, RTLIndicator } from '@/components/RTLToggle';
-import { getPositionClass, rtlClass } from '@/utils/rtl';
+import { UserStatistics } from '@/shared/components/common/UserStatistics';
 
 export default function HomePage() {
   const { userType } = useUserType();
-  const { isRTL } = useRTL();
   const [hasActivePlan, setHasActivePlan] = useState(false);
   const [activePlan, setActivePlan] = useState<{
     id: string;
@@ -33,7 +28,6 @@ export default function HomePage() {
     estimatedTime: string;
   } | null>(null);
   const [showAnimation, setShowAnimation] = useState(false);
-  const [showTour, setShowTour] = useState(false);
 
   // Trigger animation on mount
   useEffect(() => {
@@ -42,38 +36,6 @@ export default function HomePage() {
     }, 500);
     return () => clearTimeout(timer);
   }, []);
-
-  // Check if user should see the tour (first visit)
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const hasSeenTour = localStorage.getItem('hasSeenHomepageTour');
-      if (!hasSeenTour) {
-        // Show tour after animations complete
-        const tourTimer = setTimeout(() => {
-          setShowTour(true);
-        }, 2000);
-        return () => clearTimeout(tourTimer);
-      }
-    }
-  }, []);
-
-  const handleTourComplete = () => {
-    setShowTour(false);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('hasSeenHomepageTour', 'true');
-    }
-  };
-
-  const handleTourSkip = () => {
-    setShowTour(false);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('hasSeenHomepageTour', 'true');
-    }
-  };
-
-  const startTour = () => {
-    setShowTour(true);
-  };
 
   // Check for active guided learning plan
   useEffect(() => {
@@ -185,19 +147,6 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 z-10">
-        {/* Tour Button */}
-        <div
-          className={`absolute top-4 z-20 ${getPositionClass(isRTL, 'right', '4')}`}
-        >
-          <button
-            onClick={startTour}
-            className={`inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-700 dark:text-gray-300 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-200 dark:border-gray-700`}
-          >
-            <Play className="w-4 h-4" />
-            <span className="text-sm font-medium">Take Tour</span>
-          </button>
-        </div>
-
         <div className="max-w-7xl mx-auto text-center">
           <div className="mb-8">
             {/* Animated title with sparkles */}
@@ -218,15 +167,13 @@ export default function HomePage() {
               {/* Animated sparkles around title */}
               {showAnimation && (
                 <>
-                  <Sparkles
-                    className={`absolute -top-4 w-8 h-8 text-yellow-400 animate-pulse ${getPositionClass(isRTL, 'right', '4')}`}
-                  />
+                  <Sparkles className="absolute -top-4 w-8 h-8 text-yellow-400 animate-pulse right-4" />
                   <Zap
-                    className={`absolute -bottom-2 w-6 h-6 text-blue-400 animate-bounce ${getPositionClass(isRTL, 'left', '4')}`}
+                    className="absolute -bottom-2 w-6 h-6 text-blue-400 animate-bounce right-4"
                     style={{ animationDelay: '0.5s' }}
                   />
                   <Star
-                    className={`absolute top-1/2 w-5 h-5 text-purple-400 animate-ping ${getPositionClass(isRTL, 'right', '8')}`}
+                    className="absolute top-1/2 w-5 h-5 text-purple-400 animate-ping right-4"
                     style={{ animationDelay: '1s' }}
                   />
                 </>
@@ -267,51 +214,12 @@ export default function HomePage() {
                 {/* Animated background effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
 
-                <span
-                  className={`relative z-10 flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')}`}
-                >
+                <span className="relative z-10 flex items-center space-x-2">
                   {personalizedContent.icon}
                   <span>{personalizedContent.cta}</span>
-                  <ArrowRight
-                    className={`w-5 h-5 transition-transform duration-300 ${rtlClass(isRTL, 'group-hover:-translate-x-1 rtl-mirror-icon', 'group-hover:translate-x-1')}`}
-                  />
+                  <ArrowRight className="w-5 h-5 transition-transform duration-300" />
                 </span>
               </Link>
-
-              {/* Animated pointing arrow */}
-              {showAnimation && (
-                <div
-                  className={`absolute top-1/2 transform -translate-y-1/2 animate-bounce ${getPositionClass(isRTL, 'right', '16')}`}
-                >
-                  <div className="flex flex-col items-center">
-                    <div className="text-2xl animate-pulse">👆</div>
-                    <div className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mt-1 animate-pulse">
-                      Click here!
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Alternative animated arrow with CSS */}
-              {showAnimation && (
-                <div
-                  className={`absolute top-1/2 transform -translate-y-1/2 ${getPositionClass(isRTL, 'right', '20')}`}
-                >
-                  <div className="relative">
-                    <ArrowRight
-                      className={`w-8 h-8 text-indigo-500 animate-pulse ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
-                    />
-                    <div className="absolute inset-0">
-                      <ArrowRight
-                        className={`w-8 h-8 text-indigo-500 animate-ping opacity-75 ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
-                      />
-                    </div>
-                    <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-indigo-600 dark:text-indigo-400 animate-pulse whitespace-nowrap">
-                      Start Learning!
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
@@ -328,8 +236,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Animated Quick Actions */}
-      <section className="quick-actions-section py-16 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm relative z-10">
+      {/* Learning Style Selection */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2
@@ -339,7 +247,7 @@ export default function HomePage() {
                   : 'opacity-0 translate-y-8'
               }`}
             >
-              Quick Actions
+              How would you like to learn?
             </h2>
             <p
               className={`text-xl text-gray-600 dark:text-gray-300 transition-all duration-1000 delay-900 ${
@@ -348,107 +256,67 @@ export default function HomePage() {
                   : 'opacity-0 translate-y-8'
               }`}
             >
-              Jump into learning with these popular options
+              Choose your learning style to get the most personalized
+              experience.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                href: '/practice',
-                icon: <Code className="w-6 h-6 text-white" />,
-                title: 'Practice Challenges',
-                description:
-                  'Solve real interview questions with our interactive editor',
-                color:
-                  'from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20',
-                iconBg: 'bg-indigo-600',
-                delay: 1000,
-              },
-              {
-                href: '/learn',
-                icon: <BookOpen className="w-6 h-6 text-white" />,
-                title: 'Learning Paths',
-                description:
-                  'Follow structured paths or create your own roadmap',
-                color:
-                  'from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20',
-                iconBg: 'bg-purple-600',
-                delay: 1100,
-              },
-              {
-                href: '/progress',
-                icon: <Target className="w-6 h-6 text-white" />,
-                title: 'Track Progress',
-                description:
-                  'Monitor your learning journey and celebrate achievements',
-                color:
-                  'from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20',
-                iconBg: 'bg-blue-600',
-                delay: 1200,
-              },
-              {
-                href: '/get-started',
-                icon: <Award className="w-6 h-6 text-white" />,
-                title: 'Get Started',
-                description:
-                  'Take our interactive tour and choose your learning style',
-                color:
-                  'from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20',
-                iconBg: 'bg-green-600',
-                delay: 1300,
-                isHighlighted: true, // Add special highlighting for Get Started
-              },
-            ].map((item, index) => (
-              <div key={index} className="relative">
-                <Link
-                  href={item.href}
-                  className={`group bg-gradient-to-br ${item.color} rounded-2xl p-6 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 ${
-                    showAnimation
-                      ? 'opacity-100 translate-y-0'
-                      : 'opacity-0 translate-y-8'
-                  } ${item.isHighlighted ? 'ring-2 ring-green-400 ring-opacity-50 shadow-lg get-started-card' : ''}`}
-                  style={{ transitionDelay: `${item.delay}ms` }}
-                >
-                  <div
-                    className={`w-12 h-12 ${item.iconBg} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 ${
-                      item.isHighlighted ? 'animate-pulse' : ''
-                    }`}
-                  >
-                    {item.icon}
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
-                    {item.description}
-                  </p>
-                </Link>
-
-                {/* Animated arrow for Get Started card */}
-                {item.isHighlighted && showAnimation && (
-                  <div
-                    className={`absolute -top-4 z-10 ${getPositionClass(isRTL, 'right', '4')}`}
-                  >
-                    <div className="relative">
-                      <ArrowRight
-                        className={`w-6 h-6 text-green-500 animate-bounce ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
-                      />
-                      <div className="absolute inset-0">
-                        <ArrowRight
-                          className={`w-6 h-6 text-green-500 animate-ping opacity-75 ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Pulsing border for Get Started card */}
-                {item.isHighlighted && showAnimation && (
-                  <div className="absolute inset-0 rounded-2xl border-2 border-green-400 animate-ping opacity-20 pointer-events-none"></div>
-                )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Guided Learning */}
+            <Link
+              href="/learn"
+              className={`group bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl p-8 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 ${
+                showAnimation
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-8'
+              } ${userType === 'guided' ? 'ring-2 ring-indigo-400 ring-opacity-50 shadow-lg' : ''}`}
+              style={{ transitionDelay: '1000ms' }}
+            >
+              <div className="text-center">
+                <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Compass className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  Guided Learning
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-6 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
+                  Follow structured learning paths designed by experts. Perfect
+                  for beginners or those who prefer a guided approach.
+                </p>
+                <div className="flex items-center justify-center space-x-2 text-indigo-600 dark:text-indigo-400 font-medium">
+                  <span>Start Guided Learning</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </div>
               </div>
-            ))}
+            </Link>
+
+            {/* Free Style Learning */}
+            <Link
+              href="/free-style-roadmap"
+              className={`group bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 ${
+                showAnimation
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-8'
+              } ${userType === 'self-directed' ? 'ring-2 ring-green-400 ring-opacity-50 shadow-lg' : ''}`}
+              style={{ transitionDelay: '1100ms' }}
+            >
+              <div className="text-center">
+                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Map className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                  Free Style Learning
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-6 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
+                  Create your own learning roadmap and explore topics at your
+                  own pace. Perfect for experienced learners.
+                </p>
+                <div className="flex items-center justify-center space-x-2 text-green-600 dark:text-green-400 font-medium">
+                  <span>Start Free Style Learning</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -507,16 +375,14 @@ export default function HomePage() {
                   )}
                   <Link
                     href={personalizedContent.ctaLink}
-                    className={`inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-6 py-3 ${
+                    className={`inline-flex items-center space-x-2 px-6 py-3 ${
                       hasActivePlan
                         ? 'bg-green-600 hover:bg-green-700'
                         : 'bg-indigo-600 hover:bg-indigo-700'
                     } text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg`}
                   >
                     <span>{personalizedContent.cta}</span>
-                    <ArrowRight
-                      className={`w-4 h-4 ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
-                    />
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
@@ -543,12 +409,10 @@ export default function HomePage() {
                   </p>
                   <Link
                     href="/free-style-roadmap"
-                    className={`inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg`}
+                    className="inline-flex items-center space-x-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                   >
                     <span>View My Roadmap</span>
-                    <ArrowRight
-                      className={`w-4 h-4 ${rtlClass(isRTL, 'rtl-mirror-icon', '')}`}
-                    />
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
@@ -587,17 +451,15 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
                     href="/get-started"
-                    className={`group inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-8 py-4 bg-white text-indigo-600 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105`}
+                    className="group inline-flex items-center space-x-2 px-8 py-4 bg-white text-indigo-600 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                   >
                     <Play className="w-5 h-5" />
                     <span>Start Learning Now</span>
-                    <ArrowRight
-                      className={`w-5 h-5 transition-transform duration-300 ${rtlClass(isRTL, 'group-hover:-translate-x-1 rtl-mirror-icon', 'group-hover:translate-x-1')}`}
-                    />
+                    <ArrowRight className="w-5 h-5 transition-transform duration-300" />
                   </Link>
                   <Link
                     href="/learn"
-                    className={`inline-flex items-center ${rtlClass(isRTL, 'space-x-reverse space-x-2', 'space-x-2')} px-8 py-4 border-2 border-white/30 text-white rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 transform hover:scale-105`}
+                    className="inline-flex items-center space-x-2 px-8 py-4 border-2 border-white/30 text-white rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 transform hover:scale-105"
                   >
                     <BookOpen className="w-5 h-5" />
                     <span>Explore Learning Paths</span>
@@ -608,17 +470,6 @@ export default function HomePage() {
           </div>
         </section>
       )}
-
-      {/* Guided Tour */}
-      <GuidedTour
-        isOpen={showTour}
-        onComplete={handleTourComplete}
-        onSkip={handleTourSkip}
-      />
-
-      {/* RTL Development Tools */}
-      <FloatingRTLToggle />
-      <RTLIndicator />
     </div>
   );
 }

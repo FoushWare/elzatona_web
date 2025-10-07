@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Trash2, Edit3, Eye, Loader2, Plus, Save, X } from 'lucide-react';
 import { useLearningPlanTemplates } from '@/hooks/useLearningPlanTemplates';
-import { notify } from '@/components/ui/Notification';
-import { useConfirmation } from '@/components/ui/ConfirmationDialog';
+import { notify } from '@/shared/components/ui/Notification';
+import { useConfirmation } from '@/shared/components/ui/ConfirmationDialog';
 
 interface Category {
   id: string;
