@@ -3,7 +3,7 @@
 
 import { Metadata } from 'next';
 
-import UnifiedQuestionManager from '@/components/UnifiedQuestionManager';
+import UnifiedQuestionManager from '@/shared/components/learning/UnifiedQuestionManager';
 
 export const metadata: Metadata = {
   title: 'Unified Questions | Admin Panel',

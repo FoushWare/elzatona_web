@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
-import AdminLoginNavbar from '@/components/AdminLoginNavbar';
+import AdminLoginNavbar from '@/shared/components/auth/AdminLoginNavbar';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
