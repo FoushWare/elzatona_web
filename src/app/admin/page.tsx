@@ -9,8 +9,18 @@ export default function AdminPage() {
   const { isAuthenticated, isLoading } = useAdminAuth();
   const router = useRouter();
 
-  // Redirect is now handled by AdminAuthProvider context
-  // No need for local redirect logic here
+  useEffect(() => {
+    // Only redirect when not loading
+    if (!isLoading) {
+      if (isAuthenticated) {
+        // If authenticated, redirect to dashboard
+        router.replace('/admin/dashboard');
+      } else {
+        // If not authenticated, redirect to login
+        router.replace('/admin/login');
+      }
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   // Show loading state while checking authentication
   return (

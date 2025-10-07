@@ -20,31 +20,9 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   // Skip authentication check for login page and admin root page
   const isLoginPage = pathname === '/admin/login';
   const isAdminRootPage = pathname === '/admin';
-  const isAuditLogsPage = pathname === '/admin/audit-logs';
-  const isGuidedLearningPage = pathname === '/admin/guided-learning';
-  const isGuidedLearningEditPage =
-    pathname?.startsWith('/admin/guided-learning/') &&
-    pathname?.endsWith('/edit');
-  const isQuestionsPage = pathname === '/admin/content/questions';
-  const isPublicPage =
-    isLoginPage ||
-    isAdminRootPage ||
-    isAuditLogsPage ||
-    isGuidedLearningPage ||
-    isGuidedLearningEditPage ||
-    isQuestionsPage;
 
   // For login page and admin root page, render immediately without waiting for auth check
-  if (isPublicPage) {
-    // Show navbar for guided learning pages and questions page even without auth
-    if (isGuidedLearningPage || isGuidedLearningEditPage || isQuestionsPage) {
-      return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-          <AdminNavbar />
-          <main className="pt-20">{children}</main>
-        </div>
-      );
-    }
+  if (isLoginPage || isAdminRootPage) {
     return <>{children}</>;
   }
 
@@ -61,10 +39,10 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     );
   }
 
-  // Temporarily bypass authentication for development
-  // if (!isAuthenticated) {
-  //   return null; // Will redirect to login via AdminAuthProvider
-  // }
+  // Check authentication for all other admin routes
+  if (!isAuthenticated) {
+    return null; // Will redirect to login via AdminAuthProvider
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

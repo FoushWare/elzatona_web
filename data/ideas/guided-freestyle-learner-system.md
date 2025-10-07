@@ -54,7 +54,7 @@ A comprehensive learning system for frontend developers preparing for interviews
 
 **Admin Panel Access:**
 
-- Main Dashboard: `http://localhost:3001/admin/dashboard`
+- Main Dashboard: `/admin/dashboard`
 - Authentication: Admin-only access with role-based permissions
 - Features: Comprehensive admin panel for managing all aspects of the learning platform
 - **Note**: Admin runs on port 3001 (separate from main web app on port 3000)
@@ -122,6 +122,7 @@ A comprehensive learning system for frontend developers preparing for interviews
 - **Pre-Interview Review**: Dedicated flashcard review session
 - **Spaced Repetition**: Optimize review timing for retention
 - **Export Options**: Download flashcards for offline study
+- \*\*user have page to review flashcards and add new flashcards
 
 ### **7. Progress Grading & Analytics**
 
@@ -197,7 +198,7 @@ A comprehensive learning system for frontend developers preparing for interviews
 - **React/Next.js**: Modern, responsive web application
 - **State Management**: Context API or Redux for complex state
 - **Routing**: Dynamic routing for different learning paths
-- **UI Components**: Reusable, accessible components
+- **UI Components**: Reusable, accessible components, use shadcn/ui
 - **Responsive Design**: Mobile-first, cross-device compatibility
 
 ### **15. Backend & Database**
@@ -241,7 +242,7 @@ A comprehensive learning system for frontend developers preparing for interviews
 
 ### **Phase 1: Core Learning System (Weeks 1-4)**
 
-- User authentication and onboarding
+- User authentication
 - Basic guided and free style learning paths
 - Question system and practice functionality
 - Progress tracking and basic analytics
@@ -344,7 +345,6 @@ A comprehensive learning system for frontend developers preparing for interviews
 
 #### **Critical Gaps**
 
-- ❌ **Interactive Onboarding Tour**: Missing guided feature discovery
 - ❌ **User-Generated Questions**: No custom question creation interface
 - ❌ **Admin Review System**: No moderation for user-submitted content
 
