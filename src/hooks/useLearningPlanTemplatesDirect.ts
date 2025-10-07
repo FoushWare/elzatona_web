@@ -49,7 +49,13 @@ export function useLearningPlanTemplatesDirect(): UseLearningPlanTemplatesReturn
       const baseUrl =
         typeof window !== 'undefined'
           ? window.location.origin
-          : 'http://localhost:3000';
+          : process.env.WEB_URL ||
+            process.env.NEXT_PUBLIC_WEB_URL ||
+            (() => {
+              throw new Error(
+                'WEB_URL or NEXT_PUBLIC_WEB_URL environment variable must be set'
+              );
+            })();
       const response = await fetch(`${baseUrl}/api/test-firebase`);
       const apiData = await response.json();
 
