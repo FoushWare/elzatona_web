@@ -2,8 +2,8 @@
 // Admin page for managing all questions from a single source
 
 import { Metadata } from 'next';
-import AdminLayout from '@/components/AdminLayout';
-import UnifiedQuestionManager from '@/components/UnifiedQuestionManager';
+
+import UnifiedQuestionManager from '@/shared/components/learning/UnifiedQuestionManager';
 
 export const metadata: Metadata = {
   title: 'Unified Questions | Admin Panel',
@@ -12,10 +12,8 @@ export const metadata: Metadata = {
 
 export default function UnifiedQuestionsPage() {
   return (
-    <AdminLayout>
-      <div className="container mx-auto py-6">
-        <UnifiedQuestionManager />
-      </div>
-    </AdminLayout>
+    <div className="container mx-auto py-6">
+      <UnifiedQuestionManager />
+    </div>
   );
 }

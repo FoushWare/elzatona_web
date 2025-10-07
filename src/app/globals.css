@@ -19,7 +19,10 @@
 
 /* Dark mode transition utilities */
 * {
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
 }
 
 /* Ensure proper dark mode application */
@@ -54,13 +57,13 @@ html.light {
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
     --radius: 0.5rem;
-    
+
     /* Enhanced Typography Colors */
     --text-primary: 222.2 84% 4.9%;
     --text-secondary: 215.4 16.3% 46.9%;
     --text-muted: 215.4 16.3% 46.9%;
     --text-accent: 221.2 83.2% 53.3%;
-    
+
     /* Enhanced UI Colors */
     --success: 142.1 76.2% 36.3%;
     --success-foreground: 355.7 100% 97.3%;
@@ -96,13 +99,13 @@ html.light {
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
-    
+
     /* Enhanced Typography Colors for Dark Mode */
     --text-primary: 210 40% 98%;
     --text-secondary: 215 20.2% 65.1%;
     --text-muted: 215 20.2% 65.1%;
     --text-accent: 217.2 91.2% 59.8%;
-    
+
     /* Enhanced UI Colors for Dark Mode */
     --success: 142.1 70.6% 45.3%;
     --success-foreground: 144.9 80.4% 10%;
@@ -122,111 +125,133 @@ html.light {
   * {
     @apply border-border;
   }
-  
+
   /* Arabic Font Support */
   .font-arabic {
     font-family: var(--font-arabic), 'Amiri', 'Scheherazade', serif;
     font-weight: 600;
   }
-  
+
   /* Enhanced Arabic Text Rendering */
   .font-arabic {
     text-rendering: optimizeLegibility;
-    -webkit-font-feature-settings: "liga" 1, "kern" 1;
-    font-feature-settings: "liga" 1, "kern" 1;
+    -webkit-font-feature-settings:
+      'liga' 1,
+      'kern' 1;
+    font-feature-settings:
+      'liga' 1,
+      'kern' 1;
   }
-  
+
   html {
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family:
+      var(--font-geist-sans),
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
     line-height: 1.6;
     letter-spacing: 0.025em;
   }
-  
+
   /* Enhanced Typography */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-semibold tracking-tight;
     color: hsl(var(--text-primary));
   }
-  
+
   h1 {
     @apply text-4xl md:text-5xl lg:text-6xl;
     line-height: 1.1;
     font-weight: 700;
   }
-  
+
   h2 {
     @apply text-3xl md:text-4xl;
     line-height: 1.2;
     font-weight: 600;
   }
-  
+
   h3 {
     @apply text-2xl md:text-3xl;
     line-height: 1.3;
     font-weight: 600;
   }
-  
+
   h4 {
     @apply text-xl md:text-2xl;
     line-height: 1.4;
     font-weight: 600;
   }
-  
+
   h5 {
     @apply text-lg md:text-xl;
     line-height: 1.4;
     font-weight: 600;
   }
-  
+
   h6 {
     @apply text-base md:text-lg;
     line-height: 1.4;
     font-weight: 600;
   }
-  
+
   p {
     @apply text-base leading-relaxed;
     color: hsl(var(--text-secondary));
   }
-  
+
   /* Enhanced Link Styling */
   a {
     @apply transition-colors duration-200;
     color: hsl(var(--text-accent));
   }
-  
+
   a:hover {
     color: hsl(var(--primary));
   }
-  
+
   /* Enhanced Code Styling */
   code {
     @apply font-mono text-sm px-2 py-1 rounded;
     background-color: hsl(var(--muted));
     color: hsl(var(--text-primary));
   }
-  
+
   pre {
     @apply font-mono text-sm p-4 rounded-lg overflow-x-auto;
     background-color: hsl(var(--muted));
     color: hsl(var(--text-primary));
   }
-  
+
   /* Enhanced Button Styling */
   button {
     @apply font-medium transition-all duration-200;
   }
-  
+
   /* Enhanced Input Styling */
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     @apply font-sans;
   }
 }
@@ -247,145 +272,158 @@ html.light {
     @apply bg-card border border-border rounded-lg shadow-sm;
     transition: all 0.2s ease-in-out;
   }
-  
+
   .card:hover {
     @apply shadow-md;
     transform: translateY(-1px);
   }
-  
+
   /* Enhanced Button Variants */
   .btn-primary {
     @apply bg-primary text-primary-foreground font-medium px-4 py-2 rounded-md transition-all duration-200;
   }
-  
+
   .btn-primary:hover {
     background-color: hsl(var(--primary) / 0.9);
   }
-  
+
   .btn-secondary {
     @apply bg-secondary text-secondary-foreground font-medium px-4 py-2 rounded-md transition-all duration-200;
   }
-  
+
   .btn-secondary:hover {
     background-color: hsl(var(--secondary) / 0.8);
   }
-  
+
   .btn-outline {
     @apply border border-border bg-transparent hover:bg-accent hover:text-accent-foreground font-medium px-4 py-2 rounded-md transition-all duration-200;
   }
-  
+
   /* Enhanced Navigation Styling */
   .nav-link {
     @apply px-3 py-2 rounded-md text-sm font-medium transition-all duration-200;
     color: hsl(var(--text-primary));
   }
-  
+
   .nav-link:hover {
     color: hsl(var(--primary));
     background-color: hsl(var(--accent));
   }
-  
+
   .nav-link.active {
     color: hsl(var(--primary));
     background-color: hsl(var(--accent));
   }
-  
+
   /* Enhanced Dropdown Styling */
   .dropdown-menu {
     @apply bg-background border border-border shadow-lg rounded-md;
     backdrop-filter: blur(12px);
   }
-  
+
   .dropdown-item {
     @apply block px-4 py-2 text-sm transition-all duration-200;
     color: hsl(var(--text-primary));
   }
-  
+
   .dropdown-item:hover {
     color: hsl(var(--primary));
     background-color: hsl(var(--accent));
   }
-  
+
   /* Enhanced Badge Styling */
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
   }
-  
+
   .badge-primary {
     @apply bg-primary text-primary-foreground;
   }
-  
+
   .badge-secondary {
     @apply bg-secondary text-secondary-foreground;
   }
-  
+
   .badge-success {
     @apply bg-success text-success-foreground;
   }
-  
+
   .badge-warning {
     @apply bg-warning text-warning-foreground;
   }
-  
+
   .badge-destructive {
     @apply bg-destructive text-destructive-foreground;
   }
-  
+
   /* Enhanced Form Styling */
   .form-input {
     @apply w-full px-3 py-2 border border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200;
   }
-  
+
   .form-label {
     @apply block text-sm font-medium mb-2;
     color: hsl(var(--text-primary));
   }
-  
+
   /* Enhanced Loading States */
   .loading {
     @apply animate-pulse bg-muted;
   }
-  
+
   /* Enhanced Focus States */
   .focus-ring {
     @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
   }
-  
+
   /* Enhanced Transitions */
   .transition-smooth {
     @apply transition-all duration-300 ease-in-out;
   }
-  
+
   /* Enhanced Shadows */
   .shadow-soft {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.08),
+      0 1px 2px rgba(0, 0, 0, 0.08);
   }
-  
+
   .shadow-medium {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
+
   .shadow-strong {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 10px 15px rgba(0, 0, 0, 0.1),
+      0 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+
   /* Dark mode shadow adjustments */
   .dark .shadow-soft {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.4);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.4),
+      0 1px 2px rgba(0, 0, 0, 0.4);
   }
-  
+
   .dark .shadow-medium {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.4);
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.4);
   }
-  
+
   .dark .shadow-strong {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4), 0 4px 6px rgba(0, 0, 0, 0.4);
+    box-shadow:
+      0 10px 15px rgba(0, 0, 0, 0.4),
+      0 4px 6px rgba(0, 0, 0, 0.4);
   }
 }
 
 /* Custom floating animations for background elements */
 @keyframes float-slow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
   }
   25% {
@@ -400,7 +438,8 @@ html.light {
 }
 
 @keyframes float-reverse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
   }
   25% {
@@ -415,7 +454,8 @@ html.light {
 }
 
 @keyframes float-gentle {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
   }
   33% {
@@ -427,7 +467,8 @@ html.light {
 }
 
 @keyframes wave-slow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(-100%) skewX(-15deg);
   }
   50% {
@@ -436,7 +477,8 @@ html.light {
 }
 
 @keyframes wave-reverse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(100%) skewX(15deg);
   }
   50% {
@@ -445,7 +487,8 @@ html.light {
 }
 
 @keyframes wave-gentle {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(-50%) skewX(-8deg);
   }
   50% {
@@ -476,4 +519,35 @@ html.light {
 
 .animate-wave-gentle {
   animation: wave-gentle 25s ease-in-out infinite;
+}
+
+/* Simple responsive fixes */
+@media (max-width: 640px) {
+  .fixed {
+    position: fixed !important;
+  }
+}
+
+/* Enhanced color scheme */
+:root {
+  --primary-indigo: #4f46e5;
+  --primary-indigo-dark: #4338ca;
+  --primary-purple: #7c3aed;
+  --primary-blue: #2563eb;
+}
+
+/* Improved gradient backgrounds */
+.bg-gradient-indigo {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #2563eb 100%);
+}
+
+/* Enhanced shadows */
+.shadow-indigo {
+  box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.15);
+}
+
+.shadow-indigo-lg {
+  box-shadow:
+    0 10px 25px -3px rgba(79, 70, 229, 0.1),
+    0 4px 6px -2px rgba(79, 70, 229, 0.05);
 }

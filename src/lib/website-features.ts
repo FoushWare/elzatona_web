@@ -200,30 +200,18 @@ export const allWebsiteFeatures: WebsiteFeature[] = [
     fullStory:
       'The AI Mock Interview system was developed to provide users with realistic interview practice using advanced AI technology. This feature simulates real interview scenarios with intelligent follow-up questions, behavioral assessments, and technical evaluations. It helps users build confidence and improve their interview skills through personalized feedback.',
     implementation: {
-      technologies: [
-        'Next.js',
-        'React',
-        'TypeScript',
-        'OpenAI API',
-        'Web Speech API',
-      ],
+      technologies: ['Next.js', 'React', 'TypeScript', 'OpenAI API'],
       files: [
         'src/app/ai-mock-interview/page.tsx',
         'src/components/AIInterview.tsx',
       ],
-      components: [
-        'Interview Interface',
-        'Speech Recognition',
-        'AI Response System',
-      ],
-      apis: ['OpenAI GPT-4', 'Web Speech API', 'Custom Interview API'],
+      components: ['Interview Interface', 'AI Response System'],
+      apis: ['OpenAI GPT-4', 'Custom Interview API'],
       database: ['Firebase Firestore'],
       deployment: ['Vercel', 'Serverless Functions'],
     },
     features: [
       'Real-time AI conversation',
-      'Speech-to-text input',
-      'Text-to-speech responses',
       'Interview question generation',
       'Behavioral assessment',
       'Technical evaluation',

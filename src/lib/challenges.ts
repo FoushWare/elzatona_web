@@ -144,7 +144,7 @@ export const sampleChallenges: Challenge[] = [
         id: '1',
         name: 'Form Structure',
         description: 'Check if form has proper input fields and labels',
-        input: 'html',
+        input: { type: 'html' },
         expectedOutput: 'form with name, email, message fields',
         type: 'html',
       },

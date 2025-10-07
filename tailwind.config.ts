@@ -5,12 +5,14 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/shared/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   darkMode: 'class',
   theme: {
     extend: {
       screens: {
         xs: '475px',
+        '2xl': '1440px',
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -209,6 +211,13 @@ const config: Config = {
         '18': '4.5rem',
         '88': '22rem',
         '128': '32rem',
+        'safe-bottom': 'env(safe-area-inset-bottom, 0px)',
+        'safe-right': 'env(safe-area-inset-right, 0px)',
+        'safe-left': 'env(safe-area-inset-left, 0px)',
+        'safe-top': 'env(safe-area-inset-top, 0px)',
+      },
+      zIndex: {
+        chat: '50',
       },
       borderRadius: {
         '4xl': '2rem',
