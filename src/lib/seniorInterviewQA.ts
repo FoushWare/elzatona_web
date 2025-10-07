@@ -600,7 +600,9 @@ test('submits form with user data', async () => {
 module.exports = {
   ci: {
     collect: {
-      url: ['http://localhost:3000'],
+      url: [process.env.WEB_URL || process.env.NEXT_PUBLIC_WEB_URL || (() => {
+        throw new Error('WEB_URL or NEXT_PUBLIC_WEB_URL environment variable must be set');
+      })()],
       numberOfRuns: 3,
     },
     assert: {
