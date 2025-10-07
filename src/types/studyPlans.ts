@@ -26,7 +26,15 @@ export interface StudyTopic {
   id: string;
   title: string;
   description: string;
-  category: 'javascript' | 'react' | 'css' | 'html' | 'system-design' | 'algorithms' | 'testing' | 'performance';
+  category:
+    | 'javascript'
+    | 'react'
+    | 'css'
+    | 'html'
+    | 'system-design'
+    | 'algorithms'
+    | 'testing'
+    | 'performance';
   difficulty: 'easy' | 'medium' | 'hard';
   estimatedHours: number;
   resources: StudyResource[];

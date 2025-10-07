@@ -22,6 +22,41 @@ export class ClientAudioUploadService {
     'audio/webm',
   ];
 
+  private questionId?: string;
+
+  constructor(questionId?: string) {
+    this.questionId = questionId;
+  }
+
+  /**
+   * Upload audio file (instance method)
+   */
+  async uploadAudio(
+    file: File,
+    type: 'question' | 'answer' = 'question'
+  ): Promise<string> {
+    if (!this.questionId) {
+      throw new Error('Question ID is required for audio upload');
+    }
+
+    const result =
+      type === 'question'
+        ? await ClientAudioUploadService.uploadQuestionAudio(
+            this.questionId,
+            file
+          )
+        : await ClientAudioUploadService.uploadAnswerAudio(
+            this.questionId,
+            file
+          );
+
+    if (result.success && result.url) {
+      return result.url;
+    } else {
+      throw new Error(result.error || 'Failed to upload audio');
+    }
+  }
+
   /**
    * Upload question audio file via API
    */

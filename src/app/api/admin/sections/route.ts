@@ -1,119 +1,139 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SectionService } from '@/lib/section-service';
+import { firestoreService } from '@/lib/firestore-service';
 
-// GET - Get all sections
 export async function GET() {
   try {
-    const result = await SectionService.getSections();
+    const sections = await firestoreService.getAllSections();
 
-    if (result.success) {
-      return NextResponse.json(result);
-    } else {
-      return NextResponse.json(
-        { success: false, error: result.error },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json({
+      success: true,
+      data: sections,
+    });
   } catch (error) {
-    console.error('Sections API error:', error);
+    console.error('Error fetching sections:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to retrieve sections' },
+      {
+        success: false,
+        error: 'Failed to fetch sections',
+      },
       { status: 500 }
     );
   }
 }
 
-// POST - Add new section
 export async function POST(request: NextRequest) {
   try {
-    const { name, description } = await request.json();
+    const body = await request.json();
+    const {
+      name,
+      description,
+      category,
+      difficulty,
+      estimatedTime,
+      order,
+      isActive,
+    } = body;
 
-    if (!name || !name.trim()) {
+    if (!name || !category) {
       return NextResponse.json(
-        { success: false, error: 'Section name is required' },
+        {
+          success: false,
+          error: 'Name and category are required',
+        },
         { status: 400 }
       );
     }
 
-    const result = await SectionService.addSection(
-      name.trim(),
-      description?.trim()
-    );
+    const sectionData = {
+      name,
+      description: description || '',
+      category,
+      difficulty: difficulty || 'beginner',
+      estimatedTime: estimatedTime || '',
+      order: order || 1,
+      isActive: isActive !== false,
+      questionCount: 0,
+    };
 
-    if (result.success) {
-      return NextResponse.json(result);
-    } else {
-      return NextResponse.json(
-        { success: false, error: result.error },
-        { status: 400 }
-      );
-    }
+    const section = await firestoreService.createSection(sectionData);
+
+    return NextResponse.json({
+      success: true,
+      data: section,
+    });
   } catch (error) {
-    console.error('Sections API error:', error);
+    console.error('Error creating section:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to add section' },
+      {
+        success: false,
+        error: 'Failed to create section',
+      },
       { status: 500 }
     );
   }
 }
 
-// PUT - Update section
 export async function PUT(request: NextRequest) {
   try {
-    const { sectionId, updates } = await request.json();
+    const body = await request.json();
+    const { sectionId, updates } = body;
 
     if (!sectionId) {
       return NextResponse.json(
-        { success: false, error: 'Section ID is required' },
+        {
+          success: false,
+          error: 'Section ID is required',
+        },
         { status: 400 }
       );
     }
 
-    const result = await SectionService.updateSection(sectionId, updates);
+    const section = await firestoreService.updateSection(sectionId, updates);
 
-    if (result.success) {
-      return NextResponse.json(result);
-    } else {
-      return NextResponse.json(
-        { success: false, error: result.error },
-        { status: 400 }
-      );
-    }
+    return NextResponse.json({
+      success: true,
+      data: section,
+    });
   } catch (error) {
-    console.error('Sections API error:', error);
+    console.error('Error updating section:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to update section' },
+      {
+        success: false,
+        error: 'Failed to update section',
+      },
       { status: 500 }
     );
   }
 }
 
-// DELETE - Delete section
 export async function DELETE(request: NextRequest) {
   try {
-    const { sectionId } = await request.json();
+    const body = await request.json();
+    const { sectionId } = body;
 
     if (!sectionId) {
       return NextResponse.json(
-        { success: false, error: 'Section ID is required' },
+        {
+          success: false,
+          error: 'Section ID is required',
+        },
         { status: 400 }
       );
     }
 
-    const result = await SectionService.deleteSection(sectionId);
+    await firestoreService.deleteSection(sectionId);
 
-    if (result.success) {
-      return NextResponse.json(result);
-    } else {
-      return NextResponse.json(
-        { success: false, error: result.error },
-        { status: 400 }
-      );
-    }
+    return NextResponse.json({
+      success: true,
+      message: 'Section deleted successfully',
+    });
   } catch (error) {
-    console.error('Sections API error:', error);
+    console.error('Error deleting section:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to delete section' },
+      {
+        success: false,
+        error: 'Failed to delete section',
+      },
       { status: 500 }
     );
   }

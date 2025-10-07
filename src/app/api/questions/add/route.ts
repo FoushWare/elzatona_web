@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 
-const db = getFirestore(app);
+const db = app ? getFirestore(app) : null;
 
 const questions = [
   {
@@ -142,6 +142,13 @@ export async function POST(request: NextRequest) {
     );
 
     const results = [];
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     for (const question of questionsToAdd) {
       await setDoc(doc(db, 'questions', question.id), question);

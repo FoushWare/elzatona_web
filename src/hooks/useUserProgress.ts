@@ -18,10 +18,24 @@ import {
   updateUserPreferences,
 } from '@/lib/firebase-progress';
 
+export interface ContinueData {
+  recentPath?: {
+    pathId: string;
+    pathName: string;
+    completedSections: any[];
+    progress: number;
+    lastAccessed: string;
+    timeSpent: number;
+  };
+  recentQuestions: any[];
+  recentChallenges: any[];
+  lastActivity: string;
+}
+
 export interface UseUserProgressReturn {
   progress: UserProgress | null;
   dashboardStats: DashboardStats | null;
-  continueData: unknown;
+  continueData: ContinueData | null;
   isLoading: boolean;
   error: string | null;
   updateQuestion: (
@@ -52,7 +66,7 @@ export const useUserProgress = (): UseUserProgressReturn => {
   const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(
     null
   );
-  const [continueData, setContinueData] = useState<unknown>(null);
+  const [continueData, setContinueData] = useState<ContinueData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isLoadingRef = useRef(false);
@@ -106,7 +120,7 @@ export const useUserProgress = (): UseUserProgressReturn => {
 
     try {
       const data = await getContinueWhereLeftOff(user.uid);
-      setContinueData(data || null);
+      setContinueData(data as ContinueData | null);
     } catch (err) {
       console.error('Error loading continue data:', err);
       setContinueData(null);

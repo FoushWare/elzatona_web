@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import UnifiedQuestionService from '@/lib/unified-question-schema';
+import { db } from '@/lib/firebase-server';
 
 // GET - Get questions for a section using unified system
 export async function GET(
@@ -20,7 +21,8 @@ export async function GET(
     }
 
     // Get questions from unified system filtered by learning path
-    const questions = await UnifiedQuestionService.getQuestions({
+    const service = new UnifiedQuestionService(db);
+    const questions = await service.getQuestions({
       learningPath: sectionId,
       isActive: true,
     });
@@ -34,8 +36,8 @@ export async function GET(
   } catch (error) {
     console.error('Unified section questions API error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to retrieve section questions',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
@@ -67,25 +69,19 @@ export async function POST(
       isActive: true,
     };
 
-    const result = await UnifiedQuestionService.createQuestion(questionWithLearningPath);
+    const service = new UnifiedQuestionService(db);
+    const result = await service.createQuestion(questionWithLearningPath);
 
-    if (result.success) {
-      return NextResponse.json({
-        success: true,
-        data: result.data,
-        message: 'Question added to section successfully',
-      });
-    } else {
-      return NextResponse.json(
-        { success: false, error: result.error },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json({
+      success: true,
+      data: result,
+      message: 'Question added to section successfully',
+    });
   } catch (error) {
     console.error('Add question to unified section API error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to add question to section',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
@@ -111,24 +107,25 @@ export async function DELETE(
       );
     }
 
-    const result = await UnifiedQuestionService.deleteQuestion(questionId);
+    const service = new UnifiedQuestionService(db);
+    const result = await service.deleteQuestion(questionId);
 
-    if (result.success) {
+    if (result) {
       return NextResponse.json({
         success: true,
         message: 'Question deleted from section successfully',
       });
     } else {
       return NextResponse.json(
-        { success: false, error: result.error },
+        { success: false, error: 'Failed to delete question' },
         { status: 500 }
       );
     }
   } catch (error) {
     console.error('Delete question from unified section API error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Failed to delete question from section',
         details: error instanceof Error ? error.message : 'Unknown error',
       },

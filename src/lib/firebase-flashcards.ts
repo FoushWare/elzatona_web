@@ -12,6 +12,7 @@ import {
   limit,
   serverTimestamp,
   Timestamp,
+  Firestore,
 } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -75,13 +76,23 @@ export interface FlashcardDeck {
   updatedAt: Timestamp;
 }
 
+// Helper function to check database initialization
+const checkDb = (): Firestore => {
+  if (!db) {
+    throw new Error('Database not initialized');
+  }
+  return db;
+};
+
 // Flashcard CRUD operations
 export const flashcardService = {
   // Create a new flashcard
   async createFlashcard(
     flashcard: Omit<Flashcard, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<string> {
-    const docRef = await addDoc(collection(db, 'flashcards'), {
+    const database = checkDb();
+
+    const docRef = await addDoc(collection(database, 'flashcards'), {
       ...flashcard,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
@@ -91,7 +102,9 @@ export const flashcardService = {
 
   // Get all flashcards
   async getAllFlashcards(): Promise<Flashcard[]> {
-    const querySnapshot = await getDocs(collection(db, 'flashcards'));
+    const database = checkDb();
+
+    const querySnapshot = await getDocs(collection(database, 'flashcards'));
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
@@ -101,7 +114,7 @@ export const flashcardService = {
   // Get flashcards by category
   async getFlashcardsByCategory(category: string): Promise<Flashcard[]> {
     const q = query(
-      collection(db, 'flashcards'),
+      collection(checkDb(), 'flashcards'),
       where('category', '==', category)
     );
     const querySnapshot = await getDocs(q);
@@ -114,7 +127,7 @@ export const flashcardService = {
   // Get flashcards by difficulty
   async getFlashcardsByDifficulty(difficulty: string): Promise<Flashcard[]> {
     const q = query(
-      collection(db, 'flashcards'),
+      collection(checkDb(), 'flashcards'),
       where('difficulty', '==', difficulty)
     );
     const querySnapshot = await getDocs(q);
@@ -126,7 +139,7 @@ export const flashcardService = {
 
   // Get a single flashcard
   async getFlashcard(id: string): Promise<Flashcard | null> {
-    const docRef = doc(db, 'flashcards', id);
+    const docRef = doc(checkDb(), 'flashcards', id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() } as Flashcard;
@@ -139,7 +152,7 @@ export const flashcardService = {
     id: string,
     updates: Partial<Flashcard>
   ): Promise<void> {
-    const docRef = doc(db, 'flashcards', id);
+    const docRef = doc(checkDb(), 'flashcards', id);
     await updateDoc(docRef, {
       ...updates,
       updatedAt: serverTimestamp(),
@@ -148,7 +161,7 @@ export const flashcardService = {
 
   // Delete a flashcard
   async deleteFlashcard(id: string): Promise<void> {
-    const docRef = doc(db, 'flashcards', id);
+    const docRef = doc(checkDb(), 'flashcards', id);
     await deleteDoc(docRef);
   },
 
@@ -185,7 +198,10 @@ export const flashcardService = {
         nextReview: null,
       };
 
-      const docRef = await addDoc(collection(db, 'flashcards'), flashcardData);
+      const docRef = await addDoc(
+        collection(checkDb(), 'flashcards'),
+        flashcardData
+      );
       return docRef.id;
     } catch (error) {
       console.error('Error creating flashcard from question:', error);
@@ -206,7 +222,7 @@ export const flashcardService = {
       }
 
       const flashcardsQuery = query(
-        collection(db, 'flashcards'),
+        collection(checkDb(), 'flashcards'),
         where('createdBy', '==', userId),
         where('question', '==', question)
       );
@@ -230,7 +246,7 @@ export const flashcardService = {
   // Remove flashcard
   async removeFlashcard(flashcardId: string): Promise<boolean> {
     try {
-      await deleteDoc(doc(db, 'flashcards', flashcardId));
+      await deleteDoc(doc(checkDb(), 'flashcards', flashcardId));
       return true;
     } catch (error) {
       console.error('Error removing flashcard:', error);
@@ -248,7 +264,7 @@ export const progressService = {
     isCorrect: boolean
   ): Promise<void> {
     const progressRef = doc(
-      db,
+      checkDb(),
       'flashcardProgress',
       `${userId}_${flashcardId}`
     );
@@ -308,7 +324,7 @@ export const progressService = {
       // Create new progress record
       nextReview.setDate(now.getDate() + 1);
 
-      await addDoc(collection(db, 'flashcardProgress'), {
+      await addDoc(collection(checkDb(), 'flashcardProgress'), {
         userId,
         flashcardId,
         correctCount: isCorrect ? 1 : 0,
@@ -328,7 +344,7 @@ export const progressService = {
   // Get user's flashcard progress
   async getUserProgress(userId: string): Promise<FlashcardProgress[]> {
     const q = query(
-      collection(db, 'flashcardProgress'),
+      collection(checkDb(), 'flashcardProgress'),
       where('userId', '==', userId)
     );
     const querySnapshot = await getDocs(q);
@@ -343,7 +359,7 @@ export const progressService = {
     const now = new Date();
     // First get all progress records for the user
     const q = query(
-      collection(db, 'flashcardProgress'),
+      collection(checkDb(), 'flashcardProgress'),
       where('userId', '==', userId)
     );
     const querySnapshot = await getDocs(q);
@@ -389,7 +405,7 @@ export const sessionService = {
     userId: string,
     sessionType: 'review' | 'new' | 'mixed'
   ): Promise<string> {
-    const docRef = await addDoc(collection(db, 'flashcardSessions'), {
+    const docRef = await addDoc(collection(checkDb(), 'flashcardSessions'), {
       userId,
       sessionType,
       cardsReviewed: 0,
@@ -403,7 +419,7 @@ export const sessionService = {
 
   // End a flashcard session
   async endSession(sessionId: string, duration: number): Promise<void> {
-    const docRef = doc(db, 'flashcardSessions', sessionId);
+    const docRef = doc(checkDb(), 'flashcardSessions', sessionId);
     await updateDoc(docRef, {
       endTime: serverTimestamp(),
       duration,
@@ -415,7 +431,7 @@ export const sessionService = {
     sessionId: string,
     isCorrect: boolean
   ): Promise<void> {
-    const docRef = doc(db, 'flashcardSessions', sessionId);
+    const docRef = doc(checkDb(), 'flashcardSessions', sessionId);
     const sessionSnap = await getDoc(docRef);
 
     if (sessionSnap.exists()) {
@@ -438,7 +454,7 @@ export const sessionService = {
     limitCount: number = 10
   ): Promise<FlashcardSession[]> {
     const q = query(
-      collection(db, 'flashcardSessions'),
+      collection(checkDb(), 'flashcardSessions'),
       where('userId', '==', userId),
       orderBy('startTime', 'desc'),
       limit(limitCount)
@@ -457,7 +473,7 @@ export const deckService = {
   async createDeck(
     deck: Omit<FlashcardDeck, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<string> {
-    const docRef = await addDoc(collection(db, 'flashcardDecks'), {
+    const docRef = await addDoc(collection(checkDb(), 'flashcardDecks'), {
       ...deck,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
@@ -468,7 +484,7 @@ export const deckService = {
   // Get all public decks
   async getPublicDecks(): Promise<FlashcardDeck[]> {
     const q = query(
-      collection(db, 'flashcardDecks'),
+      collection(checkDb(), 'flashcardDecks'),
       where('isPublic', '==', true)
     );
     const querySnapshot = await getDocs(q);
@@ -481,7 +497,7 @@ export const deckService = {
   // Get user's decks
   async getUserDecks(userId: string): Promise<FlashcardDeck[]> {
     const q = query(
-      collection(db, 'flashcardDecks'),
+      collection(checkDb(), 'flashcardDecks'),
       where('createdBy', '==', userId)
     );
     const querySnapshot = await getDocs(q);
@@ -495,7 +511,7 @@ export const deckService = {
   async getDeckWithCards(
     deckId: string
   ): Promise<{ deck: FlashcardDeck; cards: Flashcard[] } | null> {
-    const deckRef = doc(db, 'flashcardDecks', deckId);
+    const deckRef = doc(checkDb(), 'flashcardDecks', deckId);
     const deckSnap = await getDoc(deckRef);
 
     if (!deckSnap.exists()) {

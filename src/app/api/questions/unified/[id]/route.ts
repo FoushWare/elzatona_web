@@ -1,74 +1,77 @@
-// v1.0 - Individual Question API Route
-
 import { NextRequest, NextResponse } from 'next/server';
-import UnifiedQuestionService from '@/lib/unified-question-schema';
+import { UnifiedQuestionService } from '@/lib/unified-question-schema';
+import { db } from '@/lib/firebase-server';
 
-// GET /api/questions/unified/[id] - Get single question
-export async function GET(
+export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const question = await UnifiedQuestionService.getQuestion(params.id);
+    const { id } = await params;
+    const updatedQuestion = await request.json();
 
-    if (!question) {
+    console.log('🔄 Updating question:', id, updatedQuestion);
+
+    if (!db) {
       return NextResponse.json(
-        { success: false, error: 'Question not found' },
-        { status: 404 }
+        { error: 'Database not initialized' },
+        { status: 500 }
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      data: question,
-    });
-  } catch (error) {
-    console.error('Error fetching question:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch question' },
-      { status: 500 }
-    );
-  }
-}
+    const service = new UnifiedQuestionService(db);
+    await service.updateQuestion(id, updatedQuestion);
 
-// PUT /api/questions/unified/[id] - Update single question
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const updates = await request.json();
-    await UnifiedQuestionService.updateQuestion(params.id, updates);
+    // Get the updated question to return
+    const updatedQuestionData = await service.getQuestion(id);
 
     return NextResponse.json({
       success: true,
+      data: updatedQuestionData,
       message: 'Question updated successfully',
     });
   } catch (error) {
-    console.error('Error updating question:', error);
+    console.error('❌ Error updating question:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to update question' },
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Internal server error',
+      },
       { status: 500 }
     );
   }
 }
 
-// DELETE /api/questions/unified/[id] - Delete single question
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await UnifiedQuestionService.deleteQuestion(params.id);
+    const { id } = await params;
+
+    console.log('🗑️ Deleting question:', id);
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
+    const service = new UnifiedQuestionService(db);
+    await service.deleteQuestion(id);
 
     return NextResponse.json({
       success: true,
       message: 'Question deleted successfully',
     });
   } catch (error) {
-    console.error('Error deleting question:', error);
+    console.error('❌ Error deleting question:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to delete question' },
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Internal server error',
+      },
       { status: 500 }
     );
   }
