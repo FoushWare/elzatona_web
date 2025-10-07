@@ -11,6 +11,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
+import { adminConfig, getAdminApiUrl } from '@/config/admin';
 
 // Types
 export interface AdminCredential {
@@ -50,11 +51,8 @@ export interface AdminDeactivationResult {
   error?: string;
 }
 
-// Configuration
-const SALT_ROUNDS = 12;
-
 export class AdminAuthService {
-  private static readonly COLLECTION_NAME = 'admins';
+  private static readonly COLLECTION_NAME = adminConfig.database.collectionName;
 
   /**
    * Initialize admin credentials (one-time setup)
@@ -76,7 +74,10 @@ export class AdminAuthService {
       }
 
       // Hash password
-      const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+      const passwordHash = await bcrypt.hash(
+        password,
+        adminConfig.security.saltRounds
+      );
 
       // Create admin document
       if (!db) {
@@ -117,7 +118,7 @@ export class AdminAuthService {
     password: string
   ): Promise<AuthResult> {
     try {
-      const response = await fetch('/api/admin/auth', {
+      const response = await fetch(getAdminApiUrl('/admin/auth'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -159,7 +160,10 @@ export class AdminAuthService {
       }
 
       // Hash password
-      const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+      const passwordHash = await bcrypt.hash(
+        password,
+        adminConfig.security.saltRounds
+      );
 
       // Create admin document
       if (!db) {
@@ -265,7 +269,7 @@ export class AdminAuthService {
       }
 
       // Verify JWT token via API
-      const response = await fetch('/api/admin/auth', {
+      const response = await fetch(getAdminApiUrl('/admin/auth'), {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${session.token}`,
