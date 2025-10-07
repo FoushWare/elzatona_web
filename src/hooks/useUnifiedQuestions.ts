@@ -16,6 +16,7 @@ interface UseUnifiedQuestionsOptions {
     subcategory?: string;
     difficulty?: string;
     learningPath?: string;
+    topic?: string;
     sectionId?: string;
     isActive?: boolean;
     isComplete?: boolean;
@@ -38,6 +39,14 @@ interface UseUnifiedQuestionsReturn {
 
   // Error states
   error: string | null;
+
+  // Pagination state
+  currentPage: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
 
   // Actions
   loadQuestions: (
@@ -66,6 +75,12 @@ interface UseUnifiedQuestionsReturn {
     filters?: UseUnifiedQuestionsOptions['initialFilters']
   ) => Promise<void>;
 
+  // Pagination actions
+  goToPage: (page: number) => void;
+  nextPage: () => void;
+  prevPage: () => void;
+  changePageSize: (pageSize: number) => void;
+
   // Utilities
   clearError: () => void;
   clearQuestions: () => void;
@@ -92,34 +107,92 @@ export function useUnifiedQuestions(
   // Error state
   const [error, setError] = useState<string | null>(null);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [hasNext, setHasNext] = useState(false);
+  const [hasPrev, setHasPrev] = useState(false);
+
   // API calls
-  const apiCall = async (url: string, options: RequestInit = {}) => {
-    const response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      ...options,
-    });
+  const apiCall = useCallback(
+    async (url: string, options: RequestInit = {}) => {
+      try {
+        const response = await fetch(url, {
+          headers: {
+            'Content-Type': 'application/json',
+            ...options.headers,
+          },
+          ...options,
+        });
 
-    if (!response.ok) {
-      const errorData = await response
-        .json()
-        .catch(() => ({ error: 'Unknown error' }));
-      throw new Error(errorData.error || `HTTP ${response.status}`);
-    }
+        if (!response.ok) {
+          const errorData = await response
+            .json()
+            .catch(() => ({ error: 'Unknown error' }));
+          throw new Error(errorData.error || `HTTP ${response.status}`);
+        }
 
-    return response.json();
-  };
+        return response.json();
+      } catch (err) {
+        // Handle Firebase "Target ID already exists" errors gracefully
+        if (
+          err instanceof Error &&
+          err.message.includes('Target ID already exists')
+        ) {
+          console.warn(
+            'Firebase listener conflict, retrying in 500ms...',
+            err.message
+          );
+          // Wait a bit and retry once
+          await new Promise(resolve => setTimeout(resolve, 500));
+          const response = await fetch(url, {
+            headers: {
+              'Content-Type': 'application/json',
+              ...options.headers,
+            },
+            ...options,
+          });
+
+          if (!response.ok) {
+            const errorData = await response
+              .json()
+              .catch(() => ({ error: 'Unknown error' }));
+            throw new Error(errorData.error || `HTTP ${response.status}`);
+          }
+
+          return response.json();
+        }
+        throw err;
+      }
+    },
+    []
+  );
 
   // Load questions
   const loadQuestions = useCallback(
-    async (filters?: UseUnifiedQuestionsOptions['initialFilters']) => {
+    async (
+      filters?: UseUnifiedQuestionsOptions['initialFilters'],
+      page: number = currentPage
+    ) => {
+      console.log(
+        '🔄 useUnifiedQuestions: loadQuestions called with filters:',
+        filters,
+        'page:',
+        page
+      );
       setIsLoading(true);
       setError(null);
 
       try {
         const queryParams = new URLSearchParams();
+
+        // Add pagination parameters
+        queryParams.append('page', String(page));
+        queryParams.append('pageSize', String(pageSize));
+        queryParams.append('includePagination', 'true');
+
         if (filters) {
           Object.entries(filters).forEach(([key, value]) => {
             if (value !== undefined && value !== null) {
@@ -129,11 +202,35 @@ export function useUnifiedQuestions(
         }
 
         const url = `/api/questions/unified${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+        console.log('🔄 useUnifiedQuestions: Making API call to:', url);
         const response = await apiCall(url);
+        console.log('🔄 useUnifiedQuestions: API response received:', response);
 
         if (response.success) {
+          console.log(
+            '✅ useUnifiedQuestions: Questions loaded successfully:',
+            response.data
+          );
+          console.log(
+            '✅ useUnifiedQuestions: Setting questions with data length:',
+            response.data?.length
+          );
           setQuestions(response.data);
+
+          // Update pagination state
+          if (response.pagination) {
+            setCurrentPage(response.pagination.page);
+            setTotalCount(response.pagination.totalCount);
+            setTotalPages(response.pagination.totalPages);
+            setHasNext(response.pagination.hasNext);
+            setHasPrev(response.pagination.hasPrev);
+            console.log('📄 Pagination updated:', response.pagination);
+          }
         } else {
+          console.error(
+            '❌ useUnifiedQuestions: Failed to load questions:',
+            response.error
+          );
           throw new Error(response.error || 'Failed to load questions');
         }
       } catch (err) {
@@ -145,7 +242,7 @@ export function useUnifiedQuestions(
         setIsLoading(false);
       }
     },
-    []
+    [apiCall, currentPage, pageSize]
   );
 
   // Load single question
@@ -186,8 +283,9 @@ export function useUnifiedQuestions(
         err instanceof Error ? err.message : 'Failed to load learning paths';
       setError(errorMessage);
       console.error('Error loading learning paths:', err);
+      // Don't throw the error to prevent breaking the component
     }
-  }, []);
+  }, [apiCall]);
 
   // Load statistics
   const loadStats = useCallback(async () => {
@@ -204,8 +302,9 @@ export function useUnifiedQuestions(
         err instanceof Error ? err.message : 'Failed to load statistics';
       setError(errorMessage);
       console.error('Error loading statistics:', err);
+      // Don't throw the error to prevent breaking the component
     }
-  }, []);
+  }, [apiCall]);
 
   // Create question
   const createQuestion = useCallback(
@@ -317,15 +416,35 @@ export function useUnifiedQuestions(
       setError(null);
 
       try {
+        // Flatten all questions from all BulkQuestionData objects
+        const allQuestions = questionsData.flatMap(
+          bulkData => bulkData.questions
+        );
+
+        console.log('🚀 Sending questions to API:', {
+          totalQuestions: allQuestions.length,
+          firstQuestion: allQuestions[0]?.title || 'No title',
+          questionsDataLength: questionsData.length,
+        });
+
         const response = await apiCall('/api/questions/unified', {
           method: 'POST',
-          body: JSON.stringify({ bulk: true, questions: questionsData }),
+          body: JSON.stringify({
+            questions: allQuestions,
+            isBulkImport: true,
+          }),
         });
+
+        console.log('📥 API Response:', response);
 
         if (response.success) {
           // Reload questions to include the new ones
           await loadQuestions(initialFilters);
-          return response.data;
+          return {
+            success: response.data?.length || allQuestions.length,
+            failed: 0,
+            errors: [],
+          };
         } else {
           throw new Error(response.error || 'Failed to bulk import questions');
         }
@@ -338,7 +457,7 @@ export function useUnifiedQuestions(
         console.error('Error bulk importing questions:', err);
         return {
           success: 0,
-          failed: questionsData.length,
+          failed: questionsData.flatMap(bd => bd.questions).length,
           errors: [errorMessage],
         };
       } finally {
@@ -443,12 +562,72 @@ export function useUnifiedQuestions(
 
   // Auto-load on mount
   useEffect(() => {
+    console.log(
+      '🔄 useUnifiedQuestions: useEffect called with autoLoad:',
+      autoLoad
+    );
     if (autoLoad) {
-      loadQuestions(initialFilters);
-      loadLearningPaths();
-      loadStats();
+      console.log(
+        '🔄 useUnifiedQuestions: autoLoad is true, calling loadQuestions'
+      );
+
+      // Load questions first, then other data with delays to prevent Firebase conflicts
+      const loadDataSequentially = async () => {
+        try {
+          await loadQuestions(initialFilters);
+
+          // Add small delays between API calls to prevent Firebase "Target ID already exists" errors
+          setTimeout(() => {
+            loadLearningPaths().catch(err =>
+              console.error('Error loading learning paths:', err)
+            );
+          }, 100);
+
+          setTimeout(() => {
+            loadStats().catch(err =>
+              console.error('Error loading stats:', err)
+            );
+          }, 200);
+        } catch (err) {
+          console.error('Error in sequential data loading:', err);
+        }
+      };
+
+      loadDataSequentially();
     }
   }, [autoLoad, loadQuestions, loadLearningPaths, loadStats, initialFilters]);
+
+  // Pagination functions
+  const goToPage = useCallback(
+    (page: number) => {
+      if (page >= 1 && page <= totalPages) {
+        setCurrentPage(page);
+        loadQuestions(initialFilters, page);
+      }
+    },
+    [totalPages, loadQuestions, initialFilters]
+  );
+
+  const nextPage = useCallback(() => {
+    if (hasNext) {
+      goToPage(currentPage + 1);
+    }
+  }, [hasNext, currentPage, goToPage]);
+
+  const prevPage = useCallback(() => {
+    if (hasPrev) {
+      goToPage(currentPage - 1);
+    }
+  }, [hasPrev, currentPage, goToPage]);
+
+  const changePageSize = useCallback(
+    (newPageSize: number) => {
+      setPageSize(newPageSize);
+      setCurrentPage(1);
+      loadQuestions(initialFilters, 1);
+    },
+    [loadQuestions, initialFilters]
+  );
 
   return {
     // Data
@@ -466,6 +645,14 @@ export function useUnifiedQuestions(
     // Error state
     error,
 
+    // Pagination state
+    currentPage,
+    pageSize,
+    totalCount,
+    totalPages,
+    hasNext,
+    hasPrev,
+
     // Actions
     loadQuestions,
     loadQuestion,
@@ -477,6 +664,12 @@ export function useUnifiedQuestions(
     bulkImportQuestions,
     searchQuestions,
     getRandomQuestions,
+
+    // Pagination actions
+    goToPage,
+    nextPage,
+    prevPage,
+    changePageSize,
 
     // Utilities
     clearError,

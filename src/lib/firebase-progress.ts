@@ -1,19 +1,19 @@
 // v1.0 - Enhanced Firebase Progress Tracking System
-import { 
-  doc, 
-  setDoc, 
-  getDoc, 
-  updateDoc, 
-  collection, 
-  query, 
-  where, 
-  getDocs, 
-  orderBy, 
+import {
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
   limit,
   Timestamp,
   increment,
   arrayUnion,
-  arrayRemove
+  arrayRemove,
 } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -110,7 +110,9 @@ export interface DashboardStats {
 }
 
 // Progress tracking functions
-export const initializeUserProgress = async (userId: string): Promise<UserProgress> => {
+export const initializeUserProgress = async (
+  userId: string
+): Promise<UserProgress> => {
   if (!db) {
     throw new Error('Firestore not initialized');
   }
@@ -134,10 +136,10 @@ export const initializeUserProgress = async (userId: string): Promise<UserProgre
       notifications: true,
       emailUpdates: false,
       difficulty: 'mixed',
-      focusAreas: []
+      focusAreas: [],
     },
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   };
 
   try {
@@ -150,7 +152,9 @@ export const initializeUserProgress = async (userId: string): Promise<UserProgre
   }
 };
 
-export const getUserProgress = async (userId: string): Promise<UserProgress | null> => {
+export const getUserProgress = async (
+  userId: string
+): Promise<UserProgress | null> => {
   if (!db) {
     console.warn('Firestore not available');
     return null;
@@ -183,7 +187,7 @@ export const updateQuestionProgress = async (
   try {
     const userProgressRef = doc(db, 'userProgress', userId);
     const timestamp = new Date().toISOString();
-    
+
     // Calculate points based on difficulty and correctness
     const points = calculateQuestionPoints(
       questionAttempt.difficulty,
@@ -194,7 +198,7 @@ export const updateQuestionProgress = async (
     const fullAttempt: QuestionAttempt = {
       ...questionAttempt,
       timestamp,
-      points
+      points,
     };
 
     // Update progress document
@@ -203,7 +207,7 @@ export const updateQuestionProgress = async (
       totalPoints: increment(points),
       lastActivityDate: timestamp,
       updatedAt: timestamp,
-      questionHistory: arrayUnion(fullAttempt)
+      questionHistory: arrayUnion(fullAttempt),
     });
 
     // Check for achievements
@@ -225,7 +229,7 @@ export const updateChallengeProgress = async (
   try {
     const userProgressRef = doc(db, 'userProgress', userId);
     const timestamp = new Date().toISOString();
-    
+
     // Calculate points based on score and completion
     const points = calculateChallengePoints(
       challengeAttempt.score,
@@ -236,16 +240,18 @@ export const updateChallengeProgress = async (
     const fullAttempt: ChallengeAttempt = {
       ...challengeAttempt,
       timestamp,
-      points
+      points,
     };
 
     // Update progress document
     await updateDoc(userProgressRef, {
-      totalChallengesCompleted: challengeAttempt.completed ? increment(1) : increment(0),
+      totalChallengesCompleted: challengeAttempt.completed
+        ? increment(1)
+        : increment(0),
       totalPoints: increment(points),
       lastActivityDate: timestamp,
       updatedAt: timestamp,
-      challengeHistory: arrayUnion(fullAttempt)
+      challengeHistory: arrayUnion(fullAttempt),
     });
 
     // Check for achievements
@@ -271,7 +277,7 @@ export const updateLearningPathProgress = async (
   try {
     const userProgressRef = doc(db, 'userProgress', userId);
     const userProgress = await getUserProgress(userId);
-    
+
     if (!userProgress) {
       throw new Error('User progress not found');
     }
@@ -286,16 +292,19 @@ export const updateLearningPathProgress = async (
       // Update existing path
       updatedPaths = [...userProgress.learningPaths];
       const existingPath = updatedPaths[existingPathIndex];
-      
+
       if (completed && !existingPath.completedSections.includes(sectionId)) {
         existingPath.completedSections.push(sectionId);
-        existingPath.progress = Math.min(100, (existingPath.completedSections.length / 10) * 100); // Assuming 10 sections per path
+        existingPath.progress = Math.min(
+          100,
+          (existingPath.completedSections.length / 10) * 100
+        ); // Assuming 10 sections per path
       }
-      
+
       existingPath.currentSection = sectionId;
       existingPath.lastAccessed = new Date().toISOString();
       existingPath.timeSpent += timeSpent;
-      
+
       if (existingPath.progress === 100) {
         existingPath.completedAt = new Date().toISOString();
       }
@@ -309,16 +318,16 @@ export const updateLearningPathProgress = async (
         currentSection: sectionId,
         lastAccessed: new Date().toISOString(),
         timeSpent,
-        startedAt: new Date().toISOString()
+        startedAt: new Date().toISOString(),
       };
-      
+
       updatedPaths = [...userProgress.learningPaths, newPath];
     }
 
     await updateDoc(userProgressRef, {
       learningPaths: updatedPaths,
       lastActivityDate: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     });
 
     // Check for achievements
@@ -337,20 +346,23 @@ export const updateUserStreak = async (userId: string): Promise<void> => {
   try {
     const userProgressRef = doc(db, 'userProgress', userId);
     const userProgress = await getUserProgress(userId);
-    
+
     if (!userProgress) {
       throw new Error('User progress not found');
     }
 
     const today = new Date().toDateString();
     const lastActivity = new Date(userProgress.lastActivityDate).toDateString();
-    
+
     let newStreak = userProgress.currentStreak;
-    
+
     if (today === lastActivity) {
       // User already active today, no change
       return;
-    } else if (new Date(today).getTime() - new Date(lastActivity).getTime() === 86400000) {
+    } else if (
+      new Date(today).getTime() - new Date(lastActivity).getTime() ===
+      86400000
+    ) {
       // Consecutive day, increment streak
       newStreak += 1;
     } else {
@@ -364,7 +376,7 @@ export const updateUserStreak = async (userId: string): Promise<void> => {
       currentStreak: newStreak,
       longestStreak,
       lastActivityDate: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     });
 
     // Check for streak achievements
@@ -375,68 +387,82 @@ export const updateUserStreak = async (userId: string): Promise<void> => {
   }
 };
 
-export const getDashboardStats = async (userId: string): Promise<DashboardStats> => {
+export const getDashboardStats = async (
+  userId: string
+): Promise<DashboardStats> => {
   if (!db) {
     throw new Error('Firestore not available');
   }
 
   try {
     const userProgress = await getUserProgress(userId);
-    
+
     if (!userProgress) {
       throw new Error('User progress not found');
     }
 
     // Calculate total time spent
-    const totalTimeSpent = userProgress.questionHistory.reduce(
-      (sum, attempt) => sum + attempt.timeSpent, 0
-    ) + userProgress.challengeHistory.reduce(
-      (sum, attempt) => sum + attempt.timeSpent * 60, 0
-    );
+    const totalTimeSpent =
+      userProgress.questionHistory.reduce(
+        (sum, attempt) => sum + attempt.timeSpent,
+        0
+      ) +
+      userProgress.challengeHistory.reduce(
+        (sum, attempt) => sum + attempt.timeSpent * 60,
+        0
+      );
 
     // Calculate average score
     const totalQuestions = userProgress.questionHistory.length;
     const correctAnswers = userProgress.questionHistory.filter(
       attempt => attempt.answeredCorrectly
     ).length;
-    const averageScore = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+    const averageScore =
+      totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
 
     // Calculate completion rate
     const totalPaths = userProgress.learningPaths.length;
     const completedPaths = userProgress.learningPaths.filter(
       path => path.progress === 100
     ).length;
-    const completionRate = totalPaths > 0 ? (completedPaths / totalPaths) * 100 : 0;
+    const completionRate =
+      totalPaths > 0 ? (completedPaths / totalPaths) * 100 : 0;
 
     // Calculate weekly and monthly progress
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const oneMonthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-    
+
     const weeklyQuestions = userProgress.questionHistory.filter(
       attempt => new Date(attempt.timestamp) >= oneWeekAgo
     ).length;
-    
+
     const monthlyQuestions = userProgress.questionHistory.filter(
       attempt => new Date(attempt.timestamp) >= oneMonthAgo
     ).length;
 
     // Get top categories
-    const categoryStats = userProgress.questionHistory.reduce((acc, attempt) => {
-      if (!acc[attempt.category]) {
-        acc[attempt.category] = { score: 0, questionsCompleted: 0 };
-      }
-      acc[attempt.category].questionsCompleted += 1;
-      if (attempt.answeredCorrectly) {
-        acc[attempt.category].score += 1;
-      }
-      return acc;
-    }, {} as Record<string, { score: number; questionsCompleted: number }>);
+    const categoryStats = userProgress.questionHistory.reduce(
+      (acc, attempt) => {
+        if (!acc[attempt.category]) {
+          acc[attempt.category] = { score: 0, questionsCompleted: 0 };
+        }
+        acc[attempt.category].questionsCompleted += 1;
+        if (attempt.answeredCorrectly) {
+          acc[attempt.category].score += 1;
+        }
+        return acc;
+      },
+      {} as Record<string, { score: number; questionsCompleted: number }>
+    );
 
     const topCategories = Object.entries(categoryStats)
       .map(([category, stats]) => ({
         category,
-        score: stats.questionsCompleted > 0 ? (stats.score / stats.questionsCompleted) * 100 : 0,
-        questionsCompleted: stats.questionsCompleted
+        score:
+          stats.questionsCompleted > 0
+            ? (stats.score / stats.questionsCompleted) * 100
+            : 0,
+        questionsCompleted: stats.questionsCompleted,
       }))
       .sort((a, b) => b.score - a.score)
       .slice(0, 5);
@@ -447,17 +473,20 @@ export const getDashboardStats = async (userId: string): Promise<DashboardStats>
         type: 'question' as const,
         title: `${attempt.category} Question`,
         timestamp: attempt.timestamp,
-        points: attempt.points
+        points: attempt.points,
       })),
       ...userProgress.challengeHistory.slice(-5).map(attempt => ({
         type: 'challenge' as const,
         title: attempt.challengeName,
         timestamp: attempt.timestamp,
-        points: attempt.points
-      }))
+        points: attempt.points,
+      })),
     ]
-    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-    .slice(0, 10);
+      .sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      )
+      .slice(0, 10);
 
     return {
       totalTimeSpent,
@@ -466,7 +495,7 @@ export const getDashboardStats = async (userId: string): Promise<DashboardStats>
       weeklyProgress: weeklyQuestions,
       monthlyProgress: monthlyQuestions,
       topCategories,
-      recentActivity
+      recentActivity,
     };
   } catch (error) {
     console.error('Error getting dashboard stats:', error);
@@ -481,30 +510,38 @@ export const getContinueWhereLeftOff = async (userId: string) => {
 
   try {
     const userProgress = await getUserProgress(userId);
-    
+
     if (!userProgress) {
       return null;
     }
 
     // Find the most recently accessed learning path
-    const recentPath = userProgress.learningPaths
-      .sort((a, b) => new Date(b.lastAccessed).getTime() - new Date(a.lastAccessed).getTime())[0];
+    const recentPath = userProgress.learningPaths.sort(
+      (a, b) =>
+        new Date(b.lastAccessed).getTime() - new Date(a.lastAccessed).getTime()
+    )[0];
 
     // Find recent question attempts
     const recentQuestions = userProgress.questionHistory
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      )
       .slice(0, 5);
 
     // Find recent challenge attempts
     const recentChallenges = userProgress.challengeHistory
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      )
       .slice(0, 5);
 
     return {
       recentPath,
       recentQuestions,
       recentChallenges,
-      lastActivity: userProgress.lastActivityDate
+      lastActivity: userProgress.lastActivityDate,
     };
   } catch (error) {
     console.error('Error getting continue where left off:', error);
@@ -519,16 +556,16 @@ const calculateQuestionPoints = (
   attempts: number
 ): number => {
   if (!answeredCorrectly) return 0;
-  
+
   const basePoints = {
     easy: 5,
     medium: 10,
-    hard: 20
+    hard: 20,
   };
-  
+
   const points = basePoints[difficulty as keyof typeof basePoints] || 5;
   const attemptPenalty = Math.max(0, (attempts - 1) * 2);
-  
+
   return Math.max(1, points - attemptPenalty);
 };
 
@@ -538,7 +575,7 @@ const calculateChallengePoints = (
   completed: boolean
 ): number => {
   if (!completed) return 0;
-  
+
   const percentage = score / maxScore;
   return Math.round(percentage * 50); // Max 50 points per challenge
 };
@@ -549,7 +586,10 @@ const checkAndUnlockAchievements = async (userId: string): Promise<void> => {
   // For now, we'll implement basic achievement checking
 };
 
-const checkStreakAchievements = async (userId: string, streak: number): Promise<void> => {
+const checkStreakAchievements = async (
+  userId: string,
+  streak: number
+): Promise<void> => {
   // Implementation for checking streak-based achievements
   // This would check if the user has reached milestone streaks
 };
@@ -566,7 +606,7 @@ export const updateUserPreferences = async (
     const userProgressRef = doc(db, 'userProgress', userId);
     await updateDoc(userProgressRef, {
       preferences: preferences,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     });
   } catch (error) {
     console.error('Error updating user preferences:', error);

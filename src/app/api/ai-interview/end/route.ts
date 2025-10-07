@@ -153,9 +153,9 @@ export async function POST(request: NextRequest) {
     feedback += `\n\nSuggestion: ${randomSuggestion}`;
 
     // Generate flashcards for weak areas
-    const flashcards = [];
+    const flashcards: any[] = [];
     if (weakAreas && weakAreas.length > 0) {
-      weakAreas.forEach(area => {
+      weakAreas.forEach((area: any) => {
         flashcards.push({
           question: `What is ${area} and how is it used in ${category} development?`,
           answer: `This is a key concept in ${category} development that you should study further.`,

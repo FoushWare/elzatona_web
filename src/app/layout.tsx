@@ -1,10 +1,14 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { JotaiProvider } from '@/providers/JotaiProvider';
+import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
+import { UserTypeProvider } from '@/contexts/UserTypeContext';
+import { MobileMenuProvider } from '@/contexts/MobileMenuContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { CookieAuthProvider } from '@/contexts/CookieAuthContext';
-import Navbar from '@/components/Navbar';
-import ChatGPT from '@/components/ChatGPT';
+import { LanguageProvider } from '@/contexts/LanguageContext';
+import { OnboardingProvider } from '@/contexts/OnboardingContext';
+import { ConditionalLayout } from '@/shared/components/common/ConditionalLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -49,15 +53,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider>
-          <CookieAuthProvider>
-            <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-              <Navbar />
-              <main className="pt-20">{children}</main>
-              <ChatGPT />
-            </div>
-          </CookieAuthProvider>
-        </ThemeProvider>
+        <JotaiProvider>
+          <FirebaseAuthProvider>
+            <UserTypeProvider>
+              <MobileMenuProvider>
+                <ThemeProvider>
+                  <LanguageProvider>
+                    <OnboardingProvider>
+                      <ConditionalLayout>{children}</ConditionalLayout>
+                    </OnboardingProvider>
+                  </LanguageProvider>
+                </ThemeProvider>
+              </MobileMenuProvider>
+            </UserTypeProvider>
+          </FirebaseAuthProvider>
+        </JotaiProvider>
       </body>
     </html>
   );

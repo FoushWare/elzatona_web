@@ -18,8 +18,10 @@ A comprehensive learning system for frontend developers preparing for interviews
 
 - **Encouraged Sign-In**: Users can explore without sign-in, but encouraged to sign in for progress saving
 - **Session Storage**: Use sessionStorage for temporary data before sign-in
+- **Interactive Onboarding**: Guided tour of website features
 - **Feature Discovery**: Show all capabilities and benefits
 - **Sign-In Benefits**: Clear explanation of benefits (progress saving, cross-device sync, analytics)
+- **Progress Preservation**: Maintain session state during onboarding
 
 ---
 
@@ -239,7 +241,7 @@ A comprehensive learning system for frontend developers preparing for interviews
 
 ### **Phase 1: Core Learning System (Weeks 1-4)**
 
-- User authentication
+- User authentication and onboarding
 - Basic guided and free style learning paths
 - Question system and practice functionality
 - Progress tracking and basic analytics
@@ -342,6 +344,7 @@ A comprehensive learning system for frontend developers preparing for interviews
 
 #### **Critical Gaps**
 
+- ❌ **Interactive Onboarding Tour**: Missing guided feature discovery
 - ❌ **User-Generated Questions**: No custom question creation interface
 - ❌ **Admin Review System**: No moderation for user-submitted content
 

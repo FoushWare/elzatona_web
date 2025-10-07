@@ -12,30 +12,43 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  // Always start with dark mode to prevent hydration mismatch
+  // This matches the default theme preference
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     // Load theme preference from localStorage on mount (client-side only)
+    let theme = true; // default to dark to prevent hydration mismatch
+
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme) {
-        setIsDarkMode(savedTheme === 'dark');
+        theme = savedTheme === 'dark';
       } else {
-        // Default to dark mode
-        setIsDarkMode(true);
+        // Default to dark mode if no preference saved
+        theme = true;
+        localStorage.setItem('theme', 'dark');
       }
-      
+
       // Debug logging
       console.log(
         'ThemeContext: Initial theme loaded:',
         savedTheme || 'dark (default)'
       );
     }
+
+    // Only update if different from initial state to prevent flashing
+    if (theme !== isDarkMode) {
+      setIsDarkMode(theme);
+    }
     setIsLoaded(true);
-  }, []);
+  }, [isDarkMode]);
 
   useEffect(() => {
+    // Only run after initial load to prevent hydration mismatch
+    if (!isLoaded) return;
+
     // Save theme preference to localStorage whenever it changes (client-side only)
     if (typeof window !== 'undefined') {
       localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
@@ -58,10 +71,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Debug logging
-      console.log('ThemeContext: Theme applied:', isDarkMode ? 'dark' : 'light');
+      console.log(
+        'ThemeContext: Theme applied:',
+        isDarkMode ? 'dark' : 'light'
+      );
       console.log('ThemeContext: Root classes:', root.className);
     }
-  }, [isDarkMode]);
+  }, [isDarkMode, isLoaded]);
 
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;

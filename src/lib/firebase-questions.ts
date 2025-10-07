@@ -1,467 +1,577 @@
-// v1.0 - Firebase Questions and Answers Management
-import { 
-  collection, 
-  doc, 
-  getDocs, 
-  getDoc, 
-  setDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
-  limit,
+// v1.0 - Firebase Questions Service
+// Service for managing questions in Firebase Firestore
+
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
   addDoc,
-  Timestamp
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  Timestamp,
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
+import {
+  UnifiedQuestion,
+  QuestionStats,
+  QuestionFilter,
+  QuestionSearchResult,
+  QuestionValidationResult,
+  QuestionValidationError,
+  QUESTION_VALIDATION_RULES,
+} from './unified-question-schema';
 
-// Question and Answer interfaces
+// Legacy types for backward compatibility
 export interface Question {
   id: string;
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  explanation: string;
+  title: string;
+  content: string;
+  type: 'multiple-choice' | 'open-ended' | 'true-false' | 'code';
   category: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  tags: string[];
-  points: number;
-  timeLimit?: number; // in seconds
+  subcategory?: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  learningPath?: string;
+  sectionId?: string;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
   createdBy?: string;
-  isActive: boolean;
-}
-
-export interface QuestionAttempt {
-  questionId: string;
-  userId: string;
-  selectedAnswer: number;
-  isCorrect: boolean;
-  timeSpent: number; // in seconds
-  attempts: number;
-  timestamp: string;
-  points: number;
+  updatedBy?: string;
+  tags?: string[];
+  explanation?: string;
+  hints?: string[];
+  timeLimit?: number;
+  points?: number;
+  options?: {
+    id: string;
+    text: string;
+    isCorrect: boolean;
+    explanation?: string;
+  }[];
+  codeTemplate?: string;
+  testCases?: {
+    input: string;
+    expectedOutput: string;
+    description?: string;
+  }[];
+  sampleAnswers?: string[];
+  stats?: {
+    totalAttempts: number;
+    correctAttempts: number;
+    averageTime: number;
+    difficultyRating: number;
+  };
 }
 
 export interface QuestionCategory {
   id: string;
   name: string;
   description: string;
-  icon: string;
-  color: string;
   questionCount: number;
   isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface QuestionStats {
-  totalQuestions: number;
-  questionsByCategory: Record<string, number>;
-  questionsByDifficulty: Record<string, number>;
-  averagePoints: number;
+export interface QuestionAttempt {
+  id: string;
+  questionId: string;
+  userId: string;
+  userAnswer: any;
+  isCorrect: boolean;
+  timeSpent: number; // in seconds
+  points: number;
+  attemptedAt: string;
+  completedAt?: string;
+  feedback?: string;
+  hintsUsed: number;
+  metadata?: {
+    device?: string;
+    browser?: string;
+    [key: string]: any;
+  };
 }
 
-// Question management functions
-export const createQuestion = async (questionData: Omit<Question, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
+// Convert UnifiedQuestion to legacy Question format
+const convertToLegacyQuestion = (unified: UnifiedQuestion): Question => {
+  return {
+    id: unified.id,
+    title: unified.title,
+    content: unified.content,
+    type: unified.type,
+    category: unified.category || '',
+    subcategory: unified.subcategory || '',
+    difficulty: unified.difficulty || 'intermediate',
+    learningPath: unified.learningPath || '',
+    sectionId: unified.sectionId,
+    isActive: unified.isActive,
+    createdAt: unified.createdAt,
+    updatedAt: unified.updatedAt,
+    createdBy: unified.createdBy,
+    updatedBy: unified.updatedBy,
+    tags: unified.tags,
+    explanation: unified.explanation,
+    hints: unified.hints,
+    timeLimit: unified.timeLimit,
+    points: unified.points,
+    options: unified.options,
+    codeTemplate: unified.codeTemplate,
+    testCases: unified.testCases,
+    sampleAnswers: unified.sampleAnswers,
+    stats: unified.stats,
+  };
+};
 
-  try {
-    const timestamp = new Date().toISOString();
-    const questionRef = await addDoc(collection(db, 'questions'), {
-      ...questionData,
-      createdAt: timestamp,
-      updatedAt: timestamp
+// Convert legacy Question to UnifiedQuestion format
+const convertToUnifiedQuestion = (legacy: Question): UnifiedQuestion => {
+  return {
+    id: legacy.id,
+    title: legacy.title,
+    content: legacy.content,
+    type: legacy.type,
+    category: legacy.category,
+    subcategory: legacy.subcategory,
+    difficulty: legacy.difficulty,
+    learningPath: legacy.learningPath,
+    sectionId: legacy.sectionId,
+    isActive: legacy.isActive,
+    createdAt: legacy.createdAt,
+    updatedAt: legacy.updatedAt,
+    createdBy: legacy.createdBy,
+    updatedBy: legacy.updatedBy,
+    tags: legacy.tags,
+    explanation: legacy.explanation,
+    hints: legacy.hints,
+    timeLimit: legacy.timeLimit,
+    points: legacy.points,
+    metadata: {
+      source: 'legacy',
+      version: '1.0.0',
+      references: [],
+    },
+    options: legacy.options,
+    codeTemplate: legacy.codeTemplate,
+    testCases: legacy.testCases,
+    sampleAnswers: legacy.sampleAnswers,
+    stats: legacy.stats,
+  };
+};
+
+// Validation functions
+export const validateQuestion = (
+  question: Partial<UnifiedQuestion>
+): QuestionValidationResult => {
+  const errors: QuestionValidationError[] = [];
+  const warnings: QuestionValidationError[] = [];
+
+  // Title validation
+  if (!question.title) {
+    errors.push({
+      field: 'title',
+      message: 'Title is required',
+      code: 'REQUIRED',
     });
-    
-    return questionRef.id;
-  } catch (error) {
-    console.error('Error creating question:', error);
-    throw error;
+  } else if (
+    question.title.length < QUESTION_VALIDATION_RULES.title.minLength
+  ) {
+    errors.push({
+      field: 'title',
+      message: `Title must be at least ${QUESTION_VALIDATION_RULES.title.minLength} characters`,
+      code: 'MIN_LENGTH',
+      value: question.title.length,
+    });
+  } else if (
+    question.title.length > QUESTION_VALIDATION_RULES.title.maxLength
+  ) {
+    errors.push({
+      field: 'title',
+      message: `Title must be no more than ${QUESTION_VALIDATION_RULES.title.maxLength} characters`,
+      code: 'MAX_LENGTH',
+      value: question.title.length,
+    });
   }
-};
 
-export const getQuestion = async (questionId: string): Promise<Question | null> => {
-  if (!db) {
-    throw new Error('Firestore not available');
+  // Content validation
+  if (!question.content) {
+    errors.push({
+      field: 'content',
+      message: 'Content is required',
+      code: 'REQUIRED',
+    });
+  } else if (
+    question.content.length < QUESTION_VALIDATION_RULES.content.minLength
+  ) {
+    errors.push({
+      field: 'content',
+      message: `Content must be at least ${QUESTION_VALIDATION_RULES.content.minLength} characters`,
+      code: 'MIN_LENGTH',
+      value: question.content.length,
+    });
+  } else if (
+    question.content.length > QUESTION_VALIDATION_RULES.content.maxLength
+  ) {
+    errors.push({
+      field: 'content',
+      message: `Content must be no more than ${QUESTION_VALIDATION_RULES.content.maxLength} characters`,
+      code: 'MAX_LENGTH',
+      value: question.content.length,
+    });
   }
 
-  try {
-    const questionRef = doc(db, 'questions', questionId);
-    const questionSnap = await getDoc(questionRef);
+  // Type validation
+  if (!question.type) {
+    errors.push({
+      field: 'type',
+      message: 'Question type is required',
+      code: 'REQUIRED',
+    });
+  }
 
-    if (questionSnap.exists()) {
-      return { id: questionSnap.id, ...questionSnap.data() } as Question;
+  // Options validation for multiple choice
+  if (question.type === 'multiple-choice') {
+    if (
+      !question.options ||
+      question.options.length < QUESTION_VALIDATION_RULES.options.minCount
+    ) {
+      errors.push({
+        field: 'options',
+        message: `Multiple choice questions must have at least ${QUESTION_VALIDATION_RULES.options.minCount} options`,
+        code: 'INSUFFICIENT_OPTIONS',
+        value: question.options?.length || 0,
+      });
+    } else if (
+      question.options.length > QUESTION_VALIDATION_RULES.options.maxCount
+    ) {
+      errors.push({
+        field: 'options',
+        message: `Multiple choice questions must have no more than ${QUESTION_VALIDATION_RULES.options.maxCount} options`,
+        code: 'TOO_MANY_OPTIONS',
+        value: question.options.length,
+      });
     } else {
-      return null;
+      const correctOptions = question.options.filter(opt => opt.isCorrect);
+      if (correctOptions.length === 0) {
+        errors.push({
+          field: 'options',
+          message: 'At least one option must be marked as correct',
+          code: 'NO_CORRECT_OPTION',
+        });
+      }
     }
-  } catch (error) {
-    console.error('Error getting question:', error);
-    return null;
   }
+
+  // Time limit validation
+  if (question.timeLimit) {
+    if (question.timeLimit < QUESTION_VALIDATION_RULES.timeLimit.min) {
+      warnings.push({
+        field: 'timeLimit',
+        message: `Time limit is very short (${question.timeLimit}s). Consider increasing it.`,
+        code: 'SHORT_TIME_LIMIT',
+        value: question.timeLimit,
+      });
+    } else if (question.timeLimit > QUESTION_VALIDATION_RULES.timeLimit.max) {
+      warnings.push({
+        field: 'timeLimit',
+        message: `Time limit is very long (${question.timeLimit}s). Consider reducing it.`,
+        code: 'LONG_TIME_LIMIT',
+        value: question.timeLimit,
+      });
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    warnings,
+    suggestions:
+      errors.length > 0
+        ? [
+            'Check all required fields are filled',
+            'Ensure question content is clear and complete',
+            'Verify multiple choice options are properly configured',
+          ]
+        : undefined,
+  };
 };
 
-export const getQuestions = async (filters?: {
-  category?: string;
-  difficulty?: string;
-  tags?: string[];
-  limit?: number;
-  isActive?: boolean;
-}): Promise<Question[]> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
+// Firebase operations
+export const getQuestions = async (
+  filters?: QuestionFilter
+): Promise<Question[]> => {
   try {
-    let q = query(collection(db, 'questions'));
+    if (!db) throw new Error('Firebase not initialized');
 
-    // Apply filters
-    if (filters?.category) {
-      q = query(q, where('category', '==', filters.category));
-    }
-    
-    if (filters?.difficulty) {
-      q = query(q, where('difficulty', '==', filters.difficulty));
-    }
-    
-    if (filters?.isActive !== undefined) {
-      q = query(q, where('isActive', '==', filters.isActive));
+    const questionsRef = collection(db, 'unifiedQuestions');
+    let q = query(questionsRef, where('isActive', '==', true));
+
+    if (filters) {
+      if (filters.category) {
+        q = query(q, where('category', '==', filters.category));
+      }
+      if (filters.difficulty) {
+        q = query(q, where('difficulty', '==', filters.difficulty));
+      }
+      if (filters.learningPath) {
+        q = query(q, where('learningPath', '==', filters.learningPath));
+      }
+      if (filters.sectionId) {
+        q = query(q, where('sectionId', '==', filters.sectionId));
+      }
     }
 
-    // Order by creation date
     q = query(q, orderBy('createdAt', 'desc'));
 
-    // Apply limit
-    if (filters?.limit) {
-      q = query(q, limit(filters.limit));
-    }
-
-    const querySnapshot = await getDocs(q);
+    const snapshot = await getDocs(q);
     const questions: Question[] = [];
 
-    querySnapshot.forEach((doc) => {
-      questions.push({ id: doc.id, ...doc.data() } as Question);
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      questions.push({
+        id: doc.id,
+        ...data,
+        createdAt:
+          data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        updatedAt:
+          data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+      } as Question);
     });
-
-    // Filter by tags if specified (client-side filtering for array-contains-any)
-    if (filters?.tags && filters.tags.length > 0) {
-      return questions.filter(question => 
-        filters.tags!.some(tag => question.tags.includes(tag))
-      );
-    }
 
     return questions;
   } catch (error) {
     console.error('Error getting questions:', error);
-    return [];
-  }
-};
-
-export const updateQuestion = async (questionId: string, updates: Partial<Question>): Promise<void> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
-  try {
-    const questionRef = doc(db, 'questions', questionId);
-    await updateDoc(questionRef, {
-      ...updates,
-      updatedAt: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('Error updating question:', error);
     throw error;
   }
 };
 
-export const deleteQuestion = async (questionId: string): Promise<void> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
+export const getQuestion = async (id: string): Promise<Question | null> => {
   try {
-    const questionRef = doc(db, 'questions', questionId);
-    await deleteDoc(questionRef);
+    if (!db) throw new Error('Firebase not initialized');
+
+    const questionRef = doc(db, 'questions', id);
+    const questionSnap = await getDoc(questionRef);
+
+    if (questionSnap.exists()) {
+      const data = questionSnap.data();
+      return {
+        id: questionSnap.id,
+        ...data,
+        createdAt:
+          data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        updatedAt:
+          data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+      } as Question;
+    }
+
+    return null;
   } catch (error) {
-    console.error('Error deleting question:', error);
+    console.error('Error getting question:', error);
     throw error;
   }
 };
 
-export const getRandomQuestions = async (count: number, filters?: {
-  category?: string;
-  difficulty?: string;
-  excludeIds?: string[];
-}): Promise<Question[]> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
+export const getRandomQuestions = async (
+  count: number = 10,
+  filters?: QuestionFilter
+): Promise<Question[]> => {
   try {
-    // Get all questions first (we'll randomize client-side for simplicity)
-    // In production, you might want to implement server-side randomization
-    const allQuestions = await getQuestions({
-      category: filters?.category,
-      difficulty: filters?.difficulty,
-      isActive: true
-    });
-
-    // Filter out excluded questions
-    const filteredQuestions = filters?.excludeIds 
-      ? allQuestions.filter(q => !filters.excludeIds!.includes(q.id))
-      : allQuestions;
-
-    // Shuffle and take the requested count
-    const shuffled = filteredQuestions.sort(() => 0.5 - Math.random());
+    const allQuestions = await getQuestions(filters);
+    const shuffled = allQuestions.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
   } catch (error) {
     console.error('Error getting random questions:', error);
-    return [];
-  }
-};
-
-export const getQuestionsByCategory = async (category: string): Promise<Question[]> => {
-  return getQuestions({ category, isActive: true });
-};
-
-export const getQuestionsByDifficulty = async (difficulty: string): Promise<Question[]> => {
-  return getQuestions({ difficulty, isActive: true });
-};
-
-// Question categories management
-export const getCategories = async (): Promise<QuestionCategory[]> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
-  try {
-    const categoriesRef = collection(db, 'questionCategories');
-    const categoriesSnap = await getDocs(categoriesRef);
-    
-    const categories: QuestionCategory[] = [];
-    categoriesSnap.forEach((doc) => {
-      categories.push({ id: doc.id, ...doc.data() } as QuestionCategory);
-    });
-
-    return categories.sort((a, b) => a.name.localeCompare(b.name));
-  } catch (error) {
-    console.error('Error getting categories:', error);
-    return [];
-  }
-};
-
-export const createCategory = async (categoryData: Omit<QuestionCategory, 'id'>): Promise<string> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
-  try {
-    const categoryRef = await addDoc(collection(db, 'questionCategories'), categoryData);
-    return categoryRef.id;
-  } catch (error) {
-    console.error('Error creating category:', error);
     throw error;
   }
 };
 
-// Question statistics
-export const getQuestionStats = async (): Promise<QuestionStats> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
+export const getCategories = async (): Promise<QuestionCategory[]> => {
   try {
-    const questions = await getQuestions({ isActive: true });
-    
+    if (!db) throw new Error('Firebase not initialized');
+
+    const categoriesRef = collection(db, 'questionCategories');
+    const snapshot = await getDocs(categoriesRef);
+    const categories: QuestionCategory[] = [];
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      categories.push({
+        id: doc.id,
+        ...data,
+        createdAt:
+          data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        updatedAt:
+          data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+      } as QuestionCategory);
+    });
+
+    return categories;
+  } catch (error) {
+    console.error('Error getting categories:', error);
+    throw error;
+  }
+};
+
+export const getQuestionStats = async (): Promise<QuestionStats> => {
+  try {
+    const questions = await getQuestions();
+
     const stats: QuestionStats = {
       totalQuestions: questions.length,
       questionsByCategory: {},
       questionsByDifficulty: {},
-      averagePoints: 0
+      questionsByLearningPath: {},
+      questionsBySection: {},
+      activeQuestions: questions.filter(q => q.isActive).length,
+      inactiveQuestions: questions.filter(q => !q.isActive).length,
+      averageDifficulty: 0,
+      lastUpdated: new Date().toISOString(),
+      topCategories: [],
+      recentActivity: [],
     };
 
-    let totalPoints = 0;
-
+    // Calculate category distribution
     questions.forEach(question => {
-      // Count by category
-      stats.questionsByCategory[question.category] = 
+      stats.questionsByCategory[question.category] =
         (stats.questionsByCategory[question.category] || 0) + 1;
-      
-      // Count by difficulty
-      stats.questionsByDifficulty[question.difficulty] = 
+      stats.questionsByDifficulty[question.difficulty] =
         (stats.questionsByDifficulty[question.difficulty] || 0) + 1;
-      
-      totalPoints += question.points;
+
+      if (question.learningPath) {
+        stats.questionsByLearningPath[question.learningPath] =
+          (stats.questionsByLearningPath[question.learningPath] || 0) + 1;
+      }
+
+      if (question.sectionId) {
+        stats.questionsBySection[question.sectionId] =
+          (stats.questionsBySection[question.sectionId] || 0) + 1;
+      }
     });
 
-    stats.averagePoints = questions.length > 0 ? totalPoints / questions.length : 0;
+    // Calculate average difficulty
+    const difficultyValues = { beginner: 1, intermediate: 2, advanced: 3 };
+    const totalDifficulty = questions.reduce(
+      (sum, q) => sum + difficultyValues[q.difficulty],
+      0
+    );
+    stats.averageDifficulty =
+      questions.length > 0 ? totalDifficulty / questions.length : 0;
+
+    // Calculate top categories
+    stats.topCategories = Object.entries(stats.questionsByCategory)
+      .map(([category, count]) => ({
+        category,
+        count,
+        percentage: Math.round((count / questions.length) * 100),
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
 
     return stats;
   } catch (error) {
     console.error('Error getting question stats:', error);
-    return {
-      totalQuestions: 0,
-      questionsByCategory: {},
-      questionsByDifficulty: {},
-      averagePoints: 0
-    };
+    throw error;
   }
 };
 
-// Question attempt tracking
-export const saveQuestionAttempt = async (attempt: Omit<QuestionAttempt, 'timestamp' | 'points'>): Promise<void> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
+export const saveQuestionAttempt = async (
+  attempt: Omit<QuestionAttempt, 'id' | 'attemptedAt'>
+): Promise<string> => {
   try {
-    const timestamp = new Date().toISOString();
-    
-    // Calculate points based on difficulty and correctness
-    const question = await getQuestion(attempt.questionId);
-    const points = question && attempt.isCorrect 
-      ? Math.max(1, question.points - (attempt.attempts - 1) * 2)
-      : 0;
+    if (!db) throw new Error('Firebase not initialized');
 
-    const fullAttempt: QuestionAttempt = {
+    const attemptsRef = collection(db, 'questionAttempts');
+    const docRef = await addDoc(attemptsRef, {
       ...attempt,
-      timestamp,
-      points
-    };
-
-    const attemptRef = await addDoc(collection(db, 'questionAttempts'), fullAttempt);
-    
-    // Also update user progress (integrate with existing progress system)
-    const { updateQuestionProgress } = await import('./firebase-progress');
-    await updateQuestionProgress(attempt.userId, {
-      questionId: attempt.questionId,
-      category: question?.category || 'general',
-      difficulty: question?.difficulty || 'medium',
-      answeredCorrectly: attempt.isCorrect,
-      timeSpent: attempt.timeSpent,
-      attempts: attempt.attempts
+      attemptedAt: serverTimestamp(),
     });
+
+    return docRef.id;
   } catch (error) {
     console.error('Error saving question attempt:', error);
     throw error;
   }
 };
 
-export const getUserQuestionAttempts = async (userId: string, questionId?: string): Promise<QuestionAttempt[]> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
+export const getUserQuestionAttempts = async (
+  userId: string,
+  questionId?: string
+): Promise<QuestionAttempt[]> => {
   try {
-    let q = query(
-      collection(db, 'questionAttempts'),
-      where('userId', '==', userId),
-      orderBy('timestamp', 'desc')
-    );
+    if (!db) throw new Error('Firebase not initialized');
+
+    const attemptsRef = collection(db, 'questionAttempts');
+    let q = query(attemptsRef, where('userId', '==', userId));
 
     if (questionId) {
       q = query(q, where('questionId', '==', questionId));
     }
 
-    const querySnapshot = await getDocs(q);
+    q = query(q, orderBy('attemptedAt', 'desc'));
+
+    const snapshot = await getDocs(q);
     const attempts: QuestionAttempt[] = [];
 
-    querySnapshot.forEach((doc) => {
-      attempts.push({ id: doc.id, ...doc.data() } as QuestionAttempt);
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      attempts.push({
+        id: doc.id,
+        ...data,
+        attemptedAt:
+          data.attemptedAt?.toDate?.()?.toISOString() ||
+          new Date().toISOString(),
+        completedAt: data.completedAt?.toDate?.()?.toISOString(),
+      } as QuestionAttempt);
     });
 
     return attempts;
   } catch (error) {
     console.error('Error getting user question attempts:', error);
-    return [];
-  }
-};
-
-// Bulk operations for seeding questions
-export const seedQuestions = async (questions: Omit<Question, 'id' | 'createdAt' | 'updatedAt'>[]): Promise<void> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
-  try {
-    const batch = [];
-    const timestamp = new Date().toISOString();
-
-    for (const question of questions) {
-      const questionRef = doc(collection(db, 'questions'));
-      batch.push(setDoc(questionRef, {
-        ...question,
-        createdAt: timestamp,
-        updatedAt: timestamp
-      }));
-    }
-
-    await Promise.all(batch);
-  } catch (error) {
-    console.error('Error seeding questions:', error);
     throw error;
   }
 };
 
-// Search questions
-export const searchQuestions = async (searchTerm: string, filters?: {
-  category?: string;
-  difficulty?: string;
-}): Promise<Question[]> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
+export const searchQuestions = async (
+  searchTerm: string,
+  filters?: QuestionFilter
+): Promise<Question[]> => {
   try {
-    const questions = await getQuestions({
-      category: filters?.category,
-      difficulty: filters?.difficulty,
-      isActive: true
-    });
+    const allQuestions = await getQuestions(filters);
 
-    // Client-side search (in production, consider using Algolia or similar)
     const searchLower = searchTerm.toLowerCase();
-    return questions.filter(question => 
-      question.question.toLowerCase().includes(searchLower) ||
-      question.explanation.toLowerCase().includes(searchLower) ||
-      question.tags.some(tag => tag.toLowerCase().includes(searchLower))
+    return allQuestions.filter(
+      question =>
+        question.title.toLowerCase().includes(searchLower) ||
+        question.content.toLowerCase().includes(searchLower) ||
+        question.tags?.some(tag => tag.toLowerCase().includes(searchLower)) ||
+        question.category.toLowerCase().includes(searchLower)
     );
   } catch (error) {
     console.error('Error searching questions:', error);
-    return [];
+    throw error;
   }
 };
 
-// Get questions for a quiz
-export const getQuizQuestions = async (quizConfig: {
-  category?: string;
-  difficulty?: string;
-  count: number;
-  timeLimit?: number;
-}): Promise<Question[]> => {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
-
+export const getQuizQuestions = async (
+  category?: string,
+  difficulty?: string,
+  count: number = 10
+): Promise<Question[]> => {
   try {
-    const questions = await getRandomQuestions(quizConfig.count, {
-      category: quizConfig.category,
-      difficulty: quizConfig.difficulty
-    });
+    const filters: QuestionFilter = {
+      category,
+      difficulty,
+      isActive: true,
+    };
 
-    // Apply time limit if specified
-    if (quizConfig.timeLimit) {
-      return questions.map(q => ({
-        ...q,
-        timeLimit: quizConfig.timeLimit
-      }));
-    }
-
-    return questions;
+    return await getRandomQuestions(count, filters);
   } catch (error) {
     console.error('Error getting quiz questions:', error);
-    return [];
+    throw error;
   }
 };

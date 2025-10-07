@@ -20,6 +20,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Query admin from Firestore
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
     const adminsRef = collection(db, 'admins');
     const q = query(adminsRef, where('email', '==', email));
     const querySnapshot = await getDocs(q);
