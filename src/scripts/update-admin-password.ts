@@ -7,7 +7,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
-import { adminConfig, getAdminApiUrl } from '../config/admin';
+import { adminConfig, getAdminApiUrl } from '../../admin.config';
 
 /**
  * Update Admin Password Script
