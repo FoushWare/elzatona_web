@@ -1,4 +1,4 @@
-import { adminConfig, getAdminApiUrl } from '../config/admin';
+import { adminConfig, getAdminApiUrl } from '../../admin.config';
 
 /**
  * Test Admin Authentication Script

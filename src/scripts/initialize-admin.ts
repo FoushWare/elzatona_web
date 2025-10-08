@@ -1,5 +1,5 @@
 import { AdminAuthService } from '../lib/admin-auth';
-import { adminConfig, validateAdminConfig } from '../config/admin';
+import { adminConfig, validateAdminConfig } from '../../admin.config';
 
 /**
  * Initialize Admin Credentials Script

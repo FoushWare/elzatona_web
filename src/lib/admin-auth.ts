@@ -11,7 +11,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
-import { adminConfig, getAdminApiUrl } from '@/config/admin';
+import { adminConfig, getAdminApiUrl } from '@/admin.config';
 
 // Types
 export interface AdminCredential {

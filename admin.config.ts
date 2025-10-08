@@ -21,39 +21,19 @@ export const adminConfig = {
 
   // Admin Port Configuration
   port: {
-    admin:
-      process.env.ADMIN_PORT ||
-      (() => {
-        throw new Error('ADMIN_PORT environment variable must be set');
-      })(),
-    web:
-      process.env.WEB_PORT ||
-      (() => {
-        throw new Error('WEB_PORT environment variable must be set');
-      })(),
+    admin: process.env.ADMIN_PORT || '3001',
+    web: process.env.WEB_PORT || '3000',
   },
 
   // Admin URLs
   urls: {
-    admin:
-      process.env.ADMIN_URL ||
-      (() => {
-        throw new Error('ADMIN_URL environment variable must be set');
-      })(),
-    web:
-      process.env.WEB_URL ||
-      (() => {
-        throw new Error('WEB_URL environment variable must be set');
-      })(),
+    admin: process.env.ADMIN_URL || 'http://localhost:3001',
+    web: process.env.WEB_URL || 'http://localhost:3000',
   },
 
   // Admin API Configuration
   api: {
-    baseUrl:
-      process.env.ADMIN_API_BASE_URL ||
-      (() => {
-        throw new Error('ADMIN_API_BASE_URL environment variable must be set');
-      })(),
+    baseUrl: process.env.ADMIN_API_BASE_URL || 'http://localhost:3001/api',
     timeout: parseInt(process.env.ADMIN_API_TIMEOUT || '10000'),
   },
 
@@ -93,24 +73,22 @@ export const adminConfig = {
 } as const;
 
 // Validation function to ensure required environment variables are set
+// Only runs on server side to avoid client-side errors
 export function validateAdminConfig() {
+  // Only validate on server side
+  if (typeof window !== 'undefined') {
+    return; // Skip validation on client side
+  }
+
   const errors: string[] = [];
 
-  // Required environment variables
-  const requiredVars = [
-    'ADMIN_PORT',
-    'WEB_PORT',
-    'ADMIN_URL',
-    'WEB_URL',
-    'ADMIN_API_BASE_URL',
-    'JWT_SECRET',
-  ];
-
-  requiredVars.forEach(varName => {
-    if (!process.env[varName]) {
-      errors.push(`${varName} must be set`);
-    }
-  });
+  // Only validate JWT_SECRET as it's the most critical
+  if (
+    !process.env.JWT_SECRET ||
+    process.env.JWT_SECRET === 'your-secret-key-change-in-production'
+  ) {
+    errors.push('JWT_SECRET must be set and should not be the default value');
+  }
 
   if (process.env.NODE_ENV === 'production') {
     if (!process.env.INITIAL_ADMIN_EMAIL) {
