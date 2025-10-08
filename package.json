@@ -22,7 +22,8 @@
     "cleanup:deep": "bash scripts/cleanup-build.sh --deep",
     "cleanup:project": "node scripts/cleanup-project.js",
     "health-check": "node scripts/project-health-check.js",
-    "maintenance": "npm run cleanup:project && npm run health-check"
+    "maintenance": "npm run cleanup:project && npm run health-check",
+    "setup-env": "node scripts/setup-env.js"
   },
   "dependencies": {
     "@daily-co/daily-js": "^0.84.0",
