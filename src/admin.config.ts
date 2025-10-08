@@ -42,9 +42,10 @@ export const adminConfig = {
     // These should only be used for initial setup
     // In production, admins should be created through the admin panel
     initialAdmin: {
-      email: process.env.INITIAL_ADMIN_EMAIL || '',
-      password: process.env.INITIAL_ADMIN_PASSWORD || '',
-      name: process.env.INITIAL_ADMIN_NAME || 'Super Admin',
+      email:
+        process.env.INITIAL_ADMIN_EMAIL || 'afouadsoftwareengineer@gmail.com',
+      password: process.env.INITIAL_ADMIN_PASSWORD || 'zatonafoushware$8888',
+      name: process.env.INITIAL_ADMIN_NAME || 'Ahmed Fouad',
       role:
         (process.env.INITIAL_ADMIN_ROLE as 'super_admin' | 'admin') ||
         'super_admin',
