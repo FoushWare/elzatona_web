@@ -1,6 +1,6 @@
 'use client';
 
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 
 export default function AdminDashboard() {
   const { user } = useAdminAuth();
