@@ -2,6 +2,13 @@
 
 import { useState, useEffect } from 'react';
 
+interface WindowWithGuidance extends Window {
+  triggerSignInGuidance?: (
+    trigger: string,
+    context: Record<string, unknown>
+  ) => void;
+}
+
 interface ProgressData {
   completedQuestions: number;
   totalTimeSpent: number;
@@ -60,11 +67,11 @@ export const useProgressTracking = () => {
     // Trigger sign-in guidance if needed
     if (
       typeof window !== 'undefined' &&
-      (window as any).triggerSignInGuidance
+      (window as WindowWithGuidance).triggerSignInGuidance
     ) {
       const newCount = progress.completedQuestions + 1;
       if (newCount % 5 === 0) {
-        (window as any).triggerSignInGuidance('progress', {
+        (window as WindowWithGuidance).triggerSignInGuidance('progress', {
           progressCount: newCount,
         });
       }
@@ -84,9 +91,11 @@ export const useProgressTracking = () => {
     // Trigger sign-in guidance for achievements
     if (
       typeof window !== 'undefined' &&
-      (window as any).triggerSignInGuidance
+      (window as WindowWithGuidance).triggerSignInGuidance
     ) {
-      (window as any).triggerSignInGuidance('achievement', { achievement });
+      (window as WindowWithGuidance).triggerSignInGuidance('achievement', {
+        achievement,
+      });
     }
   };
 
@@ -100,10 +109,10 @@ export const useProgressTracking = () => {
     // Trigger sign-in guidance for roadmap
     if (
       typeof window !== 'undefined' &&
-      (window as any).triggerSignInGuidance &&
+      (window as WindowWithGuidance).triggerSignInGuidance &&
       sections.length >= 3
     ) {
-      (window as any).triggerSignInGuidance('roadmap', {
+      (window as WindowWithGuidance).triggerSignInGuidance('roadmap', {
         roadmapSections: sections.length,
       });
     }

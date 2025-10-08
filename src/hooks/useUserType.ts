@@ -11,7 +11,6 @@ import {
   canAccessAdminFeaturesAtom,
   defaultStudyModeAtom,
 } from '@/atoms/userType';
-import type { UserType, UserTypeState } from '@/atoms/userType';
 
 export function useUserType() {
   const [userTypeState, setUserTypeState] = useAtom(userTypeStateAtom);
