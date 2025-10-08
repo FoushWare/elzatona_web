@@ -61,6 +61,14 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
         if (sessionData) {
           const session: AdminSession = JSON.parse(sessionData);
 
+          console.log('🔍 AdminAuthContext parsed session:', {
+            id: session.id,
+            email: session.email,
+            name: session.name,
+            role: session.role,
+            fullSession: session,
+          });
+
           // Check if session has expired
           if (new Date() > new Date(session.expiresAt)) {
             console.log('⏰ Session expired, clearing data');
@@ -68,7 +76,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
             setIsAuthenticated(false);
             setUser(null);
           } else {
-            console.log('✅ Valid session found');
+            console.log('✅ Valid session found, setting user');
             setUser(session);
             setIsAuthenticated(true);
           }
@@ -137,6 +145,13 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
       if (result.success && result.admin) {
         // Save session to localStorage
         if (typeof window !== 'undefined') {
+          console.log('💾 Storing admin session:', {
+            id: result.admin.id,
+            email: result.admin.email,
+            name: result.admin.name,
+            role: result.admin.role,
+            fullAdmin: result.admin,
+          });
           localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(result.admin));
         }
 
