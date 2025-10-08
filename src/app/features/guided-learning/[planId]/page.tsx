@@ -36,7 +36,7 @@ export default function LearningPlanDetailPage() {
   // Add loading state for navigation
   const handleBackClick = () => {
     setIsNavigating(true);
-    router.push('/guided-learning');
+    router.push('/features/guided-learning');
   };
 
   const handleStartPlan = async (selectedPlan: NonNullable<typeof plan>) => {
@@ -99,7 +99,7 @@ export default function LearningPlanDetailPage() {
             The learning plan you&apos;re looking for doesn&apos;t exist.
           </p>
           <button
-            onClick={() => router.push('/guided-learning')}
+            onClick={() => router.push('/features/guided-learning')}
             className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
           >
             Back to Learning Plans

@@ -44,7 +44,7 @@ export default function GetStartedPage() {
         // Already authenticated, proceed directly
         setIsNavigating(true);
         setTimeout(() => {
-          router.push('/guided-learning');
+          router.push('/features/guided-learning');
         }, 1500);
       }
     } else {
@@ -61,7 +61,7 @@ export default function GetStartedPage() {
     if (pendingUserType === 'guided') {
       setIsNavigating(true);
       setTimeout(() => {
-        router.push('/guided-learning');
+        router.push('/features/guided-learning');
       }, 1500);
     }
     setPendingUserType(null);
