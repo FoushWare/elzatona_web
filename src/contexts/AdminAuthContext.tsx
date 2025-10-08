@@ -28,7 +28,6 @@ const AdminAuthContext = createContext<AdminAuthContextType | undefined>(
 );
 
 const ADMIN_SESSION_KEY = 'admin_session';
-const REDIRECT_KEY = 'admin_redirect_attempted';
 
 interface AdminAuthProviderProps {
   children: ReactNode;
@@ -39,7 +38,6 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<AdminSession | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [redirectAttempted, setRedirectAttempted] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -54,11 +52,9 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
         }
 
         const sessionData = localStorage.getItem(ADMIN_SESSION_KEY);
-        const redirectData = localStorage.getItem(REDIRECT_KEY);
 
         console.log('🔍 AdminAuthProvider checking session:', {
           hasSession: !!sessionData,
-          hasRedirectAttempt: !!redirectData,
           pathname,
         });
 
@@ -69,7 +65,6 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
           if (new Date() > new Date(session.expiresAt)) {
             console.log('⏰ Session expired, clearing data');
             localStorage.removeItem(ADMIN_SESSION_KEY);
-            localStorage.removeItem(REDIRECT_KEY);
             setIsAuthenticated(false);
             setUser(null);
           } else {
@@ -86,7 +81,6 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
         console.error('Error checking session:', error);
         if (typeof window !== 'undefined') {
           localStorage.removeItem(ADMIN_SESSION_KEY);
-          localStorage.removeItem(REDIRECT_KEY);
         }
         setIsAuthenticated(false);
         setUser(null);
@@ -98,42 +92,37 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
     checkSession();
   }, []);
 
-  // Handle redirects based on authentication state
+  // Handle redirects for protected admin routes (excluding /admin root and /admin/login)
   useEffect(() => {
     if (isLoading) return;
 
     const isLoginPage = pathname === '/admin/login';
     const isAdminRootPage = pathname === '/admin';
-    const isPublicPage = isLoginPage || isAdminRootPage;
-    const hasRedirectAttempted = localStorage.getItem(REDIRECT_KEY) === 'true';
+    const isProtectedRoute =
+      pathname.startsWith('/admin/') && !isLoginPage && !isAdminRootPage;
 
     console.log('🔄 AdminAuthProvider redirect logic:', {
       isLoading,
       isAuthenticated,
       isLoginPage,
       isAdminRootPage,
-      isPublicPage,
+      isProtectedRoute,
       pathname,
-      hasRedirectAttempted,
     });
 
-    // Prevent infinite redirects by tracking redirect attempts
-    if (hasRedirectAttempted) {
-      console.log('🚫 Redirect already attempted, skipping');
+    // Redirect authenticated users away from login page
+    if (isAuthenticated && isLoginPage) {
+      console.log('✅ User already authenticated, redirecting to dashboard');
+      router.replace('/admin/dashboard');
       return;
     }
 
-    if (!isAuthenticated && !isPublicPage) {
-      console.log('🚨 Redirecting to login - not authenticated');
-      localStorage.setItem(REDIRECT_KEY, 'true');
+    // Only redirect from protected routes, not from /admin root or login
+    if (!isAuthenticated && isProtectedRoute) {
+      console.log(
+        '🚨 Redirecting to login - not authenticated on protected route'
+      );
       router.replace('/admin/login');
-    } else if (isAuthenticated && isPublicPage) {
-      console.log('🚨 Redirecting to dashboard - authenticated');
-      localStorage.setItem(REDIRECT_KEY, 'true');
-      router.replace('/admin/dashboard');
-    } else {
-      // Clear redirect flag when we're in the right place
-      localStorage.removeItem(REDIRECT_KEY);
     }
   }, [isAuthenticated, isLoading, router, pathname]);
 
@@ -141,7 +130,6 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     setError(null);
-    localStorage.removeItem(REDIRECT_KEY); // Clear any previous redirect attempts
 
     try {
       const result = await AdminAuthService.authenticateAdmin(email, password);
@@ -154,6 +142,10 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
 
         setUser(result.admin);
         setIsAuthenticated(true);
+
+        // Redirect to admin dashboard after successful login
+        console.log('✅ Login successful, redirecting to admin dashboard');
+        router.push('/admin/dashboard');
 
         return { success: true };
       } else {
@@ -174,12 +166,10 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   const logout = useCallback(() => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(ADMIN_SESSION_KEY);
-      localStorage.removeItem(REDIRECT_KEY);
     }
     setUser(null);
     setIsAuthenticated(false);
     setError(null);
-    setRedirectAttempted(false);
   }, []);
 
   const value = {

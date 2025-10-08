@@ -1,6 +1,33 @@
 import { useState, useEffect, useCallback } from 'react';
-import { firestoreService } from '@/lib/firestore-service';
 import { LearningPlanTemplate } from '@/lib/guided-learning-service';
+
+interface ApiPlan {
+  id: string;
+  name: string;
+  description: string;
+  duration: number;
+  difficulty: string;
+  topics: string[];
+  questions: string[];
+  createdAt:
+    | {
+        seconds: number;
+        nanoseconds: number;
+      }
+    | string;
+  updatedAt:
+    | {
+        seconds: number;
+        nanoseconds: number;
+      }
+    | string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  plans: ApiPlan[];
+  error?: string;
+}
 
 interface UseLearningPlanTemplatesReturn {
   templates: LearningPlanTemplate[];
@@ -27,7 +54,13 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
       const baseUrl =
         typeof window !== 'undefined'
           ? window.location.origin
-          : 'http://localhost:3000';
+          : process.env.WEB_URL ||
+            process.env.NEXT_PUBLIC_WEB_URL ||
+            (() => {
+              throw new Error(
+                'WEB_URL or NEXT_PUBLIC_WEB_URL environment variable must be set'
+              );
+            })();
       const response = await fetch(`${baseUrl}/api/guided-learning/plans`);
       const apiData = await response.json();
 
@@ -39,9 +72,11 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
 
         // Convert API data to our format with safe defaults
         const formattedTemplates: LearningPlanTemplate[] = apiData.plans.map(
-          (plan: any) => {
+          (plan: ApiPlan) => {
             // Handle Firestore timestamp format
-            const parseFirestoreTimestamp = (timestamp: any) => {
+            const parseFirestoreTimestamp = (
+              timestamp: ApiPlan['createdAt']
+            ) => {
               if (!timestamp) return new Date();
               if (timestamp.seconds) {
                 return new Date(timestamp.seconds * 1000);
@@ -55,7 +90,7 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             // Calculate total questions from sections
             const sections = plan.sections || [];
             const totalQuestions = sections.reduce(
-              (total: number, section: any) => {
+              (total: number, section: { questions: string[] }) => {
                 return (
                   total + (section.questions ? section.questions.length : 0)
                 );
@@ -81,7 +116,7 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
                 dailyQuestions ||
                 plan.dailyQuestions ||
                 Math.ceil((plan.totalQuestions || 100) / duration),
-              sections: sections.map((section: any) => ({
+              sections: sections.map((section: { questions: string[] }) => ({
                 id: section.id,
                 name: section.name,
                 questions: section.questions || [],

@@ -8,7 +8,6 @@ import {
   Play,
   Edit,
   Trash2,
-  Eye,
   Calendar,
   Target,
   Clock,
@@ -18,8 +17,6 @@ import {
   Loader2,
   AlertCircle,
   BookOpen,
-  Zap,
-  TrendingUp,
 } from 'lucide-react';
 
 interface CustomPlan {

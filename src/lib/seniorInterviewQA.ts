@@ -54,7 +54,7 @@ import logo from './logo.png';
 import { useState, useEffect } from 'react'; // Only useState is used
 
 // ❌ Tree shaking doesn't work with CommonJS
-const { useState, useEffect } = require('react');
+import { useState, useEffect } from 'react';
 
 // ✅ Named imports enable better tree shaking
 import { map, filter } from 'lodash';`,
@@ -597,10 +597,12 @@ test('submits form with user data', async () => {
       'Lighthouse is an open-source, automated tool for improving the quality of web pages. It audits for performance, accessibility, progressive web apps, SEO, and more. It provides specific metrics and suggestions for improvement, making it an essential tool for web performance optimization.',
     codeExample: `// Lighthouse CI Configuration
 // .lighthouserc.js
-module.exports = {
+export const lighthouseConfig = {
   ci: {
     collect: {
-      url: ['http://localhost:3000'],
+      url: [process.env.WEB_URL || process.env.NEXT_PUBLIC_WEB_URL || (() => {
+        throw new Error('WEB_URL or NEXT_PUBLIC_WEB_URL environment variable must be set');
+      })()],
       numberOfRuns: 3,
     },
     assert: {

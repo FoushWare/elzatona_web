@@ -1,6 +1,6 @@
 'use client';
 
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 
 import QuestionAudioManager from '@/shared/components/learning/QuestionAudioManager';
 

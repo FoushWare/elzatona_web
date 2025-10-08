@@ -33,7 +33,7 @@ export default function BrowsePracticeQuestionsPage() {
       description: 'Master technical interviews with curated questions',
       icon: <Users className="w-12 h-12" />,
       color: 'blue',
-      path: '/learning-paths',
+      path: '/free-style-practice',
       isPopular: true,
     },
     {
@@ -42,7 +42,7 @@ export default function BrowsePracticeQuestionsPage() {
       description: 'Build real-world projects and components',
       icon: <Code className="w-12 h-12" />,
       color: 'purple',
-      path: '/frontend-tasks',
+      path: '/custom-roadmap',
       isPopular: false,
     },
     {
@@ -51,7 +51,7 @@ export default function BrowsePracticeQuestionsPage() {
       description: 'Solve algorithmic and logical problems',
       icon: <Brain className="w-12 h-12" />,
       color: 'green',
-      path: '/problem-solving',
+      path: '/free-style-practice',
       isPopular: false,
     },
   ];

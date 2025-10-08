@@ -7,14 +7,9 @@ import {
   getDoc,
   getDocs,
   addDoc,
-  updateDoc,
-  deleteDoc,
   query,
   where,
   orderBy,
-  limit,
-  startAfter,
-  Timestamp,
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
@@ -22,7 +17,6 @@ import {
   UnifiedQuestion,
   QuestionStats,
   QuestionFilter,
-  QuestionSearchResult,
   QuestionValidationResult,
   QuestionValidationError,
   QUESTION_VALIDATION_RULES,
@@ -80,11 +74,18 @@ export interface QuestionCategory {
   updatedAt: string;
 }
 
+// Type definitions for question tracking
+interface UserAnswer {
+  answer: string | string[] | boolean;
+  explanation?: string;
+  confidence?: number;
+}
+
 export interface QuestionAttempt {
   id: string;
   questionId: string;
   userId: string;
-  userAnswer: any;
+  userAnswer: UserAnswer;
   isCorrect: boolean;
   timeSpent: number; // in seconds
   points: number;
@@ -95,74 +96,9 @@ export interface QuestionAttempt {
   metadata?: {
     device?: string;
     browser?: string;
-    [key: string]: any;
+    [key: string]: string | number | boolean;
   };
 }
-
-// Convert UnifiedQuestion to legacy Question format
-const convertToLegacyQuestion = (unified: UnifiedQuestion): Question => {
-  return {
-    id: unified.id,
-    title: unified.title,
-    content: unified.content,
-    type: unified.type,
-    category: unified.category || '',
-    subcategory: unified.subcategory || '',
-    difficulty: unified.difficulty || 'intermediate',
-    learningPath: unified.learningPath || '',
-    sectionId: unified.sectionId,
-    isActive: unified.isActive,
-    createdAt: unified.createdAt,
-    updatedAt: unified.updatedAt,
-    createdBy: unified.createdBy,
-    updatedBy: unified.updatedBy,
-    tags: unified.tags,
-    explanation: unified.explanation,
-    hints: unified.hints,
-    timeLimit: unified.timeLimit,
-    points: unified.points,
-    options: unified.options,
-    codeTemplate: unified.codeTemplate,
-    testCases: unified.testCases,
-    sampleAnswers: unified.sampleAnswers,
-    stats: unified.stats,
-  };
-};
-
-// Convert legacy Question to UnifiedQuestion format
-const convertToUnifiedQuestion = (legacy: Question): UnifiedQuestion => {
-  return {
-    id: legacy.id,
-    title: legacy.title,
-    content: legacy.content,
-    type: legacy.type,
-    category: legacy.category,
-    subcategory: legacy.subcategory,
-    difficulty: legacy.difficulty,
-    learningPath: legacy.learningPath,
-    sectionId: legacy.sectionId,
-    isActive: legacy.isActive,
-    createdAt: legacy.createdAt,
-    updatedAt: legacy.updatedAt,
-    createdBy: legacy.createdBy,
-    updatedBy: legacy.updatedBy,
-    tags: legacy.tags,
-    explanation: legacy.explanation,
-    hints: legacy.hints,
-    timeLimit: legacy.timeLimit,
-    points: legacy.points,
-    metadata: {
-      source: 'legacy',
-      version: '1.0.0',
-      references: [],
-    },
-    options: legacy.options,
-    codeTemplate: legacy.codeTemplate,
-    testCases: legacy.testCases,
-    sampleAnswers: legacy.sampleAnswers,
-    stats: legacy.stats,
-  };
-};
 
 // Validation functions
 export const validateQuestion = (

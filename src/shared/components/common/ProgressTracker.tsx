@@ -12,7 +12,18 @@ interface ProgressTrackerProps {
   sectionId?: string;
   category?: string;
   difficulty?: 'easy' | 'medium' | 'hard';
-  onProgressUpdate?: (progress: any) => void;
+  onProgressUpdate?: (progress: {
+    type: string;
+    questionId?: string;
+    challengeId?: string;
+    learningPathId?: string;
+    sectionId?: string;
+    answeredCorrectly?: boolean;
+    completed?: boolean;
+    score?: number;
+    points?: number;
+    timeSpent?: number;
+  }) => void;
 }
 
 export default function ProgressTracker({

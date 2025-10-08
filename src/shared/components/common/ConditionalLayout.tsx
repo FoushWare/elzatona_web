@@ -12,17 +12,24 @@ interface ConditionalLayoutProps {
 export function ConditionalLayout({ children }: ConditionalLayoutProps) {
   const pathname = usePathname();
   const [isClient, setIsClient] = useState(false);
-  const [isAdminRoute, setIsAdminRoute] = useState(false);
+
+  // Check if current route is admin route - this works on both server and client
+  const isAdminRoute = pathname?.startsWith('/admin') || false;
 
   // Ensure consistent rendering between server and client
   useEffect(() => {
     setIsClient(true);
-    // Check if current route is admin route
-    setIsAdminRoute(pathname?.startsWith('/admin') || false);
-  }, [pathname]);
+  }, []);
 
-  // During SSR or before hydration, always render the main layout
-  // to prevent hydration mismatch and navbar switching
+  // If we're on an admin route, render children without the main layout
+  // The admin routes have their own layouts that provide the necessary structure
+  // This prevents navbar switching during SSR and hydration
+  if (isAdminRoute) {
+    return <>{children}</>;
+  }
+
+  // During SSR or before hydration, render the main layout
+  // This prevents hydration mismatch for non-admin routes
   if (!isClient) {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white relative">
@@ -31,12 +38,6 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
         <ChatGPT />
       </div>
     );
-  }
-
-  // If we're on an admin route, render children without the main layout
-  // The admin routes have their own layouts that provide the necessary structure
-  if (isAdminRoute) {
-    return <>{children}</>;
   }
 
   // Otherwise, render the main layout with navbar and other components
