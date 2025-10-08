@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { AdminAuthProvider } from '@/contexts/AdminAuthContext';

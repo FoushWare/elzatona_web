@@ -4,8 +4,6 @@
 
 import { setAuthCookie } from './auth-utils';
 
-import { User } from 'firebase/auth';
-
 interface UserWithIdToken {
   getIdToken(): Promise<string>;
 }

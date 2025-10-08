@@ -95,8 +95,12 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
       const clsObserver = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
           // Check if the entry has hadRecentInput property (for CLS entries)
-          if (!(entry as any).hadRecentInput) {
-            clsValue += (entry as PerformanceEntry & { value: number }).value;
+          const layoutShiftEntry = entry as PerformanceEntry & {
+            value: number;
+            hadRecentInput?: boolean;
+          };
+          if (!layoutShiftEntry.hadRecentInput) {
+            clsValue += layoutShiftEntry.value;
           }
         }
         setMetrics(prev => ({
@@ -119,8 +123,11 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
         const firstEntry = entries[0];
         if (firstEntry) {
           // For FID entries, use the correct property
-          const fidValue = (firstEntry as any).processingStart
-            ? (firstEntry as any).processingStart - firstEntry.startTime
+          const fidEntry = firstEntry as PerformanceEntry & {
+            processingStart?: number;
+          };
+          const fidValue = fidEntry.processingStart
+            ? fidEntry.processingStart - firstEntry.startTime
             : 0;
           setMetrics(prev => ({
             ...prev,

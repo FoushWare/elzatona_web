@@ -125,7 +125,10 @@ export default function SectionConfigManager({
     }
   };
 
-  const updateConfig = (field: keyof SectionConfig, value: any) => {
+  const updateConfig = (
+    field: keyof SectionConfig,
+    value: string | number | boolean
+  ) => {
     if (!config) return;
     setConfig({ ...config, [field]: value });
   };

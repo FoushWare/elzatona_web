@@ -11,9 +11,21 @@ export interface UnifiedSection {
   category: string;
 }
 
+interface QuestionData {
+  id?: string;
+  title: string;
+  content: string;
+  type: string;
+  difficulty: string;
+  category: string;
+  learningPath?: string;
+  isActive?: boolean;
+  [key: string]: unknown;
+}
+
 export interface UnifiedSectionApiResult {
   success: boolean;
-  data?: any;
+  data?: unknown;
   message?: string;
   error?: string;
 }
@@ -64,7 +76,7 @@ export class UnifiedSectionClientService {
    */
   static async addQuestion(
     sectionId: string,
-    questionData: any
+    questionData: QuestionData
   ): Promise<UnifiedSectionApiResult> {
     try {
       const response = await fetch(
@@ -121,7 +133,7 @@ export class UnifiedSectionClientService {
    */
   static async bulkAddQuestions(
     sectionId: string,
-    questions: any[]
+    questions: QuestionData[]
   ): Promise<UnifiedSectionApiResult> {
     try {
       const response = await fetch(

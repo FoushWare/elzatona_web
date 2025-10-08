@@ -40,6 +40,17 @@ jest.mock('@/shared/components/common/NavbarSimple', () => {
   };
 });
 
+// Type definitions for mocks
+interface MockAdminAuth {
+  login: jest.MockedFunction<
+    (email: string, password: string) => Promise<{ success: boolean }>
+  >;
+  logout: jest.MockedFunction<() => void>;
+  user: { id: string; email: string; name: string; role: string } | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+}
+
 describe('Navbar Switching Fix', () => {
   const mockUsePathname = usePathname as jest.MockedFunction<
     typeof usePathname

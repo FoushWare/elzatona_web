@@ -30,7 +30,16 @@ export default function LearningPathQuestions({
   const [showStatistics, setShowStatistics] = useState(false);
 
   // Get questions based on category
-  const getQuestionsByCategory = (): any[] => {
+  const getQuestionsByCategory = (): Array<{
+    id: string;
+    question: string;
+    options: string[];
+    correctAnswer: string | number;
+    explanation: string;
+    difficulty?: string;
+    category?: string;
+    tags?: string[];
+  }> => {
     switch (category) {
       case 'javascript':
         return javascriptQuestions;
@@ -234,7 +243,7 @@ export default function LearningPathQuestions({
               Select the correct answer:
             </h4>
             <div className="space-y-2">
-              {currentQuestion.options.map((option: any, index: number) => {
+              {currentQuestion.options.map((option: string, index: number) => {
                 const optionLabel = getOptionLabel(index);
                 const isSelected = selectedAnswer === optionLabel;
                 const isCorrect = optionLabel === getCorrectAnswer();

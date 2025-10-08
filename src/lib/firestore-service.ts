@@ -554,7 +554,9 @@ class FirestoreService {
     }
   }
 
-  async getLearningPlanTemplate(planId: string): Promise<any | null> {
+  async getLearningPlanTemplate(
+    planId: string
+  ): Promise<LearningPlanTemplate | null> {
     if (!db) {
       console.warn('Firestore not available');
       return null;
@@ -664,7 +666,7 @@ class FirestoreService {
   }
 
   // Learning Path Management
-  async getLearningPath(pathId: string): Promise<any | null> {
+  async getLearningPath(pathId: string): Promise<LearningPath | null> {
     if (!db) {
       console.warn('Firestore not available');
       return null;
@@ -735,7 +737,7 @@ class FirestoreService {
   }
 
   // Section Management
-  async getAllSections(): Promise<any[]> {
+  async getAllSections(): Promise<Section[]> {
     if (!db) {
       console.warn('Firestore not available');
       return [];
@@ -839,7 +841,7 @@ class FirestoreService {
   }
 
   // Category Management
-  async getAllCategories(): Promise<any[]> {
+  async getAllCategories(): Promise<Category[]> {
     if (!db) {
       console.warn('Firestore not available');
       return [];

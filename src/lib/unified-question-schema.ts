@@ -443,7 +443,7 @@ export class UnifiedQuestionService {
         typeof q.createdAt === 'object' &&
         'toDate' in q.createdAt
       ) {
-        const parsedDate = (q.createdAt as any).toDate();
+        const parsedDate = (q.createdAt as { toDate: () => Date }).toDate();
         date = isNaN(parsedDate.getTime())
           ? new Date().toISOString().split('T')[0]
           : parsedDate.toISOString().split('T')[0];
@@ -694,7 +694,7 @@ export class UnifiedQuestionService {
   // Get questions by IDs (placeholder implementation)
   static async getQuestionsByIds(
     questionIds: string[]
-  ): Promise<{ success: boolean; data?: any[]; error?: string }> {
+  ): Promise<{ success: boolean; data?: UnifiedQuestion[]; error?: string }> {
     // This is a placeholder implementation
     // In a real implementation, this would query the database for questions by their IDs
     console.log('getQuestionsByIds called with IDs:', questionIds);
