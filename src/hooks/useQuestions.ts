@@ -19,6 +19,21 @@ import {
   getQuizQuestions,
 } from '@/lib/firebase-questions';
 
+interface QuestionFilters {
+  category?: string;
+  difficulty?: string;
+  tags?: string[];
+  [key: string]: unknown;
+}
+
+interface QuizConfig {
+  count?: number;
+  category?: string;
+  difficulty?: string;
+  tags?: string[];
+  [key: string]: unknown;
+}
+
 export interface UseQuestionsReturn {
   questions: Question[];
   categories: QuestionCategory[];
@@ -27,9 +42,12 @@ export interface UseQuestionsReturn {
   userAttempts: QuestionAttempt[];
   isLoading: boolean;
   error: string | null;
-  loadQuestions: (filters?: any) => Promise<void>;
+  loadQuestions: (filters?: QuestionFilters) => Promise<void>;
   loadQuestion: (questionId: string) => Promise<void>;
-  loadRandomQuestions: (count: number, filters?: any) => Promise<void>;
+  loadRandomQuestions: (
+    count: number,
+    filters?: QuestionFilters
+  ) => Promise<void>;
   loadCategories: () => Promise<void>;
   loadStats: () => Promise<void>;
   loadUserAttempts: (questionId?: string) => Promise<void>;
@@ -39,8 +57,11 @@ export interface UseQuestionsReturn {
     timeSpent: number,
     attempts: number
   ) => Promise<void>;
-  searchQuestions: (searchTerm: string, filters?: any) => Promise<void>;
-  getQuiz: (config: any) => Promise<Question[]>;
+  searchQuestions: (
+    searchTerm: string,
+    filters?: QuestionFilters
+  ) => Promise<void>;
+  getQuiz: (config: QuizConfig) => Promise<Question[]>;
   clearError: () => void;
 }
 
@@ -54,7 +75,7 @@ export const useQuestions = (): UseQuestionsReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadQuestions = useCallback(async (filters?: any) => {
+  const loadQuestions = useCallback(async (filters?: QuestionFilters) => {
     setIsLoading(true);
     setError(null);
 
@@ -85,7 +106,7 @@ export const useQuestions = (): UseQuestionsReturn => {
   }, []);
 
   const loadRandomQuestions = useCallback(
-    async (count: number, filters?: any) => {
+    async (count: number, filters?: QuestionFilters) => {
       setIsLoading(true);
       setError(null);
 
@@ -206,7 +227,7 @@ export const useQuestions = (): UseQuestionsReturn => {
   );
 
   const searchQuestionsLocal = useCallback(
-    async (searchTerm: string, filters?: any) => {
+    async (searchTerm: string, filters?: QuestionFilters) => {
       setIsLoading(true);
       setError(null);
 
@@ -225,24 +246,27 @@ export const useQuestions = (): UseQuestionsReturn => {
     []
   );
 
-  const getQuiz = useCallback(async (config: any): Promise<Question[]> => {
-    setIsLoading(true);
-    setError(null);
+  const getQuiz = useCallback(
+    async (config: QuizConfig): Promise<Question[]> => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const quizQuestions = await getQuizQuestions(config);
-      setQuestions(quizQuestions);
-      return quizQuestions;
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Failed to get quiz questions'
-      );
-      console.error('Error getting quiz questions:', err);
-      return [];
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      try {
+        const quizQuestions = await getQuizQuestions(config);
+        setQuestions(quizQuestions);
+        return quizQuestions;
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Failed to get quiz questions'
+        );
+        console.error('Error getting quiz questions:', err);
+        return [];
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
 
   const clearError = useCallback(() => {
     setError(null);

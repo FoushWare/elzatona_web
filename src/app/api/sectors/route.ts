@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
         { status: 500 }
       );
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in GET /api/sectors:', error);
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in POST /api/sectors:', error);
     return NextResponse.json(
       { success: false, error: 'Internal server error' },

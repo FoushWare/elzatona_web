@@ -4,18 +4,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
 
+interface Topic {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  difficulty: string;
+  [key: string]: unknown;
+}
+
+interface TopicUpdateData {
+  name?: string;
+  description?: string;
+  category?: string;
+  difficulty?: string;
+  [key: string]: unknown;
+}
+
 // Placeholder EnhancedQuestionService
 class EnhancedQuestionService {
-  static async getTopic(topicId: string): Promise<any> {
+  static async getTopic(topicId: string): Promise<Topic | null> {
     // Placeholder implementation
     console.log('Getting topic:', topicId);
     return null;
   }
 
-  static async updateTopic(topicId: string, updateData: any): Promise<any> {
+  static async updateTopic(
+    topicId: string,
+    updateData: TopicUpdateData
+  ): Promise<Topic | null> {
     // Placeholder implementation
     console.log('Updating topic:', topicId, updateData);
-    return { id: topicId, ...updateData };
+    return { id: topicId, ...updateData } as Topic;
   }
 
   static async deleteTopic(topicId: string): Promise<boolean> {

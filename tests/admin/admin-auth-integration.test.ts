@@ -87,7 +87,13 @@ describe('Admin Authentication Integration', () => {
 
       // Step 2: Verify JWT token
       const token = loginData.admin.token;
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+        adminId: string;
+        email: string;
+        role: string;
+        exp: number;
+        iat: number;
+      };
 
       expect(decoded.adminId).toBe(mockAdmin.id);
       expect(decoded.email).toBe(mockAdmin.email);
@@ -176,7 +182,13 @@ describe('Admin Authentication Integration', () => {
 
       // Verify token can be used for subsequent requests
       const token = loginData.admin.token;
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+        adminId: string;
+        email: string;
+        role: string;
+        exp: number;
+        iat: number;
+      };
 
       expect(decoded.adminId).toBe(mockAdmin.id);
       expect(decoded.email).toBe(mockAdmin.email);
@@ -256,7 +268,13 @@ describe('Admin Authentication Integration', () => {
         process.env.JWT_SECRET!
       );
 
-      const decoded = jwt.verify(validToken, process.env.JWT_SECRET!) as any;
+      const decoded = jwt.verify(validToken, process.env.JWT_SECRET!) as {
+        adminId: string;
+        email: string;
+        role: string;
+        exp: number;
+        iat: number;
+      };
 
       expect(decoded.adminId).toBe('admin_test@example.com');
       expect(decoded.email).toBe('test@example.com');
