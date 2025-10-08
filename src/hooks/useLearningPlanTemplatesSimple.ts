@@ -1,6 +1,27 @@
 import { useState, useEffect } from 'react';
 import { LearningPlanTemplate } from '@/lib/guided-learning-service';
 
+interface ApiTemplate {
+  id: string;
+  name?: string;
+  duration?: number;
+  description?: string;
+  difficulty?: string;
+  totalQuestions?: number;
+  dailyQuestions?: number;
+  sections?: Array<{
+    id: string;
+    name: string;
+    questions: unknown[];
+    weight: number;
+  }>;
+  features?: string[];
+  estimatedTime?: string;
+  isRecommended?: boolean;
+  isActive?: boolean;
+  [key: string]: unknown;
+}
+
 interface UseLearningPlanTemplatesReturn {
   templates: LearningPlanTemplate[];
   isLoading: boolean;
@@ -39,7 +60,7 @@ export function useLearningPlanTemplatesSimple(): UseLearningPlanTemplatesReturn
 
           // Convert API data to our format
           const formattedTemplates: LearningPlanTemplate[] =
-            apiData.templates.map((template: any) => ({
+            apiData.templates.map((template: ApiTemplate) => ({
               id: template.id,
               name: template.name || `${template.duration} Day Plan`,
               duration: template.duration || 1,

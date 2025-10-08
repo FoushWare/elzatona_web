@@ -597,7 +597,7 @@ test('submits form with user data', async () => {
       'Lighthouse is an open-source, automated tool for improving the quality of web pages. It audits for performance, accessibility, progressive web apps, SEO, and more. It provides specific metrics and suggestions for improvement, making it an essential tool for web performance optimization.',
     codeExample: `// Lighthouse CI Configuration
 // .lighthouserc.js
-module.exports = {
+export const lighthouseConfig = {
   ci: {
     collect: {
       url: [process.env.WEB_URL || process.env.NEXT_PUBLIC_WEB_URL || (() => {

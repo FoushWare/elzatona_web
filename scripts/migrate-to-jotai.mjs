@@ -153,8 +153,8 @@ function main() {
   console.log('4. Update any remaining context usage manually');
 }
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
 
-module.exports = { migrateFile, contextToHookMapping, hookNameMapping };
+export { migrateFile, contextToHookMapping, hookNameMapping };

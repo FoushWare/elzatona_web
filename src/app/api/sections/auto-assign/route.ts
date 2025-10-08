@@ -11,6 +11,20 @@ import {
   doc,
 } from 'firebase/firestore';
 
+interface Question {
+  id: string;
+  learningPath?: string;
+  createdAt?: Date;
+  [key: string]: unknown;
+}
+
+interface Section {
+  id: string;
+  name?: string;
+  currentQuestionCount?: number;
+  [key: string]: unknown;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const {
@@ -31,7 +45,7 @@ export async function POST(request: NextRequest) {
       orderBy('createdAt', 'asc')
     );
     const questionsSnapshot = await getDocs(q);
-    const questions = questionsSnapshot.docs.map(doc => ({
+    const questions: Question[] = questionsSnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
@@ -44,7 +58,7 @@ export async function POST(request: NextRequest) {
       orderBy('order', 'asc')
     );
     const sectionsSnapshot = await getDocs(sectionsQuery);
-    const existingSections = sectionsSnapshot.docs.map(doc => ({
+    const existingSections: Section[] = sectionsSnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
@@ -86,7 +100,8 @@ export async function POST(request: NextRequest) {
     // Update section question count
     const sectionRef = doc(db, 'sections', targetSection.id);
     await updateDoc(sectionRef, {
-      currentQuestionCount: (targetSection as any).currentQuestionCount + 1,
+      currentQuestionCount:
+        (targetSection as Section).currentQuestionCount! + 1,
       updatedAt: new Date(),
     });
 
@@ -95,7 +110,7 @@ export async function POST(request: NextRequest) {
       data: {
         questionId,
         sectionId: targetSection.id,
-        sectionName: (targetSection as any).name,
+        sectionName: (targetSection as Section).name,
         orderInSection: (questionIndex % sectionSize) + 1,
       },
     });

@@ -15,7 +15,7 @@ interface Question {
   content: string;
   category?: string;
   topic?: string;
-  [key: string]: any;
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 // Category and topic mapping based on question content analysis

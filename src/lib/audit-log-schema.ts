@@ -21,7 +21,7 @@ export interface AuditLog {
   resourceId?: string; // ID of the affected resource
   resourceName?: string; // Human-readable name of the resource
   details: string; // Detailed description of the action
-  changes?: Record<string, any>; // Before/after values for updates
+  changes?: Record<string, string | number | boolean | null>; // Before/after values for updates
   userId?: string; // Admin user ID who performed the action
   userEmail?: string; // Admin user email
   ipAddress?: string; // IP address of the user
@@ -29,7 +29,7 @@ export interface AuditLog {
   timestamp: string; // ISO timestamp
   success: boolean; // Whether the action was successful
   errorMessage?: string; // Error message if action failed
-  metadata?: Record<string, any>; // Additional metadata
+  metadata?: Record<string, string | number | boolean | null>; // Additional metadata
 }
 
 export class AuditLogService {

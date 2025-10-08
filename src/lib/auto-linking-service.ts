@@ -24,7 +24,7 @@ export interface QuestionData {
   learningPath: string;
   sectionId?: string;
   tags: string[];
-  options?: any[];
+  options?: unknown[];
   correctAnswers?: string[];
   explanation: string;
   points: number;
@@ -35,6 +35,13 @@ export interface QuestionData {
   isComplete?: boolean;
   createdBy?: string;
   lastModifiedBy?: string;
+}
+
+interface SectorData {
+  id: string;
+  name: string;
+  questionIds?: string[];
+  [key: string]: unknown;
 }
 
 export interface SectionData {
@@ -190,7 +197,7 @@ class AutoLinkingService {
       }
 
       // Add question to the target sector
-      const currentQuestionIds = (targetSector as any).questionIds || [];
+      const currentQuestionIds = (targetSector as SectorData).questionIds || [];
       if (!currentQuestionIds.includes(questionId)) {
         const updatedQuestionIds = [...currentQuestionIds, questionId];
 
@@ -202,11 +209,11 @@ class AutoLinkingService {
         });
 
         console.log(
-          `✅ Added question to sector: ${(targetSector as any).name} (${targetSector.id})`
+          `✅ Added question to sector: ${(targetSector as SectorData).name} (${targetSector.id})`
         );
       } else {
         console.log(
-          `ℹ️ Question already exists in sector: ${(targetSector as any).name}`
+          `ℹ️ Question already exists in sector: ${(targetSector as SectorData).name}`
         );
       }
 
@@ -526,7 +533,7 @@ class AutoLinkingService {
         id: section.id,
         name: section.name,
         description: section.description,
-        category: section.category as any,
+        category: section.category as SectionData['category'],
         learningPath: section.learningPathId,
         questions: [], // Will be populated dynamically
         order: 0, // Will be set based on learning path order

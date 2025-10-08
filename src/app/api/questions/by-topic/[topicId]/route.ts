@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
+interface Question {
+  id: string;
+  order?: number;
+  topics?: string[];
+  [key: string]: unknown; // Allow additional properties from Firebase
+}
+
 // GET /api/questions/by-topic/[topicId]
 export async function GET(
   request: NextRequest,
@@ -34,7 +41,7 @@ export async function GET(
     const q = query(questionsRef, where('topics', 'array-contains', topicId));
 
     const querySnapshot = await getDocs(q);
-    const questions: any[] = [];
+    const questions: Question[] = [];
 
     querySnapshot.forEach(doc => {
       questions.push({
@@ -44,7 +51,9 @@ export async function GET(
     });
 
     // Sort questions by order field if available
-    questions.sort((a, b) => (a.order || 0) - (b.order || 0));
+    questions.sort(
+      (a: Question, b: Question) => (a.order || 0) - (b.order || 0)
+    );
 
     console.log(`Found ${questions.length} questions for topic ${topicId}`);
 
