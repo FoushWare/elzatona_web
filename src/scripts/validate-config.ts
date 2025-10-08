@@ -1,4 +1,4 @@
-import { validateAdminConfig } from '../../admin.config';
+import { validateAdminConfig } from '@/admin.config';
 
 /**
  * Configuration Validation Script
