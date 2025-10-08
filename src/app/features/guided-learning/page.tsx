@@ -106,12 +106,8 @@ export default function GuidedLearningPage() {
     null
   );
 
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/get-started');
-    }
-  }, [isAuthenticated, router]);
+  // Allow non-authenticated users to explore guided learning
+  // Authentication is optional - users can explore freely but are encouraged to sign in
 
   // Check if user has an active plan
   useEffect(() => {
