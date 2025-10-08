@@ -67,7 +67,7 @@ export default function HomePage() {
           title: 'Start Your Learning Path',
           subtitle: 'Choose a structured learning plan to begin your journey',
           cta: 'Choose Learning Plan',
-          ctaLink: '/guided-learning',
+          ctaLink: '/features/guided-learning',
           icon: <Map className="w-6 h-6" />,
           color: 'indigo',
         };

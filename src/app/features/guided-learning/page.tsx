@@ -508,7 +508,7 @@ export default function GuidedLearningPage() {
                 }`}
                 onClick={() => {
                   setIsNavigatingToPlan(plan.id);
-                  router.push(`/guided-learning/${plan.id}`);
+                  router.push(`/features/guided-learning/${plan.id}`);
                 }}
                 onMouseEnter={() => setHoveredPlan(plan.id)}
                 onMouseLeave={() => setHoveredPlan(null)}
