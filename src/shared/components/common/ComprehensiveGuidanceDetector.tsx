@@ -5,6 +5,11 @@ import { usePathname } from 'next/navigation';
 import { UserGuidanceSystem } from './UserGuidanceSystem';
 import { useUserType } from '@/contexts/UserTypeContext';
 
+interface WindowWithTestFlags extends Window {
+  __DISABLE_GUIDANCE_MODALS__?: boolean;
+  __TEST_MODE__?: boolean;
+}
+
 export const ComprehensiveGuidanceDetector: React.FC = () => {
   const {
     isFirstVisit,
@@ -25,8 +30,8 @@ export const ComprehensiveGuidanceDetector: React.FC = () => {
     // Don't show guidance during testing
     if (
       typeof window !== 'undefined' &&
-      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
-        (window as any).__TEST_MODE__)
+      ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as WindowWithTestFlags).__TEST_MODE__)
     ) {
       return;
     }

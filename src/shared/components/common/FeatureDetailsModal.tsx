@@ -11,10 +11,7 @@ import {
   Github,
   Calendar,
   Users,
-  FileText,
   Code,
-  Database,
-  Zap,
   Shield,
   Eye,
   Target,
@@ -23,12 +20,9 @@ import {
   Lightbulb,
   TestTube,
   Gauge,
-  Lock,
   Accessibility,
   Rocket,
   Link,
-  Image,
-  BookOpen,
 } from 'lucide-react';
 
 interface FeatureDetailsModalProps {

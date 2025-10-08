@@ -13,7 +13,6 @@ import {
   Auth,
   setPersistence,
   browserLocalPersistence,
-  browserSessionPersistence,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -21,14 +20,11 @@ import {
   setDoc,
   getDoc,
   Firestore,
-  connectFirestoreEmulator,
   enableNetwork,
-  disableNetwork,
 } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import { getStorage, FirebaseStorage } from 'firebase/storage';
 
 // Check if Firebase is configured (always true since we have fallback values)
-const isFirebaseConfigured = true;
 
 // Add immediate error suppression for Firebase internal errors
 if (typeof window !== 'undefined') {
@@ -77,7 +73,7 @@ const firebaseConfig = {
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
-let storage: any | null = null;
+let storage: FirebaseStorage | null = null;
 
 try {
   // Force a fresh Firebase initialization
@@ -142,15 +138,6 @@ try {
         return; // Suppress these warnings
       }
       originalConsoleWarn.apply(console, args);
-    };
-
-    // Handle connection state changes
-    const handleConnectionChange = (connected: boolean) => {
-      if (connected) {
-        console.log('🔗 Firestore connected');
-      } else {
-        console.log('🔌 Firestore disconnected');
-      }
     };
 
     // Set up connection monitoring and error recovery
@@ -446,19 +433,22 @@ export const withFirestoreErrorHandling = async <T>(
 ): Promise<T | undefined> => {
   try {
     return await operation();
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Handle Firebase internal assertion errors gracefully
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorCode = (error as { code?: string })?.code;
+
     if (
-      error?.code === 'internal' ||
-      error?.message?.includes('INTERNAL ASSERTION FAILED')
+      errorCode === 'internal' ||
+      errorMessage.includes('INTERNAL ASSERTION FAILED')
     ) {
-      console.warn('⚠️ Firebase internal error (non-critical):', error.message);
+      console.warn('⚠️ Firebase internal error (non-critical):', errorMessage);
       return fallback;
     }
 
     // Handle other Firebase errors
-    if (error?.code?.startsWith('firestore/')) {
-      console.error('Firestore error:', error.message);
+    if (errorCode?.startsWith('firestore/')) {
+      console.error('Firestore error:', errorMessage);
       return fallback;
     }
 

@@ -43,8 +43,9 @@ describe('Navbar Switching Fix', () => {
   const mockUsePathname = usePathname as jest.MockedFunction<
     typeof usePathname
   >;
-  const mockUseAdminAuth = require('@/contexts/AdminAuthContext')
-    .useAdminAuth as jest.MockedFunction<any>;
+  const mockUseAdminAuth = jest.mocked(
+    require('@/contexts/AdminAuthContext').useAdminAuth
+  ) as jest.MockedFunction<() => MockAdminAuth>;
 
   beforeEach(() => {
     jest.clearAllMocks();

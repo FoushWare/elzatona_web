@@ -54,7 +54,7 @@ import logo from './logo.png';
 import { useState, useEffect } from 'react'; // Only useState is used
 
 // ❌ Tree shaking doesn't work with CommonJS
-const { useState, useEffect } = require('react');
+import { useState, useEffect } from 'react';
 
 // ✅ Named imports enable better tree shaking
 import { map, filter } from 'lodash';`,
