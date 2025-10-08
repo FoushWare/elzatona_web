@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { firestoreService } from '@/lib/firestore-service';
 
+interface SectionConfig {
+  sectionId?: string;
+  id?: string;
+  sectionName: string;
+  category: string;
+  questionCount: number;
+  maxQuestions?: number;
+  weight?: number;
+  order?: number;
+}
+
 // GET /api/guided-learning/plans/[planId]/sections - Get section configuration for a plan
 export async function GET(
   request: NextRequest,
@@ -62,7 +73,7 @@ export async function PUT(
     // Update the plan with new section configuration
     const updatedPlan = {
       ...plan,
-      sections: config.sections.map((section: any) => ({
+      sections: config.sections.map((section: SectionConfig) => ({
         id: section.sectionId || section.id,
         name: section.sectionName,
         category: section.category,

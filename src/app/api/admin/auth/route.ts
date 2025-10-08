@@ -3,10 +3,7 @@ import jwt from 'jsonwebtoken';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
-
-const JWT_SECRET =
-  process.env.JWT_SECRET || 'your-secret-key-change-in-production';
-const JWT_EXPIRES_IN = '24h';
+import { adminConfig } from '@/admin.config';
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +24,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const adminsRef = collection(db, 'admins');
+    const adminsRef = collection(db, adminConfig.database.collectionName);
     const q = query(adminsRef, where('email', '==', email));
     const querySnapshot = await getDocs(q);
 
@@ -63,7 +60,9 @@ export async function POST(request: NextRequest) {
 
     // Create JWT token
     const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 24); // 24 hours
+    expiresAt.setTime(
+      expiresAt.getTime() + adminConfig.security.sessionTimeout
+    );
 
     const token = jwt.sign(
       {
@@ -71,8 +70,8 @@ export async function POST(request: NextRequest) {
         email: adminData.email,
         role: adminData.role,
       },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
+      adminConfig.jwt.secret,
+      { expiresIn: adminConfig.jwt.expiresIn }
     );
 
     const session = {
@@ -106,7 +105,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify JWT token
-    const decoded = jwt.verify(token, JWT_SECRET) as {
+    const decoded = jwt.verify(token, adminConfig.jwt.secret) as {
       adminId: string;
       email: string;
       role: string;

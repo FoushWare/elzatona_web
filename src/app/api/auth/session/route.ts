@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth-config';
 
+interface UserWithId {
+  id?: string;
+  email?: string | null;
+  name?: string | null;
+  image?: string | null;
+}
+
 // Get current session status
 export async function GET(request: NextRequest) {
   try {
@@ -11,7 +18,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         isAuthenticated: true,
         user: {
-          id: (session.user as any).id || session.user.email,
+          id: (session.user as UserWithId).id || session.user.email,
           email: session.user.email,
           name: session.user.name,
           image: session.user.image,

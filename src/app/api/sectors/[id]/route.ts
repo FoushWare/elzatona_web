@@ -22,7 +22,7 @@ export async function GET(
         { status: 404 }
       );
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in GET /api/sectors/[id]:', error);
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
@@ -53,7 +53,7 @@ export async function PUT(
         { status: 500 }
       );
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in PUT /api/sectors/[id]:', error);
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
@@ -83,7 +83,7 @@ export async function DELETE(
         { status: 500 }
       );
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in DELETE /api/sectors/[id]:', error);
     return NextResponse.json(
       { success: false, error: 'Internal server error' },

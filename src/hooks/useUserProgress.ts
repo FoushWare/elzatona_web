@@ -22,13 +22,13 @@ export interface ContinueData {
   recentPath?: {
     pathId: string;
     pathName: string;
-    completedSections: any[];
+    completedSections: unknown[];
     progress: number;
     lastAccessed: string;
     timeSpent: number;
   };
-  recentQuestions: any[];
-  recentChallenges: any[];
+  recentQuestions: unknown[];
+  recentChallenges: unknown[];
   lastActivity: string;
 }
 

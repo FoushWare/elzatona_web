@@ -109,9 +109,15 @@ export function NotificationContainer() {
       setNotifications(prev => [...prev, notification]);
     };
 
-    window.addEventListener('notification' as any, handleNotification);
+    window.addEventListener(
+      'notification' as keyof WindowEventMap,
+      handleNotification as EventListener
+    );
     return () => {
-      window.removeEventListener('notification' as any, handleNotification);
+      window.removeEventListener(
+        'notification' as keyof WindowEventMap,
+        handleNotification as EventListener
+      );
     };
   }, []);
 

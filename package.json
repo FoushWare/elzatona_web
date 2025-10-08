@@ -22,7 +22,17 @@
     "cleanup:deep": "bash scripts/cleanup-build.sh --deep",
     "cleanup:project": "node scripts/cleanup-project.js",
     "health-check": "node scripts/project-health-check.js",
-    "maintenance": "npm run cleanup:project && npm run health-check"
+    "maintenance": "npm run cleanup:project && npm run health-check",
+    "setup-env": "node scripts/setup-env.mjs",
+    "test:admin-login": "node scripts/run-admin-login-tests.mjs",
+    "test:admin-login:fast": "npx jest tests/admin/admin-login-api.test.ts --verbose",
+    "test:admin-login:watch": "npx jest tests/admin/ --watch",
+    "test:admin-login:coverage": "npx jest tests/admin/ --coverage",
+    "git-hooks:standard": "bash scripts/configure-git-hooks.sh standard",
+    "git-hooks:admin-tests": "bash scripts/configure-git-hooks.sh admin-tests",
+    "git-hooks:fast": "bash scripts/configure-git-hooks.sh fast",
+    "git-hooks:comprehensive": "bash scripts/configure-git-hooks.sh comprehensive",
+    "git-hooks:status": "bash scripts/configure-git-hooks.sh status"
   },
   "dependencies": {
     "@daily-co/daily-js": "^0.84.0",

@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Brain, Compass, X } from 'lucide-react';
 import { useUserType } from '@/contexts/UserTypeContext';
+
+interface WindowWithTestFlags extends Window {
+  __DISABLE_GUIDANCE_MODALS__?: boolean;
+  __TEST_MODE__?: boolean;
+}
 
 interface FirstVisitModalProps {
   isOpen: boolean;
@@ -11,19 +16,19 @@ export const FirstVisitModal: React.FC<FirstVisitModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  // Don't show modal during testing
-  if (
-    typeof window !== 'undefined' &&
-    ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
-      (window as any).__TEST_MODE__)
-  ) {
-    return null;
-  }
-
   const { setUserType, setHasCompletedOnboarding } = useUserType();
   const [selectedType, setSelectedType] = useState<
     'guided' | 'self-directed' | null
   >(null);
+
+  // Don't show modal during testing
+  if (
+    typeof window !== 'undefined' &&
+    ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
+      (window as WindowWithTestFlags).__TEST_MODE__)
+  ) {
+    return null;
+  }
 
   const handleSelect = (type: 'guided' | 'self-directed') => {
     setSelectedType(type);
@@ -61,8 +66,8 @@ export const FirstVisitModal: React.FC<FirstVisitModalProps> = ({
             Welcome to Elzatona web 🚀
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Let's personalize your learning experience. How do you prefer to
-            learn?
+            Let&apos;s personalize your learning experience. How do you prefer
+            to learn?
           </p>
         </div>
 
@@ -132,7 +137,7 @@ export const FirstVisitModal: React.FC<FirstVisitModalProps> = ({
                 />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                I'm self-directed
+                I&apos;m self-directed
               </h3>
             </div>
             <p className="text-gray-600 dark:text-gray-300">

@@ -16,6 +16,13 @@ interface ProgressIndicatorProps {
   compact?: boolean;
 }
 
+interface WindowWithGuidance extends Window {
+  triggerSignInGuidance?: (
+    trigger: string,
+    context: Record<string, unknown>
+  ) => void;
+}
+
 export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   showSignInPrompt = true,
   compact = false,
@@ -36,9 +43,9 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   const handleSignInClick = () => {
     if (
       typeof window !== 'undefined' &&
-      (window as any).triggerSignInGuidance
+      (window as WindowWithGuidance).triggerSignInGuidance
     ) {
-      (window as any).triggerSignInGuidance('manual', {
+      (window as WindowWithGuidance).triggerSignInGuidance('manual', {
         progressCount: progress.completedQuestions,
         roadmapSections: progress.roadmapSections.length,
       });

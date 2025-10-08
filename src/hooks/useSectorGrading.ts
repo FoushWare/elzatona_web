@@ -1,5 +1,23 @@
 import { useState, useRef } from 'react';
 
+// Type definitions for learning path data
+interface LearningPath {
+  id: string;
+  name: string;
+  description: string;
+  sectors: Sector[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Sector {
+  id: string;
+  name: string;
+  order: number;
+  totalQuestions: number;
+  description?: string;
+}
+
 export interface SectorGrade {
   sectorId: string;
   sectorName: string;
@@ -97,7 +115,7 @@ export const useSectorGrading = (pathId?: string) => {
         }
 
         const currentPath = pathsData.data.find(
-          (path: any) => path.id === pathId
+          (path: LearningPath) => path.id === pathId
         );
         console.log('🔍 Current path found:', currentPath);
         if (!currentPath) {
@@ -105,25 +123,27 @@ export const useSectorGrading = (pathId?: string) => {
         }
 
         // Convert sectors to SectorGrade format
-        const sectorGrades: SectorGrade[] = sectorsList.map((sector: any) => {
-          const totalQuestions = sector.totalQuestions || 0;
+        const sectorGrades: SectorGrade[] = sectorsList.map(
+          (sector: Sector) => {
+            const totalQuestions = sector.totalQuestions || 0;
 
-          // TODO: Replace with real user progress data from Firebase
-          // For now, initialize with 0 progress
-          const correctAnswers = 0;
-          const percentage = 0;
+            // TODO: Replace with real user progress data from Firebase
+            // For now, initialize with 0 progress
+            const correctAnswers = 0;
+            const percentage = 0;
 
-          return {
-            sectorId: sector.id,
-            sectorName: sector.name,
-            sectorOrder: sector.order || 0,
-            totalQuestions,
-            correctAnswers,
-            grade: calculateGrade(percentage),
-            percentage,
-            isCompleted: false, // Will be updated when user completes questions
-          };
-        });
+            return {
+              sectorId: sector.id,
+              sectorName: sector.name,
+              sectorOrder: sector.order || 0,
+              totalQuestions,
+              correctAnswers,
+              grade: calculateGrade(percentage),
+              percentage,
+              isCompleted: false, // Will be updated when user completes questions
+            };
+          }
+        );
 
         // Sort sectors by order
         sectorGrades.sort((a, b) => a.sectorOrder - b.sectorOrder);
@@ -163,9 +183,11 @@ export const useSectorGrading = (pathId?: string) => {
         });
 
         console.log('✅ Sectors data set successfully');
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('❌ Error fetching sector data:', err);
-        setError(err.message || 'Failed to load sector data');
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to load sector data';
+        setError(errorMessage);
       } finally {
         console.log('🔄 Setting loading to false');
         setIsLoading(false);

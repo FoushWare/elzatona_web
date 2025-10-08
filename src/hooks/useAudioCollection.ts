@@ -2,6 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { AudioCollectionService } from '@/lib/audio-collection-service';
 import { QuestionAudioMapping } from '@/lib/audio-collection-schema';
 
+interface AudioInfo {
+  path: string;
+  duration?: number;
+  size?: number;
+  format?: string;
+}
+
 export interface UseAudioCollectionReturn {
   // State
   audioMappings: QuestionAudioMapping[];
@@ -20,7 +27,7 @@ export interface UseAudioCollectionReturn {
   updateAudioFile: (
     questionId: string,
     audioType: 'questionAudio' | 'answerAudio',
-    audioInfo: any
+    audioInfo: AudioInfo
   ) => Promise<boolean>;
   createAudioMapping: (
     questionId: string,
@@ -140,7 +147,7 @@ export function useAudioCollection(): UseAudioCollectionReturn {
     async (
       questionId: string,
       audioType: 'questionAudio' | 'answerAudio',
-      audioInfo: any
+      audioInfo: AudioInfo
     ): Promise<boolean> => {
       try {
         setIsLoading(true);

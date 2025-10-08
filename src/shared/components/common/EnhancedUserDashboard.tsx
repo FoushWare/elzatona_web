@@ -329,7 +329,7 @@ export default function EnhancedUserDashboard() {
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             Start learning to see your progress and achievements.
           </p>
-          <Link href="/guided-learning">
+          <Link href="/features/guided-learning">
             <Button className="bg-red-600 hover:bg-red-700">
               Start Learning
             </Button>
@@ -760,7 +760,7 @@ export default function EnhancedUserDashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Link href="/guided-learning">
+              <Link href="/features/guided-learning">
                 <Button className="w-full bg-red-600 hover:bg-red-700">
                   <BookOpen className="w-4 h-4 mr-2" />
                   Start Learning Plan

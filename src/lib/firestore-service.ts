@@ -15,12 +15,11 @@ import {
   orderBy,
   limit,
   getDocs,
-  Timestamp,
   serverTimestamp,
   increment,
   arrayUnion,
-  arrayRemove,
   Firestore,
+  Timestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -32,21 +31,48 @@ const checkDb = (): Firestore => {
   return db;
 };
 import { firestoreConnectionManager } from './firestore-connection-manager';
-import {
-  FirestoreUser,
-  UserPreferences,
-  UserProgress,
-  UserAchievements,
-  LearningPlanProgress,
-  LearningSession,
-  SectionProgress,
-  WeeklyProgress,
-  MonthlyProgress,
-  DailyGoal,
-  Badge,
-  FirestoreQuestion,
-  UserAnalytics,
-} from '@/types/firestore';
+// Type definitions for service methods
+interface LearningPlanTemplate {
+  id: string;
+  name: string;
+  description: string;
+  duration: number;
+  difficulty: string;
+  topics: string[];
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
+interface LearningPath {
+  id: string;
+  name: string;
+  description: string;
+  topics: string[];
+  difficulty: string;
+  estimatedTime: number;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
+interface Section {
+  id: string;
+  name: string;
+  description: string;
+  topics: string[];
+  order: number;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  icon: string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
 
 class FirestoreService {
   constructor() {
@@ -474,7 +500,7 @@ class FirestoreService {
     }
   }
 
-  async getLearningPlanTemplates(): Promise<any[]> {
+  async getLearningPlanTemplates(): Promise<LearningPlanTemplate[]> {
     if (!db) {
       console.warn('Firestore not available');
       return [];
@@ -508,7 +534,7 @@ class FirestoreService {
       if (apiPlan) {
         console.log(
           '⚠️ FirestoreService: api-integration plan found in list:',
-          (apiPlan as any).name
+          (apiPlan as LearningPlanTemplate).name
         );
         console.log(
           '⚠️ FirestoreService: api-integration plan data:',
@@ -528,7 +554,9 @@ class FirestoreService {
     }
   }
 
-  async getLearningPlanTemplate(planId: string): Promise<any | null> {
+  async getLearningPlanTemplate(
+    planId: string
+  ): Promise<LearningPlanTemplate | null> {
     if (!db) {
       console.warn('Firestore not available');
       return null;
@@ -638,7 +666,7 @@ class FirestoreService {
   }
 
   // Learning Path Management
-  async getLearningPath(pathId: string): Promise<any | null> {
+  async getLearningPath(pathId: string): Promise<LearningPath | null> {
     if (!db) {
       console.warn('Firestore not available');
       return null;
@@ -661,7 +689,10 @@ class FirestoreService {
     }
   }
 
-  async updateLearningPath(pathId: string, data: any): Promise<any | null> {
+  async updateLearningPath(
+    pathId: string,
+    data: Partial<LearningPath>
+  ): Promise<LearningPath | null> {
     if (!db) {
       console.warn('Firestore not available');
       return null;
@@ -706,7 +737,7 @@ class FirestoreService {
   }
 
   // Section Management
-  async getAllSections(): Promise<any[]> {
+  async getAllSections(): Promise<Section[]> {
     if (!db) {
       console.warn('Firestore not available');
       return [];
@@ -732,7 +763,9 @@ class FirestoreService {
     }
   }
 
-  async createSection(sectionData: any): Promise<any> {
+  async createSection(
+    sectionData: Omit<Section, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<Section> {
     if (!db) {
       throw new Error('Firestore not available');
     }
@@ -757,7 +790,10 @@ class FirestoreService {
     }
   }
 
-  async updateSection(sectionId: string, updates: any): Promise<any> {
+  async updateSection(
+    sectionId: string,
+    updates: Partial<Section>
+  ): Promise<Section | null> {
     if (!db) {
       throw new Error('Firestore not available');
     }
@@ -805,7 +841,7 @@ class FirestoreService {
   }
 
   // Category Management
-  async getAllCategories(): Promise<any[]> {
+  async getAllCategories(): Promise<Category[]> {
     if (!db) {
       console.warn('Firestore not available');
       return [];
@@ -831,7 +867,9 @@ class FirestoreService {
     }
   }
 
-  async createCategory(categoryData: any): Promise<any> {
+  async createCategory(
+    categoryData: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<Category> {
     if (!db) {
       throw new Error('Firestore not available');
     }
@@ -856,7 +894,10 @@ class FirestoreService {
     }
   }
 
-  async updateCategory(categoryId: string, updates: any): Promise<any> {
+  async updateCategory(
+    categoryId: string,
+    updates: Partial<Category>
+  ): Promise<Category | null> {
     if (!db) {
       throw new Error('Firestore not available');
     }

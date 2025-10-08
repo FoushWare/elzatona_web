@@ -1,0 +1,111 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo ""
+echo "════════════════════════════════════════════════════════════════"
+echo "🚀 PRE-PUSH HOOK STARTING..."
+echo "════════════════════════════════════════════════════════════════"
+echo ""
+
+# Get the current branch name
+current_branch=$(git branch --show-current)
+echo "📍 Current branch: $current_branch"
+echo ""
+
+# Only run build check on development branches
+if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_branch" == "develop" ]] || [[ "$current_branch" == "main" ]]; then
+  echo "🔄 Running pre-push checks on development branch..."
+  echo ""
+  
+  # Step 1: Build check
+  echo "🏗️  STEP 1: Running build validation..."
+  echo "   📦 Executing: npm run build"
+  echo "   ⏳ This may take a moment..."
+  echo ""
+  
+  # Run build with detailed output
+  npm run build
+  BUILD_EXIT_CODE=$?
+  
+  echo ""
+  if [ $BUILD_EXIT_CODE -ne 0 ]; then
+    echo "   ❌ Build failed with exit code: $BUILD_EXIT_CODE"
+    echo "   💡 Please fix build issues before pushing"
+    echo ""
+    echo "════════════════════════════════════════════════════════════════"
+    echo "❌ PRE-PUSH HOOK FAILED - BUILD ERRORS DETECTED!"
+    echo "════════════════════════════════════════════════════════════════"
+    echo ""
+    exit 1
+  else
+    echo "   ✅ Build completed successfully!"
+  fi
+  echo ""
+  
+  # Step 2: Clean up build files after successful build
+  echo "🧹 STEP 2: Cleaning build files..."
+  
+  echo "   🗑️  Removing .next directory..."
+  if [ -d ".next" ]; then
+    rm -rf .next
+    echo "   ✅ .next directory removed"
+  else
+    echo "   ℹ️  .next directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing build directory..."
+  if [ -d "build" ]; then
+    rm -rf build
+    echo "   ✅ build directory removed"
+  else
+    echo "   ℹ️  build directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing storybook-static directory..."
+  if [ -d "storybook-static" ]; then
+    rm -rf storybook-static
+    echo "   ✅ storybook-static directory removed"
+  else
+    echo "   ℹ️  storybook-static directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing test-results directory..."
+  if [ -d "test-results" ]; then
+    rm -rf test-results
+    echo "   ✅ test-results directory removed"
+  else
+    echo "   ℹ️  test-results directory not found (already clean)"
+  fi
+  
+  echo "   🗑️  Removing coverage directory..."
+  if [ -d "coverage" ]; then
+    rm -rf coverage
+    echo "   ✅ coverage directory removed"
+  else
+    echo "   ℹ️  coverage directory not found (already clean)"
+  fi
+  
+  echo "   ℹ️  Keeping tsconfig.tsbuildinfo (helps with incremental builds)"
+  echo ""
+  
+  # Step 3: Final status
+  echo "📊 PRE-PUSH SUMMARY:"
+  echo "   ✅ Build validation passed"
+  echo "   ✅ Build files cleaned"
+  echo "   ✅ Ready for push"
+  echo ""
+  echo "════════════════════════════════════════════════════════════════"
+  echo "✅ PRE-PUSH CHECKS COMPLETED SUCCESSFULLY!"
+  echo "🚀 READY TO PUSH TO REMOTE REPOSITORY!"
+  echo "════════════════════════════════════════════════════════════════"
+  echo ""
+else
+  echo "ℹ️  Branch '$current_branch' is not a development branch"
+  echo "💡 Pre-push checks only run on: main, develop, release/v1.0.0-main-website"
+  echo ""
+  echo "════════════════════════════════════════════════════════════════"
+  echo "ℹ️  PRE-PUSH HOOK SKIPPED (Non-development branch)"
+  echo "🚀 READY TO PUSH!"
+  echo "════════════════════════════════════════════════════════════════"
+  echo ""
+fi

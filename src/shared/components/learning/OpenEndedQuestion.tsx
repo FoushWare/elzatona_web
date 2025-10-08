@@ -4,15 +4,24 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { UnifiedQuestion } from '@/lib/unified-question-schema';
 
+interface OpenEndedQuestionExtended extends UnifiedQuestion {
+  expectedAnswer?: string;
+  aiValidationPrompt?: string;
+  acceptPartialCredit?: boolean;
+}
+
+interface ValidationResult {
+  isCorrect: boolean;
+  feedback: string;
+  score?: number;
+}
+
 interface OpenEndedQuestionProps {
-  question: UnifiedQuestion;
-  onAnswer: (
-    answer: string,
-    validation: { isCorrect: boolean; feedback: string }
-  ) => void;
+  question: OpenEndedQuestionExtended;
+  onAnswer: (answer: string, validation: ValidationResult) => void;
   isAnswered?: boolean;
   userAnswer?: string;
-  validationResult?: { isCorrect: boolean; feedback: string } | null;
+  validationResult?: ValidationResult | null;
 }
 
 export function OpenEndedQuestion({
@@ -44,9 +53,9 @@ export function OpenEndedQuestion({
         body: JSON.stringify({
           question: question.content,
           userAnswer: answer.trim(),
-          expectedAnswer: (question as any).expectedAnswer || '',
-          customPrompt: (question as any).aiValidationPrompt || '',
-          acceptPartialCredit: (question as any).acceptPartialCredit || false,
+          expectedAnswer: question.expectedAnswer || '',
+          customPrompt: question.aiValidationPrompt || '',
+          acceptPartialCredit: question.acceptPartialCredit || false,
         }),
       });
 
@@ -145,10 +154,10 @@ export function OpenEndedQuestion({
               AI Validation Result
             </h4>
             <div
-              className={`px-3 py-1 rounded-full text-sm font-medium ${getScoreColor((validationResult as any).score || 0)}`}
+              className={`px-3 py-1 rounded-full text-sm font-medium ${getScoreColor(validationResult.score || 0)}`}
             >
-              {getScoreIcon((validationResult as any).score || 0)}{' '}
-              {(validationResult as any).score || 0}%
+              {getScoreIcon(validationResult.score || 0)}{' '}
+              {validationResult.score || 0}%
             </div>
           </div>
 
