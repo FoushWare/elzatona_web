@@ -110,6 +110,13 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
       pathname,
     });
 
+    // Redirect authenticated users away from login page
+    if (isAuthenticated && isLoginPage) {
+      console.log('✅ User already authenticated, redirecting to dashboard');
+      router.replace('/admin/dashboard');
+      return;
+    }
+
     // Only redirect from protected routes, not from /admin root or login
     if (!isAuthenticated && isProtectedRoute) {
       console.log(
@@ -135,6 +142,10 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
 
         setUser(result.admin);
         setIsAuthenticated(true);
+
+        // Redirect to admin dashboard after successful login
+        console.log('✅ Login successful, redirecting to admin dashboard');
+        router.push('/admin/dashboard');
 
         return { success: true };
       } else {
