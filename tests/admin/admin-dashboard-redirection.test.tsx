@@ -10,7 +10,8 @@
 
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { AdminAuthProvider } from '@/contexts/AdminAuthContext';
 import AdminLoginPage from '@/app/admin/login/page';
 import AdminDashboardPage from '@/app/admin/dashboard/page';
@@ -51,9 +52,9 @@ describe('Admin Dashboard Redirection', () => {
   const mockPush = jest.fn();
   const mockReplace = jest.fn();
   const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-  const mockUseAdminAuth = jest.mocked(
-    require('@/contexts/AdminAuthContext').useAdminAuth
-  ) as jest.MockedFunction<() => MockAdminAuth>;
+  const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<
+    () => MockAdminAuth
+  >;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -387,9 +388,7 @@ describe('Admin Dashboard Redirection', () => {
   describe('Navigation Flow', () => {
     it('should handle direct navigation to admin root', () => {
       // Mock usePathname to return /admin
-      const mockUsePathname = jest.mocked(
-        require('next/navigation').usePathname
-      ) as jest.MockedFunction<() => string>;
+      const mockUsePathname = usePathname as jest.MockedFunction<() => string>;
       mockUsePathname.mockReturnValue('/admin');
 
       mockUseAdminAuth.mockReturnValue({
@@ -406,9 +405,7 @@ describe('Admin Dashboard Redirection', () => {
     });
 
     it('should handle navigation to protected admin routes', () => {
-      const mockUsePathname = jest.mocked(
-        require('next/navigation').usePathname
-      ) as jest.MockedFunction<() => string>;
+      const mockUsePathname = usePathname as jest.MockedFunction<() => string>;
       mockUsePathname.mockReturnValue('/admin/questions');
 
       mockUseAdminAuth.mockReturnValue({
