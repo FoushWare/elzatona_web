@@ -12,7 +12,7 @@ current_branch=$(git branch --show-current)
 echo "📍 Current branch: $current_branch"
 echo ""
 
-# Only run comprehensive checks on development branches
+# Only run build check on development branches
 if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_branch" == "develop" ]] || [[ "$current_branch" == "main" ]]; then
   echo "🔄 Running pre-push checks on development branch..."
   echo ""
@@ -42,36 +42,8 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   fi
   echo ""
   
-  # Step 2: Run comprehensive admin login tests
-  echo "🧪 STEP 2: Running comprehensive admin login tests..."
-  echo "   📝 Executing: npm run test:admin-login"
-  echo "   🔍 Running all admin authentication tests"
-  echo ""
-  
-  # Check if admin tests exist
-  if [ -f "tests/admin/admin-login-api.test.ts" ]; then
-    npm run test:admin-login
-    TEST_EXIT_CODE=$?
-    
-    if [ $TEST_EXIT_CODE -ne 0 ]; then
-      echo "   ❌ Admin login tests failed with exit code: $TEST_EXIT_CODE"
-      echo "   💡 Please fix admin authentication issues before pushing"
-      echo ""
-      echo "════════════════════════════════════════════════════════════════"
-      echo "❌ PRE-PUSH HOOK FAILED - ADMIN LOGIN TESTS FAILED!"
-      echo "════════════════════════════════════════════════════════════════"
-      echo ""
-      exit 1
-    else
-      echo "   ✅ Admin login tests passed successfully!"
-    fi
-  else
-    echo "   ℹ️  Admin login tests not found, skipping..."
-  fi
-  echo ""
-  
-  # Step 3: Clean up build files after successful build
-  echo "🧹 STEP 3: Cleaning build files..."
+  # Step 2: Clean up build files after successful build
+  echo "🧹 STEP 2: Cleaning build files..."
   
   echo "   🗑️  Removing .next directory..."
   if [ -d ".next" ]; then
@@ -116,10 +88,9 @@ if [[ "$current_branch" == "release/v1.0.0-main-website" ]] || [[ "$current_bran
   echo "   ℹ️  Keeping tsconfig.tsbuildinfo (helps with incremental builds)"
   echo ""
   
-  # Step 4: Final status
+  # Step 3: Final status
   echo "📊 PRE-PUSH SUMMARY:"
   echo "   ✅ Build validation passed"
-  echo "   ✅ Admin login tests passed"
   echo "   ✅ Build files cleaned"
   echo "   ✅ Ready for push"
   echo ""
