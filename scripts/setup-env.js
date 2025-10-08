@@ -56,36 +56,6 @@ async function setupEnvironment() {
       default: 'zatonafoushware-super-secret-jwt-key-2024-production-ready',
     },
     {
-      key: 'ADMIN_PORT',
-      description: 'Port for admin server',
-      default: '3001',
-    },
-    {
-      key: 'WEB_PORT',
-      description: 'Port for web server',
-      default: '3000',
-    },
-    {
-      key: 'ADMIN_URL',
-      description: 'Admin server URL',
-      default: 'http://localhost:3001',
-    },
-    {
-      key: 'WEB_URL',
-      description: 'Web server URL',
-      default: 'http://localhost:3000',
-    },
-    {
-      key: 'NEXT_PUBLIC_WEB_URL',
-      description: 'Public web URL',
-      default: 'http://localhost:3000',
-    },
-    {
-      key: 'ADMIN_API_BASE_URL',
-      description: 'Admin API base URL',
-      default: 'http://localhost:3001/api',
-    },
-    {
       key: 'INITIAL_ADMIN_EMAIL',
       description: 'Initial admin email',
       default: 'afouadsoftwareengineer@gmail.com',
@@ -102,11 +72,72 @@ async function setupEnvironment() {
     },
   ];
 
+  // Optional environment variables (with dynamic defaults)
+  const optionalVars = [
+    {
+      key: 'PORT',
+      description: 'Port for the application (auto-detected if not set)',
+      default: '3000',
+      optional: true,
+    },
+    {
+      key: 'ADMIN_PORT',
+      description: 'Port for admin server (optional - uses PORT if not set)',
+      default: '3000',
+      optional: true,
+    },
+    {
+      key: 'WEB_PORT',
+      description: 'Port for web server (optional - uses PORT if not set)',
+      default: '3000',
+      optional: true,
+    },
+    {
+      key: 'ADMIN_URL',
+      description: 'Admin server URL (optional - auto-generated from port)',
+      default: 'http://localhost:3000',
+      optional: true,
+    },
+    {
+      key: 'WEB_URL',
+      description: 'Web server URL (optional - auto-generated from port)',
+      default: 'http://localhost:3000',
+      optional: true,
+    },
+    {
+      key: 'NEXT_PUBLIC_WEB_URL',
+      description: 'Public web URL (optional - auto-generated from port)',
+      default: 'http://localhost:3000',
+      optional: true,
+    },
+    {
+      key: 'ADMIN_API_BASE_URL',
+      description: 'Admin API base URL (optional - auto-generated from port)',
+      default: 'http://localhost:3000/api',
+      optional: true,
+    },
+  ];
+
   let envContent = fs.readFileSync(envPath, 'utf8');
 
+  // Handle required variables
   for (const variable of requiredVars) {
     const value = await question(
       `${variable.description} (${variable.key}) [${variable.default}]: `
+    );
+    const finalValue = value.trim() || variable.default;
+
+    // Replace the value in the .env file
+    const regex = new RegExp(`^${variable.key}=.*$`, 'm');
+    envContent = envContent.replace(regex, `${variable.key}=${finalValue}`);
+  }
+
+  console.log('\n📝 Optional configuration (press Enter to use defaults):\n');
+
+  // Handle optional variables
+  for (const variable of optionalVars) {
+    const value = await question(
+      `${variable.description} (${variable.key}) [${variable.default}] (optional): `
     );
     const finalValue = value.trim() || variable.default;
 

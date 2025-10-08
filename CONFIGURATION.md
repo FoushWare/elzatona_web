@@ -1,10 +1,10 @@
 # 🔧 Configuration Setup Guide
 
-This guide explains how to set up the environment configuration for the Elzatona Web application. **All environment variables are required** to ensure explicit configuration and prevent accidental use of insecure defaults.
+This guide explains how to set up the environment configuration for the Elzatona Web application. **Port and URL configuration is now dynamic** - the application automatically uses the actual running port, making setup much easier.
 
 ## 📋 Environment Variables
 
-**ALL environment variables are required** - no defaults are provided to ensure explicit configuration and prevent accidental use of insecure defaults.
+**Only essential variables are required** - port and URL configuration is now optional and automatically detected from the running process.
 
 ### Core Configuration (REQUIRED)
 
@@ -13,17 +13,18 @@ This guide explains how to set up the environment configuration for the Elzatona
 JWT_SECRET=your-super-secret-jwt-key-change-in-production
 JWT_EXPIRES_IN=24h
 
-# Port Configuration (REQUIRED)
-ADMIN_PORT=3001
-WEB_PORT=3000
+# Port Configuration (OPTIONAL - auto-detected)
+# PORT=3000  # Automatically detected from running process
+# ADMIN_PORT=3001  # Optional - defaults to same as PORT
+# WEB_PORT=3000    # Optional - defaults to same as PORT
 
-# URL Configuration (REQUIRED)
-ADMIN_URL=http://localhost:3001
-WEB_URL=http://localhost:3000
-NEXT_PUBLIC_WEB_URL=http://localhost:3000
+# URL Configuration (OPTIONAL - auto-generated)
+# ADMIN_URL=http://localhost:3001  # Auto-generated from port
+# WEB_URL=http://localhost:3000    # Auto-generated from port
+# NEXT_PUBLIC_WEB_URL=http://localhost:3000  # Auto-generated from port
 
-# API Configuration (REQUIRED)
-ADMIN_API_BASE_URL=http://localhost:3001/api
+# API Configuration (OPTIONAL - auto-generated)
+# ADMIN_API_BASE_URL=http://localhost:3001/api  # Auto-generated from port
 ADMIN_API_TIMEOUT=10000
 ```
 
