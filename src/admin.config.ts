@@ -19,21 +19,31 @@ export const adminConfig = {
     expiresIn: process.env.JWT_EXPIRES_IN || '24h',
   },
 
-  // Admin Port Configuration
+  // Dynamic Port Configuration
   port: {
-    admin: process.env.ADMIN_PORT,
-    web: process.env.WEB_PORT,
+    // Use actual port from process.env.PORT or default to 3000
+    web: process.env.PORT || process.env.WEB_PORT || '3000',
+    // Admin port can be different or same as web port
+    admin: process.env.ADMIN_PORT || process.env.PORT || '3000',
   },
 
-  // Admin URLs
+  // Dynamic URL Configuration
   urls: {
-    admin: process.env.ADMIN_URL,
-    web: process.env.WEB_URL,
+    // Use actual host and port from environment
+    web:
+      process.env.WEB_URL ||
+      `http://localhost:${process.env.PORT || process.env.WEB_PORT || '3000'}`,
+    admin:
+      process.env.ADMIN_URL ||
+      `http://localhost:${process.env.ADMIN_PORT || process.env.PORT || '3000'}`,
   },
 
-  // Admin API Configuration
+  // Dynamic API Configuration
   api: {
-    baseUrl: process.env.ADMIN_API_BASE_URL,
+    // Use actual port for API base URL
+    baseUrl:
+      process.env.ADMIN_API_BASE_URL ||
+      `http://localhost:${process.env.ADMIN_PORT || process.env.PORT || '3000'}/api`,
     timeout: parseInt(process.env.ADMIN_API_TIMEOUT || '10000'),
   },
 
@@ -85,14 +95,18 @@ export function validateAdminConfig() {
   // Required environment variables
   const requiredVars = [
     'JWT_SECRET',
+    'INITIAL_ADMIN_EMAIL',
+    'INITIAL_ADMIN_PASSWORD',
+    'INITIAL_ADMIN_NAME',
+  ];
+
+  // Optional environment variables (with dynamic defaults)
+  const optionalVars = [
     'ADMIN_PORT',
     'WEB_PORT',
     'ADMIN_URL',
     'WEB_URL',
     'ADMIN_API_BASE_URL',
-    'INITIAL_ADMIN_EMAIL',
-    'INITIAL_ADMIN_PASSWORD',
-    'INITIAL_ADMIN_NAME',
   ];
 
   for (const varName of requiredVars) {
