@@ -9,6 +9,30 @@ interface SignInGuidanceDetectorProps {
   userId?: string;
 }
 
+interface GuidanceContext {
+  progress?: {
+    completedQuestions: number;
+    totalQuestions: number;
+    percentage: number;
+  };
+  roadmap?: {
+    topics: string[];
+    estimatedTime: string;
+  };
+  achievements?: {
+    badges: string[];
+    streak: number;
+  };
+  deviceSwitch?: {
+    fromDevice: string;
+    toDevice: string;
+  };
+}
+
+interface WindowWithGuidance extends WindowWithTestFlags {
+  triggerSignInGuidance?: (trigger: string, context: GuidanceContext) => void;
+}
+
 export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
   userId,
 }) => {
@@ -16,7 +40,7 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
   const [guidanceTrigger, setGuidanceTrigger] = useState<
     'progress' | 'roadmap' | 'achievement' | 'device-switch' | 'manual'
   >('manual');
-  const [guidanceContext, setGuidanceContext] = useState<any>({});
+  const [guidanceContext, setGuidanceContext] = useState<GuidanceContext>({});
   const router = useRouter();
   const pathname = usePathname();
 
@@ -32,8 +56,8 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
     // Don't show guidance during testing
     if (
       typeof window !== 'undefined' &&
-      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
-        (window as any).__TEST_MODE__)
+      ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as WindowWithTestFlags).__TEST_MODE__)
     ) {
       return;
     }
@@ -125,8 +149,8 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
     // Don't show guidance during testing
     if (
       typeof window !== 'undefined' &&
-      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
-        (window as any).__TEST_MODE__)
+      ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as WindowWithTestFlags).__TEST_MODE__)
     ) {
       return;
     }
@@ -171,13 +195,13 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
       | 'achievement'
       | 'device-switch'
       | 'manual',
-    context: any = {}
+    context: GuidanceContext = {}
   ) => {
     // Don't show guidance during testing
     if (
       typeof window !== 'undefined' &&
-      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
-        (window as any).__TEST_MODE__)
+      ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as WindowWithTestFlags).__TEST_MODE__)
     ) {
       return;
     }
@@ -189,9 +213,10 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
 
   // Expose trigger function globally for other components
   useEffect(() => {
-    (window as any).triggerSignInGuidance = triggerSignInGuidance;
+    (window as WindowWithGuidance).triggerSignInGuidance =
+      triggerSignInGuidance;
     return () => {
-      delete (window as any).triggerSignInGuidance;
+      delete (window as WindowWithGuidance).triggerSignInGuidance;
     };
   }, []);
 

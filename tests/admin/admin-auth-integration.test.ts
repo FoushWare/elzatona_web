@@ -14,6 +14,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { POST as authPOST } from '@/app/api/admin/auth/route';
 import { POST as logoutPOST } from '@/app/api/auth/clear-cookie/route';
 import jwt from 'jsonwebtoken';
+import { AdminAuthService } from '@/lib/admin-auth';
 
 // Mock Firebase
 jest.mock('@/lib/firebase', () => ({
@@ -34,7 +35,9 @@ jest.mock('@/lib/admin-auth', () => ({
 }));
 
 describe('Admin Authentication Integration', () => {
-  const mockAdminAuthService = require('@/lib/admin-auth').AdminAuthService;
+  const mockAdminAuthService = AdminAuthService as jest.Mocked<
+    typeof AdminAuthService
+  >;
 
   beforeEach(() => {
     jest.clearAllMocks();
