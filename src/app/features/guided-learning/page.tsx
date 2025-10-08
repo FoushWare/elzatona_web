@@ -350,19 +350,8 @@ export default function GuidedLearningPage() {
     );
   }
 
-  // Show loading state while checking authentication
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600 dark:text-gray-300">
-            Redirecting to get started...
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // Allow non-authenticated users to explore but encourage sign-in
+  // Remove the authentication requirement to align with design document
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 py-8">
@@ -431,6 +420,23 @@ export default function GuidedLearningPage() {
             </div>
           </div>
         </div>
+
+        {/* Sign-in Encouragement for Non-authenticated Users */}
+        {!isAuthenticated && (
+          <div className="mb-8 text-center">
+            <div className="inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+              <Star className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="text-left">
+                <p className="text-blue-800 dark:text-blue-200 font-medium">
+                  💡 You can explore freely, but sign in to save your progress!
+                </p>
+                <p className="text-blue-600 dark:text-blue-300 text-sm">
+                  Your progress will be saved across devices and sessions
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* User Status */}
         {isAuthenticated && (
