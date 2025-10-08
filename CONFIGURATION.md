@@ -1,28 +1,28 @@
 # 🔧 Configuration Setup Guide
 
-This guide explains how to set up the environment configuration for the Elzatona Web application without any hardcoded values.
+This guide explains how to set up the environment configuration for the Elzatona Web application with sensible defaults for development.
 
-## 📋 Required Environment Variables
+## 📋 Environment Variables
 
-**ALL environment variables are required - no defaults are provided.** This ensures production-ready configuration.
+**Most environment variables have sensible defaults for development.** Only JWT_SECRET is required for production security.
 
-### Core Configuration (Required)
+### Core Configuration (Optional with Defaults)
 
 ```bash
-# JWT Configuration
+# JWT Configuration (REQUIRED for production)
 JWT_SECRET=your-super-secret-jwt-key-change-in-production
 JWT_EXPIRES_IN=24h
 
-# Port Configuration
+# Port Configuration (Optional - defaults: 3001, 3000)
 ADMIN_PORT=3001
 WEB_PORT=3000
 
-# URL Configuration
+# URL Configuration (Optional - defaults: localhost URLs)
 ADMIN_URL=http://localhost:3001
 WEB_URL=http://localhost:3000
 NEXT_PUBLIC_WEB_URL=http://localhost:3000
 
-# API Configuration
+# API Configuration (Optional - defaults provided)
 ADMIN_API_BASE_URL=http://localhost:3001/api
 ADMIN_API_TIMEOUT=10000
 ```

@@ -32,15 +32,24 @@ A comprehensive learning system for frontend developers preparing for interviews
 #### **Guided Path**
 
 - **Structured Learning**: Pre-defined curriculum and timeline
-- **Time-Based Plans**: 1-7 days preparation options
-- **Admin-Managed**: Configurable question counts per section
+- **Time-Based Plans**: 1-7 days preparation options with cumulative question system
+- **Cumulative Question System**: Each plan includes all questions from previous plans plus new ones
+  - **1-Day Plan**: 100 questions (base questions)
+  - **2-Day Plan**: 1-Day questions + 2-Day specific questions
+  - **3-Day Plan**: 1-Day + 2-Day + 3-Day specific questions
+  - **4-Day Plan**: 1-Day + 2-Day + 3-Day + 4-Day specific questions
+  - **5-Day Plan**: 1-Day + 2-Day + 3-Day + 4-Day + 5-Day specific questions
+  - **6-Day Plan**: 1-Day + 2-Day + 3-Day + 4-Day + 5-Day + 6-Day specific questions
+  - **7-Day Plan**: All previous days + 7-Day specific questions
+- **Admin-Managed**: Configurable question counts per section and automatic cumulative assignment
 - **Card-Based Structure**: Four main learning cards per plan:
   - **Core Technologies Card**: HTML, CSS, JavaScript, TypeScript
   - **Framework Questions Card**: React.js, Next.js, Vue.js, Angular, etc.
   - **Problem Solving Card**: Frontend-specific coding challenges
   - **System Design Card**: Frontend system design (e.g., Facebook feeds, Twitter timeline)
-- **Dynamic Content**: All cards populated from admin panel
+- **Dynamic Content**: All cards populated from admin panel with cumulative question distribution
 - **Integrated Learning**: Cards connect to questions and learning paths
+- **Question Tagging System**: Questions tagged as "included-in-plans" when added to guided learning
 
 #### **Free Style Path**
 
@@ -49,6 +58,11 @@ A comprehensive learning system for frontend developers preparing for interviews
   - **With Map Mode**: Custom roadmap creation with section selection
 - **Flexible Timeline**: 1-N days based on user preference
 - **Custom Question Counts**: User-defined questions per section
+- **Question Tagging System**: Questions tagged as "not-included" by default
+  - **Default Tag**: All questions start as "not-included-in-plans"
+  - **Plan Integration**: Questions automatically tagged as "included-in-plans" when added to guided learning plans
+  - **Freestyle Access**: Users can access both tagged and untagged questions in freestyle mode
+  - **Filtering Options**: Users can filter by tag status (included/not-included) for focused practice
 
 ### **4. Admin Management System**
 
@@ -87,12 +101,22 @@ A comprehensive learning system for frontend developers preparing for interviews
 
 #### **Guided Path Configuration**
 
-- **Time Plans**: Manage 1-7 day preparation schedules
+- **Time Plans**: Manage 1-7 day preparation schedules with cumulative question system
+- **Cumulative Question Assignment**:
+  - **Automatic Distribution**: When adding questions to a plan, automatically include in all subsequent plans
+  - **Plan 1 (1-Day)**: Base questions (100 questions)
+  - **Plan 2 (2-Day)**: Plan 1 questions + Plan 2 specific questions
+  - **Plan 3 (3-Day)**: Plan 1 + Plan 2 + Plan 3 specific questions
+  - **Plan 4 (4-Day)**: Plan 1 + Plan 2 + Plan 3 + Plan 4 specific questions
+  - **Plan 5 (5-Day)**: Plan 1 + Plan 2 + Plan 3 + Plan 4 + Plan 5 specific questions
+  - **Plan 6 (6-Day)**: Plan 1 + Plan 2 + Plan 3 + Plan 4 + Plan 5 + Plan 6 specific questions
+  - **Plan 7 (7-Day)**: All previous plans + Plan 7 specific questions
 - **Card-Based Learning**: Four structured learning cards per plan
-- **Question Distribution**: Set question counts per card per day
-- **Content Management**: Add/edit/remove questions and resources
+- **Question Distribution**: Set question counts per card per day with cumulative tracking
+- **Content Management**: Add/edit/remove questions and resources with automatic plan assignment
 - **Card Management**: Configure card types, difficulty, topics, and time limits
-- **Analytics Dashboard**: Track user progress and performance
+- **Question Tagging**: Automatic tagging of questions as "included-in-plans" when assigned to guided learning
+- **Analytics Dashboard**: Track user progress and performance across cumulative plans
 
 #### **Learning Cards Management**
 
@@ -181,6 +205,11 @@ A comprehensive learning system for frontend developers preparing for interviews
 - **Answer Management**: Provide and edit custom answers
 - **Account Association**: Link custom questions to user account
 - **Personal Library**: Organize and manage custom content
+- **Question Tagging System**:
+  - **Default Status**: All user-generated questions start as "not-included-in-plans"
+  - **Freestyle Access**: Available in freestyle learning mode immediately
+  - **Admin Review**: Questions can be reviewed and potentially added to guided learning plans
+  - **Tag Management**: Users can see tag status and request inclusion in guided plans
 
 ### **12. Admin Review System**
 
@@ -188,6 +217,112 @@ A comprehensive learning system for frontend developers preparing for interviews
 - **Quality Assessment**: Review and approve high-quality questions
 - **Attribution System**: Credit original question creators
 - **Moderation Tools**: Flag inappropriate or low-quality content
+- **Question Tag Management**:
+  - **Tag Assignment**: Change question tags from "not-included-in-plans" to "included-in-plans"
+  - **Plan Assignment**: Add approved questions to specific guided learning plans
+  - **Cumulative Distribution**: Automatically distribute questions to all subsequent plans when added to a plan
+  - **Tag Tracking**: Monitor which questions are included in which plans
+
+---
+
+## 🔄 **Cumulative Question System & Tagging Implementation**
+
+### **13. Cumulative Question Distribution System**
+
+#### **Question Assignment Logic**
+
+- **Base Questions (Plan 1)**: 100 core questions covering all four card types
+- **Progressive Addition**: Each subsequent plan adds new questions while retaining all previous questions
+- **Automatic Distribution**: When a question is added to Plan N, it automatically appears in Plans N+1 through 7
+- **Question Count Growth**:
+  - **Plan 1**: 100 questions
+  - **Plan 2**: 100 + 50 = 150 questions
+  - **Plan 3**: 150 + 50 = 200 questions
+  - **Plan 4**: 200 + 50 = 250 questions
+  - **Plan 5**: 250 + 50 = 300 questions
+  - **Plan 6**: 300 + 50 = 350 questions
+  - **Plan 7**: 350 + 50 = 400 questions
+
+#### **Card-Based Distribution**
+
+- **Core Technologies Card**: 25% of questions per plan
+- **Framework Questions Card**: 25% of questions per plan
+- **Problem Solving Card**: 25% of questions per plan
+- **System Design Card**: 25% of questions per plan
+- **Cumulative Tracking**: Each card shows total questions including all previous plans
+
+### **14. Question Tagging System**
+
+#### **Tag Types**
+
+- **"not-included-in-plans"**: Default status for all questions
+- **"included-in-plans"**: Questions assigned to guided learning plans
+- **"freestyle-only"**: Questions specifically for freestyle learning
+- **"user-generated"**: Questions created by users
+- **"admin-approved"**: User questions approved by admin
+
+#### **Tag Management Workflow**
+
+1. **Question Creation**: All new questions start with "not-included-in-plans" tag
+2. **Admin Assignment**: Admin assigns questions to specific plans
+3. **Automatic Tagging**: Questions automatically tagged as "included-in-plans" when assigned
+4. **Cumulative Distribution**: Questions distributed to all subsequent plans
+5. **Tag Updates**: Tags updated when questions moved between plans or removed
+
+#### **Freestyle Learning Integration**
+
+- **Access Control**: Freestyle users can access all questions regardless of tag
+- **Filtering Options**: Users can filter by tag status for focused practice
+- **Tag Visibility**: Users can see which questions are included in guided plans
+- **Custom Practice**: Create custom practice sessions with specific tag combinations
+
+### **15. Database Schema Updates**
+
+#### **Question Schema Extensions**
+
+```typescript
+interface Question {
+  // ... existing fields
+  tags: string[]; // Array of tag strings
+  planAssignments: number[]; // Array of plan IDs (1-7)
+  isIncludedInPlans: boolean; // Quick lookup for plan inclusion
+  cumulativePlans: number[]; // All plans this question appears in
+  createdForPlan: number | null; // Original plan assignment
+}
+```
+
+#### **Plan Schema Extensions**
+
+```typescript
+interface LearningPlan {
+  // ... existing fields
+  totalQuestions: number; // Cumulative question count
+  newQuestions: number; // Questions specific to this plan
+  cumulativeQuestions: Question[]; // All questions including previous plans
+  questionDistribution: {
+    coreTechnologies: number;
+    frameworkQuestions: number;
+    problemSolving: number;
+    systemDesign: number;
+  };
+}
+```
+
+### **16. Admin Interface Enhancements**
+
+#### **Question Management**
+
+- **Tag Management Panel**: Bulk tag assignment and filtering
+- **Plan Assignment Interface**: Visual plan selection with cumulative preview
+- **Question Distribution View**: See how questions are distributed across plans
+- **Cumulative Preview**: Preview total questions for each plan
+
+#### **Plan Configuration**
+
+- **Cumulative Question Counter**: Real-time count of questions per plan
+- **Distribution Visualization**: Charts showing question distribution across plans
+- **Bulk Operations**: Add/remove questions from multiple plans simultaneously
+- **Plan Comparison**: Compare question sets between different plans
 
 ---
 
@@ -345,6 +480,8 @@ A comprehensive learning system for frontend developers preparing for interviews
 
 #### **Critical Gaps**
 
+- ❌ **Cumulative Question System**: No automatic question distribution across plans
+- ❌ **Question Tagging System**: No tagging system for plan inclusion status
 - ❌ **User-Generated Questions**: No custom question creation interface
 - ❌ **Admin Review System**: No moderation for user-submitted content
 
@@ -356,14 +493,17 @@ A comprehensive learning system for frontend developers preparing for interviews
 - ❌ **Achievement System**: Limited gamification elements
 - ❌ **Card Practice Interface**: Individual card practice sessions
 - ❌ **Card Review System**: Review completed cards and progress
+- ❌ **Plan Comparison Interface**: Visual comparison between different plans
+- ❌ **Bulk Question Management**: Admin tools for managing question assignments
 
 ### 🎯 **NEXT STEPS**
 
 1. **Phase 1 (Week 1-2)**: ✅ **COMPLETED** - Card-based guided learning system implemented
 2. **Phase 2 (Week 3-4)**: ✅ **COMPLETED** - Admin card management and question integration
-3. **Phase 3 (Week 5-6)**: Implement card practice interface and review system
+3. **Phase 3 (Week 5-6)**: Implement cumulative question system and tagging
 4. **Phase 4 (Week 7-8)**: Add user-generated questions and admin review
-5. **Phase 5 (Week 9-10)**: Implement advanced analytics
+5. **Phase 5 (Week 9-10)**: Implement advanced analytics and plan comparison
+6. **Phase 6 (Week 11-12)**: Add bulk question management and enhanced admin tools
 
 ## 🚀 **IMPLEMENTATION SUMMARY**
 
@@ -442,7 +582,30 @@ The card-based guided learning system has been successfully implemented with the
 
 The card-based guided learning system is now **fully functional** and ready for use! Users can access the admin panel to manage cards, and the website will display these cards in the guided learning interface.
 
-**Next Phase**: Implement individual card practice sessions and review functionality.
+**Next Phase**: Implement cumulative question system, tagging, and individual card practice sessions.
+
+### **Cumulative Question System - PENDING IMPLEMENTATION**
+
+#### **Required Database Changes**
+
+- **Question Schema Updates**: Add tagging and plan assignment fields
+- **Plan Schema Updates**: Add cumulative question tracking
+- **Migration Scripts**: Update existing questions with default tags
+- **Indexing**: Optimize queries for tag-based filtering
+
+#### **Required Admin Interface Updates**
+
+- **Question Management**: Add tag management and plan assignment interface
+- **Plan Configuration**: Add cumulative question preview and distribution tools
+- **Bulk Operations**: Add tools for managing multiple questions across plans
+- **Analytics**: Add cumulative question tracking and reporting
+
+#### **Required User Interface Updates**
+
+- **Freestyle Filtering**: Add tag-based filtering options
+- **Plan Comparison**: Show cumulative question counts for each plan
+- **Tag Visibility**: Display question inclusion status in freestyle mode
+- **Progress Tracking**: Update progress tracking for cumulative questions
 
 This comprehensive learning system is well on its way to becoming the go-to resource for frontend interview preparation! 🚀📚💻
 

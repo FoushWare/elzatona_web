@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
-import { adminConfig } from '@/config/admin';
+import { adminConfig } from '@/admin.config';
 
 export async function POST(request: NextRequest) {
   try {
