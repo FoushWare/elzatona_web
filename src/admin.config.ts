@@ -21,19 +21,19 @@ export const adminConfig = {
 
   // Admin Port Configuration
   port: {
-    admin: process.env.ADMIN_PORT || '3001',
-    web: process.env.WEB_PORT || '3000',
+    admin: process.env.ADMIN_PORT,
+    web: process.env.WEB_PORT,
   },
 
   // Admin URLs
   urls: {
-    admin: process.env.ADMIN_URL || 'http://localhost:3001',
-    web: process.env.WEB_URL || 'http://localhost:3000',
+    admin: process.env.ADMIN_URL,
+    web: process.env.WEB_URL,
   },
 
   // Admin API Configuration
   api: {
-    baseUrl: process.env.ADMIN_API_BASE_URL || 'http://localhost:3001/api',
+    baseUrl: process.env.ADMIN_API_BASE_URL,
     timeout: parseInt(process.env.ADMIN_API_TIMEOUT || '10000'),
   },
 
@@ -42,10 +42,9 @@ export const adminConfig = {
     // These should only be used for initial setup
     // In production, admins should be created through the admin panel
     initialAdmin: {
-      email:
-        process.env.INITIAL_ADMIN_EMAIL || 'afouadsoftwareengineer@gmail.com',
-      password: process.env.INITIAL_ADMIN_PASSWORD || 'zatonafoushware$8888',
-      name: process.env.INITIAL_ADMIN_NAME || 'Ahmed Fouad',
+      email: process.env.INITIAL_ADMIN_EMAIL,
+      password: process.env.INITIAL_ADMIN_PASSWORD,
+      name: process.env.INITIAL_ADMIN_NAME,
       role:
         (process.env.INITIAL_ADMIN_ROLE as 'super_admin' | 'admin') ||
         'super_admin',
@@ -83,22 +82,31 @@ export function validateAdminConfig() {
 
   const errors: string[] = [];
 
-  // Only validate JWT_SECRET as it's the most critical
-  if (
-    !process.env.JWT_SECRET ||
-    process.env.JWT_SECRET === 'your-secret-key-change-in-production'
-  ) {
-    errors.push('JWT_SECRET must be set and should not be the default value');
+  // Required environment variables
+  const requiredVars = [
+    'JWT_SECRET',
+    'ADMIN_PORT',
+    'WEB_PORT',
+    'ADMIN_URL',
+    'WEB_URL',
+    'ADMIN_API_BASE_URL',
+    'INITIAL_ADMIN_EMAIL',
+    'INITIAL_ADMIN_PASSWORD',
+    'INITIAL_ADMIN_NAME',
+  ];
+
+  for (const varName of requiredVars) {
+    if (!process.env[varName]) {
+      errors.push(`${varName} must be set in environment variables`);
+    }
   }
 
-  if (process.env.NODE_ENV === 'production') {
-    if (!process.env.INITIAL_ADMIN_EMAIL) {
-      errors.push('INITIAL_ADMIN_EMAIL must be set in production');
-    }
-
-    if (!process.env.INITIAL_ADMIN_PASSWORD) {
-      errors.push('INITIAL_ADMIN_PASSWORD must be set in production');
-    }
+  // Validate JWT_SECRET is not default
+  if (
+    process.env.JWT_SECRET === 'your-secret-key-change-in-production' ||
+    process.env.JWT_SECRET === 'dev-secret-key-change-in-production'
+  ) {
+    errors.push('JWT_SECRET must be set to a secure value, not the default');
   }
 
   if (errors.length > 0) {
