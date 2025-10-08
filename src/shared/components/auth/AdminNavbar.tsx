@@ -32,6 +32,19 @@ export default function AdminNavbar() {
   const { isAuthenticated, user, logout } = useAdminAuth();
   const router = useRouter();
 
+  // Debug: Log user data
+  useEffect(() => {
+    if (user) {
+      console.log('🔍 AdminNavbar user data:', {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        fullUser: user,
+      });
+    }
+  }, [user]);
+
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
