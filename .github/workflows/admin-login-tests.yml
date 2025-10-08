@@ -1,0 +1,118 @@
+name: Admin Login Tests CI/CD
+
+on:
+  push:
+    branches: [main, develop, release/v1.0.0-main-website]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  admin-login-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run admin login tests
+        run: npm run test:admin-login
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'test-jwt-secret-key' }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID || 'test-project' }}
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY || 'test-api-key' }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN || 'test-project.firebaseapp.com' }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET || 'test-project.firebasestorage.app' }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID || '123456789' }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID || '1:123456789:web:test' }}
+          NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID || 'G-TEST123' }}
+
+      - name: Run admin login tests with coverage
+        run: npm run test:admin-login:coverage
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'test-jwt-secret-key' }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID || 'test-project' }}
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY || 'test-api-key' }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN || 'test-project.firebaseapp.com' }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET || 'test-project.firebasestorage.app' }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID || '123456789' }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID || '1:123456789:web:test' }}
+          NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID || 'G-TEST123' }}
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: admin-login-tests
+          name: admin-login-coverage
+
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // Read test results if available
+            let testResults = '✅ Admin login tests passed successfully!';
+
+            try {
+              if (fs.existsSync('coverage/lcov-report/index.html')) {
+                testResults += '\n\n📊 Coverage report generated successfully.';
+              }
+            } catch (error) {
+              console.log('No coverage report found');
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🧪 Admin Login Tests Results
+              
+              ${testResults}
+              
+              **Node.js Version:** ${{ matrix.node-version }}
+              **Branch:** ${{ github.head_ref || github.ref_name }}
+              **Commit:** ${{ github.sha }}
+              
+              All admin authentication functionality has been validated.`
+            });
+
+  build-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run build check
+        run: npm run build:check
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Check for TypeScript errors
+        run: npx tsc --noEmit
