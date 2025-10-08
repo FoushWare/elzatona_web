@@ -23,7 +23,10 @@
     "cleanup:project": "node scripts/cleanup-project.js",
     "health-check": "node scripts/project-health-check.js",
     "maintenance": "npm run cleanup:project && npm run health-check",
-    "setup-env": "node scripts/setup-env.js"
+    "setup-env": "node scripts/setup-env.js",
+    "test:admin-login": "node scripts/run-admin-login-tests.js",
+    "test:admin-login:watch": "npx jest tests/admin/ --watch",
+    "test:admin-login:coverage": "npx jest tests/admin/ --coverage"
   },
   "dependencies": {
     "@daily-co/daily-js": "^0.84.0",
