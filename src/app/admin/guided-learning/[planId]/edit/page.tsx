@@ -306,16 +306,18 @@ export default function PlanEditorPage() {
           : Object.values(data.data.sections);
 
         const allQuestionIds = sections.flatMap(
-          (section: any) => section.questions || []
+          (section: { questions?: string[] }) => section.questions || []
         );
 
         console.log(
           '🔍 Plan sections:',
-          sections.map((s: any) => ({
-            id: s.id,
-            name: s.name,
-            questions: s.questions,
-          }))
+          sections.map(
+            (s: { id: string; name: string; questions?: string[] }) => ({
+              id: s.id,
+              name: s.name,
+              questions: s.questions,
+            })
+          )
         );
         console.log('🔍 All question IDs from plan:', allQuestionIds);
 
@@ -326,16 +328,18 @@ export default function PlanEditorPage() {
 
           if (questionsData.success) {
             const allQuestions = questionsData.data || [];
-            const planQuestionsData = allQuestions.filter((question: any) =>
-              allQuestionIds.includes(question.id)
+            const planQuestionsData = allQuestions.filter(
+              (question: { id: string }) => allQuestionIds.includes(question.id)
             );
             console.log(
               '🔍 Plan questions found:',
-              planQuestionsData.map((q: any) => ({
-                id: q.id,
-                title: q.title,
-                category: q.category,
-              }))
+              planQuestionsData.map(
+                (q: { id: string; title: string; category: string }) => ({
+                  id: q.id,
+                  title: q.title,
+                  category: q.category,
+                })
+              )
             );
             setPlanQuestions(planQuestionsData);
           }
@@ -983,8 +987,8 @@ export default function PlanEditorPage() {
               Remove Question
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-              Are you sure you want to remove "{questionToRemove.title}" from
-              the plan? This action cannot be undone.
+              Are you sure you want to remove &quot;{questionToRemove.title}
+              &quot; from the plan? This action cannot be undone.
             </p>
             <div className="flex space-x-3 justify-end">
               <Button

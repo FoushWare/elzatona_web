@@ -4,15 +4,43 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
 
+interface QuestionData {
+  title: string;
+  content: string;
+  type: string;
+  difficulty: string;
+  category: string;
+  learningPath: string;
+}
+
+interface Topic {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+interface EnhancedQuestion {
+  id: string;
+  title: string;
+  content: string;
+  type: string;
+  difficulty: string;
+  category: string;
+  learningPath: string;
+  topicId?: string;
+  sectionId?: string;
+  isActive?: boolean;
+}
+
 // Placeholder EnhancedQuestionService
 class EnhancedQuestionService {
-  static async createQuestion(questionData: any): Promise<string> {
+  static async createQuestion(questionData: QuestionData): Promise<string> {
     // Placeholder implementation
     console.log('Creating enhanced question:', questionData);
     return 'placeholder-question-id';
   }
 
-  static async getTopic(topicId: string): Promise<any> {
+  static async getTopic(topicId: string): Promise<Topic | null> {
     // Placeholder implementation
     console.log('Getting topic:', topicId);
     return null;
@@ -29,7 +57,7 @@ export async function GET(request: NextRequest) {
     const isActive = searchParams.get('isActive');
 
     // Return empty array since we cleared all questions
-    const questions: any[] = [];
+    const questions: EnhancedQuestion[] = [];
 
     return NextResponse.json({
       success: true,

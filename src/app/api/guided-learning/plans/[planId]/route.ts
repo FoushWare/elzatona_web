@@ -26,10 +26,12 @@ export async function GET(
     }
 
     return NextResponse.json({ success: true, data: plan });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching plan:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }
@@ -57,10 +59,12 @@ export async function PUT(
       success: true,
       message: 'Plan updated successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating plan:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }
