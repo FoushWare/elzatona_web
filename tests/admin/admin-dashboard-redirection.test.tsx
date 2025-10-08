@@ -27,12 +27,33 @@ jest.mock('@/contexts/AdminAuthContext', () => ({
   useAdminAuth: jest.fn(),
 }));
 
+// Type definitions for mocks
+interface MockRouter {
+  push: jest.MockedFunction<(url: string) => void>;
+  replace: jest.MockedFunction<(url: string) => void>;
+  prefetch: jest.MockedFunction<(url: string) => void>;
+  back: jest.MockedFunction<() => void>;
+  forward: jest.MockedFunction<() => void>;
+  refresh: jest.MockedFunction<() => void>;
+}
+
+interface MockAdminAuth {
+  login: jest.MockedFunction<
+    (email: string, password: string) => Promise<{ success: boolean }>
+  >;
+  logout: jest.MockedFunction<() => void>;
+  user: { id: string; email: string; name: string; role: string } | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+}
+
 describe('Admin Dashboard Redirection', () => {
   const mockPush = jest.fn();
   const mockReplace = jest.fn();
   const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-  const mockUseAdminAuth = require('@/contexts/AdminAuthContext')
-    .useAdminAuth as jest.MockedFunction<any>;
+  const mockUseAdminAuth = jest.mocked(
+    require('@/contexts/AdminAuthContext').useAdminAuth
+  ) as jest.MockedFunction<() => MockAdminAuth>;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -43,7 +64,7 @@ describe('Admin Dashboard Redirection', () => {
       back: jest.fn(),
       forward: jest.fn(),
       refresh: jest.fn(),
-    } as any);
+    } as MockRouter);
   });
 
   describe('Login Success Redirection', () => {
@@ -366,8 +387,9 @@ describe('Admin Dashboard Redirection', () => {
   describe('Navigation Flow', () => {
     it('should handle direct navigation to admin root', () => {
       // Mock usePathname to return /admin
-      const mockUsePathname = require('next/navigation')
-        .usePathname as jest.MockedFunction<any>;
+      const mockUsePathname = jest.mocked(
+        require('next/navigation').usePathname
+      ) as jest.MockedFunction<() => string>;
       mockUsePathname.mockReturnValue('/admin');
 
       mockUseAdminAuth.mockReturnValue({
@@ -384,8 +406,9 @@ describe('Admin Dashboard Redirection', () => {
     });
 
     it('should handle navigation to protected admin routes', () => {
-      const mockUsePathname = require('next/navigation')
-        .usePathname as jest.MockedFunction<any>;
+      const mockUsePathname = jest.mocked(
+        require('next/navigation').usePathname
+      ) as jest.MockedFunction<() => string>;
       mockUsePathname.mockReturnValue('/admin/questions');
 
       mockUseAdminAuth.mockReturnValue({

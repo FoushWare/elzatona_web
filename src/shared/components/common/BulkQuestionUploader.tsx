@@ -8,8 +8,6 @@ import {
 import { MarkdownQuestionParser } from '@/lib/markdown-question-parser';
 import useUnifiedQuestions from '@/hooks/useUnifiedQuestions';
 import {
-  Upload,
-  FileText,
   Download,
   AlertCircle,
   CheckCircle,
@@ -625,7 +623,7 @@ export default function BulkQuestionUploader({
                 Parse your questions
               </p>
               <p className="text-gray-600 dark:text-gray-400">
-                Click "Parse" to process them
+                Click &quot;Parse&quot; to process them
               </p>
             </div>
           </div>
@@ -638,7 +636,7 @@ export default function BulkQuestionUploader({
                 Save to Firebase
               </p>
               <p className="text-gray-600 dark:text-gray-400">
-                Click "Save X Questions" to add them
+                Click &quot;Save X Questions&quot; to add them
               </p>
             </div>
           </div>
@@ -899,8 +897,8 @@ then click "Save X Questions" to add them to Firebase.`}
                   </div>
                   {questions.length > 0 && (
                     <div>
-                      • First question title: "
-                      {questions[0]?.title || 'No title'}"
+                      • First question title: &quot;
+                      {questions[0]?.title || 'No title'}&quot;
                     </div>
                   )}
                 </div>

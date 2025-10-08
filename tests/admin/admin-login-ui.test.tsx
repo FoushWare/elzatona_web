@@ -29,11 +29,32 @@ jest.mock('@/contexts/AdminAuthContext', () => ({
 // Mock fetch for API calls
 global.fetch = jest.fn();
 
+// Type definitions for mocks
+interface MockRouter {
+  push: jest.MockedFunction<(url: string) => void>;
+  replace: jest.MockedFunction<(url: string) => void>;
+  prefetch: jest.MockedFunction<(url: string) => void>;
+  back: jest.MockedFunction<() => void>;
+  forward: jest.MockedFunction<() => void>;
+  refresh: jest.MockedFunction<() => void>;
+}
+
+interface MockAdminAuth {
+  login: jest.MockedFunction<
+    (email: string, password: string) => Promise<{ success: boolean }>
+  >;
+  logout: jest.MockedFunction<() => void>;
+  user: { id: string; email: string; name: string; role: string } | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+}
+
 describe('Admin Login Page', () => {
   const mockPush = jest.fn();
   const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-  const mockUseAdminAuth = require('@/contexts/AdminAuthContext')
-    .useAdminAuth as jest.MockedFunction<any>;
+  const mockUseAdminAuth = jest.mocked(
+    require('@/contexts/AdminAuthContext').useAdminAuth
+  ) as jest.MockedFunction<() => MockAdminAuth>;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -44,7 +65,7 @@ describe('Admin Login Page', () => {
       back: jest.fn(),
       forward: jest.fn(),
       refresh: jest.fn(),
-    } as any);
+    } as MockRouter);
 
     // Default mock for useAdminAuth
     mockUseAdminAuth.mockReturnValue({
