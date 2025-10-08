@@ -12,6 +12,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import AdminLoginPage from '@/app/admin/login/page';
 import { AdminAuthProvider } from '@/contexts/AdminAuthContext';
 
@@ -52,9 +53,9 @@ interface MockAdminAuth {
 describe('Admin Login Page', () => {
   const mockPush = jest.fn();
   const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-  const mockUseAdminAuth = jest.mocked(
-    require('@/contexts/AdminAuthContext').useAdminAuth
-  ) as jest.MockedFunction<() => MockAdminAuth>;
+  const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<
+    () => MockAdminAuth
+  >;
 
   beforeEach(() => {
     jest.clearAllMocks();

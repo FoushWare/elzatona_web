@@ -23,6 +23,7 @@ import {
   Accessibility,
   Rocket,
   Link,
+  BookOpen,
 } from 'lucide-react';
 
 interface FeatureDetailsModalProps {
