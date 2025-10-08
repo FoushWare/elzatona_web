@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
-import AdminLoginNavbar from '@/components/AdminLoginNavbar';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import AdminLoginNavbar from '@/shared/components/auth/AdminLoginNavbar';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -15,12 +15,8 @@ export default function AdminLoginPage() {
   const { isAuthenticated, isLoading, login } = useAdminAuth();
   const router = useRouter();
 
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      router.push('/admin/dashboard');
-    }
-  }, [isAuthenticated, isLoading, router]);
+  // Redirect is now handled by AdminAuthProvider context
+  // No need for local redirect logic here
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,17 +27,19 @@ export default function AdminLoginPage() {
       const result = await login(email, password);
 
       if (result.success) {
-        router.push('/admin/dashboard');
+        // Don't redirect here - let the useEffect handle it
+        // This prevents double redirects
       } else {
         setError(result.error || 'Login failed');
       }
-    } catch (error) {
+    } catch {
       setError('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // Show loading state while checking authentication
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-900 dark:to-gray-800">

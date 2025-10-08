@@ -27,6 +27,7 @@ export class SectionClientService {
       return {
         success: false,
         error: 'Failed to retrieve sections',
+        message: 'Failed to retrieve sections',
       };
     }
   }
@@ -54,6 +55,7 @@ export class SectionClientService {
       return {
         success: false,
         error: 'Failed to add section',
+        message: 'Failed to add section',
       };
     }
   }
@@ -81,6 +83,7 @@ export class SectionClientService {
       return {
         success: false,
         error: 'Failed to update section',
+        message: 'Failed to update section',
       };
     }
   }
@@ -105,6 +108,7 @@ export class SectionClientService {
       return {
         success: false,
         error: 'Failed to delete section',
+        message: 'Failed to delete section',
       };
     }
   }
@@ -131,6 +135,7 @@ export class SectionClientService {
       return {
         success: false,
         error: 'Failed to reorder sections',
+        message: 'Failed to reorder sections',
       };
     }
   }
@@ -150,6 +155,7 @@ export class SectionClientService {
       return {
         success: false,
         error: 'Failed to retrieve section questions',
+        message: 'Failed to retrieve section questions',
       };
     }
   }
@@ -177,6 +183,7 @@ export class SectionClientService {
       return {
         success: false,
         error: 'Failed to add question',
+        message: 'Failed to add question',
       };
     }
   }
@@ -204,6 +211,7 @@ export class SectionClientService {
       return {
         success: false,
         error: 'Failed to add bulk questions',
+        message: 'Failed to add bulk questions',
       };
     }
   }

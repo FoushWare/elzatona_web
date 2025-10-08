@@ -1,220 +1,237 @@
-Product Requirements Document (PRD)
+# 🎯 **Guided Learner & Free Style Learner System**
 
-Product Name: GreatFrontendHub
-Version: v1.0
-Owner: [Your Name]
+## 📋 **Feature Overview**
 
-1. 🎯 Purpose
+A comprehensive learning system for frontend developers preparing for interviews, offering both guided and self-directed learning paths with progress tracking, flashcards, custom questions, and community features.
 
-The purpose of GreatFrontendHub is to help frontend developers prepare for technical interviews by offering structured practice problems, coding challenges, quizzes, and learning resources.
+---
 
-The MVP will be open-access, no login required, to maximize adoption and speed to market.
+## 🚀 **Core System Architecture**
 
-2. 👥 Target Audience
+### **1. Website Purpose & Target Audience**
+- **Primary Goal**: Help frontend developers prepare for technical interviews
+- **Target Users**: Frontend developers at all levels (junior, mid, senior)
+- **Focus Areas**: HTML, CSS, JavaScript, TypeScript, React.js, Next.js, System Design, Performance, Security, Design Patterns, Problem Solving
+
+### **2. First-Time User Experience**
+- **No Data Storage**: Until sign-in, no cookies or localStorage usage
+- **Interactive Onboarding**: Guided tour of website features
+- **Feature Discovery**: Show all capabilities and benefits
+- **Sign-In Encouragement**: Guide users to sign in to save progress
+- **Progress Preservation**: Maintain session state during onboarding
 
-Junior to senior frontend developers preparing for job interviews
-Students/graduates learning frontend engineering
-Professionals who want to sharpen problem-solving skills
+---
 
-3. ✨ Key Features
-3.1 (Phase 1 – MVP Features)
+## 🎓 **Learning Path System**
 
-Open access, no signup/login
-Coding challenges (HTML, CSS, JS)
-In-browser code editor with live preview
-Basic test cases auto-run on submission
-Explanations & sample solutions
-Categorized challenges (easy, medium, hard)
+### **3. Post-Sign-In Learning Mode Selection**
 
-3.2 (Future Features – Phase 2+)
+#### **Guided Path**
+- **Structured Learning**: Pre-defined curriculum and timeline
+- **Time-Based Plans**: 1-7 days preparation options
+- **Admin-Managed**: Configurable question counts per section
+- **Section Coverage**: HTML, CSS, JavaScript, TypeScript, React.js, Next.js, System Design, Performance, Security, Design Patterns, Problem Solving
+
+#### **Free Style Path**
+- **Two Sub-Types**:
+  - **Free Mode**: Access all sections anytime, learn at own pace
+  - **With Map Mode**: Custom roadmap creation with section selection
+- **Flexible Timeline**: 1-N days based on user preference
+- **Custom Question Counts**: User-defined questions per section
 
-User accounts & profiles
-Progress tracking (completed problems, streaks, badges)
-Gamification (XP, leaderboard)
-Premium content (later, if monetization added)
+### **4. Admin Management System**
+
+#### **Guided Path Configuration**
+- **Time Plans**: Manage 1-7 day preparation schedules
+- **Question Distribution**: Set question counts per section per day
+- **Content Management**: Add/edit/remove questions and resources
+- **Analytics Dashboard**: Track user progress and performance
 
-3.3 Admin/Content Management
+#### **Section Management**
+- **Frontend Sections**: HTML, CSS, JavaScript, TypeScript, React.js, Next.js
+- **Advanced Topics**: System Design, Performance, Security, Design Patterns
+- **Problem Solving**: JavaScript-specific coding challenges
+- **Difficulty Levels**: Easy, Medium, Hard for each section
 
-Admin panel to add/edit/delete coding challenges
-Problem categorization by difficulty/topic
+---
 
-4. 🛠 Technical Requirements
-Frontend
+## 📚 **Learning & Practice Features**
+
+### **5. Practice System**
+- **Adaptive Learning**: Questions adjust based on user performance
+- **Bad Answer Tracking**: Automatically add incorrect answers to flashcards
+- **Manual Bookmarking**: Users can add questions to flashcards
+- **Progress Tracking**: Real-time progress updates
+- **Performance Analytics**: Track improvement over time
+
+### **6. Flashcard System**
+- **Auto-Generated**: Questions with bad answers automatically added
+- **Manual Addition**: Users can bookmark questions
+- **Pre-Interview Review**: Dedicated flashcard review session
+- **Spaced Repetition**: Optimize review timing for retention
+- **Export Options**: Download flashcards for offline study
 
-Framework: React.js / Next.js (SEO + SSR)
-Styling: TailwindCSS
-Code Editor: Monaco Editor (or similar)
-
-Backend
-
-MVP: Static data (JSON/Markdown files for challenges)
-Later: Firebase/Database for dynamic content
-
-DevOps
-
-Deployment: Vercel / Netlify
-CI/CD: GitHub Actions
-Monitoring: Sentry, LogRocket
-
-5. 📊 Success Metrics
-
-Number of unique visitors
-Avg. time spent per challenge
-Number of completed challenges per user session
-Returning visitors (retention)
-
-6. 📅 Roadmap (MVP → Full Product)
-
-Phase 1: MVP (2–3 months)
-
-Open-access site (no signup/login)
-Basic challenge library (HTML, CSS, JS)
-In-browser editor with live preview & test cases
-Explanations and sample solutions
-
-Phase 2: Growth (3–6 months)
-
-Add signup/login (Google, GitHub, email)
-Progress tracking (saved problems, streaks)
-Add React challenges
-Gamification (badges, XP, leaderboard)
-
-Phase 3: Scaling (6–12 months)
-
-Mock interviews & timed challenges
-System design case studies
-Community features (discussion, comments)
-(Optional) Payment/subscription model for premium content
-
-7. 🚫 Constraints & Risks
-
-Without signup, users can't save progress in MVP
-Static challenge data may limit scalability in MVP
-Sandbox hosting costs if execution load grows
-
-✅ Now Phase 1 is 100% free, no signup, no payment. Users just visit the site and start coding immediately.
-
-📌 Epics & User Stories for GreatFrontendHub (MVP – Phase 1)
-
-Epic 1: Challenge Library
-
-As a user, I want to browse coding challenges by category and difficulty, so that I can select exercises that match my skill level.
-
-User Stories:
-
-GH-1.1: As a user, I want to see a list of challenges grouped by categories (HTML, CSS, JS).
-GH-1.2: As a user, I want to filter challenges by difficulty level (Easy, Medium, Hard).
-GH-1.3: As a user, I want to click a challenge and view its problem statement, examples, and instructions.
-GH-1.4: As an admin, I want to add, edit, and delete challenges via an admin interface or content files.
-
-Epic 2: In-Browser Code Editor
-
-As a user, I want to solve challenges in an online editor with live preview, so I can practice without leaving the website.
-
-User Stories:
-
-GH-2.1: As a user, I want to write code in the editor and see a live preview of the result.
-GH-2.2: As a user, I want to run test cases against my solution to check correctness.
-GH-2.3: As a user, I want to reset the editor to the starter template if I break something.
-GH-2.4: As an admin, I want to define test cases for each challenge (input/output expectations).
-
-Epic 3: Solutions & Explanations
-
-As a user, I want to see sample solutions and explanations after solving a challenge, so I can learn best practices.
-
-User Stories:
-
-GH-3.1: As a user, I want to view an official solution after completing a challenge.
-GH-3.2: As a user, I want to see an explanation that describes why the solution works.
-GH-3.3: As a user, I want to compare my solution with the official one.
-
-Epic 4: Open Access (No Signup/Login)
-
-As a first-time visitor, I want to start practicing immediately without signup, so I can try the platform with zero friction.
-
-User Stories:
-
-GH-4.1: As a user, I want to access challenges without creating an account.
-GH-4.2: As a user, I want to solve challenges in the editor without login.
-GH-4.3: As an admin, I want to track overall usage metrics (e.g., page visits, challenge attempts) without needing accounts.
-
-Epic 5: UI/UX & Navigation
-
-As a user, I want a clean, intuitive interface so I can easily browse and solve challenges.
-
-User Stories:
-
-GH-5.1: As a user, I want a homepage with featured challenges and categories.
-GH-5.2: As a user, I want a search bar to quickly find challenges by keyword.
-GH-5.3: As a user, I want a responsive layout so the site works on desktop and mobile.
-GH-5.4: As a user, I want a dark/light mode toggle for better readability.
-
-Epic 6: Deployment & Monitoring
-
-As a developer, I want to deploy and monitor the platform, so that users can access it reliably.
-
-User Stories:
-
-GH-6.1: As a developer, I want to deploy the site to Vercel/Netlify.
-GH-6.2: As a developer, I want automated CI/CD pipelines to deploy changes.
-GH-6.3: As a developer, I want to integrate monitoring tools (Sentry/LogRocket) to track errors and user activity.
-
-📅 Sprint Plan – GreatFrontendHub (MVP)
-
-Sprint 1 (Weeks 1–3) → Core Foundation & Challenge Library
-
-🎯 Goal: Set up project structure, UI, and initial challenges.
-
-Deliverables:
-
-Project scaffolding (Next.js + TailwindCSS)
-Homepage with categories (HTML, CSS, JS)
-Challenge listing page with filters (Easy, Medium, Hard)
-Challenge details page (problem statement, starter code)
-Admin workflow for adding challenges (Markdown/JSON-based at first)
-
-Stories (from backlog):
-GH-1.1, GH-1.2, GH-1.3, GH-1.4
-GH-5.1
-
-Sprint 2 (Weeks 4–6) → Code Editor & Execution
-
-🎯 Goal: Allow users to solve challenges in-browser.
-
-Deliverables:
-
-Integrate Monaco Editor
-Live HTML/CSS/JS preview pane
-Run test cases against submitted code
-Reset code button
-Starter templates for each challenge
-
-Stories:
-GH-2.1, GH-2.2, GH-2.3, GH-2.4
-GH-5.2 (search bar for challenges)
-
-Sprint 3 (Weeks 7–9) → Solutions, Explanations & Deployment
-
-🎯 Goal: Complete MVP with explanations and make it public.
-
-Deliverables:
-
-Show official solution after user attempts
-Provide explanations and best practices per challenge
-Comparison view: my solution vs official solution
-Dark/light mode toggle
-Deploy to Vercel/Netlify with CI/CD
-Integrate monitoring (Sentry/LogRocket)
-
-Stories:
-GH-3.1, GH-3.2, GH-3.3
-GH-5.3, GH-5.4
-GH-6.1, GH-6.2, GH-6.3
-
-✅ MVP Acceptance Criteria
-
-Any visitor can open the site and practice challenges without signup.
-Users can write, run, and test code in-browser.
-At least 10 challenges per category (HTML, CSS, JS).
-Each challenge has an official solution + explanation.
-Site is deployed publicly, responsive, and monitored.
+### **7. Progress Grading & Analytics**
+
+#### **Section-Based Grading**
+- **Individual Scores**: Track performance per section
+- **Overall Progress**: Aggregate learning insights
+- **Weakness Identification**: Highlight areas needing improvement
+- **Strength Recognition**: Acknowledge mastered topics
+- **Learning Velocity**: Track pace of improvement
+
+#### **User Insights Dashboard**
+- **Performance Metrics**: Success rates, time spent, improvement trends
+- **Learning Patterns**: Most/least studied sections, peak learning times
+- **Goal Tracking**: Progress toward interview readiness
+- **Recommendations**: AI-suggested focus areas
+
+---
+
+## 🔄 **Flexibility & Switching**
+
+### **8. Learning Mode Flexibility**
+- **Seamless Switching**: Change between guided and free style anytime
+- **Progress Preservation**: Maintain progress when switching modes
+- **Data Continuity**: All progress, flashcards, and analytics preserved
+- **Mode-Specific Features**: Access appropriate features for current mode
+
+---
+
+## 💾 **Data Management & Storage**
+
+### **9. Firebase Integration**
+- **User Authentication**: Secure sign-in with email/username
+- **Progress Storage**: Real-time progress synchronization
+- **Cross-Device Sync**: Access progress from any device
+- **Data Backup**: Automatic cloud backup of all user data
+- **Offline Support**: Cache data for offline access
+
+### **10. User Account Management**
+- **Profile System**: User preferences, learning goals, interview dates
+- **Progress History**: Complete learning journey tracking
+- **Achievement System**: Badges and milestones for motivation
+- **Settings Management**: Customize learning experience
+
+---
+
+## 🎨 **Custom Content Features**
+
+### **11. User-Generated Questions**
+- **Custom Question Creation**: Users can add their own questions
+- **Answer Management**: Provide and edit custom answers
+- **Account Association**: Link custom questions to user account
+- **Personal Library**: Organize and manage custom content
+
+### **12. Admin Review System**
+- **Custom Question Review**: Admin dashboard for user-submitted questions
+- **Quality Assessment**: Review and approve high-quality questions
+- **Community Integration**: Add approved questions to public pool
+- **Attribution System**: Credit original question creators
+- **Moderation Tools**: Flag inappropriate or low-quality content
+
+---
+
+## 👥 **Community Features (Future Implementation)**
+
+### **13. Community Integration**
+- **Question Sharing**: Users can share questions with community
+- **Discussion Forums**: Collaborative learning and Q&A
+- **Peer Review**: Community-driven question quality assessment
+- **Study Groups**: Form groups for collaborative learning
+- **Expert Contributions**: Industry professionals can contribute content
+
+---
+
+## 🎯 **Technical Implementation Requirements**
+
+### **14. Frontend Architecture**
+- **React/Next.js**: Modern, responsive web application
+- **State Management**: Context API or Redux for complex state
+- **Routing**: Dynamic routing for different learning paths
+- **UI Components**: Reusable, accessible components
+- **Responsive Design**: Mobile-first, cross-device compatibility
+
+### **15. Backend & Database**
+- **Firebase Firestore**: NoSQL database for flexible data structure
+- **Firebase Auth**: Secure user authentication
+- **Firebase Functions**: Server-side logic and API endpoints
+- **Real-time Updates**: Live progress synchronization
+- **Data Validation**: Ensure data integrity and security
+
+### **16. Admin Dashboard**
+- **Content Management**: CRUD operations for questions and sections
+- **User Management**: Monitor user progress and engagement
+- **Analytics**: Comprehensive reporting and insights
+- **Configuration**: Manage learning paths and time plans
+- **Moderation**: Review and approve user-generated content
+
+---
+
+## 📊 **Success Metrics & KPIs**
+
+### **17. User Engagement**
+- **Daily Active Users**: Track consistent usage
+- **Session Duration**: Average time spent learning
+- **Completion Rates**: Percentage of users completing paths
+- **Retention Rates**: User return frequency
+- **Feature Adoption**: Usage of different learning modes
+
+### **18. Learning Effectiveness**
+- **Improvement Rates**: Progress over time
+- **Interview Success**: User-reported interview outcomes
+- **Knowledge Retention**: Long-term learning assessment
+- **User Satisfaction**: Feedback and ratings
+- **Community Engagement**: Participation in community features
+
+---
+
+## 🚀 **Implementation Phases**
+
+### **Phase 1: Core Learning System (Weeks 1-4)**
+- User authentication and onboarding
+- Basic guided and free style learning paths
+- Question system and practice functionality
+- Progress tracking and basic analytics
+- Admin dashboard for content management
+
+### **Phase 2: Advanced Features (Weeks 5-8)**
+- Flashcard system and spaced repetition
+- Custom question creation and management
+- Advanced analytics and user insights
+- Learning mode switching functionality
+- Performance optimization and mobile optimization
+
+### **Phase 3: Community & Enhancement (Weeks 9-12)**
+- Community features and question sharing
+- Advanced admin moderation tools
+- AI-powered recommendations
+- Gamification and achievement system
+- Advanced reporting and insights
+
+---
+
+## 🎉 **Expected Impact**
+
+### **User Benefits**
+- **Structured Preparation**: Clear path to interview readiness
+- **Flexible Learning**: Adapt to individual learning styles
+- **Progress Tracking**: Clear visibility into improvement
+- **Community Support**: Learn from peers and experts
+- **Custom Content**: Personalized learning experience
+
+### **Platform Benefits**
+- **User Retention**: Engaging, comprehensive learning experience
+- **Content Quality**: Community-driven question improvement
+- **Scalability**: Flexible system that grows with user base
+- **Data Insights**: Rich analytics for continuous improvement
+- **Competitive Advantage**: Unique combination of guided and free learning
+
+---
+
+**Priority**: 🌟 **HIGH**  
+**Estimated Effort**: 12 weeks  
+**Team Size**: 3-4 developers  
+**Status**: Ready for Implementation
+
+This comprehensive learning system will transform our platform into the go-to resource for frontend interview preparation! 🚀📚💻

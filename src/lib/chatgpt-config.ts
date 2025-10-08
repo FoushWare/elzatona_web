@@ -1,17 +1,19 @@
 // ChatGPT API Configuration
 export const CHATGPT_CONFIG = {
   // API endpoint - you can use OpenAI's API or a proxy service
-  API_URL: process.env.NEXT_PUBLIC_CHATGPT_API_URL || 'https://api.openai.com/v1/chat/completions',
-  
+  API_URL:
+    process.env.NEXT_PUBLIC_CHATGPT_API_URL ||
+    'https://api.openai.com/v1/chat/completions',
+
   // Model to use
   MODEL: process.env.NEXT_PUBLIC_CHATGPT_MODEL || 'gpt-3.5-turbo',
-  
+
   // Maximum tokens for responses
   MAX_TOKENS: 1000,
-  
+
   // Temperature for response creativity (0.0 = focused, 1.0 = creative)
   TEMPERATURE: 0.7,
-  
+
   // System prompt to define the AI's role
   SYSTEM_PROMPT: `You are an expert frontend development tutor and interview coach. Your role is to help learners understand frontend development concepts, prepare for interviews, and improve their coding skills.
 
@@ -34,24 +36,29 @@ Guidelines:
 Always respond in a helpful, educational tone and focus on practical frontend development knowledge.`,
 
   // Default welcome message
-  WELCOME_MESSAGE: "Hello! I'm your AI learning assistant specialized in frontend development. I can help you with HTML, CSS, JavaScript, React, interview preparation, and more. What would you like to learn about today?",
-  
+  WELCOME_MESSAGE:
+    "Hello! I'm your AI learning assistant specialized in frontend development. I can help you with HTML, CSS, JavaScript, React, interview preparation, and more. What would you like to learn about today?",
+
   // Error messages
   ERROR_MESSAGES: {
-    API_ERROR: "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.",
-    RATE_LIMIT: "I'm receiving too many requests. Please wait a moment before trying again.",
-    INVALID_INPUT: "I didn't understand that. Could you please rephrase your question?",
-    NETWORK_ERROR: "Network connection issue. Please check your internet connection.",
+    API_ERROR:
+      "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.",
+    RATE_LIMIT:
+      "I'm receiving too many requests. Please wait a moment before trying again.",
+    INVALID_INPUT:
+      "I didn't understand that. Could you please rephrase your question?",
+    NETWORK_ERROR:
+      'Network connection issue. Please check your internet connection.',
   },
-  
+
   // Suggested questions for new users
   SUGGESTED_QUESTIONS: [
-    "What are the key differences between HTML4 and HTML5?",
-    "How do I center a div both horizontally and vertically?",
-    "Explain the difference between let, const, and var in JavaScript",
-    "What is the Virtual DOM in React?",
-    "How do I optimize website performance?",
-    "What are common frontend interview questions?",
+    'What are the key differences between HTML4 and HTML5?',
+    'How do I center a div both horizontally and vertically?',
+    'Explain the difference between let, const, and var in JavaScript',
+    'What is the Virtual DOM in React?',
+    'How do I optimize website performance?',
+    'What are common frontend interview questions?',
   ],
 };
 

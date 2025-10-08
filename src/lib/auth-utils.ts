@@ -36,6 +36,34 @@ export const getAuthStatus = async () => {
   return { isAuthenticated: true, user };
 };
 
+// Set HTTP-only cookie for authentication
+export const setAuthCookie = async (token: string): Promise<void> => {
+  try {
+    await fetch('/api/auth/set-cookie', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }),
+      credentials: 'include',
+    });
+  } catch (error) {
+    console.error('Error setting auth cookie:', error);
+  }
+};
+
+// Clear HTTP-only cookie
+export const clearAuthCookie = async (): Promise<void> => {
+  try {
+    await fetch('/api/auth/clear-cookie', {
+      method: 'POST',
+      credentials: 'include',
+    });
+  } catch (error) {
+    console.error('Error clearing auth cookie:', error);
+  }
+};
+
 // Clear all authentication-related data
 export const clearAuthData = () => {
   if (typeof window !== 'undefined') {
@@ -44,7 +72,8 @@ export const clearAuthData = () => {
       if (
         key.startsWith('firebase:') ||
         key.startsWith('auth_') ||
-        key.includes('user')
+        key.includes('user') ||
+        key.startsWith('progress_')
       ) {
         localStorage.removeItem(key);
       }

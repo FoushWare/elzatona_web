@@ -29,6 +29,8 @@ interface OptimizedImageData {
   optimizedUrl: string;
   isLoaded: boolean;
   error: string | null;
+  onLoad: () => void;
+  onError: (error: string) => void;
 }
 
 /**
@@ -72,7 +74,7 @@ export const useImageOptimization = (
     const finalFormat = format === 'auto' ? preferredFormat : format;
     return generateOptimizedImageUrl(src, {
       quality,
-      format: finalFormat as 'webp' | 'avif' | 'jpeg' | 'png',
+      format: finalFormat as 'webp' | 'jpeg' | 'png',
       width,
       height,
     });

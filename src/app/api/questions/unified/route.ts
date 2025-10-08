@@ -2,14 +2,40 @@
 // Single endpoint for all question operations
 
 import { NextRequest, NextResponse } from 'next/server';
-import UnifiedQuestionService, {
-  BulkQuestionData,
-} from '@/lib/unified-question-schema';
+import {
+  db,
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from '@/lib/firebase-server';
+
+// Simple in-memory cache for questions (resets on server restart)
+let questionsCache: Array<{
+  id: string;
+  [key: string]: unknown;
+}> | null = null;
+let cacheTimestamp: number = 0;
+const CACHE_DURATION = 30000; // 30 seconds
 
 // GET /api/questions/unified - Get questions with filters
 export async function GET(request: NextRequest) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     const { searchParams } = new URL(request.url);
+
+    // Pagination parameters
+    const page = parseInt(searchParams.get('page') || '1');
+    const pageSize = parseInt(searchParams.get('pageSize') || '10');
+    const offset = (page - 1) * pageSize;
 
     const filters = {
       category: searchParams.get('category') || undefined,
@@ -29,9 +55,7 @@ export async function GET(request: NextRequest) {
           : searchParams.get('isComplete') === 'false'
             ? false
             : undefined,
-      limit: searchParams.get('limit')
-        ? parseInt(searchParams.get('limit')!)
-        : undefined,
+      limit: pageSize,
       orderBy:
         (searchParams.get('orderBy') as
           | 'createdAt'
@@ -44,15 +68,87 @@ export async function GET(request: NextRequest) {
 
     // Remove undefined values
     const cleanFilters = Object.fromEntries(
-      Object.entries(filters).filter(([_, value]) => value !== undefined)
+      Object.entries(filters).filter(([, value]) => value !== undefined)
     );
 
-    const questions = await UnifiedQuestionService.getQuestions(cleanFilters);
+    // Check cache first
+    const now = Date.now();
+    let allQuestions: Array<{
+      id: string;
+      [key: string]: unknown;
+    }>;
+
+    if (questionsCache && now - cacheTimestamp < CACHE_DURATION) {
+      // Use cached data
+      allQuestions = questionsCache;
+      console.log('📦 Using cached questions:', allQuestions.length);
+    } else {
+      // Fetch from Firestore
+      const constraints = [];
+
+      // Apply filters
+      if (cleanFilters.category) {
+        constraints.push(where('category', '==', cleanFilters.category));
+      }
+      if (cleanFilters.difficulty) {
+        constraints.push(where('difficulty', '==', cleanFilters.difficulty));
+      }
+      if (cleanFilters.learningPath) {
+        constraints.push(
+          where('learningPath', '==', cleanFilters.learningPath)
+        );
+      }
+      if (cleanFilters.isActive !== undefined) {
+        constraints.push(where('isActive', '==', cleanFilters.isActive));
+      }
+
+      // Order by createdAt descending
+      constraints.push(orderBy('createdAt', 'desc'));
+
+      // Create the query
+      const q = query(collection(db, 'unifiedQuestions'), ...constraints);
+
+      // For small datasets, get all and paginate in memory (more efficient)
+      const allSnapshot = await getDocs(q);
+      allQuestions = allSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      // Update cache
+      questionsCache = allQuestions;
+      cacheTimestamp = now;
+      console.log(
+        '🔄 Fetched fresh questions from Firestore:',
+        allQuestions.length
+      );
+    }
+
+    const totalCount = allQuestions.length;
+
+    // Apply pagination in memory
+    const startIndex = offset;
+    const endIndex = startIndex + pageSize;
+    const questions = allQuestions.slice(startIndex, endIndex);
+
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    // Include pagination by default, but allow disabling for performance
+    const includePagination = searchParams.get('includePagination') !== 'false';
 
     return NextResponse.json({
       success: true,
       data: questions,
-      count: questions.length,
+      ...(includePagination && {
+        pagination: {
+          page,
+          pageSize,
+          totalCount,
+          totalPages,
+          hasNext: page < totalPages,
+          hasPrev: page > 1,
+        },
+      }),
     });
   } catch (error) {
     console.error('Error fetching questions:', error);
@@ -63,46 +159,79 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/questions/unified - Create new question or bulk import
+// POST /api/questions/unified - Create questions (bulk import or single)
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-
-    // Check if it's a bulk import
-    if (body.bulk && Array.isArray(body.questions)) {
-      const results = await UnifiedQuestionService.bulkImportQuestions(
-        body.questions
-      );
-
-      return NextResponse.json({
-        success: true,
-        message: `Bulk import completed: ${results.success} successful, ${results.failed} failed`,
-        data: results,
-      });
+    if (!db) {
+      throw new Error('Firebase not initialized');
     }
 
-    // Single question creation
-    const questionId = await UnifiedQuestionService.createQuestion(body);
+    const body = await request.json();
+    const { questions, isBulkImport = false } = body;
+
+    if (!questions || !Array.isArray(questions)) {
+      return NextResponse.json(
+        { success: false, error: 'Questions array is required' },
+        { status: 400 }
+      );
+    }
+
+    const results = [];
+    const errors = [];
+
+    for (const questionData of questions) {
+      try {
+        const questionWithTimestamps = {
+          ...questionData,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+
+        const docRef = await addDoc(
+          collection(db, 'unifiedQuestions'),
+          questionWithTimestamps
+        );
+        results.push({ id: docRef.id, ...questionData });
+      } catch (error) {
+        console.error('Error creating question:', error);
+        errors.push({
+          question: questionData,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    }
+
+    // Invalidate cache after creating questions
+    questionsCache = null;
 
     return NextResponse.json({
       success: true,
-      message: 'Question created successfully',
-      data: { id: questionId },
+      data: {
+        success: results.length,
+        failed: errors.length,
+        errors: errors.map(e => e.error),
+        results: results,
+      },
+      message: `Successfully ${isBulkImport ? 'imported' : 'created'} ${results.length} questions`,
     });
   } catch (error) {
-    console.error('Error creating question:', error);
+    console.error('Error creating questions:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create question' },
+      { success: false, error: 'Failed to create questions' },
       { status: 500 }
     );
   }
 }
 
-// PUT /api/questions/unified - Update question
+// PUT /api/questions/unified - Update a question
 export async function PUT(request: NextRequest) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     const body = await request.json();
-    const { id, ...updates } = body;
+    const { id, ...updateData } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -111,7 +240,15 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    await UnifiedQuestionService.updateQuestion(id, updates);
+    const updateWithTimestamps = {
+      ...updateData,
+      updatedAt: new Date(),
+    };
+
+    await updateDoc(doc(db, 'unifiedQuestions', id), updateWithTimestamps);
+
+    // Invalidate cache after updating question
+    questionsCache = null;
 
     return NextResponse.json({
       success: true,
@@ -126,9 +263,13 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-// DELETE /api/questions/unified - Delete question
+// DELETE /api/questions/unified - Delete a question
 export async function DELETE(request: NextRequest) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
@@ -139,7 +280,10 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await UnifiedQuestionService.deleteQuestion(id);
+    await deleteDoc(doc(db, 'unifiedQuestions', id));
+
+    // Invalidate cache after deleting question
+    questionsCache = null;
 
     return NextResponse.json({
       success: true,
