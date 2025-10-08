@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-server';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 
+interface Section {
+  id: string;
+  name: string;
+  questions: string[];
+  questionCount?: number;
+  updatedAt?: Date;
+  [key: string]: unknown; // Allow additional properties
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ planId: string; sectionId: string }> }
@@ -43,7 +52,7 @@ export async function PUT(
     const sections = planData.sections || [];
 
     // Find and update the specific section
-    const updatedSections = sections.map((section: any) => {
+    const updatedSections = sections.map((section: Section) => {
       if (section.id === sectionId) {
         return {
           ...section,
@@ -110,7 +119,7 @@ export async function GET(
     const sections = planData.sections || [];
 
     // Find the specific section
-    const section = sections.find((s: any) => s.id === sectionId);
+    const section = sections.find((s: Section) => s.id === sectionId);
 
     if (!section) {
       return NextResponse.json(

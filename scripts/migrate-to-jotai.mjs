@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const glob = require('glob');
+import fs from 'fs';
+import path from 'path';
+import { glob } from 'glob';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Mapping of old context imports to new hook imports
 const contextToHookMapping = {
@@ -149,8 +153,8 @@ function main() {
   console.log('4. Update any remaining context usage manually');
 }
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
 
-module.exports = { migrateFile, contextToHookMapping, hookNameMapping };
+export { migrateFile, contextToHookMapping, hookNameMapping };

@@ -13,7 +13,7 @@ interface LearningPlanTemplate {
   sections: Array<{
     id: string;
     name: string;
-    questions: any[];
+    questions: unknown[];
     weight: number;
   }>;
   features: string[];
@@ -22,6 +22,27 @@ interface LearningPlanTemplate {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+
+interface ApiTemplate {
+  id: string;
+  name?: string;
+  duration?: number;
+  description?: string;
+  difficulty?: string;
+  totalQuestions?: number;
+  dailyQuestions?: number;
+  sections?: Array<{
+    id: string;
+    name: string;
+    questions: unknown[];
+    weight: number;
+  }>;
+  features?: string[];
+  estimatedTime?: string;
+  isRecommended?: boolean;
+  isActive?: boolean;
+  [key: string]: unknown;
 }
 
 interface UseLearningPlanTemplatesReturn {
@@ -49,7 +70,13 @@ export function useLearningPlanTemplatesDirect(): UseLearningPlanTemplatesReturn
       const baseUrl =
         typeof window !== 'undefined'
           ? window.location.origin
-          : 'http://localhost:3000';
+          : process.env.WEB_URL ||
+            process.env.NEXT_PUBLIC_WEB_URL ||
+            (() => {
+              throw new Error(
+                'WEB_URL or NEXT_PUBLIC_WEB_URL environment variable must be set'
+              );
+            })();
       const response = await fetch(`${baseUrl}/api/test-firebase`);
       const apiData = await response.json();
 
@@ -63,7 +90,7 @@ export function useLearningPlanTemplatesDirect(): UseLearningPlanTemplatesReturn
           apiData.templates.length
         );
         const formattedTemplates: LearningPlanTemplate[] =
-          apiData.templates.map((template: any) => ({
+          apiData.templates.map((template: ApiTemplate) => ({
             id: template.id,
             name: template.name || `${template.duration} Day Plan`,
             duration: template.duration || 1,

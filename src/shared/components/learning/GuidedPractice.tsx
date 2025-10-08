@@ -199,7 +199,7 @@ export const GuidedPractice: React.FC = () => {
     }
 
     // Redirect to completion page or dashboard
-    router.push('/guided-learning?completed=true');
+    router.push('/features/guided-learning?completed=true');
   };
 
   const formatTime = (seconds: number) => {
@@ -406,7 +406,7 @@ export const GuidedPractice: React.FC = () => {
           {/* Actions */}
           <div className="flex justify-between">
             <button
-              onClick={() => router.push('/guided-learning')}
+              onClick={() => router.push('/features/guided-learning')}
               className="flex items-center space-x-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />

@@ -3,6 +3,11 @@
 
 import { AuditLogService } from './audit-log-schema';
 
+// Define specific types for audit log data
+export type AuditLogValue = string | number | boolean | null | undefined;
+export type AuditLogChanges = Record<string, AuditLogValue>;
+export type AuditLogMetadata = Record<string, AuditLogValue>;
+
 export interface LogActionParams {
   action:
     | 'CREATE'
@@ -24,14 +29,14 @@ export interface LogActionParams {
   resourceId?: string;
   resourceName?: string;
   details: string;
-  changes?: Record<string, any>;
+  changes?: AuditLogChanges;
   userId?: string;
   userEmail?: string;
   ipAddress?: string;
   userAgent?: string;
   success?: boolean;
   errorMessage?: string;
-  metadata?: Record<string, any>;
+  metadata?: AuditLogMetadata;
 }
 
 export class AuditLogger {
@@ -40,7 +45,7 @@ export class AuditLogger {
     try {
       // Clean up undefined values to prevent Firebase errors
       const cleanParams = Object.fromEntries(
-        Object.entries(params).filter(([_, value]) => value !== undefined)
+        Object.entries(params).filter(([, value]) => value !== undefined)
       );
 
       // Ensure required properties are present
@@ -65,7 +70,7 @@ export class AuditLogger {
     try {
       // Clean up undefined values to prevent Firebase errors
       const cleanParams = Object.fromEntries(
-        Object.entries(params).filter(([_, value]) => value !== undefined)
+        Object.entries(params).filter(([, value]) => value !== undefined)
       );
 
       // Ensure required properties are present
@@ -89,7 +94,7 @@ export class AuditLogger {
     topicId: string,
     topicName: string,
     details: string,
-    changes?: Record<string, any>,
+    changes?: AuditLogChanges,
     userId?: string,
     userEmail?: string
   ): Promise<void> {
@@ -117,7 +122,7 @@ export class AuditLogger {
     categoryId: string,
     categoryName: string,
     details: string,
-    changes?: Record<string, any>,
+    changes?: AuditLogChanges,
     userId?: string,
     userEmail?: string
   ): Promise<void> {
@@ -145,7 +150,7 @@ export class AuditLogger {
     questionId: string,
     questionTitle: string,
     details: string,
-    changes?: Record<string, any>,
+    changes?: AuditLogChanges,
     userId?: string,
     userEmail?: string
   ): Promise<void> {
@@ -173,7 +178,7 @@ export class AuditLogger {
     sectionId: string,
     sectionName: string,
     details: string,
-    changes?: Record<string, any>,
+    changes?: AuditLogChanges,
     userId?: string,
     userEmail?: string
   ): Promise<void> {
@@ -201,7 +206,7 @@ export class AuditLogger {
     pathId: string,
     pathName: string,
     details: string,
-    changes?: Record<string, any>,
+    changes?: AuditLogChanges,
     userId?: string,
     userEmail?: string
   ): Promise<void> {
@@ -229,7 +234,7 @@ export class AuditLogger {
     userId: string,
     userEmail: string,
     details: string,
-    changes?: Record<string, any>
+    changes?: AuditLogChanges
   ): Promise<void> {
     await this.logSuccess({
       action,
@@ -249,7 +254,7 @@ export class AuditLogger {
   static async logSystemAction(
     action: 'EXPORT' | 'IMPORT' | 'VIEW',
     details: string,
-    metadata?: Record<string, any>,
+    metadata?: AuditLogMetadata,
     userId?: string,
     userEmail?: string
   ): Promise<void> {

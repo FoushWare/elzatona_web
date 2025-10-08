@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import {
   userPreferencesAtom,
   themePreferenceAtom,
@@ -10,7 +10,6 @@ import {
   reducedMotionPreferenceAtom,
   resetPreferencesAtom,
 } from '@/atoms/userPreferences';
-import type { UserPreferences } from '@/atoms/userPreferences';
 
 export function useUserPreferences() {
   const [preferences, setPreferences] = useAtom(userPreferencesAtom);

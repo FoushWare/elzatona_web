@@ -30,7 +30,7 @@ interface MarkdownQuestionExtractorProps {
   learningPaths: Array<{ id: string; name: string }>;
   onClose: () => void;
   onRefreshLearningPaths?: () => void;
-  onExtract?: (questions: any[]) => void;
+  onExtract?: (questions: ExtractedQuestion[]) => void;
 }
 
 export function MarkdownQuestionExtractor({

@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-interface Message {
-  id: string;
-  type: 'user' | 'ai';
-  content: string;
-  timestamp: Date;
+interface Flashcard {
+  question: string;
+  answer: string;
+  explanation: string;
+  category: string;
+  difficulty: string;
+  tags: string[];
+}
+
+interface WeakArea {
+  name: string;
+  description?: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -153,16 +160,16 @@ export async function POST(request: NextRequest) {
     feedback += `\n\nSuggestion: ${randomSuggestion}`;
 
     // Generate flashcards for weak areas
-    const flashcards: any[] = [];
+    const flashcards: Flashcard[] = [];
     if (weakAreas && weakAreas.length > 0) {
-      weakAreas.forEach((area: any) => {
+      weakAreas.forEach((area: WeakArea) => {
         flashcards.push({
-          question: `What is ${area} and how is it used in ${category} development?`,
+          question: `What is ${area.name} and how is it used in ${category} development?`,
           answer: `This is a key concept in ${category} development that you should study further.`,
-          explanation: `Understanding ${area} is crucial for ${category} development. Consider reviewing documentation and practicing with examples.`,
+          explanation: `Understanding ${area.name} is crucial for ${category} development. Consider reviewing documentation and practicing with examples.`,
           category: category,
           difficulty: difficulty,
-          tags: [area, category, 'interview-prep'],
+          tags: [area.name, category, 'interview-prep'],
         });
       });
     }

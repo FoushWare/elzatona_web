@@ -3,6 +3,29 @@ import { db } from '@/lib/firebase-server';
 import { collection, getDocs } from 'firebase/firestore';
 import { SectionService } from '@/lib/section-service';
 
+interface LearningPath {
+  id: string;
+  name: string;
+  order?: number;
+  questionCount?: number;
+  [key: string]: unknown; // Allow additional properties
+}
+
+interface Section {
+  id: string;
+  name: string;
+  questionCount?: number;
+  [key: string]: unknown; // Allow additional properties
+}
+
+interface LearningPathWithSections extends LearningPath {
+  sectors: Array<{
+    id: string;
+    name: string;
+    questionCount: number;
+  }>;
+}
+
 // Mapping of learning paths to their relevant sections
 const learningPathSections: Record<string, string[]> = {
   'performance-optimization': ['performance-optimization'],
@@ -63,7 +86,7 @@ export async function GET(request: NextRequest) {
         id: doc.id,
         ...doc.data(),
       }))
-      .sort((a: any, b: any) => {
+      .sort((a: LearningPath, b: LearningPath) => {
         // Sort by order field if it exists, otherwise by name
         const orderA = a.order || 999;
         const orderB = b.order || 999;
@@ -83,20 +106,20 @@ export async function GET(request: NextRequest) {
       throw new Error(sectionsResult.error || 'Failed to fetch sections');
     }
 
-    const sections: any[] = (sectionsResult.data as any[]) || [];
+    const sections: Section[] = (sectionsResult.data as Section[]) || [];
 
     // Create a map of sections for quick lookup
     const sectionsMap = sections.reduce(
-      (acc: Record<string, any>, section: any) => {
+      (acc: Record<string, Section>, section: Section) => {
         acc[section.id] = section;
         return acc;
       },
-      {} as Record<string, any>
+      {} as Record<string, Section>
     );
 
     // Deduplicate learning paths by ID and add sections data
     const uniqueLearningPaths = learningPaths.reduce(
-      (acc: any[], path: any) => {
+      (acc: LearningPathWithSections[], path: LearningPath) => {
         if (!acc.find(existingPath => existingPath.id === path.id)) {
           // Get relevant sections for this learning path
           const relevantSectionIds = learningPathSections[path.id] || [];
@@ -118,7 +141,7 @@ export async function GET(request: NextRequest) {
         }
         return acc;
       },
-      [] as any[]
+      [] as LearningPathWithSections[]
     );
 
     return NextResponse.json({

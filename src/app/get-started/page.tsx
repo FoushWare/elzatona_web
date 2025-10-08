@@ -18,35 +18,24 @@ import {
 } from 'lucide-react';
 import { UserTypeSelector } from '@/shared/components/common/UserTypeSelector';
 import { LoadingTransition } from '@/shared/components/common/LoadingTransition';
-import { SignInPopup } from '@/shared/components/auth/SignInPopup';
 import { useUserType } from '@/contexts/UserTypeContext';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 
 type UserType = 'guided' | 'self-directed' | null;
 
 export default function GetStartedPage() {
   const router = useRouter();
   const { setUserType } = useUserType();
-  const { isAuthenticated } = useFirebaseAuth();
   const [isNavigating, setIsNavigating] = useState(false);
-  const [showSignInPopup, setShowSignInPopup] = useState(false);
-  const [pendingUserType, setPendingUserType] = useState<UserType>(null);
 
   const handleUserTypeSelect = (type: UserType) => {
     setUserType(type);
 
     if (type === 'guided') {
-      // For guided learning, show sign-in popup if not authenticated
-      if (!isAuthenticated) {
-        setPendingUserType(type);
-        setShowSignInPopup(true);
-      } else {
-        // Already authenticated, proceed directly
-        setIsNavigating(true);
-        setTimeout(() => {
-          router.push('/guided-learning');
-        }, 1500);
-      }
+      // For guided learning, proceed directly but encourage sign-in for progress saving
+      setIsNavigating(true);
+      setTimeout(() => {
+        router.push('/features/guided-learning');
+      }, 1500);
     } else {
       // For self-directed, proceed directly
       setIsNavigating(true);
@@ -54,17 +43,6 @@ export default function GetStartedPage() {
         router.push('/browse-practice-questions');
       }, 1500);
     }
-  };
-
-  const handleSignInSuccess = () => {
-    setShowSignInPopup(false);
-    if (pendingUserType === 'guided') {
-      setIsNavigating(true);
-      setTimeout(() => {
-        router.push('/guided-learning');
-      }, 1500);
-    }
-    setPendingUserType(null);
   };
 
   return (
@@ -91,16 +69,6 @@ export default function GetStartedPage() {
           <UserTypeSelector onSelect={handleUserTypeSelect} />
         </div>
       </div>
-
-      {/* Sign In Popup */}
-      <SignInPopup
-        isOpen={showSignInPopup}
-        onClose={() => {
-          setShowSignInPopup(false);
-          setPendingUserType(null);
-        }}
-        onSuccess={handleSignInSuccess}
-      />
     </div>
   );
 }

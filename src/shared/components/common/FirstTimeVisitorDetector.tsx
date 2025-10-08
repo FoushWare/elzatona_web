@@ -5,6 +5,11 @@ import { usePathname } from 'next/navigation';
 import { OnboardingSystem } from './OnboardingSystem';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 
+interface WindowWithTestFlags extends Window {
+  __DISABLE_GUIDANCE_MODALS__?: boolean;
+  __TEST_MODE__?: boolean;
+}
+
 export const FirstTimeVisitorDetector: React.FC = () => {
   const { showOnboarding, startOnboarding, completeOnboarding } =
     useOnboarding();
@@ -20,8 +25,8 @@ export const FirstTimeVisitorDetector: React.FC = () => {
     // Don't show onboarding during testing
     if (
       typeof window !== 'undefined' &&
-      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
-        (window as any).__TEST_MODE__)
+      ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as WindowWithTestFlags).__TEST_MODE__)
     ) {
       return;
     }

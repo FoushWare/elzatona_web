@@ -20,7 +20,7 @@ interface AnalyticsCard {
   title: string;
   value: string | number;
   subtitle: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   color: string;
   trend?: {
     value: number;

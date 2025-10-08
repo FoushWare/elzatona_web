@@ -25,7 +25,7 @@ interface ContinueItem {
   progress?: number;
   lastAccessed: string;
   href: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   color: string;
   timeSpent?: number;
   points?: number;
@@ -60,9 +60,17 @@ export default function ContinueWhereLeftOff() {
         continueData.recentQuestions &&
         continueData.recentQuestions.length > 0
       ) {
-        continueData.recentQuestions
-          .slice(0, 2)
-          .forEach((question: any, index: number) => {
+        continueData.recentQuestions.slice(0, 2).forEach(
+          (
+            question: {
+              questionId: string;
+              category: string;
+              answeredCorrectly: boolean;
+              timestamp: string;
+              points?: number;
+            },
+            index: number
+          ) => {
             items.push({
               id: `question-${question.questionId}`,
               type: 'question',
@@ -78,7 +86,8 @@ export default function ContinueWhereLeftOff() {
                 : 'from-orange-500 to-orange-600',
               points: question.points,
             });
-          });
+          }
+        );
       }
 
       // Add recent challenges
@@ -86,9 +95,17 @@ export default function ContinueWhereLeftOff() {
         continueData.recentChallenges &&
         continueData.recentChallenges.length > 0
       ) {
-        continueData.recentChallenges
-          .slice(0, 2)
-          .forEach((challenge: any, index: number) => {
+        continueData.recentChallenges.slice(0, 2).forEach(
+          (
+            challenge: {
+              challengeId: string;
+              challengeName: string;
+              completed: boolean;
+              timestamp: string;
+              points?: number;
+            },
+            index: number
+          ) => {
             items.push({
               id: `challenge-${challenge.challengeId}`,
               type: 'challenge',
@@ -102,7 +119,8 @@ export default function ContinueWhereLeftOff() {
                 : 'from-yellow-500 to-yellow-600',
               points: challenge.points,
             });
-          });
+          }
+        );
       }
 
       setContinueItems(items);
