@@ -11,6 +11,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { usePathname } from 'next/navigation';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { ConditionalLayout } from '@/shared/components/common/ConditionalLayout';
 import AdminLayout from '@/app/admin/layout';
 import { AdminAuthProvider } from '@/contexts/AdminAuthContext';
@@ -43,9 +44,9 @@ describe('Navbar Switching Fix', () => {
   const mockUsePathname = usePathname as jest.MockedFunction<
     typeof usePathname
   >;
-  const mockUseAdminAuth = jest.mocked(
-    require('@/contexts/AdminAuthContext').useAdminAuth
-  ) as jest.MockedFunction<() => MockAdminAuth>;
+  const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<
+    () => MockAdminAuth
+  >;
 
   beforeEach(() => {
     jest.clearAllMocks();
