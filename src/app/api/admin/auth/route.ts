@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         role: adminData.role,
       },
       adminConfig.jwt.secret as string,
-      { expiresIn: adminConfig.jwt.expiresIn }
+      { expiresIn: adminConfig.jwt.expiresIn as string }
     );
 
     const session = {
