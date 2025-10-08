@@ -620,6 +620,20 @@ This comprehensive learning system is well on its way to becoming the go-to reso
   - [x] Sign-in with admin credentials
   - [x] Verify redirect to `/admin/dashboard`
 
+- [ ] **Admin Dashboard**
+  - [ ] Go to `/admin/dashboard`
+  - [ ] Verify page loads with menu items
+  - [ ] Verify menu has Questions,
+  - [ ] verify menu has Learning Cards
+  - [ ] verify menu has Guided Learning
+  - [ ] verify menu has Learning Sections
+  - [ ] verify menu has Categories & Topics
+  - [ ] verify menu has Feature Reports
+  - [ ] verify menu has Audit Logs
+  - [ ] verify menu has User Management
+  - [ ] verify menu has Audio Management
+  - [ ] verify menu has Settings
+
 - [ ] **Learning Cards Management**
   - [ ] Navigate to `/admin/learning-cards`
   - [ ] Verify page loads with "Loading learning cards..." message
