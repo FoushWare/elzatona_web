@@ -32,19 +32,6 @@ export default function AdminNavbar() {
   const { isAuthenticated, user, logout } = useAdminAuth();
   const router = useRouter();
 
-  // Debug: Log user data
-  useEffect(() => {
-    if (user) {
-      console.log('🔍 AdminNavbar user data:', {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        fullUser: user,
-      });
-    }
-  }, [user]);
-
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
@@ -236,16 +223,16 @@ export default function AdminNavbar() {
 
                 {/* User Dropdown */}
                 {isUserDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
+                  <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
                     <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                         {user.name || 'Admin User'}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 break-all">
                         {user.email}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Role: {user.role}
+                      <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                        Role: {user.role.replace('_', ' ')}
                       </p>
                     </div>
 
@@ -333,11 +320,14 @@ export default function AdminNavbar() {
               {isAuthenticated && user && (
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
                   <div className="px-3 py-2">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                       {user.name || 'Admin User'}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 break-all">
                       {user.email}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                      Role: {user.role.replace('_', ' ')}
                     </p>
                   </div>
 
