@@ -4,6 +4,12 @@
 
 import { setAuthCookie } from './auth-utils';
 
+import { User } from 'firebase/auth';
+
+interface UserWithIdToken {
+  getIdToken(): Promise<string>;
+}
+
 export class CookieManager {
   private static instance: CookieManager;
   private isSettingCookie = false;
@@ -15,7 +21,7 @@ export class CookieManager {
     return CookieManager.instance;
   }
 
-  async ensureAuthCookie(user: any): Promise<boolean> {
+  async ensureAuthCookie(user: UserWithIdToken): Promise<boolean> {
     if (this.isSettingCookie) {
       // Wait for the current cookie setting to complete
       return new Promise(resolve => {
@@ -43,7 +49,10 @@ export class CookieManager {
     }
   }
 
-  async retryAuthCookie(user: any, maxRetries: number = 3): Promise<boolean> {
+  async retryAuthCookie(
+    user: UserWithIdToken,
+    maxRetries: number = 3
+  ): Promise<boolean> {
     for (let i = 0; i < maxRetries; i++) {
       try {
         const success = await this.ensureAuthCookie(user);

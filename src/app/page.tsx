@@ -5,15 +5,11 @@ import Link from 'next/link';
 import {
   ArrowRight,
   Play,
-  Code,
-  Target,
   BookOpen,
   Star,
-  Award,
   Map,
   Compass,
   Sparkles,
-  Zap,
 } from 'lucide-react';
 import { useUserType } from '@/contexts/UserTypeContext';
 import { UserStatistics } from '@/shared/components/common/UserStatistics';
