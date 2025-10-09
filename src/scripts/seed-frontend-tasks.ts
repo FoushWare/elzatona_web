@@ -88,7 +88,7 @@ export default Counter;
         description: 'Initial state should be 0',
         input: 'initial',
         expectedOutput: '0',
-        type: 'state',
+        type: 'component',
         timeout: 1000,
       },
       {
@@ -96,7 +96,7 @@ export default Counter;
         description: 'Increment should increase count by 1',
         input: 'increment',
         expectedOutput: '1',
-        type: 'action',
+        type: 'component',
         timeout: 1000,
       },
       {
@@ -104,7 +104,7 @@ export default Counter;
         description: 'Decrement should decrease count by 1',
         input: 'decrement',
         expectedOutput: '-1',
-        type: 'action',
+        type: 'component',
         timeout: 1000,
       },
       {
@@ -112,7 +112,7 @@ export default Counter;
         description: 'Reset should set count to 0',
         input: 'reset',
         expectedOutput: '0',
-        type: 'action',
+        type: 'component',
         timeout: 1000,
       },
     ],
