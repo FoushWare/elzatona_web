@@ -252,7 +252,11 @@ export const useQuestions = (): UseQuestionsReturn => {
       setError(null);
 
       try {
-        const quizQuestions = await getQuizQuestions(config);
+        const quizQuestions = await getQuizQuestions(
+          config.category,
+          config.difficulty,
+          config.count
+        );
         setQuestions(quizQuestions);
         return quizQuestions;
       } catch (err) {
