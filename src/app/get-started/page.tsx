@@ -62,8 +62,8 @@ export default function GetStartedPage() {
               Choose Your Learning Style
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Select how you'd like to learn and we'll customize your experience
-              accordingly.
+              Select how you&apos;d like to learn and we&apos;ll customize your
+              experience accordingly.
             </p>
           </div>
           <UserTypeSelector onSelect={handleUserTypeSelect} />

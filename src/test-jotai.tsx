@@ -1,12 +1,12 @@
 'use client';
 
 import { JotaiProvider } from '@/providers/JotaiProvider';
-import { useTheme } from '@/hooks/useTheme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useMobileMenu } from '@/hooks/useMobileMenu';
 
 function TestComponent() {
-  const { theme, toggleTheme } = useTheme();
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const { language, setLanguage } = useLanguage();
   const { isMobileMenuOpen, toggleMobileMenu } = useMobileMenu();
 
@@ -14,8 +14,8 @@ function TestComponent() {
     <div className="p-4">
       <h1>Jotai Test Component</h1>
       <div>
-        <p>Theme: {theme}</p>
-        <button onClick={toggleTheme}>Toggle Theme</button>
+        <p>Theme: {isDarkMode ? 'dark' : 'light'}</p>
+        <button onClick={toggleDarkMode}>Toggle Theme</button>
       </div>
       <div>
         <p>Language: {language}</p>

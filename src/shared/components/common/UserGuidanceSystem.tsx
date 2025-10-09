@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   ArrowRight,
   ArrowLeft,
@@ -15,7 +15,6 @@ import {
   Compass,
   Brain,
   Lightbulb,
-  Trophy,
 } from 'lucide-react';
 
 interface GuidanceStep {
@@ -25,6 +24,11 @@ interface GuidanceStep {
   icon: React.ReactNode;
   action?: string;
   highlight?: boolean;
+}
+
+interface WindowWithTestFlags extends Window {
+  __DISABLE_GUIDANCE_MODALS__?: boolean;
+  __TEST_MODE__?: boolean;
 }
 
 interface UserGuidanceSystemProps {
@@ -38,20 +42,20 @@ export const UserGuidanceSystem: React.FC<UserGuidanceSystemProps> = ({
   onClose,
   onComplete,
 }) => {
-  // Don't show guidance during testing
-  if (
-    typeof window !== 'undefined' &&
-    ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
-      (window as any).__TEST_MODE__)
-  ) {
-    return null;
-  }
-
   const [currentStep, setCurrentStep] = useState(0);
   const [userType, setUserType] = useState<'guided' | 'self-directed' | null>(
     null
   );
   const [showTour, setShowTour] = useState(false);
+
+  // Don't show guidance during testing
+  if (
+    typeof window !== 'undefined' &&
+    ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
+      (window as WindowWithTestFlags).__TEST_MODE__)
+  ) {
+    return null;
+  }
 
   const welcomeSteps: GuidanceStep[] = [
     {

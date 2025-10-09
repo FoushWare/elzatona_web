@@ -678,8 +678,8 @@ export default function SectionManager() {
               {filteredQuestions.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-gray-600 dark:text-gray-400">
-                    No questions found for this section's category and learning
-                    path
+                    No questions found for this section&apos;s category and
+                    learning path
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
                     Questions are automatically linked based on category:{' '}

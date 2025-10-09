@@ -100,7 +100,7 @@ export const UserTypeSelector: React.FC<UserTypeSelectorProps> = ({
             </div>
 
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              I'm self-directed
+              I&apos;m self-directed
             </h3>
 
             <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">

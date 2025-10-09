@@ -18,6 +18,8 @@ import {
   HelpCircle,
   FolderOpen,
   BookOpen,
+  Code,
+  Calculator,
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
@@ -95,6 +97,18 @@ export default function AdminNavbar() {
       description: 'Create and manage topics and categories',
     },
     {
+      href: '/admin/frontend-tasks',
+      label: 'Frontend Tasks',
+      icon: Code,
+      description: 'Create and manage React/frontend coding challenges',
+    },
+    {
+      href: '/admin/problem-solving',
+      label: 'Problem Solving',
+      icon: Calculator,
+      description: 'Create and manage algorithmic coding challenges',
+    },
+    {
       href: '/admin/reports',
       label: 'Feature Reports',
       icon: BarChart3,
@@ -123,7 +137,7 @@ export default function AdminNavbar() {
       }`}
     >
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link
             href="/admin/dashboard"
@@ -154,7 +168,7 @@ export default function AdminNavbar() {
 
               {/* Admin Dropdown */}
               {isAdminDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
+                <div className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50 max-h-[80vh] overflow-y-auto">
                   <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
                       Admin Panel
@@ -164,22 +178,26 @@ export default function AdminNavbar() {
                     </p>
                   </div>
 
-                  {adminMenuItems.map(item => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                      onClick={() => setIsAdminDropdownOpen(false)}
-                    >
-                      <item.icon className="w-4 h-4 mr-3 text-red-600 dark:text-red-400" />
-                      <div>
-                        <div className="font-medium">{item.label}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
-                          {item.description}
+                  <div className="grid grid-cols-1 gap-1">
+                    {adminMenuItems.map(item => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                        onClick={() => setIsAdminDropdownOpen(false)}
+                      >
+                        <item.icon className="w-4 h-4 mr-3 text-red-600 dark:text-red-400 flex-shrink-0" />
+                        <div className="min-w-0">
+                          <div className="font-medium truncate">
+                            {item.label}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                            {item.description}
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -288,7 +306,7 @@ export default function AdminNavbar() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden">
+          <div className="md:hidden max-h-[70vh] overflow-y-auto">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
               {/* Admin Panel Section */}
               <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700 mb-2">
@@ -300,22 +318,24 @@ export default function AdminNavbar() {
                 </p>
               </div>
 
-              {adminMenuItems.map(item => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center space-x-3 px-3 py-3 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <item.icon className="w-5 h-5 text-red-600 dark:text-red-400" />
-                  <div>
-                    <div className="font-medium">{item.label}</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {item.description}
+              <div className="grid grid-cols-1 gap-1">
+                {adminMenuItems.map(item => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <item.icon className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" />
+                    <div className="min-w-0">
+                      <div className="font-medium truncate">{item.label}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        {item.description}
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
+              </div>
 
               {isAuthenticated && user && (
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
