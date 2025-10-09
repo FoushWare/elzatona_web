@@ -71,7 +71,7 @@ export const useProgressTracking = () => {
     ) {
       const newCount = progress.completedQuestions + 1;
       if (newCount % 5 === 0) {
-        (window as WindowWithGuidance).triggerSignInGuidance('progress', {
+        (window as WindowWithGuidance).triggerSignInGuidance?.('progress', {
           progressCount: newCount,
         });
       }
