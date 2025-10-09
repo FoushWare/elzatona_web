@@ -76,7 +76,7 @@ export default function SectionManager() {
       const result = await UnifiedSectionClientService.getSections();
 
       if (result.success) {
-        setSections(result.data);
+        setSections(result.data as UnifiedSection[]);
       } else {
         setError(result.error || 'Failed to load sections');
       }
