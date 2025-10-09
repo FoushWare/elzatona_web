@@ -85,7 +85,7 @@ export class AdminFirestoreHelper {
       where?: { field: string; operator: any; value: any }[];
     } = {}
   ): Promise<{ data: T[]; total: number }> {
-    let query = db.collection(collection);
+    let query: any = db.collection(collection);
 
     // Apply where clauses
     if (options.where) {
