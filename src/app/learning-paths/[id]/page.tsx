@@ -80,7 +80,7 @@ export default function LearningPathDetailPage() {
   };
 
   const handleStartLearning = () => {
-    if (learningPath?.sectors.length > 0) {
+    if (learningPath?.sectors?.length && learningPath.sectors.length > 0) {
       handleSectionClick(learningPath.sectors[0].id);
     }
   };
