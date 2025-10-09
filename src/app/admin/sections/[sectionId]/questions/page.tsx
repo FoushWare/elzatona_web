@@ -2,12 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/shared/components/ui/card';
+import { Card, CardContent } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
 import { Input } from '@/shared/components/ui/input';
@@ -19,25 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/shared/components/ui/dialog';
-import {
-  ArrowLeft,
-  Plus,
-  Edit,
-  Trash2,
-  Search,
-  Filter,
-  BookOpen,
-  Target,
-  Clock,
-  Eye,
-  EyeOff,
-} from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, Loader2, Save, X } from 'lucide-react';
 
 interface Question {
   id: string;
@@ -79,6 +56,8 @@ const DIFFICULTY_OPTIONS = [
   },
   { value: 'advanced', label: 'Advanced', color: 'bg-red-100 text-red-800' },
 ];
+
+type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced';
 
 export default function SectionQuestionsPage() {
   const params = useParams();
@@ -304,7 +283,7 @@ export default function SectionQuestionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="bg-gray-50 dark:bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -568,7 +547,7 @@ export default function SectionQuestionsPage() {
                       onChange={e =>
                         setFormData({
                           ...formData,
-                          difficulty: e.target.value as any,
+                          difficulty: e.target.value as DifficultyLevel,
                         })
                       }
                       className="w-full p-2 border border-gray-300 rounded-md"
@@ -698,7 +677,7 @@ export default function SectionQuestionsPage() {
                       onChange={e =>
                         setFormData({
                           ...formData,
-                          difficulty: e.target.value as any,
+                          difficulty: e.target.value as DifficultyLevel,
                         })
                       }
                       className="w-full p-2 border border-gray-300 rounded-md"

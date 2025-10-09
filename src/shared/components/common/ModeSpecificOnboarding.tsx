@@ -57,8 +57,8 @@ export const ModeSpecificOnboarding: React.FC<ModeSpecificOnboardingProps> = ({
               Structured Learning Paths
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              We'll guide you through carefully designed learning paths tailored
-              to your interview timeline.
+              We&apos;ll guide you through carefully designed learning paths
+              tailored to your interview timeline.
             </p>
           </div>
 
@@ -106,7 +106,7 @@ export const ModeSpecificOnboarding: React.FC<ModeSpecificOnboardingProps> = ({
               How many days do you have?
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              We'll adjust the learning intensity based on your timeline
+              We&apos;ll adjust the learning intensity based on your timeline
             </p>
           </div>
 
@@ -202,8 +202,8 @@ export const ModeSpecificOnboarding: React.FC<ModeSpecificOnboardingProps> = ({
               Flexible Learning Experience
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              You're in control! Build your own roadmap and learn at your own
-              pace.
+              You&apos;re in control! Build your own roadmap and learn at your
+              own pace.
             </p>
           </div>
 
@@ -248,7 +248,7 @@ export const ModeSpecificOnboarding: React.FC<ModeSpecificOnboardingProps> = ({
         <div className="space-y-6">
           <div className="text-center mb-6">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              Let's build your custom roadmap
+              Let&apos;s build your custom roadmap
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
               Choose the topics and timeline that work best for you

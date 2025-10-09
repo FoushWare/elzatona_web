@@ -28,7 +28,6 @@ import {
   Plus,
   Search,
   Filter,
-  Download,
   Upload,
   Trash2,
   Edit,
@@ -43,6 +42,25 @@ import BulkQuestionUploader from '../common/BulkQuestionUploader';
 
 interface UnifiedQuestionManagerProps {
   className?: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  description?: string;
+  color?: string;
+}
+
+interface Topic {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+interface LearningPath {
+  id: string;
+  name: string;
+  title?: string;
 }
 
 export default function UnifiedQuestionManager({
@@ -124,7 +142,7 @@ export default function UnifiedQuestionManager({
       const response = await fetch('/api/categories');
       const data = await response.json();
       if (data.success) {
-        setCategories(data.data.map((cat: any) => cat.name));
+        setCategories(data.data.map((cat: Category) => cat.name));
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -136,7 +154,7 @@ export default function UnifiedQuestionManager({
       const response = await fetch('/api/topics');
       const data = await response.json();
       if (data.success) {
-        setTopics(data.data.map((topic: any) => topic.name));
+        setTopics(data.data.map((topic: Topic) => topic.name));
       }
     } catch (error) {
       console.error('Error fetching topics:', error);
@@ -149,7 +167,10 @@ export default function UnifiedQuestionManager({
       const data = await response.json();
       if (data.success) {
         setDynamicLearningPaths(
-          data.data.map((path: any) => ({ id: path.id, name: path.name }))
+          data.data.map((path: LearningPath) => ({
+            id: path.id,
+            name: path.name,
+          }))
         );
       }
     } catch (error) {
@@ -326,7 +347,9 @@ export default function UnifiedQuestionManager({
 
   // Handle delete
   const handleDelete = async (question: UnifiedQuestion) => {
-    if (confirm(`Are you sure you want to delete "${question.title}"?`)) {
+    if (
+      confirm(`Are you sure you want to delete &quot;${question.title}&quot;?`)
+    ) {
       await deleteQuestion(question.id);
     }
   };
@@ -657,7 +680,7 @@ export default function UnifiedQuestionManager({
                       <SelectValue placeholder="Select path" />
                     </SelectTrigger>
                     <SelectContent>
-                      {hookLearningPaths.map((path: any) => (
+                      {hookLearningPaths.map((path: LearningPath) => (
                         <SelectItem key={path.id} value={path.title}>
                           {path.title}
                         </SelectItem>

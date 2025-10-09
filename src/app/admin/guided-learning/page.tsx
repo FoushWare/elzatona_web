@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Trash2, Edit3, Eye, Loader2, Plus, Save, X } from 'lucide-react';
 import { useLearningPlanTemplates } from '@/hooks/useLearningPlanTemplates';
 import { notify } from '@/shared/components/ui/Notification';
@@ -25,8 +25,31 @@ interface Section {
   questionCount: number;
 }
 
+interface SectionWithCategoryId extends Section {
+  categoryId: string;
+}
+
+interface PlanSection {
+  id: string;
+  name: string;
+  questions: string[];
+  weight: number;
+}
+
+interface EditingPlan {
+  id: string;
+  name: string;
+  description: string;
+  duration: number;
+  difficulty: string;
+  sections?: PlanSection[];
+}
+
 // Helper function to get category name from categoryId
-const getCategoryName = (categoryId: string, sections: any[]) => {
+const getCategoryName = (
+  categoryId: string,
+  sections: SectionWithCategoryId[]
+) => {
   const section = sections.find(s => s.categoryId === categoryId);
   return section?.category || 'Unknown Category';
 };
@@ -79,7 +102,7 @@ export default function GuidedLearningAdminPage() {
 
   // State for creating/editing plans
   const [isCreatingPlan, setIsCreatingPlan] = useState(false);
-  const [editingPlan, setEditingPlan] = useState<any>(null);
+  const [editingPlan, setEditingPlan] = useState<EditingPlan | null>(null);
   const [newPlan, setNewPlan] = useState({
     name: '',
     description: '',
@@ -227,7 +250,7 @@ export default function GuidedLearningAdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="bg-gray-50 dark:bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
@@ -471,7 +494,7 @@ export default function GuidedLearningAdminPage() {
                   <h4 className="font-medium text-gray-900 dark:text-white sticky top-0 bg-white dark:bg-gray-800 py-1">
                     Sections:
                   </h4>
-                  {plan.sections?.map((section: any) => (
+                  {plan.sections?.map((section: PlanSection) => (
                     <div
                       key={section.id}
                       className="flex items-center justify-between text-sm py-1"

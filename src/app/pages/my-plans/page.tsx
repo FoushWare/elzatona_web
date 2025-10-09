@@ -378,7 +378,7 @@ export default function MyPlansPage() {
 
             <p className="text-gray-600 dark:text-gray-300 mb-6">
               Are you sure you want to delete this plan? This action cannot be
-              undone and you'll lose all progress.
+              undone and you&apos;ll lose all progress.
             </p>
 
             <div className="flex items-center space-x-3">

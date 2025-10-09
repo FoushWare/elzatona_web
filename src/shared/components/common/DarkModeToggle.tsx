@@ -1,13 +1,12 @@
 'use client';
 
-import { useTheme } from '@/hooks/useTheme';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Moon, Sun } from 'lucide-react';
 
 export default function DarkModeToggle() {
-  const { theme, toggleTheme, isLoading } = useTheme();
-  const isDarkMode = theme === 'dark';
+  const { isDarkMode, toggleDarkMode, isLoaded } = useTheme();
 
-  if (isLoading) {
+  if (!isLoaded) {
     return (
       <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
     );
@@ -15,7 +14,7 @@ export default function DarkModeToggle() {
 
   return (
     <button
-      onClick={toggleTheme}
+      onClick={toggleDarkMode}
       className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
       aria-label="Toggle dark mode"
     >

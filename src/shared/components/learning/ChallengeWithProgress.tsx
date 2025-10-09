@@ -1,7 +1,7 @@
 // v1.0 - Example Challenge Component with Progress Tracking
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useProgressTracking } from '@/hooks/useProgressTracking';
 import {
   Code,
@@ -13,6 +13,14 @@ import {
   Pause,
   RotateCcw,
 } from 'lucide-react';
+
+interface TestResult {
+  input: string;
+  expectedOutput: string;
+  actualOutput: string;
+  passed: boolean;
+  description: string;
+}
 
 interface Challenge {
   id: string;
@@ -44,7 +52,7 @@ export default function ChallengeWithProgress({
   const { updateProgress } = useProgressTracking();
   const [code, setCode] = useState('');
   const [isRunning, setIsRunning] = useState(false);
-  const [testResults, setTestResults] = useState<any[]>([]);
+  const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [score, setScore] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [startTime] = useState(Date.now());

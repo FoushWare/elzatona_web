@@ -47,7 +47,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AdminNavbar />
-      <main className="pt-20">
+      <main className="pt-16">
         <FirestoreErrorBoundary>{children}</FirestoreErrorBoundary>
       </main>
       <NotificationContainer />
