@@ -394,7 +394,7 @@ export class FrontendTaskValidator {
 
     try {
       const window = iframe.contentWindow!;
-      const func = window[functionName];
+      const func = (window as any)[functionName];
 
       if (!func) {
         throw new Error(`Function ${functionName} not found`);
