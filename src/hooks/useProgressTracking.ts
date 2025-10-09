@@ -93,7 +93,7 @@ export const useProgressTracking = () => {
       typeof window !== 'undefined' &&
       (window as WindowWithGuidance).triggerSignInGuidance
     ) {
-      (window as WindowWithGuidance).triggerSignInGuidance('achievement', {
+      (window as WindowWithGuidance).triggerSignInGuidance?.('achievement', {
         achievement,
       });
     }
