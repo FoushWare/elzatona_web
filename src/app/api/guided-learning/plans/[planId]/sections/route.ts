@@ -37,9 +37,9 @@ export async function GET(
       plan: {
         id: plan.id,
         name: plan.name,
-        sections: plan.sections || [],
-        totalQuestions: plan.totalQuestions || 0,
-        dailyQuestions: plan.dailyQuestions || 0,
+        sections: [],
+        totalQuestions: 0,
+        dailyQuestions: 0,
       },
     });
   } catch (error) {
