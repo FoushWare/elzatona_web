@@ -328,20 +328,16 @@ export default function TopicManager() {
           editingTopic.id,
           topicForm.name,
           `Updated topic "${editingTopic.name}" to "${topicForm.name}"`,
-          JSON.stringify({
-            before: {
-              name: editingTopic.name,
-              description: editingTopic.description,
-              category: editingTopic.category,
-              difficulty: editingTopic.difficulty,
-            },
-            after: {
-              name: topicForm.name,
-              description: topicForm.description,
-              category: topicForm.category,
-              difficulty: topicForm.difficulty,
-            },
-          })
+          {
+            'before.name': editingTopic.name,
+            'before.description': editingTopic.description,
+            'before.category': editingTopic.category,
+            'before.difficulty': editingTopic.difficulty,
+            'after.name': topicForm.name,
+            'after.description': topicForm.description,
+            'after.category': topicForm.category,
+            'after.difficulty': topicForm.difficulty,
+          }
         );
 
         setEditingTopic(null);
