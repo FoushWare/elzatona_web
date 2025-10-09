@@ -555,7 +555,7 @@ class FirestoreService {
         );
       }
 
-      return plans;
+      return plans as LearningPlanTemplate[];
     } catch (error) {
       console.error('Error getting learning plan templates:', error);
       // Return empty array instead of throwing to prevent app crashes
