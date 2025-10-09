@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+interface Message {
+  type: 'user' | 'assistant';
+  content: string;
+}
+
 interface Flashcard {
   question: string;
   answer: string;

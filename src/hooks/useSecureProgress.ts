@@ -40,7 +40,7 @@ interface UseSecureProgressReturn {
 }
 
 export function useSecureProgress(): UseSecureProgressReturn {
-  const { user, isAuthenticated } = useFirebaseAuth();
+  const { user, firebaseUser, isAuthenticated } = useFirebaseAuth();
   const [progress, setProgress] = useState<ProgressSummary | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -117,8 +117,11 @@ export function useSecureProgress(): UseSecureProgressReturn {
 
             // Try to get a fresh token and set the cookie
             try {
+              if (!firebaseUser) {
+                throw new Error('No Firebase user available for token refresh');
+              }
               const { cookieManager } = await import('@/lib/cookie-manager');
-              const success = await cookieManager.retryAuthCookie(user);
+              const success = await cookieManager.retryAuthCookie(firebaseUser);
               if (success) {
                 console.log(
                   '✅ Auth cookie set successfully, retrying progress save...'

@@ -329,18 +329,14 @@ export default function TopicManager() {
           topicForm.name,
           `Updated topic "${editingTopic.name}" to "${topicForm.name}"`,
           {
-            before: {
-              name: editingTopic.name,
-              description: editingTopic.description,
-              category: editingTopic.category,
-              difficulty: editingTopic.difficulty,
-            },
-            after: {
-              name: topicForm.name,
-              description: topicForm.description,
-              category: topicForm.category,
-              difficulty: topicForm.difficulty,
-            },
+            'before.name': editingTopic.name,
+            'before.description': editingTopic.description,
+            'before.category': editingTopic.category,
+            'before.difficulty': editingTopic.difficulty,
+            'after.name': topicForm.name,
+            'after.description': topicForm.description,
+            'after.category': topicForm.category,
+            'after.difficulty': topicForm.difficulty,
           }
         );
 
@@ -439,13 +435,11 @@ export default function TopicManager() {
           topicName,
           `Deleted topic "${topicName}"`,
           {
-            deletedTopic: {
-              id: topicId,
-              name: topicName,
-              description: topic?.description,
-              category: topic?.category,
-              difficulty: topic?.difficulty,
-            },
+            'deleted.id': topicId,
+            'deleted.name': topicName,
+            'deleted.description': topic?.description || '',
+            'deleted.category': topic?.category || '',
+            'deleted.difficulty': topic?.difficulty || '',
           }
         );
 
@@ -509,12 +503,10 @@ export default function TopicManager() {
           categoryName,
           `Deleted category "${categoryName}"`,
           {
-            deletedCategory: {
-              id: categoryId,
-              name: categoryName,
-              description: category?.description,
-              color: category?.color,
-            },
+            'deleted.id': categoryId,
+            'deleted.name': categoryName,
+            'deleted.description': category?.description || '',
+            'deleted.color': category?.color || '',
           }
         );
 

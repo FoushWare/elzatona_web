@@ -71,7 +71,7 @@ export const useProgressTracking = () => {
     ) {
       const newCount = progress.completedQuestions + 1;
       if (newCount % 5 === 0) {
-        (window as WindowWithGuidance).triggerSignInGuidance('progress', {
+        (window as WindowWithGuidance).triggerSignInGuidance?.('progress', {
           progressCount: newCount,
         });
       }
@@ -93,7 +93,7 @@ export const useProgressTracking = () => {
       typeof window !== 'undefined' &&
       (window as WindowWithGuidance).triggerSignInGuidance
     ) {
-      (window as WindowWithGuidance).triggerSignInGuidance('achievement', {
+      (window as WindowWithGuidance).triggerSignInGuidance?.('achievement', {
         achievement,
       });
     }
@@ -112,7 +112,7 @@ export const useProgressTracking = () => {
       (window as WindowWithGuidance).triggerSignInGuidance &&
       sections.length >= 3
     ) {
-      (window as WindowWithGuidance).triggerSignInGuidance('roadmap', {
+      (window as WindowWithGuidance).triggerSignInGuidance?.('roadmap', {
         roadmapSections: sections.length,
       });
     }

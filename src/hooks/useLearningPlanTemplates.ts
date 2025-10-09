@@ -78,17 +78,24 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
               timestamp: ApiPlan['createdAt']
             ) => {
               if (!timestamp) return new Date();
-              if (timestamp.seconds) {
+              if (typeof timestamp === 'string') {
+                return new Date(timestamp);
+              }
+              if (typeof timestamp === 'object' && timestamp.seconds) {
                 return new Date(timestamp.seconds * 1000);
               }
-              if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+              if (
+                typeof timestamp === 'object' &&
+                'toDate' in timestamp &&
+                typeof timestamp.toDate === 'function'
+              ) {
                 return timestamp.toDate();
               }
-              return new Date(timestamp);
+              return new Date();
             };
 
             // Calculate total questions from sections
-            const sections = plan.sections || [];
+            const sections = (plan as any).sections || [];
             const totalQuestions = sections.reduce(
               (total: number, section: { questions: string[] }) => {
                 return (
@@ -111,28 +118,29 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
                 plan.description ||
                 `${plan.duration}-day intensive preparation plan`,
               difficulty: plan.difficulty || 'Intermediate',
-              totalQuestions: totalQuestions || plan.totalQuestions || 100,
+              totalQuestions:
+                totalQuestions || (plan as any).totalQuestions || 100,
               dailyQuestions:
                 dailyQuestions ||
-                plan.dailyQuestions ||
-                Math.ceil((plan.totalQuestions || 100) / duration),
-              sections: sections.map((section: { questions: string[] }) => ({
-                id: section.id,
-                name: section.name,
+                (plan as any).dailyQuestions ||
+                Math.ceil(((plan as any).totalQuestions || 100) / duration),
+              sections: sections.map((section: any) => ({
+                id: section.id || '',
+                name: section.name || '',
                 questions: section.questions || [],
                 weight: section.weight || 0,
               })),
-              features: plan.features || [
+              features: (plan as any).features || [
                 'Structured learning path',
                 'Progress tracking',
                 'Curated questions',
               ],
               estimatedTime:
-                plan.estimatedTime ||
+                (plan as any).estimatedTime ||
                 `${Math.ceil(duration * 2)}-${Math.ceil(duration * 3)} hours`,
               isRecommended:
-                plan.isRecommended || duration === 3 || duration === 7,
-              isActive: plan.isActive !== false,
+                (plan as any).isRecommended || duration === 3 || duration === 7,
+              isActive: (plan as any).isActive !== false,
               createdAt: parseFirestoreTimestamp(plan.createdAt),
               updatedAt: parseFirestoreTimestamp(plan.updatedAt),
             };

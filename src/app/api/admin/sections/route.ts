@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
       order: order || 1,
       isActive: isActive !== false,
       questionCount: 0,
+      topics: [],
     };
 
     const section = await firestoreService.createSection(sectionData);

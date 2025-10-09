@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { firestoreService } from '@/lib/firestore-service';
+import { LearningPlanTemplate } from '@/lib/guided-learning-service';
 
 interface SectionConfig {
   sectionId?: string;
@@ -36,9 +37,9 @@ export async function GET(
       plan: {
         id: plan.id,
         name: plan.name,
-        sections: plan.sections || [],
-        totalQuestions: plan.totalQuestions || 0,
-        dailyQuestions: plan.dailyQuestions || 0,
+        sections: [],
+        totalQuestions: 0,
+        dailyQuestions: 0,
       },
     });
   } catch (error) {

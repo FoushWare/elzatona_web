@@ -99,7 +99,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
     const isLoginPage = pathname === '/admin/login';
     const isAdminRootPage = pathname === '/admin';
     const isProtectedRoute =
-      pathname.startsWith('/admin/') && !isLoginPage && !isAdminRootPage;
+      pathname?.startsWith('/admin/') && !isLoginPage && !isAdminRootPage;
 
     console.log('🔄 AdminAuthProvider redirect logic:', {
       isLoading,
