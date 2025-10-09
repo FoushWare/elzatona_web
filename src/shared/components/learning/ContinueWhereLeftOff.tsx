@@ -105,32 +105,42 @@ export default function ContinueWhereLeftOff() {
         continueData.recentChallenges &&
         continueData.recentChallenges.length > 0
       ) {
-        continueData.recentChallenges.slice(0, 2).forEach(
-          (
-            challenge: {
-              challengeId: string;
-              challengeName: string;
-              completed: boolean;
-              timestamp: string;
-              points?: number;
-            },
-            index: number
-          ) => {
-            items.push({
-              id: `challenge-${challenge.challengeId}`,
-              type: 'challenge',
-              title: challenge.challengeName,
-              description: challenge.completed ? 'Completed' : 'In progress',
-              lastAccessed: challenge.timestamp,
-              href: `/challenges/${challenge.challengeId}`,
-              icon: Code,
-              color: challenge.completed
-                ? 'from-blue-500 to-blue-600'
-                : 'from-yellow-500 to-yellow-600',
-              points: challenge.points,
-            });
-          }
-        );
+        (
+          continueData.recentChallenges as Array<{
+            challengeId: string;
+            challengeName: string;
+            completed: boolean;
+            timestamp: string;
+            points?: number;
+          }>
+        )
+          .slice(0, 2)
+          .forEach(
+            (
+              challenge: {
+                challengeId: string;
+                challengeName: string;
+                completed: boolean;
+                timestamp: string;
+                points?: number;
+              },
+              index: number
+            ) => {
+              items.push({
+                id: `challenge-${challenge.challengeId}`,
+                type: 'challenge',
+                title: challenge.challengeName,
+                description: challenge.completed ? 'Completed' : 'In progress',
+                lastAccessed: challenge.timestamp,
+                href: `/challenges/${challenge.challengeId}`,
+                icon: Code,
+                color: challenge.completed
+                  ? 'from-blue-500 to-blue-600'
+                  : 'from-yellow-500 to-yellow-600',
+                points: challenge.points,
+              });
+            }
+          );
       }
 
       setContinueItems(items);
