@@ -29,7 +29,7 @@ interface GuidanceContext {
   };
 }
 
-interface WindowWithGuidance extends WindowWithTestFlags {
+interface WindowWithGuidance extends Window {
   triggerSignInGuidance?: (trigger: string, context: GuidanceContext) => void;
 }
 
