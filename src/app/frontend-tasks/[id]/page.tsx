@@ -1188,11 +1188,11 @@ export default function App() {
                     //     includeCompletionsForModuleExports: false,
                     //   },
                     // },
-                    javascript: {
-                      suggest: {
-                        includeCompletionsForModuleExports: false,
-                      },
-                    },
+                    // javascript: {
+                    //   suggest: {
+                    //     includeCompletionsForModuleExports: false,
+                    //   },
+                    // },
                     // Disable module resolution errors
                     noSemanticValidation: true,
                     noSyntaxValidation: false,
