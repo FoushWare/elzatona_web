@@ -309,10 +309,10 @@ export default function ChallengeWithProgress({
                       <strong>Input:</strong> {result.input}
                     </div>
                     <div>
-                      <strong>Expected:</strong> {result.expected}
+                      <strong>Expected:</strong> {result.expectedOutput}
                     </div>
                     <div>
-                      <strong>Actual:</strong> {result.actual}
+                      <strong>Actual:</strong> {result.actualOutput}
                     </div>
                     <div>
                       <strong>Description:</strong> {result.description}
