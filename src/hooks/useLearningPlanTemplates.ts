@@ -130,7 +130,7 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
                 questions: section.questions || [],
                 weight: section.weight || 0,
               })),
-              features: plan.features || [
+              features: (plan as any).features || [
                 'Structured learning path',
                 'Progress tracking',
                 'Curated questions',
