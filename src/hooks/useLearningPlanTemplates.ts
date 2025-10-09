@@ -118,11 +118,12 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
                 plan.description ||
                 `${plan.duration}-day intensive preparation plan`,
               difficulty: plan.difficulty || 'Intermediate',
-              totalQuestions: totalQuestions || plan.totalQuestions || 100,
+              totalQuestions:
+                totalQuestions || (plan as any).totalQuestions || 100,
               dailyQuestions:
                 dailyQuestions ||
-                plan.dailyQuestions ||
-                Math.ceil((plan.totalQuestions || 100) / duration),
+                (plan as any).dailyQuestions ||
+                Math.ceil(((plan as any).totalQuestions || 100) / duration),
               sections: sections.map((section: { questions: string[] }) => ({
                 id: section.id,
                 name: section.name,
