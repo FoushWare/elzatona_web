@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
         id: doc.id,
         ...doc.data(),
       }))
-      .sort((a: LearningPath, b: LearningPath) => {
+      .sort((a: any, b: any) => {
         // Sort by order field if it exists, otherwise by name
         const orderA = a.order || 999;
         const orderB = b.order || 999;
