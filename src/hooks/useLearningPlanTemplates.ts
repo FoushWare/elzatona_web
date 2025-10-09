@@ -78,7 +78,10 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
               timestamp: ApiPlan['createdAt']
             ) => {
               if (!timestamp) return new Date();
-              if (timestamp.seconds) {
+              if (typeof timestamp === 'string') {
+                return new Date(timestamp);
+              }
+              if (typeof timestamp === 'object' && timestamp.seconds) {
                 return new Date(timestamp.seconds * 1000);
               }
               if (timestamp.toDate && typeof timestamp.toDate === 'function') {
