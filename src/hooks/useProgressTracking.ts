@@ -112,7 +112,7 @@ export const useProgressTracking = () => {
       (window as WindowWithGuidance).triggerSignInGuidance &&
       sections.length >= 3
     ) {
-      (window as WindowWithGuidance).triggerSignInGuidance('roadmap', {
+      (window as WindowWithGuidance).triggerSignInGuidance?.('roadmap', {
         roadmapSections: sections.length,
       });
     }
