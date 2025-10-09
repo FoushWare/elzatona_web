@@ -87,17 +87,9 @@ export default function LearningPathQuestions({
     setSelectedAnswer(answer);
     setTotalAnswered(prev => prev + 1);
 
-    // Handle different question types
-    if ('correctAnswer' in currentQuestion) {
-      // MultipleChoiceQuestion type
-      if (answer === currentQuestion.correctAnswer.toString()) {
-        setScore(prev => prev + 1);
-      }
-    } else {
-      // JavaScriptQuestion or ReactQuestion type
-      if (answer === currentQuestion.correctAnswer) {
-        setScore(prev => prev + 1);
-      }
+    // Check if answer is correct
+    if (answer === currentQuestion.correctAnswer.toString()) {
+      setScore(prev => prev + 1);
     }
   };
 
@@ -146,21 +138,12 @@ export default function LearningPathQuestions({
 
   // Get the correct answer for the current question
   const getCorrectAnswer = () => {
-    if ('correctAnswer' in currentQuestion) {
-      // MultipleChoiceQuestion type
-      return currentQuestion.correctAnswer.toString();
-    } else {
-      // JavaScriptQuestion or ReactQuestion type
-      return currentQuestion.answer;
-    }
+    return currentQuestion.correctAnswer.toString();
   };
 
   // Get difficulty for the current question
   const getDifficulty = () => {
-    if ('difficulty' in currentQuestion) {
-      return currentQuestion.difficulty;
-    }
-    return 'medium'; // Default difficulty for JS/React questions
+    return currentQuestion.difficulty || 'medium';
   };
 
   return (
