@@ -246,13 +246,8 @@ export default function LearningPlanDetailPage() {
                     onClick={() => {
                       // This will be used to auto-select category in questions manager
                       console.log('Section clicked:', section);
-                      // Store the section category for use in questions manager
-                      if (section.category) {
-                        localStorage.setItem(
-                          'selectedSectionCategory',
-                          section.category
-                        );
-                      }
+                      // Note: PlanSection doesn't have category property
+                      // Category selection will be handled in the questions manager
                     }}
                   >
                     <div className="flex items-center justify-between mb-4">
