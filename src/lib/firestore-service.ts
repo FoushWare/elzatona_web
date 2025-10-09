@@ -870,7 +870,7 @@ class FirestoreService {
         updatedAt:
           doc.data().updatedAt?.toDate?.()?.toISOString() ||
           new Date().toISOString(),
-      }));
+      })) as Category[];
     } catch (error) {
       console.error('Error getting categories:', error);
       return [];
