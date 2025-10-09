@@ -680,7 +680,7 @@ export default function UnifiedQuestionManager({
                       <SelectValue placeholder="Select path" />
                     </SelectTrigger>
                     <SelectContent>
-                      {hookLearningPaths.map((path: LearningPath) => (
+                      {hookLearningPaths.map(path => (
                         <SelectItem key={path.id} value={path.title}>
                           {path.title}
                         </SelectItem>
