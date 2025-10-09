@@ -793,7 +793,7 @@ class FirestoreService {
         ...sectionData,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      };
+      } as Section;
     } catch (error) {
       console.error('Error creating section:', error);
       throw error;
