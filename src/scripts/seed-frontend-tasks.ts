@@ -288,6 +288,7 @@ export default TodoList;
     updatedAt: new Date(),
   },
   {
+    id: 'user-profile-form',
     title: 'User Profile Form',
     description:
       'Create a user profile form with validation, controlled inputs, and form submission handling. Include fields for name, email, age, and bio.',
@@ -543,6 +544,7 @@ export default UserProfileForm;
     updatedAt: new Date(),
   },
   {
+    id: 'api-data-fetching',
     title: 'API Data Fetching Component',
     description:
       'Create a component that fetches data from an API, handles loading states, error states, and displays the data in a user-friendly format.',
@@ -726,6 +728,7 @@ export default DataFetcher;
     updatedAt: new Date(),
   },
   {
+    id: 'custom-hook-local-storage',
     title: 'Custom Hook for Local Storage',
     description:
       'Create a custom React hook that manages localStorage with automatic serialization/deserialization, error handling, and TypeScript support.',
@@ -899,6 +902,7 @@ export default useLocalStorage;
 // Additional JavaScript/TypeScript tasks
 const javascriptTasks: FrontendTask[] = [
   {
+    id: 'array-manipulation-functions',
     title: 'Array Manipulation Functions',
     description:
       'Implement common array manipulation functions including map, filter, reduce, and find. Test your implementation with various data types.',
@@ -1055,6 +1059,7 @@ console.log('Find:', customFind(numbers, x => x > 3));
 // CSS/HTML tasks
 const cssTasks: FrontendTask[] = [
   {
+    id: 'responsive-card-layout',
     title: 'Responsive Card Layout',
     description:
       'Create a responsive card layout using CSS Grid and Flexbox. The layout should adapt to different screen sizes and display cards in a grid format.',
