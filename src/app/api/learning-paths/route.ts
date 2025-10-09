@@ -119,7 +119,7 @@ export async function GET(request: NextRequest) {
 
     // Deduplicate learning paths by ID and add sections data
     const uniqueLearningPaths = learningPaths.reduce(
-      (acc: LearningPathWithSections[], path: LearningPath) => {
+      (acc: LearningPathWithSections[], path: any) => {
         if (!acc.find(existingPath => existingPath.id === path.id)) {
           // Get relevant sections for this learning path
           const relevantSectionIds = learningPathSections[path.id] || [];
