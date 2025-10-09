@@ -400,9 +400,9 @@ export function MarkdownQuestionExtractor({
                     ? 'medium'
                     : 'hard',
               tags: q.tags || [],
-              expectedAnswer: q.expectedAnswer,
-              aiValidationPrompt: q.aiValidationPrompt,
-              acceptPartialCredit: q.acceptPartialCredit,
+              expectedAnswer: undefined, // UnifiedQuestion doesn't have this property
+              aiValidationPrompt: undefined, // UnifiedQuestion doesn't have this property
+              acceptPartialCredit: undefined, // UnifiedQuestion doesn't have this property
             }));
           onExtract(extractedQuestionsForCallback);
         }
