@@ -503,12 +503,10 @@ export default function TopicManager() {
           categoryName,
           `Deleted category "${categoryName}"`,
           {
-            deletedCategory: {
-              id: categoryId,
-              name: categoryName,
-              description: category?.description,
-              color: category?.color,
-            },
+            'deleted.id': categoryId,
+            'deleted.name': categoryName,
+            'deleted.description': category?.description || '',
+            'deleted.color': category?.color || '',
           }
         );
 
