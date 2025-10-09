@@ -435,13 +435,11 @@ export default function TopicManager() {
           topicName,
           `Deleted topic "${topicName}"`,
           {
-            deletedTopic: {
-              id: topicId,
-              name: topicName,
-              description: topic?.description,
-              category: topic?.category,
-              difficulty: topic?.difficulty,
-            },
+            'deleted.id': topicId,
+            'deleted.name': topicName,
+            'deleted.description': topic?.description || '',
+            'deleted.category': topic?.category || '',
+            'deleted.difficulty': topic?.difficulty || '',
           }
         );
 
