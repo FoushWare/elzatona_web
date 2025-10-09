@@ -897,7 +897,7 @@ class FirestoreService {
         ...categoryData,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      } as Category;
+      } as unknown as Category;
     } catch (error) {
       console.error('Error creating category:', error);
       throw error;
