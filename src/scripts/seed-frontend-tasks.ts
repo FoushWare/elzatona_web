@@ -6,6 +6,7 @@ import { FrontendTask } from '../types/admin';
 // React Developer Test Questions
 const reactFrontendTasks: FrontendTask[] = [
   {
+    id: 'counter-component',
     title: 'Counter Component',
     description:
       'Create a React counter component with increment, decrement, and reset functionality. The component should display the current count and have three buttons.',
