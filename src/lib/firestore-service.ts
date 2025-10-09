@@ -766,7 +766,7 @@ class FirestoreService {
         updatedAt:
           doc.data().updatedAt?.toDate?.()?.toISOString() ||
           new Date().toISOString(),
-      }));
+      })) as Section[];
     } catch (error) {
       console.error('Error getting sections:', error);
       return [];
