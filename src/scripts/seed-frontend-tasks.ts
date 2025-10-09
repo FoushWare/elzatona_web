@@ -123,6 +123,7 @@ export default Counter;
     updatedAt: new Date(),
   },
   {
+    id: 'todo-list-component',
     title: 'Todo List Component',
     description:
       'Build a complete Todo List application with add, delete, and toggle completion functionality. Include input validation and proper state management.',
