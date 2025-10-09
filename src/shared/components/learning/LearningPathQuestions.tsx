@@ -75,7 +75,7 @@ export default function LearningPathQuestions({
       case 'general':
         return transformInternalQuestions(generalFrontendQuestions);
       default:
-        return generalFrontendQuestions;
+        return transformInternalQuestions(generalFrontendQuestions);
     }
   };
 
