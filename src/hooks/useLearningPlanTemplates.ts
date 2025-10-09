@@ -95,7 +95,7 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             };
 
             // Calculate total questions from sections
-            const sections = plan.sections || [];
+            const sections = (plan as any).sections || [];
             const totalQuestions = sections.reduce(
               (total: number, section: { questions: string[] }) => {
                 return (
