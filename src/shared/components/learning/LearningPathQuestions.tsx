@@ -40,23 +40,40 @@ export default function LearningPathQuestions({
     category?: string;
     tags?: string[];
   }> => {
+    const transformInternalQuestions = (questions: any[]) => {
+      return questions.map(q => ({
+        id: q.id,
+        question: q.question,
+        options: Object.values(q.options).filter(Boolean) as string[],
+        correctAnswer: q.correctAnswer,
+        explanation: q.explanation,
+        difficulty: q.difficulty,
+        category: q.category,
+        tags: q.tags || [],
+      }));
+    };
+
     switch (category) {
       case 'javascript':
-        return javascriptQuestions;
+        return transformInternalQuestions(javascriptQuestions);
       case 'react':
-        return reactQuestions;
+        return transformInternalQuestions(reactQuestions);
       case 'css':
-        return cssQuestions;
+        return transformInternalQuestions(cssQuestions);
       case 'html':
-        return generalFrontendQuestions.filter(q => q.category === 'html');
+        return transformInternalQuestions(
+          generalFrontendQuestions.filter(q => q.category === 'html')
+        );
       case 'git':
-        return generalFrontendQuestions.filter(q => q.category === 'git');
+        return transformInternalQuestions(
+          generalFrontendQuestions.filter(q => q.category === 'git')
+        );
       case 'websockets':
-        return generalFrontendQuestions.filter(q =>
-          q.tags.includes('websockets')
+        return transformInternalQuestions(
+          generalFrontendQuestions.filter(q => q.tags.includes('websockets'))
         );
       case 'general':
-        return generalFrontendQuestions;
+        return transformInternalQuestions(generalFrontendQuestions);
       default:
         return generalFrontendQuestions;
     }
