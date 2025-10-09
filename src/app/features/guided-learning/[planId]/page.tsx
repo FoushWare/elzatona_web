@@ -259,11 +259,6 @@ export default function LearningPlanDetailPage() {
                           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                             {section.name}
                           </h3>
-                          {section.category && (
-                            <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">
-                              Category: {section.category}
-                            </div>
-                          )}
                         </div>
                       </div>
                       <div className="text-right">
