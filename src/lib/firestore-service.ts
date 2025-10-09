@@ -26,6 +26,7 @@ import {
   FirestoreUser,
   UserPreferences,
   LearningSession,
+  LearningPlanProgress,
 } from '../types/firestore';
 
 // Helper function to check database initialization
