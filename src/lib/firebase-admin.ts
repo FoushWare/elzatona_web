@@ -105,7 +105,7 @@ export class AdminFirestoreHelper {
     }
 
     const snapshot = await query.get();
-    const data = snapshot.docs.map(doc => ({
+    const data = snapshot.docs.map((doc: any) => ({
       id: doc.id,
       ...doc.data(),
     })) as T[];
