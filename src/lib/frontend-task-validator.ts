@@ -126,7 +126,7 @@ export class FrontendTaskValidator {
           testCaseId: testCase.id,
           passed: false,
           expectedOutput: testCase.expectedOutput,
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
           executionTime: 0,
         });
       });
@@ -184,7 +184,7 @@ export class FrontendTaskValidator {
           testCaseId: testCase.id,
           passed: false,
           expectedOutput: testCase.expectedOutput,
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
           executionTime: 0,
         });
       });
@@ -379,7 +379,7 @@ export class FrontendTaskValidator {
         testCaseId: testCase.id,
         passed: false,
         expectedOutput: testCase.expectedOutput,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         executionTime: Date.now() - startTime,
       };
     }
@@ -417,7 +417,7 @@ export class FrontendTaskValidator {
         testCaseId: testCase.id,
         passed: false,
         expectedOutput: testCase.expectedOutput,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         executionTime: Date.now() - startTime,
       };
     }
@@ -469,7 +469,7 @@ export class FrontendTaskValidator {
         testCaseId: testCase.id,
         passed: false,
         expectedOutput: testCase.expectedOutput,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         executionTime: Date.now() - startTime,
       };
     }
