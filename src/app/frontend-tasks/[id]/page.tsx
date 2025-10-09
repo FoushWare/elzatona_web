@@ -59,7 +59,7 @@ interface FrontendTask {
 export default function FrontendTaskPage() {
   const router = useRouter();
   const params = useParams();
-  const taskId = params.id as string;
+  const taskId = params?.id as string;
   const { isAuthenticated, user } = useAuth();
 
   const [task, setTask] = useState<FrontendTask | null>(null);
