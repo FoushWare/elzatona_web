@@ -27,10 +27,22 @@ interface GuidanceContext {
     fromDevice: string;
     toDevice: string;
   };
+  progressCount?: number;
+  roadmapSections?: number;
+  achievement?: string;
+  deviceType?: string;
 }
 
-interface WindowWithGuidance extends WindowWithTestFlags {
-  triggerSignInGuidance?: (trigger: string, context: GuidanceContext) => void;
+interface WindowWithGuidance extends Window {
+  triggerSignInGuidance?: (
+    trigger:
+      | 'progress'
+      | 'roadmap'
+      | 'achievement'
+      | 'device-switch'
+      | 'manual',
+    context?: GuidanceContext
+  ) => void;
 }
 
 export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
@@ -56,8 +68,8 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
     // Don't show guidance during testing
     if (
       typeof window !== 'undefined' &&
-      ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
-        (window as WindowWithTestFlags).__TEST_MODE__)
+      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as any).__TEST_MODE__)
     ) {
       return;
     }
@@ -149,8 +161,8 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
     // Don't show guidance during testing
     if (
       typeof window !== 'undefined' &&
-      ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
-        (window as WindowWithTestFlags).__TEST_MODE__)
+      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as any).__TEST_MODE__)
     ) {
       return;
     }
@@ -200,8 +212,8 @@ export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
     // Don't show guidance during testing
     if (
       typeof window !== 'undefined' &&
-      ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
-        (window as WindowWithTestFlags).__TEST_MODE__)
+      ((window as any).__DISABLE_GUIDANCE_MODALS__ ||
+        (window as any).__TEST_MODE__)
     ) {
       return;
     }

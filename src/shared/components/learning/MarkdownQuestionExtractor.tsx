@@ -379,7 +379,32 @@ export function MarkdownQuestionExtractor({
 
         // Call onExtract callback if provided
         if (onExtract) {
-          onExtract(bulkData.questions);
+          // Convert UnifiedQuestion[] back to ExtractedQuestion[] format
+          const extractedQuestionsForCallback: ExtractedQuestion[] =
+            bulkData.questions.map(q => ({
+              content: q.content,
+              type:
+                q.type === 'multiple-choice'
+                  ? 'single'
+                  : q.type === 'open-ended'
+                    ? 'open-ended'
+                    : 'single',
+              options: q.options || [],
+              explanation: q.explanation || '',
+              learningPath: q.learningPath || '',
+              category: q.category || '',
+              difficulty:
+                q.difficulty === 'beginner'
+                  ? 'easy'
+                  : q.difficulty === 'intermediate'
+                    ? 'medium'
+                    : 'hard',
+              tags: q.tags || [],
+              expectedAnswer: undefined, // UnifiedQuestion doesn't have this property
+              aiValidationPrompt: undefined, // UnifiedQuestion doesn't have this property
+              acceptPartialCredit: undefined, // UnifiedQuestion doesn't have this property
+            }));
+          onExtract(extractedQuestionsForCallback);
         }
 
         // Auto-close after successful import

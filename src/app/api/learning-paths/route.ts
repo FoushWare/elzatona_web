@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
         id: doc.id,
         ...doc.data(),
       }))
-      .sort((a: LearningPath, b: LearningPath) => {
+      .sort((a: any, b: any) => {
         // Sort by order field if it exists, otherwise by name
         const orderA = a.order || 999;
         const orderB = b.order || 999;
@@ -119,7 +119,7 @@ export async function GET(request: NextRequest) {
 
     // Deduplicate learning paths by ID and add sections data
     const uniqueLearningPaths = learningPaths.reduce(
-      (acc: LearningPathWithSections[], path: LearningPath) => {
+      (acc: LearningPathWithSections[], path: any) => {
         if (!acc.find(existingPath => existingPath.id === path.id)) {
           // Get relevant sections for this learning path
           const relevantSectionIds = learningPathSections[path.id] || [];

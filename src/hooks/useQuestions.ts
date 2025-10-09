@@ -206,7 +206,7 @@ export const useQuestions = (): UseQuestionsReturn => {
         await saveQuestionAttempt({
           questionId,
           userId: user.uid,
-          userAnswer: selectedAnswer,
+          userAnswer: { answer: selectedAnswer.toString() },
           isCorrect,
           timeSpent,
           points: isCorrect ? 10 : 0,
@@ -252,7 +252,11 @@ export const useQuestions = (): UseQuestionsReturn => {
       setError(null);
 
       try {
-        const quizQuestions = await getQuizQuestions(config);
+        const quizQuestions = await getQuizQuestions(
+          config.category,
+          config.difficulty,
+          config.count
+        );
         setQuestions(quizQuestions);
         return quizQuestions;
       } catch (err) {
