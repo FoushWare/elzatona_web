@@ -96,7 +96,7 @@ export interface QuestionAttempt {
   metadata?: {
     device?: string;
     browser?: string;
-    [key: string]: string | number | boolean;
+    [key: string]: string | number | boolean | undefined;
   };
 }
 
