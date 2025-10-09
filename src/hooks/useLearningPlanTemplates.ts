@@ -84,7 +84,11 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
               if (typeof timestamp === 'object' && timestamp.seconds) {
                 return new Date(timestamp.seconds * 1000);
               }
-              if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+              if (
+                typeof timestamp === 'object' &&
+                'toDate' in timestamp &&
+                typeof timestamp.toDate === 'function'
+              ) {
                 return timestamp.toDate();
               }
               return new Date(timestamp);
