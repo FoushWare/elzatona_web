@@ -68,13 +68,13 @@ export async function PUT(
     // Update the task
     await AdminFirestoreHelper.updateDocument<ProblemSolvingTask>(
       COLLECTIONS.PROBLEM_SOLVING_TASKS,
-      params.id,
+      id,
       body
     );
 
     const response: ApiResponse<{ id: string }> = {
       success: true,
-      data: { id: params.id },
+      data: { id },
     };
 
     return NextResponse.json(response);
@@ -111,13 +111,13 @@ export async function DELETE(
     // Soft delete by setting isActive to false
     await AdminFirestoreHelper.updateDocument<ProblemSolvingTask>(
       COLLECTIONS.PROBLEM_SOLVING_TASKS,
-      params.id,
+      id,
       { isActive: false }
     );
 
     const response: ApiResponse<{ id: string }> = {
       success: true,
-      data: { id: params.id },
+      data: { id },
     };
 
     return NextResponse.json(response);
