@@ -60,34 +60,44 @@ export default function ContinueWhereLeftOff() {
         continueData.recentQuestions &&
         continueData.recentQuestions.length > 0
       ) {
-        continueData.recentQuestions.slice(0, 2).forEach(
-          (
-            question: {
-              questionId: string;
-              category: string;
-              answeredCorrectly: boolean;
-              timestamp: string;
-              points?: number;
-            },
-            index: number
-          ) => {
-            items.push({
-              id: `question-${question.questionId}`,
-              type: 'question',
-              title: `${question.category} Question`,
-              description: question.answeredCorrectly
-                ? 'Completed correctly'
-                : 'Needs review',
-              lastAccessed: question.timestamp,
-              href: `/questions/${question.questionId}`,
-              icon: BookOpen,
-              color: question.answeredCorrectly
-                ? 'from-green-500 to-green-600'
-                : 'from-orange-500 to-orange-600',
-              points: question.points,
-            });
-          }
-        );
+        (
+          continueData.recentQuestions as Array<{
+            questionId: string;
+            category: string;
+            answeredCorrectly: boolean;
+            timestamp: string;
+            points?: number;
+          }>
+        )
+          .slice(0, 2)
+          .forEach(
+            (
+              question: {
+                questionId: string;
+                category: string;
+                answeredCorrectly: boolean;
+                timestamp: string;
+                points?: number;
+              },
+              index: number
+            ) => {
+              items.push({
+                id: `question-${question.questionId}`,
+                type: 'question',
+                title: `${question.category} Question`,
+                description: question.answeredCorrectly
+                  ? 'Completed correctly'
+                  : 'Needs review',
+                lastAccessed: question.timestamp,
+                href: `/questions/${question.questionId}`,
+                icon: BookOpen,
+                color: question.answeredCorrectly
+                  ? 'from-green-500 to-green-600'
+                  : 'from-orange-500 to-orange-600',
+                points: question.points,
+              });
+            }
+          );
       }
 
       // Add recent challenges
