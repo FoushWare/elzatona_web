@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 
 interface TestResult {
+  testCase: number;
   input: string;
   expectedOutput: string;
   actualOutput: string;
@@ -83,8 +84,8 @@ export default function ChallengeWithProgress({
         return {
           testCase: index + 1,
           input: testCase.input,
-          expected: testCase.expectedOutput,
-          actual: isPassed ? testCase.expectedOutput : 'Wrong output',
+          expectedOutput: testCase.expectedOutput,
+          actualOutput: isPassed ? testCase.expectedOutput : 'Wrong output',
           passed: isPassed,
           description: testCase.description,
         };
