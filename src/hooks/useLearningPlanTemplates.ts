@@ -91,7 +91,7 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
               ) {
                 return timestamp.toDate();
               }
-              return new Date(timestamp);
+              return new Date();
             };
 
             // Calculate total questions from sections
