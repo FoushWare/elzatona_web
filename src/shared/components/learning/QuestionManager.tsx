@@ -97,12 +97,12 @@ export default function QuestionManager() {
     console.log('Form submitted:', formData);
   };
 
-  const handleEdit = (question: Question) => {
+  const handleEdit = (question: any) => {
     setEditingQuestion(question);
     setFormData({
-      question: question.question,
-      options: question.options,
-      correctAnswer: question.correctAnswer,
+      question: question.question || '',
+      options: question.options || [],
+      correctAnswer: question.correctAnswer || 0,
       explanation: question.explanation,
       category: question.category,
       difficulty: question.difficulty,
