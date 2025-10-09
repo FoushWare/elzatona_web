@@ -27,6 +27,10 @@ interface GuidanceContext {
     fromDevice: string;
     toDevice: string;
   };
+  progressCount?: number;
+  roadmapSections?: number;
+  achievement?: string;
+  deviceType?: string;
 }
 
 interface WindowWithGuidance extends Window {
