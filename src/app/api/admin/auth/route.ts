@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
         email: adminData.email,
         role: adminData.role,
       },
-      adminConfig.jwt.secret as string,
+      adminConfig.jwt.secret,
       { expiresIn: '24h' }
     );
 

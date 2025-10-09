@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       name,
       description: description || '',
       color: color || '#3B82F6',
-      icon: 'folder', // Default icon
+      icon: 'BookOpen',
     };
 
     const category = await firestoreService.createCategory(categoryData);

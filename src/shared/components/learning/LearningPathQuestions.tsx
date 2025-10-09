@@ -40,25 +40,42 @@ export default function LearningPathQuestions({
     category?: string;
     tags?: string[];
   }> => {
+    const transformInternalQuestions = (questions: any[]) => {
+      return questions.map(q => ({
+        id: q.id,
+        question: q.question,
+        options: Object.values(q.options).filter(Boolean) as string[],
+        correctAnswer: q.correctAnswer,
+        explanation: q.explanation,
+        difficulty: q.difficulty,
+        category: q.category,
+        tags: q.tags || [],
+      }));
+    };
+
     switch (category) {
       case 'javascript':
-        return javascriptQuestions;
+        return transformInternalQuestions(javascriptQuestions);
       case 'react':
-        return reactQuestions;
+        return transformInternalQuestions(reactQuestions);
       case 'css':
-        return cssQuestions;
+        return transformInternalQuestions(cssQuestions);
       case 'html':
-        return generalFrontendQuestions.filter(q => q.category === 'html');
+        return transformInternalQuestions(
+          generalFrontendQuestions.filter(q => q.category === 'html')
+        );
       case 'git':
-        return generalFrontendQuestions.filter(q => q.category === 'git');
+        return transformInternalQuestions(
+          generalFrontendQuestions.filter(q => q.category === 'git')
+        );
       case 'websockets':
-        return generalFrontendQuestions.filter(q =>
-          q.tags.includes('websockets')
+        return transformInternalQuestions(
+          generalFrontendQuestions.filter(q => q.tags.includes('websockets'))
         );
       case 'general':
-        return generalFrontendQuestions;
+        return transformInternalQuestions(generalFrontendQuestions);
       default:
-        return generalFrontendQuestions;
+        return transformInternalQuestions(generalFrontendQuestions);
     }
   };
 
@@ -70,17 +87,9 @@ export default function LearningPathQuestions({
     setSelectedAnswer(answer);
     setTotalAnswered(prev => prev + 1);
 
-    // Handle different question types
-    if ('correctAnswer' in currentQuestion) {
-      // MultipleChoiceQuestion type
-      if (answer === currentQuestion.correctAnswer.toString()) {
-        setScore(prev => prev + 1);
-      }
-    } else {
-      // JavaScriptQuestion or ReactQuestion type
-      if (answer === currentQuestion.correctAnswer) {
-        setScore(prev => prev + 1);
-      }
+    // Check if answer is correct
+    if (answer === currentQuestion.correctAnswer.toString()) {
+      setScore(prev => prev + 1);
     }
   };
 
@@ -129,21 +138,12 @@ export default function LearningPathQuestions({
 
   // Get the correct answer for the current question
   const getCorrectAnswer = () => {
-    if ('correctAnswer' in currentQuestion) {
-      // MultipleChoiceQuestion type
-      return currentQuestion.correctAnswer.toString();
-    } else {
-      // JavaScriptQuestion or ReactQuestion type
-      return currentQuestion.answer;
-    }
+    return currentQuestion.correctAnswer.toString();
   };
 
   // Get difficulty for the current question
   const getDifficulty = () => {
-    if ('difficulty' in currentQuestion) {
-      return currentQuestion.difficulty;
-    }
-    return 'medium'; // Default difficulty for JS/React questions
+    return currentQuestion.difficulty || 'medium';
   };
 
   return (

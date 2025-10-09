@@ -44,6 +44,9 @@ export class AudioUploadService {
       }
 
       // Create storage reference
+      if (!storage) {
+        return { success: false, error: 'Firebase Storage not available' };
+      }
       const fileName = `questions/${questionId}/question_audio`;
       const storageRef = ref(storage, fileName);
 
@@ -76,6 +79,9 @@ export class AudioUploadService {
       }
 
       // Create storage reference
+      if (!storage) {
+        return { success: false, error: 'Firebase Storage not available' };
+      }
       const fileName = `questions/${questionId}/answer_audio`;
       const storageRef = ref(storage, fileName);
 
@@ -105,6 +111,9 @@ export class AudioUploadService {
       }
 
       // Create storage reference
+      if (!storage) {
+        return { success: false, error: 'Firebase Storage not available' };
+      }
       const storageRef = ref(storage, filePath);
 
       // Delete file

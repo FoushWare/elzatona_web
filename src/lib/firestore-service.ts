@@ -22,6 +22,16 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
+import {
+  FirestoreUser,
+  UserPreferences,
+  LearningSession,
+  LearningPlanProgress,
+  Badge,
+  UserAnalytics,
+  FirestoreQuestion,
+  UserProgress,
+} from '../types/firestore';
 
 // Helper function to check database initialization
 const checkDb = (): Firestore => {
@@ -546,7 +556,7 @@ class FirestoreService {
         );
       }
 
-      return plans;
+      return plans as LearningPlanTemplate[];
     } catch (error) {
       console.error('Error getting learning plan templates:', error);
       // Return empty array instead of throwing to prevent app crashes
@@ -570,7 +580,7 @@ class FirestoreService {
         return {
           id: planSnap.id,
           ...planSnap.data(),
-        };
+        } as LearningPlanTemplate;
       }
       return null;
     } catch (error) {
@@ -680,7 +690,7 @@ class FirestoreService {
         return {
           id: pathSnap.id,
           ...pathSnap.data(),
-        };
+        } as LearningPath;
       }
       return null;
     } catch (error) {
@@ -711,7 +721,7 @@ class FirestoreService {
         return {
           id: updatedSnap.id,
           ...updatedSnap.data(),
-        };
+        } as LearningPath;
       }
       return null;
     } catch (error) {
@@ -756,7 +766,7 @@ class FirestoreService {
         updatedAt:
           doc.data().updatedAt?.toDate?.()?.toISOString() ||
           new Date().toISOString(),
-      }));
+      })) as Section[];
     } catch (error) {
       console.error('Error getting sections:', error);
       return [];
@@ -783,7 +793,7 @@ class FirestoreService {
         ...sectionData,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      };
+      } as unknown as Section;
     } catch (error) {
       console.error('Error creating section:', error);
       throw error;
@@ -817,7 +827,7 @@ class FirestoreService {
           updatedAt:
             updatedSnap.data().updatedAt?.toDate?.()?.toISOString() ||
             new Date().toISOString(),
-        };
+        } as Section;
       }
       return null;
     } catch (error) {
@@ -860,7 +870,7 @@ class FirestoreService {
         updatedAt:
           doc.data().updatedAt?.toDate?.()?.toISOString() ||
           new Date().toISOString(),
-      }));
+      })) as Category[];
     } catch (error) {
       console.error('Error getting categories:', error);
       return [];
@@ -887,7 +897,7 @@ class FirestoreService {
         ...categoryData,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      };
+      } as unknown as Category;
     } catch (error) {
       console.error('Error creating category:', error);
       throw error;
@@ -921,7 +931,7 @@ class FirestoreService {
           updatedAt:
             updatedSnap.data().updatedAt?.toDate?.()?.toISOString() ||
             new Date().toISOString(),
-        };
+        } as unknown as Category;
       }
       return null;
     } catch (error) {
