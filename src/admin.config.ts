@@ -54,7 +54,7 @@ export const adminConfig = {
     initialAdmin: {
       email: process.env.INITIAL_ADMIN_EMAIL,
       password: process.env.INITIAL_ADMIN_PASSWORD,
-      name: process.env.INITIAL_ADMIN_NAME,
+      name: process.env.INITIAL_ADMIN_NAME || 'Admin',
       role:
         (process.env.INITIAL_ADMIN_ROLE as 'super_admin' | 'admin') ||
         'super_admin',
