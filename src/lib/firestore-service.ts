@@ -931,7 +931,7 @@ class FirestoreService {
           updatedAt:
             updatedSnap.data().updatedAt?.toDate?.()?.toISOString() ||
             new Date().toISOString(),
-        };
+        } as unknown as Category;
       }
       return null;
     } catch (error) {
