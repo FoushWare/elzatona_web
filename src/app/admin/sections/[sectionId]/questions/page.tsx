@@ -14,7 +14,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
-import { ArrowLeft, Plus, Edit, Trash2, Loader2, Save, X } from 'lucide-react';
+import {
+  ArrowLeft,
+  Plus,
+  Edit,
+  Trash2,
+  Loader2,
+  Save,
+  X,
+  Search,
+} from 'lucide-react';
 
 interface Question {
   id: string;
