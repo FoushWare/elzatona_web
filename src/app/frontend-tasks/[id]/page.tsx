@@ -1183,11 +1183,11 @@ export default function App() {
                       indentation: true,
                     },
                     // TypeScript/JavaScript specific options
-                    typescript: {
-                      suggest: {
-                        includeCompletionsForModuleExports: false,
-                      },
-                    },
+                    // typescript: {
+                    //   suggest: {
+                    //     includeCompletionsForModuleExports: false,
+                    //   },
+                    // },
                     javascript: {
                       suggest: {
                         includeCompletionsForModuleExports: false,
