@@ -124,9 +124,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
                 dailyQuestions ||
                 (plan as any).dailyQuestions ||
                 Math.ceil(((plan as any).totalQuestions || 100) / duration),
-              sections: sections.map((section: { questions: string[] }) => ({
-                id: section.id,
-                name: section.name,
+              sections: sections.map((section: any) => ({
+                id: section.id || '',
+                name: section.name || '',
                 questions: section.questions || [],
                 weight: section.weight || 0,
               })),
