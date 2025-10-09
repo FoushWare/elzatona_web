@@ -30,6 +30,7 @@ import {
   Badge,
   UserAnalytics,
   FirestoreQuestion,
+  UserProgress,
 } from '../types/firestore';
 
 // Helper function to check database initialization
