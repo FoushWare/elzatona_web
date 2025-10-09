@@ -34,7 +34,15 @@ interface GuidanceContext {
 }
 
 interface WindowWithGuidance extends Window {
-  triggerSignInGuidance?: (trigger: string, context: GuidanceContext) => void;
+  triggerSignInGuidance?: (
+    trigger:
+      | 'progress'
+      | 'roadmap'
+      | 'achievement'
+      | 'device-switch'
+      | 'manual',
+    context?: GuidanceContext
+  ) => void;
 }
 
 export const SignInGuidanceDetector: React.FC<SignInGuidanceDetectorProps> = ({
