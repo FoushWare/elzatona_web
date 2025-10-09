@@ -29,6 +29,7 @@ import {
   LearningPlanProgress,
   Badge,
   UserAnalytics,
+  FirestoreQuestion,
 } from '../types/firestore';
 
 // Helper function to check database initialization
