@@ -3,10 +3,11 @@ import { AudioCollectionService } from '@/lib/audio-collection-service';
 import { QuestionAudioMapping } from '@/lib/audio-collection-schema';
 
 interface AudioInfo {
-  path: string;
+  localPath: string;
+  isDefault: boolean;
   duration?: number;
-  size?: number;
-  format?: string;
+  fileSize?: number;
+  mimeType?: string;
 }
 
 export interface UseAudioCollectionReturn {
