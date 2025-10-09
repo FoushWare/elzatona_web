@@ -24,6 +24,7 @@ import {
   X,
   Search,
   Filter,
+  BookOpen,
 } from 'lucide-react';
 
 interface Question {
