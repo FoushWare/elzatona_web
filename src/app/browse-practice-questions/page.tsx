@@ -33,7 +33,7 @@ export default function BrowsePracticeQuestionsPage() {
       description: 'Master technical interviews with curated questions',
       icon: <Users className="w-12 h-12" />,
       color: 'blue',
-      path: '/free-style-practice',
+      path: '/learning-paths',
       isPopular: true,
     },
     {
@@ -42,7 +42,7 @@ export default function BrowsePracticeQuestionsPage() {
       description: 'Build real-world projects and components',
       icon: <Code className="w-12 h-12" />,
       color: 'purple',
-      path: '/custom-roadmap',
+      path: '/frontend-tasks',
       isPopular: false,
     },
     {
@@ -108,9 +108,9 @@ export default function BrowsePracticeQuestionsPage() {
           </h1>
 
           <p className="text-2xl text-gray-600 dark:text-gray-400 max-w-5xl mx-auto leading-relaxed mb-12">
-            Select how you'd like to learn and improve your frontend development
-            skills. Each option offers a unique experience tailored to different
-            goals and skill levels.
+            Select how you&apos;d like to learn and improve your frontend
+            development skills. Each option offers a unique experience tailored
+            to different goals and skill levels.
           </p>
 
           {/* Quick Stats */}
@@ -296,8 +296,8 @@ export default function BrowsePracticeQuestionsPage() {
                   Interview Prep
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  Perfect if you're preparing for technical interviews or want
-                  to practice with real company questions.
+                  Perfect if you&apos;re preparing for technical interviews or
+                  want to practice with real company questions.
                 </p>
               </div>
 

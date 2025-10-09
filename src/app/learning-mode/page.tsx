@@ -65,8 +65,8 @@ export default function LearningModePage() {
                 Choose Your Learning Style
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Select how you'd like to learn and we'll customize your
-                experience accordingly.
+                Select how you&apos;d like to learn and we&apos;ll customize
+                your experience accordingly.
               </p>
             </div>
           </div>
@@ -172,8 +172,8 @@ export default function LearningModePage() {
                   Guided Learning
                 </h4>
                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                  Perfect if you're preparing for technical interviews or want
-                  structured, expert-curated content with clear milestones.
+                  Perfect if you&apos;re preparing for technical interviews or
+                  want structured, expert-curated content with clear milestones.
                 </p>
               </div>
 

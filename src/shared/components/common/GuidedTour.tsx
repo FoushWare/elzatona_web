@@ -90,8 +90,9 @@ const steps = [
           Ready to Begin? 🎉
         </h3>
         <p style={{ color: 'var(--tour-text)', opacity: 0.8 }}>
-          You're all set! Click "Start Learning Now" to begin your journey or
-          explore the learning paths to see what's available.
+          You&apos;re all set! Click &quot;Start Learning Now&quot; to begin
+          your journey or explore the learning paths to see what&apos;s
+          available.
         </p>
       </div>
     ),

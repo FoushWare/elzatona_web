@@ -51,7 +51,7 @@ export const OnboardingSystem: React.FC<OnboardingSystemProps> = ({
       content: (
         <div className="space-y-4">
           <p className="text-gray-600 dark:text-gray-300">
-            We're excited to help you prepare for your frontend developer
+            We&apos;re excited to help you prepare for your frontend developer
             interviews! Let us show you around and discover all the amazing
             features we have to offer.
           </p>

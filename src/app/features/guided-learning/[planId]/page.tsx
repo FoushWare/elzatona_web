@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { useLearningPlanTemplates } from '@/hooks/useLearningPlanTemplates';
@@ -21,6 +21,24 @@ import {
   ArrowRight,
   Loader2,
 } from 'lucide-react';
+
+interface PlanSection {
+  id: string;
+  name: string;
+  questions: string[];
+  weight: number;
+}
+
+interface LearningPlan {
+  id: string;
+  name: string;
+  description: string;
+  duration: number;
+  difficulty: string;
+  features: string[];
+  estimatedTime: string;
+  sections: PlanSection[];
+}
 
 export default function LearningPlanDetailPage() {
   const router = useRouter();
@@ -213,10 +231,10 @@ export default function LearningPlanDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {plan.sections
               .filter(
-                (section: any) =>
+                (section: PlanSection) =>
                   section.questions && section.questions.length > 0
               )
-              .map((section: any, index: number) => {
+              .map((section: PlanSection, index: number) => {
                 const actualQuestionCount = section.questions
                   ? section.questions.length
                   : 0;
@@ -278,7 +296,8 @@ export default function LearningPlanDetailPage() {
           </div>
 
           {plan.sections.filter(
-            (section: any) => section.questions && section.questions.length > 0
+            (section: PlanSection) =>
+              section.questions && section.questions.length > 0
           ).length === 0 && (
             <div className="text-center py-12">
               <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
@@ -307,7 +326,7 @@ export default function LearningPlanDetailPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {plan.features.map((feature: any, index: number) => (
+            {plan.features.map((feature: string, index: number) => (
               <div
                 key={index}
                 className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
@@ -353,7 +372,9 @@ export default function LearningPlanDetailPage() {
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
                       {dailyQuestions} questions •{' '}
-                      {sectionsForDay.map((s: any) => s.name).join(', ')}
+                      {sectionsForDay
+                        .map((s: PlanSection) => s.name)
+                        .join(', ')}
                     </p>
                   </div>
                   <div className="text-right">

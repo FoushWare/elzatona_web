@@ -43,7 +43,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setIsDarkMode(theme);
     }
     setIsLoaded(true);
-  }, [isDarkMode]);
+  }, []); // Remove isDarkMode dependency to prevent infinite loop
 
   useEffect(() => {
     // Only run after initial load to prevent hydration mismatch

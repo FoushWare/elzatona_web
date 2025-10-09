@@ -31,6 +31,22 @@ interface QuestionFormData {
   isActive: boolean;
 }
 
+interface Question {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+  category: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  tags: string[];
+  points: number;
+  timeLimit?: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function QuestionManager() {
   const {
     questions,
@@ -47,7 +63,7 @@ export default function QuestionManager() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [editingQuestion, setEditingQuestion] = useState<any>(null);
+  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [formData, setFormData] = useState<QuestionFormData>({
     question: '',
     options: ['', '', '', ''],
@@ -81,7 +97,7 @@ export default function QuestionManager() {
     console.log('Form submitted:', formData);
   };
 
-  const handleEdit = (question: any) => {
+  const handleEdit = (question: Question) => {
     setEditingQuestion(question);
     setFormData({
       question: question.question,
@@ -508,7 +524,10 @@ export default function QuestionManager() {
                       onChange={e =>
                         setFormData(prev => ({
                           ...prev,
-                          difficulty: e.target.value as any,
+                          difficulty: e.target.value as
+                            | 'easy'
+                            | 'medium'
+                            | 'hard',
                         }))
                       }
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"

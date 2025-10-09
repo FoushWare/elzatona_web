@@ -19,6 +19,11 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase-server';
 
+interface SectorError extends Error {
+  code?: string;
+  message: string;
+}
+
 // Helper function to check database initialization
 const checkDb = (): Firestore => {
   if (!db) {
@@ -112,9 +117,10 @@ export class SectorService {
       await updateDoc(docRef, { id: docRef.id });
 
       return { success: true, sectorId: docRef.id };
-    } catch (error: any) {
-      console.error('Error creating sector:', error);
-      return { success: false, error: error.message };
+    } catch (error: unknown) {
+      const sectorError = error as SectorError;
+      console.error('Error creating sector:', sectorError);
+      return { success: false, error: sectorError.message };
     }
   }
 
