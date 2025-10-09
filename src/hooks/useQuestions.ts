@@ -206,7 +206,7 @@ export const useQuestions = (): UseQuestionsReturn => {
         await saveQuestionAttempt({
           questionId,
           userId: user.uid,
-          userAnswer: { answer: selectedAnswer },
+          userAnswer: { answer: selectedAnswer.toString() },
           isCorrect,
           timeSpent,
           points: isCorrect ? 10 : 0,
