@@ -22,7 +22,11 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { FirestoreUser, UserPreferences } from '../types/firestore';
+import {
+  FirestoreUser,
+  UserPreferences,
+  LearningSession,
+} from '../types/firestore';
 
 // Helper function to check database initialization
 const checkDb = (): Firestore => {
