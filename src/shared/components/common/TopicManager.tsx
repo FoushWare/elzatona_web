@@ -328,7 +328,7 @@ export default function TopicManager() {
           editingTopic.id,
           topicForm.name,
           `Updated topic "${editingTopic.name}" to "${topicForm.name}"`,
-          {
+          JSON.stringify({
             before: {
               name: editingTopic.name,
               description: editingTopic.description,
@@ -341,7 +341,7 @@ export default function TopicManager() {
               category: topicForm.category,
               difficulty: topicForm.difficulty,
             },
-          }
+          })
         );
 
         setEditingTopic(null);
