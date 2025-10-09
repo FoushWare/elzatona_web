@@ -136,10 +136,10 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
                 'Curated questions',
               ],
               estimatedTime:
-                plan.estimatedTime ||
+                (plan as any).estimatedTime ||
                 `${Math.ceil(duration * 2)}-${Math.ceil(duration * 3)} hours`,
               isRecommended:
-                plan.isRecommended || duration === 3 || duration === 7,
+                (plan as any).isRecommended || duration === 3 || duration === 7,
               isActive: plan.isActive !== false,
               createdAt: parseFirestoreTimestamp(plan.createdAt),
               updatedAt: parseFirestoreTimestamp(plan.updatedAt),
