@@ -44,7 +44,7 @@ interface LearningPathResponse {
 export default function LearningPathDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const pathId = params.id as string;
+  const pathId = params?.id as string;
 
   const [learningPath, setLearningPath] = useState<LearningPath | null>(null);
   const [loading, setLoading] = useState(true);
