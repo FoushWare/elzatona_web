@@ -140,7 +140,7 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
                 `${Math.ceil(duration * 2)}-${Math.ceil(duration * 3)} hours`,
               isRecommended:
                 (plan as any).isRecommended || duration === 3 || duration === 7,
-              isActive: plan.isActive !== false,
+              isActive: (plan as any).isActive !== false,
               createdAt: parseFirestoreTimestamp(plan.createdAt),
               updatedAt: parseFirestoreTimestamp(plan.updatedAt),
             };
