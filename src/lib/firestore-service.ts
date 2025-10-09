@@ -579,7 +579,7 @@ class FirestoreService {
         return {
           id: planSnap.id,
           ...planSnap.data(),
-        };
+        } as LearningPlanTemplate;
       }
       return null;
     } catch (error) {
