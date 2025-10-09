@@ -690,7 +690,7 @@ class FirestoreService {
         return {
           id: pathSnap.id,
           ...pathSnap.data(),
-        };
+        } as LearningPath;
       }
       return null;
     } catch (error) {
