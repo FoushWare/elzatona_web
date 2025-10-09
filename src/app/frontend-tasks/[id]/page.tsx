@@ -1193,11 +1193,6 @@ export default function App() {
                     //     includeCompletionsForModuleExports: false,
                     //   },
                     // },
-                    // Disable module resolution errors
-                    noSemanticValidation: true,
-                    noSyntaxValidation: false,
-                    // Disable import/export validation
-                    validate: false,
                   }}
                   beforeMount={monaco => {
                     // Configure TypeScript compiler options
