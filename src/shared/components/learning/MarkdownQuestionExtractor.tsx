@@ -393,7 +393,12 @@ export function MarkdownQuestionExtractor({
               explanation: q.explanation || '',
               learningPath: q.learningPath || '',
               category: q.category || '',
-              difficulty: q.difficulty || 'medium',
+              difficulty:
+                q.difficulty === 'beginner'
+                  ? 'easy'
+                  : q.difficulty === 'intermediate'
+                    ? 'medium'
+                    : 'hard',
               tags: q.tags || [],
               expectedAnswer: q.expectedAnswer,
               aiValidationPrompt: q.aiValidationPrompt,
