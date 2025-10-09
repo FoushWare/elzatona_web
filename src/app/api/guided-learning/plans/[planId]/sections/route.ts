@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { firestoreService } from '@/lib/firestore-service';
+import { LearningPlanTemplate } from '@/lib/guided-learning-service';
 
 interface SectionConfig {
   sectionId?: string;
