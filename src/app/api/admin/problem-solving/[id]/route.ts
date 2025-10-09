@@ -11,12 +11,13 @@ import {
 // GET /api/admin/problem-solving/[id] - Get specific problem solving task
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const task = await AdminFirestoreHelper.getDocument<ProblemSolvingTask>(
       COLLECTIONS.PROBLEM_SOLVING_TASKS,
-      params.id
+      id
     );
 
     if (!task) {
@@ -44,8 +45,9 @@ export async function GET(
 // PUT /api/admin/problem-solving/[id] - Update problem solving task
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const body: Partial<ProblemSolvingTaskFormData> = await request.json();
 
@@ -53,7 +55,7 @@ export async function PUT(
     const existingTask =
       await AdminFirestoreHelper.getDocument<ProblemSolvingTask>(
         COLLECTIONS.PROBLEM_SOLVING_TASKS,
-        params.id
+        id
       );
 
     if (!existingTask) {
@@ -88,14 +90,15 @@ export async function PUT(
 // DELETE /api/admin/problem-solving/[id] - Delete problem solving task (soft delete)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     // Check if task exists
     const existingTask =
       await AdminFirestoreHelper.getDocument<ProblemSolvingTask>(
         COLLECTIONS.PROBLEM_SOLVING_TASKS,
-        params.id
+        id
       );
 
     if (!existingTask) {
