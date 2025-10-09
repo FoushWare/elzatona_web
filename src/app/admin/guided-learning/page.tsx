@@ -502,18 +502,6 @@ export default function GuidedLearningAdminPage() {
                       <span className="text-gray-600 dark:text-gray-400 truncate flex-1 mr-2">
                         • {section.name}
                       </span>
-                      {section.categoryId && (
-                        <span
-                          className="px-2 py-1 rounded-full text-xs font-medium text-white flex-shrink-0"
-                          style={{
-                            backgroundColor: getCategoryColor(
-                              section.categoryId
-                            ),
-                          }}
-                        >
-                          {getCategoryName(section.categoryId, plan.sections)}
-                        </span>
-                      )}
                     </div>
                   )) || (
                     <p className="text-gray-500 text-sm">
