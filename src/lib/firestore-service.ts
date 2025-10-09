@@ -721,7 +721,7 @@ class FirestoreService {
         return {
           id: updatedSnap.id,
           ...updatedSnap.data(),
-        };
+        } as LearningPath;
       }
       return null;
     } catch (error) {
