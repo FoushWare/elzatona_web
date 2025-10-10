@@ -178,7 +178,7 @@ export default function ProblemSolvingEditor({
     const defaultFiles: FileNode[] = [
       {
         id: 'starter',
-        name: 'solution.js',
+        name: 'starter.js',
         type: 'file',
         content: starterCode,
         fileType: 'js',
