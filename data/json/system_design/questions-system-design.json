@@ -269,7 +269,6 @@
       }
     ]
   },
-  // ========= Performance =========
   {
     "id": "q11",
     "title": "What is the difference between lazy loading and code splitting?",

@@ -1,0 +1,430 @@
+[
+  {
+    "id": "pp1",
+    "title": "What is the PRPL Pattern?",
+    "content": "### PRPL Pattern\nThe **PRPL Pattern** is a web performance optimization strategy that focuses on making applications load and run efficiently, even on low-end devices or slow networks.\n\n**PRPL** stands for:\n- **P**: Push critical resources for the initial route.\n- **R**: Render the initial route as soon as possible.\n- **P**: Pre-cache assets for future routes.\n- **L**: Lazy-load remaining routes and assets.\n\nThis approach improves load times, offline experience, and caching efficiency.\n\n**Example:** Progressive Web Apps (PWAs) that use an app shell, service workers, and code-splitting to load only what’s needed.\n\n**Pros:**\n- Faster first render.\n- Improved caching and offline usability.\n- Reduced bandwidth usage.\n\n**Cons:**\n- Requires careful bundling and caching strategy.\n- Over-pushing or preloading can waste bandwidth.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Web Optimization",
+    "difficulty": "intermediate",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["performance", "prpl", "pwa", "web-optimization"],
+    "sampleAnswers": [
+      "A web performance pattern that optimizes loading by pushing critical resources, rendering fast, pre-caching assets, and lazy-loading the rest."
+    ]
+  },
+  {
+    "id": "pp2",
+    "title": "What does each letter in the PRPL acronym stand for?",
+    "content": "Choose the correct expansion of PRPL.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Web Optimization",
+    "difficulty": "beginner",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["prpl", "acronym", "performance"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Push, Render, Pre-cache, Lazy-load",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Preload, Render, Pre-fetch, Load",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Push, Render, Preload, Link",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Prepare, Run, Pre-cache, Load",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "PRPL stands for Push critical resources, Render initial route, Pre-cache assets, and Lazy-load remaining routes."
+  },
+  {
+    "id": "pp3",
+    "title": "True or False: The PRPL pattern focuses on optimizing the first route before loading any other resources.",
+    "content": "Evaluate the statement about PRPL’s optimization focus.",
+    "type": "true-false",
+    "category": "Performance Patterns",
+    "subcategory": "Web Optimization",
+    "difficulty": "beginner",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["prpl", "true-false", "performance"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "PRPL prioritizes loading and rendering the initial route first, then caching and lazy-loading the rest."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": "Other resources load only after the initial route completes."
+      }
+    ]
+  },
+  {
+    "id": "pp4",
+    "title": "Which of the following technologies does the PRPL pattern often rely on?",
+    "content": "Select all the technologies that typically support PRPL pattern implementation.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Web Optimization",
+    "difficulty": "intermediate",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["prpl", "service-workers", "http2", "performance"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "HTTP/2 Server Push",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Service Workers",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "App Shell Architecture",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "jQuery AJAX for resource loading",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "PRPL commonly uses HTTP/2 server push, service workers for caching, and an app shell for faster rendering."
+  },
+  {
+    "id": "pp5",
+    "title": "Why is code-splitting important in the PRPL pattern?",
+    "content": "### Code-Splitting in PRPL\nCode-splitting divides the application into smaller, cachable chunks. This helps browsers load only what's necessary for the current route, improving performance and reducing cache bloat.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Web Optimization",
+    "difficulty": "intermediate",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["code-splitting", "performance", "prpl"],
+    "sampleAnswers": [
+      "It ensures only the necessary parts of the app are loaded, improving performance and caching efficiency."
+    ]
+  },
+  {
+    "id": "pp6",
+    "title": "Which step in PRPL involves caching frequently visited routes?",
+    "content": "Identify which phase of the PRPL process focuses on pre-caching routes for better offline performance.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Web Optimization",
+    "difficulty": "beginner",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["prpl", "precaching", "pwa"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Push",
+        "isCorrect": false
+      },
+      {
+        "id": "o2",
+        "text": "Render",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Pre-cache",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "Lazy-load",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Pre-caching ensures frequently visited routes and assets are stored for quick access and offline use."
+  },
+  {
+    "id": "pp7",
+    "title": "What is a potential drawback of pushing too many resources in PRPL?",
+    "content": "Select the correct consequence of over-pushing or over-preloading resources.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Web Optimization",
+    "difficulty": "intermediate",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["performance", "bandwidth", "prpl"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Improved caching performance",
+        "isCorrect": false
+      },
+      {
+        "id": "o2",
+        "text": "Wasted bandwidth and filled browser cache",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Better offline support",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Reduced initial load time",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Pushing unnecessary files wastes bandwidth and fills the browser cache, reducing overall performance."
+  },
+  {
+    "id": "pp8",
+    "title": "How does HTTP/2 improve performance for the PRPL pattern?",
+    "content": "### HTTP/2 and PRPL\nHTTP/2 enables multiplexing — allowing multiple request/response streams over a single TCP connection. This reduces 'head-of-line' blocking and speeds up resource delivery, which complements PRPL’s 'Push' and 'Render' steps.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Web Optimization",
+    "difficulty": "advanced",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["http2", "performance", "multiplexing", "prpl"],
+    "sampleAnswers": [
+      "HTTP/2 allows multiple requests in one TCP connection, reducing latency and supporting PRPL’s goal of faster initial route rendering."
+    ]
+  },
+  {
+    "id": "pp9",
+    "title": "What role does the App Shell play in the PRPL pattern?",
+    "content": "Identify how the App Shell architecture supports the PRPL pattern.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Architecture",
+    "difficulty": "intermediate",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["app-shell", "pwa", "prpl"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Provides a minimal structure that loads instantly and handles routing",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Delays rendering until all assets are fetched",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Caches server responses in memory only",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Forces the app to reload on each navigation",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The App Shell delivers the minimal UI structure immediately, allowing PRPL to render the first route quickly and cache other assets later."
+  },
+  {
+    "id": "pp10",
+    "title": "True or False: Service Workers are essential to implement the 'Pre-cache' and 'Lazy-load' steps of PRPL.",
+    "content": "Assess whether Service Workers are necessary for caching and lazy loading in PRPL.",
+    "type": "true-false",
+    "category": "Performance Patterns",
+    "subcategory": "Web Optimization",
+    "difficulty": "intermediate",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["service-workers", "prpl", "caching"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "Service Workers enable background caching and lazy-loading of routes and assets in PRPL."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": "PRPL relies heavily on Service Workers for offline caching and background resource fetching."
+      }
+    ]
+  },
+  {
+    "id": "pp11",
+    "title": "What happens if we preload too many resources in the PRPL pattern?",
+    "content": "### Over-Preloading\nPreloading too many assets increases competition for bandwidth, delaying critical resources like CSS or hero images and worsening Core Web Vitals such as Largest Contentful Paint (LCP).",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Optimization Trade-offs",
+    "difficulty": "advanced",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["preload", "tradeoff", "lcp", "performance"],
+    "sampleAnswers": [
+      "It can delay critical rendering assets like CSS and images, worsening user-perceived performance metrics."
+    ]
+  },
+  {
+    "id": "pp12",
+    "title": "Which PRPL step directly improves the Time to Interactive (TTI) metric?",
+    "content": "Select which part of the PRPL process helps achieve a faster TTI.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Web Metrics",
+    "difficulty": "intermediate",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["tti", "performance", "metrics", "prpl"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Render initial route quickly",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Pre-cache assets in background",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Lazy-load unused modules",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Push critical resources after render",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Rendering the initial route early reduces the time before a user can interact, improving TTI."
+  },
+  {
+    "id": "pp13",
+    "title": "How does PRPL enhance offline experience?",
+    "content": "Explain how PRPL ensures an app remains functional even without an internet connection.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Offline Experience",
+    "difficulty": "intermediate",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["offline", "service-workers", "prpl"],
+    "sampleAnswers": [
+      "By using Service Workers to pre-cache frequently visited routes and assets, so they can load from cache when offline."
+    ]
+  },
+  {
+    "id": "pp14",
+    "title": "Which step in PRPL primarily benefits from HTTP/2 server push?",
+    "content": "Identify where HTTP/2 server push has the most effect in the PRPL process.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Network Optimization",
+    "difficulty": "intermediate",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["http2", "server-push", "network", "prpl"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Push",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Render",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Pre-cache",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Lazy-load",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "HTTP/2 server push accelerates the 'Push' step by sending critical resources before the browser requests them."
+  },
+  {
+    "id": "pp15",
+    "title": "True or False: PRPL can only be implemented in Progressive Web Apps (PWAs).",
+    "content": "Evaluate the statement about PRPL’s application scope.",
+    "type": "true-false",
+    "category": "Performance Patterns",
+    "subcategory": "Web Optimization",
+    "difficulty": "beginner",
+    "topic": "PRPL Pattern",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["pwa", "web", "prpl"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": false,
+        "explanation": "While PWAs benefit most, PRPL can be used in any web app with modular architecture and caching."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": true,
+        "explanation": "PRPL is a performance approach, not limited to PWAs — it applies to modern web apps using HTTP/2 and code-splitting."
+      }
+    ]
+  }
+]
