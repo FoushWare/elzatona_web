@@ -36,6 +36,14 @@ import {
 } from '@/shared/components/ui/dialog';
 import { Button } from '@/shared/components/ui/button';
 
+interface FrontendTaskFile {
+  id: string;
+  name: string;
+  type: 'tsx' | 'ts' | 'css' | 'html' | 'json' | 'js';
+  content: string;
+  isEntryPoint?: boolean;
+}
+
 interface FrontendTask {
   id: string;
   title: string;
@@ -54,6 +62,7 @@ interface FrontendTask {
     css?: string;
     react?: string;
   };
+  files?: FrontendTaskFile[]; // New dynamic files structure
 }
 
 export default function FrontendTaskPage() {
@@ -220,6 +229,51 @@ export default function App() {
     </div>
   );
 }`,
+      files: [
+        {
+          id: 'app',
+          name: 'App.tsx',
+          type: 'tsx',
+          content: `import { useState } from 'react';
+
+// This is a warm up question to help you
+// get familiar with the editor.
+// Most of the code has been filled in for you.
+export default function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <button
+        onClick={() => {
+          // Fix the bug in the next line
+          // to complete the question.
+          setCount(count - 1);
+        }}>
+        Clicks: {count}
+      </button>
+    </div>
+  );
+}`,
+          isEntryPoint: true,
+        },
+        {
+          id: 'styles',
+          name: 'styles.css',
+          type: 'css',
+          content: 'body {\n  font-family: sans-serif;\n}',
+          isEntryPoint: false,
+        },
+        {
+          id: 'index',
+          name: 'index.html',
+          type: 'html',
+          content:
+            '<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta\n      name="viewport"\n      content="width=device-width, initial-scale=1.0" />\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
+          isEntryPoint: false,
+        },
+      ],
+      // Legacy starterCode for backward compatibility
       starterCode: {
         html: '<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta\n      name="viewport"\n      content="width=device-width, initial-scale=1.0" />\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
         css: 'body {\n  font-family: sans-serif;\n}',
@@ -248,25 +302,50 @@ export default function App() {
     };
 
     setTask(mockTask);
-    setCode(mockTask.starterCode?.react || '');
-    setCss(mockTask.starterCode?.css || '');
 
-    // Update openFiles with the starter code content
-    setOpenFiles(prev =>
-      prev.map(file => {
-        if (file.id === 'app') {
-          return { ...file, content: mockTask.starterCode?.react || '' };
-        } else if (file.id === 'styles') {
-          return { ...file, content: mockTask.starterCode?.css || '' };
-        } else if (file.id === 'index') {
-          return {
-            ...file,
-            content: mockTask.starterCode?.html || file.content,
-          };
-        }
-        return file;
-      })
-    );
+    // Use files if available, otherwise fall back to starterCode
+    if (mockTask.files && mockTask.files.length > 0) {
+      // Find the entry point file (usually App.tsx)
+      const entryPointFile =
+        mockTask.files.find(f => f.isEntryPoint) || mockTask.files[0];
+      setCode(entryPointFile.content);
+
+      // Find CSS file
+      const cssFile = mockTask.files.find(f => f.type === 'css');
+      setCss(cssFile?.content || '');
+
+      // Update openFiles with the files content
+      setOpenFiles(prev =>
+        prev.map(file => {
+          const taskFile = mockTask.files?.find(f => f.id === file.id);
+          if (taskFile) {
+            return { ...file, content: taskFile.content };
+          }
+          return file;
+        })
+      );
+    } else {
+      // Fallback to legacy starterCode
+      setCode(mockTask.starterCode?.react || '');
+      setCss(mockTask.starterCode?.css || '');
+
+      // Update openFiles with the starter code content
+      setOpenFiles(prev =>
+        prev.map(file => {
+          if (file.id === 'app') {
+            return { ...file, content: mockTask.starterCode?.react || '' };
+          } else if (file.id === 'styles') {
+            return { ...file, content: mockTask.starterCode?.css || '' };
+          } else if (file.id === 'index') {
+            return {
+              ...file,
+              content: mockTask.starterCode?.html || file.content,
+            };
+          }
+          return file;
+        })
+      );
+    }
   }, [taskId]);
 
   const getCategoryIcon = (category: string) => {

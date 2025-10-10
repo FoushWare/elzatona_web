@@ -273,7 +273,18 @@ function FrontendTaskModal({
     hints: [''],
     solution: '',
     starterCode: '',
+    files: [
+      {
+        id: '1',
+        name: 'App.tsx',
+        type: 'tsx',
+        content: '',
+        isEntryPoint: true,
+      },
+    ],
+    testCases: [],
     tags: [],
+    isActive: true,
   });
 
   useEffect(() => {
@@ -290,10 +301,80 @@ function FrontendTaskModal({
         hints: task.hints,
         solution: task.solution,
         starterCode: task.starterCode,
+        files: task.files || [
+          {
+            id: '1',
+            name: 'App.tsx',
+            type: 'tsx',
+            content: task.starterCode,
+            isEntryPoint: true,
+          },
+        ],
+        testCases: task.testCases || [],
         tags: task.tags,
+        isActive: task.isActive,
       });
     }
   }, [task]);
+
+  const addFile = () => {
+    const newFile = {
+      id: Date.now().toString(),
+      name: 'NewFile.tsx',
+      type: 'tsx' as const,
+      content: '',
+      isEntryPoint: false,
+    };
+    setFormData({
+      ...formData,
+      files: [...formData.files, newFile],
+    });
+  };
+
+  const removeFile = (fileId: string) => {
+    if (formData.files.length <= 1) return; // Keep at least one file
+    setFormData({
+      ...formData,
+      files: formData.files.filter(f => f.id !== fileId),
+    });
+  };
+
+  const updateFile = (fileId: string, updates: Partial<FrontendTaskFile>) => {
+    setFormData({
+      ...formData,
+      files: formData.files.map(f =>
+        f.id === fileId ? { ...f, ...updates } : f
+      ),
+    });
+  };
+
+  const addHint = () => {
+    setFormData({
+      ...formData,
+      hints: [...formData.hints, ''],
+    });
+  };
+
+  const removeHint = (index: number) => {
+    setFormData({
+      ...formData,
+      hints: formData.hints.filter((_, i) => i !== index),
+    });
+  };
+
+  const addTag = () => {
+    setFormData({
+      ...formData,
+      tags: [...formData.tags, ''],
+    });
+  };
+
+  const removeTag = (index: number) => {
+    setFormData({
+      ...formData,
+      tags: formData.tags.filter((_, i) => i !== index),
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -320,12 +401,13 @@ function FrontendTaskModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-gray-800 rounded-lg p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4">
           {task ? 'Edit Task' : 'Create New Task'}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Basic Information */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Title</label>
@@ -341,15 +423,24 @@ function FrontendTaskModal({
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Category</label>
-              <input
-                type="text"
+              <select
                 value={formData.category}
                 onChange={e =>
                   setFormData({ ...formData, category: e.target.value })
                 }
                 className="w-full p-2 bg-gray-700 border border-gray-600 rounded"
                 required
-              />
+              >
+                <option value="">Select Category</option>
+                <option value="React">React</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="TypeScript">TypeScript</option>
+                <option value="CSS">CSS</option>
+                <option value="HTML">HTML</option>
+                <option value="Vue.js">Vue.js</option>
+                <option value="Angular">Angular</option>
+                <option value="Svelte">Svelte</option>
+              </select>
             </div>
           </div>
 
@@ -434,6 +525,177 @@ function FrontendTaskModal({
             />
           </div>
 
+          {/* Dynamic Files Section */}
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-medium">Files</label>
+              <button
+                type="button"
+                onClick={addFile}
+                className="px-3 py-1 bg-green-600 hover:bg-green-700 rounded text-sm"
+              >
+                + Add File
+              </button>
+            </div>
+            <div className="space-y-3">
+              {formData.files.map((file, index) => (
+                <div key={file.id} className="bg-gray-700 rounded p-4">
+                  <div className="grid grid-cols-4 gap-2 mb-2">
+                    <div>
+                      <label className="block text-xs font-medium mb-1">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        value={file.name}
+                        onChange={e =>
+                          updateFile(file.id, { name: e.target.value })
+                        }
+                        className="w-full p-1 bg-gray-600 border border-gray-500 rounded text-sm"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1">
+                        Type
+                      </label>
+                      <select
+                        value={file.type}
+                        onChange={e =>
+                          updateFile(file.id, { type: e.target.value as any })
+                        }
+                        className="w-full p-1 bg-gray-600 border border-gray-500 rounded text-sm"
+                      >
+                        <option value="tsx">TSX</option>
+                        <option value="ts">TS</option>
+                        <option value="js">JS</option>
+                        <option value="css">CSS</option>
+                        <option value="html">HTML</option>
+                        <option value="json">JSON</option>
+                      </select>
+                    </div>
+                    <div className="flex items-end">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={file.isEntryPoint}
+                          onChange={e =>
+                            updateFile(file.id, {
+                              isEntryPoint: e.target.checked,
+                            })
+                          }
+                          className="mr-1"
+                        />
+                        <span className="text-xs">Entry Point</span>
+                      </label>
+                    </div>
+                    <div className="flex items-end">
+                      {formData.files.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeFile(file.id)}
+                          className="px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-xs"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium mb-1">
+                      Content
+                    </label>
+                    <textarea
+                      value={file.content}
+                      onChange={e =>
+                        updateFile(file.id, { content: e.target.value })
+                      }
+                      rows={6}
+                      className="w-full p-2 bg-gray-900 border border-gray-600 rounded font-mono text-sm"
+                      placeholder={`Enter ${file.type.toUpperCase()} code here...`}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Hints Section */}
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-medium">Hints</label>
+              <button
+                type="button"
+                onClick={addHint}
+                className="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm"
+              >
+                + Add Hint
+              </button>
+            </div>
+            <div className="space-y-2">
+              {formData.hints.map((hint, index) => (
+                <div key={index} className="flex gap-2">
+                  <input
+                    type="text"
+                    value={hint}
+                    onChange={e => {
+                      const newHints = [...formData.hints];
+                      newHints[index] = e.target.value;
+                      setFormData({ ...formData, hints: newHints });
+                    }}
+                    className="flex-1 p-2 bg-gray-700 border border-gray-600 rounded"
+                    placeholder={`Hint ${index + 1}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeHint(index)}
+                    className="px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-sm"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Tags Section */}
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-medium">Tags</label>
+              <button
+                type="button"
+                onClick={addTag}
+                className="px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded text-sm"
+              >
+                + Add Tag
+              </button>
+            </div>
+            <div className="space-y-2">
+              {formData.tags.map((tag, index) => (
+                <div key={index} className="flex gap-2">
+                  <input
+                    type="text"
+                    value={tag}
+                    onChange={e => {
+                      const newTags = [...formData.tags];
+                      newTags[index] = e.target.value;
+                      setFormData({ ...formData, tags: newTags });
+                    }}
+                    className="flex-1 p-2 bg-gray-700 border border-gray-600 rounded"
+                    placeholder={`Tag ${index + 1}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeTag(index)}
+                    className="px-2 py-1 bg-red-600 hover:bg-red-700 rounded text-sm"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium mb-1">Solution</label>
             <textarea
@@ -443,24 +705,6 @@ function FrontendTaskModal({
               }
               rows={6}
               className="w-full p-2 bg-gray-700 border border-gray-600 rounded font-mono"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Starter Code
-            </label>
-            <textarea
-              value={formData.starterCode}
-              onChange={e =>
-                setFormData({
-                  ...formData,
-                  starterCode: e.target.value,
-                })
-              }
-              rows={8}
-              className="w-full p-2 bg-gray-900 border border-gray-600 rounded font-mono"
               required
             />
           </div>
@@ -496,7 +740,7 @@ function FrontendTaskViewModal({
 }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-gray-800 rounded-lg p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-start mb-4">
           <h2 className="text-2xl font-bold">{task.title}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
@@ -504,7 +748,7 @@ function FrontendTaskViewModal({
           </button>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="flex gap-4">
             <span className="px-2 py-1 bg-blue-600 text-xs rounded">
               {task.category}
@@ -523,6 +767,7 @@ function FrontendTaskViewModal({
             <span className="text-sm text-gray-400">
               {task.estimatedTime} minutes
             </span>
+            <span className="text-sm text-gray-400">by {task.author}</span>
           </div>
 
           <div>
@@ -537,12 +782,75 @@ function FrontendTaskViewModal({
             </p>
           </div>
 
-          <div>
-            <h3 className="font-medium mb-2">Starter Code</h3>
-            <pre className="bg-gray-900 p-4 rounded text-sm overflow-x-auto">
-              <code>{task.starterCode}</code>
-            </pre>
-          </div>
+          {/* Dynamic Files Section */}
+          {task.files && task.files.length > 0 && (
+            <div>
+              <h3 className="font-medium mb-2">Files</h3>
+              <div className="space-y-3">
+                {task.files.map((file, index) => (
+                  <div key={file.id} className="bg-gray-700 rounded p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="font-mono text-sm text-blue-400">
+                        {file.name}
+                      </span>
+                      <span className="px-2 py-1 bg-gray-600 text-xs rounded">
+                        {file.type.toUpperCase()}
+                      </span>
+                      {file.isEntryPoint && (
+                        <span className="px-2 py-1 bg-green-600 text-xs rounded">
+                          Entry Point
+                        </span>
+                      )}
+                    </div>
+                    <pre className="bg-gray-900 p-3 rounded text-sm overflow-x-auto">
+                      <code>{file.content}</code>
+                    </pre>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Legacy Starter Code (for backward compatibility) */}
+          {!task.files && task.starterCode && (
+            <div>
+              <h3 className="font-medium mb-2">Starter Code</h3>
+              <pre className="bg-gray-900 p-4 rounded text-sm overflow-x-auto">
+                <code>{task.starterCode}</code>
+              </pre>
+            </div>
+          )}
+
+          {/* Hints */}
+          {task.hints && task.hints.length > 0 && (
+            <div>
+              <h3 className="font-medium mb-2">Hints</h3>
+              <ul className="list-disc list-inside space-y-1">
+                {task.hints.map((hint, index) => (
+                  <li key={index} className="text-gray-300 text-sm">
+                    {hint}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Tags */}
+          {task.tags && task.tags.length > 0 && (
+            <div>
+              <h3 className="font-medium mb-2">Tags</h3>
+              <div className="flex flex-wrap gap-2">
+                {task.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-purple-600 text-xs rounded"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div>
             <h3 className="font-medium mb-2">Solution</h3>

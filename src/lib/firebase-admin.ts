@@ -12,20 +12,25 @@ if (!getApps().length) {
       const serviceAccountKey = JSON.parse(serviceAccount);
       initializeApp({
         credential: cert(serviceAccountKey),
-        projectId: process.env.FIREBASE_PROJECT_ID,
+        projectId: 'fir-demo-project-adffb',
       });
+      console.log('✅ Firebase Admin SDK initialized with service account');
     } else {
-      // Fallback to default credentials (for local development)
+      // Try to use application default credentials
       initializeApp({
-        projectId: process.env.FIREBASE_PROJECT_ID || 'elzatona-web',
+        projectId: 'fir-demo-project-adffb',
       });
+      console.log(
+        '✅ Firebase Admin SDK initialized with application default credentials'
+      );
     }
   } catch (error) {
     console.error('Failed to initialize Firebase Admin:', error);
     // Initialize with minimal config for development
     initializeApp({
-      projectId: process.env.FIREBASE_PROJECT_ID || 'elzatona-web',
+      projectId: 'fir-demo-project-adffb',
     });
+    console.log('✅ Firebase Admin SDK initialized with minimal config');
   }
 }
 
