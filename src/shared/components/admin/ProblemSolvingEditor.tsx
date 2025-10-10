@@ -174,24 +174,25 @@ export default function ProblemSolvingEditor({
 
   // Initialize file tree with default files
   useEffect(() => {
+    // Always update file tree when starterCode or solutionCode changes
+    const defaultFiles: FileNode[] = [
+      {
+        id: 'starter',
+        name: 'solution.js',
+        type: 'file',
+        content: starterCode,
+        fileType: 'js',
+      },
+      {
+        id: 'solution',
+        name: 'solution.js',
+        type: 'file',
+        content: solutionCode,
+        fileType: 'js',
+      },
+    ];
+    setFileTree(defaultFiles);
     if (fileTree.length === 0) {
-      const defaultFiles: FileNode[] = [
-        {
-          id: 'starter',
-          name: 'solution.js',
-          type: 'file',
-          content: starterCode,
-          fileType: 'js',
-        },
-        {
-          id: 'solution',
-          name: 'solution.js',
-          type: 'file',
-          content: solutionCode,
-          fileType: 'js',
-        },
-      ];
-      setFileTree(defaultFiles);
       setOpenFiles(['starter']);
       setActiveFile('starter');
     }
