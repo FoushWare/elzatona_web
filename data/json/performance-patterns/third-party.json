@@ -1,0 +1,172 @@
+[
+  {
+    "id": "tp1",
+    "title": "What are third-party resources on a website?",
+    "content": "Define third-party resources and give examples.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Third-Party Optimization",
+    "difficulty": "beginner",
+    "topic": "Third-Party Resources",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["third-party", "web", "performance"],
+    "sampleAnswers": [
+      "Resources hosted on another domain and used by your site, e.g., YouTube embeds, Google Analytics, social media widgets, maps, advertisements."
+    ]
+  },
+  {
+    "id": "tp2",
+    "title": "Why can third-party scripts slow down your website?",
+    "content": "Identify the main ways third-party scripts negatively impact performance.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Third-Party Optimization",
+    "difficulty": "intermediate",
+    "topic": "Third-Party Performance Impact",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["third-party", "performance", "cwv"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Additional round trips to other domains",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Bulky or unoptimized JavaScript",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Blocking rendering of critical resources",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "Always reduces DNS lookup times",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Third-party scripts can block rendering, increase network requests, and execute heavy JS, negatively impacting Core Web Vitals."
+  },
+  {
+    "id": "tp3",
+    "title": "How can you optimize non-critical third-party JavaScript?",
+    "content": "Explain async and defer usage for non-critical third-party scripts.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Third-Party Optimization",
+    "difficulty": "intermediate",
+    "topic": "Third-Party Loading",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["async", "defer", "third-party", "javascript"],
+    "sampleAnswers": [
+      "Use defer to fetch scripts in parallel and execute after DOM parsing, or async to execute as soon as available without blocking the parser, for scripts that are not critical to initial rendering."
+    ]
+  },
+  {
+    "id": "tp4",
+    "title": "True or False: Preconnect and dns-prefetch can speed up third-party resource loading.",
+    "content": "Evaluate whether resource hints improve third-party performance.",
+    "type": "true-false",
+    "category": "Performance Patterns",
+    "subcategory": "Third-Party Optimization",
+    "difficulty": "intermediate",
+    "topic": "Third-Party Loading",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["preconnect", "dns-prefetch", "third-party", "performance"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "Resource hints like dns-prefetch and preconnect reduce latency by initiating DNS lookups and TCP/TLS connections early."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": "Resource hints are effective and recommended for critical third-party resources."
+      }
+    ]
+  },
+  {
+    "id": "tp5",
+    "title": "What is the benefit of lazy-loading third-party embeds?",
+    "content": "Explain why lazy-loading YouTube, maps, and social media embeds improves page performance.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Third-Party Optimization",
+    "difficulty": "intermediate",
+    "topic": "Third-Party Loading",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["lazy-loading", "third-party", "performance", "embeds"],
+    "sampleAnswers": [
+      "Embeds not visible on page load are delayed until needed, reducing initial load times and blocking of critical rendering."
+    ]
+  },
+  {
+    "id": "tp6",
+    "title": "Why might self-hosting third-party scripts improve performance?",
+    "content": "Describe the advantages and caveats of self-hosting 3P scripts.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Third-Party Optimization",
+    "difficulty": "advanced",
+    "topic": "Third-Party Loading",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["self-hosting", "third-party", "performance", "caching"],
+    "sampleAnswers": [
+      "Reduces DNS lookups, allows better caching control, and can use HTTP/2 push, but scripts must be updated regularly to stay current."
+    ]
+  },
+  {
+    "id": "tp7",
+    "title": "Which strategy does Next.js provide to optimize third-party scripts?",
+    "content": "Identify the strategies available in the Next.js Script component.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Third-Party Optimization",
+    "difficulty": "intermediate",
+    "topic": "Next.js Third-Party Scripts",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["nextjs", "script", "third-party", "performance"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "beforeInteractive",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "afterInteractive",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "lazyOnload",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "documentWrite",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Next.js Script component allows beforeInteractive for critical scripts, afterInteractive for deferred scripts, and lazyOnload for scripts to load when idle."
+  }
+]
