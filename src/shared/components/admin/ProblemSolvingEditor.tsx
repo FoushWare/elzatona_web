@@ -762,7 +762,7 @@ export default function ProblemSolvingEditor({
                             ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
                             : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                         }`}
-                        placeholder="Add example (string or JSON: {input: '...', output: '...', explanation: '...'})"
+                        placeholder="Add example (string or JSON format)"
                       />
                       <button
                         onClick={addExample}
