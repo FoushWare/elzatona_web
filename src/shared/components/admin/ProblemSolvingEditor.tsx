@@ -221,10 +221,29 @@ export default function ProblemSolvingEditor({
 
   const addExample = () => {
     if (newExample.trim()) {
-      setFormData(prev => ({
-        ...prev,
-        examples: [...prev.examples, newExample.trim()],
-      }));
+      // Parse the input to handle both string and object formats
+      try {
+        // Try to parse as JSON first (for object format)
+        const parsedExample = JSON.parse(newExample);
+        if (parsedExample && typeof parsedExample === 'object') {
+          setFormData(prev => ({
+            ...prev,
+            examples: [...prev.examples, parsedExample],
+          }));
+        } else {
+          // Fallback to string format
+          setFormData(prev => ({
+            ...prev,
+            examples: [...prev.examples, newExample.trim()],
+          }));
+        }
+      } catch {
+        // If JSON parsing fails, treat as string
+        setFormData(prev => ({
+          ...prev,
+          examples: [...prev.examples, newExample.trim()],
+        }));
+      }
       setNewExample('');
     }
   };
@@ -716,7 +735,9 @@ export default function ProblemSolvingEditor({
                             isDark ? 'text-gray-300' : 'text-gray-700'
                           }`}
                         >
-                          {example}
+                          {typeof example === 'string'
+                            ? example
+                            : `${example.input} → ${example.output}`}
                         </span>
                         <button
                           onClick={() => removeExample(index)}
@@ -741,7 +762,7 @@ export default function ProblemSolvingEditor({
                             ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
                             : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                         }`}
-                        placeholder="Add example..."
+                        placeholder="Add example (string or JSON: {input: '...', output: '...', explanation: '...'})"
                       />
                       <button
                         onClick={addExample}
