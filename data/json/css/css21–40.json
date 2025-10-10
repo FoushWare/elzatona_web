@@ -1,0 +1,612 @@
+[
+  {
+    "id": "css-q21",
+    "title": "What are the differences between relative and absolute positioning in CSS?",
+    "content": "`position: relative` offsets an element from its normal position without removing it from the document flow. `position: absolute` removes the element from the flow and positions it relative to the nearest positioned ancestor (or viewport if none).",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Positioning",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Positioning",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "position", "relative", "absolute", "layout"],
+    "explanation": "Relative positioning keeps the element in the flow; absolute positioning takes it out and anchors to a positioned parent.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "`relative`: offsets in flow; `absolute`: removed from flow, relative to positioned ancestor",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "`absolute` is always relative to the body",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`relative` removes the element from layout",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "They behave identically",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q22",
+    "title": "What is the CSS Box Model?",
+    "content": "The CSS Box Model describes the structure of every HTML element as consisting of content, padding, border, and margin.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Box Model",
+    "difficulty": "beginner",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Box Model",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "box-model", "layout", "padding", "margin", "border"],
+    "explanation": "Understanding the box model is essential for accurate layout calculations. `box-sizing: border-box` includes padding and border in width/height.",
+    "points": 6,
+    "sampleAnswers": [
+      "The CSS Box Model consists of four layers: content (text/image), padding (inside border), border, and margin (outside border).",
+      "By default, `width` and `height` apply only to content. Use `box-sizing: border-box` to include padding and border in sizing."
+    ]
+  },
+  {
+    "id": "css-q23",
+    "title": "How do you specify units in CSS? What are the different types?",
+    "content": "CSS units include absolute (px, pt, cm) and relative (em, rem, %, vw, vh) units for defining lengths, sizes, and spacing.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Core Concepts",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Units",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "units", "px", "em", "rem", "vw", "vh"],
+    "explanation": "Relative units scale with context (e.g., `em` with font-size, `vw` with viewport width); absolute units are fixed.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "Absolute: px, pt, cm; Relative: em, rem, %, vw, vh",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Only pixels are valid",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`em` is absolute; `px` is relative",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "All units behave the same across devices",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q24",
+    "title": "Which unit would you prefer among px, em, %, or rem and why?",
+    "content": "`px` gives precise control; `em` is relative to parent font-size; `%` is relative to parent size; `rem` is relative to root font-size and avoids compounding.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Core Concepts",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Units",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "units", "responsive", "accessibility", "rem"],
+    "explanation": "`rem` is preferred for scalability and accessibility; `px` for fixed sizes; avoid `em` for layout due to compounding.",
+    "points": 7,
+    "sampleAnswers": [
+      "`rem` is best for consistent scaling (relative to root font-size). `px` is fine for borders or fixed elements. Avoid `em` in layout to prevent nesting issues.",
+      "Use `%` for fluid containers, `vw`/`vh` for full-viewport elements, and `rem` for typography and spacing."
+    ]
+  },
+  {
+    "id": "css-q25",
+    "title": "What is a pseudo-element? What is a pseudo-class?",
+    "content": "Pseudo-elements (`::before`, `::first-line`) style parts of an element. Pseudo-classes (`:hover`, `:nth-child`) style elements in specific states.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Selectors",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Pseudo-Classes vs Pseudo-Elements",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "pseudo-elements", "pseudo-classes", "selectors"],
+    "explanation": "Pseudo-elements create virtual content; pseudo-classes respond to user interaction or structural position.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "Pseudo-elements: virtual parts (e.g., ::before); Pseudo-classes: element states (e.g., :hover)",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "They are the same",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Pseudo-classes insert content",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Pseudo-elements require JavaScript",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q26",
+    "title": "Explain the CSS Box Model and its components.",
+    "content": "The Box Model includes: content (actual text/image), padding (space inside border), border (edge around padding), and margin (space outside border).",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Box Model",
+    "difficulty": "beginner",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Box Model",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "box-model", "layout", "padding", "margin", "border"],
+    "explanation": "Total width = content width + padding + border + margin. Use `box-sizing: border-box` to simplify sizing.",
+    "points": 6,
+    "sampleAnswers": [
+      "The Box Model has four layers: content (where text/images go), padding (inner spacing), border (visible edge), and margin (outer spacing).",
+      "By default, setting `width: 100px` means content is 100px. With `box-sizing: border-box`, the entire element (including padding/border) is 100px."
+    ]
+  },
+  {
+    "id": "css-q27",
+    "title": "How do you tell the browser to render layout in different box models?",
+    "content": "Use the `box-sizing` property: `content-box` (default) or `border-box` (includes padding/border in width/height).",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Box Model",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Box Model",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "box-sizing", "layout", "responsive"],
+    "explanation": "`box-sizing: border-box` is preferred in modern CSS for predictable sizing.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`content-box`: width = content only; `border-box`: width = content + padding + border",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "`border-box` excludes padding",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`box-sizing` has no effect on layout",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Only `content-box` is valid",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q28",
+    "title": "What is the difference between border-box and content-box?",
+    "content": "`content-box` (default): width/height apply to content only. `border-box`: width/height include content, padding, and border.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Box Model",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Box Model",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "box-sizing", "border-box", "content-box", "layout"],
+    "explanation": "`border-box` prevents layout shifts when adding padding/border, making responsive design easier.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`content-box`: width excludes padding/border; `border-box`: width includes them",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "`border-box` is slower",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "They are identical",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`content-box` includes margin",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q29",
+    "title": "Explain the meaning of CSS length units like cm, em, in, mm, pc, pt, px.",
+    "content": "Absolute units: `cm` (centimeters), `in` (inches), `mm` (millimeters), `pc` (picas), `pt` (points), `px` (pixels). Relative: `em` (font-size relative).",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Core Concepts",
+    "difficulty": "beginner",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Units",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "units", "absolute", "relative", "px", "em"],
+    "explanation": "Absolute units are fixed; `px` is standard for screens. `em` scales with font-size, useful for accessibility.",
+    "points": 5,
+    "sampleAnswers": [
+      "`px` is 1/96th of an inch—standard for screen design. `em` equals the current font-size (e.g., 16px default → 1em = 16px).",
+      "Avoid `pt`, `pc`, `in` for web—they’re print units. Use `px` for borders, `rem`/`em` for text, `%`/`vw` for responsive layouts."
+    ]
+  },
+  {
+    "id": "css-q30",
+    "title": "How would you select <a> elements whose href starts with 'https', ends with '.pdf', or contains 'css'?",
+    "content": "Use attribute selectors: `a[href^='https']`, `a[href$='.pdf']`, `a[href*='css']`.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Selectors",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Attribute Selectors",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "attribute-selectors", "href", "selectors"],
+    "explanation": "Attribute selectors enable precise targeting based on HTML attribute values without extra classes.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`a[href^='https']`, `a[href$='.pdf']`, `a[href*='css']`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Only class selectors can target links",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`a[href='https']` matches all HTTPS links",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Attribute selectors are deprecated",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q31",
+    "title": "What is the purpose of the box-sizing property?",
+    "content": "`box-sizing` controls how an element’s total width and height are calculated—whether padding and border are included.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Box Model",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Box Model",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "box-sizing", "layout", "responsive"],
+    "explanation": "`border-box` simplifies layout by making width/height include padding and border, preventing overflow issues.",
+    "points": 6,
+    "sampleAnswers": [
+      "`box-sizing: border-box` ensures that when you set `width: 100px`, the element—including padding and border—is exactly 100px wide.",
+      "It’s a best practice to apply `*, *::before, *::after { box-sizing: border-box; }` globally for consistent sizing."
+    ]
+  },
+  {
+    "id": "css-q32",
+    "title": "What is the difference between RGBa, HEX, and HSLa color formats?",
+    "content": "`RGBa`: red/green/blue/alpha (0–255 or %). `HEX`: #RRGGBB or #RGB. `HSLa`: hue (0–360), saturation (%), lightness (%), alpha.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Colors",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Colors",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "colors", "rgba", "hex", "hsla", "transparency"],
+    "explanation": "HSLa is more intuitive for designers; RGBa and HEX are widely supported. All support alpha transparency.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`RGBa`: 0-255 channels; `HEX`: #RRGGBB; `HSLa`: hue/saturation/lightness",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "HEX supports alpha; RGBa does not",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "HSLa uses CMYK values",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "All formats are identical",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q33",
+    "title": "What is a CSS preprocessor?",
+    "content": "A CSS preprocessor (Sass, LESS, Stylus) extends CSS with variables, nesting, mixins, and functions, compiling to standard CSS.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Preprocessors",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Preprocessors",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "preprocessor", "sass", "less", "variables", "mixins"],
+    "explanation": "Preprocessors improve maintainability and enable logic-like features (variables, loops) not native to CSS.",
+    "points": 6,
+    "sampleAnswers": [
+      "Sass allows variables (`$primary: #333;`), nesting, and mixins—compiled to standard CSS for browser compatibility.",
+      "Preprocessors reduce repetition, enable modular architecture, and support math operations (e.g., `width: 100% / 3;`)."
+    ]
+  },
+  {
+    "id": "css-q34",
+    "title": "What is the difference between 'resetting' and 'normalizing' CSS?",
+    "content": "Resetting removes all default browser styles. Normalizing makes styles consistent across browsers while preserving useful defaults.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Core Concepts",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Reset & Normalize",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "reset", "normalize", "cross-browser", "consistency"],
+    "explanation": "Normalize.css is preferred for modern projects—it fixes browser inconsistencies without stripping all defaults.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "Reset: removes all styles; Normalize: preserves useful defaults, fixes inconsistencies",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "They are the same",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Normalize removes all margins",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Reset is obsolete",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q35",
+    "title": "Explain CSS Block Formatting Context (BFC).",
+    "content": "A BFC is an isolated rendering area where block-level boxes are laid out without affecting outside elements. Created by `overflow: hidden`, `float`, `display: flow-root`, etc.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Layout",
+    "difficulty": "advanced",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Block Formatting Context",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "bfc", "layout", "overflow", "float", "clearfix"],
+    "explanation": "BFCs prevent margin collapse and contain floated children—essential for complex layouts.",
+    "points": 8,
+    "sampleAnswers": [
+      "A BFC isolates layout: margins don’t collapse with outside elements, and floated children are contained. Create one with `overflow: hidden` or `display: flow-root`.",
+      "Use BFC to fix common issues: parent height collapse with floats, or unwanted margin merging between adjacent blocks."
+    ]
+  },
+  {
+    "id": "css-q36",
+    "title": "What is the float property and what does it do?",
+    "content": "`float` places an element to the left or right of its container, allowing text and inline elements to wrap around it.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Layout",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Floats",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "float", "layout", "wrapping", "legacy"],
+    "explanation": "Floats were used for layouts before Flexbox/Grid but are now mainly for text wrapping (e.g., images in articles).",
+    "points": 6,
+    "sampleAnswers": [
+      "`float: left` moves an element to the left, with content wrapping on the right. Common for image captions in text.",
+      "Floats take elements out of normal flow—use `clear` or BFC to manage layout consequences."
+    ]
+  },
+  {
+    "id": "css-q37",
+    "title": "Describe the clear property in CSS.",
+    "content": "`clear` specifies which sides of an element cannot have floating elements, preventing overlap.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Layout",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Floats",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "clear", "float", "layout"],
+    "explanation": "`clear: both` forces an element below all floated siblings—essential for footer placement after floated columns.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`clear: left` prevents left floats; `clear: right` prevents right floats; `clear: both` prevents both",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "`clear` only works with `position: absolute`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`clear` is deprecated",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`clear` affects inline elements",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q38",
+    "title": "Explain the purpose of clearing floats in CSS.",
+    "content": "Clearing floats ensures that non-floated elements (like footers) appear below floated content instead of wrapping beside it.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Layout",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Floats",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "clear", "float", "clearfix", "layout"],
+    "explanation": "Without clearing, containers collapse and subsequent elements wrap around floats—`clear` or modern layout methods fix this.",
+    "points": 6,
+    "sampleAnswers": [
+      "Use `clear: both` on a footer to ensure it appears below floated sidebars. Modern alternative: use Flexbox/Grid instead of floats for layout.",
+      "The clearfix hack (`overflow: hidden` or `::after { clear: both }`) contains floats within a parent container."
+    ]
+  },
+  {
+    "id": "css-q39",
+    "title": "What is a clearfix in CSS?",
+    "content": "A clearfix is a technique to contain floated children within a parent container, preventing height collapse.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Layout",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Floats",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "clearfix", "float", "layout", "bfc"],
+    "explanation": "Modern solution: `display: flow-root` creates a BFC. Legacy: `::after { content: ''; clear: both; }`.",
+    "points": 6,
+    "sampleAnswers": [
+      "A clearfix forces a parent to wrap floated children. Modern method: `parent { display: flow-root; }`. Legacy: use a `::after` pseudo-element with `clear: both`.",
+      "Without clearfix, a parent with only floated children has zero height—clearfix fixes this layout issue."
+    ]
+  },
+  {
+    "id": "css-q40",
+    "title": "Does `overflow: hidden` create a new block formatting context?",
+    "content": "Yes. `overflow: hidden` (and any non-`visible` overflow value) creates a new Block Formatting Context (BFC).",
+    "type": "true-false",
+    "category": "CSS & Styling",
+    "subcategory": "Layout",
+    "difficulty": "advanced",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Block Formatting Context",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "bfc", "overflow", "layout", "clearfix"],
+    "explanation": "This is why `overflow: hidden` contains floats and prevents margin collapse—it creates a new BFC.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": false
+      }
+    ]
+  }
+]

@@ -1,0 +1,596 @@
+[
+  {
+    "id": "css-q81",
+    "title": "How do you restore the default value of a CSS property?",
+    "content": "Use the `initial` keyword to reset a property to its default value as defined in the CSS specification.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Core Concepts",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Values",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "initial", "reset", "default-value"],
+    "explanation": "`initial` resets a property to its browser-defined default, not inherited value.",
+    "points": 5,
+    "sampleAnswers": [
+      "`color: initial;` resets text color to browser default (usually black).",
+      "Unlike `inherit`, `initial` ignores parent styles and uses the spec’s default."
+    ]
+  },
+  {
+    "id": "css-q82",
+    "title": "What is specificity in CSS? How is it calculated?",
+    "content": "Specificity determines which CSS rule applies when multiple rules target the same element. It’s calculated based on selector types: inline styles > IDs > classes/attributes/pseudo-classes > elements.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Cascading & Specificity",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Specificity",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "specificity", "cascading", "selectors"],
+    "explanation": "Specificity is calculated as (inline, ID, class, element). `!important` overrides all.",
+    "points": 7,
+    "options": [
+      {
+        "id": "a",
+        "text": "Inline > ID > Class > Element",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Element > Class > ID > Inline",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "All selectors have equal weight",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`!important` has lowest priority",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q83",
+    "title": "What are CSS transitions?",
+    "content": "CSS transitions allow smooth animation between two states of an element (e.g., hover). Controlled by `transition-property`, `duration`, `timing-function`, and `delay`.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Animations",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Transitions",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "transitions", "animation", "hover"],
+    "explanation": "Transitions require a state change (e.g., `:hover`) and only animate between defined values.",
+    "points": 6,
+    "sampleAnswers": [
+      "`transition: all 0.3s ease-in-out;` smoothly animates any property change over 300ms.",
+      "Transitions are ideal for micro-interactions like button hovers or menu reveals."
+    ]
+  },
+  {
+    "id": "css-q84",
+    "title": "What are CSS filters?",
+    "content": "CSS filters apply graphical effects like blur, brightness, or grayscale to elements using functions like `blur()`, `grayscale()`, and `drop-shadow()`.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Effects",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Filters",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "filters", "blur", "grayscale", "effects"],
+    "explanation": "Filters are commonly used for image adjustments, hover effects, and visual enhancements.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`blur()`, `brightness()`, `grayscale()`, `drop-shadow()`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Only for SVG elements",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Filters require JavaScript",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Not supported in modern browsers",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q85",
+    "title": "List common font-related CSS properties.",
+    "content": "Key font properties: `font-family`, `font-size`, `font-weight`, `font-style`, `font-variant`, `line-height`, and system fonts like `caption`, `menu`.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Typography",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Typography",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "fonts", "typography", "font-family", "font-weight"],
+    "explanation": "These properties control typeface, size, weight, style, and spacing of text.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`font-family`, `font-size`, `font-weight`, `font-style`, `line-height`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Only `font-size` and `color`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`text-font` is the main property",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Fonts cannot be styled with CSS",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q86",
+    "title": "List common background-related CSS properties.",
+    "content": "Background properties: `background-color`, `background-image`, `background-repeat`, `background-position`, `background-size`, `background-attachment`, `background-origin`, `background-clip`.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Backgrounds",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Backgrounds",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "background", "background-image", "background-size"],
+    "explanation": "These properties control how backgrounds are displayed, repeated, and sized.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`background-color`, `background-image`, `background-size`, `background-repeat`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Only `background-color`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`bg-color` is the standard property",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Backgrounds are handled only by HTML",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q87",
+    "title": "What is the difference between `em` and `rem` units?",
+    "content": "`em` is relative to the parent’s font-size; `rem` is relative to the root (`<html>`) font-size.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "CSS Units",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Units",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "em", "rem", "units", "responsive"],
+    "explanation": "`rem` avoids compounding issues in nested elements; `em` is useful for component-relative scaling.",
+    "points": 7,
+    "sampleAnswers": [
+      "`1em = parent font-size`; `1rem = root font-size` (usually 16px). Use `rem` for consistent spacing across components.",
+      "Nested `em` values compound (e.g., 1.5em inside 1.5em = 2.25x), while `rem` stays predictable."
+    ]
+  },
+  {
+    "id": "css-q88",
+    "title": "What does `!important` mean in CSS?",
+    "content": "`!important` overrides the normal cascade and specificity rules, giving the declaration the highest priority.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Cascading & Specificity",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Specificity",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "important", "specificity", "cascade"],
+    "explanation": "Avoid `!important`—it breaks maintainability and makes debugging harder. Use higher-specificity selectors instead.",
+    "points": 6,
+    "sampleAnswers": [
+      "`color: red !important;` will override even inline styles or ID selectors.",
+      "It should only be used in utility classes or third-party overrides as a last resort."
+    ]
+  },
+  {
+    "id": "css-q89",
+    "title": "Does style2.css have to be downloaded before Paragraph 1 is rendered?",
+    "content": "No. Browsers render content as it’s parsed. `<link>` in `<body>` doesn’t block rendering of prior content.",
+    "type": "true-false",
+    "category": "CSS & Styling",
+    "subcategory": "Performance",
+    "difficulty": "advanced",
+    "learningPath": "Performance Optimization Specialist",
+    "topic": "CSS Loading",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "rendering", "blocking", "performance"],
+    "explanation": "Only `<link>` in `<head>` blocks rendering. Stylesheets in `<body>` load asynchronously for subsequent content.",
+    "points": 8,
+    "options": [
+      {
+        "id": "a",
+        "text": "False",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "True",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q90",
+    "title": "Do stylesheets block each other during download?",
+    "content": "No. Modern browsers download multiple CSS files in parallel.",
+    "type": "true-false",
+    "category": "CSS & Styling",
+    "subcategory": "Performance",
+    "difficulty": "intermediate",
+    "learningPath": "Performance Optimization Specialist",
+    "topic": "CSS Loading",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "parallel-download", "performance", "http2"],
+    "explanation": "Browsers fetch all linked stylesheets concurrently, improving load performance.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "False",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "True",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q91",
+    "title": "What are the CSS positioning values?",
+    "content": "Position values: `static` (default), `relative`, `absolute`, `fixed`, `sticky`.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Positioning",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Positioning",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "position", "layout", "absolute", "fixed", "sticky"],
+    "explanation": "Each value controls how an element is placed in the document flow and relative to other elements.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`static`, `relative`, `absolute`, `fixed`, `sticky`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Only `absolute` and `relative`",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "`position: float` is valid",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "`sticky` is deprecated",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q92",
+    "title": "What is the difference between padding and margin?",
+    "content": "Padding is inside the border (affects background); margin is outside the border (creates space between elements).",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Box Model",
+    "difficulty": "beginner",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Box Model",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "padding", "margin", "box-model", "layout"],
+    "explanation": "Margin can collapse vertically; padding cannot. Padding increases element size; margin does not.",
+    "points": 5,
+    "sampleAnswers": [
+      "Padding is space inside the border (background shows through); margin is space outside (transparent, no background).",
+      "Vertical margins collapse; padding never collapses and always adds to element dimensions."
+    ]
+  },
+  {
+    "id": "css-q93",
+    "title": "What are CSS gradients?",
+    "content": "CSS gradients are images created with `linear-gradient()`, `radial-gradient()`, or `conic-gradient()` functions.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Gradients",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "CSS Gradients",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": [
+      "css",
+      "gradients",
+      "linear-gradient",
+      "radial-gradient",
+      "backgrounds"
+    ],
+    "explanation": "Gradients are treated as background images and can be used anywhere an image is valid.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`linear-gradient()`, `radial-gradient()`, `conic-gradient()`",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Only solid colors are allowed",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Gradients require SVG",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Not supported in modern browsers",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q94",
+    "title": "What is CSS opacity?",
+    "content": "`opacity` sets the transparency of an element (0 = fully transparent, 1 = fully opaque).",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Effects",
+    "difficulty": "beginner",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Opacity",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "opacity", "transparency", "effects"],
+    "explanation": "Opacity affects the entire element and its children. Use `rgba()` for text-only transparency.",
+    "points": 4,
+    "sampleAnswers": [
+      "`opacity: 0.5;` makes an element 50% transparent, including all child content.",
+      "For text-only transparency, use `color: rgba(0,0,0,0.5);` instead of `opacity`."
+    ]
+  },
+  {
+    "id": "css-q95",
+    "title": "How is inheritance applied in CSS?",
+    "content": "Inheritance passes property values from parent to child elements (e.g., `color`, `font-family`). Not all properties inherit (e.g., `margin`, `padding`).",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Core Concepts",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Inheritance",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "inheritance", "cascade", "parent-child"],
+    "explanation": "Inherited properties can be overridden. Use `inherit` to force inheritance for non-inherited properties.",
+    "points": 6,
+    "sampleAnswers": [
+      "Text properties like `color` and `font-family` inherit by default; layout properties like `width` do not.",
+      "Use `color: inherit;` to explicitly inherit a non-inherited property from the parent."
+    ]
+  },
+  {
+    "id": "css-q96",
+    "title": "How do you handle browser differences in CSS?",
+    "content": "Use `@supports` for feature detection, Autoprefixer for vendor prefixes, and graceful degradation for unsupported features.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Cross-Browser Compatibility",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Browser Compatibility",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": [
+      "css",
+      "browser-compatibility",
+      "feature-detection",
+      "supports",
+      "autoprefixer"
+    ],
+    "explanation": "`@supports` allows safe usage of modern features with fallbacks for older browsers.",
+    "points": 7,
+    "sampleAnswers": [
+      "`@supports (display: grid) { ... }` applies grid layout only if supported; otherwise, use floats or flexbox as fallback.",
+      "Combine `@supports` with `caniuse.com` data and Autoprefixer for robust cross-browser support."
+    ]
+  },
+  {
+    "id": "css-q97",
+    "title": "What is the CSS cascade?",
+    "content": "The cascade is the algorithm that resolves conflicting CSS rules by considering origin, importance (`!important`), specificity, and order.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Cascading & Specificity",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Cascading & Specificity",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "cascade", "specificity", "importance", "order"],
+    "explanation": "The cascade ensures predictable styling by applying rules in a defined priority order.",
+    "points": 6,
+    "sampleAnswers": [
+      "The cascade resolves conflicts using: 1) `!important`, 2) origin (user vs author), 3) specificity, 4) source order.",
+      "Without the cascade, overlapping rules would cause unpredictable styling behavior."
+    ]
+  },
+  {
+    "id": "css-q98",
+    "title": "What are CSS vendor prefixes?",
+    "content": "Vendor prefixes (`-webkit-`, `-moz-`, `-ms-`, `-o-`) provide experimental or non-standard CSS properties in specific browsers.",
+    "type": "multiple-choice",
+    "category": "CSS & Styling",
+    "subcategory": "Cross-Browser Compatibility",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Vendor Prefixes",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "vendor-prefixes", "webkit", "moz", "compatibility"],
+    "explanation": "Modern tooling like Autoprefixer adds prefixes automatically based on browser support targets.",
+    "points": 6,
+    "options": [
+      {
+        "id": "a",
+        "text": "`-webkit-` (Chrome/Safari), `-moz-` (Firefox), `-ms-` (IE/Edge), `-o-` (Opera)",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Vendor prefixes are no longer needed",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "All browsers use the same prefix",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Prefixes are part of the official CSS spec",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "css-q99",
+    "title": "How is the DOM linked to CSS?",
+    "content": "CSS styles the DOM tree. The browser combines HTML (DOM) and CSS (CSSOM) into a render tree to display the page.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Core Concepts",
+    "difficulty": "advanced",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "DOM & CSSOM",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "dom", "cssom", "render-tree", "painting"],
+    "explanation": "The browser parses HTML into DOM, CSS into CSSOM, combines them into a render tree, then paints the pixels.",
+    "points": 8,
+    "sampleAnswers": [
+      "CSS selectors target DOM nodes. The browser builds a render tree from DOM + CSSOM, then calculates layout and paints pixels.",
+      "JavaScript can manipulate both DOM (structure) and CSSOM (styles) to dynamically update the UI."
+    ]
+  },
+  {
+    "id": "css-q100",
+    "title": "Explain the `table-layout` property.",
+    "content": "`table-layout: auto` (default) sizes columns based on content; `table-layout: fixed` sizes columns based on table/col width, improving performance.",
+    "type": "open-ended",
+    "category": "CSS & Styling",
+    "subcategory": "Layout",
+    "difficulty": "intermediate",
+    "learningPath": "Modern CSS Mastery",
+    "topic": "Table Layout",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["css", "table-layout", "tables", "performance", "fixed"],
+    "explanation": "`fixed` layout renders faster because the browser doesn’t wait for all content to calculate column widths.",
+    "points": 7,
+    "sampleAnswers": [
+      "`table-layout: fixed;` uses the first row or `<col>` widths to set column sizes, ignoring cell content—great for large tables.",
+      "With `fixed`, the table renders immediately without waiting for all data, improving perceived performance."
+    ]
+  }
+]
