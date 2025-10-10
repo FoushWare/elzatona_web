@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Code,
@@ -25,6 +25,7 @@ import {
   Settings,
   Brain,
   Globe,
+  Loader2,
 } from 'lucide-react';
 
 interface FrontendTask {
@@ -33,129 +34,19 @@ interface FrontendTask {
   description: string;
   category: string;
   difficulty: 'easy' | 'medium' | 'hard';
-  technologies: string[];
-  completionCount: number;
-  estimatedTime: string;
-  isWarmUp?: boolean;
-  author?: string;
+  estimatedTime: number; // minutes
+  author: string;
   company?: string;
+  requirements: string;
+  hints: string[];
+  solution: string;
+  starterCode: string;
+  testCases?: any[];
+  tags: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  isActive: boolean;
 }
-
-const frontendTasks: FrontendTask[] = [
-  {
-    id: 'counter',
-    title: 'Counter',
-    description:
-      'Build a simple counter that increments whenever a button is clicked',
-    category: 'UI coding',
-    difficulty: 'easy',
-    technologies: ['React', 'HTML5', 'Angular', 'Vue.js', 'Svelte'],
-    completionCount: 35400,
-    estimatedTime: '5 mins',
-    isWarmUp: true,
-    author: 'Yangshun Tay',
-    company: 'Ex-Meta Staff Engineer',
-  },
-  {
-    id: 'make-counter',
-    title: 'Make Counter',
-    description:
-      'Implement a function that accepts an integer value and returns a function that can be repeatedly called to return increasing values',
-    category: 'JS functions',
-    difficulty: 'easy',
-    technologies: ['JavaScript', 'TypeScript'],
-    completionCount: 17300,
-    estimatedTime: '10 mins',
-  },
-  {
-    id: 'mean',
-    title: 'Mean',
-    description:
-      'Implement a function that finds the mean of the values inside an array',
-    category: 'JS functions',
-    difficulty: 'easy',
-    technologies: ['JavaScript', 'TypeScript'],
-    completionCount: 14500,
-    estimatedTime: '8 mins',
-  },
-  {
-    id: 'contact-form',
-    title: 'Contact Form',
-    description:
-      'Create a contact form with validation and submission handling',
-    category: 'UI coding',
-    difficulty: 'easy',
-    technologies: ['React', 'HTML5', 'CSS3', 'JavaScript'],
-    completionCount: 28900,
-    estimatedTime: '15 mins',
-  },
-  {
-    id: 'todo-list',
-    title: 'Todo List',
-    description:
-      'Build a todo list application with add, edit, delete, and mark complete functionality',
-    category: 'UI coding',
-    difficulty: 'medium',
-    technologies: ['React', 'HTML5', 'CSS3', 'JavaScript'],
-    completionCount: 42100,
-    estimatedTime: '25 mins',
-  },
-  {
-    id: 'shopping-cart',
-    title: 'Shopping Cart',
-    description:
-      'Implement a shopping cart with add/remove items, quantity updates, and total calculation',
-    category: 'UI coding',
-    difficulty: 'medium',
-    technologies: ['React', 'TypeScript', 'CSS3'],
-    completionCount: 18700,
-    estimatedTime: '30 mins',
-  },
-  {
-    id: 'image-gallery',
-    title: 'Image Gallery',
-    description:
-      'Create an image gallery with lightbox, filtering, and lazy loading',
-    category: 'UI coding',
-    difficulty: 'medium',
-    technologies: ['React', 'HTML5', 'CSS3', 'JavaScript'],
-    completionCount: 12300,
-    estimatedTime: '20 mins',
-  },
-  {
-    id: 'weather-app',
-    title: 'Weather App',
-    description:
-      'Build a weather application that fetches and displays weather data',
-    category: 'API integration',
-    difficulty: 'medium',
-    technologies: ['React', 'JavaScript', 'CSS3'],
-    completionCount: 15600,
-    estimatedTime: '35 mins',
-  },
-  {
-    id: 'chat-interface',
-    title: 'Chat Interface',
-    description:
-      'Create a real-time chat interface with message history and user presence',
-    category: 'UI coding',
-    difficulty: 'hard',
-    technologies: ['React', 'TypeScript', 'WebSocket'],
-    completionCount: 8900,
-    estimatedTime: '45 mins',
-  },
-  {
-    id: 'dashboard',
-    title: 'Analytics Dashboard',
-    description:
-      'Build a dashboard with charts, data visualization, and interactive filters',
-    category: 'UI coding',
-    difficulty: 'hard',
-    technologies: ['React', 'TypeScript', 'D3.js', 'CSS3'],
-    completionCount: 6700,
-    estimatedTime: '60 mins',
-  },
-];
 
 export default function FrontendTasksPage() {
   const router = useRouter();
@@ -163,12 +54,134 @@ export default function FrontendTasksPage() {
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [tasks, setTasks] = useState<FrontendTask[]>([
+    {
+      id: 'counter-component',
+      title: 'Counter Component',
+      description:
+        'Create a React counter component with increment, decrement, and reset functionality. The component should display the current count and have three buttons.',
+      category: 'React',
+      difficulty: 'easy',
+      estimatedTime: 15,
+      author: 'AI Assistant',
+      company: 'Elzatona',
+      requirements: 'Build a simple counter component with useState hook',
+      hints: ['Use useState hook', 'Create increment/decrement functions'],
+      solution: '// Solution code here',
+      starterCode: '// Starter code here',
+      testCases: [],
+      tags: ['react', 'hooks', 'state', 'beginner'],
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 'todo-list',
+      title: 'Todo List',
+      description:
+        'Build a todo list application with add, edit, delete, and mark complete functionality',
+      category: 'React',
+      difficulty: 'medium',
+      estimatedTime: 30,
+      author: 'AI Assistant',
+      company: 'Elzatona',
+      requirements: 'Create a todo list with CRUD operations',
+      hints: ['Use useState for state management', 'Implement form handling'],
+      solution: '// Solution code here',
+      starterCode: '// Starter code here',
+      testCases: [],
+      tags: ['react', 'forms', 'state', 'intermediate'],
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/admin/frontend-tasks');
+        if (!response.ok) {
+          throw new Error('Failed to fetch tasks');
+        }
+        const data = await response.json();
+
+        // Handle API response format
+        if (data.success && data.data) {
+          setTasks(data.data);
+        } else if (Array.isArray(data)) {
+          setTasks(data);
+        } else {
+          throw new Error('Invalid response format');
+        }
+      } catch (err) {
+        console.error('Error fetching tasks:', err);
+        // Fallback to sample data for testing
+        setTasks([
+          {
+            id: 'counter-component',
+            title: 'Counter Component',
+            description:
+              'Create a React counter component with increment, decrement, and reset functionality. The component should display the current count and have three buttons.',
+            category: 'React',
+            difficulty: 'easy',
+            estimatedTime: 15,
+            author: 'AI Assistant',
+            company: 'Elzatona',
+            requirements: 'Build a simple counter component with useState hook',
+            hints: [
+              'Use useState hook',
+              'Create increment/decrement functions',
+            ],
+            solution: '// Solution code here',
+            starterCode: '// Starter code here',
+            testCases: [],
+            tags: ['react', 'hooks', 'state', 'beginner'],
+            isActive: true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          {
+            id: 'todo-list',
+            title: 'Todo List',
+            description:
+              'Build a todo list application with add, edit, delete, and mark complete functionality',
+            category: 'React',
+            difficulty: 'medium',
+            estimatedTime: 30,
+            author: 'AI Assistant',
+            company: 'Elzatona',
+            requirements: 'Create a todo list with CRUD operations',
+            hints: [
+              'Use useState for state management',
+              'Implement form handling',
+            ],
+            solution: '// Solution code here',
+            starterCode: '// Starter code here',
+            testCases: [],
+            tags: ['react', 'forms', 'state', 'intermediate'],
+            isActive: true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        ]);
+        setError(null); // Clear error since we have fallback data
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
+  }, []);
 
   const handleTaskClick = (taskId: string) => {
     router.push(`/frontend-tasks/${taskId}`);
   };
 
-  const filteredTasks = frontendTasks.filter(task => {
+  const filteredTasks = tasks.filter(task => {
     const matchesSearch =
       task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       task.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -222,11 +235,10 @@ export default function FrontendTasksPage() {
     return iconMap[tech] || <Code className="w-4 h-4" />;
   };
 
-  const totalQuestions = frontendTasks.length;
+  const totalQuestions = tasks.length;
   const totalHours = Math.round(
-    frontendTasks.reduce((acc, task) => {
-      const minutes = parseInt(task.estimatedTime.split(' ')[0]);
-      return acc + minutes;
+    tasks.reduce((acc, task) => {
+      return acc + task.estimatedTime;
     }, 0) / 60
   );
 
@@ -344,8 +356,36 @@ export default function FrontendTasksPage() {
           </div>
         </div>
 
-        {/* Tasks Grid */}
-        {filteredTasks.length === 0 ? (
+        {/* Loading State */}
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              Loading tasks...
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              Please wait while we fetch the frontend tasks
+            </p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Code className="w-8 h-8 text-red-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              Error loading tasks
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        ) : filteredTasks.length === 0 ? (
           <div className="text-center py-12">
             <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search className="w-8 h-8 text-gray-400" />
@@ -390,18 +430,16 @@ export default function FrontendTasksPage() {
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
                               {task.title}
                             </h3>
-                            {task.isWarmUp && (
+                            {task.difficulty === 'easy' && (
                               <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-xs font-medium">
-                                Warm up question
+                                Beginner friendly
                               </span>
                             )}
                           </div>
                         </div>
                         <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
                           <CheckCircle className="w-4 h-4" />
-                          <span className="text-sm">
-                            {(task.completionCount / 1000).toFixed(1)}k done
-                          </span>
+                          <span className="text-sm">{task.author}</span>
                         </div>
                       </div>
 
@@ -422,25 +460,25 @@ export default function FrontendTasksPage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="w-4 h-4" />
-                          <span>{task.estimatedTime}</span>
+                          <span>{task.estimatedTime} mins</span>
                         </div>
                       </div>
 
-                      {/* Technologies */}
+                      {/* Tags */}
                       <div className="mb-4">
                         <div className="flex flex-wrap gap-2">
-                          {task.technologies.slice(0, 4).map(tech => (
+                          {task.tags.slice(0, 4).map(tag => (
                             <div
-                              key={tech}
+                              key={tag}
                               className="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs"
                             >
-                              {getTechnologyIcon(tech)}
-                              <span>{tech}</span>
+                              <Code className="w-3 h-3" />
+                              <span>{tag}</span>
                             </div>
                           ))}
-                          {task.technologies.length > 4 && (
+                          {task.tags.length > 4 && (
                             <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded text-xs">
-                              +{task.technologies.length - 4} more
+                              +{task.tags.length - 4} more
                             </span>
                           )}
                         </div>
@@ -467,9 +505,9 @@ export default function FrontendTasksPage() {
                         <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                           {task.title}
                         </h3>
-                        {task.isWarmUp && (
+                        {task.difficulty === 'easy' && (
                           <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-xs font-medium">
-                            Warm up
+                            Beginner friendly
                           </span>
                         )}
                       </div>
@@ -487,13 +525,11 @@ export default function FrontendTasksPage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="w-4 h-4" />
-                          <span>{task.estimatedTime}</span>
+                          <span>{task.estimatedTime} mins</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <CheckCircle className="w-4 h-4" />
-                          <span>
-                            {(task.completionCount / 1000).toFixed(1)}k done
-                          </span>
+                          <span>{task.author}</span>
                         </div>
                       </div>
                     </div>

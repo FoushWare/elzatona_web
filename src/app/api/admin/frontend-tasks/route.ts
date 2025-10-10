@@ -1,17 +1,35 @@
 // v1.0 - API routes for frontend tasks CRUD operations
 
 import { NextRequest, NextResponse } from 'next/server';
-import { AdminFirestoreHelper, COLLECTIONS } from '@/lib/firebase-admin';
 import {
   FrontendTask,
   FrontendTaskFormData,
   ApiResponse,
   PaginatedResponse,
 } from '@/types/admin';
+import {
+  db,
+  collection,
+  getDocs,
+  addDoc,
+  query,
+  where,
+  orderBy,
+} from '@/lib/firebase-server';
 
 // GET /api/admin/frontend-tasks - List all frontend tasks
 export async function GET(request: NextRequest) {
   try {
+    console.log('🔄 API: Fetching frontend tasks...');
+
+    if (!db) {
+      console.error('❌ API: Database not initialized');
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -19,45 +37,42 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category') || '';
     const difficulty = searchParams.get('difficulty') || '';
 
-    let whereClauses: { field: string; operator: any; value: any }[] = [];
+    // Fetch tasks from Firebase
+    const tasksRef = collection(db, 'frontendTasks');
+    let q = query(tasksRef, orderBy('createdAt', 'desc'));
 
+    // Apply filters
     if (category) {
-      whereClauses.push({ field: 'category', operator: '==', value: category });
+      q = query(
+        tasksRef,
+        where('category', '==', category),
+        orderBy('createdAt', 'desc')
+      );
     }
-
     if (difficulty) {
-      whereClauses.push({
-        field: 'difficulty',
-        operator: '==',
-        value: difficulty,
-      });
+      q = query(
+        tasksRef,
+        where('difficulty', '==', difficulty),
+        orderBy('createdAt', 'desc')
+      );
     }
 
-    whereClauses.push({ field: 'isActive', operator: '==', value: true });
+    const snapshot = await getDocs(q);
+    let data: FrontendTask[] = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as FrontendTask[];
 
-    let data: FrontendTask[];
-    let total: number;
-
+    // Apply search filter (client-side since Firestore doesn't support full-text search)
     if (search) {
-      data = await AdminFirestoreHelper.searchDocuments<FrontendTask>(
-        COLLECTIONS.FRONTEND_TASKS,
-        search,
-        ['title', 'description', 'category', 'tags'],
-        { limit: 100, orderBy: 'createdAt', orderDirection: 'desc' }
+      const lowerSearch = search.toLowerCase();
+      data = data.filter(
+        task =>
+          task.title.toLowerCase().includes(lowerSearch) ||
+          task.description.toLowerCase().includes(lowerSearch) ||
+          task.category.toLowerCase().includes(lowerSearch) ||
+          task.tags.some(tag => tag.toLowerCase().includes(lowerSearch))
       );
-      total = data.length;
-    } else {
-      const result = await AdminFirestoreHelper.listDocuments<FrontendTask>(
-        COLLECTIONS.FRONTEND_TASKS,
-        {
-          limit: limit * 10, // Get more to filter client-side
-          orderBy: 'createdAt',
-          orderDirection: 'desc',
-          where: whereClauses,
-        }
-      );
-      data = result.data;
-      total = result.total;
     }
 
     // Client-side pagination
@@ -65,10 +80,14 @@ export async function GET(request: NextRequest) {
     const endIndex = startIndex + limit;
     const paginatedData = data.slice(startIndex, endIndex);
 
+    console.log(
+      `📊 API: Frontend tasks fetched: ${data.length} total, ${paginatedData.length} returned`
+    );
+
     const response: PaginatedResponse<FrontendTask> = {
       success: true,
       data: paginatedData,
-      total,
+      total: data.length,
       page,
       limit,
       hasMore: endIndex < data.length,
@@ -76,7 +95,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Error fetching frontend tasks:', error);
+    console.error('❌ API: Error fetching frontend tasks:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to fetch frontend tasks' },
       { status: 500 }
@@ -87,6 +106,16 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/frontend-tasks - Create new frontend task
 export async function POST(request: NextRequest) {
   try {
+    console.log('🔄 API: Creating new frontend task...');
+
+    if (!db) {
+      console.error('❌ API: Database not initialized');
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
     const body: FrontendTaskFormData = await request.json();
 
     // Validate required fields
@@ -97,23 +126,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create the task
-    const taskId = await AdminFirestoreHelper.createDocument<FrontendTask>(
-      COLLECTIONS.FRONTEND_TASKS,
-      {
-        ...body,
-        isActive: true,
-      }
-    );
+    // Create the task data
+    const taskData = {
+      ...body,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    // Add to Firebase
+    const docRef = await addDoc(collection(db, 'frontendTasks'), taskData);
+
+    console.log(`✅ API: Frontend task created with ID: ${docRef.id}`);
 
     const response: ApiResponse<{ id: string }> = {
       success: true,
-      data: { id: taskId },
+      data: { id: docRef.id },
     };
 
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
-    console.error('Error creating frontend task:', error);
+    console.error('❌ API: Error creating frontend task:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to create frontend task' },
       { status: 500 }

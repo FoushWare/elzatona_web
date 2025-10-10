@@ -9,6 +9,14 @@ export interface FrontendTaskTestCase {
   timeout?: number;
 }
 
+export interface FrontendTaskFile {
+  id: string;
+  name: string;
+  type: 'tsx' | 'ts' | 'css' | 'html' | 'json' | 'js';
+  content: string;
+  isEntryPoint?: boolean; // For main component files
+}
+
 export interface FrontendTask {
   id: string;
   title: string;
@@ -21,7 +29,8 @@ export interface FrontendTask {
   requirements: string;
   hints: string[];
   solution: string;
-  starterCode: string; // Changed to string for simplicity
+  starterCode: string; // Legacy field for backward compatibility
+  files: FrontendTaskFile[]; // New dynamic files structure
   testCases?: FrontendTaskTestCase[]; // Added test cases
   tags: string[];
   createdAt: Date;
@@ -95,9 +104,11 @@ export interface FrontendTaskFormData {
   requirements: string;
   hints: string[];
   solution: string;
-  starterCode: string; // Changed to string for simplicity
+  starterCode: string; // Legacy field for backward compatibility
+  files: FrontendTaskFile[]; // New dynamic files structure
   testCases?: FrontendTaskTestCase[]; // Added test cases
   tags: string[];
+  isActive: boolean;
 }
 
 export interface ProblemSolvingTaskFormData {

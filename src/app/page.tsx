@@ -77,7 +77,7 @@ export default function HomePage() {
         title: 'Build Your Custom Roadmap',
         subtitle: 'Create and manage your personalized learning journey',
         cta: 'View My Roadmap',
-        ctaLink: '/free-style-roadmap',
+        ctaLink: '/browse-practice-questions',
         icon: <Compass className="w-6 h-6" />,
         color: 'purple',
       };
@@ -289,7 +289,7 @@ export default function HomePage() {
 
             {/* Free Style Learning */}
             <Link
-              href="/free-style-roadmap"
+              href="/browse-practice-questions"
               className={`group bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 ${
                 showAnimation
                   ? 'opacity-100 translate-y-0'
@@ -405,7 +405,7 @@ export default function HomePage() {
                     freely and build your personalized learning journey.
                   </p>
                   <Link
-                    href="/free-style-roadmap"
+                    href="/browse-practice-questions"
                     className="inline-flex items-center space-x-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                   >
                     <span>View My Roadmap</span>

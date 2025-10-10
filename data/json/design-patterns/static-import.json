@@ -1,0 +1,106 @@
+[
+  {
+    "id": 57,
+    "title": "What is Static Import in JavaScript modules?",
+    "content": "Static Import uses the ES2015 `import` keyword to bring in code from another module. These imports are bundled at build time and included in the initial JavaScript bundle, meaning they are executed as soon as the module is loaded.",
+    "type": "mcq",
+    "difficulty": "easy",
+    "options": [
+      "A way to import modules dynamically at runtime",
+      "A way to import modules at build time, included in the initial bundle",
+      "A feature only available in Node.js",
+      "A method to lazy load modules"
+    ],
+    "answer": "A way to import modules at build time, included in the initial bundle"
+  },
+  {
+    "id": 58,
+    "title": "How does static import affect bundle size and performance?",
+    "content": "All statically imported modules are bundled into the main JavaScript file (e.g., `main.bundle.js` in Webpack). Larger bundles can slow down initial page load, since the browser must download, parse, and execute everything before rendering the UI.",
+    "type": "open-ended",
+    "difficulty": "medium",
+    "sampleAnswers": [
+      "Static imports increase bundle size since everything is loaded upfront.",
+      "They can hurt performance by delaying time-to-interactive, especially on slow networks or devices.",
+      "Using too many static imports for rarely used components leads to wasted resources."
+    ]
+  },
+  {
+    "id": 59,
+    "title": "In the chat app example, which components were statically imported?",
+    "content": "In the given example, the `App` component statically imports `UserInfo`, `ChatList`, and `ChatInput`. The `ChatInput` component itself statically imports `EmojiPicker`.",
+    "type": "mcq",
+    "difficulty": "easy",
+    "options": [
+      "Only UserInfo and ChatList",
+      "UserInfo, ChatList, and ChatInput (which includes EmojiPicker)",
+      "Only EmojiPicker",
+      "None of the above"
+    ],
+    "answer": "UserInfo, ChatList, and ChatInput (which includes EmojiPicker)"
+  },
+  {
+    "id": 60,
+    "title": "What is the main drawback of using only static imports in a React app?",
+    "content": "If every component and dependency is statically imported, the initial bundle can become very large. This delays rendering since the browser must download and parse all modules before showing any content.",
+    "type": "open-ended",
+    "difficulty": "medium",
+    "sampleAnswers": [
+      "Slower initial load due to larger bundle size.",
+      "Worse performance on mobile or slow networks.",
+      "Even components not immediately needed are still loaded upfront."
+    ]
+  },
+  {
+    "id": 61,
+    "title": "How does Webpack handle static imports?",
+    "content": "Webpack bundles all statically imported modules into the main bundle file. For example, `main.bundle.js` might include every statically imported component from the source code.",
+    "type": "mcq",
+    "difficulty": "medium",
+    "options": [
+      "It bundles them only when used at runtime",
+      "It splits them into separate files automatically",
+      "It includes all statically imported modules into the main bundle",
+      "It ignores them unless explicitly configured"
+    ],
+    "answer": "It includes all statically imported modules into the main bundle"
+  },
+  {
+    "id": 62,
+    "title": "When should you avoid static imports?",
+    "content": "Avoid static imports for components that are not immediately necessary on page load, such as modals, tooltips, or rarely used features. Instead, load them dynamically to improve performance.",
+    "type": "open-ended",
+    "difficulty": "medium",
+    "sampleAnswers": [
+      "When the component is behind a user action (e.g., clicking a button).",
+      "When the component is not critical for the initial render.",
+      "When optimizing for smaller bundle sizes and faster loads."
+    ]
+  },
+  {
+    "id": 63,
+    "title": "Compare Static Import vs Dynamic Import.",
+    "content": "Static import loads all modules upfront at build time, increasing initial bundle size. Dynamic import (`import()`) loads modules only when needed (e.g., on user interaction), improving load performance but adding runtime overhead.",
+    "type": "open-ended",
+    "difficulty": "hard",
+    "sampleAnswers": [
+      "Static imports are eager, dynamic imports are lazy.",
+      "Static imports bundle everything, dynamic imports support code-splitting.",
+      "Static imports run immediately, dynamic imports return a promise."
+    ]
+  },
+  {
+    "id": 64,
+    "title": "What performance optimization can replace some static imports in the chat app example?",
+    "content": "Instead of statically importing the `EmojiPicker`, we can dynamically import it when the user opens the emoji panel. This reduces initial bundle size and speeds up app load.",
+    "type": "mcq",
+    "difficulty": "medium",
+    "options": [
+      "Static export",
+      "Dynamic import (`import()`)",
+      "Tree shaking",
+      "Code minification"
+    ],
+    "answer": "Dynamic import (`import()`)"
+  }
+]

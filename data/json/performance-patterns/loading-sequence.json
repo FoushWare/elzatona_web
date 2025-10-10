@@ -1,0 +1,232 @@
+[
+  {
+    "id": 1,
+    "title": "Understanding Loading Sequence",
+    "content": "What is the primary goal of optimizing the loading sequence in web performance?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Loading Sequence Optimization",
+    "difficulty": "easy",
+    "topic": "Web Performance",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["performance", "web vitals", "optimization"],
+    "options": [
+      "To improve SEO ranking",
+      "To enhance perceived performance and achieve better Core Web Vitals",
+      "To reduce the number of network requests",
+      "To prevent CSS and JS conflicts"
+    ],
+    "explanation": "Optimizing the loading sequence ensures that critical resources load at the right time, improving perceived performance and metrics like FCP and LCP.",
+    "sampleAnswers": [
+      "To enhance perceived performance and achieve better Core Web Vitals"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Why Optimal Loading Is Difficult",
+    "content": "What is one major reason why achieving an optimal loading sequence is challenging?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Loading Sequence Optimization",
+    "difficulty": "medium",
+    "topic": "Loading Challenges",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["performance", "browser", "sequence"],
+    "options": [
+      "Browsers follow a standard universal resource prioritization model",
+      "Developers and browsers often differ in how they prioritize resources",
+      "All third-party scripts automatically optimize for performance",
+      "HTTP/2 always provides perfect prioritization"
+    ],
+    "explanation": "Developers often expect browsers to prioritize resources in a specific order, but browsers handle requests differently, leading to suboptimal performance.",
+    "sampleAnswers": [
+      "Developers and browsers often differ in how they prioritize resources"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Network and CPU Utilization",
+    "content": "What happens if resources are not pipelined correctly in terms of CPU and network usage?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Loading Sequence Optimization",
+    "difficulty": "medium",
+    "topic": "Network Optimization",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["cpu", "network", "performance"],
+    "options": [
+      "The browser caches all resources automatically",
+      "The CPU and network are always fully utilized",
+      "Dead time occurs on either CPU or network, causing delays",
+      "LCP is achieved faster"
+    ],
+    "explanation": "Improper pipelining can lead to idle CPU or network times, where one waits for the other, decreasing efficiency.",
+    "sampleAnswers": [
+      "Dead time occurs on either CPU or network, causing delays"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Third-Party Scripts Impact",
+    "content": "How do third-party scripts usually affect page load performance?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Third-Party Integration",
+    "difficulty": "medium",
+    "topic": "Third-Party Performance",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["third-party", "javascript", "blocking"],
+    "options": [
+      "They optimize the sequence automatically",
+      "They often block rendering and delay critical resource loading",
+      "They improve CPU utilization",
+      "They load after all first-party scripts by default"
+    ],
+    "explanation": "Third-party scripts like ads or analytics often block rendering or delay other resources, harming metrics like FID and LCP.",
+    "sampleAnswers": [
+      "They often block rendering and delay critical resource loading"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Critical CSS Best Practice",
+    "content": "What is the best way to handle critical CSS for optimal performance?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Critical Resources",
+    "difficulty": "easy",
+    "topic": "CSS Optimization",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["css", "inline", "performance"],
+    "options": [
+      "Load all CSS files asynchronously",
+      "Inline critical CSS and preload if external",
+      "Serve all CSS from third-party CDNs",
+      "Load CSS after all JavaScript"
+    ],
+    "explanation": "Inlining critical CSS ensures faster rendering of above-the-fold content, directly improving FCP and LCP.",
+    "sampleAnswers": ["Inline critical CSS and preload if external"]
+  },
+  {
+    "id": 6,
+    "title": "Font Loading Strategy",
+    "content": "How can developers reduce the delay caused by fetching external fonts?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Font Optimization",
+    "difficulty": "medium",
+    "topic": "Fonts and Preconnect",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["fonts", "preconnect", "performance"],
+    "options": [
+      "Use font preconnect for external domains",
+      "Load all fonts after interactivity starts",
+      "Inline all font files directly into HTML",
+      "Avoid using font fallbacks"
+    ],
+    "explanation": "Using preconnect allows browsers to establish connections early, reducing delay in fetching critical font resources.",
+    "sampleAnswers": ["Use font preconnect for external domains"]
+  },
+  {
+    "id": 7,
+    "title": "Image Loading Prioritization",
+    "content": "Which images should be prioritized during the initial page load?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Image Optimization",
+    "difficulty": "easy",
+    "topic": "Images and LCP",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["images", "LCP", "ATF"],
+    "options": [
+      "Below the fold images",
+      "Above the fold images including the hero image",
+      "All images equally",
+      "Lazy-load all images"
+    ],
+    "explanation": "Above-the-fold (ATF) and hero images directly affect LCP and should be prioritized during initial loading.",
+    "sampleAnswers": ["Above the fold images including the hero image"]
+  },
+  {
+    "id": 8,
+    "title": "Next.js ScriptLoader Usage",
+    "content": "Which Next.js ScriptLoader priority should be used for scripts that run after hydration, such as analytics?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Next.js Optimization",
+    "difficulty": "medium",
+    "topic": "Script Loading",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["next.js", "scripts", "hydration"],
+    "options": [
+      "Before-Interactive",
+      "After-Interactive",
+      "Lazy-Onload",
+      "Async-Preload"
+    ],
+    "explanation": "Scripts like analytics should use 'After-Interactive' so they load after hydration without blocking critical rendering.",
+    "sampleAnswers": ["After-Interactive"]
+  },
+  {
+    "id": 9,
+    "title": "Lazy-Onload Scripts",
+    "content": "When should you use the 'Lazy-Onload' priority for third-party scripts in Next.js?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Third-Party Optimization",
+    "difficulty": "medium",
+    "topic": "Next.js Script Management",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["lazy-load", "scripts", "third-party"],
+    "options": [
+      "For critical polyfills and security scripts",
+      "For social widgets and feedback scripts",
+      "For hydration-related scripts",
+      "For critical fonts and CSS"
+    ],
+    "explanation": "'Lazy-Onload' should be used for non-critical third-party scripts like social widgets that can load after all main content.",
+    "sampleAnswers": ["For social widgets and feedback scripts"]
+  },
+  {
+    "id": 10,
+    "title": "Avoiding Preload Overuse",
+    "content": "Why should developers avoid overusing the preload directive?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Loading Sequence Optimization",
+    "difficulty": "hard",
+    "topic": "Browser Optimization",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["preload", "performance", "browser"],
+    "options": [
+      "It can cause the browser to download unnecessary resources early",
+      "It improves caching too much",
+      "It automatically prioritizes resources correctly",
+      "It blocks all async scripts"
+    ],
+    "explanation": "Overusing preload can cause browsers to fetch unnecessary resources too early, increasing network congestion and reducing performance.",
+    "sampleAnswers": [
+      "It can cause the browser to download unnecessary resources early"
+    ]
+  }
+]

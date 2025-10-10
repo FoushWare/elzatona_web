@@ -1,0 +1,1022 @@
+[
+  {
+    "id": "react-q-026",
+    "title": "What is the children prop?",
+    "content": "The `children` prop is a special prop in React used to pass elements between the opening and closing tags of a component. It is commonly used in layout and wrapper components.\n\nA simple usage of children prop looks as below,\n```jsx harmony\nfunction MyDiv({ children }){\n    return (\n      <div>\n        {children}\n      </div>;\n    );\n}\nexport default function Greeting() {\n  return (\n    <MyDiv>\n      <span>{\"Hello\"}</span>\n      <span>{\"World\"}</span>\n    </MyDiv>\n  );\n}\n```\nHere, everything inside `<MyDiv>...</MyDiv>` is passed as children to the custom div component.\nThe children can be text, JSX elements, fragments, arrays and functions(for advance use case like render props).",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Props",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "children", "props", "composition"],
+    "explanation": "The `children` prop allows components to wrap other elements, enabling flexible and reusable layout components like modals, cards, or containers.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "It passes data from parent to child as a string",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It allows components to receive and render nested content between their tags",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It is only used for passing numbers",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It is an alias for `props.data`",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-027",
+    "title": "How to write comments in React?",
+    "content": "The comments in React/JSX are similar to JavaScript Multiline comments but are wrapped in curly braces.\n\n**Single-line comments:**\n```jsx harmony\n<div>\n  {/* Single-line comments(In vanilla JavaScript, the single-line comments are represented by double slash(//)) */}\n  {`Welcome ${user}, let's play React`}\n</div>\n```\n\n**Multi-line comments:**\n```jsx harmony\n<div>\n  {/* Multi-line comments for more than\n   one line */}\n  {`Welcome ${user}, let's play React`}\n</div>\n```\nYou can use `//` and `/* */` in JS logic, hooks, and functions.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "JSX",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "comments", "jsx", "syntax"],
+    "explanation": "In JSX, comments must be wrapped in `{/* */}`. Regular JS comments (`//`, `/* */`) work only outside JSX expressions.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `//` inside JSX tags",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use `{/* comment */}` for JSX comments",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Comments are not allowed in React",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use HTML-style `<!-- -->` comments",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-028",
+    "title": "What is reconciliation?",
+    "content": "`Reconciliation` is the process through which React updates the Browser DOM and makes React work faster. React use a `diffing algorithm` so that component updates are predictable and faster. React would first calculate the difference between the `real DOM` and the copy of DOM `(Virtual DOM)` when there's an update of components.\n\nReact stores a copy of Browser DOM which is called `Virtual DOM`. When we make changes or add data, React creates a new Virtual DOM and compares it with the previous one. This comparison is done by `Diffing Algorithm`.\n\nNow React compares the Virtual DOM with Real DOM. It finds out the changed nodes and updates only the changed nodes in Real DOM leaving the rest nodes as it is. This process is called _Reconciliation_.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Virtual DOM",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "reconciliation", "virtual-dom", "diffing", "rendering"],
+    "explanation": "Reconciliation is React’s process of comparing Virtual DOM trees and updating the real DOM efficiently using a diffing algorithm.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "The process of converting JSX to JavaScript",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "React’s algorithm to compare Virtual DOM trees and update only changed real DOM nodes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A method to bundle React components",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "The act of mounting a component for the first time",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-029",
+    "title": "Does the lazy function support named exports?",
+    "content": "No, currently `React.lazy` function supports default exports only. If you would like to import modules which are named exports, you can create an intermediate module that reexports it as the default. It also ensures that tree shaking keeps working and don’t pull unused components.\n\nLet's take a component file which exports multiple named components,\n```javascript\n// MoreComponents.js\nexport const SomeComponent = /* ... */;\nexport const UnusedComponent = /* ... */;\n```\nand reexport `MoreComponents.js` components in an intermediate file `IntermediateComponent.js`\n```javascript\n// IntermediateComponent.js\nexport { SomeComponent as default } from \"./MoreComponents.js\";\n```\nNow you can import the module using lazy function as below,\n```javascript\nimport React, { lazy } from \"react\";\nconst SomeComponent = lazy(() => import(\"./IntermediateComponent.js\"));\n```",
+    "type": "true-false",
+    "category": "React",
+    "topic": "Code Splitting",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "react",
+      "lazy",
+      "code-splitting",
+      "dynamic-import",
+      "named-exports"
+    ],
+    "explanation": "`React.lazy` only supports default exports. To use named exports, you must re-export them as default in an intermediate file.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "True",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "False",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "id": "react-q-030",
+    "title": "Why does React use className instead of the class attribute?",
+    "content": "React uses **className** instead of **class** because of a JavaScript naming conflict with the class keyword.\n1. `class` is a reserved keyword in JavaScript\n   In JavaScript, class is used to define ES6 classes:\n   ```js\n   class Person {\n     constructor(name) {\n       this.name = name;\n     }\n   }\n   ```\n   If you try to use class as a variable or property name, it will throw a syntax error. Since JSX is just JavaScript with XML-like syntax, using class directly in JSX would break the parser.\n2. JSX Is JavaScript\n   When you write JSX like this:\n   ```jsx\n   <div class=\"btn\">Click</div>\n   ```\n   It will be compiled to:\n   ```jsx\n   React.createElement('div', { class: 'btn' }, 'Click');\n   ```\n   But `class` is invalid in this object literal context (since it clashes with the JS keyword), hence React instead uses className.\n   ```jsx\n   <div className=\"btn\">Click</div>\n   ```\n   which compiles to:\n   ```jsx\n   React.createElement('div', { className: 'btn' }, 'Click');\n   ```\n   React then translates `className` to` class` in the final HTML DOM.\n3. Aligns with DOM APIs\n   In vanilla JavaScript, you interact with element classes using:\n   ```js\n   element.className = 'my-class';\n   ```\n   React follows this convention, staying consistent with the DOM API's property name rather than HTML’s attribute.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "JSX",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "jsx", "classname", "class", "dom"],
+    "explanation": "React uses `className` because `class` is a reserved keyword in JavaScript, and JSX compiles to JavaScript object literals where `class` would cause a syntax error.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Because `class` is a reserved keyword in JavaScript",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To make CSS harder to write",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Because HTML doesn’t support `class`",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It’s a typo that became standard",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-031",
+    "title": "What are Fragments?",
+    "content": "It's a common pattern or practice in React for a component to return multiple elements. _Fragments_ let you group a list of children without adding extra nodes to the DOM.\nYou need to use either `<Fragment>` or a shorter syntax having empty tag (`<></>`).\nBelow is the example of how to use fragment inside _Story_ component.\n```jsx harmony\nfunction Story({ title, description, date }) {\n  return (\n    <Fragment>\n      <h2>{title}</h2>\n      <p>{description}</p>\n      <p>{date}</p>\n    </Fragment>\n  );\n}\n```\nIt is also possible to render list of fragments inside a loop with the mandatory **key** attribute supplied.\n```jsx harmony\nfunction StoryBook() {\n  return stories.map((story) => (\n    <Fragment key={story.id}>\n      <h2>{story.title}</h2>\n      <p>{story.description}</p>\n      <p>{story.date}</p>\n    </Fragment>\n  ));\n}\n```\nUsually, you don't need to use `<Fragment>` until there is a need of _key_ attribute. The usage of shorter syntax looks like below.\n```jsx harmony\nfunction Story({ title, description, date }) {\n  return (\n    <>\n      <h2>{title}</h2>\n      <p>{description}</p>\n      <p>{date}</p>\n    </>\n  );\n}\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Fragments",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "fragments", "jsx", "rendering", "dom"],
+    "explanation": "Fragments allow grouping multiple elements without adding extra DOM nodes, improving performance and avoiding layout issues.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Special components that render nothing",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A way to group multiple elements without adding extra DOM nodes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Components that only render on mobile",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "A type of React error boundary",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-032",
+    "title": "Why are Fragments better than container divs?",
+    "content": "Below are the list of reasons to prefer fragments over container DOM elements,\n1. Fragments are a bit faster and use less memory by not creating an extra DOM node. This only has a real benefit on very large and deep trees.\n2. Some CSS mechanisms like _Flexbox_ and _CSS Grid_ have a special parent-child relationships, and adding divs in the middle makes it hard to keep the desired layout.\n3. The DOM Inspector is less cluttered.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Fragments",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "fragments", "performance", "css", "layout"],
+    "explanation": "Fragments avoid unnecessary DOM nodes, which improves performance, preserves CSS layout (e.g., Flexbox/Grid), and reduces DOM clutter.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "They are slower but easier to debug",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "They prevent CSS layout issues, improve performance, and reduce DOM clutter",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "They automatically apply styles",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "They are required for server-side rendering",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-033",
+    "title": "What are portals in React?",
+    "content": "A Portal is a React feature that enables rendering children into a DOM node that exists outside the parent component's DOM hierarchy, while still preserving the React component hierarchy. Portals help avoid CSS stacking issues—for example, elements with position: fixed may not behave as expected inside a parent with transform. Portals solve this by rendering content (like modals or tooltips) outside such constrained DOM contexts.\n```javascript\nReactDOM.createPortal(child, container);\n```\n*   `child`: Any valid React node (e.g., JSX, string, fragment).\n*   `container`: A real DOM node (e.g., `document.getElementById('modal-root')`).\nEven though the content renders elsewhere in the DOM, it still behaves like a normal child in React. It has access to context, state, and event handling.\n\n**Example:- Modal:**\n```jsx\nfunction Modal({ children }) {\n  return ReactDOM.createPortal(\n    <div className=\"modal\">{children}</div>,\n    document.body)\n  );\n}\n```\nThe above code will render the modal content into the body element in the HTML, not inside the component's usual location.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Portals",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "portals", "modals", "dom", "rendering"],
+    "explanation": "Portals render React children into a DOM node outside the parent hierarchy (e.g., modals into `document.body`), while maintaining React context and event handling.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "A way to share state between unrelated components",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A feature to render children into a different DOM node while preserving React behavior",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A method to lazy-load components",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "An alternative to React Context",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-034",
+    "title": "What are stateless components?",
+    "content": "If the behaviour of a component is independent of its state then it can be a stateless component. You can use either a function or a class for creating stateless components. But unless you need to use a lifecycle hook in your components, you should go for function components. There are a lot of benefits if you decide to use function components here; they are easy to write, understand, and test, a little faster, and you can avoid the `this` keyword altogether.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Components",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "stateless", "function-components", "components"],
+    "explanation": "Stateless components (now called functional components) don’t manage internal state and are typically pure functions that render based on props.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Components that cannot receive props",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Components that don’t manage internal state and render based only on props",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Components that are always class-based",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Components that throw errors",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-035",
+    "title": "What are stateful components?",
+    "content": "If the behaviour of a component is dependent on the _state_ of the component then it can be termed as stateful component. These _stateful components_ are either function components with hooks or _class components_.\n\nLet's take an example of function stateful component which update the state based on click event,\n```javascript\nimport React, {useState} from 'react';\nconst App = (props) => {\nconst [count, setCount] = useState(0);\nhandleIncrement() {\n  setCount(count+1);\n}\nreturn (\n  <>\n    <button onClick={handleIncrement}>Increment</button>\n    <span>Counter: {count}</span>\n  </>\n  )\n}\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "State",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "stateful", "state", "hooks", "class-components"],
+    "explanation": "Stateful components manage internal state using `useState` (function) or `this.state` (class), and re-render when state changes.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Components that never re-render",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Components that manage internal state and re-render when it changes",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Components that only accept static props",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Components that are deprecated",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-036",
+    "title": "How to apply validation to props in React?",
+    "content": "When the application is running in _development mode_, React will automatically check all props that we set on components to make sure they have _correct type_. If the type is incorrect, React will generate warning messages in the console. It's disabled in _production mode_ due to performance impact. The mandatory props are defined with `isRequired`.\n\nThe set of predefined prop types:\n1. `PropTypes.number`\n2. `PropTypes.string`\n3. `PropTypes.array`\n4. `PropTypes.object`\n5. `PropTypes.func`\n6. `PropTypes.node`\n7. `PropTypes.element`\n8. `PropTypes.bool`\n9. `PropTypes.symbol`\n10. `PropTypes.any`\n\nWe can define `propTypes` for `User` component as below:\n```jsx harmony\nimport React from \"react\";\nimport PropTypes from \"prop-types\";\nclass User extends React.Component {\n  static propTypes = {\n    name: PropTypes.string.isRequired,\n    age: PropTypes.number.isRequired,\n  };\n  render() {\n    return (\n      <>\n        <h1>{`Welcome, ${this.props.name}`}</h1>\n        <h2>{`Age, ${this.props.age}`}</h2>\n      </>\n    );\n  }\n}\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Props",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "react",
+      "proptypes",
+      "validation",
+      "type-checking",
+      "development"
+    ],
+    "explanation": "PropTypes validate prop types in development mode, helping catch bugs early. Required props use `.isRequired`.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `PropTypes` from the `prop-types` package to define expected prop types and required props",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "PropTypes work in production mode for security",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Validation is automatic and cannot be customized",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "PropTypes are built into React since v16",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-037",
+    "title": "What are the advantages of React?",
+    "content": "Below are the list of main advantages of React,\n1. Increases the application's performance with _Virtual DOM_.\n2. JSX makes code easy to read and write.\n3. It renders both on client and server side (_SSR_).\n4. Easy to integrate with frameworks (Angular, Backbone) since it is only a view library.\n5. Easy to write unit and integration tests with tools such as Jest.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "React Basics",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "advantages", "virtual-dom", "jsx", "ssr"],
+    "explanation": "React’s key advantages include Virtual DOM for performance, JSX for readability, SSR support, framework agnosticism, and testability.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Virtual DOM, JSX, SSR, easy integration, and testability",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Two-way data binding and full framework features",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Built-in state management and routing",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "No learning curve for beginners",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-038",
+    "title": "What are the limitations of React?",
+    "content": "Apart from the advantages, there are few limitations of React too,\n1. React is just a view library, not a full framework.\n2. There is a learning curve for beginners who are new to web development.\n3. Integrating React into a traditional MVC framework requires some additional configuration.\n4. The code complexity increases with inline templating and JSX.\n5. Too many smaller components leading to over engineering or boilerplate.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "React Basics",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "limitations", "view-library", "jsx", "boilerplate"],
+    "explanation": "React is only a view library, has a learning curve, requires extra setup for full apps, and can lead to boilerplate with many small components.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "It’s a full framework with built-in routing and state management",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It’s just a view library, has a learning curve, and can create boilerplate",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It doesn’t support server-side rendering",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It’s slower than vanilla JS",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-039",
+    "title": "What are the recommended ways for static type checking?",
+    "content": "Normally we use _PropTypes library_ (`React.PropTypes` moved to a `prop-types` package since React v15.5) for _type checking_ in the React applications. For large code bases, it is recommended to use _static type checkers_ such as Flow or TypeScript, that perform type checking at compile time and provide auto-completion features.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "TypeScript",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "typescript", "flow", "proptypes", "type-checking"],
+    "explanation": "For small apps, PropTypes suffice; for large codebases, use TypeScript or Flow for compile-time type safety and better tooling.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "PropTypes for small apps; TypeScript/Flow for large codebases",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Only PropTypes should be used",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "TypeScript is not compatible with React",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Static typing is unnecessary in React",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-040",
+    "title": "What is the use of the react-dom package?",
+    "content": "The `react-dom` package provides _DOM-specific methods_ that can be used at the top level of your app. Most of the components are not required to use this module. Some of the methods of this package are:\n1. `render()`\n2. `hydrate()`\n3. `unmountComponentAtNode()`\n4. `findDOMNode()`\n5. `createPortal()`",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "React DOM",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "react-dom", "dom", "render", "hydrate"],
+    "explanation": "`react-dom` provides methods to interact with the browser DOM, such as `render`, `hydrate`, and `createPortal`.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "It contains React’s core logic like useState and useEffect",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It provides DOM-specific methods like render(), hydrate(), and createPortal()",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It’s used for server-side logic only",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "It’s deprecated in React 18",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-041",
+    "title": "What is ReactDOMServer?",
+    "content": "The `ReactDOMServer` object enables you to render components to static markup (typically used on node server). This object is mainly used for _server-side rendering_ (SSR). The following methods can be used in both the server and browser environments:\n1. `renderToString()`\n2. `renderToStaticMarkup()`\n\nFor example, you generally run a Node-based web server like Express, Hapi, or Koa, and you call `renderToString` to render your root component to a string, which you then send as response.\n```javascript\n// using Express\nimport { renderToString } from \"react-dom/server\";\nimport MyPage from \"./MyPage\";\napp.get(\"/\", (req, res) => {\n  res.write(\n    \"<!DOCTYPE html><html><head><title>My Page</title></head><body>\"\n  );\n  res.write('<div id=\"content\">');\n  res.write(renderToString(<MyPage />));\n  res.write(\"</div></body></html>\");\n  res.end();\n});\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Server-Side Rendering",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "react",
+      "ssr",
+      "react-dom-server",
+      "render-to-string",
+      "server-side"
+    ],
+    "explanation": "`ReactDOMServer` provides methods like `renderToString` for server-side rendering, enabling SEO-friendly and fast initial loads.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "A tool for client-side hydration only",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "An object with methods like renderToString() for server-side rendering",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A replacement for react-dom in the browser",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Used for testing components",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-042",
+    "title": "How to use innerHTML in React?",
+    "content": "The `dangerouslySetInnerHTML` attribute is React's replacement for using `innerHTML` in the browser DOM. Just like `innerHTML`, it is risky to use this attribute considering cross-site scripting (XSS) attacks. You just need to pass a `__html` object as key and HTML text as value.\n\nIn this example MyComponent uses `dangerouslySetInnerHTML` attribute for setting HTML markup:\n```jsx harmony\nfunction createMarkup() {\n  return { __html: \"First &middot; Second\" };\n}\nfunction MyComponent() {\n  return <div dangerouslySetInnerHTML={createMarkup()} />;\n}\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "DOM Manipulation",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "dangerouslysetinnerhtml", "xss", "dom", "security"],
+    "explanation": "`dangerouslySetInnerHTML` is React’s way to set raw HTML, but it’s dangerous and should be used cautiously to avoid XSS.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `innerHTML` directly on JSX elements",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use `dangerouslySetInnerHTML={{ __html: string }}` with caution",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "It’s not possible to render HTML in React",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use `React.renderHTML()`",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-043",
+    "title": "How to apply styles in React?",
+    "content": "The `style` attribute accepts a JavaScript object with camelCased properties rather than a CSS string. This is consistent with the DOM style JavaScript property, is more efficient, and prevents XSS security holes.\n```jsx harmony\nconst divStyle = {\n  color: \"blue\",\n  backgroundImage: \"url(\" + imgUrl + \")\",\n};\nfunction HelloWorldComponent() {\n  return <div style={divStyle}>Hello World!</div>;\n}\n```\nStyle keys are camelCased in order to be consistent with accessing the properties on DOM nodes in JavaScript (e.g. `node.style.backgroundImage`).",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "CSS & Styling",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "styles", "inline-styles", "camelcase", "css"],
+    "explanation": "React uses camelCased JavaScript objects for inline styles (e.g., `backgroundColor`), not CSS strings.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use CSS strings like `style=\"color: blue\"`",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use camelCased JavaScript objects: `style={{ backgroundColor: 'blue' }}`",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Only external CSS files are allowed",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Styles must be defined in a separate CSS module",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-044",
+    "title": "How are events different in React?",
+    "content": "Handling events in React elements has some syntactic differences:\n1. React event handlers are named using camelCase, rather than lowercase.\n2. With JSX you pass a function as the event handler, rather than a string.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "DOM Events",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "events", "event-handling", "camelcase", "jsx"],
+    "explanation": "React uses camelCase for event names (e.g., `onClick`) and passes functions, not strings, as handlers.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Event names are lowercase and handlers are strings",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Event names use camelCase and handlers are functions",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Events are handled the same as in HTML",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "React doesn’t support events",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-045",
+    "title": "What is the impact of using indexes as keys?",
+    "content": "Keys should be stable, predictable, and unique so that React can keep track of elements.\n\nIn the below code snippet each element's key will be based on ordering, rather than tied to the data that is being represented. This limits the optimizations that React can do and creates confusing bugs in the application.\n```jsx harmony\n{\n  todos.map((todo, index) => <Todo {...todo} key={index} />);\n}\n```\nIf you use element data for unique key, assuming `todo.id` is unique to this list and stable, React would be able to reorder elements without needing to reevaluate them as much.\n```jsx harmony\n{\n  todos.map((todo) => <Todo {...todo} key={todo.id} />);\n}\n```\n\n**Note:** If you don't specify `key` prop at all, React will use index as a key's value while iterating over an array of data.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Lists and Keys",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "keys", "lists", "index", "performance"],
+    "explanation": "Using indexes as keys can cause bugs when lists are reordered or filtered. Use stable IDs instead.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "It’s always safe and recommended",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It can cause bugs with reordering or filtering; use stable IDs instead",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Keys are optional and have no impact",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Indexes improve performance",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-046",
+    "title": "How do you conditionally render components?",
+    "content": "In some cases you want to render different components depending on some state. JSX does not render `false` or `undefined`, so you can use conditional _short-circuiting_ to render a given part of your component only if a certain condition is true.\n```jsx harmony\nconst MyComponent = ({ name, address }) => (\n  <div>\n    <h2>{name}</h2>\n    {address && <p>{address}</p>}\n  </div>\n);\n```\nIf you need an `if-else` condition then use _ternary operator_.\n```jsx harmony\nconst MyComponent = ({ name, address }) => (\n  <div>\n    <h2>{name}</h2>\n    {address ? <p>{address}</p> : <p>{\"Address is not available\"}</p>}\n  </div>\n);\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Conditional Rendering",
+    "learningPath": "React Developer Path",
+    "difficulty": "beginner",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "react",
+      "conditional-rendering",
+      "ternary",
+      "short-circuit",
+      "jsx"
+    ],
+    "explanation": "Use `&&` for simple conditions and ternary (`? :`) for if-else in JSX.",
+    "points": 2,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `if` statements directly in JSX",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Use `&&` for truthy checks and ternary for if-else logic",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Conditional rendering is not supported",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Always use `switch` statements",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-047",
+    "title": "Why we need to be careful when spreading props on DOM elements?",
+    "content": "When we _spread props_ we run into the risk of adding unknown HTML attributes, which is a bad practice. Instead we can use prop destructuring with `...rest` operator, so it will add only required props.\nFor example,\n```jsx harmony\nconst ComponentA = () => (\n  <ComponentB isDisplay={true} className={\"componentStyle\"} />\n);\nconst ComponentB = ({ isDisplay, ...domProps }) => (\n  <div {...domProps}>{\"ComponentB\"}</div>\n);\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Props",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "spread", "props", "rest", "dom"],
+    "explanation": "Spreading all props onto DOM elements can pass invalid HTML attributes. Destructure to separate DOM props from custom ones.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "Spreading props is always safe",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "It can add invalid HTML attributes; destructure to avoid this",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "DOM elements ignore extra props",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "You must spread all props for components to work",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-048",
+    "title": "How do you memoize a component?",
+    "content": "Since React v16.6.0, we have a `React.memo`. It provides a higher order component which memoizes component unless the props change. To use it, simply wrap the component using React.memo before you use it.\n```js\nconst MemoComponent = React.memo(function MemoComponent(props) {\n  /* render using props */\n});\nOR;\nexport default React.memo(MyFunctionComponent);\n```",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Performance Optimization",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "memo", "performance", "re-render", "optimization"],
+    "explanation": "`React.memo` prevents re-renders of function components when props haven’t changed.",
+    "points": 4,
+    "options": [
+      {
+        "id": "a",
+        "text": "Use `React.memo()` to prevent unnecessary re-renders when props are unchanged",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Memoization is only for class components",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "All components are memoized by default",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use `useMemo` on the component itself",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-049",
+    "title": "How do you implement Server Side Rendering or SSR?",
+    "content": "React is already equipped to handle rendering on Node servers. A special version of the DOM renderer is available, which follows the same pattern as on the client side.\n```jsx harmony\nimport ReactDOMServer from \"react-dom/server\";\nimport App from \"./App\";\nReactDOMServer.renderToString(<App />);\n```\nThis method will output the regular HTML as a string, which can be then placed inside a page body as part of the server response. On the client side, React detects the pre-rendered content and seamlessly picks up where it left off.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Server-Side Rendering",
+    "learningPath": "React Developer Path",
+    "difficulty": "advanced",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": [
+      "react",
+      "ssr",
+      "server-side-rendering",
+      "react-dom-server",
+      "hydration"
+    ],
+    "explanation": "Use `ReactDOMServer.renderToString()` on the server and `hydrateRoot` on the client for SSR.",
+    "points": 5,
+    "options": [
+      {
+        "id": "a",
+        "text": "Render on server with `ReactDOMServer.renderToString()` and hydrate on client",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "SSR is not supported in React",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Use `ReactDOM.render()` on the server",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "SSR requires a special build of React",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": "react-q-050",
+    "title": "How to enable production mode in React?",
+    "content": "You should use Webpack's `DefinePlugin` method to set `NODE_ENV` to `production`, by which it strip out things like propType validation and extra warnings. Apart from this, if you minify the code, for example, Uglify's dead-code elimination to strip out development only code and comments, it will drastically reduce the size of your bundle.",
+    "type": "multiple-choice",
+    "category": "React",
+    "topic": "Build Tools & Workflow",
+    "learningPath": "React Developer Path",
+    "difficulty": "intermediate",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "system",
+    "updatedBy": "system",
+    "tags": ["react", "production", "webpack", "optimization", "bundle"],
+    "explanation": "Set `NODE_ENV=production` via Webpack’s DefinePlugin to enable optimizations like propType stripping and minification.",
+    "points": 3,
+    "options": [
+      {
+        "id": "a",
+        "text": "Set `NODE_ENV=production` using Webpack’s DefinePlugin",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Production mode is enabled by default",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Remove all console.log statements manually",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Use `--prod` flag in the browser",
+        "isCorrect": false
+      }
+    ]
+  }
+]
