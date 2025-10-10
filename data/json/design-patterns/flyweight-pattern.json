@@ -1,0 +1,142 @@
+[
+  {
+    "id": 17,
+    "title": "Definition of Flyweight Pattern",
+    "content": "What is the Flyweight Pattern, and why is it useful?",
+    "type": "open-ended",
+    "difficulty": "beginner",
+    "category": "Design Patterns",
+    "subcategory": "Structural",
+    "topic": "Flyweight Pattern",
+    "sampleAnswers": [
+      "It’s a structural design pattern that minimizes memory usage by sharing common object data instead of creating duplicates.",
+      "It’s useful when creating a large number of similar objects, e.g., books with the same ISBN."
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Flyweight Example Output",
+    "content": "What will this code log?\n\n```js\nconsole.log(\"Total amount of copies: \", bookList.length);\nconsole.log(\"Total amount of books: \", isbnNumbers.size);\n```\nAfter adding 5 copies of 3 different books, what is the output?",
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "options": [
+      {
+        "id": "a",
+        "text": "Total amount of copies: 5, Total amount of books: 5",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Total amount of copies: 3, Total amount of books: 5",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Total amount of copies: 5, Total amount of books: 3",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "title": "Advantages of Flyweight Pattern",
+    "content": "Which of the following are advantages of the Flyweight Pattern?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "options": [
+      {
+        "id": "a",
+        "text": "Reduced memory usage by reusing objects",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Improved performance for large-scale applications",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Simplifies debugging",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "Reduces network latency",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Disadvantages of Flyweight Pattern",
+    "content": "What is a drawback of using the Flyweight Pattern?",
+    "type": "open-ended",
+    "difficulty": "intermediate",
+    "sampleAnswers": [
+      "It can increase code complexity by adding an extra layer of object management.",
+      "Modern hardware often has enough memory, so the benefit may be negligible in many applications."
+    ]
+  },
+  {
+    "id": 21,
+    "title": "Flyweight vs Factory Pattern",
+    "content": "How does the Flyweight Pattern differ from the Factory Pattern?",
+    "type": "open-ended",
+    "difficulty": "advanced",
+    "sampleAnswers": [
+      "Factory Pattern abstracts object creation, while Flyweight Pattern focuses on sharing existing objects to save memory.",
+      "Factory decides *how* to create, Flyweight decides *whether to reuse*."
+    ]
+  },
+  {
+    "id": 22,
+    "title": "Fix the Bug",
+    "content": "What’s wrong with this implementation?\n\n```js\nconst isbnNumbers = new Set();\n\nconst createBook = (title, author, isbn) => {\n  const book = isbnNumbers.has(isbn);\n  if (book) {\n    return book;\n  } else {\n    const book = new Book(title, author, isbn);\n    isbnNumbers.add(isbn);\n    return book;\n  }\n};\n```",
+    "type": "open-ended",
+    "difficulty": "advanced",
+    "sampleAnswers": [
+      "The code incorrectly treats `isbnNumbers.has(isbn)` as the book object, but it returns a boolean.",
+      "A `Map` or dictionary should be used to store ISBN → Book mappings, not just a `Set`."
+    ]
+  },
+  {
+    "id": 23,
+    "title": "When to Use Flyweight",
+    "content": "In which situation would the Flyweight Pattern be the best choice?",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "options": [
+      {
+        "id": "a",
+        "text": "When creating thousands of objects that share common properties",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "When creating a single instance of a service",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "When caching API responses",
+        "isCorrect": false
+      },
+      {
+        "id": "d",
+        "text": "When setting up event delegation in DOM",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "title": "Flyweight Pattern in Modern JS",
+    "content": "Why is the Flyweight Pattern considered less critical in modern JavaScript applications compared to older times?",
+    "type": "open-ended",
+    "difficulty": "beginner",
+    "sampleAnswers": [
+      "Because modern devices have large amounts of memory (RAM), so optimizing object count is less often necessary.",
+      "JavaScript engines also optimize memory allocation internally."
+    ]
+  }
+]
