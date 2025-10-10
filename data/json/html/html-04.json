@@ -1,0 +1,227 @@
+[
+  {
+    "id": "html41",
+    "title": "What is the purpose of the <canvas> element?",
+    "content": "Explain how <canvas> can be used for rendering graphics on the fly.",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML5 Media",
+    "difficulty": "advanced",
+    "topic": "Canvas",
+    "isActive": true,
+    "tags": ["html5", "canvas", "graphics", "javascript"],
+    "sampleAnswers": [
+      "<canvas> provides a drawable region in HTML. Using JS, you can draw shapes, images, or animations dynamically on the client-side."
+    ]
+  },
+  {
+    "id": "html42",
+    "title": "Explain the difference between <iframe> sandbox attributes.",
+    "content": "How does sandboxing improve security when embedding external content?",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML5 Security",
+    "difficulty": "advanced",
+    "topic": "IFrame",
+    "isActive": true,
+    "tags": ["html5", "iframe", "security", "sandbox"],
+    "sampleAnswers": [
+      "The 'sandbox' attribute limits iframe capabilities. Examples: allow-scripts, allow-same-origin. It prevents untrusted content from running arbitrary scripts or accessing parent DOM."
+    ]
+  },
+  {
+    "id": "html43",
+    "title": "What is the difference between <audio> and <video> elements?",
+    "content": "Include examples of controls, autoplay, and loop attributes.",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML5 Media",
+    "difficulty": "intermediate",
+    "topic": "Audio/Video",
+    "isActive": true,
+    "tags": ["html5", "media", "audio", "video"],
+    "sampleAnswers": [
+      "<audio src='song.mp3' controls autoplay loop></audio> for audio. <video src='video.mp4' controls autoplay loop></video> for video. <video> has visual playback, <audio> is audio-only."
+    ]
+  },
+  {
+    "id": "html44",
+    "title": "How does the <meta> viewport tag affect mobile rendering?",
+    "content": "Explain why <meta name='viewport' content='width=device-width, initial-scale=1'> is important.",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML Head",
+    "difficulty": "intermediate",
+    "topic": "Responsive Design",
+    "isActive": true,
+    "tags": ["html", "meta", "viewport", "mobile"],
+    "sampleAnswers": [
+      "It sets the width of the viewport to the device width and initial zoom. Without it, mobile browsers may scale desktop layouts incorrectly."
+    ]
+  },
+  {
+    "id": "html45",
+    "title": "What is the difference between <section> and <div>?",
+    "content": "When should each be used semantically?",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML5 Semantics",
+    "difficulty": "intermediate",
+    "topic": "HTML5 Elements",
+    "isActive": true,
+    "tags": ["html5", "div", "section", "semantic"],
+    "sampleAnswers": [
+      "<div> is a generic container with no semantic meaning. <section> represents a thematic grouping of content. Use <section> when content has a specific topic."
+    ]
+  },
+  {
+    "id": "html46",
+    "title": "Explain the purpose of the <link rel='preload'> tag.",
+    "content": "How does preloading resources improve performance?",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML5 Performance",
+    "difficulty": "advanced",
+    "topic": "Performance",
+    "isActive": true,
+    "tags": ["html5", "performance", "link", "preload"],
+    "sampleAnswers": [
+      "<link rel='preload' href='script.js' as='script'> tells the browser to fetch resources early, reducing blocking and improving page load times."
+    ]
+  },
+  {
+    "id": "html47",
+    "title": "How does <iframe> differ from <object> for embedding content?",
+    "content": "Discuss pros and cons of both.",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML5 Media",
+    "difficulty": "advanced",
+    "topic": "Embedding Content",
+    "isActive": true,
+    "tags": ["html5", "iframe", "object", "embedding"],
+    "sampleAnswers": [
+      "<iframe> embeds another HTML page, isolating it from parent. <object> can embed any resource (SVG, PDF) and interacts more with the parent. iframe is safer; object is flexible."
+    ]
+  },
+  {
+    "id": "html48",
+    "title": "What is the difference between <col> and <colgroup>?",
+    "content": "How are these used in table styling?",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML Tables",
+    "difficulty": "intermediate",
+    "topic": "HTML Tables",
+    "isActive": true,
+    "tags": ["html", "table", "col", "colgroup", "styling"],
+    "sampleAnswers": [
+      "<col> applies styles to a single column. <colgroup> groups columns and applies collective styling or attributes."
+    ]
+  },
+  {
+    "id": "html49",
+    "title": "Explain how the 'autofocus' attribute works in forms.",
+    "content": "Can multiple inputs have autofocus at the same time?",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML Forms",
+    "difficulty": "intermediate",
+    "topic": "Forms",
+    "isActive": true,
+    "tags": ["html", "forms", "autofocus"],
+    "sampleAnswers": [
+      "'autofocus' makes a form element focus automatically on page load. Only the first element with autofocus receives focus if multiple are set."
+    ]
+  },
+  {
+    "id": "html50",
+    "title": "How do you create a semantic breadcrumb navigation in HTML5?",
+    "content": "What elements and ARIA roles would you use?",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML5 Semantics",
+    "difficulty": "advanced",
+    "topic": "Accessibility",
+    "isActive": true,
+    "tags": ["html5", "accessibility", "breadcrumb", "aria"],
+    "sampleAnswers": [
+      "<nav aria-label='breadcrumb'> <ol> <li><a href='/'>Home</a></li> <li><a href='/category'>Category</a></li> <li>Current Page</li> </ol> </nav>"
+    ]
+  },
+  {
+    "id": "html51",
+    "title": "What is the difference between <abbr> and <acronym>?",
+    "content": "Why is <acronym> obsolete in HTML5?",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML Text",
+    "difficulty": "advanced",
+    "topic": "HTML Text",
+    "isActive": true,
+    "tags": ["html5", "text", "abbreviations"],
+    "sampleAnswers": [
+      "<abbr> is the HTML5-compliant tag for abbreviations with a title attribute. <acronym> is obsolete and should not be used."
+    ]
+  },
+  {
+    "id": "html52",
+    "title": "How does the 'required' attribute work on HTML5 forms?",
+    "content": "Can it be bypassed? Explain with examples.",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML Forms",
+    "difficulty": "intermediate",
+    "topic": "Forms",
+    "isActive": true,
+    "tags": ["html5", "forms", "required"],
+    "sampleAnswers": [
+      "'required' prevents form submission if the input is empty. It can be bypassed by JS or non-compliant browsers, so server-side validation is still needed."
+    ]
+  },
+  {
+    "id": "html53",
+    "title": "What is the purpose of the 'download' attribute on <a> tags?",
+    "content": "Provide an example of forcing file download.",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML Links",
+    "difficulty": "intermediate",
+    "topic": "HTML Links",
+    "isActive": true,
+    "tags": ["html5", "links", "download"],
+    "sampleAnswers": [
+      "<a href='file.pdf' download='MyFile.pdf'>Download</a> forces the browser to download the file instead of navigating to it."
+    ]
+  },
+  {
+    "id": "html54",
+    "title": "Explain how to make an element focusable with tabindex.",
+    "content": "What are the differences between tabindex='0', '-1', and positive numbers?",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "Accessibility",
+    "difficulty": "advanced",
+    "topic": "Accessibility",
+    "isActive": true,
+    "tags": ["html5", "accessibility", "tabindex", "focus"],
+    "sampleAnswers": [
+      "tabindex='0' allows element to receive focus in normal tab order. '-1' makes it focusable via JS but not tab. Positive numbers define explicit tab order (discouraged)."
+    ]
+  },
+  {
+    "id": "html55",
+    "title": "How do you embed SVG graphics directly in HTML?",
+    "content": "Provide an example with inline SVG and describe advantages.",
+    "type": "open-ended",
+    "category": "Web Development",
+    "subcategory": "HTML5 Media",
+    "difficulty": "advanced",
+    "topic": "SVG",
+    "isActive": true,
+    "tags": ["html5", "svg", "graphics", "inline"],
+    "sampleAnswers": [
+      "<svg width='100' height='100'> <circle cx='50' cy='50' r='40' stroke='black' stroke-width='3' fill='red' /> </svg>. Inline SVG can be styled with CSS and animated with JS."
+    ]
+  }
+]
