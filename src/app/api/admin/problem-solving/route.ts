@@ -1,7 +1,15 @@
 // v1.0 - API routes for problem solving tasks CRUD operations
 
 import { NextRequest, NextResponse } from 'next/server';
-import { AdminFirestoreHelper, COLLECTIONS } from '@/lib/firebase-admin';
+import {
+  db,
+  collection,
+  getDocs,
+  addDoc,
+  query,
+  where,
+  orderBy,
+} from '@/lib/firebase-server';
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
@@ -12,6 +20,16 @@ import {
 // GET /api/admin/problem-solving - List all problem solving tasks
 export async function GET(request: NextRequest) {
   try {
+    console.log('🔄 API: Fetching problem solving tasks...');
+
+    if (!db) {
+      console.error('❌ API: Database not initialized');
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -19,46 +37,42 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category') || '';
     const difficulty = searchParams.get('difficulty') || '';
 
-    let whereClauses: { field: string; operator: any; value: any }[] = [];
+    // Fetch tasks from Firebase
+    const tasksRef = collection(db, 'problemSolvingTasks');
+    let q = query(tasksRef, orderBy('createdAt', 'desc'));
 
+    // Apply filters
     if (category) {
-      whereClauses.push({ field: 'category', operator: '==', value: category });
-    }
-
-    if (difficulty) {
-      whereClauses.push({
-        field: 'difficulty',
-        operator: '==',
-        value: difficulty,
-      });
-    }
-
-    whereClauses.push({ field: 'isActive', operator: '==', value: true });
-
-    let data: ProblemSolvingTask[];
-    let total: number;
-
-    if (search) {
-      data = await AdminFirestoreHelper.searchDocuments<ProblemSolvingTask>(
-        COLLECTIONS.PROBLEM_SOLVING_TASKS,
-        search,
-        ['title', 'description', 'category', 'tags'],
-        { limit: 100, orderBy: 'createdAt', orderDirection: 'desc' }
+      q = query(
+        tasksRef,
+        where('category', '==', category),
+        orderBy('createdAt', 'desc')
       );
-      total = data.length;
-    } else {
-      const result =
-        await AdminFirestoreHelper.listDocuments<ProblemSolvingTask>(
-          COLLECTIONS.PROBLEM_SOLVING_TASKS,
-          {
-            limit: limit * 10, // Get more to filter client-side
-            orderBy: 'createdAt',
-            orderDirection: 'desc',
-            where: whereClauses,
-          }
-        );
-      data = result.data;
-      total = result.total;
+    }
+    if (difficulty) {
+      q = query(
+        tasksRef,
+        where('difficulty', '==', difficulty),
+        orderBy('createdAt', 'desc')
+      );
+    }
+
+    const snapshot = await getDocs(q);
+    let data: ProblemSolvingTask[] = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as ProblemSolvingTask[];
+
+    // Apply search filter (client-side since Firestore doesn't support full-text search)
+    if (search) {
+      const lowerSearch = search.toLowerCase();
+      data = data.filter(
+        task =>
+          task.title.toLowerCase().includes(lowerSearch) ||
+          task.description.toLowerCase().includes(lowerSearch) ||
+          task.category.toLowerCase().includes(lowerSearch) ||
+          task.tags.some(tag => tag.toLowerCase().includes(lowerSearch))
+      );
     }
 
     // Client-side pagination
@@ -66,10 +80,14 @@ export async function GET(request: NextRequest) {
     const endIndex = startIndex + limit;
     const paginatedData = data.slice(startIndex, endIndex);
 
+    console.log(
+      `📊 API: Problem solving tasks fetched: ${data.length} total, ${paginatedData.length} returned`
+    );
+
     const response: PaginatedResponse<ProblemSolvingTask> = {
       success: true,
       data: paginatedData,
-      total,
+      total: data.length,
       page,
       limit,
       hasMore: endIndex < data.length,
@@ -77,7 +95,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Error fetching problem solving tasks:', error);
+    console.error('❌ API: Error fetching problem solving tasks:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to fetch problem solving tasks' },
       { status: 500 }
@@ -88,6 +106,16 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/problem-solving - Create new problem solving task
 export async function POST(request: NextRequest) {
   try {
+    console.log('🔄 API: Creating new problem solving task...');
+
+    if (!db) {
+      console.error('❌ API: Database not initialized');
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
     const body: ProblemSolvingTaskFormData = await request.json();
 
     // Validate required fields
@@ -111,24 +139,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create the task
-    const taskId =
-      await AdminFirestoreHelper.createDocument<ProblemSolvingTask>(
-        COLLECTIONS.PROBLEM_SOLVING_TASKS,
-        {
-          ...body,
-          isActive: true,
-        }
-      );
+    // Create the task data
+    const taskData = {
+      ...body,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    // Add to Firebase
+    const docRef = await addDoc(
+      collection(db, 'problemSolvingTasks'),
+      taskData
+    );
+
+    console.log(`✅ API: Problem solving task created with ID: ${docRef.id}`);
 
     const response: ApiResponse<{ id: string }> = {
       success: true,
-      data: { id: taskId },
+      data: { id: docRef.id },
     };
 
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
-    console.error('Error creating problem solving task:', error);
+    console.error('❌ API: Error creating problem solving task:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to create problem solving task' },
       { status: 500 }
