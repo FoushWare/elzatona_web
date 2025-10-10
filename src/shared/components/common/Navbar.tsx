@@ -94,6 +94,18 @@ export default function Navbar() {
       icon: '💻',
       items: [
         {
+          href: '/frontend-tasks',
+          label: 'Frontend Tasks',
+          icon: '⚛️',
+          description: 'React and frontend coding challenges',
+        },
+        {
+          href: '/problem-solving',
+          label: 'Problem Solving',
+          icon: '🧮',
+          description: 'Algorithmic coding challenges',
+        },
+        {
           href: '/practice/frontend-challenges',
           label: 'Frontend Challenges',
           icon: '⚡',
@@ -329,6 +341,26 @@ export default function Navbar() {
               }`}
             >
               Practice
+            </Link>
+            <Link
+              href="/frontend-tasks"
+              className={`font-medium transition-colors duration-200 ${
+                isScrolled
+                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  : 'text-white hover:text-blue-100'
+              }`}
+            >
+              Frontend Tasks
+            </Link>
+            <Link
+              href="/problem-solving"
+              className={`font-medium transition-colors duration-200 ${
+                isScrolled
+                  ? 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  : 'text-white hover:text-blue-100'
+              }`}
+            >
+              Problem Solving
             </Link>
             <Link
               href="/interview-prep"
