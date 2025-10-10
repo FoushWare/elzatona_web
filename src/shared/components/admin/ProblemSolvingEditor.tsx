@@ -90,6 +90,16 @@ export default function ProblemSolvingEditor({
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
   const [isDark, setIsDark] = useState(false);
 
+  // Resizing state
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizeStartX, setResizeStartX] = useState(0);
+  const [resizeType, setResizeType] = useState<
+    'left-middle' | 'middle-right' | null
+  >(null);
+  const [leftPanelWidth, setLeftPanelWidth] = useState(30);
+  const [middlePanelWidth, setMiddlePanelWidth] = useState(45);
+  const [rightPanelWidth, setRightPanelWidth] = useState(25);
+
   // Form data
   const [formData, setFormData] = useState<ProblemSolvingTaskFormData>({
     title: '',
@@ -197,6 +207,70 @@ export default function ProblemSolvingEditor({
       setActiveFile('starter');
     }
   }, [starterCode, solutionCode]);
+
+  // Resizing handlers
+  const handleMouseDown = (
+    e: React.MouseEvent,
+    type: 'left-middle' | 'middle-right'
+  ) => {
+    e.preventDefault();
+    setIsResizing(true);
+    setResizeType(type);
+    setResizeStartX(e.clientX);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isResizing || !resizeType) return;
+
+    const deltaX = e.clientX - resizeStartX;
+    const containerWidth = window.innerWidth;
+    const deltaPercent = (deltaX / containerWidth) * 100;
+
+    if (deltaPercent !== 0) {
+      if (resizeType === 'left-middle') {
+        setLeftPanelWidth(prev =>
+          Math.max(20, Math.min(50, prev + deltaPercent))
+        );
+        setMiddlePanelWidth(prev =>
+          Math.max(30, Math.min(60, prev - deltaPercent))
+        );
+      } else if (resizeType === 'middle-right') {
+        setMiddlePanelWidth(prev =>
+          Math.max(30, Math.min(60, prev + deltaPercent))
+        );
+        setRightPanelWidth(prev =>
+          Math.max(20, Math.min(50, prev - deltaPercent))
+        );
+      }
+      setResizeStartX(e.clientX);
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsResizing(false);
+    setResizeType(null);
+  };
+
+  useEffect(() => {
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    } else {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing]);
 
   const getDifficultyColor = (difficulty: string) => {
     const diff = difficulties.find(d => d.value === difficulty);
@@ -503,7 +577,10 @@ export default function ProblemSolvingEditor({
 
       <div className="flex h-[calc(100vh-80px)]">
         {/* Left Panel - Task Details */}
-        <div className="w-1/3 min-w-[300px] max-w-[500px]">
+        <div
+          className="min-w-[300px] max-w-[500px]"
+          style={{ width: `${leftPanelWidth}%` }}
+        >
           <div
             className={`h-full border-r transition-colors duration-300 ${
               isDark
@@ -952,8 +1029,16 @@ export default function ProblemSolvingEditor({
           </div>
         </div>
 
+        {/* Resize Handle 1 - Between Left and Middle */}
+        <div
+          className={`w-1 cursor-col-resize transition-colors duration-200 hover:bg-blue-400 ${
+            isDark ? 'bg-gray-600' : 'bg-gray-300'
+          } ${isResizing ? 'bg-blue-500' : ''}`}
+          onMouseDown={e => handleMouseDown(e, 'left-middle')}
+        />
+
         {/* Middle Panel - File Explorer + Code Editor */}
-        <div className="flex-1 flex">
+        <div className="flex" style={{ width: `${middlePanelWidth}%` }}>
           {/* File Explorer */}
           {showFileExplorer && (
             <div className="w-1/4 min-w-[200px] max-w-[300px]">
@@ -1160,8 +1245,19 @@ export default function ProblemSolvingEditor({
           </div>
         </div>
 
+        {/* Resize Handle 2 - Between Middle and Right */}
+        <div
+          className={`w-1 cursor-col-resize transition-colors duration-200 hover:bg-blue-400 ${
+            isDark ? 'bg-gray-600' : 'bg-gray-300'
+          } ${isResizing ? 'bg-blue-500' : ''}`}
+          onMouseDown={e => handleMouseDown(e, 'middle-right')}
+        />
+
         {/* Right Panel - Preview/Test Runner */}
-        <div className="w-1/4 min-w-[300px] max-w-[500px]">
+        <div
+          className="min-w-[300px] max-w-[500px]"
+          style={{ width: `${rightPanelWidth}%` }}
+        >
           <div
             className={`h-full border-l transition-colors duration-300 ${
               isDark
