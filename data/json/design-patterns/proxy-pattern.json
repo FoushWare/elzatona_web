@@ -1,0 +1,90 @@
+[
+  {
+    "id": 66,
+    "title": "Introduction to Proxy Pattern",
+    "content": "What is the Proxy Pattern in JavaScript and how does it differ from directly interacting with an object?",
+    "type": "open-ended",
+    "difficulty": "easy"
+  },
+  {
+    "id": 67,
+    "title": "Basic Proxy Usage",
+    "content": "You have an object `person = { name: 'John', age: 30 }`. Create a proxy that logs whenever any property is accessed.",
+    "type": "code",
+    "difficulty": "medium"
+  },
+  {
+    "id": 68,
+    "title": "Handler Methods",
+    "content": "Which two handler methods are most commonly used in JavaScript Proxies?",
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "options": [
+      "apply and construct",
+      "get and set",
+      "deleteProperty and defineProperty",
+      "ownKeys and has"
+    ]
+  },
+  {
+    "id": 69,
+    "title": "Validation with Proxies",
+    "content": "How can the Proxy pattern help with data validation? Give an example.",
+    "type": "open-ended",
+    "difficulty": "medium"
+  },
+  {
+    "id": 70,
+    "title": "Logging Changes",
+    "content": "Write a proxy that prevents setting `age` to a non-numeric value and logs attempts with an error message.",
+    "type": "code",
+    "difficulty": "hard"
+  },
+  {
+    "id": 71,
+    "title": "Proxy and Non-Existent Properties",
+    "content": "When trying to access a property that does not exist, how can a Proxy handler respond?",
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "options": [
+      "Throw an error",
+      "Return undefined",
+      "Log a custom message",
+      "Any of the above, depending on the handler logic"
+    ]
+  },
+  {
+    "id": 72,
+    "title": "Reflect with Proxies",
+    "content": "What is the role of the `Reflect` object when working with Proxies, and why is it preferred over direct property access?",
+    "type": "open-ended",
+    "difficulty": "medium"
+  },
+  {
+    "id": 73,
+    "title": "Refactoring Proxy with Reflect",
+    "content": "Rewrite this Proxy handler to use `Reflect.get` and `Reflect.set` instead of direct object manipulation.",
+    "type": "code",
+    "difficulty": "hard"
+  },
+  {
+    "id": 74,
+    "title": "Proxy Use Cases",
+    "content": "Which of the following are valid use cases for the Proxy pattern?",
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "options": [
+      "Validation of object properties",
+      "Debugging and logging",
+      "Formatting data before return",
+      "Performance optimization in critical code"
+    ]
+  },
+  {
+    "id": 75,
+    "title": "Tradeoffs of Proxy",
+    "content": "What are the performance tradeoffs of using Proxy objects in large applications?",
+    "type": "open-ended",
+    "difficulty": "hard"
+  }
+]

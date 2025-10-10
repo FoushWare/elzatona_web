@@ -3,8 +3,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Eye, Search, Filter } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Search, Filter, Code } from 'lucide-react';
 import { FrontendTask, FrontendTaskFormData } from '@/types/admin';
+import FrontendTaskEditor from '@/shared/components/admin/FrontendTaskEditor';
 
 export default function FrontendTasksAdminPage() {
   const [tasks, setTasks] = useState<FrontendTask[]>([]);
@@ -12,9 +13,11 @@ export default function FrontendTasksAdminPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
-  const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingTask, setEditingTask] = useState<FrontendTask | null>(null);
-  const [viewingTask, setViewingTask] = useState<FrontendTask | null>(null);
+  const [showEditor, setShowEditor] = useState(false);
+  const [editorMode, setEditorMode] = useState<'create' | 'edit' | 'view'>(
+    'create'
+  );
 
   // Fetch tasks
   const fetchTasks = async () => {
@@ -59,6 +62,64 @@ export default function FrontendTasksAdminPage() {
     }
   };
 
+  // Handle editor save
+  const handleEditorSave = async (taskData: FrontendTaskFormData) => {
+    try {
+      const url =
+        editorMode === 'create'
+          ? '/api/admin/frontend-tasks'
+          : `/api/admin/frontend-tasks/${editingTask?.id}`;
+
+      const method = editorMode === 'create' ? 'POST' : 'PUT';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(taskData),
+      });
+
+      if (response.ok) {
+        await fetchTasks(); // Refresh the list
+        setShowEditor(false);
+        setEditingTask(null);
+      } else {
+        throw new Error('Failed to save task');
+      }
+    } catch (error) {
+      console.error('Error saving task:', error);
+      alert('Failed to save task. Please try again.');
+    }
+  };
+
+  // Handle editor cancel
+  const handleEditorCancel = () => {
+    setShowEditor(false);
+    setEditingTask(null);
+  };
+
+  // Open editor for create
+  const openCreateEditor = () => {
+    setEditorMode('create');
+    setEditingTask(null);
+    setShowEditor(true);
+  };
+
+  // Open editor for edit
+  const openEditEditor = (task: FrontendTask) => {
+    setEditorMode('edit');
+    setEditingTask(task);
+    setShowEditor(true);
+  };
+
+  // Open editor for view (read-only)
+  const openViewEditor = (task: FrontendTask) => {
+    setEditorMode('view');
+    setEditingTask(task);
+    setShowEditor(true);
+  };
+
   const categories = [
     'React',
     'JavaScript',
@@ -72,182 +133,174 @@ export default function FrontendTasksAdminPage() {
   const difficulties = ['easy', 'medium', 'hard'];
 
   return (
-    <div className="bg-gray-900 text-white p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Frontend Tasks</h1>
-            <p className="text-gray-400 mt-2">
-              Manage React and frontend coding challenges
-            </p>
+    <>
+      <div className="bg-gray-900 text-white p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="text-3xl font-bold">Frontend Tasks</h1>
+              <p className="text-gray-400 mt-2">
+                Manage React and frontend coding challenges
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={openCreateEditor}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+              >
+                <Code className="w-4 h-4" />
+                Create Task
+              </button>
+            </div>
           </div>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            Create Task
-          </button>
-        </div>
 
-        {/* Filters */}
-        <div className="bg-gray-800 rounded-lg p-4 mb-6">
-          <div className="flex gap-4 items-center">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
-                />
+          {/* Filters */}
+          <div className="bg-gray-800 rounded-lg p-4 mb-6">
+            <div className="flex gap-4 items-center">
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Search tasks..."
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+                  />
+                </div>
               </div>
+              <select
+                value={selectedCategory}
+                onChange={e => setSelectedCategory(e.target.value)}
+                className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+              >
+                <option value="">All Categories</option>
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={selectedDifficulty}
+                onChange={e => setSelectedDifficulty(e.target.value)}
+                className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+              >
+                <option value="">All Difficulties</option>
+                {difficulties.map(diff => (
+                  <option key={diff} value={diff}>
+                    {diff.charAt(0).toUpperCase() + diff.slice(1)}
+                  </option>
+                ))}
+              </select>
             </div>
-            <select
-              value={selectedCategory}
-              onChange={e => setSelectedCategory(e.target.value)}
-              className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
-            >
-              <option value="">All Categories</option>
-              {categories.map(cat => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            <select
-              value={selectedDifficulty}
-              onChange={e => setSelectedDifficulty(e.target.value)}
-              className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
-            >
-              <option value="">All Difficulties</option>
-              {difficulties.map(diff => (
-                <option key={diff} value={diff}>
-                  {diff.charAt(0).toUpperCase() + diff.slice(1)}
-                </option>
-              ))}
-            </select>
           </div>
-        </div>
 
-        {/* Tasks Table */}
-        <div className="bg-gray-800 rounded-lg overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center text-gray-400">
-              Loading tasks...
-            </div>
-          ) : tasks.length === 0 ? (
-            <div className="p-8 text-center text-gray-400">No tasks found</div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-700">
-                  <tr>
-                    <th className="text-left p-4">Title</th>
-                    <th className="text-left p-4">Category</th>
-                    <th className="text-left p-4">Difficulty</th>
-                    <th className="text-left p-4">Time</th>
-                    <th className="text-left p-4">Author</th>
-                    <th className="text-left p-4">Created</th>
-                    <th className="text-left p-4">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tasks.map(task => (
-                    <tr
-                      key={task.id}
-                      className="border-t border-gray-700 hover:bg-gray-750"
-                    >
-                      <td className="p-4">
-                        <div className="font-medium">{task.title}</div>
-                        <div className="text-sm text-gray-400 truncate max-w-xs">
-                          {task.description}
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <span className="px-2 py-1 bg-blue-600 text-xs rounded">
-                          {task.category}
-                        </span>
-                      </td>
-                      <td className="p-4">
-                        <span
-                          className={`px-2 py-1 text-xs rounded ${
-                            task.difficulty === 'easy'
-                              ? 'bg-green-600'
-                              : task.difficulty === 'medium'
-                                ? 'bg-yellow-600'
-                                : 'bg-red-600'
-                          }`}
-                        >
-                          {task.difficulty}
-                        </span>
-                      </td>
-                      <td className="p-4">{task.estimatedTime}min</td>
-                      <td className="p-4">{task.author}</td>
-                      <td className="p-4 text-sm text-gray-400">
-                        {new Date(task.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="p-4">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => setViewingTask(task)}
-                            className="p-1 text-gray-400 hover:text-blue-400"
-                            title="View"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => setEditingTask(task)}
-                            className="p-1 text-gray-400 hover:text-yellow-400"
-                            title="Edit"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(task.id)}
-                            className="p-1 text-gray-400 hover:text-red-400"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
+          {/* Tasks Table */}
+          <div className="bg-gray-800 rounded-lg overflow-hidden">
+            {loading ? (
+              <div className="p-8 text-center text-gray-400">
+                Loading tasks...
+              </div>
+            ) : tasks.length === 0 ? (
+              <div className="p-8 text-center text-gray-400">
+                No tasks found
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-700">
+                    <tr>
+                      <th className="text-left p-4">Title</th>
+                      <th className="text-left p-4">Category</th>
+                      <th className="text-left p-4">Difficulty</th>
+                      <th className="text-left p-4">Time</th>
+                      <th className="text-left p-4">Author</th>
+                      <th className="text-left p-4">Created</th>
+                      <th className="text-left p-4">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {tasks.map(task => (
+                      <tr
+                        key={task.id}
+                        className="border-t border-gray-700 hover:bg-gray-750"
+                      >
+                        <td className="p-4">
+                          <div className="font-medium">{task.title}</div>
+                          <div className="text-sm text-gray-400 truncate max-w-xs">
+                            {task.description}
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <span className="px-2 py-1 bg-blue-600 text-xs rounded">
+                            {task.category}
+                          </span>
+                        </td>
+                        <td className="p-4">
+                          <span
+                            className={`px-2 py-1 text-xs rounded ${
+                              task.difficulty === 'easy'
+                                ? 'bg-green-600'
+                                : task.difficulty === 'medium'
+                                  ? 'bg-yellow-600'
+                                  : 'bg-red-600'
+                            }`}
+                          >
+                            {task.difficulty}
+                          </span>
+                        </td>
+                        <td className="p-4">{task.estimatedTime}min</td>
+                        <td className="p-4">{task.author}</td>
+                        <td className="p-4 text-sm text-gray-400">
+                          {new Date(task.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="p-4">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => openViewEditor(task)}
+                              className="p-1 text-gray-400 hover:text-blue-400"
+                              title="View with Editor"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => openEditEditor(task)}
+                              className="p-1 text-gray-400 hover:text-green-400"
+                              title="Edit with Editor"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(task.id)}
+                              className="p-1 text-gray-400 hover:text-red-400"
+                              title="Delete"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
+          {/* Frontend Task Editor */}
+          {showEditor && (
+            <FrontendTaskEditor
+              task={editingTask}
+              onSave={handleEditorSave}
+              onCancel={handleEditorCancel}
+              mode={editorMode}
+            />
           )}
         </div>
-
-        {/* Create/Edit Modal */}
-        {(showCreateModal || editingTask) && (
-          <FrontendTaskModal
-            task={editingTask}
-            onClose={() => {
-              setShowCreateModal(false);
-              setEditingTask(null);
-            }}
-            onSave={() => {
-              fetchTasks();
-              setShowCreateModal(false);
-              setEditingTask(null);
-            }}
-          />
-        )}
-
-        {/* View Modal */}
-        {viewingTask && (
-          <FrontendTaskViewModal
-            task={viewingTask}
-            onClose={() => setViewingTask(null)}
-          />
-        )}
       </div>
-    </div>
+    </>
   );
 }
 
