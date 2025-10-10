@@ -1,0 +1,221 @@
+[
+  {
+    "id": 11,
+    "title": "What problem does dynamic import solve in the chat application example?",
+    "content": "Dynamic import prevents loading unnecessary modules like EmojiPicker on the initial render, reducing bundle size and improving load performance.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Dynamic Import",
+    "difficulty": "easy",
+    "topic": "Code Splitting and Lazy Loading",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["dynamic import", "performance", "lazy loading"],
+    "options": [
+      "It makes all modules load immediately",
+      "It avoids unnecessary loading of non-critical modules",
+      "It disables code splitting",
+      "It improves SEO"
+    ],
+    "explanation": "Dynamic imports allow you to load components only when needed, reducing initial bundle size and improving first render speed.",
+    "sampleAnswers": ["It avoids unnecessary loading of non-critical modules"]
+  },
+  {
+    "id": 12,
+    "title": "How does React Suspense help in dynamic importing?",
+    "content": "React Suspense allows components to wait for a dynamically imported module to load, showing a fallback while loading.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Dynamic Import",
+    "difficulty": "easy",
+    "topic": "React Suspense",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["react", "suspense", "lazy loading"],
+    "options": [
+      "It preloads all components before rendering",
+      "It blocks rendering until all resources are loaded",
+      "It renders a fallback while a lazy component loads",
+      "It disables lazy loading"
+    ],
+    "explanation": "Suspense provides a fallback UI while waiting for the dynamically imported component to be fetched and rendered.",
+    "sampleAnswers": ["It renders a fallback while a lazy component loads"]
+  },
+  {
+    "id": 13,
+    "title": "Which React function is used to dynamically import components?",
+    "content": "React.lazy is used to dynamically import components at runtime.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Dynamic Import",
+    "difficulty": "easy",
+    "topic": "React Lazy Loading",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["react.lazy", "dynamic import"],
+    "options": ["React.useMemo", "React.lazy", "React.load", "React.defer"],
+    "explanation": "`React.lazy(() => import('./Component'))` loads a component only when it is rendered for the first time.",
+    "sampleAnswers": ["React.lazy"]
+  },
+  {
+    "id": 14,
+    "title": "How much was the bundle size reduced by using dynamic import for EmojiPicker?",
+    "content": "By dynamically importing EmojiPicker, the initial bundle size was reduced from 1.5 MiB to 1.33 MiB.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Dynamic Import",
+    "difficulty": "medium",
+    "topic": "Bundle Optimization",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["bundle size", "webpack", "optimization"],
+    "options": [
+      "From 1.5 MiB to 1.2 MiB",
+      "From 1.5 MiB to 1.33 MiB",
+      "From 1.3 MiB to 1.1 MiB",
+      "From 2 MiB to 1.5 MiB"
+    ],
+    "explanation": "The example reduced the main bundle from 1.5 MiB to 1.33 MiB by deferring the loading of EmojiPicker.",
+    "sampleAnswers": ["From 1.5 MiB to 1.33 MiB"]
+  },
+  {
+    "id": 15,
+    "title": "When is the EmojiPicker component actually loaded in the dynamic import example?",
+    "content": "EmojiPicker is loaded only when the user clicks on the emoji icon, triggering the lazy import.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Dynamic Import",
+    "difficulty": "medium",
+    "topic": "Lazy Loading Behavior",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["lazy loading", "react", "user interaction"],
+    "options": [
+      "When the app starts",
+      "When the page is reloaded",
+      "Only when the emoji button is clicked",
+      "Immediately after rendering ChatInput"
+    ],
+    "explanation": "The lazy import ensures that the module is fetched and executed only upon user interaction with the emoji button.",
+    "sampleAnswers": ["Only when the emoji button is clicked"]
+  },
+  {
+    "id": 16,
+    "title": "What is the purpose of the fallback prop in Suspense?",
+    "content": "The fallback prop defines what should be rendered while a component is being dynamically loaded.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Dynamic Import",
+    "difficulty": "easy",
+    "topic": "React Suspense Fallback",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["react", "suspense", "fallback"],
+    "options": [
+      "Defines a backup component to use if loading fails",
+      "Displays content while waiting for lazy component",
+      "Triggers a re-render on error",
+      "Caches the lazy component"
+    ],
+    "explanation": "Suspense uses the fallback UI (like a loader or placeholder) until the lazy component finishes loading.",
+    "sampleAnswers": ["Displays content while waiting for lazy component"]
+  },
+  {
+    "id": 17,
+    "title": "Why is React Suspense not ideal for server-side rendering (SSR)?",
+    "content": "React Suspense currently lacks SSR support, meaning lazy-loaded components can’t be pre-rendered on the server.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Dynamic Import",
+    "difficulty": "medium",
+    "topic": "SSR Limitation",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["ssr", "react", "suspense"],
+    "options": [
+      "Because SSR can’t handle async operations",
+      "Because Suspense can’t yet stream server-rendered lazy components",
+      "Because it increases bundle size",
+      "Because Suspense only works in Next.js"
+    ],
+    "explanation": "Suspense currently only supports client-side rendering; SSR requires libraries like `@loadable/component` to manage lazy imports.",
+    "sampleAnswers": [
+      "Because Suspense can’t yet stream server-rendered lazy components"
+    ]
+  },
+  {
+    "id": 18,
+    "title": "What library is recommended for dynamic imports in SSR applications?",
+    "content": "The loadable-components library is recommended for SSR applications since React Suspense does not yet support SSR.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Dynamic Import",
+    "difficulty": "medium",
+    "topic": "SSR Alternatives",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["loadable-components", "ssr", "react"],
+    "options": [
+      "React.lazy",
+      "React.Suspense",
+      "@loadable/component",
+      "NextDynamic"
+    ],
+    "explanation": "The `@loadable/component` library provides a Suspense-like API compatible with both SSR and CSR environments.",
+    "sampleAnswers": ["@loadable/component"]
+  },
+  {
+    "id": 19,
+    "title": "What happens while a lazy-loaded module is still being fetched?",
+    "content": "The fallback component (e.g., a loading message) is rendered until the lazy-loaded component is ready.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Dynamic Import",
+    "difficulty": "easy",
+    "topic": "User Experience",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["fallback", "ux", "loading"],
+    "options": [
+      "The app freezes",
+      "The page reloads",
+      "The fallback component displays temporarily",
+      "Nothing happens until it loads"
+    ],
+    "explanation": "A fallback placeholder keeps the UI responsive and visually communicates that the module is still loading.",
+    "sampleAnswers": ["The fallback component displays temporarily"]
+  },
+  {
+    "id": 20,
+    "title": "Why does dynamic import improve the user experience?",
+    "content": "It lets the app load faster by deferring non-critical resources, making the UI interactive sooner.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Dynamic Import",
+    "difficulty": "medium",
+    "topic": "Performance UX",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["performance", "lazy loading", "ux"],
+    "options": [
+      "It preloads everything at once",
+      "It blocks rendering until all files are loaded",
+      "It reduces initial bundle size and improves interactivity",
+      "It disables animations to speed up UI"
+    ],
+    "explanation": "By deferring low-priority code, dynamic imports shorten Time to Interactive (TTI) and improve perceived performance.",
+    "sampleAnswers": [
+      "It reduces initial bundle size and improves interactivity"
+    ]
+  }
+]

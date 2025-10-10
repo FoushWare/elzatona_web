@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { SignInPopup } from '@/shared/components/auth/SignInPopup';
@@ -19,12 +19,61 @@ import {
   Star,
   Award,
   TrendingUp,
+  Calendar,
+  Loader2,
 } from 'lucide-react';
+
+interface CustomPlan {
+  id: string;
+  name: string;
+  description: string;
+  duration: number;
+  sections: {
+    id: string;
+    name: string;
+    selectedQuestions: string[];
+  }[];
+  totalQuestions: number;
+  dailyQuestions: number;
+  createdAt: string;
+  isActive?: boolean;
+  progress?: {
+    completedQuestions: number;
+    currentDay: number;
+    lastActivity: string;
+  };
+}
 
 export default function BrowsePracticeQuestionsPage() {
   const router = useRouter();
   const { isAuthenticated } = useFirebaseAuth();
   const [showSignInPopup, setShowSignInPopup] = useState(false);
+  const [customRoadmaps, setCustomRoadmaps] = useState<CustomPlan[]>([]);
+  const [isLoadingRoadmaps, setIsLoadingRoadmaps] = useState(false);
+
+  // Load custom roadmaps when component mounts
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadCustomRoadmaps();
+    }
+  }, [isAuthenticated]);
+
+  const loadCustomRoadmaps = async () => {
+    setIsLoadingRoadmaps(true);
+    try {
+      // Load from localStorage for now (in real app, load from Firebase)
+      const savedPlans = localStorage.getItem('userPlans');
+      if (savedPlans) {
+        const parsedPlans = JSON.parse(savedPlans);
+        setCustomRoadmaps(parsedPlans);
+      }
+    } catch (error) {
+      console.error('Error loading custom roadmaps:', error);
+      setCustomRoadmaps([]);
+    } finally {
+      setIsLoadingRoadmaps(false);
+    }
+  };
 
   const practiceOptions = [
     {
@@ -80,6 +129,23 @@ export default function BrowsePracticeQuestionsPage() {
 
   const handleSignInClose = () => {
     setShowSignInPopup(false);
+  };
+
+  const handleStartRoadmap = (planId: string) => {
+    // Set as active plan and redirect to practice
+    localStorage.setItem('active-custom-plan', planId);
+    router.push(`/custom-practice/${planId}`);
+  };
+
+  const handleViewRoadmap = (planId: string) => {
+    router.push(`/my-plans`);
+  };
+
+  const getProgressPercentage = (plan: CustomPlan) => {
+    if (!plan.progress) return 0;
+    return Math.round(
+      (plan.progress.completedQuestions / plan.totalQuestions) * 100
+    );
   };
 
   return (
@@ -227,6 +293,134 @@ export default function BrowsePracticeQuestionsPage() {
             </div>
           ))}
         </div>
+
+        {/* My Custom Roadmaps Section */}
+        {isAuthenticated && customRoadmaps.length > 0 && (
+          <div className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent mb-4">
+                My Custom Roadmaps
+              </h2>
+              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                Continue your personalized learning journey with your custom
+                roadmaps
+              </p>
+            </div>
+
+            {isLoadingRoadmaps ? (
+              <div className="text-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-purple-600" />
+                <p className="text-gray-600 dark:text-gray-300">
+                  Loading your roadmaps...
+                </p>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {customRoadmaps.map(roadmap => (
+                  <div
+                    key={roadmap.id}
+                    className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                  >
+                    {/* Roadmap Header */}
+                    <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                            {roadmap.name}
+                          </h3>
+                          <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                            {roadmap.description}
+                          </p>
+                        </div>
+                        {roadmap.isActive && (
+                          <div className="ml-4">
+                            <div className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
+                              <CheckCircle className="w-4 h-4" />
+                              <span>Active</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Roadmap Stats */}
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                          <Calendar className="w-4 h-4" />
+                          <span>{roadmap.duration} days</span>
+                        </div>
+                        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                          <Target className="w-4 h-4" />
+                          <span>{roadmap.totalQuestions} questions</span>
+                        </div>
+                        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                          <Clock className="w-4 h-4" />
+                          <span>{roadmap.dailyQuestions}/day</span>
+                        </div>
+                        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                          <BookOpen className="w-4 h-4" />
+                          <span>{roadmap.sections.length} sections</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Progress Section */}
+                    {roadmap.progress && (
+                      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Progress
+                          </span>
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                            {getProgressPercentage(roadmap)}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
+                          <div
+                            className="bg-gradient-to-r from-purple-500 to-indigo-500 h-2 rounded-full transition-all duration-300"
+                            style={{
+                              width: `${getProgressPercentage(roadmap)}%`,
+                            }}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                          <span>
+                            {roadmap.progress.completedQuestions} of{' '}
+                            {roadmap.totalQuestions} completed
+                          </span>
+                          <span>
+                            Day {roadmap.progress.currentDay} of{' '}
+                            {roadmap.duration}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Actions */}
+                    <div className="p-6">
+                      <div className="flex items-center space-x-3">
+                        <button
+                          onClick={() => handleStartRoadmap(roadmap.id)}
+                          className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all duration-300 group-hover:scale-105"
+                        >
+                          <Play className="w-4 h-4" />
+                          <span>{roadmap.progress ? 'Continue' : 'Start'}</span>
+                        </button>
+
+                        <button
+                          onClick={() => handleViewRoadmap(roadmap.id)}
+                          className="p-3 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-colors"
+                          title="View Details"
+                        >
+                          <Eye className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Custom Roadmap Option */}
         <div className="mb-16">

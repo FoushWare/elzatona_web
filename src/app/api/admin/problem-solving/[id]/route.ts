@@ -1,7 +1,7 @@
 // v1.0 - API routes for individual problem solving task operations
 
 import { NextRequest, NextResponse } from 'next/server';
-import { AdminFirestoreHelper, COLLECTIONS } from '@/lib/firebase-admin';
+import { db, doc, getDoc, updateDoc, deleteDoc } from '@/lib/firebase-server';
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
@@ -13,28 +13,51 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
   try {
-    const task = await AdminFirestoreHelper.getDocument<ProblemSolvingTask>(
-      COLLECTIONS.PROBLEM_SOLVING_TASKS,
-      id
-    );
+    console.log('🔄 API: Fetching problem solving task by ID...');
 
-    if (!task) {
+    if (!db) {
+      console.error('❌ API: Database not initialized');
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
+    const { id } = await params;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'Task ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Fetch task from Firebase
+    const taskDoc = await getDoc(doc(db, 'problemSolvingTasks', id));
+
+    if (!taskDoc.exists()) {
       return NextResponse.json(
         { success: false, error: 'Task not found' },
         { status: 404 }
       );
     }
 
+    const taskData = {
+      id: taskDoc.id,
+      ...taskDoc.data(),
+    } as ProblemSolvingTask;
+
+    console.log(`✅ API: Problem solving task fetched: ${taskData.title}`);
+
     const response: ApiResponse<ProblemSolvingTask> = {
       success: true,
-      data: task,
+      data: taskData,
     };
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Error fetching problem solving task:', error);
+    console.error('❌ API: Error fetching problem solving task:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to fetch problem solving task' },
       { status: 500 }
@@ -47,30 +70,44 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
   try {
+    console.log('🔄 API: Updating problem solving task...');
+
+    if (!db) {
+      console.error('❌ API: Database not initialized');
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
+    const { id } = await params;
     const body: Partial<ProblemSolvingTaskFormData> = await request.json();
 
-    // Check if task exists
-    const existingTask =
-      await AdminFirestoreHelper.getDocument<ProblemSolvingTask>(
-        COLLECTIONS.PROBLEM_SOLVING_TASKS,
-        id
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'Task ID is required' },
+        { status: 400 }
       );
+    }
 
-    if (!existingTask) {
+    // Check if task exists
+    const taskDoc = await getDoc(doc(db, 'problemSolvingTasks', id));
+
+    if (!taskDoc.exists()) {
       return NextResponse.json(
         { success: false, error: 'Task not found' },
         { status: 404 }
       );
     }
 
-    // Update the task
-    await AdminFirestoreHelper.updateDocument<ProblemSolvingTask>(
-      COLLECTIONS.PROBLEM_SOLVING_TASKS,
-      id,
-      body
-    );
+    // Update task in Firebase
+    await updateDoc(doc(db, 'problemSolvingTasks', id), {
+      ...body,
+      updatedAt: new Date(),
+    });
+
+    console.log(`✅ API: Problem solving task updated: ${id}`);
 
     const response: ApiResponse<{ id: string }> = {
       success: true,
@@ -79,7 +116,7 @@ export async function PUT(
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Error updating problem solving task:', error);
+    console.error('❌ API: Error updating problem solving task:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to update problem solving task' },
       { status: 500 }
@@ -92,16 +129,30 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
   try {
-    // Check if task exists
-    const existingTask =
-      await AdminFirestoreHelper.getDocument<ProblemSolvingTask>(
-        COLLECTIONS.PROBLEM_SOLVING_TASKS,
-        id
-      );
+    console.log('🔄 API: Deleting problem solving task...');
 
-    if (!existingTask) {
+    if (!db) {
+      console.error('❌ API: Database not initialized');
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
+    const { id } = await params;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'Task ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Check if task exists
+    const taskDoc = await getDoc(doc(db, 'problemSolvingTasks', id));
+
+    if (!taskDoc.exists()) {
       return NextResponse.json(
         { success: false, error: 'Task not found' },
         { status: 404 }
@@ -109,11 +160,12 @@ export async function DELETE(
     }
 
     // Soft delete by setting isActive to false
-    await AdminFirestoreHelper.updateDocument<ProblemSolvingTask>(
-      COLLECTIONS.PROBLEM_SOLVING_TASKS,
-      id,
-      { isActive: false }
-    );
+    await updateDoc(doc(db, 'problemSolvingTasks', id), {
+      isActive: false,
+      updatedAt: new Date(),
+    });
+
+    console.log(`✅ API: Problem solving task deleted: ${id}`);
 
     const response: ApiResponse<{ id: string }> = {
       success: true,
@@ -122,7 +174,7 @@ export async function DELETE(
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error('Error deleting problem solving task:', error);
+    console.error('❌ API: Error deleting problem solving task:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to delete problem solving task' },
       { status: 500 }
