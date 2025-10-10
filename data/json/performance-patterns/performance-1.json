@@ -1,0 +1,155 @@
+[
+  {
+    "id": "pp7",
+    "title": "How does Dynamic Import relate to Bundle Splitting?",
+    "content": "### Dynamic Import\nDynamic imports allow us to load JavaScript modules only when needed rather than at initial load. This enables bundle splitting by creating separate chunks for on-demand code.\n\n**Example:**\n```js\nimport('./EmojiPicker').then(module => {\n  const EmojiPicker = module.default;\n  render(<EmojiPicker />);\n});\n```\n\n**Question:**\nExplain how dynamic import statements contribute to bundle splitting and performance optimization.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Code Loading Strategies",
+    "difficulty": "advanced",
+    "topic": "Dynamic Import",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["dynamic-import", "performance", "bundle-splitting"],
+    "sampleAnswers": [
+      "Dynamic imports allow JavaScript modules to be fetched on demand, automatically creating separate bundles for lazy-loaded components and reducing initial load size."
+    ]
+  },
+  {
+    "id": "pp8",
+    "title": "Which of the following statements about Dynamic Import are true?",
+    "content": "Select all correct statements related to dynamic imports and bundle splitting.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Code Loading Strategies",
+    "difficulty": "intermediate",
+    "topic": "Dynamic Import",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["javascript", "dynamic-import", "performance"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Dynamic imports return a Promise that resolves to the requested module.",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Dynamic imports always block the initial page render.",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Webpack automatically creates separate chunks for dynamically imported modules.",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "Dynamic imports are part of the ES2020 specification.",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "Dynamic imports are asynchronous and allow bundlers like Webpack to split code into separate chunks that load only when needed, improving perceived performance."
+  },
+  {
+    "id": "pp9",
+    "title": "True or False: Bundle Splitting can be applied manually using Webpack entry points.",
+    "content": "Evaluate whether developers can configure multiple entry points in Webpack to create separate bundles manually.",
+    "type": "true-false",
+    "category": "Performance Patterns",
+    "subcategory": "Build Optimization",
+    "difficulty": "intermediate",
+    "topic": "Webpack Configuration",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["webpack", "bundle-splitting", "configuration"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "Developers can define multiple entry points in Webpack to generate multiple bundles, allowing control over what loads initially versus later."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": "Webpack supports manual splitting via multiple entry points or dynamic imports."
+      }
+    ]
+  },
+  {
+    "id": "pp10",
+    "title": "What is Lazy Loading, and how is it connected to Bundle Splitting?",
+    "content": "### Lazy Loading\nLazy loading is a strategy where certain resources or components are loaded only when they’re actually needed. When used with bundle splitting, lazy loading ensures that non-critical chunks are loaded later.\n\n**Example:** React’s `lazy()` and `Suspense` help load components on demand.\n\n**Question:**\nDescribe how lazy loading works in combination with bundle splitting to improve user experience.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "User Experience Optimization",
+    "difficulty": "intermediate",
+    "topic": "Lazy Loading",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["lazy-loading", "bundle-splitting", "performance"],
+    "sampleAnswers": [
+      "Lazy loading delays loading of non-critical components. Combined with bundle splitting, it ensures smaller initial bundles and faster interactive experiences."
+    ]
+  },
+  {
+    "id": "pp11",
+    "title": "Which tools or techniques can help automate Bundle Splitting in modern web projects?",
+    "content": "Select the correct tools or features that support automatic bundle splitting.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Build Optimization",
+    "difficulty": "advanced",
+    "topic": "Bundle Splitting Tools",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["tools", "webpack", "vite", "rollup"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Webpack's `SplitChunksPlugin`",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Vite’s pre-bundling mechanism (esbuild)",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "React.lazy() + Suspense",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "HTML inline scripts",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Tools like Webpack’s SplitChunksPlugin, Rollup, and modern bundlers like Vite handle automatic code-splitting and lazy loading integration."
+  },
+  {
+    "id": "pp12",
+    "title": "What are potential drawbacks of overusing Bundle Splitting?",
+    "content": "### Trade-offs\nWhile bundle splitting improves load times, over-splitting can lead to performance issues.\n\n**Possible issues include:**\n- Too many network requests\n- Increased HTTP overhead\n- Caching complexity\n\n**Question:** What are the main drawbacks developers should consider before aggressively splitting bundles?",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Trade-offs",
+    "difficulty": "advanced",
+    "topic": "Bundle Splitting",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["performance", "tradeoffs", "bundle-splitting"],
+    "sampleAnswers": [
+      "Excessive splitting can cause too many small network requests, increase latency, and make caching more complex."
+    ]
+  }
+]

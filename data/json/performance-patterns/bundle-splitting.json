@@ -1,0 +1,175 @@
+[
+  {
+    "id": "pp1",
+    "title": "What is Bundle Splitting?",
+    "content": "### Bundle Splitting\nBundle Splitting is a performance optimization technique that divides a large JavaScript bundle into smaller chunks. Instead of loading one huge file containing all code (even unused code), the application loads only what’s required for the current view.\n\n**Example:**\nSplitting `main.bundle.js` into `main.bundle.js` and `emoji-picker.bundle.js` reduces initial load time by fetching less data.\n\n**Why it matters:**\n- Reduces time to First Contentful Paint (FCP) and Largest Contentful Paint (LCP)\n- Decreases loading and execution time\n- Improves Time To Interactive (TTI)\n\n**Goal:** Deliver visible and interactive content to the user faster by minimizing unnecessary code loading.",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Loading Optimization",
+    "difficulty": "intermediate",
+    "topic": "Bundle Splitting",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["performance", "bundle-splitting", "patterns.dev", "optimization"],
+    "sampleAnswers": [
+      "Bundle Splitting divides a large JavaScript file into smaller bundles so the browser loads only necessary code for the current route or view, improving load performance."
+    ]
+  },
+  {
+    "id": "pp2",
+    "title": "What are the main benefits of Bundle Splitting?",
+    "content": "Select all benefits that result from splitting your bundle into smaller chunks.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Loading Optimization",
+    "difficulty": "beginner",
+    "topic": "Bundle Splitting",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["bundle", "optimization", "performance"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Reduced time to First Contentful Paint (FCP)",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Reduced Time To Interactive (TTI)",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Larger initial download size",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Improved perceived performance on slower networks",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "Splitting bundles reduces loading and execution times, improving FCP, LCP, and TTI metrics—especially for low-end devices or slow networks."
+  },
+  {
+    "id": "pp3",
+    "title": "True or False: Bundle Splitting reduces the total amount of JavaScript your app needs to execute.",
+    "content": "Evaluate this statement based on the performance pattern.",
+    "type": "true-false",
+    "category": "Performance Patterns",
+    "subcategory": "Loading Optimization",
+    "difficulty": "beginner",
+    "topic": "Bundle Splitting",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["bundle", "true-false", "optimization"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": false,
+        "explanation": "The total code size remains the same; bundle splitting optimizes loading sequence, not total size."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": true,
+        "explanation": "It changes when and how code is fetched, not how much code exists in total."
+      }
+    ]
+  },
+  {
+    "id": "pp4",
+    "title": "Which performance metrics are most directly improved by Bundle Splitting?",
+    "content": "Identify which performance metrics benefit most from applying bundle splitting.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Rendering Performance",
+    "difficulty": "intermediate",
+    "topic": "Bundle Splitting",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["performance", "web-vitals", "bundle-splitting"],
+    "options": [
+      {
+        "id": "m1",
+        "text": "First Contentful Paint (FCP)",
+        "isCorrect": true
+      },
+      {
+        "id": "m2",
+        "text": "Largest Contentful Paint (LCP)",
+        "isCorrect": true
+      },
+      {
+        "id": "m3",
+        "text": "Cumulative Layout Shift (CLS)",
+        "isCorrect": false
+      },
+      {
+        "id": "m4",
+        "text": "Time To Interactive (TTI)",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "FCP, LCP, and TTI improve as less code needs to be parsed and executed before meaningful content appears."
+  },
+  {
+    "id": "pp5",
+    "title": "What problem does Bundle Splitting aim to solve?",
+    "content": "### Problem Description\nLarge bundles can delay the time it takes before the browser paints the first visible content and becomes interactive. Even unused code has to be downloaded and parsed before rendering.\n\n**Question:**\nWhat core issue does bundle splitting address in modern web applications?",
+    "type": "open-ended",
+    "category": "Performance Patterns",
+    "subcategory": "Loading Optimization",
+    "difficulty": "intermediate",
+    "topic": "Bundle Splitting",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["performance", "patterns.dev", "bundle-splitting"],
+    "sampleAnswers": [
+      "Bundle splitting addresses slow load times caused by downloading and parsing large monolithic bundles that contain code not needed on initial render."
+    ]
+  },
+  {
+    "id": "pp6",
+    "title": "Which of the following statements best describes Time To Interactive (TTI)?",
+    "content": "Select the correct definition for TTI in the context of performance patterns.",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "subcategory": "Web Vitals",
+    "difficulty": "beginner",
+    "topic": "Time To Interactive",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00.000Z",
+    "updatedAt": "2025-10-10T00:00:00.000Z",
+    "tags": ["tti", "performance", "bundle-splitting"],
+    "options": [
+      {
+        "id": "c1",
+        "text": "The time it takes for all content to be painted and interactive after the bundle loads",
+        "isCorrect": true
+      },
+      {
+        "id": "c2",
+        "text": "The time between a user's first input and a response",
+        "isCorrect": false
+      },
+      {
+        "id": "c3",
+        "text": "The time it takes to fetch the HTML document from the server",
+        "isCorrect": false
+      },
+      {
+        "id": "c4",
+        "text": "The total JavaScript execution time",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "TTI measures how long it takes for the page to become fully interactive, which bundle splitting helps improve by reducing load and execution time."
+  }
+]

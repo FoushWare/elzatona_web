@@ -1,0 +1,231 @@
+[
+  {
+    "id": 1,
+    "title": "What is the purpose of the View Transitions API?",
+    "content": "It provides a simple way to animate visual DOM changes between two states, enabling smooth transitions between UI views or pages.",
+    "type": "multiple-choice",
+    "difficulty": "beginner",
+    "options": [
+      "To animate data fetching operations",
+      "To transition visual changes between DOM states smoothly",
+      "To handle form validation errors visually",
+      "To optimize network requests"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Which method is central to the View Transitions API?",
+    "content": "The document.startViewTransition(callback) method initiates a view transition and calls the provided callback to update the DOM.",
+    "type": "multiple-choice",
+    "difficulty": "beginner",
+    "options": [
+      "document.animateTransition()",
+      "window.beginViewChange()",
+      "document.startViewTransition()",
+      "window.transitionTo()"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "What does document.startViewTransition(callback) do before executing the callback?",
+    "content": "It takes a screenshot of the current DOM state before applying the callback changes.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "options": [
+      "Preloads all CSS animations",
+      "Takes a screenshot of the current DOM",
+      "Stores a snapshot of localStorage",
+      "Pauses all event listeners"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Which CSS pseudo-elements allow developers to style the before and after states of a transition?",
+    "content": "Developers can use ::view-transition-old(root) and ::view-transition-new(root) to style the old and new DOM states during a transition.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "options": [
+      "::before and ::after",
+      "::view-transition-old(root) and ::view-transition-new(root)",
+      "::transition-old and ::transition-new",
+      "::prev-state and ::next-state"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "What is the role of view-transition-name in the View Transitions API?",
+    "content": "It assigns a unique name to elements so that matching elements across states can be smoothly animated together.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "options": [
+      "It defines a CSS keyframe",
+      "It assigns an animation ID for transitions",
+      "It uniquely identifies elements for smooth state transitions",
+      "It determines animation duration"
+    ]
+  },
+  {
+    "id": 6,
+    "title": "What happens to the DOM during a view transition callback?",
+    "content": "The DOM becomes non-interactive (frozen) until the callback and transition animation complete.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      "The DOM remains interactive",
+      "The DOM becomes non-interactive until the callback resolves",
+      "Only CSS changes are blocked",
+      "Event listeners are temporarily removed"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "When should document.startViewTransition ideally be called during page navigation?",
+    "content": "After the data request completes to minimize the time the DOM is frozen and improve user experience.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "options": [
+      "Before sending the data request",
+      "Immediately on link click",
+      "After the data request completes",
+      "After component unmount"
+    ]
+  },
+  {
+    "id": 8,
+    "title": "How can developers delay the completion of a transition?",
+    "content": "By returning a Promise from the callback, which must resolve before the animation completes.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      "By using setTimeout inside the callback",
+      "By returning a Promise that resolves when the DOM update is complete",
+      "By pausing the animation manually",
+      "By re-rendering the DOM asynchronously"
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Which React lifecycle method is used in the example to prevent premature rendering during a transition?",
+    "content": "shouldComponentUpdate() is overridden to return false, delaying rendering until the view transition begins.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      "componentDidMount()",
+      "componentWillUnmount()",
+      "shouldComponentUpdate()",
+      "getSnapshotBeforeUpdate()"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "What does the componentDidUpdate() method do in the React example?",
+    "content": "It resolves the promise returned during the DOM update, notifying the View Transition API that the DOM has been updated.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      "Starts a new transition",
+      "Forces a DOM re-render",
+      "Resolves the update promise for the transition",
+      "Triggers a fade-out animation"
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Why is React’s strict mode disabled in the Next.js example?",
+    "content": "Because React’s strict mode causes double rendering in development, interfering with the transition flow.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "options": [
+      "It breaks routing",
+      "It prevents componentDidUpdate from firing",
+      "It causes components to render twice and disrupts transitions",
+      "It disables animation hooks"
+    ]
+  },
+  {
+    "id": 12,
+    "title": "What is the main limitation of using the View Transitions API for page transitions?",
+    "content": "It requires the new page HTML to be available before animating, potentially delaying feedback for users.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      "It only supports inline styles",
+      "It can’t animate DOM elements",
+      "It needs new page HTML before animating",
+      "It blocks network requests"
+    ]
+  },
+  {
+    "id": 13,
+    "title": "What is the advantage of performing exit animations immediately after a link click?",
+    "content": "It provides instant feedback while waiting for the new content to load, improving perceived performance.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "options": [
+      "It improves SEO performance",
+      "It reduces memory usage",
+      "It offers immediate visual feedback to the user",
+      "It prevents animation jank"
+    ]
+  },
+  {
+    "id": 14,
+    "title": "Which library enhances server-side rendered MPAs with SPA-like speeds by replacing the <body> with new HTML from the response?",
+    "content": "Turbo, part of the Hotwire suite, enhances MPAs by replacing the page body dynamically using JavaScript.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "options": ["Turn", "Turbo", "Astro", "Remix"]
+  },
+  {
+    "id": 15,
+    "title": "What is Turn used for in combination with Turbo?",
+    "content": "Turn handles animating page navigations by adding classes like turn-exit and turn-enter to trigger CSS transitions.",
+    "type": "multiple-choice",
+    "difficulty": "intermediate",
+    "options": [
+      "It performs server rendering",
+      "It adds routing capabilities",
+      "It animates page navigations via CSS classes",
+      "It caches HTML responses"
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Which events does Turn hook into to manage the flow of page animations?",
+    "content": "Turn listens to Turbo events such as turbo:visit, turbo:before-render, and turbo:render to control animations.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      "turbo:start and turbo:end",
+      "turbo:visit, turbo:before-render, turbo:render",
+      "turbo:click and turbo:load",
+      "animationstart and animationend"
+    ]
+  },
+  {
+    "id": 17,
+    "title": "What does setting Turn.config.experimental.viewTransitions = true enable?",
+    "content": "It activates experimental support for the View Transitions API, falling back to CSS animations when unsupported.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      "It disables animations completely",
+      "It enables experimental view transitions with fallback",
+      "It triggers full page reloads",
+      "It forces server-side rendering"
+    ]
+  },
+  {
+    "id": 18,
+    "title": "What is the main design trade-off between the View Transitions API and traditional exit animations?",
+    "content": "The View Transitions API can animate shared elements across pages but requires waiting for new content, while exit animations give instant feedback but can’t transition shared elements.",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      "View transitions are faster in all cases",
+      "Exit animations support cross-page element morphing",
+      "View transitions handle shared elements but may delay feedback",
+      "Exit animations require the new HTML before starting"
+    ]
+  }
+]

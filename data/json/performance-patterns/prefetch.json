@@ -1,0 +1,180 @@
+[
+  {
+    "id": 1,
+    "title": "Understanding Prefetch in Web Performance",
+    "content": "What is the purpose of using `<link rel=\"prefetch\">` in web applications?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Prefetch",
+    "difficulty": "easy",
+    "topic": "Prefetch Optimization",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["performance", "optimization", "prefetch", "webpack"],
+    "options": [
+      {
+        "id": "a",
+        "text": "To load resources that may be needed in the future",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "To defer resource loading until the user interacts",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "To immediately execute a script when the page loads",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Prefetch allows browsers to fetch resources that may be needed later, improving responsiveness for upcoming interactions.",
+    "sampleAnswers": [
+      "Prefetch helps reduce perceived latency by loading resources before they are needed."
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Prefetch vs Lazy Loading",
+    "content": "How does prefetch differ from lazy loading when optimizing resources?",
+    "type": "open-ended",
+    "category": "Performance Pattern",
+    "subcategory": "Prefetch",
+    "difficulty": "medium",
+    "topic": "Prefetch Optimization",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["performance", "lazy loading", "prefetch"],
+    "options": [],
+    "explanation": "Prefetch loads resources before they are needed (proactively), while lazy loading loads them only when required (reactively).",
+    "sampleAnswers": [
+      "Prefetching anticipates future needs; lazy loading reacts to user actions or visibility."
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Webpack Prefetch Magic Comment",
+    "content": "What is the purpose of adding the `/* webpackPrefetch: true */` comment to a dynamic import?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Prefetch",
+    "difficulty": "medium",
+    "topic": "Webpack Optimization",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["webpack", "prefetch", "code-splitting"],
+    "options": [
+      {
+        "id": "a",
+        "text": "To bundle the file immediately into the main chunk",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "To hint the browser to prefetch the resource during idle time",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "To force lazy loading of the component",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "The magic comment tells Webpack to include a `<link rel='prefetch'>` for the specified chunk, allowing the browser to load it in advance.",
+    "sampleAnswers": [
+      "It hints the browser to prefetch the module, improving perceived load time."
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Performance Benefit of Prefetch",
+    "content": "What happens when a prefetched module is requested by the user?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Prefetch",
+    "difficulty": "easy",
+    "topic": "Prefetch Optimization",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["performance", "cache", "prefetch"],
+    "options": [
+      {
+        "id": "a",
+        "text": "It is fetched from cache instantly",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It triggers a network request",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It delays rendering until all resources are loaded",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Prefetched resources are cached by the browser, allowing instant retrieval when the user requests them.",
+    "sampleAnswers": [
+      "The module loads from cache, minimizing wait time for the user."
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Prefetching Trade-offs",
+    "content": "Why should developers avoid excessive use of prefetching?",
+    "type": "open-ended",
+    "category": "Performance Pattern",
+    "subcategory": "Prefetch",
+    "difficulty": "medium",
+    "topic": "Performance Best Practices",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["performance", "optimization", "best-practices"],
+    "options": [],
+    "explanation": "Overusing prefetch may waste bandwidth and slow down critical resource loading if prefetched assets are never used.",
+    "sampleAnswers": [
+      "Prefetching too many unused resources can waste network bandwidth and harm performance."
+    ]
+  },
+  {
+    "id": 6,
+    "title": "When to Prefetch",
+    "content": "Which is a good scenario to use prefetching in a web application?",
+    "type": "multiple-choice",
+    "category": "Performance Pattern",
+    "subcategory": "Prefetch",
+    "difficulty": "medium",
+    "topic": "Optimization Scenarios",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["performance", "prefetch", "ux"],
+    "options": [
+      {
+        "id": "a",
+        "text": "For pages or components the user is likely to visit soon",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "For every resource in the application",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Only for images in the viewport",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Prefetching should be used for predictable user paths to balance performance and bandwidth usage.",
+    "sampleAnswers": [
+      "Prefetch resources users are likely to access next to improve perceived speed."
+    ]
+  }
+]
