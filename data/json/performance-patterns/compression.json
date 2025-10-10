@@ -1,0 +1,224 @@
+[
+  {
+    "id": 1,
+    "title": "What is the main purpose of JavaScript compression?",
+    "content": "JavaScript compression reduces the size of scripts to improve transfer, load, and execution time over the network.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Compressing JavaScript",
+    "difficulty": "easy",
+    "topic": "Web Performance Optimization",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["compression", "performance", "javascript"],
+    "options": [
+      "To increase readability of JavaScript code",
+      "To improve execution speed by increasing file size",
+      "To reduce file size and improve loading performance",
+      "To replace unused code automatically"
+    ],
+    "explanation": "Compression minimizes script size, making downloads faster and reducing network bandwidth usage.",
+    "sampleAnswers": ["To reduce file size and improve loading performance"]
+  },
+  {
+    "id": 2,
+    "title": "Which compression algorithms are most commonly used for JavaScript?",
+    "content": "The two most common compression algorithms used for HTTP and JavaScript data are Gzip and Brotli.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Compressing JavaScript",
+    "difficulty": "easy",
+    "topic": "Compression Algorithms",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["gzip", "brotli", "compression"],
+    "options": [
+      "JPEG and PNG",
+      "Gzip and Brotli",
+      "Zlib and Snappy",
+      "WebP and AVIF"
+    ],
+    "explanation": "Modern browsers widely support Gzip and Brotli for compressing text-based assets like JavaScript, HTML, and CSS.",
+    "sampleAnswers": ["Gzip and Brotli"]
+  },
+  {
+    "id": 3,
+    "title": "Which compression algorithm provides better compression ratios?",
+    "content": "Brotli typically provides smaller file sizes compared to Gzip at similar compression levels.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Compressing JavaScript",
+    "difficulty": "medium",
+    "topic": "Compression Comparison",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["brotli", "gzip", "performance"],
+    "options": [
+      "Gzip has a higher compression ratio than Brotli",
+      "Brotli has a better compression ratio at similar levels",
+      "Both perform the same at all levels",
+      "Brotli compresses slower with worse ratios"
+    ],
+    "explanation": "Brotli achieves denser compression through context modeling and larger dictionary windows, reducing file size effectively.",
+    "sampleAnswers": ["Brotli has a better compression ratio at similar levels"]
+  },
+  {
+    "id": 4,
+    "title": "What is the difference between lossy and lossless compression?",
+    "content": "Lossy compression slightly alters files while maintaining usability, while lossless compression preserves data exactly.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Compressing JavaScript",
+    "difficulty": "medium",
+    "topic": "Compression Types",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["lossless", "compression", "http"],
+    "options": [
+      "Lossy retains exact data; lossless removes data",
+      "Lossy slightly changes files; lossless preserves them exactly",
+      "Both compress with some data loss",
+      "Lossless only applies to images"
+    ],
+    "explanation": "JavaScript requires lossless compression to preserve code integrity during compression and decompression.",
+    "sampleAnswers": [
+      "Lossy slightly changes files; lossless preserves them exactly"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Which compression type should be used for JavaScript files?",
+    "content": "JavaScript should always use lossless compression to ensure code runs correctly after decompression.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Compressing JavaScript",
+    "difficulty": "easy",
+    "topic": "Compression Best Practices",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["lossless", "javascript", "gzip"],
+    "options": [
+      "Lossy compression",
+      "Lossless compression",
+      "Dynamic compression only",
+      "No compression"
+    ],
+    "explanation": "Since JavaScript must remain valid after compression, only lossless algorithms like Brotli or Gzip should be used.",
+    "sampleAnswers": ["Lossless compression"]
+  },
+  {
+    "id": 6,
+    "title": "What does minification do before compression?",
+    "content": "Minification removes unnecessary syntax like spaces, comments, and line breaks to reduce file size.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Compressing JavaScript",
+    "difficulty": "medium",
+    "topic": "Minification",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["minification", "terser", "performance"],
+    "options": [
+      "Adds whitespace for readability",
+      "Removes unnecessary syntax to shrink file size",
+      "Combines multiple files into one",
+      "Encrypts JavaScript files"
+    ],
+    "explanation": "Minification optimizes code before compression, enabling smaller payloads without changing functionality.",
+    "sampleAnswers": ["Removes unnecessary syntax to shrink file size"]
+  },
+  {
+    "id": 7,
+    "title": "What is static compression?",
+    "content": "Static compression pre-compresses resources at build time for better download performance of infrequently changing files.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Compressing JavaScript",
+    "difficulty": "medium",
+    "topic": "Compression Types",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["static compression", "build", "performance"],
+    "options": [
+      "Compression applied at runtime",
+      "Pre-compressing files during build time",
+      "Client-side compression of resources",
+      "Compressing files multiple times after deployment"
+    ],
+    "explanation": "Static compression is ideal for files that rarely change, improving transfer speeds without runtime cost.",
+    "sampleAnswers": ["Pre-compressing files during build time"]
+  },
+  {
+    "id": 8,
+    "title": "What is dynamic compression?",
+    "content": "Dynamic compression happens at runtime when the browser requests a resource, compressing it on the fly.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Compressing JavaScript",
+    "difficulty": "medium",
+    "topic": "HTTP Compression",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["dynamic compression", "server", "gzip"],
+    "options": [
+      "Compression done before build",
+      "Compression applied during runtime on request",
+      "Compression handled by the browser only",
+      "Compression used only for media files"
+    ],
+    "explanation": "Dynamic compression is used for frequently changing content, balancing CPU time with real-time optimization.",
+    "sampleAnswers": ["Compression applied during runtime on request"]
+  },
+  {
+    "id": 9,
+    "title": "Which Webpack plugin enables Brotli compression?",
+    "content": "You can use the BrotliWebpackPlugin in Webpack to enable Brotli compression for bundled assets.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Compressing JavaScript",
+    "difficulty": "medium",
+    "topic": "Webpack Configuration",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["webpack", "brotli", "plugin"],
+    "options": [
+      "CompressionPlugin",
+      "MinifyPlugin",
+      "BrotliWebpackPlugin",
+      "OptimizeCSSAssetsPlugin"
+    ],
+    "explanation": "Webpack supports Brotli through BrotliWebpackPlugin, enabling efficient compression of assets for production builds.",
+    "sampleAnswers": ["BrotliWebpackPlugin"]
+  },
+  {
+    "id": 10,
+    "title": "What trade-off does bundle granularity create in compression?",
+    "content": "Smaller chunks improve caching but reduce compression efficiency, while larger chunks compress better but cache less effectively.",
+    "type": "mcq",
+    "category": "Performance Pattern",
+    "subcategory": "Compressing JavaScript",
+    "difficulty": "hard",
+    "topic": "Granularity Trade-off",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-10-10T00:00:00Z",
+    "tags": ["granularity", "bundle", "trade-off"],
+    "options": [
+      "Larger chunks are always better",
+      "Smaller chunks are always faster",
+      "Smaller chunks cache better, larger compress better",
+      "Chunk size has no impact on performance"
+    ],
+    "explanation": "This is the granularity trade-off: compression efficiency and caching benefits often compete in bundle optimization.",
+    "sampleAnswers": ["Smaller chunks cache better, larger compress better"]
+  }
+]

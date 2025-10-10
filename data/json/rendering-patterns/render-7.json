@@ -1,0 +1,177 @@
+[
+  {
+    "id": 51,
+    "title": "Partial Hydration Concept",
+    "content": "What is Partial Hydration and when is it beneficial?",
+    "type": "open-ended",
+    "difficulty": "advanced",
+    "sampleAnswers": [
+      "Partial Hydration means hydrating only parts of a statically rendered page that require interactivity.",
+      "It is beneficial for pages with mostly static content and a few interactive widgets."
+    ]
+  },
+  {
+    "id": 52,
+    "title": "Partial vs Progressive Hydration",
+    "content": "How is Partial Hydration different from Progressive Hydration?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      {
+        "id": "a",
+        "text": "Partial Hydration only hydrates selected components, Progressive Hydration hydrates sequentially over time",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "They are identical processes",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Partial Hydration works only on client-side rendering",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": 53,
+    "title": "Selective Prefetching",
+    "content": "What is Selective Prefetching and why is it important?",
+    "type": "open-ended",
+    "difficulty": "medium",
+    "sampleAnswers": [
+      "Selective Prefetching fetches data or resources only for components likely to be used soon, based on user behavior.",
+      "It prevents bandwidth waste and improves perceived performance on slow networks."
+    ]
+  },
+  {
+    "id": 54,
+    "title": "When to Use Selective Prefetching",
+    "content": "In what scenario is Selective Prefetching most effective?",
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "options": [
+      {
+        "id": "a",
+        "text": "On pages with many navigation routes where user intent can be predicted",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "On static single-page apps with no dynamic routing",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "When caching is disabled entirely",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": 55,
+    "title": "Lazy Streaming Rendering",
+    "content": "What is Lazy Streaming Rendering and how does it differ from normal streaming?",
+    "type": "open-ended",
+    "difficulty": "advanced",
+    "sampleAnswers": [
+      "Lazy Streaming defers rendering of non-critical content until it’s needed, reducing initial TTFB.",
+      "Unlike standard streaming, it doesn’t stream everything immediately—it prioritizes essential chunks."
+    ]
+  },
+  {
+    "id": 56,
+    "title": "React Suspense for Data Fetching",
+    "content": "What role does React Suspense play in rendering optimization?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      {
+        "id": "a",
+        "text": "It allows components to wait for data before rendering while showing fallback UI",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "It blocks all rendering until the entire app loads",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "It only works for routing, not data fetching",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": 57,
+    "title": "Concurrent Rendering Advantage",
+    "content": "How does React 18's concurrent rendering improve user experience?",
+    "type": "open-ended",
+    "difficulty": "advanced",
+    "sampleAnswers": [
+      "Concurrent Rendering enables React to interrupt non-urgent renders to prioritize important updates, improving responsiveness.",
+      "It helps avoid UI freezes during heavy computation or re-renders."
+    ]
+  },
+  {
+    "id": 58,
+    "title": "Concurrent vs Synchronous Rendering",
+    "content": "What is the difference between concurrent and synchronous rendering in React?",
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "options": [
+      {
+        "id": "a",
+        "text": "Concurrent rendering can pause and resume renders, synchronous rendering blocks until completion",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Concurrent rendering executes faster JavaScript",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Synchronous rendering can handle multiple threads",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": 59,
+    "title": "Idle Time Rendering",
+    "content": "What is Idle Time Rendering and how does it optimize performance?",
+    "type": "open-ended",
+    "difficulty": "medium",
+    "sampleAnswers": [
+      "Idle Time Rendering defers rendering of non-critical UI parts until the main thread is idle.",
+      "It uses browser APIs like requestIdleCallback to improve smoothness."
+    ]
+  },
+  {
+    "id": 60,
+    "title": "Pre-rendering Optimization Tradeoffs",
+    "content": "What trade-offs do pre-rendering optimizations (like ISR or static generation) have?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      {
+        "id": "a",
+        "text": "They improve initial load but can serve outdated content until revalidated",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "They slow down page loads by increasing bundle size",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "They disable interactivity on the client",
+        "isCorrect": false
+      }
+    ]
+  }
+]
