@@ -1,0 +1,177 @@
+[
+  {
+    "id": 11,
+    "title": "Understanding Server-Side Rendering (SSR)",
+    "content": "What happens during the Server-Side Rendering (SSR) process in frameworks like Next.js?",
+    "type": "open-ended",
+    "difficulty": "easy",
+    "sampleAnswers": [
+      "The server executes React components to generate HTML on each request and sends it to the client.",
+      "The client then hydrates the HTML to make it interactive."
+    ]
+  },
+  {
+    "id": 12,
+    "title": "SSR Performance Trade-off",
+    "content": "What is the main trade-off when using Server-Side Rendering?",
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "options": [
+      {
+        "id": "a",
+        "text": "Faster Time to First Byte (TTFB)",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "Higher server load and slower TTFB compared to static rendering",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "Improved client-side bundle size",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "SSR Use Case",
+    "content": "Which scenario best benefits from Server-Side Rendering?",
+    "type": "multiple-choice",
+    "difficulty": "easy",
+    "options": [
+      {
+        "id": "a",
+        "text": "A marketing blog updated monthly",
+        "isCorrect": false
+      },
+      {
+        "id": "b",
+        "text": "A dashboard showing real-time user data",
+        "isCorrect": true
+      },
+      {
+        "id": "c",
+        "text": "A static documentation website",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "title": "Hydration in SSR",
+    "content": "What does 'hydration' mean in the context of SSR?",
+    "type": "open-ended",
+    "difficulty": "medium",
+    "sampleAnswers": [
+      "Hydration is the process where React attaches event listeners and reuses server-rendered HTML to make the page interactive.",
+      "It bridges the server-rendered static HTML with client-side React logic."
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Streaming SSR",
+    "content": "How does Streaming SSR differ from traditional SSR?",
+    "type": "open-ended",
+    "difficulty": "advanced",
+    "sampleAnswers": [
+      "Streaming SSR sends HTML to the browser in chunks as components are rendered, instead of waiting for the full page to be ready.",
+      "It improves TTFB and makes perceived performance faster."
+    ]
+  },
+  {
+    "id": 16,
+    "title": "React 18 and Streaming SSR",
+    "content": "Which React feature introduced in React 18 enhances Streaming SSR?",
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "options": [
+      {
+        "id": "a",
+        "text": "React Suspense for data fetching",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "React Context API",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "React.memo",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "title": "Edge Rendering",
+    "content": "What is Edge Rendering and why is it becoming popular?",
+    "type": "open-ended",
+    "difficulty": "advanced",
+    "sampleAnswers": [
+      "Edge Rendering runs SSR logic on edge servers close to the user, reducing latency and improving global performance.",
+      "It’s ideal for personalization with low latency."
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Edge vs Server Rendering",
+    "content": "How does Edge Rendering differ from traditional SSR?",
+    "type": "multiple-choice",
+    "difficulty": "advanced",
+    "options": [
+      {
+        "id": "a",
+        "text": "Edge Rendering happens on globally distributed edge nodes rather than a central server",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Edge Rendering always requires a CDN",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Edge Rendering only works for static pages",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "title": "React Server Components (RSC)",
+    "content": "How do React Server Components (RSC) improve rendering performance?",
+    "type": "open-ended",
+    "difficulty": "advanced",
+    "sampleAnswers": [
+      "RSC allow parts of the React tree to render on the server without sending extra JavaScript to the client.",
+      "They reduce hydration cost and client bundle size."
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Combining Rendering Strategies",
+    "content": "Which rendering approach combines static and dynamic techniques for optimal performance?",
+    "type": "multiple-choice",
+    "difficulty": "medium",
+    "options": [
+      {
+        "id": "a",
+        "text": "Hybrid Rendering — mixing SSG, SSR, and ISR depending on route needs",
+        "isCorrect": true
+      },
+      {
+        "id": "b",
+        "text": "Full Client-Side Rendering only",
+        "isCorrect": false
+      },
+      {
+        "id": "c",
+        "text": "Single Static HTML rendering",
+        "isCorrect": false
+      }
+    ]
+  }
+]
