@@ -1,0 +1,272 @@
+[
+  {
+    "id": "sec61",
+    "title": "What is CSRF (Cross-Site Request Forgery)?",
+    "content": "Explain how CSRF attacks work and why they are dangerous.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "CSRF",
+    "difficulty": "intermediate",
+    "topic": "CSRF",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:01:00.000Z",
+    "updatedAt": "2025-10-11T01:01:00.000Z",
+    "tags": ["security", "csrf", "frontend"],
+    "sampleAnswers": [
+      "CSRF attacks trick a user’s browser into making unwanted requests to a web application where they are authenticated. This can lead to unauthorized actions like changing account details, making purchases, or deleting content."
+    ]
+  },
+  {
+    "id": "sec62",
+    "title": "How can you prevent CSRF attacks?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "CSRF",
+    "difficulty": "intermediate",
+    "topic": "CSRF Prevention",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:02:00.000Z",
+    "updatedAt": "2025-10-11T01:02:00.000Z",
+    "tags": ["security", "csrf", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use CSRF tokens for forms",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Validate Origin and Referer headers",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Rely only on HTTPS",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Use SameSite attribute on cookies",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "CSRF tokens, checking Origin/Referer, and setting cookies as SameSite help prevent CSRF attacks. HTTPS alone does not prevent CSRF."
+  },
+  {
+    "id": "sec63",
+    "title": "What is the purpose of the SameSite cookie attribute?",
+    "content": "Explain how SameSite helps with web security.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Cookies",
+    "difficulty": "intermediate",
+    "topic": "Cookies Security",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:03:00.000Z",
+    "updatedAt": "2025-10-11T01:03:00.000Z",
+    "tags": ["security", "cookies", "csrf"],
+    "sampleAnswers": [
+      "The SameSite attribute restricts how cookies are sent with cross-site requests. 'Strict' blocks all cross-site cookie usage, 'Lax' allows certain safe methods, helping prevent CSRF attacks."
+    ]
+  },
+  {
+    "id": "sec64",
+    "title": "What is token expiration and why is it important?",
+    "content": "Explain token expiration in authentication and session management.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Authentication",
+    "difficulty": "intermediate",
+    "topic": "Token Expiration",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:04:00.000Z",
+    "updatedAt": "2025-10-11T01:04:00.000Z",
+    "tags": ["security", "authentication", "tokens"],
+    "sampleAnswers": [
+      "Token expiration limits how long an authentication token is valid. This reduces risk if a token is leaked or stolen and forces users to re-authenticate after a set period."
+    ]
+  },
+  {
+    "id": "sec65",
+    "title": "How can you secure API endpoints in a frontend application?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "API Security",
+    "difficulty": "intermediate",
+    "topic": "API Security",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:05:00.000Z",
+    "updatedAt": "2025-10-11T01:05:00.000Z",
+    "tags": ["security", "api", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use authentication tokens like JWT",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Enforce HTTPS for all API requests",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Validate all user inputs on the server",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "Rely only on client-side checks",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Server-side validation, HTTPS, and token-based authentication are essential. Client-side checks alone cannot ensure security."
+  },
+  {
+    "id": "sec66",
+    "title": "What is OAuth 2.0?",
+    "content": "Explain OAuth 2.0 and its use in web applications.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Authentication",
+    "difficulty": "intermediate",
+    "topic": "OAuth",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:06:00.000Z",
+    "updatedAt": "2025-10-11T01:06:00.000Z",
+    "tags": ["security", "oauth", "authentication"],
+    "sampleAnswers": [
+      "OAuth 2.0 is an authorization framework that allows third-party applications to access user resources without exposing credentials. It issues tokens with limited scope and duration."
+    ]
+  },
+  {
+    "id": "sec67",
+    "title": "How does a Content Security Policy (CSP) improve security?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "CSP",
+    "difficulty": "intermediate",
+    "topic": "Content Security Policy",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:07:00.000Z",
+    "updatedAt": "2025-10-11T01:07:00.000Z",
+    "tags": ["security", "csp", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Restrict sources of scripts, styles, and media",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Prevent inline script execution",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Encrypt cookies automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Mitigate XSS attacks",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "CSP controls which sources are allowed for scripts and styles, blocks inline scripts, and helps mitigate XSS attacks. It does not encrypt cookies."
+  },
+  {
+    "id": "sec68",
+    "title": "What is the purpose of HttpOnly cookies?",
+    "content": "Explain how HttpOnly cookies improve security.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Cookies",
+    "difficulty": "intermediate",
+    "topic": "HttpOnly Cookies",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:08:00.000Z",
+    "updatedAt": "2025-10-11T01:08:00.000Z",
+    "tags": ["security", "cookies", "frontend"],
+    "sampleAnswers": [
+      "HttpOnly cookies cannot be accessed via JavaScript in the browser, reducing the risk of session theft through XSS attacks."
+    ]
+  },
+  {
+    "id": "sec69",
+    "title": "What is the difference between stored and reflected XSS?",
+    "content": "Select the correct statements.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "XSS",
+    "difficulty": "intermediate",
+    "topic": "XSS Types",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:09:00.000Z",
+    "updatedAt": "2025-10-11T01:09:00.000Z",
+    "tags": ["security", "xss", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Stored XSS persists in the database and affects multiple users",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Reflected XSS occurs immediately and is non-persistent",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Reflected XSS stores payload in server database",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Stored XSS is less dangerous than reflected XSS",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "Stored XSS is persistent and affects all users viewing the content; reflected XSS is immediate, targeting a single user through crafted requests."
+  },
+  {
+    "id": "sec70",
+    "title": "What are the best practices for session management in frontend apps?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "Session Management",
+    "difficulty": "intermediate",
+    "topic": "Session Management",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:10:00.000Z",
+    "updatedAt": "2025-10-11T01:10:00.000Z",
+    "tags": ["security", "session", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use short-lived tokens and refresh them securely",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Store tokens in memory or HttpOnly cookies",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Rely solely on localStorage for tokens",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Invalidate sessions on logout and after inactivity",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "Use secure storage, short-lived tokens, refresh tokens carefully, and invalidate sessions properly. Avoid storing sensitive tokens in localStorage due to XSS risk."
+  }
+]

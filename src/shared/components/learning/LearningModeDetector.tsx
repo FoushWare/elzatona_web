@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { useUserType } from '@/contexts/UserTypeContext';
+import { useUserType } from '@/contexts/UserTypeContextSafe';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { ModeSpecificOnboarding } from '../common/ModeSpecificOnboarding';
 import { useRouter } from 'next/navigation';
