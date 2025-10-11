@@ -1,0 +1,272 @@
+[
+  {
+    "id": "sec91",
+    "title": "What is Clickjacking (UI Redressing)?",
+    "content": "Explain how clickjacking works and why it's dangerous.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "UI Redressing",
+    "difficulty": "intermediate",
+    "topic": "Clickjacking",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:30:00.000Z",
+    "updatedAt": "2025-10-11T01:30:00.000Z",
+    "tags": ["security", "clickjacking", "frontend"],
+    "sampleAnswers": [
+      "Clickjacking tricks users into clicking invisible or disguised elements, causing unintended actions like approving transactions, changing settings, or enabling permissions."
+    ]
+  },
+  {
+    "id": "sec92",
+    "title": "How can you prevent Clickjacking attacks?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "UI Redressing",
+    "difficulty": "intermediate",
+    "topic": "Clickjacking Prevention",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:31:00.000Z",
+    "updatedAt": "2025-10-11T01:31:00.000Z",
+    "tags": ["security", "clickjacking", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options header to deny framing",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors directive",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Ensure HTTPS is used",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Use JavaScript frame-busting techniques",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "X-Frame-Options, CSP frame-ancestors, and frame-busting scripts protect against clickjacking. HTTPS alone does not prevent it."
+  },
+  {
+    "id": "sec93",
+    "title": "What is a Man-in-the-Middle (MITM) attack?",
+    "content": "Explain how MITM attacks can compromise web applications.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Network",
+    "difficulty": "intermediate",
+    "topic": "MITM",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:32:00.000Z",
+    "updatedAt": "2025-10-11T01:32:00.000Z",
+    "tags": ["security", "mitm", "frontend"],
+    "sampleAnswers": [
+      "MITM occurs when an attacker intercepts communication between a user and a server, allowing them to read, modify, or inject malicious data without either party knowing."
+    ]
+  },
+  {
+    "id": "sec94",
+    "title": "How can HTTPS prevent MITM attacks?",
+    "content": "Select the correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "Network",
+    "difficulty": "intermediate",
+    "topic": "MITM Prevention",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:33:00.000Z",
+    "updatedAt": "2025-10-11T01:33:00.000Z",
+    "tags": ["security", "mitm", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Encrypts data in transit",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Authenticates the server using certificates",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Prevents phishing attacks",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Prevents unauthorized data tampering",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "HTTPS encrypts traffic and verifies server identity, reducing MITM risks. It does not automatically prevent phishing."
+  },
+  {
+    "id": "sec95",
+    "title": "What are common signs that a website might be vulnerable to XSS?",
+    "content": "Select all applicable options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "XSS",
+    "difficulty": "beginner",
+    "topic": "XSS Detection",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:34:00.000Z",
+    "updatedAt": "2025-10-11T01:34:00.000Z",
+    "tags": ["security", "xss", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "User input is reflected without sanitization",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Using dangerouslySetInnerHTML without sanitation",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Input validation for forms",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Content loaded dynamically from unknown sources",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "Reflected input, unsanitized HTML rendering, and dynamic content from untrusted sources are common XSS vulnerabilities."
+  },
+  {
+    "id": "sec96",
+    "title": "Why should frontend developers care about security headers?",
+    "content": "Explain their role and importance in web security.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Headers",
+    "difficulty": "beginner",
+    "topic": "Security Headers",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:35:00.000Z",
+    "updatedAt": "2025-10-11T01:35:00.000Z",
+    "tags": ["security", "headers", "frontend"],
+    "sampleAnswers": [
+      "Security headers like CSP, X-Frame-Options, and Strict-Transport-Security help protect against XSS, clickjacking, and MITM attacks by instructing the browser on safe behavior."
+    ]
+  },
+  {
+    "id": "sec97",
+    "title": "What is the purpose of the HttpOnly cookie attribute?",
+    "content": "Select the correct option.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "Cookies",
+    "difficulty": "beginner",
+    "topic": "HttpOnly Cookies",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:36:00.000Z",
+    "updatedAt": "2025-10-11T01:36:00.000Z",
+    "tags": ["security", "cookies", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Prevents JavaScript from accessing the cookie",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Encrypts cookie contents",
+        "isCorrect": false
+      },
+      {
+        "id": "o3",
+        "text": "Prevents cookies from being sent over HTTP",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Automatically rotates session cookies",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "HttpOnly restricts access to cookies from JavaScript, reducing XSS risks."
+  },
+  {
+    "id": "sec98",
+    "title": "What is the main danger of storing JWT tokens in localStorage?",
+    "content": "Explain the security risk involved.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Tokens",
+    "difficulty": "intermediate",
+    "topic": "JWT Storage",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:37:00.000Z",
+    "updatedAt": "2025-10-11T01:37:00.000Z",
+    "tags": ["security", "jwt", "frontend"],
+    "sampleAnswers": [
+      "JWT tokens in localStorage are accessible via JavaScript, making them vulnerable to XSS attacks. If stolen, attackers can impersonate users."
+    ]
+  },
+  {
+    "id": "sec99",
+    "title": "How can React’s default escaping help prevent XSS?",
+    "content": "Select the correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "XSS",
+    "difficulty": "beginner",
+    "topic": "React XSS",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:38:00.000Z",
+    "updatedAt": "2025-10-11T01:38:00.000Z",
+    "tags": ["security", "react", "xss"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Automatically escapes data in JSX expressions",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Prevents execution of scripts in user content",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Replaces the need for server-side validation",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Removes all HTML from user input",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "React escapes data in JSX, preventing scripts from executing. However, server-side validation is still required."
+  },
+  {
+    "id": "sec100",
+    "title": "What is the role of TLS/SSL certificates in web security?",
+    "content": "Explain how TLS/SSL certificates protect users and applications.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Network",
+    "difficulty": "beginner",
+    "topic": "TLS/SSL",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:39:00.000Z",
+    "updatedAt": "2025-10-11T01:39:00.000Z",
+    "tags": ["security", "tls", "frontend"],
+    "sampleAnswers": [
+      "TLS/SSL certificates encrypt traffic between the browser and server, ensuring data confidentiality, integrity, and authentication, which prevents eavesdropping and MITM attacks."
+    ]
+  }
+]

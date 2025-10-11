@@ -1,0 +1,263 @@
+[
+  {
+    "id": "sec51",
+    "title": "What is a Man-in-the-Middle (MITM) attack?",
+    "content": "Explain how MITM attacks work and their potential impact on web applications.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "MITM",
+    "difficulty": "intermediate",
+    "topic": "MITM",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:51:00.000Z",
+    "updatedAt": "2025-10-11T00:51:00.000Z",
+    "tags": ["security", "mitm", "frontend"],
+    "sampleAnswers": [
+      "In a MITM attack, an attacker intercepts communication between a client and server, potentially stealing sensitive data like passwords, cookies, or session tokens, or modifying the communication without the user's knowledge."
+    ]
+  },
+  {
+    "id": "sec52",
+    "title": "How can HTTPS prevent MITM attacks?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "MITM",
+    "difficulty": "beginner",
+    "topic": "HTTPS & MITM",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:52:00.000Z",
+    "updatedAt": "2025-10-11T00:52:00.000Z",
+    "tags": ["security", "https", "mitm"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Encrypts data between client and server",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Validates server identity using certificates",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Blocks phishing emails automatically",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Prevents cookie theft if Secure flag is set",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "HTTPS encrypts communication, validates the server's certificate, and combined with Secure cookies, helps prevent MITM attacks."
+  },
+  {
+    "id": "sec53",
+    "title": "What is CORS (Cross-Origin Resource Sharing)?",
+    "content": "Explain CORS and its role in web security.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "CORS",
+    "difficulty": "intermediate",
+    "topic": "CORS",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:53:00.000Z",
+    "updatedAt": "2025-10-11T00:53:00.000Z",
+    "tags": ["security", "cors", "frontend"],
+    "sampleAnswers": [
+      "CORS is a security feature implemented by browsers to restrict web pages from making requests to a different domain than the one that served the web page. Proper CORS headers allow safe cross-origin requests while preventing unauthorized access."
+    ]
+  },
+  {
+    "id": "sec54",
+    "title": "How can you safely allow cross-origin requests?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "CORS",
+    "difficulty": "intermediate",
+    "topic": "CORS",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:54:00.000Z",
+    "updatedAt": "2025-10-11T00:54:00.000Z",
+    "tags": ["security", "cors", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Set Access-Control-Allow-Origin to a specific trusted domain",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Use credentials (cookies) only when necessary",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Set Access-Control-Allow-Origin to '*'",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Use server-side proxy to handle requests",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "Allow only trusted domains, use credentials carefully, and proxy requests server-side to control access. Using '*' allows any domain and is unsafe for sensitive data."
+  },
+  {
+    "id": "sec55",
+    "title": "What is rate limiting and why is it important?",
+    "content": "Explain how rate limiting protects web applications.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Rate Limiting",
+    "difficulty": "intermediate",
+    "topic": "Rate Limiting",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:55:00.000Z",
+    "updatedAt": "2025-10-11T00:55:00.000Z",
+    "tags": ["security", "rate-limiting", "frontend"],
+    "sampleAnswers": [
+      "Rate limiting restricts the number of requests a client can make in a given time period, protecting the server from abuse, brute-force attacks, and denial-of-service attacks."
+    ]
+  },
+  {
+    "id": "sec56",
+    "title": "True or False: All third-party libraries are safe by default.",
+    "content": "Evaluate the statement in terms of frontend security.",
+    "type": "true-false",
+    "category": "Web Security",
+    "subcategory": "Third-Party Security",
+    "difficulty": "beginner",
+    "topic": "Third-Party Libraries",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:56:00.000Z",
+    "updatedAt": "2025-10-11T00:56:00.000Z",
+    "tags": ["security", "libraries", "frontend"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": false,
+        "explanation": "Third-party libraries can have vulnerabilities, outdated dependencies, or malicious code; always review and update them."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": true,
+        "explanation": "Always validate, audit, and update third-party libraries before using them in production."
+      }
+    ]
+  },
+  {
+    "id": "sec57",
+    "title": "What is JWT and how does it help with security?",
+    "content": "Explain JWT (JSON Web Token) and its use in authentication.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Authentication",
+    "difficulty": "intermediate",
+    "topic": "JWT",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:57:00.000Z",
+    "updatedAt": "2025-10-11T00:57:00.000Z",
+    "tags": ["security", "jwt", "authentication"],
+    "sampleAnswers": [
+      "JWT is a compact token used to securely transmit information between client and server. It ensures authenticity and integrity of the payload, commonly used for stateless authentication."
+    ]
+  },
+  {
+    "id": "sec58",
+    "title": "How can you prevent XSS when displaying user-generated content?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "XSS",
+    "difficulty": "intermediate",
+    "topic": "XSS Prevention",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:58:00.000Z",
+    "updatedAt": "2025-10-11T00:58:00.000Z",
+    "tags": ["security", "xss", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Escape HTML before rendering",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Sanitize input using libraries like DOMPurify",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Use dangerouslySetInnerHTML without sanitization",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Implement Content Security Policy (CSP)",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "Escape and sanitize user content, and enforce CSP. Avoid unsanitized dangerouslySetInnerHTML as it introduces XSS vulnerabilities."
+  },
+  {
+    "id": "sec59",
+    "title": "What is UI Redressing (Clickjacking)?",
+    "content": "Explain how clickjacking attacks manipulate user interface elements.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Clickjacking",
+    "difficulty": "intermediate",
+    "topic": "Clickjacking",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:59:00.000Z",
+    "updatedAt": "2025-10-11T00:59:00.000Z",
+    "tags": ["security", "clickjacking", "frontend"],
+    "sampleAnswers": [
+      "Clickjacking occurs when attackers overlay a transparent or disguised element over a legitimate UI element, tricking users into clicking it and performing unintended actions like submitting forms or changing settings."
+    ]
+  },
+  {
+    "id": "sec60",
+    "title": "How do you prevent clickjacking attacks?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "Clickjacking",
+    "difficulty": "intermediate",
+    "topic": "Clickjacking Prevention",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:00:00.000Z",
+    "updatedAt": "2025-10-11T01:00:00.000Z",
+    "tags": ["security", "clickjacking", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options header to deny framing",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors directive",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Rely only on HTTPS",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Implement UI overlays as security measure",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent your site from being embedded in iframes, mitigating clickjacking attacks."
+  }
+]

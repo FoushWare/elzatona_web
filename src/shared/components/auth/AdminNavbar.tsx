@@ -20,6 +20,7 @@ import {
   BookOpen,
   Code,
   Calculator,
+  CreditCard,
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
@@ -83,6 +84,12 @@ export default function AdminNavbar() {
       label: 'Guided Learning',
       icon: BookOpen,
       description: 'Create and manage learning plans',
+    },
+    {
+      href: '/admin/learning-cards',
+      label: 'Learning Cards',
+      icon: CreditCard,
+      description: 'Manage learning cards for plans',
     },
     {
       href: '/admin/sections',

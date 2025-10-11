@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUserType } from '@/contexts/UserTypeContext';
+import { useUserType } from '@/contexts/UserTypeContextSafe';
 import {
   Compass,
   Brain,
