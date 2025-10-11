@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Compass, Brain, ChevronDown } from 'lucide-react';
-import { useUserType } from '@/contexts/UserTypeContext';
+import { useUserType } from '@/contexts/UserTypeContextSafe';
 
 interface LearningModeSwitcherProps {
   isScrolled?: boolean;

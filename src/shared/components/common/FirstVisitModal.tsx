@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Brain, Compass, X } from 'lucide-react';
-import { useUserType } from '@/contexts/UserTypeContext';
+import { useUserType } from '@/contexts/UserTypeContextSafe';
 
 interface WindowWithTestFlags extends Window {
   __DISABLE_GUIDANCE_MODALS__?: boolean;

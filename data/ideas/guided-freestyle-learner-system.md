@@ -648,24 +648,68 @@ interface LearningPlan {
 
 ## 🚀 **IMPLEMENTATION SUMMARY**
 
-### **Card-Based Learning System - COMPLETED**
+### **Card-Based Learning System - NEEDS IMPLEMENTATION**
 
-The card-based guided learning system has been successfully implemented with the following components:
+The card-based guided learning system needs to be implemented with the following components:
+
+#### **🎯 REQUIRED IMPLEMENTATION PLAN**
+
+**Current Issue**: The guided learning plans page (`/admin/guided-learning/[planId]/edit`) shows sections instead of the required card-based interface with:
+
+- Core Technologies Card (Blue)
+- Framework Questions Card (Green)
+- Problem Solving Card (Purple)
+- System Design Card (Orange)
+
+**Required Structure**:
+
+```
+Plan → Cards → Sections → Topics → Questions
+```
+
+**Implementation Steps**:
+
+1. **Create Learning Cards Database Schema**
+   - `learningCards` collection in Firebase
+   - Four predefined card types with proper metadata
+   - Card-to-plan relationships
+
+2. **Create Learning Cards Admin Page**
+   - `/admin/learning-cards` - CRUD interface for managing cards
+   - Card configuration (question counts, time limits, difficulty, topics)
+   - Integration with existing questions database
+
+3. **Update Guided Learning Plan Editor**
+   - Replace section-based interface with card-based interface
+   - Show four main cards per plan
+   - Card → Section → Topic → Question hierarchy
+   - Question assignment to specific cards/sections/topics
+
+4. **Create Card Management Components**
+   - Card display components
+   - Card configuration forms
+   - Question assignment interface
+   - Progress tracking per card
+
+5. **Update Database Seeding**
+   - Seed the four main learning cards
+   - Link existing questions to appropriate cards
+   - Create card-section-topic relationships
 
 #### **1. Database Schema & Types**
 
-- ✅ **LearningCard Interface**: Complete schema with 4 card types
-- ✅ **LearningPlanCard Interface**: Links cards to specific learning plans
-- ✅ **CardProgress Interface**: Tracks user progress per card
-- ✅ **Question Integration**: Added `learningCardId` and `cardType` fields to question schema
+- ❌ **LearningCard Interface**: Needs to be created with 4 card types
+- ❌ **LearningPlanCard Interface**: Needs to link cards to specific learning plans
+- ❌ **CardProgress Interface**: Needs to track user progress per card
+- ❌ **Question Integration**: Needs `learningCardId` and `cardType` fields added to question schema
 
 #### **2. Admin Management System**
 
-- ✅ **Learning Cards Page**: `/admin/learning-cards` - Full CRUD interface
-- ✅ **Card Configuration**: Set question counts, time limits, difficulty, topics
-- ✅ **UI Components**: Complete set of admin UI components (Card, Button, Badge, Input, etc.)
-- ✅ **Navigation Integration**: Added "Learning Cards" to admin navbar
-- ✅ **Real-time Updates**: Changes in admin reflect immediately on website
+- ❌ **Learning Cards Page**: `/admin/learning-cards` - Needs to be created
+- ❌ **Card Configuration**: Set question counts, time limits, difficulty, topics
+- ❌ **UI Components**: Need card-specific admin UI components
+- ❌ **Navigation Integration**: Need to add "Learning Cards" to admin navbar
+- ❌ **Real-time Updates**: Need Firebase integration for card management
 - ✅ **Production-Ready Authentication**: Firebase Authentication with role-based access control
 - ✅ **Admin Role Management**: Admin roles stored in Firestore with real-time verification
 - ✅ **Secure Login System**: No hardcoded credentials, comprehensive error handling
@@ -673,19 +717,19 @@ The card-based guided learning system has been successfully implemented with the
 
 #### **3. User Interface Components**
 
-- ✅ **LearningCard Component**: Beautiful, interactive card display
-- ✅ **Progress Tracking**: Visual progress bars and status indicators
-- ✅ **Card-Based Guided Learning**: New page structure using cards instead of sections
-- ✅ **Responsive Design**: Mobile-first, accessible components
+- ❌ **LearningCard Component**: Needs to be created with beautiful, interactive card display
+- ❌ **Progress Tracking**: Needs visual progress bars and status indicators
+- ❌ **Card-Based Guided Learning**: Needs new page structure using cards instead of sections
+- ✅ **Responsive Design**: Mobile-first, accessible components (existing)
 
 #### **4. Firebase Integration**
 
-- ✅ **Learning Cards Service**: Complete Firebase service for card management
-- ✅ **Progress Tracking**: User progress saved to Firebase
-- ✅ **Real-time Sync**: Changes sync across devices
-- ✅ **Error Handling**: Proper error handling and loading states
+- ❌ **Learning Cards Service**: Needs Firebase service for card management
+- ❌ **Progress Tracking**: Needs user progress saved to Firebase
+- ❌ **Real-time Sync**: Needs changes sync across devices
+- ✅ **Error Handling**: Proper error handling and loading states (existing)
 
-#### **5. Four Learning Card Types**
+#### **5. Four Learning Card Types (TO BE IMPLEMENTED)**
 
 - 💻 **Core Technologies** (Blue) - HTML, CSS, JavaScript, TypeScript
 - ⚛️ **Framework Questions** (Green) - React, Next.js, Vue, Angular, Svelte
@@ -694,36 +738,39 @@ The card-based guided learning system has been successfully implemented with the
 
 ### **Technical Implementation Details**
 
-#### **Files Created/Modified:**
+#### **Files TO BE Created/Modified:**
 
-- `libs/shared/types/learning-cards.ts` - Card type definitions
-- `apps/web/types/learning-cards.ts` - Web app card types
-- `apps/admin/types/learning-cards.ts` - Admin card types
-- `libs/data/firebase/src/learning-cards-service.ts` - Firebase service
-- `apps/web/lib/learning-cards-service.ts` - Web app service
-- `libs/shared/ui/src/components/learning-cards/LearningCard.tsx` - Card component
-- `apps/web/components/learning-cards/LearningCard.tsx` - Web card component
-- `apps/admin/app/admin/learning-cards/page.tsx` - Admin management page
-- `apps/web/app/features/learning/guided-learning/[planId]/cards/page.tsx` - Card display page
-- Complete set of admin UI components in `apps/admin/components/ui/`
+- `src/types/learning-cards.ts` - Card type definitions
+- `src/lib/learning-cards-service.ts` - Firebase service for card management
+- `src/shared/components/admin/LearningCard.tsx` - Card component
+- `src/app/admin/learning-cards/page.tsx` - Admin management page
+- `src/app/admin/guided-learning/[planId]/edit/page.tsx` - Update to use card-based interface
+- `src/scripts/seed-learning-cards.ts` - Script to seed the four main cards
+- Update admin layout to include Learning Cards navigation
 
-#### **Key Features Implemented:**
+#### **Key Features TO BE Implemented:**
 
-- ✅ **Card Management**: Create, edit, delete, configure learning cards
-- ✅ **Question Integration**: Questions linked to specific card types
-- ✅ **Progress Tracking**: Individual card progress and completion status
-- ✅ **Admin Interface**: Full CRUD interface for card management
-- ✅ **User Interface**: Beautiful card display with progress indicators
-- ✅ **Firebase Integration**: Real-time data synchronization
-- ✅ **Type Safety**: Comprehensive TypeScript types throughout
-- ✅ **Error Handling**: Proper error handling and loading states
-- ✅ **Responsive Design**: Mobile-first, cross-device compatibility
+- ❌ **Card Management**: Create, edit, delete, configure learning cards
+- ❌ **Question Integration**: Questions linked to specific card types
+- ❌ **Progress Tracking**: Individual card progress and completion status
+- ❌ **Admin Interface**: Full CRUD interface for card management
+- ❌ **User Interface**: Beautiful card display with progress indicators
+- ❌ **Firebase Integration**: Real-time data synchronization
+- ❌ **Type Safety**: Comprehensive TypeScript types throughout
+- ❌ **Error Handling**: Proper error handling and loading states
+- ✅ **Responsive Design**: Mobile-first, cross-device compatibility (existing)
 
-### **Current Status: 85% Complete**
+### **Current Status: NEEDS IMPLEMENTATION**
 
-The card-based guided learning system is now **fully functional** and ready for use! Users can access the admin panel to manage cards, and the website will display these cards in the guided learning interface.
+The card-based guided learning system **needs to be implemented**. The current system uses sections instead of the required card-based interface.
 
-**Next Phase**: Implement cumulative question system, tagging, and individual card practice sessions.
+**Next Phase**: Implement the complete card-based system with:
+
+1. Learning cards database schema and seeding
+2. Admin interface for card management
+3. Card-based plan editor interface
+4. Question assignment to cards/sections/topics
+5. Progress tracking per card
 
 ### **Cumulative Question System - PENDING IMPLEMENTATION**
 

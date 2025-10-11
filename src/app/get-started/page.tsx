@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { UserTypeSelector } from '@/shared/components/common/UserTypeSelector';
 import { LoadingTransition } from '@/shared/components/common/LoadingTransition';
-import { useUserType } from '@/contexts/UserTypeContext';
+import { useUserType } from '@/contexts/UserTypeContextSafe';
 
 type UserType = 'guided' | 'self-directed' | null;
 

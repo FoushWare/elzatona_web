@@ -16,7 +16,7 @@ import {
   Clock,
   Star,
 } from 'lucide-react';
-import { useUserType } from '@/contexts/UserTypeContext';
+import { useUserType } from '@/contexts/UserTypeContextSafe';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 import { useSecureProgress } from '@/hooks/useSecureProgress';
 
