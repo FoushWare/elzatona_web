@@ -1,0 +1,232 @@
+[
+  {
+    "id": "sec71",
+    "title": "What is Clickjacking (UI Redressing)?",
+    "content": "Explain how clickjacking attacks work and why they are dangerous.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Clickjacking",
+    "difficulty": "intermediate",
+    "topic": "UI Redressing",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:11:00.000Z",
+    "updatedAt": "2025-10-11T01:11:00.000Z",
+    "tags": ["security", "clickjacking", "frontend"],
+    "sampleAnswers": [
+      "Clickjacking tricks a user into clicking on invisible or disguised elements on a page, performing actions without their knowledge, such as changing settings or authorizing payments."
+    ]
+  },
+  {
+    "id": "sec72",
+    "title": "How can you prevent clickjacking attacks?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "Clickjacking",
+    "difficulty": "intermediate",
+    "topic": "UI Redressing Prevention",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:12:00.000Z",
+    "updatedAt": "2025-10-11T01:12:00.000Z",
+    "tags": ["security", "clickjacking", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use X-Frame-Options header",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Use Content Security Policy frame-ancestors directive",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Disable JavaScript completely",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Use secure authentication only",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent a site from being embedded in iframes, mitigating clickjacking attacks."
+  },
+  {
+    "id": "sec73",
+    "title": "What is Man-in-the-Middle (MITM) attack?",
+    "content": "Explain how MITM attacks occur in web applications.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "MITM",
+    "difficulty": "intermediate",
+    "topic": "Man-in-the-Middle",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:13:00.000Z",
+    "updatedAt": "2025-10-11T01:13:00.000Z",
+    "tags": ["security", "mitm", "frontend"],
+    "sampleAnswers": [
+      "MITM attacks occur when an attacker intercepts communication between a client and server to eavesdrop, steal credentials, or manipulate data in transit."
+    ]
+  },
+  {
+    "id": "sec74",
+    "title": "How can you prevent MITM attacks in web applications?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "MITM",
+    "difficulty": "intermediate",
+    "topic": "MITM Prevention",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:14:00.000Z",
+    "updatedAt": "2025-10-11T01:14:00.000Z",
+    "tags": ["security", "mitm", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use HTTPS for all communication",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Validate SSL/TLS certificates",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Implement HSTS headers",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "Rely only on network-level security",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "HTTPS, certificate validation, and HSTS protect against MITM attacks. Network-level security alone is insufficient."
+  },
+  {
+    "id": "sec75",
+    "title": "What is HTTP Strict Transport Security (HSTS)?",
+    "content": "Explain how HSTS helps improve web security.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Headers",
+    "difficulty": "intermediate",
+    "topic": "HSTS",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:15:00.000Z",
+    "updatedAt": "2025-10-11T01:15:00.000Z",
+    "tags": ["security", "headers", "frontend"],
+    "sampleAnswers": [
+      "HSTS tells browsers to only communicate over HTTPS, preventing protocol downgrade attacks and reducing the risk of MITM attacks."
+    ]
+  },
+  {
+    "id": "sec76",
+    "title": "What is Subresource Integrity (SRI)?",
+    "content": "Explain how SRI protects your frontend applications.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Headers",
+    "difficulty": "intermediate",
+    "topic": "SRI",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:16:00.000Z",
+    "updatedAt": "2025-10-11T01:16:00.000Z",
+    "tags": ["security", "sri", "frontend"],
+    "sampleAnswers": [
+      "SRI allows you to provide a hash for external scripts or stylesheets. The browser verifies the file has not been tampered with, protecting against CDN compromises or MITM attacks."
+    ]
+  },
+  {
+    "id": "sec77",
+    "title": "How do HTTPS and TLS protect against web attacks?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "TLS",
+    "difficulty": "intermediate",
+    "topic": "HTTPS/TLS",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:17:00.000Z",
+    "updatedAt": "2025-10-11T01:17:00.000Z",
+    "tags": ["security", "https", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Encrypts data in transit",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Prevents eavesdropping and tampering",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Automatically sanitizes user inputs",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Provides server authentication",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "HTTPS/TLS encrypts data, ensures integrity, and authenticates servers. It does not sanitize inputs."
+  },
+  {
+    "id": "sec78",
+    "title": "What are security implications of storing sensitive data in localStorage?",
+    "content": "Explain the risks of using localStorage for authentication tokens.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Storage",
+    "difficulty": "intermediate",
+    "topic": "LocalStorage Risks",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:18:00.000Z",
+    "updatedAt": "2025-10-11T01:18:00.000Z",
+    "tags": ["security", "localstorage", "frontend"],
+    "sampleAnswers": [
+      "localStorage is accessible via JavaScript, making it vulnerable to XSS attacks. Sensitive tokens can be stolen if an attacker injects malicious scripts."
+    ]
+  },
+  {
+    "id": "sec79",
+    "title": "What is a security audit for frontend applications?",
+    "content": "Explain the purpose of frontend security audits.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Audit",
+    "difficulty": "intermediate",
+    "topic": "Security Audit",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:19:00.000Z",
+    "updatedAt": "2025-10-11T01:19:00.000Z",
+    "tags": ["security", "audit", "frontend"],
+    "sampleAnswers": [
+      "A security audit identifies vulnerabilities in frontend code, including XSS, CSRF, insecure storage, misconfigured headers, and third-party libraries, and provides recommendations to fix them."
+    ]
+  },
+  {
+    "id": "sec80",
+    "title": "What is the principle of least privilege in frontend security?",
+    "content": "Explain how least privilege applies to frontend applications.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Least Privilege",
+    "difficulty": "intermediate",
+    "topic": "Least Privilege",
+    "isActive": true,
+    "createdAt": "2025-10-11T01:20:00.000Z",
+    "updatedAt": "2025-10-11T01:20:00.000Z",
+    "tags": ["security", "least privilege", "frontend"],
+    "sampleAnswers": [
+      "Least privilege restricts access to only what is necessary for a user or application to perform its tasks, reducing the risk of data breaches and unauthorized actions."
+    ]
+  }
+]

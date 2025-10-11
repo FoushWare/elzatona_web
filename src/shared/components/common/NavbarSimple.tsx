@@ -15,7 +15,7 @@ import {
   Settings,
 } from 'lucide-react';
 import { AlzatonaLogo } from './AlzatonaLogo';
-import { useUserType } from '@/contexts/UserTypeContext';
+import { useUserType } from '@/contexts/UserTypeContextSafe';
 import { useMobileMenu } from '@/contexts/MobileMenuContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
