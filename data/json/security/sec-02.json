@@ -1,0 +1,248 @@
+[
+  {
+    "id": "sec10",
+    "title": "What is CSRF (Cross-Site Request Forgery)?",
+    "content": "Explain what CSRF attacks are and how they work in web applications.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "CSRF",
+    "difficulty": "intermediate",
+    "topic": "CSRF",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:10:00.000Z",
+    "updatedAt": "2025-10-11T00:10:00.000Z",
+    "tags": ["security", "csrf", "frontend"],
+    "sampleAnswers": [
+      "CSRF tricks a logged-in user into performing unwanted actions on a web application by submitting requests without their consent, using their authentication credentials."
+    ]
+  },
+  {
+    "id": "sec11",
+    "title": "Which measures can prevent CSRF attacks?",
+    "content": "Select all correct prevention techniques.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "CSRF",
+    "difficulty": "intermediate",
+    "topic": "CSRF",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:11:00.000Z",
+    "updatedAt": "2025-10-11T00:11:00.000Z",
+    "tags": ["security", "csrf", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Use anti-CSRF tokens in forms",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Validate the Origin and Referer headers",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Enable HttpOnly cookies",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Require user confirmation for critical actions",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "CSRF prevention uses tokens, checks headers, and sometimes asks users for confirmation."
+  },
+  {
+    "id": "sec12",
+    "title": "True or False: MITM attacks can steal data from HTTPS connections if SSL/TLS is not validated correctly.",
+    "content": "Evaluate whether this statement is true or false.",
+    "type": "true-false",
+    "category": "Web Security",
+    "subcategory": "MITM",
+    "difficulty": "intermediate",
+    "topic": "MITM",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:12:00.000Z",
+    "updatedAt": "2025-10-11T00:12:00.000Z",
+    "tags": ["security", "mitm", "frontend"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "Improper certificate validation or self-signed certs allow MITM attacks even over HTTPS."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ]
+  },
+  {
+    "id": "sec13",
+    "title": "What is the purpose of a Content Security Policy (CSP)?",
+    "content": "Explain how CSP protects web applications and what types of attacks it mitigates.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "CSP",
+    "difficulty": "intermediate",
+    "topic": "CSP",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:13:00.000Z",
+    "updatedAt": "2025-10-11T00:13:00.000Z",
+    "tags": ["security", "csp", "frontend"],
+    "sampleAnswers": [
+      "CSP restricts which sources are allowed for scripts, styles, and media. It reduces XSS, clickjacking, and data injection risks."
+    ]
+  },
+  {
+    "id": "sec14",
+    "title": "Which of the following headers help improve web security?",
+    "content": "Select all correct HTTP headers.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "Headers",
+    "difficulty": "beginner",
+    "topic": "Security Headers",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:14:00.000Z",
+    "updatedAt": "2025-10-11T00:14:00.000Z",
+    "tags": ["security", "headers", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Strict-Transport-Security",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "X-Content-Type-Options",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "X-Frame-Options",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "X-Powered-By",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "HSTS, X-Content-Type-Options, and X-Frame-Options improve security; X-Powered-By reveals server info and is not protective."
+  },
+  {
+    "id": "sec15",
+    "title": "True or False: Using HTTPS alone completely protects against XSS.",
+    "content": "Evaluate the statement.",
+    "type": "true-false",
+    "category": "Web Security",
+    "subcategory": "XSS",
+    "difficulty": "beginner",
+    "topic": "XSS",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:15:00.000Z",
+    "updatedAt": "2025-10-11T00:15:00.000Z",
+    "tags": ["security", "xss", "frontend"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": false,
+        "explanation": "HTTPS protects data in transit but does not prevent script injection on the client side."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ]
+  },
+  {
+    "id": "sec16",
+    "title": "How can you prevent DOM-based XSS in JavaScript?",
+    "content": "Explain best practices for preventing DOM-based XSS attacks in frontend code.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "XSS",
+    "difficulty": "advanced",
+    "topic": "DOM XSS",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:16:00.000Z",
+    "updatedAt": "2025-10-11T00:16:00.000Z",
+    "tags": ["security", "xss", "dom", "frontend"],
+    "sampleAnswers": [
+      "Avoid setting innerHTML with untrusted input, sanitize inputs with libraries like DOMPurify, use textContent instead of innerHTML, and avoid inline event handlers."
+    ]
+  },
+  {
+    "id": "sec17",
+    "title": "Which of these are valid ways to secure cookies against XSS and CSRF?",
+    "content": "Select all correct options.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "Cookies",
+    "difficulty": "intermediate",
+    "topic": "Cookies",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:17:00.000Z",
+    "updatedAt": "2025-10-11T00:17:00.000Z",
+    "tags": ["security", "cookies", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Set HttpOnly flag",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Set Secure flag",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Use SameSite=strict",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "Store sensitive info in localStorage",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "HttpOnly prevents JS access, Secure restricts to HTTPS, and SameSite limits cross-site requests. LocalStorage is accessible by JS and vulnerable to XSS."
+  },
+  {
+    "id": "sec18",
+    "title": "True or False: Using third-party JavaScript libraries without review is safe if your site uses HTTPS.",
+    "content": "Evaluate this statement.",
+    "type": "true-false",
+    "category": "Web Security",
+    "subcategory": "Third-Party",
+    "difficulty": "intermediate",
+    "topic": "Third-Party JS",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:18:00.000Z",
+    "updatedAt": "2025-10-11T00:18:00.000Z",
+    "tags": ["security", "third-party", "frontend"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": false,
+        "explanation": "Even over HTTPS, malicious or vulnerable third-party JS can introduce XSS or malware."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": true,
+        "explanation": ""
+      }
+    ]
+  }
+]

@@ -1,0 +1,248 @@
+[
+  {
+    "id": "sec1",
+    "title": "What is an XSS attack?",
+    "content": "Cross-Site Scripting (XSS) is when attackers inject malicious scripts into web pages viewed by other users. Explain the potential risks and examples.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "XSS",
+    "difficulty": "intermediate",
+    "topic": "XSS",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["security", "xss", "frontend"],
+    "sampleAnswers": [
+      "XSS is when an attacker injects scripts into a page to steal cookies, hijack sessions, or manipulate the DOM. Examples: stored XSS in comments, reflected XSS in search forms, DOM-based XSS via URL parameters."
+    ]
+  },
+  {
+    "id": "sec2",
+    "title": "Which of the following are types of XSS attacks?",
+    "content": "Select all types of XSS attacks.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "XSS",
+    "difficulty": "intermediate",
+    "topic": "XSS",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["security", "xss", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "DOM-based XSS",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Reflected XSS",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Stored XSS",
+        "isCorrect": true
+      },
+      {
+        "id": "o4",
+        "text": "SQL Injection",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "DOM-based, Reflected, and Stored are the three main XSS types. SQL Injection is a server-side attack."
+  },
+  {
+    "id": "sec3",
+    "title": "True or False: CSRF attacks rely on user authentication.",
+    "content": "Evaluate whether this statement is true or false.",
+    "type": "true-false",
+    "category": "Web Security",
+    "subcategory": "CSRF",
+    "difficulty": "beginner",
+    "topic": "CSRF",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["security", "csrf", "frontend"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "CSRF exploits the fact that the user is already authenticated."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ]
+  },
+  {
+    "id": "sec4",
+    "title": "What is clickjacking?",
+    "content": "Clickjacking is a type of attack where a user is tricked into clicking elements hidden under legitimate UI elements. Explain how it works and prevention strategies.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Clickjacking",
+    "difficulty": "intermediate",
+    "topic": "Clickjacking",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["security", "clickjacking", "frontend"],
+    "sampleAnswers": [
+      "Clickjacking tricks users into clicking hidden elements using overlays or iframes. Prevention: X-Frame-Options header, CSP frame-ancestors, avoid transparent overlays."
+    ]
+  },
+  {
+    "id": "sec5",
+    "title": "Which HTTP header helps prevent clickjacking?",
+    "content": "Select the correct header used to prevent clickjacking attacks.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "Clickjacking",
+    "difficulty": "beginner",
+    "topic": "Clickjacking",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["security", "clickjacking", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "X-Frame-Options",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Content-Security-Policy (frame-ancestors)",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "X-Content-Type-Options",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Strict-Transport-Security",
+        "isCorrect": false
+      }
+    ],
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent malicious iframe embedding."
+  },
+  {
+    "id": "sec6",
+    "title": "True or False: MITM attacks only affect unsecured HTTP connections.",
+    "content": "Evaluate whether this statement is true or false.",
+    "type": "true-false",
+    "category": "Web Security",
+    "subcategory": "MITM",
+    "difficulty": "intermediate",
+    "topic": "MITM",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["security", "mitm", "frontend"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": false,
+        "explanation": "MITM can also target HTTPS via certificate spoofing or rogue networks."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": true,
+        "explanation": "Even HTTPS can be vulnerable if certificates are compromised."
+      }
+    ]
+  },
+  {
+    "id": "sec7",
+    "title": "How do HttpOnly and Secure cookies improve security?",
+    "content": "Explain how the HttpOnly and Secure flags help prevent attacks.",
+    "type": "open-ended",
+    "category": "Web Security",
+    "subcategory": "Cookies",
+    "difficulty": "intermediate",
+    "topic": "Cookies",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["security", "cookies", "frontend"],
+    "sampleAnswers": [
+      "HttpOnly prevents JavaScript from reading cookies (protects against XSS). Secure ensures cookies are only sent over HTTPS."
+    ]
+  },
+  {
+    "id": "sec8",
+    "title": "Which of these is a recommended prevention for XSS in React?",
+    "content": "Select all correct strategies.",
+    "type": "multiple-choice",
+    "category": "Web Security",
+    "subcategory": "XSS",
+    "difficulty": "intermediate",
+    "topic": "XSS",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["security", "xss", "frontend"],
+    "options": [
+      {
+        "id": "o1",
+        "text": "Avoid dangerouslySetInnerHTML",
+        "isCorrect": true
+      },
+      {
+        "id": "o2",
+        "text": "Use DOMPurify or similar sanitizers",
+        "isCorrect": true
+      },
+      {
+        "id": "o3",
+        "text": "Use HttpOnly cookies",
+        "isCorrect": false
+      },
+      {
+        "id": "o4",
+        "text": "Validate input server-side",
+        "isCorrect": true
+      }
+    ],
+    "explanation": "Avoid unsafe HTML, sanitize inputs, and validate server-side to prevent XSS."
+  },
+  {
+    "id": "sec9",
+    "title": "True or False: CSP (Content Security Policy) can help mitigate XSS.",
+    "content": "Evaluate whether this statement is true or false.",
+    "type": "true-false",
+    "category": "Web Security",
+    "subcategory": "CSP",
+    "difficulty": "beginner",
+    "topic": "CSP",
+    "isActive": true,
+    "createdAt": "2025-10-11T00:00:00.000Z",
+    "updatedAt": "2025-10-11T00:00:00.000Z",
+    "tags": ["security", "csp", "frontend"],
+    "options": [
+      {
+        "id": "t1",
+        "text": "True",
+        "isCorrect": true,
+        "explanation": "CSP restricts allowed script sources, mitigating XSS."
+      },
+      {
+        "id": "t2",
+        "text": "False",
+        "isCorrect": false,
+        "explanation": ""
+      }
+    ]
+  }
+]
