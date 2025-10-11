@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
   Card,
@@ -11,6 +11,12 @@ import {
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/shared/components/ui/tabs';
+import {
   ArrowLeft,
   Save,
   Eye,
@@ -19,18 +25,20 @@ import {
   BookOpen,
   Settings,
   Plus,
+  List,
+  Grid,
+  Trash2,
   ChevronDown,
   ChevronRight,
+  Check,
   X,
 } from 'lucide-react';
 import { LearningCardsService } from '@/lib/learning-cards-service';
-import { PlanQuestionsService } from '@/lib/plan-questions-service';
 import type {
   LearningCard,
   LearningCardSection,
   LearningCardTopic,
 } from '@/types/learning-cards';
-import type { PlanQuestion } from '@/lib/plan-questions-service';
 
 interface Question {
   id: string;
@@ -39,6 +47,15 @@ interface Question {
   difficulty: string;
   category: string;
   tags?: string[];
+}
+
+interface PlanQuestion {
+  id: string;
+  questionId: string;
+  cardId: string;
+  sectionId?: string;
+  topicId?: string;
+  order: number;
 }
 
 export default function CardBasedPlanEditorPage() {
@@ -67,7 +84,7 @@ export default function CardBasedPlanEditorPage() {
   // Load all data
   useEffect(() => {
     loadData();
-  }, [planId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [planId]);
 
   const loadData = async () => {
     try {
@@ -95,12 +112,11 @@ export default function CardBasedPlanEditorPage() {
 
   const loadPlanQuestions = async () => {
     try {
-      const planQuestionsData =
-        await PlanQuestionsService.getPlanQuestions(planId);
-      setPlanQuestions(planQuestionsData);
+      // This would load existing plan questions from Firebase
+      // For now, we'll start with an empty array
+      setPlanQuestions([]);
     } catch (error) {
       console.error('Error loading plan questions:', error);
-      setPlanQuestions([]);
     }
   };
 
@@ -153,8 +169,8 @@ export default function CardBasedPlanEditorPage() {
     if (!selectedCard) return;
 
     try {
-      const planQuestionData = {
-        planId,
+      const newPlanQuestion: PlanQuestion = {
+        id: `${Date.now()}-${Math.random()}`,
         questionId,
         cardId: selectedCard.id,
         sectionId: selectedSection?.id,
@@ -162,55 +178,25 @@ export default function CardBasedPlanEditorPage() {
         order: planQuestions.length + 1,
       };
 
-      await PlanQuestionsService.addQuestionToPlan(planQuestionData);
+      setPlanQuestions(prev => [...prev, newPlanQuestion]);
 
-      // Reload plan questions to get the updated list
-      await loadPlanQuestions();
+      // Here you would save to Firebase
+      console.log('Added question to plan:', newPlanQuestion);
     } catch (error) {
       console.error('Error adding question to plan:', error);
-      // Show error message to user
-      alert('Failed to add question to plan. It may already be assigned.');
     }
   };
 
-  const handleRemoveQuestionFromPlan = async (planQuestionId: string) => {
-    try {
-      await PlanQuestionsService.removeQuestionFromPlan(planQuestionId);
-      // Reload plan questions to get the updated list
-      await loadPlanQuestions();
-    } catch (error) {
-      console.error('Error removing question from plan:', error);
-      alert('Failed to remove question from plan.');
-    }
-  };
-
-  const handleSavePlan = async () => {
-    try {
-      setIsSaving(true);
-
-      // Get plan statistics
-      const statistics = await PlanQuestionsService.getPlanStatistics(planId);
-
-      // Here you would update the plan document with the statistics
-      // For now, we'll just show a success message
-      console.log('Plan saved with statistics:', statistics);
-      alert(
-        `Plan saved successfully! Total questions: ${statistics.totalQuestions}`
-      );
-    } catch (error) {
-      console.error('Error saving plan:', error);
-      alert('Failed to save plan.');
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const getQuestionsForCard = (card: LearningCard) => {
-    return planQuestions.filter(pq => pq.cardId === card.id);
+  const handleRemoveQuestionFromPlan = (planQuestionId: string) => {
+    setPlanQuestions(prev => prev.filter(pq => pq.id !== planQuestionId));
   };
 
   const getQuestionsForTopic = (topic: LearningCardTopic) => {
     return questions.filter(q => topic.questionIds.includes(q.id));
+  };
+
+  const getQuestionsForCard = (card: LearningCard) => {
+    return planQuestions.filter(pq => pq.cardId === card.id);
   };
 
   const getCardTypeColor = (type: string) => {
@@ -299,7 +285,9 @@ export default function CardBasedPlanEditorPage() {
               </Button>
               <Button
                 size="sm"
-                onClick={handleSavePlan}
+                onClick={() => {
+                  /* Save plan */
+                }}
                 disabled={isSaving}
                 className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
@@ -557,7 +545,7 @@ export default function CardBasedPlanEditorPage() {
                                               <div className="ml-4 space-y-1">
                                                 {getQuestionsForTopic(
                                                   topic
-                                                ).map((question: Question) => (
+                                                ).map(question => (
                                                   <div
                                                     key={question.id}
                                                     className="p-2 bg-gray-50 dark:bg-gray-800 rounded border-l-2 border-gray-300"

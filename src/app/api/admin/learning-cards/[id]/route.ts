@@ -14,6 +14,9 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
     const cardRef = doc(db, 'learningCards', params.id);
     const cardSnap = await getDoc(cardRef);
 
@@ -65,6 +68,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
     const body = await request.json();
     const {
       title,
@@ -135,6 +141,9 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
     const cardRef = doc(db, 'learningCards', params.id);
     await deleteDoc(cardRef);
 

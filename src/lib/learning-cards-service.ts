@@ -28,6 +28,10 @@ export class LearningCardsService {
   // Learning Cards CRUD operations
   static async getAllCards(): Promise<LearningCard[]> {
     try {
+      if (!db) {
+        throw new Error('Firebase database not initialized');
+      }
+
       const cardsRef = collection(db, LEARNING_CARDS_COLLECTION);
       const q = query(cardsRef, orderBy('order', 'asc'));
       const snapshot = await getDocs(q);
@@ -45,6 +49,10 @@ export class LearningCardsService {
   }
 
   static async getCardById(cardId: string): Promise<LearningCard | null> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const cardRef = doc(db, LEARNING_CARDS_COLLECTION, cardId);
       const cardSnap = await getDoc(cardRef);
@@ -66,6 +74,10 @@ export class LearningCardsService {
   }
 
   static async createCard(cardData: LearningCardFormData): Promise<string> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const cardsRef = collection(db, LEARNING_CARDS_COLLECTION);
       const docRef = await addDoc(cardsRef, {
@@ -85,6 +97,10 @@ export class LearningCardsService {
     cardId: string,
     cardData: Partial<LearningCardFormData>
   ): Promise<void> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const cardRef = doc(db, LEARNING_CARDS_COLLECTION, cardId);
       await updateDoc(cardRef, {
@@ -98,6 +114,10 @@ export class LearningCardsService {
   }
 
   static async deleteCard(cardId: string): Promise<void> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const cardRef = doc(db, LEARNING_CARDS_COLLECTION, cardId);
       await deleteDoc(cardRef);
@@ -109,6 +129,10 @@ export class LearningCardsService {
 
   // Learning Plan Cards operations
   static async getCardsForPlan(planId: string): Promise<LearningPlanCard[]> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const planCardsRef = collection(db, LEARNING_PLAN_CARDS_COLLECTION);
       const q = query(
@@ -151,6 +175,10 @@ export class LearningCardsService {
       difficulty: 'beginner' | 'intermediate' | 'advanced';
     }
   ): Promise<string> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const planCardsRef = collection(db, LEARNING_PLAN_CARDS_COLLECTION);
       const docRef = await addDoc(planCardsRef, {
@@ -170,6 +198,10 @@ export class LearningCardsService {
   }
 
   static async removeCardFromPlan(planCardId: string): Promise<void> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const planCardRef = doc(db, LEARNING_PLAN_CARDS_COLLECTION, planCardId);
       await deleteDoc(planCardRef);
@@ -185,6 +217,10 @@ export class LearningCardsService {
     planId: string,
     cardId: string
   ): Promise<CardProgress | null> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const progressRef = collection(db, CARD_PROGRESS_COLLECTION);
       const q = query(
@@ -216,6 +252,10 @@ export class LearningCardsService {
   static async updateCardProgress(
     progressData: Partial<CardProgress>
   ): Promise<void> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       if (!progressData.id) {
         throw new Error('Progress ID is required for update');
@@ -235,6 +275,10 @@ export class LearningCardsService {
   static async createCardProgress(
     progressData: Omit<CardProgress, 'id'>
   ): Promise<string> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const progressRef = collection(db, CARD_PROGRESS_COLLECTION);
       const docRef = await addDoc(progressRef, {
@@ -252,6 +296,10 @@ export class LearningCardsService {
 
   // Utility methods
   static async getCardsByType(type: CardType): Promise<LearningCard[]> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const cardsRef = collection(db, LEARNING_CARDS_COLLECTION);
       const q = query(
@@ -274,6 +322,10 @@ export class LearningCardsService {
   }
 
   static async getActiveCards(): Promise<LearningCard[]> {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
+
     try {
       const cardsRef = collection(db, LEARNING_CARDS_COLLECTION);
       const q = query(
