@@ -12,10 +12,11 @@ import {
   Sparkles,
   Zap,
 } from 'lucide-react';
-import { useUserType } from '@/contexts/UserTypeContext';
-import { UserStatistics } from '@/shared/components/common/UserStatistics';
+import { useUserType } from '@/contexts/UserTypeContextSafe';
+import { UserStatistics } from '@/shared/components/common/UserStatisticsSafe';
+import ErrorBoundary from '@/shared/components/common/ErrorBoundary';
 
-export default function HomePage() {
+function HomePageContent() {
   const { userType } = useUserType();
   const [hasActivePlan, setHasActivePlan] = useState(false);
   const [activePlan, setActivePlan] = useState<{
@@ -468,5 +469,13 @@ export default function HomePage() {
         </section>
       )}
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <ErrorBoundary>
+      <HomePageContent />
+    </ErrorBoundary>
   );
 }

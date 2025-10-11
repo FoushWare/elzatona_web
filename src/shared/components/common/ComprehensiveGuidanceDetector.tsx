@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { UserGuidanceSystem } from './UserGuidanceSystem';
-import { useUserType } from '@/contexts/UserTypeContext';
+import { useUserType } from '@/contexts/UserTypeContextSafe';
 
 interface WindowWithTestFlags extends Window {
   __DISABLE_GUIDANCE_MODALS__?: boolean;
