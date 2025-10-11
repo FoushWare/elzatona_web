@@ -11,6 +11,9 @@ import { LearningCard } from '@/types/learning-cards';
 // GET /api/admin/learning-cards - Get all learning cards
 export async function GET() {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
     const cardsRef = collection(db, 'learningCards');
     const snapshot = await getDocs(cardsRef);
 
@@ -25,11 +28,17 @@ export async function GET() {
         color: data.color,
         icon: data.icon,
         order: data.order,
-        sections: data.sections || [],
-        topics: data.topics || [],
-        questionCount: data.questionCount || 0,
+        isActive: data.isActive !== false,
         createdAt: data.createdAt?.toDate() || new Date(),
         updatedAt: data.updatedAt?.toDate() || new Date(),
+        metadata: {
+          questionCount:
+            data.metadata?.questionCount || data.questionCount || 0,
+          estimatedTime: data.metadata?.estimatedTime || '2-4 hours',
+          difficulty: data.metadata?.difficulty || 'intermediate',
+          topics: data.metadata?.topics || data.topics || [],
+          sections: data.metadata?.sections || data.sections || [],
+        },
       });
     });
 
@@ -55,18 +64,12 @@ export async function GET() {
 // POST /api/admin/learning-cards - Create a new learning card
 export async function POST(request: NextRequest) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
     const body = await request.json();
-    const {
-      title,
-      type,
-      description,
-      color,
-      icon,
-      order,
-      sections,
-      topics,
-      questionCount,
-    } = body;
+    const { title, type, description, color, icon, order, isActive, metadata } =
+      body;
 
     if (!title || !type || !description) {
       return NextResponse.json(
@@ -86,9 +89,14 @@ export async function POST(request: NextRequest) {
       color,
       icon,
       order: order || 0,
-      sections: sections || [],
-      topics: topics || [],
-      questionCount: questionCount || 0,
+      isActive: isActive !== false,
+      metadata: metadata || {
+        questionCount: 0,
+        estimatedTime: '2-4 hours',
+        difficulty: 'intermediate',
+        topics: [],
+        sections: [],
+      },
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
@@ -103,9 +111,14 @@ export async function POST(request: NextRequest) {
         color,
         icon,
         order: order || 0,
-        sections: sections || [],
-        topics: topics || [],
-        questionCount: questionCount || 0,
+        isActive: isActive !== false,
+        metadata: metadata || {
+          questionCount: 0,
+          estimatedTime: '2-4 hours',
+          difficulty: 'intermediate',
+          topics: [],
+          sections: [],
+        },
       },
     });
   } catch (error) {
