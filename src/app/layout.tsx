@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { JotaiProvider } from '@/providers/JotaiProvider';
 import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
-import { UserTypeProvider } from '@/contexts/UserTypeContext';
+import { UserTypeProvider } from '@/contexts/UserTypeContextSafe';
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { FirstVisitModal } from './FirstVisitModal';
-import { useUserType } from '@/contexts/UserTypeContext';
+import { useUserType } from '@/contexts/UserTypeContextSafe';
 
 export const FirstVisitDetector: React.FC = () => {
   const { isFirstVisit, setIsFirstVisit, userType } = useUserType();
