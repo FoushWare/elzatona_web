@@ -21,9 +21,27 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   const isLoginPage = pathname === '/admin/login';
   const isAdminRootPage = pathname === '/admin';
 
+  // TEMPORARY: Skip authentication for development/testing
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const skipAuthForTesting =
+    isDevelopment &&
+    (pathname?.includes('/admin/content/questions') ||
+      pathname?.includes('/admin/guided-learning') ||
+      pathname?.includes('/admin/enhanced-structure') ||
+      pathname?.includes('/admin/categories-topics'));
+
   // For login page and admin root page, render immediately without waiting for auth check
   if (isLoginPage || isAdminRootPage) {
     return <>{children}</>;
+  }
+
+  // For testing pages, render with navbar but skip auth check
+  if (skipAuthForTesting) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <main className="pt-16">{children}</main>
+      </div>
+    );
   }
 
   if (isLoading) {
@@ -56,6 +74,28 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
+  // TEMPORARY: Skip AdminAuthProvider for testing
+  const pathname = usePathname();
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const skipAuthForTesting =
+    isDevelopment &&
+    (pathname?.includes('/admin/content/questions') ||
+      pathname?.includes('/admin/guided-learning') ||
+      pathname?.includes('/admin/enhanced-structure') ||
+      pathname?.includes('/admin/categories-topics'));
+
+  if (skipAuthForTesting) {
+    return (
+      <AdminAuthProvider>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+          <AdminNavbar />
+          <main className="pt-16">{children}</main>
+          <NotificationContainer />
+        </div>
+      </AdminAuthProvider>
+    );
+  }
+
   return (
     <AdminAuthProvider>
       <AdminLayoutContent>{children}</AdminLayoutContent>
