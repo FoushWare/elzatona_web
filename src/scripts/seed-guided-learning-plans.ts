@@ -7,26 +7,28 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-import fs from 'fs';
-import path from 'path';
+// Removed unused imports: fs and path
 
-// Firebase configuration
+// Firebase configuration - using the correct project
 const firebaseConfig = {
   apiKey:
     process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
-    'AIzaSyBvOkBwv1YzF4x4x4x4x4x4x4x4x4x4x4x4x4',
+    'AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y',
   authDomain:
     process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
-    'elzatona-web.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'elzatona-web',
+    'fir-demo-project-adffb.firebaseapp.com',
+  projectId:
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'fir-demo-project-adffb',
   storageBucket:
     process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
-    'elzatona-web.appspot.com',
+    'fir-demo-project-adffb.firebasestorage.app',
   messagingSenderId:
-    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '123456789',
+    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '76366138630',
   appId:
     process.env.NEXT_PUBLIC_FIREBASE_APP_ID ||
-    '1:123456789:web:abcdefghijklmnop',
+    '1:76366138630:web:0f3381c2f5a62e0401e287',
+  measurementId:
+    process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-XZ5VKFGG4Y',
 };
 
 // Initialize Firebase
@@ -291,7 +293,7 @@ async function createGuidedLearningPlan(
     metadata: {
       version: '1.0.0',
       cumulative: true,
-      previousPlanId: day > 1 ? `guided-plan-${day - 1}-day` : undefined,
+      previousPlanId: day > 1 ? `guided-plan-${day - 1}-day` : null,
     },
   };
 
