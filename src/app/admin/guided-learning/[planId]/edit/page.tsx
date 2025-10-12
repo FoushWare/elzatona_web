@@ -27,7 +27,7 @@ import { LearningCardsService } from '@/lib/learning-cards-service';
 import { PlanQuestionsService } from '@/lib/plan-questions-service';
 import type {
   LearningCard,
-  LearningCardSection,
+  LearningCardCategory,
   LearningCardTopic,
 } from '@/types/learning-cards';
 import type { PlanQuestion } from '@/lib/plan-questions-service';
@@ -49,8 +49,8 @@ export default function CardBasedPlanEditorPage() {
   // State management
   const [cards, setCards] = useState<LearningCard[]>([]);
   const [selectedCard, setSelectedCard] = useState<LearningCard | null>(null);
-  const [selectedSection, setSelectedSection] =
-    useState<LearningCardSection | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<LearningCardCategory | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<LearningCardTopic | null>(
     null
   );
@@ -59,7 +59,7 @@ export default function CardBasedPlanEditorPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set()
   );
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set());
@@ -114,14 +114,14 @@ export default function CardBasedPlanEditorPage() {
     setExpandedCards(newExpanded);
   };
 
-  const toggleSectionExpansion = (sectionId: string) => {
-    const newExpanded = new Set(expandedSections);
-    if (newExpanded.has(sectionId)) {
-      newExpanded.delete(sectionId);
+  const toggleCategoryExpansion = (categoryId: string) => {
+    const newExpanded = new Set(expandedCategories);
+    if (newExpanded.has(categoryId)) {
+      newExpanded.delete(categoryId);
     } else {
-      newExpanded.add(sectionId);
+      newExpanded.add(categoryId);
     }
-    setExpandedSections(newExpanded);
+    setExpandedCategories(newExpanded);
   };
 
   const toggleTopicExpansion = (topicId: string) => {
@@ -136,12 +136,12 @@ export default function CardBasedPlanEditorPage() {
 
   const handleCardClick = (card: LearningCard) => {
     setSelectedCard(card);
-    setSelectedSection(null);
+    setSelectedCategory(null);
     setSelectedTopic(null);
   };
 
-  const handleSectionClick = (section: LearningCardSection) => {
-    setSelectedSection(section);
+  const handleCategoryClick = (category: LearningCardCategory) => {
+    setSelectedCategory(category);
     setSelectedTopic(null);
   };
 
@@ -157,7 +157,7 @@ export default function CardBasedPlanEditorPage() {
         planId,
         questionId,
         cardId: selectedCard.id,
-        sectionId: selectedSection?.id,
+        categoryId: selectedCategory?.id,
         topicId: selectedTopic?.id,
         order: planQuestions.length + 1,
       };
@@ -457,37 +457,37 @@ export default function CardBasedPlanEditorPage() {
                           </div>
                         </div>
 
-                        {/* Card Sections (if expanded) */}
+                        {/* Card Categories (if expanded) */}
                         {expandedCards.has(card.id) &&
-                          card.metadata.sections && (
+                          card.metadata.categories && (
                             <div className="ml-4 space-y-1">
-                              {card.metadata.sections.map(section => (
-                                <div key={section.id} className="space-y-1">
-                                  {/* Section Header */}
+                              {card.metadata.categories.map(category => (
+                                <div key={category.id} className="space-y-1">
+                                  {/* Category Header */}
                                   <div
                                     className={`p-3 border-l-2 cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                                      selectedSection?.id === section.id
+                                      selectedCategory?.id === category.id
                                         ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
                                         : 'border-transparent hover:border-gray-300'
                                     }`}
                                     onClick={e => {
                                       e.stopPropagation();
-                                      handleSectionClick(section);
+                                      handleCategoryClick(category);
                                     }}
                                   >
                                     <div className="flex items-center justify-between">
                                       <h4 className="font-medium text-gray-900 dark:text-white text-sm">
-                                        {section.name}
+                                        {category.name}
                                       </h4>
                                       <Button
                                         variant="ghost"
                                         size="sm"
                                         onClick={e => {
                                           e.stopPropagation();
-                                          toggleSectionExpansion(section.id);
+                                          toggleCategoryExpansion(category.id);
                                         }}
                                       >
-                                        {expandedSections.has(section.id) ? (
+                                        {expandedCategories.has(category.id) ? (
                                           <ChevronDown className="w-3 h-3" />
                                         ) : (
                                           <ChevronRight className="w-3 h-3" />
@@ -495,15 +495,15 @@ export default function CardBasedPlanEditorPage() {
                                       </Button>
                                     </div>
                                     <p className="text-xs text-gray-600 dark:text-gray-400">
-                                      {section.description}
+                                      {category.description}
                                     </p>
                                   </div>
 
-                                  {/* Section Topics (if expanded) */}
-                                  {expandedSections.has(section.id) &&
-                                    section.topics && (
+                                  {/* Category Topics (if expanded) */}
+                                  {expandedCategories.has(category.id) &&
+                                    category.topics && (
                                       <div className="ml-4 space-y-1">
-                                        {section.topics.map(topic => (
+                                        {category.topics.map(topic => (
                                           <div
                                             key={topic.id}
                                             className="space-y-1"
@@ -683,14 +683,14 @@ export default function CardBasedPlanEditorPage() {
                       </div>
                     </div>
 
-                    {/* Selected Section/Topic Info */}
-                    {selectedSection && (
+                    {/* Selected Category/Topic Info */}
+                    {selectedCategory && (
                       <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
                         <h4 className="font-medium text-green-900 dark:text-green-100 mb-2">
-                          Selected Section: {selectedSection.name}
+                          Selected Category: {selectedCategory.name}
                         </h4>
                         <p className="text-sm text-green-700 dark:text-green-300">
-                          {selectedSection.description}
+                          {selectedCategory.description}
                         </p>
                       </div>
                     )}

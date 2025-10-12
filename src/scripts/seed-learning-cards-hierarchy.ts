@@ -42,7 +42,7 @@ interface Question {
   tags?: string[];
 }
 
-interface LearningCardSection {
+interface LearningCardCategory {
   id: string;
   name: string;
   description: string;
@@ -61,7 +61,7 @@ interface LearningCardTopic {
 // Comprehensive hierarchy structure for each card type
 const CARD_HIERARCHY = {
   'core-technologies': {
-    sections: [
+    categories: [
       {
         name: 'HTML Fundamentals',
         description: 'Core HTML concepts, semantic elements, and structure',
@@ -179,7 +179,7 @@ const CARD_HIERARCHY = {
     ],
   },
   'framework-questions': {
-    sections: [
+    categories: [
       {
         name: 'React Fundamentals',
         description: 'Core React concepts, components, and hooks',
@@ -251,7 +251,7 @@ const CARD_HIERARCHY = {
     ],
   },
   'problem-solving': {
-    sections: [
+    categories: [
       {
         name: 'Array & String Problems',
         description: 'Common array and string manipulation problems',
@@ -357,7 +357,7 @@ const CARD_HIERARCHY = {
     ],
   },
   'system-design': {
-    sections: [
+    categories: [
       {
         name: 'Frontend Architecture',
         description: 'Frontend system design patterns and architecture',
@@ -493,32 +493,33 @@ function findQuestionsForTopic(
 
 async function updateLearningCard(
   cardId: string,
-  sections: LearningCardSection[]
+  sections: LearningCardCategory[]
 ) {
   try {
     const cardRef = doc(db, 'learningCards', cardId);
     await updateDoc(cardRef, {
       metadata: {
-        sections: sections,
+        categories: sections,
         questionCount: sections.reduce(
           (total, section) =>
             total +
             section.topics.reduce(
-              (sectionTotal, topic) => sectionTotal + topic.questionIds.length,
+              (categoryTotal, topic) =>
+                categoryTotal + topic.questionIds.length,
               0
             ),
           0
         ),
         estimatedTime: '2-4 hours',
         difficulty: 'intermediate',
-        topics: sections.flatMap(section =>
-          section.topics.map(topic => topic.name)
+        topics: sections.flatMap(category =>
+          category.topics.map(topic => topic.name)
         ),
       },
       updatedAt: new Date(),
     });
 
-    console.log(`✅ Updated card ${cardId} with ${sections.length} sections`);
+    console.log(`✅ Updated card ${cardId} with ${sections.length} categories`);
   } catch (error) {
     console.error(`❌ Error updating card ${cardId}:`, error);
   }
@@ -556,22 +557,22 @@ async function seedLearningCardsHierarchy() {
 
       console.log(`\n🔄 Processing ${card.title} (${cardType})...`);
 
-      const sections: LearningCardSection[] = [];
+      const categories: LearningCardCategory[] = [];
 
       for (
         let sectionIndex = 0;
-        sectionIndex < hierarchy.sections.length;
+        sectionIndex < hierarchy.categories.length;
         sectionIndex++
       ) {
-        const sectionData = hierarchy.sections[sectionIndex];
+        const categoryData = hierarchy.categories[sectionIndex];
         const topics: LearningCardTopic[] = [];
 
         for (
           let topicIndex = 0;
-          topicIndex < sectionData.topics.length;
+          topicIndex < categoryData.topics.length;
           topicIndex++
         ) {
-          const topicData = sectionData.topics[topicIndex];
+          const topicData = categoryData.topics[topicIndex];
 
           // Find questions for this topic
           const questionIds = findQuestionsForTopic(
@@ -593,35 +594,35 @@ async function seedLearningCardsHierarchy() {
           );
         }
 
-        const section: LearningCardSection = {
-          id: `${cardType}-section-${sectionIndex}`,
-          name: sectionData.name,
-          description: sectionData.description,
+        const category: LearningCardCategory = {
+          id: `${cardType}-category-${sectionIndex}`,
+          name: categoryData.name,
+          description: categoryData.description,
           order: sectionIndex + 1,
           topics: topics,
         };
 
-        sections.push(section);
+        categories.push(category);
         console.log(
-          `📂 Section "${section.name}": ${section.topics.length} topics`
+          `📂 Category "${category.name}": ${category.topics.length} topics`
         );
       }
 
-      // Update the card with sections
-      await updateLearningCard(card.id, sections);
+      // Update the card with categories
+      await updateLearningCard(card.id, categories);
 
-      const totalQuestions = sections.reduce(
-        (total, section) =>
+      const totalQuestions = categories.reduce(
+        (total, category) =>
           total +
-          section.topics.reduce(
-            (sectionTotal, topic) => sectionTotal + topic.questionIds.length,
+          category.topics.reduce(
+            (categoryTotal, topic) => categoryTotal + topic.questionIds.length,
             0
           ),
         0
       );
 
       console.log(
-        `✅ Completed ${card.title}: ${sections.length} sections, ${totalQuestions} total questions`
+        `✅ Completed ${card.title}: ${categories.length} categories, ${totalQuestions} total questions`
       );
     }
 

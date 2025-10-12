@@ -37,7 +37,7 @@ export async function GET() {
           estimatedTime: data.metadata?.estimatedTime || '2-4 hours',
           difficulty: data.metadata?.difficulty || 'intermediate',
           topics: data.metadata?.topics || data.topics || [],
-          sections: data.metadata?.sections || data.sections || [],
+          categories: data.metadata?.categories || data.categories || [],
         },
       });
     });
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
         estimatedTime: '2-4 hours',
         difficulty: 'intermediate',
         topics: [],
-        sections: [],
+        categories: [],
       },
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
           estimatedTime: '2-4 hours',
           difficulty: 'intermediate',
           topics: [],
-          sections: [],
+          categories: [],
         },
       },
     });

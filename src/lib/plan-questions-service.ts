@@ -18,7 +18,7 @@ export interface PlanQuestion {
   planId: string;
   questionId: string;
   cardId: string;
-  sectionId?: string;
+  categoryId?: string;
   topicId?: string;
   order: number;
   createdAt: Date;
@@ -29,7 +29,7 @@ export interface PlanQuestionFormData {
   planId: string;
   questionId: string;
   cardId: string;
-  sectionId?: string;
+  categoryId?: string;
   topicId?: string;
   order?: number;
 }
@@ -202,11 +202,11 @@ export class PlanQuestionsService {
     }
   }
 
-  // Move question to different card/section/topic
+  // Move question to different card/category/topic
   static async moveQuestion(
     planQuestionId: string,
     newCardId: string,
-    newSectionId?: string,
+    newCategoryId?: string,
     newTopicId?: string
   ): Promise<void> {
     try {
@@ -220,7 +220,7 @@ export class PlanQuestionsService {
       );
       await updateDoc(planQuestionRef, {
         cardId: newCardId,
-        sectionId: newSectionId || null,
+        categoryId: newCategoryId || null,
         topicId: newTopicId || null,
         updatedAt: serverTimestamp(),
       });
@@ -234,7 +234,7 @@ export class PlanQuestionsService {
   static async getPlanStatistics(planId: string): Promise<{
     totalQuestions: number;
     questionsByCard: { [cardId: string]: number };
-    questionsBySection: { [sectionId: string]: number };
+    questionsByCategory: { [categoryId: string]: number };
     questionsByTopic: { [topicId: string]: number };
   }> {
     try {
@@ -243,7 +243,7 @@ export class PlanQuestionsService {
       const statistics = {
         totalQuestions: planQuestions.length,
         questionsByCard: {} as { [cardId: string]: number },
-        questionsBySection: {} as { [sectionId: string]: number },
+        questionsByCategory: {} as { [categoryId: string]: number },
         questionsByTopic: {} as { [topicId: string]: number },
       };
 
@@ -252,10 +252,10 @@ export class PlanQuestionsService {
         statistics.questionsByCard[pq.cardId] =
           (statistics.questionsByCard[pq.cardId] || 0) + 1;
 
-        // Count by section (if exists)
-        if (pq.sectionId) {
-          statistics.questionsBySection[pq.sectionId] =
-            (statistics.questionsBySection[pq.sectionId] || 0) + 1;
+        // Count by category (if exists)
+        if (pq.categoryId) {
+          statistics.questionsByCategory[pq.categoryId] =
+            (statistics.questionsByCategory[pq.categoryId] || 0) + 1;
         }
 
         // Count by topic (if exists)
