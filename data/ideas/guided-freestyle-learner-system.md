@@ -664,19 +664,19 @@ The card-based guided learning system has been successfully implemented with all
 **✅ Implemented Structure**:
 
 ```
-Plan → Cards → Sections → Topics → Questions
+LearningPlan → Cards → Categories → Topics → Questions
 ```
 
 #### **🎯 Hierarchy Functionality Working**
 
 The expandable hierarchy functionality is now fully operational:
 
-- ✅ **Card Expansion**: Click on cards to see sections underneath
-- ✅ **Section Expansion**: Click on sections to see topics underneath
+- ✅ **Card Expansion**: Click on cards to see categories underneath
+- ✅ **Category Expansion**: Click on categories to see topics underneath
 - ✅ **Topic Expansion**: Click on topics to see questions underneath
-- ✅ **Question Assignment**: Click on questions to add them to the plan with specific section and topic references
+- ✅ **Question Assignment**: Click on questions to add them to the plan with specific category and topic references
 - ✅ **Real-time Updates**: All changes sync immediately across the interface
-- ✅ **Progress Tracking**: Visual indicators showing assigned question counts per card/section/topic
+- ✅ **Progress Tracking**: Visual indicators showing assigned question counts per card/category/topic
 
 #### **✅ COMPLETED IMPLEMENTATION STEPS**
 
@@ -693,8 +693,8 @@ The expandable hierarchy functionality is now fully operational:
 3. **✅ Guided Learning Plan Editor**
    - ✅ Card-based interface replacing section-based interface
    - ✅ Four main cards per plan with expandable hierarchy
-   - ✅ Card → Section → Topic → Question hierarchy
-   - ✅ Question assignment to specific cards/sections/topics
+   - ✅ Card → Category → Topic → Question hierarchy
+   - ✅ Question assignment to specific cards/categories/topics
 
 4. **✅ Card Management Components**
    - ✅ Interactive card display components
@@ -704,7 +704,7 @@ The expandable hierarchy functionality is now fully operational:
 
 5. **✅ Database Seeding**
    - ✅ Four main learning cards seeded automatically
-   - ✅ Card-section-topic relationships established
+   - ✅ Card-category-topic relationships established
    - ✅ Integration with existing questions database
 
 #### **✅ 1. Database Schema & Types**
@@ -712,7 +712,7 @@ The expandable hierarchy functionality is now fully operational:
 - ✅ **LearningCard Interface**: Created with 4 card types and comprehensive metadata
 - ✅ **LearningPlanCard Interface**: Links cards to specific learning plans
 - ✅ **CardProgress Interface**: Tracks user progress per card
-- ✅ **PlanQuestion Interface**: Manages question assignments to plans with card/section/topic references
+- ✅ **PlanQuestion Interface**: Manages question assignments to plans with card/category/topic references
 - ✅ **Question Integration**: Questions linked to cards via `planQuestions` collection
 
 #### **✅ 2. Admin Management System**
@@ -729,11 +729,11 @@ The expandable hierarchy functionality is now fully operational:
 
 #### **✅ 3. User Interface Components**
 
-- ✅ **LearningCard Component**: Beautiful, interactive card display with expandable sections
+- ✅ **LearningCard Component**: Beautiful, interactive card display with expandable categories
 - ✅ **Progress Tracking**: Visual progress indicators and question counts
 - ✅ **Card-Based Guided Learning**: New page structure using cards instead of sections
 - ✅ **Responsive Design**: Mobile-first, accessible components
-- ✅ **Interactive Hierarchy**: Click-to-expand Cards → Sections → Topics → Questions
+- ✅ **Interactive Hierarchy**: Click-to-expand Cards → Categories → Topics → Questions
 
 #### **✅ 4. Firebase Integration**
 
@@ -766,8 +766,8 @@ The expandable hierarchy functionality is now fully operational:
 #### **✅ Key Features Implemented:**
 
 1. **Auto-Seeding**: Learning cards are automatically seeded if they don't exist
-2. **Hierarchical Display**: Cards → Sections → Topics → Questions with expandable UI
-3. **Question Assignment**: Click-to-assign questions to specific cards/sections/topics
+2. **Hierarchical Display**: Cards → Categories → Topics → Questions with expandable UI
+3. **Question Assignment**: Click-to-assign questions to specific cards/categories/topics
 4. **Real-time Updates**: All changes sync immediately across the interface
 5. **Progress Tracking**: Visual indicators showing assigned question counts
 6. **Responsive Design**: Mobile-friendly interface with proper touch interactions
@@ -777,7 +777,7 @@ The expandable hierarchy functionality is now fully operational:
 #### **✅ User Experience:**
 
 - **Admin Interface**: Intuitive card-based editor with drag-and-drop style interactions
-- **Visual Hierarchy**: Clear visual distinction between cards, sections, topics, and questions
+- **Visual Hierarchy**: Clear visual distinction between cards, categories, topics, and questions
 - **Assignment Flow**: Simple click-to-assign workflow for adding questions to plans
 - **Progress Visibility**: Real-time updates showing question counts and plan statistics
 - **Mobile Support**: Fully responsive design that works on all device sizes
@@ -803,7 +803,7 @@ The card-based guided learning system has been **successfully implemented** with
 1. ✅ Learning cards database schema and comprehensive seeding
 2. ✅ Admin interface for card management (`/admin/learning-cards`)
 3. ✅ Card-based plan editor interface (`/admin/guided-learning/[planId]/edit`)
-4. ✅ Question assignment to cards/sections/topics with hierarchical display
+4. ✅ Question assignment to cards/categories/topics with hierarchical display
 5. ✅ Progress tracking per card with real-time updates
 6. ✅ Firebase integration with proper error handling
 7. ✅ TypeScript type safety throughout the system
@@ -813,14 +813,14 @@ The card-based guided learning system has been **successfully implemented** with
 
 #### **✅ Completed Database Changes**
 
-- ✅ **Question Schema Updates**: Questions properly linked to cards/sections/topics
+- ✅ **Question Schema Updates**: Questions properly linked to cards/categories/topics
 - ✅ **Plan Schema Updates**: Cumulative question tracking implemented
 - ✅ **Migration Scripts**: Comprehensive seeding scripts for all question types
 - ✅ **Indexing**: Optimized Firebase indexes for efficient querying
 
 #### **✅ Completed Admin Interface Updates**
 
-- ✅ **Question Management**: Full CRUD interface with card/section/topic assignment
+- ✅ **Question Management**: Full CRUD interface with card/category/topic assignment
 - ✅ **Plan Configuration**: Card-based plan editor with hierarchical question assignment
 - ✅ **Bulk Operations**: Comprehensive seeding and management tools
 - ✅ **Analytics**: Plan statistics and question count tracking
@@ -840,9 +840,9 @@ The comprehensive card-based guided learning system has been **fully implemented
 
 #### **🎯 Key Achievements:**
 
-1. **✅ Complete Card Hierarchy**: Cards → Sections → Topics → Questions structure implemented
+1. **✅ Complete Card Hierarchy**: Cards → Categories → Topics → Questions structure implemented
 2. **✅ Admin Interface**: Full CRUD operations for learning cards and plan management
-3. **✅ Question Assignment**: Dynamic question assignment to specific cards/sections/topics
+3. **✅ Question Assignment**: Dynamic question assignment to specific cards/categories/topics
 4. **✅ Firebase Integration**: Real-time data synchronization with proper error handling
 5. **✅ TypeScript Safety**: Comprehensive type definitions throughout the system
 6. **✅ Responsive Design**: Mobile-friendly interface with proper touch interactions
@@ -860,7 +860,7 @@ The comprehensive card-based guided learning system has been **fully implemented
 #### **📱 User Experience:**
 
 - **Admin Users**: Intuitive card-based editor with drag-and-drop style interactions
-- **Visual Hierarchy**: Clear distinction between cards, sections, topics, and questions
+- **Visual Hierarchy**: Clear distinction between cards, categories, topics, and questions
 - **Assignment Flow**: Simple click-to-assign workflow for adding questions to plans
 - **Progress Visibility**: Real-time updates showing question counts and plan statistics
 - **Mobile Support**: Fully responsive design that works on all device sizes
@@ -2448,11 +2448,11 @@ This comprehensive testing guide ensures both admin pages and website integratio
     - [ ] Problem Solving Card (Purple)
     - [ ] System Design Card (Orange)
   - [ ] Click on "Core Technologies" card
-  - [ ] Verify card expands to show sections underneath
-  - [ ] Verify sections are properly loaded from Firebase
-  - [ ] Click on a section (e.g., "JavaScript Fundamentals")
-  - [ ] Verify section expands to show topics underneath
-  - [ ] Click on a topic (e.g., "Closures")
+  - [ ] Verify card expands to show categories underneath
+  - [ ] Verify categories are properly loaded from Firebase
+  - [ ] Click on a category (e.g., "JavaScript")
+  - [ ] Verify category expands to show topics underneath
+  - [ ] Click on a topic (e.g., "Promises")
   - [ ] Verify topic expands to show questions underneath
   - [ ] Verify question count displays correctly for each topic
 
@@ -2462,7 +2462,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [ ] Verify question count updates in real-time
   - [ ] Verify question is stored with proper references:
     - [ ] `cardId` - references the learning card
-    - [ ] `sectionId` - references the section
+    - [ ] `categoryId` - references the category
     - [ ] `topicId` - references the topic
     - [ ] `questionId` - references the specific question
   - [ ] Test removing questions from the plan
@@ -2488,12 +2488,12 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [ ] Test creating a new learning card:
     - [ ] Click "Add New Learning Card"
     - [ ] Fill in card details (title, type, description)
-    - [ ] Configure sections and topics
+    - [ ] Configure categories and topics
     - [ ] Save the card
     - [ ] Verify card appears in the list
   - [ ] Test editing existing cards:
     - [ ] Modify card configuration
-    - [ ] Update sections and topics
+    - [ ] Update categories and topics
     - [ ] Verify changes are saved
   - [ ] Test deleting cards:
     - [ ] Delete a test card
@@ -2505,7 +2505,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [ ] Test configuring time limits
   - [ ] Test setting difficulty levels
   - [ ] Test adding/removing topics
-  - [ ] Test section management
+  - [ ] Test category management
   - [ ] Verify all configurations save to Firebase
 
 #### **6.3 Guided Learning Plan Editor Testing**
@@ -2514,14 +2514,14 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [ ] Navigate to `/admin/guided-learning/[planId]/edit`
   - [ ] Verify card-based interface loads correctly
   - [ ] Test card expansion/collapse functionality
-  - [ ] Test section expansion/collapse functionality
+  - [ ] Test category expansion/collapse functionality
   - [ ] Test topic expansion/collapse functionality
   - [ ] Verify question assignment interface works
   - [ ] Test plan statistics display
 
 - [ ] **Question Assignment Workflow**
   - [ ] Test assigning questions to specific cards
-  - [ ] Test assigning questions to specific sections
+  - [ ] Test assigning questions to specific categories
   - [ ] Test assigning questions to specific topics
   - [ ] Verify question references are stored correctly
   - [ ] Test bulk question assignment
