@@ -39,7 +39,7 @@ export async function GET(
       color: data.color,
       icon: data.icon,
       order: data.order,
-      sections: data.sections || [],
+      categories: data.categories || [],
       topics: data.topics || [],
       questionCount: data.questionCount || 0,
       createdAt: data.createdAt?.toDate() || new Date(),
