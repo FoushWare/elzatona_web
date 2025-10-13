@@ -28,7 +28,7 @@ export class HybridFirestoreHelper {
       if (!db) {
         throw new Error('Firebase not initialized');
       }
-      
+
       const collectionRef = collection(db, collectionName);
       let q = query(collectionRef);
 
@@ -77,7 +77,7 @@ export class HybridFirestoreHelper {
       if (!db) {
         throw new Error('Firebase not initialized');
       }
-      
+
       const docRef = doc(collection(db, collectionName));
       const docData = {
         ...data,
@@ -100,7 +100,7 @@ export class HybridFirestoreHelper {
       if (!db) {
         throw new Error('Firebase not initialized');
       }
-      
+
       const docRef = doc(db, collectionName, id);
       const docSnap = await getDocs(
         query(collection(db, collectionName), where('__name__', '==', id))
@@ -128,7 +128,7 @@ export class HybridFirestoreHelper {
       if (!db) {
         throw new Error('Firebase not initialized');
       }
-      
+
       const docRef = doc(db, collectionName, id);
       await updateDoc(docRef, {
         ...data,
@@ -148,7 +148,7 @@ export class HybridFirestoreHelper {
       if (!db) {
         throw new Error('Firebase not initialized');
       }
-      
+
       const docRef = doc(db, collectionName, id);
       await deleteDoc(docRef);
     } catch (error) {

@@ -44,10 +44,13 @@ export async function GET(
     const q = query(collection(db, 'unifiedQuestions'), ...constraints);
     const snapshot = await getDocs(q);
 
-    const questions = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    } as any));
+    const questions = snapshot.docs.map(
+      doc =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        }) as any
+    );
 
     // Sort by createdAt after fetching (to avoid Firestore index issues)
     questions.sort((a, b) => {
