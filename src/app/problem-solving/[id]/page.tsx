@@ -44,6 +44,8 @@ export default function ProblemSolvingTaskPage() {
   // Fetch task data
   useEffect(() => {
     const fetchTask = async () => {
+      if (!params?.id) return;
+
       try {
         setLoading(true);
         const response = await fetch(`/api/admin/problem-solving/${params.id}`);
@@ -64,10 +66,10 @@ export default function ProblemSolvingTaskPage() {
       }
     };
 
-    if (params.id) {
+    if (params?.id) {
       fetchTask();
     }
-  }, [params.id]);
+  }, [params?.id]);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {

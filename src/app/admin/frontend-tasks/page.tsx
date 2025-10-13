@@ -4,7 +4,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Eye, Search, Filter, Code } from 'lucide-react';
-import { FrontendTask, FrontendTaskFormData } from '@/types/admin';
+import {
+  FrontendTask,
+  FrontendTaskFormData,
+  FrontendTaskFile,
+} from '@/types/admin';
 import FrontendTaskEditor from '@/shared/components/admin/FrontendTaskEditor';
 
 export default function FrontendTasksAdminPage() {

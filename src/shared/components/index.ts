@@ -47,7 +47,7 @@ export { default as FlashcardSession } from './learning/FlashcardSession';
 export { default as JavaScriptQuestionCard } from './learning/JavaScriptQuestionCard';
 export { MarkdownQuestionExtractor } from './learning/MarkdownQuestionExtractor';
 export { OpenEndedQuestion } from './learning/OpenEndedQuestion';
-export { default as QuestionAudioManager } from './learning/QuestionAudioManager';
+// export { default as QuestionAudioManager } from './learning/QuestionAudioManager';
 export { QuestionCreationForm } from './learning/QuestionCreationForm';
 export { default as QuestionCreator } from './learning/QuestionCreator';
 export { QuestionEditModal } from './learning/QuestionEditModal';
@@ -59,7 +59,7 @@ export { default as SolutionDisplay } from './learning/SolutionDisplay';
 export { default as TestRunner } from './learning/TestRunner';
 export { TopicManager } from './learning/TopicManager';
 export { TopicSelector } from './learning/TopicSelector';
-export { default as UnifiedQuestionManager } from './learning/UnifiedQuestionManager';
+// export { default as UnifiedQuestionManager } from './learning/UnifiedQuestionManager';
 
 // Auth Components
 export { SignInPopup } from './auth/SignInPopup';

@@ -14,14 +14,14 @@ import {
 // GET /api/questions/by-topic/[topicId] - Get questions for a specific topic
 export async function GET(
   request: NextRequest,
-  { params }: { params: { topicId: string } }
+  { params }: { params: Promise<{ topicId: string }> }
 ) {
   try {
     if (!db) {
       throw new Error('Firebase not initialized');
     }
 
-    const topicId = params.topicId;
+    const { topicId } = await params;
     const { searchParams } = new URL(request.url);
 
     // Optional filters
@@ -47,12 +47,12 @@ export async function GET(
     const questions = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
-    }));
+    } as any));
 
     // Sort by createdAt after fetching (to avoid Firestore index issues)
     questions.sort((a, b) => {
-      const dateA = new Date(a.createdAt);
-      const dateB = new Date(b.createdAt);
+      const dateA = new Date(a.createdAt || new Date());
+      const dateB = new Date(b.createdAt || new Date());
       return dateB.getTime() - dateA.getTime();
     });
 
