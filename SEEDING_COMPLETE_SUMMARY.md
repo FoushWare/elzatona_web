@@ -60,7 +60,7 @@ Your Firebase database has been successfully populated with comprehensive learni
 
 ### **1. Admin Panel Access**
 
-- **Categories & Topics Management**: `http://localhost:3000/admin/categories-topics`
+- **Content Management**: `http://localhost:3000/admin/content-management`
 - **Questions Management**: `http://localhost:3000/admin/content/questions`
 
 ### **2. Learning Content**

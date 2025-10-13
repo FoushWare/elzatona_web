@@ -2,7 +2,7 @@
 
 ## 📋 **Admin Panel URL**
 
-**Main URL**: `http://localhost:3000/admin/categories-topics`
+**Main URL**: `http://localhost:3000/admin/content-management`
 
 **🎯 Unified Interface**: Single page with expandable categories and nested topics:
 
@@ -63,7 +63,7 @@
 
 ### **Step 1: Create Categories First**
 
-1. Navigate to `/admin/categories-topics`
+1. Navigate to `/admin/content-management`
 2. Click "Add Category" button
 3. Fill in category details (name, card type, color, etc.)
 4. Save category

@@ -26,9 +26,8 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   const skipAuthForTesting =
     isDevelopment &&
     (pathname?.includes('/admin/content/questions') ||
-      pathname?.includes('/admin/guided-learning') ||
       pathname?.includes('/admin/enhanced-structure') ||
-      pathname?.includes('/admin/categories-topics'));
+      pathname?.includes('/admin/content-management'));
 
   // For login page and admin root page, render immediately without waiting for auth check
   if (isLoginPage || isAdminRootPage) {
@@ -80,9 +79,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const skipAuthForTesting =
     isDevelopment &&
     (pathname?.includes('/admin/content/questions') ||
-      pathname?.includes('/admin/guided-learning') ||
       pathname?.includes('/admin/enhanced-structure') ||
-      pathname?.includes('/admin/categories-topics'));
+      pathname?.includes('/admin/content-management'));
 
   if (skipAuthForTesting) {
     return (

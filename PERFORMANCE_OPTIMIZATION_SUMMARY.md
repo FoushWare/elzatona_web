@@ -185,6 +185,6 @@ const loadInitialStructure = useCallback(async () => {
 
 ## ✅ Conclusion
 
-The performance optimizations have been successfully implemented and tested. The `/admin/categories-topics` page now loads significantly faster while maintaining all functionality and providing a better user experience. The lazy loading strategy ensures that users see content quickly while detailed data loads in the background as needed.
+The performance optimizations have been successfully implemented and tested. The `/admin/content-management` page now loads significantly faster while maintaining all functionality and providing a better user experience. The lazy loading strategy ensures that users see content quickly while detailed data loads in the background as needed.
 
 All Core Web Vitals metrics have been improved, and the page is now optimized for both desktop and mobile devices without breaking the existing UI/UX.

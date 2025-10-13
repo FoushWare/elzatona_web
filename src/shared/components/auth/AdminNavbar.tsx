@@ -80,12 +80,6 @@ export default function AdminNavbar() {
       description: 'Add, edit, and manage questions',
     },
     {
-      href: '/admin/guided-learning',
-      label: 'Guided Learning',
-      icon: BookOpen,
-      description: 'Create and manage learning plans',
-    },
-    {
       href: '/admin/learning-cards',
       label: 'Learning Cards',
       icon: CreditCard,
@@ -98,10 +92,11 @@ export default function AdminNavbar() {
       description: 'Manage learning path sections',
     },
     {
-      href: '/admin/categories-topics',
-      label: 'Categories & Topics',
+      href: '/admin/content-management',
+      label: 'Content Management',
       icon: Settings,
-      description: 'Create and manage topics and categories',
+      description:
+        'Comprehensive admin interface for managing learning content',
     },
     {
       href: '/admin/frontend-tasks',
