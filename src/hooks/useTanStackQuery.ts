@@ -7,7 +7,12 @@ type LearningPlan = any;
 type Category = any;
 type Topic = any;
 type ApiResponse<T> = { success: boolean; data: T; count?: number };
-type PaginatedResponse<T> = { success: boolean; data: T[]; count: number; total: number };
+type PaginatedResponse<T> = {
+  success: boolean;
+  data: T[];
+  count: number;
+  total: number;
+};
 
 // ============================================================================
 // QUERY KEYS - Centralized key management for consistency
@@ -17,38 +22,43 @@ export const queryKeys = {
   // Learning Cards
   cards: ['cards'] as const,
   card: (id: string) => ['cards', id] as const,
-  
+
   // Learning Plans
   plans: ['plans'] as const,
   plan: (id: string) => ['plans', id] as const,
-  
+
   // Categories
   categories: ['categories'] as const,
   category: (id: string) => ['categories', id] as const,
-  categoriesByCard: (cardType: string) => ['categories', 'by-card', cardType] as const,
-  
+  categoriesByCard: (cardType: string) =>
+    ['categories', 'by-card', cardType] as const,
+
   // Topics
   topics: ['topics'] as const,
   topic: (id: string) => ['topics', id] as const,
-  topicsByCategory: (categoryId: string) => ['topics', 'by-category', categoryId] as const,
-  
+  topicsByCategory: (categoryId: string) =>
+    ['topics', 'by-category', categoryId] as const,
+
   // Questions
   questions: ['questions'] as const,
   question: (id: string) => ['questions', id] as const,
-  questionsByTopic: (topicId: string) => ['questions', 'by-topic', topicId] as const,
-  questionsByCategory: (categoryId: string) => ['questions', 'by-category', categoryId] as const,
-  questionsByCard: (cardType: string) => ['questions', 'by-card', cardType] as const,
+  questionsByTopic: (topicId: string) =>
+    ['questions', 'by-topic', topicId] as const,
+  questionsByCategory: (categoryId: string) =>
+    ['questions', 'by-category', categoryId] as const,
+  questionsByCard: (cardType: string) =>
+    ['questions', 'by-card', cardType] as const,
   questionsUnified: ['questions', 'unified'] as const,
   questionsUnifiedById: (id: string) => ['questions', 'unified', id] as const,
-  
+
   // Frontend Tasks
   frontendTasks: ['frontend-tasks'] as const,
   frontendTask: (id: string) => ['frontend-tasks', id] as const,
-  
+
   // Problem Solving Tasks
   problemSolvingTasks: ['problem-solving-tasks'] as const,
   problemSolvingTask: (id: string) => ['problem-solving-tasks', id] as const,
-  
+
   // Admin Stats
   adminStats: ['admin', 'stats'] as const,
 } as const;
@@ -77,9 +87,10 @@ const api = {
   },
 
   // Learning Cards
-  getCards: () => api.fetch<{ data: LearningCard[]; count: number }>('/api/cards'),
+  getCards: () =>
+    api.fetch<{ data: LearningCard[]; count: number }>('/api/cards'),
   getCard: (id: string) => api.fetch<LearningCard>(`/api/cards/${id}`),
-  createCard: (data: Partial<LearningCard>) => 
+  createCard: (data: Partial<LearningCard>) =>
     api.fetch<LearningCard>('/api/cards', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -95,7 +106,8 @@ const api = {
     }),
 
   // Learning Plans
-  getPlans: () => api.fetch<{ data: LearningPlan[]; count: number }>('/api/plans'),
+  getPlans: () =>
+    api.fetch<{ data: LearningPlan[]; count: number }>('/api/plans'),
   getPlan: (id: string) => api.fetch<LearningPlan>(`/api/plans/${id}`),
   createPlan: (data: Partial<LearningPlan>) =>
     api.fetch<LearningPlan>('/api/plans', {
@@ -113,7 +125,8 @@ const api = {
     }),
 
   // Categories
-  getCategories: () => api.fetch<{ data: Category[]; count: number }>('/api/categories'),
+  getCategories: () =>
+    api.fetch<{ data: Category[]; count: number }>('/api/categories'),
   getCategory: (id: string) => api.fetch<Category>(`/api/categories/${id}`),
   createCategory: (data: Partial<Category>) =>
     api.fetch<Category>('/api/categories', {
@@ -170,9 +183,12 @@ const api = {
       `/api/questions${queryString ? `?${queryString}` : ''}`
     );
   },
-  getQuestion: (id: string) => api.fetch<UnifiedQuestion>(`/api/questions/${id}`),
+  getQuestion: (id: string) =>
+    api.fetch<UnifiedQuestion>(`/api/questions/${id}`),
   getQuestionsByTopic: (topicId: string) =>
-    api.fetch<{ data: UnifiedQuestion[]; count: number }>(`/api/questions/by-topic/${topicId}`),
+    api.fetch<{ data: UnifiedQuestion[]; count: number }>(
+      `/api/questions/by-topic/${topicId}`
+    ),
   getQuestionsUnified: (params?: { page?: number; limit?: number }) => {
     const searchParams = new URLSearchParams();
     if (params) {
@@ -267,7 +283,7 @@ export const useCard = (id: string) => {
 
 export const useCreateCard = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.createCard,
     onSuccess: () => {
@@ -278,7 +294,7 @@ export const useCreateCard = () => {
 
 export const useUpdateCard = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<LearningCard> }) =>
       api.updateCard(id, data),
@@ -291,7 +307,7 @@ export const useUpdateCard = () => {
 
 export const useDeleteCard = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.deleteCard,
     onSuccess: () => {
@@ -322,7 +338,7 @@ export const usePlan = (id: string) => {
 
 export const useCreatePlan = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.createPlan,
     onSuccess: () => {
@@ -333,7 +349,7 @@ export const useCreatePlan = () => {
 
 export const useUpdatePlan = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<LearningPlan> }) =>
       api.updatePlan(id, data),
@@ -346,7 +362,7 @@ export const useUpdatePlan = () => {
 
 export const useDeletePlan = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.deletePlan,
     onSuccess: () => {
@@ -377,7 +393,7 @@ export const useCategory = (id: string) => {
 
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.createCategory,
     onSuccess: () => {
@@ -388,7 +404,7 @@ export const useCreateCategory = () => {
 
 export const useUpdateCategory = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<Category> }) =>
       api.updateCategory(id, data),
@@ -401,7 +417,7 @@ export const useUpdateCategory = () => {
 
 export const useDeleteCategory = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.deleteCategory,
     onSuccess: () => {
@@ -432,7 +448,7 @@ export const useTopic = (id: string) => {
 
 export const useCreateTopic = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.createTopic,
     onSuccess: () => {
@@ -443,7 +459,7 @@ export const useCreateTopic = () => {
 
 export const useUpdateTopic = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<Topic> }) =>
       api.updateTopic(id, data),
@@ -456,7 +472,7 @@ export const useUpdateTopic = () => {
 
 export const useDeleteTopic = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.deleteTopic,
     onSuccess: () => {
@@ -501,7 +517,10 @@ export const useQuestionsByTopic = (topicId: string) => {
   });
 };
 
-export const useQuestionsUnified = (params?: { page?: number; limit?: number }) => {
+export const useQuestionsUnified = (params?: {
+  page?: number;
+  limit?: number;
+}) => {
   return useQuery({
     queryKey: [...queryKeys.questionsUnified, params],
     queryFn: () => api.getQuestionsUnified(params),
@@ -519,7 +538,7 @@ export const useQuestionUnified = (id: string) => {
 
 export const useCreateQuestion = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.createQuestion,
     onSuccess: () => {
@@ -531,22 +550,29 @@ export const useCreateQuestion = () => {
 
 export const useUpdateQuestion = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<UnifiedQuestion> }) =>
-      api.updateQuestion(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Partial<UnifiedQuestion>;
+    }) => api.updateQuestion(id, data),
     onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.questions });
       queryClient.invalidateQueries({ queryKey: queryKeys.question(id) });
       queryClient.invalidateQueries({ queryKey: queryKeys.questionsUnified });
-      queryClient.invalidateQueries({ queryKey: queryKeys.questionsUnifiedById(id) });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.questionsUnifiedById(id),
+      });
     },
   });
 };
 
 export const useDeleteQuestion = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.deleteQuestion,
     onSuccess: () => {
@@ -578,7 +604,7 @@ export const useFrontendTask = (id: string) => {
 
 export const useCreateFrontendTask = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.createFrontendTask,
     onSuccess: () => {
@@ -589,7 +615,7 @@ export const useCreateFrontendTask = () => {
 
 export const useUpdateFrontendTask = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) =>
       api.updateFrontendTask(id, data),
@@ -602,7 +628,7 @@ export const useUpdateFrontendTask = () => {
 
 export const useDeleteFrontendTask = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.deleteFrontendTask,
     onSuccess: () => {
@@ -633,35 +659,43 @@ export const useProblemSolvingTask = (id: string) => {
 
 export const useCreateProblemSolvingTask = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.createProblemSolvingTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.problemSolvingTasks });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.problemSolvingTasks,
+      });
     },
   });
 };
 
 export const useUpdateProblemSolvingTask = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) =>
       api.updateProblemSolvingTask(id, data),
     onSuccess: (_, { id }) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.problemSolvingTasks });
-      queryClient.invalidateQueries({ queryKey: queryKeys.problemSolvingTask(id) });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.problemSolvingTasks,
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.problemSolvingTask(id),
+      });
     },
   });
 };
 
 export const useDeleteProblemSolvingTask = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: api.deleteProblemSolvingTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.problemSolvingTasks });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.problemSolvingTasks,
+      });
     },
   });
 };
@@ -674,14 +708,30 @@ export const useAdminStats = () => {
   return useQuery({
     queryKey: queryKeys.adminStats,
     queryFn: async () => {
-      const [questionsRes, categoriesRes, topicsRes, cardsRes, plansRes, frontendTasksRes, problemSolvingRes] = await Promise.all([
-        api.fetch<{ count: number }>('/api/questions').catch(() => ({ count: 0 })),
-        api.fetch<{ count: number }>('/api/categories').catch(() => ({ count: 0 })),
+      const [
+        questionsRes,
+        categoriesRes,
+        topicsRes,
+        cardsRes,
+        plansRes,
+        frontendTasksRes,
+        problemSolvingRes,
+      ] = await Promise.all([
+        api
+          .fetch<{ count: number }>('/api/questions')
+          .catch(() => ({ count: 0 })),
+        api
+          .fetch<{ count: number }>('/api/categories')
+          .catch(() => ({ count: 0 })),
         api.fetch<{ count: number }>('/api/topics').catch(() => ({ count: 0 })),
         api.fetch<{ count: number }>('/api/cards').catch(() => ({ count: 0 })),
         api.fetch<{ count: number }>('/api/plans').catch(() => ({ count: 0 })),
-        api.fetch<{ total: number }>('/api/admin/frontend-tasks').catch(() => ({ total: 0 })),
-        api.fetch<{ total: number }>('/api/admin/problem-solving').catch(() => ({ total: 0 })),
+        api
+          .fetch<{ total: number }>('/api/admin/frontend-tasks')
+          .catch(() => ({ total: 0 })),
+        api
+          .fetch<{ total: number }>('/api/admin/problem-solving')
+          .catch(() => ({ total: 0 })),
       ]);
 
       return {
