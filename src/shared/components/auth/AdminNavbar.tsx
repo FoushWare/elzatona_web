@@ -80,18 +80,6 @@ export default function AdminNavbar() {
       description: 'Add, edit, and manage questions',
     },
     {
-      href: '/admin/learning-cards',
-      label: 'Learning Cards',
-      icon: CreditCard,
-      description: 'Manage learning cards for plans',
-    },
-    {
-      href: '/admin/sections',
-      label: 'Learning Sections',
-      icon: FileText,
-      description: 'Manage learning path sections',
-    },
-    {
       href: '/admin/content-management',
       label: 'Content Management',
       icon: Settings,
@@ -115,18 +103,6 @@ export default function AdminNavbar() {
       label: 'Feature Reports',
       icon: BarChart3,
       description: 'View project features and progress',
-    },
-    {
-      href: '/admin/backup',
-      label: 'Backup Management',
-      icon: FolderOpen,
-      description: 'Manage question backups',
-    },
-    {
-      href: '/admin/audit-logs',
-      label: 'Audit Logs',
-      icon: FileText,
-      description: 'Monitor admin actions and system events',
     },
   ];
 

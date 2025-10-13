@@ -27,7 +27,8 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     isDevelopment &&
     (pathname?.includes('/admin/content/questions') ||
       pathname?.includes('/admin/enhanced-structure') ||
-      pathname?.includes('/admin/content-management'));
+      pathname?.includes('/admin/content-management') ||
+      pathname?.includes('/admin/dashboard'));
 
   // For login page and admin root page, render immediately without waiting for auth check
   if (isLoginPage || isAdminRootPage) {

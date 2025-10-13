@@ -117,8 +117,6 @@ import {
   Users,
   Calendar,
   Target,
-  Loader2,
-  Database,
 } from 'lucide-react';
 
 // Lazy load forms to reduce initial bundle size
@@ -145,6 +143,11 @@ const CardForm = React.lazy(() =>
 const PlanForm = React.lazy(() =>
   import('@/shared/components/forms/PlanForm').then(module => ({
     default: module.PlanForm,
+  }))
+);
+const EmptyState = React.lazy(() =>
+  import('@/shared/components/ui/empty-state').then(module => ({
+    default: module.EmptyState,
   }))
 );
 
@@ -258,22 +261,10 @@ export default function UnifiedAdminPage() {
     >
   >({});
 
-  // Loading states for each section
-  const [loadingStates, setLoadingStates] = useState({
-    cards: false,
-    plans: false,
-    categories: false,
-    topics: false,
-    questions: false,
-  });
-
-  // Data loaded states
+  // Data loaded states (simplified)
   const [dataLoaded, setDataLoaded] = useState({
-    cards: false,
-    plans: false,
     categories: false,
     topics: false,
-    questions: false,
   });
 
   // Debounced search to improve performance
@@ -321,8 +312,8 @@ export default function UnifiedAdminPage() {
     });
   }, [plans, debouncedSearchTerm]);
 
-  // Optimized data loading with caching
-  const loadInitialStructure = useCallback(async () => {
+  // Load all data directly when page loads
+  const loadAllData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -368,14 +359,13 @@ export default function UnifiedAdminPage() {
         totalQuestions: questionsData.count || 0,
       });
 
-      // Load basic structure data (just IDs and names for quick rendering)
+      // Load cards data directly
       if (cardsData.success && cardsData.data) {
-        const basicCards = cardsData.data
+        const validCards = cardsData.data
           .filter(
-            (card: BasicCard) =>
-              card && card.id && card.name && card.description
+            (card: any) => card && card.id && card.name && card.description
           )
-          .map((card: BasicCard) => ({
+          .map((card: any) => ({
             id: card.id,
             name: card.name,
             description: card.description,
@@ -383,17 +373,17 @@ export default function UnifiedAdminPage() {
             icon: card.icon || 'layers',
             order: card.order || 0,
           }));
-        setCards(basicCards);
-        setDataLoaded(prev => ({ ...prev, cards: true }));
+        setCards(validCards);
+        console.log('Cards loaded:', validCards);
       }
 
+      // Load plans data directly
       if (plansData.success && plansData.data) {
-        const basicPlans = plansData.data
+        const validPlans = plansData.data
           .filter(
-            (plan: BasicPlan) =>
-              plan && plan.id && plan.name && plan.description
+            (plan: any) => plan && plan.id && plan.name && plan.description
           )
-          .map((plan: BasicPlan) => ({
+          .map((plan: any) => ({
             id: plan.id,
             name: plan.name,
             description: plan.description,
@@ -402,83 +392,35 @@ export default function UnifiedAdminPage() {
             color: plan.color || '#10B981',
             estimatedHours: plan.estimatedHours || 0,
           }));
-        setPlans(basicPlans);
-        setDataLoaded(prev => ({ ...prev, plans: true }));
+        setPlans(validPlans);
+        console.log('Plans loaded:', validPlans);
+      }
+
+      // Load categories data directly
+      if (categoriesData.success && categoriesData.data) {
+        setCategories(categoriesData.data);
+        setDataLoaded(prev => ({ ...prev, categories: true }));
+      }
+
+      // Load topics data directly
+      if (topicsData.success && topicsData.data) {
+        setTopics(topicsData.data);
+        setDataLoaded(prev => ({ ...prev, topics: true }));
       }
     } catch (error) {
-      console.error('Error loading initial structure:', error);
+      console.error('Error loading all data:', error);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    loadInitialStructure();
-  }, [loadInitialStructure]);
+    loadAllData();
+  }, [loadAllData]);
 
-  // Optimized data loading functions with error handling
-  const loadCardsData = useCallback(async () => {
-    if (dataLoaded.cards) return;
-
-    try {
-      setLoadingStates(prev => ({ ...prev, cards: true }));
-      const response = await fetch('/api/cards');
-      const data: ApiResponse<BasicCard[]> = await response.json();
-
-      if (data.success && data.data) {
-        // Filter out invalid cards and add defaults
-        const validCards = data.data
-          .filter(card => card && card.id && card.name && card.description)
-          .map(card => ({
-            ...card,
-            color: card.color || '#3B82F6',
-            icon: card.icon || 'layers',
-            order: card.order || 0,
-          }));
-        setCards(validCards);
-        setDataLoaded(prev => ({ ...prev, cards: true }));
-      }
-    } catch (error) {
-      console.error('Error loading cards:', error);
-    } finally {
-      setLoadingStates(prev => ({ ...prev, cards: false }));
-    }
-  }, [dataLoaded.cards]);
-
-  const loadPlansData = useCallback(async () => {
-    if (dataLoaded.plans) return;
-
-    try {
-      setLoadingStates(prev => ({ ...prev, plans: true }));
-      const response = await fetch('/api/plans');
-      const data: ApiResponse<BasicPlan[]> = await response.json();
-
-      if (data.success && data.data) {
-        // Filter out invalid plans and add defaults
-        const validPlans = data.data
-          .filter(plan => plan && plan.id && plan.name && plan.description)
-          .map(plan => ({
-            ...plan,
-            duration: plan.duration || 'N/A',
-            difficulty: plan.difficulty || 'beginner',
-            color: plan.color || '#10B981',
-            estimatedHours: plan.estimatedHours || 0,
-          }));
-        setPlans(validPlans);
-        setDataLoaded(prev => ({ ...prev, plans: true }));
-      }
-    } catch (error) {
-      console.error('Error loading plans:', error);
-    } finally {
-      setLoadingStates(prev => ({ ...prev, plans: false }));
-    }
-  }, [dataLoaded.plans]);
-
+  // Individual data loading functions for CRUD operations
   const loadCategoriesData = useCallback(async () => {
-    if (dataLoaded.categories) return;
-
     try {
-      setLoadingStates(prev => ({ ...prev, categories: true }));
       const response = await fetch('/api/categories');
       const data = await response.json();
 
@@ -488,16 +430,11 @@ export default function UnifiedAdminPage() {
       }
     } catch (error) {
       console.error('Error loading categories:', error);
-    } finally {
-      setLoadingStates(prev => ({ ...prev, categories: false }));
     }
-  }, [dataLoaded.categories]);
+  }, []);
 
   const loadTopicsData = useCallback(async () => {
-    if (dataLoaded.topics) return;
-
     try {
-      setLoadingStates(prev => ({ ...prev, topics: true }));
       const response = await fetch('/api/topics');
       const data = await response.json();
 
@@ -507,10 +444,8 @@ export default function UnifiedAdminPage() {
       }
     } catch (error) {
       console.error('Error loading topics:', error);
-    } finally {
-      setLoadingStates(prev => ({ ...prev, topics: false }));
     }
-  }, [dataLoaded.topics]);
+  }, []);
 
   // Optimized toggle functions with lazy loading
   const toggleCard = useCallback(
@@ -607,14 +542,14 @@ export default function UnifiedAdminPage() {
 
         if (!response.ok) throw new Error('Failed to create card');
         setIsCardModalOpen(false);
-        await loadCardsData();
+        await loadAllData(); // Reload all data
         setStats(prev => ({ ...prev, totalCards: prev.totalCards + 1 }));
       } catch (error) {
         console.error('Error creating card:', error);
         alert('Failed to create card');
       }
     },
-    [loadCardsData]
+    [loadAllData]
   );
 
   const handleCreatePlan = useCallback(
@@ -628,14 +563,14 @@ export default function UnifiedAdminPage() {
 
         if (!response.ok) throw new Error('Failed to create plan');
         setIsPlanModalOpen(false);
-        await loadPlansData();
+        await loadAllData(); // Reload all data
         setStats(prev => ({ ...prev, totalPlans: prev.totalPlans + 1 }));
       } catch (error) {
         console.error('Error creating plan:', error);
         alert('Failed to create plan');
       }
     },
-    [loadPlansData]
+    [loadAllData]
   );
 
   const handleCreateCategory = useCallback(
@@ -851,38 +786,27 @@ export default function UnifiedAdminPage() {
             <Layers className="h-5 w-5 mr-2 text-blue-600" />
             Learning Cards ({stats.totalCards})
           </h2>
-          {!dataLoaded.cards && (
-            <Suspense fallback={<LoadingSkeleton />}>
-              <Button
-                onClick={loadCardsData}
-                disabled={loadingStates.cards}
-                variant="outline"
-                size="sm"
-              >
-                {loadingStates.cards ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Loading...
-                  </>
-                ) : (
-                  <>
-                    <Database className="h-4 w-4 mr-2" />
-                    Load Cards Data
-                  </>
-                )}
-              </Button>
-            </Suspense>
-          )}
         </div>
 
-        {!dataLoaded.cards ? (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            <Database className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Click &quot;Load Cards Data&quot; to view learning cards</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {filteredCards.map(card => {
+        <div className="space-y-4">
+          {filteredCards.length === 0 ? (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <EmptyState
+                icon={Layers}
+                title="No Learning Cards"
+                description="Create your first learning card to organize categories and topics for structured learning."
+                action={{
+                  label: 'Create First Card',
+                  onClick: () => {
+                    setEditingCard(null);
+                    setIsCardModalOpen(true);
+                  },
+                }}
+                className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg"
+              />
+            </Suspense>
+          ) : (
+            filteredCards.map(card => {
               const cardCategories = categories.filter(
                 cat => cat.cardType === card.name
               );
@@ -1144,9 +1068,9 @@ export default function UnifiedAdminPage() {
                   )}
                 </Card>
               );
-            })}
-          </div>
-        )}
+            })
+          )}
+        </div>
       </div>
 
       {/* Plans Section */}
@@ -1156,38 +1080,27 @@ export default function UnifiedAdminPage() {
             <Users className="h-5 w-5 mr-2 text-green-600" />
             Learning Plans ({stats.totalPlans})
           </h2>
-          {!dataLoaded.plans && (
-            <Suspense fallback={<LoadingSkeleton />}>
-              <Button
-                onClick={loadPlansData}
-                disabled={loadingStates.plans}
-                variant="outline"
-                size="sm"
-              >
-                {loadingStates.plans ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Loading...
-                  </>
-                ) : (
-                  <>
-                    <Database className="h-4 w-4 mr-2" />
-                    Load Plans Data
-                  </>
-                )}
-              </Button>
-            </Suspense>
-          )}
         </div>
 
-        {!dataLoaded.plans ? (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            <Database className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Click &quot;Load Plans Data&quot; to view learning plans</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {filteredPlans.map(plan => (
+        <div className="space-y-4">
+          {filteredPlans.length === 0 ? (
+            <Suspense fallback={<LoadingSkeleton />}>
+              <EmptyState
+                icon={Calendar}
+                title="No Learning Plans"
+                description="Create your first learning plan to provide structured learning paths for users."
+                action={{
+                  label: 'Create First Plan',
+                  onClick: () => {
+                    setEditingPlan(null);
+                    setIsPlanModalOpen(true);
+                  },
+                }}
+                className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg"
+              />
+            </Suspense>
+          ) : (
+            filteredPlans.map(plan => (
               <Card
                 key={plan.id}
                 className="border-l-4"
@@ -1248,9 +1161,9 @@ export default function UnifiedAdminPage() {
                   </CardContent>
                 )}
               </Card>
-            ))}
-          </div>
-        )}
+            ))
+          )}
+        </div>
       </div>
 
       {/* Modals */}
