@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { JotaiProvider } from '@/providers/JotaiProvider';
+import { QueryProvider } from '@/providers/QueryProvider';
 import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
 import { UserTypeProvider } from '@/contexts/UserTypeContextSafe';
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext';
@@ -53,21 +54,23 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <JotaiProvider>
-          <FirebaseAuthProvider>
-            <UserTypeProvider>
-              <MobileMenuProvider>
-                <ThemeProvider>
-                  <LanguageProvider>
-                    <OnboardingProvider>
-                      <ConditionalLayout>{children}</ConditionalLayout>
-                    </OnboardingProvider>
-                  </LanguageProvider>
-                </ThemeProvider>
-              </MobileMenuProvider>
-            </UserTypeProvider>
-          </FirebaseAuthProvider>
-        </JotaiProvider>
+        <QueryProvider>
+          <JotaiProvider>
+            <FirebaseAuthProvider>
+              <UserTypeProvider>
+                <MobileMenuProvider>
+                  <ThemeProvider>
+                    <LanguageProvider>
+                      <OnboardingProvider>
+                        <ConditionalLayout>{children}</ConditionalLayout>
+                      </OnboardingProvider>
+                    </LanguageProvider>
+                  </ThemeProvider>
+                </MobileMenuProvider>
+              </UserTypeProvider>
+            </FirebaseAuthProvider>
+          </JotaiProvider>
+        </QueryProvider>
       </body>
     </html>
   );

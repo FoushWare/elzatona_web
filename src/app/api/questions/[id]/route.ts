@@ -5,10 +5,17 @@ import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 // GET /api/questions/[id] - Get a specific question
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const questionId = params.id;
+    const { id: questionId } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     if (!questionId) {
       return NextResponse.json(
@@ -48,11 +55,18 @@ export async function GET(
 // PUT /api/questions/[id] - Update a specific question
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const questionId = params.id;
+    const { id: questionId } = await params;
     const body = await request.json();
+
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     if (!questionId) {
       return NextResponse.json(
@@ -105,10 +119,17 @@ export async function PUT(
 // DELETE /api/questions/[id] - Delete a specific question
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const questionId = params.id;
+    const { id: questionId } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     if (!questionId) {
       return NextResponse.json(

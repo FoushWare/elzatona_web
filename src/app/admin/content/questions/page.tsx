@@ -146,7 +146,7 @@ export default function AdminContentQuestionsPage() {
       if (data.success) {
         const categories = [
           ...new Set(data.data.map((q: Question) => q.category)),
-        ];
+        ] as string[];
         setAllCategories(categories.sort());
       } else {
         console.error('Failed to load categories:', data.error);
