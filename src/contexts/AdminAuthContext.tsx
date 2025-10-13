@@ -98,14 +98,28 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
 
     const isLoginPage = pathname === '/admin/login';
     const isAdminRootPage = pathname === '/admin';
+
+    // TEMPORARY: Skip authentication for development/testing
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const skipAuthForTesting =
+      isDevelopment &&
+      (pathname?.includes('/admin/content/questions') ||
+        pathname?.includes('/admin/enhanced-structure') ||
+        pathname?.includes('/admin/content-management') ||
+        pathname?.includes('/admin/dashboard'));
+
     const isProtectedRoute =
-      pathname?.startsWith('/admin/') && !isLoginPage && !isAdminRootPage;
+      pathname?.startsWith('/admin/') &&
+      !isLoginPage &&
+      !isAdminRootPage &&
+      !skipAuthForTesting;
 
     console.log('🔄 AdminAuthProvider redirect logic:', {
       isLoading,
       isAuthenticated,
       isLoginPage,
       isAdminRootPage,
+      skipAuthForTesting,
       isProtectedRoute,
       pathname,
     });
@@ -117,7 +131,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
       return;
     }
 
-    // Only redirect from protected routes, not from /admin root or login
+    // Only redirect from protected routes, not from /admin root or login or testing routes
     if (!isAuthenticated && isProtectedRoute) {
       console.log(
         '🚨 Redirecting to login - not authenticated on protected route'

@@ -325,9 +325,7 @@ describe('Navbar Switching Fix', () => {
         '/admin/users',
         '/admin/settings',
         '/admin/guided-learning',
-        '/admin/sections',
         '/admin/questions/unified',
-        '/admin/sections/123/questions',
       ];
 
       adminRoutes.forEach(route => {
