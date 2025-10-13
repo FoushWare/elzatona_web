@@ -27,7 +27,7 @@ export { LearningPathCard } from './learning/LearningPathCard';
 export { default as LearningPathQuestions } from './learning/LearningPathQuestions';
 export { default as LearningPathWithProgress } from './learning/LearningPathWithProgress';
 export { LearningPathsGrid } from './learning/LearningPathsGrid';
-export { LearningModeSwitcher } from './learning/LearningModeSwitcher';
+// export { LearningModeSwitcher } from './learning/LearningModeSwitcher';
 export { LearningModeDetector } from './learning/LearningModeDetector';
 export { GuidedPractice } from './learning/GuidedPractice';
 export { GuidedAnalytics } from './learning/GuidedAnalytics';
