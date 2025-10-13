@@ -34,7 +34,9 @@ export function useFirebaseQuestions(
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/questions/${learningPath}`);
+      const response = await fetch(
+        `/api/questions/by-learning-path/${learningPath}`
+      );
       const data = await response.json();
 
       if (!response.ok) {
