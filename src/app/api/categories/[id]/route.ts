@@ -5,10 +5,17 @@ import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 // GET /api/categories/[id] - Get a specific category
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const categoryId = params.id;
+    const { id: categoryId } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     if (!categoryId) {
       return NextResponse.json(
@@ -48,11 +55,18 @@ export async function GET(
 // PUT /api/categories/[id] - Update a specific category
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const categoryId = params.id;
+    const { id: categoryId } = await params;
     const body = await request.json();
+
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     if (!categoryId) {
       return NextResponse.json(
@@ -105,10 +119,17 @@ export async function PUT(
 // DELETE /api/categories/[id] - Delete a specific category
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const categoryId = params.id;
+    const { id: categoryId } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     if (!categoryId) {
       return NextResponse.json(

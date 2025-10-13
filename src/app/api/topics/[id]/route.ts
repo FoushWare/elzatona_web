@@ -5,10 +5,17 @@ import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 // GET /api/topics/[id] - Get a specific topic
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const topicId = params.id;
+    const { id: topicId } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     if (!topicId) {
       return NextResponse.json(
@@ -48,11 +55,18 @@ export async function GET(
 // PUT /api/topics/[id] - Update a specific topic
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const topicId = params.id;
+    const { id: topicId } = await params;
     const body = await request.json();
+
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     if (!topicId) {
       return NextResponse.json(
@@ -105,10 +119,17 @@ export async function PUT(
 // DELETE /api/topics/[id] - Delete a specific topic
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const topicId = params.id;
+    const { id: topicId } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
 
     if (!topicId) {
       return NextResponse.json(

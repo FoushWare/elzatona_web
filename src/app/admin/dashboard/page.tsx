@@ -1,7 +1,6 @@
 'use client';
 
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
-import { useState, useEffect } from 'react';
 import {
   BookOpen,
   HelpCircle,
@@ -31,6 +30,7 @@ import {
   Info,
   ExternalLink,
 } from 'lucide-react';
+import { useAdminStats } from '@/hooks/useTanStackQuery';
 
 interface DashboardStats {
   questions: number;
@@ -44,72 +44,18 @@ interface DashboardStats {
 
 export default function AdminDashboard() {
   const { user } = useAdminAuth();
-  const [stats, setStats] = useState<DashboardStats>({
-    questions: 0,
-    categories: 0,
-    topics: 0,
-    learningCards: 0,
-    learningPlans: 0,
-    frontendTasks: 0,
-    problemSolvingTasks: 0,
-  });
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    loadDashboardStats();
-  }, []);
+  // Use TanStack Query hook for admin stats
+  const {
+    data: stats,
+    isLoading: loading,
+    error: statsError,
+    refetch: refetchStats,
+    isRefetching: refreshing,
+  } = useAdminStats();
 
-  const loadDashboardStats = async (isRefresh = false) => {
-    try {
-      if (isRefresh) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
-
-      // Load stats from all our API endpoints
-      const [
-        questionsRes,
-        categoriesRes,
-        topicsRes,
-        cardsRes,
-        plansRes,
-        frontendTasksRes,
-        problemSolvingRes,
-      ] = await Promise.all([
-        fetch('/api/questions').then(res =>
-          res.ok ? res.json() : { count: 0 }
-        ),
-        fetch('/api/categories').then(res =>
-          res.ok ? res.json() : { count: 0 }
-        ),
-        fetch('/api/topics').then(res => (res.ok ? res.json() : { count: 0 })),
-        fetch('/api/cards').then(res => (res.ok ? res.json() : { count: 0 })),
-        fetch('/api/plans').then(res => (res.ok ? res.json() : { count: 0 })),
-        fetch('/api/admin/frontend-tasks').then(res =>
-          res.ok ? res.json() : { total: 0 }
-        ),
-        fetch('/api/admin/problem-solving').then(res =>
-          res.ok ? res.json() : { total: 0 }
-        ),
-      ]);
-
-      setStats({
-        questions: questionsRes.count || 0,
-        categories: categoriesRes.count || 0,
-        topics: topicsRes.count || 0,
-        learningCards: cardsRes.count || 0,
-        learningPlans: plansRes.count || 0,
-        frontendTasks: frontendTasksRes.total || 0,
-        problemSolvingTasks: problemSolvingRes.total || 0,
-      });
-    } catch (error) {
-      console.error('Error loading dashboard stats:', error);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+  const handleRefresh = () => {
+    refetchStats();
   };
 
   const adminMenuItems = [
@@ -119,7 +65,7 @@ export default function AdminDashboard() {
       icon: HelpCircle,
       description: 'Manage all learning questions',
       color: 'bg-blue-500',
-      stats: stats.questions,
+      stats: stats?.questions || 0,
     },
     {
       href: '/admin/content-management',
@@ -127,7 +73,7 @@ export default function AdminDashboard() {
       icon: Settings,
       description: 'Unified learning content management',
       color: 'bg-purple-500',
-      stats: `${stats.categories} categories, ${stats.topics} topics`,
+      stats: `${stats?.categories || 0} categories, ${stats?.topics || 0} topics`,
     },
     {
       href: '/admin/frontend-tasks',
@@ -135,7 +81,7 @@ export default function AdminDashboard() {
       icon: Code,
       description: 'React/frontend coding challenges',
       color: 'bg-cyan-500',
-      stats: stats.frontendTasks,
+      stats: stats?.frontendTasks || 0,
     },
     {
       href: '/admin/problem-solving',
@@ -143,7 +89,7 @@ export default function AdminDashboard() {
       icon: Calculator,
       description: 'Algorithmic coding challenges',
       color: 'bg-red-500',
-      stats: stats.problemSolvingTasks,
+      stats: stats?.problemSolvingTasks || 0,
     },
     {
       href: '/admin/reports',
@@ -213,7 +159,7 @@ export default function AdminDashboard() {
               </p>
             </div>
             <button
-              onClick={() => loadDashboardStats(true)}
+              onClick={handleRefresh}
               disabled={refreshing}
               className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50"
             >
@@ -241,7 +187,7 @@ export default function AdminDashboard() {
                     {loading ? (
                       <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-16 rounded"></div>
                     ) : (
-                      stats.questions.toLocaleString()
+                      (stats?.questions || 0).toLocaleString()
                     )}
                   </p>
                 </div>
@@ -269,7 +215,7 @@ export default function AdminDashboard() {
                     {loading ? (
                       <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-8 rounded"></div>
                     ) : (
-                      stats.learningCards
+                      stats?.learningCards || 0
                     )}
                   </p>
                 </div>
@@ -297,7 +243,7 @@ export default function AdminDashboard() {
                     {loading ? (
                       <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-8 rounded"></div>
                     ) : (
-                      stats.learningPlans
+                      stats?.learningPlans || 0
                     )}
                   </p>
                 </div>
@@ -325,7 +271,8 @@ export default function AdminDashboard() {
                     {loading ? (
                       <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-12 rounded"></div>
                     ) : (
-                      stats.frontendTasks + stats.problemSolvingTasks
+                      (stats?.frontendTasks || 0) +
+                      (stats?.problemSolvingTasks || 0)
                     )}
                   </p>
                 </div>

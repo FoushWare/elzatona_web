@@ -2,11 +2,33 @@
 
 import React, {
   useState,
-  useEffect,
   useMemo,
   useCallback,
+  useEffect,
   Suspense,
 } from 'react';
+import {
+  useCards,
+  usePlans,
+  useCategories,
+  useTopics,
+  useQuestionsUnified,
+  useCreateCard,
+  useUpdateCard,
+  useDeleteCard,
+  useCreatePlan,
+  useUpdatePlan,
+  useDeletePlan,
+  useCreateCategory,
+  useUpdateCategory,
+  useDeleteCategory,
+  useCreateTopic,
+  useUpdateTopic,
+  useDeleteTopic,
+  useCreateQuestion,
+  useUpdateQuestion,
+  useDeleteQuestion,
+} from '@/hooks/useTanStackQuery';
 
 // Types for API responses
 interface ApiResponse<T> {
@@ -212,25 +234,101 @@ const StatsCard = React.memo(
 StatsCard.displayName = 'StatsCard';
 
 export default function UnifiedAdminPage() {
-  // Data state
-  const [cards, setCards] = useState<BasicCard[]>([]);
-  const [plans, setPlans] = useState<BasicPlan[]>([]);
-  const [categories, setCategories] = useState<
-    { id: string; name: string; description: string; cardType: string }[]
-  >([]);
-  const [topics, setTopics] = useState<
-    { id: string; name: string; description: string; categoryId: string }[]
-  >([]);
-  const [stats, setStats] = useState<Stats>({
-    totalCards: 0,
-    totalPlans: 0,
-    totalCategories: 0,
-    totalTopics: 0,
-    totalQuestions: 0,
+  // Use TanStack Query hooks for data fetching
+  const {
+    data: cardsData,
+    isLoading: cardsLoading,
+    error: cardsError,
+  } = useCards();
+
+  const {
+    data: plansData,
+    isLoading: plansLoading,
+    error: plansError,
+  } = usePlans();
+
+  const {
+    data: categoriesData,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+  } = useCategories();
+
+  const {
+    data: topicsData,
+    isLoading: topicsLoading,
+    error: topicsError,
+  } = useTopics();
+
+  const {
+    data: questionsData,
+    isLoading: questionsLoading,
+    error: questionsError,
+  } = useQuestionsUnified();
+
+  // Mutation hooks
+  const createCardMutation = useCreateCard();
+  const updateCardMutation = useUpdateCard();
+  const deleteCardMutation = useDeleteCard();
+  const createPlanMutation = useCreatePlan();
+  const updatePlanMutation = useUpdatePlan();
+  const deletePlanMutation = useDeletePlan();
+  const createCategoryMutation = useCreateCategory();
+  const updateCategoryMutation = useUpdateCategory();
+  const deleteCategoryMutation = useDeleteCategory();
+  const createTopicMutation = useCreateTopic();
+  const updateTopicMutation = useUpdateTopic();
+  const deleteTopicMutation = useDeleteTopic();
+  const createQuestionMutation = useCreateQuestion();
+  const updateQuestionMutation = useUpdateQuestion();
+  const deleteQuestionMutation = useDeleteQuestion();
+
+  // Debug logging for TanStack Query
+  console.log('TanStack Query Status:', {
+    cardsLoading,
+    cardsError,
+    cardsData,
+    plansLoading,
+    plansError,
+    plansData,
+    categoriesLoading,
+    categoriesError,
+    categoriesData,
+    topicsLoading,
+    topicsError,
+    topicsData,
+    questionsLoading,
+    questionsError,
+    questionsData,
   });
 
+  // Derived data
+  const cards = cardsData?.data || [];
+  const plans = plansData?.data || [];
+  const categories = categoriesData?.data || [];
+  const topics = topicsData?.data || [];
+  const questions = questionsData?.data || [];
+
+  // Loading state
+  const loading =
+    cardsLoading ||
+    plansLoading ||
+    categoriesLoading ||
+    topicsLoading ||
+    questionsLoading;
+
+  // Stats calculation
+  const stats = useMemo(
+    () => ({
+      totalCards: cardsData?.count || 0,
+      totalPlans: plansData?.count || 0,
+      totalCategories: categoriesData?.count || 0,
+      totalTopics: topicsData?.count || 0,
+      totalQuestions: questionsData?.count || 0,
+    }),
+    [cardsData, plansData, categoriesData, topicsData, questionsData]
+  );
+
   // UI state
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCardType, setFilterCardType] = useState('all');
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
@@ -261,11 +359,149 @@ export default function UnifiedAdminPage() {
     >
   >({});
 
-  // Data loaded states (simplified)
-  const [dataLoaded, setDataLoaded] = useState({
-    categories: false,
-    topics: false,
-  });
+  // CRUD handlers using TanStack Query mutations
+  const handleCreateCard = async (cardData: Partial<LearningCard>) => {
+    try {
+      await createCardMutation.mutateAsync(cardData);
+    } catch (error) {
+      console.error('Failed to create card:', error);
+    }
+  };
+
+  const handleUpdateCard = async (
+    cardId: string,
+    cardData: Partial<LearningCard>
+  ) => {
+    try {
+      await updateCardMutation.mutateAsync({ id: cardId, data: cardData });
+    } catch (error) {
+      console.error('Failed to update card:', error);
+    }
+  };
+
+  const handleDeleteCard = async (cardId: string) => {
+    try {
+      await deleteCardMutation.mutateAsync(cardId);
+    } catch (error) {
+      console.error('Failed to delete card:', error);
+    }
+  };
+
+  const handleCreatePlan = async (planData: Partial<LearningPlan>) => {
+    try {
+      await createPlanMutation.mutateAsync(planData);
+    } catch (error) {
+      console.error('Failed to create plan:', error);
+    }
+  };
+
+  const handleUpdatePlan = async (
+    planId: string,
+    planData: Partial<LearningPlan>
+  ) => {
+    try {
+      await updatePlanMutation.mutateAsync({ id: planId, data: planData });
+    } catch (error) {
+      console.error('Failed to update plan:', error);
+    }
+  };
+
+  const handleDeletePlan = async (planId: string) => {
+    try {
+      await deletePlanMutation.mutateAsync(planId);
+    } catch (error) {
+      console.error('Failed to delete plan:', error);
+    }
+  };
+
+  const handleCreateCategory = async (categoryData: Partial<Category>) => {
+    try {
+      await createCategoryMutation.mutateAsync(categoryData);
+    } catch (error) {
+      console.error('Failed to create category:', error);
+    }
+  };
+
+  const handleUpdateCategory = async (
+    categoryId: string,
+    categoryData: Partial<Category>
+  ) => {
+    try {
+      await updateCategoryMutation.mutateAsync({
+        id: categoryId,
+        data: categoryData,
+      });
+    } catch (error) {
+      console.error('Failed to update category:', error);
+    }
+  };
+
+  const handleDeleteCategory = async (categoryId: string) => {
+    try {
+      await deleteCategoryMutation.mutateAsync(categoryId);
+    } catch (error) {
+      console.error('Failed to delete category:', error);
+    }
+  };
+
+  const handleCreateTopic = async (topicData: Partial<Topic>) => {
+    try {
+      await createTopicMutation.mutateAsync(topicData);
+    } catch (error) {
+      console.error('Failed to create topic:', error);
+    }
+  };
+
+  const handleUpdateTopic = async (
+    topicId: string,
+    topicData: Partial<Topic>
+  ) => {
+    try {
+      await updateTopicMutation.mutateAsync({ id: topicId, data: topicData });
+    } catch (error) {
+      console.error('Failed to update topic:', error);
+    }
+  };
+
+  const handleDeleteTopic = async (topicId: string) => {
+    try {
+      await deleteTopicMutation.mutateAsync(topicId);
+    } catch (error) {
+      console.error('Failed to delete topic:', error);
+    }
+  };
+
+  const handleCreateQuestion = async (
+    questionData: Partial<UnifiedQuestion>
+  ) => {
+    try {
+      await createQuestionMutation.mutateAsync(questionData);
+    } catch (error) {
+      console.error('Failed to create question:', error);
+    }
+  };
+
+  const handleUpdateQuestion = async (
+    questionId: string,
+    questionData: Partial<UnifiedQuestion>
+  ) => {
+    try {
+      await updateQuestionMutation.mutateAsync({
+        id: questionId,
+        data: questionData,
+      });
+    } catch (error) {
+      console.error('Failed to update question:', error);
+    }
+  };
+
+  const handleDeleteQuestion = async (questionId: string) => {
+    try {
+      await deleteQuestionMutation.mutateAsync(questionId);
+    } catch (error) {
+      console.error('Failed to delete question:', error);
+    }
+  };
 
   // Debounced search to improve performance
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
@@ -312,327 +548,53 @@ export default function UnifiedAdminPage() {
     });
   }, [plans, debouncedSearchTerm]);
 
-  // Load all data directly when page loads
-  const loadAllData = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      // Use Promise.allSettled to prevent one failed request from breaking everything
-      const [
-        cardsResult,
-        plansResult,
-        categoriesResult,
-        topicsResult,
-        questionsResult,
-      ] = await Promise.allSettled([
-        fetch('/api/cards'),
-        fetch('/api/plans'),
-        fetch('/api/categories'),
-        fetch('/api/topics'),
-        fetch('/api/questions'),
-      ]);
-
-      // Process results safely
-      const processResult = async (result: PromiseSettledResult<Response>) => {
-        if (result.status === 'fulfilled') {
-          const data = await result.value.json();
-          return data.success ? data : { success: false, count: 0 };
-        }
-        return { success: false, count: 0 };
-      };
-
-      const [cardsData, plansData, categoriesData, topicsData, questionsData] =
-        await Promise.all([
-          processResult(cardsResult),
-          processResult(plansResult),
-          processResult(categoriesResult),
-          processResult(topicsResult),
-          processResult(questionsResult),
-        ]);
-
-      // Set stats immediately for quick display
-      setStats({
-        totalCards: cardsData.count || 0,
-        totalPlans: plansData.count || 0,
-        totalCategories: categoriesData.count || 0,
-        totalTopics: topicsData.count || 0,
-        totalQuestions: questionsData.count || 0,
-      });
-
-      // Load cards data directly
-      if (cardsData.success && cardsData.data) {
-        const validCards = cardsData.data
-          .filter(
-            (card: any) => card && card.id && card.name && card.description
-          )
-          .map((card: any) => ({
-            id: card.id,
-            name: card.name,
-            description: card.description,
-            color: card.color || '#3B82F6',
-            icon: card.icon || 'layers',
-            order: card.order || 0,
-          }));
-        setCards(validCards);
-        console.log('Cards loaded:', validCards);
-      }
-
-      // Load plans data directly
-      if (plansData.success && plansData.data) {
-        const validPlans = plansData.data
-          .filter(
-            (plan: any) => plan && plan.id && plan.name && plan.description
-          )
-          .map((plan: any) => ({
-            id: plan.id,
-            name: plan.name,
-            description: plan.description,
-            duration: plan.duration || 'N/A',
-            difficulty: plan.difficulty || 'beginner',
-            color: plan.color || '#10B981',
-            estimatedHours: plan.estimatedHours || 0,
-          }));
-        setPlans(validPlans);
-        console.log('Plans loaded:', validPlans);
-      }
-
-      // Load categories data directly
-      if (categoriesData.success && categoriesData.data) {
-        setCategories(categoriesData.data);
-        setDataLoaded(prev => ({ ...prev, categories: true }));
-      }
-
-      // Load topics data directly
-      if (topicsData.success && topicsData.data) {
-        setTopics(topicsData.data);
-        setDataLoaded(prev => ({ ...prev, topics: true }));
-      }
-    } catch (error) {
-      console.error('Error loading all data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadAllData();
-  }, [loadAllData]);
-
-  // Individual data loading functions for CRUD operations
-  const loadCategoriesData = useCallback(async () => {
-    try {
-      const response = await fetch('/api/categories');
-      const data = await response.json();
-
-      if (data.success) {
-        setCategories(data.data);
-        setDataLoaded(prev => ({ ...prev, categories: true }));
-      }
-    } catch (error) {
-      console.error('Error loading categories:', error);
-    }
-  }, []);
-
-  const loadTopicsData = useCallback(async () => {
-    try {
-      const response = await fetch('/api/topics');
-      const data = await response.json();
-
-      if (data.success) {
-        setTopics(data.data);
-        setDataLoaded(prev => ({ ...prev, topics: true }));
-      }
-    } catch (error) {
-      console.error('Error loading topics:', error);
-    }
-  }, []);
-
-  // Optimized toggle functions with lazy loading
-  const toggleCard = useCallback(
-    async (cardId: string) => {
-      const newExpanded = new Set(expandedCards);
+  // Helper functions for UI interactions
+  const toggleCard = useCallback((cardId: string) => {
+    setExpandedCards(prev => {
+      const newExpanded = new Set(prev);
       if (newExpanded.has(cardId)) {
         newExpanded.delete(cardId);
       } else {
         newExpanded.add(cardId);
-        // Load categories and topics data when expanding a card
-        if (!dataLoaded.categories) {
-          await loadCategoriesData();
-        }
-        if (!dataLoaded.topics) {
-          await loadTopicsData();
-        }
       }
-      setExpandedCards(newExpanded);
-    },
-    [
-      expandedCards,
-      dataLoaded.categories,
-      dataLoaded.topics,
-      loadCategoriesData,
-      loadTopicsData,
-    ]
-  );
+      return newExpanded;
+    });
+  }, []);
 
-  const toggleCategory = useCallback(
-    async (categoryId: string) => {
-      const newExpanded = new Set(expandedCategories);
+  const toggleCategory = useCallback((categoryId: string) => {
+    setExpandedCategories(prev => {
+      const newExpanded = new Set(prev);
       if (newExpanded.has(categoryId)) {
         newExpanded.delete(categoryId);
       } else {
         newExpanded.add(categoryId);
-        // Ensure topics data is loaded
-        if (!dataLoaded.topics) {
-          await loadTopicsData();
-        }
       }
-      setExpandedCategories(newExpanded);
-    },
-    [expandedCategories, dataLoaded.topics, loadTopicsData]
-  );
+      return newExpanded;
+    });
+  }, []);
 
-  const toggleTopic = useCallback(
-    async (topicId: string) => {
-      const newExpanded = new Set(expandedTopics);
+  const toggleTopic = useCallback((topicId: string) => {
+    setExpandedTopics(prev => {
+      const newExpanded = new Set(prev);
       if (newExpanded.has(topicId)) {
         newExpanded.delete(topicId);
       } else {
         newExpanded.add(topicId);
-        // Load questions for this topic
-        try {
-          const response = await fetch(`/api/questions/by-topic/${topicId}`);
-          const data = await response.json();
-          if (data.success) {
-            setQuestionsByTopic(prev => ({
-              ...prev,
-              [topicId]: data.data,
-            }));
-          }
-        } catch (error) {
-          console.error('Error loading questions for topic:', error);
-        }
       }
-      setExpandedTopics(newExpanded);
-    },
-    [expandedTopics]
-  );
+      return newExpanded;
+    });
+  }, []);
 
-  const togglePlan = useCallback(
-    (planId: string) => {
-      const newExpanded = new Set(expandedPlans);
+  const togglePlan = useCallback((planId: string) => {
+    setExpandedPlans(prev => {
+      const newExpanded = new Set(prev);
       if (newExpanded.has(planId)) {
         newExpanded.delete(planId);
       } else {
         newExpanded.add(planId);
       }
-      setExpandedPlans(newExpanded);
-    },
-    [expandedPlans]
-  );
-
-  // Optimized CRUD handlers with error handling
-  const handleCreateCard = useCallback(
-    async (data: unknown) => {
-      try {
-        const response = await fetch('/api/cards', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) throw new Error('Failed to create card');
-        setIsCardModalOpen(false);
-        await loadAllData(); // Reload all data
-        setStats(prev => ({ ...prev, totalCards: prev.totalCards + 1 }));
-      } catch (error) {
-        console.error('Error creating card:', error);
-        alert('Failed to create card');
-      }
-    },
-    [loadAllData]
-  );
-
-  const handleCreatePlan = useCallback(
-    async (data: unknown) => {
-      try {
-        const response = await fetch('/api/plans', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) throw new Error('Failed to create plan');
-        setIsPlanModalOpen(false);
-        await loadAllData(); // Reload all data
-        setStats(prev => ({ ...prev, totalPlans: prev.totalPlans + 1 }));
-      } catch (error) {
-        console.error('Error creating plan:', error);
-        alert('Failed to create plan');
-      }
-    },
-    [loadAllData]
-  );
-
-  const handleCreateCategory = useCallback(
-    async (data: unknown) => {
-      try {
-        const response = await fetch('/api/categories', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) throw new Error('Failed to create category');
-        setIsCategoryModalOpen(false);
-        await loadCategoriesData();
-        setStats(prev => ({
-          ...prev,
-          totalCategories: prev.totalCategories + 1,
-        }));
-      } catch (error) {
-        console.error('Error creating category:', error);
-        alert('Failed to create category');
-      }
-    },
-    [loadCategoriesData]
-  );
-
-  const handleCreateTopic = useCallback(
-    async (data: unknown) => {
-      try {
-        const response = await fetch('/api/topics', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) throw new Error('Failed to create topic');
-        setIsTopicModalOpen(false);
-        await loadTopicsData();
-        setStats(prev => ({ ...prev, totalTopics: prev.totalTopics + 1 }));
-      } catch (error) {
-        console.error('Error creating topic:', error);
-        alert('Failed to create topic');
-      }
-    },
-    [loadTopicsData]
-  );
-
-  const handleCreateQuestion = useCallback(async (data: unknown) => {
-    try {
-      const response = await fetch('/api/questions/unified', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ questions: [data] }),
-      });
-
-      if (!response.ok) throw new Error('Failed to create question');
-      setIsQuestionModalOpen(false);
-      setStats(prev => ({ ...prev, totalQuestions: prev.totalQuestions + 1 }));
-    } catch (error) {
-      console.error('Error creating question:', error);
-      alert('Failed to create question');
-    }
+      return newExpanded;
+    });
   }, []);
 
   if (loading) {

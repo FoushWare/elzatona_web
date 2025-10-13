@@ -77,6 +77,9 @@ export default function FrontendTaskEditor({
     solution: '',
     category: 'react',
     difficulty: 'easy',
+    estimatedTime: 30,
+    author: '',
+    starterCode: '',
     tags: [],
     hints: [],
     files: [],
@@ -155,6 +158,9 @@ export default function FrontendTaskEditor({
         solution: task.solution || '',
         category: task.category || 'react',
         difficulty: task.difficulty || 'easy',
+        estimatedTime: task.estimatedTime || 30,
+        author: task.author || '',
+        starterCode: task.starterCode || '',
         tags: task.tags || [],
         hints: task.hints || [],
         files: task.files || [],
@@ -195,7 +201,14 @@ export default function FrontendTaskEditor({
           },
         ]);
 
-        setOpenFiles(files);
+        setOpenFiles(
+          files.map(f => ({
+            id: f.id,
+            name: f.name,
+            type: f.fileType as 'tsx' | 'css' | 'html' | 'js' | 'json',
+            content: f.content,
+          }))
+        );
         setActiveFile(
           files.find(f => f.isEntryPoint)?.id || files[0]?.id || null
         );
@@ -203,17 +216,25 @@ export default function FrontendTaskEditor({
       } else {
         // Default files
         const defaultFiles = [
-          { id: 'app', name: 'App.tsx', type: 'tsx' as const, content: '' },
+          {
+            id: 'app',
+            name: 'App.tsx',
+            type: 'file' as const,
+            fileType: 'tsx',
+            content: '',
+          },
           {
             id: 'styles',
             name: 'styles.css',
-            type: 'css' as const,
+            type: 'file' as const,
+            fileType: 'css',
             content: '',
           },
           {
             id: 'index',
             name: 'index.html',
-            type: 'html' as const,
+            type: 'file' as const,
+            fileType: 'html',
             content:
               '<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
           },
@@ -224,17 +245,24 @@ export default function FrontendTaskEditor({
             id: 'src',
             name: 'src',
             type: 'folder',
-            children: defaultFiles.filter(f => f.type !== 'html'),
+            children: defaultFiles.filter(f => f.fileType !== 'html'),
           },
           {
             id: 'public',
             name: 'public',
             type: 'folder',
-            children: defaultFiles.filter(f => f.type === 'html'),
+            children: defaultFiles.filter(f => f.fileType === 'html'),
           },
         ]);
 
-        setOpenFiles(defaultFiles);
+        setOpenFiles(
+          defaultFiles.map(f => ({
+            id: f.id,
+            name: f.name,
+            type: f.fileType as 'tsx' | 'css' | 'html' | 'js' | 'json',
+            content: f.content,
+          }))
+        );
         setActiveFile('app');
         setExpandedFolders(new Set(['src', 'public']));
       }

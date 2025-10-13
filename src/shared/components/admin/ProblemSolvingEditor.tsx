@@ -306,19 +306,26 @@ export default function ProblemSolvingEditor({
             examples: [...prev.examples, parsedExample],
           }));
         } else {
-          // Fallback to string format
+          // Fallback to string format - create a simple example object
           setFormData(prev => ({
             ...prev,
-            examples: [...prev.examples, newExample.trim()],
+            examples: [...prev.examples, {
+              input: newExample.trim(),
+              output: 'Expected output',
+              explanation: 'Explanation'
+            }],
           }));
         }
       } catch {
-        // If JSON parsing fails, treat as string
+        // If JSON parsing fails, treat as string - create a simple example object
         setFormData(prev => ({
           ...prev,
-          examples: [...prev.examples, newExample.trim()],
+          examples: [...prev.examples, {
+            input: newExample.trim(),
+            output: 'Expected output',
+            explanation: 'Explanation'
+          }],
         }));
-      }
       setNewExample('');
     }
   };
@@ -1388,4 +1395,4 @@ export default function ProblemSolvingEditor({
       </div>
     </div>
   );
-}
+};
