@@ -108,7 +108,6 @@ export { default as LayoutWrapper } from './common/LayoutWrapper';
 // Additional Common Components (moved from main components)
 export { AIInterviewerAgent } from './common/AIInterviewerAgent';
 export { default as AddToFlashcard } from './common/AddToFlashcard';
-export { default as BackupManager } from './common/BackupManager';
 export { default as BulkQuestionUploader } from './common/BulkQuestionUploader';
 export { default as ChatGPT } from './common/ChatGPT';
 export { default as CodeEditor } from './common/CodeEditor';

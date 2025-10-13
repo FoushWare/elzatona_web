@@ -285,13 +285,10 @@ A comprehensive learning system for frontend developers preparing for interviews
 - **Questions Management**: `/admin/content/questions` - Add, edit, and manage questions
 - **Learning Cards Management**: `/admin/learning-cards` - Create and manage learning cards for guided plans
 - **Guided Learning Plans**: `/admin/guided-learning` - Create and manage learning plans
-- **Learning Sections**: `/admin/sections` - Manage learning path sections
 - **Categories & Topics**: `/admin/enhanced-structure` - Create and manage topics and categories
 - **Frontend Tasks Management**: `/admin/frontend-tasks` - Create and manage React/frontend coding challenges ✅ **Added to Admin Menu**
 - **Problem Solving Management**: `/admin/problem-solving` - Create and manage algorithmic coding challenges ✅ **Added to Admin Menu**
 - **Feature Reports**: `/admin/reports` - View project features and progress
-- **Backup Management**: `/admin/backup` - Manage question backups
-- **Audit Logs**: `/admin/audit-logs` - Monitor admin actions and system events
 - **User Management**: `/admin/users` - Create and manage user accounts
 - **Audio Management**: `/admin/audio` - Upload and manage audio files
 
