@@ -55,7 +55,9 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
       const learningPath =
         topicToLearningPath[interviewTopic] || 'frontend-basics';
 
-      const response = await fetch(`/api/questions/${learningPath}`);
+      const response = await fetch(
+        `/api/questions/by-learning-path/${learningPath}`
+      );
       const data = await response.json();
 
       if (data.success && data.questions) {
