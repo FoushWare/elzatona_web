@@ -73,7 +73,7 @@ The Frontend Tasks card is now ready for:
 
 ## ✅ **Verification**
 
-- ✅ All 5 cards visible in `/admin/categories-topics`
+- ✅ All 5 cards visible in `/admin/content-management`
 - ✅ Card statistics display correctly
 - ✅ Database contains complete card structure
 - ✅ API endpoints return all 5 cards

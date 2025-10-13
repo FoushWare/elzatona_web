@@ -721,7 +721,8 @@ export default function UnifiedAdminPage() {
           🎯 Unified Learning Management
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Manage Cards, Plans, Categories, Topics, and Questions in one place
+          Comprehensive admin interface for managing learning cards, plans,
+          categories, topics, and questions
         </p>
       </div>
 

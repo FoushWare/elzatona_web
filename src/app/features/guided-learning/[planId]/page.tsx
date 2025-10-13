@@ -299,7 +299,7 @@ export default function LearningPlanDetailPage() {
                 start learning.
               </p>
               <button
-                onClick={() => router.push('/admin/guided-learning')}
+                onClick={() => router.push('/admin/content-management')}
                 className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
               >
                 Manage Plan Questions

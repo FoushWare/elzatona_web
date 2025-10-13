@@ -2600,7 +2600,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
 #### **7.1 Categories & Topics Page Testing**
 
 - [ ] **Page Access & Functionality**
-  - [ ] Navigate to `/admin/categories-topics`
+  - [ ] Navigate to `/admin/content-management`
   - [ ] Verify page loads without authentication issues
   - [ ] Verify statistics cards display correctly:
     - [ ] Total Categories count
@@ -3111,10 +3111,10 @@ This comprehensive testing guide now covers all critical aspects of the guided l
     - [ ] Verify question is removed from Firebase
     - [ ] Verify question count updates correctly
 
-#### **15.1.4 Categories & Topics Management (`/admin/categories-topics`)**
+#### **15.1.4 Content Management (`/admin/content-management`)**
 
 - [ ] **Verify Real Categories Data**
-  - [ ] Navigate to `/admin/categories-topics`
+  - [ ] Navigate to `/admin/content-management`
   - [ ] Verify categories show actual data:
     - [ ] Category names (React, JavaScript, Next.js, CSS, HTML, etc.)
     - [ ] Category question counts (realistic numbers)

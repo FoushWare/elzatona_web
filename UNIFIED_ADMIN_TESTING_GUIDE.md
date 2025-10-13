@@ -6,7 +6,7 @@ The unified admin interface now consolidates all learning management functionali
 
 ## 🚀 Quick Access
 
-- **Main Admin Page**: `http://localhost:3000/admin/categories-topics`
+- **Main Admin Page**: `http://localhost:3000/admin/content-management`
 - **API Test Page**: `http://localhost:3000/test-admin-apis.html`
 
 ## 📊 System Architecture
@@ -125,7 +125,7 @@ Plans (Learning Paths)
 
 ### **Step 1: Basic Page Load**
 
-1. Navigate to `http://localhost:3000/admin/categories-topics`
+1. Navigate to `http://localhost:3000/admin/content-management`
 2. Verify page loads without errors
 3. Check that stats cards show correct counts
 4. Verify search and filter controls are present

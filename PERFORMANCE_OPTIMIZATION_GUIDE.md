@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide documents the performance optimizations implemented for the `/admin/categories-topics` page to improve Core Web Vitals and overall user experience.
+This guide documents the performance optimizations implemented for the `/admin/content-management` page to improve Core Web Vitals and overall user experience.
 
 ## 🚀 Implemented Optimizations
 
@@ -248,7 +248,7 @@ const LoadingSkeleton = () => (
 
    ```bash
    # Open browser dev tools
-   # Navigate to http://localhost:3000/admin/categories-topics
+   # Navigate to http://localhost:3000/admin/content-management
    # Check Network tab for initial API calls
    # Verify only counts are loaded initially
    ```
@@ -279,7 +279,7 @@ node scripts/test-performance-optimizations.js
 
 ```bash
 # Use Lighthouse CLI
-npx lighthouse http://localhost:3000/admin/categories-topics --output=html --output-path=./lighthouse-report.html
+npx lighthouse http://localhost:3000/admin/content-management --output=html --output-path=./lighthouse-report.html
 
 # Or use Chrome DevTools
 # 1. Open DevTools

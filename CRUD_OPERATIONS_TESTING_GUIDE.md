@@ -15,28 +15,28 @@ Both admin pages now have fully functional CRUD operations (Create, Read, Update
 - **✅ UPDATE**: Edit existing questions with pre-filled forms
 - **✅ DELETE**: Remove questions with confirmation
 
-### ✅ **Categories CRUD** (`/admin/categories-topics`)
+### ✅ **Categories CRUD** (`/admin/content-management`)
 
 - **✅ CREATE**: Add new categories
 - **✅ READ**: View categories in hierarchical structure
 - **✅ UPDATE**: Edit existing categories
 - **✅ DELETE**: Remove categories
 
-### ✅ **Topics CRUD** (`/admin/categories-topics`)
+### ✅ **Topics CRUD** (`/admin/content-management`)
 
 - **✅ CREATE**: Add new topics with category association
 - **✅ READ**: View topics under categories
 - **✅ UPDATE**: Edit existing topics
 - **✅ DELETE**: Remove topics
 
-### ✅ **Cards CRUD** (`/admin/categories-topics`)
+### ✅ **Cards CRUD** (`/admin/content-management`)
 
 - **✅ CREATE**: Add new learning cards
 - **✅ READ**: View cards in hierarchical structure
 - **✅ UPDATE**: Edit existing cards
 - **✅ DELETE**: Remove cards
 
-### ✅ **Plans CRUD** (`/admin/categories-topics`)
+### ✅ **Plans CRUD** (`/admin/content-management`)
 
 - **✅ CREATE**: Add new learning plans
 - **✅ READ**: View plans with details
@@ -85,7 +85,7 @@ Both admin pages now have fully functional CRUD operations (Create, Read, Update
 
 ### **2. Categories-Topics Page Testing**
 
-**URL**: `http://localhost:3000/admin/categories-topics`
+**URL**: `http://localhost:3000/admin/content-management`
 
 #### **Cards Management**
 
@@ -170,7 +170,7 @@ Both admin pages now have fully functional CRUD operations (Create, Read, Update
 
 ## 🚀 **Performance Features**
 
-### **Lazy Loading** (`/admin/categories-topics`)
+### **Lazy Loading** (`/admin/content-management`)
 
 - Initial page load shows only counts and basic structure
 - Detailed data loads on-demand when expanding sections
