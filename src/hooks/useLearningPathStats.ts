@@ -40,7 +40,9 @@ export function useLearningPathStats(): UseLearningPathStatsReturn {
         }
 
         // Fallback to the legacy questions API
-        const legacyResponse = await fetch(`/api/questions/${pathId}`);
+        const legacyResponse = await fetch(
+          `/api/questions/by-learning-path/${pathId}`
+        );
         if (legacyResponse.ok) {
           const legacyData = await legacyResponse.json();
           if (legacyData.success && legacyData.count) {
