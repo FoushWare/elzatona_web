@@ -2,7 +2,7 @@
 
 ## 📋 **Testing Overview**
 
-This guide focuses specifically on CRUD operations for Topics and Categories management at `http://localhost:3000/admin/categories-topics`.
+This guide focuses specifically on CRUD operations for Topics and Categories management at `http://localhost:3000/admin/content-management`.
 
 **🎯 New Unified Interface**: The admin page now features an integrated design with:
 
@@ -19,12 +19,12 @@ This guide focuses specifically on CRUD operations for Topics and Categories man
 
 ## 🏷️ **TOPICS CRUD OPERATIONS**
 
-### **URL**: `http://localhost:3000/admin/categories-topics`
+### **URL**: `http://localhost:3000/admin/content-management`
 
 #### **✅ Topics CRUD Testing Checklist**
 
 - [ ] **Page Access**
-  - [ ] Navigate to `/admin/categories-topics`
+  - [ ] Navigate to `/admin/content-management`
   - [ ] Verify admin authentication required
   - [ ] Sign in with admin credentials
   - [ ] Verify page loads successfully
@@ -108,7 +108,7 @@ This guide focuses specifically on CRUD operations for Topics and Categories man
 
 ## 📚 **CATEGORIES CRUD OPERATIONS**
 
-### **URL**: `http://localhost:3000/admin/categories-topics`
+### **URL**: `http://localhost:3000/admin/content-management`
 
 #### **✅ Categories CRUD Testing Checklist**
 
@@ -286,7 +286,7 @@ curl -X DELETE http://localhost:3000/api/categories/[category-id]
 
 #### **Step 1: Authentication**
 
-1. Navigate to `/admin/categories-topics`
+1. Navigate to `/admin/content-management`
 2. Sign in with admin credentials
 3. Verify access to admin page
 
@@ -415,7 +415,7 @@ curl -s http://localhost:3000/api/categories | jq '.data[0:3]'
 
 ### **Manual Testing**
 
-1. Navigate to `http://localhost:3000/admin/categories-topics`
+1. Navigate to `http://localhost:3000/admin/content-management`
 2. Create topics first
 3. Create categories with topic arrays
 4. Test all CRUD operations

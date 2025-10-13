@@ -2,7 +2,7 @@
 
 ## ✅ Implementation Complete
 
-The card statistics feature has been successfully implemented in the `/admin/categories-topics` page. Each learning card now displays:
+The card statistics feature has been successfully implemented in the `/admin/content-management` page. Each learning card now displays:
 
 ### 🎨 Visual Badges
 
@@ -26,7 +26,7 @@ Based on the test results:
 
 #### Code Location
 
-- **File**: `src/app/admin/categories-topics/page.tsx`
+- **File**: `src/app/admin/content-management/page.tsx`
 - **Lines**: Card rendering section with badge calculations
 
 #### Key Features
