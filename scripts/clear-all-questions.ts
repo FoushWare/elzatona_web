@@ -33,7 +33,7 @@ async function clearAllQuestions() {
 
   try {
     // Get all questions
-    const questionsRef = collection(db, 'questions');
+    const questionsRef = collection(db, 'unifiedQuestions');
     const querySnapshot = await getDocs(questionsRef);
 
     if (querySnapshot.empty) {
@@ -49,7 +49,9 @@ async function clearAllQuestions() {
     const deletePromises = [];
     querySnapshot.forEach(docSnapshot => {
       console.log(`   - Deleting: ${docSnapshot.id}`);
-      deletePromises.push(deleteDoc(doc(db, 'questions', docSnapshot.id)));
+      deletePromises.push(
+        deleteDoc(doc(db, 'unifiedQuestions', docSnapshot.id))
+      );
     });
 
     // Wait for all deletions to complete
