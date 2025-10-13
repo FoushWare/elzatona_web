@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Editor } from '@monaco-editor/react';
 import {
@@ -31,14 +30,12 @@ import {
   TestCase,
 } from '@/types/admin';
 import ClientCodeRunner from './ClientCodeRunner';
-
 interface ProblemSolvingEditorProps {
   task?: ProblemSolvingTask | null;
   onSave: (taskData: ProblemSolvingTaskFormData) => void;
   onCancel: () => void;
   isEditing?: boolean;
 }
-
 interface FileNode {
   id: string;
   name: string;
@@ -47,7 +44,6 @@ interface FileNode {
   content?: string;
   fileType?: string;
 }
-
 const categories = [
   'Array',
   'String',
@@ -73,13 +69,11 @@ const categories = [
   'Simulation',
   'Other',
 ];
-
 const difficulties = [
   { value: 'easy', label: 'Easy', color: 'bg-green-600' },
   { value: 'medium', label: 'Medium', color: 'bg-yellow-600' },
   { value: 'hard', label: 'Hard', color: 'bg-red-600' },
 ];
-
 export default function ProblemSolvingEditor({
   task,
   onSave,
@@ -89,7 +83,6 @@ export default function ProblemSolvingEditor({
   // Theme management
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
   const [isDark, setIsDark] = useState(false);
-
   // Resizing state
   const [isResizing, setIsResizing] = useState(false);
   const [resizeStartX, setResizeStartX] = useState(0);
@@ -99,7 +92,6 @@ export default function ProblemSolvingEditor({
   const [leftPanelWidth, setLeftPanelWidth] = useState(30);
   const [middlePanelWidth, setMiddlePanelWidth] = useState(45);
   const [rightPanelWidth, setRightPanelWidth] = useState(25);
-
   // Form data
   const [formData, setFormData] = useState<ProblemSolvingTaskFormData>({
     title: '',
@@ -114,12 +106,10 @@ export default function ProblemSolvingEditor({
     examples: [],
     tags: [],
   });
-
   // Code editor states
   const [starterCode, setStarterCode] = useState('');
   const [solutionCode, setSolutionCode] = useState('');
   const [activeTab, setActiveTab] = useState<'starter' | 'solution'>('starter');
-
   // File explorer states
   const [activeFile, setActiveFile] = useState<string>('');
   const [fileTree, setFileTree] = useState<FileNode[]>([]);
@@ -132,12 +122,10 @@ export default function ProblemSolvingEditor({
   const [showAddFile, setShowAddFile] = useState(false);
   const [showAddFolder, setShowAddFolder] = useState(false);
   const [showFileExplorer, setShowFileExplorer] = useState(true);
-
   // Dynamic field states
   const [newConstraint, setNewConstraint] = useState('');
   const [newExample, setNewExample] = useState('');
   const [newTag, setNewTag] = useState('');
-
   // Initialize form data when task prop changes
   useEffect(() => {
     if (task) {
@@ -169,19 +157,16 @@ export default function ProblemSolvingEditor({
       }));
     }
   }, [task]);
-
   // Theme detection
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const updateTheme = () => {
       setIsDark(theme === 'dark' || (theme === 'system' && mediaQuery.matches));
     };
-
     updateTheme();
     mediaQuery.addEventListener('change', updateTheme);
     return () => mediaQuery.removeEventListener('change', updateTheme);
   }, [theme]);
-
   // Initialize file tree with default files
   useEffect(() => {
     // Always update file tree when starterCode or solutionCode changes
@@ -207,7 +192,6 @@ export default function ProblemSolvingEditor({
       setActiveFile('starter');
     }
   }, [starterCode, solutionCode]);
-
   // Resizing handlers
   const handleMouseDown = (
     e: React.MouseEvent,
@@ -218,14 +202,11 @@ export default function ProblemSolvingEditor({
     setResizeType(type);
     setResizeStartX(e.clientX);
   };
-
   const handleMouseMove = (e: MouseEvent) => {
     if (!isResizing || !resizeType) return;
-
     const deltaX = e.clientX - resizeStartX;
     const containerWidth = window.innerWidth;
     const deltaPercent = (deltaX / containerWidth) * 100;
-
     if (deltaPercent !== 0) {
       if (resizeType === 'left-middle') {
         setLeftPanelWidth(prev =>
@@ -245,12 +226,10 @@ export default function ProblemSolvingEditor({
       setResizeStartX(e.clientX);
     }
   };
-
   const handleMouseUp = () => {
     setIsResizing(false);
     setResizeType(null);
   };
-
   useEffect(() => {
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
@@ -263,7 +242,6 @@ export default function ProblemSolvingEditor({
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
     }
-
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
@@ -271,12 +249,10 @@ export default function ProblemSolvingEditor({
       document.body.style.userSelect = '';
     };
   }, [isResizing]);
-
   const getDifficultyColor = (difficulty: string) => {
     const diff = difficulties.find(d => d.value === difficulty);
     return diff?.color || 'bg-gray-600';
   };
-
   const addConstraint = () => {
     if (newConstraint.trim()) {
       setFormData(prev => ({
@@ -286,14 +262,12 @@ export default function ProblemSolvingEditor({
       setNewConstraint('');
     }
   };
-
   const removeConstraint = (index: number) => {
     setFormData(prev => ({
       ...prev,
       constraints: prev.constraints.filter((_, i) => i !== index),
     }));
   };
-
   const addExample = () => {
     if (newExample.trim()) {
       // Parse the input to handle both string and object formats
@@ -329,14 +303,12 @@ export default function ProblemSolvingEditor({
       setNewExample('');
     }
   };
-
   const removeExample = (index: number) => {
     setFormData(prev => ({
       ...prev,
       examples: prev.examples.filter((_, i) => i !== index),
     }));
   };
-
   const addTag = () => {
     if (newTag.trim()) {
       setFormData(prev => ({
@@ -346,14 +318,12 @@ export default function ProblemSolvingEditor({
       setNewTag('');
     }
   };
-
   const removeTag = (index: number) => {
     setFormData(prev => ({
       ...prev,
       tags: prev.tags.filter((_, i) => i !== index),
     }));
   };
-
   const addTestCase = () => {
     const newTestCase: TestCase = {
       id: Date.now().toString(),
@@ -366,14 +336,12 @@ export default function ProblemSolvingEditor({
       testCases: [...prev.testCases, newTestCase],
     }));
   };
-
   const removeTestCase = (id: string) => {
     setFormData(prev => ({
       ...prev,
       testCases: prev.testCases.filter(tc => tc.id !== id),
     }));
   };
-
   const updateTestCase = (id: string, field: keyof TestCase, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -382,7 +350,6 @@ export default function ProblemSolvingEditor({
       ),
     }));
   };
-
   const toggleFolder = (folderId: string) => {
     setExpandedFolders(prev => {
       const newSet = new Set(prev);
@@ -394,18 +361,15 @@ export default function ProblemSolvingEditor({
       return newSet;
     });
   };
-
   const openFile = (fileId: string) => {
     setActiveFile(fileId);
     if (!openFiles.includes(fileId)) {
       setOpenFiles([...openFiles, fileId]);
     }
   };
-
   const getFileExtension = (filename: string) => {
     return filename.split('.').pop()?.toLowerCase() || 'txt';
   };
-
   const getFileLanguage = (fileType: string) => {
     const languageMap: { [key: string]: string } = {
       js: 'javascript',
@@ -423,12 +387,10 @@ export default function ProblemSolvingEditor({
     };
     return languageMap[fileType] || 'plaintext';
   };
-
   const getFileContent = (fileId: string) => {
     const file = fileTree.find(node => node.id === fileId);
     return file?.content || '';
   };
-
   const addFile = () => {
     if (newFileName.trim()) {
       const fileExtension = getFileExtension(newFileName);
@@ -444,7 +406,6 @@ export default function ProblemSolvingEditor({
       setShowAddFile(false);
     }
   };
-
   const addFolder = () => {
     if (newFolderName.trim()) {
       const newFolder: FileNode = {
@@ -458,7 +419,6 @@ export default function ProblemSolvingEditor({
       setShowAddFolder(false);
     }
   };
-
   const deleteFile = (fileId: string) => {
     setFileTree(prev => prev.filter(node => node.id !== fileId));
     setOpenFiles(prev => prev.filter(id => id !== fileId));
@@ -467,13 +427,11 @@ export default function ProblemSolvingEditor({
       setActiveFile(remainingFiles.length > 0 ? remainingFiles[0].id : '');
     }
   };
-
   const updateFileContent = (fileId: string, content: string) => {
     setFileTree(prev =>
       prev.map(node => (node.id === fileId ? { ...node, content } : node))
     );
   };
-
   const handleSave = () => {
     const taskData = {
       ...formData,
@@ -482,7 +440,6 @@ export default function ProblemSolvingEditor({
     };
     onSave(taskData);
   };
-
   return (
     <div
       className={`fixed inset-0 z-50 transition-colors duration-300 ${
@@ -516,7 +473,6 @@ export default function ProblemSolvingEditor({
               {isEditing ? 'Edit Problem' : 'Create Problem'}
             </h1>
           </div>
-
           <div className="flex items-center gap-3">
             {/* Theme Toggle */}
             <div className="flex items-center gap-1">
@@ -566,7 +522,6 @@ export default function ProblemSolvingEditor({
                 <Monitor className="w-4 h-4" />
               </button>
             </div>
-
             <button
               onClick={onCancel}
               className={`p-2 rounded-lg transition-colors duration-200 ${
@@ -581,7 +536,6 @@ export default function ProblemSolvingEditor({
           </div>
         </div>
       </div>
-
       <div className="flex h-[calc(100vh-80px)]">
         {/* Left Panel - Task Details */}
         <div
@@ -606,7 +560,6 @@ export default function ProblemSolvingEditor({
                   >
                     Problem Details
                   </h2>
-
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 ${
@@ -629,7 +582,6 @@ export default function ProblemSolvingEditor({
                       placeholder="Enter problem title"
                     />
                   </div>
-
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 ${
@@ -656,7 +608,6 @@ export default function ProblemSolvingEditor({
                       ))}
                     </select>
                   </div>
-
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 ${
@@ -683,7 +634,6 @@ export default function ProblemSolvingEditor({
                       ))}
                     </select>
                   </div>
-
                   <div>
                     <label
                       className={`block text-sm font-medium mb-2 ${
@@ -710,7 +660,6 @@ export default function ProblemSolvingEditor({
                     />
                   </div>
                 </div>
-
                 {/* Description */}
                 <div className="space-y-4">
                   <h2
@@ -734,7 +683,6 @@ export default function ProblemSolvingEditor({
                     placeholder="Describe the problem..."
                   />
                 </div>
-
                 {/* Constraints */}
                 <div className="space-y-4">
                   <h2
@@ -797,7 +745,6 @@ export default function ProblemSolvingEditor({
                     </div>
                   </div>
                 </div>
-
                 {/* Examples */}
                 <div className="space-y-4">
                   <h2
@@ -862,7 +809,6 @@ export default function ProblemSolvingEditor({
                     </div>
                   </div>
                 </div>
-
                 {/* Tags */}
                 <div className="space-y-4">
                   <h2
@@ -925,7 +871,6 @@ export default function ProblemSolvingEditor({
                     </div>
                   </div>
                 </div>
-
                 {/* Test Cases */}
                 <div className="space-y-4">
                   <h2
@@ -1035,7 +980,6 @@ export default function ProblemSolvingEditor({
             </div>
           </div>
         </div>
-
         {/* Resize Handle 1 - Between Left and Middle */}
         <div
           className={`w-1 cursor-col-resize transition-colors duration-200 hover:bg-blue-400 ${
@@ -1043,7 +987,6 @@ export default function ProblemSolvingEditor({
           } ${isResizing ? 'bg-blue-500' : ''}`}
           onMouseDown={e => handleMouseDown(e, 'left-middle')}
         />
-
         {/* Middle Panel - File Explorer + Code Editor */}
         <div className="flex" style={{ width: `${middlePanelWidth}%` }}>
           {/* File Explorer */}
@@ -1097,7 +1040,6 @@ export default function ProblemSolvingEditor({
                       </button>
                     </div>
                   </div>
-
                   {/* File Tree */}
                   <div className="flex-1 overflow-y-auto p-2">
                     <div className="space-y-1">
@@ -1172,7 +1114,6 @@ export default function ProblemSolvingEditor({
               </div>
             </div>
           )}
-
           {/* Code Editor */}
           <div className="flex-1">
             <div className="h-full flex flex-col">
@@ -1222,7 +1163,6 @@ export default function ProblemSolvingEditor({
                   </div>
                 </div>
               </div>
-
               {/* Monaco Editor */}
               <div className="flex-1">
                 <Editor
@@ -1251,7 +1191,6 @@ export default function ProblemSolvingEditor({
             </div>
           </div>
         </div>
-
         {/* Resize Handle 2 - Between Middle and Right */}
         <div
           className={`w-1 cursor-col-resize transition-colors duration-200 hover:bg-blue-400 ${
@@ -1259,7 +1198,6 @@ export default function ProblemSolvingEditor({
           } ${isResizing ? 'bg-blue-500' : ''}`}
           onMouseDown={e => handleMouseDown(e, 'middle-right')}
         />
-
         {/* Right Panel - Preview/Test Runner */}
         <div
           className="min-w-[300px] max-w-[500px]"
@@ -1283,7 +1221,6 @@ export default function ProblemSolvingEditor({
                   >
                     Test Runner
                   </h2>
-
                   <div className="space-y-3">
                     <div className="flex gap-2">
                       <button
@@ -1313,7 +1250,6 @@ export default function ProblemSolvingEditor({
                         Reset
                       </button>
                     </div>
-
                     {/* Live Test Runner */}
                     {formData.functionName && formData.testCases.length > 0 && (
                       <div className="mt-6">
@@ -1331,7 +1267,6 @@ export default function ProblemSolvingEditor({
           </div>
         </div>
       </div>
-
       {/* Bottom Action Bar */}
       <div
         className={`border-t transition-colors duration-300 ${
@@ -1367,7 +1302,6 @@ export default function ProblemSolvingEditor({
               {formData.testCases.length} test cases
             </span>
           </div>
-
           <div className="flex items-center gap-3">
             <button
               onClick={onCancel}

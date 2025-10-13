@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -27,63 +27,40 @@ import {
   BookOpen,
   Eye,
 } from 'lucide-react';
+import {
+  useQuestionsUnified,
+  useCreateQuestion,
+  useUpdateQuestion,
+  useDeleteQuestion,
+  useCards,
+  usePlans,
+} from '@/hooks/useTanStackQuery';
+import { UnifiedQuestion } from '@/lib/unified-question-schema';
 
-interface Question {
-  id: string;
-  title: string;
-  content: string;
-  sampleAnswers: string[];
-  explanation?: string;
-  difficulty:
-    | 'easy'
-    | 'medium'
-    | 'hard'
-    | 'intermediate'
-    | 'beginner'
-    | 'advanced';
-  category: string;
-  topic?: string;
-  topics?: string[];
-  tags?: string[];
-  createdAt: string;
-  updatedAt: string;
-  // Relationship fields
-  cardType?: string;
-  cardId?: string;
-  categoryId?: string;
-  topicId?: string;
-  planAssignments?: number[];
-  isIncludedInPlans?: boolean;
-  type?: 'multiple-choice' | 'open-ended' | 'true-false' | 'code';
-}
-
-interface Card {
-  id: string;
-  name: string;
-  color: string;
-  icon: string;
-}
-
-interface Plan {
-  id: string;
-  name: string;
-  color: string;
-  icon: string;
-}
+// Use UnifiedQuestion instead of custom Question interface
+type Question = UnifiedQuestion;
 
 export default function AdminContentQuestionsPage() {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [allCategories, setAllCategories] = useState<string[]>([]);
-  const [cards, setCards] = useState<Card[]>([]);
-  const [plans, setPlans] = useState<Plan[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // TanStack Query hooks
+  const { data: questionsData, isLoading: questionsLoading } =
+    useQuestionsUnified();
+
+  const { data: cardsData, isLoading: cardsLoading } = useCards();
+
+  const { data: plansData, isLoading: plansLoading } = usePlans();
+
+  // Mutation hooks
+  const createQuestionMutation = useCreateQuestion();
+  const updateQuestionMutation = useUpdateQuestion();
+  const deleteQuestionMutation = useDeleteQuestion();
+
+  // Local state for UI
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDifficulty, setFilterDifficulty] = useState('all');
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterQuestionType, setFilterQuestionType] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalQuestions, setTotalQuestions] = useState(0);
   const [questionsPerPage, setQuestionsPerPage] = useState(10);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null
@@ -92,117 +69,67 @@ export default function AdminContentQuestionsPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  // Load questions, categories, cards, and plans
-  useEffect(() => {
-    loadQuestions();
-    loadAllCategories();
-    loadCardsAndPlans();
-  }, []);
-
-  // Reload questions when page size changes
-  useEffect(() => {
-    loadQuestions(1); // Reset to first page when page size changes
-  }, [questionsPerPage]);
-
-  const loadQuestions = async (page = 1) => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(
-        `/api/questions/unified?page=${page}&pageSize=${questionsPerPage}`
-      );
-      const data = await response.json();
-
-      if (data.success) {
-        setQuestions(data.data || []);
-        setTotalQuestions(
-          data.pagination?.totalCount || data.data?.length || 0
-        );
-        setTotalPages(
-          data.pagination?.totalPages ||
-            Math.ceil(
-              (data.pagination?.totalCount || data.data?.length || 0) /
-                questionsPerPage
-            )
-        );
-        setCurrentPage(page);
-      } else {
-        console.error('Failed to load questions:', data.error);
-      }
-    } catch (error) {
-      console.error('Error loading questions:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const loadAllCategories = async () => {
-    try {
-      // Load a large sample to get all categories
-      const response = await fetch(
-        `/api/questions/unified?page=1&pageSize=1000`
-      );
-      const data = await response.json();
-
-      if (data.success) {
-        const categories = [
-          ...new Set(data.data.map((q: Question) => q.category)),
-        ] as string[];
-        setAllCategories(categories.sort());
-      } else {
-        console.error('Failed to load categories:', data.error);
-      }
-    } catch (error) {
-      console.error('Error loading categories:', error);
-    }
-  };
-
-  const loadCardsAndPlans = async () => {
-    try {
-      const [cardsResponse, plansResponse] = await Promise.all([
-        fetch('/api/cards'),
-        fetch('/api/plans'),
-      ]);
-
-      const [cardsData, plansData] = await Promise.all([
-        cardsResponse.json(),
-        plansResponse.json(),
-      ]);
-
-      if (cardsData.success) {
-        setCards(cardsData.data);
-      }
-      if (plansData.success) {
-        setPlans(plansData.data);
-      }
-    } catch (error) {
-      console.error('Error loading cards and plans:', error);
-    }
-  };
+  // Derived data from TanStack Query
+  const questions = questionsData?.data || [];
+  const cards = cardsData?.data || [];
+  const isLoading = questionsLoading || cardsLoading || plansLoading;
 
   // Filter questions
-  const filteredQuestions = questions.filter(question => {
-    // Add null checks for question and answer fields
-    const questionText = question.title || question.content || '';
-    const answerText = question.sampleAnswers?.[0] || '';
+  const filteredQuestions = useMemo(() => {
+    return questions.filter(question => {
+      // Add null checks for question and answer fields
+      const questionText = question.title || question.content || '';
+      const answerText = question.sampleAnswers?.[0] || '';
 
-    const matchesSearch =
-      questionText.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      answerText.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDifficulty =
-      filterDifficulty === 'all' || question.difficulty === filterDifficulty;
-    const matchesCategory =
-      filterCategory === 'all' || question.category === filterCategory;
-    const matchesQuestionType =
-      filterQuestionType === 'all' ||
-      getQuestionType(question) === filterQuestionType;
+      const matchesSearch =
+        questionText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        answerText.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesDifficulty =
+        filterDifficulty === 'all' || question.difficulty === filterDifficulty;
+      const matchesCategory =
+        filterCategory === 'all' || question.category === filterCategory;
+      const matchesQuestionType =
+        filterQuestionType === 'all' ||
+        getQuestionType(question) === filterQuestionType;
 
-    return (
-      matchesSearch &&
-      matchesDifficulty &&
-      matchesCategory &&
-      matchesQuestionType
-    );
-  });
+      return (
+        matchesSearch &&
+        matchesDifficulty &&
+        matchesCategory &&
+        matchesQuestionType
+      );
+    });
+  }, [
+    questions,
+    searchTerm,
+    filterDifficulty,
+    filterCategory,
+    filterQuestionType,
+  ]);
+
+  // Extract unique categories from questions
+  const allCategories = useMemo(() => {
+    const categories = [...new Set(questions.map((q: Question) => q.category))];
+    return categories.sort();
+  }, [questions]);
+
+  // Pagination logic - use filtered questions
+  const totalQuestions = filteredQuestions.length;
+  const paginatedQuestions = useMemo(() => {
+    const startIndex = (currentPage - 1) * questionsPerPage;
+    const endIndex = startIndex + questionsPerPage;
+    return filteredQuestions.slice(startIndex, endIndex);
+  }, [filteredQuestions, currentPage, questionsPerPage]);
+
+  // Update total pages when questions or page size changes
+  useEffect(() => {
+    setTotalPages(Math.ceil(totalQuestions / questionsPerPage));
+  }, [totalQuestions, questionsPerPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterDifficulty, filterCategory, filterQuestionType]);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -231,8 +158,10 @@ export default function AdminContentQuestionsPage() {
     // Check for multiple choice questions (multiple short answers)
     if (answerCount > 1) {
       const avgAnswerLength =
-        question.sampleAnswers.reduce((sum, answer) => sum + answer.length, 0) /
-        answerCount;
+        (question.sampleAnswers?.reduce(
+          (sum, answer) => sum + answer.length,
+          0
+        ) || 0) / answerCount;
       // If average answer length is short (< 50 chars), likely multiple choice
       if (avgAnswerLength < 50) {
         return 'Multiple Choice';
@@ -263,7 +192,7 @@ export default function AdminContentQuestionsPage() {
   const getCardName = (cardId?: string, cardType?: string) => {
     if (cardId) {
       const card = cards.find(c => c.id === cardId);
-      if (card) return card.name;
+      if (card) return (card as any).name;
     }
     if (cardType) {
       return cardType;
@@ -274,7 +203,7 @@ export default function AdminContentQuestionsPage() {
   const getCardColor = (cardId?: string, cardType?: string) => {
     if (cardId) {
       const card = cards.find(c => c.id === cardId);
-      if (card) return card.color;
+      if (card) return (card as any).color;
     }
     // Default colors for card types
     const defaultColors: Record<string, string> = {
@@ -284,16 +213,6 @@ export default function AdminContentQuestionsPage() {
       'System Design': '#EF4444',
     };
     return defaultColors[cardType || ''] || '#6B7280';
-  };
-
-  const getPlanNames = (planAssignments?: number[]) => {
-    if (!planAssignments || planAssignments.length === 0) return [];
-    return planAssignments
-      .map(planId => {
-        const plan = plans.find(p => p.id === planId.toString());
-        return plan ? plan.name : `Plan ${planId}`;
-      })
-      .filter(Boolean);
   };
 
   // Handle view question
@@ -312,17 +231,8 @@ export default function AdminContentQuestionsPage() {
   const handleDeleteQuestion = async (questionId: string) => {
     if (confirm('Are you sure you want to delete this question?')) {
       try {
-        const response = await fetch(`/api/questions/unified/${questionId}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
-          // Remove question from local state
-          setQuestions(questions.filter(q => q.id !== questionId));
-          alert('Question deleted successfully');
-        } else {
-          alert('Failed to delete question');
-        }
+        await deleteQuestionMutation.mutateAsync(questionId);
+        alert('Question deleted successfully');
       } catch (error) {
         console.error('Error deleting question:', error);
         alert('Error deleting question');
@@ -331,29 +241,17 @@ export default function AdminContentQuestionsPage() {
   };
 
   // Handle update question
-  const handleUpdateQuestion = async (questionId: string, updatedData: any) => {
+  const handleUpdateQuestion = async (
+    questionId: string,
+    updatedData: Partial<UnifiedQuestion>
+  ) => {
     try {
-      const response = await fetch(`/api/questions/unified/${questionId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData),
+      await updateQuestionMutation.mutateAsync({
+        id: questionId,
+        data: updatedData,
       });
-
-      if (response.ok) {
-        // Update question in local state
-        setQuestions(
-          questions.map(q =>
-            q.id === questionId ? { ...q, ...updatedData } : q
-          )
-        );
-        alert('Question updated successfully');
-        closeModals();
-      } else {
-        const error = await response.json();
-        alert(`Failed to update question: ${error.error}`);
-      }
+      alert('Question updated successfully');
+      closeModals();
     } catch (error) {
       console.error('Error updating question:', error);
       alert('Error updating question');
@@ -361,29 +259,13 @@ export default function AdminContentQuestionsPage() {
   };
 
   // Handle create question
-  const handleCreateQuestion = async (questionData: any) => {
+  const handleCreateQuestion = async (
+    questionData: Partial<UnifiedQuestion>
+  ) => {
     try {
-      const response = await fetch('/api/questions/unified', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          questions: [questionData],
-          isBulkImport: false,
-        }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        // Add new question to local state
-        setQuestions([...questions, result.data.results[0]]);
-        alert('Question created successfully');
-        closeModals();
-      } else {
-        const error = await response.json();
-        alert(`Failed to create question: ${error.error}`);
-      }
+      await createQuestionMutation.mutateAsync(questionData);
+      alert('Question created successfully');
+      closeModals();
     } catch (error) {
       console.error('Error creating question:', error);
       alert('Error creating question');
@@ -484,7 +366,7 @@ export default function AdminContentQuestionsPage() {
                   Questions in Plans
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {questions.filter(q => q.isIncludedInPlans).length}
+                  {questions.filter(q => (q as any).isIncludedInPlans).length}
                 </p>
               </div>
             </div>
@@ -530,7 +412,7 @@ export default function AdminContentQuestionsPage() {
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
                   {getCategories().map(category => (
-                    <SelectItem key={category} value={category}>
+                    <SelectItem key={category} value={category || ''}>
                       {category}
                     </SelectItem>
                   ))}
@@ -593,7 +475,7 @@ export default function AdminContentQuestionsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => loadQuestions(currentPage - 1)}
+                onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 Previous
@@ -606,7 +488,7 @@ export default function AdminContentQuestionsPage() {
                       key={pageNum}
                       variant={currentPage === pageNum ? 'default' : 'outline'}
                       size="sm"
-                      onClick={() => loadQuestions(pageNum)}
+                      onClick={() => setCurrentPage(pageNum)}
                       className="w-8 h-8 p-0"
                     >
                       {pageNum}
@@ -621,7 +503,7 @@ export default function AdminContentQuestionsPage() {
                         currentPage === totalPages ? 'default' : 'outline'
                       }
                       size="sm"
-                      onClick={() => loadQuestions(totalPages)}
+                      onClick={() => setCurrentPage(totalPages)}
                       className="w-8 h-8 p-0"
                     >
                       {totalPages}
@@ -632,7 +514,7 @@ export default function AdminContentQuestionsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => loadQuestions(currentPage + 1)}
+                onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
                 Next
@@ -675,7 +557,7 @@ export default function AdminContentQuestionsPage() {
                 </div>
               ) : (
                 <div className="space-y-1">
-                  {filteredQuestions.map(question => (
+                  {paginatedQuestions.map(question => (
                     <div
                       key={question.id}
                       className="p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
@@ -710,25 +592,26 @@ export default function AdminContentQuestionsPage() {
                             </Badge>
 
                             {/* Card Badge */}
-                            {(question.cardType || question.cardId) && (
+                            {((question as any).cardType ||
+                              (question as any).cardId) && (
                               <Badge
                                 variant="outline"
                                 className="text-xs"
                                 style={{
                                   borderColor: getCardColor(
-                                    question.cardId,
-                                    question.cardType
+                                    (question as any).cardId,
+                                    (question as any).cardType
                                   ),
                                   color: getCardColor(
-                                    question.cardId,
-                                    question.cardType
+                                    (question as any).cardId,
+                                    (question as any).cardType
                                   ),
                                 }}
                               >
                                 📚{' '}
                                 {getCardName(
-                                  question.cardId,
-                                  question.cardType
+                                  (question as any).cardId,
+                                  (question as any).cardType
                                 )}
                               </Badge>
                             )}
@@ -746,21 +629,22 @@ export default function AdminContentQuestionsPage() {
                             )}
 
                             {/* Plans Badge */}
-                            {question.planAssignments &&
-                              question.planAssignments.length > 0 && (
+                            {(question as any).planAssignments &&
+                              (question as any).planAssignments.length > 0 && (
                                 <Badge
                                   variant="outline"
                                   className="text-xs bg-blue-50 text-blue-700 border-blue-200"
                                 >
-                                  📋 {question.planAssignments.length} Plan
-                                  {question.planAssignments.length > 1
+                                  📋 {(question as any).planAssignments.length}{' '}
+                                  Plan
+                                  {(question as any).planAssignments.length > 1
                                     ? 's'
                                     : ''}
                                 </Badge>
                               )}
 
                             {/* Included in Plans Badge */}
-                            {question.isIncludedInPlans && (
+                            {(question as any).isIncludedInPlans && (
                               <Badge
                                 variant="outline"
                                 className="text-xs bg-green-50 text-green-700 border-green-200"
@@ -770,13 +654,17 @@ export default function AdminContentQuestionsPage() {
                             )}
 
                             {/* Additional Topics */}
-                            {question.topics && question.topics.length > 0 && (
-                              <Badge variant="outline" className="text-xs">
-                                🏷️ {question.topics.slice(0, 2).join(', ')}
-                                {question.topics.length > 2 &&
-                                  ` +${question.topics.length - 2} more`}
-                              </Badge>
-                            )}
+                            {(question as any).topics &&
+                              (question as any).topics.length > 0 && (
+                                <Badge variant="outline" className="text-xs">
+                                  🏷️{' '}
+                                  {(question as any).topics
+                                    .slice(0, 2)
+                                    .join(', ')}
+                                  {(question as any).topics.length > 2 &&
+                                    ` +${(question as any).topics.length - 2} more`}
+                                </Badge>
+                              )}
                           </div>
                         </div>
                         <div className="flex items-center space-x-2 ml-4">
@@ -868,25 +756,26 @@ export default function AdminContentQuestionsPage() {
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {/* Card Badge */}
-                    {(selectedQuestion.cardType || selectedQuestion.cardId) && (
+                    {((selectedQuestion as any).cardType ||
+                      (selectedQuestion as any).cardId) && (
                       <Badge
                         variant="outline"
                         className="text-xs"
                         style={{
                           borderColor: getCardColor(
-                            selectedQuestion.cardId,
-                            selectedQuestion.cardType
+                            (selectedQuestion as any).cardId,
+                            (selectedQuestion as any).cardType
                           ),
                           color: getCardColor(
-                            selectedQuestion.cardId,
-                            selectedQuestion.cardType
+                            (selectedQuestion as any).cardId,
+                            (selectedQuestion as any).cardType
                           ),
                         }}
                       >
                         📚{' '}
                         {getCardName(
-                          selectedQuestion.cardId,
-                          selectedQuestion.cardType
+                          (selectedQuestion as any).cardId,
+                          (selectedQuestion as any).cardType
                         )}
                       </Badge>
                     )}
@@ -904,21 +793,22 @@ export default function AdminContentQuestionsPage() {
                     )}
 
                     {/* Plans Badge */}
-                    {selectedQuestion.planAssignments &&
-                      selectedQuestion.planAssignments.length > 0 && (
+                    {(selectedQuestion as any).planAssignments &&
+                      (selectedQuestion as any).planAssignments.length > 0 && (
                         <Badge
                           variant="outline"
                           className="text-xs bg-blue-50 text-blue-700 border-blue-200"
                         >
-                          📋 {selectedQuestion.planAssignments.length} Plan
-                          {selectedQuestion.planAssignments.length > 1
+                          📋 {(selectedQuestion as any).planAssignments.length}{' '}
+                          Plan
+                          {(selectedQuestion as any).planAssignments.length > 1
                             ? 's'
                             : ''}
                         </Badge>
                       )}
 
                     {/* Included in Plans Badge */}
-                    {selectedQuestion.isIncludedInPlans && (
+                    {(selectedQuestion as any).isIncludedInPlans && (
                       <Badge
                         variant="outline"
                         className="text-xs bg-green-50 text-green-700 border-green-200"
@@ -958,22 +848,24 @@ export default function AdminContentQuestionsPage() {
                 </div>
               </div>
 
-              {selectedQuestion.topics &&
-                selectedQuestion.topics.length > 0 && (
+              {(selectedQuestion as any).topics &&
+                (selectedQuestion as any).topics.length > 0 && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Topics
                     </label>
                     <div className="flex flex-wrap gap-2">
-                      {selectedQuestion.topics.map((topic, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="text-xs"
-                        >
-                          {topic}
-                        </Badge>
-                      ))}
+                      {(selectedQuestion as any).topics.map(
+                        (topic: string, index: number) => (
+                          <Badge
+                            key={index}
+                            variant="outline"
+                            className="text-xs"
+                          >
+                            {topic}
+                          </Badge>
+                        )
+                      )}
                     </div>
                   </div>
                 )}
@@ -1122,7 +1014,7 @@ export default function AdminContentQuestionsPage() {
                   </label>
                   <Select
                     name="cardType"
-                    defaultValue={selectedQuestion.cardType}
+                    defaultValue={(selectedQuestion as any).cardType}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -1159,16 +1051,23 @@ export default function AdminContentQuestionsPage() {
                   if (!form) return;
 
                   const formData = new FormData(form);
-                  const updatedData = {
+                  const updatedData: Partial<UnifiedQuestion> = {
                     title: formData.get('title') as string,
                     content: formData.get('title') as string, // Use title as content if no separate content field
                     sampleAnswers: [formData.get('answer') as string],
                     explanation: formData.get('explanation') as string,
-                    difficulty: formData.get('difficulty') as string,
+                    difficulty: formData.get('difficulty') as
+                      | 'beginner'
+                      | 'intermediate'
+                      | 'advanced',
                     category: formData.get('category') as string,
                     topic: formData.get('topic') as string,
-                    cardType: formData.get('cardType') as string,
-                    type: formData.get('type') as string,
+                    type: formData.get('type') as
+                      | 'multiple-choice'
+                      | 'open-ended'
+                      | 'true-false'
+                      | 'code',
+                    updatedAt: new Date().toISOString(),
                   };
 
                   handleUpdateQuestion(selectedQuestion.id, updatedData);
@@ -1325,16 +1224,25 @@ export default function AdminContentQuestionsPage() {
                   if (!form) return;
 
                   const formData = new FormData(form);
-                  const questionData = {
+                  const questionData: Partial<UnifiedQuestion> = {
                     title: formData.get('title') as string,
                     content: formData.get('title') as string, // Use title as content if no separate content field
                     sampleAnswers: [formData.get('answer') as string],
                     explanation: formData.get('explanation') as string,
-                    difficulty: formData.get('difficulty') as string,
+                    difficulty: formData.get('difficulty') as
+                      | 'beginner'
+                      | 'intermediate'
+                      | 'advanced',
                     category: formData.get('category') as string,
                     topic: formData.get('topic') as string,
-                    cardType: formData.get('cardType') as string,
-                    type: formData.get('type') as string,
+                    type: formData.get('type') as
+                      | 'multiple-choice'
+                      | 'open-ended'
+                      | 'true-false'
+                      | 'code',
+                    isActive: true,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
                   };
 
                   handleCreateQuestion(questionData);
