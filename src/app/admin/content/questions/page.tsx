@@ -34,18 +34,48 @@ interface Question {
   content: string;
   sampleAnswers: string[];
   explanation?: string;
-  difficulty: 'easy' | 'medium' | 'hard' | 'intermediate';
+  difficulty:
+    | 'easy'
+    | 'medium'
+    | 'hard'
+    | 'intermediate'
+    | 'beginner'
+    | 'advanced';
   category: string;
   topic?: string;
   topics?: string[];
   tags?: string[];
   createdAt: string;
   updatedAt: string;
+  // Relationship fields
+  cardType?: string;
+  cardId?: string;
+  categoryId?: string;
+  topicId?: string;
+  planAssignments?: number[];
+  isIncludedInPlans?: boolean;
+  type?: 'multiple-choice' | 'open-ended' | 'true-false' | 'code';
+}
+
+interface Card {
+  id: string;
+  name: string;
+  color: string;
+  icon: string;
+}
+
+interface Plan {
+  id: string;
+  name: string;
+  color: string;
+  icon: string;
 }
 
 export default function AdminContentQuestionsPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [allCategories, setAllCategories] = useState<string[]>([]);
+  const [cards, setCards] = useState<Card[]>([]);
+  const [plans, setPlans] = useState<Plan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDifficulty, setFilterDifficulty] = useState('all');
@@ -60,11 +90,13 @@ export default function AdminContentQuestionsPage() {
   );
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  // Load questions and categories
+  // Load questions, categories, cards, and plans
   useEffect(() => {
     loadQuestions();
     loadAllCategories();
+    loadCardsAndPlans();
   }, []);
 
   // Reload questions when page size changes
@@ -121,6 +153,29 @@ export default function AdminContentQuestionsPage() {
       }
     } catch (error) {
       console.error('Error loading categories:', error);
+    }
+  };
+
+  const loadCardsAndPlans = async () => {
+    try {
+      const [cardsResponse, plansResponse] = await Promise.all([
+        fetch('/api/cards'),
+        fetch('/api/plans'),
+      ]);
+
+      const [cardsData, plansData] = await Promise.all([
+        cardsResponse.json(),
+        plansResponse.json(),
+      ]);
+
+      if (cardsData.success) {
+        setCards(cardsData.data);
+      }
+      if (plansData.success) {
+        setPlans(plansData.data);
+      }
+    } catch (error) {
+      console.error('Error loading cards and plans:', error);
     }
   };
 
@@ -205,6 +260,42 @@ export default function AdminContentQuestionsPage() {
     return allCategories;
   };
 
+  const getCardName = (cardId?: string, cardType?: string) => {
+    if (cardId) {
+      const card = cards.find(c => c.id === cardId);
+      if (card) return card.name;
+    }
+    if (cardType) {
+      return cardType;
+    }
+    return 'Unknown Card';
+  };
+
+  const getCardColor = (cardId?: string, cardType?: string) => {
+    if (cardId) {
+      const card = cards.find(c => c.id === cardId);
+      if (card) return card.color;
+    }
+    // Default colors for card types
+    const defaultColors: Record<string, string> = {
+      'Core Technologies': '#3B82F6',
+      'Framework Questions': '#10B981',
+      'Problem Solving': '#F59E0B',
+      'System Design': '#EF4444',
+    };
+    return defaultColors[cardType || ''] || '#6B7280';
+  };
+
+  const getPlanNames = (planAssignments?: number[]) => {
+    if (!planAssignments || planAssignments.length === 0) return [];
+    return planAssignments
+      .map(planId => {
+        const plan = plans.find(p => p.id === planId.toString());
+        return plan ? plan.name : `Plan ${planId}`;
+      })
+      .filter(Boolean);
+  };
+
   // Handle view question
   const handleViewQuestion = (question: Question) => {
     setSelectedQuestion(question);
@@ -239,10 +330,71 @@ export default function AdminContentQuestionsPage() {
     }
   };
 
+  // Handle update question
+  const handleUpdateQuestion = async (questionId: string, updatedData: any) => {
+    try {
+      const response = await fetch(`/api/questions/unified/${questionId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (response.ok) {
+        // Update question in local state
+        setQuestions(
+          questions.map(q =>
+            q.id === questionId ? { ...q, ...updatedData } : q
+          )
+        );
+        alert('Question updated successfully');
+        closeModals();
+      } else {
+        const error = await response.json();
+        alert(`Failed to update question: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Error updating question:', error);
+      alert('Error updating question');
+    }
+  };
+
+  // Handle create question
+  const handleCreateQuestion = async (questionData: any) => {
+    try {
+      const response = await fetch('/api/questions/unified', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          questions: [questionData],
+          isBulkImport: false,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        // Add new question to local state
+        setQuestions([...questions, result.data.results[0]]);
+        alert('Question created successfully');
+        closeModals();
+      } else {
+        const error = await response.json();
+        alert(`Failed to create question: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Error creating question:', error);
+      alert('Error creating question');
+    }
+  };
+
   // Close modals
   const closeModals = () => {
     setIsViewModalOpen(false);
     setIsEditModalOpen(false);
+    setIsCreateModalOpen(false);
     setSelectedQuestion(null);
   };
 
@@ -329,10 +481,10 @@ export default function AdminContentQuestionsPage() {
               <Eye className="w-8 h-8 text-orange-600" />
               <div>
                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                  Easy Questions
+                  Questions in Plans
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {questions.filter(q => q.difficulty === 'easy').length}
+                  {questions.filter(q => q.isIncludedInPlans).length}
                 </p>
               </div>
             </div>
@@ -495,7 +647,10 @@ export default function AdminContentQuestionsPage() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>Questions ({filteredQuestions.length})</span>
-            <Button className="flex items-center space-x-2">
+            <Button
+              className="flex items-center space-x-2"
+              onClick={() => setIsCreateModalOpen(true)}
+            >
               <Plus className="w-4 h-4" />
               <span>Add Question</span>
             </Button>
@@ -535,7 +690,8 @@ export default function AdminContentQuestionsPage() {
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
                             {question.sampleAnswers?.[0] || 'No answer text'}
                           </p>
-                          <div className="flex items-center space-x-2">
+                          <div className="flex flex-wrap items-center gap-2">
+                            {/* Difficulty Badge */}
                             <Badge
                               className={getDifficultyColor(
                                 question.difficulty
@@ -543,6 +699,8 @@ export default function AdminContentQuestionsPage() {
                             >
                               {question.difficulty}
                             </Badge>
+
+                            {/* Question Type Badge */}
                             <Badge
                               className={getQuestionTypeColor(
                                 getQuestionType(question)
@@ -550,15 +708,71 @@ export default function AdminContentQuestionsPage() {
                             >
                               {getQuestionType(question)}
                             </Badge>
-                            <Badge variant="outline">{question.category}</Badge>
-                            {question.topic && (
-                              <Badge variant="outline" className="text-xs">
-                                {question.topic}
+
+                            {/* Card Badge */}
+                            {(question.cardType || question.cardId) && (
+                              <Badge
+                                variant="outline"
+                                className="text-xs"
+                                style={{
+                                  borderColor: getCardColor(
+                                    question.cardId,
+                                    question.cardType
+                                  ),
+                                  color: getCardColor(
+                                    question.cardId,
+                                    question.cardType
+                                  ),
+                                }}
+                              >
+                                📚{' '}
+                                {getCardName(
+                                  question.cardId,
+                                  question.cardType
+                                )}
                               </Badge>
                             )}
+
+                            {/* Category Badge */}
+                            <Badge variant="outline" className="text-xs">
+                              📁 {question.category}
+                            </Badge>
+
+                            {/* Topic Badge */}
+                            {question.topic && (
+                              <Badge variant="outline" className="text-xs">
+                                🏷️ {question.topic}
+                              </Badge>
+                            )}
+
+                            {/* Plans Badge */}
+                            {question.planAssignments &&
+                              question.planAssignments.length > 0 && (
+                                <Badge
+                                  variant="outline"
+                                  className="text-xs bg-blue-50 text-blue-700 border-blue-200"
+                                >
+                                  📋 {question.planAssignments.length} Plan
+                                  {question.planAssignments.length > 1
+                                    ? 's'
+                                    : ''}
+                                </Badge>
+                              )}
+
+                            {/* Included in Plans Badge */}
+                            {question.isIncludedInPlans && (
+                              <Badge
+                                variant="outline"
+                                className="text-xs bg-green-50 text-green-700 border-green-200"
+                              >
+                                ✅ In Plans
+                              </Badge>
+                            )}
+
+                            {/* Additional Topics */}
                             {question.topics && question.topics.length > 0 && (
                               <Badge variant="outline" className="text-xs">
-                                {question.topics.slice(0, 2).join(', ')}
+                                🏷️ {question.topics.slice(0, 2).join(', ')}
                                 {question.topics.length > 2 &&
                                   ` +${question.topics.length - 2} more`}
                               </Badge>
@@ -647,36 +861,100 @@ export default function AdminContentQuestionsPage() {
                 </div>
               )}
 
-              <div className="flex items-center space-x-4">
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Difficulty
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Relationships
                   </label>
-                  <Badge
-                    className={getDifficultyColor(selectedQuestion.difficulty)}
-                  >
-                    {selectedQuestion.difficulty}
-                  </Badge>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Question Type
-                  </label>
-                  <Badge
-                    className={getQuestionTypeColor(
-                      getQuestionType(selectedQuestion)
+                  <div className="flex flex-wrap gap-2">
+                    {/* Card Badge */}
+                    {(selectedQuestion.cardType || selectedQuestion.cardId) && (
+                      <Badge
+                        variant="outline"
+                        className="text-xs"
+                        style={{
+                          borderColor: getCardColor(
+                            selectedQuestion.cardId,
+                            selectedQuestion.cardType
+                          ),
+                          color: getCardColor(
+                            selectedQuestion.cardId,
+                            selectedQuestion.cardType
+                          ),
+                        }}
+                      >
+                        📚{' '}
+                        {getCardName(
+                          selectedQuestion.cardId,
+                          selectedQuestion.cardType
+                        )}
+                      </Badge>
                     )}
-                  >
-                    {getQuestionType(selectedQuestion)}
-                  </Badge>
+
+                    {/* Category Badge */}
+                    <Badge variant="outline" className="text-xs">
+                      📁 {selectedQuestion.category}
+                    </Badge>
+
+                    {/* Topic Badge */}
+                    {selectedQuestion.topic && (
+                      <Badge variant="outline" className="text-xs">
+                        🏷️ {selectedQuestion.topic}
+                      </Badge>
+                    )}
+
+                    {/* Plans Badge */}
+                    {selectedQuestion.planAssignments &&
+                      selectedQuestion.planAssignments.length > 0 && (
+                        <Badge
+                          variant="outline"
+                          className="text-xs bg-blue-50 text-blue-700 border-blue-200"
+                        >
+                          📋 {selectedQuestion.planAssignments.length} Plan
+                          {selectedQuestion.planAssignments.length > 1
+                            ? 's'
+                            : ''}
+                        </Badge>
+                      )}
+
+                    {/* Included in Plans Badge */}
+                    {selectedQuestion.isIncludedInPlans && (
+                      <Badge
+                        variant="outline"
+                        className="text-xs bg-green-50 text-green-700 border-green-200"
+                      >
+                        ✅ In Plans
+                      </Badge>
+                    )}
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Category
-                  </label>
-                  <Badge variant="outline">{selectedQuestion.category}</Badge>
+                <div className="flex items-center space-x-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Difficulty
+                    </label>
+                    <Badge
+                      className={getDifficultyColor(
+                        selectedQuestion.difficulty
+                      )}
+                    >
+                      {selectedQuestion.difficulty}
+                    </Badge>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Question Type
+                    </label>
+                    <Badge
+                      className={getQuestionTypeColor(
+                        getQuestionType(selectedQuestion)
+                      )}
+                    >
+                      {getQuestionType(selectedQuestion)}
+                    </Badge>
+                  </div>
                 </div>
               </div>
 
@@ -731,90 +1009,142 @@ export default function AdminContentQuestionsPage() {
               </Button>
             </div>
 
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Question Title
-                </label>
-                <Input
-                  defaultValue={
-                    selectedQuestion.title || selectedQuestion.content || ''
-                  }
-                  placeholder="Enter question title"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Answer
-                </label>
-                <textarea
-                  className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
-                  rows={3}
-                  defaultValue={selectedQuestion.sampleAnswers?.[0] || ''}
-                  placeholder="Enter answer"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Explanation
-                </label>
-                <textarea
-                  className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
-                  rows={3}
-                  defaultValue={selectedQuestion.explanation || ''}
-                  placeholder="Enter explanation"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
+            <form id="edit-question-form">
+              <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Difficulty
+                    Question Title
                   </label>
-                  <Select defaultValue={selectedQuestion.difficulty}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="easy">Easy</SelectItem>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="hard">Hard</SelectItem>
-                      <SelectItem value="intermediate">Intermediate</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    name="title"
+                    defaultValue={
+                      selectedQuestion.title || selectedQuestion.content || ''
+                    }
+                    placeholder="Enter question title"
+                  />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Question Type
+                    Answer
                   </label>
-                  <Select defaultValue={getQuestionType(selectedQuestion)}>
+                  <textarea
+                    name="answer"
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                    rows={3}
+                    defaultValue={selectedQuestion.sampleAnswers?.[0] || ''}
+                    placeholder="Enter answer"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Explanation
+                  </label>
+                  <textarea
+                    name="explanation"
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                    rows={3}
+                    defaultValue={selectedQuestion.explanation || ''}
+                    placeholder="Enter explanation"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Difficulty
+                    </label>
+                    <Select
+                      name="difficulty"
+                      defaultValue={selectedQuestion.difficulty}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="easy">Easy</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="hard">Hard</SelectItem>
+                        <SelectItem value="intermediate">
+                          Intermediate
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Question Type
+                    </label>
+                    <Select
+                      name="type"
+                      defaultValue={getQuestionType(selectedQuestion)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Open-ended">Open-ended</SelectItem>
+                        <SelectItem value="Multiple Choice">
+                          Multiple Choice
+                        </SelectItem>
+                        <SelectItem value="True/False">True/False</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Category
+                  </label>
+                  <Input
+                    name="category"
+                    defaultValue={selectedQuestion.category}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Topic
+                  </label>
+                  <Input
+                    name="topic"
+                    defaultValue={selectedQuestion.topic}
+                    placeholder="Enter topic"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Card Type
+                  </label>
+                  <Select
+                    name="cardType"
+                    defaultValue={selectedQuestion.cardType}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Open-ended">Open-ended</SelectItem>
-                      <SelectItem value="Multiple Choice">
-                        Multiple Choice
+                      <SelectItem value="Core Technologies">
+                        Core Technologies
                       </SelectItem>
-                      <SelectItem value="True/False">True/False</SelectItem>
+                      <SelectItem value="Framework Questions">
+                        Framework Questions
+                      </SelectItem>
+                      <SelectItem value="Problem Solving">
+                        Problem Solving
+                      </SelectItem>
+                      <SelectItem value="System Design">
+                        System Design
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Category
-                </label>
-                <Input
-                  defaultValue={selectedQuestion.category}
-                  placeholder="Enter category"
-                />
-              </div>
-            </div>
+            </form>
 
             <div className="flex justify-end space-x-2 mt-6">
               <Button variant="outline" onClick={closeModals}>
@@ -822,12 +1152,195 @@ export default function AdminContentQuestionsPage() {
               </Button>
               <Button
                 onClick={() => {
-                  // TODO: Implement update functionality
-                  alert('Update functionality will be implemented');
-                  closeModals();
+                  // Get form data
+                  const form = document.querySelector(
+                    '#edit-question-form'
+                  ) as HTMLFormElement;
+                  if (!form) return;
+
+                  const formData = new FormData(form);
+                  const updatedData = {
+                    title: formData.get('title') as string,
+                    content: formData.get('title') as string, // Use title as content if no separate content field
+                    sampleAnswers: [formData.get('answer') as string],
+                    explanation: formData.get('explanation') as string,
+                    difficulty: formData.get('difficulty') as string,
+                    category: formData.get('category') as string,
+                    topic: formData.get('topic') as string,
+                    cardType: formData.get('cardType') as string,
+                    type: formData.get('type') as string,
+                  };
+
+                  handleUpdateQuestion(selectedQuestion.id, updatedData);
                 }}
               >
                 Update Question
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Question Modal */}
+      {isCreateModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                Create New Question
+              </h2>
+              <Button variant="ghost" onClick={closeModals}>
+                ✕
+              </Button>
+            </div>
+
+            <form id="create-question-form">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Question Title *
+                  </label>
+                  <Input
+                    name="title"
+                    placeholder="Enter question title"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Answer *
+                  </label>
+                  <textarea
+                    name="answer"
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                    rows={3}
+                    placeholder="Enter answer"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Explanation
+                  </label>
+                  <textarea
+                    name="explanation"
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                    rows={3}
+                    placeholder="Enter explanation"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Difficulty *
+                    </label>
+                    <Select name="difficulty" defaultValue="medium" required>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="easy">Easy</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="hard">Hard</SelectItem>
+                        <SelectItem value="intermediate">
+                          Intermediate
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Question Type
+                    </label>
+                    <Select name="type" defaultValue="Open-ended">
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Open-ended">Open-ended</SelectItem>
+                        <SelectItem value="Multiple Choice">
+                          Multiple Choice
+                        </SelectItem>
+                        <SelectItem value="True/False">True/False</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Category
+                  </label>
+                  <Input name="category" placeholder="Enter category" />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Topic
+                  </label>
+                  <Input name="topic" placeholder="Enter topic" />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Card Type
+                  </label>
+                  <Select name="cardType" defaultValue="Core Technologies">
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Core Technologies">
+                        Core Technologies
+                      </SelectItem>
+                      <SelectItem value="Framework Questions">
+                        Framework Questions
+                      </SelectItem>
+                      <SelectItem value="Problem Solving">
+                        Problem Solving
+                      </SelectItem>
+                      <SelectItem value="System Design">
+                        System Design
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </form>
+
+            <div className="flex justify-end space-x-2 mt-6">
+              <Button variant="outline" onClick={closeModals}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  // Get form data
+                  const form = document.querySelector(
+                    '#create-question-form'
+                  ) as HTMLFormElement;
+                  if (!form) return;
+
+                  const formData = new FormData(form);
+                  const questionData = {
+                    title: formData.get('title') as string,
+                    content: formData.get('title') as string, // Use title as content if no separate content field
+                    sampleAnswers: [formData.get('answer') as string],
+                    explanation: formData.get('explanation') as string,
+                    difficulty: formData.get('difficulty') as string,
+                    category: formData.get('category') as string,
+                    topic: formData.get('topic') as string,
+                    cardType: formData.get('cardType') as string,
+                    type: formData.get('type') as string,
+                  };
+
+                  handleCreateQuestion(questionData);
+                }}
+              >
+                Create Question
               </Button>
             </div>
           </div>

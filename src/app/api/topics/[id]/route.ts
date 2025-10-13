@@ -1,158 +1,134 @@
-// Individual Topic API Route
-// v1.0 - Handle individual topic operations (GET, PUT, DELETE)
-
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-
-interface Topic {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  difficulty: string;
-  [key: string]: unknown;
-}
-
-interface TopicUpdateData {
-  name?: string;
-  description?: string;
-  category?: string;
-  difficulty?: string;
-  [key: string]: unknown;
-}
-
-// Placeholder EnhancedQuestionService
-class EnhancedQuestionService {
-  static async getTopic(topicId: string): Promise<Topic | null> {
-    // Placeholder implementation
-    console.log('Getting topic:', topicId);
-    return null;
-  }
-
-  static async updateTopic(
-    topicId: string,
-    updateData: TopicUpdateData
-  ): Promise<Topic | null> {
-    // Placeholder implementation
-    console.log('Updating topic:', topicId, updateData);
-    return { id: topicId, ...updateData } as Topic;
-  }
-
-  static async deleteTopic(topicId: string): Promise<boolean> {
-    // Placeholder implementation
-    console.log('Deleting topic:', topicId);
-    return true;
-  }
-}
+import { db } from '@/lib/firebase';
+import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 // GET /api/topics/[id] - Get a specific topic
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: topicId } = await params;
-    const topic = await EnhancedQuestionService.getTopic(topicId);
+    const topicId = params.id;
 
-    if (!topic) {
+    if (!topicId) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Topic not found',
-        },
+        { success: false, error: 'Topic ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const topicRef = doc(db, 'topics', topicId);
+    const topicSnap = await getDoc(topicRef);
+
+    if (!topicSnap.exists()) {
+      return NextResponse.json(
+        { success: false, error: 'Topic not found' },
         { status: 404 }
       );
     }
 
+    const topicData = {
+      id: topicSnap.id,
+      ...topicSnap.data(),
+    };
+
     return NextResponse.json({
       success: true,
-      data: topic,
+      data: topicData,
     });
   } catch (error) {
     console.error('Error fetching topic:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to fetch topic',
-      },
+      { success: false, error: 'Failed to fetch topic' },
       { status: 500 }
     );
   }
 }
 
-// PUT /api/topics/[id] - Update a topic
+// PUT /api/topics/[id] - Update a specific topic
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: topicId } = await params;
-    const updateData = await request.json();
+    const topicId = params.id;
+    const body = await request.json();
 
-    // Validate required fields
-    const requiredFields = ['name', 'description', 'category', 'difficulty'];
-    for (const field of requiredFields) {
-      if (!updateData[field]) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: `Missing required field: ${field}`,
-          },
-          { status: 400 }
-        );
-      }
+    if (!topicId) {
+      return NextResponse.json(
+        { success: false, error: 'Topic ID is required' },
+        { status: 400 }
+      );
     }
 
-    const updatedTopic = await EnhancedQuestionService.updateTopic(
-      topicId,
-      updateData
-    );
-
-    if (!updatedTopic) {
+    // Validate required fields
+    if (!body.name) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Topic not found',
-        },
+        { success: false, error: 'Topic name is required' },
+        { status: 400 }
+      );
+    }
+
+    const topicRef = doc(db, 'topics', topicId);
+
+    // Check if topic exists
+    const topicSnap = await getDoc(topicRef);
+    if (!topicSnap.exists()) {
+      return NextResponse.json(
+        { success: false, error: 'Topic not found' },
         { status: 404 }
       );
     }
 
+    // Prepare update data
+    const updateData = {
+      ...body,
+      updatedAt: new Date(),
+    };
+
+    await updateDoc(topicRef, updateData);
+
     return NextResponse.json({
       success: true,
-      data: updatedTopic,
       message: 'Topic updated successfully',
+      data: { id: topicId, ...updateData },
     });
   } catch (error) {
     console.error('Error updating topic:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to update topic',
-      },
+      { success: false, error: 'Failed to update topic' },
       { status: 500 }
     );
   }
 }
 
-// DELETE /api/topics/[id] - Delete a topic
+// DELETE /api/topics/[id] - Delete a specific topic
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: topicId } = await params;
-    const deleted = await EnhancedQuestionService.deleteTopic(topicId);
+    const topicId = params.id;
 
-    if (!deleted) {
+    if (!topicId) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Topic not found',
-        },
+        { success: false, error: 'Topic ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const topicRef = doc(db, 'topics', topicId);
+
+    // Check if topic exists
+    const topicSnap = await getDoc(topicRef);
+    if (!topicSnap.exists()) {
+      return NextResponse.json(
+        { success: false, error: 'Topic not found' },
         { status: 404 }
       );
     }
+
+    await deleteDoc(topicRef);
 
     return NextResponse.json({
       success: true,
@@ -161,10 +137,7 @@ export async function DELETE(
   } catch (error) {
     console.error('Error deleting topic:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to delete topic',
-      },
+      { success: false, error: 'Failed to delete topic' },
       { status: 500 }
     );
   }
