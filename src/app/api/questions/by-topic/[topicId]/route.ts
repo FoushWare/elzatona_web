@@ -1,76 +1,74 @@
+// Questions by Topic API Route
+// v1.0 - Get questions for a specific topic
+
 import { NextRequest, NextResponse } from 'next/server';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import {
+  db,
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+} from '@/lib/firebase-server';
 
-interface Question {
-  id: string;
-  order?: number;
-  topics?: string[];
-  [key: string]: unknown; // Allow additional properties from Firebase
-}
-
-// GET /api/questions/by-topic/[topicId]
+// GET /api/questions/by-topic/[topicId] - Get questions for a specific topic
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ topicId: string }> }
+  { params }: { params: { topicId: string } }
 ) {
   try {
-    const { topicId } = await params;
-
-    if (!topicId) {
-      return NextResponse.json(
-        { success: false, error: 'Topic ID is required' },
-        { status: 400 }
-      );
-    }
-
     if (!db) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Firestore not available',
-        },
-        { status: 500 }
-      );
+      throw new Error('Firebase not initialized');
     }
 
-    console.log(`Fetching questions for topic: ${topicId}`);
+    const topicId = params.topicId;
+    const { searchParams } = new URL(request.url);
 
-    // Query questions from Firebase that have this topic
-    const questionsRef = collection(db, 'questions');
-    const q = query(questionsRef, where('topics', 'array-contains', topicId));
+    // Optional filters
+    const difficulty = searchParams.get('difficulty');
+    const type = searchParams.get('type');
+    const limit = parseInt(searchParams.get('limit') || '50');
 
-    const querySnapshot = await getDocs(q);
-    const questions: Question[] = [];
+    // Build query constraints
+    const constraints = [where('topicId', '==', topicId)];
 
-    querySnapshot.forEach(doc => {
-      questions.push({
-        id: doc.id,
-        ...doc.data(),
-      });
+    if (difficulty) {
+      constraints.push(where('difficulty', '==', difficulty));
+    }
+
+    if (type) {
+      constraints.push(where('type', '==', type));
+    }
+
+    // Create the query
+    const q = query(collection(db, 'unifiedQuestions'), ...constraints);
+    const snapshot = await getDocs(q);
+
+    const questions = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // Sort by createdAt after fetching (to avoid Firestore index issues)
+    questions.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return dateB.getTime() - dateA.getTime();
     });
 
-    // Sort questions by order field if available
-    questions.sort(
-      (a: Question, b: Question) => (a.order || 0) - (b.order || 0)
-    );
-
-    console.log(`Found ${questions.length} questions for topic ${topicId}`);
+    // Apply limit
+    const limitedQuestions = questions.slice(0, limit);
 
     return NextResponse.json({
       success: true,
-      topicId,
-      questions,
-      count: questions.length,
+      data: limitedQuestions,
+      count: limitedQuestions.length,
+      total: questions.length,
     });
   } catch (error) {
     console.error('Error fetching questions by topic:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to fetch questions from Firebase',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
+      { success: false, error: 'Failed to fetch questions' },
       { status: 500 }
     );
   }

@@ -1,78 +1,18 @@
-// Individual Category API Route
-// v1.0 - Handle individual category operations (GET, PUT, DELETE)
-
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
+import { db } from '@/lib/firebase';
 import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 // GET /api/categories/[id] - Get a specific category
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
+    const categoryId = params.id;
 
-    const { id: categoryId } = await params;
-    const categoryRef = doc(db, 'categories', categoryId);
-    const categorySnap = await getDoc(categoryRef);
-
-    if (!categorySnap.exists()) {
+    if (!categoryId) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Category not found',
-        },
-        { status: 404 }
-      );
-    }
-
-    const categoryData = categorySnap.data();
-    const category = {
-      id: categorySnap.id,
-      ...categoryData,
-      createdAt: categoryData.createdAt?.toDate() || new Date(),
-      updatedAt: categoryData.updatedAt?.toDate() || new Date(),
-    };
-
-    return NextResponse.json({
-      success: true,
-      data: category,
-    });
-  } catch (error) {
-    console.error('Error fetching category:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to fetch category',
-      },
-      { status: 500 }
-    );
-  }
-}
-
-// PUT /api/categories/[id] - Update a category
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
-    const { id: categoryId } = await params;
-    const updateData = await request.json();
-
-    // Validate required fields
-    if (!updateData.name) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Category name is required',
-        },
+        { success: false, error: 'Category ID is required' },
         { status: 400 }
       );
     }
@@ -82,80 +22,112 @@ export async function PUT(
 
     if (!categorySnap.exists()) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Category not found',
-        },
+        { success: false, error: 'Category not found' },
         { status: 404 }
       );
     }
 
-    // Update the category
-    await updateDoc(categoryRef, {
-      ...updateData,
-      updatedAt: new Date(),
+    const categoryData = {
+      id: categorySnap.id,
+      ...categorySnap.data(),
+    };
+
+    return NextResponse.json({
+      success: true,
+      data: categoryData,
     });
+  } catch (error) {
+    console.error('Error fetching category:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to fetch category' },
+      { status: 500 }
+    );
+  }
+}
 
-    // Fetch the updated category
-    const updatedSnap = await getDoc(categoryRef);
-    const updatedData = updatedSnap.data();
+// PUT /api/categories/[id] - Update a specific category
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const categoryId = params.id;
+    const body = await request.json();
 
-    if (!updatedData) {
+    if (!categoryId) {
+      return NextResponse.json(
+        { success: false, error: 'Category ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate required fields
+    if (!body.name) {
+      return NextResponse.json(
+        { success: false, error: 'Category name is required' },
+        { status: 400 }
+      );
+    }
+
+    const categoryRef = doc(db, 'categories', categoryId);
+
+    // Check if category exists
+    const categorySnap = await getDoc(categoryRef);
+    if (!categorySnap.exists()) {
       return NextResponse.json(
         { success: false, error: 'Category not found' },
         { status: 404 }
       );
     }
 
-    const updatedCategory = {
-      id: updatedSnap.id,
-      ...updatedData,
-      createdAt: updatedData.createdAt?.toDate() || new Date(),
-      updatedAt: updatedData.updatedAt?.toDate() || new Date(),
+    // Prepare update data
+    const updateData = {
+      ...body,
+      updatedAt: new Date(),
     };
+
+    await updateDoc(categoryRef, updateData);
 
     return NextResponse.json({
       success: true,
-      data: updatedCategory,
       message: 'Category updated successfully',
+      data: { id: categoryId, ...updateData },
     });
   } catch (error) {
     console.error('Error updating category:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to update category',
-      },
+      { success: false, error: 'Failed to update category' },
       { status: 500 }
     );
   }
 }
 
-// DELETE /api/categories/[id] - Delete a category
+// DELETE /api/categories/[id] - Delete a specific category
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
+    const categoryId = params.id;
+
+    if (!categoryId) {
+      return NextResponse.json(
+        { success: false, error: 'Category ID is required' },
+        { status: 400 }
+      );
     }
 
-    const { id: categoryId } = await params;
     const categoryRef = doc(db, 'categories', categoryId);
-    const categorySnap = await getDoc(categoryRef);
 
+    // Check if category exists
+    const categorySnap = await getDoc(categoryRef);
     if (!categorySnap.exists()) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Category not found',
-        },
+        { success: false, error: 'Category not found' },
         { status: 404 }
       );
     }
 
-    // Delete the category
     await deleteDoc(categoryRef);
 
     return NextResponse.json({
@@ -165,10 +137,7 @@ export async function DELETE(
   } catch (error) {
     console.error('Error deleting category:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to delete category',
-      },
+      { success: false, error: 'Failed to delete category' },
       { status: 500 }
     );
   }

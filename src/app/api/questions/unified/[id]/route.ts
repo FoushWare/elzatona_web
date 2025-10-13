@@ -2,6 +2,43 @@ import { NextRequest, NextResponse } from 'next/server';
 import { UnifiedQuestionService } from '@/lib/unified-question-schema';
 import { db } from '@/lib/firebase-server';
 
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Database not initialized' },
+        { status: 500 }
+      );
+    }
+
+    const service = new UnifiedQuestionService(db);
+    const question = await service.getQuestion(id);
+
+    if (!question) {
+      return NextResponse.json(
+        { success: false, error: 'Question not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: question,
+    });
+  } catch (error) {
+    console.error('Error fetching question:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to fetch question' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
