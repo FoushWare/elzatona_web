@@ -14,6 +14,29 @@ type PaginatedResponse<T> = {
   total: number;
 };
 
+interface AdminStats {
+  questions: number;
+  categories: number;
+  topics: number;
+  learningCards: number;
+  learningPlans: number;
+  frontendTasks: number;
+  problemSolvingTasks: number;
+  totalContent: number;
+  recentActivity: Array<{
+    id: string;
+    action: string;
+    timestamp: any;
+    user: string;
+    details: string;
+  }>;
+  systemHealth: {
+    databaseConnected: boolean;
+    lastUpdated: string;
+    apiResponseTime: number;
+  };
+}
+
 // ============================================================================
 // QUERY KEYS - Centralized key management for consistency
 // ============================================================================
@@ -59,8 +82,44 @@ export const queryKeys = {
   problemSolvingTasks: ['problem-solving-tasks'] as const,
   problemSolvingTask: (id: string) => ['problem-solving-tasks', id] as const,
 
+  // Learning Paths
+  learningPaths: ['learning-paths'] as const,
+  learningPath: (id: string) => ['learning-paths', id] as const,
+
+  // Questions by Learning Path
+  questionsByLearningPath: (learningPath: string) =>
+    ['questions-by-learning-path', learningPath] as const,
+
   // Admin Stats
   adminStats: ['admin', 'stats'] as const,
+
+  // Backup Operations
+  backups: ['backups'] as const,
+  backup: (id: string) => ['backups', id] as const,
+  backupStats: ['backupStats'] as const,
+
+  // Bulk Operations
+  bulkOperations: ['bulk-operations'] as const,
+  bulkOperationProgress: (operationId: string) =>
+    ['bulk-operations', 'progress', operationId] as const,
+
+  // Content Versioning
+  contentVersions: (contentId: string, contentType: string) =>
+    ['content-versions', contentId, contentType] as const,
+  contentVersion: (versionId: string) =>
+    ['content-version', versionId] as const,
+  versionComparison: (versionId1: string, versionId2: string) =>
+    ['version-comparison', versionId1, versionId2] as const,
+
+  // Audit Logs
+  auditLogs: ['audit-logs'] as const,
+  auditLogStats: ['audit-log-stats'] as const,
+
+  // User Analytics
+  userProgress: (userId: string) => ['analytics', 'progress', userId] as const,
+  userAnalytics: (userId: string) => ['analytics', 'user', userId] as const,
+  userInsights: (userId: string) => ['analytics', 'insights', userId] as const,
+  systemAnalytics: ['analytics', 'system'] as const,
 } as const;
 
 // ============================================================================
@@ -259,6 +318,230 @@ const api = {
     api.fetch<{ success: boolean }>(`/api/admin/problem-solving/${id}`, {
       method: 'DELETE',
     }),
+
+  // Learning Paths
+  getLearningPaths: () =>
+    api.fetch<{ success: boolean; data: any[] }>('/api/learning-paths'),
+  getLearningPath: (id: string) => api.fetch<any>(`/api/learning-paths/${id}`),
+
+  // Questions by Learning Path
+  getQuestionsByLearningPath: (learningPath: string) =>
+    api.fetch<{ success: boolean; questions: any[] }>(
+      `/api/questions/by-learning-path/${learningPath}`
+    ),
+
+  // Backup Operations
+  getBackups: () =>
+    api.fetch<{ success: boolean; backups: any[] }>(
+      '/api/admin/backup?action=list'
+    ),
+  getBackupStats: () =>
+    api.fetch<{
+      success: boolean;
+      totalBackups: number;
+      totalSize: number;
+      lastBackup?: Date;
+      collectionsCount: number;
+    }>('/api/admin/backup?action=stats'),
+  createBackup: (name: string, description: string) =>
+    api.fetch<{ success: boolean; backupId?: string }>('/api/admin/backup', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'create', name, description }),
+    }),
+  restoreBackup: (backupId: string, options?: any) =>
+    api.fetch<{ success: boolean; summary?: any }>('/api/admin/backup', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'restore', backupId, options }),
+    }),
+  deleteBackup: (backupId: string) =>
+    api.fetch<{ success: boolean }>(`/api/admin/backup?backupId=${backupId}`, {
+      method: 'DELETE',
+    }),
+  scheduleBackup: (schedule: 'daily' | 'weekly' | 'monthly') =>
+    api.fetch<{ success: boolean }>('/api/admin/backup', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'schedule', schedule }),
+    }),
+
+  // Bulk Operations
+  bulkDelete: (
+    type: 'cards' | 'plans' | 'categories' | 'topics' | 'questions',
+    ids: string[]
+  ) =>
+    api.fetch<{
+      success: boolean;
+      processed: number;
+      failed: number;
+      errors: string[];
+      message: string;
+    }>('/api/admin/bulk-operations', {
+      method: 'POST',
+      body: JSON.stringify({ operation: 'delete', type, ids }),
+    }),
+  bulkEdit: (
+    type: 'cards' | 'plans' | 'categories' | 'topics' | 'questions',
+    ids: string[],
+    updates: Record<string, any>
+  ) =>
+    api.fetch<{
+      success: boolean;
+      processed: number;
+      failed: number;
+      errors: string[];
+      message: string;
+    }>('/api/admin/bulk-operations', {
+      method: 'POST',
+      body: JSON.stringify({ operation: 'edit', type, ids, updates }),
+    }),
+  getBulkOperationProgress: (operationId: string) =>
+    api.fetch<{ success: boolean; progress: any }>(
+      `/api/admin/bulk-operations/progress/${operationId}`
+    ),
+  cancelBulkOperation: (operationId: string) =>
+    api.fetch<{ success: boolean }>(
+      `/api/admin/bulk-operations/${operationId}`,
+      {
+        method: 'DELETE',
+      }
+    ),
+
+  // Content Versioning
+  createContentVersion: (
+    contentId: string,
+    contentType: string,
+    data: any,
+    userId: string,
+    reason?: string
+  ) =>
+    api.fetch<{ success: boolean; versionId: string; message: string }>(
+      '/api/admin/content-versioning/versions',
+      {
+        method: 'POST',
+        body: JSON.stringify({ contentId, contentType, data, userId, reason }),
+      }
+    ),
+  getContentVersions: (
+    contentId: string,
+    contentType: string,
+    limit?: number
+  ) => {
+    const params = new URLSearchParams({ contentId, contentType });
+    if (limit) params.append('limit', limit.toString());
+    return api.fetch<{ success: boolean; versions: any[]; count: number }>(
+      `/api/admin/content-versioning/versions?${params}`
+    );
+  },
+  getContentVersion: (versionId: string) =>
+    api.fetch<{ success: boolean; version: any }>(
+      `/api/admin/content-versioning/versions/${versionId}`
+    ),
+  restoreContentVersion: (
+    versionId: string,
+    contentId: string,
+    contentType: string,
+    userId: string
+  ) =>
+    api.fetch<{ success: boolean; message: string }>(
+      `/api/admin/content-versioning/versions/${versionId}/restore`,
+      {
+        method: 'PUT',
+        body: JSON.stringify({ contentId, contentType, userId }),
+      }
+    ),
+  compareVersions: (versionId1: string, versionId2: string) =>
+    api.fetch<{ success: boolean; comparison: any[]; changesCount: number }>(
+      `/api/admin/content-versioning/versions/${versionId1}/compare/${versionId2}`
+    ),
+
+  // Audit Logs
+  getAuditLogs: (contentId?: string, contentType?: string, limit?: number) => {
+    const params = new URLSearchParams();
+    if (contentId) params.append('contentId', contentId);
+    if (contentType) params.append('contentType', contentType);
+    if (limit) params.append('limit', limit.toString());
+    return api.fetch<{
+      success: boolean;
+      logs: any[];
+      summary: any;
+      count: number;
+    }>(`/api/admin/audit-logs?${params}`);
+  },
+  getAuditLogStats: (days?: number) => {
+    const params = new URLSearchParams();
+    if (days) params.append('days', days.toString());
+    return api.fetch<{ success: boolean; stats: any }>(
+      `/api/admin/audit-logs/stats?${params}`
+    );
+  },
+
+  // User Analytics
+  trackProgress: (data: {
+    userId: string;
+    userEmail: string;
+    contentType: string;
+    contentId: string;
+    contentName: string;
+    status: string;
+    progress?: number;
+    timeSpent?: number;
+    score?: number;
+    metadata?: any;
+  }) =>
+    api.fetch<{ success: boolean; progressId: string }>(
+      '/api/analytics/progress',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }
+    ),
+  getUserProgress: (userId: string, contentId?: string) => {
+    const params = new URLSearchParams();
+    params.append('userId', userId);
+    if (contentId) params.append('contentId', contentId);
+    return api.fetch<{ success: boolean; data: any; count: number }>(
+      `/api/analytics/progress?${params}`
+    );
+  },
+  startSession: (data: {
+    userId: string;
+    userEmail: string;
+    sessionType: string;
+    learningPath?: string;
+    metadata?: any;
+  }) =>
+    api.fetch<{ success: boolean; sessionId: string }>(
+      '/api/analytics/sessions',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }
+    ),
+  endSession: (
+    sessionId: string,
+    data: {
+      contentCompleted?: string[];
+      totalQuestions?: number;
+      correctAnswers?: number;
+      averageScore?: number;
+    }
+  ) =>
+    api.fetch<{ success: boolean }>(`/api/analytics/sessions/${sessionId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  getUserAnalytics: (userId: string, regenerate?: boolean) => {
+    const params = new URLSearchParams();
+    if (regenerate) params.append('regenerate', 'true');
+    return api.fetch<{ success: boolean; analytics: any }>(
+      `/api/analytics/user/${userId}?${params}`
+    );
+  },
+  getUserInsights: (userId: string) =>
+    api.fetch<{ success: boolean; insights: any }>(
+      `/api/analytics/insights/${userId}`
+    ),
+  getSystemAnalytics: () =>
+    api.fetch<{ success: boolean; analytics: any }>('/api/analytics/system'),
 };
 
 // ============================================================================
@@ -270,6 +553,9 @@ export const useCards = () => {
     queryKey: queryKeys.cards,
     queryFn: api.getCards,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnMount: true, // Always refetch on mount
+    refetchOnWindowFocus: false, // Don't refetch on window focus
+    retry: 3, // Retry failed requests 3 times
   });
 };
 
@@ -325,6 +611,9 @@ export const usePlans = () => {
     queryKey: queryKeys.plans,
     queryFn: api.getPlans,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnMount: true, // Always refetch on mount
+    refetchOnWindowFocus: false, // Don't refetch on window focus
+    retry: 3, // Retry failed requests 3 times
   });
 };
 
@@ -380,6 +669,9 @@ export const useCategories = () => {
     queryKey: queryKeys.categories,
     queryFn: api.getCategories,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnMount: true, // Always refetch on mount
+    refetchOnWindowFocus: false, // Don't refetch on window focus
+    retry: 3, // Retry failed requests 3 times
   });
 };
 
@@ -435,6 +727,9 @@ export const useTopics = () => {
     queryKey: queryKeys.topics,
     queryFn: api.getTopics,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnMount: true, // Always refetch on mount
+    refetchOnWindowFocus: false, // Don't refetch on window focus
+    retry: 3, // Retry failed requests 3 times
   });
 };
 
@@ -525,6 +820,9 @@ export const useQuestionsUnified = (params?: {
     queryKey: [...queryKeys.questionsUnified, params],
     queryFn: () => api.getQuestionsUnified(params),
     staleTime: 2 * 60 * 1000, // 2 minutes
+    refetchOnMount: true, // Always refetch on mount
+    refetchOnWindowFocus: false, // Don't refetch on window focus
+    retry: 3, // Retry failed requests 3 times
   });
 };
 
@@ -701,50 +999,131 @@ export const useDeleteProblemSolvingTask = () => {
 };
 
 // ============================================================================
+// LEARNING PATHS HOOKS
+// ============================================================================
+
+export const useLearningPaths = () => {
+  return useQuery({
+    queryKey: queryKeys.learningPaths,
+    queryFn: api.getLearningPaths,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+export const useLearningPath = (id: string) => {
+  return useQuery({
+    queryKey: queryKeys.learningPath(id),
+    queryFn: () => api.getLearningPath(id),
+    enabled: !!id,
+  });
+};
+
+// ============================================================================
+// QUESTIONS BY LEARNING PATH HOOKS
+// ============================================================================
+
+export const useQuestionsByLearningPath = (learningPath: string) => {
+  return useQuery({
+    queryKey: queryKeys.questionsByLearningPath(learningPath),
+    queryFn: () => api.getQuestionsByLearningPath(learningPath),
+    enabled: !!learningPath,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+// ============================================================================
 // ADMIN STATS HOOKS
 // ============================================================================
 
 export const useAdminStats = () => {
   return useQuery({
     queryKey: queryKeys.adminStats,
-    queryFn: async () => {
-      const [
-        questionsRes,
-        categoriesRes,
-        topicsRes,
-        cardsRes,
-        plansRes,
-        frontendTasksRes,
-        problemSolvingRes,
-      ] = await Promise.all([
-        api
-          .fetch<{ count: number }>('/api/questions')
-          .catch(() => ({ count: 0 })),
-        api
-          .fetch<{ count: number }>('/api/categories')
-          .catch(() => ({ count: 0 })),
-        api.fetch<{ count: number }>('/api/topics').catch(() => ({ count: 0 })),
-        api.fetch<{ count: number }>('/api/cards').catch(() => ({ count: 0 })),
-        api.fetch<{ count: number }>('/api/plans').catch(() => ({ count: 0 })),
-        api
-          .fetch<{ total: number }>('/api/admin/frontend-tasks')
-          .catch(() => ({ total: 0 })),
-        api
-          .fetch<{ total: number }>('/api/admin/problem-solving')
-          .catch(() => ({ total: 0 })),
-      ]);
-
-      return {
-        questions: questionsRes.count || 0,
-        categories: categoriesRes.count || 0,
-        topics: topicsRes.count || 0,
-        learningCards: cardsRes.count || 0,
-        learningPlans: plansRes.count || 0,
-        frontendTasks: frontendTasksRes.total || 0,
-        problemSolvingTasks: problemSolvingRes.total || 0,
-      };
-    },
+    queryFn: () => api.fetch<AdminStats>('/api/admin/stats'),
     staleTime: 1 * 60 * 1000, // 1 minute
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    retry: 3,
+  });
+};
+
+// ============================================================================
+// BACKUP HOOKS
+// ============================================================================
+
+export const useBackups = () => {
+  return useQuery({
+    queryKey: queryKeys.backups,
+    queryFn: api.getBackups,
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    retry: 3,
+  });
+};
+
+export const useBackupStats = () => {
+  return useQuery({
+    queryKey: queryKeys.backupStats,
+    queryFn: api.getBackupStats,
+    staleTime: 1 * 60 * 1000, // 1 minute
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    retry: 3,
+  });
+};
+
+export const useCreateBackup = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      name,
+      description,
+    }: {
+      name: string;
+      description: string;
+    }) => api.createBackup(name, description),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.backups });
+      queryClient.invalidateQueries({ queryKey: queryKeys.backupStats });
+    },
+  });
+};
+
+export const useRestoreBackup = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ backupId, options }: { backupId: string; options?: any }) =>
+      api.restoreBackup(backupId, options),
+    onSuccess: () => {
+      // Invalidate all queries since data has been restored
+      queryClient.invalidateQueries();
+    },
+  });
+};
+
+export const useDeleteBackup = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (backupId: string) => api.deleteBackup(backupId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.backups });
+      queryClient.invalidateQueries({ queryKey: queryKeys.backupStats });
+    },
+  });
+};
+
+export const useScheduleBackup = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (schedule: 'daily' | 'weekly' | 'monthly') =>
+      api.scheduleBackup(schedule),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.backupStats });
+    },
   });
 };
 
@@ -807,4 +1186,254 @@ export const useOptimisticUpdate = <T>(
   };
 
   return optimisticUpdate;
+};
+
+// ============================================================================
+// BULK OPERATIONS HOOKS
+// ============================================================================
+
+export const useBulkDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      type,
+      ids,
+    }: {
+      type: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
+      ids: string[];
+    }) => api.bulkDelete(type, ids),
+    onSuccess: (_, { type }) => {
+      // Invalidate relevant queries based on type
+      queryClient.invalidateQueries({ queryKey: queryKeys[type] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.adminStats });
+    },
+  });
+};
+
+export const useBulkEdit = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      type,
+      ids,
+      updates,
+    }: {
+      type: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
+      ids: string[];
+      updates: Record<string, any>;
+    }) => api.bulkEdit(type, ids, updates),
+    onSuccess: (_, { type }) => {
+      // Invalidate relevant queries based on type
+      queryClient.invalidateQueries({ queryKey: queryKeys[type] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.adminStats });
+    },
+  });
+};
+
+export const useBulkOperationProgress = (operationId: string) => {
+  return useQuery({
+    queryKey: queryKeys.bulkOperationProgress(operationId),
+    queryFn: () => api.getBulkOperationProgress(operationId),
+    enabled: !!operationId,
+    refetchInterval: 1000, // Poll every second for progress updates
+  });
+};
+
+export const useCancelBulkOperation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: api.cancelBulkOperation,
+    onSuccess: (_, operationId) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.bulkOperationProgress(operationId),
+      });
+    },
+  });
+};
+
+// ============================================================================
+// CONTENT VERSIONING HOOKS
+// ============================================================================
+
+export const useCreateContentVersion = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      contentId,
+      contentType,
+      data,
+      userId,
+      reason,
+    }: {
+      contentId: string;
+      contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
+      data: any;
+      userId: string;
+      reason?: string;
+    }) =>
+      api.createContentVersion(contentId, contentType, data, userId, reason),
+    onSuccess: (_, { contentId, contentType }) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.contentVersions(contentId, contentType),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.auditLogs });
+    },
+  });
+};
+
+export const useContentVersions = (
+  contentId: string,
+  contentType: string,
+  limit?: number
+) => {
+  return useQuery({
+    queryKey: queryKeys.contentVersions(contentId, contentType),
+    queryFn: () => api.getContentVersions(contentId, contentType, limit),
+    enabled: !!contentId && !!contentType,
+  });
+};
+
+export const useContentVersion = (versionId: string) => {
+  return useQuery({
+    queryKey: queryKeys.contentVersion(versionId),
+    queryFn: () => api.getContentVersion(versionId),
+    enabled: !!versionId,
+  });
+};
+
+export const useRestoreContentVersion = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      versionId,
+      contentId,
+      contentType,
+      userId,
+    }: {
+      versionId: string;
+      contentId: string;
+      contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
+      userId: string;
+    }) => api.restoreContentVersion(versionId, contentId, contentType, userId),
+    onSuccess: (_, { contentId, contentType }) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.contentVersions(contentId, contentType),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys[contentType] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.auditLogs });
+    },
+  });
+};
+
+export const useCompareVersions = (versionId1: string, versionId2: string) => {
+  return useQuery({
+    queryKey: queryKeys.versionComparison(versionId1, versionId2),
+    queryFn: () => api.compareVersions(versionId1, versionId2),
+    enabled: !!versionId1 && !!versionId2,
+  });
+};
+
+// ============================================================================
+// AUDIT LOGS HOOKS
+// ============================================================================
+
+export const useAuditLogs = (
+  contentId?: string,
+  contentType?: string,
+  limit?: number
+) => {
+  return useQuery({
+    queryKey: queryKeys.auditLogs,
+    queryFn: () => api.getAuditLogs(contentId, contentType, limit),
+    staleTime: 2 * 60 * 1000, // 2 minutes
+  });
+};
+
+export const useAuditLogStats = (days?: number) => {
+  return useQuery({
+    queryKey: queryKeys.auditLogStats,
+    queryFn: () => api.getAuditLogStats(days),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+// ============================================================================
+// USER ANALYTICS HOOKS
+// ============================================================================
+
+export const useTrackProgress = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: api.trackProgress,
+    onSuccess: () => {
+      // Invalidate user progress queries
+      queryClient.invalidateQueries({ queryKey: ['analytics', 'progress'] });
+    },
+  });
+};
+
+export const useUserProgress = (userId: string, contentId?: string) => {
+  return useQuery({
+    queryKey: queryKeys.userProgress(userId),
+    queryFn: () => api.getUserProgress(userId, contentId),
+    enabled: !!userId,
+    staleTime: 2 * 60 * 1000, // 2 minutes
+  });
+};
+
+export const useStartSession = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: api.startSession,
+    onSuccess: () => {
+      // Invalidate user analytics queries
+      queryClient.invalidateQueries({ queryKey: ['analytics', 'user'] });
+    },
+  });
+};
+
+export const useEndSession = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ sessionId, data }: { sessionId: string; data: any }) =>
+      api.endSession(sessionId, data),
+    onSuccess: () => {
+      // Invalidate user analytics queries
+      queryClient.invalidateQueries({ queryKey: ['analytics', 'user'] });
+    },
+  });
+};
+
+export const useUserAnalytics = (userId: string, regenerate?: boolean) => {
+  return useQuery({
+    queryKey: queryKeys.userAnalytics(userId),
+    queryFn: () => api.getUserAnalytics(userId, regenerate),
+    enabled: !!userId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+export const useUserInsights = (userId: string) => {
+  return useQuery({
+    queryKey: queryKeys.userInsights(userId),
+    queryFn: () => api.getUserInsights(userId),
+    enabled: !!userId,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+export const useSystemAnalytics = () => {
+  return useQuery({
+    queryKey: queryKeys.systemAnalytics,
+    queryFn: api.getSystemAnalytics,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 };
