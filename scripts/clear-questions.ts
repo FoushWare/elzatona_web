@@ -71,16 +71,14 @@ async function clearQuestions() {
 }
 
 // Run the script
-if (require.main === module) {
-  clearQuestions()
-    .then(() => {
-      console.log('✨ Script completed successfully');
-      process.exit(0);
-    })
-    .catch(error => {
-      console.error('💥 Script failed:', error);
-      process.exit(1);
-    });
-}
+clearQuestions()
+  .then(() => {
+    console.log('✨ Script completed successfully');
+    process.exit(0);
+  })
+  .catch(error => {
+    console.error('💥 Script failed:', error);
+    process.exit(1);
+  });
 
 export { clearQuestions };
