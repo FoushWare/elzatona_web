@@ -1,216 +1,281 @@
 [
   {
-    "id": "sec35",
+    "id": "sec-05-sec35",
     "title": "What is Clickjacking (UI Redressing)?",
     "content": "Explain how clickjacking works and its impact on users.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "Clickjacking",
-    "difficulty": "intermediate",
+    "category": "Security",
     "topic": "Clickjacking",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:35:00.000Z",
     "updatedAt": "2025-10-11T00:35:00.000Z",
-    "tags": ["security", "clickjacking", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
+    "explanation": "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions.",
+    "points": 10,
     "sampleAnswers": [
       "Clickjacking tricks users into clicking hidden or disguised UI elements, performing unintended actions such as changing settings, submitting forms, or executing transactions."
-    ]
+    ],
+    "subcategory": "Clickjacking",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec36",
+    "id": "sec-05-sec36",
     "title": "How can you prevent Clickjacking attacks?",
     "content": "Select all correct mitigation strategies.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "Clickjacking",
-    "difficulty": "intermediate",
+    "category": "Security",
     "topic": "Clickjacking",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:36:00.000Z",
     "updatedAt": "2025-10-11T00:36:00.000Z",
-    "tags": ["security", "clickjacking", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent your site from being framed; additional user confirmation mitigates risk. CSS obfuscation is not a reliable defense.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "Use X-Frame-Options header",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Use Content Security Policy frame-ancestors directive",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Obfuscate your buttons with CSS",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Require user confirmation for critical actions",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       }
     ],
-    "explanation": "X-Frame-Options and CSP frame-ancestors prevent your site from being framed; additional user confirmation mitigates risk. CSS obfuscation is not a reliable defense."
+    "subcategory": "Clickjacking",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec37",
+    "id": "sec-05-sec37",
     "title": "What is MITM (Man-in-the-Middle) attack?",
     "content": "Describe MITM attacks and their impact on frontend web security.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "MITM",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
     "difficulty": "intermediate",
-    "topic": "MITM",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:37:00.000Z",
     "updatedAt": "2025-10-11T00:37:00.000Z",
-    "tags": ["security", "mitm", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
+    "explanation": "MITM attacks intercept communication between a client and server, potentially stealing sensitive data like passwords, session tokens, or credit card info. It often occurs on unsecured networks or via malicious proxies.",
+    "points": 10,
     "sampleAnswers": [
       "MITM attacks intercept communication between a client and server, potentially stealing sensitive data like passwords, session tokens, or credit card info. It often occurs on unsecured networks or via malicious proxies."
-    ]
+    ],
+    "subcategory": "MITM",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec38",
+    "id": "sec-05-sec38",
     "title": "How can HTTPS prevent MITM attacks?",
     "content": "Select all correct options.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "MITM",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
     "difficulty": "intermediate",
-    "topic": "MITM",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:38:00.000Z",
     "updatedAt": "2025-10-11T00:38:00.000Z",
-    "tags": ["security", "https", "mitm", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
+    "explanation": "HTTPS (TLS) encrypts data, ensures integrity, and authenticates the server. It does not automatically detect phishing sites.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "Encrypts traffic between client and server",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Prevents tampering of data in transit",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Automatically detects phishing websites",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Ensures integrity via TLS certificates",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       }
     ],
-    "explanation": "HTTPS (TLS) encrypts data, ensures integrity, and authenticates the server. It does not automatically detect phishing sites."
+    "subcategory": "MITM",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec39",
+    "id": "sec-05-sec39",
     "title": "What is the difference between Reflected, Stored, and DOM-based XSS?",
     "content": "Explain the three main types of XSS attacks.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "XSS",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:39:00.000Z",
     "updatedAt": "2025-10-11T00:39:00.000Z",
-    "tags": ["security", "xss", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "Reflected XSS: Malicious input is reflected immediately in a response. Stored XSS: Malicious input is stored in the server (DB) and executed for all users. DOM-based XSS: Payload executes by manipulating the DOM on the client side.",
+    "points": 10,
     "sampleAnswers": [
       "Reflected XSS: Malicious input is reflected immediately in a response. Stored XSS: Malicious input is stored in the server (DB) and executed for all users. DOM-based XSS: Payload executes by manipulating the DOM on the client side."
-    ]
+    ],
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec40",
+    "id": "sec-05-sec40",
     "title": "Which of the following is the most dangerous type of XSS?",
     "content": "Select the correct answer.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "XSS",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:40:00.000Z",
     "updatedAt": "2025-10-11T00:40:00.000Z",
-    "tags": ["security", "xss", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "Stored XSS is persistent and can affect all users who visit the page, making it the most dangerous.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "DOM-based XSS",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Reflected XSS",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Stored XSS",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "All are equally dangerous",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "Stored XSS is persistent and can affect all users who visit the page, making it the most dangerous."
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec41",
+    "id": "sec-05-sec41",
     "title": "What are common mitigation strategies against XSS?",
     "content": "Select all correct options.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "XSS",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:41:00.000Z",
     "updatedAt": "2025-10-11T00:41:00.000Z",
-    "tags": ["security", "xss", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "Validating/sanitizing inputs, HttpOnly cookies, and avoiding inline scripts help prevent XSS. Using eval() is unsafe.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "Input validation and sanitization",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Using HttpOnly cookies",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Avoid inline scripts and use external scripts",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Use eval() to encode input",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "Validating/sanitizing inputs, HttpOnly cookies, and avoiding inline scripts help prevent XSS. Using eval() is unsafe."
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec42",
+    "id": "sec-05-sec42",
     "title": "True or False: Using HTTPS alone fully protects against XSS attacks.",
     "content": "Evaluate this statement.",
     "type": "true-false",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "XSS",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:42:00.000Z",
     "updatedAt": "2025-10-11T00:42:00.000Z",
-    "tags": ["security", "xss", "frontend", "https"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "The correct answer is: False",
+    "points": 10,
     "options": [
       {
         "id": "t1",
@@ -224,6 +289,9 @@
         "isCorrect": true,
         "explanation": "XSS requires input sanitization, CSP, and secure coding practices in addition to HTTPS."
       }
-    ]
+    ],
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   }
 ]
