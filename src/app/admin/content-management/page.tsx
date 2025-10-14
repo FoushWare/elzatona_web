@@ -29,6 +29,9 @@ import {
   useUpdateQuestion,
   useDeleteQuestion,
 } from '@/hooks/useTanStackQuery';
+import { useQueryClient } from '@tanstack/react-query';
+import { useNotificationActions } from '@/hooks/useNotificationActions';
+import { BulkOperations } from '@/shared/components/admin/BulkOperations';
 
 // Types for API responses
 interface ApiResponse<T> {
@@ -282,23 +285,36 @@ export default function UnifiedAdminPage() {
   const updateQuestionMutation = useUpdateQuestion();
   const deleteQuestionMutation = useDeleteQuestion();
 
+  // Notification actions
+  const { notifyContentUpdate, notifyAdminAction } = useNotificationActions();
+
   // Debug logging for TanStack Query
   console.log('TanStack Query Status:', {
     cardsLoading,
     cardsError,
-    cardsData,
+    cardsData: cardsData
+      ? { count: cardsData.count, dataLength: cardsData.data?.length }
+      : null,
     plansLoading,
     plansError,
-    plansData,
+    plansData: plansData
+      ? { count: plansData.count, dataLength: plansData.data?.length }
+      : null,
     categoriesLoading,
     categoriesError,
-    categoriesData,
+    categoriesData: categoriesData
+      ? { count: categoriesData.count, dataLength: categoriesData.data?.length }
+      : null,
     topicsLoading,
     topicsError,
-    topicsData,
+    topicsData: topicsData
+      ? { count: topicsData.count, dataLength: topicsData.data?.length }
+      : null,
     questionsLoading,
     questionsError,
-    questionsData,
+    questionsData: questionsData
+      ? { count: questionsData.count, dataLength: questionsData.data?.length }
+      : null,
   });
 
   // Derived data
@@ -307,6 +323,31 @@ export default function UnifiedAdminPage() {
   const categories = categoriesData?.data || [];
   const topics = topicsData?.data || [];
   const questions = questionsData?.data || [];
+
+  // Fallback mechanism - refetch if no data after initial load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (
+        !cardsLoading &&
+        (!cardsData || !cardsData.data || cardsData.data.length === 0)
+      ) {
+        console.log('🔄 Refetching cards due to empty data');
+        // Trigger refetch by invalidating the query
+        const queryClient = useQueryClient();
+        queryClient.invalidateQueries({ queryKey: ['cards'] });
+      }
+      if (
+        !plansLoading &&
+        (!plansData || !plansData.data || plansData.data.length === 0)
+      ) {
+        console.log('🔄 Refetching plans due to empty data');
+        const queryClient = useQueryClient();
+        queryClient.invalidateQueries({ queryKey: ['plans'] });
+      }
+    }, 2000); // Wait 2 seconds after component mount
+
+    return () => clearTimeout(timer);
+  }, [cardsLoading, cardsData, plansLoading, plansData]);
 
   // Loading state
   const loading =
@@ -363,6 +404,7 @@ export default function UnifiedAdminPage() {
   const handleCreateCard = async (cardData: Partial<LearningCard>) => {
     try {
       await createCardMutation.mutateAsync(cardData);
+      await notifyContentUpdate('Learning Card', 'created');
     } catch (error) {
       console.error('Failed to create card:', error);
     }
@@ -374,6 +416,7 @@ export default function UnifiedAdminPage() {
   ) => {
     try {
       await updateCardMutation.mutateAsync({ id: cardId, data: cardData });
+      await notifyContentUpdate('Learning Card', 'updated');
     } catch (error) {
       console.error('Failed to update card:', error);
     }
@@ -382,6 +425,7 @@ export default function UnifiedAdminPage() {
   const handleDeleteCard = async (cardId: string) => {
     try {
       await deleteCardMutation.mutateAsync(cardId);
+      await notifyContentUpdate('Learning Card', 'deleted');
     } catch (error) {
       console.error('Failed to delete card:', error);
     }
@@ -390,6 +434,7 @@ export default function UnifiedAdminPage() {
   const handleCreatePlan = async (planData: Partial<LearningPlan>) => {
     try {
       await createPlanMutation.mutateAsync(planData);
+      await notifyContentUpdate('Learning Plan', 'created');
     } catch (error) {
       console.error('Failed to create plan:', error);
     }
@@ -401,6 +446,7 @@ export default function UnifiedAdminPage() {
   ) => {
     try {
       await updatePlanMutation.mutateAsync({ id: planId, data: planData });
+      await notifyContentUpdate('Learning Plan', 'updated');
     } catch (error) {
       console.error('Failed to update plan:', error);
     }
@@ -409,6 +455,7 @@ export default function UnifiedAdminPage() {
   const handleDeletePlan = async (planId: string) => {
     try {
       await deletePlanMutation.mutateAsync(planId);
+      await notifyContentUpdate('Learning Plan', 'deleted');
     } catch (error) {
       console.error('Failed to delete plan:', error);
     }
@@ -610,6 +657,49 @@ export default function UnifiedAdminPage() {
     );
   }
 
+  // Error handling
+  if (
+    cardsError ||
+    plansError ||
+    categoriesError ||
+    topicsError ||
+    questionsError
+  ) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="text-red-500 text-6xl mb-4">⚠️</div>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              Error Loading Data
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              There was an error loading the admin data. Please try refreshing
+              the page.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Refresh Page
+            </button>
+            <div className="mt-4 text-sm text-gray-500">
+              {cardsError && <p>Cards Error: {cardsError.message}</p>}
+              {plansError && <p>Plans Error: {plansError.message}</p>}
+              {categoriesError && (
+                <p>Categories Error: {categoriesError.message}</p>
+              )}
+              {topicsError && <p>Topics Error: {topicsError.message}</p>}
+              {questionsError && (
+                <p>Questions Error: {questionsError.message}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto p-6">
       {/* Header */}
@@ -740,6 +830,16 @@ export default function UnifiedAdminPage() {
           </Button>
         </Suspense>
       </div>
+
+      {/* Bulk Operations for Cards */}
+      <BulkOperations
+        type="cards"
+        items={filteredCards.map(card => ({ id: card.id, name: card.name }))}
+        onRefresh={() => {
+          // Refetch cards data
+          queryClient.invalidateQueries({ queryKey: ['cards'] });
+        }}
+      />
 
       {/* Cards Section */}
       <div className="mb-8">
@@ -1034,6 +1134,16 @@ export default function UnifiedAdminPage() {
           )}
         </div>
       </div>
+
+      {/* Bulk Operations for Plans */}
+      <BulkOperations
+        type="plans"
+        items={filteredPlans.map(plan => ({ id: plan.id, name: plan.name }))}
+        onRefresh={() => {
+          // Refetch plans data
+          queryClient.invalidateQueries({ queryKey: ['plans'] });
+        }}
+      />
 
       {/* Plans Section */}
       <div className="mb-8">

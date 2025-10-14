@@ -12,6 +12,38 @@ import {
   getDoc,
 } from '@/lib/firebase-server';
 
+/**
+ * @swagger
+ * /api/cards:
+ *   get:
+ *     summary: Get all learning cards
+ *     description: Retrieve all learning cards ordered by their order field
+ *     tags: [Learning Cards]
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved learning cards
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/LearningCard'
+ *                 count:
+ *                   type: number
+ *                   example: 5
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 // GET /api/cards - Get all learning cards
 export async function GET(request: NextRequest) {
   try {
@@ -41,6 +73,66 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * @swagger
+ * /api/cards:
+ *   post:
+ *     summary: Create a new learning card
+ *     description: Create a new learning card with the provided data
+ *     tags: [Learning Cards]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - description
+ *               - type
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Core Technologies"
+ *               description:
+ *                 type: string
+ *                 example: "Fundamental web technologies"
+ *               type:
+ *                 type: string
+ *                 enum: [core-technologies, framework-questions, problem-solving, system-design, frontend-tasks]
+ *                 example: "core-technologies"
+ *               color:
+ *                 type: string
+ *                 example: "#3B82F6"
+ *               icon:
+ *                 type: string
+ *                 example: "Code"
+ *               order:
+ *                 type: number
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Learning card created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/LearningCard'
+ *                 message:
+ *                   type: string
+ *                   example: "Card created successfully"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 // POST /api/cards - Create a new learning card
 export async function POST(request: NextRequest) {
   try {

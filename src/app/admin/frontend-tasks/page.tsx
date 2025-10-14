@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Plus, Edit, Trash2, Eye, Search, Filter, Code } from 'lucide-react';
 import {
   FrontendTask,
@@ -10,10 +10,27 @@ import {
   FrontendTaskFile,
 } from '@/types/admin';
 import FrontendTaskEditor from '@/shared/components/admin/FrontendTaskEditor';
+import {
+  useFrontendTasks,
+  useCreateFrontendTask,
+  useUpdateFrontendTask,
+  useDeleteFrontendTask,
+} from '@/hooks/useTanStackQuery';
 
 export default function FrontendTasksAdminPage() {
-  const [tasks, setTasks] = useState<FrontendTask[]>([]);
-  const [loading, setLoading] = useState(true);
+  // TanStack Query hooks
+  const {
+    data: tasksData,
+    isLoading: tasksLoading,
+    error: tasksError,
+  } = useFrontendTasks();
+
+  // Mutation hooks
+  const createTaskMutation = useCreateFrontendTask();
+  const updateTaskMutation = useUpdateFrontendTask();
+  const deleteTaskMutation = useDeleteFrontendTask();
+
+  // Local state for UI
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
@@ -23,79 +40,62 @@ export default function FrontendTasksAdminPage() {
     'create'
   );
 
-  // Fetch tasks
-  const fetchTasks = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (searchTerm) params.append('search', searchTerm);
-      if (selectedCategory) params.append('category', selectedCategory);
-      if (selectedDifficulty) params.append('difficulty', selectedDifficulty);
+  // Derived data
+  const tasks = tasksData?.data || [];
+  const loading = tasksLoading;
 
-      const response = await fetch(`/api/admin/frontend-tasks?${params}`);
-      const data = await response.json();
+  // Filtered tasks based on search and filters
+  const filteredTasks = useMemo(() => {
+    return tasks.filter(task => {
+      const matchesSearch =
+        task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        !selectedCategory || task.category === selectedCategory;
+      const matchesDifficulty =
+        !selectedDifficulty || task.difficulty === selectedDifficulty;
 
-      if (data.success) {
-        setTasks(data.data);
+      return matchesSearch && matchesCategory && matchesDifficulty;
+    });
+  }, [tasks, searchTerm, selectedCategory, selectedDifficulty]);
+
+  // CRUD handlers using TanStack Query mutations
+  const handleDelete = useCallback(
+    async (id: string) => {
+      if (!confirm('Are you sure you want to delete this task?')) return;
+
+      try {
+        await deleteTaskMutation.mutateAsync(id);
+      } catch (error) {
+        console.error('Error deleting task:', error);
+        alert('Failed to delete task. Please try again.');
       }
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchTasks();
-  }, [searchTerm, selectedCategory, selectedDifficulty]);
-
-  // Delete task
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this task?')) return;
-
-    try {
-      const response = await fetch(`/api/admin/frontend-tasks/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        fetchTasks();
-      }
-    } catch (error) {
-      console.error('Error deleting task:', error);
-    }
-  };
+    },
+    [deleteTaskMutation]
+  );
 
   // Handle editor save
-  const handleEditorSave = async (taskData: FrontendTaskFormData) => {
-    try {
-      const url =
-        editorMode === 'create'
-          ? '/api/admin/frontend-tasks'
-          : `/api/admin/frontend-tasks/${editingTask?.id}`;
+  const handleEditorSave = useCallback(
+    async (taskData: FrontendTaskFormData) => {
+      try {
+        if (editorMode === 'create') {
+          await createTaskMutation.mutateAsync(taskData);
+        } else if (editingTask?.id) {
+          await updateTaskMutation.mutateAsync({
+            id: editingTask.id,
+            data: taskData,
+          });
+        }
 
-      const method = editorMode === 'create' ? 'POST' : 'PUT';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(taskData),
-      });
-
-      if (response.ok) {
-        await fetchTasks(); // Refresh the list
         setShowEditor(false);
         setEditingTask(null);
-      } else {
-        throw new Error('Failed to save task');
+      } catch (error) {
+        console.error('Error saving task:', error);
+        alert('Failed to save task. Please try again.');
       }
-    } catch (error) {
-      console.error('Error saving task:', error);
-      alert('Failed to save task. Please try again.');
-    }
-  };
+    },
+    [editorMode, editingTask?.id, createTaskMutation, updateTaskMutation]
+  );
 
   // Handle editor cancel
   const handleEditorCancel = () => {
@@ -207,7 +207,7 @@ export default function FrontendTasksAdminPage() {
               <div className="p-8 text-center text-gray-400">
                 Loading tasks...
               </div>
-            ) : tasks.length === 0 ? (
+            ) : filteredTasks.length === 0 ? (
               <div className="p-8 text-center text-gray-400">
                 No tasks found
               </div>
@@ -226,7 +226,7 @@ export default function FrontendTasksAdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {tasks.map(task => (
+                    {filteredTasks.map(task => (
                       <tr
                         key={task.id}
                         className="border-t border-gray-700 hover:bg-gray-750"

@@ -39,7 +39,9 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   if (skipAuthForTesting) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <AdminNavbar />
         <main className="pt-16">{children}</main>
+        <NotificationContainer />
       </div>
     );
   }
@@ -81,7 +83,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     isDevelopment &&
     (pathname?.includes('/admin/content/questions') ||
       pathname?.includes('/admin/enhanced-structure') ||
-      pathname?.includes('/admin/content-management'));
+      pathname?.includes('/admin/content-management') ||
+      pathname?.includes('/admin/dashboard'));
 
   if (skipAuthForTesting) {
     return (
