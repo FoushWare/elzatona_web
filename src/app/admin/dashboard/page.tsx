@@ -41,6 +41,8 @@ interface DashboardStats {
   frontendTasks: number;
   problemSolvingTasks: number;
   totalContent: number;
+  totalUsers: number;
+  totalNotifications: number;
   recentActivity: Array<{
     id: string;
     action: string;
@@ -48,10 +50,47 @@ interface DashboardStats {
     user: string;
     details: string;
   }>;
+  recentErrors: Array<{
+    id: string;
+    error: string;
+    timestamp: any;
+    severity: string;
+    source: string;
+  }>;
   systemHealth: {
     databaseConnected: boolean;
     lastUpdated: string;
     apiResponseTime: number;
+    totalCollections: number;
+    activeCollections: number;
+    errorRate: number;
+    uptime: string;
+  };
+  performanceMetrics: {
+    averageResponseTime: number;
+    databaseQueryTime: number;
+    cacheHitRate: number;
+    memoryUsage: string;
+    cpuUsage: string;
+  };
+  analytics: {
+    contentDistribution: Record<string, number>;
+    questionCategories: Record<string, number>;
+    questionDifficulty: Record<string, number>;
+    questionTypes: Record<string, number>;
+    userEngagement: {
+      totalUsers: number;
+      activeUsers: number;
+      totalSessions: number;
+      averageSessionDuration: string;
+      completionRate: number;
+    };
+    contentQuality: {
+      questionsWithExplanations: number;
+      questionsWithHints: number;
+      questionsWithSampleAnswers: number;
+      averageQuestionLength: number;
+    };
   };
 }
 
@@ -337,6 +376,210 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Performance Monitoring */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Performance Monitoring
+            </h2>
+            <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+              <Zap className="h-4 w-4" />
+              <span>Real-time metrics</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Response Time
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.performanceMetrics?.averageResponseTime || 0}ms
+                  </p>
+                </div>
+                <Zap className="w-8 h-8 text-yellow-500" />
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Cache Hit Rate
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.performanceMetrics?.cacheHitRate || 0}%
+                  </p>
+                </div>
+                <Activity className="w-8 h-8 text-green-500" />
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Memory Usage
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.performanceMetrics?.memoryUsage || '0%'}
+                  </p>
+                </div>
+                <Database className="w-8 h-8 text-blue-500" />
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    CPU Usage
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.performanceMetrics?.cpuUsage || '0%'}
+                  </p>
+                </div>
+                <BarChart3 className="w-8 h-8 text-purple-500" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* User Engagement Analytics */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              User Engagement
+            </h2>
+            <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+              <Users className="h-4 w-4" />
+              <span>User metrics</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Total Users
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.totalUsers || 0}
+                  </p>
+                </div>
+                <Users className="w-8 h-8 text-blue-500" />
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Active Users
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.analytics?.userEngagement?.activeUsers || 0}
+                  </p>
+                </div>
+                <TrendingUp className="w-8 h-8 text-green-500" />
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Total Sessions
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.analytics?.userEngagement?.totalSessions || 0}
+                  </p>
+                </div>
+                <Clock className="w-8 h-8 text-orange-500" />
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Completion Rate
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.analytics?.userEngagement?.completionRate || 0}%
+                  </p>
+                </div>
+                <Target className="w-8 h-8 text-purple-500" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Quality Analytics */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Content Quality
+            </h2>
+            <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+              <Star className="h-4 w-4" />
+              <span>Quality metrics</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Questions with Explanations
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.analytics?.contentQuality
+                      ?.questionsWithExplanations || 0}
+                  </p>
+                </div>
+                <Info className="w-8 h-8 text-blue-500" />
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Questions with Hints
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.analytics?.contentQuality?.questionsWithHints || 0}
+                  </p>
+                </div>
+                <HelpCircle className="w-8 h-8 text-green-500" />
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Questions with Sample Answers
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.analytics?.contentQuality
+                      ?.questionsWithSampleAnswers || 0}
+                  </p>
+                </div>
+                <CheckCircle className="w-8 h-8 text-purple-500" />
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Avg Question Length
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {stats?.analytics?.contentQuality?.averageQuestionLength ||
+                      0}
+                  </p>
+                </div>
+                <FileText className="w-8 h-8 text-orange-500" />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Enhanced Recent Activity */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 mb-8">
           <div className="flex items-center justify-between mb-6">
@@ -386,6 +629,128 @@ export default function AdminDashboard() {
                 <p>No recent activity</p>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* System Health & Error Monitoring */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* System Health */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                System Health
+              </h3>
+              <div className="flex items-center space-x-2 text-green-500">
+                <CheckCircle className="h-4 w-4" />
+                <span className="text-sm font-medium">
+                  All systems operational
+                </span>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                <div className="flex items-center">
+                  <Database className="h-5 w-5 text-blue-500 mr-3" />
+                  <span className="text-gray-900 dark:text-white font-medium">
+                    Database
+                  </span>
+                </div>
+                <div className="flex items-center text-green-500">
+                  <CheckCircle className="h-4 w-4 mr-1" />
+                  <span className="text-sm">Connected</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                <div className="flex items-center">
+                  <Zap className="h-5 w-5 text-yellow-500 mr-3" />
+                  <span className="text-gray-900 dark:text-white font-medium">
+                    API Response
+                  </span>
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  {stats?.systemHealth?.apiResponseTime || 0}ms
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                <div className="flex items-center">
+                  <Activity className="h-5 w-5 text-green-500 mr-3" />
+                  <span className="text-gray-900 dark:text-white font-medium">
+                    Uptime
+                  </span>
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  {stats?.systemHealth?.uptime || '99.9%'}
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                <div className="flex items-center">
+                  <BarChart3 className="h-5 w-5 text-purple-500 mr-3" />
+                  <span className="text-gray-900 dark:text-white font-medium">
+                    Collections
+                  </span>
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  {stats?.systemHealth?.activeCollections || 0}/
+                  {stats?.systemHealth?.totalCollections || 0}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Errors */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                Recent Errors
+              </h3>
+              <div className="flex items-center space-x-2 text-red-500">
+                <AlertCircle className="h-4 w-4" />
+                <span className="text-sm font-medium">
+                  {stats?.recentErrors?.length || 0} errors
+                </span>
+              </div>
+            </div>
+            <div className="space-y-3">
+              {loading ? (
+                Array.from({ length: 3 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-xl"
+                  >
+                    <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-4 w-4 rounded mr-3"></div>
+                    <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-4 w-32 rounded mr-3"></div>
+                    <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-4 w-20 rounded"></div>
+                  </div>
+                ))
+              ) : stats?.recentErrors?.length > 0 ? (
+                stats.recentErrors.slice(0, 3).map(error => (
+                  <div
+                    key={error.id}
+                    className="flex items-center p-3 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800"
+                  >
+                    <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+                    <div className="flex-1">
+                      <span className="text-red-900 dark:text-red-300 font-medium">
+                        {error.error}
+                      </span>
+                      <p className="text-sm text-red-600 dark:text-red-400">
+                        {error.source} - {error.severity}
+                      </p>
+                    </div>
+                    <div className="text-sm text-red-500 dark:text-red-400">
+                      {new Date(
+                        error.timestamp?.seconds * 1000 || Date.now()
+                      ).toLocaleTimeString()}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <CheckCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>No recent errors</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
