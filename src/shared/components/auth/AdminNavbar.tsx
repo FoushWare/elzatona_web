@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import { NotificationDropdown } from '../common/NotificationDropdown';
 import AlzatonaLogo from '../common/AlzatonaLogo';
 
 export default function AdminNavbar() {
@@ -215,7 +216,7 @@ export default function AdminNavbar() {
             </div>
           </div>
 
-          {/* Right side - Theme toggle and User menu */}
+          {/* Right side - Theme toggle, Notifications and User menu */}
           <div className="flex items-center space-x-4">
             {/* Theme Toggle */}
             <button
@@ -233,6 +234,9 @@ export default function AdminNavbar() {
                 <Moon className="w-5 h-5" />
               )}
             </button>
+
+            {/* Notifications */}
+            <NotificationDropdown />
 
             {/* User Menu */}
             {isAuthenticated && user && (

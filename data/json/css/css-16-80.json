@@ -1,729 +1,810 @@
 [
   {
-    "id": "css-q61",
+    "id": "css-16-80-css-q61",
     "title": "List display property values in CSS?",
     "content": "The `display` property controls how an element is rendered. Common values: `block`, `inline`, `inline-block`, `flex`, `grid`, `none`, `table`, etc.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Display",
-    "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
+    "category": "CSS",
     "topic": "Display Property",
+    "difficulty": "intermediate",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "display", "layout", "block", "inline", "flex", "grid"],
+    "updatedBy": "admin",
+    "tags": ["css", "display-property", "intermediate"],
     "explanation": "`display` defines the outer and inner display type of an element, controlling layout behavior and flow.",
     "points": 6,
     "options": [
       {
         "id": "a",
         "text": "`block`, `inline`, `inline-block`, `flex`, `grid`, `none`, `table`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Only `block` and `inline`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`display` has no effect on layout",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`display: hidden` is valid",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q62",
+    "id": "css-16-80-css-q62",
     "title": "How is responsive design different from adaptive design?",
     "content": "Responsive design uses fluid grids and media queries to adapt continuously. Adaptive design uses fixed layouts for specific breakpoints.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Responsive Design",
+    "category": "CSS",
+    "topic": "Responsive Design",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Responsive vs Adaptive",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "responsive", "adaptive", "mobile", "breakpoints"],
+    "updatedBy": "admin",
+    "tags": ["css", "responsive-design", "intermediate"],
     "explanation": "Responsive is fluid and flexible; adaptive serves predefined layouts based on device detection or viewport size.",
     "points": 7,
     "options": [
       {
         "id": "a",
         "text": "Responsive: fluid, continuous adaptation; Adaptive: fixed layouts at breakpoints",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "They are identical",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "Adaptive uses only percentages",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "Responsive requires JavaScript",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q63",
+    "id": "css-16-80-css-q63",
     "title": "What is retina graphics? How to handle images for retina screens?",
     "content": "Retina displays have high pixel density. Use `srcset`, `picture`, or media queries to serve higher-resolution images conditionally.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Images",
+    "category": "CSS",
+    "topic": "Images",
     "difficulty": "advanced",
-    "learningPath": "Performance Optimization Specialist",
-    "topic": "Retina Graphics",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "retina", "srcset", "picture", "responsive-images", "dpi"],
+    "updatedBy": "admin",
+    "tags": ["css", "images", "advanced"],
     "explanation": "Serving 2x images to high-DPR devices improves sharpness without bloating bandwidth for standard screens.",
     "points": 8,
     "sampleAnswers": [
       "Use `<img src=\"image.jpg\" srcset=\"image@2x.jpg 2x\">` to let the browser choose the right image based on device pixel ratio.",
       "For art direction, use the `<picture>` element with media queries to serve different crops or formats per viewport."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q64",
+    "id": "css-16-80-css-q64",
     "title": "Is there any reason to use translate() instead of absolute positioning?",
     "content": "Yes. `translate()` triggers compositing (GPU) without reflow/repaint, making animations smoother. Absolute positioning triggers layout recalculations.",
     "type": "true-false",
-    "category": "CSS & Styling",
-    "subcategory": "Performance",
+    "category": "CSS",
+    "topic": "CSS Performance",
     "difficulty": "advanced",
-    "learningPath": "Performance Optimization Specialist",
-    "topic": "Transforms vs Positioning",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": [
-      "css",
-      "translate",
-      "transform",
-      "positioning",
-      "performance",
-      "gpu"
-    ],
+    "updatedBy": "admin",
+    "tags": ["css", "css-performance", "advanced"],
     "explanation": "`transform: translate()` is compositor-only; `position: absolute` with `top/left` triggers layout, paint, and composite.",
     "points": 8,
     "options": [
       {
         "id": "a",
         "text": "True",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "False",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q65",
+    "id": "css-16-80-css-q65",
     "title": "Can the translate() function move an element on the z-axis?",
     "content": "No. `translate()` is 2D. Use `translateZ()` or `translate3d()` for z-axis movement.",
     "type": "true-false",
-    "category": "CSS & Styling",
-    "subcategory": "Transforms",
-    "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
+    "category": "CSS",
     "topic": "CSS Transforms",
+    "difficulty": "intermediate",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "translate", "3d-transforms", "z-axis"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-transforms", "intermediate"],
     "explanation": "`translate(x, y)` is shorthand for 2D. For 3D, use `translate3d(x, y, z)` or `translateZ(z)`.",
     "points": 5,
     "options": [
       {
         "id": "a",
         "text": "False",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "True",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q66",
+    "id": "css-16-80-css-q66",
     "title": "What is an At-Rule in CSS?",
     "content": "At-rules (`@...`) instruct CSS on how to behave. Examples: `@media`, `@import`, `@font-face`, `@keyframes`.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Core Concepts",
+    "category": "CSS",
+    "topic": "CSS Fundamentals",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "At-Rules",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "at-rules", "media", "import", "keyframes", "font-face"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-fundamentals", "intermediate"],
     "explanation": "At-rules begin with `@` and define conditional or structural behavior in CSS.",
     "points": 6,
     "options": [
       {
         "id": "a",
         "text": "`@media`, `@import`, `@font-face`, `@keyframes`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "At-rules are invalid in modern CSS",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`@rule` is the correct syntax",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "Only `@media` is an at-rule",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q67",
+    "id": "css-16-80-css-q67",
     "title": "How can the gap under an image be removed?",
     "content": "Images are inline by default, causing a gap for descenders. Fix with `display: block` or `vertical-align: top/bottom`.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Box Model",
+    "category": "CSS",
+    "topic": "CSS Box Model",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Image Layout",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "images", "inline", "gap", "vertical-align", "display"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-box-model", "intermediate"],
     "explanation": "The gap is reserved for text descenders (like 'g', 'y'). Making the image block-level removes it.",
     "points": 6,
     "sampleAnswers": [
       "Set `img { display: block; }` to remove the gap caused by inline alignment.",
       "Alternatively, use `img { vertical-align: top; }` to align the image to the top of the line box."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q68",
+    "id": "css-16-80-css-q68",
     "title": "What is progressive rendering?",
     "content": "Progressive rendering improves perceived load time by displaying content as it becomes available (e.g., lazy loading, above-the-fold first).",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Performance",
+    "category": "CSS",
+    "topic": "CSS Performance",
     "difficulty": "advanced",
-    "learningPath": "Performance Optimization Specialist",
-    "topic": "Progressive Rendering",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": [
-      "css",
-      "progressive-rendering",
-      "performance",
-      "lazy-loading",
-      "above-the-fold"
-    ],
+    "updatedBy": "admin",
+    "tags": ["css", "css-performance", "advanced"],
     "explanation": "It prioritizes critical content to give users immediate feedback while non-critical assets load later.",
     "points": 8,
     "sampleAnswers": [
       "Techniques include lazy-loading images, inlining critical CSS, and flushing HTML early from the server.",
       "Above-the-fold rendering sends only the visible portion of the page first, improving time-to-interactive."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q69",
+    "id": "css-16-80-css-q69",
     "title": "What is mobile-first CSS? How does it differ from responsive design?",
     "content": "Mobile-first is a responsive strategy that starts with base styles for mobile, then enhances for larger screens using `min-width` media queries.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Responsive Design",
+    "category": "CSS",
+    "topic": "Responsive Design",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Mobile-First Design",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": [
-      "css",
-      "mobile-first",
-      "responsive",
-      "media-queries",
-      "progressive-enhancement"
-    ],
+    "updatedBy": "admin",
+    "tags": ["css", "responsive-design", "intermediate"],
     "explanation": "Mobile-first reduces unnecessary styles on mobile and improves performance by avoiding overrides.",
     "points": 7,
     "sampleAnswers": [
       "Base styles apply to mobile; `@media (min-width: 768px) { ... }` adds desktop enhancements. This is more efficient than desktop-first with `max-width` overrides.",
       "Mobile-first enforces content prioritization and results in cleaner, more maintainable CSS."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q70",
+    "id": "css-16-80-css-q70",
     "title": "Which property changes the font face?",
     "content": "The `font-family` property specifies the font face.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Typography",
+    "category": "CSS",
+    "topic": "CSS Typography",
     "difficulty": "beginner",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Typography",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "font-family", "typography", "fonts"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-typography", "beginner"],
     "explanation": "`font-family` defines a prioritized list of fonts, with fallbacks to system fonts.",
     "points": 4,
     "options": [
       {
         "id": "a",
         "text": "`font-family`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`font-face`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`font-style`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`font`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q71",
+    "id": "css-16-80-css-q71",
     "title": "Which property makes text italic or oblique?",
     "content": "The `font-style` property makes text italic (`italic`) or oblique (`oblique`).",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Typography",
+    "category": "CSS",
+    "topic": "CSS Typography",
     "difficulty": "beginner",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Typography",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "font-style", "italic", "oblique", "typography"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-typography", "beginner"],
     "explanation": "`font-style: italic` uses true italic fonts; `oblique` slants the regular font.",
     "points": 4,
     "options": [
       {
         "id": "a",
         "text": "`font-style`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`font-variant`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`text-transform`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`font-weight`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q72",
+    "id": "css-16-80-css-q72",
     "title": "Which property creates a small-caps effect?",
     "content": "The `font-variant` property with `small-caps` creates small capital letters.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Typography",
+    "category": "CSS",
+    "topic": "CSS Typography",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Typography",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "font-variant", "small-caps", "typography"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-typography", "intermediate"],
     "explanation": "`font-variant: small-caps` renders lowercase letters as smaller uppercase glyphs.",
     "points": 5,
     "options": [
       {
         "id": "a",
         "text": "`font-variant`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`text-transform: capitalize`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`font-style: small-caps`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`text-variant`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q73",
+    "id": "css-16-80-css-q73",
     "title": "Which property controls font boldness?",
     "content": "The `font-weight` property controls how bold or light a font appears (e.g., `normal`, `bold`, `400`, `700`).",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Typography",
+    "category": "CSS",
+    "topic": "CSS Typography",
     "difficulty": "beginner",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Typography",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "font-weight", "bold", "typography"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-typography", "beginner"],
     "explanation": "Values range from 100 (thin) to 900 (black); `normal` = 400, `bold` = 700.",
     "points": 4,
     "options": [
       {
         "id": "a",
         "text": "`font-weight`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`font-style`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`text-bold`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`font-emphasis`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q74",
+    "id": "css-16-80-css-q74",
     "title": "Which property adjusts space between letters?",
     "content": "The `letter-spacing` property adds or subtracts space between characters.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Typography",
+    "category": "CSS",
+    "topic": "CSS Typography",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Typography",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "letter-spacing", "kerning", "typography"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-typography", "intermediate"],
     "explanation": "Positive values increase spacing; negative values tighten it (use cautiously).",
     "points": 5,
     "options": [
       {
         "id": "a",
         "text": "`letter-spacing`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`word-spacing`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`text-spacing`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`char-spacing`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q75",
+    "id": "css-16-80-css-q75",
     "title": "Which property adjusts space between words?",
     "content": "The `word-spacing` property adds or subtracts space between words.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Typography",
+    "category": "CSS",
+    "topic": "CSS Typography",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Typography",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "word-spacing", "typography", "layout"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-typography", "intermediate"],
     "explanation": "Useful for adjusting readability in justified text or tight layouts.",
     "points": 5,
     "options": [
       {
         "id": "a",
         "text": "`word-spacing`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`letter-spacing`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`text-indent`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`line-height`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q76",
+    "id": "css-16-80-css-q76",
     "title": "Which property indents the first line of a paragraph?",
     "content": "The `text-indent` property indents the first line of text.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Typography",
+    "category": "CSS",
+    "topic": "CSS Typography",
     "difficulty": "beginner",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Typography",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "text-indent", "paragraph", "typography"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-typography", "beginner"],
     "explanation": "Commonly used in print-style layouts to indicate new paragraphs.",
     "points": 4,
     "options": [
       {
         "id": "a",
         "text": "`text-indent`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`margin-left`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`padding-left`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`first-line-indent`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q77",
+    "id": "css-16-80-css-q77",
     "title": "Which property aligns text?",
     "content": "The `text-align` property aligns text horizontally (`left`, `right`, `center`, `justify`).",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Typography",
+    "category": "CSS",
+    "topic": "CSS Typography",
     "difficulty": "beginner",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Typography",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "text-align", "alignment", "typography"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-typography", "beginner"],
     "explanation": "Applies to block-level elements; aligns inline content within the block.",
     "points": 4,
     "options": [
       {
         "id": "a",
         "text": "`text-align`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`align-text`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`horizontal-align`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`justify`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q78",
+    "id": "css-16-80-css-q78",
     "title": "Which property underlines, overlines, or strikes through text?",
     "content": "The `text-decoration` property controls underline, overline, line-through, and blink effects.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Typography",
+    "category": "CSS",
+    "topic": "CSS Typography",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Typography",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "text-decoration", "underline", "strike", "typography"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-typography", "intermediate"],
     "explanation": "Modern syntax allows control over style, color, and thickness of the decoration line.",
     "points": 5,
     "options": [
       {
         "id": "a",
         "text": "`text-decoration`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`font-decoration`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`text-style`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`underline`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q79",
+    "id": "css-16-80-css-q79",
     "title": "Which property capitalizes or changes text case?",
     "content": "The `text-transform` property converts text to uppercase, lowercase, or capitalized form.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Typography",
+    "category": "CSS",
+    "topic": "CSS Typography",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Typography",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "text-transform", "uppercase", "capitalize", "typography"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-typography", "intermediate"],
     "explanation": "Useful for ensuring consistent casing without changing HTML content.",
     "points": 5,
     "options": [
       {
         "id": "a",
         "text": "`text-transform`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`font-case`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`text-case`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`transform-text`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q80",
+    "id": "css-16-80-css-q80",
     "title": "Which property controls list marker appearance?",
     "content": "The `list-style-type` property sets the marker shape for list items (e.g., `disc`, `circle`, `square`, `decimal`).",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Lists",
-    "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
+    "category": "CSS",
     "topic": "Lists",
+    "difficulty": "intermediate",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "list-style-type", "lists", "markers", "ul", "ol"],
+    "updatedBy": "admin",
+    "tags": ["css", "lists", "intermediate"],
     "explanation": "Also supports custom images via `list-style-image` and position via `list-style-position`.",
     "points": 6,
     "options": [
       {
         "id": "a",
         "text": "`list-style-type`",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "`marker-type`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`list-marker`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`bullet-style`",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   }
 ]
