@@ -1,142 +1,197 @@
 [
   {
-    "id": "sec43",
+    "id": "sec-06-sec43",
     "title": "What is CSRF (Cross-Site Request Forgery)?",
     "content": "Explain how CSRF attacks work and why they are dangerous.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "CSRF",
+    "category": "Security",
+    "topic": "Cross-Site Request Forgery (CSRF)",
     "difficulty": "intermediate",
-    "topic": "CSRF",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:43:00.000Z",
     "updatedAt": "2025-10-11T00:43:00.000Z",
-    "tags": ["security", "csrf", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "cross-site-request-forgery-csrf",
+      "csrf",
+      "intermediate"
+    ],
+    "explanation": "CSRF tricks a logged-in user’s browser into making unwanted requests to a web application, potentially changing account settings, making purchases, or performing administrative actions without the user's consent.",
+    "points": 10,
     "sampleAnswers": [
       "CSRF tricks a logged-in user’s browser into making unwanted requests to a web application, potentially changing account settings, making purchases, or performing administrative actions without the user's consent."
-    ]
+    ],
+    "subcategory": "CSRF",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec44",
+    "id": "sec-06-sec44",
     "title": "How can you prevent CSRF attacks?",
     "content": "Select all correct options.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "CSRF",
+    "category": "Security",
+    "topic": "Cross-Site Request Forgery (CSRF)",
     "difficulty": "intermediate",
-    "topic": "CSRF",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:44:00.000Z",
     "updatedAt": "2025-10-11T00:44:00.000Z",
-    "tags": ["security", "csrf", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "cross-site-request-forgery-csrf",
+      "csrf",
+      "intermediate"
+    ],
+    "explanation": "CSRF tokens, SameSite cookies, and header validation prevent CSRF. HTTPS alone does not protect against CSRF.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "Use CSRF tokens in forms and API requests",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Use SameSite cookies",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Validate the origin or referer header",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Rely only on HTTPS",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "CSRF tokens, SameSite cookies, and header validation prevent CSRF. HTTPS alone does not protect against CSRF."
+    "subcategory": "CSRF",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec45",
+    "id": "sec-06-sec45",
     "title": "What are security headers and why are they important?",
     "content": "Explain common security headers and their role in protecting frontend applications.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "Headers",
-    "difficulty": "intermediate",
+    "category": "Security",
     "topic": "Security Headers",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:45:00.000Z",
     "updatedAt": "2025-10-11T00:45:00.000Z",
-    "tags": ["security", "headers", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "security-headers", "headers", "intermediate"],
+    "explanation": "Security headers protect users from XSS, clickjacking, and other attacks. Examples include Content-Security-Policy, X-Frame-Options, X-XSS-Protection, and Strict-Transport-Security.",
+    "points": 10,
     "sampleAnswers": [
       "Security headers protect users from XSS, clickjacking, and other attacks. Examples include Content-Security-Policy, X-Frame-Options, X-XSS-Protection, and Strict-Transport-Security."
-    ]
+    ],
+    "subcategory": "Headers",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec46",
+    "id": "sec-06-sec46",
     "title": "Which HTTP header helps prevent Clickjacking?",
     "content": "Select the correct answer.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "Clickjacking",
-    "difficulty": "beginner",
+    "category": "Security",
     "topic": "Clickjacking",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:46:00.000Z",
     "updatedAt": "2025-10-11T00:46:00.000Z",
-    "tags": ["security", "clickjacking", "headers"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "clickjacking", "clickjacking", "beginner"],
+    "explanation": "The X-Frame-Options header prevents your site from being embedded in iframes, mitigating clickjacking.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "X-Frame-Options",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Content-Security-Policy",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Strict-Transport-Security",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "X-Content-Type-Options",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "The X-Frame-Options header prevents your site from being embedded in iframes, mitigating clickjacking."
+    "subcategory": "Clickjacking",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec47",
+    "id": "sec-06-sec47",
     "title": "What is the Content Security Policy (CSP) header?",
     "content": "Explain how CSP helps prevent XSS and other attacks.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "CSP",
+    "category": "Security",
+    "topic": "Content Security Policy (CSP)",
     "difficulty": "intermediate",
-    "topic": "CSP",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:47:00.000Z",
     "updatedAt": "2025-10-11T00:47:00.000Z",
-    "tags": ["security", "csp", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "content-security-policy-csp", "csp", "intermediate"],
+    "explanation": "CSP allows developers to define which sources of scripts, images, and other resources are trusted. It blocks inline scripts and unauthorized domains, reducing the risk of XSS, clickjacking, and data injection attacks.",
+    "points": 10,
     "sampleAnswers": [
       "CSP allows developers to define which sources of scripts, images, and other resources are trusted. It blocks inline scripts and unauthorized domains, reducing the risk of XSS, clickjacking, and data injection attacks."
-    ]
+    ],
+    "subcategory": "CSP",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec48",
+    "id": "sec-06-sec48",
     "title": "True or False: Using HttpOnly and Secure flags on cookies protects against XSS and MITM attacks.",
     "content": "Evaluate the statement.",
     "type": "true-false",
-    "category": "Web Security",
-    "subcategory": "Cookies",
+    "category": "Security",
+    "topic": "Session Management",
     "difficulty": "intermediate",
-    "topic": "Cookies",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:48:00.000Z",
     "updatedAt": "2025-10-11T00:48:00.000Z",
-    "tags": ["security", "cookies", "xss", "mitm"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "session-management", "cookies", "intermediate"],
+    "explanation": "The correct answer is: True",
+    "points": 10,
     "options": [
       {
         "id": "t1",
@@ -150,60 +205,85 @@
         "isCorrect": false,
         "explanation": ""
       }
-    ]
+    ],
+    "subcategory": "Cookies",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec49",
+    "id": "sec-06-sec49",
     "title": "What is input validation and why is it important for security?",
     "content": "Explain the role of input validation in preventing attacks like XSS and SQL Injection.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "Input Validation",
+    "category": "Security",
+    "topic": "Input Validation & Sanitization",
     "difficulty": "intermediate",
-    "topic": "Input Validation",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:49:00.000Z",
     "updatedAt": "2025-10-11T00:49:00.000Z",
-    "tags": ["security", "validation", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "input-validation-&-sanitization",
+      "input validation",
+      "intermediate"
+    ],
+    "explanation": "Input validation ensures that user-supplied data matches expected formats and content. It prevents malicious scripts or commands from being injected, mitigating XSS, SQL Injection, and other attacks.",
+    "points": 10,
     "sampleAnswers": [
       "Input validation ensures that user-supplied data matches expected formats and content. It prevents malicious scripts or commands from being injected, mitigating XSS, SQL Injection, and other attacks."
-    ]
+    ],
+    "subcategory": "Input Validation",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec50",
+    "id": "sec-06-sec50",
     "title": "Which is safer for sensitive data transmission: HTTP or HTTPS?",
     "content": "Select the correct answer.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "Transport Security",
+    "category": "Security",
+    "topic": "HTTPS & SSL/TLS",
     "difficulty": "beginner",
-    "topic": "HTTPS",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:50:00.000Z",
     "updatedAt": "2025-10-11T00:50:00.000Z",
-    "tags": ["security", "https", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "https-&-ssl/tls", "transport security", "beginner"],
+    "explanation": "HTTPS encrypts data in transit, ensuring confidentiality, integrity, and protection against MITM attacks, unlike HTTP.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "HTTP",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "HTTPS",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Both are equally safe",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Depends on browser",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "HTTPS encrypts data in transit, ensuring confidentiality, integrity, and protection against MITM attacks, unlike HTTP."
+    "subcategory": "Transport Security",
+    "hints": [],
+    "metadata": {}
   }
 ]
