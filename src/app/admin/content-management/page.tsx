@@ -31,7 +31,6 @@ import {
 } from '@/hooks/useTanStackQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNotificationActions } from '@/hooks/useNotificationActions';
-import { BulkOperations } from '@/shared/components/admin/BulkOperations';
 
 // Types for API responses
 interface ApiResponse<T> {
@@ -288,6 +287,9 @@ export default function UnifiedAdminPage() {
   // Notification actions
   const { notifyContentUpdate, notifyAdminAction } = useNotificationActions();
 
+  // Query client for manual invalidation
+  const queryClient = useQueryClient();
+
   // Debug logging for TanStack Query
   console.log('TanStack Query Status:', {
     cardsLoading,
@@ -324,16 +326,45 @@ export default function UnifiedAdminPage() {
   const topics = topicsData?.data || [];
   const questions = questionsData?.data || [];
 
+  // Force fresh data on mount
+  useEffect(() => {
+    console.log('🔄 Force refreshing all queries on mount...');
+    queryClient.invalidateQueries({ queryKey: ['cards'] });
+    queryClient.invalidateQueries({ queryKey: ['plans'] });
+    queryClient.invalidateQueries({ queryKey: ['categories'] });
+    queryClient.invalidateQueries({ queryKey: ['topics'] });
+    queryClient.invalidateQueries({ queryKey: ['questionsUnified'] });
+  }, []); // Only run on mount
+
+  // Immediate retry on mount if no data
+  useEffect(() => {
+    console.log('🚀 Component mounted, checking initial data...');
+
+    // If we have loading states but no data after a short delay, retry immediately
+    const immediateTimer = setTimeout(() => {
+      if (cardsLoading && !cardsData) {
+        console.log('🔄 Immediate retry for cards');
+        queryClient.invalidateQueries({ queryKey: ['cards'] });
+      }
+      if (plansLoading && !plansData) {
+        console.log('🔄 Immediate retry for plans');
+        queryClient.invalidateQueries({ queryKey: ['plans'] });
+      }
+    }, 500); // Very short delay for immediate retry
+
+    return () => clearTimeout(immediateTimer);
+  }, []); // Only run on mount
+
   // Fallback mechanism - refetch if no data after initial load
   useEffect(() => {
     const timer = setTimeout(() => {
+      console.log('🔍 Checking data availability after 2 seconds...');
+
       if (
         !cardsLoading &&
         (!cardsData || !cardsData.data || cardsData.data.length === 0)
       ) {
         console.log('🔄 Refetching cards due to empty data');
-        // Trigger refetch by invalidating the query
-        const queryClient = useQueryClient();
         queryClient.invalidateQueries({ queryKey: ['cards'] });
       }
       if (
@@ -341,13 +372,49 @@ export default function UnifiedAdminPage() {
         (!plansData || !plansData.data || plansData.data.length === 0)
       ) {
         console.log('🔄 Refetching plans due to empty data');
-        const queryClient = useQueryClient();
         queryClient.invalidateQueries({ queryKey: ['plans'] });
+      }
+      if (
+        !categoriesLoading &&
+        (!categoriesData ||
+          !categoriesData.data ||
+          categoriesData.data.length === 0)
+      ) {
+        console.log('🔄 Refetching categories due to empty data');
+        queryClient.invalidateQueries({ queryKey: ['categories'] });
+      }
+      if (
+        !topicsLoading &&
+        (!topicsData || !topicsData.data || topicsData.data.length === 0)
+      ) {
+        console.log('🔄 Refetching topics due to empty data');
+        queryClient.invalidateQueries({ queryKey: ['topics'] });
+      }
+      if (
+        !questionsLoading &&
+        (!questionsData ||
+          !questionsData.data ||
+          questionsData.data.length === 0)
+      ) {
+        console.log('🔄 Refetching questions due to empty data');
+        queryClient.invalidateQueries({ queryKey: ['questionsUnified'] });
       }
     }, 2000); // Wait 2 seconds after component mount
 
     return () => clearTimeout(timer);
-  }, [cardsLoading, cardsData, plansLoading, plansData]);
+  }, [
+    cardsLoading,
+    cardsData,
+    plansLoading,
+    plansData,
+    categoriesLoading,
+    categoriesData,
+    topicsLoading,
+    topicsData,
+    questionsLoading,
+    questionsData,
+    queryClient,
+  ]);
 
   // Loading state
   const loading =
@@ -831,16 +898,6 @@ export default function UnifiedAdminPage() {
         </Suspense>
       </div>
 
-      {/* Bulk Operations for Cards */}
-      <BulkOperations
-        type="cards"
-        items={filteredCards.map(card => ({ id: card.id, name: card.name }))}
-        onRefresh={() => {
-          // Refetch cards data
-          queryClient.invalidateQueries({ queryKey: ['cards'] });
-        }}
-      />
-
       {/* Cards Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
@@ -1134,16 +1191,6 @@ export default function UnifiedAdminPage() {
           )}
         </div>
       </div>
-
-      {/* Bulk Operations for Plans */}
-      <BulkOperations
-        type="plans"
-        items={filteredPlans.map(plan => ({ id: plan.id, name: plan.name }))}
-        onRefresh={() => {
-          // Refetch plans data
-          queryClient.invalidateQueries({ queryKey: ['plans'] });
-        }}
-      />
 
       {/* Plans Section */}
       <div className="mb-8">

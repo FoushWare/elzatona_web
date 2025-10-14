@@ -106,8 +106,8 @@ export async function GET(request: NextRequest) {
       getDocs(collection(db, 'questions')),
       getDocs(collection(db, 'categories')),
       getDocs(collection(db, 'topics')),
-      getDocs(collection(db, 'cards')),
-      getDocs(collection(db, 'plans')),
+      getDocs(collection(db, 'learningCards')),
+      getDocs(collection(db, 'learningPlans')),
       getDocs(collection(db, 'frontendTasks')),
       getDocs(collection(db, 'problemSolving')),
       getDocs(

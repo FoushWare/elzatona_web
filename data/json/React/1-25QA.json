@@ -5,9 +5,10 @@
     "content": "React (aka React.js or ReactJS) is an **open-source front-end JavaScript library** for building user interfaces based on components. It's used for handling the view layer in web and mobile applications, and allows developers to create reusable UI components and manage the state of those components efficiently.\n\nReact was created by [Jordan Walke](https://github.com/jordwalke), a software engineer at Facebook (now Meta). It was first deployed on Facebook's News Feed in 2011 and on Instagram in 2012. The library was open-sourced in May 2013 and has since become one of the most popular JavaScript libraries for building modern user interfaces.",
     "type": "open-ended",
     "category": "React",
+    "subcategory": "Fundamentals",
     "topic": "React Basics",
-    "learningPath": "React Developer Path",
     "difficulty": "beginner",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -16,6 +17,7 @@
     "tags": ["react", "library", "ui", "components", "frontend"],
     "explanation": "React is a declarative, efficient, and flexible JavaScript library for building user interfaces using a component-based architecture.",
     "points": 2,
+    "timeLimit": 120,
     "sampleAnswers": [
       "React is a JavaScript library for building user interfaces by composing reusable components.",
       "React is an open-source front-end library maintained by Meta for creating interactive UIs with a virtual DOM and unidirectional data flow."
@@ -23,13 +25,14 @@
   },
   {
     "id": "react-q-002",
-    "title": "What is the history behind React’s evolution?",
+    "title": "What is the history behind React's evolution?",
     "content": "The history of ReactJS started in 2010 with the creation of **XHP**. XHP is a PHP extension which improved the syntax of the language such that XML document fragments become valid PHP expressions and the primary purpose was used to create custom and reusable HTML elements.\n\nThe main principle of this extension was to make front-end code easier to understand and to help avoid cross-site scripting attacks. The project was successful to prevent the malicious content submitted by the scrubbing user.\n\nBut there was a different problem with XHP in which dynamic web applications require many roundtrips to the server, and XHP did not solve this problem. Also, the whole UI was re-rendered for small change in the application. Later, the initial prototype of React is created with the name **FaxJ** by Jordan inspired from XHP. Finally after sometime React has been introduced as a new library into JavaScript world.",
     "type": "open-ended",
     "category": "React",
+    "subcategory": "History",
     "topic": "React Basics",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -38,6 +41,7 @@
     "tags": ["react", "history", "xhp", "facebook", "evolution"],
     "explanation": "React was inspired by XHP, a PHP extension at Facebook. It evolved to solve performance issues with full re-renders by introducing the Virtual DOM, and has since grown with features like Hooks, Concurrent Mode, and Server Components.",
     "points": 4,
+    "timeLimit": 180,
     "sampleAnswers": [
       "React originated from Facebook's XHP project. Jordan Walke created FaxJS (later React) to bring XHP's component model to JavaScript with better performance via the Virtual DOM.",
       "React was first used internally at Facebook in 2011, open-sourced in 2013, and evolved through major milestones like React Native (2015), Fiber (2017), Hooks (2019), and React 18 (2022)."
@@ -49,9 +53,10 @@
     "content": "React offers a powerful set of features that have made it one of the most popular JavaScript libraries for building user interfaces:\n\n**Core Features:**\n- **Component-Based Architecture**: React applications are built using components - independent, reusable pieces of code that return HTML via a render function.\n- **Virtual DOM**: React creates an in-memory data structure cache, computes the resulting differences, and efficiently updates only the changed parts in the browser DOM.\n- **JSX (JavaScript XML)**: A syntax extension that allows writing HTML-like code in JavaScript.\n- **Unidirectional Data Flow**: Data flows from parent to child components.\n- **Declarative UI**: Describe what your UI should look like for a given state.\n\n**Advanced Features:**\n- **React Hooks**: Allow using state and other React features in functional components.\n- **Context API**: Provides a way to share values between components without explicitly passing props.\n- **Error Boundaries**: Components that catch JavaScript errors anywhere in their child component tree.\n- **Server-Side Rendering (SSR)**: Enables rendering React components on the server.\n- **Concurrent Mode**: A set of new features that help React apps stay responsive.\n- **React Server Components**: A new feature that allows components to be rendered entirely on the server.\n- **Suspense**: A feature that lets your components \"wait\" for something before rendering.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Features",
     "topic": "React Basics",
-    "learningPath": "React Developer Path",
     "difficulty": "beginner",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -60,6 +65,7 @@
     "tags": ["react", "features", "virtual-dom", "jsx", "hooks", "context"],
     "explanation": "React's major features include component architecture, Virtual DOM, JSX, unidirectional data flow, Hooks, Context API, Error Boundaries, SSR, Concurrent Mode, Suspense, and Server Components.",
     "points": 3,
+    "timeLimit": 180,
     "options": [
       {
         "id": "a",
@@ -89,9 +95,10 @@
     "content": "_JSX_ stands for _JavaScript XML_ and it is an XML-like syntax extension to ECMAScript. Basically it just provides the syntactic sugar for the `React.createElement(type, props, ...children)` function, giving us expressiveness of JavaScript along with HTML like template syntax.\n\nIn the example below, the text inside `<h1>` tag is returned as JavaScript function to the render function.\n\n```jsx harmony\nexport default function App() {\n  return <h1 className=\"greeting\">{\"Hello, this is a JSX Code!\"}</h1>;\n}\n```\n\nIf you don't use JSX syntax then the respective JavaScript code should be written as below,\n\n```javascript\nimport { createElement } from \"react\";\nexport default function App() {\n  return createElement(\n    \"h1\",\n    { className: \"greeting\" },\n    \"Hello, this is a JSX Code!\"\n  );\n}\n```",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Syntax",
     "topic": "JSX",
-    "learningPath": "React Developer Path",
     "difficulty": "beginner",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -100,6 +107,7 @@
     "tags": ["react", "jsx", "syntax", "createElement"],
     "explanation": "JSX is syntactic sugar for React.createElement(). It allows writing HTML-like syntax in JavaScript, which gets compiled to function calls.",
     "points": 2,
+    "timeLimit": 120,
     "options": [
       {
         "id": "a",
@@ -129,9 +137,10 @@
     "content": "**Element:**\n- A React **Element** is a plain JavaScript object that describes what you want to see on the UI. It represents a DOM node or a component at a specific point in time. \n- Elements are immutable.\n- Creating an element is fast and lightweight.\n\n**Component:**\n- A **Component** is a function or class that returns an element (or a tree of elements).\n- Components can accept inputs (props) and manage their own state.\n\nIn summary:\n- **Elements** are the smallest building blocks in React—objects that describe what you want to see.\n- **Components** are functions or classes that return elements and encapsulate logic, structure, and behavior for parts of your UI.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Core Concepts",
     "topic": "React Basics",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -140,6 +149,7 @@
     "tags": ["react", "element", "component", "rendering"],
     "explanation": "An element is a plain object describing what should appear on screen. A component is a function or class that returns elements.",
     "points": 4,
+    "timeLimit": 180,
     "options": [
       {
         "id": "a",
@@ -169,9 +179,10 @@
     "content": "Components are the building blocks of creating User Interfaces(UI) in React. There are two possible ways to create a component.\n\n1. **Function Components:** This is the simplest way to create a component. Those are pure JavaScript functions that accept props object as the one and only one parameter and return React elements to render the output:\n   ```jsx harmony\n   function Greeting({ message }) {\n     return <h1>{`Hello, ${message}`}</h1>;\n   }\n   ```\n\n2. **Class Components:** You can also use ES6 class to define a component. The above function component can be written as a class component:\n   ```jsx harmony\n   class Greeting extends React.Component {\n     render() {\n       return <h1>{`Hello, ${this.props.message}`}</h1>;\n     }\n   }\n   ```",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Component Types",
     "topic": "Components",
-    "learningPath": "React Developer Path",
     "difficulty": "beginner",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -180,6 +191,7 @@
     "tags": ["react", "function-component", "class-component", "components"],
     "explanation": "React components can be created as functions or ES6 classes. Function components are preferred in modern React.",
     "points": 2,
+    "timeLimit": 120,
     "options": [
       {
         "id": "a",
@@ -209,9 +221,10 @@
     "content": "After the addition of Hooks(i.e. React 16.8 onwards) it is always recommended to use Function components over Class components in React. Because you could use state, lifecycle methods and other features that were only available in class component present in function component too.\n\nBut even there are two reasons to use Class components over Function components.\n1. If you need a React functionality whose Function component equivalent is not present yet, like Error Boundaries.\n2. In older versions, If the component needs _state or lifecycle methods_ then you need to use class component.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Best Practices",
     "topic": "Components",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -226,6 +239,7 @@
     ],
     "explanation": "Since React 16.8, function components with Hooks are preferred. Class components are mainly needed for Error Boundaries (though third-party libraries like react-error-boundary can avoid this).",
     "points": 3,
+    "timeLimit": 180,
     "options": [
       {
         "id": "a",
@@ -255,9 +269,10 @@
     "content": "Pure components are the components which render the same output for the same state and props. In function components, you can achieve these pure components through memoized `React.memo()` API wrapping around the component. This API prevents unnecessary re-renders by comparing the previous props and new props using shallow comparison.\n\nIn class components, the components extending _`React.PureComponent`_ instead of _`React.Component`_ become the pure components. When props or state changes, _PureComponent_ will do a shallow comparison on both props and state by invoking `shouldComponentUpdate()` lifecycle method.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Optimization",
     "topic": "Performance Optimization",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -270,8 +285,9 @@
       "performance",
       "re-render"
     ],
-    "explanation": "Pure components optimize performance by preventing re-renders when props/state haven’t changed. Use React.memo() for function components and PureComponent for class components.",
+    "explanation": "Pure components optimize performance by preventing re-renders when props/state haven't changed. Use React.memo() for function components and PureComponent for class components.",
     "points": 4,
+    "timeLimit": 240,
     "options": [
       {
         "id": "a",
@@ -301,9 +317,10 @@
     "content": "_State_ of a component is an object that holds some information that may change over the lifetime of the component. The important point is whenever the state object changes, the component re-renders.\n\nLet's take an example of **User** component with `message` state. Here, **useState** hook has been used to add state to the User component and it returns an array with current state and function to update it.\n\n```jsx harmony\nimport { useState } from \"react\";\nfunction User() {\n  const [message, setMessage] = useState(\"Welcome to React world\");\n  return (\n    <div>\n      <h1>{message}</h1>\n    </div>\n  );\n}\n```",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "State Management",
     "topic": "State",
-    "learningPath": "React Developer Path",
     "difficulty": "beginner",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -312,6 +329,7 @@
     "tags": ["react", "state", "useState", "component-state"],
     "explanation": "State is mutable data that triggers re-renders when updated. In function components, it's managed with useState; in class components, with this.state.",
     "points": 2,
+    "timeLimit": 120,
     "options": [
       {
         "id": "a",
@@ -341,9 +359,10 @@
     "content": "_Props_ are inputs to components. They are single values or objects containing a set of values that are passed to components on creation similar to HTML-tag attributes. Here, the data is passed down from a parent component to a child component.\n\nThe primary purpose of props in React is to provide following component functionality:\n1. Pass custom data to your component.\n2. Trigger state changes.\n3. Use via `this.props.reactProp` inside component's `render()` method.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Data Flow",
     "topic": "Props",
-    "learningPath": "React Developer Path",
     "difficulty": "beginner",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -352,6 +371,7 @@
     "tags": ["react", "props", "properties", "data-flow"],
     "explanation": "Props are read-only inputs passed from parent to child components to configure behavior or display data.",
     "points": 2,
+    "timeLimit": 120,
     "options": [
       {
         "id": "a",
@@ -381,9 +401,10 @@
     "content": "### State\n- Managed within a component\n- Mutable\n- Local to the component\n- Updated with setState/useState\n\n### Props\n- Passed from parent component\n- Read-only\n- Used to configure child components\n- Cannot be modified by the child\n\n### Summary Table\n| Feature   | State                               | Props                             |\n|-----------|-------------------------------------|-----------------------------------|\n| Managed by| The component itself                | Parent component                  |\n| Mutable   | Yes                                 | No (read-only)                    |\n| Scope     | Local to the component              | Passed from parent to child       |\n| Usage     | Manage dynamic data and UI changes  | Configure and customize component |\n| Update    | Using setState/useState             | Cannot be updated by the component|",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Core Concepts",
     "topic": "State",
-    "learningPath": "React Developer Path",
     "difficulty": "beginner",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -392,6 +413,7 @@
     "tags": ["react", "state", "props", "data-flow", "immutability"],
     "explanation": "State is mutable and managed internally; props are immutable and passed from parents.",
     "points": 3,
+    "timeLimit": 150,
     "options": [
       {
         "id": "a",
@@ -421,9 +443,10 @@
     "content": "Below are some of the main differences between HTML and React event handling,\n1. In HTML, the event name usually represents in _lowercase_ as a convention:\n   ```html\n   <button onclick=\"activateLasers()\"></button>\n   ```\n   Whereas in React it follows _camelCase_ convention:\n   ```jsx harmony\n   <button onClick={activateLasers}>\n   ```\n2. In HTML, you can return `false` to prevent default behavior:\n   ```html\n   <a\n     href=\"#\"\n     onclick='console.log(\"The link was clicked.\"); return false;'\n   />\n   ```\n   Whereas in React you must call `preventDefault()` explicitly:\n   ```javascript\n   function handleClick(event) {\n     event.preventDefault();\n     console.log(\"The link was clicked.\");\n   }\n   ```\n3. In HTML, you need to invoke the function by appending `()`\n   Whereas in react you should not append `()` with the function name.",
     "type": "multiple-choice",
     "category": "React",
-    "topic": "DOM Events",
-    "learningPath": "React Developer Path",
+    "subcategory": "Events",
+    "topic": "Event Handling",
     "difficulty": "beginner",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -438,6 +461,7 @@
     ],
     "explanation": "React uses camelCase for event names, requires explicit preventDefault(), and passes function references (not strings).",
     "points": 3,
+    "timeLimit": 150,
     "options": [
       {
         "id": "a",
@@ -467,9 +491,10 @@
     "content": "`SyntheticEvent` is a cross-browser wrapper around the browser's native event. Its API is same as the browser's native event, including `stopPropagation()` and `preventDefault()`, except the events work identically across all browsers. The native events can be accessed directly from synthetic events using `nativeEvent` attribute.\n\nLet's take an example of `BookStore` title search component with the ability to get all native event properties\n\n```js\nfunction BookStore() {\n  function handleTitleChange(e) {\n    console.log(\"The new title is:\", e.target.value);\n    console.log('Synthetic event:', e); // React SyntheticEvent\n    console.log('Native event:', e.nativeEvent); // Browser native event\n    e.stopPropagation();\n    e.preventDefault();\n  }\n  return <input name=\"title\" onChange={handleTitleChange} />;\n}\n```",
     "type": "multiple-choice",
     "category": "React",
-    "topic": "DOM Events",
-    "learningPath": "React Developer Path",
+    "subcategory": "Events",
+    "topic": "Event Handling",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -478,6 +503,7 @@
     "tags": ["react", "synthetic-event", "events", "cross-browser"],
     "explanation": "SyntheticEvent is a React wrapper around native browser events, providing consistent API across browsers.",
     "points": 3,
+    "timeLimit": 180,
     "options": [
       {
         "id": "a",
@@ -507,9 +533,10 @@
     "content": "You can use either _if statements_ or _ternary expressions_ which are available in JS(and JSX in React) to conditionally execute or render expressions. Apart from these approaches, you can also embed any expressions in JSX by wrapping them in curly braces and then followed by JS logical operator `&&`. It is helpful to render elements conditionally within a single line and commonly used for concise logic, especially in JSX rendering.\n\n```jsx harmony\n<h1>Hello!</h1>;\n{\n  messages.length > 0 && !isLogin ? (\n    <h2>You have {messages.length} unread messages.</h2>\n  ) : (\n    <h2>You don't have unread messages.</h2>\n  );\n}\n```",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Rendering",
     "topic": "Conditional Rendering",
-    "learningPath": "React Developer Path",
     "difficulty": "beginner",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -518,6 +545,7 @@
     "tags": ["react", "conditional-rendering", "ternary", "logical-and", "jsx"],
     "explanation": "React supports ternary operators and && for inline conditional rendering in JSX.",
     "points": 2,
+    "timeLimit": 120,
     "options": [
       {
         "id": "a",
@@ -547,9 +575,10 @@
     "content": "A `key` is a special attribute you **should** include when mapping over arrays to render data. _Key_ prop helps React identify which items have changed, are added, or are removed.\n\nKeys should be unique among its siblings. Most often we use ID from our data as _key_:\n```jsx harmony\nconst todoItems = todos.map((todo) => <li key={todo.id}>{todo.text}</li>);\n```\n\n**Benefits of key:**\n  *   Enables React to **efficiently update and re-render** components.\n  *   Prevents unnecessary re-renders by **reusing** components when possible.\n  *   Helps **maintain internal state** of list items correctly.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Lists",
     "topic": "Lists and Keys",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -558,6 +587,7 @@
     "tags": ["react", "key", "lists", "rendering", "performance"],
     "explanation": "Keys help React identify which list items have changed, been added, or removed, enabling efficient updates and correct state management.",
     "points": 4,
+    "timeLimit": 180,
     "options": [
       {
         "id": "a",
@@ -587,9 +617,10 @@
     "content": "The _Virtual DOM_ (VDOM) is a lightweight, in-memory representation of _Real DOM_ used by libraries like React to optimize UI rendering. The representation of a UI is kept in memory and synced with the \"real\" DOM. It's a step that happens between the render function being called and the displaying of elements on the screen. This entire process is called _reconciliation_.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Architecture",
     "topic": "Virtual DOM",
-    "learningPath": "React Developer Path",
     "difficulty": "beginner",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -598,6 +629,7 @@
     "tags": ["react", "virtual-dom", "reconciliation", "performance"],
     "explanation": "Virtual DOM is an in-memory representation of the real DOM that enables efficient diffing and minimal updates.",
     "points": 2,
+    "timeLimit": 120,
     "options": [
       {
         "id": "a",
@@ -627,9 +659,10 @@
     "content": "The _Virtual DOM_ works in five simple steps.\n**1. Initial Render**  \nWhen a UI component renders for the first time, it returns JSX. React uses this structure to create a Virtual DOM tree.\n**2. State or Props Change**  \nWhen the component's state or props change, React creates a new Virtual DOM.\n**3. Diffing Algorithm**  \nReact compares the new Virtual DOM with the previous one.\n**4. Reconciliation**  \nBased on the diffing results, React decides which parts of the Real DOM should be updated.\n**5. Efficient DOM Updates**  \nThis process makes UI rendering much faster and more efficient.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Architecture",
     "topic": "Virtual DOM",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -644,6 +677,7 @@
     ],
     "explanation": "React creates a new Virtual DOM on state change, diffs it with the previous one, and updates only the changed parts of the real DOM.",
     "points": 4,
+    "timeLimit": 240,
     "options": [
       {
         "id": "a",
@@ -673,9 +707,10 @@
     "content": "The _Shadow DOM_ is a browser technology designed primarily for scoping variables and CSS in _web components_. The _Virtual DOM_ is a concept implemented by libraries in JavaScript on top of browser APIs.\n\n| Feature | Shadow DOM | Virtual DOM |\n| --- | --- | --- |\n| Purpose | Encapsulation for Web Components | Efficient UI rendering |\n| Managed by | Browser | JS frameworks (e.g., React) |\n| DOM Type | Part of real DOM (scoped) | In-memory representation |\n| Encapsulation | Yes | No |\n| Use Case | Web Components, scoped styling | UI diffing and minimal DOM updates |",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Architecture",
     "topic": "Virtual DOM",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -690,6 +725,7 @@
     ],
     "explanation": "Shadow DOM is a browser feature for encapsulation in Web Components; Virtual DOM is a React concept for efficient rendering.",
     "points": 3,
+    "timeLimit": 180,
     "options": [
       {
         "id": "a",
@@ -716,12 +752,13 @@
   {
     "id": "react-q-019",
     "title": "What is React Fiber?",
-    "content": "**React Fiber** is the **new reconciliation engine** in React, introduced in React 16. It’s a complete rewrite of React’s core algorithm(old stack-based algorithm) for rendering and updating the UI. Fiber enhances React’s ability to handle **asynchronous rendering**, **prioritized updates**(assign priority to different types of updates), and **interruption**(ability to pause, abort, or reuse work) of rendering work, enabling smoother and more responsive user interfaces.",
+    "content": "**React Fiber** is the **new reconciliation engine** in React, introduced in React 16. It's a complete rewrite of React's core algorithm(old stack-based algorithm) for rendering and updating the UI. Fiber enhances React's ability to handle **asynchronous rendering**, **prioritized updates**(assign priority to different types of updates), and **interruption**(ability to pause, abort, or reuse work) of rendering work, enabling smoother and more responsive user interfaces.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Advanced",
     "topic": "React Fiber",
-    "learningPath": "React Developer Path",
     "difficulty": "advanced",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -736,6 +773,7 @@
     ],
     "explanation": "React Fiber is the new reconciliation engine in React 16+ that enables async rendering, prioritization, and interruption for better performance.",
     "points": 5,
+    "timeLimit": 300,
     "options": [
       {
         "id": "a",
@@ -765,9 +803,10 @@
     "content": "The goal of _React Fiber_ is to increase its suitability for areas like animation, layout, and gestures. Its headline feature is **incremental rendering**: the ability to split rendering work into chunks and spread it out over multiple frames.\n\nIts main goals are:\n*   **Incremental Rendering** – Breaks work into chunks for smoother updates.\n*   **Interruptible Rendering** – Pauses and resumes rendering to keep the UI responsive.\n*   **Prioritization** – Handles high-priority updates before low-priority ones.\n*   **Concurrency Support** – Enables working on multiple UI versions simultaneously.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Advanced",
     "topic": "React Fiber",
-    "learningPath": "React Developer Path",
     "difficulty": "advanced",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -782,6 +821,7 @@
     ],
     "explanation": "React Fiber's main goal is incremental rendering to enable smoother UIs by breaking work into chunks and prioritizing updates.",
     "points": 5,
+    "timeLimit": 300,
     "options": [
       {
         "id": "a",
@@ -811,9 +851,10 @@
     "content": "A **controlled component** is a React component that **fully manages the form element's state**(e.g, elements like `<input>`, `<textarea>`, or `<select>`))  using React's internal state mechanism. i.e, The component does not manage its own internal state — instead, React acts as the single source of truth for form data.\n\nThe controlled components will be implemented using the below steps,\n1. Initialize the state using `useState` hooks in function components or inside constructor for class components.\n2. Set the value of the form element to the respective state variable.\n3. Create an event handler(`onChange`) to handle the user input changes through `useState`'s updater function or `setState` from class component.\n4. Attach the above event handler to form element's change or click events",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Forms",
     "topic": "Forms",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -822,6 +863,7 @@
     "tags": ["react", "controlled-components", "forms", "state", "input"],
     "explanation": "Controlled components use React state as the single source of truth for form data, with value and onChange handlers.",
     "points": 4,
+    "timeLimit": 240,
     "options": [
       {
         "id": "a",
@@ -851,9 +893,10 @@
     "content": "The **Uncontrolled components** are form elements (like `<input>`, `<textarea>`, or `<select>`) that **manage their own state internally** via the **DOM**, rather than through React state.\n\nYou can query the DOM using a `ref` to find its current value when you need it. This is a bit more like traditional HTML.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Forms",
     "topic": "Forms",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -862,6 +905,7 @@
     "tags": ["react", "uncontrolled-components", "forms", "refs", "dom"],
     "explanation": "Uncontrolled components store their state in the DOM and use refs to access values when needed.",
     "points": 4,
+    "timeLimit": 240,
     "options": [
       {
         "id": "a",
@@ -891,9 +935,10 @@
     "content": "#### **createElement:** \nCreates a new React element from scratch. JSX elements will be transpiled to `React.createElement()` functions.\n\n#### **cloneElement:**\n The `cloneElement` method is used to clone an existing React element and optionally adds or overrides props.",
     "type": "multiple-choice",
     "category": "React",
-    "topic": "Elements",
-    "learningPath": "React Developer Path",
+    "subcategory": "API",
+    "topic": "React Basics",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -902,6 +947,7 @@
     "tags": ["react", "createelement", "cloneelement", "elements", "jsx"],
     "explanation": "createElement creates new elements; cloneElement clones existing ones and optionally overrides props.",
     "points": 3,
+    "timeLimit": 180,
     "options": [
       {
         "id": "a",
@@ -931,9 +977,10 @@
     "content": "When several components need to share the same changing data then it is recommended to _lift the shared state up_ to their closest common ancestor. That means if two child components share the same data from its parent, then move the state to parent instead of maintaining local state in both of the child components.",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Patterns",
     "topic": "State Management",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -942,6 +989,7 @@
     "tags": ["react", "lifting-state-up", "state", "components", "data-flow"],
     "explanation": "Lifting state up means moving shared state to the closest common ancestor so multiple components can access it.",
     "points": 3,
+    "timeLimit": 180,
     "options": [
       {
         "id": "a",
@@ -968,12 +1016,13 @@
   {
     "id": "react-q-025",
     "title": "What are Higher-Order Components?",
-    "content": "A _higher-order component_ (_HOC_) is a function that takes a component and returns a new enhanced component with additional props, behavior, or data. It’s a design pattern based on React’s compositional nature, allowing you to reuse logic across multiple components without modifying their internals.\n\n```javascript\nconst EnhancedComponent = higherOrderComponent(WrappedComponent);\n```",
+    "content": "A _higher-order component_ (_HOC_) is a function that takes a component and returns a new enhanced component with additional props, behavior, or data. It's a design pattern based on React's compositional nature, allowing you to reuse logic across multiple components without modifying their internals.\n\n```javascript\nconst EnhancedComponent = higherOrderComponent(WrappedComponent);\n```",
     "type": "multiple-choice",
     "category": "React",
+    "subcategory": "Patterns",
     "topic": "Higher-Order Components",
-    "learningPath": "React Developer Path",
     "difficulty": "intermediate",
+    "learningPath": "React Developer Path",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
@@ -982,6 +1031,7 @@
     "tags": ["react", "hoc", "higher-order-component", "composition", "reuse"],
     "explanation": "HOCs are functions that take a component and return a new enhanced component, enabling logic reuse.",
     "points": 4,
+    "timeLimit": 240,
     "options": [
       {
         "id": "a",

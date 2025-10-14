@@ -193,16 +193,16 @@ export default function AdminDashboard() {
                   <Database className="h-6 w-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
                     Total Questions
-                  </p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                  </div>
+                  <div className="text-3xl font-bold text-gray-900 dark:text-white">
                     {loading ? (
                       <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-16 rounded"></div>
                     ) : (
                       (stats?.questions || 0).toLocaleString()
                     )}
-                  </p>
+                  </div>
                 </div>
               </div>
               <div className="text-right">
@@ -221,16 +221,16 @@ export default function AdminDashboard() {
                   <BookOpen className="h-6 w-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
                     Learning Cards
-                  </p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                  </div>
+                  <div className="text-3xl font-bold text-gray-900 dark:text-white">
                     {loading ? (
                       <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-8 rounded"></div>
                     ) : (
                       stats?.learningCards || 0
                     )}
-                  </p>
+                  </div>
                 </div>
               </div>
               <div className="text-right">
@@ -249,16 +249,16 @@ export default function AdminDashboard() {
                   <Target className="h-6 w-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
                     Learning Plans
-                  </p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                  </div>
+                  <div className="text-3xl font-bold text-gray-900 dark:text-white">
                     {loading ? (
                       <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-8 rounded"></div>
                     ) : (
                       stats?.learningPlans || 0
                     )}
-                  </p>
+                  </div>
                 </div>
               </div>
               <div className="text-right">
@@ -277,17 +277,17 @@ export default function AdminDashboard() {
                   <Zap className="h-6 w-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
                     Total Tasks
-                  </p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                  </div>
+                  <div className="text-3xl font-bold text-gray-900 dark:text-white">
                     {loading ? (
                       <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-12 rounded"></div>
                     ) : (
                       (stats?.frontendTasks || 0) +
                       (stats?.problemSolvingTasks || 0)
                     )}
-                  </p>
+                  </div>
                 </div>
               </div>
               <div className="text-right">
@@ -334,137 +334,6 @@ export default function AdminDashboard() {
                 <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-200" />
               </button>
             ))}
-          </div>
-        </div>
-
-        {/* Enhanced System Status */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-              System Status
-            </h3>
-            <div className="flex items-center space-x-2 text-green-500">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium">
-                All Systems Operational
-              </span>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
-              <CheckCircle className="h-6 w-6 text-green-500 mr-3" />
-              <div>
-                <span className="text-gray-900 dark:text-white font-medium">
-                  Firebase Connected
-                </span>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Real-time database active
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
-              <CheckCircle className="h-6 w-6 text-green-500 mr-3" />
-              <div>
-                <span className="text-gray-900 dark:text-white font-medium">
-                  Admin Authentication
-                </span>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Secure access enabled
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
-              <CheckCircle className="h-6 w-6 text-green-500 mr-3" />
-              <div>
-                <span className="text-gray-900 dark:text-white font-medium">
-                  Real-time Sync
-                </span>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Live updates active
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Enhanced Performance Monitoring */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-              Performance Monitoring
-            </h3>
-            <div className="flex items-center space-x-2 text-green-500">
-              <Activity className="h-4 w-4" />
-              <span className="text-sm font-medium">Real-time Metrics</span>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="flex items-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-              <BarChart3 className="h-6 w-6 text-blue-500 mr-3" />
-              <div>
-                <span className="text-gray-900 dark:text-white font-medium">
-                  Total Content
-                </span>
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  {loading ? (
-                    <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-16 rounded"></div>
-                  ) : (
-                    (stats?.totalContent || 0).toLocaleString()
-                  )}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
-              <Zap className="h-6 w-6 text-green-500 mr-3" />
-              <div>
-                <span className="text-gray-900 dark:text-white font-medium">
-                  API Response Time
-                </span>
-                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                  {loading ? (
-                    <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-12 rounded"></div>
-                  ) : (
-                    `${stats?.systemHealth?.apiResponseTime ? Date.now() - stats.systemHealth.apiResponseTime : 0}ms`
-                  )}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
-              <Clock className="h-6 w-6 text-purple-500 mr-3" />
-              <div>
-                <span className="text-gray-900 dark:text-white font-medium">
-                  Last Updated
-                </span>
-                <p className="text-sm font-bold text-purple-600 dark:text-purple-400">
-                  {loading ? (
-                    <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-4 w-20 rounded"></div>
-                  ) : stats?.systemHealth?.lastUpdated ? (
-                    new Date(
-                      stats.systemHealth.lastUpdated
-                    ).toLocaleTimeString()
-                  ) : (
-                    'N/A'
-                  )}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
-              <TrendingUp className="h-6 w-6 text-orange-500 mr-3" />
-              <div>
-                <span className="text-gray-900 dark:text-white font-medium">
-                  Database Status
-                </span>
-                <p className="text-sm font-bold text-orange-600 dark:text-orange-400">
-                  {loading ? (
-                    <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-4 w-16 rounded"></div>
-                  ) : stats?.systemHealth?.databaseConnected ? (
-                    'Connected'
-                  ) : (
-                    'Disconnected'
-                  )}
-                </p>
-              </div>
-            </div>
           </div>
         </div>
 

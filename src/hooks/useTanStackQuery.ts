@@ -258,9 +258,12 @@ const api = {
       });
     }
     const queryString = searchParams.toString();
-    return api.fetch<{ data: UnifiedQuestion[]; count: number }>(
-      `/api/questions/unified${queryString ? `?${queryString}` : ''}`
-    );
+    const url = `/api/questions/unified${queryString ? `?${queryString}` : ''}`;
+    console.log('API Debug - getQuestionsUnified:', { params, url });
+    return api.fetch<{
+      data: UnifiedQuestion[];
+      pagination: { totalCount: number };
+    }>(url);
   },
   getQuestionUnified: (id: string) =>
     api.fetch<UnifiedQuestion>(`/api/questions/unified/${id}`),
