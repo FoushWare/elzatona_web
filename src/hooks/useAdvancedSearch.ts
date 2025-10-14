@@ -280,7 +280,8 @@ export function useQuestionsSearch(
     ...options,
     queryKey: ['questions-search'],
     queryFn: async () => {
-      const response = await fetch('/api/questions/unified');
+      // Fetch all questions without pagination for client-side filtering
+      const response = await fetch('/api/questions/unified?pageSize=1000');
       const data = await response.json();
       return data.data || [];
     },
