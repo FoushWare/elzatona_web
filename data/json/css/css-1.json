@@ -1,622 +1,680 @@
 [
   {
-    "id": "css-q1",
+    "id": "css-1-css-q1",
     "title": "What is CSS?",
     "content": "CSS stands for Cascading Style Sheets. It is used to define styles for web pages, including design, layout, and responsiveness across devices.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Core Concepts",
-    "difficulty": "beginner",
-    "learningPath": "Modern CSS Mastery",
+    "category": "CSS",
     "topic": "CSS Fundamentals",
+    "difficulty": "beginner",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "styling", "web", "frontend", "interview"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-fundamentals", "beginner"],
     "explanation": "CSS separates content (HTML) from presentation, enabling consistent, maintainable, and responsive designs.",
     "points": 3,
     "sampleAnswers": [
       "CSS (Cascading Style Sheets) controls the visual appearance of HTML elements—layout, colors, fonts, spacing, and responsiveness.",
       "Its primary purpose is to decouple styling from structure, making websites easier to maintain and scale."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q2",
+    "id": "css-1-css-q2",
     "title": "What is the use of CSS ruleset?",
     "content": "A CSS ruleset consists of a selector and a declaration block. The selector targets HTML elements, and the declaration block contains property-value pairs that define styling.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Core Concepts",
+    "category": "CSS",
+    "topic": "CSS Fundamentals",
     "difficulty": "beginner",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "CSS Syntax",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "ruleset", "syntax", "selectors", "declarations"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-fundamentals", "beginner"],
     "explanation": "Each ruleset applies styles to selected elements. Declarations must end with a semicolon (except the last one), and properties define visual characteristics.",
     "points": 4,
     "sampleAnswers": [
       "A CSS ruleset has two parts: a selector (e.g., `h1`) and a declaration block (e.g., `{ color: red; font-size: 2em; }`).",
       "It tells the browser which elements to style and how to style them using property-value pairs."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q3",
+    "id": "css-1-css-q3",
     "title": "What are the possible ways to apply CSS styles to a web page?",
     "content": "There are three primary methods: inline styles (via `style` attribute), internal/embedded styles (in `<style>` tag), and external stylesheets (via `<link>`).",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Core Concepts",
+    "category": "CSS",
+    "topic": "CSS Fundamentals",
     "difficulty": "beginner",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "CSS Integration",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "inline", "internal", "external", "styling"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-fundamentals", "beginner"],
     "explanation": "External stylesheets are preferred for maintainability, caching, and separation of concerns. Inline styles have highest specificity but hurt reusability.",
     "points": 5,
     "options": [
       {
         "id": "a",
         "text": "Inline, internal, and external",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Only external",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "Only inline",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "CSS cannot be applied to HTML",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q4",
+    "id": "css-1-css-q4",
     "title": "What does the cascading portion of CSS mean?",
     "content": "Cascading refers to how CSS resolves conflicting rules by applying styles based on origin, specificity, and order—allowing author styles to override browser defaults.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Core Concepts",
+    "category": "CSS",
+    "topic": "CSS Fundamentals",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Cascading & Specificity",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": [
-      "css",
-      "cascading",
-      "specificity",
-      "inheritance",
-      "browser-styles"
-    ],
+    "updatedBy": "admin",
+    "tags": ["css", "css-fundamentals", "intermediate"],
     "explanation": "Styles cascade from browser defaults → user styles → author styles. Higher-specificity or later-defined rules override earlier ones.",
     "points": 6,
     "sampleAnswers": [
       "Cascading determines which styles win when multiple rules apply. Author styles override browser defaults, and more specific selectors override less specific ones.",
       "It’s the 'C' in CSS—rules flow down and combine based on priority, not just order."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q5",
+    "id": "css-1-css-q5",
     "title": "Explain new features in CSS3?",
     "content": "CSS3 introduced selectors (`:nth-child`, `[attr^=]`), pseudo-classes (`:target`, `:not`), colors (RGBA, HSLA), rounded corners (`border-radius`), shadows (`box-shadow`, `text-shadow`), gradients, and multiple backgrounds.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "CSS3 Features",
+    "category": "CSS",
+    "topic": "CSS3 Features",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "CSS3",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css3", "gradients", "border-radius", "selectors", "rgba"],
+    "updatedBy": "admin",
+    "tags": ["css", "css3-features", "intermediate"],
     "explanation": "CSS3 modularized the spec and added powerful visual and layout capabilities without requiring JavaScript.",
     "points": 7,
     "options": [
       {
         "id": "a",
         "text": "border-radius, box-shadow, gradients, RGBA, new selectors",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Only new color formats",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "CSS3 removed all vendor prefixes",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "CSS3 is not supported in modern browsers",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q6",
+    "id": "css-1-css-q6",
     "title": "What are the CSS selectors?",
     "content": "CSS selectors target HTML elements for styling. Types include: universal (`*`), element (`p`), class (`.class`), ID (`#id`), attribute (`[type='text']`), pseudo-classes (`:hover`), pseudo-elements (`::before`), and combinators (`>`, `+`, `~`).",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Selectors",
+    "category": "CSS",
+    "topic": "Selectors",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "CSS Selectors",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": [
-      "css",
-      "selectors",
-      "combinators",
-      "pseudo-classes",
-      "pseudo-elements"
-    ],
+    "updatedBy": "admin",
+    "tags": ["css", "selectors", "intermediate"],
     "explanation": "Selectors form the foundation of CSS—they determine which elements receive which styles.",
     "points": 7,
     "options": [
       {
         "id": "a",
         "text": "Universal, element, class, ID, attribute, pseudo-classes, pseudo-elements, combinators",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Only class and ID",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "Selectors are optional in CSS",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "Pseudo-elements are the same as pseudo-classes",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q7",
+    "id": "css-1-css-q7",
     "title": "What is contextual selector?",
     "content": "A contextual selector (or descendant selector) targets an element based on its ancestor context, e.g., `table p` selects `<p>` inside `<table>`.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Selectors",
+    "category": "CSS",
+    "topic": "Selectors",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Combinators",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "contextual-selector", "descendant", "combinators"],
+    "updatedBy": "admin",
+    "tags": ["css", "selectors", "intermediate"],
     "explanation": "It styles elements only when they appear within a specific structural context in the HTML tree.",
     "points": 6,
     "sampleAnswers": [
       "`table p` applies styles only to paragraphs that are descendants of a table—useful for scoped styling.",
       "Contextual selectors increase specificity and reduce unintended side effects."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q8",
+    "id": "css-1-css-q8",
     "title": "What is the difference between Pseudo-classes and pseudo-elements?",
     "content": "Pseudo-classes (e.g., `:hover`, `:nth-child`) style elements in specific states. Pseudo-elements (e.g., `::before`, `::first-line`) style parts of an element that aren’t real HTML nodes.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Selectors",
+    "category": "CSS",
+    "topic": "Selectors",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Pseudo-Classes vs Pseudo-Elements",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "pseudo-classes", "pseudo-elements", "selectors"],
+    "updatedBy": "admin",
+    "tags": ["css", "selectors", "intermediate"],
     "explanation": "Pseudo-classes target existing elements in special states; pseudo-elements create virtual content or style subparts.",
     "points": 7,
     "options": [
       {
         "id": "a",
         "text": "Pseudo-classes: element states; Pseudo-elements: virtual parts of elements",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "They are identical",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "Pseudo-elements can’t insert content",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "Pseudo-classes require double colons",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q9",
+    "id": "css-1-css-q9",
     "title": "What is Combinator selector?",
     "content": "Combinators connect selectors to define relationships: descendant (space), child (`>`), adjacent sibling (`+`), and general sibling (`~`).",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Selectors",
+    "category": "CSS",
+    "topic": "Selectors",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Combinators",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "combinators", "child", "sibling", "descendant"],
+    "updatedBy": "admin",
+    "tags": ["css", "selectors", "intermediate"],
     "explanation": "Combinators enable precise targeting based on element relationships in the DOM tree.",
     "points": 6,
     "options": [
       {
         "id": "a",
         "text": "Descendant ( ), child (>), adjacent (+), general sibling (~)",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Only child and descendant",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "Combinators are deprecated",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "Adjacent sibling selects all following siblings",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q10",
+    "id": "css-1-css-q10",
     "title": "What is the difference between class selectors and id selectors?",
     "content": "Class selectors (`.class`) can be reused on multiple elements. ID selectors (`#id`) should be unique to a single element per page.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Selectors",
+    "category": "CSS",
+    "topic": "Selectors",
     "difficulty": "beginner",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "CSS Selectors",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "class", "id", "specificity", "selectors"],
+    "updatedBy": "admin",
+    "tags": ["css", "selectors", "beginner"],
     "explanation": "IDs have higher specificity than classes. While HTML allows duplicate IDs, it’s invalid and breaks accessibility and JavaScript.",
     "points": 5,
     "options": [
       {
         "id": "a",
         "text": "Class is for one element; ID is for many",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Class can be reused; ID should be unique",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "They are functionally identical",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "ID selectors are faster in all browsers",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q11",
+    "id": "css-1-css-q11",
     "title": "What is the difference between the “nth-child()” and “nth-of-type()” selectors?",
     "content": "`nth-child(n)` counts all siblings; `nth-of-type(n)` counts only siblings of the same element type.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Selectors",
+    "category": "CSS",
+    "topic": "Selectors",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Pseudo-Classes",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "nth-child", "nth-of-type", "selectors", "structural"],
+    "updatedBy": "admin",
+    "tags": ["css", "selectors", "intermediate"],
     "explanation": "`p:nth-of-type(2)` selects the second `<p>` among only `<p>` siblings, ignoring other elements.",
     "points": 7,
     "sampleAnswers": [
       "`div:nth-child(2)` selects the second child if it’s a `<div>`. `div:nth-of-type(2)` selects the second `<div>` regardless of other siblings.",
       "Use `nth-of-type` when you care about element type; use `nth-child` when position among all siblings matters."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q12",
+    "id": "css-1-css-q12",
     "title": "Explain CSS grid layout with example?",
     "content": "CSS Grid is a two-dimensional layout system for rows and columns. Use `display: grid`, `grid-template-columns`, `grid-template-rows`, and `grid-area` for complex layouts.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "CSS Grid",
-    "difficulty": "advanced",
-    "learningPath": "Modern CSS Mastery",
+    "category": "CSS",
     "topic": "CSS Grid",
+    "difficulty": "advanced",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "grid", "layout", "two-dimensional", "responsive"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-grid", "advanced"],
     "explanation": "Grid excels at page-level layouts with precise control over alignment, sizing, and layering.",
     "points": 9,
     "sampleAnswers": [
       "```css\n.grid { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }\n``` creates a two-column layout where the second column is twice as wide.",
       "Grid is ideal for dashboards, image galleries, and complex responsive designs that require both row and column control."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q13",
+    "id": "css-1-css-q13",
     "title": "What is CSS flexbox? Write all the properties of the flexbox?",
     "content": "Flexbox is a one-dimensional layout model for distributing space and aligning items in rows or columns. Key properties: `flex-direction`, `justify-content`, `align-items`, `flex-wrap`, `order`, `flex-grow`, `flex-shrink`.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Flexbox",
+    "category": "CSS",
+    "topic": "CSS Flexbox",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Flexbox",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "flexbox", "layout", "alignment", "responsive"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-flexbox", "intermediate"],
     "explanation": "Flexbox simplifies alignment and distribution of space among items in a container, even when their size is unknown or dynamic.",
     "points": 8,
     "sampleAnswers": [
       "Use `display: flex` on a container. Control direction with `flex-direction`, alignment with `justify-content` (main axis) and `align-items` (cross axis).",
       "Flexbox is perfect for navigation bars, card layouts, and centering content—both horizontally and vertically."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q14",
+    "id": "css-1-css-q14",
     "title": "When to use CSS grid and flexbox?",
     "content": "Use Flexbox for one-dimensional layouts (rows OR columns). Use Grid for two-dimensional layouts (rows AND columns). Flexbox is content-first; Grid is layout-first.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Layout",
+    "category": "CSS",
+    "topic": "CSS Layout",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Grid vs Flexbox",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "grid", "flexbox", "layout", "comparison"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-layout", "intermediate"],
     "explanation": "Flexbox handles dynamic content in a single dimension; Grid handles complex, predefined layouts in two dimensions.",
     "points": 7,
     "options": [
       {
         "id": "a",
         "text": "Flexbox: 1D, content-first; Grid: 2D, layout-first",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Grid is only for mobile",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "Flexbox replaces Grid",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "They are identical",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q15",
+    "id": "css-1-css-q15",
     "title": "What is CSS BEM?",
     "content": "BEM (Block Element Modifier) is a naming convention: `.block`, `.block__element`, `.block__element--modifier` for maintainable, scoped CSS.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Methodologies",
+    "category": "CSS",
+    "topic": "CSS Methodologies",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "BEM",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": [
-      "css",
-      "bem",
-      "naming-convention",
-      "methodology",
-      "maintainability"
-    ],
+    "updatedBy": "admin",
+    "tags": ["css", "css-methodologies", "intermediate"],
     "explanation": "BEM reduces specificity conflicts, improves readability, and enables reusable, modular components.",
     "points": 6,
     "sampleAnswers": [
       "`.card`, `.card__title`, `.card__title--large` clearly shows hierarchy and state without deep nesting or high specificity.",
       "BEM makes CSS predictable and scalable in large teams and projects."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q16",
+    "id": "css-1-css-q16",
     "title": "What are the benefits of using CSS sprites?",
     "content": "CSS sprites combine multiple images into one to reduce HTTP requests, improving load performance (though less critical with HTTP/2).",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Performance",
+    "category": "CSS",
+    "topic": "CSS Performance",
     "difficulty": "intermediate",
-    "learningPath": "Performance Optimization Specialist",
-    "topic": "Image Optimization",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "sprites", "performance", "http-requests", "images"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-performance", "intermediate"],
     "explanation": "Sprites reduce network overhead by loading one image instead of many, especially useful for icon sets.",
     "points": 6,
     "sampleAnswers": [
       "Combine icons into one sprite image, then use `background-position` to show the correct part—reducing HTTP requests from 10 to 1.",
       "With HTTP/2, sprites are less necessary, but still useful for hover states and reducing connection overhead."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q17",
+    "id": "css-1-css-q17",
     "title": "What is tweening in CSS?",
     "content": "Tweening (in-betweening) is generating intermediate frames between two states for smooth animations, achieved via CSS `@keyframes` and `animation`.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Animations",
-    "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
+    "category": "CSS",
     "topic": "CSS Animations",
+    "difficulty": "intermediate",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "tweening", "animation", "keyframes", "transitions"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-animations", "intermediate"],
     "explanation": "CSS animations automatically interpolate between keyframes to create fluid motion without JavaScript.",
     "points": 6,
     "sampleAnswers": [
       "`@keyframes slide { from { margin-left: 100%; } to { margin-left: 0; } }` creates smooth sliding via tweening.",
       "Tweening is handled by the browser’s rendering engine—no manual frame calculation needed."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q18",
+    "id": "css-1-css-q18",
     "title": "Explain the difference between `visibility: hidden;` and `display: none;`?",
     "content": "`visibility: hidden` hides the element but preserves its space in the layout. `display: none` removes it from the layout flow entirely.",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Box Model",
+    "category": "CSS",
+    "topic": "CSS Box Model",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Visibility & Display",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "visibility", "display", "layout", "hidden"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-box-model", "intermediate"],
     "explanation": "Use `visibility: hidden` to hide but keep layout; use `display: none` to remove completely (triggers reflow).",
     "points": 6,
     "options": [
       {
         "id": "a",
         "text": "`visibility: hidden` preserves space; `display: none` removes from flow",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "They are identical",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`display: none` preserves space",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`visibility: hidden` triggers reflow",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q19",
+    "id": "css-1-css-q19",
     "title": "What is the purpose of the `z-index` and how a stacking context is formed?",
     "content": "`z-index` controls stack order of positioned elements. A stacking context is created by `position` (non-static), `opacity < 1`, `transform`, `z-index`, etc.",
     "type": "open-ended",
-    "category": "CSS & Styling",
-    "subcategory": "Positioning",
+    "category": "CSS",
+    "topic": "CSS Positioning",
     "difficulty": "advanced",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Z-Index & Stacking Context",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "z-index", "stacking-context", "positioning", "layers"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-positioning", "advanced"],
     "explanation": "Elements with higher `z-index` appear on top, but only within their stacking context. Nested contexts are isolated.",
     "points": 8,
     "sampleAnswers": [
       "`z-index` only works on positioned elements (`relative`, `absolute`, etc.). A new stacking context is formed by `transform`, `opacity`, or `isolation: isolate`.",
       "Child `z-index` values are relative to their parent’s stacking context, not the global stack."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "css-q20",
+    "id": "css-1-css-q20",
     "title": "Explain CSS position Property?",
     "content": "`position` values: `static` (default), `relative` (offset from normal position), `absolute` (relative to nearest positioned ancestor), `fixed` (relative to viewport), `sticky` (hybrid of relative and fixed).",
     "type": "multiple-choice",
-    "category": "CSS & Styling",
-    "subcategory": "Positioning",
+    "category": "CSS",
+    "topic": "CSS Positioning",
     "difficulty": "intermediate",
-    "learningPath": "Modern CSS Mastery",
-    "topic": "Positioning",
+    "learningCardId": "core-technologies",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z",
     "createdBy": "admin",
-    "tags": ["css", "position", "layout", "absolute", "fixed", "sticky"],
+    "updatedBy": "admin",
+    "tags": ["css", "css-positioning", "intermediate"],
     "explanation": "Positioning controls how elements are placed in the document flow and relative to other elements or the viewport.",
     "points": 7,
     "options": [
       {
         "id": "a",
         "text": "static, relative, absolute, fixed, sticky",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Only absolute and relative",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "`fixed` is relative to parent",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "`sticky` doesn’t require a threshold",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   }
 ]

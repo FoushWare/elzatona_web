@@ -9,7 +9,7 @@ import { MobileMenuProvider } from '@/contexts/MobileMenuContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { OnboardingProvider } from '@/contexts/OnboardingContext';
-import { ConditionalLayout } from '@/shared/components/common/ConditionalLayout';
+import { NotificationProvider } from '@/contexts/NotificationContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -62,7 +62,9 @@ export default function RootLayout({
                   <ThemeProvider>
                     <LanguageProvider>
                       <OnboardingProvider>
-                        <ConditionalLayout>{children}</ConditionalLayout>
+                        <NotificationProvider>
+                          <ConditionalLayout>{children}</ConditionalLayout>
+                        </NotificationProvider>
                       </OnboardingProvider>
                     </LanguageProvider>
                   </ThemeProvider>
