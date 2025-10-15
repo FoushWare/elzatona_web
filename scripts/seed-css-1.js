@@ -1,8 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, writeBatch, doc } from 'firebase/firestore';
-import questionsData from '../data/json/CSS/css-1.json' with { type: 'json' };
+import questionsData from '../data/json/css/css-1.json' with { type: 'json' };
 
-// Firebase configuration (same as in the app)
 const firebaseConfig = {
   apiKey: 'AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y',
   authDomain: 'fir-demo-project-adffb.firebaseapp.com',
@@ -13,7 +12,6 @@ const firebaseConfig = {
   measurementId: 'G-XZ5VKFGG4Y',
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
