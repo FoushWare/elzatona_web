@@ -1,451 +1,440 @@
-/**
- * Content Versioning Service
- * Handles versioning and audit trails for all content types
- */
-
-import { db } from '@/lib/firebase';
+import { db } from './firebase';
 import {
   collection,
+  writeBatch,
   doc,
-  addDoc,
   getDocs,
   query,
   where,
   orderBy,
   limit,
+  addDoc,
   updateDoc,
   deleteDoc,
-  serverTimestamp,
-  Timestamp,
 } from 'firebase/firestore';
 
 export interface ContentVersion {
   id: string;
   contentId: string;
-  contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
+  contentType: 'question' | 'category' | 'topic' | 'card' | 'plan';
   version: number;
   data: Record<string, any>;
-  changes: ContentChange[];
-  createdAt: Timestamp;
+  changes: {
+    field: string;
+    oldValue: any;
+    newValue: any;
+  }[];
   createdBy: string;
-  reason?: string;
-  isActive: boolean;
+  createdAt: string;
+  description?: string;
+  tags?: string[];
 }
 
-export interface ContentChange {
-  field: string;
-  oldValue: any;
-  newValue: any;
-  changeType: 'added' | 'modified' | 'removed';
+export interface VersionComparison {
+  version1: ContentVersion;
+  version2: ContentVersion;
+  differences: {
+    field: string;
+    version1Value: any;
+    version2Value: any;
+    changeType: 'added' | 'removed' | 'modified';
+  }[];
 }
 
 export interface AuditLog {
   id: string;
   contentId: string;
-  contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
+  contentType: string;
   action: 'create' | 'update' | 'delete' | 'restore';
+  changes?: Record<string, any>;
   userId: string;
-  userEmail: string;
-  timestamp: Timestamp;
-  changes: ContentChange[];
-  metadata: {
-    userAgent?: string;
-    ipAddress?: string;
-    reason?: string;
-  };
+  timestamp: string;
+  ipAddress?: string;
+  userAgent?: string;
+  metadata?: Record<string, any>;
 }
 
-export interface VersionComparison {
-  field: string;
-  oldValue: any;
-  newValue: any;
-  hasChanged: boolean;
-}
-
-class ContentVersioningService {
-  private readonly VERSIONS_COLLECTION = 'content_versions';
-  private readonly AUDIT_LOGS_COLLECTION = 'audit_logs';
+export class ContentVersioningService {
+  private static readonly VERSIONS_COLLECTION = 'contentVersions';
+  private static readonly AUDIT_LOGS_COLLECTION = 'auditLogs';
 
   /**
-   * Create a new version of content
+   * Create a new content version
    */
-  async createVersion(
+  static async createContentVersion(
     contentId: string,
-    contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions',
+    contentType: ContentVersion['contentType'],
     data: Record<string, any>,
-    userId: string,
-    reason?: string
-  ): Promise<string> {
-    try {
-      // Get the latest version number
-      const latestVersion = await this.getLatestVersion(contentId, contentType);
-      const newVersionNumber = latestVersion ? latestVersion.version + 1 : 1;
+    changes: ContentVersion['changes'],
+    createdBy: string,
+    description?: string,
+    tags?: string[]
+  ): Promise<ContentVersion> {
+    // Get the latest version number
+    const latestVersion = await this.getLatestVersion(contentId, contentType);
+    const versionNumber = latestVersion ? latestVersion.version + 1 : 1;
 
-      // Calculate changes if this is an update
-      const changes: ContentChange[] = [];
-      if (latestVersion) {
-        changes.push(...this.calculateChanges(latestVersion.data, data));
-      } else {
-        // First version - all fields are additions
-        Object.entries(data).forEach(([field, value]) => {
-          changes.push({
-            field,
-            oldValue: null,
-            newValue: value,
-            changeType: 'added',
-          });
-        });
-      }
+    const version: ContentVersion = {
+      id: `${contentType}_${contentId}_v${versionNumber}`,
+      contentId,
+      contentType,
+      version: versionNumber,
+      data,
+      changes,
+      createdBy,
+      createdAt: new Date().toISOString(),
+      description,
+      tags,
+    };
 
-      // Deactivate previous versions
-      if (latestVersion) {
-        await this.deactivateVersions(contentId, contentType);
-      }
+    // Save version to Firestore
+    await addDoc(collection(db, this.VERSIONS_COLLECTION), version);
 
-      // Create new version
-      const versionData: Omit<ContentVersion, 'id'> = {
-        contentId,
-        contentType,
-        version: newVersionNumber,
-        data: { ...data },
-        changes,
-        createdAt: serverTimestamp() as Timestamp,
-        createdBy: userId,
-        reason,
-        isActive: true,
-      };
+    // Create audit log
+    await this.createAuditLog({
+      contentId,
+      contentType,
+      action: 'create',
+      changes: { version: versionNumber, changes },
+      userId: createdBy,
+      timestamp: new Date().toISOString(),
+    });
 
-      const docRef = await addDoc(
-        collection(db, this.VERSIONS_COLLECTION),
-        versionData
-      );
-
-      // Create audit log
-      await this.createAuditLog({
-        contentId,
-        contentType,
-        action: latestVersion ? 'update' : 'create',
-        userId,
-        userEmail: '', // Will be populated by the API
-        timestamp: serverTimestamp() as Timestamp,
-        changes,
-        metadata: { reason },
-      });
-
-      return docRef.id;
-    } catch (error) {
-      console.error('Error creating content version:', error);
-      throw new Error(`Failed to create version: ${error}`);
-    }
+    return version;
   }
 
   /**
-   * Get version history for content
+   * Get all versions for a specific content item
    */
-  async getVersionHistory(
+  static async getContentVersions(
     contentId: string,
-    contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions',
-    limitCount: number = 10
+    contentType: ContentVersion['contentType'],
+    limitCount: number = 50
   ): Promise<ContentVersion[]> {
-    try {
-      const q = query(
+    const versionsSnapshot = await getDocs(
+      query(
         collection(db, this.VERSIONS_COLLECTION),
         where('contentId', '==', contentId),
         where('contentType', '==', contentType),
         orderBy('version', 'desc'),
         limit(limitCount)
-      );
+      )
+    );
 
-      const snapshot = await getDocs(q);
-      return snapshot.docs.map(
-        doc =>
-          ({
-            id: doc.id,
-            ...doc.data(),
-          }) as ContentVersion
-      );
-    } catch (error) {
-      console.error('Error getting version history:', error);
-      throw new Error(`Failed to get version history: ${error}`);
-    }
+    return versionsSnapshot.docs.map(doc => doc.data() as ContentVersion);
   }
 
   /**
    * Get a specific version
    */
-  async getVersion(versionId: string): Promise<ContentVersion | null> {
-    try {
-      const docRef = doc(db, this.VERSIONS_COLLECTION, versionId);
-      const snapshot = await getDocs(
-        query(
-          collection(db, this.VERSIONS_COLLECTION),
-          where('__name__', '==', versionId)
-        )
-      );
+  static async getContentVersion(
+    versionId: string
+  ): Promise<ContentVersion | null> {
+    const versionSnapshot = await getDocs(
+      query(
+        collection(db, this.VERSIONS_COLLECTION),
+        where('id', '==', versionId)
+      )
+    );
 
-      if (snapshot.empty) return null;
-
-      const doc = snapshot.docs[0];
-      return {
-        id: doc.id,
-        ...doc.data(),
-      } as ContentVersion;
-    } catch (error) {
-      console.error('Error getting version:', error);
-      throw new Error(`Failed to get version: ${error}`);
+    if (versionSnapshot.empty) {
+      return null;
     }
+
+    return versionSnapshot.docs[0].data() as ContentVersion;
+  }
+
+  /**
+   * Get the latest version for a content item
+   */
+  static async getLatestVersion(
+    contentId: string,
+    contentType: ContentVersion['contentType']
+  ): Promise<ContentVersion | null> {
+    const versionsSnapshot = await getDocs(
+      query(
+        collection(db, this.VERSIONS_COLLECTION),
+        where('contentId', '==', contentId),
+        where('contentType', '==', contentType),
+        orderBy('version', 'desc'),
+        limit(1)
+      )
+    );
+
+    if (versionsSnapshot.empty) {
+      return null;
+    }
+
+    return versionsSnapshot.docs[0].data() as ContentVersion;
   }
 
   /**
    * Restore content to a specific version
    */
-  async restoreToVersion(
-    contentId: string,
-    contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions',
+  static async restoreContentVersion(
     versionId: string,
-    userId: string
-  ): Promise<void> {
+    restoredBy: string
+  ): Promise<boolean> {
     try {
-      const version = await this.getVersion(versionId);
+      const version = await this.getContentVersion(versionId);
       if (!version) {
         throw new Error('Version not found');
       }
 
-      if (
-        version.contentId !== contentId ||
-        version.contentType !== contentType
-      ) {
-        throw new Error('Version does not match content');
-      }
+      // Get the collection name for the content type
+      const collectionName = this.getCollectionName(version.contentType);
 
-      // Create a new version with the restored data
-      await this.createVersion(
-        contentId,
-        contentType,
-        version.data,
-        userId,
-        `Restored from version ${version.version}`
-      );
-
-      // Create audit log for restore action
-      await this.createAuditLog({
-        contentId,
-        contentType,
-        action: 'restore',
-        userId,
-        userEmail: '',
-        timestamp: serverTimestamp() as Timestamp,
-        changes: [
-          {
-            field: 'restore',
-            oldValue: null,
-            newValue: `Version ${version.version}`,
-            changeType: 'added',
-          },
-        ],
-        metadata: { reason: `Restored from version ${version.version}` },
+      // Update the content with the version data
+      const contentRef = doc(collection(db, collectionName), version.contentId);
+      await updateDoc(contentRef, {
+        ...version.data,
+        updatedAt: new Date().toISOString(),
+        updatedBy: restoredBy,
       });
+
+      // Create audit log
+      await this.createAuditLog({
+        contentId: version.contentId,
+        contentType: version.contentType,
+        action: 'restore',
+        changes: { restoredFromVersion: version.version },
+        userId: restoredBy,
+        timestamp: new Date().toISOString(),
+      });
+
+      return true;
     } catch (error) {
-      console.error('Error restoring version:', error);
-      throw new Error(`Failed to restore version: ${error}`);
+      console.error('Failed to restore content version:', error);
+      return false;
     }
   }
 
   /**
    * Compare two versions
    */
-  async compareVersions(
+  static async compareVersions(
     versionId1: string,
     versionId2: string
-  ): Promise<VersionComparison[]> {
-    try {
-      const [version1, version2] = await Promise.all([
-        this.getVersion(versionId1),
-        this.getVersion(versionId2),
-      ]);
+  ): Promise<VersionComparison | null> {
+    const [version1, version2] = await Promise.all([
+      this.getContentVersion(versionId1),
+      this.getContentVersion(versionId2),
+    ]);
 
-      if (!version1 || !version2) {
-        throw new Error('One or both versions not found');
-      }
-
-      const allFields = new Set([
-        ...Object.keys(version1.data),
-        ...Object.keys(version2.data),
-      ]);
-
-      const comparisons: VersionComparison[] = [];
-
-      for (const field of allFields) {
-        const oldValue = version1.data[field];
-        const newValue = version2.data[field];
-        const hasChanged =
-          JSON.stringify(oldValue) !== JSON.stringify(newValue);
-
-        comparisons.push({
-          field,
-          oldValue,
-          newValue,
-          hasChanged,
-        });
-      }
-
-      return comparisons;
-    } catch (error) {
-      console.error('Error comparing versions:', error);
-      throw new Error(`Failed to compare versions: ${error}`);
+    if (!version1 || !version2) {
+      return null;
     }
+
+    const differences = this.calculateDifferences(version1.data, version2.data);
+
+    return {
+      version1,
+      version2,
+      differences,
+    };
   }
 
   /**
-   * Get audit logs for content
+   * Get audit logs for a content item
    */
-  async getAuditLogs(
+  static async getAuditLogs(
     contentId?: string,
-    contentType?: 'cards' | 'plans' | 'categories' | 'topics' | 'questions',
-    limitCount: number = 50
+    contentType?: string,
+    limitCount: number = 100
   ): Promise<AuditLog[]> {
-    try {
-      let q = query(
+    let auditQuery = query(
+      collection(db, this.AUDIT_LOGS_COLLECTION),
+      orderBy('timestamp', 'desc'),
+      limit(limitCount)
+    );
+
+    if (contentId) {
+      auditQuery = query(
         collection(db, this.AUDIT_LOGS_COLLECTION),
+        where('contentId', '==', contentId),
         orderBy('timestamp', 'desc'),
         limit(limitCount)
       );
-
-      if (contentId) {
-        q = query(q, where('contentId', '==', contentId));
-      }
-
-      if (contentType) {
-        q = query(q, where('contentType', '==', contentType));
-      }
-
-      const snapshot = await getDocs(q);
-      return snapshot.docs.map(
-        doc =>
-          ({
-            id: doc.id,
-            ...doc.data(),
-          }) as AuditLog
-      );
-    } catch (error) {
-      console.error('Error getting audit logs:', error);
-      throw new Error(`Failed to get audit logs: ${error}`);
     }
+
+    if (contentType) {
+      auditQuery = query(
+        collection(db, this.AUDIT_LOGS_COLLECTION),
+        where('contentType', '==', contentType),
+        orderBy('timestamp', 'desc'),
+        limit(limitCount)
+      );
+    }
+
+    const auditSnapshot = await getDocs(auditQuery);
+    return auditSnapshot.docs.map(doc => doc.data() as AuditLog);
+  }
+
+  /**
+   * Get audit log statistics
+   */
+  static async getAuditLogStats(): Promise<{
+    totalLogs: number;
+    logsByAction: Record<string, number>;
+    logsByContentType: Record<string, number>;
+    recentActivity: AuditLog[];
+  }> {
+    const auditSnapshot = await getDocs(
+      query(
+        collection(db, this.AUDIT_LOGS_COLLECTION),
+        orderBy('timestamp', 'desc'),
+        limit(1000)
+      )
+    );
+
+    const logs = auditSnapshot.docs.map(doc => doc.data() as AuditLog);
+
+    const logsByAction: Record<string, number> = {};
+    const logsByContentType: Record<string, number> = {};
+
+    logs.forEach(log => {
+      logsByAction[log.action] = (logsByAction[log.action] || 0) + 1;
+      logsByContentType[log.contentType] =
+        (logsByContentType[log.contentType] || 0) + 1;
+    });
+
+    return {
+      totalLogs: logs.length,
+      logsByAction,
+      logsByContentType,
+      recentActivity: logs.slice(0, 10),
+    };
   }
 
   /**
    * Delete old versions (cleanup)
    */
-  async cleanupOldVersions(
+  static async cleanupOldVersions(
     contentId: string,
-    contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions',
+    contentType: ContentVersion['contentType'],
     keepVersions: number = 10
-  ): Promise<void> {
-    try {
-      const versions = await this.getVersionHistory(
-        contentId,
-        contentType,
-        100
-      );
-      const versionsToDelete = versions.slice(keepVersions);
+  ): Promise<number> {
+    const versions = await this.getContentVersions(
+      contentId,
+      contentType,
+      1000
+    );
 
-      for (const version of versionsToDelete) {
-        await deleteDoc(doc(db, this.VERSIONS_COLLECTION, version.id));
-      }
-    } catch (error) {
-      console.error('Error cleaning up old versions:', error);
-      throw new Error(`Failed to cleanup old versions: ${error}`);
+    if (versions.length <= keepVersions) {
+      return 0;
     }
+
+    const versionsToDelete = versions.slice(keepVersions);
+    const batch = writeBatch(db);
+
+    versionsToDelete.forEach(version => {
+      const versionRef = doc(
+        collection(db, this.VERSIONS_COLLECTION),
+        version.id
+      );
+      batch.delete(versionRef);
+    });
+
+    await batch.commit();
+    return versionsToDelete.length;
   }
 
   /**
-   * Private helper methods
+   * Create audit log entry
    */
-  private async getLatestVersion(
-    contentId: string,
-    contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions'
-  ): Promise<ContentVersion | null> {
-    const q = query(
-      collection(db, this.VERSIONS_COLLECTION),
-      where('contentId', '==', contentId),
-      where('contentType', '==', contentType),
-      orderBy('version', 'desc'),
-      limit(1)
-    );
-
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) return null;
-
-    const doc = snapshot.docs[0];
-    return {
-      id: doc.id,
-      ...doc.data(),
-    } as ContentVersion;
-  }
-
-  private async deactivateVersions(
-    contentId: string,
-    contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions'
+  private static async createAuditLog(
+    auditData: Omit<AuditLog, 'id'>
   ): Promise<void> {
-    const q = query(
-      collection(db, this.VERSIONS_COLLECTION),
-      where('contentId', '==', contentId),
-      where('contentType', '==', contentType),
-      where('isActive', '==', true)
-    );
+    const auditLog: AuditLog = {
+      id: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      ...auditData,
+    };
 
-    const snapshot = await getDocs(q);
-    const batch = snapshot.docs.map(doc =>
-      updateDoc(doc.ref, { isActive: false })
-    );
-
-    await Promise.all(batch);
+    await addDoc(collection(db, this.AUDIT_LOGS_COLLECTION), auditLog);
   }
 
-  private calculateChanges(
-    oldData: Record<string, any>,
-    newData: Record<string, any>
-  ): ContentChange[] {
-    const changes: ContentChange[] = [];
-    const allFields = new Set([
-      ...Object.keys(oldData),
-      ...Object.keys(newData),
-    ]);
+  /**
+   * Get collection name for content type
+   */
+  private static getCollectionName(
+    contentType: ContentVersion['contentType']
+  ): string {
+    const collectionMap = {
+      question: 'questions',
+      category: 'categories',
+      topic: 'topics',
+      card: 'learningCards',
+      plan: 'learningPlans',
+    };
+    return collectionMap[contentType];
+  }
 
-    for (const field of allFields) {
-      const oldValue = oldData[field];
-      const newValue = newData[field];
+  /**
+   * Calculate differences between two objects
+   */
+  private static calculateDifferences(
+    obj1: Record<string, any>,
+    obj2: Record<string, any>
+  ): {
+    field: string;
+    version1Value: any;
+    version2Value: any;
+    changeType: 'added' | 'removed' | 'modified';
+  }[] {
+    const differences: any[] = [];
+    const allKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
 
-      if (oldValue === undefined && newValue !== undefined) {
-        changes.push({
-          field,
-          oldValue: null,
-          newValue,
-          changeType: 'added',
+    allKeys.forEach(key => {
+      const value1 = obj1[key];
+      const value2 = obj2[key];
+
+      if (value1 === undefined && value2 !== undefined) {
+        differences.push({
+          field: key,
+          version1Value: undefined,
+          version2Value: value2,
+          changeType: 'added' as const,
         });
-      } else if (oldValue !== undefined && newValue === undefined) {
-        changes.push({
-          field,
-          oldValue,
-          newValue: null,
-          changeType: 'removed',
+      } else if (value1 !== undefined && value2 === undefined) {
+        differences.push({
+          field: key,
+          version1Value: value1,
+          version2Value: undefined,
+          changeType: 'removed' as const,
         });
-      } else if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
-        changes.push({
-          field,
-          oldValue,
-          newValue,
-          changeType: 'modified',
+      } else if (JSON.stringify(value1) !== JSON.stringify(value2)) {
+        differences.push({
+          field: key,
+          version1Value: value1,
+          version2Value: value2,
+          changeType: 'modified' as const,
         });
       }
+    });
+
+    return differences;
+  }
+
+  /**
+   * Generate version description from changes
+   */
+  static generateVersionDescription(
+    changes: ContentVersion['changes']
+  ): string {
+    if (changes.length === 0) {
+      return 'No changes detected';
     }
 
-    return changes;
-  }
+    const changeTypes = changes.map(change => {
+      if (change.oldValue === undefined) {
+        return `Added ${change.field}`;
+      } else if (change.newValue === undefined) {
+        return `Removed ${change.field}`;
+      } else {
+        return `Modified ${change.field}`;
+      }
+    });
 
-  private async createAuditLog(auditData: Omit<AuditLog, 'id'>): Promise<void> {
-    await addDoc(collection(db, this.AUDIT_LOGS_COLLECTION), auditData);
+    return changeTypes.join(', ');
   }
 }
-
-export const contentVersioningService = new ContentVersioningService();

@@ -1,9 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { userAnalyticsService } from '@/lib/user-analytics-service';
+import { UserAnalyticsService } from '@/lib/user-analytics-service';
 
 /**
- * GET /api/analytics/user/[userId]
- * Get user analytics
+ * @swagger
+ * /api/analytics/user/{userId}:
+ *   get:
+ *     summary: Get user analytics
+ *     tags: [Analytics]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: User analytics data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 analytics:
+ *                   $ref: '#/components/schemas/UserAnalytics'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
  */
 export async function GET(
   request: NextRequest,
@@ -11,39 +37,17 @@ export async function GET(
 ) {
   try {
     const { userId } = params;
-    const url = new URL(request.url);
-    const regenerate = url.searchParams.get('regenerate') === 'true';
 
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'User ID is required' },
-        { status: 400 }
-      );
-    }
-
-    let analytics;
-
-    if (regenerate) {
-      analytics = await userAnalyticsService.generateUserAnalytics(userId);
-    } else {
-      analytics = await userAnalyticsService.getUserAnalytics(userId);
-      if (!analytics) {
-        analytics = await userAnalyticsService.generateUserAnalytics(userId);
-      }
-    }
+    const analytics = await UserAnalyticsService.getUserAnalytics(userId);
 
     return NextResponse.json({
       success: true,
       analytics,
     });
   } catch (error) {
-    console.error('Get user analytics error:', error);
+    console.error('Error fetching user analytics:', error);
     return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      { success: false, error: 'Failed to fetch user analytics' },
       { status: 500 }
     );
   }
