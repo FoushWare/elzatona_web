@@ -483,6 +483,8 @@ export default function UnifiedAdminPage() {
     try {
       await createCardMutation.mutateAsync(cardData);
       await notifyContentUpdate('Learning Card', 'created');
+      // Close modal on successful creation
+      setIsCardModalOpen(false);
     } catch (error) {
       console.error('Failed to create card:', error);
     }
@@ -495,6 +497,9 @@ export default function UnifiedAdminPage() {
     try {
       await updateCardMutation.mutateAsync({ id: cardId, data: cardData });
       await notifyContentUpdate('Learning Card', 'updated');
+      // Close modal on successful update
+      setIsCardModalOpen(false);
+      setEditingCard(null);
     } catch (error) {
       console.error('Failed to update card:', error);
     }
@@ -525,6 +530,9 @@ export default function UnifiedAdminPage() {
     try {
       await updatePlanMutation.mutateAsync({ id: planId, data: planData });
       await notifyContentUpdate('Learning Plan', 'updated');
+      // Close modal on successful update
+      setIsPlanModalOpen(false);
+      setEditingPlan(null);
     } catch (error) {
       console.error('Failed to update plan:', error);
     }
@@ -1042,10 +1050,22 @@ export default function UnifiedAdminPage() {
                           }, 0)}{' '}
                           Questions
                         </Badge>
-                        <Button variant="ghost" size="sm">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setEditingCard(card);
+                            setIsCardModalOpen(true);
+                          }}
+                        >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteCard(card.id)}
+                          disabled={deleteCardMutation?.isPending}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -1106,10 +1126,24 @@ export default function UnifiedAdminPage() {
                                     }, 0)}{' '}
                                     Questions
                                   </Badge>
-                                  <Button variant="ghost" size="sm">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      setEditingCategory(category);
+                                      setIsCategoryModalOpen(true);
+                                    }}
+                                  >
                                     <Edit className="h-4 w-4" />
                                   </Button>
-                                  <Button variant="ghost" size="sm">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() =>
+                                      handleDeleteCategory(category.id)
+                                    }
+                                    disabled={deleteCategoryMutation?.isPending}
+                                  >
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </div>
@@ -1157,10 +1191,26 @@ export default function UnifiedAdminPage() {
                                             >
                                               {topicQuestions.length} Questions
                                             </Badge>
-                                            <Button variant="ghost" size="sm">
+                                            <Button
+                                              variant="ghost"
+                                              size="sm"
+                                              onClick={() => {
+                                                setEditingTopic(topic);
+                                                setIsTopicModalOpen(true);
+                                              }}
+                                            >
                                               <Edit className="h-4 w-4" />
                                             </Button>
-                                            <Button variant="ghost" size="sm">
+                                            <Button
+                                              variant="ghost"
+                                              size="sm"
+                                              onClick={() =>
+                                                handleDeleteTopic(topic.id)
+                                              }
+                                              disabled={
+                                                deleteTopicMutation?.isPending
+                                              }
+                                            >
                                               <Trash2 className="h-4 w-4" />
                                             </Button>
                                           </div>
@@ -1189,12 +1239,28 @@ export default function UnifiedAdminPage() {
                                                   <Button
                                                     variant="ghost"
                                                     size="sm"
+                                                    onClick={() => {
+                                                      setEditingQuestion(
+                                                        question
+                                                      );
+                                                      setIsQuestionModalOpen(
+                                                        true
+                                                      );
+                                                    }}
                                                   >
                                                     <Edit className="h-3 w-3" />
                                                   </Button>
                                                   <Button
                                                     variant="ghost"
                                                     size="sm"
+                                                    onClick={() =>
+                                                      handleDeleteQuestion(
+                                                        question.id
+                                                      )
+                                                    }
+                                                    disabled={
+                                                      deleteQuestionMutation?.isPending
+                                                    }
                                                   >
                                                     <Trash2 className="h-3 w-3" />
                                                   </Button>
@@ -1295,10 +1361,22 @@ export default function UnifiedAdminPage() {
                         {plan.duration} • {plan.difficulty}
                       </Badge>
                       <Badge variant="outline">{plan.estimatedHours}h</Badge>
-                      <Button variant="ghost" size="sm">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setEditingPlan(plan);
+                          setIsPlanModalOpen(true);
+                        }}
+                      >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeletePlan(plan.id)}
+                        disabled={deletePlanMutation?.isPending}
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -1330,12 +1408,28 @@ export default function UnifiedAdminPage() {
       <Suspense fallback={<LoadingSkeleton />}>
         <Modal
           isOpen={isCardModalOpen}
-          onClose={() => setIsCardModalOpen(false)}
+          onClose={() => {
+            setIsCardModalOpen(false);
+            setEditingCard(null);
+          }}
           title={editingCard ? 'Edit Card' : 'Create New Card'}
         >
           <CardForm
-            onSubmit={handleCreateCard}
-            onCancel={() => setIsCardModalOpen(false)}
+            card={editingCard}
+            onSubmit={
+              editingCard
+                ? data => handleUpdateCard(editingCard.id, data)
+                : handleCreateCard
+            }
+            onCancel={() => {
+              setIsCardModalOpen(false);
+              setEditingCard(null);
+            }}
+            isLoading={
+              editingCard
+                ? updateCardMutation?.isPending
+                : createCardMutation?.isPending
+            }
           />
         </Modal>
       </Suspense>
@@ -1343,12 +1437,28 @@ export default function UnifiedAdminPage() {
       <Suspense fallback={<LoadingSkeleton />}>
         <Modal
           isOpen={isPlanModalOpen}
-          onClose={() => setIsPlanModalOpen(false)}
+          onClose={() => {
+            setIsPlanModalOpen(false);
+            setEditingPlan(null);
+          }}
           title={editingPlan ? 'Edit Plan' : 'Create New Plan'}
         >
           <PlanForm
-            onSubmit={handleCreatePlan}
-            onCancel={() => setIsPlanModalOpen(false)}
+            plan={editingPlan}
+            onSubmit={
+              editingPlan
+                ? data => handleUpdatePlan(editingPlan.id, data)
+                : handleCreatePlan
+            }
+            onCancel={() => {
+              setIsPlanModalOpen(false);
+              setEditingPlan(null);
+            }}
+            isLoading={
+              editingPlan
+                ? updatePlanMutation?.isPending
+                : createPlanMutation?.isPending
+            }
           />
         </Modal>
       </Suspense>
@@ -1356,12 +1466,28 @@ export default function UnifiedAdminPage() {
       <Suspense fallback={<LoadingSkeleton />}>
         <Modal
           isOpen={isCategoryModalOpen}
-          onClose={() => setIsCategoryModalOpen(false)}
+          onClose={() => {
+            setIsCategoryModalOpen(false);
+            setEditingCategory(null);
+          }}
           title={editingCategory ? 'Edit Category' : 'Create New Category'}
         >
           <CategoryForm
-            onSubmit={handleCreateCategory}
-            onCancel={() => setIsCategoryModalOpen(false)}
+            category={editingCategory}
+            onSubmit={
+              editingCategory
+                ? data => handleUpdateCategory(editingCategory.id, data)
+                : handleCreateCategory
+            }
+            onCancel={() => {
+              setIsCategoryModalOpen(false);
+              setEditingCategory(null);
+            }}
+            isLoading={
+              editingCategory
+                ? updateCategoryMutation?.isPending
+                : createCategoryMutation?.isPending
+            }
           />
         </Modal>
       </Suspense>
@@ -1369,13 +1495,29 @@ export default function UnifiedAdminPage() {
       <Suspense fallback={<LoadingSkeleton />}>
         <Modal
           isOpen={isTopicModalOpen}
-          onClose={() => setIsTopicModalOpen(false)}
+          onClose={() => {
+            setIsTopicModalOpen(false);
+            setEditingTopic(null);
+          }}
           title={editingTopic ? 'Edit Topic' : 'Create New Topic'}
         >
           <TopicForm
-            onSubmit={handleCreateTopic}
+            topic={editingTopic}
+            onSubmit={
+              editingTopic
+                ? data => handleUpdateTopic(editingTopic.id, data)
+                : handleCreateTopic
+            }
             categories={categories}
-            onCancel={() => setIsTopicModalOpen(false)}
+            onCancel={() => {
+              setIsTopicModalOpen(false);
+              setEditingTopic(null);
+            }}
+            isLoading={
+              editingTopic
+                ? updateTopicMutation?.isPending
+                : createTopicMutation?.isPending
+            }
           />
         </Modal>
       </Suspense>
@@ -1383,14 +1525,30 @@ export default function UnifiedAdminPage() {
       <Suspense fallback={<LoadingSkeleton />}>
         <Modal
           isOpen={isQuestionModalOpen}
-          onClose={() => setIsQuestionModalOpen(false)}
+          onClose={() => {
+            setIsQuestionModalOpen(false);
+            setEditingQuestion(null);
+          }}
           title={editingQuestion ? 'Edit Question' : 'Create New Question'}
         >
           <QuestionForm
-            onSubmit={handleCreateQuestion}
+            question={editingQuestion}
+            onSubmit={
+              editingQuestion
+                ? data => handleUpdateQuestion(editingQuestion.id, data)
+                : handleCreateQuestion
+            }
             topics={topics}
             categories={categories}
-            onCancel={() => setIsQuestionModalOpen(false)}
+            onCancel={() => {
+              setIsQuestionModalOpen(false);
+              setEditingQuestion(null);
+            }}
+            isLoading={
+              editingQuestion
+                ? updateQuestionMutation?.isPending
+                : createQuestionMutation?.isPending
+            }
           />
         </Modal>
       </Suspense>

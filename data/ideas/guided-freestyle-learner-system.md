@@ -283,9 +283,7 @@ A comprehensive learning system for frontend developers preparing for interviews
 
 - **Dashboard**: `/admin/dashboard` - Overview and statistics
 - **Questions Management**: `/admin/content/questions` - Add, edit, and manage questions
-- **Learning Cards Management**: `/admin/learning-cards` - Create and manage learning cards for guided plans
-- **Guided Learning Plans**: `/admin/guided-learning` - Create and manage learning plans
-- **Categories & Topics**: `/admin/enhanced-structure` - Create and manage topics and categories
+- **Content Management**: `/admin/content-management` - Unified interface for managing learning cards, plans, categories, topics, and questions
 - **Frontend Tasks Management**: `/admin/frontend-tasks` - Create and manage React/frontend coding challenges ✅ **Added to Admin Menu**
 - **Problem Solving Management**: `/admin/problem-solving` - Create and manage algorithmic coding challenges ✅ **Added to Admin Menu**
 - **Feature Reports**: `/admin/reports` - View project features and progress
@@ -329,8 +327,10 @@ A comprehensive learning system for frontend developers preparing for interviews
 - **Framework Questions Card**: React.js, Next.js, Vue.js, Angular, Svelte
 - **Problem Solving Card**: Frontend-specific coding challenges and algorithms
 - **System Design Card**: Frontend architecture patterns (Facebook feeds, Twitter timeline)
+- **Frontend Tasks Card**: Interactive coding challenges and projects
 - **Card Configuration**: Question counts, time limits, difficulty levels, topics
 - **Progress Tracking**: Individual card completion and user analytics
+- **Unified Management**: All cards managed through `/admin/content-management`
 
 ---
 
@@ -781,10 +781,10 @@ The expandable hierarchy functionality is now fully operational:
 
 #### **✅ 2. Admin Management System**
 
-- ✅ **Learning Cards Page**: `/admin/learning-cards` - Full CRUD interface
+- ✅ **Unified Content Management**: `/admin/content-management` - Complete CRUD interface for cards, plans, categories, topics, and questions
 - ✅ **Card Configuration**: Set question counts, time limits, difficulty, topics
 - ✅ **UI Components**: Card-specific admin UI components with real-time updates
-- ✅ **Navigation Integration**: "Learning Cards" added to admin navbar
+- ✅ **Navigation Integration**: "Content Management" added to admin navbar
 - ✅ **Real-time Updates**: Firebase integration for card management
 - ✅ **Production-Ready Authentication**: Firebase Authentication with role-based access control
 - ✅ **Admin Role Management**: Admin roles stored in Firestore with real-time verification
@@ -807,12 +807,13 @@ The expandable hierarchy functionality is now fully operational:
 - ✅ **Real-time Sync**: Changes sync across devices
 - ✅ **Error Handling**: Comprehensive error handling and loading states
 
-#### **✅ 5. Four Learning Card Types (IMPLEMENTED)**
+#### **✅ 5. Five Learning Card Types (IMPLEMENTED)**
 
 - ✅ 💻 **Core Technologies** (Blue) - HTML, CSS, JavaScript, TypeScript
 - ✅ ⚛️ **Framework Questions** (Green) - React, Next.js, Vue, Angular, Svelte
 - ✅ 🧩 **Problem Solving** (Purple) - Frontend coding challenges and algorithms
 - ✅ 🏗️ **System Design** (Orange) - Frontend architecture patterns
+- ✅ 🎨 **Frontend Tasks** (Teal) - Interactive coding challenges and projects
 
 ### **✅ Technical Implementation Details**
 
@@ -821,11 +822,11 @@ The expandable hierarchy functionality is now fully operational:
 - ✅ `src/types/learning-cards.ts` - Complete card type definitions with interfaces
 - ✅ `src/lib/learning-cards-service.ts` - Firebase service for card management
 - ✅ `src/lib/plan-questions-service.ts` - Service for managing plan question assignments
-- ✅ `src/app/admin/learning-cards/page.tsx` - Admin management page
-- ✅ `src/app/admin/guided-learning/[planId]/edit/page.tsx` - Card-based interface
+- ✅ `src/app/admin/content-management/page.tsx` - Unified admin management page
+- ✅ `src/app/admin/content/questions/page.tsx` - Questions management page
 - ✅ `src/app/api/admin/plan-questions/route.ts` - API endpoints for plan questions
 - ✅ `src/scripts/check-and-seed-learning-cards.ts` - Auto-seeding script
-- ✅ Admin layout updated to include Learning Cards navigation
+- ✅ Admin layout updated to include Content Management navigation
 
 #### **✅ Key Features Implemented:**
 
@@ -865,8 +866,8 @@ The card-based guided learning system has been **successfully implemented** with
 **✅ Completed Implementation:**
 
 1. ✅ Learning cards database schema and comprehensive seeding
-2. ✅ Admin interface for card management (`/admin/learning-cards`)
-3. ✅ Card-based plan editor interface (`/admin/guided-learning/[planId]/edit`)
+2. ✅ Unified admin interface for content management (`/admin/content-management`)
+3. ✅ Questions management interface (`/admin/content/questions`)
 4. ✅ Question assignment to cards/categories/topics with hierarchical display
 5. ✅ Progress tracking per card with real-time updates
 6. ✅ Firebase integration with proper error handling
@@ -944,10 +945,13 @@ This comprehensive learning system is now the go-to resource for frontend interv
 ### **📊 Content Management System**
 
 - ✅ **Unified Content Management**: `http://localhost:3000/admin/content-management`
-  - Learning Cards CRUD (4 cards: Core Technologies, Framework Questions, Problem Solving, System Design, Frontend Tasks)
+  - Learning Cards CRUD (5 cards: Core Technologies, Framework Questions, Problem Solving, System Design, Frontend Tasks)
   - Learning Plans CRUD (7 cumulative plans: 1-day through 7-day)
   - Categories management with topic relationships
   - Topics management with question assignments
+  - Questions management (view, edit, delete) within topics
+  - Performance optimized for initial load (direct loading for cards and plans)
+  - UI/UX enhancements for intuitive management
   - Real-time statistics and counts
   - Hierarchical data display (Cards → Categories → Topics → Questions)
 
@@ -1055,10 +1059,10 @@ This comprehensive learning system is now the go-to resource for frontend interv
   - [ ] Verify menu has Feature Reports
 
 - [ ] **Learning Cards Management**
-  - [ ] Navigate to `/admin/learning-cards`
-  - [ ] Verify page loads with "Loading learning cards..." message
+  - [x] Navigate to `/admin/content-management`
+  - [x] Verify page loads with learning cards section
   - [ ] Test creating a new learning card:
-    - [ ] Click "Add New Learning Card"
+    - [ ] Click "Add New Learning Card" in the Cards section
     - [ ] Fill in title: "Core Technologies"
     - [ ] Select type: "Core Technologies"
     - [ ] Add description: "HTML, CSS, JavaScript, TypeScript fundamentals"
@@ -1092,22 +1096,23 @@ This comprehensive learning system is now the go-to resource for frontend interv
   - [ ] Verify questions are linked to cards
 
 - [ ] **Card-Question Relationship**
-  - [ ] Go to `/admin/learning-cards`
-  - [ ] Verify question count displays correctly
+  - [ ] Go to `/admin/content-management`
+  - [ ] Verify question count displays correctly in Cards section
   - [ ] Test filtering questions by card type
   - [ ] Verify question distribution across cards
 
 ### **1.3 Guided Learning Plan CRUD Testing**
 
 - [ ] **Plan Creation**
-  - [ ] Go to `/admin/guided-learning`
+  - [ ] Go to `/admin/content-management`
+  - [ ] Navigate to Learning Plans section
   - [ ] Create new learning plan
   - [ ] Assign learning cards to plan
   - [ ] Set time limits and difficulty
   - [ ] Configure question distribution
 
 - [ ] **Plan Configuration**
-  - [ ] Edit existing learning plan
+  - [ ] Edit existing learning plan in Plans section
   - [ ] Modify card assignments
   - [ ] Update time schedules
   - [ ] Test plan validation
@@ -2643,10 +2648,10 @@ This comprehensive testing guide ensures both admin pages and website integratio
 #### **6.2 Admin Learning Cards Management Testing**
 
 - [ ] **Learning Cards CRUD Operations**
-  - [ ] Navigate to `/admin/learning-cards`
-  - [ ] Verify page loads with existing cards
+  - [ ] Navigate to `/admin/content-management`
+  - [ ] Verify page loads with existing cards in Cards section
   - [ ] Test creating a new learning card:
-    - [ ] Click "Add New Learning Card"
+    - [ ] Click "Add New Learning Card" in Cards section
     - [ ] Fill in card details (title, type, description)
     - [ ] Configure categories and topics
     - [ ] Save the card
@@ -3122,15 +3127,15 @@ This comprehensive testing guide now covers all critical aspects of the guided l
 
 ### **15.1 Real Data Verification - Admin Pages**
 
-#### **15.1.1 Learning Cards Management (`/admin/learning-cards`)**
+#### **15.1.1 Learning Cards Management (`/admin/content-management`)**
 
 - [ ] **Verify Real Learning Cards Data**
-  - [ ] Navigate to `/admin/learning-cards`
-  - [ ] Verify page loads with actual learning cards from Firebase
+  - [ ] Navigate to `/admin/content-management`
+  - [ ] Verify page loads with actual learning cards from Firebase in Cards section
   - [ ] Confirm cards show real data:
     - [ ] Card titles (e.g., "Core Technologies", "Framework Questions")
     - [ ] Card descriptions (not placeholder text)
-    - [ ] Card types (Core Technologies, Framework Questions, Problem Solving, System Design)
+    - [ ] Card types (Core Technologies, Framework Questions, Problem Solving, System Design, Frontend Tasks)
     - [ ] Card order and configuration
   - [ ] Test creating a new card:
     - [ ] Fill in real data (not test data)
@@ -3144,10 +3149,11 @@ This comprehensive testing guide now covers all critical aspects of the guided l
   - [ ] Test assigning real questions to cards
   - [ ] Verify question distribution across cards is realistic
 
-#### **15.1.2 Guided Learning Plans (`/admin/guided-learning`)**
+#### **15.1.2 Guided Learning Plans (`/admin/content-management`)**
 
 - [ ] **Verify Real Plan Data**
-  - [ ] Navigate to `/admin/guided-learning`
+  - [ ] Navigate to `/admin/content-management`
+  - [ ] Navigate to Learning Plans section
   - [ ] Verify plans show actual data:
     - [ ] Plan names (1-Day Plan, 2-Day Plan, etc.)
     - [ ] Plan descriptions (not placeholder text)
@@ -3160,12 +3166,14 @@ This comprehensive testing guide now covers all critical aspects of the guided l
     - [ ] Verify changes reflect on website
 
 - [ ] **Verify Card-Based Interface**
-  - [ ] Navigate to `/admin/guided-learning/1-day-plan/edit`
-  - [ ] Verify all 4 learning cards load with real data:
+  - [ ] Navigate to `/admin/content-management`
+  - [ ] Navigate to Learning Plans section
+  - [ ] Verify all 5 learning cards load with real data:
     - [ ] Core Technologies Card shows actual sections/topics
     - [ ] Framework Questions Card shows real React/Next.js content
     - [ ] Problem Solving Card shows actual coding challenges
     - [ ] System Design Card shows real architecture questions
+    - [ ] Frontend Tasks Card shows actual interactive projects
   - [ ] Test card expansion:
     - [ ] Verify sections load from Firebase (not hardcoded)
     - [ ] Verify topics load from Firebase (not hardcoded)
