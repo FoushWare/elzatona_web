@@ -34,6 +34,8 @@ import { useNotificationActions } from '@/hooks/useNotificationActions';
 import { BulkOperations } from '@/shared/components/admin/BulkOperations';
 import { LearningCard } from '@/types/learning-cards';
 import { UnifiedQuestion } from '@/lib/unified-question-schema';
+import { useToast } from '@/shared/components/common/Toast';
+import ToastContainer from '@/shared/components/common/Toast';
 
 // Define types for other entities (these should be moved to proper type files)
 type LearningPlan = any;
@@ -294,6 +296,9 @@ export default function UnifiedAdminPage() {
   // Query client for manual invalidation
   const queryClient = useQueryClient();
 
+  // Toast notifications
+  const { showSuccess, showError, toasts, removeToast } = useToast();
+
   // Debug logging for TanStack Query
   console.log('TanStack Query Status:', {
     cardsLoading,
@@ -509,10 +514,18 @@ export default function UnifiedAdminPage() {
     try {
       await createCardMutation.mutateAsync(cardData);
       await notifyContentUpdate('Learning Card', 'created');
+      showSuccess(
+        'Card Created Successfully',
+        `"${cardData.title}" has been created successfully.`
+      );
       // Close modal on successful creation
       setIsCardModalOpen(false);
     } catch (error) {
       console.error('Failed to create card:', error);
+      showError(
+        'Failed to Create Card',
+        'There was an error creating the card. Please try again.'
+      );
     }
   };
 
@@ -523,11 +536,19 @@ export default function UnifiedAdminPage() {
     try {
       await updateCardMutation.mutateAsync({ id: cardId, data: cardData });
       await notifyContentUpdate('Learning Card', 'updated');
+      showSuccess(
+        'Card Updated Successfully',
+        `"${cardData.title}" has been updated successfully.`
+      );
       // Close modal on successful update
       setIsCardModalOpen(false);
       setEditingCard(null);
     } catch (error) {
       console.error('Failed to update card:', error);
+      showError(
+        'Failed to Update Card',
+        'There was an error updating the card. Please try again.'
+      );
     }
   };
 
@@ -612,16 +633,45 @@ export default function UnifiedAdminPage() {
     }
   };
 
+  const confirmDeleteCard = async () => {
+    if (!cardToDelete) return;
+
+    try {
+      await deleteCardMutation.mutateAsync(cardToDelete.id);
+      await notifyContentUpdate('Learning Card', 'deleted');
+      showSuccess(
+        'Card Deleted Successfully',
+        `"${cardToDelete.title}" has been deleted successfully.`
+      );
+      setIsDeleteCardModalOpen(false);
+      setCardToDelete(null);
+    } catch (error) {
+      console.error('Failed to delete card:', error);
+      showError(
+        'Failed to Delete Card',
+        'There was an error deleting the card. Please try again.'
+      );
+    }
+  };
+
   const confirmDeletePlan = async () => {
     if (!planToDelete) return;
 
     try {
       await deletePlanMutation.mutateAsync(planToDelete.id);
       await notifyContentUpdate('Learning Plan', 'deleted');
+      showSuccess(
+        'Plan Deleted Successfully',
+        `"${planToDelete.title}" has been deleted successfully.`
+      );
       setIsDeletePlanModalOpen(false);
       setPlanToDelete(null);
     } catch (error) {
       console.error('Failed to delete plan:', error);
+      showError(
+        'Failed to Delete Plan',
+        'There was an error deleting the plan. Please try again.'
+      );
     }
   };
 
@@ -1592,6 +1642,78 @@ export default function UnifiedAdminPage() {
           }
         />
       </Modal>
+
+      {/* Confirmation Modals */}
+      <Modal
+        isOpen={isDeleteCardModalOpen}
+        onClose={() => {
+          setIsDeleteCardModalOpen(false);
+          setCardToDelete(null);
+        }}
+        title="Delete Card"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Are you sure you want to delete the card "{cardToDelete?.title}"?
+            This action cannot be undone.
+          </p>
+          <div className="flex justify-end space-x-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsDeleteCardModalOpen(false);
+                setCardToDelete(null);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDeleteCard}
+              disabled={deleteCardMutation.isPending}
+            >
+              {deleteCardMutation.isPending ? 'Deleting...' : 'Delete'}
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={isDeletePlanModalOpen}
+        onClose={() => {
+          setIsDeletePlanModalOpen(false);
+          setPlanToDelete(null);
+        }}
+        title="Delete Plan"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Are you sure you want to delete the plan "{planToDelete?.title}"?
+            This action cannot be undone.
+          </p>
+          <div className="flex justify-end space-x-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsDeletePlanModalOpen(false);
+                setPlanToDelete(null);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDeletePlan}
+              disabled={deletePlanMutation.isPending}
+            >
+              {deletePlanMutation.isPending ? 'Deleting...' : 'Delete'}
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Toast Notifications */}
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );
 }
