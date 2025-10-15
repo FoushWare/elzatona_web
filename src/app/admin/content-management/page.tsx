@@ -32,6 +32,13 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { useNotificationActions } from '@/hooks/useNotificationActions';
 import { BulkOperations } from '@/shared/components/admin/BulkOperations';
+import { LearningCard } from '@/types/learning-cards';
+import { UnifiedQuestion } from '@/lib/unified-question-schema';
+
+// Define types for other entities (these should be moved to proper type files)
+type LearningPlan = any;
+type Category = any;
+type Topic = any;
 
 // Types for API responses
 interface ApiResponse<T> {
@@ -121,11 +128,7 @@ const SelectValue = React.lazy(() =>
     default: module.SelectValue,
   }))
 );
-const Modal = React.lazy(() =>
-  import('@/shared/components/ui/modal').then(module => ({
-    default: module.Modal,
-  }))
-);
+import { Modal } from '@/shared/components/ui/modal';
 
 // Import icons with tree shaking
 import {
@@ -316,7 +319,10 @@ export default function UnifiedAdminPage() {
     questionsLoading,
     questionsError,
     questionsData: questionsData
-      ? { count: questionsData.count, dataLength: questionsData.data?.length }
+      ? {
+          count: questionsData.pagination?.totalCount || 0,
+          dataLength: questionsData.data?.length,
+        }
       : null,
   });
 
@@ -432,7 +438,7 @@ export default function UnifiedAdminPage() {
       totalPlans: plansData?.count || 0,
       totalCategories: categoriesData?.count || 0,
       totalTopics: topicsData?.count || 0,
-      totalQuestions: questionsData?.count || 0,
+      totalQuestions: questionsData?.pagination?.totalCount || 0,
     }),
     [cardsData, plansData, categoriesData, topicsData, questionsData]
   );
@@ -454,11 +460,31 @@ export default function UnifiedAdminPage() {
   const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
 
-  const [editingCard, setEditingCard] = useState<unknown>(null);
-  const [editingPlan, setEditingPlan] = useState<unknown>(null);
-  const [editingCategory, setEditingCategory] = useState<unknown>(null);
-  const [editingTopic, setEditingTopic] = useState<unknown>(null);
-  const [editingQuestion, setEditingQuestion] = useState<unknown>(null);
+  // Confirmation modal states
+  const [isDeleteCardModalOpen, setIsDeleteCardModalOpen] = useState(false);
+  const [isDeletePlanModalOpen, setIsDeletePlanModalOpen] = useState(false);
+  const [isDeleteCategoryModalOpen, setIsDeleteCategoryModalOpen] =
+    useState(false);
+  const [isDeleteTopicModalOpen, setIsDeleteTopicModalOpen] = useState(false);
+  const [isDeleteQuestionModalOpen, setIsDeleteQuestionModalOpen] =
+    useState(false);
+
+  // Item to delete states
+  const [cardToDelete, setCardToDelete] = useState<LearningCard | null>(null);
+  const [planToDelete, setPlanToDelete] = useState<LearningPlan | null>(null);
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
+    null
+  );
+  const [topicToDelete, setTopicToDelete] = useState<Topic | null>(null);
+  const [questionToDelete, setQuestionToDelete] =
+    useState<UnifiedQuestion | null>(null);
+
+  const [editingCard, setEditingCard] = useState<LearningCard | null>(null);
+  const [editingPlan, setEditingPlan] = useState<LearningPlan | null>(null);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [editingTopic, setEditingTopic] = useState<Topic | null>(null);
+  const [editingQuestion, setEditingQuestion] =
+    useState<UnifiedQuestion | null>(null);
 
   // Questions state
   const [questionsByTopic, setQuestionsByTopic] = useState<
@@ -505,12 +531,52 @@ export default function UnifiedAdminPage() {
     }
   };
 
+  // Form submission wrappers
+  const handleCardFormSubmit = (data: any) => {
+    if (editingCard?.id) {
+      handleUpdateCard(editingCard.id, data);
+    } else {
+      handleCreateCard(data);
+    }
+  };
+
+  const handlePlanFormSubmit = (data: any) => {
+    if (editingPlan?.id) {
+      handleUpdatePlan(editingPlan.id, data);
+    } else {
+      handleCreatePlan(data);
+    }
+  };
+
+  const handleCategoryFormSubmit = async (data: any) => {
+    if (editingCategory?.id) {
+      await handleUpdateCategory(editingCategory.id, data);
+    } else {
+      await handleCreateCategory(data);
+    }
+  };
+
+  const handleTopicFormSubmit = async (data: any) => {
+    if (editingTopic?.id) {
+      await handleUpdateTopic(editingTopic.id, data);
+    } else {
+      await handleCreateTopic(data);
+    }
+  };
+
+  const handleQuestionFormSubmit = async (data: any) => {
+    if (editingQuestion?.id) {
+      await handleUpdateQuestion(editingQuestion.id, data);
+    } else {
+      await handleCreateQuestion(data);
+    }
+  };
+
   const handleDeleteCard = async (cardId: string) => {
-    try {
-      await deleteCardMutation.mutateAsync(cardId);
-      await notifyContentUpdate('Learning Card', 'deleted');
-    } catch (error) {
-      console.error('Failed to delete card:', error);
+    const card = cards.find(c => c.id === cardId);
+    if (card) {
+      setCardToDelete(card);
+      setIsDeleteCardModalOpen(true);
     }
   };
 
@@ -539,9 +605,21 @@ export default function UnifiedAdminPage() {
   };
 
   const handleDeletePlan = async (planId: string) => {
+    const plan = plans.find(p => p.id === planId);
+    if (plan) {
+      setPlanToDelete(plan);
+      setIsDeletePlanModalOpen(true);
+    }
+  };
+
+  const confirmDeletePlan = async () => {
+    if (!planToDelete) return;
+
     try {
-      await deletePlanMutation.mutateAsync(planId);
+      await deletePlanMutation.mutateAsync(planToDelete.id);
       await notifyContentUpdate('Learning Plan', 'deleted');
+      setIsDeletePlanModalOpen(false);
+      setPlanToDelete(null);
     } catch (error) {
       console.error('Failed to delete plan:', error);
     }
@@ -650,17 +728,17 @@ export default function UnifiedAdminPage() {
   const filteredCards = useMemo(() => {
     return cards.filter(card => {
       // Add null checks to prevent runtime errors
-      if (!card || !card.name || !card.description) {
+      if (!card || !card.title || !card.description) {
         return false;
       }
 
       const matchesSearch =
-        card.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        card.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
         card.description
           .toLowerCase()
           .includes(debouncedSearchTerm.toLowerCase());
       const matchesCardType =
-        filterCardType === 'all' || card.name === filterCardType;
+        filterCardType === 'all' || card.title === filterCardType;
       return matchesSearch && matchesCardType;
     });
   }, [cards, debouncedSearchTerm, filterCardType]);
@@ -976,10 +1054,10 @@ export default function UnifiedAdminPage() {
           ) : (
             filteredCards.map(card => {
               const cardCategories = categories.filter(
-                cat => cat.cardType === card.name
+                cat => cat.cardType === card.title
               );
               const IconComponent =
-                CARD_ICONS[card.name as keyof typeof CARD_ICONS]?.icon ||
+                CARD_ICONS[card.title as keyof typeof CARD_ICONS]?.icon ||
                 Layers;
 
               return (
@@ -1006,7 +1084,9 @@ export default function UnifiedAdminPage() {
                           style={{ color: card.color }}
                         />
                         <div>
-                          <CardTitle className="text-lg">{card.name}</CardTitle>
+                          <CardTitle className="text-lg">
+                            {card.title}
+                          </CardTitle>
                           <p className="text-sm text-gray-600 dark:text-gray-400">
                             {card.description}
                           </p>
@@ -1241,7 +1321,7 @@ export default function UnifiedAdminPage() {
                                                     size="sm"
                                                     onClick={() => {
                                                       setEditingQuestion(
-                                                        question
+                                                        question as UnifiedQuestion
                                                       );
                                                       setIsQuestionModalOpen(
                                                         true
@@ -1405,153 +1485,113 @@ export default function UnifiedAdminPage() {
       </div>
 
       {/* Modals */}
-      <Suspense fallback={<LoadingSkeleton />}>
-        <Modal
-          isOpen={isCardModalOpen}
-          onClose={() => {
+      <Modal
+        isOpen={isCardModalOpen}
+        onClose={() => {
+          setIsCardModalOpen(false);
+          setEditingCard(null);
+        }}
+        title={editingCard ? 'Edit Card' : 'Create New Card'}
+      >
+        <CardForm
+          card={editingCard}
+          onSubmit={handleCardFormSubmit}
+          onCancel={() => {
             setIsCardModalOpen(false);
             setEditingCard(null);
           }}
-          title={editingCard ? 'Edit Card' : 'Create New Card'}
-        >
-          <CardForm
-            card={editingCard}
-            onSubmit={
-              editingCard
-                ? data => handleUpdateCard(editingCard.id, data)
-                : handleCreateCard
-            }
-            onCancel={() => {
-              setIsCardModalOpen(false);
-              setEditingCard(null);
-            }}
-            isLoading={
-              editingCard
-                ? updateCardMutation?.isPending
-                : createCardMutation?.isPending
-            }
-          />
-        </Modal>
-      </Suspense>
+          isLoading={
+            createCardMutation.isPending || updateCardMutation.isPending
+          }
+        />
+      </Modal>
 
-      <Suspense fallback={<LoadingSkeleton />}>
-        <Modal
-          isOpen={isPlanModalOpen}
-          onClose={() => {
+      <Modal
+        isOpen={isPlanModalOpen}
+        onClose={() => {
+          setIsPlanModalOpen(false);
+          setEditingPlan(null);
+        }}
+        title={editingPlan ? 'Edit Plan' : 'Create New Plan'}
+      >
+        <PlanForm
+          plan={editingPlan}
+          onSubmit={handlePlanFormSubmit}
+          onCancel={() => {
             setIsPlanModalOpen(false);
             setEditingPlan(null);
           }}
-          title={editingPlan ? 'Edit Plan' : 'Create New Plan'}
-        >
-          <PlanForm
-            plan={editingPlan}
-            onSubmit={
-              editingPlan
-                ? data => handleUpdatePlan(editingPlan.id, data)
-                : handleCreatePlan
-            }
-            onCancel={() => {
-              setIsPlanModalOpen(false);
-              setEditingPlan(null);
-            }}
-            isLoading={
-              editingPlan
-                ? updatePlanMutation?.isPending
-                : createPlanMutation?.isPending
-            }
-          />
-        </Modal>
-      </Suspense>
+          isLoading={
+            createPlanMutation.isPending || updatePlanMutation.isPending
+          }
+        />
+      </Modal>
 
-      <Suspense fallback={<LoadingSkeleton />}>
-        <Modal
-          isOpen={isCategoryModalOpen}
-          onClose={() => {
+      <Modal
+        isOpen={isCategoryModalOpen}
+        onClose={() => {
+          setIsCategoryModalOpen(false);
+          setEditingCategory(null);
+        }}
+        title={editingCategory ? 'Edit Category' : 'Create New Category'}
+      >
+        <CategoryForm
+          category={editingCategory}
+          onSubmit={handleCategoryFormSubmit}
+          onCancel={() => {
             setIsCategoryModalOpen(false);
             setEditingCategory(null);
           }}
-          title={editingCategory ? 'Edit Category' : 'Create New Category'}
-        >
-          <CategoryForm
-            category={editingCategory}
-            onSubmit={
-              editingCategory
-                ? data => handleUpdateCategory(editingCategory.id, data)
-                : handleCreateCategory
-            }
-            onCancel={() => {
-              setIsCategoryModalOpen(false);
-              setEditingCategory(null);
-            }}
-            isLoading={
-              editingCategory
-                ? updateCategoryMutation?.isPending
-                : createCategoryMutation?.isPending
-            }
-          />
-        </Modal>
-      </Suspense>
+          isLoading={
+            createCategoryMutation.isPending || updateCategoryMutation.isPending
+          }
+        />
+      </Modal>
 
-      <Suspense fallback={<LoadingSkeleton />}>
-        <Modal
-          isOpen={isTopicModalOpen}
-          onClose={() => {
+      <Modal
+        isOpen={isTopicModalOpen}
+        onClose={() => {
+          setIsTopicModalOpen(false);
+          setEditingTopic(null);
+        }}
+        title={editingTopic ? 'Edit Topic' : 'Create New Topic'}
+      >
+        <TopicForm
+          topic={editingTopic}
+          categories={categories}
+          onSubmit={handleTopicFormSubmit}
+          onCancel={() => {
             setIsTopicModalOpen(false);
             setEditingTopic(null);
           }}
-          title={editingTopic ? 'Edit Topic' : 'Create New Topic'}
-        >
-          <TopicForm
-            topic={editingTopic}
-            onSubmit={
-              editingTopic
-                ? data => handleUpdateTopic(editingTopic.id, data)
-                : handleCreateTopic
-            }
-            categories={categories}
-            onCancel={() => {
-              setIsTopicModalOpen(false);
-              setEditingTopic(null);
-            }}
-            isLoading={
-              editingTopic
-                ? updateTopicMutation?.isPending
-                : createTopicMutation?.isPending
-            }
-          />
-        </Modal>
-      </Suspense>
+          isLoading={
+            createTopicMutation.isPending || updateTopicMutation.isPending
+          }
+        />
+      </Modal>
 
-      <Suspense fallback={<LoadingSkeleton />}>
-        <Modal
-          isOpen={isQuestionModalOpen}
-          onClose={() => {
+      <Modal
+        isOpen={isQuestionModalOpen}
+        onClose={() => {
+          setIsQuestionModalOpen(false);
+          setEditingQuestion(null);
+        }}
+        title={editingQuestion ? 'Edit Question' : 'Create New Question'}
+      >
+        <QuestionForm
+          question={editingQuestion as any}
+          topics={topics}
+          categories={categories}
+          onSubmit={handleQuestionFormSubmit}
+          onCancel={() => {
             setIsQuestionModalOpen(false);
             setEditingQuestion(null);
           }}
-          title={editingQuestion ? 'Edit Question' : 'Create New Question'}
-        >
-          <QuestionForm
-            question={editingQuestion}
-            onSubmit={
-              editingQuestion
-                ? data => handleUpdateQuestion(editingQuestion.id, data)
-                : handleCreateQuestion
-            }
-            topics={topics}
-            categories={categories}
-            onCancel={() => {
-              setIsQuestionModalOpen(false);
-              setEditingQuestion(null);
-            }}
-            isLoading={
-              editingQuestion
-                ? updateQuestionMutation?.isPending
-                : createQuestionMutation?.isPending
-            }
-          />
-        </Modal>
-      </Suspense>
+          isLoading={
+            createQuestionMutation.isPending || updateQuestionMutation.isPending
+          }
+        />
+      </Modal>
     </div>
   );
 }
