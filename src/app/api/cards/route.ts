@@ -54,10 +54,14 @@ export async function GET(request: NextRequest) {
     const q = query(collection(db, 'learningCards'), orderBy('order', 'asc'));
     const querySnapshot = await getDocs(q);
 
-    const cards = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const cards = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        title: data.name || data.title, // Handle both name and title for backward compatibility
+        ...data,
+      };
+    });
 
     return NextResponse.json({
       success: true,
