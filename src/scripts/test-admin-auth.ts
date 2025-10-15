@@ -58,27 +58,12 @@ async function testAdminAuth() {
     } else {
       console.log('❌ Authentication failed:', data.error);
 
-      // Try with the original password from the script
-      console.log('\n🔄 Trying with original password...');
-      const originalPassword = 'zatonafoushware';
-
-      const response2 = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: adminEmail,
-          password: originalPassword,
-        }),
-      });
-
-      const data2 = await response2.json();
-      console.log('📊 Original Password Response Status:', response2.status);
-      console.log(
-        '📋 Original Password Response Data:',
-        JSON.stringify(data2, null, 2)
-      );
+      // Log error details for debugging
+      console.log('\n🔍 Authentication failed. Please check:');
+      console.log('   - Email address is correct');
+      console.log('   - Password is correct');
+      console.log('   - Environment variables are set properly');
+      console.log('   - Admin account exists in Firebase');
     }
   } catch (error) {
     console.error('❌ Error testing admin auth:', error);

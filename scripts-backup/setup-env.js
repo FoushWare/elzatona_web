@@ -57,22 +57,22 @@ async function setupEnvironment() {
     {
       key: 'JWT_SECRET',
       description: 'JWT secret key for admin authentication',
-      default: 'zatonafoushware-super-secret-jwt-key-2024-production-ready',
+      default: 'generate-a-secure-jwt-secret-key-here',
     },
     {
       key: 'INITIAL_ADMIN_EMAIL',
       description: 'Initial admin email',
-      default: 'afouadsoftwareengineer@gmail.com',
+      default: 'admin@yourdomain.com',
     },
     {
       key: 'INITIAL_ADMIN_PASSWORD',
       description: 'Initial admin password',
-      default: 'zatonafoushware$8888',
+      default: 'generate-a-secure-password-here',
     },
     {
       key: 'INITIAL_ADMIN_NAME',
       description: 'Initial admin name',
-      default: 'Ahmed Fouad',
+      default: 'Admin User',
     },
   ];
 
