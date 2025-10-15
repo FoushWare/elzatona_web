@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ContentVersioningService } from '@/lib/content-versioning-service';
 
 /**
  * @swagger

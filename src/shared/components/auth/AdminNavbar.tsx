@@ -14,16 +14,9 @@ import {
   BarChart3,
   Shield,
   ChevronDown,
-  FileText,
   HelpCircle,
-  FolderOpen,
-  BookOpen,
   Code,
   Calculator,
-  CreditCard,
-  Bug,
-  Database,
-  TrendingUp,
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
@@ -78,12 +71,6 @@ export default function AdminNavbar() {
       description: 'Admin overview and statistics',
     },
     {
-      href: '/admin/analytics',
-      label: 'Analytics',
-      icon: TrendingUp,
-      description: 'User analytics and learning insights',
-    },
-    {
       href: '/admin/content/questions',
       label: 'Questions',
       icon: HelpCircle,
@@ -107,31 +94,6 @@ export default function AdminNavbar() {
       label: 'Problem Solving',
       icon: Calculator,
       description: 'Create and manage algorithmic coding challenges',
-    },
-    {
-      href: '/admin/logs',
-      label: 'System Logs',
-      icon: Bug,
-      description: 'Monitor errors, performance, and system health',
-    },
-    {
-      href: '/admin/backup',
-      label: 'Data Backup',
-      icon: Database,
-      description:
-        'Manage backups, restore data, and schedule automatic backups',
-    },
-    {
-      href: '/admin/api-docs',
-      label: 'API Documentation',
-      icon: BookOpen,
-      description: 'Comprehensive API documentation with Swagger/OpenAPI',
-    },
-    {
-      href: '/admin/content-versioning',
-      label: 'Content Versioning',
-      icon: FileText,
-      description: 'Track content changes, manage versions, and audit trails',
     },
     {
       href: '/admin/reports',

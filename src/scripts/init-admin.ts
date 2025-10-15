@@ -14,16 +14,20 @@ async function initializeAdmin() {
 
   try {
     const result = await AdminAuthService.initializeAdminCredentials(
-      'admin@example.com',
-      'admin123',
+      process.env.ADMIN_EMAIL || 'admin@example.com',
+      process.env.ADMIN_PASSWORD || 'admin123',
       'Admin User',
       'super_admin'
     );
 
     if (result.success) {
       console.log('✅ Admin credentials initialized successfully!');
-      console.log('📧 Email: admin@example.com');
-      console.log('🔑 Password: admin123');
+      console.log(
+        '📧 Email: ' + (process.env.ADMIN_EMAIL || 'admin@example.com')
+      );
+      console.log(
+        '🔑 Password: ' + (process.env.ADMIN_PASSWORD ? '[HIDDEN]' : 'admin123')
+      );
       console.log('👤 Role: super_admin');
       console.log('');
       console.log(
