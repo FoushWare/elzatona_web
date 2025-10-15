@@ -5,13 +5,13 @@ import { Button } from '@/shared/components/ui/button';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
+import { Progress } from '@/shared/components/ui/progress';
 import { Checkbox } from '@/shared/components/ui/checkbox';
-import { Input } from '@/shared/components/ui/input';
-import { Label } from '@/shared/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -19,459 +19,380 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
+import { Input } from '@/shared/components/ui/input';
+import { Label } from '@/shared/components/ui/label';
 import { Textarea } from '@/shared/components/ui/textarea';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/shared/components/ui/dialog';
 import { Alert, AlertDescription } from '@/shared/components/ui/alert';
-import { Progress } from '@/shared/components/ui/progress';
 import {
   Trash2,
-  Edit3,
-  CheckSquare,
-  Square,
-  AlertTriangle,
-  Loader2,
+  Edit,
   CheckCircle,
   XCircle,
+  Play,
+  Pause,
+  AlertTriangle,
+  Loader2,
+  Settings,
 } from 'lucide-react';
-import { useBulkDelete, useBulkEdit } from '@/hooks/useTanStackQuery';
-import { useNotificationActions } from '@/hooks/useNotificationActions';
+import {
+  useBulkOperations,
+  useBulkOperationStats,
+  useBulkDelete,
+  useBulkEdit,
+  useBulkActivate,
+  useBulkDeactivate,
+  useCancelBulkOperation,
+} from '@/hooks/useTanStackQuery';
 
 interface BulkOperationsProps {
-  type: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
-  items: Array<{
-    id: string;
-    name?: string;
-    title?: string;
-    [key: string]: any;
-  }>;
-  onRefresh: () => void;
-}
-
-interface BulkEditFormData {
-  [key: string]: any;
+  targetType: 'questions' | 'categories' | 'topics' | 'cards' | 'plans';
+  selectedItems: string[];
+  onSelectionChange: (items: string[]) => void;
+  onOperationComplete?: () => void;
 }
 
 export const BulkOperations: React.FC<BulkOperationsProps> = ({
-  type,
-  items,
-  onRefresh,
+  targetType,
+  selectedItems,
+  onSelectionChange,
+  onOperationComplete,
 }) => {
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [isBulkEditOpen, setIsBulkEditOpen] = useState(false);
-  const [isBulkDeleteOpen, setIsBulkDeleteOpen] = useState(false);
-  const [bulkEditForm, setBulkEditForm] = useState<BulkEditFormData>({});
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [operationType, setOperationType] = useState<
+    'delete' | 'edit' | 'activate' | 'deactivate'
+  >('delete');
+  const [editData, setEditData] = useState<Record<string, any>>({});
+  const [isOperationModalOpen, setIsOperationModalOpen] = useState(false);
 
-  const bulkDeleteMutation = useBulkDelete();
-  const bulkEditMutation = useBulkEdit();
-  const { showNotification } = useNotificationActions();
+  // Hooks
+  const { data: operations, isLoading: operationsLoading } =
+    useBulkOperations(10);
+  const { data: stats, isLoading: statsLoading } = useBulkOperationStats();
+  const bulkDelete = useBulkDelete();
+  const bulkEdit = useBulkEdit();
+  const bulkActivate = useBulkActivate();
+  const bulkDeactivate = useBulkDeactivate();
+  const cancelOperation = useCancelBulkOperation();
 
-  const handleSelectAll = () => {
-    if (selectedItems.length === items.length) {
-      setSelectedItems([]);
-    } else {
-      setSelectedItems(items.map(item => item.id));
-    }
-  };
-
-  const handleSelectItem = (itemId: string) => {
-    setSelectedItems(prev =>
-      prev.includes(itemId)
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
-    );
-  };
-
-  const handleBulkDelete = async () => {
-    if (selectedItems.length === 0) return;
-
-    setIsProcessing(true);
-    try {
-      const result = await bulkDeleteMutation.mutateAsync({
-        type,
-        ids: selectedItems,
-      });
-
-      if (result.success) {
-        showNotification({
-          type: 'success',
-          title: 'Bulk Delete Successful',
-          message: result.message,
-        });
-        setSelectedItems([]);
-        onRefresh();
-      } else {
-        showNotification({
-          type: 'error',
-          title: 'Bulk Delete Failed',
-          message: result.message,
-        });
-      }
-    } catch (error) {
-      showNotification({
-        type: 'error',
-        title: 'Bulk Delete Error',
-        message:
-          error instanceof Error ? error.message : 'Unknown error occurred',
-      });
-    } finally {
-      setIsProcessing(false);
-      setIsBulkDeleteOpen(false);
-    }
-  };
-
-  const handleBulkEdit = async () => {
-    if (selectedItems.length === 0 || Object.keys(bulkEditForm).length === 0)
+  const handleBulkOperation = async () => {
+    if (selectedItems.length === 0) {
+      alert('Please select items to perform bulk operation');
       return;
+    }
 
-    setIsProcessing(true);
     try {
-      const result = await bulkEditMutation.mutateAsync({
-        type,
-        ids: selectedItems,
-        updates: bulkEditForm,
-      });
+      let result;
+      switch (operationType) {
+        case 'delete':
+          result = await bulkDelete.mutateAsync({
+            type: targetType,
+            ids: selectedItems,
+          });
+          break;
+        case 'edit':
+          result = await bulkEdit.mutateAsync({
+            type: targetType,
+            ids: selectedItems,
+            updates: editData,
+          });
+          break;
+        case 'activate':
+          result = await bulkActivate.mutateAsync({
+            type: targetType,
+            ids: selectedItems,
+          });
+          break;
+        case 'deactivate':
+          result = await bulkDeactivate.mutateAsync({
+            type: targetType,
+            ids: selectedItems,
+          });
+          break;
+      }
 
-      if (result.success) {
-        showNotification({
-          type: 'success',
-          title: 'Bulk Edit Successful',
-          message: result.message,
-        });
-        setSelectedItems([]);
-        setBulkEditForm({});
-        onRefresh();
-      } else {
-        showNotification({
-          type: 'error',
-          title: 'Bulk Edit Failed',
-          message: result.message,
-        });
+      if (result?.success) {
+        onSelectionChange([]);
+        setIsOperationModalOpen(false);
+        onOperationComplete?.();
       }
     } catch (error) {
-      showNotification({
-        type: 'error',
-        title: 'Bulk Edit Error',
-        message:
-          error instanceof Error ? error.message : 'Unknown error occurred',
-      });
-    } finally {
-      setIsProcessing(false);
-      setIsBulkEditOpen(false);
+      console.error('Bulk operation failed:', error);
     }
   };
 
-  const getEditableFields = () => {
-    const fieldConfigs: Record<
-      string,
-      Array<{ key: string; label: string; type: string; options?: string[] }>
-    > = {
-      cards: [
-        { key: 'name', label: 'Name', type: 'text' },
-        { key: 'description', label: 'Description', type: 'textarea' },
-        {
-          key: 'color',
-          label: 'Color',
-          type: 'select',
-          options: ['blue', 'green', 'purple', 'red', 'yellow', 'indigo'],
-        },
-        { key: 'icon', label: 'Icon', type: 'text' },
-        { key: 'order', label: 'Order', type: 'number' },
-      ],
-      plans: [
-        { key: 'name', label: 'Name', type: 'text' },
-        { key: 'description', label: 'Description', type: 'textarea' },
-        { key: 'duration', label: 'Duration', type: 'text' },
-        {
-          key: 'difficulty',
-          label: 'Difficulty',
-          type: 'select',
-          options: ['beginner', 'intermediate', 'advanced'],
-        },
-        { key: 'order', label: 'Order', type: 'number' },
-      ],
-      categories: [
-        { key: 'name', label: 'Name', type: 'text' },
-        { key: 'description', label: 'Description', type: 'textarea' },
-        {
-          key: 'color',
-          label: 'Color',
-          type: 'select',
-          options: ['blue', 'green', 'purple', 'red', 'yellow', 'indigo'],
-        },
-        { key: 'order', label: 'Order', type: 'number' },
-      ],
-      topics: [
-        { key: 'name', label: 'Name', type: 'text' },
-        { key: 'description', label: 'Description', type: 'textarea' },
-        {
-          key: 'difficulty',
-          label: 'Difficulty',
-          type: 'select',
-          options: ['beginner', 'intermediate', 'advanced'],
-        },
-        { key: 'order', label: 'Order', type: 'number' },
-      ],
-      questions: [
-        { key: 'title', label: 'Title', type: 'text' },
-        { key: 'content', label: 'Content', type: 'textarea' },
-        {
-          key: 'difficulty',
-          label: 'Difficulty',
-          type: 'select',
-          options: ['beginner', 'intermediate', 'advanced'],
-        },
-        { key: 'category', label: 'Category', type: 'text' },
-        { key: 'topic', label: 'Topic', type: 'text' },
-      ],
-    };
-
-    return fieldConfigs[type] || [];
+  const handleCancelOperation = async (operationId: string) => {
+    try {
+      await cancelOperation.mutateAsync(operationId);
+    } catch (error) {
+      console.error('Failed to cancel operation:', error);
+    }
   };
 
-  const renderFieldInput = (field: {
-    key: string;
-    label: string;
-    type: string;
-    options?: string[];
-  }) => {
-    const value = bulkEditForm[field.key] || '';
-
-    switch (field.type) {
-      case 'textarea':
-        return (
-          <Textarea
-            value={value}
-            onChange={e =>
-              setBulkEditForm(prev => ({
-                ...prev,
-                [field.key]: e.target.value,
-              }))
-            }
-            placeholder={`Enter ${field.label.toLowerCase()}`}
-          />
-        );
-      case 'select':
-        return (
-          <Select
-            value={value}
-            onValueChange={val =>
-              setBulkEditForm(prev => ({ ...prev, [field.key]: val }))
-            }
-          >
-            <SelectTrigger>
-              <SelectValue
-                placeholder={`Select ${field.label.toLowerCase()}`}
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {field.options?.map(option => (
-                <SelectItem key={option} value={option}>
-                  {option.charAt(0).toUpperCase() + option.slice(1)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        );
-      case 'number':
-        return (
-          <Input
-            type="number"
-            value={value}
-            onChange={e =>
-              setBulkEditForm(prev => ({
-                ...prev,
-                [field.key]: parseInt(e.target.value) || 0,
-              }))
-            }
-            placeholder={`Enter ${field.label.toLowerCase()}`}
-          />
-        );
+  const getOperationIcon = (type: string) => {
+    switch (type) {
+      case 'delete':
+        return <Trash2 className="h-4 w-4" />;
+      case 'edit':
+        return <Edit className="h-4 w-4" />;
+      case 'activate':
+        return <CheckCircle className="h-4 w-4" />;
+      case 'deactivate':
+        return <XCircle className="h-4 w-4" />;
       default:
-        return (
-          <Input
-            value={value}
-            onChange={e =>
-              setBulkEditForm(prev => ({
-                ...prev,
-                [field.key]: e.target.value,
-              }))
-            }
-            placeholder={`Enter ${field.label.toLowerCase()}`}
-          />
-        );
+        return <Settings className="h-4 w-4" />;
     }
   };
 
-  if (items.length === 0) return null;
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      case 'failed':
+        return 'bg-red-100 text-red-800';
+      case 'running':
+        return 'bg-blue-100 text-blue-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString();
+  };
+
+  const formatDuration = (ms: number) => {
+    if (ms < 1000) return `${ms}ms`;
+    if (ms < 60000) return `${Math.round(ms / 1000)}s`;
+    return `${Math.round(ms / 60000)}m`;
+  };
 
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>Bulk Operations</span>
-          <div className="flex items-center space-x-2">
-            <Badge variant="outline">{selectedItems.length} selected</Badge>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleSelectAll}
-              className="flex items-center space-x-2"
-            >
-              {selectedItems.length === items.length ? (
-                <CheckSquare className="w-4 h-4" />
-              ) : (
-                <Square className="w-4 h-4" />
-              )}
-              <span>Select All</span>
-            </Button>
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {/* Items List with Checkboxes */}
-          <div className="max-h-60 overflow-y-auto space-y-2">
-            {items.map(item => (
-              <div
-                key={item.id}
-                className="flex items-center space-x-3 p-2 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
-              >
-                <Checkbox
-                  checked={selectedItems.includes(item.id)}
-                  onCheckedChange={() => handleSelectItem(item.id)}
-                />
-                <div className="flex-1">
-                  <span className="font-medium">
-                    {item.name || item.title || item.id}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Bulk Action Buttons */}
+    <div className="space-y-6">
+      {/* Bulk Operations Controls */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="h-5 w-5" />
+            Bulk Operations
+          </CardTitle>
+          <CardDescription>
+            Perform operations on {selectedItems.length} selected {targetType}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
           {selectedItems.length > 0 && (
-            <div className="flex items-center space-x-2 pt-4 border-t">
-              <Dialog open={isBulkEditOpen} onOpenChange={setIsBulkEditOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="flex items-center space-x-2"
-                    disabled={isProcessing}
-                  >
-                    <Edit3 className="w-4 h-4" />
-                    <span>Bulk Edit ({selectedItems.length})</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Bulk Edit {type}</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <Alert>
-                      <AlertTriangle className="h-4 w-4" />
-                      <AlertDescription>
-                        This will update {selectedItems.length} {type}. Leave
-                        fields empty to keep current values.
-                      </AlertDescription>
-                    </Alert>
-                    {getEditableFields().map(field => (
-                      <div key={field.key} className="space-y-2">
-                        <Label htmlFor={field.key}>{field.label}</Label>
-                        {renderFieldInput(field)}
-                      </div>
-                    ))}
-                    <div className="flex justify-end space-x-2">
-                      <Button
-                        variant="outline"
-                        onClick={() => setIsBulkEditOpen(false)}
-                        disabled={isProcessing}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={handleBulkEdit}
-                        disabled={
-                          isProcessing || Object.keys(bulkEditForm).length === 0
-                        }
-                      >
-                        {isProcessing ? (
-                          <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            Processing...
-                          </>
-                        ) : (
-                          'Apply Changes'
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
-
-              <Dialog
-                open={isBulkDeleteOpen}
-                onOpenChange={setIsBulkDeleteOpen}
+            <div className="flex items-center gap-4">
+              <Select
+                value={operationType}
+                onValueChange={(value: any) => setOperationType(value)}
               >
-                <DialogTrigger asChild>
-                  <Button
-                    variant="destructive"
-                    className="flex items-center space-x-2"
-                    disabled={isProcessing}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    <span>Bulk Delete ({selectedItems.length})</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Confirm Bulk Delete</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <Alert>
-                      <AlertTriangle className="h-4 w-4" />
-                      <AlertDescription>
-                        Are you sure you want to delete {selectedItems.length}{' '}
-                        {type}? This action cannot be undone.
-                      </AlertDescription>
-                    </Alert>
-                    <div className="flex justify-end space-x-2">
-                      <Button
-                        variant="outline"
-                        onClick={() => setIsBulkDeleteOpen(false)}
-                        disabled={isProcessing}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        onClick={handleBulkDelete}
-                        disabled={isProcessing}
-                      >
-                        {isProcessing ? (
-                          <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            Deleting...
-                          </>
-                        ) : (
-                          'Delete All'
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="Select operation" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="delete">Delete</SelectItem>
+                  <SelectItem value="edit">Edit</SelectItem>
+                  <SelectItem value="activate">Activate</SelectItem>
+                  <SelectItem value="deactivate">Deactivate</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {operationType === 'edit' && (
+                <div className="flex-1 space-y-2">
+                  <Label htmlFor="edit-field">Field to update</Label>
+                  <Input
+                    id="edit-field"
+                    placeholder="Field name (e.g., isActive, difficulty)"
+                    value={editData.field || ''}
+                    onChange={e =>
+                      setEditData({ ...editData, field: e.target.value })
+                    }
+                  />
+                  <Label htmlFor="edit-value">New value</Label>
+                  <Input
+                    id="edit-value"
+                    placeholder="New value"
+                    value={editData.value || ''}
+                    onChange={e =>
+                      setEditData({ ...editData, value: e.target.value })
+                    }
+                  />
+                </div>
+              )}
+
+              <Button
+                onClick={handleBulkOperation}
+                disabled={
+                  bulkDelete.isPending ||
+                  bulkEdit.isPending ||
+                  bulkActivate.isPending ||
+                  bulkDeactivate.isPending
+                }
+                className="flex items-center gap-2"
+              >
+                {(bulkDelete.isPending ||
+                  bulkEdit.isPending ||
+                  bulkActivate.isPending ||
+                  bulkDeactivate.isPending) && (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                )}
+                {getOperationIcon(operationType)}
+                Execute {operationType}
+              </Button>
             </div>
           )}
-        </div>
-      </CardContent>
-    </Card>
+
+          {selectedItems.length === 0 && (
+            <Alert>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                Select items from the list above to perform bulk operations.
+              </AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Statistics */}
+      {stats && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Bulk Operations Statistics</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold">
+                  {stats.totalOperations}
+                </div>
+                <div className="text-sm text-gray-600">Total Operations</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">
+                  {stats.completedOperations}
+                </div>
+                <div className="text-sm text-gray-600">Completed</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-600">
+                  {stats.failedOperations}
+                </div>
+                <div className="text-sm text-gray-600">Failed</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">
+                  {stats.runningOperations}
+                </div>
+                <div className="text-sm text-gray-600">Running</div>
+              </div>
+            </div>
+            {stats.averageProcessingTime > 0 && (
+              <div className="mt-4 text-center">
+                <div className="text-sm text-gray-600">
+                  Average Processing Time:{' '}
+                  {formatDuration(stats.averageProcessingTime)}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Recent Operations */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Operations</CardTitle>
+          <CardDescription>
+            Track the progress of recent bulk operations
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {operationsLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin" />
+              <span className="ml-2">Loading operations...</span>
+            </div>
+          ) : operations && operations.length > 0 ? (
+            <div className="space-y-4">
+              {operations.map((operation: any) => (
+                <div key={operation.id} className="border rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      {getOperationIcon(operation.type)}
+                      <span className="font-medium">
+                        {operation.type} {operation.totalItems}{' '}
+                        {operation.targetType}
+                      </span>
+                      <Badge className={getStatusColor(operation.status)}>
+                        {operation.status}
+                      </Badge>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      {formatDate(operation.createdAt)}
+                    </div>
+                  </div>
+
+                  {operation.status === 'running' && (
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span>
+                          Progress: {operation.processedItems} /{' '}
+                          {operation.totalItems}
+                        </span>
+                        <span>{operation.progress}%</span>
+                      </div>
+                      <Progress value={operation.progress} className="h-2" />
+                      <div className="flex justify-end">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleCancelOperation(operation.id)}
+                          disabled={cancelOperation.isPending}
+                        >
+                          {cancelOperation.isPending && (
+                            <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                          )}
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {operation.status === 'completed' && (
+                    <div className="text-sm text-green-600">
+                      ✅ Completed successfully
+                    </div>
+                  )}
+
+                  {operation.status === 'failed' && (
+                    <div className="space-y-2">
+                      <div className="text-sm text-red-600">
+                        ❌ Operation failed
+                      </div>
+                      {operation.errors && operation.errors.length > 0 && (
+                        <div className="text-xs text-red-500">
+                          Errors: {operation.errors.join(', ')}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {operation.completedAt && (
+                    <div className="text-xs text-gray-500 mt-2">
+                      Completed: {formatDate(operation.completedAt)}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              No bulk operations found
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };

@@ -1,345 +1,327 @@
-// Advanced Search Hook for React Components
-// Provides easy-to-use search functionality with TanStack Query integration
+/**
+ * Advanced Search Hook
+ * Provides React integration for the advanced search service
+ */
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   advancedSearchService,
   SearchFilters,
+  SearchOptions,
   SearchResult,
-  SearchableItem,
 } from '@/lib/advanced-search-service';
 
-export interface UseAdvancedSearchOptions<T extends SearchableItem> {
-  // Data source
-  data?: T[];
-  queryKey?: string[];
-  queryFn?: () => Promise<T[]>;
-
-  // Default filters
-  defaultFilters?: Partial<SearchFilters>;
-
-  // Search behavior
+export interface UseAdvancedSearchOptions {
   debounceMs?: number;
-  minSearchLength?: number;
-
-  // Pagination
-  defaultPageSize?: number;
-
-  // Auto-refetch
-  refetchInterval?: number;
-  enabled?: boolean;
+  enableSuggestions?: boolean;
+  enableAnalytics?: boolean;
+  cacheTime?: number;
+  staleTime?: number;
 }
 
-export interface UseAdvancedSearchReturn<T extends SearchableItem> {
+export interface UseAdvancedSearchReturn<T> {
   // Search state
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
+  query: string;
+  setQuery: (query: string) => void;
   filters: SearchFilters;
-  setFilters: (filters: Partial<SearchFilters>) => void;
-  updateFilter: (key: keyof SearchFilters, value: any) => void;
-  clearFilters: () => void;
+  setFilters: (filters: SearchFilters) => void;
+  options: SearchOptions;
+  setOptions: (options: SearchOptions) => void;
 
-  // Results
-  results: SearchResult<T>;
+  // Search results
+  data: T[] | undefined;
+  totalCount: number;
+  facets: any;
+  suggestions: string[];
   isLoading: boolean;
+  isError: boolean;
   error: Error | null;
+  searchTime: number;
+
+  // Search actions
+  search: (filters?: SearchFilters, options?: SearchOptions) => void;
+  clearSearch: () => void;
+  refresh: () => void;
+
+  // Facet actions
+  addFilter: (key: keyof SearchFilters, value: any) => void;
+  removeFilter: (key: keyof SearchFilters) => void;
+  clearFilters: () => void;
 
   // Pagination
   currentPage: number;
   setCurrentPage: (page: number) => void;
+  pageSize: number;
+  setPageSize: (size: number) => void;
   totalPages: number;
-  hasMore: boolean;
 
-  // Search stats
-  searchStats: {
-    totalItems: number;
-    activeItems: number;
-    categories: string[];
-    difficulties: string[];
-    tags: string[];
-  };
-
-  // Actions
-  refetch: () => void;
-  search: (filters: Partial<SearchFilters>) => Promise<void>;
-
-  // URL integration
-  updateUrl: () => void;
-  loadFromUrl: () => void;
-
-  // Suggestions
-  suggestions: string[];
+  // Analytics
+  searchAnalytics: any;
+  isLoadingAnalytics: boolean;
 }
 
-export function useAdvancedSearch<T extends SearchableItem>(
-  options: UseAdvancedSearchOptions<T> = {}
+export function useAdvancedSearch<T = any>(
+  initialFilters: SearchFilters = {},
+  initialOptions: SearchOptions = {},
+  hookOptions: UseAdvancedSearchOptions = {}
 ): UseAdvancedSearchReturn<T> {
   const {
-    data: providedData,
-    queryKey,
-    queryFn,
-    defaultFilters = {},
     debounceMs = 300,
-    minSearchLength = 0,
-    defaultPageSize = 10,
-    refetchInterval,
-    enabled = true,
-  } = options;
+    enableSuggestions = true,
+    enableAnalytics = true,
+    cacheTime = 5 * 60 * 1000, // 5 minutes
+    staleTime = 1 * 60 * 1000, // 1 minute
+  } = hookOptions;
 
   const queryClient = useQueryClient();
 
-  // State management
-  const [searchTerm, setSearchTerm] = useState(defaultFilters.searchTerm || '');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
-  const [filters, setFiltersState] = useState<SearchFilters>({
+  // Search state
+  const [query, setQuery] = useState('');
+  const [filters, setFilters] = useState<SearchFilters>(initialFilters);
+  const [options, setOptions] = useState<SearchOptions>({
     page: 1,
-    limit: defaultPageSize,
-    ...defaultFilters,
+    pageSize: 10,
+    includeFacets: true,
+    includeSuggestions: enableSuggestions,
+    ...initialOptions,
   });
-  const [currentPage, setCurrentPage] = useState(filters.page || 1);
 
-  // Debounce search term
+  // Debounced search query
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
+      setDebouncedQuery(query);
     }, debounceMs);
-    return () => clearTimeout(timer);
-  }, [searchTerm, debounceMs]);
 
-  // Fetch data if queryFn is provided
-  const {
-    data: fetchedData,
-    isLoading: isDataLoading,
-    error: dataError,
-    refetch,
-  } = useQuery({
-    queryKey: queryKey || ['advanced-search-data'],
-    queryFn: queryFn!,
-    enabled: enabled && !!queryFn,
-    refetchInterval,
+    return () => clearTimeout(timer);
+  }, [query, debounceMs]);
+
+  // Update filters when query changes
+  useEffect(() => {
+    if (debouncedQuery !== query) {
+      setFilters(prev => ({ ...prev, query: debouncedQuery }));
+    }
+  }, [debouncedQuery, query]);
+
+  // Search query
+  const searchQuery = useQuery({
+    queryKey: ['advanced-search', filters, options],
+    queryFn: () => advancedSearchService.searchQuestions(filters, options),
+    enabled: !!filters.query || Object.keys(filters).length > 0,
+    cacheTime,
+    staleTime,
+    retry: 2,
+    retryDelay: 1000,
   });
 
-  // Use provided data or fetched data
-  const data = providedData || fetchedData || [];
-  const isLoading = isDataLoading;
+  // Suggestions query
+  const suggestionsQuery = useQuery({
+    queryKey: ['search-suggestions', query],
+    queryFn: () => advancedSearchService.getSuggestions(query),
+    enabled: enableSuggestions && query.length >= 2,
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 
-  // Update filters when search term changes
-  useEffect(() => {
-    if (debouncedSearchTerm !== filters.searchTerm) {
-      setFiltersState(prev => ({
-        ...prev,
-        searchTerm: debouncedSearchTerm,
-        page: 1, // Reset to first page when searching
-      }));
-      setCurrentPage(1);
-    }
-  }, [debouncedSearchTerm, filters.searchTerm]);
+  // Analytics query
+  const analyticsQuery = useQuery({
+    queryKey: ['search-analytics'],
+    queryFn: () => advancedSearchService.getSearchAnalytics(),
+    enabled: enableAnalytics,
+    cacheTime: 30 * 60 * 1000, // 30 minutes
+    staleTime: 15 * 60 * 1000, // 15 minutes
+  });
 
-  // Perform search
-  const searchResults = useMemo(() => {
-    if (!data || data.length === 0) {
-      return {
-        data: [],
-        totalCount: 0,
-        hasMore: false,
-        currentPage: 1,
-        totalPages: 0,
-        filters,
-        searchTime: 0,
-        suggestions: [],
-      };
-    }
+  // Search actions
+  const search = useCallback(
+    (newFilters?: SearchFilters, newOptions?: SearchOptions) => {
+      if (newFilters) setFilters(newFilters);
+      if (newOptions) setOptions(newOptions);
+    },
+    []
+  );
 
-    return advancedSearchService.search(data, {
-      ...filters,
-      searchTerm: debouncedSearchTerm,
-    });
-  }, [data, filters, debouncedSearchTerm]);
+  const clearSearch = useCallback(() => {
+    setQuery('');
+    setFilters({});
+    setOptions({ page: 1, pageSize: 10 });
+    queryClient.removeQueries({ queryKey: ['advanced-search'] });
+  }, [queryClient]);
 
-  // Search stats
-  const searchStats = useMemo(() => {
-    return advancedSearchService.getSearchStats(data);
-  }, [data]);
+  const refresh = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['advanced-search'] });
+  }, [queryClient]);
 
-  // Filter management
-  const setFilters = useCallback((newFilters: Partial<SearchFilters>) => {
-    setFiltersState(prev => ({
-      ...prev,
-      ...newFilters,
-      page: newFilters.page || 1, // Reset to first page when filters change
-    }));
-    setCurrentPage(newFilters.page || 1);
+  // Facet actions
+  const addFilter = useCallback((key: keyof SearchFilters, value: any) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
   }, []);
 
-  const updateFilter = useCallback(
-    (key: keyof SearchFilters, value: any) => {
-      setFilters({ [key]: value });
-    },
-    [setFilters]
-  );
+  const removeFilter = useCallback((key: keyof SearchFilters) => {
+    setFilters(prev => {
+      const newFilters = { ...prev };
+      delete newFilters[key];
+      return newFilters;
+    });
+  }, []);
 
   const clearFilters = useCallback(() => {
-    const clearedFilters: SearchFilters = {
-      page: 1,
-      limit: defaultPageSize,
-      ...defaultFilters,
-    };
-    setFiltersState(clearedFilters);
-    setCurrentPage(1);
-    setSearchTerm('');
-  }, [defaultFilters, defaultPageSize]);
-
-  // Search action
-  const search = useCallback(
-    async (searchFilters: Partial<SearchFilters>) => {
-      setFilters(searchFilters);
-    },
-    [setFilters]
-  );
-
-  // URL integration
-  const updateUrl = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      const url = advancedSearchService.createSearchUrl(
-        filters,
-        window.location.pathname
-      );
-      window.history.replaceState({}, '', url);
-    }
-  }, [filters]);
-
-  const loadFromUrl = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlFilters = advancedSearchService.parseSearchFilters(urlParams);
-
-      if (Object.keys(urlFilters).length > 0) {
-        setFiltersState(prev => ({ ...prev, ...urlFilters }));
-        if (urlFilters.searchTerm) {
-          setSearchTerm(urlFilters.searchTerm);
-        }
-        if (urlFilters.page) {
-          setCurrentPage(urlFilters.page);
-        }
-      }
-    }
+    setFilters({});
   }, []);
 
-  // Load filters from URL on mount
-  useEffect(() => {
-    loadFromUrl();
-  }, [loadFromUrl]);
+  // Pagination
+  const currentPage = options.page || 1;
+  const pageSize = options.pageSize || 10;
+  const totalPages = Math.ceil((searchQuery.data?.totalCount || 0) / pageSize);
 
-  // Update URL when filters change
+  const setCurrentPage = useCallback((page: number) => {
+    setOptions(prev => ({ ...prev, page }));
+  }, []);
+
+  const setPageSize = useCallback((size: number) => {
+    setOptions(prev => ({ ...prev, pageSize: size, page: 1 }));
+  }, []);
+
+  // Save search query for analytics
   useEffect(() => {
-    updateUrl();
-  }, [updateUrl]);
+    if (searchQuery.data && enableAnalytics) {
+      advancedSearchService.saveSearchQuery(
+        query,
+        filters,
+        searchQuery.data.totalCount
+      );
+    }
+  }, [searchQuery.data, query, filters, enableAnalytics]);
+
+  // Computed values
+  const data = searchQuery.data?.data;
+  const totalCount = searchQuery.data?.totalCount || 0;
+  const facets = searchQuery.data?.facets || {};
+  const suggestions = suggestionsQuery.data || [];
+  const searchTime = searchQuery.data?.searchTime || 0;
 
   return {
     // Search state
-    searchTerm,
-    setSearchTerm,
+    query,
+    setQuery,
     filters,
     setFilters,
-    updateFilter,
-    clearFilters,
+    options,
+    setOptions,
 
-    // Results
-    results: searchResults,
-    isLoading,
-    error: dataError,
+    // Search results
+    data,
+    totalCount,
+    facets,
+    suggestions,
+    isLoading: searchQuery.isLoading,
+    isError: searchQuery.isError,
+    error: searchQuery.error,
+    searchTime,
+
+    // Search actions
+    search,
+    clearSearch,
+    refresh,
+
+    // Facet actions
+    addFilter,
+    removeFilter,
+    clearFilters,
 
     // Pagination
     currentPage,
     setCurrentPage,
-    totalPages: searchResults.totalPages,
-    hasMore: searchResults.hasMore,
+    pageSize,
+    setPageSize,
+    totalPages,
 
-    // Search stats
-    searchStats,
-
-    // Actions
-    refetch,
-    search,
-
-    // URL integration
-    updateUrl,
-    loadFromUrl,
-
-    // Suggestions
-    suggestions: searchResults.suggestions || [],
+    // Analytics
+    searchAnalytics: analyticsQuery.data,
+    isLoadingAnalytics: analyticsQuery.isLoading,
   };
 }
 
-// Specialized hooks for different content types
-export function useQuestionsSearch(
-  options: Omit<UseAdvancedSearchOptions<any>, 'queryKey' | 'queryFn'> = {}
+/**
+ * Hook for global search across all content types
+ */
+export function useGlobalSearch(
+  initialFilters: SearchFilters = {},
+  initialOptions: SearchOptions = {},
+  hookOptions: UseAdvancedSearchOptions = {}
 ) {
-  return useAdvancedSearch({
-    ...options,
-    queryKey: ['questions-search'],
-    queryFn: async () => {
-      // Fetch all questions without pagination for client-side filtering
-      const response = await fetch('/api/questions/unified?pageSize=1000');
-      const data = await response.json();
-      return data.data || [];
+  const [query, setQuery] = useState('');
+  const [filters, setFilters] = useState<SearchFilters>(initialFilters);
+  const [options, setOptions] = useState<SearchOptions>({
+    page: 1,
+    pageSize: 10,
+    includeFacets: true,
+    includeSuggestions: true,
+    ...initialOptions,
+  });
+
+  const globalSearchQuery = useQuery({
+    queryKey: ['global-search', filters, options],
+    queryFn: () => advancedSearchService.searchAll(filters, options),
+    enabled: !!filters.query || Object.keys(filters).length > 0,
+    cacheTime: 5 * 60 * 1000,
+    staleTime: 1 * 60 * 1000,
+  });
+
+  const search = useCallback(
+    (newFilters?: SearchFilters, newOptions?: SearchOptions) => {
+      if (newFilters) setFilters(newFilters);
+      if (newOptions) setOptions(newOptions);
     },
+    []
+  );
+
+  const clearSearch = useCallback(() => {
+    setQuery('');
+    setFilters({});
+    setOptions({ page: 1, pageSize: 10 });
+  }, []);
+
+  return {
+    query,
+    setQuery,
+    filters,
+    setFilters,
+    options,
+    setOptions,
+    data: globalSearchQuery.data,
+    isLoading: globalSearchQuery.isLoading,
+    isError: globalSearchQuery.isError,
+    error: globalSearchQuery.error,
+    search,
+    clearSearch,
+    refresh: () => globalSearchQuery.refetch(),
+  };
+}
+
+/**
+ * Hook for search suggestions
+ */
+export function useSearchSuggestions(query: string, limit: number = 10) {
+  return useQuery({
+    queryKey: ['search-suggestions', query, limit],
+    queryFn: () => advancedSearchService.getSuggestions(query, limit),
+    enabled: query.length >= 2,
+    cacheTime: 10 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
   });
 }
 
-export function useCardsSearch(
-  options: Omit<UseAdvancedSearchOptions<any>, 'queryKey' | 'queryFn'> = {}
-) {
-  return useAdvancedSearch({
-    ...options,
-    queryKey: ['cards-search'],
-    queryFn: async () => {
-      const response = await fetch('/api/cards');
-      const data = await response.json();
-      return data.data || [];
-    },
-  });
-}
-
-export function usePlansSearch(
-  options: Omit<UseAdvancedSearchOptions<any>, 'queryKey' | 'queryFn'> = {}
-) {
-  return useAdvancedSearch({
-    ...options,
-    queryKey: ['plans-search'],
-    queryFn: async () => {
-      const response = await fetch('/api/plans');
-      const data = await response.json();
-      return data.data || [];
-    },
-  });
-}
-
-export function useFrontendTasksSearch(
-  options: Omit<UseAdvancedSearchOptions<any>, 'queryKey' | 'queryFn'> = {}
-) {
-  return useAdvancedSearch({
-    ...options,
-    queryKey: ['frontend-tasks-search'],
-    queryFn: async () => {
-      const response = await fetch('/api/admin/frontend-tasks');
-      const data = await response.json();
-      return data.data || [];
-    },
-  });
-}
-
-export function useProblemSolvingSearch(
-  options: Omit<UseAdvancedSearchOptions<any>, 'queryKey' | 'queryFn'> = {}
-) {
-  return useAdvancedSearch({
-    ...options,
-    queryKey: ['problem-solving-search'],
-    queryFn: async () => {
-      const response = await fetch('/api/admin/problem-solving');
-      const data = await response.json();
-      return data.data || [];
-    },
+/**
+ * Hook for search analytics
+ */
+export function useSearchAnalytics() {
+  return useQuery({
+    queryKey: ['search-analytics'],
+    queryFn: () => advancedSearchService.getSearchAnalytics(),
+    cacheTime: 30 * 60 * 1000,
+    staleTime: 15 * 60 * 1000,
   });
 }

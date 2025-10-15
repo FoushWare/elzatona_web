@@ -23,7 +23,6 @@ import {
   Trash2,
   Loader2,
   Eye,
-  Search,
   BookOpen,
   ChevronLeft,
   ChevronRight,
@@ -39,18 +38,14 @@ import {
 import { Label } from '@/shared/components/ui/label';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { Checkbox } from '@/shared/components/ui/checkbox';
-import { UnifiedQuestion } from '@/lib/unified-question-schema';
+import { AdvancedSearch } from '@/shared/components/common/AdvancedSearch';
 
 type Question = UnifiedQuestion;
 
 export default function AdminContentQuestionsPage() {
-  // Local state for search and pagination
-  const [searchTerm, setSearchTerm] = useState('');
+  // Local state for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
-  const [selectedType, setSelectedType] = useState<string>('all');
 
   // Data state
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -143,40 +138,8 @@ export default function AdminContentQuestionsPage() {
     return types.sort();
   }, [questions]);
 
-  // Filtered questions based on local search and filters
-  const filteredQuestions = useMemo(() => {
-    let filtered = questions;
-
-    if (searchTerm) {
-      const lowerCaseSearchTerm = searchTerm.toLowerCase();
-      filtered = filtered.filter(
-        q =>
-          q.title.toLowerCase().includes(lowerCaseSearchTerm) ||
-          q.content.toLowerCase().includes(lowerCaseSearchTerm) ||
-          q.tags?.some(tag => tag.toLowerCase().includes(lowerCaseSearchTerm))
-      );
-    }
-
-    if (selectedCategory !== 'all' && selectedCategory) {
-      filtered = filtered.filter(q => q.category === selectedCategory);
-    }
-
-    if (selectedDifficulty !== 'all' && selectedDifficulty) {
-      filtered = filtered.filter(q => q.difficulty === selectedDifficulty);
-    }
-
-    if (selectedType !== 'all' && selectedType) {
-      filtered = filtered.filter(q => q.type === selectedType);
-    }
-
-    return filtered;
-  }, [
-    questions,
-    searchTerm,
-    selectedCategory,
-    selectedDifficulty,
-    selectedType,
-  ]);
+  // Questions list - now managed by AdvancedSearch component
+  const displayQuestions = questions;
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -384,82 +347,34 @@ export default function AdminContentQuestionsPage() {
                   Filtered Results
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {filteredQuestions.length}
+                  {displayQuestions.length}
                 </p>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Search and Filter Controls */}
-        <Card className="mb-6">
-          <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search questions..."
-                  value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              <Select
-                value={selectedCategory}
-                onValueChange={setSelectedCategory}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="All Categories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  {allCategories.map(category => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select
-                value={selectedDifficulty}
-                onValueChange={setSelectedDifficulty}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="All Difficulties" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Difficulties</SelectItem>
-                  <SelectItem value="beginner">Beginner</SelectItem>
-                  <SelectItem value="intermediate">Intermediate</SelectItem>
-                  <SelectItem value="advanced">Advanced</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select value={selectedType} onValueChange={setSelectedType}>
-                <SelectTrigger>
-                  <SelectValue placeholder="All Types" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  {allTypes.map(type => (
-                    <SelectItem key={type} value={type}>
-                      {type.charAt(0).toUpperCase() +
-                        type.slice(1).replace('-', ' ')}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Advanced Search */}
+        <AdvancedSearch
+          onResultsChange={results => {
+            setQuestions(results);
+            setTotalCount(results.length);
+          }}
+          onFacetsChange={facets => {
+            // Update facets if needed
+          }}
+          placeholder="Search questions by title, content, tags..."
+          showFilters={true}
+          showFacets={true}
+          showSuggestions={true}
+          showAnalytics={true}
+        />
 
         {/* Questions List */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <span>Questions ({filteredQuestions.length})</span>
+              <span>Questions ({displayQuestions.length})</span>
               <Button
                 className="flex items-center space-x-2"
                 onClick={() => setIsCreateModalOpen(true)}
@@ -471,24 +386,19 @@ export default function AdminContentQuestionsPage() {
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800">
-              {filteredQuestions.length === 0 ? (
+              {displayQuestions.length === 0 ? (
                 <div className="text-center py-12">
                   <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                     No questions found
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    {searchTerm ||
-                    selectedCategory !== 'all' ||
-                    selectedDifficulty !== 'all' ||
-                    selectedType !== 'all'
-                      ? 'Try adjusting your search criteria'
-                      : 'No questions available'}
+                    No questions available
                   </p>
                 </div>
               ) : (
                 <div className="space-y-1">
-                  {filteredQuestions.map(question => (
+                  {displayQuestions.map(question => (
                     <div
                       key={question.id}
                       className="p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"

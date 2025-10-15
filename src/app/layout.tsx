@@ -10,6 +10,7 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { OnboardingProvider } from '@/contexts/OnboardingContext';
 import { NotificationProvider } from '@/contexts/NotificationContext';
+import { ConditionalLayout } from '@/shared/components/common/ConditionalLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
