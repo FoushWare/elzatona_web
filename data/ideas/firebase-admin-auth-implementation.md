@@ -6,8 +6,6 @@ This document outlines the implementation of a secure Firebase-based admin authe
 
 ## Requirements
 
-- **Admin Email**: `afouadsoftwareengineer@gmail.com`
-- **Admin Password**: `zatonafoushware$8888`
 - **Max Audio File Size**: 10MB
 - **Admin Roles**: Support for different permission levels (super admin vs. regular admin)
 - **Audio Formats**: All audio formats supported
