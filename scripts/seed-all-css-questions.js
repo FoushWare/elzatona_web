@@ -5,34 +5,53 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const scripts = [
-  'seed-css-01-20.js',
+const seedingScripts = [
+  'seed-css-1.js',
   'seed-css-21-40.js',
-  'seed-css-16-80.js',
   'seed-css-41-60.js',
+  'seed-css-16-80.js',
   'seed-css-81-100.js',
 ];
 
-async function seedAllCSSQuestions() {
-  console.log('🚀 Starting full CSS questions seeding process...');
+async function runSeedingScripts() {
+  console.log('🚀 Starting CSS questions seeding process...');
+  console.log(`📁 Found ${seedingScripts.length} seeding scripts to run`);
 
-  for (const script of scripts) {
-    const scriptPath = path.join(__dirname, script);
-    console.log(`\nExecuting: node ${scriptPath}`);
+  let successCount = 0;
+  let errorCount = 0;
+
+  for (const script of seedingScripts) {
     try {
-      const { stdout, stderr } = await execa('node', [scriptPath], {
+      console.log(`\n🔄 Running ${script}...`);
+      const scriptPath = path.join(__dirname, script);
+
+      await execa('node', [scriptPath], {
         stdio: 'inherit',
+        cwd: __dirname,
       });
-      if (stdout) console.log(stdout);
-      if (stderr) console.error(stderr);
-      console.log(`✅ Successfully completed ${script}`);
+
+      console.log(`✅ ${script} completed successfully`);
+      successCount++;
     } catch (error) {
-      console.error(`❌ Error executing ${script}:`, error.message);
-      process.exit(1);
+      console.error(`❌ ${script} failed:`, error.message);
+      errorCount++;
     }
   }
 
-  console.log('\n🎉 All CSS questions seeding completed successfully!');
+  console.log('\n📊 Seeding Summary:');
+  console.log(`✅ Successful: ${successCount}`);
+  console.log(`❌ Failed: ${errorCount}`);
+  console.log(`📁 Total scripts: ${seedingScripts.length}`);
+
+  if (errorCount === 0) {
+    console.log('\n🎉 All CSS questions seeded successfully!');
+  } else {
+    console.log('\n⚠️  Some scripts failed. Please check the errors above.');
+    process.exit(1);
+  }
 }
 
-seedAllCSSQuestions().catch(console.error);
+runSeedingScripts().catch(error => {
+  console.error('💥 Master seeding script failed:', error);
+  process.exit(1);
+});
