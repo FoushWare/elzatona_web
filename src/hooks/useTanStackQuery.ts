@@ -135,8 +135,14 @@ const api = {
   },
 
   // Learning Cards
-  getCards: () =>
-    api.fetch<{ data: LearningCard[]; count: number }>('/api/cards'),
+  getCards: async () => {
+    const response = await api.fetch<{
+      success: boolean;
+      data: LearningCard[];
+      count: number;
+    }>('/api/cards');
+    return { data: response.data, count: response.count };
+  },
   getCard: (id: string) => api.fetch<LearningCard>(`/api/cards/${id}`),
   createCard: (data: Partial<LearningCard>) =>
     api.fetch<LearningCard>('/api/cards', {
@@ -154,8 +160,14 @@ const api = {
     }),
 
   // Learning Plans
-  getPlans: () =>
-    api.fetch<{ data: LearningPlan[]; count: number }>('/api/plans'),
+  getPlans: async () => {
+    const response = await api.fetch<{
+      success: boolean;
+      data: LearningPlan[];
+      count: number;
+    }>('/api/plans');
+    return { data: response.data, count: response.count };
+  },
   getPlan: (id: string) => api.fetch<LearningPlan>(`/api/plans/${id}`),
   createPlan: (data: Partial<LearningPlan>) =>
     api.fetch<LearningPlan>('/api/plans', {
@@ -173,8 +185,14 @@ const api = {
     }),
 
   // Categories
-  getCategories: () =>
-    api.fetch<{ data: Category[]; count: number }>('/api/categories'),
+  getCategories: async () => {
+    const response = await api.fetch<{
+      success: boolean;
+      data: Category[];
+      count: number;
+    }>('/api/categories');
+    return { data: response.data, count: response.count };
+  },
   getCategory: (id: string) => api.fetch<Category>(`/api/categories/${id}`),
   createCategory: (data: Partial<Category>) =>
     api.fetch<Category>('/api/categories', {
@@ -192,7 +210,14 @@ const api = {
     }),
 
   // Topics
-  getTopics: () => api.fetch<{ data: Topic[]; count: number }>('/api/topics'),
+  getTopics: async () => {
+    const response = await api.fetch<{
+      success: boolean;
+      data: Topic[];
+      count: number;
+    }>('/api/topics');
+    return { data: response.data, count: response.count };
+  },
   getTopic: (id: string) => api.fetch<Topic>(`/api/topics/${id}`),
   createTopic: (data: Partial<Topic>) =>
     api.fetch<Topic>('/api/topics', {
@@ -210,7 +235,7 @@ const api = {
     }),
 
   // Questions
-  getQuestions: (params?: {
+  getQuestions: async (params?: {
     cardType?: string;
     category?: string;
     topic?: string;
@@ -227,16 +252,23 @@ const api = {
       });
     }
     const queryString = searchParams.toString();
-    return api.fetch<{ data: UnifiedQuestion[]; count: number }>(
-      `/api/questions${queryString ? `?${queryString}` : ''}`
-    );
+    const response = await api.fetch<{
+      success: boolean;
+      data: UnifiedQuestion[];
+      count: number;
+    }>(`/api/questions${queryString ? `?${queryString}` : ''}`);
+    return { data: response.data, count: response.count };
   },
   getQuestion: (id: string) =>
     api.fetch<UnifiedQuestion>(`/api/questions/${id}`),
-  getQuestionsByTopic: (topicId: string) =>
-    api.fetch<{ data: UnifiedQuestion[]; count: number }>(
-      `/api/questions/by-topic/${topicId}`
-    ),
+  getQuestionsByTopic: async (topicId: string) => {
+    const response = await api.fetch<{
+      success: boolean;
+      data: UnifiedQuestion[];
+      count: number;
+    }>(`/api/questions/by-topic/${topicId}`);
+    return { data: response.data, count: response.count };
+  },
   getQuestionsUnified: (params?: { page?: number; limit?: number }) => {
     const searchParams = new URLSearchParams();
     if (params) {
