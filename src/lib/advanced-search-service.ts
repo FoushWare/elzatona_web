@@ -1,102 +1,55 @@
-// Advanced Search Service for Elzatona Learning Platform
-// Provides comprehensive search and filtering capabilities across all content types
+/**
+ * Advanced Search Service
+ * Provides comprehensive search and filtering capabilities across all content types
+ */
 
 export interface SearchFilters {
-  // Text search
-  searchTerm?: string;
-
-  // Content type filters
-  contentType?:
-    | 'questions'
-    | 'cards'
-    | 'plans'
-    | 'categories'
-    | 'topics'
-    | 'frontend-tasks'
-    | 'problem-solving'
-    | 'all';
-
-  // Difficulty filters
-  difficulty?: 'easy' | 'medium' | 'hard' | 'intermediate' | 'all';
-
-  // Category and topic filters
+  query?: string;
   category?: string;
-  topic?: string;
-  cardType?: string;
-  planId?: string;
-
-  // Learning path filters
-  learningPath?: string;
-  sectionId?: string;
-
-  // Status filters
-  isActive?: boolean;
-  isComplete?: boolean;
-
-  // Date filters
-  dateFrom?: string;
-  dateTo?: string;
-
-  // Tag filters
+  difficulty?: string;
+  type?: string;
+  learningCardId?: string;
   tags?: string[];
-
-  // Sorting options
-  sortBy?:
-    | 'createdAt'
-    | 'updatedAt'
-    | 'title'
-    | 'difficulty'
-    | 'order'
-    | 'relevance';
-  sortDirection?: 'asc' | 'desc';
-
-  // Pagination
-  page?: number;
-  limit?: number;
-
-  // Advanced search options
-  exactMatch?: boolean;
-  caseSensitive?: boolean;
-  includeInactive?: boolean;
+  isActive?: boolean;
+  dateRange?: {
+    start: Date;
+    end: Date;
+  };
+  pointsRange?: {
+    min: number;
+    max: number;
+  };
 }
 
 export interface SearchResult<T> {
   data: T[];
   totalCount: number;
-  hasMore: boolean;
-  currentPage: number;
-  totalPages: number;
-  filters: SearchFilters;
+  facets: {
+    categories: { [key: string]: number };
+    difficulties: { [key: string]: number };
+    types: { [key: string]: number };
+    learningCards: { [key: string]: number };
+    tags: { [key: string]: number };
+  };
+  suggestions: string[];
   searchTime: number;
-  suggestions?: string[];
 }
 
-export interface SearchableItem {
-  id: string;
-  title?: string;
-  name?: string;
-  content?: string;
-  description?: string;
-  difficulty?: string;
-  category?: string;
-  topic?: string;
-  tags?: string[];
-  createdAt?: any;
-  updatedAt?: any;
-  isActive?: boolean;
-  isComplete?: boolean;
-  learningPath?: string;
-  sectionId?: string;
-  cardType?: string;
-  planId?: string;
+export interface SearchOptions {
+  page?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  includeFacets?: boolean;
+  includeSuggestions?: boolean;
 }
 
 export class AdvancedSearchService {
   private static instance: AdvancedSearchService;
+  private searchCache: Map<string, any> = new Map();
+  private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-  private constructor() {}
-
-  public static getInstance(): AdvancedSearchService {
+  static getInstance(): AdvancedSearchService {
     if (!AdvancedSearchService.instance) {
       AdvancedSearchService.instance = new AdvancedSearchService();
     }
@@ -104,507 +57,396 @@ export class AdvancedSearchService {
   }
 
   /**
-   * Perform advanced search across multiple content types
+   * Search questions with advanced filtering
    */
-  async search<T extends SearchableItem>(
-    items: T[],
-    filters: SearchFilters
-  ): Promise<SearchResult<T>> {
+  async searchQuestions(
+    filters: SearchFilters,
+    options: SearchOptions = {}
+  ): Promise<SearchResult<any>> {
+    const startTime = Date.now();
+    const cacheKey = this.generateCacheKey('questions', filters, options);
+
+    // Check cache first
+    const cached = this.getFromCache(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    try {
+      const response = await fetch('/api/search/questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ filters, options }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.status}`);
+      }
+
+      const result = await response.json();
+      result.searchTime = Date.now() - startTime;
+
+      // Cache the result
+      this.setCache(cacheKey, result);
+
+      return result;
+    } catch (error) {
+      console.error('Search error:', error);
+      // Fallback to client-side search
+      return this.fallbackSearch(filters, options);
+    }
+  }
+
+  /**
+   * Search across all content types
+   */
+  async searchAll(
+    filters: SearchFilters,
+    options: SearchOptions = {}
+  ): Promise<{
+    questions: SearchResult<any>;
+    categories: SearchResult<any>;
+    topics: SearchResult<any>;
+    learningCards: SearchResult<any>;
+    learningPlans: SearchResult<any>;
+  }> {
     const startTime = Date.now();
 
-    // Apply filters
-    let filteredItems = this.applyFilters(items, filters);
+    try {
+      const [questions, categories, topics, learningCards, learningPlans] =
+        await Promise.all([
+          this.searchQuestions(filters, options),
+          this.searchCategories(filters, options),
+          this.searchTopics(filters, options),
+          this.searchLearningCards(filters, options),
+          this.searchLearningPlans(filters, options),
+        ]);
 
-    // Apply text search
-    if (filters.searchTerm) {
-      filteredItems = this.applyTextSearch(filteredItems, filters);
+      return {
+        questions,
+        categories,
+        topics,
+        learningCards,
+        learningPlans,
+      };
+    } catch (error) {
+      console.error('Global search error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get search suggestions based on query
+   */
+  async getSuggestions(query: string, limit: number = 10): Promise<string[]> {
+    if (!query || query.length < 2) return [];
+
+    try {
+      const response = await fetch(
+        `/api/search/suggestions?q=${encodeURIComponent(query)}&limit=${limit}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data.suggestions || [];
+      }
+    } catch (error) {
+      console.error('Suggestions error:', error);
     }
 
-    // Apply sorting
-    filteredItems = this.applySorting(filteredItems, filters);
+    return [];
+  }
 
-    // Apply pagination
-    const paginatedResult = this.applyPagination(filteredItems, filters);
-
-    const searchTime = Date.now() - startTime;
+  /**
+   * Get search analytics
+   */
+  async getSearchAnalytics(): Promise<{
+    popularSearches: { query: string; count: number }[];
+    searchTrends: { date: string; count: number }[];
+    topCategories: { category: string; count: number }[];
+    searchPerformance: {
+      averageResponseTime: number;
+      cacheHitRate: number;
+      totalSearches: number;
+    };
+  }> {
+    try {
+      const response = await fetch('/api/search/analytics');
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.error('Analytics error:', error);
+    }
 
     return {
-      data: paginatedResult.data,
-      totalCount: filteredItems.length,
-      hasMore: paginatedResult.hasMore,
-      currentPage: filters.page || 1,
-      totalPages: paginatedResult.totalPages,
-      filters,
-      searchTime,
-      suggestions: this.generateSuggestions(items, filters.searchTerm),
+      popularSearches: [],
+      searchTrends: [],
+      topCategories: [],
+      searchPerformance: {
+        averageResponseTime: 0,
+        cacheHitRate: 0,
+        totalSearches: 0,
+      },
     };
   }
 
   /**
-   * Apply content filters
+   * Save search query for analytics
    */
-  private applyFilters<T extends SearchableItem>(
-    items: T[],
-    filters: SearchFilters
-  ): T[] {
-    return items.filter(item => {
-      // Content type filter
-      if (filters.contentType && filters.contentType !== 'all') {
-        if (!this.matchesContentType(item, filters.contentType)) {
-          return false;
-        }
-      }
-
-      // Difficulty filter
-      if (filters.difficulty && filters.difficulty !== 'all') {
-        if (item.difficulty !== filters.difficulty) {
-          return false;
-        }
-      }
-
-      // Category filter
-      if (filters.category) {
-        if (item.category !== filters.category) {
-          return false;
-        }
-      }
-
-      // Topic filter
-      if (filters.topic) {
-        if (item.topic !== filters.topic) {
-          return false;
-        }
-      }
-
-      // Card type filter
-      if (filters.cardType) {
-        if (item.cardType !== filters.cardType) {
-          return false;
-        }
-      }
-
-      // Plan ID filter
-      if (filters.planId) {
-        if (item.planId !== filters.planId) {
-          return false;
-        }
-      }
-
-      // Learning path filter
-      if (filters.learningPath) {
-        if (item.learningPath !== filters.learningPath) {
-          return false;
-        }
-      }
-
-      // Section ID filter
-      if (filters.sectionId) {
-        if (item.sectionId !== filters.sectionId) {
-          return false;
-        }
-      }
-
-      // Status filters
-      if (filters.isActive !== undefined) {
-        if (item.isActive !== filters.isActive) {
-          return false;
-        }
-      }
-
-      if (filters.isComplete !== undefined) {
-        if (item.isComplete !== filters.isComplete) {
-          return false;
-        }
-      }
-
-      // Date filters
-      if (filters.dateFrom || filters.dateTo) {
-        if (!this.matchesDateRange(item, filters.dateFrom, filters.dateTo)) {
-          return false;
-        }
-      }
-
-      // Tag filters
-      if (filters.tags && filters.tags.length > 0) {
-        if (!this.matchesTags(item, filters.tags)) {
-          return false;
-        }
-      }
-
-      // Include inactive filter
-      if (!filters.includeInactive && item.isActive === false) {
-        return false;
-      }
-
-      return true;
-    });
-  }
-
-  /**
-   * Apply text search with advanced options
-   */
-  private applyTextSearch<T extends SearchableItem>(
-    items: T[],
-    filters: SearchFilters
-  ): T[] {
-    if (!filters.searchTerm) {
-      return items;
-    }
-
-    const searchTerm = filters.caseSensitive
-      ? filters.searchTerm
-      : filters.searchTerm.toLowerCase();
-
-    return items.filter(item => {
-      const searchableFields = [
-        item.title,
-        item.name,
-        item.content,
-        item.description,
-        ...(item.tags || []),
-      ].filter(Boolean);
-
-      return searchableFields.some(field => {
-        const fieldValue = filters.caseSensitive ? field : field.toLowerCase();
-
-        if (filters.exactMatch) {
-          return fieldValue === searchTerm;
-        } else {
-          return fieldValue.includes(searchTerm);
-        }
+  async saveSearchQuery(
+    query: string,
+    filters: SearchFilters,
+    resultCount: number
+  ): Promise<void> {
+    try {
+      await fetch('/api/search/analytics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          filters,
+          resultCount,
+          timestamp: new Date().toISOString(),
+        }),
       });
-    });
+    } catch (error) {
+      console.error('Save search query error:', error);
+    }
   }
 
-  /**
-   * Apply sorting
-   */
-  private applySorting<T extends SearchableItem>(
-    items: T[],
-    filters: SearchFilters
-  ): T[] {
-    const sortBy = filters.sortBy || 'relevance';
-    const sortDirection = filters.sortDirection || 'desc';
-
-    return [...items].sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
-
-      switch (sortBy) {
-        case 'title':
-          aValue = a.title || a.name || '';
-          bValue = b.title || b.name || '';
-          break;
-        case 'difficulty':
-          aValue = this.getDifficultyOrder(a.difficulty);
-          bValue = this.getDifficultyOrder(b.difficulty);
-          break;
-        case 'createdAt':
-          aValue = a.createdAt;
-          bValue = b.createdAt;
-          break;
-        case 'updatedAt':
-          aValue = a.updatedAt;
-          bValue = b.updatedAt;
-          break;
-        case 'order':
-          aValue = (a as any).order || 0;
-          bValue = (b as any).order || 0;
-          break;
-        case 'relevance':
-          // For relevance, we'll use a simple scoring system
-          aValue = this.calculateRelevanceScore(a, filters);
-          bValue = this.calculateRelevanceScore(b, filters);
-          break;
-        default:
-          aValue = a.title || a.name || '';
-          bValue = b.title || b.name || '';
-      }
-
-      // Handle null/undefined values
-      if (aValue == null && bValue == null) return 0;
-      if (aValue == null) return sortDirection === 'asc' ? -1 : 1;
-      if (bValue == null) return sortDirection === 'asc' ? 1 : -1;
-
-      // Compare values
-      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
-      return 0;
-    });
-  }
-
-  /**
-   * Apply pagination
-   */
-  private applyPagination<T>(
-    items: T[],
-    filters: SearchFilters
-  ): { data: T[]; hasMore: boolean; totalPages: number } {
-    const page = filters.page || 1;
-    const limit = filters.limit || 10;
-    const offset = (page - 1) * limit;
-
-    const totalPages = Math.ceil(items.length / limit);
-    const hasMore = page < totalPages;
-
+  // Private methods for individual content type searches
+  private async searchCategories(
+    filters: SearchFilters,
+    options: SearchOptions
+  ): Promise<SearchResult<any>> {
+    // Implementation for category search
     return {
-      data: items.slice(offset, offset + limit),
-      hasMore,
-      totalPages,
+      data: [],
+      totalCount: 0,
+      facets: {} as any,
+      suggestions: [],
+      searchTime: 0,
+    };
+  }
+
+  private async searchTopics(
+    filters: SearchFilters,
+    options: SearchOptions
+  ): Promise<SearchResult<any>> {
+    // Implementation for topic search
+    return {
+      data: [],
+      totalCount: 0,
+      facets: {} as any,
+      suggestions: [],
+      searchTime: 0,
+    };
+  }
+
+  private async searchLearningCards(
+    filters: SearchFilters,
+    options: SearchOptions
+  ): Promise<SearchResult<any>> {
+    // Implementation for learning card search
+    return {
+      data: [],
+      totalCount: 0,
+      facets: {} as any,
+      suggestions: [],
+      searchTime: 0,
+    };
+  }
+
+  private async searchLearningPlans(
+    filters: SearchFilters,
+    options: SearchOptions
+  ): Promise<SearchResult<any>> {
+    // Implementation for learning plan search
+    return {
+      data: [],
+      totalCount: 0,
+      facets: {} as any,
+      suggestions: [],
+      searchTime: 0,
     };
   }
 
   /**
-   * Generate search suggestions based on content
+   * Fallback client-side search when API fails
    */
-  private generateSuggestions<T extends SearchableItem>(
-    items: T[],
-    searchTerm?: string
-  ): string[] {
-    if (!searchTerm || searchTerm.length < 2) {
-      return [];
-    }
+  private async fallbackSearch(
+    filters: SearchFilters,
+    options: SearchOptions
+  ): Promise<SearchResult<any>> {
+    const startTime = Date.now();
 
-    const suggestions = new Set<string>();
-    const searchLower = searchTerm.toLowerCase();
+    try {
+      // Fetch all questions and filter client-side
+      const response = await fetch(
+        '/api/questions/unified?page=1&pageSize=1000'
+      );
+      if (!response.ok) throw new Error('Failed to fetch questions');
 
-    items.forEach(item => {
-      // Add title/name suggestions
-      const title = item.title || item.name;
-      if (title && title.toLowerCase().includes(searchLower)) {
-        suggestions.add(title);
+      const result = await response.json();
+      let questions = result.data || [];
+
+      // Apply filters
+      if (filters.query) {
+        const query = filters.query.toLowerCase();
+        questions = questions.filter(
+          (q: any) =>
+            q.title.toLowerCase().includes(query) ||
+            q.content.toLowerCase().includes(query) ||
+            q.tags?.some((tag: string) => tag.toLowerCase().includes(query))
+        );
       }
 
-      // Add tag suggestions
-      if (item.tags) {
-        item.tags.forEach(tag => {
-          if (tag.toLowerCase().includes(searchLower)) {
-            suggestions.add(tag);
-          }
+      if (filters.category) {
+        questions = questions.filter(
+          (q: any) => q.category === filters.category
+        );
+      }
+
+      if (filters.difficulty) {
+        questions = questions.filter(
+          (q: any) => q.difficulty === filters.difficulty
+        );
+      }
+
+      if (filters.type) {
+        questions = questions.filter((q: any) => q.type === filters.type);
+      }
+
+      if (filters.learningCardId) {
+        questions = questions.filter(
+          (q: any) => q.learningCardId === filters.learningCardId
+        );
+      }
+
+      if (filters.isActive !== undefined) {
+        questions = questions.filter(
+          (q: any) => q.isActive === filters.isActive
+        );
+      }
+
+      // Calculate facets
+      const facets = this.calculateFacets(questions);
+
+      // Apply pagination
+      const page = options.page || 1;
+      const pageSize = options.pageSize || 10;
+      const startIndex = (page - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      const paginatedQuestions = questions.slice(startIndex, endIndex);
+
+      return {
+        data: paginatedQuestions,
+        totalCount: questions.length,
+        facets,
+        suggestions: [],
+        searchTime: Date.now() - startTime,
+      };
+    } catch (error) {
+      console.error('Fallback search error:', error);
+      return {
+        data: [],
+        totalCount: 0,
+        facets: {} as any,
+        suggestions: [],
+        searchTime: Date.now() - startTime,
+      };
+    }
+  }
+
+  /**
+   * Calculate search facets from results
+   */
+  private calculateFacets(questions: any[]): any {
+    const facets = {
+      categories: {} as { [key: string]: number },
+      difficulties: {} as { [key: string]: number },
+      types: {} as { [key: string]: number },
+      learningCards: {} as { [key: string]: number },
+      tags: {} as { [key: string]: number },
+    };
+
+    questions.forEach(question => {
+      // Categories
+      if (question.category) {
+        facets.categories[question.category] =
+          (facets.categories[question.category] || 0) + 1;
+      }
+
+      // Difficulties
+      if (question.difficulty) {
+        facets.difficulties[question.difficulty] =
+          (facets.difficulties[question.difficulty] || 0) + 1;
+      }
+
+      // Types
+      if (question.type) {
+        facets.types[question.type] = (facets.types[question.type] || 0) + 1;
+      }
+
+      // Learning Cards
+      if (question.learningCardId) {
+        facets.learningCards[question.learningCardId] =
+          (facets.learningCards[question.learningCardId] || 0) + 1;
+      }
+
+      // Tags
+      if (question.tags && Array.isArray(question.tags)) {
+        question.tags.forEach((tag: string) => {
+          facets.tags[tag] = (facets.tags[tag] || 0) + 1;
         });
       }
-
-      // Add category suggestions
-      if (item.category && item.category.toLowerCase().includes(searchLower)) {
-        suggestions.add(item.category);
-      }
     });
 
-    return Array.from(suggestions).slice(0, 10);
+    return facets;
   }
 
   /**
-   * Helper methods
+   * Generate cache key for search results
    */
-  private matchesContentType<T extends SearchableItem>(
-    item: T,
-    contentType: string
-  ): boolean {
-    // This would need to be implemented based on your data structure
-    // For now, we'll use a simple approach
-    return true; // Placeholder implementation
-  }
-
-  private matchesDateRange<T extends SearchableItem>(
-    item: T,
-    dateFrom?: string,
-    dateTo?: string
-  ): boolean {
-    const itemDate = item.createdAt || item.updatedAt;
-    if (!itemDate) return true;
-
-    const itemDateObj = new Date(itemDate);
-
-    if (dateFrom) {
-      const fromDate = new Date(dateFrom);
-      if (itemDateObj < fromDate) return false;
-    }
-
-    if (dateTo) {
-      const toDate = new Date(dateTo);
-      if (itemDateObj > toDate) return false;
-    }
-
-    return true;
-  }
-
-  private matchesTags<T extends SearchableItem>(
-    item: T,
-    requiredTags: string[]
-  ): boolean {
-    if (!item.tags) return false;
-
-    return requiredTags.every(tag =>
-      item.tags!.some(itemTag =>
-        itemTag.toLowerCase().includes(tag.toLowerCase())
-      )
-    );
-  }
-
-  private getDifficultyOrder(difficulty?: string): number {
-    switch (difficulty) {
-      case 'easy':
-        return 1;
-      case 'medium':
-        return 2;
-      case 'intermediate':
-        return 3;
-      case 'hard':
-        return 4;
-      default:
-        return 0;
-    }
-  }
-
-  private calculateRelevanceScore<T extends SearchableItem>(
-    item: T,
-    filters: SearchFilters
-  ): number {
-    let score = 0;
-
-    // Boost score for exact matches in title/name
-    if (filters.searchTerm) {
-      const searchTerm = filters.searchTerm.toLowerCase();
-      const title = (item.title || item.name || '').toLowerCase();
-
-      if (title.includes(searchTerm)) {
-        score += 10;
-      }
-
-      if (title.startsWith(searchTerm)) {
-        score += 5;
-      }
-
-      if (title === searchTerm) {
-        score += 20;
-      }
-    }
-
-    // Boost score for active items
-    if (item.isActive) {
-      score += 5;
-    }
-
-    // Boost score for recent items
-    if (item.updatedAt) {
-      const daysSinceUpdate =
-        (Date.now() - new Date(item.updatedAt).getTime()) /
-        (1000 * 60 * 60 * 24);
-      if (daysSinceUpdate < 7) {
-        score += 3;
-      }
-    }
-
-    return score;
+  private generateCacheKey(
+    type: string,
+    filters: SearchFilters,
+    options: SearchOptions
+  ): string {
+    return `${type}:${JSON.stringify(filters)}:${JSON.stringify(options)}`;
   }
 
   /**
-   * Get search statistics
+   * Get result from cache
    */
-  getSearchStats<T extends SearchableItem>(
-    items: T[]
-  ): {
-    totalItems: number;
-    activeItems: number;
-    categories: string[];
-    difficulties: string[];
-    tags: string[];
-  } {
-    const categories = [
-      ...new Set(items.map(item => item.category).filter(Boolean)),
-    ];
-    const difficulties = [
-      ...new Set(items.map(item => item.difficulty).filter(Boolean)),
-    ];
-    const tags = [...new Set(items.flatMap(item => item.tags || []))];
-
-    return {
-      totalItems: items.length,
-      activeItems: items.filter(item => item.isActive !== false).length,
-      categories: categories.sort(),
-      difficulties: difficulties.sort(),
-      tags: tags.sort(),
-    };
+  private getFromCache(key: string): any | null {
+    const cached = this.searchCache.get(key);
+    if (cached && Date.now() - cached.timestamp < this.CACHE_TTL) {
+      return cached.data;
+    }
+    return null;
   }
 
   /**
-   * Create search URL with filters
+   * Set result in cache
    */
-  createSearchUrl(filters: SearchFilters, baseUrl: string = ''): string {
-    const params = new URLSearchParams();
-
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        if (Array.isArray(value)) {
-          params.set(key, value.join(','));
-        } else {
-          params.set(key, String(value));
-        }
-      }
+  private setCache(key: string, data: any): void {
+    this.searchCache.set(key, {
+      data,
+      timestamp: Date.now(),
     });
-
-    const queryString = params.toString();
-    return queryString ? `${baseUrl}?${queryString}` : baseUrl;
   }
 
   /**
-   * Parse search filters from URL
+   * Clear search cache
    */
-  parseSearchFilters(searchParams: URLSearchParams): SearchFilters {
-    const filters: SearchFilters = {};
-
-    // Parse all possible filter parameters
-    const paramMap: Record<string, keyof SearchFilters> = {
-      search: 'searchTerm',
-      type: 'contentType',
-      difficulty: 'difficulty',
-      category: 'category',
-      topic: 'topic',
-      cardType: 'cardType',
-      planId: 'planId',
-      learningPath: 'learningPath',
-      sectionId: 'sectionId',
-      isActive: 'isActive',
-      isComplete: 'isComplete',
-      dateFrom: 'dateFrom',
-      dateTo: 'dateTo',
-      tags: 'tags',
-      sortBy: 'sortBy',
-      sortDirection: 'sortDirection',
-      page: 'page',
-      limit: 'limit',
-      exactMatch: 'exactMatch',
-      caseSensitive: 'caseSensitive',
-      includeInactive: 'includeInactive',
-    };
-
-    Object.entries(paramMap).forEach(([param, filterKey]) => {
-      const value = searchParams.get(param);
-      if (value) {
-        switch (filterKey) {
-          case 'tags':
-            filters[filterKey] = value.split(',');
-            break;
-          case 'isActive':
-          case 'isComplete':
-          case 'exactMatch':
-          case 'caseSensitive':
-          case 'includeInactive':
-            filters[filterKey] = value === 'true';
-            break;
-          case 'page':
-          case 'limit':
-            filters[filterKey] = parseInt(value);
-            break;
-          default:
-            (filters as any)[filterKey] = value;
-        }
-      }
-    });
-
-    return filters;
+  clearCache(): void {
+    this.searchCache.clear();
   }
 }
 
-// Export singleton instance
 export const advancedSearchService = AdvancedSearchService.getInstance();

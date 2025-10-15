@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { userAnalyticsService } from '@/lib/user-analytics-service';
+import { UserAnalyticsService } from '@/lib/user-analytics-service';
 
 /**
  * GET /api/analytics/system
@@ -7,7 +7,7 @@ import { userAnalyticsService } from '@/lib/user-analytics-service';
  */
 export async function GET(request: NextRequest) {
   try {
-    const analytics = await userAnalyticsService.getSystemAnalytics();
+    const analytics = await UserAnalyticsService.getSystemAnalytics();
 
     return NextResponse.json({
       success: true,

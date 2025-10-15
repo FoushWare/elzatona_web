@@ -1,722 +1,878 @@
-/**
- * User Analytics Service
- * Handles user learning progress tracking, analytics, and insights
- */
-
-import { db } from '@/lib/firebase';
+import { db } from './firebase';
 import {
   collection,
-  doc,
   addDoc,
   getDocs,
   query,
   where,
   orderBy,
   limit,
+  doc,
   updateDoc,
-  serverTimestamp,
-  Timestamp,
-  getDoc,
 } from 'firebase/firestore';
 
 export interface UserProgress {
   id: string;
   userId: string;
-  userEmail: string;
-  contentType:
-    | 'cards'
-    | 'plans'
-    | 'categories'
-    | 'topics'
-    | 'questions'
-    | 'frontend-tasks'
-    | 'problem-solving';
   contentId: string;
-  contentName: string;
-  status: 'not-started' | 'in-progress' | 'completed' | 'skipped';
+  contentType: 'question' | 'category' | 'topic' | 'card' | 'plan';
+  status: 'not_started' | 'in_progress' | 'completed' | 'skipped';
   progress: number; // 0-100
-  timeSpent: number; // in minutes
+  timeSpent: number; // in seconds
+  lastAccessed: string;
+  completedAt?: string;
+  score?: number;
   attempts: number;
-  lastAccessed: Timestamp;
-  completedAt?: Timestamp;
-  score?: number; // for questions/tasks
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
-  metadata: {
-    learningPath?: string;
-    sessionId?: string;
-    deviceType?: 'desktop' | 'mobile' | 'tablet';
-    notes?: string;
-  };
+  metadata?: Record<string, any>;
+}
+
+export interface LearningActivity {
+  id: string;
+  userId: string;
+  activityType:
+    | 'question_answered'
+    | 'topic_completed'
+    | 'card_started'
+    | 'plan_started'
+    | 'plan_completed';
+  contentId: string;
+  contentType: string;
+  timestamp: string;
+  duration?: number; // in seconds
+  score?: number;
+  metadata?: Record<string, any>;
 }
 
 export interface LearningSession {
   id: string;
   userId: string;
-  userEmail: string;
-  sessionType: 'guided' | 'freestyle' | 'interview' | 'practice';
-  startTime: Timestamp;
-  endTime?: Timestamp;
-  duration: number; // in minutes
-  contentCompleted: string[]; // content IDs
-  totalQuestions: number;
-  correctAnswers: number;
+  startTime: string;
+  endTime?: string;
+  duration?: number; // in seconds
+  activitiesCompleted: number;
+  questionsAnswered: number;
+  topicsCompleted: number;
+  cardsCompleted: number;
+  plansCompleted: number;
+  totalScore: number;
   averageScore: number;
-  learningPath?: string;
-  metadata: {
-    deviceType?: string;
-    userAgent?: string;
-    ipAddress?: string;
+  deviceInfo?: {
+    userAgent: string;
+    screenResolution: string;
+    platform: string;
+  };
+  location?: {
+    country: string;
+    city: string;
+    timezone: string;
   };
 }
 
 export interface UserAnalytics {
   userId: string;
-  userEmail: string;
   totalSessions: number;
-  totalTimeSpent: number; // in minutes
+  totalTimeSpent: number; // in seconds
   totalQuestionsAnswered: number;
-  correctAnswers: number;
+  totalTopicsCompleted: number;
+  totalCardsCompleted: number;
+  totalPlansCompleted: number;
   averageScore: number;
-  learningStreak: number; // consecutive days
-  lastActiveDate: Timestamp;
-  preferredContentTypes: Record<string, number>;
-  difficultyProgress: {
-    beginner: number;
-    intermediate: number;
-    advanced: number;
+  streakDays: number;
+  lastActiveDate: string;
+  favoriteContentTypes: string[];
+  learningPatterns: {
+    preferredTimeOfDay: string;
+    averageSessionDuration: number;
+    mostActiveDay: string;
   };
-  achievements: string[];
-  learningGoals: {
-    dailyGoal: number; // minutes
-    weeklyGoal: number; // minutes
-    monthlyGoal: number; // minutes
+  progressDistribution: {
+    notStarted: number;
+    inProgress: number;
+    completed: number;
+    skipped: number;
   };
-  progressHistory: Array<{
-    date: string;
-    timeSpent: number;
-    questionsAnswered: number;
-    score: number;
-  }>;
 }
 
 export interface LearningInsights {
   userId: string;
-  insights: {
-    strengths: string[];
-    weaknesses: string[];
-    recommendations: string[];
-    learningPatterns: {
-      mostActiveTime: string;
-      preferredDifficulty: string;
-      averageSessionLength: number;
-      completionRate: number;
-    };
-    progressTrends: {
-      isImproving: boolean;
-      improvementRate: number;
-      consistencyScore: number;
-    };
+  strengths: string[];
+  weaknesses: string[];
+  recommendations: string[];
+  learningVelocity: number; // questions per hour
+  retentionRate: number; // percentage
+  difficultyProgression: {
+    beginner: number;
+    intermediate: number;
+    advanced: number;
   };
-  generatedAt: Timestamp;
+  topicMastery: Record<string, number>; // topic -> mastery percentage
+  predictedCompletionTime: string; // estimated date
 }
 
 export interface SystemAnalytics {
   totalUsers: number;
-  activeUsers: number; // last 30 days
+  activeUsers: number; // users active in last 30 days
   totalSessions: number;
-  totalTimeSpent: number;
-  averageSessionLength: number;
-  completionRates: Record<string, number>;
-  popularContent: Array<{
-    contentId: string;
-    contentType: string;
-    name: string;
-    completionCount: number;
-    averageScore: number;
-  }>;
+  totalQuestionsAnswered: number;
+  averageSessionDuration: number;
+  mostPopularContent: {
+    questions: string[];
+    topics: string[];
+    cards: string[];
+    plans: string[];
+  };
   userEngagement: {
     dailyActiveUsers: number;
     weeklyActiveUsers: number;
     monthlyActiveUsers: number;
-    retentionRate: number;
   };
-  learningPathAnalytics: Array<{
-    pathName: string;
-    enrolledUsers: number;
-    completionRate: number;
-    averageTimeToComplete: number;
-  }>;
+  contentPerformance: {
+    mostAnsweredQuestions: string[];
+    mostCompletedTopics: string[];
+    mostPopularCards: string[];
+    mostCompletedPlans: string[];
+  };
+  learningTrends: {
+    questionsPerDay: Record<string, number>;
+    completionsPerDay: Record<string, number>;
+    averageScoresOverTime: Record<string, number>;
+  };
 }
 
-class UserAnalyticsService {
-  private readonly PROGRESS_COLLECTION = 'user_progress';
-  private readonly SESSIONS_COLLECTION = 'learning_sessions';
-  private readonly ANALYTICS_COLLECTION = 'user_analytics';
-  private readonly INSIGHTS_COLLECTION = 'learning_insights';
+export class UserAnalyticsService {
+  private static readonly USER_PROGRESS_COLLECTION = 'userProgress';
+  private static readonly LEARNING_ACTIVITIES_COLLECTION = 'learningActivities';
+  private static readonly LEARNING_SESSIONS_COLLECTION = 'learningSessions';
 
   /**
-   * Track user progress on content
+   * Track user progress
    */
-  async trackProgress(
+  static async trackProgress(
     userId: string,
-    userEmail: string,
-    contentType:
-      | 'cards'
-      | 'plans'
-      | 'categories'
-      | 'topics'
-      | 'questions'
-      | 'frontend-tasks'
-      | 'problem-solving',
     contentId: string,
-    contentName: string,
-    status: 'not-started' | 'in-progress' | 'completed' | 'skipped',
-    progress: number,
-    timeSpent: number,
+    contentType: UserProgress['contentType'],
+    status: UserProgress['status'],
+    progress: number = 0,
+    timeSpent: number = 0,
     score?: number,
-    metadata?: any
-  ): Promise<string> {
-    try {
-      // Check if progress already exists
-      const existingProgress = await this.getUserProgress(userId, contentId);
+    metadata?: Record<string, any>
+  ): Promise<UserProgress> {
+    // Check if progress already exists
+    const existingProgress = await this.getUserProgress(
+      userId,
+      contentId,
+      contentType
+    );
 
-      const progressData: Omit<UserProgress, 'id'> = {
-        userId,
-        userEmail,
-        contentType,
-        contentId,
-        contentName,
-        status,
-        progress: Math.min(100, Math.max(0, progress)),
-        timeSpent: timeSpent + (existingProgress?.timeSpent || 0),
-        attempts: (existingProgress?.attempts || 0) + 1,
-        lastAccessed: serverTimestamp() as Timestamp,
-        completedAt:
-          status === 'completed'
-            ? (serverTimestamp() as Timestamp)
-            : existingProgress?.completedAt,
-        score,
-        difficulty: metadata?.difficulty,
-        metadata: {
-          ...existingProgress?.metadata,
-          ...metadata,
-          lastUpdated: new Date().toISOString(),
-        },
-      };
+    const progressData: UserProgress = {
+      id: existingProgress?.id || `${userId}_${contentId}_${contentType}`,
+      userId,
+      contentId,
+      contentType,
+      status,
+      progress: Math.max(0, Math.min(100, progress)),
+      timeSpent: timeSpent + (existingProgress?.timeSpent || 0),
+      lastAccessed: new Date().toISOString(),
+      completedAt:
+        status === 'completed'
+          ? new Date().toISOString()
+          : existingProgress?.completedAt,
+      score: score || existingProgress?.score,
+      attempts: (existingProgress?.attempts || 0) + 1,
+      metadata: { ...existingProgress?.metadata, ...metadata },
+    };
 
-      if (existingProgress) {
-        // Update existing progress
-        await updateDoc(
-          doc(db, this.PROGRESS_COLLECTION, existingProgress.id),
-          progressData
-        );
-        return existingProgress.id;
-      } else {
-        // Create new progress
-        const docRef = await addDoc(
-          collection(db, this.PROGRESS_COLLECTION),
-          progressData
-        );
-        return docRef.id;
-      }
-    } catch (error) {
-      console.error('Error tracking progress:', error);
-      throw new Error(`Failed to track progress: ${error}`);
-    }
-  }
-
-  /**
-   * Start a learning session
-   */
-  async startSession(
-    userId: string,
-    userEmail: string,
-    sessionType: 'guided' | 'freestyle' | 'interview' | 'practice',
-    learningPath?: string,
-    metadata?: any
-  ): Promise<string> {
-    try {
-      const sessionData: Omit<LearningSession, 'id'> = {
-        userId,
-        userEmail,
-        sessionType,
-        startTime: serverTimestamp() as Timestamp,
-        duration: 0,
-        contentCompleted: [],
-        totalQuestions: 0,
-        correctAnswers: 0,
-        averageScore: 0,
-        learningPath,
-        metadata: {
-          deviceType: metadata?.deviceType,
-          userAgent: metadata?.userAgent,
-          ipAddress: metadata?.ipAddress,
-        },
-      };
-
-      const docRef = await addDoc(
-        collection(db, this.SESSIONS_COLLECTION),
-        sessionData
+    if (existingProgress) {
+      // Update existing progress
+      const progressRef = doc(
+        collection(db, this.USER_PROGRESS_COLLECTION),
+        existingProgress.id
       );
-      return docRef.id;
-    } catch (error) {
-      console.error('Error starting session:', error);
-      throw new Error(`Failed to start session: ${error}`);
+      await updateDoc(progressRef, progressData);
+    } else {
+      // Create new progress
+      await addDoc(collection(db, this.USER_PROGRESS_COLLECTION), progressData);
     }
-  }
 
-  /**
-   * End a learning session
-   */
-  async endSession(
-    sessionId: string,
-    contentCompleted: string[],
-    totalQuestions: number,
-    correctAnswers: number,
-    averageScore: number
-  ): Promise<void> {
-    try {
-      const sessionRef = doc(db, this.SESSIONS_COLLECTION, sessionId);
-      const sessionDoc = await getDoc(sessionRef);
+    // Log learning activity
+    await this.logLearningActivity({
+      userId,
+      activityType: this.getActivityType(contentType, status),
+      contentId,
+      contentType,
+      timestamp: new Date().toISOString(),
+      duration: timeSpent,
+      score,
+      metadata,
+    });
 
-      if (!sessionDoc.exists()) {
-        throw new Error('Session not found');
-      }
-
-      const sessionData = sessionDoc.data();
-      const startTime = sessionData.startTime.toDate();
-      const endTime = new Date();
-      const duration = Math.round(
-        (endTime.getTime() - startTime.getTime()) / (1000 * 60)
-      ); // minutes
-
-      await updateDoc(sessionRef, {
-        endTime: serverTimestamp(),
-        duration,
-        contentCompleted,
-        totalQuestions,
-        correctAnswers,
-        averageScore,
-      });
-    } catch (error) {
-      console.error('Error ending session:', error);
-      throw new Error(`Failed to end session: ${error}`);
-    }
+    return progressData;
   }
 
   /**
    * Get user progress for specific content
    */
-  async getUserProgress(
+  static async getUserProgress(
     userId: string,
-    contentId: string
+    contentId: string,
+    contentType: UserProgress['contentType']
   ): Promise<UserProgress | null> {
-    try {
-      const q = query(
-        collection(db, this.PROGRESS_COLLECTION),
+    const progressSnapshot = await getDocs(
+      query(
+        collection(db, this.USER_PROGRESS_COLLECTION),
         where('userId', '==', userId),
         where('contentId', '==', contentId),
-        limit(1)
-      );
+        where('contentType', '==', contentType)
+      )
+    );
 
-      const snapshot = await getDocs(q);
-      if (snapshot.empty) return null;
-
-      const doc = snapshot.docs[0];
-      return {
-        id: doc.id,
-        ...doc.data(),
-      } as UserProgress;
-    } catch (error) {
-      console.error('Error getting user progress:', error);
-      throw new Error(`Failed to get user progress: ${error}`);
+    if (progressSnapshot.empty) {
+      return null;
     }
+
+    return progressSnapshot.docs[0].data() as UserProgress;
   }
 
   /**
-   * Get all user progress
+   * Get all progress for a user
    */
-  async getAllUserProgress(userId: string): Promise<UserProgress[]> {
-    try {
-      const q = query(
-        collection(db, this.PROGRESS_COLLECTION),
+  static async getAllUserProgress(userId: string): Promise<UserProgress[]> {
+    const progressSnapshot = await getDocs(
+      query(
+        collection(db, this.USER_PROGRESS_COLLECTION),
         where('userId', '==', userId),
         orderBy('lastAccessed', 'desc')
+      )
+    );
+
+    return progressSnapshot.docs.map(doc => doc.data() as UserProgress);
+  }
+
+  /**
+   * Start a learning session
+   */
+  static async startSession(
+    userId: string,
+    deviceInfo?: LearningSession['deviceInfo'],
+    location?: LearningSession['location']
+  ): Promise<LearningSession> {
+    const session: LearningSession = {
+      id: `session_${userId}_${Date.now()}`,
+      userId,
+      startTime: new Date().toISOString(),
+      activitiesCompleted: 0,
+      questionsAnswered: 0,
+      topicsCompleted: 0,
+      cardsCompleted: 0,
+      plansCompleted: 0,
+      totalScore: 0,
+      averageScore: 0,
+      deviceInfo,
+      location,
+    };
+
+    await addDoc(collection(db, this.LEARNING_SESSIONS_COLLECTION), session);
+    return session;
+  }
+
+  /**
+   * End a learning session
+   */
+  static async endSession(
+    sessionId: string,
+    activitiesCompleted: number,
+    questionsAnswered: number,
+    topicsCompleted: number,
+    cardsCompleted: number,
+    plansCompleted: number,
+    totalScore: number
+  ): Promise<boolean> {
+    try {
+      const sessionRef = doc(
+        collection(db, this.LEARNING_SESSIONS_COLLECTION),
+        sessionId
+      );
+      const endTime = new Date().toISOString();
+
+      // Calculate duration
+      const sessionSnapshot = await getDocs(
+        query(
+          collection(db, this.LEARNING_SESSIONS_COLLECTION),
+          where('id', '==', sessionId)
+        )
       );
 
-      const snapshot = await getDocs(q);
-      return snapshot.docs.map(
-        doc =>
-          ({
-            id: doc.id,
-            ...doc.data(),
-          }) as UserProgress
+      if (sessionSnapshot.empty) {
+        return false;
+      }
+
+      const session = sessionSnapshot.docs[0].data() as LearningSession;
+      const startTime = new Date(session.startTime).getTime();
+      const duration = Math.round(
+        (new Date(endTime).getTime() - startTime) / 1000
       );
+
+      await updateDoc(sessionRef, {
+        endTime,
+        duration,
+        activitiesCompleted,
+        questionsAnswered,
+        topicsCompleted,
+        cardsCompleted,
+        plansCompleted,
+        totalScore,
+        averageScore:
+          activitiesCompleted > 0 ? totalScore / activitiesCompleted : 0,
+      });
+
+      return true;
     } catch (error) {
-      console.error('Error getting all user progress:', error);
-      throw new Error(`Failed to get user progress: ${error}`);
+      console.error('Error ending session:', error);
+      return false;
     }
   }
 
   /**
    * Get user analytics
    */
-  async getUserAnalytics(userId: string): Promise<UserAnalytics | null> {
-    try {
-      const q = query(
-        collection(db, this.ANALYTICS_COLLECTION),
-        where('userId', '==', userId),
-        limit(1)
-      );
+  static async getUserAnalytics(userId: string): Promise<UserAnalytics> {
+    const [progress, activities, sessions] = await Promise.all([
+      this.getAllUserProgress(userId),
+      this.getUserLearningActivities(userId),
+      this.getUserSessions(userId),
+    ]);
 
-      const snapshot = await getDocs(q);
-      if (snapshot.empty) return null;
+    const totalTimeSpent = sessions.reduce(
+      (sum, session) => sum + (session.duration || 0),
+      0
+    );
+    const totalQuestionsAnswered = activities.filter(
+      a => a.activityType === 'question_answered'
+    ).length;
+    const totalTopicsCompleted = activities.filter(
+      a => a.activityType === 'topic_completed'
+    ).length;
+    const totalCardsCompleted = activities.filter(
+      a => a.activityType === 'card_started'
+    ).length;
+    const totalPlansCompleted = activities.filter(
+      a => a.activityType === 'plan_completed'
+    ).length;
 
-      const doc = snapshot.docs[0];
-      return {
-        ...doc.data(),
-      } as UserAnalytics;
-    } catch (error) {
-      console.error('Error getting user analytics:', error);
-      throw new Error(`Failed to get user analytics: ${error}`);
-    }
+    const scores = activities
+      .filter(a => a.score !== undefined)
+      .map(a => a.score!);
+    const averageScore =
+      scores.length > 0
+        ? scores.reduce((sum, score) => sum + score, 0) / scores.length
+        : 0;
+
+    // Calculate streak
+    const streakDays = this.calculateStreakDays(activities);
+
+    // Get favorite content types
+    const contentTypeCounts: Record<string, number> = {};
+    activities.forEach(activity => {
+      contentTypeCounts[activity.contentType] =
+        (contentTypeCounts[activity.contentType] || 0) + 1;
+    });
+    const favoriteContentTypes = Object.entries(contentTypeCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 3)
+      .map(([type]) => type);
+
+    // Calculate learning patterns
+    const learningPatterns = this.calculateLearningPatterns(sessions);
+
+    // Calculate progress distribution
+    const progressDistribution = {
+      notStarted: progress.filter(p => p.status === 'not_started').length,
+      inProgress: progress.filter(p => p.status === 'in_progress').length,
+      completed: progress.filter(p => p.status === 'completed').length,
+      skipped: progress.filter(p => p.status === 'skipped').length,
+    };
+
+    return {
+      userId,
+      totalSessions: sessions.length,
+      totalTimeSpent,
+      totalQuestionsAnswered,
+      totalTopicsCompleted,
+      totalCardsCompleted,
+      totalPlansCompleted,
+      averageScore,
+      streakDays,
+      lastActiveDate:
+        activities.length > 0
+          ? activities[0].timestamp
+          : new Date().toISOString(),
+      favoriteContentTypes,
+      learningPatterns,
+      progressDistribution,
+    };
   }
 
   /**
-   * Generate user analytics from progress data
+   * Get learning insights for a user
    */
-  async generateUserAnalytics(userId: string): Promise<UserAnalytics> {
-    try {
-      const [progressData, sessionsData] = await Promise.all([
-        this.getAllUserProgress(userId),
-        this.getUserSessions(userId),
-      ]);
+  static async getUserInsights(userId: string): Promise<LearningInsights> {
+    const [progress, activities] = await Promise.all([
+      this.getAllUserProgress(userId),
+      this.getUserLearningActivities(userId),
+    ]);
 
-      const userEmail =
-        progressData[0]?.userEmail || sessionsData[0]?.userEmail || '';
+    // Calculate strengths and weaknesses
+    const strengths = this.calculateStrengths(progress, activities);
+    const weaknesses = this.calculateWeaknesses(progress, activities);
+    const recommendations = this.generateRecommendations(progress, activities);
 
-      // Calculate analytics
-      const totalSessions = sessionsData.length;
-      const totalTimeSpent = sessionsData.reduce(
-        (sum, session) => sum + session.duration,
-        0
-      );
-      const totalQuestionsAnswered = sessionsData.reduce(
-        (sum, session) => sum + session.totalQuestions,
-        0
-      );
-      const correctAnswers = sessionsData.reduce(
-        (sum, session) => sum + session.correctAnswers,
-        0
-      );
-      const averageScore =
-        totalQuestionsAnswered > 0
-          ? (correctAnswers / totalQuestionsAnswered) * 100
-          : 0;
+    // Calculate learning velocity (questions per hour)
+    const totalTimeSpent = activities.reduce(
+      (sum, activity) => sum + (activity.duration || 0),
+      0
+    );
+    const questionsAnswered = activities.filter(
+      a => a.activityType === 'question_answered'
+    ).length;
+    const learningVelocity =
+      totalTimeSpent > 0 ? (questionsAnswered * 3600) / totalTimeSpent : 0;
 
-      // Calculate learning streak
-      const learningStreak = this.calculateLearningStreak(sessionsData);
+    // Calculate retention rate
+    const retentionRate = this.calculateRetentionRate(progress);
 
-      // Calculate preferred content types
-      const preferredContentTypes = progressData.reduce(
-        (acc, progress) => {
-          acc[progress.contentType] = (acc[progress.contentType] || 0) + 1;
-          return acc;
-        },
-        {} as Record<string, number>
-      );
+    // Calculate difficulty progression
+    const difficultyProgression =
+      this.calculateDifficultyProgression(activities);
 
-      // Calculate difficulty progress
-      const difficultyProgress = progressData.reduce(
-        (acc, progress) => {
-          if (progress.difficulty) {
-            acc[progress.difficulty] = (acc[progress.difficulty] || 0) + 1;
-          }
-          return acc;
-        },
-        { beginner: 0, intermediate: 0, advanced: 0 } as Record<string, number>
-      );
+    // Calculate topic mastery
+    const topicMastery = this.calculateTopicMastery(progress);
 
-      // Generate progress history (last 30 days)
-      const progressHistory = this.generateProgressHistory(sessionsData);
+    // Predict completion time
+    const predictedCompletionTime = this.predictCompletionTime(
+      progress,
+      activities
+    );
 
-      const analytics: UserAnalytics = {
-        userId,
-        userEmail,
-        totalSessions,
-        totalTimeSpent,
-        totalQuestionsAnswered,
-        correctAnswers,
-        averageScore,
-        learningStreak,
-        lastActiveDate:
-          sessionsData[0]?.endTime ||
-          sessionsData[0]?.startTime ||
-          (new Date() as any),
-        preferredContentTypes,
-        difficultyProgress,
-        achievements: this.calculateAchievements(progressData, sessionsData),
-        learningGoals: {
-          dailyGoal: 30,
-          weeklyGoal: 210,
-          monthlyGoal: 900,
-        },
-        progressHistory,
-      };
-
-      // Save analytics
-      await this.saveUserAnalytics(analytics);
-
-      return analytics;
-    } catch (error) {
-      console.error('Error generating user analytics:', error);
-      throw new Error(`Failed to generate user analytics: ${error}`);
-    }
-  }
-
-  /**
-   * Generate learning insights
-   */
-  async generateLearningInsights(userId: string): Promise<LearningInsights> {
-    try {
-      const analytics = await this.getUserAnalytics(userId);
-      if (!analytics) {
-        throw new Error('User analytics not found');
-      }
-
-      const insights = {
-        strengths: this.identifyStrengths(analytics),
-        weaknesses: this.identifyWeaknesses(analytics),
-        recommendations: this.generateRecommendations(analytics),
-        learningPatterns: this.analyzeLearningPatterns(analytics),
-        progressTrends: this.analyzeProgressTrends(analytics),
-      };
-
-      const learningInsights: LearningInsights = {
-        userId,
-        insights,
-        generatedAt: serverTimestamp() as Timestamp,
-      };
-
-      // Save insights
-      await addDoc(collection(db, this.INSIGHTS_COLLECTION), learningInsights);
-
-      return learningInsights;
-    } catch (error) {
-      console.error('Error generating learning insights:', error);
-      throw new Error(`Failed to generate learning insights: ${error}`);
-    }
+    return {
+      userId,
+      strengths,
+      weaknesses,
+      recommendations,
+      learningVelocity,
+      retentionRate,
+      difficultyProgression,
+      topicMastery,
+      predictedCompletionTime,
+    };
   }
 
   /**
    * Get system-wide analytics
    */
-  async getSystemAnalytics(): Promise<SystemAnalytics> {
-    try {
-      // This would typically involve complex aggregations
-      // For now, return a mock structure
-      return {
-        totalUsers: 0,
-        activeUsers: 0,
-        totalSessions: 0,
-        totalTimeSpent: 0,
-        averageSessionLength: 0,
-        completionRates: {},
-        popularContent: [],
-        userEngagement: {
-          dailyActiveUsers: 0,
-          weeklyActiveUsers: 0,
-          monthlyActiveUsers: 0,
-          retentionRate: 0,
-        },
-        learningPathAnalytics: [],
-      };
-    } catch (error) {
-      console.error('Error getting system analytics:', error);
-      throw new Error(`Failed to get system analytics: ${error}`);
-    }
-  }
+  static async getSystemAnalytics(): Promise<SystemAnalytics> {
+    const [allProgress, allActivities, allSessions] = await Promise.all([
+      this.getAllProgress(),
+      this.getAllLearningActivities(),
+      this.getAllSessions(),
+    ]);
 
-  /**
-   * Private helper methods
-   */
-  private async getUserSessions(userId: string): Promise<LearningSession[]> {
-    const q = query(
-      collection(db, this.SESSIONS_COLLECTION),
-      where('userId', '==', userId),
-      orderBy('startTime', 'desc')
-    );
+    const uniqueUsers = new Set(allProgress.map(p => p.userId));
+    const activeUsers = this.calculateActiveUsers(allActivities);
 
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(
-      doc =>
-        ({
-          id: doc.id,
-          ...doc.data(),
-        }) as LearningSession
-    );
-  }
-
-  private calculateLearningStreak(sessions: LearningSession[]): number {
-    // Simplified streak calculation
-    return sessions.length > 0 ? Math.min(sessions.length, 30) : 0;
-  }
-
-  private generateProgressHistory(sessions: LearningSession[]): Array<{
-    date: string;
-    timeSpent: number;
-    questionsAnswered: number;
-    score: number;
-  }> {
-    const history: Array<{
-      date: string;
-      timeSpent: number;
-      questionsAnswered: number;
-      score: number;
-    }> = [];
-
-    for (let i = 29; i >= 0; i--) {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split('T')[0];
-
-      const daySessions = sessions.filter(session => {
-        const sessionDate = session.startTime.toDate
-          ? session.startTime.toDate().toISOString().split('T')[0]
-          : new Date(session.startTime).toISOString().split('T')[0];
-        return sessionDate === dateStr;
-      });
-
-      history.push({
-        date: dateStr,
-        timeSpent: daySessions.reduce(
-          (sum, session) => sum + session.duration,
-          0
-        ),
-        questionsAnswered: daySessions.reduce(
-          (sum, session) => sum + session.totalQuestions,
-          0
-        ),
-        score:
-          daySessions.length > 0
-            ? daySessions.reduce(
-                (sum, session) => sum + session.averageScore,
-                0
-              ) / daySessions.length
-            : 0,
-      });
-    }
-
-    return history;
-  }
-
-  private calculateAchievements(
-    progress: UserProgress[],
-    sessions: LearningSession[]
-  ): string[] {
-    const achievements: string[] = [];
-
-    if (sessions.length >= 1) achievements.push('First Session');
-    if (sessions.length >= 10) achievements.push('Dedicated Learner');
-    if (sessions.length >= 50) achievements.push('Learning Champion');
-
-    const completedContent = progress.filter(
-      p => p.status === 'completed'
+    const totalSessions = allSessions.length;
+    const totalQuestionsAnswered = allActivities.filter(
+      a => a.activityType === 'question_answered'
     ).length;
-    if (completedContent >= 5) achievements.push('Content Master');
-    if (completedContent >= 25) achievements.push('Knowledge Seeker');
+    const averageSessionDuration =
+      allSessions.reduce((sum, session) => sum + (session.duration || 0), 0) /
+      totalSessions;
 
-    const totalTime = sessions.reduce(
-      (sum, session) => sum + session.duration,
-      0
-    );
-    if (totalTime >= 60) achievements.push('Hour of Learning');
-    if (totalTime >= 300) achievements.push('Learning Marathon');
+    const mostPopularContent = this.calculateMostPopularContent(allActivities);
+    const userEngagement = this.calculateUserEngagement(allActivities);
+    const contentPerformance = this.calculateContentPerformance(allActivities);
+    const learningTrends = this.calculateLearningTrends(allActivities);
 
-    return achievements;
+    return {
+      totalUsers: uniqueUsers.size,
+      activeUsers,
+      totalSessions,
+      totalQuestionsAnswered,
+      averageSessionDuration,
+      mostPopularContent,
+      userEngagement,
+      contentPerformance,
+      learningTrends,
+    };
   }
 
-  private identifyStrengths(analytics: UserAnalytics): string[] {
+  // Helper methods
+  private static async logLearningActivity(
+    activity: Omit<LearningActivity, 'id'>
+  ): Promise<void> {
+    const activityData: LearningActivity = {
+      id: `activity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      ...activity,
+    };
+
+    await addDoc(
+      collection(db, this.LEARNING_ACTIVITIES_COLLECTION),
+      activityData
+    );
+  }
+
+  private static async getUserLearningActivities(
+    userId: string
+  ): Promise<LearningActivity[]> {
+    const activitiesSnapshot = await getDocs(
+      query(
+        collection(db, this.LEARNING_ACTIVITIES_COLLECTION),
+        where('userId', '==', userId),
+        orderBy('timestamp', 'desc')
+      )
+    );
+
+    return activitiesSnapshot.docs.map(doc => doc.data() as LearningActivity);
+  }
+
+  private static async getUserSessions(
+    userId: string
+  ): Promise<LearningSession[]> {
+    const sessionsSnapshot = await getDocs(
+      query(
+        collection(db, this.LEARNING_SESSIONS_COLLECTION),
+        where('userId', '==', userId),
+        orderBy('startTime', 'desc')
+      )
+    );
+
+    return sessionsSnapshot.docs.map(doc => doc.data() as LearningSession);
+  }
+
+  private static async getAllProgress(): Promise<UserProgress[]> {
+    const progressSnapshot = await getDocs(
+      collection(db, this.USER_PROGRESS_COLLECTION)
+    );
+    return progressSnapshot.docs.map(doc => doc.data() as UserProgress);
+  }
+
+  private static async getAllLearningActivities(): Promise<LearningActivity[]> {
+    const activitiesSnapshot = await getDocs(
+      collection(db, this.LEARNING_ACTIVITIES_COLLECTION)
+    );
+    return activitiesSnapshot.docs.map(doc => doc.data() as LearningActivity);
+  }
+
+  private static async getAllSessions(): Promise<LearningSession[]> {
+    const sessionsSnapshot = await getDocs(
+      collection(db, this.LEARNING_SESSIONS_COLLECTION)
+    );
+    return sessionsSnapshot.docs.map(doc => doc.data() as LearningSession);
+  }
+
+  private static getActivityType(
+    contentType: string,
+    status: string
+  ): LearningActivity['activityType'] {
+    if (contentType === 'question' && status === 'completed')
+      return 'question_answered';
+    if (contentType === 'topic' && status === 'completed')
+      return 'topic_completed';
+    if (contentType === 'card' && status === 'in_progress')
+      return 'card_started';
+    if (contentType === 'plan' && status === 'in_progress')
+      return 'plan_started';
+    if (contentType === 'plan' && status === 'completed')
+      return 'plan_completed';
+    return 'question_answered'; // default
+  }
+
+  private static calculateStreakDays(activities: LearningActivity[]): number {
+    // Simple streak calculation - consecutive days with activity
+    const activityDates = activities.map(a =>
+      new Date(a.timestamp).toDateString()
+    );
+    const uniqueDates = [...new Set(activityDates)].sort().reverse();
+
+    let streak = 0;
+    const today = new Date().toDateString();
+    let currentDate = new Date();
+
+    for (let i = 0; i < 30; i++) {
+      const dateString = currentDate.toDateString();
+      if (uniqueDates.includes(dateString)) {
+        streak++;
+        currentDate.setDate(currentDate.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+
+    return streak;
+  }
+
+  private static calculateLearningPatterns(
+    sessions: LearningSession[]
+  ): UserAnalytics['learningPatterns'] {
+    // Calculate preferred time of day
+    const hourCounts: Record<number, number> = {};
+    sessions.forEach(session => {
+      const hour = new Date(session.startTime).getHours();
+      hourCounts[hour] = (hourCounts[hour] || 0) + 1;
+    });
+    const preferredHour = Object.entries(hourCounts).reduce((a, b) =>
+      hourCounts[Number(a[0])] > hourCounts[Number(b[0])] ? a : b
+    )[0];
+    const preferredTimeOfDay =
+      preferredHour < 12
+        ? 'morning'
+        : preferredHour < 18
+          ? 'afternoon'
+          : 'evening';
+
+    // Calculate average session duration
+    const averageSessionDuration =
+      sessions.reduce((sum, session) => sum + (session.duration || 0), 0) /
+      sessions.length;
+
+    // Calculate most active day
+    const dayCounts: Record<string, number> = {};
+    sessions.forEach(session => {
+      const day = new Date(session.startTime).toLocaleDateString('en-US', {
+        weekday: 'long',
+      });
+      dayCounts[day] = (dayCounts[day] || 0) + 1;
+    });
+    const mostActiveDay = Object.entries(dayCounts).reduce((a, b) =>
+      dayCounts[a[0]] > dayCounts[b[0]] ? a : b
+    )[0];
+
+    return {
+      preferredTimeOfDay,
+      averageSessionDuration,
+      mostActiveDay,
+    };
+  }
+
+  private static calculateStrengths(
+    progress: UserProgress[],
+    activities: LearningActivity[]
+  ): string[] {
+    // Simple strength calculation based on high scores and completion rates
     const strengths: string[] = [];
 
-    if (analytics.averageScore >= 80)
-      strengths.push('High accuracy in answers');
-    if (analytics.learningStreak >= 7)
-      strengths.push('Consistent learning habit');
-    if (analytics.totalTimeSpent >= 300)
-      strengths.push('Dedicated time investment');
+    const highScoreActivities = activities.filter(a => a.score && a.score > 80);
+    if (highScoreActivities.length > activities.length * 0.7) {
+      strengths.push('High accuracy in answering questions');
+    }
+
+    const completedTopics = progress.filter(
+      p => p.contentType === 'topic' && p.status === 'completed'
+    );
+    if (completedTopics.length > 5) {
+      strengths.push('Strong topic completion rate');
+    }
 
     return strengths;
   }
 
-  private identifyWeaknesses(analytics: UserAnalytics): string[] {
+  private static calculateWeaknesses(
+    progress: UserProgress[],
+    activities: LearningActivity[]
+  ): string[] {
     const weaknesses: string[] = [];
 
-    if (analytics.averageScore < 60) weaknesses.push('Low accuracy in answers');
-    if (analytics.learningStreak < 3)
-      weaknesses.push('Inconsistent learning habit');
-    if (analytics.totalTimeSpent < 60)
-      weaknesses.push('Limited time investment');
+    const lowScoreActivities = activities.filter(a => a.score && a.score < 60);
+    if (lowScoreActivities.length > activities.length * 0.3) {
+      weaknesses.push('Low accuracy in some areas');
+    }
+
+    const skippedItems = progress.filter(p => p.status === 'skipped');
+    if (skippedItems.length > progress.length * 0.2) {
+      weaknesses.push('High skip rate');
+    }
 
     return weaknesses;
   }
 
-  private generateRecommendations(analytics: UserAnalytics): string[] {
+  private static generateRecommendations(
+    progress: UserProgress[],
+    activities: LearningActivity[]
+  ): string[] {
     const recommendations: string[] = [];
 
-    if (analytics.averageScore < 70) {
+    const incompleteItems = progress.filter(p => p.status === 'in_progress');
+    if (incompleteItems.length > 0) {
       recommendations.push(
-        'Focus on understanding concepts before moving to advanced topics'
+        'Complete in-progress items to improve learning continuity'
       );
     }
-    if (analytics.learningStreak < 5) {
-      recommendations.push('Try to maintain a daily learning routine');
-    }
-    if (analytics.totalTimeSpent < 120) {
-      recommendations.push('Increase learning time to see better progress');
+
+    const lowScoreActivities = activities.filter(a => a.score && a.score < 60);
+    if (lowScoreActivities.length > 0) {
+      recommendations.push('Review and practice areas with low scores');
     }
 
     return recommendations;
   }
 
-  private analyzeLearningPatterns(analytics: UserAnalytics): any {
+  private static calculateRetentionRate(progress: UserProgress[]): number {
+    const completedItems = progress.filter(p => p.status === 'completed');
+    const totalItems = progress.length;
+    return totalItems > 0 ? (completedItems.length / totalItems) * 100 : 0;
+  }
+
+  private static calculateDifficultyProgression(
+    activities: LearningActivity[]
+  ): LearningInsights['difficultyProgression'] {
+    // This would need to be implemented based on actual difficulty data
     return {
-      mostActiveTime: 'Evening',
-      preferredDifficulty: 'Intermediate',
-      averageSessionLength:
-        analytics.totalSessions > 0
-          ? analytics.totalTimeSpent / analytics.totalSessions
-          : 0,
-      completionRate:
-        analytics.totalQuestionsAnswered > 0
-          ? (analytics.correctAnswers / analytics.totalQuestionsAnswered) * 100
-          : 0,
+      beginner: 0,
+      intermediate: 0,
+      advanced: 0,
     };
   }
 
-  private analyzeProgressTrends(analytics: UserAnalytics): any {
-    return {
-      isImproving: true,
-      improvementRate: 5.2,
-      consistencyScore: (analytics.learningStreak / 30) * 100,
-    };
+  private static calculateTopicMastery(
+    progress: UserProgress[]
+  ): Record<string, number> {
+    const topicMastery: Record<string, number> = {};
+
+    progress.forEach(p => {
+      if (p.contentType === 'topic') {
+        topicMastery[p.contentId] = p.progress;
+      }
+    });
+
+    return topicMastery;
   }
 
-  private async saveUserAnalytics(analytics: UserAnalytics): Promise<void> {
-    // Check if analytics already exist
-    const q = query(
-      collection(db, this.ANALYTICS_COLLECTION),
-      where('userId', '==', analytics.userId),
-      limit(1)
-    );
+  private static predictCompletionTime(
+    progress: UserProgress[],
+    activities: LearningActivity[]
+  ): string {
+    // Simple prediction based on current progress rate
+    const completedItems = progress.filter(
+      p => p.status === 'completed'
+    ).length;
+    const totalItems = progress.length;
+    const completionRate = totalItems > 0 ? completedItems / totalItems : 0;
 
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) {
-      await addDoc(collection(db, this.ANALYTICS_COLLECTION), analytics);
-    } else {
-      await updateDoc(snapshot.docs[0].ref, analytics);
+    if (completionRate === 0) {
+      return 'Unable to predict';
     }
+
+    const remainingItems = totalItems - completedItems;
+    const estimatedDays = Math.ceil(remainingItems / (completionRate * 7)); // Assuming weekly completion rate
+
+    const completionDate = new Date();
+    completionDate.setDate(completionDate.getDate() + estimatedDays);
+
+    return completionDate.toISOString();
+  }
+
+  private static calculateActiveUsers(activities: LearningActivity[]): number {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const recentActivities = activities.filter(
+      a => new Date(a.timestamp) > thirtyDaysAgo
+    );
+    const activeUserIds = new Set(recentActivities.map(a => a.userId));
+
+    return activeUserIds.size;
+  }
+
+  private static calculateMostPopularContent(
+    activities: LearningActivity[]
+  ): SystemAnalytics['mostPopularContent'] {
+    const contentCounts: Record<string, Record<string, number>> = {
+      questions: {},
+      topics: {},
+      cards: {},
+      plans: {},
+    };
+
+    activities.forEach(activity => {
+      if (activity.contentType in contentCounts) {
+        const contentType = activity.contentType as keyof typeof contentCounts;
+        contentCounts[contentType][activity.contentId] =
+          (contentCounts[contentType][activity.contentId] || 0) + 1;
+      }
+    });
+
+    return {
+      questions: Object.entries(contentCounts.questions)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10)
+        .map(([id]) => id),
+      topics: Object.entries(contentCounts.topics)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10)
+        .map(([id]) => id),
+      cards: Object.entries(contentCounts.cards)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10)
+        .map(([id]) => id),
+      plans: Object.entries(contentCounts.plans)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10)
+        .map(([id]) => id),
+    };
+  }
+
+  private static calculateUserEngagement(
+    activities: LearningActivity[]
+  ): SystemAnalytics['userEngagement'] {
+    const now = new Date();
+    const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    const dailyActiveUsers = new Set(
+      activities
+        .filter(a => new Date(a.timestamp) > oneDayAgo)
+        .map(a => a.userId)
+    ).size;
+
+    const weeklyActiveUsers = new Set(
+      activities
+        .filter(a => new Date(a.timestamp) > oneWeekAgo)
+        .map(a => a.userId)
+    ).size;
+
+    const monthlyActiveUsers = new Set(
+      activities
+        .filter(a => new Date(a.timestamp) > oneMonthAgo)
+        .map(a => a.userId)
+    ).size;
+
+    return {
+      dailyActiveUsers,
+      weeklyActiveUsers,
+      monthlyActiveUsers,
+    };
+  }
+
+  private static calculateContentPerformance(
+    activities: LearningActivity[]
+  ): SystemAnalytics['contentPerformance'] {
+    // This would need to be implemented based on actual performance metrics
+    return {
+      mostAnsweredQuestions: [],
+      mostCompletedTopics: [],
+      mostPopularCards: [],
+      mostCompletedPlans: [],
+    };
+  }
+
+  private static calculateLearningTrends(
+    activities: LearningActivity[]
+  ): SystemAnalytics['learningTrends'] {
+    // This would need to be implemented based on actual trend data
+    return {
+      questionsPerDay: {},
+      completionsPerDay: {},
+      averageScoresOverTime: {},
+    };
   }
 }
-
-export const userAnalyticsService = new UserAnalyticsService();

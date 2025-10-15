@@ -31,6 +31,7 @@ import {
 } from '@/hooks/useTanStackQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNotificationActions } from '@/hooks/useNotificationActions';
+import { BulkOperations } from '@/shared/components/admin/BulkOperations';
 
 // Types for API responses
 interface ApiResponse<T> {
@@ -467,6 +468,16 @@ export default function UnifiedAdminPage() {
     >
   >({});
 
+  // Bulk operations state
+  const [selectedCards, setSelectedCards] = useState<string[]>([]);
+  const [selectedPlans, setSelectedPlans] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+  const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
+  const [activeBulkSection, setActiveBulkSection] = useState<
+    'cards' | 'plans' | 'categories' | 'topics' | 'questions'
+  >('cards');
+
   // CRUD handlers using TanStack Query mutations
   const handleCreateCard = async (cardData: Partial<LearningCard>) => {
     try {
@@ -811,6 +822,36 @@ export default function UnifiedAdminPage() {
           label="Questions"
           value={stats.totalQuestions}
           color="#EF4444"
+        />
+      </div>
+
+      {/* Bulk Operations */}
+      <div className="mb-8">
+        <BulkOperations
+          targetType={activeBulkSection}
+          selectedItems={
+            activeBulkSection === 'cards'
+              ? selectedCards
+              : activeBulkSection === 'plans'
+                ? selectedPlans
+                : activeBulkSection === 'categories'
+                  ? selectedCategories
+                  : activeBulkSection === 'topics'
+                    ? selectedTopics
+                    : selectedQuestions
+          }
+          onSelectionChange={items => {
+            if (activeBulkSection === 'cards') setSelectedCards(items);
+            else if (activeBulkSection === 'plans') setSelectedPlans(items);
+            else if (activeBulkSection === 'categories')
+              setSelectedCategories(items);
+            else if (activeBulkSection === 'topics') setSelectedTopics(items);
+            else setSelectedQuestions(items);
+          }}
+          onOperationComplete={() => {
+            // Refresh data after bulk operation
+            queryClient.invalidateQueries();
+          }}
         />
       </div>
 

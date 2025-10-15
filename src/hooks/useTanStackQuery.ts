@@ -120,6 +120,28 @@ export const queryKeys = {
   userAnalytics: (userId: string) => ['analytics', 'user', userId] as const,
   userInsights: (userId: string) => ['analytics', 'insights', userId] as const,
   systemAnalytics: ['analytics', 'system'] as const,
+
+  // Bulk Operations
+  bulkOperations: ['bulk-operations'] as const,
+  bulkOperation: (id: string) => ['bulk-operations', id] as const,
+  bulkOperationStats: ['bulk-operations', 'stats'] as const,
+
+  // Content Versioning
+  contentVersions: (contentId: string, contentType: string) =>
+    ['content-versions', contentId, contentType] as const,
+  contentVersion: (versionId: string) =>
+    ['content-version', versionId] as const,
+  versionComparison: (versionId1: string, versionId2: string) =>
+    ['version-comparison', versionId1, versionId2] as const,
+
+  // Audit Logs
+  auditLogs: ['audit-logs'] as const,
+  auditLogStats: ['audit-log-stats'] as const,
+
+  // Error Logging
+  errorLogs: ['error-logs'] as const,
+  performanceLogs: ['performance-logs'] as const,
+  logStats: ['log-stats'] as const,
 } as const;
 
 // ============================================================================
@@ -373,13 +395,14 @@ const api = {
   ) =>
     api.fetch<{
       success: boolean;
-      processed: number;
-      failed: number;
-      errors: string[];
-      message: string;
+      operation: any;
     }>('/api/admin/bulk-operations', {
       method: 'POST',
-      body: JSON.stringify({ operation: 'delete', type, ids }),
+      body: JSON.stringify({
+        type: 'delete',
+        targetType: type,
+        targetIds: ids,
+      }),
     }),
   bulkEdit: (
     type: 'cards' | 'plans' | 'categories' | 'topics' | 'questions',
@@ -388,17 +411,64 @@ const api = {
   ) =>
     api.fetch<{
       success: boolean;
-      processed: number;
-      failed: number;
-      errors: string[];
-      message: string;
+      operation: any;
     }>('/api/admin/bulk-operations', {
       method: 'POST',
-      body: JSON.stringify({ operation: 'edit', type, ids, updates }),
+      body: JSON.stringify({
+        type: 'edit',
+        targetType: type,
+        targetIds: ids,
+        operationData: updates,
+      }),
     }),
+  bulkActivate: (
+    type: 'cards' | 'plans' | 'categories' | 'topics' | 'questions',
+    ids: string[]
+  ) =>
+    api.fetch<{
+      success: boolean;
+      operation: any;
+    }>('/api/admin/bulk-operations', {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'activate',
+        targetType: type,
+        targetIds: ids,
+      }),
+    }),
+  bulkDeactivate: (
+    type: 'cards' | 'plans' | 'categories' | 'topics' | 'questions',
+    ids: string[]
+  ) =>
+    api.fetch<{
+      success: boolean;
+      operation: any;
+    }>('/api/admin/bulk-operations', {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'deactivate',
+        targetType: type,
+        targetIds: ids,
+      }),
+    }),
+  getBulkOperations: (limit?: number) =>
+    api.fetch<{
+      success: boolean;
+      operations: any[];
+    }>(`/api/admin/bulk-operations${limit ? `?limit=${limit}` : ''}`),
+  getBulkOperation: (operationId: string) =>
+    api.fetch<{
+      success: boolean;
+      operation: any;
+    }>(`/api/admin/bulk-operations/${operationId}`),
+  getBulkOperationStats: () =>
+    api.fetch<{
+      success: boolean;
+      stats: any;
+    }>('/api/admin/bulk-operations/stats'),
   getBulkOperationProgress: (operationId: string) =>
     api.fetch<{ success: boolean; progress: any }>(
-      `/api/admin/bulk-operations/progress/${operationId}`
+      `/api/admin/bulk-operations/${operationId}`
     ),
   cancelBulkOperation: (operationId: string) =>
     api.fetch<{ success: boolean }>(
@@ -545,6 +615,69 @@ const api = {
     ),
   getSystemAnalytics: () =>
     api.fetch<{ success: boolean; analytics: any }>('/api/analytics/system'),
+
+  // Error Logging
+  getErrorLogs: (filters?: {
+    level?: 'error' | 'warning' | 'info' | 'debug';
+    resolved?: boolean;
+    userId?: string;
+    adminId?: string;
+    limit?: number;
+  }) => {
+    const params = new URLSearchParams();
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined) {
+          params.append(key, value.toString());
+        }
+      });
+    }
+    return api.fetch<{ success: boolean; logs: any[]; count: number }>(
+      `/api/admin/logs?type=errors${params.toString() ? `&${params.toString()}` : ''}`
+    );
+  },
+  getPerformanceLogs: (filters?: {
+    operation?: string;
+    success?: boolean;
+    userId?: string;
+    adminId?: string;
+    limit?: number;
+  }) => {
+    const params = new URLSearchParams();
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined) {
+          params.append(key, value.toString());
+        }
+      });
+    }
+    return api.fetch<{ success: boolean; logs: any[]; count: number }>(
+      `/api/admin/logs?type=performance${params.toString() ? `&${params.toString()}` : ''}`
+    );
+  },
+  getLogStats: () =>
+    api.fetch<{ success: boolean; errorStats: any; performanceStats: any }>(
+      '/api/admin/logs?type=stats'
+    ),
+  logError: (data: {
+    level: 'error' | 'warning' | 'info' | 'debug';
+    message: string;
+    stack?: string;
+    context?: any;
+    metadata?: any;
+  }) =>
+    api.fetch<{ success: boolean; errorId: string; message: string }>(
+      '/api/admin/logs',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }
+    ),
+  resolveError: (errorId: string, resolvedBy: string) =>
+    api.fetch<{ success: boolean; message: string }>('/api/admin/logs', {
+      method: 'PUT',
+      body: JSON.stringify({ errorId, action: 'resolve', resolvedBy }),
+    }),
 };
 
 // ============================================================================
@@ -1210,6 +1343,7 @@ export const useBulkDelete = () => {
       // Invalidate relevant queries based on type
       queryClient.invalidateQueries({ queryKey: queryKeys[type] });
       queryClient.invalidateQueries({ queryKey: queryKeys.adminStats });
+      queryClient.invalidateQueries({ queryKey: queryKeys.bulkOperations });
     },
   });
 };
@@ -1231,14 +1365,77 @@ export const useBulkEdit = () => {
       // Invalidate relevant queries based on type
       queryClient.invalidateQueries({ queryKey: queryKeys[type] });
       queryClient.invalidateQueries({ queryKey: queryKeys.adminStats });
+      queryClient.invalidateQueries({ queryKey: queryKeys.bulkOperations });
     },
+  });
+};
+
+export const useBulkActivate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      type,
+      ids,
+    }: {
+      type: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
+      ids: string[];
+    }) => api.bulkActivate(type, ids),
+    onSuccess: (_, { type }) => {
+      // Invalidate relevant queries based on type
+      queryClient.invalidateQueries({ queryKey: queryKeys[type] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.adminStats });
+      queryClient.invalidateQueries({ queryKey: queryKeys.bulkOperations });
+    },
+  });
+};
+
+export const useBulkDeactivate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      type,
+      ids,
+    }: {
+      type: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
+      ids: string[];
+    }) => api.bulkDeactivate(type, ids),
+    onSuccess: (_, { type }) => {
+      // Invalidate relevant queries based on type
+      queryClient.invalidateQueries({ queryKey: queryKeys[type] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.adminStats });
+      queryClient.invalidateQueries({ queryKey: queryKeys.bulkOperations });
+    },
+  });
+};
+
+export const useBulkOperations = (limit?: number) => {
+  return useQuery({
+    queryKey: queryKeys.bulkOperations,
+    queryFn: () => api.getBulkOperations(limit),
+  });
+};
+
+export const useBulkOperation = (operationId: string) => {
+  return useQuery({
+    queryKey: queryKeys.bulkOperation(operationId),
+    queryFn: () => api.getBulkOperation(operationId),
+    enabled: !!operationId,
+  });
+};
+
+export const useBulkOperationStats = () => {
+  return useQuery({
+    queryKey: queryKeys.bulkOperationStats,
+    queryFn: api.getBulkOperationStats,
   });
 };
 
 export const useBulkOperationProgress = (operationId: string) => {
   return useQuery({
-    queryKey: queryKeys.bulkOperationProgress(operationId),
-    queryFn: () => api.getBulkOperationProgress(operationId),
+    queryKey: queryKeys.bulkOperation(operationId),
+    queryFn: () => api.getBulkOperation(operationId),
     enabled: !!operationId,
     refetchInterval: 1000, // Poll every second for progress updates
   });
@@ -1248,11 +1445,9 @@ export const useCancelBulkOperation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: api.cancelBulkOperation,
-    onSuccess: (_, operationId) => {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.bulkOperationProgress(operationId),
-      });
+    mutationFn: (operationId: string) => api.cancelBulkOperation(operationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.bulkOperations });
     },
   });
 };
@@ -1438,5 +1633,84 @@ export const useSystemAnalytics = () => {
     queryKey: queryKeys.systemAnalytics,
     queryFn: api.getSystemAnalytics,
     staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+// ============================================================================
+// ERROR LOGGING HOOKS
+// ============================================================================
+
+export const useErrorLogs = (filters?: {
+  level?: 'error' | 'warning' | 'info' | 'debug';
+  resolved?: boolean;
+  userId?: string;
+  adminId?: string;
+  limit?: number;
+}) => {
+  return useQuery({
+    queryKey: [...queryKeys.errorLogs, filters],
+    queryFn: () => api.getErrorLogs(filters),
+    staleTime: 1 * 60 * 1000, // 1 minute
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    retry: 3,
+  });
+};
+
+export const usePerformanceLogs = (filters?: {
+  operation?: string;
+  success?: boolean;
+  userId?: string;
+  adminId?: string;
+  limit?: number;
+}) => {
+  return useQuery({
+    queryKey: [...queryKeys.performanceLogs, filters],
+    queryFn: () => api.getPerformanceLogs(filters),
+    staleTime: 1 * 60 * 1000, // 1 minute
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    retry: 3,
+  });
+};
+
+export const useLogStats = () => {
+  return useQuery({
+    queryKey: queryKeys.logStats,
+    queryFn: api.getLogStats,
+    staleTime: 1 * 60 * 1000, // 1 minute
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    retry: 3,
+  });
+};
+
+export const useLogError = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: api.logError,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.errorLogs });
+      queryClient.invalidateQueries({ queryKey: queryKeys.logStats });
+    },
+  });
+};
+
+export const useResolveError = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      errorId,
+      resolvedBy,
+    }: {
+      errorId: string;
+      resolvedBy: string;
+    }) => api.resolveError(errorId, resolvedBy),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.errorLogs });
+      queryClient.invalidateQueries({ queryKey: queryKeys.logStats });
+    },
   });
 };
