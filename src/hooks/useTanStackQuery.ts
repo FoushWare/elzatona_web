@@ -93,23 +93,12 @@ export const queryKeys = {
   // Admin Stats
   adminStats: ['admin', 'stats'] as const,
 
-  // Backup Operations
-  backups: ['backups'] as const,
-  backup: (id: string) => ['backups', id] as const,
-  backupStats: ['backupStats'] as const,
-
   // Bulk Operations
   bulkOperations: ['bulk-operations'] as const,
+  bulkOperation: (id: string) => ['bulk-operations', id] as const,
+  bulkOperationStats: ['bulk-operations', 'stats'] as const,
   bulkOperationProgress: (operationId: string) =>
     ['bulk-operations', 'progress', operationId] as const,
-
-  // Content Versioning
-  contentVersions: (contentId: string, contentType: string) =>
-    ['content-versions', contentId, contentType] as const,
-  contentVersion: (versionId: string) =>
-    ['content-version', versionId] as const,
-  versionComparison: (versionId1: string, versionId2: string) =>
-    ['version-comparison', versionId1, versionId2] as const,
 
   // Audit Logs
   auditLogs: ['audit-logs'] as const,
@@ -120,28 +109,6 @@ export const queryKeys = {
   userAnalytics: (userId: string) => ['analytics', 'user', userId] as const,
   userInsights: (userId: string) => ['analytics', 'insights', userId] as const,
   systemAnalytics: ['analytics', 'system'] as const,
-
-  // Bulk Operations
-  bulkOperations: ['bulk-operations'] as const,
-  bulkOperation: (id: string) => ['bulk-operations', id] as const,
-  bulkOperationStats: ['bulk-operations', 'stats'] as const,
-
-  // Content Versioning
-  contentVersions: (contentId: string, contentType: string) =>
-    ['content-versions', contentId, contentType] as const,
-  contentVersion: (versionId: string) =>
-    ['content-version', versionId] as const,
-  versionComparison: (versionId1: string, versionId2: string) =>
-    ['version-comparison', versionId1, versionId2] as const,
-
-  // Audit Logs
-  auditLogs: ['audit-logs'] as const,
-  auditLogStats: ['audit-log-stats'] as const,
-
-  // Error Logging
-  errorLogs: ['error-logs'] as const,
-  performanceLogs: ['performance-logs'] as const,
-  logStats: ['log-stats'] as const,
 } as const;
 
 // ============================================================================
@@ -356,37 +323,6 @@ const api = {
     ),
 
   // Backup Operations
-  getBackups: () =>
-    api.fetch<{ success: boolean; backups: any[] }>(
-      '/api/admin/backup?action=list'
-    ),
-  getBackupStats: () =>
-    api.fetch<{
-      success: boolean;
-      totalBackups: number;
-      totalSize: number;
-      lastBackup?: Date;
-      collectionsCount: number;
-    }>('/api/admin/backup?action=stats'),
-  createBackup: (name: string, description: string) =>
-    api.fetch<{ success: boolean; backupId?: string }>('/api/admin/backup', {
-      method: 'POST',
-      body: JSON.stringify({ action: 'create', name, description }),
-    }),
-  restoreBackup: (backupId: string, options?: any) =>
-    api.fetch<{ success: boolean; summary?: any }>('/api/admin/backup', {
-      method: 'POST',
-      body: JSON.stringify({ action: 'restore', backupId, options }),
-    }),
-  deleteBackup: (backupId: string) =>
-    api.fetch<{ success: boolean }>(`/api/admin/backup?backupId=${backupId}`, {
-      method: 'DELETE',
-    }),
-  scheduleBackup: (schedule: 'daily' | 'weekly' | 'monthly') =>
-    api.fetch<{ success: boolean }>('/api/admin/backup', {
-      method: 'POST',
-      body: JSON.stringify({ action: 'schedule', schedule }),
-    }),
 
   // Bulk Operations
   bulkDelete: (
@@ -478,54 +414,6 @@ const api = {
       }
     ),
 
-  // Content Versioning
-  createContentVersion: (
-    contentId: string,
-    contentType: string,
-    data: any,
-    userId: string,
-    reason?: string
-  ) =>
-    api.fetch<{ success: boolean; versionId: string; message: string }>(
-      '/api/admin/content-versioning/versions',
-      {
-        method: 'POST',
-        body: JSON.stringify({ contentId, contentType, data, userId, reason }),
-      }
-    ),
-  getContentVersions: (
-    contentId: string,
-    contentType: string,
-    limit?: number
-  ) => {
-    const params = new URLSearchParams({ contentId, contentType });
-    if (limit) params.append('limit', limit.toString());
-    return api.fetch<{ success: boolean; versions: any[]; count: number }>(
-      `/api/admin/content-versioning/versions?${params}`
-    );
-  },
-  getContentVersion: (versionId: string) =>
-    api.fetch<{ success: boolean; version: any }>(
-      `/api/admin/content-versioning/versions/${versionId}`
-    ),
-  restoreContentVersion: (
-    versionId: string,
-    contentId: string,
-    contentType: string,
-    userId: string
-  ) =>
-    api.fetch<{ success: boolean; message: string }>(
-      `/api/admin/content-versioning/versions/${versionId}/restore`,
-      {
-        method: 'PUT',
-        body: JSON.stringify({ contentId, contentType, userId }),
-      }
-    ),
-  compareVersions: (versionId1: string, versionId2: string) =>
-    api.fetch<{ success: boolean; comparison: any[]; changesCount: number }>(
-      `/api/admin/content-versioning/versions/${versionId1}/compare/${versionId2}`
-    ),
-
   // Audit Logs
   getAuditLogs: (contentId?: string, contentType?: string, limit?: number) => {
     const params = new URLSearchParams();
@@ -615,69 +503,6 @@ const api = {
     ),
   getSystemAnalytics: () =>
     api.fetch<{ success: boolean; analytics: any }>('/api/analytics/system'),
-
-  // Error Logging
-  getErrorLogs: (filters?: {
-    level?: 'error' | 'warning' | 'info' | 'debug';
-    resolved?: boolean;
-    userId?: string;
-    adminId?: string;
-    limit?: number;
-  }) => {
-    const params = new URLSearchParams();
-    if (filters) {
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value !== undefined) {
-          params.append(key, value.toString());
-        }
-      });
-    }
-    return api.fetch<{ success: boolean; logs: any[]; count: number }>(
-      `/api/admin/logs?type=errors${params.toString() ? `&${params.toString()}` : ''}`
-    );
-  },
-  getPerformanceLogs: (filters?: {
-    operation?: string;
-    success?: boolean;
-    userId?: string;
-    adminId?: string;
-    limit?: number;
-  }) => {
-    const params = new URLSearchParams();
-    if (filters) {
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value !== undefined) {
-          params.append(key, value.toString());
-        }
-      });
-    }
-    return api.fetch<{ success: boolean; logs: any[]; count: number }>(
-      `/api/admin/logs?type=performance${params.toString() ? `&${params.toString()}` : ''}`
-    );
-  },
-  getLogStats: () =>
-    api.fetch<{ success: boolean; errorStats: any; performanceStats: any }>(
-      '/api/admin/logs?type=stats'
-    ),
-  logError: (data: {
-    level: 'error' | 'warning' | 'info' | 'debug';
-    message: string;
-    stack?: string;
-    context?: any;
-    metadata?: any;
-  }) =>
-    api.fetch<{ success: boolean; errorId: string; message: string }>(
-      '/api/admin/logs',
-      {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }
-    ),
-  resolveError: (errorId: string, resolvedBy: string) =>
-    api.fetch<{ success: boolean; message: string }>('/api/admin/logs', {
-      method: 'PUT',
-      body: JSON.stringify({ errorId, action: 'resolve', resolvedBy }),
-    }),
 };
 
 // ============================================================================
@@ -1453,90 +1278,6 @@ export const useCancelBulkOperation = () => {
 };
 
 // ============================================================================
-// CONTENT VERSIONING HOOKS
-// ============================================================================
-
-export const useCreateContentVersion = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({
-      contentId,
-      contentType,
-      data,
-      userId,
-      reason,
-    }: {
-      contentId: string;
-      contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
-      data: any;
-      userId: string;
-      reason?: string;
-    }) =>
-      api.createContentVersion(contentId, contentType, data, userId, reason),
-    onSuccess: (_, { contentId, contentType }) => {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.contentVersions(contentId, contentType),
-      });
-      queryClient.invalidateQueries({ queryKey: queryKeys.auditLogs });
-    },
-  });
-};
-
-export const useContentVersions = (
-  contentId: string,
-  contentType: string,
-  limit?: number
-) => {
-  return useQuery({
-    queryKey: queryKeys.contentVersions(contentId, contentType),
-    queryFn: () => api.getContentVersions(contentId, contentType, limit),
-    enabled: !!contentId && !!contentType,
-  });
-};
-
-export const useContentVersion = (versionId: string) => {
-  return useQuery({
-    queryKey: queryKeys.contentVersion(versionId),
-    queryFn: () => api.getContentVersion(versionId),
-    enabled: !!versionId,
-  });
-};
-
-export const useRestoreContentVersion = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({
-      versionId,
-      contentId,
-      contentType,
-      userId,
-    }: {
-      versionId: string;
-      contentId: string;
-      contentType: 'cards' | 'plans' | 'categories' | 'topics' | 'questions';
-      userId: string;
-    }) => api.restoreContentVersion(versionId, contentId, contentType, userId),
-    onSuccess: (_, { contentId, contentType }) => {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.contentVersions(contentId, contentType),
-      });
-      queryClient.invalidateQueries({ queryKey: queryKeys[contentType] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.auditLogs });
-    },
-  });
-};
-
-export const useCompareVersions = (versionId1: string, versionId2: string) => {
-  return useQuery({
-    queryKey: queryKeys.versionComparison(versionId1, versionId2),
-    queryFn: () => api.compareVersions(versionId1, versionId2),
-    enabled: !!versionId1 && !!versionId2,
-  });
-};
-
-// ============================================================================
 // AUDIT LOGS HOOKS
 // ============================================================================
 
@@ -1633,84 +1374,5 @@ export const useSystemAnalytics = () => {
     queryKey: queryKeys.systemAnalytics,
     queryFn: api.getSystemAnalytics,
     staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-};
-
-// ============================================================================
-// ERROR LOGGING HOOKS
-// ============================================================================
-
-export const useErrorLogs = (filters?: {
-  level?: 'error' | 'warning' | 'info' | 'debug';
-  resolved?: boolean;
-  userId?: string;
-  adminId?: string;
-  limit?: number;
-}) => {
-  return useQuery({
-    queryKey: [...queryKeys.errorLogs, filters],
-    queryFn: () => api.getErrorLogs(filters),
-    staleTime: 1 * 60 * 1000, // 1 minute
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
-    retry: 3,
-  });
-};
-
-export const usePerformanceLogs = (filters?: {
-  operation?: string;
-  success?: boolean;
-  userId?: string;
-  adminId?: string;
-  limit?: number;
-}) => {
-  return useQuery({
-    queryKey: [...queryKeys.performanceLogs, filters],
-    queryFn: () => api.getPerformanceLogs(filters),
-    staleTime: 1 * 60 * 1000, // 1 minute
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
-    retry: 3,
-  });
-};
-
-export const useLogStats = () => {
-  return useQuery({
-    queryKey: queryKeys.logStats,
-    queryFn: api.getLogStats,
-    staleTime: 1 * 60 * 1000, // 1 minute
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
-    retry: 3,
-  });
-};
-
-export const useLogError = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: api.logError,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.errorLogs });
-      queryClient.invalidateQueries({ queryKey: queryKeys.logStats });
-    },
-  });
-};
-
-export const useResolveError = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({
-      errorId,
-      resolvedBy,
-    }: {
-      errorId: string;
-      resolvedBy: string;
-    }) => api.resolveError(errorId, resolvedBy),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.errorLogs });
-      queryClient.invalidateQueries({ queryKey: queryKeys.logStats });
-    },
   });
 };
