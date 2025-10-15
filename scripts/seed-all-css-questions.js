@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const seedingScripts = [
+const scripts = [
   'seed-css-1.js',
   'seed-css-21-40.js',
   'seed-css-41-60.js',
@@ -13,45 +13,31 @@ const seedingScripts = [
   'seed-css-81-100.js',
 ];
 
-async function runSeedingScripts() {
+async function runAllScripts() {
   console.log('🚀 Starting CSS questions seeding process...');
-  console.log(`📁 Found ${seedingScripts.length} seeding scripts to run`);
+  console.log(`📁 Running ${scripts.length} seeding scripts...`);
 
-  let successCount = 0;
-  let errorCount = 0;
+  for (const script of scripts) {
+    const scriptPath = path.join(__dirname, script);
+    console.log(`\n🔄 Running ${script}...`);
 
-  for (const script of seedingScripts) {
     try {
-      console.log(`\n🔄 Running ${script}...`);
-      const scriptPath = path.join(__dirname, script);
-
       await execa('node', [scriptPath], {
-        stdio: 'inherit',
         cwd: __dirname,
+        stdio: 'inherit',
       });
-
       console.log(`✅ ${script} completed successfully`);
-      successCount++;
     } catch (error) {
       console.error(`❌ ${script} failed:`, error.message);
-      errorCount++;
+      throw error;
     }
   }
 
-  console.log('\n📊 Seeding Summary:');
-  console.log(`✅ Successful: ${successCount}`);
-  console.log(`❌ Failed: ${errorCount}`);
-  console.log(`📁 Total scripts: ${seedingScripts.length}`);
-
-  if (errorCount === 0) {
-    console.log('\n🎉 All CSS questions seeded successfully!');
-  } else {
-    console.log('\n⚠️  Some scripts failed. Please check the errors above.');
-    process.exit(1);
-  }
+  console.log('\n🎉 All CSS seeding scripts completed successfully!');
+  console.log('📊 CSS questions have been seeded to Firebase');
 }
 
-runSeedingScripts().catch(error => {
-  console.error('💥 Master seeding script failed:', error);
+runAllScripts().catch(error => {
+  console.error('💥 CSS seeding process failed:', error);
   process.exit(1);
 });
