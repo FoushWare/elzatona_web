@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { useUserType } from '@/contexts/UserTypeContextSafe';
 import { UserStatistics } from '@/shared/components/common/UserStatisticsSafe';
-import ErrorBoundary from '@/shared/components/common/ErrorBoundary';
+import { ErrorBoundary } from '@/shared/components/common/ErrorBoundary';
 
 function HomePageContent() {
   const { userType } = useUserType();

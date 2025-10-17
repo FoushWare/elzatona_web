@@ -59,10 +59,10 @@ import { BulkOperationsService } from '@/lib/bulk-operations-service';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { operationId: string } }
+  { params }: { params: Promise<{ operationId: string }> }
 ) {
   try {
-    const { operationId } = params;
+    const { operationId } = await params;
 
     const operation = await BulkOperationsService.getBulkOperation(operationId);
 
@@ -88,10 +88,10 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { operationId: string } }
+  { params }: { params: Promise<{ operationId: string }> }
 ) {
   try {
-    const { operationId } = params;
+    const { operationId } = await params;
 
     const success =
       await BulkOperationsService.cancelBulkOperation(operationId);
