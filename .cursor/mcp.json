@@ -29,6 +29,14 @@
     "chrome-devtools": {
       "command": "npx",
       "args": ["-y", "chrome-devtools-mcp@latest"]
+    },
+    "supabase": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "env -i $(cat supabase-mcp.env | xargs) supabase-mcp-server"
+      ],
+      "env": {}
     }
   }
 }

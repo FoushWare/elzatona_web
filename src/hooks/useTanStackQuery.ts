@@ -23,6 +23,15 @@ interface AdminStats {
   frontendTasks: number;
   problemSolvingTasks: number;
   totalContent: number;
+  totalUsers: number;
+  recentErrors?: Array<{
+    id: string;
+    message: string;
+    error: string;
+    source: string;
+    timestamp: string;
+    severity: string;
+  }>;
   recentActivity: Array<{
     id: string;
     action: string;
@@ -34,6 +43,33 @@ interface AdminStats {
     databaseConnected: boolean;
     lastUpdated: string;
     apiResponseTime: number;
+    uptime: string;
+    activeCollections: number;
+    totalCollections: number;
+  };
+  performanceMetrics?: {
+    averageResponseTime: number;
+    totalRequests: number;
+    errorRate: number;
+    cacheHitRate: number;
+    memoryUsage: string;
+    cpuUsage: string;
+  };
+  analytics?: {
+    userEngagement?: {
+      activeUsers: number;
+      totalSessions: number;
+      averageSessionDuration: number;
+      completionRate: number;
+    };
+    contentQuality?: {
+      questionsWithExplanations: number;
+      questionsWithHints: number;
+      questionsWithSampleAnswers: number;
+      averageQuestionRating: number;
+      averageQuestionLength: number;
+      totalReviews: number;
+    };
   };
 }
 

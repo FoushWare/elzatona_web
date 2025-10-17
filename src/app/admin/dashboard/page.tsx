@@ -603,8 +603,8 @@ export default function AdminDashboard() {
                   <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-4 w-20 rounded"></div>
                 </div>
               ))
-            ) : stats?.recentActivity?.length > 0 ? (
-              stats.recentActivity.slice(0, 5).map(activity => (
+            ) : (stats?.recentActivity?.length ?? 0) > 0 ? (
+              (stats?.recentActivity ?? []).slice(0, 5).map(activity => (
                 <div
                   key={activity.id}
                   className="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
@@ -722,8 +722,8 @@ export default function AdminDashboard() {
                     <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-4 w-20 rounded"></div>
                   </div>
                 ))
-              ) : stats?.recentErrors?.length > 0 ? (
-                stats.recentErrors.slice(0, 3).map(error => (
+              ) : (stats?.recentErrors?.length ?? 0) > 0 ? (
+                (stats?.recentErrors ?? []).slice(0, 3).map(error => (
                   <div
                     key={error.id}
                     className="flex items-center p-3 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800"
@@ -739,7 +739,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="text-sm text-red-500 dark:text-red-400">
                       {new Date(
-                        error.timestamp?.seconds * 1000 || Date.now()
+                        error.timestamp || Date.now()
                       ).toLocaleTimeString()}
                     </div>
                   </div>
