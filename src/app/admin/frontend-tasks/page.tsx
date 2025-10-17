@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Plus, Edit, Trash2, Eye, Search, Filter, Code } from 'lucide-react';
 import {
   FrontendTask,

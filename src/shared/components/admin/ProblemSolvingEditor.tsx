@@ -1353,3 +1353,5 @@ export default function ProblemSolvingEditor({
     );
   };
 }
+
+export default ProblemSolvingEditor;

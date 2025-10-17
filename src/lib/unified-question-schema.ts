@@ -29,12 +29,14 @@ export interface UnifiedQuestion {
   learningPath?: string; // Already optional
   sectionId?: string; // Already optional
   topic?: string; // Added topic field
+  learningCardId?: string; // Added learning card ID
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
   createdBy?: string;
   updatedBy?: string;
   tags?: string[];
+  answer?: string; // Added answer field
   explanation?: string;
   hints?: string[];
   timeLimit?: number; // in seconds

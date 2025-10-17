@@ -53,7 +53,7 @@ export default function LearningCardsAdminPage() {
       estimatedTime: '30 minutes',
       difficulty: 'beginner',
       topics: [],
-      sections: [],
+      categories: [],
     },
   });
 
@@ -91,7 +91,7 @@ export default function LearningCardsAdminPage() {
         estimatedTime: '30 minutes',
         difficulty: 'beginner',
         topics: [],
-        sections: [],
+        categories: [],
       },
     });
   };
@@ -150,7 +150,7 @@ export default function LearningCardsAdminPage() {
       description: cardType.description,
       metadata: {
         ...formData.metadata,
-        topics: cardType.defaultTopics,
+        topics: [...cardType.defaultTopics],
       },
     });
   };

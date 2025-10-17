@@ -33,10 +33,10 @@ import { UserAnalyticsService } from '@/lib/user-analytics-service';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const { userId } = params;
+    const { userId } = await params;
 
     const analytics = await UserAnalyticsService.getUserAnalytics(userId);
 

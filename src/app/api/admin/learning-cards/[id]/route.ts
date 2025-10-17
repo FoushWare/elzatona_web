@@ -11,10 +11,11 @@ import {
 // GET /api/admin/learning-cards/[id] - Get a specific learning card
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const cardRef = doc(db, 'learningCards', params.id);
+    const { id } = await params;
+    const cardRef = doc(db, 'learningCards', id);
     const cardSnap = await getDoc(cardRef);
 
     if (!cardSnap.exists()) {
@@ -62,9 +63,10 @@ export async function GET(
 // PUT /api/admin/learning-cards/[id] - Update a learning card
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const {
       title,
@@ -88,7 +90,7 @@ export async function PUT(
       );
     }
 
-    const cardRef = doc(db, 'learningCards', params.id);
+    const cardRef = doc(db, 'learningCards', id);
     await updateDoc(cardRef, {
       title,
       type,
@@ -105,7 +107,7 @@ export async function PUT(
     return NextResponse.json({
       success: true,
       data: {
-        id: params.id,
+        id: id,
         title,
         type,
         description,
@@ -132,10 +134,11 @@ export async function PUT(
 // DELETE /api/admin/learning-cards/[id] - Delete a learning card
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const cardRef = doc(db, 'learningCards', params.id);
+    const { id } = await params;
+    const cardRef = doc(db, 'learningCards', id);
     await deleteDoc(cardRef);
 
     return NextResponse.json({
