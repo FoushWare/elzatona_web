@@ -1,0 +1,42 @@
+import execa from 'execa';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const scripts = [
+  'seed-nextjs-next1-20.js',
+  'seed-nextjs-next-21-40.js',
+  'seed-nextjs-next41-60.js',
+  'seed-nextjs-next-61-80.js',
+];
+
+async function runAllScripts() {
+  console.log('🚀 Starting Next.js questions seeding process...');
+  console.log(`📁 Running ${scripts.length} seeding scripts...`);
+
+  for (const script of scripts) {
+    const scriptPath = path.join(__dirname, script);
+    console.log(`\n🔄 Running ${script}...`);
+
+    try {
+      await execa('node', [scriptPath], {
+        cwd: __dirname,
+        stdio: 'inherit',
+      });
+      console.log(`✅ ${script} completed successfully`);
+    } catch (error) {
+      console.error(`❌ ${script} failed:`, error.message);
+      throw error;
+    }
+  }
+
+  console.log('\n🎉 All Next.js seeding scripts completed successfully!');
+  console.log('📊 Next.js questions have been seeded to Firebase');
+}
+
+runAllScripts().catch(error => {
+  console.error('💥 Next.js seeding process failed:', error);
+  process.exit(1);
+});

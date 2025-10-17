@@ -1,180 +1,304 @@
 [
   {
-    "id": 49,
+    "id": "design-patterns-observer-pattern-49",
     "title": "Definition of Observer Pattern",
     "content": "What is the Observer Pattern and why is it useful in JavaScript applications?",
     "type": "open-ended",
-    "difficulty": "easy",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.207Z",
+    "updatedAt": "2025-10-15T00:47:17.207Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "beginner"],
+    "explanation": "The Observer Pattern allows objects (observers) to subscribe to another object (observable) so they get notified when events occur. It’s useful because it enables decoupling and supports event-driven programming.",
+    "points": 10,
     "sampleAnswers": [
       "The Observer Pattern allows objects (observers) to subscribe to another object (observable) so they get notified when events occur.",
       "It’s useful because it enables decoupling and supports event-driven programming."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": 50,
+    "id": "design-patterns-observer-pattern-50",
     "title": "Core Components of Observer Pattern",
     "content": "Which three components are essential in the Observer Pattern implementation?",
     "type": "multiple-choice",
-    "difficulty": "easy",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.207Z",
+    "updatedAt": "2025-10-15T00:47:17.207Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "beginner"],
+    "explanation": "The correct answer is: Observers, subscribe/unsubscribe, notify",
+    "points": 10,
     "options": [
       {
         "id": "a",
         "text": "Publisher, renderer, transformer",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Observers, subscribe/unsubscribe, notify",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "State, reducer, dispatcher",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "Model, view, controller",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": 51,
+    "id": "design-patterns-observer-pattern-51",
     "title": "Observer Pattern in React",
     "content": "In the example provided, which functions act as observers when subscribed to the observable?",
     "type": "multiple-choice",
-    "difficulty": "medium",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.207Z",
+    "updatedAt": "2025-10-15T00:47:17.207Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "The correct answer is: logger and toastify",
+    "points": 10,
     "options": [
       {
         "id": "a",
         "text": "handleClick and handleToggle",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "logger and toastify",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "Button and Switch components",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "React lifecycle methods",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": 52,
+    "id": "design-patterns-observer-pattern-52",
     "title": "Observable Notifications",
     "content": "What happens when the observable's notify() method is called?",
     "type": "open-ended",
-    "difficulty": "easy",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.207Z",
+    "updatedAt": "2025-10-15T00:47:17.207Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "beginner"],
+    "explanation": "It loops through the observers list and invokes each subscribed function with the provided data. All observers receive the event data at the same time.",
+    "points": 10,
     "sampleAnswers": [
       "It loops through the observers list and invokes each subscribed function with the provided data.",
       "All observers receive the event data at the same time."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": 53,
+    "id": "design-patterns-observer-pattern-53",
     "title": "Practical Use Case",
     "content": "Which scenario is a good use case for the Observer Pattern?",
     "type": "multiple-choice",
-    "difficulty": "medium",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.207Z",
+    "updatedAt": "2025-10-15T00:47:17.207Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "The correct answer is: Notifying multiple UI components when new messages arrive",
+    "points": 10,
     "options": [
       {
         "id": "a",
         "text": "Notifying multiple UI components when new messages arrive",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Rendering static content with no user interaction",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "Compiling JavaScript code to ES5",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "Sorting a list of numbers",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": 54,
+    "id": "design-patterns-observer-pattern-54",
     "title": "Observer Pattern vs Pub/Sub",
     "content": "What is the key difference between the Observer Pattern and the Publish/Subscribe (Pub/Sub) pattern?",
     "type": "open-ended",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
     "difficulty": "advanced",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.207Z",
+    "updatedAt": "2025-10-15T00:47:17.207Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "advanced"],
+    "explanation": "In Observer, observers subscribe directly to the observable, creating tight coupling. In Pub/Sub, a mediator (event bus) manages communication, decoupling publishers and subscribers.",
+    "points": 10,
     "sampleAnswers": [
       "In Observer, observers subscribe directly to the observable, creating tight coupling.",
       "In Pub/Sub, a mediator (event bus) manages communication, decoupling publishers and subscribers."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": 55,
+    "id": "design-patterns-observer-pattern-55",
     "title": "Observer Pattern in RxJS",
     "content": "Which popular JavaScript library uses the Observer Pattern extensively?",
     "type": "multiple-choice",
-    "difficulty": "easy",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.207Z",
+    "updatedAt": "2025-10-15T00:47:17.207Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "beginner"],
+    "explanation": "The correct answer is: RxJS",
+    "points": 10,
     "options": [
       {
         "id": "a",
         "text": "Redux",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Axios",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "RxJS",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "Styled Components",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": 56,
+    "id": "design-patterns-observer-pattern-56",
     "title": "Performance Concern",
     "content": "What is one potential drawback of the Observer Pattern?",
     "type": "multiple-choice",
-    "difficulty": "medium",
+    "category": "Design Patterns",
+    "topic": "General Design Patterns",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-15T00:47:17.207Z",
+    "updatedAt": "2025-10-15T00:47:17.207Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["design-patterns", "general-design-patterns", "intermediate"],
+    "explanation": "The correct answer is: Too many or complex observers can cause performance issues during notifications",
+    "points": 10,
     "options": [
       {
         "id": "a",
         "text": "Observers cannot be removed once added",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "b",
         "text": "Too many or complex observers can cause performance issues during notifications",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "c",
         "text": "Observable cannot notify multiple observers at once",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "d",
         "text": "It cannot work with asynchronous data",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   }
 ]

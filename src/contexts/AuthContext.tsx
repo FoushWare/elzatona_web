@@ -7,12 +7,25 @@ import {
   useEffect,
   ReactNode,
 } from 'react';
+import { UserAuthService } from '@/lib/user-auth';
 
 interface User {
   id: string;
   name: string;
   email: string;
   avatar?: string;
+  role: 'user' | 'premium_user' | 'admin' | 'super_admin';
+  preferences?: {
+    theme: 'light' | 'dark' | 'system';
+    notifications: boolean;
+    emailUpdates: boolean;
+  };
+  progress?: {
+    completedQuestions: string[];
+    completedPaths: string[];
+    streak: number;
+    totalTimeSpent: number;
+  };
 }
 
 interface AuthContextType {
@@ -67,20 +80,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setIsLoading(true);
 
-      // Simulate API call - replace with actual authentication API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Call the authentication API
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // For demo purposes, accept any email/password combination
-      // In production, this would validate against your backend
-      if (email && password) {
+      const data = await response.json();
+
+      if (data.success && data.user) {
+        // Convert session to user format
         const userData: User = {
-          id: Date.now().toString(),
-          name: email.split('@')[0], // Use email prefix as name for demo
-          email: email,
+          id: data.user.id,
+          name: data.user.name,
+          email: data.user.email,
+          role: data.user.role,
         };
 
         setUser(userData);
         localStorage.setItem('frontend-koddev-user', JSON.stringify(userData));
+        localStorage.setItem('auth-token', data.user.token);
         return true;
       }
 
@@ -101,20 +123,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setIsLoading(true);
 
-      // Simulate API call - replace with actual signup API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Call the registration API
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-      // For demo purposes, accept any valid signup data
-      if (name && email && password) {
-        const userData: User = {
-          id: Date.now().toString(),
-          name: name,
-          email: email,
-        };
+      const data = await response.json();
 
-        setUser(userData);
-        localStorage.setItem('frontend-koddev-user', JSON.stringify(userData));
-        return true;
+      if (data.success) {
+        // After successful registration, automatically log in
+        return await login(email, password);
       }
 
       return false;
@@ -129,6 +151,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('frontend-koddev-user');
+    localStorage.removeItem('auth-token');
   };
 
   const updateUser = (userData: Partial<User>) => {

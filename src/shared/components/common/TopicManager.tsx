@@ -48,7 +48,6 @@ import {
   TabsTrigger,
 } from '@/shared/components/ui/tabs';
 import { toast } from 'sonner';
-import { AuditLogger } from '@/lib/audit-logger';
 
 export interface Category {
   id: string;
@@ -164,20 +163,6 @@ export default function TopicManager() {
       if (data.success) {
         toast.success('Topic created successfully');
 
-        // Log the audit action
-        await AuditLogger.logTopicAction(
-          'CREATE',
-          data.data.id,
-          topicForm.name,
-          `Created topic "${topicForm.name}" with category "${topicForm.category}" and difficulty "${topicForm.difficulty}"`,
-          {
-            name: topicForm.name,
-            description: topicForm.description,
-            category: topicForm.category,
-            difficulty: topicForm.difficulty,
-          }
-        );
-
         setTopicForm({
           name: '',
           description: '',
@@ -190,15 +175,6 @@ export default function TopicManager() {
       } else {
         toast.error(data.error || 'Failed to create topic');
         console.error('❌ Topic creation failed:', data.error);
-
-        // Log the failed action
-        await AuditLogger.logError({
-          action: 'CREATE',
-          resource: 'TOPIC',
-          resourceName: topicForm.name,
-          details: `Failed to create topic "${topicForm.name}": ${data.error}`,
-          errorMessage: data.error || 'Unknown error',
-        });
       }
     } catch (err) {
       toast.error('Failed to create topic');
@@ -226,33 +202,11 @@ export default function TopicManager() {
       if (data.success) {
         toast.success('Category created successfully');
 
-        // Log the audit action
-        await AuditLogger.logCategoryAction(
-          'CREATE',
-          data.data.id,
-          categoryForm.name,
-          `Created category "${categoryForm.name}" with color "${categoryForm.color}"`,
-          {
-            name: categoryForm.name,
-            description: categoryForm.description,
-            color: categoryForm.color,
-          }
-        );
-
         setCategoryForm({ name: '', description: '', color: '#3B82F6' });
         setIsCategoryDialogOpen(false);
         loadData();
       } else {
         toast.error(data.error || 'Failed to create category');
-
-        // Log the failed action
-        await AuditLogger.logError({
-          action: 'CREATE',
-          resource: 'CATEGORY',
-          resourceName: categoryForm.name,
-          details: `Failed to create category "${categoryForm.name}": ${data.error}`,
-          errorMessage: data.error || 'Unknown error',
-        });
       }
     } catch (err) {
       toast.error('Failed to create category');
@@ -322,24 +276,6 @@ export default function TopicManager() {
       if (data.success) {
         toast.success('Topic updated successfully');
 
-        // Log the audit action
-        await AuditLogger.logTopicAction(
-          'UPDATE',
-          editingTopic.id,
-          topicForm.name,
-          `Updated topic "${editingTopic.name}" to "${topicForm.name}"`,
-          {
-            'before.name': editingTopic.name,
-            'before.description': editingTopic.description,
-            'before.category': editingTopic.category,
-            'before.difficulty': editingTopic.difficulty,
-            'after.name': topicForm.name,
-            'after.description': topicForm.description,
-            'after.category': topicForm.category,
-            'after.difficulty': topicForm.difficulty,
-          }
-        );
-
         setEditingTopic(null);
         setTopicForm({
           name: '',
@@ -351,16 +287,6 @@ export default function TopicManager() {
         loadData();
       } else {
         toast.error(data.error || 'Failed to update topic');
-
-        // Log the failed action
-        await AuditLogger.logError({
-          action: 'UPDATE',
-          resource: 'TOPIC',
-          resourceId: editingTopic.id,
-          resourceName: editingTopic.name,
-          details: `Failed to update topic "${editingTopic.name}": ${data.error}`,
-          errorMessage: data.error || 'Unknown error',
-        });
       }
     } catch (err) {
       toast.error('Failed to update topic');
@@ -428,48 +354,13 @@ export default function TopicManager() {
       if (data.success) {
         toast.success('Topic deleted successfully');
 
-        // Log the audit action
-        await AuditLogger.logTopicAction(
-          'DELETE',
-          topicId,
-          topicName,
-          `Deleted topic "${topicName}"`,
-          {
-            'deleted.id': topicId,
-            'deleted.name': topicName,
-            'deleted.description': topic?.description || '',
-            'deleted.category': topic?.category || '',
-            'deleted.difficulty': topic?.difficulty || '',
-          }
-        );
-
         loadData();
       } else {
         toast.error(data.error || 'Failed to delete topic');
-
-        // Log the failed action
-        await AuditLogger.logError({
-          action: 'DELETE',
-          resource: 'TOPIC',
-          resourceId: topicId,
-          resourceName: topicName,
-          details: `Failed to delete topic "${topicName}": ${data.error}`,
-          errorMessage: data.error || 'Unknown error',
-        });
       }
     } catch (err) {
       toast.error('Failed to delete topic');
       console.error('Error deleting topic:', err);
-
-      // Log the failed action
-      await AuditLogger.logError({
-        action: 'DELETE',
-        resource: 'TOPIC',
-        resourceId: topicId,
-        resourceName: topicName,
-        details: `Failed to delete topic "${topicName}": ${err instanceof Error ? err.message : 'Unknown error'}`,
-        errorMessage: err instanceof Error ? err.message : 'Unknown error',
-      });
     }
   };
 
@@ -496,47 +387,13 @@ export default function TopicManager() {
       if (data.success) {
         toast.success('Category deleted successfully');
 
-        // Log the audit action
-        await AuditLogger.logCategoryAction(
-          'DELETE',
-          categoryId,
-          categoryName,
-          `Deleted category "${categoryName}"`,
-          {
-            'deleted.id': categoryId,
-            'deleted.name': categoryName,
-            'deleted.description': category?.description || '',
-            'deleted.color': category?.color || '',
-          }
-        );
-
         loadData();
       } else {
         toast.error(data.error || 'Failed to delete category');
-
-        // Log the failed action
-        await AuditLogger.logError({
-          action: 'DELETE',
-          resource: 'CATEGORY',
-          resourceId: categoryId,
-          resourceName: categoryName,
-          details: `Failed to delete category "${categoryName}": ${data.error}`,
-          errorMessage: data.error || 'Unknown error',
-        });
       }
     } catch (err) {
       toast.error('Failed to delete category');
       console.error('Error deleting category:', err);
-
-      // Log the failed action
-      await AuditLogger.logError({
-        action: 'DELETE',
-        resource: 'CATEGORY',
-        resourceId: categoryId,
-        resourceName: categoryName,
-        details: `Failed to delete category "${categoryName}": ${err instanceof Error ? err.message : 'Unknown error'}`,
-        errorMessage: err instanceof Error ? err.message : 'Unknown error',
-      });
     }
   };
 

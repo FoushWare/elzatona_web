@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useQuestionsByLearningPath } from './useTanStackQuery';
 
 interface Question {
   id: string;
@@ -25,50 +25,19 @@ interface UseFirebaseQuestionsResult {
 export function useFirebaseQuestions(
   learningPath: string
 ): UseFirebaseQuestionsResult {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: questionsData,
+    isLoading: loading,
+    error,
+    refetch,
+  } = useQuestionsByLearningPath(learningPath);
 
-  const fetchQuestions = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch(`/api/questions/${learningPath}`);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch questions');
-      }
-
-      if (data.success) {
-        setQuestions(data.questions || []);
-      } else {
-        throw new Error(data.error || 'Failed to fetch questions');
-      }
-    } catch (err) {
-      console.error('Error fetching questions:', err);
-      setError(err instanceof Error ? err.message : 'Unknown error');
-      setQuestions([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [learningPath]);
-
-  useEffect(() => {
-    if (learningPath) {
-      fetchQuestions();
-    }
-  }, [learningPath, fetchQuestions]);
-
-  const refetch = () => {
-    fetchQuestions();
-  };
+  const questions = questionsData?.questions || [];
 
   return {
     questions,
     loading,
-    error,
+    error: error instanceof Error ? error.message : null,
     refetch,
   };
 }

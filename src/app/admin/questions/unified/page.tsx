@@ -3,7 +3,7 @@
 
 import { Metadata } from 'next';
 
-import UnifiedQuestionManager from '@/shared/components/learning/UnifiedQuestionManager';
+// import UnifiedQuestionManager from '@/shared/components/learning/UnifiedQuestionManager';
 
 export const metadata: Metadata = {
   title: 'Unified Questions | Admin Panel',
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function UnifiedQuestionsPage() {
   return (
     <div className="container mx-auto py-6">
-      <UnifiedQuestionManager />
+      {/* <UnifiedQuestionManager /> */}
     </div>
   );
 }

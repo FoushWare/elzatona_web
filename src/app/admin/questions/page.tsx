@@ -2,7 +2,7 @@
 
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
 
-import QuestionAudioManager from '@/shared/components/learning/QuestionAudioManager';
+// import QuestionAudioManager from '@/shared/components/learning/QuestionAudioManager';
 
 export default function AdminQuestionsPage() {
   const { user } = useAdminAuth();
@@ -20,7 +20,7 @@ export default function AdminQuestionsPage() {
       </div>
 
       {/* Question Audio Manager */}
-      <QuestionAudioManager learningPathId="frontend-basics" />
+      {/* <QuestionAudioManager learningPathId="frontend-basics" /> */}
     </div>
   );
 }

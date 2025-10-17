@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import DailyIframe from '@daily-co/daily-js';
+import { useQuestionsByLearningPath } from '@/hooks/useTanStackQuery';
 
 interface AIInterviewerAgentProps {
   roomUrl: string;
@@ -33,73 +34,55 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
   const [agentStatus, setAgentStatus] = useState<
     'connecting' | 'ready' | 'speaking' | 'listening' | 'thinking'
   >('connecting');
-  const [interviewQuestions, setInterviewQuestions] = useState<
-    InterviewQuestion[]
-  >([]);
-  const [questionsLoaded, setQuestionsLoaded] = useState(false);
 
-  // Fetch questions from Firebase based on interview topic
-  const fetchQuestionsFromFirebase = async () => {
-    try {
-      // Map interview topics to learning paths
-      const topicToLearningPath: Record<string, string> = {
-        'Frontend Development': 'frontend-basics',
-        React: 'react-mastery',
-        JavaScript: 'javascript-deep-dive',
-        CSS: 'advanced-css',
-        TypeScript: 'typescript-essentials',
-        'Web Performance': 'performance-optimization',
-        'System Design': 'system-design',
-      };
-
-      const learningPath =
-        topicToLearningPath[interviewTopic] || 'frontend-basics';
-
-      const response = await fetch(`/api/questions/${learningPath}`);
-      const data = await response.json();
-
-      if (data.success && data.questions) {
-        // Convert Firebase questions to interview format
-        const convertedQuestions: InterviewQuestion[] = data.questions
-          .filter(
-            (q: { type: string; options: string[] }) =>
-              q.type === 'multiple-choice' && q.options && q.options.length > 0
-          )
-          .map(
-            (q: {
-              id: string;
-              question: string;
-              category: string;
-              difficulty: string;
-              explanation: string;
-            }) => ({
-              id: q.id,
-              question: q.question,
-              category: q.category || interviewTopic,
-              difficulty: q.difficulty || 'intermediate',
-              expectedKeywords: extractKeywords(q.question, q.explanation),
-              followUpQuestions: generateFollowUpQuestions(
-                q.question,
-                q.category
-              ),
-            })
-          );
-
-        setInterviewQuestions(convertedQuestions);
-        setQuestionsLoaded(true);
-        console.log(
-          `🤖 AI Agent loaded ${convertedQuestions.length} questions for ${interviewTopic}`
-        );
-      } else {
-        throw new Error('Failed to fetch questions from Firebase');
-      }
-    } catch (error) {
-      console.error('❌ Error fetching questions for AI agent:', error);
-      // Fallback to basic questions
-      setInterviewQuestions(getFallbackQuestions());
-      setQuestionsLoaded(true);
-    }
+  // Map interview topics to learning paths
+  const topicToLearningPath: Record<string, string> = {
+    'Frontend Development': 'frontend-basics',
+    React: 'react-mastery',
+    JavaScript: 'javascript-deep-dive',
+    CSS: 'advanced-css',
+    TypeScript: 'typescript-essentials',
+    'Web Performance': 'performance-optimization',
+    'System Design': 'system-design',
   };
+
+  const learningPath = topicToLearningPath[interviewTopic] || 'frontend-basics';
+
+  // Use TanStack Query hook to fetch questions
+  const {
+    data: questionsData,
+    isLoading: questionsLoading,
+    error: questionsError,
+  } = useQuestionsByLearningPath(learningPath);
+
+  // Convert Firebase questions to interview format
+  const interviewQuestions = useMemo(() => {
+    if (!questionsData?.questions) return [];
+
+    return questionsData.questions
+      .filter(
+        (q: { type: string; options: string[] }) =>
+          q.type === 'multiple-choice' && q.options && q.options.length > 0
+      )
+      .map(
+        (q: {
+          id: string;
+          question: string;
+          category: string;
+          difficulty: string;
+          explanation: string;
+        }) => ({
+          id: q.id,
+          question: q.question,
+          category: q.category || interviewTopic,
+          difficulty: q.difficulty || 'intermediate',
+          expectedKeywords: extractKeywords(q.question, q.explanation),
+          followUpQuestions: generateFollowUpQuestions(q.question, q.category),
+        })
+      );
+  }, [questionsData?.questions, interviewTopic]);
+
+  const questionsLoaded = !questionsLoading && interviewQuestions.length > 0;
 
   // Extract keywords from question and explanation
   const extractKeywords = (question: string, explanation: string): string[] => {
@@ -200,10 +183,16 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
     },
   ];
 
-  // Load questions when component mounts
+  // Handle questions loading error
   useEffect(() => {
-    fetchQuestionsFromFirebase();
-  }, [interviewTopic]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (questionsError) {
+      console.error(
+        '❌ Error fetching questions for AI agent:',
+        questionsError
+      );
+      // Questions will fall back to empty array, and we'll use fallback questions
+    }
+  }, [questionsError]);
 
   useEffect(() => {
     if (!iframeRef.current || !roomUrl) return;
@@ -268,7 +257,16 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
 
   const startInterview = () => {
     if (!questionsLoaded || interviewQuestions.length === 0) {
-      console.log('⏳ Waiting for questions to load...');
+      console.log(
+        '⏳ Waiting for questions to load or using fallback questions...'
+      );
+      // Use fallback questions if no questions are loaded
+      const fallbackQuestions = getFallbackQuestions();
+      const randomQuestion =
+        fallbackQuestions[Math.floor(Math.random() * fallbackQuestions.length)];
+      setCurrentQuestion(randomQuestion);
+      setAgentStatus('speaking');
+      speakQuestion(randomQuestion.question);
       return;
     }
 
