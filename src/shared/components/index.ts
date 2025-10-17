@@ -27,7 +27,7 @@ export { LearningPathCard } from './learning/LearningPathCard';
 export { default as LearningPathQuestions } from './learning/LearningPathQuestions';
 export { default as LearningPathWithProgress } from './learning/LearningPathWithProgress';
 export { LearningPathsGrid } from './learning/LearningPathsGrid';
-export { LearningModeSwitcher } from './learning/LearningModeSwitcher';
+// export { LearningModeSwitcher } from './learning/LearningModeSwitcher';
 export { LearningModeDetector } from './learning/LearningModeDetector';
 export { GuidedPractice } from './learning/GuidedPractice';
 export { GuidedAnalytics } from './learning/GuidedAnalytics';
@@ -47,7 +47,7 @@ export { default as FlashcardSession } from './learning/FlashcardSession';
 export { default as JavaScriptQuestionCard } from './learning/JavaScriptQuestionCard';
 export { MarkdownQuestionExtractor } from './learning/MarkdownQuestionExtractor';
 export { OpenEndedQuestion } from './learning/OpenEndedQuestion';
-export { default as QuestionAudioManager } from './learning/QuestionAudioManager';
+// export { default as QuestionAudioManager } from './learning/QuestionAudioManager';
 export { QuestionCreationForm } from './learning/QuestionCreationForm';
 export { default as QuestionCreator } from './learning/QuestionCreator';
 export { QuestionEditModal } from './learning/QuestionEditModal';
@@ -59,7 +59,7 @@ export { default as SolutionDisplay } from './learning/SolutionDisplay';
 export { default as TestRunner } from './learning/TestRunner';
 export { TopicManager } from './learning/TopicManager';
 export { TopicSelector } from './learning/TopicSelector';
-export { default as UnifiedQuestionManager } from './learning/UnifiedQuestionManager';
+// export { default as UnifiedQuestionManager } from './learning/UnifiedQuestionManager';
 
 // Auth Components
 export { SignInPopup } from './auth/SignInPopup';
@@ -108,7 +108,6 @@ export { default as LayoutWrapper } from './common/LayoutWrapper';
 // Additional Common Components (moved from main components)
 export { AIInterviewerAgent } from './common/AIInterviewerAgent';
 export { default as AddToFlashcard } from './common/AddToFlashcard';
-export { default as BackupManager } from './common/BackupManager';
 export { default as BulkQuestionUploader } from './common/BulkQuestionUploader';
 export { default as ChatGPT } from './common/ChatGPT';
 export { default as CodeEditor } from './common/CodeEditor';

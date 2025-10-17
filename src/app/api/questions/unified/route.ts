@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
       constraints.push(orderBy('createdAt', 'desc'));
 
       // Create the query
-      const q = query(collection(db, 'unifiedQuestions'), ...constraints);
+      const q = query(collection(db, 'questions'), ...constraints);
 
       // For small datasets, get all and paginate in memory (more efficient)
       const allSnapshot = await getDocs(q);
@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
         };
 
         const docRef = await addDoc(
-          collection(db, 'unifiedQuestions'),
+          collection(db, 'questions'),
           questionWithTimestamps
         );
         results.push({ id: docRef.id, ...questionData });
@@ -245,7 +245,7 @@ export async function PUT(request: NextRequest) {
       updatedAt: new Date(),
     };
 
-    await updateDoc(doc(db, 'unifiedQuestions', id), updateWithTimestamps);
+    await updateDoc(doc(db, 'questions', id), updateWithTimestamps);
 
     // Invalidate cache after updating question
     questionsCache = null;
@@ -280,7 +280,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await deleteDoc(doc(db, 'unifiedQuestions', id));
+    await deleteDoc(doc(db, 'questions', id));
 
     // Invalidate cache after deleting question
     questionsCache = null;

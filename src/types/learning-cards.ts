@@ -18,11 +18,11 @@ export interface LearningCard {
     estimatedTime: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     topics: string[];
-    sections: LearningCardSection[];
+    categories: LearningCardCategory[];
   };
 }
 
-export interface LearningCardSection {
+export interface LearningCardCategory {
   id: string;
   name: string;
   description: string;
@@ -83,7 +83,7 @@ export interface LearningCardFormData {
     estimatedTime: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     topics: string[];
-    sections: Omit<LearningCardSection, 'id'>[];
+    categories: Omit<LearningCardCategory, 'id'>[];
   };
 }
 

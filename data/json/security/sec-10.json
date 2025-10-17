@@ -1,292 +1,395 @@
 [
   {
-    "id": "sec81",
+    "id": "sec-10-sec81",
     "title": "How does CSRF (Cross-Site Request Forgery) work?",
     "content": "Explain the mechanism of a CSRF attack and its potential impact.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "CSRF",
+    "category": "Security",
+    "topic": "Cross-Site Request Forgery (CSRF)",
     "difficulty": "intermediate",
-    "topic": "CSRF",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T01:20:00.000Z",
     "updatedAt": "2025-10-11T01:20:00.000Z",
-    "tags": ["security", "csrf", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "cross-site-request-forgery-csrf",
+      "csrf",
+      "intermediate"
+    ],
+    "explanation": "CSRF tricks an authenticated user into unknowingly performing actions on a web application, like changing account details or transferring funds, by submitting malicious requests from another site.",
+    "points": 10,
     "sampleAnswers": [
       "CSRF tricks an authenticated user into unknowingly performing actions on a web application, like changing account details or transferring funds, by submitting malicious requests from another site."
-    ]
+    ],
+    "subcategory": "CSRF",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec82",
+    "id": "sec-10-sec82",
     "title": "How can you prevent CSRF attacks?",
     "content": "Select all correct options.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "CSRF",
+    "category": "Security",
+    "topic": "Cross-Site Request Forgery (CSRF)",
     "difficulty": "intermediate",
-    "topic": "CSRF Prevention",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T01:21:00.000Z",
     "updatedAt": "2025-10-11T01:21:00.000Z",
-    "tags": ["security", "csrf", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "cross-site-request-forgery-csrf",
+      "csrf",
+      "intermediate"
+    ],
+    "explanation": "CSRF tokens, SameSite cookies, and HTTPS help prevent CSRF attacks. Disabling cookies is not practical for most web apps.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "Use CSRF tokens in forms",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Use SameSite cookie attribute",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Use HTTPS",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Disable cookies completely",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "CSRF tokens, SameSite cookies, and HTTPS help prevent CSRF attacks. Disabling cookies is not practical for most web apps."
+    "subcategory": "CSRF",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec83",
+    "id": "sec-10-sec83",
     "title": "What is the difference between DOM-based XSS and Stored XSS?",
     "content": "Select the correct description.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "XSS Types",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T01:22:00.000Z",
     "updatedAt": "2025-10-11T01:22:00.000Z",
-    "tags": ["security", "xss", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "DOM-based XSS runs in the browser, while Stored XSS is saved in server-side storage and executed when other users access it.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "DOM-based XSS executes purely on the client side",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Stored XSS persists in a database or storage and affects multiple users",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "DOM-based XSS stores payloads on the server",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Stored XSS only affects a single user",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "DOM-based XSS runs in the browser, while Stored XSS is saved in server-side storage and executed when other users access it."
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec84",
+    "id": "sec-10-sec84",
     "title": "Why should you avoid using inline scripts in your frontend code?",
     "content": "Explain the security risk associated with inline JavaScript.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "Inline Scripts",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T01:23:00.000Z",
     "updatedAt": "2025-10-11T01:23:00.000Z",
-    "tags": ["security", "xss", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "Inline scripts can easily be exploited by attackers in XSS attacks. Using external scripts and event bindings reduces the risk of executing malicious code.",
+    "points": 10,
     "sampleAnswers": [
       "Inline scripts can easily be exploited by attackers in XSS attacks. Using external scripts and event bindings reduces the risk of executing malicious code."
-    ]
+    ],
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec85",
+    "id": "sec-10-sec85",
     "title": "What is the role of Content Security Policy (CSP) in frontend security?",
     "content": "Select all correct options.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "Headers",
+    "category": "Security",
+    "topic": "Content Security Policy (CSP)",
     "difficulty": "intermediate",
-    "topic": "CSP",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T01:24:00.000Z",
     "updatedAt": "2025-10-11T01:24:00.000Z",
-    "tags": ["security", "csp", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "security",
+      "content-security-policy-csp",
+      "headers",
+      "intermediate"
+    ],
+    "explanation": "CSP controls resource loading and helps prevent XSS, but does not replace input validation.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "Restricts sources of scripts and other resources",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Helps prevent XSS attacks",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Replaces the need for input validation",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Can block inline styles and scripts if configured",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       }
     ],
-    "explanation": "CSP controls resource loading and helps prevent XSS, but does not replace input validation."
+    "subcategory": "Headers",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec86",
+    "id": "sec-10-sec86",
     "title": "Why is sanitizing user input important in frontend security?",
     "content": "Explain the consequences of unsanitized inputs.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "Input Sanitization",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T01:25:00.000Z",
     "updatedAt": "2025-10-11T01:25:00.000Z",
-    "tags": ["security", "xss", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "Unsanitized input can contain scripts or HTML that execute in the user's browser, leading to XSS attacks, data theft, or session hijacking.",
+    "points": 10,
     "sampleAnswers": [
       "Unsanitized input can contain scripts or HTML that execute in the user's browser, leading to XSS attacks, data theft, or session hijacking."
-    ]
+    ],
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec87",
+    "id": "sec-10-sec87",
     "title": "How does the SameSite cookie attribute improve security?",
     "content": "Select the correct behavior.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "Cookies",
+    "category": "Security",
+    "topic": "Session Management",
     "difficulty": "intermediate",
-    "topic": "SameSite Cookies",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T01:26:00.000Z",
     "updatedAt": "2025-10-11T01:26:00.000Z",
-    "tags": ["security", "cookies", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "session-management", "cookies", "intermediate"],
+    "explanation": "SameSite restricts cross-site sending of cookies to reduce CSRF risks. It does not encrypt cookies or make them HttpOnly.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "Prevents cookies from being sent with cross-site requests by default",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Mitigates CSRF attacks",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Encrypts cookie contents",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Prevents cookies from being accessed via JavaScript",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "SameSite restricts cross-site sending of cookies to reduce CSRF risks. It does not encrypt cookies or make them HttpOnly."
+    "subcategory": "Cookies",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec88",
+    "id": "sec-10-sec88",
     "title": "What are best practices for secure cookie usage in frontend applications?",
     "content": "Select all correct options.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "Cookies",
+    "category": "Security",
+    "topic": "Session Management",
     "difficulty": "intermediate",
-    "topic": "Secure Cookies",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T01:27:00.000Z",
     "updatedAt": "2025-10-11T01:27:00.000Z",
-    "tags": ["security", "cookies", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "session-management", "cookies", "intermediate"],
+    "explanation": "HttpOnly, Secure, and SameSite attributes protect cookies from XSS and CSRF attacks. Sensitive tokens should not be stored in localStorage.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "Use HttpOnly to prevent JavaScript access",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Use Secure flag to enforce HTTPS transmission",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Avoid storing sensitive tokens in localStorage",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Use SameSite attribute to mitigate CSRF",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       }
     ],
-    "explanation": "HttpOnly, Secure, and SameSite attributes protect cookies from XSS and CSRF attacks. Sensitive tokens should not be stored in localStorage."
+    "subcategory": "Cookies",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec89",
+    "id": "sec-10-sec89",
     "title": "What is the risk of using eval() in frontend JavaScript?",
     "content": "Explain why eval() can be dangerous in web applications.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "Eval Risks",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T01:28:00.000Z",
     "updatedAt": "2025-10-11T01:28:00.000Z",
-    "tags": ["security", "xss", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "eval() executes arbitrary strings as code, which can lead to remote code execution if user input is passed, making applications vulnerable to XSS and other attacks.",
+    "points": 10,
     "sampleAnswers": [
       "eval() executes arbitrary strings as code, which can lead to remote code execution if user input is passed, making applications vulnerable to XSS and other attacks."
-    ]
+    ],
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec90",
+    "id": "sec-10-sec90",
     "title": "How do you mitigate XSS in React applications?",
     "content": "Select all correct options.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "React XSS Prevention",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T01:29:00.000Z",
     "updatedAt": "2025-10-11T01:29:00.000Z",
-    "tags": ["security", "react", "xss"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "React automatically escapes content in JSX. Any HTML inserted via dangerouslySetInnerHTML must be sanitized. Avoid storing sensitive tokens insecurely.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "Use JSX curly braces to escape content",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Sanitize any user-generated HTML before using dangerouslySetInnerHTML",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Use external scripts instead of inline scripts",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Store session tokens in localStorage without encryption",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "React automatically escapes content in JSX. Any HTML inserted via dangerouslySetInnerHTML must be sanitized. Avoid storing sensitive tokens insecurely."
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   }
 ]

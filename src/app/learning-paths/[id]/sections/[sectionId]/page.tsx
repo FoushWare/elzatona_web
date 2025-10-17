@@ -101,7 +101,9 @@ export default function LearningPathSectionPage() {
       }
 
       // Fetch questions for this section
-      const questionsResponse = await fetch(`/api/questions/${pathId}`);
+      const questionsResponse = await fetch(
+        `/api/questions/by-learning-path/${pathId}`
+      );
       const questionsData: QuestionsResponse = await questionsResponse.json();
 
       if (questionsData.success) {

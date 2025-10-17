@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin APIs Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .test-result {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      .loading {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧪 Admin APIs Test</h1>
+    <button onclick="testAllAPIs()">Test All APIs</button>
+    <button onclick="clearResults()">Clear Results</button>
+
+    <div id="results"></div>
+
+    <script>
+      async function testAPI(url, name) {
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'test-result loading';
+        resultDiv.innerHTML = `🔄 Testing ${name}...`;
+        document.getElementById('results').appendChild(resultDiv);
+
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.success) {
+            resultDiv.className = 'test-result success';
+            resultDiv.innerHTML = `✅ ${name}: Success (${data.count || data.data?.length || 'N/A'} items)`;
+          } else {
+            resultDiv.className = 'test-result error';
+            resultDiv.innerHTML = `❌ ${name}: Failed - ${data.error || 'Unknown error'}`;
+          }
+        } catch (error) {
+          resultDiv.className = 'test-result error';
+          resultDiv.innerHTML = `❌ ${name}: Error - ${error.message}`;
+        }
+      }
+
+      async function testAllAPIs() {
+        clearResults();
+
+        await testAPI('/api/categories', 'Categories API');
+        await testAPI('/api/topics', 'Topics API');
+        await testAPI('/api/questions', 'Questions API');
+        await testAPI(
+          '/api/questions/by-topic/react-basics',
+          'Questions by Topic API'
+        );
+      }
+
+      function clearResults() {
+        document.getElementById('results').innerHTML = '';
+      }
+
+      // Auto-run tests on page load
+      window.onload = testAllAPIs;
+    </script>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   BookOpen,
@@ -23,6 +23,7 @@ import {
   Grid,
   List,
 } from 'lucide-react';
+import { useLearningPaths } from '@/hooks/useTanStackQuery';
 
 interface LearningPath {
   id: string;
@@ -36,42 +37,20 @@ interface LearningPath {
   }>;
 }
 
-interface LearningPathsResponse {
-  success: boolean;
-  data: LearningPath[];
-  error?: string;
-}
-
 export default function LearningPathsPage() {
   const router = useRouter();
-  const [learningPaths, setLearningPaths] = useState<LearningPath[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  useEffect(() => {
-    fetchLearningPaths();
-  }, []);
+  // Use TanStack Query hook
+  const {
+    data: learningPathsData,
+    isLoading: loading,
+    error,
+  } = useLearningPaths();
 
-  const fetchLearningPaths = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/learning-paths');
-      const data: LearningPathsResponse = await response.json();
-
-      if (data.success) {
-        setLearningPaths(data.data);
-      } else {
-        setError(data.error || 'Failed to fetch learning paths');
-      }
-    } catch (err) {
-      setError('Failed to fetch learning paths');
-      console.error('Error fetching learning paths:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Derived data
+  const learningPaths = learningPathsData?.data || [];
 
   const handlePathClick = (pathId: string) => {
     router.push(`/learning-paths/${pathId}`);
@@ -81,13 +60,16 @@ export default function LearningPathsPage() {
     router.push(`/learning-paths/${pathId}/sections/${sectionId}`);
   };
 
-  const filteredPaths = learningPaths.filter(
-    path =>
-      path.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      path.sectors.some(sector =>
-        sector.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-  );
+  // Filtered learning paths based on search
+  const filteredPaths = useMemo(() => {
+    return learningPaths.filter(
+      path =>
+        path.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        path.sectors.some(sector =>
+          sector.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    );
+  }, [learningPaths, searchTerm]);
 
   const getPathIcon = (pathId: string) => {
     const iconMap: Record<string, React.ReactNode> = {
@@ -154,9 +136,13 @@ export default function LearningPathsPage() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Error Loading Paths
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            {error instanceof Error
+              ? error.message
+              : 'Failed to load learning paths'}
+          </p>
           <button
-            onClick={fetchLearningPaths}
+            onClick={() => window.location.reload()}
             className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
           >
             Try Again

@@ -1,207 +1,307 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { db } from './firebase';
+import {
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  deleteDoc,
+  writeBatch,
+  serverTimestamp,
+} from 'firebase/firestore';
 
-// Types
-export interface QuestionOption {
+export interface BackupData {
   id: string;
-  text: string;
-  isCorrect: boolean;
-}
-
-export interface BackupQuestion {
-  id: string;
-  title: string;
-  content: string;
-  type: 'single' | 'multiple';
-  difficulty: 'easy' | 'medium' | 'hard';
-  section: string;
-  options: QuestionOption[];
-  correctAnswers: string[];
-  explanation: string;
-  audioQuestion?: string;
-  audioAnswer?: string;
-  createdAt: string;
-  updatedAt: string;
-  isActive: boolean;
-}
-
-export interface BackupResult {
-  success: boolean;
-  message: string;
-  backupPath?: string;
+  name: string;
+  description: string;
+  collections: {
+    [collectionName: string]: any[];
+  };
+  metadata: {
+    createdAt: Date;
+    createdBy: string;
+    version: string;
+    totalDocuments: number;
+    collectionsCount: number;
+  };
+  status: 'completed' | 'failed' | 'in_progress';
   error?: string;
 }
 
-export interface RestoreResult {
-  success: boolean;
-  message: string;
-  questionsRestored?: number;
-  error?: string;
+export interface RestoreOptions {
+  overwriteExisting: boolean;
+  collections?: string[];
+  dryRun?: boolean;
 }
 
 export class BackupService {
-  private static readonly BACKUP_DIR = path.join(process.cwd(), 'backup');
-  private static readonly QUESTIONS_DIR = path.join(
-    this.BACKUP_DIR,
-    'questions'
-  );
+  private static readonly BACKUP_COLLECTION = 'backups';
+  private static readonly COLLECTIONS_TO_BACKUP = [
+    'questions',
+    'categories',
+    'topics',
+    'learningCards',
+    'learningPlans',
+    'frontendTasks',
+    'problemSolvingTasks',
+    'learningPaths',
+    'auditLogs',
+    'adminCredentials',
+    'users',
+    'notifications',
+    'errorLogs',
+  ];
 
   /**
-   * Ensure backup directories exist
+   * Create a full backup of all collections
    */
-  private static async ensureBackupDirectories(): Promise<void> {
+  static async createBackup(
+    name: string,
+    description: string,
+    createdBy: string
+  ): Promise<{ success: boolean; backupId?: string; error?: string }> {
     try {
-      await fs.mkdir(this.BACKUP_DIR, { recursive: true });
-      await fs.mkdir(this.QUESTIONS_DIR, { recursive: true });
-    } catch (error) {
-      console.error('Failed to create backup directories:', error);
-      throw new Error('Failed to create backup directories');
-    }
-  }
+      const backupId = `backup_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-  /**
-   * Get backup file path for a section
-   */
-  private static getSectionBackupPath(section: string): string {
-    const sanitizedSection = section.toLowerCase().replace(/[^a-z0-9]/g, '-');
-    return path.join(this.QUESTIONS_DIR, `${sanitizedSection}-questions.json`);
-  }
-
-  /**
-   * Backup a question to its section file
-   */
-  static async backupQuestion(question: BackupQuestion): Promise<BackupResult> {
-    try {
-      await this.ensureBackupDirectories();
-
-      const backupPath = this.getSectionBackupPath(question.section);
-      let existingQuestions: BackupQuestion[] = [];
-
-      // Read existing questions if file exists
-      try {
-        const fileContent = await fs.readFile(backupPath, 'utf-8');
-        existingQuestions = JSON.parse(fileContent);
-      } catch (error) {
-        // File doesn't exist yet, start with empty array
-        console.log(
-          `Creating new backup file for section: ${question.section}`
-        );
-      }
-
-      // Check if question already exists (by ID)
-      const existingIndex = existingQuestions.findIndex(
-        q => q.id === question.id
-      );
-
-      if (existingIndex >= 0) {
-        // Update existing question
-        existingQuestions[existingIndex] = question;
-        console.log(
-          `Updated question ${question.id} in backup for section: ${question.section}`
-        );
-      } else {
-        // Add new question
-        existingQuestions.push(question);
-        console.log(
-          `Added new question ${question.id} to backup for section: ${question.section}`
-        );
-      }
-
-      // Sort questions by creation date (newest first)
-      existingQuestions.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-
-      // Write updated questions to backup file
-      await fs.writeFile(
-        backupPath,
-        JSON.stringify(existingQuestions, null, 2)
-      );
-
-      return {
-        success: true,
-        message: `Question backed up successfully to ${question.section} section`,
-        backupPath,
+      // Create backup record
+      const backupData: Omit<BackupData, 'id'> = {
+        name,
+        description,
+        collections: {},
+        metadata: {
+          createdAt: new Date(),
+          createdBy,
+          version: '1.0',
+          totalDocuments: 0,
+          collectionsCount: 0,
+        },
+        status: 'in_progress',
       };
+
+      await setDoc(doc(db, this.BACKUP_COLLECTION, backupId), {
+        ...backupData,
+        metadata: {
+          ...backupData.metadata,
+          createdAt: serverTimestamp(),
+        },
+      });
+
+      // Backup each collection
+      const collections: { [key: string]: any[] } = {};
+      let totalDocuments = 0;
+
+      for (const collectionName of this.COLLECTIONS_TO_BACKUP) {
+        try {
+          const snapshot = await getDocs(collection(db, collectionName));
+          const documents = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          collections[collectionName] = documents;
+          totalDocuments += documents.length;
+
+          console.log(
+            `✅ Backed up ${documents.length} documents from ${collectionName}`
+          );
+        } catch (error) {
+          console.error(
+            `❌ Failed to backup collection ${collectionName}:`,
+            error
+          );
+          collections[collectionName] = [];
+        }
+      }
+
+      // Update backup with data
+      await setDoc(
+        doc(db, this.BACKUP_COLLECTION, backupId),
+        {
+          ...backupData,
+          collections,
+          metadata: {
+            ...backupData.metadata,
+            totalDocuments,
+            collectionsCount: Object.keys(collections).length,
+          },
+          status: 'completed',
+        },
+        { merge: true }
+      );
+
+      console.log(`✅ Backup completed: ${backupId}`);
+      return { success: true, backupId };
     } catch (error) {
-      console.error('Backup failed:', error);
+      console.error('❌ Backup failed:', error);
       return {
         success: false,
-        message: 'Failed to backup question',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : 'Backup failed',
       };
     }
   }
 
   /**
-   * Get all backup files
+   * Restore data from a backup
    */
-  static async getBackupFiles(): Promise<string[]> {
+  static async restoreBackup(
+    backupId: string,
+    options: RestoreOptions = { overwriteExisting: false, dryRun: false }
+  ): Promise<{ success: boolean; error?: string; summary?: any }> {
     try {
-      await this.ensureBackupDirectories();
-
-      const files = await fs.readdir(this.QUESTIONS_DIR);
-      return files.filter(file => file.endsWith('.json'));
-    } catch (error) {
-      console.error('Failed to get backup files:', error);
-      return [];
-    }
-  }
-
-  /**
-   * Get questions from a specific section backup
-   */
-  static async getSectionBackup(section: string): Promise<BackupQuestion[]> {
-    try {
-      await this.ensureBackupDirectories();
-
-      const backupPath = this.getSectionBackupPath(section);
-      const fileContent = await fs.readFile(backupPath, 'utf-8');
-      return JSON.parse(fileContent);
-    } catch (error) {
-      console.error(`Failed to read backup for section ${section}:`, error);
-      return [];
-    }
-  }
-
-  /**
-   * Restore questions from backup to Firebase (placeholder for future implementation)
-   */
-  static async restoreFromBackup(section: string): Promise<RestoreResult> {
-    try {
-      const questions = await this.getSectionBackup(section);
-
-      if (questions.length === 0) {
-        return {
-          success: false,
-          message: `No backup questions found for section: ${section}`,
-          questionsRestored: 0,
-        };
+      // Get backup data
+      const backupDoc = await getDocs(
+        doc(db, this.BACKUP_COLLECTION, backupId)
+      );
+      if (!backupDoc.exists()) {
+        return { success: false, error: 'Backup not found' };
       }
 
-      // TODO: Implement Firebase restoration
-      // This would involve:
-      // 1. Connecting to Firebase
-      // 2. Adding questions to the appropriate collection
-      // 3. Handling duplicates and conflicts
+      const backupData = backupDoc.data() as BackupData;
+      if (backupData.status !== 'completed') {
+        return { success: false, error: 'Backup is not completed' };
+      }
+
+      const summary = {
+        collectionsRestored: 0,
+        documentsRestored: 0,
+        documentsSkipped: 0,
+        errors: [] as string[],
+      };
+
+      if (options.dryRun) {
+        // Dry run - just count what would be restored
+        for (const [collectionName, documents] of Object.entries(
+          backupData.collections
+        )) {
+          if (
+            options.collections &&
+            !options.collections.includes(collectionName)
+          ) {
+            continue;
+          }
+
+          summary.collectionsRestored++;
+          summary.documentsRestored += documents.length;
+        }
+
+        return { success: true, summary };
+      }
+
+      // Actual restore
+      const batch = writeBatch(db);
+      let batchCount = 0;
+      const BATCH_SIZE = 500; // Firestore batch limit
+
+      for (const [collectionName, documents] of Object.entries(
+        backupData.collections
+      )) {
+        if (
+          options.collections &&
+          !options.collections.includes(collectionName)
+        ) {
+          continue;
+        }
+
+        try {
+          for (const document of documents) {
+            const docRef = doc(db, collectionName, document.id);
+
+            if (options.overwriteExisting) {
+              batch.set(docRef, document);
+            } else {
+              // Check if document exists
+              const existingDoc = await getDocs(docRef);
+              if (!existingDoc.exists()) {
+                batch.set(docRef, document);
+              } else {
+                summary.documentsSkipped++;
+                continue;
+              }
+            }
+
+            batchCount++;
+            summary.documentsRestored++;
+
+            // Commit batch if it reaches the limit
+            if (batchCount >= BATCH_SIZE) {
+              await batch.commit();
+              batchCount = 0;
+            }
+          }
+
+          summary.collectionsRestored++;
+          console.log(
+            `✅ Restored ${documents.length} documents to ${collectionName}`
+          );
+        } catch (error) {
+          const errorMsg = `Failed to restore collection ${collectionName}: ${error}`;
+          summary.errors.push(errorMsg);
+          console.error(`❌ ${errorMsg}`);
+        }
+      }
+
+      // Commit remaining batch
+      if (batchCount > 0) {
+        await batch.commit();
+      }
 
       console.log(
-        `Would restore ${questions.length} questions for section: ${section}`
+        `✅ Restore completed: ${summary.documentsRestored} documents restored`
       );
-
-      return {
-        success: true,
-        message: `Successfully prepared ${questions.length} questions for restoration from ${section} section`,
-        questionsRestored: questions.length,
-      };
+      return { success: true, summary };
     } catch (error) {
-      console.error('Restore failed:', error);
+      console.error('❌ Restore failed:', error);
       return {
         success: false,
-        message: 'Failed to restore questions from backup',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        questionsRestored: 0,
+        error: error instanceof Error ? error.message : 'Restore failed',
+      };
+    }
+  }
+
+  /**
+   * List all available backups
+   */
+  static async listBackups(): Promise<BackupData[]> {
+    try {
+      const snapshot = await getDocs(collection(db, this.BACKUP_COLLECTION));
+      const backups: BackupData[] = [];
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        backups.push({
+          id: doc.id,
+          ...data,
+          metadata: {
+            ...data.metadata,
+            createdAt: data.metadata?.createdAt?.toDate() || new Date(),
+          },
+        } as BackupData);
+      });
+
+      return backups.sort(
+        (a, b) =>
+          b.metadata.createdAt.getTime() - a.metadata.createdAt.getTime()
+      );
+    } catch (error) {
+      console.error('❌ Failed to list backups:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Delete a backup
+   */
+  static async deleteBackup(
+    backupId: string
+  ): Promise<{ success: boolean; error?: string }> {
+    try {
+      await deleteDoc(doc(db, this.BACKUP_COLLECTION, backupId));
+      console.log(`✅ Backup deleted: ${backupId}`);
+      return { success: true };
+    } catch (error) {
+      console.error('❌ Failed to delete backup:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Delete failed',
       };
     }
   }
@@ -210,56 +310,87 @@ export class BackupService {
    * Get backup statistics
    */
   static async getBackupStats(): Promise<{
-    totalFiles: number;
-    totalQuestions: number;
-    sections: { [section: string]: number };
+    totalBackups: number;
+    totalSize: number;
+    lastBackup?: Date;
+    collectionsCount: number;
   }> {
     try {
-      const files = await this.getBackupFiles();
-      let totalQuestions = 0;
-      const sections: { [section: string]: number } = {};
-
-      for (const file of files) {
-        const section = file.replace('-questions.json', '');
-        const questions = await this.getSectionBackup(section);
-        sections[section] = questions.length;
-        totalQuestions += questions.length;
-      }
+      const backups = await this.listBackups();
+      const totalBackups = backups.length;
+      const totalSize = backups.reduce(
+        (sum, backup) => sum + backup.metadata.totalDocuments,
+        0
+      );
+      const lastBackup =
+        backups.length > 0 ? backups[0].metadata.createdAt : undefined;
+      const collectionsCount = this.COLLECTIONS_TO_BACKUP.length;
 
       return {
-        totalFiles: files.length,
-        totalQuestions,
-        sections,
+        totalBackups,
+        totalSize,
+        lastBackup,
+        collectionsCount,
       };
     } catch (error) {
-      console.error('Failed to get backup stats:', error);
+      console.error('❌ Failed to get backup stats:', error);
       return {
-        totalFiles: 0,
-        totalQuestions: 0,
-        sections: {},
+        totalBackups: 0,
+        totalSize: 0,
+        collectionsCount: this.COLLECTIONS_TO_BACKUP.length,
       };
     }
   }
 
   /**
-   * Delete backup file for a section
+   * Schedule automatic backups
    */
-  static async deleteSectionBackup(section: string): Promise<BackupResult> {
+  static async scheduleBackup(
+    schedule: 'daily' | 'weekly' | 'monthly',
+    createdBy: string
+  ): Promise<{ success: boolean; error?: string }> {
     try {
-      const backupPath = this.getSectionBackupPath(section);
-      await fs.unlink(backupPath);
+      // This would integrate with a cron job service or cloud scheduler
+      // For now, we'll just create a scheduled backup record
+      const scheduleId = `schedule_${Date.now()}`;
 
-      return {
-        success: true,
-        message: `Backup file deleted for section: ${section}`,
-      };
+      await setDoc(doc(db, 'backupSchedules', scheduleId), {
+        schedule,
+        createdBy,
+        createdAt: serverTimestamp(),
+        isActive: true,
+        lastRun: null,
+        nextRun: this.calculateNextRun(schedule),
+      });
+
+      console.log(`✅ Backup schedule created: ${schedule}`);
+      return { success: true };
     } catch (error) {
-      console.error('Failed to delete backup:', error);
+      console.error('❌ Failed to schedule backup:', error);
       return {
         success: false,
-        message: 'Failed to delete backup file',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : 'Schedule failed',
       };
+    }
+  }
+
+  /**
+   * Calculate next run time for scheduled backups
+   */
+  private static calculateNextRun(
+    schedule: 'daily' | 'weekly' | 'monthly'
+  ): Date {
+    const now = new Date();
+
+    switch (schedule) {
+      case 'daily':
+        return new Date(now.getTime() + 24 * 60 * 60 * 1000);
+      case 'weekly':
+        return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+      case 'monthly':
+        return new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+      default:
+        return new Date(now.getTime() + 24 * 60 * 60 * 1000);
     }
   }
 }

@@ -1,45 +1,67 @@
 [
   {
-    "id": "html1",
+    "id": "html-01-html1",
     "title": "What does HTML stand for?",
     "content": "Explain the full form of HTML and its purpose.",
     "type": "open-ended",
-    "category": "Web Development",
-    "subcategory": "HTML",
-    "difficulty": "beginner",
+    "category": "HTML",
     "topic": "HTML Basics",
+    "difficulty": "beginner",
+    "learningCardId": "core-technologies",
     "isActive": true,
-    "tags": ["html", "basics"],
+    "createdAt": "2025-10-15T03:53:54.814Z",
+    "updatedAt": "2025-10-15T03:53:54.815Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["html", "html-basics", "beginner"],
+    "explanation": "HTML stands for HyperText Markup Language. It is used to structure content on the web using elements and tags.",
+    "points": 10,
     "sampleAnswers": [
       "HTML stands for HyperText Markup Language. It is used to structure content on the web using elements and tags."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "html2",
+    "id": "html-01-html2",
     "title": "What is the purpose of the <!DOCTYPE html> declaration?",
     "content": "Explain why <!DOCTYPE html> is important in an HTML document.",
     "type": "open-ended",
-    "category": "Web Development",
-    "subcategory": "HTML",
-    "difficulty": "beginner",
+    "category": "HTML",
     "topic": "HTML Structure",
+    "difficulty": "beginner",
+    "learningCardId": "core-technologies",
     "isActive": true,
-    "tags": ["html", "doctype"],
+    "createdAt": "2025-10-15T03:53:54.816Z",
+    "updatedAt": "2025-10-15T03:53:54.816Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["html", "html-structure", "beginner"],
+    "explanation": "The <!DOCTYPE html> declaration tells the browser to render the page in standards mode using HTML5 syntax.",
+    "points": 10,
     "sampleAnswers": [
       "The <!DOCTYPE html> declaration tells the browser to render the page in standards mode using HTML5 syntax."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "html3",
+    "id": "html-01-html3",
     "title": "True or False: All HTML elements must have a closing tag.",
     "content": "Evaluate whether all HTML elements require closing tags.",
     "type": "true-false",
-    "category": "Web Development",
-    "subcategory": "HTML",
-    "difficulty": "beginner",
+    "category": "HTML",
     "topic": "HTML Syntax",
+    "difficulty": "beginner",
+    "learningCardId": "core-technologies",
     "isActive": true,
-    "tags": ["html", "tags", "syntax"],
+    "createdAt": "2025-10-15T03:53:54.816Z",
+    "updatedAt": "2025-10-15T03:53:54.816Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["html", "html-syntax", "beginner"],
+    "explanation": "The correct answer is: False",
+    "points": 10,
     "options": [
       {
         "id": "o1",
@@ -53,119 +75,178 @@
         "isCorrect": true,
         "explanation": "Self-closing elements do not require a closing tag."
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "html4",
+    "id": "html-01-html4",
     "title": "What is the difference between block-level and inline elements?",
     "content": "Explain how block-level and inline elements behave differently in HTML.",
     "type": "open-ended",
-    "category": "Web Development",
-    "subcategory": "HTML",
-    "difficulty": "intermediate",
+    "category": "HTML",
     "topic": "HTML Elements",
+    "difficulty": "intermediate",
+    "learningCardId": "core-technologies",
     "isActive": true,
-    "tags": ["html", "elements", "layout"],
+    "createdAt": "2025-10-15T03:53:54.816Z",
+    "updatedAt": "2025-10-15T03:53:54.816Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["html", "html-elements", "intermediate"],
+    "explanation": "Block-level elements (like <div>, <p>, <h1>) start on a new line and take full width. Inline elements (like <span>, <a>, <strong>) flow within text and do not start on a new line.",
+    "points": 10,
     "sampleAnswers": [
       "Block-level elements (like <div>, <p>, <h1>) start on a new line and take full width. Inline elements (like <span>, <a>, <strong>) flow within text and do not start on a new line."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "html5",
+    "id": "html-01-html5",
     "title": "Which semantic HTML elements are commonly used for page structure?",
     "content": "Name the main semantic elements in HTML5 for structuring content.",
     "type": "multiple-choice",
-    "category": "Web Development",
-    "subcategory": "HTML",
-    "difficulty": "intermediate",
+    "category": "HTML",
     "topic": "HTML5 Semantics",
+    "difficulty": "intermediate",
+    "learningCardId": "core-technologies",
     "isActive": true,
-    "tags": ["html5", "semantic", "structure"],
+    "createdAt": "2025-10-15T03:53:54.816Z",
+    "updatedAt": "2025-10-15T03:53:54.816Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["html", "html5-semantics", "intermediate"],
+    "explanation": "HTML5 semantic elements provide meaning and improve accessibility and SEO.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "<header>, <main>, <footer>, <section>, <article>, <nav>",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "<div>, <span>, <p>, <b>, <i>",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "HTML5 semantic elements provide meaning and improve accessibility and SEO."
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "html6",
+    "id": "html-01-html6",
     "title": "What is the difference between an <id> and a <class> attribute?",
     "content": "Explain when to use id and class in HTML elements.",
     "type": "open-ended",
-    "category": "Web Development",
-    "subcategory": "HTML",
-    "difficulty": "intermediate",
+    "category": "HTML",
     "topic": "HTML Attributes",
+    "difficulty": "intermediate",
+    "learningCardId": "core-technologies",
     "isActive": true,
-    "tags": ["html", "attributes", "selectors"],
+    "createdAt": "2025-10-15T03:53:54.816Z",
+    "updatedAt": "2025-10-15T03:53:54.816Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["html", "html-attributes", "intermediate"],
+    "explanation": "The id attribute is unique within a page and used to identify a single element. The class attribute can be shared among multiple elements and is used for styling or scripting multiple elements at once.",
+    "points": 10,
     "sampleAnswers": [
       "The id attribute is unique within a page and used to identify a single element. The class attribute can be shared among multiple elements and is used for styling or scripting multiple elements at once."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "html7",
+    "id": "html-01-html7",
     "title": "How do you create a hyperlink in HTML?",
     "content": "Provide the syntax to create a link to https://example.com.",
     "type": "open-ended",
-    "category": "Web Development",
-    "subcategory": "HTML",
-    "difficulty": "beginner",
+    "category": "HTML",
     "topic": "HTML Links",
+    "difficulty": "beginner",
+    "learningCardId": "core-technologies",
     "isActive": true,
-    "tags": ["html", "links", "anchors"],
-    "sampleAnswers": ["<a href=\"https://example.com\">Visit Example</a>"]
+    "createdAt": "2025-10-15T03:53:54.816Z",
+    "updatedAt": "2025-10-15T03:53:54.816Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["html", "html-links", "beginner"],
+    "explanation": "<a href=\"https://example.com\">Visit Example</a>",
+    "points": 10,
+    "sampleAnswers": ["<a href=\"https://example.com\">Visit Example</a>"],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "html8",
+    "id": "html-01-html8",
     "title": "What is the purpose of the alt attribute on <img> tags?",
     "content": "Explain why the alt attribute is important for images.",
     "type": "open-ended",
-    "category": "Web Development",
-    "subcategory": "HTML",
-    "difficulty": "intermediate",
+    "category": "HTML",
     "topic": "HTML Accessibility",
+    "difficulty": "intermediate",
+    "learningCardId": "core-technologies",
     "isActive": true,
-    "tags": ["html", "images", "accessibility"],
+    "createdAt": "2025-10-15T03:53:54.816Z",
+    "updatedAt": "2025-10-15T03:53:54.816Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["html", "html-accessibility", "intermediate"],
+    "explanation": "The alt attribute provides alternative text for images, which is used by screen readers for accessibility and displayed if the image fails to load.",
+    "points": 10,
     "sampleAnswers": [
       "The alt attribute provides alternative text for images, which is used by screen readers for accessibility and displayed if the image fails to load."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "html9",
+    "id": "html-01-html9",
     "title": "Name three HTML form input types and their purpose.",
     "content": "List three different <input> types and when they are used.",
     "type": "open-ended",
-    "category": "Web Development",
-    "subcategory": "HTML Forms",
-    "difficulty": "intermediate",
+    "category": "HTML",
     "topic": "HTML Forms",
+    "difficulty": "intermediate",
+    "learningCardId": "core-technologies",
     "isActive": true,
-    "tags": ["html", "forms", "inputs"],
+    "createdAt": "2025-10-15T03:53:54.816Z",
+    "updatedAt": "2025-10-15T03:53:54.816Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["html", "html-forms", "intermediate"],
+    "explanation": "<input type=\"text\"> for single-line text input, <input type=\"email\"> for email input with validation, <input type=\"password\"> for password entry masking.",
+    "points": 10,
     "sampleAnswers": [
       "<input type=\"text\"> for single-line text input, <input type=\"email\"> for email input with validation, <input type=\"password\"> for password entry masking."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "html10",
+    "id": "html-01-html10",
     "title": "What is the difference between <div> and <span>?",
     "content": "Explain when to use <div> and when to use <span>.",
     "type": "open-ended",
-    "category": "Web Development",
-    "subcategory": "HTML Elements",
-    "difficulty": "beginner",
+    "category": "HTML",
     "topic": "HTML Elements",
+    "difficulty": "beginner",
+    "learningCardId": "core-technologies",
     "isActive": true,
-    "tags": ["html", "elements", "layout"],
+    "createdAt": "2025-10-15T03:53:54.816Z",
+    "updatedAt": "2025-10-15T03:53:54.816Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["html", "html-elements", "beginner"],
+    "explanation": "<div> is a block-level element used for grouping content and layout, while <span> is an inline element used to style or wrap a portion of text inside other elements.",
+    "points": 10,
     "sampleAnswers": [
       "<div> is a block-level element used for grouping content and layout, while <span> is an inline element used to style or wrap a portion of text inside other elements."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   }
 ]

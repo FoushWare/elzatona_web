@@ -1,34 +1,44 @@
 [
   {
-    "id": "ts1",
+    "id": "performance-patterns-tree-shaking-ts1",
     "title": "What is tree shaking in JavaScript?",
     "content": "Define tree shaking and its main purpose.",
     "type": "open-ended",
     "category": "Performance Patterns",
-    "subcategory": "Tree Shaking",
-    "difficulty": "beginner",
     "topic": "Tree Shaking",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["tree-shaking", "javascript", "performance"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["performance-patterns", "tree-shaking", "beginner"],
+    "explanation": "Tree shaking is the process of eliminating unused code from the final JavaScript bundle to reduce size, download, parse, and execution time.",
+    "points": 10,
     "sampleAnswers": [
       "Tree shaking is the process of eliminating unused code from the final JavaScript bundle to reduce size, download, parse, and execution time."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "ts2",
+    "id": "performance-patterns-tree-shaking-ts2",
     "title": "True or False: Tree shaking works with CommonJS modules.",
     "content": "Evaluate whether tree shaking can remove dead code from CommonJS modules.",
     "type": "true-false",
     "category": "Performance Patterns",
-    "subcategory": "Tree Shaking",
-    "difficulty": "beginner",
     "topic": "Tree Shaking Modules",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["tree-shaking", "modules", "javascript"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["performance-patterns", "tree-shaking-modules", "beginner"],
+    "explanation": "The correct answer is: False",
+    "points": 10,
     "options": [
       {
         "id": "t1",
@@ -42,67 +52,92 @@
         "isCorrect": true,
         "explanation": "CommonJS modules cannot be properly tree-shaken because their structure is dynamic and cannot be statically analyzed."
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "ts3",
+    "id": "performance-patterns-tree-shaking-ts3",
     "title": "Why does tree shaking consider side effects in modules?",
     "content": "Explain what side effects are and why they affect tree shaking.",
     "type": "open-ended",
     "category": "Performance Patterns",
-    "subcategory": "Tree Shaking",
-    "difficulty": "intermediate",
     "topic": "Tree Shaking Side Effects",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["tree-shaking", "side-effects", "javascript"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "performance-patterns",
+      "tree-shaking-side-effects",
+      "intermediate"
+    ],
+    "explanation": "A module has side effects if importing it changes the global scope or performs actions even if its exports are not used. Such modules cannot be safely removed by tree shaking.",
+    "points": 10,
     "sampleAnswers": [
       "A module has side effects if importing it changes the global scope or performs actions even if its exports are not used. Such modules cannot be safely removed by tree shaking."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "ts4",
+    "id": "performance-patterns-tree-shaking-ts4",
     "title": "Given the following code, which function will be included in the final bundle?",
     "content": "```javascript\n// utilities.js\nexport function read(props) { return props.book; }\nexport function nap(props) { return props.winks; }\n\n// index.js\nimport { read } from 'utilities';\nconst eventHandler = (e) => { read({ book: e.target.value }); };\n```",
     "type": "multiple-choice",
     "category": "Performance Patterns",
-    "subcategory": "Tree Shaking",
-    "difficulty": "intermediate",
     "topic": "Tree Shaking Example",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["tree-shaking", "example", "javascript"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["performance-patterns", "tree-shaking-example", "intermediate"],
+    "explanation": "Only read() is used in index.js, so nap() is considered dead code and excluded from the bundle.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "read()",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "nap()",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "Only read() is used in index.js, so nap() is considered dead code and excluded from the bundle."
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "ts5",
+    "id": "performance-patterns-tree-shaking-ts5",
     "title": "How does tree shaking determine which parts of the code to include?",
     "content": "Explain the traversal process used in tree shaking.",
     "type": "open-ended",
     "category": "Performance Patterns",
-    "subcategory": "Tree Shaking",
-    "difficulty": "advanced",
     "topic": "Tree Shaking Mechanism",
+    "difficulty": "advanced",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["tree-shaking", "javascript", "bundler"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["performance-patterns", "tree-shaking-mechanism", "advanced"],
+    "explanation": "Tree shaking starts at the entry point and traverses the dependency graph, marking only the code paths that are used. Unused paths are excluded from the final bundle.",
+    "points": 10,
     "sampleAnswers": [
       "Tree shaking starts at the entry point and traverses the dependency graph, marking only the code paths that are used. Unused paths are excluded from the final bundle."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   }
 ]

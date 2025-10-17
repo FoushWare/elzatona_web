@@ -14,16 +14,13 @@ import {
   BarChart3,
   Shield,
   ChevronDown,
-  FileText,
   HelpCircle,
-  FolderOpen,
-  BookOpen,
   Code,
   Calculator,
-  CreditCard,
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import { NotificationDropdown } from '../common/NotificationDropdown';
 import AlzatonaLogo from '../common/AlzatonaLogo';
 
 export default function AdminNavbar() {
@@ -80,28 +77,11 @@ export default function AdminNavbar() {
       description: 'Add, edit, and manage questions',
     },
     {
-      href: '/admin/guided-learning',
-      label: 'Guided Learning',
-      icon: BookOpen,
-      description: 'Create and manage learning plans',
-    },
-    {
-      href: '/admin/learning-cards',
-      label: 'Learning Cards',
-      icon: CreditCard,
-      description: 'Manage learning cards for plans',
-    },
-    {
-      href: '/admin/sections',
-      label: 'Learning Sections',
-      icon: FileText,
-      description: 'Manage learning path sections',
-    },
-    {
-      href: '/admin/enhanced-structure',
-      label: 'Categories & Topics',
+      href: '/admin/content-management',
+      label: 'Content Management',
       icon: Settings,
-      description: 'Create and manage topics and categories',
+      description:
+        'Comprehensive admin interface for managing learning content',
     },
     {
       href: '/admin/frontend-tasks',
@@ -120,18 +100,6 @@ export default function AdminNavbar() {
       label: 'Feature Reports',
       icon: BarChart3,
       description: 'View project features and progress',
-    },
-    {
-      href: '/admin/backup',
-      label: 'Backup Management',
-      icon: FolderOpen,
-      description: 'Manage question backups',
-    },
-    {
-      href: '/admin/audit-logs',
-      label: 'Audit Logs',
-      icon: FileText,
-      description: 'Monitor admin actions and system events',
     },
   ];
 
@@ -210,7 +178,7 @@ export default function AdminNavbar() {
             </div>
           </div>
 
-          {/* Right side - Theme toggle and User menu */}
+          {/* Right side - Theme toggle, Notifications and User menu */}
           <div className="flex items-center space-x-4">
             {/* Theme Toggle */}
             <button
@@ -228,6 +196,9 @@ export default function AdminNavbar() {
                 <Moon className="w-5 h-5" />
               )}
             </button>
+
+            {/* Notifications */}
+            <NotificationDropdown />
 
             {/* User Menu */}
             {isAuthenticated && user && (
