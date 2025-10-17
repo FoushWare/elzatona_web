@@ -39,6 +39,7 @@ import { Label } from '@/shared/components/ui/label';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { Checkbox } from '@/shared/components/ui/checkbox';
 import { AdvancedSearch } from '@/shared/components/common/AdvancedSearch';
+import { UnifiedQuestion } from '@/lib/unified-question-schema';
 
 type Question = UnifiedQuestion;
 
@@ -173,8 +174,14 @@ export default function AdminContentQuestionsPage() {
     }
   };
 
-  const handleUpdateQuestion = async (updatedQuestion: Question) => {
+  const handleUpdateQuestion = async (
+    updatedQuestion: Partial<UnifiedQuestion>
+  ) => {
     try {
+      if (!updatedQuestion.id) {
+        throw new Error('Question ID is required for update');
+      }
+
       const response = await fetch(
         `/api/questions/unified/${updatedQuestion.id}`,
         {
