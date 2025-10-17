@@ -1,71 +1,92 @@
 [
   {
-    "id": "sec1",
+    "id": "sec-01-sec1",
     "title": "What is an XSS attack?",
     "content": "Cross-Site Scripting (XSS) is when attackers inject malicious scripts into web pages viewed by other users. Explain the potential risks and examples.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "XSS",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["security", "xss", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "XSS is when an attacker injects scripts into a page to steal cookies, hijack sessions, or manipulate the DOM. Examples: stored XSS in comments, reflected XSS in search forms, DOM-based XSS via URL parameters.",
+    "points": 10,
     "sampleAnswers": [
       "XSS is when an attacker injects scripts into a page to steal cookies, hijack sessions, or manipulate the DOM. Examples: stored XSS in comments, reflected XSS in search forms, DOM-based XSS via URL parameters."
-    ]
+    ],
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec2",
+    "id": "sec-01-sec2",
     "title": "Which of the following are types of XSS attacks?",
     "content": "Select all types of XSS attacks.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "XSS",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["security", "xss", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "DOM-based, Reflected, and Stored are the three main XSS types. SQL Injection is a server-side attack.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "DOM-based XSS",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Reflected XSS",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Stored XSS",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "SQL Injection",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "DOM-based, Reflected, and Stored are the three main XSS types. SQL Injection is a server-side attack."
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec3",
+    "id": "sec-01-sec3",
     "title": "True or False: CSRF attacks rely on user authentication.",
     "content": "Evaluate whether this statement is true or false.",
     "type": "true-false",
-    "category": "Web Security",
-    "subcategory": "CSRF",
+    "category": "Security",
+    "topic": "Cross-Site Request Forgery (CSRF)",
     "difficulty": "beginner",
-    "topic": "CSRF",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["security", "csrf", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-request-forgery-csrf", "csrf", "beginner"],
+    "explanation": "The correct answer is: True",
+    "points": 10,
     "options": [
       {
         "id": "t1",
@@ -79,75 +100,99 @@
         "isCorrect": false,
         "explanation": ""
       }
-    ]
+    ],
+    "subcategory": "CSRF",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec4",
+    "id": "sec-01-sec4",
     "title": "What is clickjacking?",
     "content": "Clickjacking is a type of attack where a user is tricked into clicking elements hidden under legitimate UI elements. Explain how it works and prevention strategies.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "Clickjacking",
-    "difficulty": "intermediate",
+    "category": "Security",
     "topic": "Clickjacking",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["security", "clickjacking", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "clickjacking", "clickjacking", "intermediate"],
+    "explanation": "Clickjacking tricks users into clicking hidden elements using overlays or iframes. Prevention: X-Frame-Options header, CSP frame-ancestors, avoid transparent overlays.",
+    "points": 10,
     "sampleAnswers": [
       "Clickjacking tricks users into clicking hidden elements using overlays or iframes. Prevention: X-Frame-Options header, CSP frame-ancestors, avoid transparent overlays."
-    ]
+    ],
+    "subcategory": "Clickjacking",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec5",
+    "id": "sec-01-sec5",
     "title": "Which HTTP header helps prevent clickjacking?",
     "content": "Select the correct header used to prevent clickjacking attacks.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "Clickjacking",
-    "difficulty": "beginner",
+    "category": "Security",
     "topic": "Clickjacking",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["security", "clickjacking", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "clickjacking", "clickjacking", "beginner"],
+    "explanation": "X-Frame-Options and CSP frame-ancestors prevent malicious iframe embedding.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "X-Frame-Options",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Content-Security-Policy (frame-ancestors)",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "X-Content-Type-Options",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Strict-Transport-Security",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "X-Frame-Options and CSP frame-ancestors prevent malicious iframe embedding."
+    "subcategory": "Clickjacking",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec6",
+    "id": "sec-01-sec6",
     "title": "True or False: MITM attacks only affect unsecured HTTP connections.",
     "content": "Evaluate whether this statement is true or false.",
     "type": "true-false",
-    "category": "Web Security",
-    "subcategory": "MITM",
+    "category": "Security",
+    "topic": "Web Security Fundamentals",
     "difficulty": "intermediate",
-    "topic": "MITM",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["security", "mitm", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "web-security-fundamentals", "mitm", "intermediate"],
+    "explanation": "The correct answer is: False",
+    "points": 10,
     "options": [
       {
         "id": "t1",
@@ -161,75 +206,99 @@
         "isCorrect": true,
         "explanation": "Even HTTPS can be vulnerable if certificates are compromised."
       }
-    ]
+    ],
+    "subcategory": "MITM",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec7",
+    "id": "sec-01-sec7",
     "title": "How do HttpOnly and Secure cookies improve security?",
     "content": "Explain how the HttpOnly and Secure flags help prevent attacks.",
     "type": "open-ended",
-    "category": "Web Security",
-    "subcategory": "Cookies",
+    "category": "Security",
+    "topic": "Session Management",
     "difficulty": "intermediate",
-    "topic": "Cookies",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["security", "cookies", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "session-management", "cookies", "intermediate"],
+    "explanation": "HttpOnly prevents JavaScript from reading cookies (protects against XSS). Secure ensures cookies are only sent over HTTPS.",
+    "points": 10,
     "sampleAnswers": [
       "HttpOnly prevents JavaScript from reading cookies (protects against XSS). Secure ensures cookies are only sent over HTTPS."
-    ]
+    ],
+    "subcategory": "Cookies",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec8",
+    "id": "sec-01-sec8",
     "title": "Which of these is a recommended prevention for XSS in React?",
     "content": "Select all correct strategies.",
     "type": "multiple-choice",
-    "category": "Web Security",
-    "subcategory": "XSS",
+    "category": "Security",
+    "topic": "Cross-Site Scripting (XSS)",
     "difficulty": "intermediate",
-    "topic": "XSS",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["security", "xss", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "cross-site-scripting-xss", "xss", "intermediate"],
+    "explanation": "Avoid unsafe HTML, sanitize inputs, and validate server-side to prevent XSS.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "Avoid dangerouslySetInnerHTML",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "Use DOMPurify or similar sanitizers",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o3",
         "text": "Use HttpOnly cookies",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       },
       {
         "id": "o4",
         "text": "Validate input server-side",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       }
     ],
-    "explanation": "Avoid unsafe HTML, sanitize inputs, and validate server-side to prevent XSS."
+    "subcategory": "XSS",
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "sec9",
+    "id": "sec-01-sec9",
     "title": "True or False: CSP (Content Security Policy) can help mitigate XSS.",
     "content": "Evaluate whether this statement is true or false.",
     "type": "true-false",
-    "category": "Web Security",
-    "subcategory": "CSP",
+    "category": "Security",
+    "topic": "Content Security Policy (CSP)",
     "difficulty": "beginner",
-    "topic": "CSP",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["security", "csp", "frontend"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["security", "content-security-policy-csp", "csp", "beginner"],
+    "explanation": "The correct answer is: True",
+    "points": 10,
     "options": [
       {
         "id": "t1",
@@ -243,6 +312,9 @@
         "isCorrect": false,
         "explanation": ""
       }
-    ]
+    ],
+    "subcategory": "CSP",
+    "hints": [],
+    "metadata": {}
   }
 ]

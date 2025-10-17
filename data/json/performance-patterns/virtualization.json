@@ -1,51 +1,67 @@
 [
   {
-    "id": "lv1",
+    "id": "performance-patterns-virtualization-lv1",
     "title": "What is list virtualization (or windowing)?",
     "content": "Explain the concept of list virtualization and its main benefit.",
     "type": "open-ended",
     "category": "Performance Patterns",
-    "subcategory": "List Virtualization",
-    "difficulty": "beginner",
     "topic": "Virtual Lists",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["virtual-lists", "performance", "react"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["performance-patterns", "virtual-lists", "beginner"],
+    "explanation": "List virtualization is a technique where only the visible rows of a list are rendered at a time, rather than the entire list. This improves rendering performance and scroll efficiency.",
+    "points": 10,
     "sampleAnswers": [
       "List virtualization is a technique where only the visible rows of a list are rendered at a time, rather than the entire list. This improves rendering performance and scroll efficiency."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "lv2",
+    "id": "performance-patterns-virtualization-lv2",
     "title": "Why is react-window preferred over react-virtualized in some cases?",
     "content": "Describe the differences between react-window and react-virtualized and why react-window might be chosen.",
     "type": "open-ended",
     "category": "Performance Patterns",
-    "subcategory": "List Virtualization",
-    "difficulty": "intermediate",
     "topic": "Virtual Lists Libraries",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["react-window", "react-virtualized", "tree-shaking"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["performance-patterns", "virtual-lists-libraries", "intermediate"],
+    "explanation": "React-window is smaller, faster, and more tree-shakeable than react-virtualized. It provides simpler APIs for most virtualization use cases and reduces bundle size significantly.",
+    "points": 10,
     "sampleAnswers": [
       "React-window is smaller, faster, and more tree-shakeable than react-virtualized. It provides simpler APIs for most virtualization use cases and reduces bundle size significantly."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "lv3",
+    "id": "performance-patterns-virtualization-lv3",
     "title": "True or False: List virtualization renders all items in the DOM at once.",
     "content": "Evaluate whether virtualization renders all items immediately.",
     "type": "true-false",
     "category": "Performance Patterns",
-    "subcategory": "List Virtualization",
-    "difficulty": "beginner",
     "topic": "Virtual Lists Rendering",
+    "difficulty": "beginner",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["virtual-lists", "react", "performance"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["performance-patterns", "virtual-lists-rendering", "beginner"],
+    "explanation": "The correct answer is: False",
+    "points": 10,
     "options": [
       {
         "id": "o1",
@@ -59,84 +75,115 @@
         "isCorrect": true,
         "explanation": "Only a small window of items is rendered at a time; offscreen items are not rendered."
       }
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "lv4",
+    "id": "performance-patterns-virtualization-lv4",
     "title": "What is the role of a 'window' in list virtualization?",
     "content": "Explain what a 'window' represents in the context of virtualized lists.",
     "type": "open-ended",
     "category": "Performance Patterns",
-    "subcategory": "List Virtualization",
-    "difficulty": "intermediate",
     "topic": "Virtual Lists Windowing",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["windowing", "virtual-lists", "react"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["performance-patterns", "virtual-lists-windowing", "intermediate"],
+    "explanation": "The 'window' refers to the subset of list items that are currently visible and rendered in the DOM. As the user scrolls, the window moves along the list, rendering new items and removing old ones.",
+    "points": 10,
     "sampleAnswers": [
       "The 'window' refers to the subset of list items that are currently visible and rendered in the DOM. As the user scrolls, the window moves along the list, rendering new items and removing old ones."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "lv5",
+    "id": "performance-patterns-virtualization-lv5",
     "title": "Which components in react-window render virtualized content?",
     "content": "Name and describe the main components in react-window used for list and grid virtualization.",
     "type": "multiple-choice",
     "category": "Performance Patterns",
-    "subcategory": "List Virtualization",
-    "difficulty": "intermediate",
     "topic": "React-Window Components",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["react-window", "grid", "list"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["performance-patterns", "react-window-components", "intermediate"],
+    "explanation": "react-window provides FixedSizeList/VariableSizeList for virtualized lists and FixedSizeGrid/VariableSizeGrid for virtualized grids.",
+    "points": 10,
     "options": [
       {
         "id": "o1",
         "text": "FixedSizeList and VariableSizeList for lists; FixedSizeGrid and VariableSizeGrid for grids",
-        "isCorrect": true
+        "isCorrect": true,
+        "explanation": ""
       },
       {
         "id": "o2",
         "text": "InfiniteScrollList and TableGrid",
-        "isCorrect": false
+        "isCorrect": false,
+        "explanation": ""
       }
     ],
-    "explanation": "react-window provides FixedSizeList/VariableSizeList for virtualized lists and FixedSizeGrid/VariableSizeGrid for virtualized grids."
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "lv6",
+    "id": "performance-patterns-virtualization-lv6",
     "title": "What are some limitations of react-window compared to react-virtualized?",
     "content": "List missing features/components in react-window.",
     "type": "open-ended",
     "category": "Performance Patterns",
-    "subcategory": "List Virtualization",
-    "difficulty": "advanced",
     "topic": "Virtual Lists Limitations",
+    "difficulty": "advanced",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["react-window", "limitations", "virtual-lists"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": ["performance-patterns", "virtual-lists-limitations", "advanced"],
+    "explanation": "React-window does not include WindowScroller, AutoSizer, or CellMeasurer by default. These need to be implemented separately if needed.",
+    "points": 10,
     "sampleAnswers": [
       "React-window does not include WindowScroller, AutoSizer, or CellMeasurer by default. These need to be implemented separately if needed."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   },
   {
-    "id": "lv7",
+    "id": "performance-patterns-virtualization-lv7",
     "title": "How does list virtualization improve performance on mid to low-end devices?",
     "content": "Explain the mechanism by which virtualization keeps rendering fast on slower devices.",
     "type": "open-ended",
     "category": "Performance Patterns",
-    "subcategory": "List Virtualization",
-    "difficulty": "intermediate",
     "topic": "Virtual Lists Performance",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
     "isActive": true,
     "createdAt": "2025-10-11T00:00:00.000Z",
     "updatedAt": "2025-10-11T00:00:00.000Z",
-    "tags": ["performance", "react-window", "virtual-lists"],
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "performance-patterns",
+      "virtual-lists-performance",
+      "intermediate"
+    ],
+    "explanation": "By rendering only the visible items and not the entire list, virtualization reduces DOM nodes, lowering layout, paint, and reflow costs, which keeps frame rates smooth.",
+    "points": 10,
     "sampleAnswers": [
       "By rendering only the visible items and not the entire list, virtualization reduces DOM nodes, lowering layout, paint, and reflow costs, which keeps frame rates smooth."
-    ]
+    ],
+    "hints": [],
+    "metadata": {}
   }
 ]
