@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { firestoreService } from '@/lib/firestore-service';
-import { autoLinkingService } from '@/lib/auto-linking-service';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+import { AutoLinkingService } from '@/lib/auto-linking-service';
 
 // GET /api/guided-learning/plans - Get all learning plans or filtered content
 export async function GET(request: NextRequest) {
@@ -13,6 +19,7 @@ export async function GET(request: NextRequest) {
 
     // If requesting sections for plan creation
     if (getSections) {
+      const autoLinkingService = new AutoLinkingService();
       const sections = await autoLinkingService.getSectionsForPlan(
         category || undefined,
         learningPath || undefined
@@ -36,7 +43,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Otherwise, get all learning plans
-    const plans = await firestoreService.getLearningPlanTemplates();
+    const { data: plans, error } = await supabase
+      .from('learning_plans')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
     return NextResponse.json({ success: true, plans });
   } catch (error) {
     console.error('Error fetching learning plans:', error);
@@ -63,16 +74,20 @@ export async function POST(request: NextRequest) {
     // Add timestamps and defaults
     const newPlan = {
       ...planData,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      isActive: planData.isActive !== undefined ? planData.isActive : true,
+      created_at: new Date(),
+      updated_at: new Date(),
+      is_active: planData.isActive !== undefined ? planData.isActive : true,
       completionRate: planData.completionRate || 0,
       enrolledUsers: planData.enrolledUsers || 0,
     };
 
-    // Save to Firestore
-    const planId = await firestoreService.saveLearningPlanTemplate(newPlan);
-    const createdPlan = { ...newPlan, id: planId };
+    // Save to Supabase
+    const { data: createdPlan, error } = await supabase
+      .from('learning_plans')
+      .insert(newPlan)
+      .select()
+      .single();
+    if (error) throw error;
 
     return NextResponse.json({
       success: true,
@@ -106,7 +121,7 @@ export async function DELETE(request: NextRequest) {
 
     // Delete from Firestore
     console.log('Attempting to delete from Firestore...');
-    await firestoreService.deleteLearningPlanTemplate(planId);
+    await supabase.from('learningplantemplates').delete().eq('id', planId);
     console.log('Successfully deleted from Firestore');
 
     return NextResponse.json({

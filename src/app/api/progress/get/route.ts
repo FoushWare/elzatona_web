@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { verifyFirebaseToken } from '@/lib/server-auth';
-import { firestoreService } from '@/lib/firestore-service';
 
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+import { cookies } from 'next/headers';
+import { verifySupabaseToken } from '@/lib/server-auth';
 export async function GET(request: NextRequest) {
   try {
     // Get the Firebase token from cookies
@@ -52,7 +57,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify the Firebase token
-    const decodedToken = await verifyFirebaseToken(token);
+    const decodedToken = await verifySupabaseToken(token);
     if (!decodedToken) {
       console.warn(
         'Token verification failed, returning mock data for development'
@@ -102,8 +107,13 @@ export async function GET(request: NextRequest) {
       | null;
     const planId = searchParams.get('planId');
 
-    // Fetch user data from Firestore
-    const userData = await firestoreService.getUser(decodedToken.uid);
+    // Fetch user data from Supabase
+    const { data: userData, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', decodedToken.id)
+      .single();
+    if (error) throw error;
 
     if (!userData) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -116,14 +126,18 @@ export async function GET(request: NextRequest) {
     // Get current learning plan if guided mode
     let currentPlan = null;
     if (learningMode === 'guided' && planId) {
-      currentPlan = await firestoreService.getLearningPlan(
-        decodedToken.uid,
-        planId
-      );
+      const { data: planData, error: planError } = await supabase
+        .from('learning_plans')
+        .select('*')
+        .eq('id', planId)
+        .single();
+      if (!planError) {
+        currentPlan = planData;
+      }
     }
 
     const progressData = {
-      userId: decodedToken.uid,
+      userId: decodedToken.id,
       totalQuestions: progress.totalQuestions,
       correctAnswers: progress.correctAnswers,
       accuracy: progress.accuracy,

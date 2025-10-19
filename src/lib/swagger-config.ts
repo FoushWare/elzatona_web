@@ -101,11 +101,11 @@ export const swaggerSpec = {
             type: 'string',
             example: 'Code',
           },
-          createdAt: {
+          created_at: {
             type: 'string',
             format: 'date-time',
           },
-          updatedAt: {
+          updated_at: {
             type: 'string',
             format: 'date-time',
           },
@@ -142,11 +142,11 @@ export const swaggerSpec = {
             },
             example: ['javascript', 'react', 'css'],
           },
-          createdAt: {
+          created_at: {
             type: 'string',
             format: 'date-time',
           },
-          updatedAt: {
+          updated_at: {
             type: 'string',
             format: 'date-time',
           },
@@ -178,11 +178,11 @@ export const swaggerSpec = {
             },
             example: ['topic_1', 'topic_2'],
           },
-          createdAt: {
+          created_at: {
             type: 'string',
             format: 'date-time',
           },
-          updatedAt: {
+          updated_at: {
             type: 'string',
             format: 'date-time',
           },
@@ -214,11 +214,11 @@ export const swaggerSpec = {
             },
             example: ['q_1', 'q_2'],
           },
-          createdAt: {
+          created_at: {
             type: 'string',
             format: 'date-time',
           },
-          updatedAt: {
+          updated_at: {
             type: 'string',
             format: 'date-time',
           },
@@ -263,11 +263,11 @@ export const swaggerSpec = {
             },
             example: ['javascript', 'variables'],
           },
-          createdAt: {
+          created_at: {
             type: 'string',
             format: 'date-time',
           },
-          updatedAt: {
+          updated_at: {
             type: 'string',
             format: 'date-time',
           },
@@ -294,11 +294,11 @@ export const swaggerSpec = {
             enum: ['user', 'premium_user', 'admin', 'super_admin'],
             example: 'user',
           },
-          isActive: {
+          is_active: {
             type: 'boolean',
             example: true,
           },
-          createdAt: {
+          created_at: {
             type: 'string',
             format: 'date-time',
           },
@@ -391,7 +391,7 @@ export const swaggerSpec = {
           metadata: {
             type: 'object',
             properties: {
-              createdAt: { type: 'string', format: 'date-time' },
+              created_at: { type: 'string', format: 'date-time' },
               createdBy: { type: 'string' },
               version: { type: 'string' },
               totalDocuments: { type: 'number' },
@@ -437,7 +437,7 @@ export const swaggerSpec = {
             type: 'boolean',
             example: false,
           },
-          createdAt: {
+          created_at: {
             type: 'string',
             format: 'date-time',
           },

@@ -2,24 +2,25 @@
 // v2.0 - Enhanced section management
 
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/sections - Get all sections
 export async function GET() {
   try {
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
+    const { data: sectionsData, error } = await supabase
+      .from('sections')
+      .select('*')
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      throw error;
     }
 
-    const snapshot = await getDocs(collection(db, 'sections'));
-    const sections = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const sections = sectionsData || [];
 
     return NextResponse.json({
       success: true,
@@ -47,8 +48,8 @@ export async function POST(request: NextRequest) {
     const requiredFields = [
       'name',
       'description',
-      'learningPath',
-      'questionLimit',
+      'learning_path',
+      'question_limit',
     ];
     for (const field of requiredFields) {
       if (!sectionData[field]) {
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate question limit
-    if (sectionData.questionLimit < 1 || sectionData.questionLimit > 100) {
+    if (sectionData.question_limit < 1 || sectionData.question_limit > 100) {
       return NextResponse.json(
         {
           success: false,
@@ -73,22 +74,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
     const sectionWithTimestamps = {
       ...sectionData,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
-    const docRef = await addDoc(
-      collection(db, 'sections'),
-      sectionWithTimestamps
-    );
-    const sectionId = docRef.id;
+
+    const { data: newSection, error } = await supabase
+      .from('sections')
+      .insert(sectionWithTimestamps)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    const sectionId = newSection.id;
 
     return NextResponse.json({
       success: true,

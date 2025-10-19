@@ -56,7 +56,7 @@ export const useProgressTracking = () => {
     }));
   };
 
-  const completeQuestion = (questionId: string, timeSpent: number = 0) => {
+  const completeQuestion = (question_id: string, timeSpent: number = 0) => {
     setProgress(prev => ({
       ...prev,
       completedQuestions: prev.completedQuestions + 1,

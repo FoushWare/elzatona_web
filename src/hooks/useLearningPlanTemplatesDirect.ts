@@ -19,9 +19,9 @@ interface LearningPlanTemplate {
   features: string[];
   estimatedTime: string;
   isRecommended: boolean;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
 }
 
 interface ApiTemplate {
@@ -127,9 +127,9 @@ export function useLearningPlanTemplatesDirect(): UseLearningPlanTemplatesReturn
               template.isRecommended ||
               template.duration === 3 ||
               template.duration === 7,
-            isActive: template.isActive !== false,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: template.isActive !== false,
+            created_at: new Date(),
+            updated_at: new Date(),
           }));
         setTemplates(formattedTemplates);
       } else {
@@ -162,9 +162,9 @@ export function useLearningPlanTemplatesDirect(): UseLearningPlanTemplatesReturn
             ],
             estimatedTime: '1-2 hours',
             isRecommended: true,
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
         ];
         setTemplates(mockTemplates);
@@ -188,9 +188,9 @@ export function useLearningPlanTemplatesDirect(): UseLearningPlanTemplatesReturn
           features: ['Basic concepts'],
           estimatedTime: '30 mins',
           isRecommended: false,
-          isActive: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          is_active: true,
+          created_at: new Date(),
+          updated_at: new Date(),
         },
       ];
       setTemplates(mockTemplates);

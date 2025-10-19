@@ -379,7 +379,7 @@ async function linkQuestionsToCategories() {
     }
 
     // Get all questions from unifiedQuestions collection
-    const questionsRef = collection(db, 'unifiedQuestions');
+    const questionsRef = supabase.from('unifiedQuestions');
     const snapshot = await getDocs(questionsRef);
 
     console.log(`📊 Found ${snapshot.docs.length} questions`);
@@ -391,7 +391,7 @@ async function linkQuestionsToCategories() {
     for (const docSnapshot of snapshot.docs) {
       const question = {
         id: docSnapshot.id,
-        ...docSnapshot.data(),
+        ...docSnapshot,
       } as Question;
 
       // Skip if already has category and topic
@@ -406,11 +406,14 @@ async function linkQuestionsToCategories() {
       const { category, topic } = analyzeQuestion(question);
 
       // Update question in Firebase
-      const questionRef = doc(db, 'unifiedQuestions', question.id);
+      const questionRef = supabase
+        .from('unifiedQuestions')
+        .select()
+        .eq('id', question.id);
       await updateDoc(questionRef, {
         category,
         topic,
-        updatedAt: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       });
 
       // Update stats

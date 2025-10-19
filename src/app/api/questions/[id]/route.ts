@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/questions/[id] - Get a specific question
 export async function GET(
@@ -10,13 +13,6 @@ export async function GET(
   try {
     const { id: questionId } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     if (!questionId) {
       return NextResponse.json(
         { success: false, error: 'Question ID is required' },
@@ -24,20 +20,18 @@ export async function GET(
       );
     }
 
-    const questionRef = doc(db, 'unifiedQuestions', questionId);
-    const questionSnap = await getDoc(questionRef);
+    const { data: questionData, error: questionError } = await supabase
+      .from('questions')
+      .select('*')
+      .eq('id', questionId)
+      .single();
 
-    if (!questionSnap.exists()) {
+    if (questionError || !questionData) {
       return NextResponse.json(
         { success: false, error: 'Question not found' },
         { status: 404 }
       );
     }
-
-    const questionData = {
-      id: questionSnap.id,
-      ...questionSnap.data(),
-    };
 
     return NextResponse.json({
       success: true,
@@ -61,13 +55,6 @@ export async function PUT(
     const { id: questionId } = await params;
     const body = await request.json();
 
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     if (!questionId) {
       return NextResponse.json(
         { success: false, error: 'Question ID is required' },
@@ -83,11 +70,14 @@ export async function PUT(
       );
     }
 
-    const questionRef = doc(db, 'unifiedQuestions', questionId);
-
     // Check if question exists
-    const questionSnap = await getDoc(questionRef);
-    if (!questionSnap.exists()) {
+    const { data: existingQuestion, error: fetchError } = await supabase
+      .from('questions')
+      .select('*')
+      .eq('id', questionId)
+      .single();
+
+    if (fetchError || !existingQuestion) {
       return NextResponse.json(
         { success: false, error: 'Question not found' },
         { status: 404 }
@@ -97,10 +87,17 @@ export async function PUT(
     // Prepare update data
     const updateData = {
       ...body,
-      updatedAt: new Date(),
+      updated_at: new Date().toISOString(),
     };
 
-    await updateDoc(questionRef, updateData);
+    const { error: updateError } = await supabase
+      .from('questions')
+      .update(updateData)
+      .eq('id', questionId);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     return NextResponse.json({
       success: true,
@@ -124,13 +121,6 @@ export async function DELETE(
   try {
     const { id: questionId } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     if (!questionId) {
       return NextResponse.json(
         { success: false, error: 'Question ID is required' },
@@ -138,18 +128,28 @@ export async function DELETE(
       );
     }
 
-    const questionRef = doc(db, 'unifiedQuestions', questionId);
-
     // Check if question exists
-    const questionSnap = await getDoc(questionRef);
-    if (!questionSnap.exists()) {
+    const { data: existingQuestion, error: fetchError } = await supabase
+      .from('questions')
+      .select('*')
+      .eq('id', questionId)
+      .single();
+
+    if (fetchError || !existingQuestion) {
       return NextResponse.json(
         { success: false, error: 'Question not found' },
         { status: 404 }
       );
     }
 
-    await deleteDoc(questionRef);
+    const { error: deleteError } = await supabase
+      .from('questions')
+      .delete()
+      .eq('id', questionId);
+
+    if (deleteError) {
+      throw deleteError;
+    }
 
     return NextResponse.json({
       success: true,

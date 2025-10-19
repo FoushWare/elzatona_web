@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 import { LearningPlanProgress } from '@/types/firestore';
 
 interface UseLearningPlansReturn {
@@ -9,15 +9,16 @@ interface UseLearningPlansReturn {
   error: string | null;
   startPlan: (planData: LearningPlanProgress) => Promise<boolean>;
   updatePlan: (
-    planId: string,
+    plan_id: string,
     updates: Partial<LearningPlanProgress>
   ) => Promise<boolean>;
-  getPlan: (planId: string) => Promise<LearningPlanProgress | null>;
+  getPlan: (plan_id: string) => Promise<LearningPlanProgress | null>;
   syncPlans: () => Promise<void>;
 }
 
 export function useLearningPlans(): UseLearningPlansReturn {
-  const { user, isAuthenticated } = useFirebaseAuth();
+  const [user, setUser] = useState({ uid: 'placeholder-user' });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [plans, setPlans] = useState<LearningPlanProgress[]>([]);
   const [currentPlan, setCurrentPlan] = useState<LearningPlanProgress | null>(
     null
@@ -78,7 +79,7 @@ export function useLearningPlans(): UseLearningPlansReturn {
 
   const updatePlan = useCallback(
     async (
-      planId: string,
+      plan_id: string,
       updates: Partial<LearningPlanProgress>
     ): Promise<boolean> => {
       if (!isAuthenticated) {
@@ -91,7 +92,7 @@ export function useLearningPlans(): UseLearningPlansReturn {
 
       try {
         const response = await fetch(
-          `/api/user/learning-plans?planId=${planId}`,
+          `/api/user/learning-plans?planId=${plan_id}`,
           {
             method: 'PUT',
             headers: {
@@ -110,11 +111,11 @@ export function useLearningPlans(): UseLearningPlansReturn {
         // Update local state
         setPlans(prev =>
           prev.map(plan =>
-            plan.planId === planId ? { ...plan, ...updates } : plan
+            plan.plan_id === plan_id ? { ...plan, ...updates } : plan
           )
         );
 
-        if (currentPlan?.planId === planId) {
+        if (currentPlan?.plan_id === plan_id) {
           setCurrentPlan(prev => (prev ? { ...prev, ...updates } : null));
         }
 
@@ -131,11 +132,11 @@ export function useLearningPlans(): UseLearningPlansReturn {
         setIsLoading(false);
       }
     },
-    [isAuthenticated, currentPlan?.planId]
+    [isAuthenticated, currentPlan?.plan_id]
   );
 
   const getPlan = useCallback(
-    async (planId: string): Promise<LearningPlanProgress | null> => {
+    async (plan_id: string): Promise<LearningPlanProgress | null> => {
       if (!isAuthenticated) {
         setError('User not authenticated');
         return null;
@@ -146,7 +147,7 @@ export function useLearningPlans(): UseLearningPlansReturn {
 
       try {
         const response = await fetch(
-          `/api/user/learning-plans?planId=${planId}`,
+          `/api/user/learning-plans?planId=${plan_id}`,
           {
             method: 'GET',
             credentials: 'include',

@@ -1,9 +1,7 @@
 // v1.0 - Fix Firebase permission issues using Admin SDK with ADC
 // Run with: npx tsx src/scripts/fix-firebase-permissions.ts
 
-import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
-import { getAuth } from 'firebase-admin/auth';
 
 // ==========================================
 // Firebase Admin SDK Configuration
@@ -139,7 +137,7 @@ async function testSeedingWithAdminSDK() {
       id: 'test-admin-sdk',
       title: 'Test Document',
       description: 'Testing Admin SDK access',
-      createdAt: new Date().toISOString(),
+      created_at: new Date().toISOString(),
       test: true,
     };
 
@@ -167,7 +165,7 @@ async function createProperSeedingScript() {
   const seedingScript = `// v1.0 - Proper Firebase Admin SDK seeding script
 // Run with: npx tsx src/scripts/seed-with-admin-sdk.ts
 
-import { initializeApp, getApps } from 'firebase-admin/app';
+
 import { getFirestore } from 'firebase-admin/firestore';
 
 // Initialize Firebase Admin SDK
@@ -187,7 +185,7 @@ const sampleData = {
   category: 'React',
   difficulty: 'easy',
   tags: ['react', 'javascript'],
-  createdAt: new Date().toISOString(),
+  created_at: new Date().toISOString(),
   createdBy: 'admin-sdk'
 };
 
@@ -203,7 +201,7 @@ async function seedData() {
     const doc = await db.collection('questions').doc(sampleData.id).get();
     if (doc.exists) {
       console.log('✅ Verified: Sample question exists in database');
-      console.log('📊 Data:', doc.data());
+      console.log('📊 Data:', doc);
     }
     
     console.log('🎉 Seeding completed successfully!');

@@ -118,20 +118,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Track progress
-    const userProgress = await UserAnalyticsService.trackProgress(
+    await UserAnalyticsService.trackProgress(
       userId,
       contentId,
       contentType,
-      status,
       progress,
-      timeSpent,
-      score,
-      metadata
+      timeSpent
     );
 
     return NextResponse.json({
       success: true,
-      progress: userProgress,
+      message: 'Progress tracked successfully',
     });
   } catch (error) {
     console.error('Error tracking progress:', error);

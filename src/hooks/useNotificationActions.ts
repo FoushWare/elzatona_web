@@ -5,10 +5,18 @@ export function useNotificationActions() {
   const notifyContentUpdate = useCallback(
     async (contentType: string, action: string, adminId?: string) => {
       try {
-        await NotificationService.notifyContentUpdate(
-          adminId || 'system',
-          contentType,
-          action
+        await NotificationService.createNotification(
+          'Content Updated',
+          `${contentType} has been ${action}`,
+          'info',
+          'content',
+          {
+            adminId: adminId || 'system',
+            metadata: {
+              contentType,
+              action,
+            },
+          }
         );
       } catch (error) {
         console.error('Failed to send content update notification:', error);
@@ -20,7 +28,19 @@ export function useNotificationActions() {
   const notifyUserRegistration = useCallback(
     async (userId: string, userName: string) => {
       try {
-        await NotificationService.notifyUserRegistration(userId, userName);
+        await NotificationService.createNotification(
+          'New User Registration',
+          `User ${userName} has registered`,
+          'success',
+          'user',
+          {
+            userId,
+            metadata: {
+              userName,
+              action: 'registration',
+            },
+          }
+        );
       } catch (error) {
         console.error('Failed to send user registration notification:', error);
       }
@@ -34,7 +54,17 @@ export function useNotificationActions() {
       type: 'info' | 'success' | 'warning' | 'error' = 'warning'
     ) => {
       try {
-        await NotificationService.notifySystemAlert(message, type);
+        await NotificationService.createNotification(
+          'System Alert',
+          message,
+          type,
+          'system',
+          {
+            metadata: {
+              action: 'system_alert',
+            },
+          }
+        );
       } catch (error) {
         console.error('Failed to send system alert:', error);
       }
@@ -45,7 +75,19 @@ export function useNotificationActions() {
   const notifyAdminAction = useCallback(
     async (adminId: string, action: string, details: string) => {
       try {
-        await NotificationService.notifyAdminAction(adminId, action, details);
+        await NotificationService.createNotification(
+          'Admin Action',
+          `Admin performed ${action}: ${details}`,
+          'info',
+          'admin',
+          {
+            adminId,
+            metadata: {
+              action,
+              details,
+            },
+          }
+        );
       } catch (error) {
         console.error('Failed to send admin action notification:', error);
       }

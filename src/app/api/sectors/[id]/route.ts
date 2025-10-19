@@ -9,16 +9,16 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const result = await SectorService.getSector(id);
+    const sector = await SectorService.getSectorById(id);
 
-    if (result.success) {
+    if (sector) {
       return NextResponse.json({
         success: true,
-        data: result.sector,
+        data: sector,
       });
     } else {
       return NextResponse.json(
-        { success: false, error: result.error },
+        { success: false, error: 'Sector not found' },
         { status: 404 }
       );
     }
@@ -40,16 +40,15 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    const result = await SectorService.updateSector(id, body);
-
-    if (result.success) {
+    try {
+      await SectorService.updateSector(id, body);
       return NextResponse.json({
         success: true,
         message: 'Sector updated successfully',
       });
-    } else {
+    } catch (error) {
       return NextResponse.json(
-        { success: false, error: result.error },
+        { success: false, error: 'Failed to update sector' },
         { status: 500 }
       );
     }
@@ -70,16 +69,15 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    const result = await SectorService.deleteSector(id);
-
-    if (result.success) {
+    try {
+      await SectorService.deleteSector(id);
       return NextResponse.json({
         success: true,
         message: 'Sector deleted successfully',
       });
-    } else {
+    } catch (error) {
       return NextResponse.json(
-        { success: false, error: result.error },
+        { success: false, error: 'Failed to delete sector' },
         { status: 500 }
       );
     }

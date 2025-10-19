@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { cookies } from 'next/headers';
-import { verifyFirebaseToken } from '@/lib/server-auth';
-import { firestoreService } from '@/lib/firestore-service';
+import { verifySupabaseToken } from '@/lib/server-auth';
 import { LearningPlanProgress } from '@/types/firestore';
 
 export async function GET(request: NextRequest) {
@@ -18,7 +24,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify the Firebase token
-    const decodedToken = await verifyFirebaseToken(token);
+    const decodedToken = await verifySupabaseToken(token);
     if (!decodedToken) {
       return NextResponse.json(
         { error: 'Invalid authentication token' },
@@ -31,12 +37,13 @@ export async function GET(request: NextRequest) {
 
     if (planId) {
       // Get specific learning plan
-      const plan = await firestoreService.getLearningPlan(
-        decodedToken.uid,
-        planId
-      );
+      const { data: plan, error } = await supabase
+        .from('learning_plans')
+        .select('*')
+        .eq('id', planId)
+        .single();
 
-      if (!plan) {
+      if (error || !plan) {
         return NextResponse.json(
           { error: 'Learning plan not found' },
           { status: 404 }
@@ -49,15 +56,19 @@ export async function GET(request: NextRequest) {
       });
     } else {
       // Get all learning plans for user
-      const userData = await firestoreService.getUser(decodedToken.uid);
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', decodedToken.id)
+        .single();
 
-      if (!userData) {
+      if (error || !userData) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
       }
 
       return NextResponse.json({
         success: true,
-        plans: userData.learningPlans,
+        plans: userData.learning_plans || [],
       });
     }
   } catch (error) {
@@ -83,7 +94,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify the Firebase token
-    const decodedToken = await verifyFirebaseToken(token);
+    const decodedToken = await verifySupabaseToken(token);
     if (!decodedToken) {
       return NextResponse.json(
         { error: 'Invalid authentication token' },
@@ -94,7 +105,7 @@ export async function POST(request: NextRequest) {
     const planData: LearningPlanProgress = await request.json();
 
     // Validate plan data
-    if (!planData.planId || !planData.planName) {
+    if (!planData.plan_id || !planData.planName) {
       return NextResponse.json(
         { error: 'Plan ID and name are required' },
         { status: 400 }
@@ -102,12 +113,22 @@ export async function POST(request: NextRequest) {
     }
 
     // Start new learning plan
-    await firestoreService.startLearningPlan(decodedToken.uid, planData);
+    const { error } = await supabase.from('user_learning_plans').insert({
+      user_id: decodedToken.id,
+      plan_id: planData.plan_id,
+      plan_name: planData.planName,
+      started_at: new Date().toISOString(),
+      progress: 0,
+      questions_completed: 0,
+      status: 'active',
+    });
+
+    if (error) throw error;
 
     return NextResponse.json({
       success: true,
       message: 'Learning plan started successfully',
-      planId: planData.planId,
+      plan_id: planData.plan_id,
     });
   } catch (error) {
     console.error('Error starting learning plan:', error);
@@ -132,7 +153,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Verify the Firebase token
-    const decodedToken = await verifyFirebaseToken(token);
+    const decodedToken = await verifySupabaseToken(token);
     if (!decodedToken) {
       return NextResponse.json(
         { error: 'Invalid authentication token' },
@@ -153,11 +174,16 @@ export async function PUT(request: NextRequest) {
     const updates: Partial<LearningPlanProgress> = await request.json();
 
     // Update learning plan
-    await firestoreService.updateLearningPlan(
-      decodedToken.uid,
-      planId,
-      updates
-    );
+    const { error } = await supabase
+      .from('user_learning_plans')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('user_id', decodedToken.id)
+      .eq('plan_id', planId);
+
+    if (error) throw error;
 
     return NextResponse.json({
       success: true,

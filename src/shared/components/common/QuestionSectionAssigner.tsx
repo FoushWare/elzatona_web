@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import {
   Card,
   CardContent,
@@ -97,15 +103,15 @@ export default function QuestionSectionAssigner({
     }
   };
 
-  const handleAssignmentChange = (questionId: string, sectionId: string) => {
+  const handleAssignmentChange = (question_id: string, sectionId: string) => {
     const newAssignments = {
       ...assignments,
     };
 
     if (sectionId === 'none') {
-      delete newAssignments[questionId];
+      delete newAssignments[question_id];
     } else {
-      newAssignments[questionId] = sectionId;
+      newAssignments[question_id] = sectionId;
     }
 
     setAssignments(newAssignments);

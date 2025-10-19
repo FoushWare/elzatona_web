@@ -36,12 +36,12 @@ export class CloudinaryAudioStorage {
     file: Buffer,
     filename: string,
     type: 'question' | 'answer',
-    questionId: string
+    question_id: string
   ): Promise<AudioFile> {
     try {
       await this.initialize();
 
-      const fileId = `${questionId}-${Date.now()}`;
+      const fileId = `${question_id}-${Date.now()}`;
       const publicId = `audio/${type}s/${fileId}`;
 
       const result = await cloudinary.uploader.upload(

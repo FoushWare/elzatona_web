@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, getDoc, updateDoc, writeBatch } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // POST /api/questions/bulk-topics
 export async function POST(request: NextRequest) {
@@ -22,41 +26,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!db) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Firestore not available',
-        },
-        { status: 500 }
-      );
-    }
-
     console.log(
       `Bulk updating topics for ${questionIds.length} questions:`,
       topics
     );
 
-    const batch = writeBatch(db);
     const results = [];
     const errors = [];
 
     // Process each question
     for (const questionId of questionIds) {
       try {
-        const questionRef = doc(db, 'questions', questionId);
-        const questionSnap = await getDoc(questionRef);
+        const { data: existingQuestion, error: fetchError } = await supabase
+          .from('questions')
+          .select('*')
+          .eq('id', questionId)
+          .single();
 
-        if (!questionSnap.exists()) {
+        if (fetchError || !existingQuestion) {
           errors.push(`Question ${questionId} not found`);
           continue;
         }
 
-        // Add to batch update
-        batch.update(questionRef, {
-          topics: topics,
-          updatedAt: new Date().toISOString(),
-        });
+        // Update the question
+        const { error: updateError } = await supabase
+          .from('questions')
+          .update({
+            topics: topics,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', questionId);
+
+        if (updateError) {
+          throw updateError;
+        }
 
         results.push({
           questionId,
@@ -71,13 +74,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Commit the batch
-    if (results.length > 0) {
-      await batch.commit();
-      console.log(
-        `Successfully updated topics for ${results.length} questions`
-      );
-    }
+    console.log(`Successfully updated topics for ${results.length} questions`);
 
     return NextResponse.json({
       success: true,

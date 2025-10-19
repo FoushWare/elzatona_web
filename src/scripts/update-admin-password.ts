@@ -1,11 +1,5 @@
 import { db } from '../lib/firebase';
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  updateDoc,
-} from 'firebase/firestore';
+
 import bcrypt from 'bcryptjs';
 import { adminConfig, getAdminApiUrl } from '@/admin.config';
 
@@ -45,17 +39,17 @@ async function updateAdminPassword() {
     }
 
     // Find the admin user
-    const adminsRef = collection(db, 'admins');
-    const q = query(adminsRef, where('email', '==', adminEmail));
+    const adminsRef = supabase.from('admins');
+    const q = query(adminsRef, where('email', adminEmail));
     const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.empty) {
+    if (querySnapshot.length === 0) {
       console.error('❌ Admin user not found');
       return;
     }
 
     const adminDoc = querySnapshot.docs[0];
-    const adminData = adminDoc.data();
+    const adminData = adminDoc;
 
     console.log('📧 Found admin:', adminData.email);
     console.log('👤 Name:', adminData.name);

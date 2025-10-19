@@ -16,10 +16,10 @@ export interface LearningSection {
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
   estimatedTime?: string;
   order: number;
-  isActive: boolean;
-  questionCount: number;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  question_count: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface SectionQuestion {
@@ -34,9 +34,9 @@ export interface SectionQuestion {
   explanation: string;
   audioQuestion?: string;
   audioAnswer?: string;
-  createdAt: string;
-  updatedAt: string;
-  isActive: boolean;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
   isComplete: boolean; // New field to track if question structure is complete
 }
 
@@ -189,7 +189,7 @@ export class SectionService {
         category: 'foundation',
         difficulty: 'beginner',
         estimatedTime: '2-3 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 1,
       },
       {
@@ -200,7 +200,7 @@ export class SectionService {
         category: 'foundation',
         difficulty: 'beginner',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 2,
       },
       {
@@ -211,7 +211,7 @@ export class SectionService {
         category: 'foundation',
         difficulty: 'beginner',
         estimatedTime: '4-5 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 3,
       },
 
@@ -224,7 +224,7 @@ export class SectionService {
         category: 'frontend',
         difficulty: 'intermediate',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 4,
       },
       {
@@ -235,7 +235,7 @@ export class SectionService {
         category: 'frontend',
         difficulty: 'intermediate',
         estimatedTime: '4-5 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 5,
       },
       {
@@ -245,7 +245,7 @@ export class SectionService {
         category: 'frontend',
         difficulty: 'intermediate',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 6,
       },
       {
@@ -256,7 +256,7 @@ export class SectionService {
         category: 'frontend',
         difficulty: 'intermediate',
         estimatedTime: '4-5 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 7,
       },
 
@@ -268,7 +268,7 @@ export class SectionService {
         category: 'advanced',
         difficulty: 'advanced',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 8,
       },
       {
@@ -278,7 +278,7 @@ export class SectionService {
         category: 'advanced',
         difficulty: 'advanced',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 9,
       },
       {
@@ -289,7 +289,7 @@ export class SectionService {
         category: 'advanced',
         difficulty: 'advanced',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 10,
       },
       {
@@ -299,7 +299,7 @@ export class SectionService {
         category: 'advanced',
         difficulty: 'advanced',
         estimatedTime: '4-5 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 11,
       },
 
@@ -312,7 +312,7 @@ export class SectionService {
         category: 'specialized',
         difficulty: 'intermediate',
         estimatedTime: '2-3 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 12,
       },
       {
@@ -322,7 +322,7 @@ export class SectionService {
         category: 'specialized',
         difficulty: 'intermediate',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 13,
       },
       {
@@ -333,7 +333,7 @@ export class SectionService {
         category: 'specialized',
         difficulty: 'intermediate',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 14,
       },
       {
@@ -343,7 +343,7 @@ export class SectionService {
         category: 'specialized',
         difficulty: 'intermediate',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 15,
       },
       {
@@ -353,7 +353,7 @@ export class SectionService {
         category: 'specialized',
         difficulty: 'intermediate',
         estimatedTime: '2-3 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 16,
       },
 
@@ -365,7 +365,7 @@ export class SectionService {
         category: 'career',
         difficulty: 'advanced',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 17,
       },
       {
@@ -376,7 +376,7 @@ export class SectionService {
         category: 'career',
         difficulty: 'intermediate',
         estimatedTime: '4-5 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 18,
       },
       {
@@ -386,7 +386,7 @@ export class SectionService {
         category: 'career',
         difficulty: 'beginner',
         estimatedTime: '2-3 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 19,
       },
 
@@ -399,7 +399,7 @@ export class SectionService {
         category: 'emerging',
         difficulty: 'intermediate',
         estimatedTime: '2-3 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 20,
       },
       {
@@ -410,7 +410,7 @@ export class SectionService {
         category: 'emerging',
         difficulty: 'advanced',
         estimatedTime: '3-4 weeks',
-        questionCount: 0,
+        question_count: 0,
         order: 21,
       },
     ];
@@ -434,10 +434,10 @@ export class SectionService {
         | undefined,
       estimatedTime: section.estimatedTime,
       order: section.order,
-      isActive: true,
-      questionCount: section.questionCount,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      is_active: true,
+      question_count: section.question_count,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     }));
   }
 
@@ -487,10 +487,10 @@ export class SectionService {
         description:
           description?.trim() || `Learn and practice ${name.toLowerCase()}`,
         order: sections.length + 1,
-        isActive: true,
-        questionCount: 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        is_active: true,
+        question_count: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
       sections.push(newSection);
@@ -557,7 +557,7 @@ export class SectionService {
       sections[sectionIndex] = {
         ...sections[sectionIndex],
         ...updates,
-        updatedAt: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
       await this.saveSections(sections);
@@ -658,7 +658,7 @@ export class SectionService {
         const newOrder = newOrderMap.get(section.id);
         if (newOrder !== undefined) {
           section.order = newOrder;
-          section.updatedAt = new Date().toISOString();
+          section.updated_at = new Date().toISOString();
         }
       });
 
@@ -750,9 +750,9 @@ export class SectionService {
         explanation: questionData.explanation || '',
         audioQuestion: questionData.audioQuestion || '',
         audioAnswer: questionData.audioAnswer || '',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        isActive: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        is_active: true,
         isComplete: this.checkQuestionCompleteness({
           title: questionData.title || '',
           content: questionData.content || '',
@@ -823,9 +823,9 @@ export class SectionService {
           explanation: questionData.explanation || '',
           audioQuestion: '', // Empty for later editing
           audioAnswer: '', // Empty for later editing
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          isActive: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          is_active: true,
           isComplete: this.checkQuestionCompleteness(questionData),
         };
 
@@ -901,8 +901,8 @@ export class SectionService {
         const sectionIndex = sections.findIndex(s => s.id === sectionId);
 
         if (sectionIndex !== -1) {
-          sections[sectionIndex].questionCount = count;
-          sections[sectionIndex].updatedAt = new Date().toISOString();
+          sections[sectionIndex].question_count = count;
+          sections[sectionIndex].updated_at = new Date().toISOString();
           await this.saveSections(sections);
         }
       }

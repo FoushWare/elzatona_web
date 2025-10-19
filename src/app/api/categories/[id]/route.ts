@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/categories/[id] - Get a specific category
 export async function GET(
@@ -10,13 +13,6 @@ export async function GET(
   try {
     const { id: categoryId } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     if (!categoryId) {
       return NextResponse.json(
         { success: false, error: 'Category ID is required' },
@@ -24,10 +20,13 @@ export async function GET(
       );
     }
 
-    const categoryRef = doc(db, 'categories', categoryId);
-    const categorySnap = await getDoc(categoryRef);
+    const { data: categorySnap, error } = await supabase
+      .from('categories')
+      .select('*')
+      .eq('id', categoryId)
+      .single();
 
-    if (!categorySnap.exists()) {
+    if (error || !categorySnap) {
       return NextResponse.json(
         { success: false, error: 'Category not found' },
         { status: 404 }
@@ -36,7 +35,7 @@ export async function GET(
 
     const categoryData = {
       id: categorySnap.id,
-      ...categorySnap.data(),
+      ...categorySnap,
     };
 
     return NextResponse.json({
@@ -61,13 +60,6 @@ export async function PUT(
     const { id: categoryId } = await params;
     const body = await request.json();
 
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     if (!categoryId) {
       return NextResponse.json(
         { success: false, error: 'Category ID is required' },
@@ -83,11 +75,14 @@ export async function PUT(
       );
     }
 
-    const categoryRef = doc(db, 'categories', categoryId);
-
     // Check if category exists
-    const categorySnap = await getDoc(categoryRef);
-    if (!categorySnap.exists()) {
+    const { data: categorySnap, error: fetchError } = await supabase
+      .from('categories')
+      .select('*')
+      .eq('id', categoryId)
+      .single();
+
+    if (fetchError || !categorySnap) {
       return NextResponse.json(
         { success: false, error: 'Category not found' },
         { status: 404 }
@@ -97,10 +92,17 @@ export async function PUT(
     // Prepare update data
     const updateData = {
       ...body,
-      updatedAt: new Date(),
+      updated_at: new Date().toISOString(),
     };
 
-    await updateDoc(categoryRef, updateData);
+    const { error: updateError } = await supabase
+      .from('categories')
+      .update(updateData)
+      .eq('id', categoryId);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     return NextResponse.json({
       success: true,
@@ -124,13 +126,6 @@ export async function DELETE(
   try {
     const { id: categoryId } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     if (!categoryId) {
       return NextResponse.json(
         { success: false, error: 'Category ID is required' },
@@ -138,18 +133,29 @@ export async function DELETE(
       );
     }
 
-    const categoryRef = doc(db, 'categories', categoryId);
-
     // Check if category exists
-    const categorySnap = await getDoc(categoryRef);
-    if (!categorySnap.exists()) {
+    const { data: categorySnap, error: fetchError } = await supabase
+      .from('categories')
+      .select('*')
+      .eq('id', categoryId)
+      .single();
+
+    if (fetchError || !categorySnap) {
       return NextResponse.json(
         { success: false, error: 'Category not found' },
         { status: 404 }
       );
     }
 
-    await deleteDoc(categoryRef);
+    // Delete the category
+    const { error: deleteError } = await supabase
+      .from('categories')
+      .delete()
+      .eq('id', categoryId);
+
+    if (deleteError) {
+      throw deleteError;
+    }
 
     return NextResponse.json({
       success: true,

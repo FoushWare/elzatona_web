@@ -1,10 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp,
-} from 'firebase/firestore';
+
 import { CARD_TYPES } from '../types/learning-cards';
 
 // Firebase configuration
@@ -30,7 +25,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 interface LearningCardSeedData {
@@ -44,9 +39,9 @@ interface LearningCardSeedData {
   color: string;
   icon: string;
   order: number;
-  isActive: boolean;
+  is_active: boolean;
   metadata: {
-    questionCount: number;
+    question_count: number;
     estimatedTime: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     topics: string[];
@@ -73,9 +68,9 @@ const learningCardsData: LearningCardSeedData[] = [
     color: '#3B82F6',
     icon: '💻',
     order: 1,
-    isActive: true,
+    is_active: true,
     metadata: {
-      questionCount: 0, // Will be updated based on actual questions
+      question_count: 0, // Will be updated based on actual questions
       estimatedTime: '2-3 hours',
       difficulty: 'beginner',
       topics: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'DOM', 'ES6+'],
@@ -166,9 +161,9 @@ const learningCardsData: LearningCardSeedData[] = [
     color: '#10B981',
     icon: '⚛️',
     order: 2,
-    isActive: true,
+    is_active: true,
     metadata: {
-      questionCount: 0,
+      question_count: 0,
       estimatedTime: '3-4 hours',
       difficulty: 'intermediate',
       topics: [
@@ -266,9 +261,9 @@ const learningCardsData: LearningCardSeedData[] = [
     color: '#8B5CF6',
     icon: '🧩',
     order: 3,
-    isActive: true,
+    is_active: true,
     metadata: {
-      questionCount: 0,
+      question_count: 0,
       estimatedTime: '2-3 hours',
       difficulty: 'intermediate',
       topics: [
@@ -364,9 +359,9 @@ const learningCardsData: LearningCardSeedData[] = [
     color: '#F59E0B',
     icon: '🏗️',
     order: 4,
-    isActive: true,
+    is_active: true,
     metadata: {
-      questionCount: 0,
+      question_count: 0,
       estimatedTime: '2-3 hours',
       difficulty: 'advanced',
       topics: ['Architecture', 'Scalability', 'Performance', 'Design Patterns'],
@@ -455,15 +450,15 @@ async function seedLearningCards() {
   try {
     console.log('🚀 Starting to seed learning cards...');
 
-    const cardsRef = collection(db, 'learningCards');
+    const cardsRef = supabase.from('learningCards');
 
     for (const cardData of learningCardsData) {
       console.log(`📝 Creating card: ${cardData.title}`);
 
       const docRef = await addDoc(cardsRef, {
         ...cardData,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       });
 
       console.log(`✅ Created card with ID: ${docRef.id}`);

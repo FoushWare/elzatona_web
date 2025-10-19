@@ -1,10 +1,17 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import Link from 'next/link';
 import { Menu, X, Sun, Moon, ChevronDown, User, LogOut } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 import AlzatonaLogo from './AlzatonaLogo';
 
 interface DropdownItem {
@@ -29,7 +36,7 @@ export default function Navbar() {
     'mobile' | 'tablet' | 'laptop' | 'desktop'
   >('desktop');
   const { isDarkMode, toggleDarkMode } = useTheme();
-  const { isAuthenticated, user, signOut, isLoading } = useFirebaseAuth();
+  const { isAuthenticated, user, logout, isLoading } = useAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -859,16 +866,16 @@ export default function Navbar() {
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-t-xl">
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                          {user?.displayName?.charAt(0) ||
+                          {user?.name?.charAt(0) ||
                             user?.email?.charAt(0) ||
                             'U'}
                         </div>
                         <div className="flex-1 min-w-0">
                           <p
                             className="text-sm font-semibold text-gray-900 dark:text-white truncate"
-                            title={user?.displayName || user?.email || 'User'}
+                            title={user?.name || user?.email || 'User'}
                           >
-                            {user?.displayName || user?.email || 'User'}
+                            {user?.name || user?.email || 'User'}
                           </p>
                           <p
                             className="text-xs text-gray-500 dark:text-gray-400 truncate"
@@ -923,7 +930,7 @@ export default function Navbar() {
                     <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
                       <button
                         onClick={() => {
-                          signOut();
+                          logout();
                           setIsUserDropdownOpen(false);
                         }}
                         className="flex items-center w-full px-3 lg:px-4 py-2 lg:py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 group border-l-2 border-transparent hover:border-red-400 dark:hover:border-red-500"
@@ -1014,9 +1021,9 @@ export default function Navbar() {
                   <div className="px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
                     <p
                       className="text-sm font-medium text-gray-900 dark:text-white truncate"
-                      title={user?.displayName || user?.email || 'User'}
+                      title={user?.name || user?.email || 'User'}
                     >
-                      {user?.displayName || user?.email || 'User'}
+                      {user?.name || user?.email || 'User'}
                     </p>
                     <p
                       className="text-xs text-gray-500 dark:text-gray-400 truncate"
@@ -1047,7 +1054,7 @@ export default function Navbar() {
                   {/* Sign Out Button */}
                   <button
                     onClick={() => {
-                      signOut();
+                      logout();
                       setIsOpen(false);
                     }}
                     className="block w-full px-4 py-3 rounded-lg text-base font-medium transition-colors bg-red-600 text-white hover:bg-red-700 text-center"

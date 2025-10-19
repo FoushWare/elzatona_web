@@ -2,14 +2,6 @@
 // Run with: npx tsx src/scripts/seed-ultimate-content.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -23,7 +15,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -220,7 +212,13 @@ const ultimateFrontendTasks = [
     align-items: center;
     gap: 4px;
 }`,
-      'index.js': `import React, { useState } from 'react';
+      'index.js': `import React from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import ReactDOM from 'react-dom/client';
 
 // Mock data
@@ -748,8 +746,8 @@ root.render(<SocialMediaDashboard />);`,
     ],
     solutionExplanation:
       'This social media dashboard demonstrates advanced React patterns including state management, component composition, and data visualization. The app features a sidebar navigation, statistics grid, chart placeholders, and a recent posts feed with engagement metrics.',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    created_at: new Date(),
+    updated_at: new Date(),
   },
 ];
 
@@ -851,8 +849,8 @@ function mergeTwoLists(l1, l2) {
       'Use the merge two sorted lists algorithm',
       'Time complexity: O(n log k), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -936,8 +934,8 @@ function mergeTwoLists(l1, l2) {
       'Handle null pointers for next and random',
       'Time complexity: O(n), Space complexity: O(n)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -1015,8 +1013,8 @@ function mergeTwoLists(l1, l2) {
       'Find the cycle and then find the entrance to the cycle',
       'Time complexity: O(n), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -1037,13 +1035,13 @@ async function seedUltimateFrontendTasks() {
     try {
       // Check if task already exists
       const existingQuery = query(
-        collection(db, 'frontendTasks'),
-        where('title', '==', task.title)
+        supabase.from('frontendTasks'),
+        where('title', task.title)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
-        await addDoc(collection(db, 'frontendTasks'), task);
+      if (existingSnapshot.length === 0) {
+        await addDoc(supabase.from('frontendTasks'), task);
         successCount++;
         console.log(`✅ Added frontend task: ${task.title}`);
       } else {
@@ -1075,13 +1073,13 @@ async function seedUltimateProblemSolvingTasks() {
     try {
       // Check if task already exists
       const existingQuery = query(
-        collection(db, 'problemSolvingTasks'),
-        where('id', '==', task.id)
+        supabase.from('problemSolvingTasks'),
+        where('id', task.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
-        await addDoc(collection(db, 'problemSolvingTasks'), task);
+      if (existingSnapshot.length === 0) {
+        await addDoc(supabase.from('problemSolvingTasks'), task);
         successCount++;
         console.log(`✅ Added problem-solving task: ${task.title}`);
       } else {

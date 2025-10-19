@@ -4,8 +4,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, limit, orderBy } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,14 +26,16 @@ export async function GET(request: NextRequest) {
     console.log('🔍 Generating suggestions for:', query);
 
     // Get all questions for suggestion generation
-    const questionsSnapshot = await getDocs(
-      query(collection(db, 'questions'), limit(1000))
-    );
+    const { data: questionsData, error } = await supabase
+      .from('questions')
+      .select('*')
+      .limit(1000);
 
-    const questions = questionsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    if (error) {
+      throw error;
+    }
+
+    const questions = questionsData || [];
 
     const suggestions = new Set<string>();
 
@@ -39,7 +44,7 @@ export async function GET(request: NextRequest) {
       // Title words
       if (question.title) {
         const titleWords = question.title.split(/\s+/);
-        titleWords.forEach(word => {
+        titleWords.forEach((word: string) => {
           const cleanWord = word.replace(/[^\w]/g, '').toLowerCase();
           if (cleanWord.length > 2 && cleanWord.includes(queryLower)) {
             suggestions.add(word);
@@ -72,7 +77,7 @@ export async function GET(request: NextRequest) {
       // Content keywords
       if (question.content) {
         const contentWords = question.content.split(/\s+/);
-        contentWords.forEach(word => {
+        contentWords.forEach((word: string) => {
           const cleanWord = word.replace(/[^\w]/g, '').toLowerCase();
           if (cleanWord.length > 3 && cleanWord.includes(queryLower)) {
             suggestions.add(word);

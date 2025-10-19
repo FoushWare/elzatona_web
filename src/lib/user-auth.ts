@@ -1,16 +1,9 @@
-import { db } from './firebase';
-import {
-  collection,
-  doc,
-  getDocs,
-  setDoc,
-  updateDoc,
-  query,
-  where,
-  serverTimestamp,
-  getDoc,
-} from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // Enhanced user types with roles
 export interface User {
@@ -19,8 +12,8 @@ export interface User {
   name: string;
   avatar?: string;
   role: 'user' | 'premium_user' | 'admin' | 'super_admin';
-  isActive: boolean;
-  createdAt: Date;
+  is_active: boolean;
+  created_at: Date;
   lastLogin?: Date;
   preferences?: {
     theme: 'light' | 'dark' | 'system';
@@ -82,20 +75,13 @@ export class UserAuthService {
       const passwordHash = await bcrypt.hash(password, 12);
 
       // Create user document
-      if (!db) {
-        return {
-          success: false,
-          error: 'Database not initialized',
-        };
-      }
-
       const userId = this.generateUserId();
       const userData: Omit<User, 'id'> = {
         email,
         name,
         role,
-        isActive: true,
-        createdAt: new Date(),
+        is_active: true,
+        created_at: new Date(),
         preferences: {
           theme: 'system',
           notifications: true,
@@ -109,10 +95,11 @@ export class UserAuthService {
         },
       };
 
-      await setDoc(doc(db, this.COLLECTION_NAME, userId), {
+      await supabase.from('users').insert({
+        id: userId,
         ...userData,
         passwordHash,
-        createdAt: serverTimestamp(),
+        created_at: new Date().toISOString(),
       });
 
       console.log(`✅ User account created: ${email} (${role})`);
@@ -136,7 +123,7 @@ export class UserAuthService {
         return { success: false, error: 'User not found' };
       }
 
-      if (!user.isActive) {
+      if (!user.is_active) {
         return { success: false, error: 'Account is deactivated' };
       }
 
@@ -174,38 +161,17 @@ export class UserAuthService {
     email: string
   ): Promise<(User & { passwordHash: string }) | null> {
     try {
-      if (!db) {
-        console.error('Database not initialized');
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .single();
+
+      if (error || !data) {
         return null;
       }
 
-      const q = query(
-        collection(db, this.COLLECTION_NAME),
-        where('email', '==', email)
-      );
-
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        return null;
-      }
-
-      const doc = querySnapshot.docs[0];
-      const data = doc.data();
-
-      return {
-        id: doc.id,
-        email: data.email,
-        name: data.name,
-        avatar: data.avatar,
-        role: data.role,
-        isActive: data.isActive,
-        createdAt: data.createdAt?.toDate() || new Date(),
-        lastLogin: data.lastLogin?.toDate(),
-        preferences: data.preferences,
-        progress: data.progress,
-        passwordHash: data.passwordHash,
-      };
+      return data as User & { passwordHash: string };
     } catch (error) {
       console.error('Error getting user by email:', error);
       return null;
@@ -217,31 +183,17 @@ export class UserAuthService {
    */
   static async getUserById(userId: string): Promise<User | null> {
     try {
-      if (!db) {
-        console.error('Database not initialized');
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error || !data) {
         return null;
       }
 
-      const docRef = doc(db, this.COLLECTION_NAME, userId);
-      const docSnap = await getDoc(docRef);
-
-      if (!docSnap.exists()) {
-        return null;
-      }
-
-      const data = docSnap.data();
-      return {
-        id: docSnap.id,
-        email: data.email,
-        name: data.name,
-        avatar: data.avatar,
-        role: data.role,
-        isActive: data.isActive,
-        createdAt: data.createdAt?.toDate() || new Date(),
-        lastLogin: data.lastLogin?.toDate(),
-        preferences: data.preferences,
-        progress: data.progress,
-      };
+      return data as User;
     } catch (error) {
       console.error('Error getting user by ID:', error);
       return null;
@@ -256,13 +208,12 @@ export class UserAuthService {
     preferences: Partial<User['preferences']>
   ): Promise<boolean> {
     try {
-      if (!db) {
-        return false;
-      }
-
-      await updateDoc(doc(db, this.COLLECTION_NAME, userId), {
-        preferences: preferences,
-      });
+      await supabase
+        .from('users')
+        .update({
+          preferences: preferences,
+        })
+        .eq('id', userId);
 
       return true;
     } catch (error) {
@@ -279,13 +230,12 @@ export class UserAuthService {
     progress: Partial<User['progress']>
   ): Promise<boolean> {
     try {
-      if (!db) {
-        return false;
-      }
-
-      await updateDoc(doc(db, this.COLLECTION_NAME, userId), {
-        progress: progress,
-      });
+      await supabase
+        .from('users')
+        .update({
+          progress: progress,
+        })
+        .eq('id', userId);
 
       return true;
     } catch (error) {
@@ -316,33 +266,13 @@ export class UserAuthService {
    */
   static async getAllUsers(): Promise<User[]> {
     try {
-      if (!db) {
-        console.error('Database not initialized');
+      const { data, error } = await supabase.from('users').select('*');
+
+      if (error || !data) {
         return [];
       }
 
-      const querySnapshot = await getDocs(collection(db, this.COLLECTION_NAME));
-      const users: User[] = [];
-
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        users.push({
-          id: doc.id,
-          email: data.email,
-          name: data.name,
-          avatar: data.avatar,
-          role: data.role,
-          isActive: data.isActive,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          lastLogin: data.lastLogin?.toDate(),
-          preferences: data.preferences,
-          progress: data.progress,
-        });
-      });
-
-      return users.sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-      );
+      return data as User[];
     } catch (error) {
       console.error('Error getting all users:', error);
       return [];
@@ -354,14 +284,12 @@ export class UserAuthService {
    */
   private static async updateLastLogin(userId: string): Promise<void> {
     try {
-      if (!db) {
-        console.error('Database not initialized');
-        return;
-      }
-
-      await updateDoc(doc(db, this.COLLECTION_NAME, userId), {
-        lastLogin: serverTimestamp(),
-      });
+      await supabase
+        .from('users')
+        .update({
+          lastLogin: new Date().toISOString(),
+        })
+        .eq('id', userId);
     } catch (error) {
       console.error('Error updating last login:', error);
     }

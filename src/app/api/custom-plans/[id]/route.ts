@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // Get a specific custom plan
 export async function GET(
@@ -10,17 +13,13 @@ export async function GET(
   try {
     const { id } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
+    const { data: planSnap, error } = await supabase
+      .from('custom_plans')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-    const planRef = doc(db, 'customPlans', id);
-    const planSnap = await getDoc(planRef);
-
-    if (!planSnap.exists()) {
+    if (error || !planSnap) {
       return NextResponse.json(
         { error: 'Custom plan not found' },
         { status: 404 }
@@ -31,7 +30,7 @@ export async function GET(
       success: true,
       data: {
         id: planSnap.id,
-        ...planSnap.data(),
+        ...planSnap,
       },
     });
   } catch (error) {
@@ -52,22 +51,34 @@ export async function PUT(
     const { id } = await params;
     const updates = await request.json();
 
-    if (!db) {
+    // Check if plan exists
+    const { data: planSnap, error: fetchError } = await supabase
+      .from('custom_plans')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !planSnap) {
       return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
+        { error: 'Custom plan not found' },
+        { status: 404 }
       );
     }
-
-    const planRef = doc(db, 'customPlans', id);
 
     // Add updatedAt timestamp
     const updatedData = {
       ...updates,
-      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    await updateDoc(planRef, updatedData);
+    const { error: updateError } = await supabase
+      .from('custom_plans')
+      .update(updatedData)
+      .eq('id', id);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     return NextResponse.json({
       success: true,
@@ -90,15 +101,29 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    if (!db) {
+    // Check if plan exists
+    const { data: planSnap, error: fetchError } = await supabase
+      .from('custom_plans')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !planSnap) {
       return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
+        { error: 'Custom plan not found' },
+        { status: 404 }
       );
     }
 
-    const planRef = doc(db, 'customPlans', id);
-    await deleteDoc(planRef);
+    // Delete the plan
+    const { error: deleteError } = await supabase
+      .from('custom_plans')
+      .delete()
+      .eq('id', id);
+
+    if (deleteError) {
+      throw deleteError;
+    }
 
     return NextResponse.json({
       success: true,

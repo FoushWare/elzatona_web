@@ -2,14 +2,6 @@
 // Run with: npx tsx src/scripts/seed-comprehensive-frontend-tasks.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -23,7 +15,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -62,7 +54,13 @@ const comprehensiveFrontendTasks = [
     files: [
       {
         name: 'App.jsx',
-        content: `import React, { useState, useEffect } from 'react';
+        content: `import React from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { io } from 'socket.io-client';
 import ChatRoom from './components/ChatRoom';
 import LoginForm from './components/LoginForm';
@@ -631,8 +629,8 @@ export default RoomList;`,
         language: 'css',
       },
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -769,7 +767,7 @@ function App() {
     const newTask = {
       id: Date.now().toString(),
       ...task,
-      createdAt: new Date().toISOString()
+      created_at: new Date().toISOString()
     };
 
     setColumns(prev => prev.map(col => {
@@ -1708,8 +1706,8 @@ export default TaskModal;`,
         language: 'css',
       },
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -1730,14 +1728,14 @@ async function seedComprehensiveFrontendTasks() {
     try {
       // Check if task already exists
       const existingQuery = query(
-        collection(db, 'frontendTasks'),
-        where('id', '==', task.id)
+        supabase.from('frontendTasks'),
+        where('id', task.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
+      if (existingSnapshot.length === 0) {
         // Add task to Firebase
-        await addDoc(collection(db, 'frontendTasks'), task);
+        await addDoc(supabase.from('frontendTasks'), task);
 
         successCount++;
         console.log(`✅ Added frontend task: ${task.title}`);

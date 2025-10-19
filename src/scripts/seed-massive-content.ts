@@ -2,14 +2,6 @@
 // Run with: npx tsx src/scripts/seed-massive-content.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -23,7 +15,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -175,7 +167,13 @@ const massiveFrontendTasks = [
     font-size: 14px;
     color: #b3b3b3;
 }`,
-      'index.js': `import React, { useState, useRef, useEffect } from 'react';
+      'index.js': `import React from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import ReactDOM from 'react-dom/client';
 
 // Mock data
@@ -654,8 +652,8 @@ root.render(<SpotifyClone />);`,
     ],
     solutionExplanation:
       'This Spotify clone demonstrates React state management, component composition, and audio player integration. The app uses useState for managing current track and playback state, and includes a sidebar navigation, playlist grid, and persistent player bar.',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    created_at: new Date(),
+    updated_at: new Date(),
   },
   {
     title: 'Create a Netflix-style Video Streaming App',
@@ -1270,8 +1268,8 @@ root.render(<NetflixClone />);`,
     ],
     solutionExplanation:
       'This Netflix clone demonstrates advanced React patterns including state management, component composition, and responsive design. The app features a fixed header with search, hero section, and multiple movie rows with horizontal scrolling.',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    created_at: new Date(),
+    updated_at: new Date(),
   },
 ];
 
@@ -1355,8 +1353,8 @@ const massiveProblemSolvingTasks = [
       'Track the size of each level before processing',
       'Time complexity: O(n), Space complexity: O(w) where w is the maximum width',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -1415,8 +1413,8 @@ const massiveProblemSolvingTasks = [
       'Recursive case: return 1 + max depth of left and right subtrees',
       'Time complexity: O(n), Space complexity: O(h) where h is the height',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -1481,8 +1479,8 @@ const massiveProblemSolvingTasks = [
       'Check if values match and recursively check subtrees',
       'Time complexity: O(n), Space complexity: O(h) where h is the height',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -1545,8 +1543,8 @@ const massiveProblemSolvingTasks = [
       'Recursive case: subtract current value from target and check children',
       'Time complexity: O(n), Space complexity: O(h) where h is the height',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -1616,8 +1614,8 @@ const massiveProblemSolvingTasks = [
       'Recursively build left and right subtrees',
       'Time complexity: O(n²), Space complexity: O(n)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -1638,13 +1636,13 @@ async function seedMassiveFrontendTasks() {
     try {
       // Check if task already exists
       const existingQuery = query(
-        collection(db, 'frontendTasks'),
-        where('title', '==', task.title)
+        supabase.from('frontendTasks'),
+        where('title', task.title)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
-        await addDoc(collection(db, 'frontendTasks'), task);
+      if (existingSnapshot.length === 0) {
+        await addDoc(supabase.from('frontendTasks'), task);
         successCount++;
         console.log(`✅ Added frontend task: ${task.title}`);
       } else {
@@ -1676,13 +1674,13 @@ async function seedMassiveProblemSolvingTasks() {
     try {
       // Check if task already exists
       const existingQuery = query(
-        collection(db, 'problemSolvingTasks'),
-        where('id', '==', task.id)
+        supabase.from('problemSolvingTasks'),
+        where('id', task.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
-        await addDoc(collection(db, 'problemSolvingTasks'), task);
+      if (existingSnapshot.length === 0) {
+        await addDoc(supabase.from('problemSolvingTasks'), task);
         successCount++;
         console.log(`✅ Added problem-solving task: ${task.title}`);
       } else {
