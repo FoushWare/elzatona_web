@@ -9,7 +9,7 @@ export interface FirestoreUser {
   photoURL: string | null;
   provider: string;
   isEmailVerified: boolean;
-  createdAt: string;
+  created_at: string;
   lastLoginAt: string;
   preferences: UserPreferences;
   progress: UserProgress;
@@ -93,7 +93,7 @@ export interface LearningSession {
 }
 
 export interface LearningPlanProgress {
-  planId: string;
+  plan_id: string;
   planName: string;
   startDate: string;
   endDate: string | null;
@@ -167,8 +167,8 @@ export interface FirestoreQuestion {
   section: string;
   difficulty: 'easy' | 'medium' | 'hard';
   tags: string[];
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
   createdBy: string; // user ID
   approved: boolean;
   usageCount: number;
@@ -188,8 +188,8 @@ export interface FirestoreLearningPlan {
   features: string[];
   estimatedTime: string;
   isRecommended: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
   createdBy: string;
   usageCount: number;
   averageRating: number;

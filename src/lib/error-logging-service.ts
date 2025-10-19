@@ -1,14 +1,9 @@
-import { db } from './firebase';
-import {
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  orderBy,
-  limit,
-  where,
-  serverTimestamp,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface ErrorLog {
   id: string;
@@ -59,8 +54,8 @@ export interface PerformanceLog {
 }
 
 export class ErrorLoggingService {
-  private static readonly ERROR_COLLECTION = 'errorLogs';
-  private static readonly PERFORMANCE_COLLECTION = 'performanceLogs';
+  private static readonly ERROR_COLLECTION = 'error_logs';
+  private static readonly PERFORMANCE_COLLECTION = 'performance_logs';
 
   /**
    * Log an error
@@ -73,34 +68,34 @@ export class ErrorLoggingService {
     metadata: ErrorLog['metadata'] = {}
   ): Promise<string> {
     try {
-      if (!db) {
-        console.error('Database not initialized for error logging');
-        return '';
-      }
-
       const errorData = {
         level,
         message,
         stack: error?.stack,
         context: {
           ...context,
-          timestamp: serverTimestamp(),
+          timestamp: new Date().toISOString(),
         },
         metadata,
         resolved: false,
       };
 
-      const docRef = await addDoc(
-        collection(db, this.ERROR_COLLECTION),
-        errorData
-      );
+      const { data, error: insertError } = await supabase
+        .from(this.ERROR_COLLECTION)
+        .insert(errorData)
+        .select()
+        .single();
+
+      if (insertError) {
+        throw insertError;
+      }
 
       // Also log to console for development
       if (process.env.NODE_ENV === 'development') {
         console.error(`[${level.toUpperCase()}] ${message}`, error);
       }
 
-      return docRef.id;
+      return data.id;
     } catch (logError) {
       console.error('Failed to log error:', logError);
       return '';
@@ -118,29 +113,30 @@ export class ErrorLoggingService {
     metadata: PerformanceLog['metadata'] = {}
   ): Promise<string> {
     try {
-      if (!db) {
-        console.error('Database not initialized for performance logging');
-        return '';
-      }
-
       const performanceData = {
         operation,
         duration,
         success,
         context: {
           ...context,
-          timestamp: serverTimestamp(),
+          timestamp: new Date().toISOString(),
         },
         metadata,
       };
 
-      const docRef = await addDoc(
-        collection(db, this.PERFORMANCE_COLLECTION),
-        performanceData
-      );
-      return docRef.id;
-    } catch (error) {
-      console.error('Failed to log performance:', error);
+      const { data, error: insertError } = await supabase
+        .from(this.PERFORMANCE_COLLECTION)
+        .insert(performanceData)
+        .select()
+        .single();
+
+      if (insertError) {
+        throw insertError;
+      }
+
+      return data.id;
+    } catch (logError) {
+      console.error('Failed to log performance:', logError);
       return '';
     }
   }
@@ -160,60 +156,49 @@ export class ErrorLoggingService {
     limitCount: number = 100
   ): Promise<ErrorLog[]> {
     try {
-      if (!db) {
-        return [];
-      }
+      let query = supabase.from(this.ERROR_COLLECTION).select('*');
 
-      let q = query(
-        collection(db, this.ERROR_COLLECTION),
-        orderBy('context.timestamp', 'desc'),
-        limit(limitCount)
-      );
-
-      // Apply filters
       if (filters.level) {
-        q = query(q, where('level', '==', filters.level));
+        query = query.eq('level', filters.level);
       }
+
       if (filters.resolved !== undefined) {
-        q = query(q, where('resolved', '==', filters.resolved));
+        query = query.eq('resolved', filters.resolved);
       }
+
       if (filters.userId) {
-        q = query(q, where('context.userId', '==', filters.userId));
+        query = query.eq('context.userId', filters.userId);
       }
+
       if (filters.adminId) {
-        q = query(q, where('context.adminId', '==', filters.adminId));
+        query = query.eq('context.adminId', filters.adminId);
       }
 
-      const querySnapshot = await getDocs(q);
-      const errorLogs: ErrorLog[] = [];
+      if (filters.startDate) {
+        query = query.gte('context.timestamp', filters.startDate.toISOString());
+      }
 
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        errorLogs.push({
-          id: doc.id,
-          level: data.level,
-          message: data.message,
-          stack: data.stack,
-          context: {
-            ...data.context,
-            timestamp: data.context.timestamp?.toDate() || new Date(),
-          },
-          metadata: data.metadata,
-          resolved: data.resolved,
-          resolvedAt: data.resolvedAt?.toDate(),
-          resolvedBy: data.resolvedBy,
-        });
-      });
+      if (filters.endDate) {
+        query = query.lte('context.timestamp', filters.endDate.toISOString());
+      }
 
-      return errorLogs;
+      const { data: logs, error } = await query
+        .order('context.timestamp', { ascending: false })
+        .limit(limitCount);
+
+      if (error) {
+        throw error;
+      }
+
+      return logs || [];
     } catch (error) {
-      console.error('Error getting error logs:', error);
+      console.error('❌ Failed to get error logs:', error);
       return [];
     }
   }
 
   /**
-   * Get performance logs
+   * Get performance logs with filtering
    */
   static async getPerformanceLogs(
     filters: {
@@ -221,84 +206,119 @@ export class ErrorLoggingService {
       success?: boolean;
       userId?: string;
       adminId?: string;
-      minDuration?: number;
-      maxDuration?: number;
+      startDate?: Date;
+      endDate?: Date;
     } = {},
     limitCount: number = 100
   ): Promise<PerformanceLog[]> {
     try {
-      if (!db) {
-        return [];
-      }
+      let query = supabase.from(this.PERFORMANCE_COLLECTION).select('*');
 
-      let q = query(
-        collection(db, this.PERFORMANCE_COLLECTION),
-        orderBy('context.timestamp', 'desc'),
-        limit(limitCount)
-      );
-
-      // Apply filters
       if (filters.operation) {
-        q = query(q, where('operation', '==', filters.operation));
+        query = query.eq('operation', filters.operation);
       }
+
       if (filters.success !== undefined) {
-        q = query(q, where('success', '==', filters.success));
+        query = query.eq('success', filters.success);
       }
+
       if (filters.userId) {
-        q = query(q, where('context.userId', '==', filters.userId));
+        query = query.eq('context.userId', filters.userId);
       }
+
       if (filters.adminId) {
-        q = query(q, where('context.adminId', '==', filters.adminId));
+        query = query.eq('context.adminId', filters.adminId);
       }
 
-      const querySnapshot = await getDocs(q);
-      const performanceLogs: PerformanceLog[] = [];
+      if (filters.startDate) {
+        query = query.gte('context.timestamp', filters.startDate.toISOString());
+      }
 
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        performanceLogs.push({
-          id: doc.id,
-          operation: data.operation,
-          duration: data.duration,
-          success: data.success,
-          context: {
-            ...data.context,
-            timestamp: data.context.timestamp?.toDate() || new Date(),
-          },
-          metadata: data.metadata,
-        });
-      });
+      if (filters.endDate) {
+        query = query.lte('context.timestamp', filters.endDate.toISOString());
+      }
 
-      return performanceLogs;
+      const { data: logs, error } = await query
+        .order('context.timestamp', { ascending: false })
+        .limit(limitCount);
+
+      if (error) {
+        throw error;
+      }
+
+      return logs || [];
     } catch (error) {
-      console.error('Error getting performance logs:', error);
+      console.error('❌ Failed to get performance logs:', error);
       return [];
     }
   }
 
   /**
-   * Mark error as resolved
+   * Mark an error as resolved
    */
   static async resolveError(
     errorId: string,
     resolvedBy: string
   ): Promise<boolean> {
     try {
-      if (!db) {
-        return false;
-      }
+      const { error } = await supabase
+        .from(this.ERROR_COLLECTION)
+        .update({
+          resolved: true,
+          resolvedAt: new Date().toISOString(),
+          resolvedBy,
+        })
+        .eq('id', errorId);
 
-      await addDoc(collection(db, this.ERROR_COLLECTION), {
-        id: errorId,
-        resolved: true,
-        resolvedAt: serverTimestamp(),
-        resolvedBy,
-      });
+      if (error) {
+        throw error;
+      }
 
       return true;
     } catch (error) {
-      console.error('Error resolving error:', error);
+      console.error('❌ Failed to resolve error:', error);
       return false;
+    }
+  }
+
+  /**
+   * Delete old logs (cleanup)
+   */
+  static async deleteOldLogs(
+    olderThanDays: number = 30,
+    logType: 'error' | 'performance' | 'both' = 'both'
+  ): Promise<number> {
+    try {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
+
+      let deletedCount = 0;
+
+      if (logType === 'error' || logType === 'both') {
+        const { data: deletedErrors } = await supabase
+          .from(this.ERROR_COLLECTION)
+          .delete()
+          .lt('context.timestamp', cutoffDate.toISOString())
+          .select();
+
+        deletedCount += (deletedErrors || []).length;
+      }
+
+      if (logType === 'performance' || logType === 'both') {
+        const { data: deletedPerformance } = await supabase
+          .from(this.PERFORMANCE_COLLECTION)
+          .delete()
+          .lt('context.timestamp', cutoffDate.toISOString())
+          .select();
+
+        deletedCount += (deletedPerformance || []).length;
+      }
+
+      console.log(`✅ Deleted ${deletedCount} old log entries`);
+      return deletedCount;
+    } catch (error) {
+      console.error('❌ Failed to delete old logs:', error);
+      return 0;
     }
   }
 
@@ -306,45 +326,57 @@ export class ErrorLoggingService {
    * Get error statistics
    */
   static async getErrorStats(): Promise<{
-    total: number;
-    byLevel: Record<string, number>;
-    unresolved: number;
+    totalErrors: number;
+    errorsByLevel: Record<string, number>;
+    unresolvedErrors: number;
     recentErrors: number;
   }> {
     try {
-      const errorLogs = await this.getErrorLogs({}, 1000);
+      const { data: errors, error } = await supabase
+        .from(this.ERROR_COLLECTION)
+        .select('*');
 
-      const stats = {
-        total: errorLogs.length,
-        byLevel: {} as Record<string, number>,
-        unresolved: 0,
-        recentErrors: 0,
-      };
+      if (error) {
+        throw error;
+      }
 
-      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const allErrors = errors || [];
+      const totalErrors = allErrors.length;
 
-      errorLogs.forEach(log => {
-        // Count by level
-        stats.byLevel[log.level] = (stats.byLevel[log.level] || 0) + 1;
+      // Count by level
+      const errorsByLevel = allErrors.reduce(
+        (acc, error) => {
+          acc[error.level] = (acc[error.level] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
-        // Count unresolved
-        if (!log.resolved) {
-          stats.unresolved++;
-        }
+      // Count unresolved
+      const unresolvedErrors = allErrors.filter(
+        error => !error.resolved
+      ).length;
 
-        // Count recent errors
-        if (log.context.timestamp > oneDayAgo) {
-          stats.recentErrors++;
-        }
-      });
+      // Count recent (last 24 hours)
+      const oneDayAgo = new Date(
+        Date.now() - 24 * 60 * 60 * 1000
+      ).toISOString();
+      const recentErrors = allErrors.filter(
+        error => error.context.timestamp >= oneDayAgo
+      ).length;
 
-      return stats;
-    } catch (error) {
-      console.error('Error getting error stats:', error);
       return {
-        total: 0,
-        byLevel: {},
-        unresolved: 0,
+        totalErrors,
+        errorsByLevel,
+        unresolvedErrors,
+        recentErrors,
+      };
+    } catch (error) {
+      console.error('❌ Failed to get error stats:', error);
+      return {
+        totalErrors: 0,
+        errorsByLevel: {},
+        unresolvedErrors: 0,
         recentErrors: 0,
       };
     }
@@ -354,64 +386,63 @@ export class ErrorLoggingService {
    * Get performance statistics
    */
   static async getPerformanceStats(): Promise<{
-    averageResponseTime: number;
-    successRate: number;
-    slowestOperations: Array<{ operation: string; duration: number }>;
     totalOperations: number;
+    averageDuration: number;
+    successRate: number;
+    slowestOperations: Array<{
+      operation: string;
+      duration: number;
+      timestamp: string;
+    }>;
   }> {
     try {
-      const performanceLogs = await this.getPerformanceLogs({}, 1000);
+      const { data: logs, error } = await supabase
+        .from(this.PERFORMANCE_COLLECTION)
+        .select('*');
 
-      if (performanceLogs.length === 0) {
+      if (error) {
+        throw error;
+      }
+
+      const allLogs = logs || [];
+      const totalOperations = allLogs.length;
+
+      if (totalOperations === 0) {
         return {
-          averageResponseTime: 0,
+          totalOperations: 0,
+          averageDuration: 0,
           successRate: 0,
           slowestOperations: [],
-          totalOperations: 0,
         };
       }
 
-      const totalDuration = performanceLogs.reduce(
-        (sum, log) => sum + log.duration,
-        0
-      );
-      const successfulOperations = performanceLogs.filter(
-        log => log.success
-      ).length;
+      const averageDuration =
+        allLogs.reduce((sum, log) => sum + log.duration, 0) / totalOperations;
+      const successRate =
+        (allLogs.filter(log => log.success).length / totalOperations) * 100;
 
-      // Get slowest operations
-      const operationDurations = performanceLogs.reduce(
-        (acc, log) => {
-          if (!acc[log.operation]) {
-            acc[log.operation] = [];
-          }
-          acc[log.operation].push(log.duration);
-          return acc;
-        },
-        {} as Record<string, number[]>
-      );
-
-      const slowestOperations = Object.entries(operationDurations)
-        .map(([operation, durations]) => ({
-          operation,
-          duration: Math.max(...durations),
-        }))
+      const slowestOperations = allLogs
         .sort((a, b) => b.duration - a.duration)
-        .slice(0, 5);
+        .slice(0, 10)
+        .map(log => ({
+          operation: log.operation,
+          duration: log.duration,
+          timestamp: log.context.timestamp,
+        }));
 
       return {
-        averageResponseTime: totalDuration / performanceLogs.length,
-        successRate: (successfulOperations / performanceLogs.length) * 100,
+        totalOperations,
+        averageDuration,
+        successRate,
         slowestOperations,
-        totalOperations: performanceLogs.length,
       };
     } catch (error) {
-      console.error('Error getting performance stats:', error);
+      console.error('❌ Failed to get performance stats:', error);
       return {
-        averageResponseTime: 0,
+        totalOperations: 0,
+        averageDuration: 0,
         successRate: 0,
         slowestOperations: [],
-        totalOperations: 0,
       };
     }
   }

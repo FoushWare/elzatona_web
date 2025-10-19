@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { cookies } from 'next/headers';
-import { verifyFirebaseToken } from '@/lib/server-auth';
-import { firestoreService } from '@/lib/firestore-service';
+import { verifySupabaseToken } from '@/lib/server-auth';
 import { UserPreferences } from '@/types/firestore';
 
 export async function GET(request: NextRequest) {
@@ -18,7 +24,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify the Firebase token
-    const decodedToken = await verifyFirebaseToken(token);
+    const decodedToken = await verifySupabaseToken(token);
     if (!decodedToken) {
       return NextResponse.json(
         { error: 'Invalid authentication token' },
@@ -26,10 +32,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get user data from Firestore
-    const userData = await firestoreService.getUser(decodedToken.uid);
+    // Get user data from Supabase
+    const { data: userData, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', decodedToken.id)
+      .single();
 
-    if (!userData) {
+    if (error || !userData) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
@@ -60,7 +70,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Verify the Firebase token
-    const decodedToken = await verifyFirebaseToken(token);
+    const decodedToken = await verifySupabaseToken(token);
     if (!decodedToken) {
       return NextResponse.json(
         { error: 'Invalid authentication token' },
@@ -78,8 +88,16 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Update user preferences in Firestore
-    await firestoreService.updateUserPreferences(decodedToken.uid, preferences);
+    // Update user preferences in Supabase
+    const { error } = await supabase
+      .from('users')
+      .update({
+        preferences: preferences,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', decodedToken.id);
+
+    if (error) throw error;
 
     return NextResponse.json({
       success: true,

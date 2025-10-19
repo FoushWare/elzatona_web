@@ -6,6 +6,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import {
   Search,
   Filter,
@@ -39,7 +45,8 @@ import {
 } from '@/shared/components/ui/collapsible';
 import { Checkbox } from '@/shared/components/ui/checkbox';
 import { Label } from '@/shared/components/ui/label';
-import { useAdvancedSearch, SearchFilters } from '@/hooks/useAdvancedSearch';
+import { useAdvancedSearch } from '@/hooks/useAdvancedSearch';
+import { SearchFilters } from '@/lib/advanced-search-service';
 
 interface AdvancedSearchProps {
   onResultsChange?: (results: any[]) => void;

@@ -1,18 +1,4 @@
 import {
-  collection,
-  doc,
-  getDocs,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  Timestamp,
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import {
   QuestionAudioMapping,
   AudioFileInfo,
   generateAudioPaths,
@@ -20,15 +6,21 @@ import {
   createCustomAudioInfo,
   DEFAULT_AUDIO_PATHS,
 } from './audio-collection-schema';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export class AudioCollectionService {
-  private static readonly COLLECTION_NAME = 'questionAudio';
+  private static readonly TABLE_NAME = 'question_audio';
 
   /**
    * Create or update audio mapping for a question
    */
   static async createOrUpdateAudioMapping(
-    questionId: string,
+    question_id: string,
     learningPath: string,
     sectionId: string,
     questionNumber: number,
@@ -36,13 +28,6 @@ export class AudioCollectionService {
     answerAudioPath?: string
   ): Promise<{ success: boolean; error?: string; mappingId?: string }> {
     try {
-      if (!db) {
-        return {
-          success: false,
-          error: 'Database not initialized',
-        };
-      }
-
       const mappingId = `${learningPath}_${sectionId}_${questionNumber}`;
       const audioPaths = generateAudioPaths(
         learningPath,
@@ -59,19 +44,29 @@ export class AudioCollectionService {
         ? createCustomAudioInfo(answerAudioPath)
         : createDefaultAudioInfo(audioPaths.answerAudio);
 
-      const audioMapping: QuestionAudioMapping = {
+      const audioMapping = {
         id: mappingId,
-        questionId,
-        learningPath,
-        sectionId,
-        questionNumber,
-        questionAudio,
-        answerAudio,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
+        question_id,
+        learning_path: learningPath,
+        section_id: sectionId,
+        question_number: questionNumber,
+        question_audio: questionAudio,
+        answer_audio: answerAudio,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
-      await setDoc(doc(db, this.COLLECTION_NAME, mappingId), audioMapping);
+      const { error } = await supabase
+        .from(this.TABLE_NAME)
+        .upsert(audioMapping);
+
+      if (error) {
+        console.error('Error creating/updating audio mapping:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
 
       return { success: true, mappingId };
     } catch (error) {
@@ -86,33 +81,34 @@ export class AudioCollectionService {
   /**
    * Get audio mapping for a specific question
    */
-  static async getAudioMapping(questionId: string): Promise<{
+  static async getAudioMapping(question_id: string): Promise<{
     success: boolean;
     mapping?: QuestionAudioMapping;
     error?: string;
   }> {
     try {
-      if (!db) {
-        return {
-          success: false,
-          error: 'Database not initialized',
-        };
-      }
+      const { data, error } = await supabase
+        .from(this.TABLE_NAME)
+        .select('*')
+        .eq('question_id', question_id)
+        .limit(1)
+        .single();
 
-      const q = query(
-        collection(db, this.COLLECTION_NAME),
-        where('questionId', '==', questionId),
-        limit(1)
-      );
-
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
+      if (error || !data) {
         return { success: true, mapping: undefined };
       }
 
-      const doc = querySnapshot.docs[0];
-      const mapping = { id: doc.id, ...doc.data() } as QuestionAudioMapping;
+      const mapping: QuestionAudioMapping = {
+        id: data.id,
+        question_id: data.question_id,
+        learningPath: data.learning_path,
+        sectionId: data.section_id,
+        questionNumber: data.question_number,
+        questionAudio: data.question_audio,
+        answerAudio: data.answer_audio,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      };
 
       return { success: true, mapping };
     } catch (error) {
@@ -133,23 +129,31 @@ export class AudioCollectionService {
     error?: string;
   }> {
     try {
-      if (!db) {
+      const { data, error } = await supabase
+        .from(this.TABLE_NAME)
+        .select('*')
+        .eq('learning_path', learningPath)
+        .order('question_number', { ascending: true });
+
+      if (error) {
+        console.error('Error getting audio mappings for learning path:', error);
         return {
           success: false,
-          error: 'Database not initialized',
+          error: error.message,
         };
       }
 
-      const q = query(
-        collection(db, this.COLLECTION_NAME),
-        where('learningPath', '==', learningPath),
-        orderBy('questionNumber', 'asc')
-      );
-
-      const querySnapshot = await getDocs(q);
-      const mappings = querySnapshot.docs.map(
-        doc => ({ id: doc.id, ...doc.data() }) as QuestionAudioMapping
-      );
+      const mappings: QuestionAudioMapping[] = (data || []).map(item => ({
+        id: item.id,
+        question_id: item.question_id,
+        learningPath: item.learning_path,
+        sectionId: item.section_id,
+        questionNumber: item.question_number,
+        questionAudio: item.question_audio,
+        answerAudio: item.answer_audio,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+      }));
 
       return { success: true, mappings };
     } catch (error) {
@@ -173,24 +177,32 @@ export class AudioCollectionService {
     error?: string;
   }> {
     try {
-      if (!db) {
+      const { data, error } = await supabase
+        .from(this.TABLE_NAME)
+        .select('*')
+        .eq('learning_path', learningPath)
+        .eq('section_id', sectionId)
+        .order('question_number', { ascending: true });
+
+      if (error) {
+        console.error('Error getting audio mappings for section:', error);
         return {
           success: false,
-          error: 'Database not initialized',
+          error: error.message,
         };
       }
 
-      const q = query(
-        collection(db, this.COLLECTION_NAME),
-        where('learningPath', '==', learningPath),
-        where('sectionId', '==', sectionId),
-        orderBy('questionNumber', 'asc')
-      );
-
-      const querySnapshot = await getDocs(q);
-      const mappings = querySnapshot.docs.map(
-        doc => ({ id: doc.id, ...doc.data() }) as QuestionAudioMapping
-      );
+      const mappings: QuestionAudioMapping[] = (data || []).map(item => ({
+        id: item.id,
+        question_id: item.question_id,
+        learningPath: item.learning_path,
+        sectionId: item.section_id,
+        questionNumber: item.question_number,
+        questionAudio: item.question_audio,
+        answerAudio: item.answer_audio,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+      }));
 
       return { success: true, mappings };
     } catch (error) {
@@ -206,19 +218,12 @@ export class AudioCollectionService {
    * Update audio file info for a question
    */
   static async updateAudioFile(
-    questionId: string,
+    question_id: string,
     audioType: 'questionAudio' | 'answerAudio',
     audioInfo: AudioFileInfo
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      if (!db) {
-        return {
-          success: false,
-          error: 'Database not initialized',
-        };
-      }
-
-      const mappingResult = await this.getAudioMapping(questionId);
+      const mappingResult = await this.getAudioMapping(question_id);
 
       if (!mappingResult.success || !mappingResult.mapping) {
         return {
@@ -230,10 +235,28 @@ export class AudioCollectionService {
       const mapping = mappingResult.mapping;
       const mappingId = mapping.id;
 
-      await updateDoc(doc(db, this.COLLECTION_NAME, mappingId), {
-        [audioType]: audioInfo,
-        updatedAt: Timestamp.now(),
-      });
+      const updateData: any = {
+        updated_at: new Date().toISOString(),
+      };
+
+      if (audioType === 'questionAudio') {
+        updateData.question_audio = audioInfo;
+      } else {
+        updateData.answer_audio = audioInfo;
+      }
+
+      const { error } = await supabase
+        .from(this.TABLE_NAME)
+        .update(updateData)
+        .eq('id', mappingId);
+
+      if (error) {
+        console.error('Error updating audio file:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
 
       return { success: true };
     } catch (error) {
@@ -249,24 +272,28 @@ export class AudioCollectionService {
    * Delete audio mapping for a question
    */
   static async deleteAudioMapping(
-    questionId: string
+    question_id: string
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      if (!db) {
-        return {
-          success: false,
-          error: 'Database not initialized',
-        };
-      }
-
-      const mappingResult = await this.getAudioMapping(questionId);
+      const mappingResult = await this.getAudioMapping(question_id);
 
       if (!mappingResult.success || !mappingResult.mapping) {
         return { success: true }; // Already deleted or doesn't exist
       }
 
       const mappingId = mappingResult.mapping.id;
-      await deleteDoc(doc(db, this.COLLECTION_NAME, mappingId));
+      const { error } = await supabase
+        .from(this.TABLE_NAME)
+        .delete()
+        .eq('id', mappingId);
+
+      if (error) {
+        console.error('Error deleting audio mapping:', error);
+        return {
+          success: false,
+          error: error.message,
+        };
+      }
 
       return { success: true };
     } catch (error) {
@@ -286,30 +313,20 @@ export class AudioCollectionService {
     sectionId: string
   ): Promise<{ success: boolean; nextNumber?: number; error?: string }> {
     try {
-      if (!db) {
-        return {
-          success: false,
-          error: 'Database not initialized',
-        };
-      }
+      const { data, error } = await supabase
+        .from(this.TABLE_NAME)
+        .select('question_number')
+        .eq('learning_path', learningPath)
+        .eq('section_id', sectionId)
+        .order('question_number', { ascending: false })
+        .limit(1)
+        .single();
 
-      const q = query(
-        collection(db, this.COLLECTION_NAME),
-        where('learningPath', '==', learningPath),
-        where('sectionId', '==', sectionId),
-        orderBy('questionNumber', 'desc'),
-        limit(1)
-      );
-
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
+      if (error || !data) {
         return { success: true, nextNumber: 1 };
       }
 
-      const lastMapping = querySnapshot.docs[0].data() as QuestionAudioMapping;
-      const nextNumber = lastMapping.questionNumber + 1;
-
+      const nextNumber = data.question_number + 1;
       return { success: true, nextNumber };
     } catch (error) {
       console.error('Error getting next question number:', error);

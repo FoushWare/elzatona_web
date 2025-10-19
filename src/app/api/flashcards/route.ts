@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import {
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  doc,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface Flashcard {
   id: string;
   userId: string;
-  questionId: string;
+  question_id: string;
   question: string;
   answer: string;
   explanation: string;
@@ -27,8 +20,8 @@ export interface Flashcard {
   easeFactor: number; // SM-2 algorithm
   lastReviewed: string | null;
   nextReview: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
   tags: string[];
   source: 'wrong_answer' | 'manual' | 'bookmark';
 }
@@ -61,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     const flashcard: Omit<Flashcard, 'id'> = {
       userId,
-      questionId,
+      question_id: questionId,
       question,
       answer,
       explanation: explanation || '',
@@ -73,20 +66,25 @@ export async function POST(request: NextRequest) {
       easeFactor: 2.5, // SM-2 algorithm default
       lastReviewed: null,
       nextReview: nextReview.toISOString(),
-      createdAt: now.toISOString(),
-      updatedAt: now.toISOString(),
+      created_at: now.toISOString(),
+      updated_at: now.toISOString(),
       tags,
       source,
     };
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
+    const { data: docRef, error } = await supabase
+      .from('flashcards')
+      .insert(flashcard)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
     }
 
-    const docRef = await addDoc(collection(db, 'flashcards'), flashcard);
+    if (!docRef) {
+      throw new Error('No flashcard was created');
+    }
 
     return NextResponse.json({
       success: true,
@@ -120,35 +118,28 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
-    let q = query(collection(db, 'flashcards'), where('userId', '==', userId));
+    let q = supabase.from('flashcards').select('*').eq('userId', userId);
 
     if (status) {
-      q = query(q, where('status', '==', status));
+      q = q.eq('status', status);
     }
 
     if (category) {
-      q = query(q, where('category', '==', category));
+      q = q.eq('category', category);
     }
 
     if (due) {
       const now = new Date().toISOString();
-      q = query(q, where('nextReview', '<=', now));
+      q = q.lte('nextReview', now);
     }
 
-    q = query(q, orderBy('nextReview', 'asc'));
+    q = q.order('nextReview', { ascending: true });
 
-    const snapshot = await getDocs(q);
-    const flashcards = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const { data: flashcards, error } = await q;
+
+    if (error) {
+      throw new Error(error.message);
+    }
 
     return NextResponse.json({
       success: true,

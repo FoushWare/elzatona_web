@@ -1,8 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useRouter, useParams } from 'next/navigation';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 import { useLearningPlanTemplates } from '@/hooks/useLearningPlanTemplates';
 import {
   ArrowLeft,
@@ -43,7 +49,8 @@ interface LearningPlan {
 export default function LearningPlanDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const { isAuthenticated, user } = useFirebaseAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const { templates, isLoading, getTemplate } = useLearningPlanTemplates();
   const [isStarting, setIsStarting] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);

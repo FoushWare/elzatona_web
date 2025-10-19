@@ -2,14 +2,6 @@
 // Run with: npx tsx src/scripts/seed-additional-problem-solving.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -34,7 +26,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -81,9 +73,9 @@ const additionalProblemSolvingTasks = [
       { input: 'head = []', output: '[]', explanation: '' },
     ],
     tags: ['Linked List', 'Recursion'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Merge Two Sorted Lists',
@@ -134,9 +126,9 @@ const additionalProblemSolvingTasks = [
       { input: 'list1 = [], list2 = [0]', output: '[0]', explanation: '' },
     ],
     tags: ['Linked List', 'Recursion'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Climbing Stairs',
@@ -184,9 +176,9 @@ const additionalProblemSolvingTasks = [
       },
     ],
     tags: ['Math', 'Dynamic Programming', 'Memoization'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Best Time to Buy and Sell Stock',
@@ -234,9 +226,9 @@ const additionalProblemSolvingTasks = [
       },
     ],
     tags: ['Array', 'Dynamic Programming'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Single Number',
@@ -272,9 +264,9 @@ const additionalProblemSolvingTasks = [
       { input: 'nums = [1]', output: '1', explanation: '' },
     ],
     tags: ['Array', 'Bit Manipulation'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Missing Number',
@@ -319,9 +311,9 @@ const additionalProblemSolvingTasks = [
       },
     ],
     tags: ['Array', 'Hash Table', 'Math', 'Bit Manipulation', 'Sorting'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Find All Anagrams in a String',
@@ -413,9 +405,9 @@ function isEqual(obj1, obj2) {
       },
     ],
     tags: ['Hash Table', 'String', 'Sliding Window'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Group Anagrams',
@@ -465,9 +457,9 @@ function isEqual(obj1, obj2) {
       { input: 'strs = ["a"]', output: '[["a"]]', explanation: '' },
     ],
     tags: ['Array', 'Hash Table', 'String', 'Sorting'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Product of Array Except Self',
@@ -514,9 +506,9 @@ function isEqual(obj1, obj2) {
       { input: 'nums = [-1,1,0,-3,3]', output: '[0,0,9,0,0]', explanation: '' },
     ],
     tags: ['Array', 'Prefix Sum'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Spiral Matrix',
@@ -602,9 +594,9 @@ function isEqual(obj1, obj2) {
       },
     ],
     tags: ['Array', 'Matrix', 'Simulation'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
 ];
 
@@ -623,13 +615,13 @@ async function seedAdditionalProblemSolvingTasks() {
     try {
       // Check if task already exists (by title)
       const existingQuery = query(
-        collection(db, 'problemSolvingTasks'),
-        where('title', '==', task.title)
+        supabase.from('problemSolvingTasks'),
+        where('title', task.title)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
-        await addDoc(collection(db, 'problemSolvingTasks'), task);
+      if (existingSnapshot.length === 0) {
+        await addDoc(supabase.from('problemSolvingTasks'), task);
         successCount++;
         console.log(`✅ Added problem-solving task: ${task.title}`);
       } else {

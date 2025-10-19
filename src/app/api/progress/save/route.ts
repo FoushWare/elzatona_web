@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { verifyFirebaseToken } from '@/lib/server-auth';
-import { firestoreService } from '@/lib/firestore-service';
 
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+import { cookies } from 'next/headers';
+import { verifySupabaseToken } from '@/lib/server-auth';
 interface ProgressData {
   userId: string;
   sessionId: string;
-  questionId: string;
+  question_id: string;
   answer: number;
   isCorrect: boolean;
   timeSpent: number;
@@ -70,7 +75,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify the Firebase token
-    const decodedToken = await verifyFirebaseToken(token);
+    const decodedToken = await verifySupabaseToken(token);
     if (!decodedToken) {
       console.warn('Token verification failed, using development mode');
 
@@ -97,7 +102,7 @@ export async function POST(request: NextRequest) {
 
     // Validate the progress data
     if (
-      !progressData.questionId ||
+      !progressData.question_id ||
       typeof progressData.isCorrect !== 'boolean'
     ) {
       return NextResponse.json(
@@ -107,47 +112,58 @@ export async function POST(request: NextRequest) {
     }
 
     // Ensure the userId matches the authenticated user
-    if (progressData.userId !== decodedToken.uid) {
+    if (progressData.userId !== decodedToken.id) {
       return NextResponse.json({ error: 'User ID mismatch' }, { status: 403 });
     }
 
-    // Save progress to Firestore
+    // Save progress to Supabase
     try {
-      await firestoreService.saveQuestionProgress(decodedToken.uid, {
-        questionId: progressData.questionId,
-        isCorrect: progressData.isCorrect,
-        timeSpent: progressData.timeSpent,
-        section: progressData.section,
-        difficulty: progressData.difficulty,
-        learningMode: progressData.learningMode,
-        planId: progressData.planId,
-      });
-      console.log('✅ Progress saved to Firestore successfully');
-    } catch (firestoreError) {
-      console.error('❌ Error saving progress to Firestore:', firestoreError);
-      // Continue with response even if Firestore fails
+      const { error: progressError } = await supabase
+        .from('user_progress')
+        .insert({
+          user_id: decodedToken.id,
+          question_id: progressData.question_id,
+          is_correct: progressData.isCorrect,
+          time_spent: progressData.timeSpent,
+          section: progressData.section,
+          difficulty: progressData.difficulty,
+          learning_mode: progressData.learningMode,
+          plan_id: progressData.planId,
+          created_at: new Date().toISOString(),
+        });
+      if (progressError) throw progressError;
+      console.log('✅ Progress saved to Supabase successfully');
+    } catch (supabaseError) {
+      console.error('❌ Error saving progress to Supabase:', supabaseError);
+      // Continue with response even if Supabase fails
     }
 
     // Update learning plan progress if guided mode
     if (progressData.learningMode === 'guided' && progressData.planId) {
       try {
-        const currentPlan = await firestoreService.getLearningPlan(
-          decodedToken.uid,
-          progressData.planId
-        );
+        const { data: currentPlan, error: planError } = await supabase
+          .from('learning_plans')
+          .select('*')
+          .eq('id', progressData.planId)
+          .single();
+
+        if (planError) throw planError;
+
         if (currentPlan) {
-          await firestoreService.updateLearningPlan(
-            decodedToken.uid,
-            progressData.planId,
-            {
-              questionsCompleted: currentPlan.questionsCompleted + 1,
+          const { error: updateError } = await supabase
+            .from('learning_plans')
+            .update({
+              questions_completed: (currentPlan.questions_completed || 0) + 1,
               progress: Math.round(
-                ((currentPlan.questionsCompleted + 1) /
-                  currentPlan.totalQuestions) *
+                (((currentPlan.questions_completed || 0) + 1) /
+                  (currentPlan.total_questions || 1)) *
                   100
               ),
-            }
-          );
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', progressData.planId);
+
+          if (updateError) throw updateError;
           console.log('✅ Learning plan updated successfully');
         } else {
           console.warn('⚠️ Learning plan not found, skipping plan update');
@@ -166,7 +182,7 @@ export async function POST(request: NextRequest) {
 
     // Set a secure HTTP-only cookie with progress summary
     const progressSummary = {
-      userId: decodedToken.uid,
+      userId: decodedToken.id,
       lastActivity: new Date().toISOString(),
       totalQuestions: 1, // This would be calculated from your database
       accuracy: progressData.isCorrect ? 100 : 0, // This would be calculated

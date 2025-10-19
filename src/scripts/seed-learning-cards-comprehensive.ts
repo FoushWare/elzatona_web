@@ -1,13 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  doc,
-  updateDoc,
-  serverTimestamp,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -30,7 +21,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 interface LearningCard {
@@ -47,7 +38,7 @@ interface LearningCard {
   order: number;
   sections: string[];
   topics: string[];
-  questionCount: number;
+  question_count: number;
   createdAt?: any;
   updatedAt?: any;
 }
@@ -61,7 +52,7 @@ interface GuidedLearningPlan {
   totalQuestions: number;
   dailyQuestions: number;
   cards: {
-    cardId: string;
+    card_id: string;
     cardType: string;
     title: string;
     description: string;
@@ -82,8 +73,8 @@ interface GuidedLearningPlan {
   }[];
   previousPlanId: string;
   cumulativeQuestions: number;
-  createdAt: any;
-  updatedAt: any;
+  created_at: any;
+  updated_at: any;
 }
 
 async function seedLearningCards() {
@@ -101,7 +92,7 @@ async function seedLearningCards() {
         order: 1,
         sections: [],
         topics: [],
-        questionCount: 0,
+        question_count: 0,
       },
       {
         title: 'Framework Questions',
@@ -113,7 +104,7 @@ async function seedLearningCards() {
         order: 2,
         sections: [],
         topics: [],
-        questionCount: 0,
+        question_count: 0,
       },
       {
         title: 'Problem Solving',
@@ -124,7 +115,7 @@ async function seedLearningCards() {
         order: 3,
         sections: [],
         topics: [],
-        questionCount: 0,
+        question_count: 0,
       },
       {
         title: 'System Design',
@@ -135,30 +126,28 @@ async function seedLearningCards() {
         order: 4,
         sections: [],
         topics: [],
-        questionCount: 0,
+        question_count: 0,
       },
     ];
 
   try {
     // Check if cards already exist
-    const existingCardsSnapshot = await getDocs(
-      collection(db, 'learningCards')
-    );
-    if (existingCardsSnapshot.size > 0) {
+    const existingCardsSnapshot = await getDocs(supabase.from('learningCards'));
+    if (existingCardsSnapshot.length > 0) {
       console.log('✅ Learning cards already exist, skipping creation');
-      return existingCardsSnapshot.docs.map(doc => ({
+      return existingCardsSnapshot.map(doc => ({
         id: doc.id,
-        ...doc.data(),
+        ...doc,
       }));
     }
 
     // Create learning cards
     const createdCards: LearningCard[] = [];
     for (const cardData of learningCards) {
-      const docRef = await addDoc(collection(db, 'learningCards'), {
+      const docRef = await addDoc(supabase.from('learningCards'), {
         ...cardData,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       });
       createdCards.push({ id: docRef.id, ...cardData });
       console.log(`✅ Created learning card: ${cardData.title}`);
@@ -179,10 +168,10 @@ async function updateGuidedLearningPlans() {
 
   try {
     // Get all learning cards
-    const cardsSnapshot = await getDocs(collection(db, 'learningCards'));
-    const cards = cardsSnapshot.docs.map(doc => ({
+    const cardsSnapshot = await getDocs(supabase.from('learningCards'));
+    const cards = cardsSnapshot.map(doc => ({
       id: doc.id,
-      ...doc.data(),
+      ...doc,
     }));
 
     if (cards.length === 0) {
@@ -191,10 +180,10 @@ async function updateGuidedLearningPlans() {
     }
 
     // Get all guided learning plans
-    const plansSnapshot = await getDocs(collection(db, 'guidedLearningPlans'));
-    const plans = plansSnapshot.docs.map(doc => ({
+    const plansSnapshot = await getDocs(supabase.from('guidedLearningPlans'));
+    const plans = plansSnapshot.map(doc => ({
       id: doc.id,
-      ...doc.data(),
+      ...doc,
     }));
 
     console.log(`📋 Found ${plans.length} guided learning plans to update`);
@@ -204,7 +193,7 @@ async function updateGuidedLearningPlans() {
 
       // Create cards structure for this plan
       const planCards = cards.map(card => ({
-        cardId: card.id,
+        card_id: card.id,
         cardType: card.type,
         title: card.title,
         description: card.description,
@@ -217,10 +206,13 @@ async function updateGuidedLearningPlans() {
       }));
 
       // Update the plan with cards structure
-      await updateDoc(doc(db, 'guidedLearningPlans', plan.id), {
-        cards: planCards,
-        updatedAt: serverTimestamp(),
-      });
+      await updateDoc(
+        supabase.from('guidedLearningPlans').select().eq('id', plan.id),
+        {
+          cards: planCards,
+          updated_at: new Date().toISOString(),
+        }
+      );
 
       console.log(
         `✅ Updated plan: ${plan.name} with ${planCards.length} cards`

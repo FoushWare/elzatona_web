@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import {
   Card,
   CardContent,
@@ -124,13 +130,13 @@ export const TanStackContentManagement: React.FC = () => {
   const deleteQuestionMutation = useDeleteQuestion();
 
   // Toggle functions
-  const toggleCard = (cardId: string) => {
+  const toggleCard = (card_id: string) => {
     setExpandedCards(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(cardId)) {
-        newSet.delete(cardId);
+      if (newSet.has(card_id)) {
+        newSet.delete(card_id);
       } else {
-        newSet.add(cardId);
+        newSet.add(card_id);
       }
       return newSet;
     });
@@ -160,13 +166,13 @@ export const TanStackContentManagement: React.FC = () => {
     });
   };
 
-  const togglePlan = (planId: string) => {
+  const togglePlan = (plan_id: string) => {
     setExpandedPlans(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(planId)) {
-        newSet.delete(planId);
+      if (newSet.has(plan_id)) {
+        newSet.delete(plan_id);
       } else {
-        newSet.add(planId);
+        newSet.add(plan_id);
       }
       return newSet;
     });
@@ -214,17 +220,17 @@ export const TanStackContentManagement: React.FC = () => {
     }
   };
 
-  const handleDeleteCard = async (cardId: string) => {
+  const handleDeleteCard = async (card_id: string) => {
     try {
-      await deleteCardMutation.mutateAsync(cardId);
+      await deleteCardMutation.mutateAsync(card_id);
     } catch (error) {
       console.error('Failed to delete card:', error);
     }
   };
 
-  const handleDeletePlan = async (planId: string) => {
+  const handleDeletePlan = async (plan_id: string) => {
     try {
-      await deletePlanMutation.mutateAsync(planId);
+      await deletePlanMutation.mutateAsync(plan_id);
     } catch (error) {
       console.error('Failed to delete plan:', error);
     }
@@ -246,9 +252,9 @@ export const TanStackContentManagement: React.FC = () => {
     }
   };
 
-  const handleDeleteQuestion = async (questionId: string) => {
+  const handleDeleteQuestion = async (question_id: string) => {
     try {
-      await deleteQuestionMutation.mutateAsync(questionId);
+      await deleteQuestionMutation.mutateAsync(question_id);
     } catch (error) {
       console.error('Failed to delete question:', error);
     }
@@ -382,7 +388,7 @@ export const TanStackContentManagement: React.FC = () => {
               {questionsLoading ? (
                 <Loader2 className="h-6 w-6 animate-spin" />
               ) : (
-                questionsData?.count || 0
+                questionsData?.pagination.totalCount || 0
               )}
             </div>
           </CardContent>

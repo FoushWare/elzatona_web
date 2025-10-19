@@ -110,7 +110,7 @@ export function useAdvancedSearch<T = any>(
     queryKey: ['advanced-search', filters, options],
     queryFn: () => advancedSearchService.searchQuestions(filters, options),
     enabled: !!filters.query || Object.keys(filters).length > 0,
-    cacheTime,
+    gcTime: cacheTime,
     staleTime,
     retry: 2,
     retryDelay: 1000,
@@ -121,7 +121,7 @@ export function useAdvancedSearch<T = any>(
     queryKey: ['search-suggestions', query],
     queryFn: () => advancedSearchService.getSuggestions(query),
     enabled: enableSuggestions && query.length >= 2,
-    cacheTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
@@ -130,7 +130,7 @@ export function useAdvancedSearch<T = any>(
     queryKey: ['search-analytics'],
     queryFn: () => advancedSearchService.getSearchAnalytics(),
     enabled: enableAnalytics,
-    cacheTime: 30 * 60 * 1000, // 30 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
     staleTime: 15 * 60 * 1000, // 15 minutes
   });
 
@@ -266,7 +266,7 @@ export function useGlobalSearch(
     queryKey: ['global-search', filters, options],
     queryFn: () => advancedSearchService.searchAll(filters, options),
     enabled: !!filters.query || Object.keys(filters).length > 0,
-    cacheTime: 5 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
     staleTime: 1 * 60 * 1000,
   });
 
@@ -309,7 +309,7 @@ export function useSearchSuggestions(query: string, limit: number = 10) {
     queryKey: ['search-suggestions', query, limit],
     queryFn: () => advancedSearchService.getSuggestions(query, limit),
     enabled: query.length >= 2,
-    cacheTime: 10 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     staleTime: 5 * 60 * 1000,
   });
 }
@@ -321,7 +321,7 @@ export function useSearchAnalytics() {
   return useQuery({
     queryKey: ['search-analytics'],
     queryFn: () => advancedSearchService.getSearchAnalytics(),
-    cacheTime: 30 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     staleTime: 15 * 60 * 1000,
   });
 }

@@ -49,12 +49,12 @@ export default function ProgressTracker({
 
     try {
       await updateQuestion({
-        questionId,
-        category,
-        difficulty,
-        answeredCorrectly,
-        timeSpent,
-        attempts,
+        id: `${questionId}-${Date.now()}`,
+        user_id: 'current-user', // This should be the actual user ID
+        question_id: questionId,
+        answer: answeredCorrectly ? 'correct' : 'incorrect',
+        is_correct: answeredCorrectly,
+        time_spent: timeSpent,
       });
 
       if (onProgressUpdate) {
@@ -85,13 +85,11 @@ export default function ProgressTracker({
 
     try {
       await updateChallenge({
-        challengeId,
-        challengeName: challengeId, // You might want to pass the actual name
-        category,
-        completed,
-        timeSpent,
-        score,
-        maxScore,
+        id: `${challengeId}-${Date.now()}`,
+        user_id: 'current-user', // This should be the actual user ID
+        challenge_id: challengeId,
+        score: score,
+        time_spent: timeSpent,
       });
 
       if (onProgressUpdate) {
@@ -184,7 +182,7 @@ export const useProgressTracking = () => {
     useUserProgress();
 
   const trackQuestion = async (
-    questionId: string,
+    question_id: string,
     category: string,
     difficulty: 'easy' | 'medium' | 'hard',
     answeredCorrectly: boolean,
@@ -193,12 +191,12 @@ export const useProgressTracking = () => {
   ) => {
     try {
       await updateQuestion({
-        questionId,
-        category,
-        difficulty,
-        answeredCorrectly,
-        timeSpent,
-        attempts,
+        id: `${question_id}-${Date.now()}`,
+        user_id: 'current-user', // This should be the actual user ID
+        question_id: question_id,
+        answer: answeredCorrectly ? 'correct' : 'incorrect',
+        is_correct: answeredCorrectly,
+        time_spent: timeSpent,
       });
     } catch (error) {
       console.error('Error tracking question progress:', error);
@@ -217,13 +215,11 @@ export const useProgressTracking = () => {
   ) => {
     try {
       await updateChallenge({
-        challengeId,
-        challengeName,
-        category,
-        completed,
-        timeSpent,
-        score,
-        maxScore,
+        id: `${challengeId}-${Date.now()}`,
+        user_id: 'current-user', // This should be the actual user ID
+        challenge_id: challengeId,
+        score: score,
+        time_spent: timeSpent,
       });
     } catch (error) {
       console.error('Error tracking challenge progress:', error);

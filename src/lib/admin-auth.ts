@@ -1,27 +1,22 @@
-import { db } from './firebase';
-import {
-  collection,
-  doc,
-  getDocs,
-  setDoc,
-  updateDoc,
-  query,
-  where,
-  serverTimestamp,
-} from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
 import { adminConfig, getAdminApiUrl } from '@/admin.config';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // Types
 export interface AdminCredential {
   id: string;
   email: string;
-  passwordHash: string;
+  password_hash: string;
   name: string;
   role: 'super_admin' | 'admin';
-  isActive: boolean;
-  createdAt: Date;
-  lastLogin?: Date;
+  is_active: boolean;
+  created_at: string;
+  last_login?: string;
 }
 
 export interface AdminSession {
@@ -51,7 +46,7 @@ export interface AdminDeactivationResult {
 }
 
 export class AdminAuthService {
-  private static readonly COLLECTION_NAME = adminConfig.database.collectionName;
+  private static readonly TABLE_NAME = 'admin_users';
 
   /**
    * Initialize admin credentials (one-time setup)
@@ -79,27 +74,23 @@ export class AdminAuthService {
       );
 
       // Create admin document
-      if (!db) {
-        return {
-          success: false,
-          error: 'Database not initialized',
-        };
-      }
-
       const adminId = this.generateAdminId();
-      const adminData: Omit<AdminCredential, 'id'> = {
+      const adminData = {
+        id: adminId,
         email,
-        passwordHash,
+        password_hash: passwordHash,
         name,
         role,
-        isActive: true,
-        createdAt: new Date(),
+        is_active: true,
+        created_at: new Date().toISOString(),
       };
 
-      await setDoc(doc(db, this.COLLECTION_NAME, adminId), {
-        ...adminData,
-        createdAt: serverTimestamp(),
-      });
+      const { error } = await supabase.from(this.TABLE_NAME).insert(adminData);
+
+      if (error) {
+        console.error('Error creating admin:', error);
+        return { success: false, error: 'Failed to create admin account' };
+      }
 
       console.log(`✅ Admin account created: ${email} (${role})`);
       return { success: true, adminId };
@@ -165,27 +156,23 @@ export class AdminAuthService {
       );
 
       // Create admin document
-      if (!db) {
-        return {
-          success: false,
-          error: 'Database not initialized',
-        };
-      }
-
       const adminId = this.generateAdminId();
-      const adminData: Omit<AdminCredential, 'id'> = {
+      const adminData = {
+        id: adminId,
         email,
-        passwordHash,
+        password_hash: passwordHash,
         name,
         role,
-        isActive: true,
-        createdAt: new Date(),
+        is_active: true,
+        created_at: new Date().toISOString(),
       };
 
-      await setDoc(doc(db, this.COLLECTION_NAME, adminId), {
-        ...adminData,
-        createdAt: serverTimestamp(),
-      });
+      const { error } = await supabase.from(this.TABLE_NAME).insert(adminData);
+
+      if (error) {
+        console.error('Error creating admin:', error);
+        return { success: false, error: 'Failed to create admin account' };
+      }
 
       console.log(`✅ Admin account created: ${email} (${role})`);
       return { success: true, adminId };
@@ -202,16 +189,15 @@ export class AdminAuthService {
     adminId: string
   ): Promise<AdminDeactivationResult> {
     try {
-      if (!db) {
-        return {
-          success: false,
-          error: 'Database not initialized',
-        };
-      }
+      const { error } = await supabase
+        .from(this.TABLE_NAME)
+        .update({ is_active: false })
+        .eq('id', adminId);
 
-      await updateDoc(doc(db, this.COLLECTION_NAME, adminId), {
-        isActive: false,
-      });
+      if (error) {
+        console.error('Error deactivating admin:', error);
+        return { success: false, error: 'Failed to deactivate admin' };
+      }
 
       console.log(`✅ Admin deactivated: ${adminId}`);
       return { success: true };
@@ -226,31 +212,17 @@ export class AdminAuthService {
    */
   static async getAllAdmins(): Promise<AdminCredential[]> {
     try {
-      if (!db) {
-        console.error('Database not initialized');
+      const { data, error } = await supabase
+        .from(this.TABLE_NAME)
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error getting all admins:', error);
         return [];
       }
 
-      const querySnapshot = await getDocs(collection(db, this.COLLECTION_NAME));
-      const admins: AdminCredential[] = [];
-
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        admins.push({
-          id: doc.id,
-          email: data.email,
-          passwordHash: data.passwordHash,
-          name: data.name,
-          role: data.role,
-          isActive: data.isActive,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          lastLogin: data.lastLogin?.toDate(),
-        });
-      });
-
-      return admins.sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-      );
+      return data || [];
     } catch (error) {
       console.error('Error getting all admins:', error);
       return [];
@@ -290,35 +262,17 @@ export class AdminAuthService {
     email: string
   ): Promise<AdminCredential | null> {
     try {
-      if (!db) {
-        console.error('Database not initialized');
+      const { data, error } = await supabase
+        .from(this.TABLE_NAME)
+        .select('*')
+        .eq('email', email)
+        .single();
+
+      if (error || !data) {
         return null;
       }
 
-      const q = query(
-        collection(db, this.COLLECTION_NAME),
-        where('email', '==', email)
-      );
-
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        return null;
-      }
-
-      const doc = querySnapshot.docs[0];
-      const data = doc.data();
-
-      return {
-        id: doc.id,
-        email: data.email,
-        passwordHash: data.passwordHash,
-        name: data.name,
-        role: data.role,
-        isActive: data.isActive,
-        createdAt: data.createdAt?.toDate() || new Date(),
-        lastLogin: data.lastLogin?.toDate(),
-      };
+      return data;
     } catch (error) {
       console.error('Error getting admin by email:', error);
       return null;
@@ -330,14 +284,10 @@ export class AdminAuthService {
    */
   private static async updateLastLogin(adminId: string): Promise<void> {
     try {
-      if (!db) {
-        console.error('Database not initialized');
-        return;
-      }
-
-      await updateDoc(doc(db, this.COLLECTION_NAME, adminId), {
-        lastLogin: serverTimestamp(),
-      });
+      await supabase
+        .from(this.TABLE_NAME)
+        .update({ last_login: new Date().toISOString() })
+        .eq('id', adminId);
     } catch (error) {
       console.error('Error updating last login:', error);
     }

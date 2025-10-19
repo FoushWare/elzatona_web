@@ -2,17 +2,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { FrontendTask, FrontendTaskFormData, ApiResponse } from '@/types/admin';
-import {
-  db,
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-} from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/admin/frontend-tasks/[id] - Get a specific frontend task
 export async function GET(
@@ -21,14 +15,6 @@ export async function GET(
 ) {
   try {
     console.log('🔄 API: Fetching frontend task by ID...');
-
-    if (!db) {
-      console.error('❌ API: Database not initialized');
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
 
     const { id } = await params;
 
@@ -39,10 +25,14 @@ export async function GET(
       );
     }
 
-    // Fetch task from Firebase
-    const taskDoc = await getDoc(doc(db, 'frontendTasks', id));
+    // Fetch task from Supabase
+    const { data: taskDoc, error } = await supabase
+      .from('frontend_tasks')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-    if (!taskDoc.exists()) {
+    if (error || !taskDoc) {
       return NextResponse.json(
         { success: false, error: 'Task not found' },
         { status: 404 }
@@ -51,7 +41,7 @@ export async function GET(
 
     const taskData = {
       id: taskDoc.id,
-      ...taskDoc.data(),
+      ...taskDoc,
     } as FrontendTask;
 
     console.log(`✅ API: Frontend task fetched: ${taskData.title}`);
@@ -79,14 +69,6 @@ export async function PUT(
   try {
     console.log('🔄 API: Updating frontend task...');
 
-    if (!db) {
-      console.error('❌ API: Database not initialized');
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     const { id } = await params;
     const body: FrontendTaskFormData = await request.json();
 
@@ -106,20 +88,27 @@ export async function PUT(
     }
 
     // Check if task exists
-    const taskDoc = await getDoc(doc(db, 'frontendTasks', id));
+    const { data: taskDoc, error: fetchError } = await supabase
+      .from('frontend_tasks')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-    if (!taskDoc.exists()) {
+    if (fetchError || !taskDoc) {
       return NextResponse.json(
         { success: false, error: 'Task not found' },
         { status: 404 }
       );
     }
 
-    // Update task in Firebase
-    await updateDoc(doc(db, 'frontendTasks', id), {
-      ...body,
-      updatedAt: new Date(),
-    });
+    // Update task in Supabase
+    const { error: updateError } = await supabase
+      .from('frontend_tasks')
+      .update({
+        ...body,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id);
 
     console.log(`✅ API: Frontend task updated: ${id}`);
 
@@ -146,14 +135,6 @@ export async function DELETE(
   try {
     console.log('🔄 API: Deleting frontend task...');
 
-    if (!db) {
-      console.error('❌ API: Database not initialized');
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     const { id } = await params;
 
     if (!id) {
@@ -164,17 +145,28 @@ export async function DELETE(
     }
 
     // Check if task exists
-    const taskDoc = await getDoc(doc(db, 'frontendTasks', id));
+    const { data: taskDoc, error: fetchError } = await supabase
+      .from('frontend_tasks')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-    if (!taskDoc.exists()) {
+    if (fetchError || !taskDoc) {
       return NextResponse.json(
         { success: false, error: 'Task not found' },
         { status: 404 }
       );
     }
 
-    // Delete task from Firebase
-    await deleteDoc(doc(db, 'frontendTasks', id));
+    // Delete task from Supabase
+    const { error: deleteError } = await supabase
+      .from('frontend_tasks')
+      .delete()
+      .eq('id', id);
+
+    if (deleteError) {
+      throw deleteError;
+    }
 
     console.log(`✅ API: Frontend task deleted: ${id}`);
 

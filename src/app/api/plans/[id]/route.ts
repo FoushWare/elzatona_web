@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, doc, getDoc, updateDoc, deleteDoc } from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/plans/[id] - Get a single plan by ID
 export async function GET(
@@ -8,10 +12,13 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const planRef = doc(db!, 'learningPlans', id);
-    const planSnap = await getDoc(planRef);
+    const { data: planData, error: planError } = await supabase
+      .from('learning_plans')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-    if (!planSnap.exists()) {
+    if (planError || !planData) {
       return NextResponse.json(
         { success: false, error: 'Plan not found' },
         { status: 404 }
@@ -20,7 +27,7 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      data: { id: planSnap.id, ...planSnap.data() },
+      data: { id: planData.id, ...planData },
     });
   } catch (error) {
     console.error('Error fetching plan:', error);
@@ -40,12 +47,14 @@ export async function PUT(
     const { id } = await params;
     const updateData = await request.json();
 
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
+    const { error: updateError } = await supabase
+      .from('learning_plans')
+      .update({ ...updateData, updated_at: new Date().toISOString() })
+      .eq('id', id);
 
-    const planRef = doc(db, 'learningPlans', id);
-    await updateDoc(planRef, { ...updateData, updatedAt: new Date() });
+    if (updateError) {
+      throw updateError;
+    }
 
     return NextResponse.json({
       success: true,
@@ -68,12 +77,14 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
+    const { error: deleteError } = await supabase
+      .from('learning_plans')
+      .delete()
+      .eq('id', id);
 
-    const planRef = doc(db, 'learningPlans', id);
-    await deleteDoc(planRef);
+    if (deleteError) {
+      throw deleteError;
+    }
 
     return NextResponse.json({
       success: true,

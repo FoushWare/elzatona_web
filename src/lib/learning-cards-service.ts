@@ -1,17 +1,4 @@
-import {
-  collection,
-  doc,
-  getDocs,
-  getDoc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  serverTimestamp,
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { createClient } from '@supabase/supabase-js';
 import type {
   LearningCard,
   LearningCardFormData,
@@ -20,53 +7,38 @@ import type {
   CardType,
 } from '@/types/learning-cards';
 
-const LEARNING_CARDS_COLLECTION = 'learningCards';
-const LEARNING_PLAN_CARDS_COLLECTION = 'learningPlanCards';
-const CARD_PROGRESS_COLLECTION = 'cardProgress';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export class LearningCardsService {
   // Learning Cards CRUD operations
   static async getAllCards(): Promise<LearningCard[]> {
     try {
-      if (!db) {
-        throw new Error('Firebase database not initialized');
-      }
+      const { data: cards, error } = await supabase
+        .from('learning_cards')
+        .select('*')
+        .order('order', { ascending: true });
 
-      const cardsRef = collection(db, LEARNING_CARDS_COLLECTION);
-      const q = query(cardsRef, orderBy('order', 'asc'));
-      const snapshot = await getDocs(q);
+      if (error) throw error;
 
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-        updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-      })) as LearningCard[];
+      return cards || [];
     } catch (error) {
       console.error('Error fetching learning cards:', error);
       throw error;
     }
   }
 
-  static async getCardById(cardId: string): Promise<LearningCard | null> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
+  static async getCardById(card_id: string): Promise<LearningCard | null> {
     try {
-      const cardRef = doc(db, LEARNING_CARDS_COLLECTION, cardId);
-      const cardSnap = await getDoc(cardRef);
+      const { data: card, error } = await supabase
+        .from('learning_cards')
+        .select('*')
+        .eq('id', card_id)
+        .single();
 
-      if (!cardSnap.exists()) {
-        return null;
-      }
-
-      return {
-        id: cardSnap.id,
-        ...cardSnap.data(),
-        createdAt: cardSnap.data().createdAt?.toDate() || new Date(),
-        updatedAt: cardSnap.data().updatedAt?.toDate() || new Date(),
-      } as LearningCard;
+      if (error) throw error;
+      return card;
     } catch (error) {
       console.error('Error fetching learning card:', error);
       throw error;
@@ -74,19 +46,19 @@ export class LearningCardsService {
   }
 
   static async createCard(cardData: LearningCardFormData): Promise<string> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     try {
-      const cardsRef = collection(db, LEARNING_CARDS_COLLECTION);
-      const docRef = await addDoc(cardsRef, {
-        ...cardData,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
+      const { data, error } = await supabase
+        .from('learning_cards')
+        .insert({
+          ...cardData,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
 
-      return docRef.id;
+      if (error) throw error;
+      return data.id;
     } catch (error) {
       console.error('Error creating learning card:', error);
       throw error;
@@ -94,33 +66,33 @@ export class LearningCardsService {
   }
 
   static async updateCard(
-    cardId: string,
+    card_id: string,
     cardData: Partial<LearningCardFormData>
   ): Promise<void> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     try {
-      const cardRef = doc(db, LEARNING_CARDS_COLLECTION, cardId);
-      await updateDoc(cardRef, {
-        ...cardData,
-        updatedAt: serverTimestamp(),
-      });
+      const { error } = await supabase
+        .from('learning_cards')
+        .update({
+          ...cardData,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', card_id);
+
+      if (error) throw error;
     } catch (error) {
       console.error('Error updating learning card:', error);
       throw error;
     }
   }
 
-  static async deleteCard(cardId: string): Promise<void> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
+  static async deleteCard(card_id: string): Promise<void> {
     try {
-      const cardRef = doc(db, LEARNING_CARDS_COLLECTION, cardId);
-      await deleteDoc(cardRef);
+      const { error } = await supabase
+        .from('learning_cards')
+        .delete()
+        .eq('id', card_id);
+
+      if (error) throw error;
     } catch (error) {
       console.error('Error deleting learning card:', error);
       throw error;
@@ -128,38 +100,33 @@ export class LearningCardsService {
   }
 
   // Learning Plan Cards operations
-  static async getCardsForPlan(planId: string): Promise<LearningPlanCard[]> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
+  static async getCardsForPlan(plan_id: string): Promise<LearningPlanCard[]> {
     try {
-      const planCardsRef = collection(db, LEARNING_PLAN_CARDS_COLLECTION);
-      const q = query(
-        planCardsRef,
-        where('planId', '==', planId),
-        orderBy('order', 'asc')
-      );
-      const snapshot = await getDocs(q);
+      const { data: planCards, error } = await supabase
+        .from('learning_plan_cards')
+        .select('*')
+        .eq('plan_id', plan_id)
+        .order('order', { ascending: true });
 
-      const planCards: LearningPlanCard[] = [];
+      if (error) throw error;
 
-      for (const docSnap of snapshot.docs) {
-        const planCardData = docSnap.data();
-        const card = await this.getCardById(planCardData.cardId);
+      const result: LearningPlanCard[] = [];
+
+      for (const planCardData of planCards || []) {
+        const card = await this.getCardById(planCardData.card_id);
 
         if (card) {
-          planCards.push({
-            id: docSnap.id,
+          result.push({
+            id: planCardData.id,
             ...planCardData,
             card,
-            createdAt: planCardData.createdAt?.toDate() || new Date(),
-            updatedAt: planCardData.updatedAt?.toDate() || new Date(),
+            created_at: planCardData.created_at || new Date(),
+            updated_at: planCardData.updated_at || new Date(),
           } as LearningPlanCard);
         }
       }
 
-      return planCards;
+      return result;
     } catch (error) {
       console.error('Error fetching cards for plan:', error);
       throw error;
@@ -167,30 +134,30 @@ export class LearningCardsService {
   }
 
   static async addCardToPlan(
-    planId: string,
-    cardId: string,
+    plan_id: string,
+    card_id: string,
     config: {
-      questionCount: number;
+      question_count: number;
       timeLimit: number;
       difficulty: 'beginner' | 'intermediate' | 'advanced';
     }
   ): Promise<string> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     try {
-      const planCardsRef = collection(db, LEARNING_PLAN_CARDS_COLLECTION);
-      const docRef = await addDoc(planCardsRef, {
-        planId,
-        cardId,
-        ...config,
-        isActive: true,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
+      const { data, error } = await supabase
+        .from('learning_plan_cards')
+        .insert({
+          plan_id,
+          card_id,
+          ...config,
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
 
-      return docRef.id;
+      if (error) throw error;
+      return data.id;
     } catch (error) {
       console.error('Error adding card to plan:', error);
       throw error;
@@ -198,13 +165,13 @@ export class LearningCardsService {
   }
 
   static async removeCardFromPlan(planCardId: string): Promise<void> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     try {
-      const planCardRef = doc(db, LEARNING_PLAN_CARDS_COLLECTION, planCardId);
-      await deleteDoc(planCardRef);
+      const { error } = await supabase
+        .from('learning_plan_cards')
+        .delete()
+        .eq('id', planCardId);
+
+      if (error) throw error;
     } catch (error) {
       console.error('Error removing card from plan:', error);
       throw error;
@@ -214,35 +181,20 @@ export class LearningCardsService {
   // Card Progress operations
   static async getCardProgress(
     userId: string,
-    planId: string,
-    cardId: string
+    plan_id: string,
+    card_id: string
   ): Promise<CardProgress | null> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     try {
-      const progressRef = collection(db, CARD_PROGRESS_COLLECTION);
-      const q = query(
-        progressRef,
-        where('userId', '==', userId),
-        where('planId', '==', planId),
-        where('cardId', '==', cardId)
-      );
-      const snapshot = await getDocs(q);
+      const { data: progress, error } = await supabase
+        .from('card_progress')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('plan_id', plan_id)
+        .eq('card_id', card_id)
+        .single();
 
-      if (snapshot.empty) {
-        return null;
-      }
-
-      const doc = snapshot.docs[0];
-      return {
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-        updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-        completedAt: doc.data().completedAt?.toDate(),
-      } as CardProgress;
+      if (error) throw error;
+      return progress;
     } catch (error) {
       console.error('Error fetching card progress:', error);
       throw error;
@@ -252,20 +204,20 @@ export class LearningCardsService {
   static async updateCardProgress(
     progressData: Partial<CardProgress>
   ): Promise<void> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     try {
       if (!progressData.id) {
         throw new Error('Progress ID is required for update');
       }
 
-      const progressRef = doc(db, CARD_PROGRESS_COLLECTION, progressData.id);
-      await updateDoc(progressRef, {
-        ...progressData,
-        updatedAt: serverTimestamp(),
-      });
+      const { error } = await supabase
+        .from('card_progress')
+        .update({
+          ...progressData,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', progressData.id);
+
+      if (error) throw error;
     } catch (error) {
       console.error('Error updating card progress:', error);
       throw error;
@@ -275,19 +227,19 @@ export class LearningCardsService {
   static async createCardProgress(
     progressData: Omit<CardProgress, 'id'>
   ): Promise<string> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     try {
-      const progressRef = collection(db, CARD_PROGRESS_COLLECTION);
-      const docRef = await addDoc(progressRef, {
-        ...progressData,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
+      const { data, error } = await supabase
+        .from('card_progress')
+        .insert({
+          ...progressData,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
 
-      return docRef.id;
+      if (error) throw error;
+      return data.id;
     } catch (error) {
       console.error('Error creating card progress:', error);
       throw error;
@@ -296,25 +248,15 @@ export class LearningCardsService {
 
   // Utility methods
   static async getCardsByType(type: CardType): Promise<LearningCard[]> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     try {
-      const cardsRef = collection(db, LEARNING_CARDS_COLLECTION);
-      const q = query(
-        cardsRef,
-        where('type', '==', type),
-        orderBy('order', 'asc')
-      );
-      const snapshot = await getDocs(q);
+      const { data: cards, error } = await supabase
+        .from('learning_cards')
+        .select('*')
+        .eq('type', type)
+        .order('order', { ascending: true });
 
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-        updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-      })) as LearningCard[];
+      if (error) throw error;
+      return cards || [];
     } catch (error) {
       console.error('Error fetching cards by type:', error);
       throw error;
@@ -322,25 +264,15 @@ export class LearningCardsService {
   }
 
   static async getActiveCards(): Promise<LearningCard[]> {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     try {
-      const cardsRef = collection(db, LEARNING_CARDS_COLLECTION);
-      const q = query(
-        cardsRef,
-        where('isActive', '==', true),
-        orderBy('order', 'asc')
-      );
-      const snapshot = await getDocs(q);
+      const { data: cards, error } = await supabase
+        .from('learning_cards')
+        .select('*')
+        .eq('is_active', true)
+        .order('order', { ascending: true });
 
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-        updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-      })) as LearningCard[];
+      if (error) throw error;
+      return cards || [];
     } catch (error) {
       console.error('Error fetching active cards:', error);
       throw error;

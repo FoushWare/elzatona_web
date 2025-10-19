@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 interface Question {
   id: string;
   order?: number;
-  [key: string]: unknown; // Allow additional properties from Firebase
+  [key: string]: unknown; // Allow additional properties from Supabase
 }
 
 export async function GET(
@@ -24,31 +28,21 @@ export async function GET(
 
     console.log(`Fetching questions for learning path: ${learningPath}`);
 
-    // Query questions from Firebase
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
+    // Query questions from Supabase
+    const { data: questionsData, error: questionsError } = await supabase
+      .from('questions')
+      .select('*')
+      .eq('learningPath', learningPath)
+      .order('order', { ascending: true });
+
+    if (questionsError) {
+      throw questionsError;
     }
 
-    const questionsRef = collection(db, 'questions');
-    const q = query(questionsRef, where('learningPath', '==', learningPath));
-
-    const querySnapshot = await getDocs(q);
-    const questions: Question[] = [];
-
-    querySnapshot.forEach(doc => {
-      questions.push({
-        id: doc.id,
-        ...doc.data(),
-      });
-    });
-
-    // Sort questions by order field in JavaScript
-    questions.sort(
-      (a: Question, b: Question) => (a.order || 0) - (b.order || 0)
-    );
+    const questions: Question[] = (questionsData || []).map(doc => ({
+      id: doc.id,
+      ...doc,
+    }));
 
     console.log(`Found ${questions.length} questions for ${learningPath}`);
 
@@ -63,7 +57,7 @@ export async function GET(
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch questions from Firebase',
+        error: 'Failed to fetch questions from Supabase',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }

@@ -8,11 +8,20 @@ export async function GET(request: NextRequest) {
     const adminId = searchParams.get('adminId');
     const limit = parseInt(searchParams.get('limit') || '50');
 
-    const notifications = await NotificationService.getNotifications(
-      userId || undefined,
-      adminId || undefined,
-      limit
-    );
+    let notifications;
+    if (userId) {
+      notifications = await NotificationService.getUserNotifications(
+        userId,
+        limit
+      );
+    } else if (adminId) {
+      notifications = await NotificationService.getAdminNotifications(
+        adminId,
+        limit
+      );
+    } else {
+      notifications = await NotificationService.getSystemNotifications(limit);
+    }
 
     return NextResponse.json({
       success: true,
@@ -78,7 +87,12 @@ export async function PUT(request: NextRequest) {
 
     switch (action) {
       case 'markAsRead':
-        success = await NotificationService.markAsRead(notificationId);
+        try {
+          await NotificationService.markAsRead(notificationId);
+          success = true;
+        } catch (error) {
+          success = false;
+        }
         break;
       default:
         return NextResponse.json(

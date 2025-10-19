@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import {
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  doc,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface LearningCartItem {
   id: string;
   userId: string;
-  questionId: string;
+  question_id: string;
   question: string;
   category: string;
   topic: string;
@@ -37,8 +30,8 @@ export interface LearningCart {
   categories: string[];
   topics: string[];
   learningPaths: string[];
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 // Add item to learning cart
@@ -67,23 +60,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if item already exists in cart
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
-    const existingCartQuery = query(
-      collection(db!, 'learningCarts'),
-      where('userId', '==', userId)
-    );
-    const existingCartSnapshot = await getDocs(existingCartQuery);
+    const { data: existingCart, error: cartError } = await supabase
+      .from('learning_carts')
+      .select('*')
+      .eq('userId', userId)
+      .single();
 
     let cartId: string;
     let cart: LearningCart;
 
-    if (existingCartSnapshot.empty) {
+    if (cartError || !existingCart) {
       // Create new cart
       const newCart: Omit<LearningCart, 'id'> = {
         userId,
@@ -93,23 +79,31 @@ export async function POST(request: NextRequest) {
         categories: [],
         topics: [],
         learningPaths: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
-      const cartRef = await addDoc(collection(db, 'learningCarts'), newCart);
-      cartId = cartRef.id;
+      const { data: cartData, error: insertError } = await supabase
+        .from('learning_carts')
+        .insert(newCart)
+        .select()
+        .single();
+
+      if (insertError) {
+        throw insertError;
+      }
+
+      cartId = cartData.id;
       cart = { id: cartId, ...newCart };
     } else {
       // Use existing cart
-      const cartDoc = existingCartSnapshot.docs[0];
-      cartId = cartDoc.id;
-      cart = { id: cartId, ...cartDoc.data() } as LearningCart;
+      cartId = existingCart.id;
+      cart = { id: cartId, ...existingCart } as LearningCart;
     }
 
     // Check if question already in cart
     const existingItem = cart.items.find(
-      item => item.questionId === questionId
+      item => item.question_id === questionId
     );
     if (existingItem) {
       return NextResponse.json(
@@ -122,7 +116,7 @@ export async function POST(request: NextRequest) {
     const newItem: LearningCartItem = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       userId,
-      questionId,
+      question_id: questionId,
       question,
       category,
       topic: topic || 'General',
@@ -152,10 +146,17 @@ export async function POST(request: NextRequest) {
       categories: updatedCategories,
       topics: updatedTopics,
       learningPaths: updatedLearningPaths,
-      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    await updateDoc(doc(db!, 'learningCarts', cartId), updatedCart);
+    const { error: updateError } = await supabase
+      .from('learning_carts')
+      .update(updatedCart)
+      .eq('id', cartId);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     return NextResponse.json({
       success: true,
@@ -187,14 +188,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const cartQuery = query(
-      collection(db!, 'learningCarts'),
-      where('userId', '==', userId)
-    );
+    const { data: cartData, error: cartError } = await supabase
+      .from('learning_carts')
+      .select('*')
+      .eq('userId', userId)
+      .single();
 
-    const cartSnapshot = await getDocs(cartQuery);
-
-    if (cartSnapshot.empty) {
+    if (cartError || !cartData) {
       return NextResponse.json({
         success: true,
         data: {
@@ -206,18 +206,17 @@ export async function GET(request: NextRequest) {
           categories: [],
           topics: [],
           learningPaths: [],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         },
       });
     }
 
-    const cart = cartSnapshot.docs[0];
     return NextResponse.json({
       success: true,
       data: {
-        id: cart.id,
-        ...cart.data(),
+        id: cartData.id,
+        ...cartData,
       },
     });
   } catch (error) {
@@ -242,19 +241,17 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const cartQuery = query(
-      collection(db!, 'learningCarts'),
-      where('userId', '==', userId)
-    );
+    const { data: cartData, error: cartError } = await supabase
+      .from('learning_carts')
+      .select('*')
+      .eq('userId', userId)
+      .single();
 
-    const cartSnapshot = await getDocs(cartQuery);
-
-    if (cartSnapshot.empty) {
+    if (cartError || !cartData) {
       return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
     }
 
-    const cartDoc = cartSnapshot.docs[0];
-    const cart = { id: cartDoc.id, ...cartDoc.data() } as LearningCart;
+    const cart = { id: cartData.id, ...cartData } as LearningCart;
 
     const updatedItems = cart.items.map(item =>
       item.id === itemId ? { ...item, ...updates } : item
@@ -268,10 +265,17 @@ export async function PUT(request: NextRequest) {
         (total, item) => total + item.estimatedTime,
         0
       ),
-      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    await updateDoc(doc(db!, 'learningCarts', cart.id), updatedCart);
+    const { error: updateError } = await supabase
+      .from('learning_carts')
+      .update(updatedCart)
+      .eq('id', cart.id);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     return NextResponse.json({
       success: true,
@@ -300,19 +304,17 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const cartQuery = query(
-      collection(db!, 'learningCarts'),
-      where('userId', '==', userId)
-    );
+    const { data: cartData, error: cartError } = await supabase
+      .from('learning_carts')
+      .select('*')
+      .eq('userId', userId)
+      .single();
 
-    const cartSnapshot = await getDocs(cartQuery);
-
-    if (cartSnapshot.empty) {
+    if (cartError || !cartData) {
       return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
     }
 
-    const cartDoc = cartSnapshot.docs[0];
-    const cart = { id: cartDoc.id, ...cartDoc.data() } as LearningCart;
+    const cart = { id: cartData.id, ...cartData } as LearningCart;
 
     const updatedItems = cart.items.filter(item => item.id !== itemId);
     const updatedCategories = [
@@ -334,10 +336,17 @@ export async function DELETE(request: NextRequest) {
       categories: updatedCategories,
       topics: updatedTopics,
       learningPaths: updatedLearningPaths,
-      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    await updateDoc(doc(db!, 'learningCarts', cart.id), updatedCart);
+    const { error: updateError } = await supabase
+      .from('learning_carts')
+      .update(updatedCart)
+      .eq('id', cart.id);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     return NextResponse.json({
       success: true,

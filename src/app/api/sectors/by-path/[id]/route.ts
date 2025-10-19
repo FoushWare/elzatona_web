@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function GET(
   request: NextRequest,
@@ -19,23 +22,18 @@ export async function GET(
       );
     }
 
-    if (!db) {
-      throw new Error('Firebase not initialized');
+    // Fetch sectors for the specific learning path
+    const { data: sectorsData, error } = await supabase
+      .from('sectors')
+      .select('*')
+      .eq('path_id', pathId)
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      throw error;
     }
 
-    // Fetch sectors for the specific learning path
-    const sectorsRef = collection(db, 'sectors');
-    const q = query(
-      sectorsRef,
-      where('pathId', '==', pathId),
-      orderBy('order')
-    );
-    const snapshot = await getDocs(q);
-
-    const sectors = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const sectors = sectorsData || [];
 
     return NextResponse.json({
       success: true,

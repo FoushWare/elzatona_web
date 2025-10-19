@@ -2,7 +2,13 @@
 
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, ReactNode } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { Editor } from '@monaco-editor/react';
 import {
   Play,
@@ -83,7 +89,7 @@ export default function FrontendTaskEditor({
     tags: [],
     hints: [],
     files: [],
-    isActive: true,
+    is_active: true,
   });
 
   // Panel layout state
@@ -164,7 +170,7 @@ export default function FrontendTaskEditor({
         tags: task.tags || [],
         hints: task.hints || [],
         files: task.files || [],
-        isActive: task.isActive !== false,
+        is_active: task.is_active !== false,
       });
 
       // Initialize file tree and open files

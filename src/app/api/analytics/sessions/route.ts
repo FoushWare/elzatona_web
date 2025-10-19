@@ -109,22 +109,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      const success = await UserAnalyticsService.endSession(
-        sessionId,
-        activitiesCompleted || 0,
-        questionsAnswered || 0,
-        topicsCompleted || 0,
-        cardsCompleted || 0,
-        plansCompleted || 0,
-        totalScore || 0
-      );
-
-      if (!success) {
-        return NextResponse.json(
-          { success: false, error: 'Failed to end session' },
-          { status: 500 }
-        );
-      }
+      await UserAnalyticsService.endSession(sessionId);
 
       return NextResponse.json({
         success: true,

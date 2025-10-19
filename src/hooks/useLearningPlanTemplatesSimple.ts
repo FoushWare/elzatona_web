@@ -1,5 +1,34 @@
 import { useState, useEffect } from 'react';
-import { LearningPlanTemplate } from '@/lib/guided-learning-service';
+
+interface LearningPlanTemplate {
+  id: string;
+  name: string;
+  duration: number;
+  description: string;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  totalQuestions: number;
+  dailyQuestions: number;
+  sections: LearningSection[];
+  features: string[];
+  estimatedTime: string;
+  isRecommended: boolean;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
+  createdBy?: string;
+  completionRate?: number;
+  enrolledUsers?: number;
+}
+
+interface LearningSection {
+  id: string;
+  name: string;
+  category: string;
+  questions: string[];
+  weight: number;
+  order: number;
+  description?: string;
+}
 
 interface ApiTemplate {
   id: string;
@@ -102,9 +131,9 @@ export function useLearningPlanTemplatesSimple(): UseLearningPlanTemplatesReturn
                 template.isRecommended ||
                 template.duration === 3 ||
                 template.duration === 7,
-              isActive: template.isActive !== false,
-              createdAt: new Date(),
-              updatedAt: new Date(),
+              is_active: template.isActive !== false,
+              created_at: new Date(),
+              updated_at: new Date(),
             }));
 
           setTemplates(formattedTemplates);
@@ -153,9 +182,9 @@ export function useLearningPlanTemplatesSimple(): UseLearningPlanTemplatesReturn
               ],
               estimatedTime: '2-3 hours',
               isRecommended: false,
-              isActive: true,
-              createdAt: new Date(),
-              updatedAt: new Date(),
+              is_active: true,
+              created_at: new Date(),
+              updated_at: new Date(),
             },
           ];
           setTemplates(mockTemplates);
@@ -214,9 +243,9 @@ export function useLearningPlanTemplatesSimple(): UseLearningPlanTemplatesReturn
             ],
             estimatedTime: '2-3 hours',
             isRecommended: false,
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
         ];
         setTemplates(mockTemplates);

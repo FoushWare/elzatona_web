@@ -1,19 +1,18 @@
-// v1.0 - Unified Questions API Route
+// v1.0 - Unified Questions API Route (Supabase Only)
 // Single endpoint for all question operations
 
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  db,
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-} from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+  },
+});
 
 // Simple in-memory cache for questions (resets on server restart)
 let questionsCache: Array<{
@@ -26,10 +25,6 @@ const CACHE_DURATION = 30000; // 30 seconds
 // GET /api/questions/unified - Get questions with filters
 export async function GET(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     const { searchParams } = new URL(request.url);
 
     // Pagination parameters
@@ -43,7 +38,7 @@ export async function GET(request: NextRequest) {
       difficulty: searchParams.get('difficulty') || undefined,
       learningPath: searchParams.get('learningPath') || undefined,
       sectionId: searchParams.get('sectionId') || undefined,
-      isActive:
+      is_active:
         searchParams.get('isActive') === 'true'
           ? true
           : searchParams.get('isActive') === 'false'
@@ -58,9 +53,9 @@ export async function GET(request: NextRequest) {
       limit: pageSize,
       orderBy:
         (searchParams.get('orderBy') as
-          | 'createdAt'
-          | 'updatedAt'
-          | 'order'
+          | 'created_at'
+          | 'updated_at'
+          | 'order_index'
           | 'title') || undefined,
       orderDirection:
         (searchParams.get('orderDirection') as 'asc' | 'desc') || undefined,
@@ -83,43 +78,37 @@ export async function GET(request: NextRequest) {
       allQuestions = questionsCache;
       console.log('📦 Using cached questions:', allQuestions.length);
     } else {
-      // Fetch from Firestore
-      const constraints = [];
+      // Fetch from Supabase
+      let query = supabase.from('questions').select('*');
 
       // Apply filters
       if (cleanFilters.category) {
-        constraints.push(where('category', '==', cleanFilters.category));
+        query = query.eq('category_id', cleanFilters.category);
       }
       if (cleanFilters.difficulty) {
-        constraints.push(where('difficulty', '==', cleanFilters.difficulty));
+        query = query.eq('difficulty', cleanFilters.difficulty);
       }
       if (cleanFilters.learningPath) {
-        constraints.push(
-          where('learningPath', '==', cleanFilters.learningPath)
-        );
+        query = query.eq('learning_card_id', cleanFilters.learningPath);
       }
       if (cleanFilters.isActive !== undefined) {
-        constraints.push(where('isActive', '==', cleanFilters.isActive));
+        query = query.eq('is_active', cleanFilters.isActive);
       }
 
-      // Order by createdAt descending
-      constraints.push(orderBy('createdAt', 'desc'));
+      // Order by created_at descending
+      query = query.order('created_at', { ascending: false });
 
-      // Create the query
-      const q = query(collection(db, 'questions'), ...constraints);
+      const { data, error } = await query;
 
-      // For small datasets, get all and paginate in memory (more efficient)
-      const allSnapshot = await getDocs(q);
-      allQuestions = allSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      if (error) throw error;
+
+      allQuestions = data || [];
 
       // Update cache
       questionsCache = allQuestions;
       cacheTimestamp = now;
       console.log(
-        '🔄 Fetched fresh questions from Firestore:',
+        '🔄 Fetched fresh questions from Supabase:',
         allQuestions.length
       );
     }
@@ -162,10 +151,6 @@ export async function GET(request: NextRequest) {
 // POST /api/questions/unified - Create questions (bulk import or single)
 export async function POST(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     const body = await request.json();
     const { questions, isBulkImport = false } = body;
 
@@ -183,15 +168,19 @@ export async function POST(request: NextRequest) {
       try {
         const questionWithTimestamps = {
           ...questionData,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
 
-        const docRef = await addDoc(
-          collection(db, 'questions'),
-          questionWithTimestamps
-        );
-        results.push({ id: docRef.id, ...questionData });
+        const { data, error } = await supabase
+          .from('questions')
+          .insert(questionWithTimestamps)
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        results.push({ id: data.id, ...questionData });
       } catch (error) {
         console.error('Error creating question:', error);
         errors.push({
@@ -226,10 +215,6 @@ export async function POST(request: NextRequest) {
 // PUT /api/questions/unified - Update a question
 export async function PUT(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     const body = await request.json();
     const { id, ...updateData } = body;
 
@@ -242,10 +227,15 @@ export async function PUT(request: NextRequest) {
 
     const updateWithTimestamps = {
       ...updateData,
-      updatedAt: new Date(),
+      updated_at: new Date().toISOString(),
     };
 
-    await updateDoc(doc(db, 'questions', id), updateWithTimestamps);
+    const { error } = await supabase
+      .from('questions')
+      .update(updateWithTimestamps)
+      .eq('id', id);
+
+    if (error) throw error;
 
     // Invalidate cache after updating question
     questionsCache = null;
@@ -266,10 +256,6 @@ export async function PUT(request: NextRequest) {
 // DELETE /api/questions/unified - Delete a question
 export async function DELETE(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
@@ -280,7 +266,9 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await deleteDoc(doc(db, 'questions', id));
+    const { error } = await supabase.from('questions').delete().eq('id', id);
+
+    if (error) throw error;
 
     // Invalidate cache after deleting question
     questionsCache = null;

@@ -1,13 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  doc,
-  updateDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -30,7 +21,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 interface Question {
@@ -455,12 +446,12 @@ const CARD_HIERARCHY = {
 
 async function getAllQuestions(): Promise<Question[]> {
   try {
-    const questionsRef = collection(db, 'unifiedQuestions');
+    const questionsRef = supabase.from('unifiedQuestions');
     const snapshot = await getDocs(questionsRef);
 
-    return snapshot.docs.map(doc => ({
+    return snapshot.map(doc => ({
       id: doc.id,
-      ...doc.data(),
+      ...doc,
     })) as Question[];
   } catch (error) {
     console.error('Error fetching questions:', error);
@@ -492,15 +483,15 @@ function findQuestionsForTopic(
 }
 
 async function updateLearningCard(
-  cardId: string,
+  card_id: string,
   sections: LearningCardCategory[]
 ) {
   try {
-    const cardRef = doc(db, 'learningCards', cardId);
+    const cardRef = supabase.from('learningCards').select().eq('id', cardId);
     await updateDoc(cardRef, {
       metadata: {
         categories: sections,
-        questionCount: sections.reduce(
+        question_count: sections.reduce(
           (total, section) =>
             total +
             section.topics.reduce(
@@ -516,7 +507,7 @@ async function updateLearningCard(
           category.topics.map(topic => topic.name)
         ),
       },
-      updatedAt: new Date(),
+      updated_at: new Date(),
     });
 
     console.log(`✅ Updated card ${cardId} with ${sections.length} categories`);
@@ -536,11 +527,11 @@ async function seedLearningCardsHierarchy() {
 
     // Get all learning cards
     console.log('🎯 Fetching learning cards...');
-    const cardsRef = collection(db, 'learningCards');
+    const cardsRef = supabase.from('learningCards');
     const cardsSnapshot = await getDocs(cardsRef);
-    const cards = cardsSnapshot.docs.map(doc => ({
+    const cards = cardsSnapshot.map(doc => ({
       id: doc.id,
-      ...doc.data(),
+      ...doc,
     }));
 
     console.log(`🎯 Found ${cards.length} learning cards`);

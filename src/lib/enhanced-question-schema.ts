@@ -6,11 +6,11 @@ export interface Section {
   name: string;
   description: string;
   order: number;
-  isActive: boolean;
+  is_active: boolean;
   questionLimit: number;
   learningPath?: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Topic {
@@ -19,9 +19,9 @@ export interface Topic {
   description: string;
   sectionId: string;
   order: number;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface EnhancedQuestion {
@@ -32,9 +32,9 @@ export interface EnhancedQuestion {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   sectionId: string;
   topicId?: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
   options?: {
     id: string;
     text: string;
@@ -53,7 +53,7 @@ export interface SectionConfig {
   topics: Topic[];
   questions: EnhancedQuestion[];
   order: number;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }

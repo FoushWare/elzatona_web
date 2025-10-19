@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import {
   Card,
   CardContent,
@@ -20,8 +26,8 @@ interface SectionConfig {
   autoAssignEnabled: boolean;
   maxSectionsPerPath: number;
   allowOverflow: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface SectionConfigManagerProps {
@@ -59,8 +65,8 @@ export default function SectionConfigManager({
             autoAssignEnabled: true,
             maxSectionsPerPath: 10,
             allowOverflow: false,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
           });
         }
       } else {
@@ -77,8 +83,8 @@ export default function SectionConfigManager({
         autoAssignEnabled: true,
         maxSectionsPerPath: 10,
         allowOverflow: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       });
     } finally {
       setIsLoading(false);
@@ -100,7 +106,7 @@ export default function SectionConfigManager({
         },
         body: JSON.stringify({
           ...config,
-          updatedAt: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         }),
       });
 

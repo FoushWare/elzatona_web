@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { Card, CardContent } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
@@ -28,9 +34,9 @@ interface Question {
   category: string;
   topic?: string;
   tags: string[];
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface LearningSection {
@@ -125,12 +131,12 @@ export const SectionQuestionManager: React.FC<SectionQuestionManagerProps> = ({
     }
   };
 
-  const handleQuestionToggle = (questionId: string) => {
+  const handleQuestionToggle = (question_id: string) => {
     setSelectedQuestions(prev => {
-      if (prev.includes(questionId)) {
-        return prev.filter(id => id !== questionId);
+      if (prev.includes(question_id)) {
+        return prev.filter(id => id !== question_id);
       } else {
-        return [...prev, questionId];
+        return [...prev, question_id];
       }
     });
   };

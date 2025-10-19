@@ -1,15 +1,11 @@
 // v1.0 - API routes for problem solving tasks CRUD operations
 
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  db,
-  collection,
-  getDocs,
-  addDoc,
-  query,
-  where,
-  orderBy,
-} from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
@@ -22,14 +18,6 @@ export async function GET(request: NextRequest) {
   try {
     console.log('🔄 API: Fetching problem solving tasks...');
 
-    if (!db) {
-      console.error('❌ API: Database not initialized');
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -37,33 +25,32 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category') || '';
     const difficulty = searchParams.get('difficulty') || '';
 
-    // Fetch tasks from Firebase
-    const tasksRef = collection(db, 'problemSolvingTasks');
-    let q = query(tasksRef, orderBy('createdAt', 'desc'));
+    // Fetch tasks from Supabase
+    let query = supabase
+      .from('problem_solving')
+      .select('*')
+      .order('created_at', { ascending: false });
 
     // Apply filters
     if (category) {
-      q = query(
-        tasksRef,
-        where('category', '==', category),
-        orderBy('createdAt', 'desc')
-      );
+      query = query.eq('category', category);
     }
     if (difficulty) {
-      q = query(
-        tasksRef,
-        where('difficulty', '==', difficulty),
-        orderBy('createdAt', 'desc')
-      );
+      query = query.eq('difficulty', difficulty);
     }
 
-    const snapshot = await getDocs(q);
-    let data: ProblemSolvingTask[] = snapshot.docs.map(doc => ({
+    const { data: snapshot, error } = await query;
+
+    if (error) {
+      throw error;
+    }
+
+    let data: ProblemSolvingTask[] = snapshot.map(doc => ({
       id: doc.id,
-      ...doc.data(),
+      ...doc,
     })) as ProblemSolvingTask[];
 
-    // Apply search filter (client-side since Firestore doesn't support full-text search)
+    // Apply search filter (client-side since Supabase doesn't support full-text search)
     if (search) {
       const lowerSearch = search.toLowerCase();
       data = data.filter(
@@ -108,14 +95,6 @@ export async function POST(request: NextRequest) {
   try {
     console.log('🔄 API: Creating new problem solving task...');
 
-    if (!db) {
-      console.error('❌ API: Database not initialized');
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     const body: ProblemSolvingTaskFormData = await request.json();
 
     // Validate required fields
@@ -142,22 +121,27 @@ export async function POST(request: NextRequest) {
     // Create the task data
     const taskData = {
       ...body,
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    // Add to Firebase
-    const docRef = await addDoc(
-      collection(db, 'problemSolvingTasks'),
-      taskData
-    );
+    // Add to Supabase
+    const { data: newTask, error } = await supabase
+      .from('problem_solving')
+      .insert(taskData)
+      .select()
+      .single();
 
-    console.log(`✅ API: Problem solving task created with ID: ${docRef.id}`);
+    if (error) {
+      throw error;
+    }
+
+    console.log(`✅ API: Problem solving task created with ID: ${newTask.id}`);
 
     const response: ApiResponse<{ id: string }> = {
       success: true,
-      data: { id: docRef.id },
+      data: { id: newTask.id },
     };
 
     return NextResponse.json(response, { status: 201 });

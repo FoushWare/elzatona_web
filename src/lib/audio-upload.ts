@@ -1,10 +1,9 @@
-import { storage } from './firebase';
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from 'firebase/storage';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface AudioUploadResult {
   success: boolean;
@@ -33,7 +32,7 @@ export class AudioUploadService {
    * Upload question audio file
    */
   static async uploadQuestionAudio(
-    questionId: string,
+    question_id: string,
     file: File
   ): Promise<AudioUploadResult> {
     try {
@@ -43,21 +42,29 @@ export class AudioUploadService {
         return { success: false, error: validation.error };
       }
 
-      // Create storage reference
-      if (!storage) {
-        return { success: false, error: 'Firebase Storage not available' };
+      // Create file path
+      const fileName = `questions/${question_id}/question_audio.${this.getFileExtension(file.type)}`;
+
+      // Upload file to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('audio-files')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: true,
+        });
+
+      if (error) {
+        console.error('Error uploading question audio:', error);
+        return { success: false, error: 'Failed to upload question audio' };
       }
-      const fileName = `questions/${questionId}/question_audio`;
-      const storageRef = ref(storage, fileName);
 
-      // Upload file
-      const snapshot = await uploadBytes(storageRef, file);
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('audio-files')
+        .getPublicUrl(fileName);
 
-      // Get download URL
-      const downloadURL = await getDownloadURL(snapshot.ref);
-
-      console.log(`✅ Question audio uploaded: ${downloadURL}`);
-      return { success: true, url: downloadURL };
+      console.log(`✅ Question audio uploaded: ${urlData.publicUrl}`);
+      return { success: true, url: urlData.publicUrl };
     } catch (error) {
       console.error('Error uploading question audio:', error);
       return { success: false, error: 'Failed to upload question audio' };
@@ -68,7 +75,7 @@ export class AudioUploadService {
    * Upload answer audio file
    */
   static async uploadAnswerAudio(
-    questionId: string,
+    question_id: string,
     file: File
   ): Promise<AudioUploadResult> {
     try {
@@ -78,21 +85,29 @@ export class AudioUploadService {
         return { success: false, error: validation.error };
       }
 
-      // Create storage reference
-      if (!storage) {
-        return { success: false, error: 'Firebase Storage not available' };
+      // Create file path
+      const fileName = `questions/${question_id}/answer_audio.${this.getFileExtension(file.type)}`;
+
+      // Upload file to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('audio-files')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: true,
+        });
+
+      if (error) {
+        console.error('Error uploading answer audio:', error);
+        return { success: false, error: 'Failed to upload answer audio' };
       }
-      const fileName = `questions/${questionId}/answer_audio`;
-      const storageRef = ref(storage, fileName);
 
-      // Upload file
-      const snapshot = await uploadBytes(storageRef, file);
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('audio-files')
+        .getPublicUrl(fileName);
 
-      // Get download URL
-      const downloadURL = await getDownloadURL(snapshot.ref);
-
-      console.log(`✅ Answer audio uploaded: ${downloadURL}`);
-      return { success: true, url: downloadURL };
+      console.log(`✅ Answer audio uploaded: ${urlData.publicUrl}`);
+      return { success: true, url: urlData.publicUrl };
     } catch (error) {
       console.error('Error uploading answer audio:', error);
       return { success: false, error: 'Failed to upload answer audio' };
@@ -110,14 +125,15 @@ export class AudioUploadService {
         return { success: false, error: 'Invalid audio URL' };
       }
 
-      // Create storage reference
-      if (!storage) {
-        return { success: false, error: 'Firebase Storage not available' };
-      }
-      const storageRef = ref(storage, filePath);
+      // Delete file from Supabase Storage
+      const { error } = await supabase.storage
+        .from('audio-files')
+        .remove([filePath]);
 
-      // Delete file
-      await deleteObject(storageRef);
+      if (error) {
+        console.error('Error deleting audio file:', error);
+        return { success: false, error: 'Failed to delete audio file' };
+      }
 
       console.log(`✅ Audio file deleted: ${filePath}`);
       return { success: true };
@@ -155,15 +171,15 @@ export class AudioUploadService {
   }
 
   /**
-   * Extract file path from Firebase Storage URL
+   * Extract file path from Supabase Storage URL
    */
   private static extractFilePathFromUrl(url: string): string | null {
     try {
-      // Firebase Storage URLs have a specific pattern
+      // Supabase Storage URLs have a specific pattern
       // Extract the path from the URL
       const urlParts = url.split('/');
       const bucketIndex = urlParts.findIndex(part =>
-        part.includes('firebasestorage.googleapis.com')
+        part.includes('supabase.co')
       );
 
       if (bucketIndex === -1) {
@@ -171,7 +187,7 @@ export class AudioUploadService {
       }
 
       // Get the path after the bucket name
-      const pathParts = urlParts.slice(bucketIndex + 2); // Skip bucket and 'o' parameter
+      const pathParts = urlParts.slice(bucketIndex + 2); // Skip bucket and 'storage' parameter
       const path = pathParts.join('/');
 
       // Remove query parameters
@@ -180,6 +196,22 @@ export class AudioUploadService {
       console.error('Error extracting file path from URL:', error);
       return null;
     }
+  }
+
+  /**
+   * Get file extension from MIME type
+   */
+  private static getFileExtension(mimeType: string): string {
+    const extensions: { [key: string]: string } = {
+      'audio/mpeg': 'mp3',
+      'audio/mp3': 'mp3',
+      'audio/wav': 'wav',
+      'audio/ogg': 'ogg',
+      'audio/m4a': 'm4a',
+      'audio/aac': 'aac',
+      'audio/webm': 'webm',
+    };
+    return extensions[mimeType] || 'mp3';
   }
 
   /**

@@ -36,7 +36,7 @@ async function seedJavaScriptQuestions() {
           .where('id', '==', question.id);
         const snapshot = await docRef.get();
 
-        if (!snapshot.empty) {
+        if (!snapshot.length === 0) {
           console.log(`⏭️  Question already exists: ${question.title}`);
           skipped++;
           continue;
