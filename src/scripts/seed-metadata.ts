@@ -2,14 +2,6 @@
 // Run with: npx tsx src/scripts/seed-metadata.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -34,7 +26,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -49,8 +41,8 @@ const categories = [
       'React library fundamentals, hooks, components, and advanced patterns',
     icon: '⚛️',
     color: '#61DAFB',
-    questionCount: 0,
-    isActive: true,
+    question_count: 0,
+    is_active: true,
   },
   {
     id: 'javascript',
@@ -59,8 +51,8 @@ const categories = [
       'Core JavaScript concepts, ES6+, async programming, and advanced features',
     icon: '🟨',
     color: '#F7DF1E',
-    questionCount: 0,
-    isActive: true,
+    question_count: 0,
+    is_active: true,
   },
   {
     id: 'nextjs',
@@ -69,8 +61,8 @@ const categories = [
       'Next.js framework, SSR, SSG, App Router, and performance optimization',
     icon: '▲',
     color: '#000000',
-    questionCount: 0,
-    isActive: true,
+    question_count: 0,
+    is_active: true,
   },
   {
     id: 'css',
@@ -79,8 +71,8 @@ const categories = [
       'CSS fundamentals, layouts, animations, and modern CSS features',
     icon: '🎨',
     color: '#1572B6',
-    questionCount: 0,
-    isActive: true,
+    question_count: 0,
+    is_active: true,
   },
   {
     id: 'html',
@@ -89,8 +81,8 @@ const categories = [
       'HTML5 semantics, accessibility, forms, and modern web standards',
     icon: '🌐',
     color: '#E34F26',
-    questionCount: 0,
-    isActive: true,
+    question_count: 0,
+    is_active: true,
   },
   {
     id: 'system-design',
@@ -99,8 +91,8 @@ const categories = [
       'Frontend system design, architecture patterns, and scalability',
     icon: '🏗️',
     color: '#FF6B6B',
-    questionCount: 0,
-    isActive: true,
+    question_count: 0,
+    is_active: true,
   },
   {
     id: 'design-patterns',
@@ -109,8 +101,8 @@ const categories = [
       'JavaScript design patterns, architectural patterns, and best practices',
     icon: '🔧',
     color: '#8B5CF6',
-    questionCount: 0,
-    isActive: true,
+    question_count: 0,
+    is_active: true,
   },
   {
     id: 'performance',
@@ -118,8 +110,8 @@ const categories = [
     description: 'Performance optimization, monitoring, and best practices',
     icon: '⚡',
     color: '#10B981',
-    questionCount: 0,
-    isActive: true,
+    question_count: 0,
+    is_active: true,
   },
   {
     id: 'rendering',
@@ -128,8 +120,8 @@ const categories = [
       'SSR, SSG, CSR, hydration patterns, and rendering optimization',
     icon: '🔄',
     color: '#F59E0B',
-    questionCount: 0,
-    isActive: true,
+    question_count: 0,
+    is_active: true,
   },
 ];
 
@@ -520,7 +512,7 @@ const learningPaths = [
       'Testing',
     ],
     categories: ['react'],
-    isActive: true,
+    is_active: true,
   },
   {
     id: 'javascript-mastery',
@@ -537,7 +529,7 @@ const learningPaths = [
       'Event Loop',
     ],
     categories: ['javascript'],
-    isActive: true,
+    is_active: true,
   },
   {
     id: 'nextjs-framework',
@@ -554,7 +546,7 @@ const learningPaths = [
       'Image Optimization',
     ],
     categories: ['nextjs'],
-    isActive: true,
+    is_active: true,
   },
   {
     id: 'frontend-fundamentals',
@@ -564,7 +556,7 @@ const learningPaths = [
     difficulty: 'beginner',
     topics: ['HTML Basics', 'CSS Basics', 'JavaScript Basics', 'React Basics'],
     categories: ['html', 'css', 'javascript', 'react'],
-    isActive: true,
+    is_active: true,
   },
   {
     id: 'performance-specialist',
@@ -580,7 +572,7 @@ const learningPaths = [
       'Memory Management',
     ],
     categories: ['performance', 'rendering'],
-    isActive: true,
+    is_active: true,
   },
   {
     id: 'system-design-frontend',
@@ -596,7 +588,7 @@ const learningPaths = [
       'Scalability',
     ],
     categories: ['system-design', 'design-patterns'],
-    isActive: true,
+    is_active: true,
   },
 ];
 
@@ -611,16 +603,16 @@ async function seedCategories() {
     try {
       // Check if category already exists
       const existingQuery = query(
-        collection(db, 'categories'),
-        where('id', '==', category.id)
+        supabase.from('categories'),
+        where('id', category.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
-        const docRef = await addDoc(collection(db, 'categories'), {
+      if (existingSnapshot.length === 0) {
+        const docRef = await addDoc(supabase.from('categories'), {
           ...category,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          created_at: new Date(),
+          updated_at: new Date(),
         });
         console.log(`✅ Added category: ${category.name} (ID: ${docRef.id})`);
       } else {
@@ -639,17 +631,17 @@ async function seedTopics() {
     try {
       // Check if topic already exists
       const existingQuery = query(
-        collection(db, 'topics'),
-        where('name', '==', topic.name)
+        supabase.from('topics'),
+        where('name', topic.name)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
-        const docRef = await addDoc(collection(db, 'topics'), {
+      if (existingSnapshot.length === 0) {
+        const docRef = await addDoc(supabase.from('topics'), {
           ...topic,
-          questionCount: 0,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          question_count: 0,
+          created_at: new Date(),
+          updated_at: new Date(),
         });
         console.log(`✅ Added topic: ${topic.name} (ID: ${docRef.id})`);
       } else {
@@ -668,16 +660,16 @@ async function seedLearningPaths() {
     try {
       // Check if learning path already exists
       const existingQuery = query(
-        collection(db, 'learningPaths'),
-        where('id', '==', path.id)
+        supabase.from('learningPaths'),
+        where('id', path.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
-        const docRef = await addDoc(collection(db, 'learningPaths'), {
+      if (existingSnapshot.length === 0) {
+        const docRef = await addDoc(supabase.from('learningPaths'), {
           ...path,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          created_at: new Date(),
+          updated_at: new Date(),
         });
         console.log(`✅ Added learning path: ${path.name} (ID: ${docRef.id})`);
       } else {

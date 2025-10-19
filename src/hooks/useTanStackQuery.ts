@@ -145,6 +145,10 @@ export const queryKeys = {
   userAnalytics: (userId: string) => ['analytics', 'user', userId] as const,
   userInsights: (userId: string) => ['analytics', 'insights', userId] as const,
   systemAnalytics: ['analytics', 'system'] as const,
+
+  // Backup Operations
+  backups: ['backups'] as const,
+  backupStats: ['backup-stats'] as const,
 } as const;
 
 // ============================================================================
@@ -571,6 +575,31 @@ const api = {
     ),
   getSystemAnalytics: () =>
     api.fetch<{ success: boolean; analytics: any }>('/api/analytics/system'),
+
+  // Backup Operations
+  getBackups: () =>
+    api.fetch<{ success: boolean; data: any[] }>('/api/admin/backups'),
+  getBackupStats: () =>
+    api.fetch<{ success: boolean; stats: any }>('/api/admin/backup-stats'),
+  createBackup: (name: string, description: string) =>
+    api.fetch<{ success: boolean; backupId: string }>('/api/admin/backups', {
+      method: 'POST',
+      body: JSON.stringify({ name, description }),
+    }),
+  restoreBackup: (backupId: string, options?: any) =>
+    api.fetch<{ success: boolean }>(`/api/admin/backups/${backupId}/restore`, {
+      method: 'POST',
+      body: JSON.stringify(options),
+    }),
+  deleteBackup: (backupId: string) =>
+    api.fetch<{ success: boolean }>(`/api/admin/backups/${backupId}`, {
+      method: 'DELETE',
+    }),
+  scheduleBackup: (schedule: any) =>
+    api.fetch<{ success: boolean }>('/api/admin/backup-schedule', {
+      method: 'POST',
+      body: JSON.stringify(schedule),
+    }),
 };
 
 // ============================================================================

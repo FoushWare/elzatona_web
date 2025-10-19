@@ -14,19 +14,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const result = await SectorService.getSectorsByLearningPath(learningPathId);
+    const sectors =
+      await SectorService.getSectorsByLearningPath(learningPathId);
 
-    if (result.success) {
-      return NextResponse.json({
-        success: true,
-        data: result.sectors,
-      });
-    } else {
-      return NextResponse.json(
-        { success: false, error: result.error },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json({
+      success: true,
+      data: sectors,
+    });
   } catch (error: unknown) {
     console.error('Error in GET /api/sectors:', error);
     return NextResponse.json(
@@ -72,25 +66,20 @@ export async function POST(request: NextRequest) {
       difficulty: difficulty || 'intermediate',
       estimatedTime: estimatedTime || 30,
       prerequisites,
-      isActive: true,
+      is_active: true,
       isLocked: prerequisites.length > 0,
       createdBy: 'admin', // TODO: Get from auth context
       lastModifiedBy: 'admin', // TODO: Get from auth context
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    const result = await SectorService.createSector(sectorData);
+    const sectorId = await SectorService.createSector(sectorData);
 
-    if (result.success) {
-      return NextResponse.json({
-        success: true,
-        data: { sectorId: result.sectorId },
-      });
-    } else {
-      return NextResponse.json(
-        { success: false, error: result.error },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json({
+      success: true,
+      data: { sectorId },
+    });
   } catch (error: unknown) {
     console.error('Error in POST /api/sectors:', error);
     return NextResponse.json(

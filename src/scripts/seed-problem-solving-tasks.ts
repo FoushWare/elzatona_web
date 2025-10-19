@@ -1,7 +1,6 @@
 // v1.0 - Seed problem solving tasks to Firebase
 
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y',
@@ -13,7 +12,6 @@ const firebaseConfig = {
   measurementId: 'G-XZ5VKFGG4Y',
 };
 
-const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const problemSolvingTasks = [
@@ -68,9 +66,9 @@ const problemSolvingTasks = [
       },
     ],
     tags: ['hash-table', 'array', 'two-pointers'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Valid Parentheses',
@@ -133,9 +131,9 @@ const problemSolvingTasks = [
       },
     ],
     tags: ['stack', 'string'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Maximum Subarray',
@@ -185,9 +183,9 @@ const problemSolvingTasks = [
       },
     ],
     tags: ['array', 'divide-and-conquer', 'dynamic-programming'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Binary Tree Inorder Traversal',
@@ -257,9 +255,9 @@ const problemSolvingTasks = [
       },
     ],
     tags: ['stack', 'tree', 'depth-first-search'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Longest Common Subsequence',
@@ -320,9 +318,9 @@ const problemSolvingTasks = [
       },
     ],
     tags: ['dynamic-programming', 'string'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
 ];
 
@@ -331,7 +329,7 @@ async function seedProblemSolvingTasks() {
     console.log('🌱 Starting to seed problem solving tasks...');
 
     for (const task of problemSolvingTasks) {
-      const docRef = await addDoc(collection(db, 'problemSolvingTasks'), task);
+      const docRef = await addDoc(supabase.from('problemSolvingTasks'), task);
       console.log(`✅ Added problem: ${task.title} with ID: ${docRef.id}`);
     }
 

@@ -6,20 +6,20 @@ export interface LearningPath {
   id: string;
   name: string;
   description: string;
-  questionCount: number;
+  question_count: number;
   icon: string;
   color: string;
   order: number;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
   difficulty?: 'beginner' | 'intermediate' | 'advanced'; // optional
   estimatedTime?: number; // in minutes - optional
   category?: string; // optional
   sectors?: Array<{
     id: string;
     name: string;
-    questionCount: number;
+    question_count: number;
   }>;
 }
 

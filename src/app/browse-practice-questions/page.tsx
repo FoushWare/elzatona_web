@@ -1,8 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useRouter } from 'next/navigation';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 import { SignInPopup } from '@/shared/components/auth/SignInPopup';
 import {
   Code,
@@ -35,7 +41,7 @@ interface CustomPlan {
   }[];
   totalQuestions: number;
   dailyQuestions: number;
-  createdAt: string;
+  created_at: string;
   isActive?: boolean;
   progress?: {
     completedQuestions: number;
@@ -46,7 +52,7 @@ interface CustomPlan {
 
 export default function BrowsePracticeQuestionsPage() {
   const router = useRouter();
-  const { isAuthenticated } = useFirebaseAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showSignInPopup, setShowSignInPopup] = useState(false);
   const [customRoadmaps, setCustomRoadmaps] = useState<CustomPlan[]>([]);
   const [isLoadingRoadmaps, setIsLoadingRoadmaps] = useState(false);
@@ -131,13 +137,13 @@ export default function BrowsePracticeQuestionsPage() {
     setShowSignInPopup(false);
   };
 
-  const handleStartRoadmap = (planId: string) => {
+  const handleStartRoadmap = (plan_id: string) => {
     // Set as active plan and redirect to practice
-    localStorage.setItem('active-custom-plan', planId);
-    router.push(`/custom-practice/${planId}`);
+    localStorage.setItem('active-custom-plan', plan_id);
+    router.push(`/custom-practice/${plan_id}`);
   };
 
-  const handleViewRoadmap = (planId: string) => {
+  const handleViewRoadmap = (plan_id: string) => {
     router.push(`/my-plans`);
   };
 

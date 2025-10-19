@@ -2,14 +2,6 @@
 // Run with: npx tsx src/scripts/seed-comprehensive-problem-solving.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -23,7 +15,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -107,8 +99,8 @@ const comprehensiveProblemSolvingTasks = [
       'Move the left pointer when a duplicate character is found',
       'Time complexity: O(n), Space complexity: O(min(m,n)) where m is the charset size',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -185,8 +177,8 @@ const comprehensiveProblemSolvingTasks = [
       'Move the pointer pointing to the shorter line inward',
       'Time complexity: O(n), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -271,8 +263,8 @@ const comprehensiveProblemSolvingTasks = [
       'Skip duplicate values to avoid duplicate triplets',
       'Time complexity: O(n²), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -354,8 +346,8 @@ const comprehensiveProblemSolvingTasks = [
       'For each center, expand outward while characters match',
       'Time complexity: O(n²), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -428,8 +420,8 @@ const comprehensiveProblemSolvingTasks = [
       'Second pass: multiply by product of all elements to the right',
       'Time complexity: O(n), Space complexity: O(1) excluding output array',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -523,8 +515,8 @@ const comprehensiveProblemSolvingTasks = [
       'Update boundaries after each direction',
       'Time complexity: O(m*n), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -591,8 +583,8 @@ const comprehensiveProblemSolvingTasks = [
       'Reverse: reverse each row after transposition',
       'Time complexity: O(n²), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -685,8 +677,8 @@ const comprehensiveProblemSolvingTasks = [
       'Check all four directions from each cell',
       'Time complexity: O(m*n*4^L), Space complexity: O(L) where L is word length',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -756,8 +748,8 @@ const comprehensiveProblemSolvingTasks = [
       'Add closing parenthesis if close < open',
       'Time complexity: O(4^n/√n), Space complexity: O(4^n/√n)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -825,8 +817,8 @@ const comprehensiveProblemSolvingTasks = [
       'Add current subset to result at each step',
       'Time complexity: O(2^n), Space complexity: O(2^n)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -847,14 +839,14 @@ async function seedComprehensiveProblemSolvingTasks() {
     try {
       // Check if task already exists
       const existingQuery = query(
-        collection(db, 'problemSolvingTasks'),
-        where('id', '==', task.id)
+        supabase.from('problemSolvingTasks'),
+        where('id', task.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
+      if (existingSnapshot.length === 0) {
         // Add task to Firebase
-        await addDoc(collection(db, 'problemSolvingTasks'), task);
+        await addDoc(supabase.from('problemSolvingTasks'), task);
 
         successCount++;
         console.log(`✅ Added problem-solving task: ${task.title}`);

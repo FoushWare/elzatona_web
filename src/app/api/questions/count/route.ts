@@ -2,33 +2,38 @@
 // Fast endpoint to get just the total count of questions
 
 import { NextRequest, NextResponse } from 'next/server';
-import { db, collection, getDocs, query, where } from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/questions/count - Get total count of questions
 export async function GET(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category');
 
     // Build query
-    let q = query(collection(db, 'unifiedQuestions'));
+    let query = supabase
+      .from('questions')
+      .select('*', { count: 'exact', head: true });
 
     if (category && category !== 'all') {
-      q = query(q, where('category', '==', category));
+      query = query.eq('category', category);
     }
 
     // Get count efficiently
-    const snapshot = await getDocs(q);
-    const totalCount = snapshot.size;
+    const { count, error } = await query;
+
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,
       data: {
-        totalCount,
+        totalCount: count || 0,
         category: category || 'all',
       },
     });

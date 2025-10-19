@@ -1,36 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  db,
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  addDoc,
-  doc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-} from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/plans - Get all learning plans
 export async function GET(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
+    const { data: plans, error } = await supabase
+      .from('learning_plans')
+      .select('*')
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      throw error;
     }
-
-    const q = query(collection(db, 'learningPlans'), orderBy('order', 'asc'));
-    const querySnapshot = await getDocs(q);
-
-    const plans = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
 
     return NextResponse.json({
       success: true,
       data: plans,
-      count: plans.length,
+      count: plans?.length || 0,
     });
   } catch (error) {
     console.error('Error fetching plans:', error);
@@ -44,29 +34,30 @@ export async function GET(request: NextRequest) {
 // POST /api/plans - Create a new learning plan
 export async function POST(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     const planData = await request.json();
 
     const planWithTimestamps = {
       ...planData,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      createdBy: 'admin',
-      updatedBy: 'admin',
-      isActive: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      created_by: 'admin',
+      updated_by: 'admin',
+      is_active: true,
     };
 
-    const docRef = await addDoc(
-      collection(db, 'learningPlans'),
-      planWithTimestamps
-    );
+    const { data: newPlan, error } = await supabase
+      .from('learning_plans')
+      .insert(planWithTimestamps)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,
-      data: { id: docRef.id, ...planWithTimestamps },
+      data: newPlan,
       message: 'Plan created successfully',
     });
   } catch (error) {

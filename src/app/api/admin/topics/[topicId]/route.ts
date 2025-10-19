@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 import { QuestionTopic } from '../route';
 
 // GET /api/admin/topics/[topicId]
@@ -11,20 +15,13 @@ export async function GET(
   try {
     const { topicId } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Firestore not available',
-        },
-        { status: 500 }
-      );
-    }
+    const { data: topicSnap, error } = await supabase
+      .from('topics')
+      .select('*')
+      .eq('id', topicId)
+      .single();
 
-    const topicRef = doc(db, 'topics', topicId);
-    const topicSnap = await getDoc(topicRef);
-
-    if (!topicSnap.exists()) {
+    if (error || !topicSnap) {
       return NextResponse.json(
         {
           success: false,
@@ -36,7 +33,7 @@ export async function GET(
 
     const topic: QuestionTopic = {
       id: topicSnap.id,
-      ...topicSnap.data(),
+      ...topicSnap,
     } as QuestionTopic;
 
     return NextResponse.json({
@@ -65,20 +62,13 @@ export async function PUT(
     const body = await request.json();
     const { name, description, category, color } = body;
 
-    if (!db) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Firestore not available',
-        },
-        { status: 500 }
-      );
-    }
+    const { data: topicSnap, error: fetchError } = await supabase
+      .from('topics')
+      .select('*')
+      .eq('id', topicId)
+      .single();
 
-    const topicRef = doc(db, 'topics', topicId);
-    const topicSnap = await getDoc(topicRef);
-
-    if (!topicSnap.exists()) {
+    if (fetchError || !topicSnap) {
       return NextResponse.json(
         {
           success: false,
@@ -89,7 +79,7 @@ export async function PUT(
     }
 
     const updateData: Partial<QuestionTopic> = {
-      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
     if (name !== undefined) updateData.name = name;
@@ -97,13 +87,29 @@ export async function PUT(
     if (category !== undefined) updateData.category = category;
     if (color !== undefined) updateData.color = color;
 
-    await updateDoc(topicRef, updateData);
+    const { error: updateError } = await supabase
+      .from('topics')
+      .update(updateData)
+      .eq('id', topicId);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     // Fetch updated topic
-    const updatedSnap = await getDoc(topicRef);
+    const { data: updatedSnap, error: fetchUpdatedError } = await supabase
+      .from('topics')
+      .select('*')
+      .eq('id', topicId)
+      .single();
+
+    if (fetchUpdatedError || !updatedSnap) {
+      throw fetchUpdatedError;
+    }
+
     const updatedTopic: QuestionTopic = {
       id: updatedSnap.id,
-      ...updatedSnap.data(),
+      ...updatedSnap,
     } as QuestionTopic;
 
     return NextResponse.json({
@@ -130,20 +136,13 @@ export async function DELETE(
   try {
     const { topicId } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Firestore not available',
-        },
-        { status: 500 }
-      );
-    }
+    const { data: topicSnap, error: fetchError } = await supabase
+      .from('topics')
+      .select('*')
+      .eq('id', topicId)
+      .single();
 
-    const topicRef = doc(db, 'topics', topicId);
-    const topicSnap = await getDoc(topicRef);
-
-    if (!topicSnap.exists()) {
+    if (fetchError || !topicSnap) {
       return NextResponse.json(
         {
           success: false,
@@ -153,7 +152,14 @@ export async function DELETE(
       );
     }
 
-    await deleteDoc(topicRef);
+    const { error: deleteError } = await supabase
+      .from('topics')
+      .delete()
+      .eq('id', topicId);
+
+    if (deleteError) {
+      throw deleteError;
+    }
 
     return NextResponse.json({
       success: true,

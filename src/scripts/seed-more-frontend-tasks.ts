@@ -2,14 +2,6 @@
 // Run with: npx tsx src/scripts/seed-more-frontend-tasks.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -34,7 +26,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -56,8 +48,8 @@ interface FrontendTask {
     content: string;
     language: string;
   }>;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
   createdBy: string;
   updatedBy: string;
 }
@@ -95,7 +87,13 @@ const additionalFrontendTasks: FrontendTask[] = [
     files: [
       {
         name: 'App.jsx',
-        content: `import React, { useState, useEffect } from 'react';
+        content: `import React from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import TodoFilter from './components/TodoFilter';
@@ -123,7 +121,7 @@ function App() {
       id: Date.now(),
       text,
       completed: false,
-      createdAt: new Date().toISOString()
+      created_at: new Date().toISOString()
     };
     setTodos([...todos, newTodo]);
   };
@@ -536,21 +534,21 @@ export default TodoFilter;`,
   background: #c82333;
 }
 
-.empty-state {
+.length === 0-state {
   text-align: center;
   padding: 40px;
   color: #666;
 }
 
-.empty-state p {
+.length === 0-state p {
   font-size: 18px;
   margin: 0;
 }`,
         language: 'css',
       },
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -1200,8 +1198,8 @@ export default ErrorMessage;`,
         language: 'css',
       },
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -1222,14 +1220,14 @@ async function seedAdditionalFrontendTasks() {
     try {
       // Check if task already exists
       const existingQuery = query(
-        collection(db, 'frontendTasks'),
-        where('id', '==', task.id)
+        supabase.from('frontendTasks'),
+        where('id', task.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
+      if (existingSnapshot.length === 0) {
         // Add task to Firebase
-        await addDoc(collection(db, 'frontendTasks'), task);
+        await addDoc(supabase.from('frontendTasks'), task);
 
         successCount++;
         console.log(`✅ Added frontend task: ${task.title}`);

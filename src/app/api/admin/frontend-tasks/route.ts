@@ -7,28 +7,16 @@ import {
   ApiResponse,
   PaginatedResponse,
 } from '@/types/admin';
-import {
-  db,
-  collection,
-  getDocs,
-  addDoc,
-  query,
-  where,
-  orderBy,
-} from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/admin/frontend-tasks - List all frontend tasks
 export async function GET(request: NextRequest) {
   try {
     console.log('🔄 API: Fetching frontend tasks...');
-
-    if (!db) {
-      console.error('❌ API: Database not initialized');
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -37,33 +25,29 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category') || '';
     const difficulty = searchParams.get('difficulty') || '';
 
-    // Fetch tasks from Firebase
-    const tasksRef = collection(db, 'frontendTasks');
-    let q = query(tasksRef, orderBy('createdAt', 'desc'));
+    // Fetch tasks from Supabase
+    let query = supabase.from('frontendTasks').select('*');
 
     // Apply filters
     if (category) {
-      q = query(
-        tasksRef,
-        where('category', '==', category),
-        orderBy('createdAt', 'desc')
-      );
+      query = query.eq('category', category);
     }
     if (difficulty) {
-      q = query(
-        tasksRef,
-        where('difficulty', '==', difficulty),
-        orderBy('createdAt', 'desc')
-      );
+      query = query.eq('difficulty', difficulty);
     }
 
-    const snapshot = await getDocs(q);
-    let data: FrontendTask[] = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as FrontendTask[];
+    // Apply ordering
+    query = query.order('createdAt', { ascending: false });
 
-    // Apply search filter (client-side since Firestore doesn't support full-text search)
+    const { data: tasks, error } = await query;
+
+    if (error) {
+      throw error;
+    }
+
+    let data: FrontendTask[] = tasks || [];
+
+    // Apply search filter (client-side since Supabase doesn't support full-text search)
     if (search) {
       const lowerSearch = search.toLowerCase();
       data = data.filter(
@@ -108,14 +92,6 @@ export async function POST(request: NextRequest) {
   try {
     console.log('🔄 API: Creating new frontend task...');
 
-    if (!db) {
-      console.error('❌ API: Database not initialized');
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     const body: FrontendTaskFormData = await request.json();
 
     // Validate required fields
@@ -129,19 +105,27 @@ export async function POST(request: NextRequest) {
     // Create the task data
     const taskData = {
       ...body,
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    // Add to Firebase
-    const docRef = await addDoc(collection(db, 'frontendTasks'), taskData);
+    // Add to Supabase
+    const { data: newTask, error } = await supabase
+      .from('frontendTasks')
+      .insert(taskData)
+      .select()
+      .single();
 
-    console.log(`✅ API: Frontend task created with ID: ${docRef.id}`);
+    if (error) {
+      throw error;
+    }
+
+    console.log(`✅ API: Frontend task created with ID: ${newTask.id}`);
 
     const response: ApiResponse<{ id: string }> = {
       success: true,
-      data: { id: docRef.id },
+      data: { id: newTask.id },
     };
 
     return NextResponse.json(response, { status: 201 });

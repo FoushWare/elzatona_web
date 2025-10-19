@@ -4,17 +4,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit,
-  startAfter,
-  DocumentSnapshot,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface SearchFilters {
   query?: string;
@@ -76,75 +70,67 @@ export async function POST(request: NextRequest) {
 
     console.log('🔍 Advanced search request:', { filters, options });
 
-    // Build Firestore query
-    let firestoreQuery = collection(db, 'questions');
-    const conditions: any[] = [];
+    // Build Supabase query
+    let query = supabase.from('questions').select('*');
 
     // Apply filters
     if (filters.category) {
-      conditions.push(where('category', '==', filters.category));
+      query = query.eq('category', filters.category);
     }
 
     if (filters.difficulty) {
-      conditions.push(where('difficulty', '==', filters.difficulty));
+      query = query.eq('difficulty', filters.difficulty);
     }
 
     if (filters.type) {
-      conditions.push(where('type', '==', filters.type));
+      query = query.eq('question_type', filters.type);
     }
 
     if (filters.learningCardId) {
-      conditions.push(where('learningCardId', '==', filters.learningCardId));
+      query = query.eq('learning_card_id', filters.learningCardId);
     }
 
     if (filters.isActive !== undefined) {
-      conditions.push(where('isActive', '==', filters.isActive));
+      query = query.eq('is_active', filters.isActive);
     }
 
     if (filters.pointsRange) {
       if (filters.pointsRange.min !== undefined) {
-        conditions.push(where('points', '>=', filters.pointsRange.min));
+        query = query.gte('points', filters.pointsRange.min);
       }
       if (filters.pointsRange.max !== undefined) {
-        conditions.push(where('points', '<=', filters.pointsRange.max));
+        query = query.lte('points', filters.pointsRange.max);
       }
     }
 
     if (filters.dateRange) {
       if (filters.dateRange.start) {
-        conditions.push(where('createdAt', '>=', filters.dateRange.start));
+        query = query.gte('created_at', filters.dateRange.start);
       }
       if (filters.dateRange.end) {
-        conditions.push(where('createdAt', '<=', filters.dateRange.end));
+        query = query.lte('created_at', filters.dateRange.end);
       }
     }
 
     // Apply sorting
-    const sortBy = options.sortBy || 'createdAt';
+    const sortBy = options.sortBy || 'created_at';
     const sortOrder = options.sortOrder || 'desc';
-    conditions.push(orderBy(sortBy, sortOrder));
+    query = query.order(sortBy, { ascending: sortOrder === 'asc' });
 
     // Apply pagination
     const page = options.page || 1;
     const pageSize = options.pageSize || 10;
     const offset = (page - 1) * pageSize;
-
-    if (offset > 0) {
-      // For pagination, we need to get documents after the offset
-      // This is a simplified implementation - in production, you'd use startAfter
-      conditions.push(limit(offset + pageSize));
-    } else {
-      conditions.push(limit(pageSize));
-    }
+    query = query.range(offset, offset + pageSize - 1);
 
     // Execute query
-    const firestoreQueryWithConditions = query(firestoreQuery, ...conditions);
-    const snapshot = await getDocs(firestoreQueryWithConditions);
+    const { data: questionsData, error, count } = await query;
 
-    let questions = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    if (error) {
+      throw error;
+    }
+
+    let questions = questionsData || [];
 
     // Apply text search if query is provided
     if (filters.query) {
@@ -173,12 +159,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Get total count for pagination
-    const totalCountQuery = query(
-      collection(db, 'questions'),
-      ...conditions.slice(0, -1)
-    );
-    const totalCountSnapshot = await getDocs(totalCountQuery);
-    const totalCount = totalCountSnapshot.size;
+    const { count: totalCount, error: countError } = await supabase
+      .from('questions')
+      .select('*', { count: 'exact', head: true });
+
+    if (countError) {
+      throw countError;
+    }
 
     // Apply pagination
     const startIndex = (page - 1) * pageSize;
@@ -195,15 +182,15 @@ export async function POST(request: NextRequest) {
 
     const result: SearchResult<any> = {
       data: paginatedQuestions,
-      totalCount,
+      totalCount: totalCount || 0,
       facets,
       suggestions,
       searchTime,
       pagination: {
         page,
         pageSize,
-        totalPages: Math.ceil(totalCount / pageSize),
-        hasNext: page < Math.ceil(totalCount / pageSize),
+        totalPages: Math.ceil((totalCount || 0) / pageSize),
+        hasNext: page < Math.ceil((totalCount || 0) / pageSize),
         hasPrevious: page > 1,
       },
     };
@@ -287,7 +274,7 @@ function generateSuggestions(query: string, questions: any[]): string[] {
     // Add title words that contain the query
     if (question.title) {
       const titleWords = question.title.split(' ');
-      titleWords.forEach(word => {
+      titleWords.forEach((word: string) => {
         if (word.toLowerCase().includes(queryLower) && word.length > 2) {
           suggestions.add(word);
         }

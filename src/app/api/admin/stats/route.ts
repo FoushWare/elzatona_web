@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import {
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  limit,
-  where,
-  Timestamp,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 /**
  * @swagger
@@ -109,44 +104,42 @@ export async function GET(request: NextRequest) {
       userProgressSnapshot,
       notificationsSnapshot,
     ] = await Promise.all([
-      getDocs(collection(db, 'questions')),
-      getDocs(collection(db, 'categories')),
-      getDocs(collection(db, 'topics')),
-      getDocs(collection(db, 'learningCards')),
-      getDocs(collection(db, 'learningPlans')),
-      getDocs(collection(db, 'frontendTasks')),
-      getDocs(collection(db, 'problemSolving')),
-      getDocs(
-        query(
-          collection(db, 'auditLogs'),
-          orderBy('timestamp', 'desc'),
-          limit(10)
-        )
-      ),
-      getDocs(
-        query(
-          collection(db, 'errorLogs'),
-          orderBy('timestamp', 'desc'),
-          limit(5)
-        )
-      ),
-      getDocs(collection(db, 'userProgress')),
-      getDocs(collection(db, 'notifications')),
+      supabase.from('questions').select(),
+      supabase.from('categories').select(),
+      supabase.from('topics').select(),
+      supabase.from('learningCards').select(),
+      supabase.from('learningPlans').select(),
+      supabase.from('frontendTasks').select(),
+      supabase.from('problemSolving').select(),
+
+      supabase
+        .from('audit_logs')
+        .select()
+        .order('timestamp', { ascending: false })
+        .limit(100),
+
+      supabase
+        .from('error_logs')
+        .select()
+        .order('timestamp', { ascending: false })
+        .limit(100),
+      supabase.from('userProgress').select(),
+      supabase.from('notifications').select(),
     ]);
 
     const endTime = Date.now();
     const apiResponseTime = endTime - startTime;
 
     // Calculate performance metrics
-    const totalQuestions = questionsSnapshot.size;
-    const totalCategories = categoriesSnapshot.size;
-    const totalTopics = topicsSnapshot.size;
-    const totalCards = cardsSnapshot.size;
-    const totalPlans = plansSnapshot.size;
-    const totalFrontendTasks = frontendTasksSnapshot.size;
-    const totalProblemSolvingTasks = problemSolvingSnapshot.size;
-    const totalUsers = userProgressSnapshot.size;
-    const totalNotifications = notificationsSnapshot.size;
+    const totalQuestions = questionsSnapshot.data?.length || 0;
+    const totalCategories = categoriesSnapshot.data?.length || 0;
+    const totalTopics = topicsSnapshot.data?.length || 0;
+    const totalCards = cardsSnapshot.data?.length || 0;
+    const totalPlans = plansSnapshot.data?.length || 0;
+    const totalFrontendTasks = frontendTasksSnapshot.data?.length || 0;
+    const totalProblemSolvingTasks = problemSolvingSnapshot.data?.length || 0;
+    const totalUsers = userProgressSnapshot.data?.length || 0;
+    const totalNotifications = notificationsSnapshot.data?.length || 0;
 
     // Calculate content distribution
     const contentDistribution = {
@@ -160,44 +153,46 @@ export async function GET(request: NextRequest) {
     };
 
     // Calculate question distribution by category
-    const questionCategories = {};
-    questionsSnapshot.docs.forEach(doc => {
-      const category = doc.data().category || 'Unknown';
+    const questionCategories: Record<string, number> = {};
+    questionsSnapshot.data?.forEach(doc => {
+      const category = doc.category || 'Unknown';
       questionCategories[category] = (questionCategories[category] || 0) + 1;
     });
 
     // Calculate question distribution by difficulty
-    const questionDifficulty = {};
-    questionsSnapshot.docs.forEach(doc => {
-      const difficulty = doc.data().difficulty || 'Unknown';
+    const questionDifficulty: Record<string, number> = {};
+    questionsSnapshot.data?.forEach(doc => {
+      const difficulty = doc.difficulty || 'Unknown';
       questionDifficulty[difficulty] =
         (questionDifficulty[difficulty] || 0) + 1;
     });
 
     // Calculate question distribution by type
-    const questionTypes = {};
-    questionsSnapshot.docs.forEach(doc => {
-      const type = doc.data().type || 'Unknown';
+    const questionTypes: Record<string, number> = {};
+    questionsSnapshot.data?.forEach(doc => {
+      const type = doc.type || 'Unknown';
       questionTypes[type] = (questionTypes[type] || 0) + 1;
     });
 
     // Calculate recent activity metrics
-    const recentActivity = auditLogsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      action: doc.data().action,
-      timestamp: doc.data().timestamp,
-      user: doc.data().user,
-      details: doc.data().details,
-    }));
+    const recentActivity =
+      auditLogsSnapshot.data?.map(doc => ({
+        id: doc.id,
+        action: doc.action,
+        timestamp: doc.timestamp,
+        user: doc.user,
+        details: doc.details,
+      })) || [];
 
     // Calculate error metrics
-    const recentErrors = errorLogsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      error: doc.data().error,
-      timestamp: doc.data().timestamp,
-      severity: doc.data().severity || 'medium',
-      source: doc.data().source || 'unknown',
-    }));
+    const recentErrors =
+      errorLogsSnapshot.data?.map(doc => ({
+        id: doc.id,
+        error: doc.error,
+        timestamp: doc.timestamp,
+        severity: doc.severity || 'medium',
+        source: doc.source || 'unknown',
+      })) || [];
 
     // Calculate system health metrics
     const systemHealth = {
@@ -231,20 +226,22 @@ export async function GET(request: NextRequest) {
 
     // Calculate content quality metrics
     const contentQuality = {
-      questionsWithExplanations: questionsSnapshot.docs.filter(
-        doc => doc.data().explanation && doc.data().explanation.length > 0
-      ).length,
-      questionsWithHints: questionsSnapshot.docs.filter(
-        doc => doc.data().hints && doc.data().hints.length > 0
-      ).length,
-      questionsWithSampleAnswers: questionsSnapshot.docs.filter(
-        doc => doc.data().sampleAnswers && doc.data().sampleAnswers.length > 0
-      ).length,
+      questionsWithExplanations:
+        questionsSnapshot.data?.filter(
+          doc => doc.explanation && doc.explanation.length > 0
+        ).length || 0,
+      questionsWithHints:
+        questionsSnapshot.data?.filter(doc => doc.hints && doc.hints.length > 0)
+          .length || 0,
+      questionsWithSampleAnswers:
+        questionsSnapshot.data?.filter(
+          doc => doc.sampleAnswers && doc.sampleAnswers.length > 0
+        ).length || 0,
       averageQuestionLength: Math.round(
-        questionsSnapshot.docs.reduce(
-          (sum, doc) => sum + (doc.data().content?.length || 0),
+        (questionsSnapshot.data?.reduce(
+          (sum, doc) => sum + (doc.content?.length || 0),
           0
-        ) / totalQuestions
+        ) || 0) / (totalQuestions || 1)
       ),
     };
 

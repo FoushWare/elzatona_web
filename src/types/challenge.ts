@@ -20,8 +20,8 @@ export interface Challenge {
   };
   explanation: string;
   tags: string[];
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface TestCase {

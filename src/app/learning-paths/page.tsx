@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, ReactNode } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useRouter } from 'next/navigation';
 import {
   BookOpen,
@@ -33,7 +39,7 @@ interface LearningPath {
   sectors: Array<{
     id: string;
     name: string;
-    questionCount: number;
+    question_count: number;
   }>;
 }
 
@@ -65,7 +71,7 @@ export default function LearningPathsPage() {
     return learningPaths.filter(
       path =>
         path.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        path.sectors.some(sector =>
+        path.sectors.some((sector: any) =>
           sector.name.toLowerCase().includes(searchTerm.toLowerCase())
         )
     );
@@ -282,7 +288,7 @@ export default function LearningPathsPage() {
                           Topics:
                         </h4>
                         <div className="flex flex-wrap gap-2">
-                          {path.sectors.slice(0, 3).map(sector => (
+                          {path.sectors.slice(0, 3).map((sector: any) => (
                             <span
                               key={sector.id}
                               className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium"
@@ -330,7 +336,7 @@ export default function LearningPathsPage() {
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        {path.sectors.slice(0, 4).map(sector => (
+                        {path.sectors.slice(0, 4).map((sector: any) => (
                           <span
                             key={sector.id}
                             className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs"

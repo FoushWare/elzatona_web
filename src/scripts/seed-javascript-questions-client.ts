@@ -1,12 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-} from 'firebase/firestore';
+
 import { getAuth, signInAnonymously } from 'firebase/auth';
 import fs from 'fs';
 
@@ -22,7 +15,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 const auth = getAuth(app);
 
@@ -53,19 +46,19 @@ async function seedJavaScriptQuestions() {
       try {
         // Check if question already exists
         const q = query(
-          collection(db, 'unifiedQuestions'),
-          where('id', '==', question.id)
+          supabase.from('unifiedQuestions'),
+          where('id', question.id)
         );
         const snapshot = await getDocs(q);
 
-        if (!snapshot.empty) {
+        if (!snapshot.length === 0) {
           console.log(`⏭️  Question already exists: ${question.title}`);
           skipped++;
           continue;
         }
 
         // Add question to Firebase
-        await addDoc(collection(db, 'unifiedQuestions'), question);
+        await addDoc(supabase.from('unifiedQuestions'), question);
         console.log(`✅ Added: ${question.title}`);
         added++;
 

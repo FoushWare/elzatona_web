@@ -78,7 +78,7 @@ export default function ChallengeCard({
 
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span className="font-medium">
-            Created: {new Date(challenge.createdAt).toLocaleDateString()}
+            Created: {new Date(challenge.created_at).toLocaleDateString()}
           </span>
           <span className="font-mono">ID: {challenge.id}</span>
         </div>

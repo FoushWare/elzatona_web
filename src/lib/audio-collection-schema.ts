@@ -1,5 +1,3 @@
-import { Timestamp } from 'firebase/firestore';
-
 /**
  * Audio Collection Schema
  *
@@ -9,14 +7,14 @@ import { Timestamp } from 'firebase/firestore';
  * Collection: 'questionAudio'
  *
  * Structure:
- * - questionId: string (references the question document)
+ * - question_id: string (references the question document)
  * - learningPath: string (e.g., 'javascript-deep-dive')
  * - sectionId: string (e.g., 'questions')
  * - questionNumber: number (1, 2, 3, etc.)
  * - questionAudio: AudioFileInfo
  * - answerAudio: AudioFileInfo
- * - createdAt: Timestamp
- * - updatedAt: Timestamp
+ * - created_at: Timestamp
+ * - updated_at: Timestamp
  */
 
 export interface AudioFileInfo {
@@ -34,14 +32,14 @@ export interface AudioFileInfo {
 
 export interface QuestionAudioMapping {
   id: string;
-  questionId: string;
+  question_id: string;
   learningPath: string;
   sectionId: string;
   questionNumber: number;
   questionAudio: AudioFileInfo;
   answerAudio: AudioFileInfo;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  created_at: string;
+  updated_at: string;
 }
 
 /**

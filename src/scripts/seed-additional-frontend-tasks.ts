@@ -2,14 +2,6 @@
 // Run with: npx tsx src/scripts/seed-additional-frontend-tasks.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -34,7 +26,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -71,7 +63,13 @@ const additionalFrontendTasks = [
         id: 'weather-dashboard-1',
         name: 'App.tsx',
         type: 'tsx',
-        content: `import React, { useState, useEffect } from 'react';
+        content: `import React from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import WeatherCard from './components/WeatherCard';
 import SearchBar from './components/SearchBar';
 import Forecast from './components/Forecast';
@@ -261,9 +259,9 @@ export default WeatherCard;`,
     ],
     solution:
       'Implement a weather dashboard with API integration, responsive design, and proper error handling.',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
     author: 'system',
   },
   {
@@ -459,9 +457,9 @@ export const useCart = () => {
     ],
     solution:
       'Implement a shopping cart with state management, localStorage persistence, and proper cart operations.',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
     author: 'system',
   },
   {
@@ -510,7 +508,7 @@ const initialTasks: Task[] = [
     status: 'todo',
     priority: 'high',
     dueDate: new Date('2024-02-15'),
-    createdAt: new Date()
+    created_at: new Date()
   },
   {
     id: '2',
@@ -519,7 +517,7 @@ const initialTasks: Task[] = [
     status: 'in-progress',
     priority: 'medium',
     dueDate: new Date('2024-02-20'),
-    createdAt: new Date()
+    created_at: new Date()
   }
 ];
 
@@ -566,7 +564,7 @@ function App() {
     const newTask: Task = {
       ...task,
       id: Date.now().toString(),
-      createdAt: new Date()
+      created_at: new Date()
     };
     setTasks([...tasks, newTask]);
   };
@@ -645,9 +643,9 @@ export default App;`,
     ],
     solution:
       'Implement a task manager with drag-and-drop functionality, filtering, and local storage persistence.',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
     author: 'system',
   },
   {
@@ -839,9 +837,9 @@ export default App;`,
     ],
     solution:
       'Implement a real-time chat application with WebSocket integration, user management, and message persistence.',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
     author: 'system',
   },
   {
@@ -999,9 +997,9 @@ export default App;`,
     ],
     solution:
       'Implement an interactive data visualization dashboard with multiple chart types, filtering, and real-time updates.',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
     author: 'system',
   },
 ];
@@ -1021,13 +1019,13 @@ async function seedAdditionalFrontendTasks() {
     try {
       // Check if task already exists
       const existingQuery = query(
-        collection(db, 'frontendTasks'),
-        where('id', '==', task.id)
+        supabase.from('frontendTasks'),
+        where('id', task.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
-        await addDoc(collection(db, 'frontendTasks'), task);
+      if (existingSnapshot.length === 0) {
+        await addDoc(supabase.from('frontendTasks'), task);
         successCount++;
         console.log(`✅ Added frontend task: ${task.title}`);
       } else {

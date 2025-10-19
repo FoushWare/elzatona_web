@@ -567,9 +567,9 @@ export class MarkdownQuestionParser {
       topic: question.topic || 'General Topic',
       tags: question.tags || [],
       points: question.points || 1,
-      isActive: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       createdBy: 'markdown-parser',
     }));
 

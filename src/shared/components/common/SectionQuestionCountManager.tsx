@@ -1,12 +1,29 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/shared/components/ui/card';
+
+interface SectionQuestionCount {
+  id: string;
+  sectionId: string;
+  sectionName: string;
+  category: string;
+  question_count: number;
+  maxQuestions: number;
+  weight: number;
+  order: number;
+}
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
@@ -43,14 +60,14 @@ interface SectionQuestionCount {
   sectionId: string;
   sectionName: string;
   category: string;
-  questionCount: number;
+  question_count: number;
   maxQuestions: number;
   weight: number;
   order: number;
 }
 
 interface PlanSectionConfig {
-  planId: string;
+  plan_id: string;
   planName: string;
   sections: SectionQuestionCount[];
   totalQuestions: number;
@@ -97,7 +114,7 @@ export const SectionQuestionCountManager: React.FC<
             sectionId: section.id,
             sectionName: section.name,
             category: section.category || 'general',
-            questionCount: section.questions?.length || 0,
+            question_count: section.questions?.length || 0,
             maxQuestions: section.maxQuestions || 15,
             weight: section.weight || Math.floor(100 / plan.sections.length),
             order: section.order || index + 1,
@@ -123,7 +140,7 @@ export const SectionQuestionCountManager: React.FC<
       sectionId: '',
       sectionName: '',
       category: 'general',
-      questionCount: 0,
+      question_count: 0,
       maxQuestions: 15,
       weight: 10,
       order: sections.length + 1,
@@ -177,7 +194,7 @@ export const SectionQuestionCountManager: React.FC<
 
   const calculateTotalQuestions = () => {
     return sections.reduce(
-      (total, section) => total + section.questionCount,
+      (total, section) => total + section.question_count,
       0
     );
   };
@@ -191,7 +208,7 @@ export const SectionQuestionCountManager: React.FC<
       setSaving(true);
 
       const config: PlanSectionConfig = {
-        planId,
+        plan_id: planId,
         planName,
         sections,
         totalQuestions: calculateTotalQuestions(),
@@ -404,11 +421,11 @@ export const SectionQuestionCountManager: React.FC<
                       </Label>
                       <Input
                         type="number"
-                        value={section.questionCount}
+                        value={section.question_count}
                         onChange={e =>
                           updateSectionField(
                             section.id,
-                            'questionCount',
+                            'question_count',
                             parseInt(e.target.value) || 0
                           )
                         }
@@ -553,11 +570,11 @@ const SectionForm: React.FC<SectionFormProps> = ({
           <Input
             id="questionCount"
             type="number"
-            value={formData.questionCount || 0}
+            value={formData.question_count || 0}
             onChange={e =>
               setFormData(prev => ({
                 ...prev,
-                questionCount: parseInt(e.target.value) || 0,
+                question_count: parseInt(e.target.value) || 0,
               }))
             }
             min="0"

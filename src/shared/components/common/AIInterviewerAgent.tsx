@@ -272,7 +272,13 @@ export const AIInterviewerAgent: React.FC<AIInterviewerAgentProps> = ({
 
     const randomQuestion =
       interviewQuestions[Math.floor(Math.random() * interviewQuestions.length)];
-    setCurrentQuestion(randomQuestion);
+    setCurrentQuestion({
+      ...randomQuestion,
+      difficulty: randomQuestion.difficulty as
+        | 'beginner'
+        | 'intermediate'
+        | 'advanced',
+    });
     setAgentStatus('speaking');
 
     // Simulate AI speaking the question

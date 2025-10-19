@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useRouter, useParams } from 'next/navigation';
 import {
   BookOpen,
@@ -31,7 +37,7 @@ interface LearningPath {
   sectors: Array<{
     id: string;
     name: string;
-    questionCount: number;
+    question_count: number;
   }>;
 }
 
@@ -257,12 +263,12 @@ export default function LearningPathDetailPage() {
                         <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-1">
                           <div className="flex items-center gap-1">
                             <BookOpen className="w-4 h-4" />
-                            <span>{sector.questionCount} questions</span>
+                            <span>{sector.question_count} questions</span>
                           </div>
                           <div className="flex items-center gap-1">
                             <Clock className="w-4 h-4" />
                             <span>
-                              ~{Math.ceil(sector.questionCount / 10)} min
+                              ~{Math.ceil(sector.question_count / 10)} min
                             </span>
                           </div>
                         </div>

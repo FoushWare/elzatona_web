@@ -11,15 +11,13 @@ export async function GET(
     const { id } = await params;
 
     // Get the sector first
-    const sectorResult = await SectorService.getSector(id);
-    if (!sectorResult.success || !sectorResult.sector) {
+    const sector = await SectorService.getSectorById(id);
+    if (!sector) {
       return NextResponse.json(
         { success: false, error: 'Sector not found' },
         { status: 404 }
       );
     }
-
-    const sector = sectorResult.sector;
 
     // If no questions in sector, return empty array
     if (!sector.questionIds || sector.questionIds.length === 0) {
@@ -71,16 +69,15 @@ export async function POST(
       );
     }
 
-    const result = await SectorService.addQuestionsToSector(id, questionIds);
-
-    if (result.success) {
+    try {
+      await SectorService.addQuestionsToSector(id, questionIds);
       return NextResponse.json({
         success: true,
         message: 'Questions added to sector successfully',
       });
-    } else {
+    } catch (error) {
       return NextResponse.json(
-        { success: false, error: result.error },
+        { success: false, error: 'Failed to add questions to sector' },
         { status: 500 }
       );
     }
@@ -110,19 +107,15 @@ export async function DELETE(
       );
     }
 
-    const result = await SectorService.removeQuestionsFromSector(
-      id,
-      questionIds
-    );
-
-    if (result.success) {
+    try {
+      await SectorService.removeQuestionsFromSector(id, questionIds);
       return NextResponse.json({
         success: true,
         message: 'Questions removed from sector successfully',
       });
-    } else {
+    } catch (error) {
       return NextResponse.json(
-        { success: false, error: result.error },
+        { success: false, error: 'Failed to remove questions from sector' },
         { status: 500 }
       );
     }

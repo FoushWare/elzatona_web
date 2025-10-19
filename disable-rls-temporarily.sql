@@ -1,0 +1,18 @@
+-- Temporarily disable RLS for migration
+-- Run this in Supabase SQL Editor before migration
+
+ALTER TABLE learning_plans DISABLE ROW LEVEL SECURITY;
+ALTER TABLE categories DISABLE ROW LEVEL SECURITY;
+ALTER TABLE topics DISABLE ROW LEVEL SECURITY;
+ALTER TABLE questions DISABLE ROW LEVEL SECURITY;
+ALTER TABLE plan_cards DISABLE ROW LEVEL SECURITY;
+
+-- After migration, re-enable RLS with:
+-- ALTER TABLE learning_plans ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE topics ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE questions ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE plan_cards ENABLE ROW LEVEL SECURITY;
+
+
+

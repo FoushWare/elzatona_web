@@ -13,9 +13,9 @@ interface UnifiedQuestion {
   topic: string;
   learningPath: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
   createdBy: string;
   updatedBy: string;
   tags: string[];
@@ -74,8 +74,8 @@ async function prepareJavaScriptQuestions() {
     // Update timestamps and creator info
     const updatedQuestions = questions.map(question => ({
       ...question,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       createdBy: 'seeding-script',
       updatedBy: 'seeding-script',
     }));

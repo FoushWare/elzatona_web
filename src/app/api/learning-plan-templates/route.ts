@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { firestoreService } from '@/lib/firestore-service';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function GET() {
   try {
-    const plans = await firestoreService.getLearningPlanTemplates();
+    const { data: plans, error } = await supabase
+      .from('learning_plans')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
 
     return NextResponse.json({
       success: true,
@@ -61,20 +70,22 @@ export async function POST(request: NextRequest) {
       features: features || [],
       sections: sections || [],
       isRecommended: isRecommended !== false,
-      isActive: isActive !== false,
+      is_active: isActive !== false,
       createdBy: 'admin',
       usageCount: 0,
       averageRating: 0,
     };
 
-    const plan = await firestoreService.saveLearningPlanTemplate(planData);
+    const { data: plan, error } = await supabase
+      .from('learning_plans')
+      .insert(planData)
+      .select()
+      .single();
+    if (error) throw error;
 
     return NextResponse.json({
       success: true,
-      data: {
-        ...planData,
-        id: plan,
-      },
+      data: plan,
     });
   } catch (error) {
     console.error('Error creating learning plan template:', error);

@@ -1,17 +1,9 @@
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  updateDoc,
-  doc,
-  addDoc,
-  Timestamp,
-  writeBatch,
-  orderBy,
-  limit,
-} from 'firebase/firestore';
-import { db } from './firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface QuestionData {
   id?: string;
@@ -31,58 +23,58 @@ export interface QuestionData {
   timeLimit: number;
   audioQuestion?: string;
   audioAnswer?: string;
-  isActive?: boolean;
-  isComplete?: boolean;
-  createdBy?: string;
-  lastModifiedBy?: string;
-}
-
-interface SectorData {
-  id: string;
-  name: string;
-  questionIds?: string[];
-  [key: string]: unknown;
+  hints?: string[];
+  references?: string[];
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface SectionData {
   id: string;
   name: string;
   description: string;
-  category:
-    | 'foundation'
-    | 'frontend'
-    | 'advanced'
-    | 'specialized'
-    | 'career'
-    | 'emerging';
-  learningPath: string;
-  questions: string[];
+  learningPathId: string;
   order: number;
+  questionLimit: number;
   isActive: boolean;
-  createdBy?: string;
-  lastModifiedBy?: string;
+  created_at: string;
+  updated_at: string;
 }
 
-class AutoLinkingService {
-  private COLLECTIONS = {
-    QUESTIONS: 'unifiedQuestions',
-    SECTIONS: 'sections',
-    LEARNING_PATHS: 'learningPaths',
-    LEARNING_PLANS: 'learningPlans',
-  };
+export interface SectorData {
+  id: string;
+  name: string;
+  description: string;
+  learningPathId: string;
+  order: number;
+  questionIds: string[];
+  totalQuestions: number;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  estimatedTime: number;
+  prerequisites: string[];
+  isActive: boolean;
+  isLocked: boolean;
+  createdBy: string;
+  lastModifiedBy: string;
+  created_at: string;
+  updated_at: string;
+}
 
+/**
+ * Auto-linking service for automatically connecting questions to sections and sectors
+ */
+export class AutoLinkingService {
   /**
-   * Auto-link a question to relevant sections based on category and learning path
-   * Note: Admin sections are virtual (based on learning paths), so we don't need to update Firestore
+   * Auto-link a question to appropriate sections based on category and learning path
    */
   async linkQuestionToSections(
-    questionId: string,
+    question_id: string,
     category: string,
     learningPath: string
   ): Promise<void> {
     try {
       console.log('🔗 Auto-linking question to sections:', {
-        questionId,
+        questionId: question_id,
         category,
         learningPath,
       });
@@ -90,513 +82,332 @@ class AutoLinkingService {
       // For admin sections, the linking is automatic based on category and learningPath matching
       // The questions will be filtered by these fields when viewing sections
       console.log(
-        `✅ Question ${questionId} will be automatically linked to sections with category: ${category}, learningPath: ${learningPath}`
+        `✅ Question ${question_id} will be automatically linked to sections with category: ${category}, learningPath: ${learningPath}`
       );
       console.log(
         'ℹ️ Admin sections are virtual - questions are filtered dynamically based on category and learningPath'
       );
 
-      // No need to update Firestore as admin sections are virtual
-      // The linking happens automatically when filtering questions by category and learningPath
+      // No need to update Supabase as admin sections are virtual
     } catch (error) {
       console.error('❌ Error auto-linking question to sections:', error);
-      throw new Error('Failed to auto-link question to sections');
+      throw error;
     }
   }
 
   /**
-   * Auto-link a question to relevant sectors based on category and learning path
+   * Auto-link a question to appropriate sectors based on learning path
    */
   async linkQuestionToSectors(
-    questionId: string,
+    question_id: string,
     category: string,
     learningPath: string
   ): Promise<void> {
     try {
-      if (!db) {
-        console.error('❌ Database not initialized');
-        return;
-      }
-
       console.log('🔗 Auto-linking question to sectors:', {
-        questionId,
+        questionId: question_id,
         category,
         learningPath,
       });
 
       // Find sectors that match the question's learning path
-      const sectorsQuery = query(
-        collection(db, 'sectors'),
-        where('learningPathId', '==', learningPath),
-        where('isActive', '==', true)
-      );
+      const { data: sectors, error: sectorsError } = await supabase
+        .from('sectors')
+        .select('*')
+        .eq('learning_path_id', learningPath)
+        .eq('is_active', true)
+        .order('order_index', { ascending: true });
 
-      const sectorsSnapshot = await getDocs(sectorsQuery);
+      if (sectorsError) {
+        console.error('❌ Error fetching sectors:', sectorsError);
+        return;
+      }
+
       console.log(
-        `📋 Found ${sectorsSnapshot.docs.length} sectors for learning path: ${learningPath}`
+        `📋 Found ${sectors?.length || 0} sectors for learning path: ${learningPath}`
       );
 
-      if (sectorsSnapshot.empty) {
+      if (!sectors || sectors.length === 0) {
         console.log('⚠️ No sectors found for learning path:', learningPath);
         return;
       }
 
-      // Find the most appropriate sector based on category matching
-      let targetSector = null;
-      let bestMatch = 0;
+      // Find the most appropriate sector based on difficulty and category
+      const appropriateSector = this.findAppropriateSector(sectors, category);
 
-      for (const doc of sectorsSnapshot.docs) {
-        const sectorData = doc.data();
-        const sectorName = sectorData.name.toLowerCase();
-        const categoryLower = category.toLowerCase();
-
-        // Check for category matches in sector name
-        let matchScore = 0;
-        if (
-          sectorName.includes(categoryLower) ||
-          categoryLower.includes(sectorName)
-        ) {
-          matchScore += 10;
-        }
-
-        // Check for common category keywords
-        const categoryKeywords = {
-          javascript: ['fundamentals', 'advanced', 'concepts', 'basics'],
-          react: ['components', 'hooks', 'state', 'props'],
-          css: ['styling', 'layout', 'responsive', 'flexbox', 'grid'],
-          html: ['semantic', 'structure', 'elements'],
-          performance: ['optimization', 'speed', 'efficiency'],
-          testing: ['unit', 'integration', 'e2e', 'jest'],
-        };
-
-        for (const [key, keywords] of Object.entries(categoryKeywords)) {
-          if (categoryLower.includes(key)) {
-            for (const keyword of keywords) {
-              if (sectorName.includes(keyword)) {
-                matchScore += 5;
-              }
-            }
-          }
-        }
-
-        if (matchScore > bestMatch) {
-          bestMatch = matchScore;
-          targetSector = { id: doc.id, ...sectorData };
-        }
+      if (!appropriateSector) {
+        console.log('⚠️ No appropriate sector found for question');
+        return;
       }
 
-      // If no specific match found, use the first available sector
-      if (!targetSector) {
-        targetSector = {
-          id: sectorsSnapshot.docs[0].id,
-          ...sectorsSnapshot.docs[0].data(),
-        };
-        console.log(
-          'ℹ️ No specific category match found, using first available sector'
-        );
-      }
+      // Add question to the sector
+      const updatedQuestionIds = [
+        ...(appropriateSector.questionIds || []),
+        question_id,
+      ];
 
-      // Add question to the target sector
-      const currentQuestionIds = (targetSector as SectorData).questionIds || [];
-      if (!currentQuestionIds.includes(questionId)) {
-        const updatedQuestionIds = [...currentQuestionIds, questionId];
-
-        await updateDoc(doc(db, 'sectors', targetSector.id), {
+      const { error: updateError } = await supabase
+        .from('sectors')
+        .update({
           questionIds: updatedQuestionIds,
-          totalQuestions: updatedQuestionIds.length,
-          updatedAt: Timestamp.now(),
-          lastModifiedBy: 'system',
-        });
+          total_questions: updatedQuestionIds.length,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', appropriateSector.id);
 
-        console.log(
-          `✅ Added question to sector: ${(targetSector as SectorData).name} (${targetSector.id})`
-        );
-      } else {
-        console.log(
-          `ℹ️ Question already exists in sector: ${(targetSector as SectorData).name}`
-        );
+      if (updateError) {
+        console.error('❌ Error updating sector:', updateError);
+        return;
       }
 
-      console.log('🎉 Auto-linking to sectors completed successfully');
+      console.log(
+        `✅ Question ${question_id} linked to sector: ${appropriateSector.name}`
+      );
     } catch (error) {
       console.error('❌ Error auto-linking question to sectors:', error);
-      throw new Error('Failed to auto-link question to sectors');
+      throw error;
     }
   }
 
   /**
-   * Auto-link a question to relevant learning paths
+   * Find the most appropriate sector for a question based on category and difficulty
    */
-  async linkQuestionToLearningPaths(
-    questionId: string,
-    category: string,
-    learningPath: string
-  ): Promise<void> {
+  private findAppropriateSector(
+    sectors: SectorData[],
+    category: string
+  ): SectorData | null {
+    // For now, return the first active sector
+    // In a more sophisticated implementation, you could match based on:
+    // - Difficulty level
+    // - Category matching
+    // - Prerequisites
+    // - Current question count (to balance load)
+
+    return sectors.find(sector => sector.isActive) || null;
+  }
+
+  /**
+   * Auto-link multiple questions to sections and sectors
+   */
+  async linkMultipleQuestions(
+    questions: QuestionData[]
+  ): Promise<{ success: number; failed: number; errors: string[] }> {
+    const results = {
+      success: 0,
+      failed: 0,
+      errors: [] as string[],
+    };
+
+    for (const question of questions) {
+      try {
+        if (!question.id) {
+          results.failed++;
+          results.errors.push(`Question missing ID: ${question.title}`);
+          continue;
+        }
+
+        await this.linkQuestionToSections(
+          question.id,
+          question.category,
+          question.learningPath
+        );
+
+        await this.linkQuestionToSectors(
+          question.id,
+          question.category,
+          question.learningPath
+        );
+
+        results.success++;
+        console.log(`✅ Successfully linked question: ${question.title}`);
+      } catch (error) {
+        results.failed++;
+        const errorMessage = `Failed to link question ${question.title}: ${error instanceof Error ? error.message : 'Unknown error'}`;
+        results.errors.push(errorMessage);
+        console.error(`❌ ${errorMessage}`);
+      }
+    }
+
+    console.log(
+      `📊 Auto-linking complete: ${results.success} success, ${results.failed} failed`
+    );
+    return results;
+  }
+
+  /**
+   * Remove question from all sectors
+   */
+  async removeQuestionFromSectors(question_id: string): Promise<void> {
     try {
-      if (!db) {
-        console.error('❌ Database not initialized');
+      // Find all sectors that contain this question
+      const { data: sectors, error: fetchError } = await supabase
+        .from('sectors')
+        .select('*')
+        .contains('question_ids', [question_id]);
+
+      if (fetchError) {
+        console.error('❌ Error fetching sectors:', fetchError);
         return;
       }
 
-      console.log('🔗 Auto-linking question to learning paths:', {
-        questionId,
-        category,
-        learningPath,
-      });
-
-      // Find learning paths that match the question's category and learning path
-      const learningPathsQuery = query(
-        collection(db, this.COLLECTIONS.LEARNING_PATHS),
-        where('category', '==', category),
-        where('learningPath', '==', learningPath),
-        where('isActive', '==', true)
-      );
-
-      const learningPathsSnapshot = await getDocs(learningPathsQuery);
-      console.log(
-        `📋 Found ${learningPathsSnapshot.docs.length} matching learning paths`
-      );
-
-      if (learningPathsSnapshot.empty) {
-        console.log('⚠️ No matching learning paths found for auto-linking');
+      if (!sectors || sectors.length === 0) {
+        console.log(`ℹ️ Question ${question_id} not found in any sectors`);
         return;
       }
 
-      // Add question to each matching learning path
-      const updatePromises = learningPathsSnapshot.docs.map(async doc => {
-        const learningPathData = doc.data();
-        const questions = learningPathData.questions || [];
+      // Remove question from each sector
+      for (const sector of sectors) {
+        const updatedQuestionIds = (sector.question_ids || []).filter(
+          (id: string) => id !== question_id
+        );
 
-        if (!questions.includes(questionId)) {
-          const updatedQuestions = [...questions, questionId];
+        const { error: updateError } = await supabase
+          .from('sectors')
+          .update({
+            question_ids: updatedQuestionIds,
+            total_questions: updatedQuestionIds.length,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', sector.id);
 
-          await updateDoc(doc.ref, {
-            questions: updatedQuestions,
-            updatedAt: Timestamp.now(),
-            lastModifiedBy: 'system',
-          });
-
-          console.log(
-            `✅ Added question to learning path: ${learningPathData.name}`
-          );
+        if (updateError) {
+          console.error(`❌ Error updating sector ${sector.id}:`, updateError);
         } else {
           console.log(
-            `ℹ️ Question already exists in learning path: ${learningPathData.name}`
+            `✅ Removed question ${question_id} from sector: ${sector.name}`
           );
         }
-      });
-
-      await Promise.all(updatePromises);
-      console.log('🎉 Auto-linking to learning paths completed successfully');
+      }
     } catch (error) {
-      console.error('❌ Error auto-linking question to learning paths:', error);
-      throw new Error('Failed to auto-link question to learning paths');
+      console.error('❌ Error removing question from sectors:', error);
+      throw error;
     }
   }
 
   /**
-   * Create a question and auto-link it to relevant sections and learning paths
-   */
-  async createQuestionWithAutoLinking(
-    questionData: QuestionData
-  ): Promise<string> {
-    try {
-      if (!db) {
-        console.error('❌ Database not initialized');
-        throw new Error('Database not initialized');
-      }
-
-      console.log('🚀 Creating question with auto-linking:', questionData);
-
-      // 1. Create question in unifiedQuestions
-      const questionRef = await addDoc(
-        collection(db, this.COLLECTIONS.QUESTIONS),
-        {
-          ...questionData,
-          createdAt: Timestamp.now(),
-          updatedAt: Timestamp.now(),
-          isActive: true,
-          isComplete: true,
-          createdBy: questionData.createdBy || 'admin',
-          lastModifiedBy: questionData.lastModifiedBy || 'admin',
-        }
-      );
-
-      console.log('✅ Question created with ID:', questionRef.id);
-
-      // 2. Auto-link to relevant sections
-      await this.linkQuestionToSections(
-        questionRef.id,
-        questionData.category,
-        questionData.learningPath
-      );
-
-      // 3. Auto-link to relevant sectors
-      await this.linkQuestionToSectors(
-        questionRef.id,
-        questionData.category,
-        questionData.learningPath
-      );
-
-      // 4. Auto-link to relevant learning paths
-      await this.linkQuestionToLearningPaths(
-        questionRef.id,
-        questionData.category,
-        questionData.learningPath
-      );
-
-      return questionRef.id;
-    } catch (error) {
-      console.error('❌ Error creating question with auto-linking:', error);
-      throw new Error('Failed to create question with auto-linking');
-    }
-  }
-
-  /**
-   * Bulk import questions with auto-linking
-   */
-  async bulkImportQuestionsWithAutoLinking(
-    questionsData: QuestionData[]
-  ): Promise<string[]> {
-    try {
-      if (!db) {
-        console.error('❌ Database not initialized');
-        throw new Error('Database not initialized');
-      }
-
-      console.log(
-        `🚀 Bulk importing ${questionsData.length} questions with auto-linking`
-      );
-
-      const batch = writeBatch(db);
-      const questionIds: string[] = [];
-
-      // Create all questions in batch
-      for (const questionData of questionsData) {
-        const questionRef = doc(collection(db, this.COLLECTIONS.QUESTIONS));
-        batch.set(questionRef, {
-          ...questionData,
-          createdAt: Timestamp.now(),
-          updatedAt: Timestamp.now(),
-          isActive: true,
-          isComplete: true,
-          createdBy: questionData.createdBy || 'admin',
-          lastModifiedBy: questionData.lastModifiedBy || 'admin',
-        });
-        questionIds.push(questionRef.id);
-      }
-
-      await batch.commit();
-      console.log('✅ All questions created in batch');
-
-      // Auto-link each question to relevant sections and learning paths
-      const linkingPromises = questionsData.map(async (questionData, index) => {
-        const questionId = questionIds[index];
-
-        await Promise.all([
-          this.linkQuestionToSections(
-            questionId,
-            questionData.category,
-            questionData.learningPath
-          ),
-          this.linkQuestionToLearningPaths(
-            questionId,
-            questionData.category,
-            questionData.learningPath
-          ),
-        ]);
-      });
-
-      await Promise.all(linkingPromises);
-      console.log('🎉 Bulk import with auto-linking completed successfully');
-
-      return questionIds;
-    } catch (error) {
-      console.error(
-        '❌ Error bulk importing questions with auto-linking:',
-        error
-      );
-      throw new Error('Failed to bulk import questions with auto-linking');
-    }
-  }
-
-  /**
-   * Get the actual Firebase learning path ID by name
-   */
-  private async getFirebaseLearningPathIdByName(
-    name: string
-  ): Promise<string | null> {
-    try {
-      if (!db) {
-        console.error('❌ Database not initialized');
-        return null;
-      }
-
-      const pathsQuery = query(
-        collection(db, this.COLLECTIONS.LEARNING_PATHS),
-        where('name', '==', name),
-        limit(1)
-      );
-
-      const pathsSnapshot = await getDocs(pathsQuery);
-      if (!pathsSnapshot.empty) {
-        const pathDoc = pathsSnapshot.docs[0];
-        return pathDoc.id;
-      }
-      return null;
-    } catch (error) {
-      console.error(
-        '❌ Error getting Firebase learning path ID by name:',
-        error
-      );
-      return null;
-    }
-  }
-
-  /**
-   * Get questions filtered by section's category and learning path
-   * For admin sections, we need to map the static sectionId to the actual Firebase learning path ID
-   */
-  async getQuestionsForSection(sectionId: string): Promise<QuestionData[]> {
-    try {
-      if (!db) {
-        console.error('❌ Database not initialized');
-        return [];
-      }
-
-      console.log('📋 Getting questions for section:', sectionId);
-
-      // For admin sections, the sectionId now directly matches the Firebase learning path ID
-      // No more complex mapping needed!
-      console.log(
-        `🔗 Using section ID directly as learning path: ${sectionId}`
-      );
-
-      // Get questions that match this learning path ID directly
-      const questionsQuery = query(
-        collection(db, this.COLLECTIONS.QUESTIONS),
-        where('learningPath', '==', sectionId),
-        where('isActive', '==', true),
-        orderBy('createdAt', 'desc')
-      );
-
-      const questionsSnapshot = await getDocs(questionsQuery);
-      const questions = questionsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as QuestionData[];
-
-      console.log(
-        `📋 Found ${questions.length} questions for section "${sectionId}"`
-      );
-      return questions;
-    } catch (error) {
-      console.error('❌ Error getting questions for section:', error);
-      throw new Error('Failed to get questions for section');
-    }
-  }
-
-  /**
-   * Get sections filtered by category and learning path
-   * For admin sections, we return the learning paths that match the criteria
+   * Get sections for plan creation
    */
   async getSectionsForPlan(
     category?: string,
     learningPath?: string
   ): Promise<SectionData[]> {
     try {
-      console.log('📋 Getting sections for plan:', { category, learningPath });
-
-      // For admin sections, we need to get the learning paths from the resources
-      // and filter them based on category and learningPath
-      const { getDefaultAdminSections } = await import(
-        './learning-path-mapping'
-      );
-      const allSections = getDefaultAdminSections();
-
-      let filteredSections = allSections;
+      let query = supabase.from('sections').select('*').eq('is_active', true);
 
       if (category) {
-        filteredSections = filteredSections.filter(
-          section => section.category === category
-        );
+        query = query.eq('category', category);
       }
 
       if (learningPath) {
-        filteredSections = filteredSections.filter(
-          section => section.learningPathId === learningPath
-        );
+        query = query.eq('learning_path_id', learningPath);
       }
 
-      // Convert to SectionData format
-      const sections: SectionData[] = filteredSections.map(section => ({
-        id: section.id,
-        name: section.name,
-        description: section.description,
-        category: section.category as SectionData['category'],
-        learningPath: section.learningPathId,
-        questions: [], // Will be populated dynamically
-        order: 0, // Will be set based on learning path order
-        isActive: section.isActive,
-        createdBy: 'system',
-        lastModifiedBy: 'system',
-      }));
+      const { data: sections, error } = await query.order('order_index', {
+        ascending: true,
+      });
 
-      console.log(`📋 Found ${sections.length} sections for plan`);
-      return sections;
+      if (error) {
+        console.error('❌ Error fetching sections:', error);
+        return [];
+      }
+
+      return sections || [];
     } catch (error) {
       console.error('❌ Error getting sections for plan:', error);
-      throw new Error('Failed to get sections for plan');
+      return [];
     }
   }
 
   /**
-   * Remove a question from all sections and learning paths
+   * Rebalance questions across sectors
    */
-  async removeQuestionFromAllSections(questionId: string): Promise<void> {
+  async rebalanceSectors(learningPathId: string): Promise<void> {
     try {
-      if (!db) {
-        console.error('❌ Database not initialized');
+      console.log(
+        `🔄 Rebalancing sectors for learning path: ${learningPathId}`
+      );
+
+      // Get all sectors for the learning path
+      const { data: sectors, error: sectorsError } = await supabase
+        .from('sectors')
+        .select('*')
+        .eq('learning_path_id', learningPathId)
+        .eq('is_active', true)
+        .order('order_index', { ascending: true });
+
+      if (sectorsError) {
+        console.error('❌ Error fetching sectors:', sectorsError);
         return;
       }
 
-      console.log('🗑️ Removing question from all sections:', questionId);
+      if (!sectors || sectors.length === 0) {
+        console.log('⚠️ No sectors found for learning path');
+        return;
+      }
 
-      // Get all sections that contain this question
-      const sectionsQuery = query(
-        collection(db, this.COLLECTIONS.SECTIONS),
-        where('questions', 'array-contains', questionId),
-        where('isActive', '==', true)
-      );
+      // Get all questions for the learning path
+      const { data: questions, error: questionsError } = await supabase
+        .from('questions')
+        .select('*')
+        .eq('learning_path', learningPathId)
+        .eq('is_active', true);
 
-      const sectionsSnapshot = await getDocs(sectionsQuery);
-      console.log(
-        `📋 Found ${sectionsSnapshot.docs.length} sections containing this question`
-      );
+      if (questionsError) {
+        console.error('❌ Error fetching questions:', questionsError);
+        return;
+      }
 
-      // Remove question from each section
-      const updatePromises = sectionsSnapshot.docs.map(async doc => {
-        const sectionData = doc.data() as SectionData;
-        const updatedQuestions = sectionData.questions.filter(
-          id => id !== questionId
+      if (!questions || questions.length === 0) {
+        console.log('⚠️ No questions found for learning path');
+        return;
+      }
+
+      // Clear existing question assignments
+      for (const sector of sectors) {
+        await supabase
+          .from('sectors')
+          .update({
+            question_ids: [],
+            total_questions: 0,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', sector.id);
+      }
+
+      // Redistribute questions across sectors
+      const questionsPerSector = Math.ceil(questions.length / sectors.length);
+
+      for (let i = 0; i < sectors.length; i++) {
+        const sector = sectors[i];
+        const startIndex = i * questionsPerSector;
+        const endIndex = Math.min(
+          startIndex + questionsPerSector,
+          questions.length
         );
+        const sectorQuestions = questions.slice(startIndex, endIndex);
 
-        await updateDoc(doc.ref, {
-          questions: updatedQuestions,
-          updatedAt: Timestamp.now(),
-          lastModifiedBy: 'system',
-        });
+        const questionIds = sectorQuestions.map(q => q.id);
 
-        console.log(`✅ Removed question from section: ${sectionData.name}`);
-      });
+        await supabase
+          .from('sectors')
+          .update({
+            question_ids: questionIds,
+            total_questions: questionIds.length,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', sector.id);
 
-      await Promise.all(updatePromises);
-      console.log('🎉 Question removal completed successfully');
+        console.log(
+          `✅ Sector ${sector.name}: ${questionIds.length} questions`
+        );
+      }
+
+      console.log(
+        `✅ Rebalancing complete for learning path: ${learningPathId}`
+      );
     } catch (error) {
-      console.error('❌ Error removing question from sections:', error);
-      throw new Error('Failed to remove question from sections');
+      console.error('❌ Error rebalancing sectors:', error);
+      throw error;
     }
   }
 }
-
-export const autoLinkingService = new AutoLinkingService();

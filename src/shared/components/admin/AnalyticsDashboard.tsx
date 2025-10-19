@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import {
   Card,
   CardContent,
@@ -204,26 +210,30 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <StatCard
               icon={Users}
               title="Total Users"
-              value={formatNumber(systemAnalytics.totalUsers)}
+              value={formatNumber(systemAnalytics.analytics?.totalUsers || 0)}
               color="#3B82F6"
             />
             <StatCard
               icon={Activity}
               title="Active Users"
-              value={formatNumber(systemAnalytics.activeUsers)}
+              value={formatNumber(systemAnalytics.analytics?.activeUsers || 0)}
               subtitle="Last 30 days"
               color="#10B981"
             />
             <StatCard
               icon={Clock}
               title="Avg Session Duration"
-              value={formatDuration(systemAnalytics.averageSessionDuration)}
+              value={formatDuration(
+                systemAnalytics.analytics?.averageSessionDuration || 0
+              )}
               color="#F59E0B"
             />
             <StatCard
               icon={MessageSquare}
               title="Questions Answered"
-              value={formatNumber(systemAnalytics.totalQuestionsAnswered)}
+              value={formatNumber(
+                systemAnalytics.analytics?.totalQuestionsAnswered || 0
+              )}
               color="#EF4444"
             />
           </div>
@@ -241,7 +251,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">
                     {formatNumber(
-                      systemAnalytics.userEngagement.dailyActiveUsers
+                      systemAnalytics.analytics?.userEngagement
+                        ?.dailyActiveUsers || 0
                     )}
                   </div>
                   <div className="text-sm text-gray-600">
@@ -251,7 +262,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 <div className="text-center">
                   <div className="text-2xl font-bold text-green-600">
                     {formatNumber(
-                      systemAnalytics.userEngagement.weeklyActiveUsers
+                      systemAnalytics.analytics?.userEngagement
+                        ?.weeklyActiveUsers || 0
                     )}
                   </div>
                   <div className="text-sm text-gray-600">
@@ -261,7 +273,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 <div className="text-center">
                   <div className="text-2xl font-bold text-purple-600">
                     {formatNumber(
-                      systemAnalytics.userEngagement.monthlyActiveUsers
+                      systemAnalytics.analytics?.userEngagement
+                        ?.monthlyActiveUsers || 0
                     )}
                   </div>
                   <div className="text-sm text-gray-600">
@@ -290,62 +303,66 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 </TabsList>
                 <TabsContent value="questions" className="mt-4">
                   <div className="space-y-2">
-                    {systemAnalytics.contentPerformance.mostAnsweredQuestions.map(
-                      (questionId, index) => (
-                        <div
-                          key={questionId}
-                          className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded"
-                        >
-                          <span className="text-sm">Question {questionId}</span>
-                          <Badge variant="secondary">#{index + 1}</Badge>
-                        </div>
-                      )
-                    )}
+                    {(
+                      systemAnalytics.analytics?.contentPerformance
+                        ?.mostAnsweredQuestions || []
+                    ).map((questionId: string, index: number) => (
+                      <div
+                        key={questionId}
+                        className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded"
+                      >
+                        <span className="text-sm">Question {questionId}</span>
+                        <Badge variant="secondary">#{index + 1}</Badge>
+                      </div>
+                    ))}
                   </div>
                 </TabsContent>
                 <TabsContent value="topics" className="mt-4">
                   <div className="space-y-2">
-                    {systemAnalytics.contentPerformance.mostCompletedTopics.map(
-                      (topicId, index) => (
-                        <div
-                          key={topicId}
-                          className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded"
-                        >
-                          <span className="text-sm">Topic {topicId}</span>
-                          <Badge variant="secondary">#{index + 1}</Badge>
-                        </div>
-                      )
-                    )}
+                    {(
+                      systemAnalytics.analytics?.contentPerformance
+                        ?.mostCompletedTopics || []
+                    ).map((topicId: string, index: number) => (
+                      <div
+                        key={topicId}
+                        className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded"
+                      >
+                        <span className="text-sm">Topic {topicId}</span>
+                        <Badge variant="secondary">#{index + 1}</Badge>
+                      </div>
+                    ))}
                   </div>
                 </TabsContent>
                 <TabsContent value="cards" className="mt-4">
                   <div className="space-y-2">
-                    {systemAnalytics.contentPerformance.mostPopularCards.map(
-                      (cardId, index) => (
-                        <div
-                          key={cardId}
-                          className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded"
-                        >
-                          <span className="text-sm">Card {cardId}</span>
-                          <Badge variant="secondary">#{index + 1}</Badge>
-                        </div>
-                      )
-                    )}
+                    {(
+                      systemAnalytics.analytics?.contentPerformance
+                        ?.mostPopularCards || []
+                    ).map((cardId: string, index: number) => (
+                      <div
+                        key={cardId}
+                        className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded"
+                      >
+                        <span className="text-sm">Card {cardId}</span>
+                        <Badge variant="secondary">#{index + 1}</Badge>
+                      </div>
+                    ))}
                   </div>
                 </TabsContent>
                 <TabsContent value="plans" className="mt-4">
                   <div className="space-y-2">
-                    {systemAnalytics.contentPerformance.mostCompletedPlans.map(
-                      (planId, index) => (
-                        <div
-                          key={planId}
-                          className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded"
-                        >
-                          <span className="text-sm">Plan {planId}</span>
-                          <Badge variant="secondary">#{index + 1}</Badge>
-                        </div>
-                      )
-                    )}
+                    {(
+                      systemAnalytics.analytics?.contentPerformance
+                        ?.mostCompletedPlans || []
+                    ).map((planId: string, index: number) => (
+                      <div
+                        key={planId}
+                        className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded"
+                      >
+                        <span className="text-sm">Plan {planId}</span>
+                        <Badge variant="secondary">#{index + 1}</Badge>
+                      </div>
+                    ))}
                   </div>
                 </TabsContent>
               </Tabs>
@@ -362,25 +379,29 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <StatCard
               icon={Clock}
               title="Total Time Spent"
-              value={formatDuration(userAnalytics.totalTimeSpent)}
+              value={formatDuration(
+                userAnalytics?.analytics?.totalTimeSpent || 0
+              )}
               color="#3B82F6"
             />
             <StatCard
               icon={MessageSquare}
               title="Questions Answered"
-              value={userAnalytics.totalQuestionsAnswered}
+              value={userAnalytics?.analytics?.totalQuestionsAnswered || 0}
               color="#10B981"
             />
             <StatCard
               icon={BookOpen}
               title="Topics Completed"
-              value={userAnalytics.totalTopicsCompleted}
+              value={userAnalytics?.analytics?.totalTopicsCompleted || 0}
               color="#F59E0B"
             />
             <StatCard
               icon={Award}
               title="Average Score"
-              value={formatPercentage(userAnalytics.averageScore)}
+              value={formatPercentage(
+                userAnalytics?.analytics?.averageScore || 0
+              )}
               color="#EF4444"
             />
           </div>
@@ -397,25 +418,29 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-gray-600">
-                    {userAnalytics.progressDistribution.notStarted}
+                    {userAnalytics?.analytics?.progressDistribution
+                      ?.notStarted || 0}
                   </div>
                   <div className="text-sm text-gray-600">Not Started</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-yellow-600">
-                    {userAnalytics.progressDistribution.inProgress}
+                    {userAnalytics?.analytics?.progressDistribution
+                      ?.inProgress || 0}
                   </div>
                   <div className="text-sm text-gray-600">In Progress</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-green-600">
-                    {userAnalytics.progressDistribution.completed}
+                    {userAnalytics?.analytics?.progressDistribution
+                      ?.completed || 0}
                   </div>
                   <div className="text-sm text-gray-600">Completed</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-red-600">
-                    {userAnalytics.progressDistribution.skipped}
+                    {userAnalytics?.analytics?.progressDistribution?.skipped ||
+                      0}
                   </div>
                   <div className="text-sm text-gray-600">Skipped</div>
                 </div>
@@ -435,14 +460,16 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {userAnalytics.learningPatterns.preferredTimeOfDay}
+                    {userAnalytics?.analytics?.learningPatterns
+                      ?.preferredTimeOfDay || 'N/A'}
                   </div>
                   <div className="text-sm text-gray-600">Preferred Time</div>
                 </div>
                 <div className="text-center">
                   <div className="text-lg font-semibold text-gray-900 dark:text-white">
                     {formatDuration(
-                      userAnalytics.learningPatterns.averageSessionDuration
+                      userAnalytics?.analytics?.learningPatterns
+                        ?.averageSessionDuration || 0
                     )}
                   </div>
                   <div className="text-sm text-gray-600">
@@ -451,7 +478,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 </div>
                 <div className="text-center">
                   <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {userAnalytics.learningPatterns.mostActiveDay}
+                    {userAnalytics?.analytics?.learningPatterns
+                      ?.mostActiveDay || 'N/A'}
                   </div>
                   <div className="text-sm text-gray-600">Most Active Day</div>
                 </div>
@@ -471,12 +499,14 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {userInsights.strengths.map((strength, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-sm">{strength}</span>
-                      </div>
-                    ))}
+                    {(userInsights?.insights?.strengths || []).map(
+                      (strength: string, index: number) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span className="text-sm">{strength}</span>
+                        </div>
+                      )
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -490,8 +520,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {userInsights.recommendations.map(
-                      (recommendation, index) => (
+                    {(userInsights?.insights?.recommendations || []).map(
+                      (recommendation: string, index: number) => (
                         <div key={index} className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                           <span className="text-sm">{recommendation}</span>

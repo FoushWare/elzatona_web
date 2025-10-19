@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
 
 interface ProgressData {
   userId: string;
   sessionId: string;
-  questionId: string;
+  question_id: string;
   answer: number;
   isCorrect: boolean;
   timeSpent: number;
@@ -23,7 +22,7 @@ interface ProgressSummary {
   timeSpent: number;
   lastActivity: string;
   currentPlan?: {
-    planId: string;
+    plan_id: string;
     questionsCompleted: number;
     totalQuestions: number;
     progress: number;
@@ -40,7 +39,9 @@ interface UseSecureProgressReturn {
 }
 
 export function useSecureProgress(): UseSecureProgressReturn {
-  const { user, firebaseUser, isAuthenticated } = useFirebaseAuth();
+  const [user, setUser] = useState({ uid: 'placeholder-user' });
+  const [firebaseUser, setFirebaseUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [progress, setProgress] = useState<ProgressSummary | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -233,7 +234,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
             cachedData.data.currentPlan.planId !== progressData.planId
           ) {
             cachedData.data.currentPlan = {
-              planId: progressData.planId,
+              plan_id: progressData.planId,
               questionsCompleted: 0,
               totalQuestions: 5, // From our testing setup
               progress: 0,

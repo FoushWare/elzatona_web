@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 import {
   UserProgress,
   QuestionAttempt,
@@ -16,7 +16,7 @@ import {
   getDashboardStats,
   getContinueWhereLeftOff,
   updateUserPreferences,
-} from '@/lib/firebase-progress';
+} from '@/lib/supabase-progress';
 
 export interface ContinueData {
   recentPath?: {
@@ -61,7 +61,8 @@ export interface UseUserProgressReturn {
 }
 
 export const useUserProgress = (): UseUserProgressReturn => {
-  const { user, isAuthenticated } = useFirebaseAuth();
+  const [user, setUser] = useState({ uid: 'placeholder-user' });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [progress, setProgress] = useState<UserProgress | null>(null);
   const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(
     null

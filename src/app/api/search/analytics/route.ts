@@ -4,16 +4,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import {
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  limit,
-  where,
-  Timestamp,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,17 +17,17 @@ export async function GET(request: NextRequest) {
     // Get search logs (if they exist)
     let searchLogs: any[] = [];
     try {
-      const searchLogsSnapshot = await getDocs(
-        query(
-          collection(db, 'searchLogs'),
-          orderBy('timestamp', 'desc'),
-          limit(1000)
-        )
-      );
-      searchLogs = searchLogsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const { data: searchLogsData, error } = await supabase
+        .from('search_logs')
+        .select('*')
+        .order('timestamp', { ascending: false })
+        .limit(1000);
+
+      if (error) {
+        throw error;
+      }
+
+      searchLogs = searchLogsData || [];
     } catch (error) {
       console.log('No search logs found, using mock data');
     }
@@ -56,7 +51,7 @@ export async function GET(request: NextRequest) {
 
     const recentSearches = searchLogs.filter(log => {
       const logDate = log.timestamp?.toDate
-        ? log.timestamp.toDate()
+        ? log.timestamp
         : new Date(log.timestamp);
       return logDate >= thirtyDaysAgo;
     });
@@ -65,7 +60,7 @@ export async function GET(request: NextRequest) {
     const dailyCounts: { [key: string]: number } = {};
     recentSearches.forEach(log => {
       const date = log.timestamp?.toDate
-        ? log.timestamp.toDate()
+        ? log.timestamp
         : new Date(log.timestamp);
       const dateKey = date.toISOString().split('T')[0];
       dailyCounts[dateKey] = (dailyCounts[dateKey] || 0) + 1;

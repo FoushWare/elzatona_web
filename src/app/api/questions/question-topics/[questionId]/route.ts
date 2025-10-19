@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // PUT /api/questions/question-topics/[questionId]
 export async function PUT(
@@ -26,22 +30,15 @@ export async function PUT(
       );
     }
 
-    if (!db) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Firestore not available',
-        },
-        { status: 500 }
-      );
-    }
-
     console.log(`Updating topics for question: ${questionId}`, topics);
 
-    const questionRef = doc(db, 'questions', questionId);
-    const questionSnap = await getDoc(questionRef);
+    const { data: questionData, error: questionError } = await supabase
+      .from('questions')
+      .select('*')
+      .eq('id', questionId)
+      .single();
 
-    if (!questionSnap.exists()) {
+    if (questionError || !questionData) {
       return NextResponse.json(
         {
           success: false,
@@ -52,16 +49,23 @@ export async function PUT(
     }
 
     // Update the question with new topics
-    await updateDoc(questionRef, {
-      topics: topics,
-      updatedAt: new Date().toISOString(),
-    });
+    const { data: updatedData, error: updateError } = await supabase
+      .from('questions')
+      .update({
+        topics: topics,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', questionId)
+      .select()
+      .single();
 
-    // Fetch updated question
-    const updatedSnap = await getDoc(questionRef);
+    if (updateError) {
+      throw updateError;
+    }
+
     const updatedQuestion = {
-      id: updatedSnap.id,
-      ...updatedSnap.data(),
+      id: updatedData.id,
+      ...updatedData,
     };
 
     console.log(`Successfully updated topics for question: ${questionId}`);

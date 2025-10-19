@@ -1,22 +1,11 @@
 // v1.0 - Unified Question Schema
 // Centralized type definitions for the unified question system
 
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  startAfter,
-  serverTimestamp,
-  Firestore,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface UnifiedQuestion {
   id: string;
@@ -30,9 +19,9 @@ export interface UnifiedQuestion {
   sectionId?: string; // Already optional
   topic?: string; // Added topic field
   learningCardId?: string; // Added learning card ID
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
   createdBy?: string;
   updatedBy?: string;
   tags?: string[];
@@ -120,18 +109,18 @@ export interface LearningPath {
   estimatedTime: number; // in hours
   prerequisites?: string[];
   targetSkills: string[];
-  questionCount: number;
+  question_count: number;
   questionCategories: string[];
   sections: Array<{
     id: string;
     title: string;
     description: string;
-    questionCount: number;
+    question_count: number;
     order: number;
   }>;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
   createdBy?: string;
   updatedBy?: string;
   metadata?: {
@@ -239,57 +228,55 @@ export const QUESTION_VALIDATION_RULES = {
 
 // Unified Question Service Class
 export class UnifiedQuestionService {
-  private db: Firestore | null;
-
-  constructor(db: Firestore | null) {
-    this.db = db;
+  constructor() {
+    // No initialization needed for Supabase
   }
 
   // Get all questions with optional filters
   async getQuestions(filters?: QuestionFilter): Promise<UnifiedQuestion[]> {
-    if (!this.db) throw new Error('Firestore not initialized');
+    if (!supabase) throw new Error('any not initialized');
 
-    let q = query(collection(this.db, 'unifiedQuestions'));
+    let q = supabase.from('questions').select('*');
 
     if (filters?.category) {
-      q = query(q, where('category', '==', filters.category));
+      q = q.eq('category', filters.category);
     }
     if (filters?.difficulty) {
-      q = query(q, where('difficulty', '==', filters.difficulty));
+      q = q.eq('difficulty', filters.difficulty);
     }
     if (filters?.learningPath) {
-      q = query(q, where('learningPath', '==', filters.learningPath));
+      q = q.eq('learningPath', filters.learningPath);
     }
     if (filters?.sectionId) {
-      q = query(q, where('sectionId', '==', filters.sectionId));
+      q = q.eq('sectionId', filters.sectionId);
     }
     if (filters?.isActive !== undefined) {
-      q = query(q, where('isActive', '==', filters.isActive));
+      q = q.eq('isActive', filters.isActive);
     }
 
-    q = query(q, orderBy('createdAt', 'desc'));
+    q = q.order('created_at', { ascending: true });
 
     if (filters?.limit) {
-      q = query(q, limit(filters.limit));
+      q = q.limit(filters.limit);
     }
 
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(
-      doc =>
-        ({
-          id: doc.id,
-          ...doc.data(),
-        }) as UnifiedQuestion
-    );
+    const { data, error } = await q;
+    if (error) throw error;
+    return data || [];
   }
 
   // Get a single question by ID
   async getQuestion(id: string): Promise<UnifiedQuestion | null> {
-    if (!this.db) throw new Error('Firestore not initialized');
+    if (!supabase) throw new Error('any not initialized');
 
-    const docSnap = await getDoc(doc(this.db, 'unifiedQuestions', id));
-    if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() } as UnifiedQuestion;
+    const { data: docSnap, error } = await supabase
+      .from('questions')
+      .select('*')
+      .eq('id', id)
+      .single();
+    if (error) throw error;
+    if (docSnap) {
+      return docSnap as UnifiedQuestion;
     }
     return null;
   }
@@ -298,20 +285,21 @@ export class UnifiedQuestionService {
   async createQuestion(
     question: Omit<UnifiedQuestion, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<UnifiedQuestion> {
-    if (!this.db) throw new Error('Firestore not initialized');
+    if (!supabase) throw new Error('any not initialized');
 
     const questionWithTimestamps = {
       ...question,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    const docRef = await addDoc(
-      collection(this.db, 'unifiedQuestions'),
-      questionWithTimestamps
-    );
-    const docSnap = await getDoc(docRef);
-    return { id: docSnap.id, ...docSnap.data() } as UnifiedQuestion;
+    const { data: docRef, error } = await supabase
+      .from('questions')
+      .insert(questionWithTimestamps)
+      .select()
+      .single();
+    if (error) throw error;
+    return docRef as UnifiedQuestion;
   }
 
   // Update an existing question
@@ -319,24 +307,30 @@ export class UnifiedQuestionService {
     id: string,
     updates: Partial<UnifiedQuestion>
   ): Promise<UnifiedQuestion> {
-    if (!this.db) throw new Error('Firestore not initialized');
+    if (!supabase) throw new Error('any not initialized');
 
     const updateWithTimestamps = {
       ...updates,
-      updatedAt: serverTimestamp(),
+      updated_at: new Date().toISOString(),
     };
 
-    await updateDoc(doc(this.db, 'unifiedQuestions', id), updateWithTimestamps);
-    const updatedDoc = await getDoc(doc(this.db, 'unifiedQuestions', id));
-    return { id: updatedDoc.id, ...updatedDoc.data() } as UnifiedQuestion;
+    const { data: updatedDoc, error } = await supabase
+      .from('questions')
+      .update(updateWithTimestamps)
+      .eq('id', id)
+      .select()
+      .single();
+    if (error) throw error;
+    return updatedDoc as UnifiedQuestion;
   }
 
   // Delete a question
   async deleteQuestion(id: string): Promise<boolean> {
-    if (!this.db) throw new Error('Firestore not initialized');
+    if (!supabase) throw new Error('any not initialized');
 
     try {
-      await deleteDoc(doc(this.db, 'unifiedQuestions', id));
+      const { error } = await supabase.from('questions').delete().eq('id', id);
+      if (error) throw error;
       return true;
     } catch (error) {
       console.error('Error deleting question:', error);
@@ -346,13 +340,13 @@ export class UnifiedQuestionService {
 
   // Get question statistics
   async getQuestionStats(): Promise<QuestionStats> {
-    if (!this.db) throw new Error('Firestore not initialized');
+    if (!supabase) throw new Error('any not initialized');
 
     // For small datasets, get all questions at once (more efficient than multiple queries)
-    const snapshot = await getDocs(collection(this.db, 'unifiedQuestions'));
-    const questions = snapshot.docs.map(
-      doc => ({ id: doc.id, ...doc.data() }) as UnifiedQuestion
-    );
+    const { data: questions, error } = await supabase
+      .from('questions')
+      .select('*');
+    if (error) throw error;
 
     const stats: QuestionStats = {
       totalQuestions: questions.length,
@@ -405,7 +399,9 @@ export class UnifiedQuestionService {
     // Calculate average difficulty
     const difficultyValues = { beginner: 1, intermediate: 2, advanced: 3 };
     const totalDifficulty = questions.reduce(
-      (sum, q) => sum + (difficultyValues[q.difficulty] || 0),
+      (sum, q) =>
+        sum +
+        (difficultyValues[q.difficulty as keyof typeof difficultyValues] || 0),
       0
     );
     stats.averageDifficulty =
@@ -433,19 +429,19 @@ export class UnifiedQuestionService {
     > = {};
 
     questions.forEach(q => {
-      // Handle both string and Firestore timestamp formats
+      // Handle both string and any timestamp formats
       let date: string;
-      if (typeof q.createdAt === 'string') {
-        const parsedDate = new Date(q.createdAt);
+      if (typeof q.created_at === 'string') {
+        const parsedDate = new Date(q.created_at);
         date = isNaN(parsedDate.getTime())
           ? new Date().toISOString().split('T')[0]
           : parsedDate.toISOString().split('T')[0];
       } else if (
-        q.createdAt &&
-        typeof q.createdAt === 'object' &&
-        'toDate' in q.createdAt
+        q.created_at &&
+        typeof q.created_at === 'object' &&
+        'toDate' in q.created_at
       ) {
-        const parsedDate = (q.createdAt as { toDate: () => Date }).toDate();
+        const parsedDate = new Date(q.created_at);
         date = isNaN(parsedDate.getTime())
           ? new Date().toISOString().split('T')[0]
           : parsedDate.toISOString().split('T')[0];
@@ -476,33 +472,32 @@ export class UnifiedQuestionService {
     searchTerm: string,
     filters?: QuestionFilter
   ): Promise<QuestionSearchResult> {
-    if (!this.db) throw new Error('Firestore not initialized');
+    if (!supabase) throw new Error('any not initialized');
 
     const startTime = Date.now();
 
-    // Get all questions first (Firestore doesn't support full-text search)
-    let q = query(collection(this.db, 'unifiedQuestions'));
+    // Get all questions first (any doesn't support full-text search)
+    let q = supabase.from('questions').select('*');
 
     if (filters?.category) {
-      q = query(q, where('category', '==', filters.category));
+      q = q.eq('category', filters.category);
     }
     if (filters?.difficulty) {
-      q = query(q, where('difficulty', '==', filters.difficulty));
+      q = q.eq('difficulty', filters.difficulty);
     }
     if (filters?.learningPath) {
-      q = query(q, where('learningPath', '==', filters.learningPath));
+      q = q.eq('learningPath', filters.learningPath);
     }
     if (filters?.sectionId) {
-      q = query(q, where('sectionId', '==', filters.sectionId));
+      q = q.eq('sectionId', filters.sectionId);
     }
     if (filters?.isActive !== undefined) {
-      q = query(q, where('isActive', '==', filters.isActive));
+      q = q.eq('isActive', filters.isActive);
     }
 
-    const snapshot = await getDocs(q);
-    let questions = snapshot.docs.map(
-      doc => ({ id: doc.id, ...doc.data() }) as UnifiedQuestion
-    );
+    const { data, error } = await q;
+    if (error) throw error;
+    let questions = data || [];
 
     // Client-side search filtering
     if (searchTerm) {
@@ -514,7 +509,9 @@ export class UnifiedQuestionService {
           (q.explanation &&
             q.explanation.toLowerCase().includes(searchLower)) ||
           (q.tags &&
-            q.tags.some(tag => tag.toLowerCase().includes(searchLower)))
+            q.tags.some((tag: string) =>
+              tag.toLowerCase().includes(searchLower)
+            ))
       );
     }
 

@@ -66,9 +66,11 @@ export function createAuthMiddleware(options: AuthMiddlewareOptions = {}) {
 }
 
 // Helper function to extract user info from token (simplified)
-function extractUserFromToken(
-  token: string
-): { id: string; role: string; email: string } | null {
+function extractUserFromToken(token: string): {
+  id: string;
+  role: 'user' | 'premium_user' | 'admin' | 'super_admin';
+  email: string;
+} | null {
   try {
     // In a real implementation, you would decode and validate a JWT token here
     // For now, we'll use a simplified approach
@@ -77,7 +79,7 @@ function extractUserFromToken(
       // In production, this would be a proper JWT decode
       return {
         id: 'user_123',
-        role: 'user',
+        role: 'user' as const,
         email: 'user@example.com',
       };
     }

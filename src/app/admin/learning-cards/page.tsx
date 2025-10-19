@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useRouter } from 'next/navigation';
 import {
   Card,
@@ -21,7 +27,7 @@ import {
   BookOpen,
   Loader2,
 } from 'lucide-react';
-import { LearningCardsService } from '@/lib/learning-cards-service';
+import { SupabaseLearningCardsService } from '@/lib/supabase-learning-cards-service';
 import { CARD_TYPES } from '@/types/learning-cards';
 import type {
   LearningCard,
@@ -47,9 +53,9 @@ export default function LearningCardsAdminPage() {
     color: '#3B82F6',
     icon: '💻',
     order: 1,
-    isActive: true,
+    is_active: true,
     metadata: {
-      questionCount: 0,
+      question_count: 0,
       estimatedTime: '30 minutes',
       difficulty: 'beginner',
       topics: [],
@@ -65,7 +71,7 @@ export default function LearningCardsAdminPage() {
     try {
       setIsLoading(true);
       setError(null);
-      const cardsData = await LearningCardsService.getAllCards();
+      const cardsData = await SupabaseLearningCardsService.getAllCards();
       setCards(cardsData);
     } catch (err) {
       console.error('Error loading cards:', err);
@@ -85,9 +91,9 @@ export default function LearningCardsAdminPage() {
       color: '#3B82F6',
       icon: '💻',
       order: cards.length + 1,
-      isActive: true,
+      is_active: true,
       metadata: {
-        questionCount: 0,
+        question_count: 0,
         estimatedTime: '30 minutes',
         difficulty: 'beginner',
         topics: [],
@@ -106,7 +112,7 @@ export default function LearningCardsAdminPage() {
       color: card.color,
       icon: card.icon,
       order: card.order,
-      isActive: card.isActive,
+      is_active: card.is_active,
       metadata: card.metadata,
     });
   };
@@ -114,9 +120,9 @@ export default function LearningCardsAdminPage() {
   const handleSaveCard = async () => {
     try {
       if (editingCard) {
-        await LearningCardsService.updateCard(editingCard.id, formData);
+        await SupabaseLearningCardsService.updateCard(editingCard.id, formData);
       } else {
-        await LearningCardsService.createCard(formData);
+        await SupabaseLearningCardsService.createCard(formData);
       }
 
       await loadCards();
@@ -128,9 +134,9 @@ export default function LearningCardsAdminPage() {
     }
   };
 
-  const handleDeleteCard = async (cardId: string) => {
+  const handleDeleteCard = async (card_id: string) => {
     try {
-      await LearningCardsService.deleteCard(cardId);
+      await SupabaseLearningCardsService.deleteCard(card_id);
       await loadCards();
       setShowDeleteConfirm(null);
     } catch (err) {
@@ -353,13 +359,13 @@ export default function LearningCardsAdminPage() {
                   </label>
                   <input
                     type="number"
-                    value={formData.metadata.questionCount}
+                    value={formData.metadata.question_count}
                     onChange={e =>
                       setFormData({
                         ...formData,
                         metadata: {
                           ...formData.metadata,
-                          questionCount: parseInt(e.target.value) || 0,
+                          question_count: parseInt(e.target.value) || 0,
                         },
                       })
                     }
@@ -388,9 +394,9 @@ export default function LearningCardsAdminPage() {
                 <input
                   type="checkbox"
                   id="isActive"
-                  checked={formData.isActive}
+                  checked={formData.is_active}
                   onChange={e =>
-                    setFormData({ ...formData, isActive: e.target.checked })
+                    setFormData({ ...formData, is_active: e.target.checked })
                   }
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
@@ -459,7 +465,7 @@ export default function LearningCardsAdminPage() {
                     <div className="flex items-center justify-between text-sm">
                       <span className="flex items-center space-x-1 text-gray-500">
                         <BookOpen className="w-4 h-4" />
-                        <span>{card.metadata.questionCount} questions</span>
+                        <span>{card.metadata.question_count} questions</span>
                       </span>
                       <span className="flex items-center space-x-1 text-gray-500">
                         <Clock className="w-4 h-4" />
@@ -473,8 +479,8 @@ export default function LearningCardsAdminPage() {
                       >
                         {card.metadata.difficulty}
                       </Badge>
-                      <Badge variant={card.isActive ? 'default' : 'secondary'}>
-                        {card.isActive ? 'Active' : 'Inactive'}
+                      <Badge variant={card.is_active ? 'default' : 'secondary'}>
+                        {card.is_active ? 'Active' : 'Inactive'}
                       </Badge>
                     </div>
                   </div>

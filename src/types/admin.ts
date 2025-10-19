@@ -33,9 +33,9 @@ export interface FrontendTask {
   files: FrontendTaskFile[]; // New dynamic files structure
   testCases?: FrontendTaskTestCase[]; // Added test cases
   tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
-  isActive: boolean;
+  created_at: Date;
+  updated_at: Date;
+  is_active: boolean;
 }
 
 export interface ProblemSolvingTask {
@@ -55,9 +55,9 @@ export interface ProblemSolvingTask {
     explanation?: string;
   }[];
   tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
-  isActive: boolean;
+  created_at: Date;
+  updated_at: Date;
+  is_active: boolean;
 }
 
 export interface TestCase {
@@ -108,7 +108,7 @@ export interface FrontendTaskFormData {
   files: FrontendTaskFile[]; // New dynamic files structure
   testCases?: FrontendTaskTestCase[]; // Added test cases
   tags: string[];
-  isActive: boolean;
+  is_active: boolean;
 }
 
 export interface ProblemSolvingTaskFormData {

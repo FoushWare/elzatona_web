@@ -32,7 +32,13 @@ const reactFrontendTasks: FrontendTask[] = [
       'Consider using CSS classes for styling',
     ],
     solution: `
-import React, { useState } from 'react';
+import React from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 
 const Counter = () => {
   const [count, setCount] = useState(0);
@@ -118,9 +124,9 @@ export default Counter;
       },
     ],
     tags: ['react', 'hooks', 'state', 'beginner'],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
   },
   {
     id: 'todo-list-component',
@@ -283,9 +289,9 @@ export default TodoList;
       },
     ],
     tags: ['react', 'hooks', 'state', 'forms', 'intermediate'],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
   },
   {
     id: 'user-profile-form',
@@ -539,9 +545,9 @@ export default UserProfileForm;
       },
     ],
     tags: ['react', 'forms', 'validation', 'typescript', 'intermediate'],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
   },
   {
     id: 'api-data-fetching',
@@ -723,9 +729,9 @@ export default DataFetcher;
       },
     ],
     tags: ['react', 'hooks', 'api', 'async', 'error-handling', 'advanced'],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
   },
   {
     id: 'custom-hook-local-storage',
@@ -893,9 +899,9 @@ export default useLocalStorage;
       },
     ],
     tags: ['react', 'hooks', 'localStorage', 'typescript', 'advanced'],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
   },
 ];
 
@@ -1050,9 +1056,9 @@ console.log('Find:', customFind(numbers, x => x > 3));
       },
     ],
     tags: ['javascript', 'arrays', 'functional-programming', 'typescript'],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
   },
 ];
 
@@ -1329,9 +1335,9 @@ const cssTasks: FrontendTask[] = [
       },
     ],
     tags: ['css', 'responsive', 'grid', 'flexbox', 'layout'],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
   },
 ];
 

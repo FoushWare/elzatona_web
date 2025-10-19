@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 interface LearningPath {
   id: string;
   title: string;
-  questionCount: number;
+  question_count: number;
   difficulty: string;
 }
 
@@ -31,19 +31,19 @@ export function useLearningPathStatsDebug(): UseLearningPathStatsDebugReturn {
           {
             id: '1',
             title: 'JavaScript Fundamentals',
-            questionCount: 25,
+            question_count: 25,
             difficulty: 'Beginner',
           },
           {
             id: '2',
             title: 'React Advanced Patterns',
-            questionCount: 18,
+            question_count: 18,
             difficulty: 'Advanced',
           },
           {
             id: '3',
             title: 'TypeScript Essentials',
-            questionCount: 32,
+            question_count: 32,
             difficulty: 'Intermediate',
           },
         ];

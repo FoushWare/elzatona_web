@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import {
   Card,
   CardContent,
@@ -234,8 +240,8 @@ export default function AdminContentQuestionsPage() {
     setIsEditModalOpen(true);
   };
 
-  const getCardTitleById = (cardId: string) => {
-    return cards.find((card: any) => card.id === cardId)?.title || 'N/A';
+  const getCardTitleById = (card_id: string) => {
+    return cards.find((card: any) => card.id === card_id)?.title || 'N/A';
   };
 
   if (loading) {
@@ -336,7 +342,7 @@ export default function AdminContentQuestionsPage() {
                   Active Questions
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {questions.filter(q => q.isActive).length}
+                  {questions.filter(q => q.is_active).length}
                 </p>
               </div>
             </CardContent>
@@ -623,7 +629,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       content: '',
       type: 'multiple-choice',
       difficulty: 'beginner',
-      isActive: true,
+      is_active: true,
       options: [],
       sampleAnswers: [],
       tags: [],
@@ -792,9 +798,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         <Checkbox
           id="isActive"
           name="isActive"
-          checked={formData.isActive || false}
+          checked={formData.is_active || false}
           onCheckedChange={checked =>
-            setFormData(prev => ({ ...prev, isActive: !!checked }))
+            setFormData(prev => ({ ...prev, is_active: !!checked }))
           }
         />
         <Label htmlFor="isActive">Is Active</Label>

@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import { collection, getDocs } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { SectionService } from '@/lib/section-service';
 
 interface LearningPath {
@@ -22,7 +26,7 @@ interface LearningPathWithSections extends LearningPath {
   sectors: Array<{
     id: string;
     name: string;
-    questionCount: number;
+    question_count: number;
   }>;
 }
 
@@ -73,18 +77,21 @@ const learningPathSections: Record<string, string[]> = {
 
 export async function GET(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
+    // Fetch learning paths from Supabase with ordering
+    const { data: learningPathsData, error: learningPathsError } =
+      await supabase
+        .from('learning_paths')
+        .select('*')
+        .order('order_index', { ascending: true });
+
+    if (learningPathsError) {
+      throw learningPathsError;
     }
 
-    // Fetch learning paths from Firebase with ordering
-    const learningPathsRef = collection(db, 'learningPaths');
-    const snapshot = await getDocs(learningPathsRef);
-
-    const learningPaths = snapshot.docs
+    const learningPaths = (learningPathsData || [])
       .map(doc => ({
         id: doc.id,
-        ...doc.data(),
+        ...doc,
       }))
       .sort((a: any, b: any) => {
         // Sort by order field if it exists, otherwise by name
@@ -129,14 +136,14 @@ export async function GET(request: NextRequest) {
             .map(section => ({
               id: section.id,
               name: section.name,
-              questionCount: section.questionCount || 0,
+              question_count: section.questionCount || 0,
             }));
 
           acc.push({
             ...path,
             sectors: pathSections,
             // Use the questionCount from the learning path itself
-            questionCount: path.questionCount || 0,
+            question_count: path.questionCount || 0,
           });
         }
         return acc;

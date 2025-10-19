@@ -17,7 +17,9 @@ export interface UseAudioCollectionReturn {
   error: string | null;
 
   // Actions
-  getAudioMapping: (questionId: string) => Promise<QuestionAudioMapping | null>;
+  getAudioMapping: (
+    question_id: string
+  ) => Promise<QuestionAudioMapping | null>;
   getAudioMappingsForLearningPath: (
     learningPath: string
   ) => Promise<QuestionAudioMapping[]>;
@@ -26,19 +28,19 @@ export interface UseAudioCollectionReturn {
     sectionId: string
   ) => Promise<QuestionAudioMapping[]>;
   updateAudioFile: (
-    questionId: string,
+    question_id: string,
     audioType: 'questionAudio' | 'answerAudio',
     audioInfo: AudioInfo
   ) => Promise<boolean>;
   createAudioMapping: (
-    questionId: string,
+    question_id: string,
     learningPath: string,
     sectionId: string,
     questionNumber: number,
     questionAudioPath?: string,
     answerAudioPath?: string
   ) => Promise<boolean>;
-  deleteAudioMapping: (questionId: string) => Promise<boolean>;
+  deleteAudioMapping: (question_id: string) => Promise<boolean>;
   clearError: () => void;
 }
 
@@ -54,12 +56,13 @@ export function useAudioCollection(): UseAudioCollectionReturn {
   }, []);
 
   const getAudioMapping = useCallback(
-    async (questionId: string): Promise<QuestionAudioMapping | null> => {
+    async (question_id: string): Promise<QuestionAudioMapping | null> => {
       try {
         setIsLoading(true);
         setError(null);
 
-        const result = await AudioCollectionService.getAudioMapping(questionId);
+        const result =
+          await AudioCollectionService.getAudioMapping(question_id);
 
         if (!result.success) {
           setError(result.error || 'Failed to get audio mapping');
@@ -146,7 +149,7 @@ export function useAudioCollection(): UseAudioCollectionReturn {
 
   const updateAudioFile = useCallback(
     async (
-      questionId: string,
+      question_id: string,
       audioType: 'questionAudio' | 'answerAudio',
       audioInfo: AudioInfo
     ): Promise<boolean> => {
@@ -155,7 +158,7 @@ export function useAudioCollection(): UseAudioCollectionReturn {
         setError(null);
 
         const result = await AudioCollectionService.updateAudioFile(
-          questionId,
+          question_id,
           audioType,
           audioInfo
         );
@@ -180,7 +183,7 @@ export function useAudioCollection(): UseAudioCollectionReturn {
 
   const createAudioMapping = useCallback(
     async (
-      questionId: string,
+      question_id: string,
       learningPath: string,
       sectionId: string,
       questionNumber: number,
@@ -192,7 +195,7 @@ export function useAudioCollection(): UseAudioCollectionReturn {
         setError(null);
 
         const result = await AudioCollectionService.createOrUpdateAudioMapping(
-          questionId,
+          question_id,
           learningPath,
           sectionId,
           questionNumber,
@@ -219,13 +222,13 @@ export function useAudioCollection(): UseAudioCollectionReturn {
   );
 
   const deleteAudioMapping = useCallback(
-    async (questionId: string): Promise<boolean> => {
+    async (question_id: string): Promise<boolean> => {
       try {
         setIsLoading(true);
         setError(null);
 
         const result =
-          await AudioCollectionService.deleteAudioMapping(questionId);
+          await AudioCollectionService.deleteAudioMapping(question_id);
 
         if (!result.success) {
           setError(result.error || 'Failed to delete audio mapping');
@@ -234,7 +237,7 @@ export function useAudioCollection(): UseAudioCollectionReturn {
 
         // Remove from local state
         setAudioMappings(prev =>
-          prev.filter(mapping => mapping.questionId !== questionId)
+          prev.filter(mapping => mapping.question_id !== question_id)
         );
         return true;
       } catch (err) {

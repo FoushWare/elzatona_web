@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  addDoc,
-  updateDoc,
-  doc,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 interface Question {
   id: string;
@@ -33,35 +27,31 @@ export async function POST(request: NextRequest) {
       sectionSize = 15,
     } = await request.json();
 
-    if (!db) {
-      throw new Error('Firebase not initialized');
+    // Get all questions for this learning path
+    const { data: questionsData, error: questionsError } = await supabase
+      .from('questions')
+      .select('*')
+      .eq('learning_path', learningPathId)
+      .order('created_at', { ascending: true });
+
+    if (questionsError) {
+      throw questionsError;
     }
 
-    // Get all questions for this learning path
-    const questionsRef = collection(db, 'questions');
-    const q = query(
-      questionsRef,
-      where('learningPath', '==', learningPathId),
-      orderBy('createdAt', 'asc')
-    );
-    const questionsSnapshot = await getDocs(q);
-    const questions: Question[] = questionsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const questions: Question[] = questionsData || [];
 
     // Get existing sections for this learning path
-    const sectionsRef = collection(db, 'sections');
-    const sectionsQuery = query(
-      sectionsRef,
-      where('learningPath', '==', learningPathId),
-      orderBy('order', 'asc')
-    );
-    const sectionsSnapshot = await getDocs(sectionsQuery);
-    const existingSections: Section[] = sectionsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const { data: sectionsData, error: sectionsError } = await supabase
+      .from('sections')
+      .select('*')
+      .eq('learning_path', learningPathId)
+      .order('order_index', { ascending: true });
+
+    if (sectionsError) {
+      throw sectionsError;
+    }
+
+    const existingSections: Section[] = sectionsData || [];
 
     // Calculate which section this question should go to
     const questionIndex = questions.findIndex(q => q.id === questionId);
@@ -77,33 +67,54 @@ export async function POST(request: NextRequest) {
       const newSection = {
         name: `Section ${sectionIndex + 1}`,
         description: `Questions ${sectionIndex * sectionSize + 1} - ${(sectionIndex + 1) * sectionSize}`,
-        learningPath: learningPathId,
-        order: sectionIndex + 1,
-        questionLimit: sectionSize,
-        currentQuestionCount: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        learning_path: learningPathId,
+        order_index: sectionIndex + 1,
+        question_limit: sectionSize,
+        current_question_count: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
-      const sectionDoc = await addDoc(sectionsRef, newSection);
-      targetSection = { id: sectionDoc.id, ...newSection };
+      const { data: sectionData, error: sectionError } = await supabase
+        .from('sections')
+        .insert(newSection)
+        .select()
+        .single();
+
+      if (sectionError) {
+        throw sectionError;
+      }
+
+      targetSection = sectionData;
     }
 
     // Update the question with section assignment
-    const questionRef = doc(db, 'questions', questionId);
-    await updateDoc(questionRef, {
-      sectionId: targetSection.id,
-      orderInSection: (questionIndex % sectionSize) + 1,
-      updatedAt: new Date(),
-    });
+    const { error: questionUpdateError } = await supabase
+      .from('questions')
+      .update({
+        section_id: targetSection.id,
+        order_in_section: (questionIndex % sectionSize) + 1,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', questionId);
+
+    if (questionUpdateError) {
+      throw questionUpdateError;
+    }
 
     // Update section question count
-    const sectionRef = doc(db, 'sections', targetSection.id);
-    await updateDoc(sectionRef, {
-      currentQuestionCount:
-        (targetSection as Section).currentQuestionCount! + 1,
-      updatedAt: new Date(),
-    });
+    const { error: sectionUpdateError } = await supabase
+      .from('sections')
+      .update({
+        current_question_count:
+          (targetSection as Section).currentQuestionCount! + 1,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', targetSection.id);
+
+    if (sectionUpdateError) {
+      throw sectionUpdateError;
+    }
 
     return NextResponse.json({
       success: true,

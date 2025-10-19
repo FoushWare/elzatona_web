@@ -2,14 +2,7 @@
 // Run with: npx tsx src/scripts/seed-css-questions.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
+
 import fs from 'fs';
 import path from 'path';
 
@@ -36,7 +29,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -53,9 +46,9 @@ interface CSSQuestion {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   learningPath: string;
   topic: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
   createdBy: string;
   updatedBy?: string;
   tags: string[];
@@ -136,9 +129,9 @@ function transformQuestion(question: any): CSSQuestion {
     difficulty: question.difficulty || 'intermediate',
     learningPath: question.learningPath || 'CSS Developer Path',
     topic: question.topic || 'CSS Basics',
-    isActive: question.isActive !== undefined ? question.isActive : true,
-    createdAt: question.createdAt || now,
-    updatedAt: question.updatedAt || now,
+    is_active: question.isActive !== undefined ? question.isActive : true,
+    created_at: question.createdAt || now,
+    updated_at: question.updatedAt || now,
     createdBy: question.createdBy || 'system',
     updatedBy: question.updatedBy || 'system',
     tags: Array.isArray(question.tags) ? question.tags : ['css'],
@@ -213,17 +206,17 @@ async function seedCSSQuestions() {
     try {
       // Check if question already exists
       const existingQuery = query(
-        collection(db, 'questions'),
-        where('id', '==', question.id)
+        supabase.from('questions'),
+        where('id', question.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
+      if (existingSnapshot.length === 0) {
         // Add to questions collection
-        await addDoc(collection(db, 'questions'), question);
+        await addDoc(supabase.from('questions'), question);
 
         // Also add to unifiedQuestions collection for compatibility
-        await addDoc(collection(db, 'unifiedQuestions'), {
+        await addDoc(supabase.from('unifiedQuestions'), {
           ...question,
           type: 'unified',
           source: 'css-json',

@@ -1,14 +1,24 @@
 'use client';
 
 import React, {
-  createContext,
-  useContext,
   useState,
   useEffect,
   useCallback,
   ReactNode,
+  createContext,
+  useContext,
 } from 'react';
-import { NotificationService, Notification } from '@/lib/notification-service';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+import {
+  NotificationService,
+  Notification,
+  NotificationSubscription,
+} from '@/lib/notification-service';
 
 interface NotificationContextType {
   notifications: Notification[];
@@ -45,11 +55,21 @@ export function NotificationProvider({
       setIsLoading(true);
       setError(null);
 
-      const fetchedNotifications = await NotificationService.getNotifications(
-        userId,
-        adminId,
-        50
-      );
+      let fetchedNotifications;
+      if (userId) {
+        fetchedNotifications = await NotificationService.getUserNotifications(
+          userId,
+          50
+        );
+      } else if (adminId) {
+        fetchedNotifications = await NotificationService.getAdminNotifications(
+          adminId,
+          50
+        );
+      } else {
+        fetchedNotifications =
+          await NotificationService.getSystemNotifications(50);
+      }
 
       setNotifications(fetchedNotifications);
       setUnreadCount(fetchedNotifications.filter(n => !n.isRead).length);
@@ -63,17 +83,15 @@ export function NotificationProvider({
 
   const markAsRead = useCallback(async (notificationId: string) => {
     try {
-      const success = await NotificationService.markAsRead(notificationId);
-      if (success) {
-        setNotifications(prev =>
-          prev.map(n =>
-            n.id === notificationId
-              ? { ...n, isRead: true, readAt: new Date() }
-              : n
-          )
-        );
-        setUnreadCount(prev => Math.max(0, prev - 1));
-      }
+      await NotificationService.markAsRead(notificationId);
+      setNotifications(prev =>
+        prev.map(n =>
+          n.id === notificationId
+            ? { ...n, isRead: true, readAt: new Date() }
+            : n
+        )
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (err) {
       console.error('Error marking notification as read:', err);
     }
@@ -81,13 +99,15 @@ export function NotificationProvider({
 
   const markAllAsRead = useCallback(async () => {
     try {
-      const success = await NotificationService.markAllAsRead(userId, adminId);
-      if (success) {
-        setNotifications(prev =>
-          prev.map(n => ({ ...n, isRead: true, readAt: new Date() }))
-        );
-        setUnreadCount(0);
+      if (userId) {
+        await NotificationService.markAllAsReadForUser(userId);
+      } else if (adminId) {
+        await NotificationService.markAllAsReadForAdmin(adminId);
       }
+      setNotifications(prev =>
+        prev.map(n => ({ ...n, isRead: true, readAt: new Date() }))
+      );
+      setUnreadCount(0);
     } catch (err) {
       console.error('Error marking all notifications as read:', err);
     }
@@ -100,19 +120,35 @@ export function NotificationProvider({
       return;
     }
 
-    const subscription = NotificationService.subscribeToNotifications(
-      realTimeNotifications => {
-        setNotifications(realTimeNotifications);
-        setUnreadCount(realTimeNotifications.filter(n => !n.isRead).length);
-        setIsLoading(false);
-      },
-      userId,
-      adminId,
-      50
-    );
+    let subscription: NotificationSubscription | undefined;
+    if (userId) {
+      subscription = NotificationService.subscribeToUserNotifications(
+        userId,
+        newNotification => {
+          setNotifications(prev => [newNotification, ...prev]);
+          if (!newNotification.isRead) {
+            setUnreadCount(prev => prev + 1);
+          }
+          setIsLoading(false);
+        }
+      );
+    } else if (adminId) {
+      subscription = NotificationService.subscribeToAdminNotifications(
+        adminId,
+        newNotification => {
+          setNotifications(prev => [newNotification, ...prev]);
+          if (!newNotification.isRead) {
+            setUnreadCount(prev => prev + 1);
+          }
+          setIsLoading(false);
+        }
+      );
+    }
 
     return () => {
-      subscription.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, [userId, adminId]);
 

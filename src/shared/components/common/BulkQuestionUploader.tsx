@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import {
   UnifiedQuestion,
   BulkQuestionData,
@@ -43,9 +49,9 @@ export default function BulkQuestionUploader({
       content: '',
       type: 'multiple-choice',
       difficulty: 'beginner',
-      isActive: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       options: [
         { id: 'a', text: '', isCorrect: false },
         { id: 'b', text: '', isCorrect: false },
@@ -83,9 +89,9 @@ export default function BulkQuestionUploader({
         content: '',
         type: 'multiple-choice',
         difficulty: 'beginner',
-        isActive: true,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
         options: [
           { id: 'a', text: '', isCorrect: false },
           { id: 'b', text: '', isCorrect: false },
@@ -210,9 +216,9 @@ export default function BulkQuestionUploader({
           content: q.content || '',
           type: q.type || 'multiple-choice',
           difficulty: q.difficulty || 'beginner',
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
           options: q.options.map(
             (
               opt: { id: string; text: string; isCorrect: boolean },
@@ -333,9 +339,9 @@ export default function BulkQuestionUploader({
           content: q.content || '',
           type: q.type || 'multiple-choice',
           difficulty: q.difficulty || 'beginner',
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
           options: q.options.map(
             (
               opt: { id: string; text: string; isCorrect: boolean },
@@ -494,9 +500,9 @@ export default function BulkQuestionUploader({
             content: '',
             type: 'multiple-choice',
             difficulty: 'beginner',
-            isActive: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
             options: [
               { id: 'a', text: '', isCorrect: false },
               { id: 'b', text: '', isCorrect: false },

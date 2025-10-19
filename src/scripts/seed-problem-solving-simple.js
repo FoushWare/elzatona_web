@@ -60,9 +60,9 @@ const problemSolvingTasks = [
       },
     ],
     tags: ['hash-table', 'array'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
 ];
 
@@ -71,7 +71,7 @@ async function seedProblemSolvingTasks() {
     console.log('🌱 Starting to seed problem solving tasks...');
 
     for (const task of problemSolvingTasks) {
-      const docRef = await addDoc(collection(db, 'problemSolvingTasks'), task);
+      const docRef = await addDoc(supabase.from('problemSolvingTasks'), task);
       console.log(`✅ Added problem: ${task.title} with ID: ${docRef.id}`);
     }
 

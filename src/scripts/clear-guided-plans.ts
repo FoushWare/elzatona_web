@@ -1,13 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-  doc,
-  deleteDoc,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -32,7 +23,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 async function clearGuidedLearningPlans() {
@@ -40,14 +31,16 @@ async function clearGuidedLearningPlans() {
 
   try {
     // Get all guided learning plans
-    const q = query(collection(db, 'guidedLearningPlans'));
+    const q = query(supabase.from('guidedLearningPlans'));
     const querySnapshot = await getDocs(q);
 
     let deletedCount = 0;
     for (const docSnapshot of querySnapshot.docs) {
-      await deleteDoc(doc(db, 'guidedLearningPlans', docSnapshot.id));
+      await deleteDoc(
+        supabase.from('guidedLearningPlans').select().eq('id', docSnapshot.id)
+      );
       deletedCount++;
-      console.log(`✅ Deleted plan: ${docSnapshot.data().name}`);
+      console.log(`✅ Deleted plan: ${docSnapshot.name}`);
     }
 
     console.log(

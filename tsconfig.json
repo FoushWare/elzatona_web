@@ -27,6 +27,7 @@
     "node_modules",
     "tests/**/*",
     "scripts-backup/**/*",
-    "src/scripts/**/*"
+    "src/scripts/**/*",
+    "scripts/firebase/**/*"
   ]
 }

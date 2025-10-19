@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
@@ -17,7 +23,7 @@ import {
   Star,
 } from 'lucide-react';
 import { useUserType } from '@/contexts/UserTypeContextSafe';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 import { useSecureProgress } from '@/hooks/useSecureProgress';
 
 interface Question {
@@ -39,7 +45,8 @@ interface FilterOptions {
 
 export default function FreeStylePracticePage() {
   const { userType } = useUserType();
-  const { isAuthenticated, isLoading: isAuthLoading } = useFirebaseAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
   const { saveProgress, progress: userProgress } = useSecureProgress();
   const router = useRouter();
 
@@ -263,7 +270,7 @@ export default function FreeStylePracticePage() {
       try {
         const success = await saveProgress({
           sessionId: `free-style_${Date.now()}`,
-          questionId: currentQuestion.id,
+          question_id: currentQuestion.id,
           answer: answerIndex,
           isCorrect: correct,
           timeSpent: Math.round(timeSpent / 1000), // Convert to seconds

@@ -10,11 +10,11 @@ export interface LearningCard {
   color: string;
   icon: string;
   order: number;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
   metadata: {
-    questionCount: number;
+    question_count: number;
     estimatedTime: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     topics: string[];
@@ -40,30 +40,30 @@ export interface LearningCardTopic {
 
 export interface LearningPlanCard {
   id: string;
-  planId: string;
-  cardId: string;
+  plan_id: string;
+  card_id: string;
   card: LearningCard;
-  questionCount: number;
+  question_count: number;
   timeLimit: number; // in minutes
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface CardProgress {
   id: string;
   userId: string;
-  planId: string;
-  cardId: string;
+  plan_id: string;
+  card_id: string;
   completedQuestions: string[];
   totalQuestions: number;
   score: number;
   timeSpent: number; // in minutes
   isCompleted: boolean;
   completedAt?: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface LearningCardFormData {
@@ -77,9 +77,9 @@ export interface LearningCardFormData {
   color: string;
   icon: string;
   order: number;
-  isActive: boolean;
+  is_active: boolean;
   metadata: {
-    questionCount: number;
+    question_count: number;
     estimatedTime: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     topics: string[];

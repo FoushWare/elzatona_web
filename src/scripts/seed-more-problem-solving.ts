@@ -2,14 +2,6 @@
 // Run with: npx tsx src/scripts/seed-more-problem-solving.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -34,7 +26,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -61,8 +53,8 @@ interface ProblemSolvingTask {
   starterCode: string;
   solutionCode: string;
   hints: string[];
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
   createdBy: string;
   updatedBy: string;
 }
@@ -144,8 +136,8 @@ const additionalProblemSolvingTasks: ProblemSolvingTask[] = [
       'For each number, check if its complement exists in the map',
       'Time complexity: O(n), Space complexity: O(n)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -233,8 +225,8 @@ const additionalProblemSolvingTasks: ProblemSolvingTask[] = [
       'When you encounter a closing bracket, check if it matches the most recent opening bracket',
       'Time complexity: O(n), Space complexity: O(n)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -324,8 +316,8 @@ function mergeTwoLists(list1, list2) {
       'Attach the smaller node to the result and move forward',
       'Time complexity: O(n + m), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -393,8 +385,8 @@ function mergeTwoLists(list1, list2) {
       'Update the global maximum whenever you find a better sum',
       'Time complexity: O(n), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -462,8 +454,8 @@ function mergeTwoLists(list1, list2) {
       'The number of ways to reach step n = ways to reach (n-1) + ways to reach (n-2)',
       'Time complexity: O(n), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -531,8 +523,8 @@ function mergeTwoLists(list1, list2) {
       'Update the maximum profit whenever you find a better profit',
       'Time complexity: O(n), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -601,8 +593,8 @@ function mergeTwoLists(list1, list2) {
       'If you rob current house, you cannot rob the previous house',
       'Time complexity: O(n), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -623,14 +615,14 @@ async function seedAdditionalProblemSolvingTasks() {
     try {
       // Check if task already exists
       const existingQuery = query(
-        collection(db, 'problemSolvingTasks'),
-        where('id', '==', task.id)
+        supabase.from('problemSolvingTasks'),
+        where('id', task.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
+      if (existingSnapshot.length === 0) {
         // Add task to Firebase
-        await addDoc(collection(db, 'problemSolvingTasks'), task);
+        await addDoc(supabase.from('problemSolvingTasks'), task);
 
         successCount++;
         console.log(`✅ Added problem-solving task: ${task.title}`);

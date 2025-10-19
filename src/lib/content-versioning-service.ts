@@ -1,17 +1,9 @@
-import { db } from './firebase';
-import {
-  collection,
-  writeBatch,
-  doc,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface ContentVersion {
   id: string;
@@ -25,7 +17,7 @@ export interface ContentVersion {
     newValue: any;
   }[];
   createdBy: string;
-  createdAt: string;
+  created_at: string;
   description?: string;
   tags?: string[];
 }
@@ -55,8 +47,8 @@ export interface AuditLog {
 }
 
 export class ContentVersioningService {
-  private static readonly VERSIONS_COLLECTION = 'contentVersions';
-  private static readonly AUDIT_LOGS_COLLECTION = 'auditLogs';
+  private static readonly VERSIONS_COLLECTION = 'content_versions';
+  private static readonly AUDIT_LOGS_COLLECTION = 'audit_logs';
 
   /**
    * Create a new content version
@@ -82,13 +74,13 @@ export class ContentVersioningService {
       data,
       changes,
       createdBy,
-      createdAt: new Date().toISOString(),
+      created_at: new Date().toISOString(),
       description,
       tags,
     };
 
-    // Save version to Firestore
-    await addDoc(collection(db, this.VERSIONS_COLLECTION), version);
+    // Save version to Supabase
+    await supabase.from(this.VERSIONS_COLLECTION).insert(version);
 
     // Create audit log
     await this.createAuditLog({
@@ -111,121 +103,112 @@ export class ContentVersioningService {
     contentType: ContentVersion['contentType'],
     limitCount: number = 50
   ): Promise<ContentVersion[]> {
-    const versionsSnapshot = await getDocs(
-      query(
-        collection(db, this.VERSIONS_COLLECTION),
-        where('contentId', '==', contentId),
-        where('contentType', '==', contentType),
-        orderBy('version', 'desc'),
-        limit(limitCount)
-      )
-    );
+    try {
+      const { data: versions, error } = await supabase
+        .from(this.VERSIONS_COLLECTION)
+        .select('*')
+        .eq('contentId', contentId)
+        .eq('contentType', contentType)
+        .order('version', { ascending: false })
+        .limit(limitCount);
 
-    return versionsSnapshot.docs.map(doc => doc.data() as ContentVersion);
-  }
+      if (error) {
+        throw error;
+      }
 
-  /**
-   * Get a specific version
-   */
-  static async getContentVersion(
-    versionId: string
-  ): Promise<ContentVersion | null> {
-    const versionSnapshot = await getDocs(
-      query(
-        collection(db, this.VERSIONS_COLLECTION),
-        where('id', '==', versionId)
-      )
-    );
-
-    if (versionSnapshot.empty) {
-      return null;
+      return versions || [];
+    } catch (error) {
+      console.error('❌ Failed to get content versions:', error);
+      return [];
     }
-
-    return versionSnapshot.docs[0].data() as ContentVersion;
   }
 
   /**
-   * Get the latest version for a content item
+   * Get the latest version of a content item
    */
   static async getLatestVersion(
     contentId: string,
     contentType: ContentVersion['contentType']
   ): Promise<ContentVersion | null> {
-    const versionsSnapshot = await getDocs(
-      query(
-        collection(db, this.VERSIONS_COLLECTION),
-        where('contentId', '==', contentId),
-        where('contentType', '==', contentType),
-        orderBy('version', 'desc'),
-        limit(1)
-      )
-    );
+    try {
+      const { data: version, error } = await supabase
+        .from(this.VERSIONS_COLLECTION)
+        .select('*')
+        .eq('contentId', contentId)
+        .eq('contentType', contentType)
+        .order('version', { ascending: false })
+        .limit(1)
+        .single();
 
-    if (versionsSnapshot.empty) {
+      if (error && error.code !== 'PGRST116') {
+        throw error;
+      }
+
+      return version || null;
+    } catch (error) {
+      console.error('❌ Failed to get latest version:', error);
       return null;
     }
-
-    return versionsSnapshot.docs[0].data() as ContentVersion;
   }
 
   /**
-   * Restore content to a specific version
+   * Get a specific version by ID
    */
-  static async restoreContentVersion(
-    versionId: string,
-    restoredBy: string
-  ): Promise<boolean> {
+  static async getVersionById(
+    versionId: string
+  ): Promise<ContentVersion | null> {
     try {
-      const version = await this.getContentVersion(versionId);
-      if (!version) {
-        throw new Error('Version not found');
+      const { data: version, error } = await supabase
+        .from(this.VERSIONS_COLLECTION)
+        .select('*')
+        .eq('id', versionId)
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        throw error;
       }
 
-      // Get the collection name for the content type
-      const collectionName = this.getCollectionName(version.contentType);
-
-      // Update the content with the version data
-      const contentRef = doc(collection(db, collectionName), version.contentId);
-      await updateDoc(contentRef, {
-        ...version.data,
-        updatedAt: new Date().toISOString(),
-        updatedBy: restoredBy,
-      });
-
-      // Create audit log
-      await this.createAuditLog({
-        contentId: version.contentId,
-        contentType: version.contentType,
-        action: 'restore',
-        changes: { restoredFromVersion: version.version },
-        userId: restoredBy,
-        timestamp: new Date().toISOString(),
-      });
-
-      return true;
+      return version || null;
     } catch (error) {
-      console.error('Failed to restore content version:', error);
-      return false;
+      console.error('❌ Failed to get version by ID:', error);
+      return null;
     }
   }
 
   /**
    * Compare two versions
    */
-  static async compareVersions(
-    versionId1: string,
-    versionId2: string
-  ): Promise<VersionComparison | null> {
-    const [version1, version2] = await Promise.all([
-      this.getContentVersion(versionId1),
-      this.getContentVersion(versionId2),
-    ]);
+  static compareVersions(
+    version1: ContentVersion,
+    version2: ContentVersion
+  ): VersionComparison {
+    const differences: VersionComparison['differences'] = [];
 
-    if (!version1 || !version2) {
-      return null;
+    // Compare all fields in version1.data
+    for (const [field, value1] of Object.entries(version1.data)) {
+      const value2 = version2.data[field];
+
+      if (value1 !== value2) {
+        differences.push({
+          field,
+          version1Value: value1,
+          version2Value: value2,
+          changeType: value2 === undefined ? 'removed' : 'modified',
+        });
+      }
     }
 
-    const differences = this.calculateDifferences(version1.data, version2.data);
+    // Check for fields added in version2
+    for (const [field, value2] of Object.entries(version2.data)) {
+      if (!(field in version1.data)) {
+        differences.push({
+          field,
+          version1Value: undefined,
+          version2Value: value2,
+          changeType: 'added',
+        });
+      }
+    }
 
     return {
       version1,
@@ -235,39 +218,127 @@ export class ContentVersioningService {
   }
 
   /**
+   * Restore content to a specific version
+   */
+  static async restoreToVersion(
+    versionId: string,
+    restoredBy: string
+  ): Promise<boolean> {
+    try {
+      const version = await this.getVersionById(versionId);
+      if (!version) {
+        throw new Error('Version not found');
+      }
+
+      // Update the content in the main table
+      const tableName = this.getTableName(version.contentType);
+      const { error: updateError } = await supabase
+        .from(tableName)
+        .update(version.data)
+        .eq('id', version.contentId);
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      // Create audit log
+      await this.createAuditLog({
+        contentId: version.contentId,
+        contentType: version.contentType,
+        action: 'restore',
+        changes: { restoredToVersion: version.version },
+        userId: restoredBy,
+        timestamp: new Date().toISOString(),
+      });
+
+      return true;
+    } catch (error) {
+      console.error('❌ Failed to restore version:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Delete a specific version
+   */
+  static async deleteVersion(versionId: string): Promise<boolean> {
+    try {
+      const { error } = await supabase
+        .from(this.VERSIONS_COLLECTION)
+        .delete()
+        .eq('id', versionId);
+
+      if (error) {
+        throw error;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('❌ Failed to delete version:', error);
+      return false;
+    }
+  }
+
+  /**
    * Get audit logs for a content item
    */
   static async getAuditLogs(
-    contentId?: string,
-    contentType?: string,
-    limitCount: number = 100
+    contentId: string,
+    contentType: string,
+    limitCount: number = 50
   ): Promise<AuditLog[]> {
-    let auditQuery = query(
-      collection(db, this.AUDIT_LOGS_COLLECTION),
-      orderBy('timestamp', 'desc'),
-      limit(limitCount)
-    );
+    try {
+      const { data: logs, error } = await supabase
+        .from(this.AUDIT_LOGS_COLLECTION)
+        .select('*')
+        .eq('contentId', contentId)
+        .eq('contentType', contentType)
+        .order('timestamp', { ascending: false })
+        .limit(limitCount);
 
-    if (contentId) {
-      auditQuery = query(
-        collection(db, this.AUDIT_LOGS_COLLECTION),
-        where('contentId', '==', contentId),
-        orderBy('timestamp', 'desc'),
-        limit(limitCount)
-      );
+      if (error) {
+        throw error;
+      }
+
+      return logs || [];
+    } catch (error) {
+      console.error('❌ Failed to get audit logs:', error);
+      return [];
     }
+  }
 
-    if (contentType) {
-      auditQuery = query(
-        collection(db, this.AUDIT_LOGS_COLLECTION),
-        where('contentType', '==', contentType),
-        orderBy('timestamp', 'desc'),
-        limit(limitCount)
-      );
+  /**
+   * Create an audit log entry
+   */
+  private static async createAuditLog(
+    logData: Omit<AuditLog, 'id'>
+  ): Promise<void> {
+    try {
+      const auditLog: AuditLog = {
+        id: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        ...logData,
+      };
+
+      await supabase.from(this.AUDIT_LOGS_COLLECTION).insert(auditLog);
+    } catch (error) {
+      console.error('❌ Failed to create audit log:', error);
     }
+  }
 
-    const auditSnapshot = await getDocs(auditQuery);
-    return auditSnapshot.docs.map(doc => doc.data() as AuditLog);
+  /**
+   * Get table name for content type
+   */
+  private static getTableName(
+    contentType: ContentVersion['contentType']
+  ): string {
+    const tableMap = {
+      question: 'questions',
+      category: 'categories',
+      topic: 'topics',
+      card: 'learning_cards',
+      plan: 'learning_plans',
+    };
+    return tableMap[contentType];
   }
 
   /**
@@ -277,164 +348,60 @@ export class ContentVersioningService {
     totalLogs: number;
     logsByAction: Record<string, number>;
     logsByContentType: Record<string, number>;
-    recentActivity: AuditLog[];
+    recentActivity: number;
   }> {
-    const auditSnapshot = await getDocs(
-      query(
-        collection(db, this.AUDIT_LOGS_COLLECTION),
-        orderBy('timestamp', 'desc'),
-        limit(1000)
-      )
-    );
+    try {
+      const { data: logs, error } = await supabase
+        .from(this.AUDIT_LOGS_COLLECTION)
+        .select('*');
 
-    const logs = auditSnapshot.docs.map(doc => doc.data() as AuditLog);
+      if (error) {
+        throw error;
+      }
 
-    const logsByAction: Record<string, number> = {};
-    const logsByContentType: Record<string, number> = {};
+      const allLogs = logs || [];
+      const totalLogs = allLogs.length;
 
-    logs.forEach(log => {
-      logsByAction[log.action] = (logsByAction[log.action] || 0) + 1;
-      logsByContentType[log.contentType] =
-        (logsByContentType[log.contentType] || 0) + 1;
-    });
-
-    return {
-      totalLogs: logs.length,
-      logsByAction,
-      logsByContentType,
-      recentActivity: logs.slice(0, 10),
-    };
-  }
-
-  /**
-   * Delete old versions (cleanup)
-   */
-  static async cleanupOldVersions(
-    contentId: string,
-    contentType: ContentVersion['contentType'],
-    keepVersions: number = 10
-  ): Promise<number> {
-    const versions = await this.getContentVersions(
-      contentId,
-      contentType,
-      1000
-    );
-
-    if (versions.length <= keepVersions) {
-      return 0;
-    }
-
-    const versionsToDelete = versions.slice(keepVersions);
-    const batch = writeBatch(db);
-
-    versionsToDelete.forEach(version => {
-      const versionRef = doc(
-        collection(db, this.VERSIONS_COLLECTION),
-        version.id
+      // Count by action
+      const logsByAction = allLogs.reduce(
+        (acc, log) => {
+          acc[log.action] = (acc[log.action] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
       );
-      batch.delete(versionRef);
-    });
 
-    await batch.commit();
-    return versionsToDelete.length;
-  }
+      // Count by content type
+      const logsByContentType = allLogs.reduce(
+        (acc, log) => {
+          acc[log.contentType] = (acc[log.contentType] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
-  /**
-   * Create audit log entry
-   */
-  private static async createAuditLog(
-    auditData: Omit<AuditLog, 'id'>
-  ): Promise<void> {
-    const auditLog: AuditLog = {
-      id: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      ...auditData,
-    };
+      // Count recent activity (last 24 hours)
+      const oneDayAgo = new Date(
+        Date.now() - 24 * 60 * 60 * 1000
+      ).toISOString();
+      const recentActivity = allLogs.filter(
+        log => log.timestamp >= oneDayAgo
+      ).length;
 
-    await addDoc(collection(db, this.AUDIT_LOGS_COLLECTION), auditLog);
-  }
-
-  /**
-   * Get collection name for content type
-   */
-  private static getCollectionName(
-    contentType: ContentVersion['contentType']
-  ): string {
-    const collectionMap = {
-      question: 'questions',
-      category: 'categories',
-      topic: 'topics',
-      card: 'learningCards',
-      plan: 'learningPlans',
-    };
-    return collectionMap[contentType];
-  }
-
-  /**
-   * Calculate differences between two objects
-   */
-  private static calculateDifferences(
-    obj1: Record<string, any>,
-    obj2: Record<string, any>
-  ): {
-    field: string;
-    version1Value: any;
-    version2Value: any;
-    changeType: 'added' | 'removed' | 'modified';
-  }[] {
-    const differences: any[] = [];
-    const allKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
-
-    allKeys.forEach(key => {
-      const value1 = obj1[key];
-      const value2 = obj2[key];
-
-      if (value1 === undefined && value2 !== undefined) {
-        differences.push({
-          field: key,
-          version1Value: undefined,
-          version2Value: value2,
-          changeType: 'added' as const,
-        });
-      } else if (value1 !== undefined && value2 === undefined) {
-        differences.push({
-          field: key,
-          version1Value: value1,
-          version2Value: undefined,
-          changeType: 'removed' as const,
-        });
-      } else if (JSON.stringify(value1) !== JSON.stringify(value2)) {
-        differences.push({
-          field: key,
-          version1Value: value1,
-          version2Value: value2,
-          changeType: 'modified' as const,
-        });
-      }
-    });
-
-    return differences;
-  }
-
-  /**
-   * Generate version description from changes
-   */
-  static generateVersionDescription(
-    changes: ContentVersion['changes']
-  ): string {
-    if (changes.length === 0) {
-      return 'No changes detected';
+      return {
+        totalLogs,
+        logsByAction,
+        logsByContentType,
+        recentActivity,
+      };
+    } catch (error) {
+      console.error('❌ Failed to get audit log stats:', error);
+      return {
+        totalLogs: 0,
+        logsByAction: {},
+        logsByContentType: {},
+        recentActivity: 0,
+      };
     }
-
-    const changeTypes = changes.map(change => {
-      if (change.oldValue === undefined) {
-        return `Added ${change.field}`;
-      } else if (change.newValue === undefined) {
-        return `Removed ${change.field}`;
-      } else {
-        return `Modified ${change.field}`;
-      }
-    });
-
-    return changeTypes.join(', ');
   }
 }

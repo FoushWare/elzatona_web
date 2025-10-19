@@ -76,7 +76,13 @@ const element = <div>
     explanation:
       'React Hooks are functions that allow you to use state and other React features in functional components without writing classes. They were introduced in React 16.8 and include useState, useEffect, useContext, and more.',
     code: `// Using useState hook
-import React, { useState } from 'react';
+import React from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 
 function Counter() {
   const [count, setCount] = useState(0);

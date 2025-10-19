@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 import { QuestionTopic } from '../route';
 
 // ==========================================
@@ -444,9 +448,9 @@ function getCommonTopics(): Omit<QuestionTopic, 'id'>[] {
           .toLowerCase()
           .replace(/\s+/g, '-') as QuestionTopic['category'],
         color: categoryColors[category] || '#3B82F6',
-        createdAt: now,
-        updatedAt: now,
-        questionCount: 0,
+        created_at: now,
+        updated_at: now,
+        question_count: 0,
       });
     });
   });
@@ -454,16 +458,15 @@ function getCommonTopics(): Omit<QuestionTopic, 'id'>[] {
   return topics;
 }
 
-// Check if topics already exist in Firebase
+// Check if topics already exist in Supabase
 async function topicsExist(): Promise<boolean> {
-  if (!db) {
-    return false;
-  }
-
   try {
-    const topicsRef = collection(db, 'topics');
-    const querySnapshot = await getDocs(topicsRef);
-    return !querySnapshot.empty;
+    const { data, error } = await supabase.from('topics').select('*');
+    if (error) {
+      console.error('Error checking if topics exist:', error);
+      return false;
+    }
+    return data && data.length > 0;
   } catch (error) {
     console.error('Error checking if topics exist:', error);
     return false;
@@ -475,16 +478,6 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { force = false } = body;
-
-    if (!db) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Firestore not available',
-        },
-        { status: 500 }
-      );
-    }
 
     const existingTopics = await topicsExist();
 
@@ -499,23 +492,45 @@ export async function POST(request: NextRequest) {
     }
 
     const commonTopics = getCommonTopics();
-    const topicsRef = collection(db, 'topics');
+    const topicsRef = supabase.from('topics');
     const createdTopics: QuestionTopic[] = [];
 
     // If force is true, we need to clear existing topics first
     if (force && existingTopics) {
-      // Note: In a production app, you might want to implement batch delete
-      // For now, we'll just add new topics (they might have different IDs)
-      console.log('Force mode: Adding topics alongside existing ones');
+      const { error: deleteError } = await supabase
+        .from('topics')
+        .delete()
+        .neq('id', 0);
+      if (deleteError) {
+        console.error('Error clearing existing topics:', deleteError);
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Failed to clear existing topics',
+          },
+          { status: 500 }
+        );
+      }
     }
 
-    // Add all topics to Firebase
+    // Add all topics to Supabase
     for (const topic of commonTopics) {
-      const docRef = await addDoc(topicsRef, topic);
-      createdTopics.push({
-        id: docRef.id,
-        ...topic,
-      });
+      const { data: newTopic, error } = await supabase
+        .from('topics')
+        .insert({
+          ...topic,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error creating topic:', error);
+        continue;
+      }
+
+      createdTopics.push(newTopic as QuestionTopic);
     }
 
     return NextResponse.json({

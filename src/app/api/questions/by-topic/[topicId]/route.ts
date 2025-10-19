@@ -2,14 +2,11 @@
 // v1.0 - Get questions for a specific topic
 
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  db,
-  collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
-} from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/questions/by-topic/[topicId] - Get questions for a specific topic
 export async function GET(
@@ -17,10 +14,6 @@ export async function GET(
   { params }: { params: Promise<{ topicId: string }> }
 ) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     const { topicId } = await params;
     const { searchParams } = new URL(request.url);
 
@@ -29,43 +22,35 @@ export async function GET(
     const type = searchParams.get('type');
     const limit = parseInt(searchParams.get('limit') || '50');
 
-    // Build query constraints
-    const constraints = [where('topicId', '==', topicId)];
+    // Build query
+    let query = supabase.from('questions').select('*').eq('topic_id', topicId);
 
     if (difficulty) {
-      constraints.push(where('difficulty', '==', difficulty));
+      query = query.eq('difficulty', difficulty);
     }
 
     if (type) {
-      constraints.push(where('type', '==', type));
+      query = query.eq('type', type);
     }
 
-    // Create the query
-    const q = query(collection(db, 'unifiedQuestions'), ...constraints);
-    const snapshot = await getDocs(q);
+    // Execute query
+    const { data: questionsData, error: questionsError } = await query
+      .order('created_at', { ascending: false })
+      .limit(limit);
 
-    const questions = snapshot.docs.map(
-      doc =>
-        ({
-          id: doc.id,
-          ...doc.data(),
-        }) as any
-    );
+    if (questionsError) {
+      throw questionsError;
+    }
 
-    // Sort by createdAt after fetching (to avoid Firestore index issues)
-    questions.sort((a, b) => {
-      const dateA = new Date(a.createdAt || new Date());
-      const dateB = new Date(b.createdAt || new Date());
-      return dateB.getTime() - dateA.getTime();
-    });
-
-    // Apply limit
-    const limitedQuestions = questions.slice(0, limit);
+    const questions = (questionsData || []).map(doc => ({
+      id: doc.id,
+      ...doc,
+    }));
 
     return NextResponse.json({
       success: true,
-      data: limitedQuestions,
-      count: limitedQuestions.length,
+      data: questions,
+      count: questions.length,
       total: questions.length,
     });
   } catch (error) {

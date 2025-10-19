@@ -1,12 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
+
 import { getAuth, signInAnonymously } from 'firebase/auth';
 
 // Firebase configuration - using the correct project
@@ -21,7 +14,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 const auth = getAuth(app);
 
@@ -45,9 +38,9 @@ async function seedSampleQuestions() {
         topic: 'Hoisting',
         learningPath: 'Advanced JavaScript Concepts',
         difficulty: 'intermediate',
-        isActive: true,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
         createdBy: 'seeding-script',
         updatedBy: 'seeding-script',
         tags: ['javascript', 'hoisting', 'var', 'let', 'temporal-dead-zone'],
@@ -91,13 +84,10 @@ async function seedSampleQuestions() {
     ];
 
     // Check if questions already exist
-    const q = query(
-      collection(db, 'unifiedQuestions'),
-      where('id', '==', 'js-q-001')
-    );
+    const q = query(supabase.from('unifiedQuestions'), where('id', 'js-q-001'));
     const querySnapshot = await getDocs(q);
 
-    if (!querySnapshot.empty) {
+    if (!querySnapshot.length === 0) {
       console.log('⏭️  Question js-q-001 already exists, skipping...');
       return;
     }
@@ -105,7 +95,7 @@ async function seedSampleQuestions() {
     // Add questions to Firebase
     for (const question of sampleQuestions) {
       console.log(`Adding question: ${question.title}`);
-      await addDoc(collection(db, 'unifiedQuestions'), question);
+      await addDoc(supabase.from('unifiedQuestions'), question);
       console.log(`✅ Added: ${question.title}`);
     }
 

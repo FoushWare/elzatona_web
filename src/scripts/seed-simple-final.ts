@@ -2,14 +2,6 @@
 // Run with: npx tsx src/scripts/seed-simple-final.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -23,7 +15,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -453,8 +445,8 @@ function reverseList(head) {
       'Iterate through the list and reverse the links',
       'Time complexity: O(n), Space complexity: O(1)',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -535,8 +527,8 @@ function inorderTraversal(root) {
       'Inorder traversal: left -> root -> right',
       'Time complexity: O(n), Space complexity: O(h) where h is height',
     ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
   },
@@ -557,14 +549,14 @@ async function seedComprehensiveQuestions() {
     try {
       // Check if question already exists
       const existingQuery = query(
-        collection(db, 'questions'),
-        where('id', '==', question.id)
+        supabase.from('questions'),
+        where('id', question.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
+      if (existingSnapshot.length === 0) {
         // Add question to Firebase
-        await addDoc(collection(db, 'questions'), question);
+        await addDoc(supabase.from('questions'), question);
 
         successCount++;
         console.log(
@@ -601,14 +593,14 @@ async function seedAdditionalProblemSolvingTasks() {
     try {
       // Check if task already exists
       const existingQuery = query(
-        collection(db, 'problemSolvingTasks'),
-        where('id', '==', task.id)
+        supabase.from('problemSolvingTasks'),
+        where('id', task.id)
       );
       const existingSnapshot = await getDocs(existingQuery);
 
-      if (existingSnapshot.empty) {
+      if (existingSnapshot.length === 0) {
         // Add task to Firebase
-        await addDoc(collection(db, 'problemSolvingTasks'), task);
+        await addDoc(supabase.from('problemSolvingTasks'), task);
 
         successCount++;
         console.log(`✅ Added problem-solving task: ${task.title}`);

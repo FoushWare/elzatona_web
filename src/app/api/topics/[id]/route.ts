@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+  },
+});
 
 // GET /api/topics/[id] - Get a specific topic
 export async function GET(
@@ -10,13 +19,6 @@ export async function GET(
   try {
     const { id: topicId } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     if (!topicId) {
       return NextResponse.json(
         { success: false, error: 'Topic ID is required' },
@@ -24,24 +26,25 @@ export async function GET(
       );
     }
 
-    const topicRef = doc(db, 'topics', topicId);
-    const topicSnap = await getDoc(topicRef);
+    const { data: topic, error } = await supabase
+      .from('topics')
+      .select('*')
+      .eq('id', topicId)
+      .single();
 
-    if (!topicSnap.exists()) {
-      return NextResponse.json(
-        { success: false, error: 'Topic not found' },
-        { status: 404 }
-      );
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return NextResponse.json(
+          { success: false, error: 'Topic not found' },
+          { status: 404 }
+        );
+      }
+      throw error;
     }
-
-    const topicData = {
-      id: topicSnap.id,
-      ...topicSnap.data(),
-    };
 
     return NextResponse.json({
       success: true,
-      data: topicData,
+      data: topic,
     });
   } catch (error) {
     console.error('Error fetching topic:', error);
@@ -61,13 +64,6 @@ export async function PUT(
     const { id: topicId } = await params;
     const body = await request.json();
 
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     if (!topicId) {
       return NextResponse.json(
         { success: false, error: 'Topic ID is required' },
@@ -83,29 +79,33 @@ export async function PUT(
       );
     }
 
-    const topicRef = doc(db, 'topics', topicId);
-
-    // Check if topic exists
-    const topicSnap = await getDoc(topicRef);
-    if (!topicSnap.exists()) {
-      return NextResponse.json(
-        { success: false, error: 'Topic not found' },
-        { status: 404 }
-      );
-    }
-
     // Prepare update data
     const updateData = {
       ...body,
-      updatedAt: new Date(),
+      updated_at: new Date().toISOString(),
     };
 
-    await updateDoc(topicRef, updateData);
+    const { data: updatedTopic, error } = await supabase
+      .from('topics')
+      .update(updateData)
+      .eq('id', topicId)
+      .select()
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return NextResponse.json(
+          { success: false, error: 'Topic not found' },
+          { status: 404 }
+        );
+      }
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,
       message: 'Topic updated successfully',
-      data: { id: topicId, ...updateData },
+      data: updatedTopic,
     });
   } catch (error) {
     console.error('Error updating topic:', error);
@@ -124,13 +124,6 @@ export async function DELETE(
   try {
     const { id: topicId } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     if (!topicId) {
       return NextResponse.json(
         { success: false, error: 'Topic ID is required' },
@@ -138,18 +131,11 @@ export async function DELETE(
       );
     }
 
-    const topicRef = doc(db, 'topics', topicId);
+    const { error } = await supabase.from('topics').delete().eq('id', topicId);
 
-    // Check if topic exists
-    const topicSnap = await getDoc(topicRef);
-    if (!topicSnap.exists()) {
-      return NextResponse.json(
-        { success: false, error: 'Topic not found' },
-        { status: 404 }
-      );
+    if (error) {
+      throw error;
     }
-
-    await deleteDoc(topicRef);
 
     return NextResponse.json({
       success: true,

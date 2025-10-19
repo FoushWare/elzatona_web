@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 interface LearningPathStats {
   id: string;
-  questionCount: number;
+  question_count: number;
   isLoading: boolean;
   error: string | null;
 }
@@ -72,7 +72,7 @@ export function useLearningPathStats(): UseLearningPathStatsReturn {
         const questionCount = await fetchQuestionCount(path.id);
         return {
           id: path.id,
-          questionCount,
+          question_count: questionCount,
           isLoading: false,
           error: null,
         };
@@ -111,7 +111,7 @@ export function useLearningPathStats(): UseLearningPathStatsReturn {
       if (isLoading || !stats[pathId]) {
         return undefined;
       }
-      return stats[pathId].questionCount;
+      return stats[pathId].question_count;
     },
     [stats, isLoading]
   );

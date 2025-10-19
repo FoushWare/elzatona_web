@@ -1,14 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  doc,
-  deleteDoc,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -33,7 +23,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 interface LearningPlanCard {
@@ -52,7 +42,7 @@ interface LearningPlanCard {
         [topicName: string]: {
           title: string;
           questions: Array<{
-            questionId: string;
+            question_id: string;
             question: string;
             difficulty: 'beginner' | 'intermediate' | 'advanced';
             estimatedTime: number;
@@ -75,9 +65,9 @@ interface GuidedLearningPlan {
   description: string;
   duration: number;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
   createdBy: string;
   updatedBy: string;
   cards: LearningPlanCard[];
@@ -289,18 +279,18 @@ async function getQuestionsByCategoryAndDifficulty(
 ): Promise<any[]> {
   try {
     const q = query(
-      collection(db, 'unifiedQuestions'),
-      where('category', '==', category),
-      where('difficulty', '==', difficulty),
-      where('isActive', '==', true)
+      supabase.from('unifiedQuestions'),
+      where('category', category),
+      where('difficulty', difficulty),
+      where('isActive', true)
     );
     const querySnapshot = await getDocs(q);
-    const questions = querySnapshot.docs.map(doc => ({
-      id: doc.data().id || doc.id,
-      question: doc.data().question || 'Sample question',
-      category: doc.data().category || category,
-      topic: doc.data().topic || 'General',
-      difficulty: doc.data().difficulty || difficulty,
+    const questions = querySnapshot.map(doc => ({
+      id: doc.id || doc.id,
+      question: doc.question || 'Sample question',
+      category: doc.category || category,
+      topic: doc.topic || 'General',
+      difficulty: doc.difficulty || difficulty,
       estimatedTime: Math.floor(Math.random() * 10) + 5, // 5-15 minutes per question
     }));
 
@@ -351,7 +341,7 @@ function calculateDaySpecificQuestions(day: number): number {
 async function createLearningPlanCard(
   cardType: keyof typeof cardConfigs,
   day: number,
-  planId: string
+  plan_id: string
 ): Promise<LearningPlanCard> {
   const config = cardConfigs[cardType];
 
@@ -414,7 +404,7 @@ async function createLearningPlanCard(
       topics[topicName] = {
         title: topicName,
         questions: shuffledQuestions.map(q => ({
-          questionId: q.id,
+          question_id: q.id,
           question: q.question,
           difficulty: q.difficulty,
           estimatedTime: q.estimatedTime,
@@ -497,9 +487,9 @@ async function createGuidedLearningPlan(
     description: `Comprehensive ${day}-day preparation plan covering core technologies, frameworks, problem solving, and system design. ${day === 1 ? 'Perfect for quick review.' : `Builds upon ${day - 1}-day foundation with additional advanced topics.`}`,
     duration: day,
     difficulty: day <= 2 ? 'beginner' : day <= 4 ? 'intermediate' : 'advanced',
-    isActive: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     createdBy: 'seeding-script',
     updatedBy: 'seeding-script',
     cards,
@@ -517,14 +507,11 @@ async function createGuidedLearningPlan(
   return plan;
 }
 
-async function planExists(planId: string): Promise<boolean> {
+async function planExists(plan_id: string): Promise<boolean> {
   try {
-    const q = query(
-      collection(db, 'guidedLearningPlans'),
-      where('id', '==', planId)
-    );
+    const q = query(supabase.from('guidedLearningPlans'), where('id', planId));
     const querySnapshot = await getDocs(q);
-    return !querySnapshot.empty;
+    return !querySnapshot.length === 0;
   } catch (error) {
     console.error(`❌ Error checking if plan exists:`, error);
     return false;
@@ -535,12 +522,14 @@ async function clearExistingPlans() {
   console.log('🗑️  Clearing existing guided learning plans...');
 
   try {
-    const q = query(collection(db, 'guidedLearningPlans'));
+    const q = query(supabase.from('guidedLearningPlans'));
     const querySnapshot = await getDocs(q);
 
     let deletedCount = 0;
     for (const docSnapshot of querySnapshot.docs) {
-      await deleteDoc(doc(db, 'guidedLearningPlans', docSnapshot.id));
+      await deleteDoc(
+        supabase.from('guidedLearningPlans').select().eq('id', docSnapshot.id)
+      );
       deletedCount++;
     }
 
@@ -571,7 +560,7 @@ async function seedTrulyCumulativeGuidedLearningPlans() {
       const plan = await createGuidedLearningPlan(day);
 
       // Add to Firebase
-      await addDoc(collection(db, 'guidedLearningPlans'), plan);
+      await addDoc(supabase.from('guidedLearningPlans'), plan);
 
       console.log(`✅ Added plan: ${plan.name}`);
       console.log(`   📊 Total Questions: ${plan.totalQuestions}`);

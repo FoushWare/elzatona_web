@@ -6,8 +6,8 @@ interface LearningPath {
   name: string;
   description: string;
   sectors: Sector[];
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface Sector {

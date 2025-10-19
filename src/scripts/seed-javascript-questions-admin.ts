@@ -38,9 +38,9 @@ interface UnifiedQuestion {
   topic: string;
   learningPath: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
   createdBy: string;
   updatedBy: string;
   tags: string[];
@@ -71,13 +71,13 @@ async function loadQuestionsFromFile(
   }
 }
 
-async function questionExists(questionId: string): Promise<boolean> {
+async function questionExists(question_id: string): Promise<boolean> {
   try {
     const docRef = db
       .collection('unifiedQuestions')
-      .where('id', '==', questionId);
+      .where('id', '==', question_id);
     const snapshot = await docRef.get();
-    return !snapshot.empty;
+    return !snapshot.length === 0;
   } catch (error) {
     console.error(`❌ Error checking if question exists:`, error);
     return false;
@@ -128,8 +128,8 @@ async function seedJavaScriptQuestions() {
         // Add question to Firebase
         await db.collection('unifiedQuestions').add({
           ...question,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
           createdBy: 'seeding-script',
           updatedBy: 'seeding-script',
         });

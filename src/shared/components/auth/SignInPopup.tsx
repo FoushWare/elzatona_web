@@ -1,7 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import {
   Dialog,
   DialogContent,
@@ -37,16 +42,21 @@ export const SignInPopup: React.FC<SignInPopupProps> = ({
     name: '',
   });
 
-  const {
-    signInWithGoogle,
-    signInWithGithub,
-    signInWithEmail,
-    signUpWithEmail,
-    isAuthenticated,
-  } = useFirebaseAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+    checkAuth();
+  }, []);
 
   // Close popup and call success callback when authenticated
-  React.useEffect(() => {
+  useEffect(() => {
     if (isAuthenticated) {
       onSuccess();
     }
@@ -59,14 +69,28 @@ export const SignInPopup: React.FC<SignInPopupProps> = ({
 
     try {
       if (isLogin) {
-        await signInWithEmail(formData.email, formData.password);
+        const { error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+        if (error) throw error;
       } else {
         if (formData.password !== formData.confirmPassword) {
           setError('Passwords do not match');
           return;
         }
-        await signUpWithEmail(formData.email, formData.password, formData.name);
+        const { error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              name: formData.name,
+            },
+          },
+        });
+        if (error) throw error;
       }
+      setIsAuthenticated(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Authentication failed');
     } finally {
@@ -76,7 +100,10 @@ export const SignInPopup: React.FC<SignInPopupProps> = ({
 
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithGoogle();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
+      if (error) throw error;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Google sign-in failed');
     }
@@ -84,7 +111,10 @@ export const SignInPopup: React.FC<SignInPopupProps> = ({
 
   const handleGithubSignIn = async () => {
     try {
-      await signInWithGithub();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+      });
+      if (error) throw error;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Github sign-in failed');
     }

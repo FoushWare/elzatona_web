@@ -1,4 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 /**
  * @swagger
@@ -37,7 +42,49 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(request: NextRequest) {
   try {
-    const stats = await ContentVersioningService.getAuditLogStats();
+    // Get total logs count
+    const { count: totalLogs } = await supabase
+      .from('audit_logs')
+      .select('*', { count: 'exact', head: true });
+
+    // Get logs by action type
+    const { data: logsByAction } = await supabase
+      .from('audit_logs')
+      .select('action')
+      .then(result => {
+        const actionCounts: Record<string, number> = {};
+        result.data?.forEach(log => {
+          actionCounts[log.action] = (actionCounts[log.action] || 0) + 1;
+        });
+        return { data: actionCounts };
+      });
+
+    // Get logs by content type
+    const { data: logsByContentType } = await supabase
+      .from('audit_logs')
+      .select('content_type')
+      .then(result => {
+        const typeCounts: Record<string, number> = {};
+        result.data?.forEach(log => {
+          typeCounts[log.content_type] =
+            (typeCounts[log.content_type] || 0) + 1;
+        });
+        return { data: typeCounts };
+      });
+
+    // Get recent activity (last 10 logs)
+    const { data: recentActivity } = await supabase
+      .from('audit_logs')
+      .select('*')
+      .order('timestamp', { ascending: false })
+      .limit(10);
+
+    const stats = {
+      totalLogs: totalLogs || 0,
+      logsByAction: logsByAction || {},
+      logsByContentType: logsByContentType || {},
+      recentActivity: recentActivity || [],
+    };
 
     return NextResponse.json({
       success: true,

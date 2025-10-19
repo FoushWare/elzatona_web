@@ -60,45 +60,41 @@ export default function ProgressAnalytics() {
           icon: Clock,
           color: 'text-blue-600',
           trend: {
-            value: dashboardStats.weeklyProgress,
+            value: dashboardStats.currentStreak,
             isPositive: true,
           },
         },
         {
           title: 'Average Score',
-          value: `${Math.round(dashboardStats.averageScore)}%`,
+          value: `${Math.round(dashboardStats.accuracy)}%`,
           subtitle: 'Question accuracy',
           icon: Target,
           color: 'text-green-600',
           trend: {
-            value: dashboardStats.averageScore - 70, // Assuming 70% as baseline
-            isPositive: dashboardStats.averageScore > 70,
+            value: dashboardStats.accuracy - 70, // Assuming 70% as baseline
+            isPositive: dashboardStats.accuracy > 70,
           },
         },
         {
           title: 'Completion Rate',
-          value: `${Math.round(dashboardStats.completionRate)}%`,
+          value: `${Math.round(dashboardStats.accuracy)}%`,
           subtitle: 'Learning paths',
           icon: TrendingUp,
           color: 'text-purple-600',
           trend: {
-            value: dashboardStats.completionRate - 50, // Assuming 50% as baseline
-            isPositive: dashboardStats.completionRate > 50,
+            value: dashboardStats.accuracy - 50, // Assuming 50% as baseline
+            isPositive: dashboardStats.accuracy > 50,
           },
         },
         {
           title: 'Weekly Progress',
-          value: dashboardStats.weeklyProgress,
+          value: dashboardStats.currentStreak,
           subtitle: 'Questions this week',
           icon: Calendar,
           color: 'text-orange-600',
           trend: {
-            value:
-              dashboardStats.weeklyProgress -
-              dashboardStats.monthlyProgress / 4,
-            isPositive:
-              dashboardStats.weeklyProgress >
-              dashboardStats.monthlyProgress / 4,
+            value: dashboardStats.currentStreak - 5, // Assuming 5 as baseline
+            isPositive: dashboardStats.currentStreak > 5,
           },
         },
       ]
@@ -193,15 +189,15 @@ export default function ProgressAnalytics() {
       </div>
 
       {/* Top Categories */}
-      {dashboardStats?.topCategories &&
-        dashboardStats.topCategories.length > 0 && (
+      {dashboardStats?.recentActivity &&
+        dashboardStats.recentActivity.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
               <Brain className="w-5 h-5 mr-2 text-purple-500" />
               Top Performing Categories
             </h3>
             <div className="space-y-4">
-              {dashboardStats.topCategories.map((category, index) => (
+              {dashboardStats.recentActivity.map((activity, index) => (
                 <div key={index} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
@@ -209,21 +205,21 @@ export default function ProgressAnalytics() {
                     </div>
                     <div>
                       <div className="font-medium text-gray-900 dark:text-white">
-                        {category.category}
+                        {activity.type}
                       </div>
                       <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {category.questionsCompleted} questions
+                        {activity.description}
                       </div>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold text-gray-900 dark:text-white">
-                      {Math.round(category.score)}%
+                      {activity.points}
                     </div>
                     <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                       <div
                         className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500"
-                        style={{ width: `${category.score}%` }}
+                        style={{ width: `${Math.min(100, activity.points)}%` }}
                       ></div>
                     </div>
                   </div>
@@ -290,7 +286,7 @@ export default function ProgressAnalytics() {
         <div className="space-y-3">
           {dashboardStats && (
             <>
-              {dashboardStats.averageScore > 80 && (
+              {dashboardStats.accuracy > 80 && (
                 <div className="flex items-center space-x-2">
                   <span className="text-green-300">🎯</span>
                   <span>
@@ -298,13 +294,13 @@ export default function ProgressAnalytics() {
                   </span>
                 </div>
               )}
-              {dashboardStats.weeklyProgress > 10 && (
+              {dashboardStats.currentStreak > 10 && (
                 <div className="flex items-center space-x-2">
                   <span className="text-blue-300">🔥</span>
                   <span>Great consistency! Keep up the daily practice.</span>
                 </div>
               )}
-              {dashboardStats.completionRate > 70 && (
+              {dashboardStats.accuracy > 70 && (
                 <div className="flex items-center space-x-2">
                   <span className="text-purple-300">🏆</span>
                   <span>Outstanding progress on learning paths!</span>

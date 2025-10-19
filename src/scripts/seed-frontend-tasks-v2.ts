@@ -1,7 +1,7 @@
 // v2.0 - Seed frontend tasks with dynamic files structure
 
 import { db } from '../lib/firebase';
-import { collection, doc, setDoc } from 'firebase/firestore';
+
 import { FrontendTask } from '../types/admin';
 
 const frontendTasks: FrontendTask[] = [
@@ -17,7 +17,13 @@ const frontendTasks: FrontendTask[] = [
     company: 'Elzatona',
     requirements: 'Build a simple counter component with useState hook',
     hints: ['Use useState hook', 'Create increment/decrement functions'],
-    solution: `import React, { useState } from 'react';
+    solution: `import React from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 
 const Counter: React.FC = () => {
   const [count, setCount] = useState(0);
@@ -134,9 +140,9 @@ button:hover {
       },
     ],
     tags: ['react', 'hooks', 'state', 'beginner'],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
   },
   {
     id: 'todo-list',
@@ -327,9 +333,9 @@ input[type="checkbox"] {
       },
     ],
     tags: ['react', 'forms', 'state', 'intermediate'],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
   },
   {
     id: 'user-profile-form',
@@ -563,9 +569,9 @@ button:hover {
       },
     ],
     tags: ['react', 'hooks', 'state', 'forms', 'intermediate'],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
   },
 ];
 
@@ -574,7 +580,7 @@ async function seedFrontendTasks() {
 
   try {
     for (const task of frontendTasks) {
-      const taskRef = doc(collection(db, 'frontendTasks'), task.id);
+      const taskRef = doc(supabase.from('frontendTasks'), task.id);
       await setDoc(taskRef, task);
       console.log(`✅ Created task: ${task.title} (ID: ${task.id})`);
     }

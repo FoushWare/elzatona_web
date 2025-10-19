@@ -1,17 +1,8 @@
-import { db } from './firebase';
-import {
-  collection,
-  doc,
-  addDoc,
-  getDocs,
-  query,
-  orderBy,
-  limit,
-  where,
-  serverTimestamp,
-  onSnapshot,
-  updateDoc,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface Notification {
   id: string;
@@ -22,7 +13,7 @@ export interface Notification {
   userId?: string; // If targeting specific user
   adminId?: string; // If targeting specific admin
   isRead: boolean;
-  createdAt: Date;
+  created_at: Date;
   readAt?: Date;
   metadata?: {
     action?: string;
@@ -54,10 +45,6 @@ export class NotificationService {
     } = {}
   ): Promise<string> {
     try {
-      if (!db) {
-        throw new Error('Database not initialized');
-      }
-
       const notificationData = {
         title,
         message,
@@ -66,17 +53,20 @@ export class NotificationService {
         userId: options.userId || null,
         adminId: options.adminId || null,
         isRead: false,
-        createdAt: serverTimestamp(),
-        metadata: options.metadata || {},
+        created_at: new Date().toISOString(),
+        readAt: null,
+        metadata: options.metadata || null,
       };
 
-      const docRef = await addDoc(
-        collection(db, this.COLLECTION_NAME),
-        notificationData
-      );
+      const { data, error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .insert(notificationData)
+        .select()
+        .single();
 
-      console.log(`✅ Notification created: ${title}`);
-      return docRef.id;
+      if (error) throw error;
+
+      return data.id;
     } catch (error) {
       console.error('Error creating notification:', error);
       throw error;
@@ -84,244 +74,357 @@ export class NotificationService {
   }
 
   /**
-   * Get notifications for a specific user or admin
+   * Get notifications for a specific user
    */
-  static async getNotifications(
-    userId?: string,
-    adminId?: string,
-    limitCount: number = 50
+  static async getUserNotifications(
+    userId: string,
+    limit: number = 50,
+    unreadOnly: boolean = false
   ): Promise<Notification[]> {
     try {
-      if (!db) {
-        console.error('Database not initialized');
-        return [];
+      let query = supabase
+        .from(this.COLLECTION_NAME)
+        .select('*')
+        .eq('userId', userId)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (unreadOnly) {
+        query = query.eq('isRead', false);
       }
 
-      let q = query(
-        collection(db, this.COLLECTION_NAME),
-        orderBy('createdAt', 'desc'),
-        limit(limitCount)
-      );
+      const { data: notifications, error } = await query;
 
-      // Filter by user or admin if specified
-      if (userId) {
-        q = query(
-          collection(db, this.COLLECTION_NAME),
-          where('userId', '==', userId),
-          orderBy('createdAt', 'desc'),
-          limit(limitCount)
-        );
-      } else if (adminId) {
-        q = query(
-          collection(db, this.COLLECTION_NAME),
-          where('adminId', '==', adminId),
-          orderBy('createdAt', 'desc'),
-          limit(limitCount)
-        );
-      }
+      if (error) throw error;
 
-      const querySnapshot = await getDocs(q);
-      const notifications: Notification[] = [];
-
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        notifications.push({
-          id: doc.id,
-          title: data.title,
-          message: data.message,
-          type: data.type,
-          category: data.category,
-          userId: data.userId,
-          adminId: data.adminId,
-          isRead: data.isRead,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          readAt: data.readAt?.toDate(),
-          metadata: data.metadata,
-        });
-      });
-
-      return notifications;
+      return notifications || [];
     } catch (error) {
-      console.error('Error getting notifications:', error);
-      return [];
+      console.error('Error fetching user notifications:', error);
+      throw error;
     }
   }
 
   /**
-   * Subscribe to real-time notifications
+   * Get notifications for a specific admin
    */
-  static subscribeToNotifications(
-    callback: (notifications: Notification[]) => void,
-    userId?: string,
-    adminId?: string,
-    limitCount: number = 50
-  ): NotificationSubscription {
-    if (!db) {
-      console.error('Database not initialized');
-      return { unsubscribe: () => {} };
+  static async getAdminNotifications(
+    adminId: string,
+    limit: number = 50,
+    unreadOnly: boolean = false
+  ): Promise<Notification[]> {
+    try {
+      let query = supabase
+        .from(this.COLLECTION_NAME)
+        .select('*')
+        .eq('adminId', adminId)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (unreadOnly) {
+        query = query.eq('isRead', false);
+      }
+
+      const { data: notifications, error } = await query;
+
+      if (error) throw error;
+
+      return notifications || [];
+    } catch (error) {
+      console.error('Error fetching admin notifications:', error);
+      throw error;
     }
+  }
 
-    let q = query(
-      collection(db, this.COLLECTION_NAME),
-      orderBy('createdAt', 'desc'),
-      limit(limitCount)
-    );
+  /**
+   * Get system notifications (no specific user/admin)
+   */
+  static async getSystemNotifications(
+    limit: number = 50
+  ): Promise<Notification[]> {
+    try {
+      const { data: notifications, error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .select('*')
+        .eq('category', 'system')
+        .is('userId', null)
+        .is('adminId', null)
+        .order('created_at', { ascending: false })
+        .limit(limit);
 
-    // Filter by user or admin if specified
-    if (userId) {
-      q = query(
-        collection(db, this.COLLECTION_NAME),
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc'),
-        limit(limitCount)
-      );
-    } else if (adminId) {
-      q = query(
-        collection(db, this.COLLECTION_NAME),
-        where('adminId', '==', adminId),
-        orderBy('createdAt', 'desc'),
-        limit(limitCount)
-      );
+      if (error) throw error;
+
+      return notifications || [];
+    } catch (error) {
+      console.error('Error fetching system notifications:', error);
+      throw error;
     }
-
-    const unsubscribe = onSnapshot(q, querySnapshot => {
-      const notifications: Notification[] = [];
-
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        notifications.push({
-          id: doc.id,
-          title: data.title,
-          message: data.message,
-          type: data.type,
-          category: data.category,
-          userId: data.userId,
-          adminId: data.adminId,
-          isRead: data.isRead,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          readAt: data.readAt?.toDate(),
-          metadata: data.metadata,
-        });
-      });
-
-      callback(notifications);
-    });
-
-    return { unsubscribe };
   }
 
   /**
    * Mark notification as read
    */
-  static async markAsRead(notificationId: string): Promise<boolean> {
+  static async markAsRead(notificationId: string): Promise<void> {
     try {
-      if (!db) {
-        return false;
-      }
+      const { error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .update({
+          isRead: true,
+          readAt: new Date().toISOString(),
+        })
+        .eq('id', notificationId);
 
-      await updateDoc(doc(db, this.COLLECTION_NAME, notificationId), {
-        isRead: true,
-        readAt: serverTimestamp(),
-      });
-
-      return true;
+      if (error) throw error;
     } catch (error) {
       console.error('Error marking notification as read:', error);
-      return false;
+      throw error;
     }
   }
 
   /**
-   * Mark all notifications as read for a user/admin
+   * Mark multiple notifications as read
    */
-  static async markAllAsRead(
-    userId?: string,
-    adminId?: string
-  ): Promise<boolean> {
+  static async markMultipleAsRead(notificationIds: string[]): Promise<void> {
     try {
-      if (!db) {
-        return false;
-      }
-
-      const notifications = await this.getNotifications(userId, adminId, 1000);
-      const unreadNotifications = notifications.filter(n => !n.isRead);
-
-      const updatePromises = unreadNotifications.map(notification =>
-        updateDoc(doc(db, this.COLLECTION_NAME, notification.id), {
+      const { error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .update({
           isRead: true,
-          readAt: serverTimestamp(),
+          readAt: new Date().toISOString(),
         })
-      );
+        .in('id', notificationIds);
 
-      await Promise.all(updatePromises);
-      return true;
+      if (error) throw error;
     } catch (error) {
-      console.error('Error marking all notifications as read:', error);
-      return false;
+      console.error('Error marking notifications as read:', error);
+      throw error;
     }
   }
 
   /**
-   * Get unread notification count
+   * Mark all notifications as read for a user
    */
-  static async getUnreadCount(
-    userId?: string,
-    adminId?: string
-  ): Promise<number> {
+  static async markAllAsReadForUser(userId: string): Promise<void> {
     try {
-      const notifications = await this.getNotifications(userId, adminId, 1000);
-      return notifications.filter(n => !n.isRead).length;
+      const { error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .update({
+          isRead: true,
+          readAt: new Date().toISOString(),
+        })
+        .eq('userId', userId)
+        .eq('isRead', false);
+
+      if (error) throw error;
     } catch (error) {
-      console.error('Error getting unread count:', error);
-      return 0;
+      console.error('Error marking all notifications as read for user:', error);
+      throw error;
     }
   }
 
   /**
-   * Create system notifications for common events
+   * Mark all notifications as read for an admin
    */
-  static async notifyUserRegistration(
+  static async markAllAsReadForAdmin(adminId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .update({
+          isRead: true,
+          readAt: new Date().toISOString(),
+        })
+        .eq('adminId', adminId)
+        .eq('isRead', false);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error(
+        'Error marking all notifications as read for admin:',
+        error
+      );
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a notification
+   */
+  static async deleteNotification(notificationId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .delete()
+        .eq('id', notificationId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete multiple notifications
+   */
+  static async deleteMultipleNotifications(
+    notificationIds: string[]
+  ): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .delete()
+        .in('id', notificationIds);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting notifications:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete old notifications (older than specified days)
+   */
+  static async deleteOldNotifications(daysOld: number = 30): Promise<void> {
+    try {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+
+      const { error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .delete()
+        .lt('created_at', cutoffDate.toISOString());
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting old notifications:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get notification count for a user
+   */
+  static async getUnreadCountForUser(userId: string): Promise<number> {
+    try {
+      const { count, error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .select('*', { count: 'exact', head: true })
+        .eq('userId', userId)
+        .eq('isRead', false);
+
+      if (error) throw error;
+      return count || 0;
+    } catch (error) {
+      console.error('Error getting unread count for user:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get notification count for an admin
+   */
+  static async getUnreadCountForAdmin(adminId: string): Promise<number> {
+    try {
+      const { count, error } = await supabase
+        .from(this.COLLECTION_NAME)
+        .select('*', { count: 'exact', head: true })
+        .eq('adminId', adminId)
+        .eq('isRead', false);
+
+      if (error) throw error;
+      return count || 0;
+    } catch (error) {
+      console.error('Error getting unread count for admin:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Subscribe to real-time notifications for a user
+   */
+  static subscribeToUserNotifications(
     userId: string,
-    userName: string
-  ): Promise<void> {
-    await this.createNotification(
-      'New User Registration',
-      `${userName} has joined the platform`,
-      'info',
-      'user',
-      { userId, metadata: { action: 'user_registration', entityId: userId } }
-    );
+    callback: (notification: Notification) => void
+  ): NotificationSubscription {
+    const subscription = supabase
+      .channel('user-notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: this.COLLECTION_NAME,
+          filter: `userId=eq.${userId}`,
+        },
+        payload => {
+          callback(payload.new as Notification);
+        }
+      )
+      .subscribe();
+
+    return {
+      unsubscribe: () => {
+        subscription.unsubscribe();
+      },
+    };
   }
 
-  static async notifyContentUpdate(
+  /**
+   * Subscribe to real-time notifications for an admin
+   */
+  static subscribeToAdminNotifications(
     adminId: string,
-    contentType: string,
-    action: string
-  ): Promise<void> {
-    await this.createNotification(
-      'Content Updated',
-      `${contentType} ${action} successfully`,
-      'success',
-      'content',
-      { adminId, metadata: { action, entityType: contentType } }
-    );
+    callback: (notification: Notification) => void
+  ): NotificationSubscription {
+    const subscription = supabase
+      .channel('admin-notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: this.COLLECTION_NAME,
+          filter: `adminId=eq.${adminId}`,
+        },
+        payload => {
+          callback(payload.new as Notification);
+        }
+      )
+      .subscribe();
+
+    return {
+      unsubscribe: () => {
+        subscription.unsubscribe();
+      },
+    };
   }
 
-  static async notifySystemAlert(
-    message: string,
-    type: Notification['type'] = 'warning'
-  ): Promise<void> {
-    await this.createNotification('System Alert', message, type, 'system');
-  }
+  /**
+   * Subscribe to system notifications
+   */
+  static subscribeToSystemNotifications(
+    callback: (notification: Notification) => void
+  ): NotificationSubscription {
+    const subscription = supabase
+      .channel('system-notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: this.COLLECTION_NAME,
+          filter: 'category=eq.system',
+        },
+        payload => {
+          callback(payload.new as Notification);
+        }
+      )
+      .subscribe();
 
-  static async notifyAdminAction(
-    adminId: string,
-    action: string,
-    details: string
-  ): Promise<void> {
-    await this.createNotification('Admin Action', details, 'info', 'admin', {
-      adminId,
-      metadata: { action },
-    });
+    return {
+      unsubscribe: () => {
+        subscription.unsubscribe();
+      },
+    };
   }
 }

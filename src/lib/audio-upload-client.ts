@@ -61,7 +61,7 @@ export class ClientAudioUploadService {
    * Upload question audio file via API
    */
   static async uploadQuestionAudio(
-    questionId: string,
+    question_id: string,
     file: File
   ): Promise<AudioUploadResult> {
     try {
@@ -72,7 +72,7 @@ export class ClientAudioUploadService {
 
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('questionId', questionId);
+      formData.append('questionId', question_id);
       formData.append('type', 'question');
 
       const response = await fetch('/api/audio/upload', {
@@ -98,7 +98,7 @@ export class ClientAudioUploadService {
    * Upload answer audio file via API
    */
   static async uploadAnswerAudio(
-    questionId: string,
+    question_id: string,
     file: File
   ): Promise<AudioUploadResult> {
     try {
@@ -109,7 +109,7 @@ export class ClientAudioUploadService {
 
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('questionId', questionId);
+      formData.append('questionId', question_id);
       formData.append('type', 'answer');
 
       const response = await fetch('/api/audio/upload', {

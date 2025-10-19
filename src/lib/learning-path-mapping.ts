@@ -128,8 +128,8 @@ export function getDefaultAdminSections(): Array<{
   name: string;
   description: string;
   learningPathId: string;
-  questionCount: number;
-  isActive: boolean;
+  question_count: number;
+  is_active: boolean;
   category: string;
 }> {
   return learningPaths.map(path => ({
@@ -137,8 +137,8 @@ export function getDefaultAdminSections(): Array<{
     name: path.title,
     description: path.description,
     learningPathId: path.id,
-    questionCount: 0, // Will be populated dynamically
-    isActive: true, // All sections are active by default
+    question_count: 0, // Will be populated dynamically
+    is_active: true, // All sections are active by default
     category: getCategoryForLearningPath(path.title), // Map based on title
   }));
 }

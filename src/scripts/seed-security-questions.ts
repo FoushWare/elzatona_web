@@ -2,14 +2,7 @@
 // Run with: npx tsx src/scripts/seed-security-questions.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
+
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -25,7 +18,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 interface SecurityQuestion {
@@ -39,8 +32,8 @@ interface SecurityQuestion {
   topic: string;
   tags: string[];
   sampleAnswers: string[];
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 async function seedSecurityQuestions() {
@@ -71,13 +64,13 @@ async function seedSecurityQuestions() {
         try {
           // Check if question already exists
           const existingQuery = query(
-            collection(db, 'questions'),
-            where('question', '==', questionData.title),
-            where('category', '==', 'Security')
+            supabase.from('questions'),
+            where('question', questionData.title),
+            where('category', 'Security')
           );
           const existingSnapshot = await getDocs(existingQuery);
 
-          if (existingSnapshot.empty) {
+          if (existingSnapshot.length === 0) {
             const question = {
               question: questionData.title,
               answer:
@@ -97,13 +90,13 @@ async function seedSecurityQuestions() {
               category: 'Security',
               topics: questionData.tags || ['security', 'web-security'],
               tags: questionData.tags || ['security', 'web-security'],
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
               createdBy: 'seeding-script',
               updatedBy: 'seeding-script',
             };
 
-            await addDoc(collection(db, 'questions'), question);
+            await addDoc(supabase.from('questions'), question);
             addedCount++;
           } else {
             skippedCount++;

@@ -1,11 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -28,7 +21,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 async function checkPlanStructure() {
@@ -36,22 +29,22 @@ async function checkPlanStructure() {
     console.log('🔍 Checking plan structure...');
 
     // Get the first plan
-    const plansSnapshot = await getDocs(collection(db, 'guidedLearningPlans'));
+    const plansSnapshot = await getDocs(supabase.from('guidedLearningPlans'));
     const firstPlan = plansSnapshot.docs[0];
 
     if (firstPlan) {
-      const data = firstPlan.data();
+      const data = firstPlan;
       console.log(`📋 Plan: ${data.name}`);
       console.log(`📊 Cards structure:`, JSON.stringify(data.cards, null, 2));
     }
 
     // Also check learning cards
     console.log('\n🎯 Checking learning cards...');
-    const cardsSnapshot = await getDocs(collection(db, 'learningCards'));
-    console.log(`📋 Found ${cardsSnapshot.size} learning cards:`);
+    const cardsSnapshot = await getDocs(supabase.from('learningCards'));
+    console.log(`📋 Found ${cardsSnapshot.length} learning cards:`);
 
     cardsSnapshot.forEach(doc => {
-      const data = doc.data();
+      const data = doc;
       console.log(`   - ID: ${doc.id}`);
       console.log(`   - Title: ${data.title}`);
       console.log(`   - Type: ${data.type}`);

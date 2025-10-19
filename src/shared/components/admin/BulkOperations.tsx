@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { Button } from '@/shared/components/ui/button';
 import {
   Card,
@@ -264,34 +270,34 @@ export const BulkOperations: React.FC<BulkOperationsProps> = ({
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold">
-                  {stats.totalOperations}
+                  {stats?.stats?.totalOperations || 0}
                 </div>
                 <div className="text-sm text-gray-600">Total Operations</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">
-                  {stats.completedOperations}
+                  {stats?.stats?.completedOperations || 0}
                 </div>
                 <div className="text-sm text-gray-600">Completed</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-red-600">
-                  {stats.failedOperations}
+                  {stats?.stats?.failedOperations || 0}
                 </div>
                 <div className="text-sm text-gray-600">Failed</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">
-                  {stats.runningOperations}
+                  {stats?.stats?.runningOperations || 0}
                 </div>
                 <div className="text-sm text-gray-600">Running</div>
               </div>
             </div>
-            {stats.averageProcessingTime > 0 && (
+            {(stats?.stats?.averageProcessingTime || 0) > 0 && (
               <div className="mt-4 text-center">
                 <div className="text-sm text-gray-600">
                   Average Processing Time:{' '}
-                  {formatDuration(stats.averageProcessingTime)}
+                  {formatDuration(stats?.stats?.averageProcessingTime || 0)}
                 </div>
               </div>
             )}
@@ -313,9 +319,11 @@ export const BulkOperations: React.FC<BulkOperationsProps> = ({
               <Loader2 className="h-6 w-6 animate-spin" />
               <span className="ml-2">Loading operations...</span>
             </div>
-          ) : operations && operations.length > 0 ? (
+          ) : operations &&
+            operations.operations &&
+            operations.operations.length > 0 ? (
             <div className="space-y-4">
-              {operations.map((operation: any) => (
+              {operations.operations.map((operation: any) => (
                 <div key={operation.id} className="border rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">

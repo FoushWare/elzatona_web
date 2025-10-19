@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
-import { app } from '@/lib/firebase';
+import { createClient } from '@supabase/supabase-js';
 
-const db = app ? getFirestore(app) : null;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 const questions = [
   {
@@ -138,20 +139,20 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(
-      `Adding ${questionsToAdd.length} questions to Firebase for learning path: ${learningPath}`
+      `Adding ${questionsToAdd.length} questions to Supabase for learning path: ${learningPath}`
     );
 
     const results = [];
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     for (const question of questionsToAdd) {
-      await setDoc(doc(db, 'questions', question.id), question);
+      const { error: insertError } = await supabase
+        .from('questions')
+        .insert(question);
+
+      if (insertError) {
+        throw insertError;
+      }
+
       results.push(
         `✅ Added question ${question.id}: ${question.question?.substring(0, 50)}...`
       );
@@ -162,7 +163,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Successfully added ${questionsToAdd.length} questions to Firebase!`,
+      message: `Successfully added ${questionsToAdd.length} questions to Supabase!`,
       results,
     });
   } catch (error) {
@@ -170,7 +171,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to add questions to Firebase',
+        error: 'Failed to add questions to Supabase',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }

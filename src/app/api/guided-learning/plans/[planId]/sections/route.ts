@@ -1,13 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { firestoreService } from '@/lib/firestore-service';
-import { LearningPlanTemplate } from '@/lib/guided-learning-service';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
+interface LearningPlanTemplate {
+  id: string;
+  name: string;
+  duration: number;
+  description: string;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  totalQuestions: number;
+  dailyQuestions: number;
+  sections: LearningSection[];
+  features: string[];
+  estimatedTime: string;
+  isRecommended: boolean;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
+  createdBy?: string;
+  completionRate?: number;
+  enrolledUsers?: number;
+}
+
+interface LearningSection {
+  id: string;
+  name: string;
+  category: string;
+  questions: string[];
+  weight: number;
+  order: number;
+  description?: string;
+}
 
 interface SectionConfig {
   sectionId?: string;
   id?: string;
   sectionName: string;
   category: string;
-  questionCount: number;
+  question_count: number;
   maxQuestions?: number;
   weight?: number;
   order?: number;
@@ -22,8 +56,12 @@ export async function GET(
     const { planId } = await params;
 
     // Get the plan details
-    const plans = await firestoreService.getLearningPlanTemplates();
-    const plan = plans.find(p => p.id === planId);
+    const { data: plans, error } = await supabase
+      .from('learning_plans')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    const plan = (plans || []).find(p => p.id === planId);
 
     if (!plan) {
       return NextResponse.json(
@@ -61,8 +99,12 @@ export async function PUT(
     const config = await request.json();
 
     // Get the current plan
-    const plans = await firestoreService.getLearningPlanTemplates();
-    const plan = plans.find(p => p.id === planId);
+    const { data: plans, error: plansError } = await supabase
+      .from('learning_plans')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (plansError) throw plansError;
+    const plan = (plans || []).find(p => p.id === planId);
 
     if (!plan) {
       return NextResponse.json(
@@ -79,7 +121,7 @@ export async function PUT(
         name: section.sectionName,
         category: section.category,
         questions: Array.from(
-          { length: section.questionCount },
+          { length: section.question_count },
           (_, i) => `q${i + 1}`
         ), // Generate question IDs
         maxQuestions: section.maxQuestions,
@@ -88,7 +130,7 @@ export async function PUT(
       })),
       totalQuestions: config.totalQuestions,
       dailyQuestions: config.dailyQuestions,
-      updatedAt: new Date(),
+      updated_at: new Date(),
     };
 
     // Save the updated plan back to Firestore

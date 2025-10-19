@@ -1,8 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   Sun,
   Moon,
@@ -18,7 +25,7 @@ import { AlzatonaLogo } from './AlzatonaLogo';
 import { useUserType } from '@/contexts/UserTypeContextSafe';
 import { useMobileMenu } from '@/contexts/MobileMenuContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 // import { LearningModeSwitcher } from '../learning/LearningModeSwitcher';
 
 export const NavbarSimple: React.FC = () => {
@@ -35,12 +42,7 @@ export const NavbarSimple: React.FC = () => {
   const { userType, setUserType } = useUserType();
   const { setIsMobileMenuOpen } = useMobileMenu();
   const { isDarkMode, toggleDarkMode } = useTheme();
-  const {
-    user,
-    isAuthenticated,
-    isLoading: isAuthLoading,
-    signOut,
-  } = useFirebaseAuth();
+  const { user, isAuthenticated, isLoading: isAuthLoading, logout } = useAuth();
   const pathname = usePathname();
 
   // Prevent hydration mismatch and flashing by using stable auth state
@@ -97,7 +99,7 @@ export const NavbarSimple: React.FC = () => {
   // Handle sign out
   const handleSignOut = async () => {
     try {
-      await signOut();
+      await logout();
       setIsOpen(false);
       setIsUserDropdownOpen(false);
       // Clear the stable auth state and session storage
@@ -536,9 +538,9 @@ export const NavbarSimple: React.FC = () => {
                 <>
                   {/* User Profile Section */}
                   <div className="flex items-center space-x-3 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    {user?.photoURL ? (
+                    {user?.avatar ? (
                       <img
-                        src={user.photoURL}
+                        src={user.avatar}
                         alt="Profile"
                         className="w-8 h-8 rounded-full object-cover"
                       />
@@ -549,7 +551,7 @@ export const NavbarSimple: React.FC = () => {
                     )}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                        {user?.displayName || 'User'}
+                        {user?.name || 'User'}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                         {user?.email}

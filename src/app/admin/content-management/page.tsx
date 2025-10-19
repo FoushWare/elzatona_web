@@ -1,12 +1,18 @@
 'use client';
 
 import React, {
-  useState,
-  useMemo,
-  useCallback,
   useEffect,
+  useMemo,
+  useState,
+  useCallback,
   Suspense,
 } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import {
   useCards,
   usePlans,
@@ -530,11 +536,11 @@ export default function UnifiedAdminPage() {
   };
 
   const handleUpdateCard = async (
-    cardId: string,
+    card_id: string,
     cardData: Partial<LearningCard>
   ) => {
     try {
-      await updateCardMutation.mutateAsync({ id: cardId, data: cardData });
+      await updateCardMutation.mutateAsync({ id: card_id, data: cardData });
       await notifyContentUpdate('Learning Card', 'updated');
       showSuccess(
         'Card Updated Successfully',
@@ -593,8 +599,8 @@ export default function UnifiedAdminPage() {
     }
   };
 
-  const handleDeleteCard = async (cardId: string) => {
-    const card = cards.find(c => c.id === cardId);
+  const handleDeleteCard = async (card_id: string) => {
+    const card = cards.find(c => c.id === card_id);
     if (card) {
       setCardToDelete(card);
       setIsDeleteCardModalOpen(true);
@@ -611,11 +617,11 @@ export default function UnifiedAdminPage() {
   };
 
   const handleUpdatePlan = async (
-    planId: string,
+    plan_id: string,
     planData: Partial<LearningPlan>
   ) => {
     try {
-      await updatePlanMutation.mutateAsync({ id: planId, data: planData });
+      await updatePlanMutation.mutateAsync({ id: plan_id, data: planData });
       await notifyContentUpdate('Learning Plan', 'updated');
       // Close modal on successful update
       setIsPlanModalOpen(false);
@@ -625,8 +631,8 @@ export default function UnifiedAdminPage() {
     }
   };
 
-  const handleDeletePlan = async (planId: string) => {
-    const plan = plans.find(p => p.id === planId);
+  const handleDeletePlan = async (plan_id: string) => {
+    const plan = plans.find(p => p.id === plan_id);
     if (plan) {
       setPlanToDelete(plan);
       setIsDeletePlanModalOpen(true);
@@ -743,12 +749,12 @@ export default function UnifiedAdminPage() {
   };
 
   const handleUpdateQuestion = async (
-    questionId: string,
+    question_id: string,
     questionData: Partial<UnifiedQuestion>
   ) => {
     try {
       await updateQuestionMutation.mutateAsync({
-        id: questionId,
+        id: question_id,
         data: questionData,
       });
     } catch (error) {
@@ -756,9 +762,9 @@ export default function UnifiedAdminPage() {
     }
   };
 
-  const handleDeleteQuestion = async (questionId: string) => {
+  const handleDeleteQuestion = async (question_id: string) => {
     try {
-      await deleteQuestionMutation.mutateAsync(questionId);
+      await deleteQuestionMutation.mutateAsync(question_id);
     } catch (error) {
       console.error('Failed to delete question:', error);
     }
@@ -810,13 +816,13 @@ export default function UnifiedAdminPage() {
   }, [plans, debouncedSearchTerm]);
 
   // Helper functions for UI interactions
-  const toggleCard = useCallback((cardId: string) => {
+  const toggleCard = useCallback((card_id: string) => {
     setExpandedCards(prev => {
       const newExpanded = new Set(prev);
-      if (newExpanded.has(cardId)) {
-        newExpanded.delete(cardId);
+      if (newExpanded.has(card_id)) {
+        newExpanded.delete(card_id);
       } else {
-        newExpanded.add(cardId);
+        newExpanded.add(card_id);
       }
       return newExpanded;
     });
@@ -846,13 +852,13 @@ export default function UnifiedAdminPage() {
     });
   }, []);
 
-  const togglePlan = useCallback((planId: string) => {
+  const togglePlan = useCallback((plan_id: string) => {
     setExpandedPlans(prev => {
       const newExpanded = new Set(prev);
-      if (newExpanded.has(planId)) {
-        newExpanded.delete(planId);
+      if (newExpanded.has(plan_id)) {
+        newExpanded.delete(plan_id);
       } else {
-        newExpanded.add(planId);
+        newExpanded.add(plan_id);
       }
       return newExpanded;
     });

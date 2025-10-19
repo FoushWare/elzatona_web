@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, doc, getDoc, updateDoc, deleteDoc } from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/cards/[id] - Get a single card by ID
 export async function GET(
@@ -8,10 +12,13 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const cardRef = doc(db!, 'learningCards', id);
-    const cardSnap = await getDoc(cardRef);
+    const { data: cardSnap, error } = await supabase
+      .from('learning_cards')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-    if (!cardSnap.exists()) {
+    if (error || !cardSnap) {
       return NextResponse.json(
         { success: false, error: 'Card not found' },
         { status: 404 }
@@ -20,7 +27,7 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      data: { id: cardSnap.id, ...cardSnap.data() },
+      data: { id: cardSnap.id, ...cardSnap },
     });
   } catch (error) {
     console.error('Error fetching card:', error);
@@ -40,12 +47,14 @@ export async function PUT(
     const { id } = await params;
     const updateData = await request.json();
 
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
+    const { error } = await supabase
+      .from('learning_cards')
+      .update({ ...updateData, updated_at: new Date().toISOString() })
+      .eq('id', id);
 
-    const cardRef = doc(db, 'learningCards', id);
-    await updateDoc(cardRef, { ...updateData, updatedAt: new Date() });
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,
@@ -68,12 +77,14 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
+    const { error } = await supabase
+      .from('learning_cards')
+      .delete()
+      .eq('id', id);
 
-    const cardRef = doc(db, 'learningCards', id);
-    await deleteDoc(cardRef);
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,

@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import Link from 'next/link';
 import {
   BookOpen,
@@ -44,7 +50,7 @@ interface UserActivity {
 }
 
 interface LearningPlanProgress {
-  planId: string;
+  plan_id: string;
   planName: string;
   duration: number;
   progress: number;
@@ -127,7 +133,7 @@ export default function EnhancedUserDashboard() {
 
     const mockLearningPlans: LearningPlanProgress[] = [
       {
-        planId: '3-day-plan',
+        plan_id: '3-day-plan',
         planName: '3 Day Comprehensive Plan',
         duration: 3,
         progress: 85,
@@ -146,7 +152,7 @@ export default function EnhancedUserDashboard() {
         ],
       },
       {
-        planId: '1-day-plan',
+        plan_id: '1-day-plan',
         planName: '1 Day Intensive',
         duration: 1,
         progress: 100,
@@ -515,7 +521,7 @@ export default function EnhancedUserDashboard() {
                 <div className="space-y-4">
                   {learningPlans.map(plan => (
                     <div
-                      key={plan.planId}
+                      key={plan.plan_id}
                       className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
                     >
                       <div className="flex items-center justify-between mb-3">

@@ -7,7 +7,6 @@ import {
   useEffect,
   ReactNode,
 } from 'react';
-import { useFirebaseAuth } from './FirebaseAuthContext';
 
 interface UserPreferences {
   theme: 'light' | 'dark' | 'system';
@@ -58,7 +57,11 @@ interface UserPreferencesProviderProps {
 export function UserPreferencesProvider({
   children,
 }: UserPreferencesProviderProps) {
-  const { user, updateUserProfile } = useFirebaseAuth();
+  const [user, setUser] = useState(null);
+  const updateUserProfile = async (data: any) => {
+    // Placeholder for user profile update
+    console.log('User profile update:', data);
+  };
   const [preferences, setPreferences] =
     useState<UserPreferences>(defaultPreferences);
   const [isLoading, setIsLoading] = useState(true);
@@ -67,23 +70,14 @@ export function UserPreferencesProvider({
   useEffect(() => {
     const loadPreferences = () => {
       try {
-        if (user?.preferences) {
-          // Use preferences from Firebase user data
+        // Load from localStorage
+        const savedPreferences = localStorage.getItem('user-preferences');
+        if (savedPreferences) {
+          const parsed = JSON.parse(savedPreferences);
           setPreferences({
             ...defaultPreferences,
-            ...user.preferences,
-            theme: user.preferences.theme as 'light' | 'dark' | 'system',
+            ...parsed,
           });
-        } else {
-          // Fallback to localStorage
-          const savedPreferences = localStorage.getItem('user-preferences');
-          if (savedPreferences) {
-            const parsed = JSON.parse(savedPreferences);
-            setPreferences({
-              ...defaultPreferences,
-              ...parsed,
-            });
-          }
         }
       } catch (error) {
         console.error('Error loading preferences:', error);

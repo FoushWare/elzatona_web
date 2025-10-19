@@ -2,7 +2,6 @@
 // Run with: npx tsx src/scripts/seed-problem-solving-comprehensive.ts
 
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -27,7 +26,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 const problemSolvingTasks = [
@@ -82,9 +81,9 @@ const problemSolvingTasks = [
       },
     ],
     tags: ['Array', 'Hash Table'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Valid Parentheses',
@@ -141,9 +140,9 @@ const problemSolvingTasks = [
       { input: 's = "(]"', output: 'false', explanation: '' },
     ],
     tags: ['String', 'Stack'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Maximum Subarray',
@@ -186,9 +185,9 @@ const problemSolvingTasks = [
       },
     ],
     tags: ['Array', 'Dynamic Programming'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Climbing Stairs',
@@ -236,9 +235,9 @@ const problemSolvingTasks = [
       },
     ],
     tags: ['Dynamic Programming', 'Math'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
   {
     title: 'Best Time to Buy and Sell Stock',
@@ -286,9 +285,9 @@ const problemSolvingTasks = [
       },
     ],
     tags: ['Array', 'Dynamic Programming'],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    is_active: true,
   },
 ];
 
@@ -296,7 +295,7 @@ async function seedProblemSolvingTasks() {
   console.log('🌱 Starting to seed problem-solving tasks...');
   try {
     for (const task of problemSolvingTasks) {
-      const docRef = await addDoc(collection(db, 'problemSolvingTasks'), task);
+      const docRef = await addDoc(supabase.from('problemSolvingTasks'), task);
       console.log(`✅ Added task: ${task.title} (ID: ${docRef.id})`);
     }
     console.log('🎉 Successfully seeded 5 problem-solving tasks!');

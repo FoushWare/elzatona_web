@@ -2,25 +2,24 @@
 // v2.0 - Enhanced section assignment with limits
 
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
 
 // Placeholder EnhancedQuestionService
 class EnhancedQuestionService {
   static async assignQuestionToSection(
-    questionId: string,
+    question_id: string,
     sectionId: string,
     order?: number
   ): Promise<boolean> {
     // Placeholder implementation
     console.log(
-      `Assigning question ${questionId} to section ${sectionId} with order ${order}`
+      `Assigning question ${question_id} to section ${sectionId} with order ${order}`
     );
     return true;
   }
 
-  static async removeQuestionFromSection(questionId: string): Promise<void> {
+  static async removeQuestionFromSection(question_id: string): Promise<void> {
     // Placeholder implementation
-    console.log(`Removing question ${questionId} from section`);
+    console.log(`Removing question ${question_id} from section`);
   }
 }
 

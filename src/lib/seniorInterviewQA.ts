@@ -23,6 +23,12 @@ export const seniorInterviewQuestions: SeniorInterviewQuestion[] = [
       'Webpack solves the fundamental problem of module management in browsers. Before bundlers, you had to manually manage script tags and their order. Webpack creates a dependency graph from your entry point, follows all imports, and generates optimized bundles.',
     codeExample: `// Entry point: src/index.js
 import React from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import './styles.css';
 import logo from './logo.png';
 

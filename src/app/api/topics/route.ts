@@ -2,30 +2,44 @@
 // v2.0 - Enhanced topic management
 
 import { NextRequest, NextResponse } from 'next/server';
-import { db, collection, getDocs, addDoc } from '@/lib/firebase-server';
+import { supabaseOperations } from '@/lib/supabase-server';
 
 // GET /api/topics - Get all topics
 export async function GET() {
   try {
     console.log('🔄 API: Fetching topics...');
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
+
+    const { data: topics, error } = await supabaseOperations.getTopics({
+      isActive: true,
+      orderBy: 'order_index',
+      orderDirection: 'asc',
+    });
+
+    if (error) {
+      throw new Error(error.message);
     }
-    const snapshot = await getDocs(collection(db, 'topics'));
-    const topics = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    console.log('📊 API: Topics fetched:', topics.length, 'topics');
-    console.log('📊 API: Topics data:', topics);
+
+    // Transform data to match expected format
+    const transformedTopics =
+      (topics as any[])?.map(topic => ({
+        id: topic.id,
+        name: topic.name,
+        description: topic.description,
+        category: topic.category_id,
+        categoryId: topic.category_id,
+        orderIndex: topic.order_index,
+        is_active: topic.is_active,
+        created_at: new Date(topic.created_at),
+        updated_at: new Date(topic.updated_at),
+      })) || [];
+
+    console.log('📊 API: Topics fetched:', transformedTopics.length, 'topics');
+    console.log('📊 API: Topics data:', transformedTopics);
 
     return NextResponse.json({
       success: true,
-      data: topics,
-      count: topics.length,
+      data: transformedTopics,
+      count: transformedTopics.length,
     });
   } catch (error) {
     console.error('❌ API: Error fetching topics:', error);
@@ -46,7 +60,7 @@ export async function POST(request: NextRequest) {
     console.log('🔄 API: Creating topic with data:', topicData);
 
     // Validate required fields
-    const requiredFields = ['name', 'description', 'category', 'difficulty'];
+    const requiredFields = ['name', 'description'];
     for (const field of requiredFields) {
       if (!topicData[field]) {
         console.error('❌ API: Missing required field:', field);
@@ -61,24 +75,41 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('✅ API: All required fields present, creating topic...');
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-    const topicWithTimestamps = {
-      ...topicData,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+
+    // Transform data to match Supabase schema
+    const supabaseTopicData = {
+      name: topicData.name,
+      description: topicData.description,
+      category_id: topicData.category || topicData.categoryId || null,
+      order_index: topicData.orderIndex || 0,
+      is_active: topicData.isActive !== false,
     };
-    const docRef = await addDoc(collection(db, 'topics'), topicWithTimestamps);
-    const topicId = docRef.id;
-    console.log('✅ API: Topic created with ID:', topicId);
+
+    const { data: newTopic, error } =
+      await supabaseOperations.createTopic(supabaseTopicData);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    console.log('✅ API: Topic created with ID:', (newTopic as any).id);
+
+    // Transform response to match expected format
+    const transformedTopic = {
+      id: (newTopic as any).id,
+      name: (newTopic as any).name,
+      description: (newTopic as any).description,
+      category: (newTopic as any).category_id,
+      categoryId: (newTopic as any).category_id,
+      orderIndex: (newTopic as any).order_index,
+      is_active: (newTopic as any).is_active,
+      created_at: new Date((newTopic as any).created_at),
+      updated_at: new Date((newTopic as any).updated_at),
+    };
 
     return NextResponse.json({
       success: true,
-      data: { id: topicId },
+      data: transformedTopic,
       message: 'Topic created successfully',
     });
   } catch (error) {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyFirebaseToken } from '@/lib/server-auth';
+import { verifySupabaseToken } from '@/lib/server-auth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify the Firebase token
-    const decodedToken = await verifyFirebaseToken(token);
+    const decodedToken = await verifySupabaseToken(token);
     if (!decodedToken) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }

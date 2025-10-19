@@ -1,11 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  orderBy,
-} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -30,7 +23,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 interface CollectionStats {
@@ -62,7 +55,7 @@ async function analyzeCollection(
       stats.subcategories = {};
 
       querySnapshot.docs.forEach(doc => {
-        const data = doc.data();
+        const data = doc;
 
         // Count by category
         const category = data.category || 'Unknown';
@@ -86,7 +79,7 @@ async function analyzeCollection(
       });
     } else if (collectionName === 'frontendTasks') {
       querySnapshot.docs.forEach(doc => {
-        const data = doc.data();
+        const data = doc;
 
         // Count by category
         const category = data.category || 'Unknown';
@@ -99,7 +92,7 @@ async function analyzeCollection(
       });
     } else if (collectionName === 'problemSolvingTasks') {
       querySnapshot.docs.forEach(doc => {
-        const data = doc.data();
+        const data = doc;
 
         // Count by category
         const category = data.category || 'Unknown';
@@ -116,7 +109,7 @@ async function analyzeCollection(
       });
     } else if (collectionName === 'guidedLearningPlans') {
       querySnapshot.docs.forEach(doc => {
-        const data = doc.data();
+        const data = doc;
 
         // Count by duration
         const duration = `${data.duration || 'Unknown'}-Day Plan`;
@@ -135,7 +128,7 @@ async function analyzeCollection(
     } else {
       // Generic handling for other collections
       querySnapshot.docs.forEach(doc => {
-        const data = doc.data();
+        const data = doc;
 
         // Try to find common fields
         if (data.category) {

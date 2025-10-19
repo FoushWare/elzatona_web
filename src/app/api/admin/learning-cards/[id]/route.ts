@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  deleteDoc,
-  serverTimestamp,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // GET /api/admin/learning-cards/[id] - Get a specific learning card
 export async function GET(
@@ -15,10 +12,13 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const cardRef = doc(db, 'learningCards', id);
-    const cardSnap = await getDoc(cardRef);
+    const { data: cardSnap, error } = await supabase
+      .from('learning_cards')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-    if (!cardSnap.exists()) {
+    if (error || !cardSnap) {
       return NextResponse.json(
         {
           success: false,
@@ -28,20 +28,19 @@ export async function GET(
       );
     }
 
-    const data = cardSnap.data();
     const card = {
       id: cardSnap.id,
-      title: data.title,
-      type: data.type,
-      description: data.description,
-      color: data.color,
-      icon: data.icon,
-      order: data.order,
-      sections: data.sections || [],
-      topics: data.topics || [],
-      questionCount: data.questionCount || 0,
-      createdAt: data.createdAt?.toDate() || new Date(),
-      updatedAt: data.updatedAt?.toDate() || new Date(),
+      title: cardSnap.title,
+      type: cardSnap.type,
+      description: cardSnap.description,
+      color: cardSnap.color,
+      icon: cardSnap.icon,
+      order: cardSnap.order,
+      sections: cardSnap.sections || [],
+      topics: cardSnap.topics || [],
+      question_count: cardSnap.question_count || 0,
+      created_at: cardSnap.created_at || new Date(),
+      updated_at: cardSnap.updated_at || new Date(),
     };
 
     return NextResponse.json({
@@ -90,19 +89,25 @@ export async function PUT(
       );
     }
 
-    const cardRef = doc(db, 'learningCards', id);
-    await updateDoc(cardRef, {
-      title,
-      type,
-      description,
-      color,
-      icon,
-      order: order || 0,
-      sections: sections || [],
-      topics: topics || [],
-      questionCount: questionCount || 0,
-      updatedAt: serverTimestamp(),
-    });
+    const { error } = await supabase
+      .from('learning_cards')
+      .update({
+        title,
+        type,
+        description,
+        color,
+        icon,
+        order: order || 0,
+        sections: sections || [],
+        topics: topics || [],
+        question_count: questionCount || 0,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id);
+
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,
@@ -116,7 +121,7 @@ export async function PUT(
         order: order || 0,
         sections: sections || [],
         topics: topics || [],
-        questionCount: questionCount || 0,
+        question_count: questionCount || 0,
       },
     });
   } catch (error) {
@@ -138,8 +143,14 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const cardRef = doc(db, 'learningCards', id);
-    await deleteDoc(cardRef);
+    const { error } = await supabase
+      .from('learning_cards')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,

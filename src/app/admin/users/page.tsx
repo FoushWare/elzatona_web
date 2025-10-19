@@ -1,6 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useAuth } from '@/contexts/AuthContext';
 import { useRoleBasedAccess } from '@/hooks/useRoleBasedAccess';
 import {
@@ -26,8 +32,8 @@ interface User {
   email: string;
   name: string;
   role: 'user' | 'premium_user' | 'admin' | 'super_admin';
-  isActive: boolean;
-  createdAt: string;
+  is_active: boolean;
+  created_at: string;
   lastLogin?: string;
   preferences?: {
     theme: 'light' | 'dark' | 'system';
@@ -221,7 +227,7 @@ export default function UserManagementPage() {
                   Active Users
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {users.filter(u => u.isActive).length}
+                  {users.filter(u => u.is_active).length}
                 </p>
               </div>
             </div>
@@ -323,16 +329,16 @@ export default function UserManagementPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          user.isActive
+                          user.is_active
                             ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                             : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
                         }`}
                       >
-                        {user.isActive ? 'Active' : 'Inactive'}
+                        {user.is_active ? 'Active' : 'Inactive'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      {new Date(user.createdAt).toLocaleDateString()}
+                      {new Date(user.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {user.lastLogin

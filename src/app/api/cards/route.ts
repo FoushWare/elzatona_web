@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  db,
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  addDoc,
-  doc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-} from '@/lib/firebase-server';
+import { supabaseOperations } from '@/lib/supabase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 /**
  * @swagger
@@ -47,26 +41,46 @@ import {
 // GET /api/cards - Get all learning cards
 export async function GET(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get('type');
+    const isActive = searchParams.get('isActive');
+    const limit = searchParams.get('limit');
+
+    const filters = {
+      type: type || undefined,
+      is_active: isActive ? isActive === 'true' : undefined,
+      limit: limit ? parseInt(limit, 10) : undefined,
+      orderBy: 'order_index',
+      orderDirection: 'asc' as const,
+    };
+
+    const { data: cards, error } =
+      await supabaseOperations.getLearningCards(filters);
+
+    if (error) {
+      throw new Error(error.message);
     }
 
-    const q = query(collection(db, 'learningCards'), orderBy('order', 'asc'));
-    const querySnapshot = await getDocs(q);
-
-    const cards = querySnapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        title: data.name || data.title, // Handle both name and title for backward compatibility
-        ...data,
-      };
-    });
+    // Transform data to match expected format
+    const transformedCards = (cards || []).map((card: any) => ({
+      id: card.id,
+      title: card.title,
+      name: card.title, // For backward compatibility
+      type: card.type,
+      description: card.description,
+      color: card.color,
+      icon: card.icon,
+      order: card.order_index,
+      order_index: card.order_index,
+      is_active: card.is_active,
+      created_at: card.created_at,
+      updated_at: card.updated_at,
+    }));
 
     return NextResponse.json({
       success: true,
-      data: cards,
-      count: cards.length,
+      data: transformedCards,
+      count: transformedCards.length,
     });
   } catch (error) {
     console.error('Error fetching cards:', error);
@@ -140,29 +154,52 @@ export async function GET(request: NextRequest) {
 // POST /api/cards - Create a new learning card
 export async function POST(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     const cardData = await request.json();
 
-    const cardWithTimestamps = {
-      ...cardData,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      createdBy: 'admin',
-      updatedBy: 'admin',
-      isActive: true,
+    // Transform data to match Supabase schema
+    const supabaseCardData = {
+      title: cardData.name || cardData.title,
+      type: cardData.type,
+      description: cardData.description,
+      color: cardData.color || '#3B82F6',
+      icon: cardData.icon || 'code',
+      order_index: cardData.order || cardData.order_index || 0,
+      is_active: cardData.isActive !== false,
     };
 
-    const docRef = await addDoc(
-      collection(db, 'learningCards'),
-      cardWithTimestamps
-    );
+    const { data: newCard, error } = await supabase
+      .from('learning_cards')
+      .insert(supabaseCardData)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (!newCard) {
+      throw new Error('No card was created');
+    }
+
+    // Transform response to match expected format
+    const transformedCard = {
+      id: newCard.id,
+      title: newCard.title,
+      name: newCard.title, // For backward compatibility
+      type: newCard.type,
+      description: newCard.description,
+      color: newCard.color,
+      icon: newCard.icon,
+      order: newCard.order_index,
+      order_index: newCard.order_index,
+      is_active: newCard.is_active,
+      created_at: newCard.created_at,
+      updated_at: newCard.updated_at,
+    };
 
     return NextResponse.json({
       success: true,
-      data: { id: docRef.id, ...cardWithTimestamps },
+      data: transformedCard,
       message: 'Card created successfully',
     });
   } catch (error) {
