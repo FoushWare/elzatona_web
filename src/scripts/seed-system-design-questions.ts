@@ -1,12 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
+
 import fs from 'fs';
 import path from 'path';
 
@@ -30,7 +23,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 interface UnifiedQuestion {
@@ -42,9 +35,9 @@ interface UnifiedQuestion {
   topic: string;
   learningPath: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
   createdBy: string;
   updatedBy: string;
   tags: string[];
@@ -75,14 +68,11 @@ async function loadQuestionsFromFile(
   }
 }
 
-async function questionExists(questionId: string): Promise<boolean> {
+async function questionExists(question_id: string): Promise<boolean> {
   try {
-    const q = query(
-      collection(db, 'unifiedQuestions'),
-      where('id', '==', questionId)
-    );
+    const q = query(supabase.from('unifiedQuestions'), where('id', questionId));
     const querySnapshot = await getDocs(q);
-    return !querySnapshot.empty;
+    return !querySnapshot.length === 0;
   } catch (error) {
     console.error(`❌ Error checking if question exists:`, error);
     return false;
@@ -131,10 +121,10 @@ async function seedSystemDesignQuestions() {
         }
 
         // Add question to Firebase
-        await addDoc(collection(db, 'unifiedQuestions'), {
+        await addDoc(supabase.from('unifiedQuestions'), {
           ...question,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
           createdBy: 'seeding-script',
           updatedBy: 'seeding-script',
         });

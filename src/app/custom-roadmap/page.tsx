@@ -1,8 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useRouter } from 'next/navigation';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 import { SignInPopup } from '@/shared/components/auth/SignInPopup';
 import {
   Plus,
@@ -50,12 +56,13 @@ interface CustomPlan {
   sections: Section[];
   totalQuestions: number;
   dailyQuestions: number;
-  createdAt: Date;
+  created_at: Date;
 }
 
 export default function CustomRoadmapPage() {
   const router = useRouter();
-  const { isAuthenticated, user } = useFirebaseAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const [showSignInPopup, setShowSignInPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -341,15 +348,15 @@ export default function CustomRoadmapPage() {
     setSelectedSections(newSelectedSections);
   };
 
-  const handleQuestionToggle = (sectionId: string, questionId: string) => {
+  const handleQuestionToggle = (sectionId: string, question_id: string) => {
     setSections(prev =>
       prev.map(section => {
         if (section.id === sectionId) {
           const newSelectedQuestions = section.selectedQuestions.includes(
-            questionId
+            question_id
           )
-            ? section.selectedQuestions.filter(id => id !== questionId)
-            : [...section.selectedQuestions, questionId];
+            ? section.selectedQuestions.filter(id => id !== question_id)
+            : [...section.selectedQuestions, question_id];
           return { ...section, selectedQuestions: newSelectedQuestions };
         }
         return section;
@@ -429,7 +436,7 @@ export default function CustomRoadmapPage() {
       sections: selectedSectionsData,
       totalQuestions: totalSelectedQuestions,
       dailyQuestions: Math.ceil(totalSelectedQuestions / duration),
-      createdAt: new Date(),
+      created_at: new Date(),
     };
 
     // Save to localStorage for now (in real app, save to Firebase)

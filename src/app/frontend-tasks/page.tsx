@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useRouter } from 'next/navigation';
 import {
   Code,
@@ -43,9 +49,9 @@ interface FrontendTask {
   starterCode: string;
   testCases?: any[];
   tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
-  isActive: boolean;
+  created_at: Date;
+  updated_at: Date;
+  is_active: boolean;
 }
 
 export default function FrontendTasksPage() {
@@ -71,9 +77,9 @@ export default function FrontendTasksPage() {
       starterCode: '// Starter code here',
       testCases: [],
       tags: ['react', 'hooks', 'state', 'beginner'],
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date(),
     },
     {
       id: 'todo-list',
@@ -91,9 +97,9 @@ export default function FrontendTasksPage() {
       starterCode: '// Starter code here',
       testCases: [],
       tags: ['react', 'forms', 'state', 'intermediate'],
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date(),
     },
   ]);
   const [loading, setLoading] = useState(false);
@@ -140,9 +146,9 @@ export default function FrontendTasksPage() {
             starterCode: '// Starter code here',
             testCases: [],
             tags: ['react', 'hooks', 'state', 'beginner'],
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
           {
             id: 'todo-list',
@@ -163,9 +169,9 @@ export default function FrontendTasksPage() {
             starterCode: '// Starter code here',
             testCases: [],
             tags: ['react', 'forms', 'state', 'intermediate'],
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
         ]);
         setError(null); // Clear error since we have fallback data

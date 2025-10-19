@@ -1,7 +1,11 @@
 // v1.0 - API routes for individual problem solving task operations
 
 import { NextRequest, NextResponse } from 'next/server';
-import { db, doc, getDoc, updateDoc, deleteDoc } from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
@@ -16,14 +20,6 @@ export async function GET(
   try {
     console.log('🔄 API: Fetching problem solving task by ID...');
 
-    if (!db) {
-      console.error('❌ API: Database not initialized');
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     const { id } = await params;
 
     if (!id) {
@@ -33,10 +29,14 @@ export async function GET(
       );
     }
 
-    // Fetch task from Firebase
-    const taskDoc = await getDoc(doc(db, 'problemSolvingTasks', id));
+    // Fetch task from Supabase
+    const { data: taskDoc, error } = await supabase
+      .from('problem_solving')
+      .select()
+      .eq('id', id)
+      .single();
 
-    if (!taskDoc.exists()) {
+    if (error || !taskDoc) {
       return NextResponse.json(
         { success: false, error: 'Task not found' },
         { status: 404 }
@@ -45,7 +45,7 @@ export async function GET(
 
     const taskData = {
       id: taskDoc.id,
-      ...taskDoc.data(),
+      ...taskDoc,
     } as ProblemSolvingTask;
 
     console.log(`✅ API: Problem solving task fetched: ${taskData.title}`);
@@ -73,14 +73,6 @@ export async function PUT(
   try {
     console.log('🔄 API: Updating problem solving task...');
 
-    if (!db) {
-      console.error('❌ API: Database not initialized');
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     const { id } = await params;
     const body: Partial<ProblemSolvingTaskFormData> = await request.json();
 
@@ -92,20 +84,31 @@ export async function PUT(
     }
 
     // Check if task exists
-    const taskDoc = await getDoc(doc(db, 'problemSolvingTasks', id));
+    const { data: taskDoc, error } = await supabase
+      .from('problem_solving')
+      .select()
+      .eq('id', id)
+      .single();
 
-    if (!taskDoc.exists()) {
+    if (error || !taskDoc) {
       return NextResponse.json(
         { success: false, error: 'Task not found' },
         { status: 404 }
       );
     }
 
-    // Update task in Firebase
-    await updateDoc(doc(db, 'problemSolvingTasks', id), {
-      ...body,
-      updatedAt: new Date(),
-    });
+    // Update task in Supabase
+    const { error: updateError } = await supabase
+      .from('problem_solving')
+      .update({
+        ...body,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     console.log(`✅ API: Problem solving task updated: ${id}`);
 
@@ -132,14 +135,6 @@ export async function DELETE(
   try {
     console.log('🔄 API: Deleting problem solving task...');
 
-    if (!db) {
-      console.error('❌ API: Database not initialized');
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
     const { id } = await params;
 
     if (!id) {
@@ -150,20 +145,31 @@ export async function DELETE(
     }
 
     // Check if task exists
-    const taskDoc = await getDoc(doc(db, 'problemSolvingTasks', id));
+    const { data: taskDoc, error } = await supabase
+      .from('problem_solving')
+      .select()
+      .eq('id', id)
+      .single();
 
-    if (!taskDoc.exists()) {
+    if (error || !taskDoc) {
       return NextResponse.json(
         { success: false, error: 'Task not found' },
         { status: 404 }
       );
     }
 
-    // Soft delete by setting isActive to false
-    await updateDoc(doc(db, 'problemSolvingTasks', id), {
-      isActive: false,
-      updatedAt: new Date(),
-    });
+    // Soft delete by setting is_active to false
+    const { error: updateError } = await supabase
+      .from('problem_solving')
+      .update({
+        is_active: false,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     console.log(`✅ API: Problem solving task deleted: ${id}`);
 

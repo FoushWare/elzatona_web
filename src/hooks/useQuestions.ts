@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 import { QuestionStats } from '@/lib/unified-question-schema';
 import {
   Question,
@@ -17,7 +17,7 @@ import {
   getUserQuestionAttempts,
   searchQuestions,
   getQuizQuestions,
-} from '@/lib/firebase-questions';
+} from '@/lib/supabase-questions';
 
 interface QuestionFilters {
   category?: string;
@@ -43,7 +43,7 @@ export interface UseQuestionsReturn {
   isLoading: boolean;
   error: string | null;
   loadQuestions: (filters?: QuestionFilters) => Promise<void>;
-  loadQuestion: (questionId: string) => Promise<void>;
+  loadQuestion: (question_id: string) => Promise<void>;
   loadRandomQuestions: (
     count: number,
     filters?: QuestionFilters
@@ -52,7 +52,7 @@ export interface UseQuestionsReturn {
   loadStats: () => Promise<void>;
   loadUserAttempts: (questionId?: string) => Promise<void>;
   submitAnswer: (
-    questionId: string,
+    question_id: string,
     selectedAnswer: number,
     timeSpent: number,
     attempts: number
@@ -66,7 +66,7 @@ export interface UseQuestionsReturn {
 }
 
 export const useQuestions = (): UseQuestionsReturn => {
-  const { user } = useFirebaseAuth();
+  const [user, setUser] = useState({ uid: 'placeholder-user' });
   const [questions, setQuestions] = useState<Question[]>([]);
   const [categories, setCategories] = useState<QuestionCategory[]>([]);
   const [stats, setStats] = useState<QuestionStats | null>(null);
@@ -90,12 +90,12 @@ export const useQuestions = (): UseQuestionsReturn => {
     }
   }, []);
 
-  const loadQuestion = useCallback(async (questionId: string) => {
+  const loadQuestion = useCallback(async (question_id: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const question = await getQuestion(questionId);
+      const question = await getQuestion(question_id);
       setCurrentQuestion(question);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load question');
@@ -181,7 +181,7 @@ export const useQuestions = (): UseQuestionsReturn => {
 
   const submitAnswer = useCallback(
     async (
-      questionId: string,
+      question_id: string,
       selectedAnswer: number,
       timeSpent: number,
       attempts: number
@@ -191,7 +191,7 @@ export const useQuestions = (): UseQuestionsReturn => {
       }
 
       try {
-        const question = await getQuestion(questionId);
+        const question = await getQuestion(question_id);
         if (!question) {
           throw new Error('Question not found');
         }
@@ -204,17 +204,15 @@ export const useQuestions = (): UseQuestionsReturn => {
           ) || false;
 
         await saveQuestionAttempt({
-          questionId,
-          userId: user.uid,
-          userAnswer: { answer: selectedAnswer.toString() },
-          isCorrect,
-          timeSpent,
-          points: isCorrect ? 10 : 0,
-          hintsUsed: 0,
+          question_id: question_id,
+          user_id: user.uid,
+          answer: selectedAnswer.toString(),
+          is_correct: isCorrect,
+          time_spent: timeSpent,
         });
 
         // Reload user attempts to show the new attempt
-        await loadUserAttempts(questionId);
+        await loadUserAttempts(question_id);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : 'Failed to submit answer'
@@ -252,11 +250,11 @@ export const useQuestions = (): UseQuestionsReturn => {
       setError(null);
 
       try {
-        const quizQuestions = await getQuizQuestions(
-          config.category,
-          config.difficulty,
-          config.count
-        );
+        const quizQuestions = await getQuizQuestions(config.count || 10, {
+          category: config.category,
+          difficulty: config.difficulty,
+          tags: config.tags,
+        });
         setQuestions(quizQuestions);
         return quizQuestions;
       } catch (err) {

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { UnifiedQuestionService } from '@/lib/unified-question-schema';
-import { db } from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function GET(
   request: NextRequest,
@@ -9,17 +12,13 @@ export async function GET(
   try {
     const { id } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
+    const { data: question, error } = await supabase
+      .from('questions')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-    const service = new UnifiedQuestionService(db);
-    const question = await service.getQuestion(id);
-
-    if (!question) {
+    if (error || !question) {
       return NextResponse.json(
         { success: false, error: 'Question not found' },
         { status: 404 }
@@ -49,22 +48,23 @@ export async function PUT(
 
     console.log('🔄 Updating question:', id, updatedQuestion);
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
+    const { data, error } = await supabase
+      .from('questions')
+      .update({
+        ...updatedQuestion,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
     }
-
-    const service = new UnifiedQuestionService(db);
-    await service.updateQuestion(id, updatedQuestion);
-
-    // Get the updated question to return
-    const updatedQuestionData = await service.getQuestion(id);
 
     return NextResponse.json({
       success: true,
-      data: updatedQuestionData,
+      data: data,
       message: 'Question updated successfully',
     });
   } catch (error) {
@@ -88,15 +88,11 @@ export async function DELETE(
 
     console.log('🗑️ Deleting question:', id);
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
+    const { error } = await supabase.from('questions').delete().eq('id', id);
 
-    const service = new UnifiedQuestionService(db);
-    await service.deleteQuestion(id);
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,

@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  collection,
-  getDocs,
-  addDoc,
-  doc,
-  updateDoc,
-  deleteDoc,
-  query,
-  orderBy,
-  where,
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface QuestionTopic {
   id: string;
@@ -31,83 +25,99 @@ export interface QuestionTopic {
     | 'performance-monitoring'
     | 'advanced-future';
   color: string;
-  createdAt: string;
-  updatedAt: string;
-  questionCount: number;
+  created_at: string;
+  updated_at: string;
+  question_count: number;
 }
 
-// Load topics from Firebase
+// Load topics from Supabase
 async function loadTopics(): Promise<QuestionTopic[]> {
   try {
-    if (!db) {
-      console.warn('Firestore not available');
+    const { data: querySnapshot, error } = await supabase
+      .from('topics')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error loading topics from Supabase:', error);
       return [];
     }
 
-    const topicsRef = collection(db, 'topics');
-    const q = query(topicsRef, orderBy('createdAt', 'desc'));
-    const querySnapshot = await getDocs(q);
-
     const topics: QuestionTopic[] = [];
-    querySnapshot.forEach(doc => {
+    querySnapshot?.forEach(doc => {
       topics.push({
         id: doc.id,
-        ...doc.data(),
+        ...doc,
       } as QuestionTopic);
     });
 
     return topics;
   } catch (error) {
-    console.error('Error loading topics from Firebase:', error);
+    console.error('Error loading topics from Supabase:', error);
     return [];
   }
 }
 
-// Save topic to Firebase
+// Save topic to Supabase
 async function saveTopic(topic: Omit<QuestionTopic, 'id'>): Promise<string> {
-  if (!db) {
-    throw new Error('Firestore not available');
+  const { data: newTopic, error } = await supabase
+    .from('topics')
+    .insert({
+      ...topic,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to save topic: ${error.message}`);
   }
 
-  const topicsRef = collection(db, 'topics');
-  const docRef = await addDoc(topicsRef, topic);
-  return docRef.id;
+  return newTopic.id;
 }
 
-// Update topic in Firebase
+// Update topic in Supabase
 async function updateTopic(
   topicId: string,
   topic: Partial<QuestionTopic>
 ): Promise<void> {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
+  const { error } = await supabase
+    .from('topics')
+    .update({
+      ...topic,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', topicId);
 
-  const topicRef = doc(db, 'topics', topicId);
-  await updateDoc(topicRef, topic);
+  if (error) {
+    throw new Error(`Failed to update topic: ${error.message}`);
+  }
 }
 
-// Delete topic from Firebase
+// Delete topic from Supabase
 async function deleteTopic(topicId: string): Promise<void> {
-  if (!db) {
-    throw new Error('Firestore not available');
-  }
+  const { error } = await supabase.from('topics').delete().eq('id', topicId);
 
-  const topicRef = doc(db, 'topics', topicId);
-  await deleteDoc(topicRef);
+  if (error) {
+    throw new Error(`Failed to delete topic: ${error.message}`);
+  }
 }
 
 // Check if topic exists by name
 async function topicExistsByName(name: string): Promise<boolean> {
-  if (!db) {
-    return false;
-  }
-
   try {
-    const topicsRef = collection(db, 'topics');
-    const q = query(topicsRef, where('name', '==', name));
-    const querySnapshot = await getDocs(q);
-    return !querySnapshot.empty;
+    const { data, error } = await supabase
+      .from('topics')
+      .select('id')
+      .eq('name', name)
+      .single();
+
+    if (error) {
+      return false;
+    }
+
+    return !!data;
   } catch (error) {
     console.error('Error checking if topic exists:', error);
     return false;
@@ -167,9 +177,9 @@ export async function POST(request: NextRequest) {
       description: description || '',
       category,
       color: color || '#3B82F6',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      questionCount: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      question_count: 0,
     };
 
     const topicId = await saveTopic(newTopic);

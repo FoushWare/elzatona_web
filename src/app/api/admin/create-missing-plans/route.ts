@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { collection, doc, setDoc, Timestamp } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,9 +30,9 @@ export async function POST(request: NextRequest) {
         ],
         estimatedTime: '5-6 hours',
         isRecommended: true,
-        isActive: true,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
       {
         id: '5-day-plan',
@@ -54,9 +57,9 @@ export async function POST(request: NextRequest) {
         ],
         estimatedTime: '6-7 hours',
         isRecommended: true,
-        isActive: true,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
       {
         id: '6-day-plan',
@@ -82,16 +85,22 @@ export async function POST(request: NextRequest) {
         ],
         estimatedTime: '7-8 hours',
         isRecommended: true,
-        isActive: true,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       },
     ];
 
     console.log('Creating missing learning plans...');
 
     for (const plan of missingPlans) {
-      await setDoc(doc(db!, 'learningPlanTemplates', plan.id), plan);
+      const { error } = await supabase.from('learning_plans').insert(plan);
+
+      if (error) {
+        console.error(`❌ Error creating ${plan.name}:`, error);
+        continue;
+      }
+
       console.log(`✅ Created ${plan.name}`);
     }
 

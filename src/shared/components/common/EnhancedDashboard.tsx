@@ -4,7 +4,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useUserProgress } from '@/hooks/useUserProgress';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+import { useAuth } from '@/contexts/AuthContext';
+
 import {
   BookOpen,
   Code,
@@ -62,7 +63,7 @@ interface Recommendation {
 }
 
 export default function EnhancedDashboard() {
-  const { user, signOut } = useFirebaseAuth();
+  const { user, logout } = useAuth();
   const {
     progress,
     dashboardStats,
@@ -85,8 +86,8 @@ export default function EnhancedDashboard() {
       icon: BookOpen,
       color: 'from-blue-500 to-blue-600',
       href: '/questions',
-      stats: `${progress?.totalQuestionsCompleted || 0} completed`,
-      progress: dashboardStats ? dashboardStats.averageScore || 0 : 0,
+      stats: `${progress?.total_questions_answered || 0} completed`,
+      progress: dashboardStats ? dashboardStats.accuracy || 0 : 0,
     },
     {
       id: 'learning-paths',
@@ -95,8 +96,8 @@ export default function EnhancedDashboard() {
       icon: Target,
       color: 'from-purple-500 to-purple-600',
       href: '/learning-paths',
-      stats: `${progress?.learningPaths?.length || 0} paths in progress`,
-      progress: dashboardStats ? dashboardStats.completionRate : 0,
+      stats: `0 paths in progress`,
+      progress: dashboardStats ? dashboardStats.accuracy || 0 : 0,
     },
     {
       id: 'challenges',
@@ -105,8 +106,8 @@ export default function EnhancedDashboard() {
       icon: Code,
       color: 'from-green-500 to-green-600',
       href: '/challenges',
-      stats: `${progress?.totalChallengesCompleted || 0} challenges solved`,
-      progress: dashboardStats ? dashboardStats.averageScore || 0 : 0,
+      stats: `${0} challenges solved`,
+      progress: dashboardStats ? dashboardStats.accuracy || 0 : 0,
     },
     {
       id: 'analytics',
@@ -115,7 +116,7 @@ export default function EnhancedDashboard() {
       icon: BarChart3,
       color: 'from-orange-500 to-orange-600',
       href: '/progress',
-      stats: `${Math.round(dashboardStats?.completionRate || 0)}% completion rate`,
+      stats: `${Math.round(dashboardStats?.accuracy || 0)}% accuracy rate`,
     },
   ];
 
@@ -123,8 +124,8 @@ export default function EnhancedDashboard() {
   const recentActivities: RecentActivity[] =
     dashboardStats?.recentActivity?.slice(0, 4).map((activity, index) => ({
       id: `activity-${index}`,
-      type: activity.type,
-      title: activity.title,
+      type: activity.type as 'question' | 'challenge' | 'path',
+      title: activity.description,
       time: formatTimeAgo(activity.timestamp),
       points: activity.points,
       icon:
@@ -269,7 +270,7 @@ export default function EnhancedDashboard() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-              Welcome back, {user?.displayName || 'Developer'}! 👋
+              Welcome back, {user?.name || 'Developer'}! 👋
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
               Ready to continue your frontend development journey?
@@ -292,7 +293,7 @@ export default function EnhancedDashboard() {
               <Settings className="w-5 h-5" />
             </button>
             <button
-              onClick={signOut}
+              onClick={logout}
               className="flex items-center space-x-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
             >
               <LogOut className="w-4 h-4" />
@@ -374,7 +375,7 @@ export default function EnhancedDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-2xl font-bold text-blue-600">
-                      {progress?.totalQuestionsCompleted || 0}
+                      {progress?.total_questions_answered || 0}
                     </div>
                     <div className="text-gray-600 dark:text-gray-400">
                       Questions Completed
@@ -388,7 +389,7 @@ export default function EnhancedDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-2xl font-bold text-purple-600">
-                      {progress?.totalPoints || 0}
+                      {progress?.total_points || 0}
                     </div>
                     <div className="text-gray-600 dark:text-gray-400">
                       Total Points
@@ -402,7 +403,7 @@ export default function EnhancedDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-2xl font-bold text-green-600">
-                      {progress?.currentStreak || 0}
+                      {progress?.current_streak || 0}
                     </div>
                     <div className="text-gray-600 dark:text-gray-400">
                       Day Streak

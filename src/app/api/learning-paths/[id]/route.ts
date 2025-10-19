@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { firestoreService } from '@/lib/firestore-service';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function GET(
   request: NextRequest,
@@ -16,7 +21,12 @@ export async function GET(
     }
 
     // Fetch learning path from Firebase
-    const learningPath = await firestoreService.getLearningPath(pathId);
+    const { data: learningPath, error } = await supabase
+      .from('learningpaths')
+      .select('*')
+      .eq('id', pathId)
+      .single();
+    if (error) throw error;
 
     if (!learningPath) {
       return NextResponse.json(
@@ -51,7 +61,11 @@ export async function PUT(
     }
 
     // Update learning path in Firebase
-    const updatedPath = await firestoreService.updateLearningPath(pathId, body);
+    const { data: updatedPath, error } = await supabase
+      .from('learningpaths')
+      .update({ ...body, updated_at: new Date().toISOString() })
+      .eq('id', pathId);
+    if (error) throw error;
 
     if (!updatedPath) {
       return NextResponse.json(
@@ -85,7 +99,11 @@ export async function DELETE(
     }
 
     // Delete learning path from Firebase
-    const success = await firestoreService.deleteLearningPath(pathId);
+    const { data: success, error } = await supabase
+      .from('learningpaths')
+      .delete()
+      .eq('id', pathId);
+    if (error) throw error;
 
     if (!success) {
       return NextResponse.json(

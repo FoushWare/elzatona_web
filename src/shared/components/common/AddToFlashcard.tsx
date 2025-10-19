@@ -1,9 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { Bookmark, BookmarkCheck, X } from 'lucide-react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
-import { flashcardService } from '@/lib/firebase-flashcards';
+
+import { flashcardService } from '@/lib/supabase-flashcards';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface AddToFlashcardProps {
   question: string;
@@ -26,7 +33,7 @@ export default function AddToFlashcard({
   onStatusChange,
   className = '',
 }: AddToFlashcardProps) {
-  const { user } = useFirebaseAuth();
+  const { user } = useAuth();
   const [state, setState] = useState<FlashcardState>('add');
   const [flashcardId, setFlashcardId] = useState<string | null>(null);
 
@@ -45,15 +52,15 @@ export default function AddToFlashcard({
     if (!user) return;
 
     try {
-      const result = await flashcardService.checkFlashcardExists(
-        user.uid,
-        question
+      // Get all flashcards for the user and check if one matches the question
+      const flashcards = await flashcardService.getFlashcards(user.id);
+      const existingCard = flashcards?.find(
+        (card: any) => card.question === question
       );
 
-      // Handle case where result might be undefined or null
-      if (result && result.exists && result.flashcardId) {
+      if (existingCard) {
         setState('saved');
-        setFlashcardId(result.flashcardId);
+        setFlashcardId(existingCard.id);
       }
     } catch (error) {
       console.error('Error checking existing flashcard:', error);
@@ -73,16 +80,35 @@ export default function AddToFlashcard({
     try {
       if (state === 'add') {
         // Add to flashcards
+        const now = new Date().toISOString();
+        const flashcard = {
+          userId: user.id,
+          question_id: `manual-${Date.now()}`,
+          question,
+          answer,
+          explanation: answer,
+          category,
+          difficulty:
+            difficulty === 'beginner'
+              ? 'easy'
+              : difficulty === 'intermediate'
+                ? 'medium'
+                : ('hard' as 'easy' | 'medium' | 'hard'),
+          status: 'new' as 'new' | 'learning' | 'review' | 'mastered',
+          interval: 0,
+          repetitions: 0,
+          easeFactor: 2.5,
+          lastReviewed: null,
+          nextReview: now,
+          tags: [],
+          source: (source || 'manual') as
+            | 'wrong_answer'
+            | 'manual'
+            | 'bookmark',
+        };
+
         const newFlashcardId =
-          await flashcardService.createFlashcardFromQuestion({
-            question,
-            answer,
-            category,
-            difficulty,
-            source,
-            addedBy: 'manual',
-            userId: user.uid,
-          });
+          await flashcardService.createFlashcard(flashcard);
 
         if (newFlashcardId) {
           setState('saved');
@@ -94,9 +120,9 @@ export default function AddToFlashcard({
         }
       } else if (state === 'saved' && flashcardId) {
         // Remove from flashcards
-        const success = await flashcardService.removeFlashcard(flashcardId);
+        await flashcardService.deleteFlashcard(flashcardId);
 
-        if (success) {
+        if (true) {
           setState('add');
           setFlashcardId(null);
           onStatusChange?.('removed');

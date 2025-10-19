@@ -1,50 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import { doc, updateDoc } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // Learning paths that should have questions and their correct counts
 const learningPathUpdates = [
-  { id: 'frontend-basics', questionCount: 5 },
-  { id: 'javascript-deep-dive', questionCount: 5 },
-  { id: 'react-mastery', questionCount: 5 },
-  { id: 'css-mastery', questionCount: 2 },
-  { id: 'typescript-essentials', questionCount: 2 },
-  { id: 'performance-optimization', questionCount: 2 },
-  { id: 'security-essentials', questionCount: 2 },
-  { id: 'testing-strategies', questionCount: 2 },
+  { id: 'frontend-basics', question_count: 5 },
+  { id: 'javascript-deep-dive', question_count: 5 },
+  { id: 'react-mastery', question_count: 5 },
+  { id: 'css-mastery', question_count: 2 },
+  { id: 'typescript-essentials', question_count: 2 },
+  { id: 'performance-optimization', question_count: 2 },
+  { id: 'security-essentials', question_count: 2 },
+  { id: 'testing-strategies', question_count: 2 },
 ];
 
 export async function POST(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     console.log('🔄 Updating learning paths via API...');
 
     const results = [];
 
     for (const update of learningPathUpdates) {
       try {
-        const pathRef = doc(db, 'learningPaths', update.id);
-        await updateDoc(pathRef, {
-          questionCount: update.questionCount,
-          updatedAt: new Date().toISOString(),
-        });
+        const { error } = await supabase
+          .from('learning_cards')
+          .update({
+            question_count: update.question_count,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', update.id);
+
+        if (error) {
+          throw error;
+        }
 
         console.log(
-          `✅ Updated ${update.id}: ${update.questionCount} questions`
+          `✅ Updated ${update.id}: ${update.question_count} questions`
         );
         results.push({
           id: update.id,
-          questionCount: update.questionCount,
+          question_count: update.question_count,
           success: true,
         });
       } catch (error) {
         console.error(`❌ Failed to update ${update.id}:`, error);
         results.push({
           id: update.id,
-          questionCount: update.questionCount,
+          question_count: update.question_count,
           success: false,
           error: error instanceof Error ? error.message : 'Unknown error',
         });

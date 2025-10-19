@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
-import { firestoreService } from '@/lib/firestore-service';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function GET(
   request: Request,
@@ -15,10 +19,14 @@ export async function GET(
       );
     }
 
-    // Get the plan from Firestore
-    const plan = await firestoreService.getLearningPlanTemplate(planId);
+    // Get the plan from Supabase
+    const { data: plan, error } = await supabase
+      .from('learning_plans')
+      .select('*')
+      .eq('id', planId)
+      .single();
 
-    if (!plan) {
+    if (error || !plan) {
       return NextResponse.json(
         { success: false, error: 'Plan not found' },
         { status: 404 }
@@ -52,8 +60,18 @@ export async function PUT(
       );
     }
 
-    // Update the plan in Firestore
-    await firestoreService.updateLearningPlanTemplate(planId, updateData);
+    // Update the plan in Supabase
+    const { error } = await supabase
+      .from('learning_plans')
+      .update({
+        ...updateData,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', planId);
+
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,

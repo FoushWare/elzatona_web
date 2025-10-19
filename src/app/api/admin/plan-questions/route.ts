@@ -1,25 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  collection,
-  doc,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  serverTimestamp,
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase-server';
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 const PLAN_QUESTIONS_COLLECTION = 'planQuestions';
 
 export async function GET(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
     const { searchParams } = new URL(request.url);
     const planId = searchParams.get('planId');
     const cardId = searchParams.get('cardId');
@@ -31,23 +21,28 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let q = query(
-      collection(db, PLAN_QUESTIONS_COLLECTION),
-      where('planId', '==', planId)
-    );
+    let query = supabase
+      .from('plan_questions')
+      .select('*')
+      .eq('plan_id', planId);
 
     if (cardId) {
-      q = query(q, where('cardId', '==', cardId));
+      query = query.eq('card_id', cardId);
     }
 
-    q = query(q, orderBy('order', 'asc'));
+    query = query.order('order', { ascending: true });
 
-    const snapshot = await getDocs(q);
-    const planQuestions = snapshot.docs.map(doc => ({
+    const { data: snapshot, error } = await query;
+
+    if (error) {
+      throw error;
+    }
+
+    const planQuestions = snapshot.map(doc => ({
       id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate() || new Date(),
-      updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+      ...doc,
+      created_at: doc.created_at || new Date(),
+      updated_at: doc.updated_at || new Date(),
     }));
 
     return NextResponse.json({
@@ -65,9 +60,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
     const body = await request.json();
     const { planId, questionId, cardId, sectionId, topicId, order } = body;
 
@@ -82,14 +74,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if question is already assigned to this plan
-    const existingQuery = query(
-      collection(db, PLAN_QUESTIONS_COLLECTION),
-      where('planId', '==', planId),
-      where('questionId', '==', questionId)
-    );
-    const existingSnapshot = await getDocs(existingQuery);
+    const { data: existingSnapshot, error: existingError } = await supabase
+      .from(PLAN_QUESTIONS_COLLECTION)
+      .select()
+      .eq('plan_id', planId)
+      .eq('question_id', questionId);
 
-    if (!existingSnapshot.empty) {
+    if (existingError) {
+      throw existingError;
+    }
+
+    if (existingSnapshot && existingSnapshot.length > 0) {
       return NextResponse.json(
         { success: false, error: 'Question is already assigned to this plan' },
         { status: 400 }
@@ -103,23 +98,23 @@ export async function POST(request: NextRequest) {
       sectionId: sectionId || null,
       topicId: topicId || null,
       order: order || 1,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    const docRef = await addDoc(
-      collection(db, PLAN_QUESTIONS_COLLECTION),
-      planQuestionData
-    );
+    const { data: newPlanQuestion, error } = await supabase
+      .from(PLAN_QUESTIONS_COLLECTION)
+      .insert(planQuestionData)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,
-      data: {
-        id: docRef.id,
-        ...planQuestionData,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+      data: newPlanQuestion,
     });
   } catch (error) {
     console.error('Error creating plan question:', error);
@@ -132,9 +127,6 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
     const body = await request.json();
     const { id, ...updateData } = body;
 
@@ -145,11 +137,14 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const planQuestionRef = doc(db, PLAN_QUESTIONS_COLLECTION, id);
-    await updateDoc(planQuestionRef, {
-      ...updateData,
-      updatedAt: serverTimestamp(),
-    });
+    const { error } = await supabase
+      .from(PLAN_QUESTIONS_COLLECTION)
+      .update({ ...updateData, updated_at: new Date().toISOString() })
+      .eq('id', id);
+
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,
@@ -166,9 +161,6 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
@@ -179,8 +171,14 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const planQuestionRef = doc(db, PLAN_QUESTIONS_COLLECTION, id);
-    await deleteDoc(planQuestionRef);
+    const { error } = await supabase
+      .from(PLAN_QUESTIONS_COLLECTION)
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,

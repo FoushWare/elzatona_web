@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 interface Section {
   id: string;
@@ -16,10 +19,6 @@ export async function PUT(
   { params }: { params: Promise<{ planId: string; sectionId: string }> }
 ) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     const { planId, sectionId } = await params;
     const body = await request.json();
     const { questions } = body;
@@ -35,10 +34,13 @@ export async function PUT(
     }
 
     // Get the plan document
-    const planRef = doc(db, 'learningPlanTemplates', planId);
-    const planDoc = await getDoc(planRef);
+    const { data: planDoc, error } = await supabase
+      .from('learning_plans')
+      .select('*')
+      .eq('id', planId)
+      .single();
 
-    if (!planDoc.exists()) {
+    if (error || !planDoc) {
       return NextResponse.json(
         {
           success: false,
@@ -48,7 +50,7 @@ export async function PUT(
       );
     }
 
-    const planData = planDoc.data();
+    const planData = planDoc;
     const sections = planData.sections || [];
 
     // Find and update the specific section
@@ -57,25 +59,32 @@ export async function PUT(
         return {
           ...section,
           questions: questions,
-          questionCount: questions.length,
-          updatedAt: new Date(),
+          question_count: questions.length,
+          updated_at: new Date(),
         };
       }
       return section;
     });
 
     // Update the plan with the modified sections
-    await updateDoc(planRef, {
-      sections: updatedSections,
-      updatedAt: new Date(),
-    });
+    const { error: updateError } = await supabase
+      .from('learning_plans')
+      .update({
+        sections: updatedSections,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', planId);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     return NextResponse.json({
       success: true,
       data: {
         sectionId,
         questions,
-        questionCount: questions.length,
+        question_count: questions.length,
       },
     });
   } catch (error) {
@@ -95,17 +104,16 @@ export async function GET(
   { params }: { params: Promise<{ planId: string; sectionId: string }> }
 ) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
-
     const { planId, sectionId } = await params;
 
     // Get the plan document
-    const planRef = doc(db, 'learningPlanTemplates', planId);
-    const planDoc = await getDoc(planRef);
+    const { data: planDoc, error } = await supabase
+      .from('learning_plans')
+      .select('*')
+      .eq('id', planId)
+      .single();
 
-    if (!planDoc.exists()) {
+    if (error || !planDoc) {
       return NextResponse.json(
         {
           success: false,
@@ -115,7 +123,7 @@ export async function GET(
       );
     }
 
-    const planData = planDoc.data();
+    const planData = planDoc;
     const sections = planData.sections || [];
 
     // Find the specific section

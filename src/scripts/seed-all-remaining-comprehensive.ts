@@ -2,14 +2,7 @@
 // Run with: npx tsx src/scripts/seed-all-remaining-comprehensive.ts
 
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
+
 import fs from 'fs';
 import path from 'path';
 
@@ -25,7 +18,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 // ==========================================
@@ -122,12 +115,12 @@ async function seedQuestionsFromJSON(
 
         // Check if question already exists
         const existingQuery = query(
-          collection(db, 'questions'),
-          where('question', '==', question.question || question.title)
+          supabase.from('questions'),
+          where('question', question.question || question.title)
         );
         const existingSnapshot = await getDocs(existingQuery);
 
-        if (existingSnapshot.empty) {
+        if (existingSnapshot.length === 0) {
           const questionData = {
             id: questionId,
             question: question.question || question.title || question.problem,
@@ -138,13 +131,13 @@ async function seedQuestionsFromJSON(
             difficulty: question.difficulty || 'medium',
             tags: question.tags || [category.toLowerCase()],
             type: question.type || 'conceptual',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
             createdBy: 'seeding-script',
             updatedBy: 'seeding-script',
           };
 
-          await addDoc(collection(db, 'questions'), questionData);
+          await addDoc(supabase.from('questions'), questionData);
           successCount++;
         } else {
           skipCount++;

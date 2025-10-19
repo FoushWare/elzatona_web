@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { JotaiProvider } from '@/providers/JotaiProvider';
 import { QueryProvider } from '@/providers/QueryProvider';
-import { FirebaseAuthProvider } from '@/contexts/FirebaseAuthContext';
+
 import { UserTypeProvider } from '@/contexts/UserTypeContextSafe';
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
@@ -12,7 +12,11 @@ import { OnboardingProvider } from '@/contexts/OnboardingContext';
 import { NotificationProvider } from '@/contexts/NotificationContext';
 import { ConditionalLayout } from '@/shared/components/common/ConditionalLayout';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  fallback: ['system-ui', 'arial'],
+});
 
 export const metadata: Metadata = {
   title: 'Master Frontend Development Interviews',
@@ -45,8 +49,6 @@ export const viewport = {
   initialScale: 1,
 };
 
-export const themeColor = '#3B82F6';
-
 export default function RootLayout({
   children,
 }: {
@@ -57,21 +59,19 @@ export default function RootLayout({
       <body className={inter.className}>
         <QueryProvider>
           <JotaiProvider>
-            <FirebaseAuthProvider>
-              <UserTypeProvider>
-                <MobileMenuProvider>
-                  <ThemeProvider>
-                    <LanguageProvider>
-                      <OnboardingProvider>
-                        <NotificationProvider>
-                          <ConditionalLayout>{children}</ConditionalLayout>
-                        </NotificationProvider>
-                      </OnboardingProvider>
-                    </LanguageProvider>
-                  </ThemeProvider>
-                </MobileMenuProvider>
-              </UserTypeProvider>
-            </FirebaseAuthProvider>
+            <UserTypeProvider>
+              <MobileMenuProvider>
+                <ThemeProvider>
+                  <LanguageProvider>
+                    <OnboardingProvider>
+                      <NotificationProvider>
+                        <ConditionalLayout>{children}</ConditionalLayout>
+                      </NotificationProvider>
+                    </OnboardingProvider>
+                  </LanguageProvider>
+                </ThemeProvider>
+              </MobileMenuProvider>
+            </UserTypeProvider>
           </JotaiProvider>
         </QueryProvider>
       </body>

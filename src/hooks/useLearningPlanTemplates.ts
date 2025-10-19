@@ -1,5 +1,34 @@
 import { useState, useEffect, useCallback } from 'react';
-import { LearningPlanTemplate } from '@/lib/guided-learning-service';
+
+interface LearningPlanTemplate {
+  id: string;
+  name: string;
+  duration: number;
+  description: string;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  totalQuestions: number;
+  dailyQuestions: number;
+  sections: LearningSection[];
+  features: string[];
+  estimatedTime: string;
+  isRecommended: boolean;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
+  createdBy?: string;
+  completionRate?: number;
+  enrolledUsers?: number;
+}
+
+interface LearningSection {
+  id: string;
+  name: string;
+  category: string;
+  questions: string[];
+  weight: number;
+  order: number;
+  description?: string;
+}
 
 interface ApiPlan {
   id: string;
@@ -9,13 +38,13 @@ interface ApiPlan {
   difficulty: string;
   topics: string[];
   questions: string[];
-  createdAt:
+  created_at:
     | {
         seconds: number;
         nanoseconds: number;
       }
     | string;
-  updatedAt:
+  updated_at:
     | {
         seconds: number;
         nanoseconds: number;
@@ -75,7 +104,7 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
           (plan: ApiPlan) => {
             // Handle Firestore timestamp format
             const parseFirestoreTimestamp = (
-              timestamp: ApiPlan['createdAt']
+              timestamp: ApiPlan['created_at']
             ) => {
               if (!timestamp) return new Date();
               if (typeof timestamp === 'string') {
@@ -89,7 +118,7 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
                 'toDate' in timestamp &&
                 typeof timestamp.toDate === 'function'
               ) {
-                return timestamp.toDate();
+                return timestamp;
               }
               return new Date();
             };
@@ -140,9 +169,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
                 `${Math.ceil(duration * 2)}-${Math.ceil(duration * 3)} hours`,
               isRecommended:
                 (plan as any).isRecommended || duration === 3 || duration === 7,
-              isActive: (plan as any).isActive !== false,
-              createdAt: parseFirestoreTimestamp(plan.createdAt),
-              updatedAt: parseFirestoreTimestamp(plan.updatedAt),
+              is_active: (plan as any).isActive !== false,
+              created_at: parseFirestoreTimestamp(plan.created_at),
+              updated_at: parseFirestoreTimestamp(plan.updated_at),
             };
           }
         );
@@ -193,9 +222,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             ],
             estimatedTime: '2-3 hours',
             isRecommended: false,
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
           {
             id: '2-day-plan',
@@ -240,9 +269,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             ],
             estimatedTime: '3-4 hours',
             isRecommended: true,
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
           {
             id: '3-day-plan',
@@ -297,9 +326,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             ],
             estimatedTime: '4-5 hours',
             isRecommended: true,
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
           {
             id: '4-day-plan',
@@ -350,9 +379,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             ],
             estimatedTime: '6-8 hours',
             isRecommended: false,
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
           {
             id: '5-day-plan',
@@ -403,9 +432,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             ],
             estimatedTime: '8-10 hours',
             isRecommended: true,
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
           {
             id: '6-day-plan',
@@ -456,9 +485,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             ],
             estimatedTime: '10-12 hours',
             isRecommended: false,
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
           {
             id: '7-day-plan',
@@ -509,9 +538,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
             ],
             estimatedTime: '12-14 hours',
             isRecommended: true,
-            isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
           },
         ];
         setTemplates(mockTemplates);
@@ -563,9 +592,9 @@ export function useLearningPlanTemplates(): UseLearningPlanTemplatesReturn {
           features: ['Quick review', 'Essential concepts', 'Common questions'],
           estimatedTime: '2-3 hours',
           isRecommended: false,
-          isActive: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          is_active: true,
+          created_at: new Date(),
+          updated_at: new Date(),
         },
       ];
       setTemplates(mockTemplates);

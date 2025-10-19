@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 interface LearningPath {
   id: string;
   title: string;
-  questionCount: number;
+  question_count: number;
   difficulty: string;
 }
 
@@ -31,13 +31,13 @@ export function useLearningPathStatsSimple(): UseLearningPathStatsSimpleReturn {
           {
             id: '1',
             title: 'Basic JavaScript',
-            questionCount: 15,
+            question_count: 15,
             difficulty: 'Easy',
           },
           {
             id: '2',
             title: 'React Basics',
-            questionCount: 12,
+            question_count: 12,
             difficulty: 'Medium',
           },
         ];

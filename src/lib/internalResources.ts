@@ -151,14 +151,14 @@ const mouse = {
   small: true,
 };`,
     options: {
-      A: 'mouse.bird.size is not valid',
-      B: 'mouse[bird.size] is not valid',
+      A: 'mouse.bird.length is not valid',
+      B: 'mouse[bird.length] is not valid',
       C: "mouse[bird['size']] is not valid",
       D: 'All of them are valid',
     },
     correctAnswer: 'A',
     explanation:
-      "In JavaScript, all object keys are strings (unless it's a Symbol). Even though we might not type them as strings, they are always converted into strings under the hood. JavaScript interprets (or unboxes) statements. When we use bracket notation, it sees the first opening bracket [ and keeps going until it finds the closing bracket ]. Only then, it will evaluate the statement. mouse[bird.size]: First it evaluates bird.size, which is 'small'. mouse['small'] returns true. However, with dot notation, this doesn't happen. mouse does not have a key called bird, which means that mouse.bird is undefined. Then, we ask for the size using dot notation: mouse.bird.size. Since mouse.bird is undefined, we're actually asking undefined.size. This isn't valid, and will throw an error similar to Cannot read property 'size' of undefined.",
+      "In JavaScript, all object keys are strings (unless it's a Symbol). Even though we might not type them as strings, they are always converted into strings under the hood. JavaScript interprets (or unboxes) statements. When we use bracket notation, it sees the first opening bracket [ and keeps going until it finds the closing bracket ]. Only then, it will evaluate the statement. mouse[bird.length]: First it evaluates bird.length, which is 'small'. mouse['small'] returns true. However, with dot notation, this doesn't happen. mouse does not have a key called bird, which means that mouse.bird is undefined. Then, we ask for the size using dot notation: mouse.bird.length. Since mouse.bird is undefined, we're actually asking undefined.length. This isn't valid, and will throw an error similar to Cannot read property 'size' of undefined.",
     difficulty: 'intermediate',
     category: 'javascript',
     tags: ['object-properties', 'bracket-notation', 'dot-notation'],
@@ -843,6 +843,12 @@ module.exports = {
     question: 'What are micro-frontends and when would you use them?',
     code: `// Example of micro-frontend shell application
 import React from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 
 // Load micro-frontends dynamically
 const ProductApp = React.lazy(() => import('product-app/ProductApp'));

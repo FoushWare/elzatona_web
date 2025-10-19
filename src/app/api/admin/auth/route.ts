@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
-import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
 import { adminConfig } from '@/admin.config';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,30 +19,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Query admin from Firestore
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
+    // Query admin from Supabase
+    const { data: adminData, error } = await supabase
+      .from('admin_users')
+      .select('*')
+      .eq('email', email)
+      .single();
 
-    const adminsRef = collection(db, adminConfig.database.collectionName);
-    const q = query(adminsRef, where('email', '==', email));
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.empty) {
+    if (error || !adminData) {
       return NextResponse.json(
         { success: false, error: 'Invalid email or password' },
         { status: 401 }
       );
     }
 
-    const adminDoc = querySnapshot.docs[0];
-    const adminData = adminDoc.data();
-
     // Check if admin is active
-    if (!adminData.isActive) {
+    if (!adminData.is_active) {
       return NextResponse.json(
         { success: false, error: 'Admin account is deactivated' },
         { status: 401 }
@@ -49,7 +44,7 @@ export async function POST(request: NextRequest) {
     // Verify password
     const isValidPassword = await bcrypt.compare(
       password,
-      adminData.passwordHash
+      adminData.password_hash
     );
     if (!isValidPassword) {
       return NextResponse.json(
@@ -66,7 +61,7 @@ export async function POST(request: NextRequest) {
 
     const token = jwt.sign(
       {
-        adminId: adminDoc.id,
+        adminId: adminData.id,
         email: adminData.email,
         role: adminData.role,
       },
@@ -75,7 +70,7 @@ export async function POST(request: NextRequest) {
     );
 
     const session = {
-      id: adminDoc.id,
+      id: adminData.id,
       email: adminData.email,
       name: adminData.name,
       role: adminData.role,

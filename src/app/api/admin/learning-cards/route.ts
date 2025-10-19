@@ -1,37 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import {
-  collection,
-  getDocs,
-  addDoc,
-  serverTimestamp,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { LearningCard } from '@/types/learning-cards';
 
 // GET /api/admin/learning-cards - Get all learning cards
 export async function GET() {
   try {
-    const cardsRef = collection(db, 'learningCards');
-    const snapshot = await getDocs(cardsRef);
+    const { data: snapshot, error } = await supabase
+      .from('learning_cards')
+      .select('*')
+      .order('order', { ascending: true });
 
-    const cards: LearningCard[] = [];
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      cards.push({
-        id: doc.id,
-        title: data.title,
-        type: data.type,
-        description: data.description,
-        color: data.color,
-        icon: data.icon,
-        order: data.order,
-        sections: data.sections || [],
-        topics: data.topics || [],
-        questionCount: data.questionCount || 0,
-        createdAt: data.createdAt?.toDate() || new Date(),
-        updatedAt: data.updatedAt?.toDate() || new Date(),
-      });
-    });
+    if (error) {
+      throw error;
+    }
+
+    const cards: LearningCard[] = snapshot.map(doc => ({
+      id: doc.id,
+      title: doc.title,
+      type: doc.type,
+      description: doc.description,
+      color: doc.color,
+      icon: doc.icon,
+      order: doc.order,
+      sections: doc.sections || [],
+      topics: doc.topics || [],
+      question_count: doc.question_count || 0,
+      is_active: doc.is_active || true,
+      metadata: doc.metadata || {},
+      created_at: doc.created_at || new Date(),
+      updated_at: doc.updated_at || new Date(),
+    }));
 
     // Sort by order
     cards.sort((a, b) => a.order - b.order);
@@ -78,20 +81,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const cardsRef = collection(db, 'learningCards');
-    const newCard = await addDoc(cardsRef, {
-      title,
-      type,
-      description,
-      color,
-      icon,
-      order: order || 0,
-      sections: sections || [],
-      topics: topics || [],
-      questionCount: questionCount || 0,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    });
+    const { data: newCard, error } = await supabase
+      .from('learning_cards')
+      .insert({
+        title,
+        type,
+        description,
+        color,
+        icon,
+        order: order || 0,
+        sections: sections || [],
+        topics: topics || [],
+        question_count: questionCount || 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,
@@ -105,7 +115,7 @@ export async function POST(request: NextRequest) {
         order: order || 0,
         sections: sections || [],
         topics: topics || [],
-        questionCount: questionCount || 0,
+        question_count: questionCount || 0,
       },
     });
   } catch (error) {

@@ -2,7 +2,6 @@
 // v2.0 - Enhanced structure with topics and sections
 
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
 
 interface QuestionData {
   title: string;

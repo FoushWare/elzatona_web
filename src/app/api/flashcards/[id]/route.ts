@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // Get a specific flashcard
 export async function GET(
@@ -10,17 +13,13 @@ export async function GET(
   try {
     const { id } = await params;
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
+    const { data: flashcardSnap, error } = await supabase
+      .from('flashcards')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-    const flashcardRef = doc(db, 'flashcards', id);
-    const flashcardSnap = await getDoc(flashcardRef);
-
-    if (!flashcardSnap.exists()) {
+    if (error || !flashcardSnap) {
       return NextResponse.json(
         { error: 'Flashcard not found' },
         { status: 404 }
@@ -31,7 +30,7 @@ export async function GET(
       success: true,
       data: {
         id: flashcardSnap.id,
-        ...flashcardSnap.data(),
+        ...flashcardSnap,
       },
     });
   } catch (error) {
@@ -52,24 +51,21 @@ export async function PUT(
     const { id } = await params;
     const { quality, reviewResult } = await request.json();
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
+    // Check if flashcard exists
+    const { data: flashcardSnap, error: fetchError } = await supabase
+      .from('flashcards')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-    const flashcardRef = doc(db, 'flashcards', id);
-    const flashcardSnap = await getDoc(flashcardRef);
-
-    if (!flashcardSnap.exists()) {
+    if (fetchError || !flashcardSnap) {
       return NextResponse.json(
         { error: 'Flashcard not found' },
         { status: 404 }
       );
     }
 
-    const flashcard = flashcardSnap.data();
+    const flashcard = flashcardSnap;
     const now = new Date();
 
     // SM-2 Algorithm implementation
@@ -118,10 +114,17 @@ export async function PUT(
       easeFactor: newEaseFactor,
       lastReviewed: now.toISOString(),
       nextReview: nextReview.toISOString(),
-      updatedAt: now.toISOString(),
+      updated_at: now.toISOString(),
     };
 
-    await updateDoc(flashcardRef, updates);
+    const { error: updateError } = await supabase
+      .from('flashcards')
+      .update(updates)
+      .eq('id', id);
+
+    if (updateError) {
+      throw updateError;
+    }
 
     return NextResponse.json({
       success: true,
@@ -154,15 +157,29 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    if (!db) {
+    // Check if flashcard exists
+    const { data: flashcardSnap, error: fetchError } = await supabase
+      .from('flashcards')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !flashcardSnap) {
       return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
+        { error: 'Flashcard not found' },
+        { status: 404 }
       );
     }
 
-    const flashcardRef = doc(db, 'flashcards', id);
-    await deleteDoc(flashcardRef);
+    // Delete the flashcard
+    const { error: deleteError } = await supabase
+      .from('flashcards')
+      .delete()
+      .eq('id', id);
+
+    if (deleteError) {
+      throw deleteError;
+    }
 
     return NextResponse.json({
       success: true,

@@ -86,7 +86,7 @@ export interface StudyTask {
 }
 
 export interface UserStudyPlan {
-  planId: string;
+  plan_id: string;
   userId: string;
   startDate: Date;
   endDate: Date;
@@ -95,7 +95,7 @@ export interface UserStudyPlan {
   completedTasks: string[];
   currentWeek: number;
   currentDay: number;
-  isActive: boolean;
+  is_active: boolean;
   customizations: PlanCustomization;
 }
 

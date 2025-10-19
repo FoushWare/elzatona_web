@@ -1,8 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useRouter } from 'next/navigation';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 import { useLearningPlanTemplates } from '@/hooks/useLearningPlanTemplates';
 import {
   Clock,
@@ -54,7 +60,8 @@ interface DailyGoal {
 // Learning plans are now loaded dynamically from Firestore via useLearningPlanTemplates hook
 
 export default function GuidedLearningPage() {
-  const { user, isAuthenticated } = useFirebaseAuth();
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const {
     templates: allTemplates,
     isLoading: templatesLoading,
@@ -79,8 +86,8 @@ export default function GuidedLearningPage() {
     })
     .sort((a, b) => {
       // Extract day number from plan ID (e.g., "1-day-plan" -> 1)
-      const getDayNumber = (planId: string) => {
-        const match = planId.match(/(\d+)-day-plan/);
+      const getDayNumber = (plan_id: string) => {
+        const match = plan_id.match(/(\d+)-day-plan/);
         return match ? parseInt(match[1], 10) : 0;
       };
 
@@ -440,8 +447,7 @@ export default function GuidedLearningPage() {
             <div className="inline-flex items-center space-x-2 px-4 py-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
               <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
               <span className="text-green-800 dark:text-green-200 font-medium">
-                Welcome back, {user?.displayName || 'User'}! Your progress will
-                be saved.
+                Welcome back, User! Your progress will be saved.
               </span>
             </div>
           </div>

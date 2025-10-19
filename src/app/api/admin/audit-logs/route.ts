@@ -1,4 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 /**
  * @swagger
@@ -48,11 +53,26 @@ export async function GET(request: NextRequest) {
     const contentType = searchParams.get('contentType');
     const limit = parseInt(searchParams.get('limit') || '100');
 
-    const logs = await ContentVersioningService.getAuditLogs(
-      contentId || undefined,
-      contentType || undefined,
-      limit
-    );
+    let query = supabase
+      .from('audit_logs')
+      .select('*')
+      .order('timestamp', { ascending: false });
+
+    if (contentId) {
+      query = query.eq('content_id', contentId);
+    }
+    if (contentType) {
+      query = query.eq('content_type', contentType);
+    }
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    const { data: logs, error } = await query;
+
+    if (error) {
+      throw error;
+    }
 
     return NextResponse.json({
       success: true,

@@ -1,90 +1,62 @@
 // API endpoint to clear all questions
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  db,
-  collection,
-  getDocs,
-  deleteDoc,
-  doc,
-  writeBatch,
-} from '@/lib/firebase-server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function DELETE(request: NextRequest) {
   try {
-    if (!db) {
-      throw new Error('Firebase not initialized');
-    }
+    console.log('🗑️  Starting to clear all question tables...');
 
-    console.log('🗑️  Starting to clear all question collections...');
-
-    const collectionsToClear = [
-      'unifiedQuestions',
+    const tablesToClear = [
       'questions',
-      'enhancedQuestions',
-      'customQuestions',
+      'unified_questions',
+      'enhanced_questions',
+      'custom_questions',
     ];
     let totalDeleted = 0;
 
-    for (const collectionName of collectionsToClear) {
+    for (const tableName of tablesToClear) {
       try {
-        console.log(`📋 Fetching documents from ${collectionName}...`);
-        const collectionRef = collection(db, collectionName);
-        const snapshot = await getDocs(collectionRef);
+        console.log(`📋 Fetching records from ${tableName}...`);
 
-        console.log(`📊 Found ${snapshot.size} documents in ${collectionName}`);
+        // First, get count of records
+        const { count } = await supabase
+          .from(tableName)
+          .select('*', { count: 'exact', head: true });
 
-        if (snapshot.size === 0) {
-          console.log(`✅ ${collectionName} is already empty`);
+        console.log(`📊 Found ${count || 0} records in ${tableName}`);
+
+        if (!count || count === 0) {
+          console.log(`✅ ${tableName} is already empty`);
           continue;
         }
 
-        console.log(
-          `🗑️  Deleting ${snapshot.size} documents from ${collectionName}...`
-        );
+        console.log(`🗑️  Deleting ${count} records from ${tableName}...`);
 
-        // Use batch operations for better performance
-        if (!db) {
-          throw new Error('Firebase not initialized');
-        }
-        const batch = writeBatch(db);
-        let batchCount = 0;
-        const batchSize = 500; // Firestore batch limit
+        // Delete all records from the table
+        const { error } = await supabase.from(tableName).delete().neq('id', 0); // This will delete all records
 
-        snapshot.forEach(docSnapshot => {
-          if (db) {
-            batch.delete(doc(db, collectionName, docSnapshot.id));
-            batchCount++;
-
-            // Commit batch when it reaches the limit
-            if (batchCount >= batchSize) {
-              batch.commit();
-              batchCount = 0;
-            }
-          }
-        });
-
-        // Commit any remaining documents
-        if (batchCount > 0) {
-          await batch.commit();
+        if (error) {
+          console.error(`❌ Error deleting from ${tableName}:`, error);
+          continue;
         }
 
-        console.log(
-          `✅ Deleted ${snapshot.size} documents from ${collectionName}`
-        );
-        totalDeleted += snapshot.size;
+        console.log(`✅ Deleted ${count} records from ${tableName}`);
+        totalDeleted += count;
       } catch (error) {
-        console.error(`❌ Error clearing ${collectionName}:`, error);
-        // Continue with other collections even if one fails
+        console.error(`❌ Error clearing ${tableName}:`, error);
+        // Continue with other tables even if one fails
       }
     }
 
-    console.log(
-      `🎉 CLEARING COMPLETE! Total documents deleted: ${totalDeleted}`
-    );
+    console.log(`🎉 CLEARING COMPLETE! Total records deleted: ${totalDeleted}`);
 
     return NextResponse.json({
       success: true,
-      message: `Successfully deleted ${totalDeleted} questions from all collections`,
+      message: `Successfully deleted ${totalDeleted} questions from all tables`,
       totalDeleted,
     });
   } catch (error) {

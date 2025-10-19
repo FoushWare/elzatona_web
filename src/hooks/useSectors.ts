@@ -6,10 +6,10 @@ export interface Sector {
   id: string;
   name: string;
   description: string;
-  questionCount: number;
+  question_count: number;
   difficulty: 'easy' | 'medium' | 'hard';
   order: number;
-  isActive: boolean;
+  is_active: boolean;
 }
 
 interface UseSectorsReturn {

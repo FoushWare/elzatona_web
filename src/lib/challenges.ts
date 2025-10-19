@@ -113,8 +113,8 @@ export const sampleChallenges: Challenge[] = [
     explanation:
       'This solution creates a responsive navigation bar using flexbox. The hamburger menu appears on mobile devices (screens smaller than 768px) and toggles the navigation menu visibility.',
     tags: ['navigation', 'responsive', 'flexbox', 'mobile'],
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: '2024-01-01T00:00:00Z',
   },
   {
     id: '2',
@@ -220,8 +220,8 @@ button:hover {
     explanation:
       'This solution creates a semantic contact form with proper labels, input types, and basic styling. The form includes validation attributes and is accessible.',
     tags: ['forms', 'validation', 'accessibility', 'semantic'],
-    createdAt: '2024-01-02T00:00:00Z',
-    updatedAt: '2024-01-02T00:00:00Z',
+    created_at: '2024-01-02T00:00:00Z',
+    updated_at: '2024-01-02T00:00:00Z',
   },
   {
     id: '3',
@@ -311,8 +311,8 @@ button:hover {
     explanation:
       'This solution uses CSS Grid with auto-fit and minmax for a responsive layout that adapts to different screen sizes. The grid automatically adjusts columns based on available space.',
     tags: ['css-grid', 'responsive', 'layout', 'gallery'],
-    createdAt: '2024-01-03T00:00:00Z',
-    updatedAt: '2024-01-03T00:00:00Z',
+    created_at: '2024-01-03T00:00:00Z',
+    updated_at: '2024-01-03T00:00:00Z',
   },
   {
     id: '4',
@@ -472,8 +472,8 @@ function deleteTodo(button) {
     explanation:
       'This solution creates a fully functional todo list with add, toggle, and delete functionality. It uses event delegation and DOM manipulation to manage the todo items.',
     tags: ['javascript', 'dom-manipulation', 'events', 'todo'],
-    createdAt: '2024-01-04T00:00:00Z',
-    updatedAt: '2024-01-04T00:00:00Z',
+    created_at: '2024-01-04T00:00:00Z',
+    updated_at: '2024-01-04T00:00:00Z',
   },
   {
     id: '5',
@@ -591,8 +591,8 @@ function deleteTodo(button) {
     explanation:
       'This solution demonstrates advanced CSS animations including keyframes for rotation, transitions for smooth hover effects, and pseudo-elements for additional visual effects.',
     tags: ['css-animations', 'keyframes', 'transitions', 'effects'],
-    createdAt: '2024-01-05T00:00:00Z',
-    updatedAt: '2024-01-05T00:00:00Z',
+    created_at: '2024-01-05T00:00:00Z',
+    updated_at: '2024-01-05T00:00:00Z',
   },
 ];
 

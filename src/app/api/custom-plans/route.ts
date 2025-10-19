@@ -1,16 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-server';
-import {
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  doc,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface CustomPlan {
   id: string;
@@ -22,11 +15,11 @@ export interface CustomPlan {
   categories: string[];
   topics: string[];
   learningPaths: string[];
-  questionCount: number;
+  question_count: number;
   isPublic: boolean;
   isTemplate: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
   createdBy: string;
   tags: string[];
   estimatedTime: number; // in minutes
@@ -83,11 +76,11 @@ export async function POST(request: NextRequest) {
       categories: categories || [],
       topics: topics || [],
       learningPaths: learningPaths || [],
-      questionCount: 0, // Will be calculated when questions are added
+      question_count: 0, // Will be calculated when questions are added
       isPublic,
       isTemplate,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       createdBy: userId,
       tags,
       estimatedTime,
@@ -95,14 +88,19 @@ export async function POST(request: NextRequest) {
       learningObjectives,
     };
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
+    const { data: docRef, error } = await supabase
+      .from('custom_plans')
+      .insert(customPlan)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
     }
 
-    const docRef = await addDoc(collection(db, 'customPlans'), customPlan);
+    if (!docRef) {
+      throw new Error('No custom plan was created');
+    }
 
     return NextResponse.json({
       success: true,
@@ -130,42 +128,35 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category');
     const difficulty = searchParams.get('difficulty');
 
-    if (!db) {
-      return NextResponse.json(
-        { error: 'Database not initialized' },
-        { status: 500 }
-      );
-    }
-
-    let q = query(collection(db, 'customPlans'));
+    let q = supabase.from('custom_plans').select('*');
 
     if (userId) {
-      q = query(q, where('userId', '==', userId));
+      q = q.eq('userId', userId);
     }
 
     if (isPublic) {
-      q = query(q, where('isPublic', '==', true));
+      q = q.eq('isPublic', true);
     }
 
     if (isTemplate) {
-      q = query(q, where('isTemplate', '==', true));
+      q = q.eq('isTemplate', true);
     }
 
     if (category) {
-      q = query(q, where('categories', 'array-contains', category));
+      q = q.contains('categories', [category]);
     }
 
     if (difficulty) {
-      q = query(q, where('difficulty', '==', difficulty));
+      q = q.eq('difficulty', difficulty);
     }
 
-    q = query(q, orderBy('createdAt', 'desc'));
+    q = q.order('created_at', { ascending: false });
 
-    const snapshot = await getDocs(q);
-    const customPlans = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const { data: customPlans, error } = await q;
+
+    if (error) {
+      throw new Error(error.message);
+    }
 
     return NextResponse.json({
       success: true,

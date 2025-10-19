@@ -1,13 +1,13 @@
 'use client';
 
 import React, {
-  createContext,
-  useContext,
   useState,
   useEffect,
   ReactNode,
+  createContext,
+  useContext,
 } from 'react';
-import { useFirebaseAuth } from './FirebaseAuthContext';
+import { createClient } from '@supabase/supabase-js';
 
 export type UserType = 'guided' | 'self-directed' | null;
 
@@ -32,7 +32,11 @@ interface UserTypeProviderProps {
 export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
   children,
 }) => {
-  const { user, updateUserProfile } = useFirebaseAuth();
+  const [user, setUser] = useState(null);
+  const updateUserProfile = async (data: any) => {
+    // Placeholder for user profile update
+    console.log('User profile update:', data);
+  };
   const [userType, setUserType] = useState<UserType>(null);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
   const [isFirstVisit, setIsFirstVisit] = useState(false);
@@ -40,19 +44,10 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
   // Load user preferences from Firebase or localStorage on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // If user is authenticated, try to load from Firebase preferences first
-      if (
-        user?.preferences &&
-        'learningMode' in user.preferences &&
-        user.preferences.learningMode
-      ) {
-        setUserType(user.preferences.learningMode as UserType);
-      } else {
-        // Fallback to localStorage
-        const savedUserType = localStorage.getItem('userType') as UserType;
-        if (savedUserType) {
-          setUserType(savedUserType);
-        }
+      // Load from localStorage
+      const savedUserType = localStorage.getItem('userType') as UserType;
+      if (savedUserType) {
+        setUserType(savedUserType);
       }
 
       const savedOnboarding =

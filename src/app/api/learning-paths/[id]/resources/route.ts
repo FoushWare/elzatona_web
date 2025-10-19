@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { firestoreService } from '@/lib/firestore-service';
-
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -102,7 +100,7 @@ export async function POST(
     const newResource = {
       id: Date.now().toString(),
       ...body,
-      createdAt: new Date().toISOString(),
+      created_at: new Date().toISOString(),
     };
 
     return NextResponse.json(newResource, { status: 201 });

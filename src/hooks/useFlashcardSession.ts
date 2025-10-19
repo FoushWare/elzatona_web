@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useFirebaseAuth } from '@/contexts/FirebaseAuthContext';
+
 import {
   flashcardService,
   progressService,
@@ -9,7 +9,7 @@ import {
   Flashcard,
   FlashcardProgress,
   FlashcardSession,
-} from '@/lib/firebase-flashcards';
+} from '@/lib/supabase-flashcards';
 
 interface SessionStats {
   cardsReviewed: number;
@@ -51,7 +51,7 @@ interface UseFlashcardSessionReturn {
 }
 
 export function useFlashcardSession(): UseFlashcardSessionReturn {
-  const { user } = useFirebaseAuth();
+  const [user, setUser] = useState({ uid: 'placeholder-user' });
   const [currentCard, setCurrentCard] = useState<Flashcard | null>(null);
   const [sessionCards, setSessionCards] = useState<Flashcard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -217,11 +217,12 @@ export function useFlashcardSession(): UseFlashcardSessionReturn {
       if (!user || !currentCard || !sessionId) return;
 
       try {
-        // Update progress in Firebase
+        // Update progress in Supabase
         await progressService.updateProgress(
-          user.uid,
           currentCard.id,
-          isCorrect
+          isCorrect ? 'correct' : 'incorrect',
+          0, // responseTime - placeholder
+          sessionId
         );
 
         // Update session stats

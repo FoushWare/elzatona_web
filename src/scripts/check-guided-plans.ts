@@ -1,5 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -22,18 +21,18 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 async function checkGuidedLearningPlans() {
   try {
     console.log('🔍 Checking guided learning plans...');
 
-    const plansSnapshot = await getDocs(collection(db, 'guidedLearningPlans'));
-    console.log(`📋 Found ${plansSnapshot.size} guided learning plans:`);
+    const plansSnapshot = await getDocs(supabase.from('guidedLearningPlans'));
+    console.log(`📋 Found ${plansSnapshot.length} guided learning plans:`);
 
     plansSnapshot.forEach(doc => {
-      const data = doc.data();
+      const data = doc;
       console.log(`   - ID: ${doc.id}`);
       console.log(`   - Name: ${data.name}`);
       console.log(`   - Duration: ${data.duration} days`);

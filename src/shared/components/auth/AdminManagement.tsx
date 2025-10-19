@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { AdminAuthService, AdminCredential } from '@/lib/admin-auth';
 
 interface AdminManagementProps {
@@ -253,7 +259,7 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
                     <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                       {admin.role}
                     </span>
-                    {!admin.isActive && (
+                    {!admin.is_active && (
                       <span className="px-2 py-1 text-xs font-medium rounded-full bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
                         Inactive
                       </span>
@@ -263,19 +269,19 @@ export default function AdminManagement({ currentUser }: AdminManagementProps) {
                     {admin.email}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                    Created: {new Date(admin.createdAt).toLocaleDateString()}
-                    {admin.lastLogin && (
+                    Created: {new Date(admin.created_at).toLocaleDateString()}
+                    {admin.last_login && (
                       <span>
                         {' '}
                         • Last login:{' '}
-                        {new Date(admin.lastLogin).toLocaleDateString()}
+                        {new Date(admin.last_login).toLocaleDateString()}
                       </span>
                     )}
                   </p>
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  {admin.isActive &&
+                  {admin.is_active &&
                     currentUser &&
                     admin.id !== currentUser.id && (
                       <button

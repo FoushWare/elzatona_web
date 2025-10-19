@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 import { useRouter, useParams } from 'next/navigation';
 import {
   BookOpen,
@@ -37,7 +43,7 @@ interface Question {
   tags: string[];
   points: number;
   timeLimit?: number;
-  isActive: boolean;
+  is_active: boolean;
 }
 
 interface QuestionsResponse {
@@ -54,7 +60,7 @@ interface LearningPath {
   sectors: Array<{
     id: string;
     name: string;
-    questionCount: number;
+    question_count: number;
   }>;
 }
 

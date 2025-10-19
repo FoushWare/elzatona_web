@@ -1,12 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  addDoc,
-  doc,
-  getDoc,
-} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey:
@@ -29,7 +21,6 @@ const firebaseConfig = {
     process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-ABCDEF1234',
 };
 
-const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 interface LearningCard {
@@ -46,9 +37,9 @@ interface LearningCard {
   order: number;
   sections: string[];
   topics: string[];
-  questionCount: number;
-  createdAt: Date;
-  updatedAt: Date;
+  question_count: number;
+  created_at: Date;
+  updated_at: Date;
 }
 
 const defaultCards: Omit<LearningCard, 'id' | 'createdAt' | 'updatedAt'>[] = [
@@ -61,7 +52,7 @@ const defaultCards: Omit<LearningCard, 'id' | 'createdAt' | 'updatedAt'>[] = [
     order: 1,
     sections: [],
     topics: [],
-    questionCount: 0,
+    question_count: 0,
   },
   {
     title: 'Framework Questions',
@@ -72,7 +63,7 @@ const defaultCards: Omit<LearningCard, 'id' | 'createdAt' | 'updatedAt'>[] = [
     order: 2,
     sections: [],
     topics: [],
-    questionCount: 0,
+    question_count: 0,
   },
   {
     title: 'Problem Solving',
@@ -83,7 +74,7 @@ const defaultCards: Omit<LearningCard, 'id' | 'createdAt' | 'updatedAt'>[] = [
     order: 3,
     sections: [],
     topics: [],
-    questionCount: 0,
+    question_count: 0,
   },
   {
     title: 'System Design',
@@ -95,7 +86,7 @@ const defaultCards: Omit<LearningCard, 'id' | 'createdAt' | 'updatedAt'>[] = [
     order: 4,
     sections: [],
     topics: [],
-    questionCount: 0,
+    question_count: 0,
   },
 ];
 
@@ -103,19 +94,19 @@ async function checkAndSeedLearningCards() {
   try {
     console.log('🔍 Checking for existing learning cards...');
 
-    const cardsRef = collection(db, 'learningCards');
+    const cardsRef = supabase.from('learningCards');
     const cardsSnapshot = await getDocs(cardsRef);
 
-    console.log(`📊 Found ${cardsSnapshot.size} existing learning cards`);
+    console.log(`📊 Found ${cardsSnapshot.length} existing learning cards`);
 
-    if (cardsSnapshot.size === 0) {
+    if (cardsSnapshot.length === 0) {
       console.log('🌱 No learning cards found. Seeding default cards...');
 
       for (const cardData of defaultCards) {
         const docRef = await addDoc(cardsRef, {
           ...cardData,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          created_at: new Date(),
+          updated_at: new Date(),
         });
         console.log(`✅ Created card: ${cardData.title} (ID: ${docRef.id})`);
       }
@@ -124,7 +115,7 @@ async function checkAndSeedLearningCards() {
     } else {
       console.log('📋 Existing learning cards:');
       cardsSnapshot.forEach(doc => {
-        const data = doc.data();
+        const data = doc;
         console.log(`  - ${data.title} (${data.type})`);
       });
     }

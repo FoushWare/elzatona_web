@@ -1,13 +1,9 @@
-import { db } from './firebase';
-import {
-  collection,
-  getDocs,
-  doc,
-  setDoc,
-  deleteDoc,
-  writeBatch,
-  serverTimestamp,
-} from 'firebase/firestore';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export interface BackupData {
   id: string;
@@ -17,7 +13,7 @@ export interface BackupData {
     [collectionName: string]: any[];
   };
   metadata: {
-    createdAt: Date;
+    created_at: Date;
     createdBy: string;
     version: string;
     totalDocuments: number;
@@ -39,16 +35,16 @@ export class BackupService {
     'questions',
     'categories',
     'topics',
-    'learningCards',
-    'learningPlans',
-    'frontendTasks',
-    'problemSolvingTasks',
-    'learningPaths',
-    'auditLogs',
-    'adminCredentials',
+    'learning_cards',
+    'learning_plans',
+    'frontend_tasks',
+    'problem_solving_tasks',
+    'learning_paths',
+    'audit_logs',
+    'admin_credentials',
     'users',
     'notifications',
-    'errorLogs',
+    'error_logs',
   ];
 
   /**
@@ -68,7 +64,7 @@ export class BackupService {
         description,
         collections: {},
         metadata: {
-          createdAt: new Date(),
+          created_at: new Date(),
           createdBy,
           version: '1.0',
           totalDocuments: 0,
@@ -77,11 +73,12 @@ export class BackupService {
         status: 'in_progress',
       };
 
-      await setDoc(doc(db, this.BACKUP_COLLECTION, backupId), {
+      await supabase.from('backups').insert({
+        id: backupId,
         ...backupData,
         metadata: {
           ...backupData.metadata,
-          createdAt: serverTimestamp(),
+          created_at: new Date().toISOString(),
         },
       });
 
@@ -91,17 +88,19 @@ export class BackupService {
 
       for (const collectionName of this.COLLECTIONS_TO_BACKUP) {
         try {
-          const snapshot = await getDocs(collection(db, collectionName));
-          const documents = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
+          const { data: documents, error } = await supabase
+            .from(collectionName)
+            .select('*');
 
-          collections[collectionName] = documents;
-          totalDocuments += documents.length;
+          if (error) {
+            throw error;
+          }
+
+          collections[collectionName] = documents || [];
+          totalDocuments += (documents || []).length;
 
           console.log(
-            `✅ Backed up ${documents.length} documents from ${collectionName}`
+            `✅ Backed up ${(documents || []).length} documents from ${collectionName}`
           );
         } catch (error) {
           console.error(
@@ -112,21 +111,20 @@ export class BackupService {
         }
       }
 
-      // Update backup with data
-      await setDoc(
-        doc(db, this.BACKUP_COLLECTION, backupId),
-        {
-          ...backupData,
+      // Update backup record with final data
+      await supabase
+        .from('backups')
+        .update({
           collections,
           metadata: {
             ...backupData.metadata,
             totalDocuments,
             collectionsCount: Object.keys(collections).length,
+            created_at: new Date().toISOString(),
           },
           status: 'completed',
-        },
-        { merge: true }
-      );
+        })
+        .eq('id', backupId);
 
       console.log(`✅ Backup completed: ${backupId}`);
       return { success: true, backupId };
@@ -148,14 +146,17 @@ export class BackupService {
   ): Promise<{ success: boolean; error?: string; summary?: any }> {
     try {
       // Get backup data
-      const backupDoc = await getDocs(
-        doc(db, this.BACKUP_COLLECTION, backupId)
-      );
-      if (!backupDoc.exists()) {
+      const { data: backupDoc, error: backupError } = await supabase
+        .from('backups')
+        .select('*')
+        .eq('id', backupId)
+        .single();
+
+      if (backupError || !backupDoc) {
         return { success: false, error: 'Backup not found' };
       }
 
-      const backupData = backupDoc.data() as BackupData;
+      const backupData = backupDoc as BackupData;
       if (backupData.status !== 'completed') {
         return { success: false, error: 'Backup is not completed' };
       }
@@ -167,30 +168,10 @@ export class BackupService {
         errors: [] as string[],
       };
 
-      if (options.dryRun) {
-        // Dry run - just count what would be restored
-        for (const [collectionName, documents] of Object.entries(
-          backupData.collections
-        )) {
-          if (
-            options.collections &&
-            !options.collections.includes(collectionName)
-          ) {
-            continue;
-          }
-
-          summary.collectionsRestored++;
-          summary.documentsRestored += documents.length;
-        }
-
-        return { success: true, summary };
-      }
-
-      // Actual restore
-      const batch = writeBatch(db);
+      const BATCH_SIZE = 100;
       let batchCount = 0;
-      const BATCH_SIZE = 500; // Firestore batch limit
 
+      // Restore each collection
       for (const [collectionName, documents] of Object.entries(
         backupData.collections
       )) {
@@ -202,16 +183,30 @@ export class BackupService {
         }
 
         try {
+          if (options.dryRun) {
+            console.log(
+              `🔍 Dry run: Would restore ${documents.length} documents to ${collectionName}`
+            );
+            summary.documentsRestored += documents.length;
+            summary.collectionsRestored++;
+            continue;
+          }
+
           for (const document of documents) {
-            const docRef = doc(db, collectionName, document.id);
+            const docId = document.id;
 
             if (options.overwriteExisting) {
-              batch.set(docRef, document);
+              await supabase.from(collectionName).upsert(document);
             } else {
               // Check if document exists
-              const existingDoc = await getDocs(docRef);
-              if (!existingDoc.exists()) {
-                batch.set(docRef, document);
+              const { data: existingDoc } = await supabase
+                .from(collectionName)
+                .select('id')
+                .eq('id', docId)
+                .single();
+
+              if (!existingDoc) {
+                await supabase.from(collectionName).insert(document);
               } else {
                 summary.documentsSkipped++;
                 continue;
@@ -223,7 +218,7 @@ export class BackupService {
 
             // Commit batch if it reaches the limit
             if (batchCount >= BATCH_SIZE) {
-              await batch.commit();
+              // Batch operations completed
               batchCount = 0;
             }
           }
@@ -241,7 +236,7 @@ export class BackupService {
 
       // Commit remaining batch
       if (batchCount > 0) {
-        await batch.commit();
+        // Batch operations completed
       }
 
       console.log(
@@ -262,25 +257,16 @@ export class BackupService {
    */
   static async listBackups(): Promise<BackupData[]> {
     try {
-      const snapshot = await getDocs(collection(db, this.BACKUP_COLLECTION));
-      const backups: BackupData[] = [];
+      const { data: backups, error } = await supabase
+        .from('backups')
+        .select('*')
+        .order('metadata.created_at', { ascending: false });
 
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        backups.push({
-          id: doc.id,
-          ...data,
-          metadata: {
-            ...data.metadata,
-            createdAt: data.metadata?.createdAt?.toDate() || new Date(),
-          },
-        } as BackupData);
-      });
+      if (error) {
+        throw error;
+      }
 
-      return backups.sort(
-        (a, b) =>
-          b.metadata.createdAt.getTime() - a.metadata.createdAt.getTime()
-      );
+      return (backups || []).map(backup => ({ id: backup.id, ...backup }));
     } catch (error) {
       console.error('❌ Failed to list backups:', error);
       return [];
@@ -294,7 +280,15 @@ export class BackupService {
     backupId: string
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      await deleteDoc(doc(db, this.BACKUP_COLLECTION, backupId));
+      const { error } = await supabase
+        .from('backups')
+        .delete()
+        .eq('id', backupId);
+
+      if (error) {
+        throw error;
+      }
+
       console.log(`✅ Backup deleted: ${backupId}`);
       return { success: true };
     } catch (error) {
@@ -312,85 +306,39 @@ export class BackupService {
   static async getBackupStats(): Promise<{
     totalBackups: number;
     totalSize: number;
-    lastBackup?: Date;
-    collectionsCount: number;
+    lastBackupDate?: string;
   }> {
     try {
-      const backups = await this.listBackups();
-      const totalBackups = backups.length;
-      const totalSize = backups.reduce(
-        (sum, backup) => sum + backup.metadata.totalDocuments,
-        0
-      );
-      const lastBackup =
-        backups.length > 0 ? backups[0].metadata.createdAt : undefined;
-      const collectionsCount = this.COLLECTIONS_TO_BACKUP.length;
+      const { data: backups, error } = await supabase
+        .from('backups')
+        .select('*');
+
+      if (error) {
+        throw error;
+      }
+
+      const totalBackups = (backups || []).length;
+      const totalSize = (backups || []).reduce((size, backup) => {
+        return size + JSON.stringify(backup).length;
+      }, 0);
+
+      const lastBackup = (backups || []).sort(
+        (a, b) =>
+          new Date(b.metadata.created_at).getTime() -
+          new Date(a.metadata.created_at).getTime()
+      )[0];
 
       return {
         totalBackups,
         totalSize,
-        lastBackup,
-        collectionsCount,
+        lastBackupDate: lastBackup?.metadata.created_at,
       };
     } catch (error) {
       console.error('❌ Failed to get backup stats:', error);
       return {
         totalBackups: 0,
         totalSize: 0,
-        collectionsCount: this.COLLECTIONS_TO_BACKUP.length,
       };
-    }
-  }
-
-  /**
-   * Schedule automatic backups
-   */
-  static async scheduleBackup(
-    schedule: 'daily' | 'weekly' | 'monthly',
-    createdBy: string
-  ): Promise<{ success: boolean; error?: string }> {
-    try {
-      // This would integrate with a cron job service or cloud scheduler
-      // For now, we'll just create a scheduled backup record
-      const scheduleId = `schedule_${Date.now()}`;
-
-      await setDoc(doc(db, 'backupSchedules', scheduleId), {
-        schedule,
-        createdBy,
-        createdAt: serverTimestamp(),
-        isActive: true,
-        lastRun: null,
-        nextRun: this.calculateNextRun(schedule),
-      });
-
-      console.log(`✅ Backup schedule created: ${schedule}`);
-      return { success: true };
-    } catch (error) {
-      console.error('❌ Failed to schedule backup:', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Schedule failed',
-      };
-    }
-  }
-
-  /**
-   * Calculate next run time for scheduled backups
-   */
-  private static calculateNextRun(
-    schedule: 'daily' | 'weekly' | 'monthly'
-  ): Date {
-    const now = new Date();
-
-    switch (schedule) {
-      case 'daily':
-        return new Date(now.getTime() + 24 * 60 * 60 * 1000);
-      case 'weekly':
-        return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-      case 'monthly':
-        return new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-      default:
-        return new Date(now.getTime() + 24 * 60 * 60 * 1000);
     }
   }
 }
