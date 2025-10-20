@@ -12,6 +12,9 @@ import { OnboardingProvider } from '@/contexts/OnboardingContext';
 import { NotificationProvider } from '@/contexts/NotificationContext';
 import { ConditionalLayout } from '@/shared/components/common/ConditionalLayout';
 
+// Force dynamic rendering to prevent static generation issues with auth context
+export const dynamic = 'force-dynamic';
+
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
