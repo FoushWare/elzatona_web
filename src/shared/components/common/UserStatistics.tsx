@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { useAuth } from '@/hooks/useAuth';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -17,7 +18,7 @@ interface UserStats {
 }
 
 export const UserStatistics: React.FC = () => {
-  const { isAuthenticated } = useFirebaseAuth();
+  const { isAuthenticated } = useAuth();
   const [stats, setStats] = useState<UserStats>({
     activeLearners: 0,
     successRate: 0,

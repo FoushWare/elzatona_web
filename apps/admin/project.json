@@ -1,0 +1,71 @@
+{
+  "name": "admin",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/admin/src",
+  "projectType": "application",
+  "tags": ["type:app", "scope:admin"],
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "apps/admin/.next"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "apps/admin/.next"
+        },
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "admin:build",
+        "dev": true,
+        "port": 3001
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "admin:build:development",
+          "dev": true,
+          "port": 3001
+        },
+        "production": {
+          "buildTarget": "admin:build:production",
+          "dev": false,
+          "port": 3001
+        }
+      }
+    },
+    "export": {
+      "executor": "@nx/next:export",
+      "options": {
+        "buildTarget": "admin:build:production"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/admin/jest.config.js",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "coverageReporters": ["text"]
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/admin/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

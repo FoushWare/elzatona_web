@@ -21,6 +21,15 @@ export interface CardFormData {
   order: number;
 }
 
+export interface CardFormErrors {
+  name?: string;
+  slug?: string;
+  description?: string;
+  color?: string;
+  icon?: string;
+  order?: string;
+}
+
 interface CardFormProps {
   card?: any;
   onSubmit: (data: CardFormData) => void;
@@ -68,7 +77,7 @@ export const CardForm: React.FC<CardFormProps> = ({
     icon: 'code',
     order: 1,
   });
-  const [errors, setErrors] = useState<Partial<CardFormData>>({});
+  const [errors, setErrors] = useState<CardFormErrors>({});
 
   useEffect(() => {
     if (card) {
@@ -102,7 +111,7 @@ export const CardForm: React.FC<CardFormProps> = ({
   };
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<CardFormData> = {};
+    const newErrors: CardFormErrors = {};
 
     if (!formData.name.trim()) {
       newErrors.name = 'Card name is required';

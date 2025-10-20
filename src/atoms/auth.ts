@@ -1,8 +1,7 @@
 import { atom } from 'jotai';
-import { User } from 'firebase/auth';
 
-// Firebase user atom
-export const firebaseUserAtom = atom<User | null>(null);
+// Supabase user atom
+export const supabaseUserAtom = atom<any | null>(null);
 
 // Auth loading state
 export const authLoadingAtom = atom(false);
@@ -31,7 +30,7 @@ export const userProfileAtom = atom<UserProfile | null>(null);
 
 // Auth status atom
 export const isAuthenticatedAtom = atom(get => {
-  const user = get(firebaseUserAtom);
+  const user = get(supabaseUserAtom);
   return user !== null;
 });
 
@@ -70,7 +69,7 @@ export const signOutAtom = atom(null, async (get, set) => {
     // This will be implemented with actual Firebase auth
     // For now, just a placeholder
     console.log('Sign out');
-    set(firebaseUserAtom, null);
+    set(supabaseUserAtom, null);
     set(userProfileAtom, null);
   } catch (error) {
     set(

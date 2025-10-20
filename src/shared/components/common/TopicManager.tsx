@@ -803,7 +803,7 @@ export default function TopicManager() {
                   <CardTitle className="flex items-center justify-between">
                     <span className="truncate">{topic.name}</span>
                     <Badge variant="secondary">
-                      {topic.questionCount} questions
+                      {topic.question_count} questions
                     </Badge>
                   </CardTitle>
                   <CardDescription className="line-clamp-2">
@@ -843,7 +843,7 @@ export default function TopicManager() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Created:</span>
                       <span className="text-sm text-gray-500">
-                        {new Date(topic.createdAt).toLocaleDateString()}
+                        {new Date(topic.created_at).toLocaleDateString()}
                       </span>
                     </div>
                     <div className="flex justify-end space-x-2 pt-2">
