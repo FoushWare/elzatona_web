@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import { useAdminAuth } from '@elzatona/shared-contexts';
 import { Loader2 } from 'lucide-react';
 
 export default function AdminPage() {

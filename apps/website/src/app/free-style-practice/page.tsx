@@ -22,9 +22,9 @@ import {
   Clock,
   Star,
 } from 'lucide-react';
-import { useUserType } from '@/contexts/UserTypeContextSafe';
+import { useUserType } from '@elzatona/shared-contexts';
 
-import { useSecureProgress } from '@/hooks/useSecureProgress';
+import { useSecureProgress } from '@elzatona/shared-hooks';
 
 interface Question {
   id: string;

@@ -13,9 +13,9 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
-import { Button } from '@/shared/components/ui/button';
+} from '@elzatona/shared-components';
+import { Badge } from '@elzatona/shared-components';
+import { Button } from '@elzatona/shared-components';
 import {
   Plus,
   Edit,

@@ -12,10 +12,10 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
-import { Badge } from '@/shared/components/ui/badge';
-import { Skeleton } from '@/shared/components/ui/skeleton';
+} from '@elzatona/shared-components';
+import { Button } from '@elzatona/shared-components';
+import { Badge } from '@elzatona/shared-components';
+import { Skeleton } from '@elzatona/shared-components';
 import {
   useCards,
   usePlans,
@@ -37,7 +37,7 @@ import {
   useDeleteCategory,
   useDeleteTopic,
   useDeleteQuestion,
-} from '@/hooks/useTanStackQuery';
+} from '@elzatona/shared-hooks';
 import {
   ChevronDown,
   ChevronRight,

@@ -29,7 +29,7 @@ import {
   Grid,
   List,
 } from 'lucide-react';
-import { useLearningPaths } from '@/hooks/useTanStackQuery';
+import { useLearningPaths } from '@elzatona/shared-hooks';
 
 interface LearningPath {
   id: string;

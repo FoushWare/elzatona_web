@@ -8,8 +8,6 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { useRouter } from 'next/navigation';
-
-import { useLearningPlanTemplates } from '@/hooks/useLearningPlanTemplates';
 import {
   Clock,
   Target,
@@ -62,12 +60,9 @@ interface DailyGoal {
 export default function GuidedLearningPage() {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const {
-    templates: allTemplates,
-    isLoading: templatesLoading,
-    error: templatesError,
-    getTemplate,
-  } = useLearningPlanTemplates();
+  const [allTemplates, setAllTemplates] = useState<any[]>([]);
+  const [templatesLoading, setTemplatesLoading] = useState(true);
+  const [templatesError, setTemplatesError] = useState<string | null>(null);
   const router = useRouter();
 
   // Filter to only show day-based plans (1-day, 2-day, 3-day, 4-day, 5-day, 6-day, 7-day)
@@ -93,6 +88,29 @@ export default function GuidedLearningPage() {
 
       return getDayNumber(a.id) - getDayNumber(b.id);
     });
+
+  // Load learning plan templates
+  useEffect(() => {
+    const loadTemplates = async () => {
+      try {
+        setTemplatesLoading(true);
+        const response = await fetch('/api/plans');
+        if (response.ok) {
+          const data = await response.json();
+          setAllTemplates(data.data || []);
+        } else {
+          setTemplatesError('Failed to load templates');
+        }
+      } catch (error) {
+        setTemplatesError('Error loading templates');
+        console.error('Error loading templates:', error);
+      } finally {
+        setTemplatesLoading(false);
+      }
+    };
+
+    loadTemplates();
+  }, []);
 
   // Debug logging
   useEffect(() => {

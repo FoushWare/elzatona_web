@@ -7,10 +7,10 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-import { AdminAuthProvider, useAdminAuth } from '@/contexts/AdminAuthContext';
-import AdminNavbar from '@/shared/components/auth/AdminNavbar';
-import { NotificationContainer } from '@/shared/components/ui/Notification';
-import FirestoreErrorBoundary from '@/shared/components/common/FirestoreErrorBoundary';
+import { AdminAuthProvider, useAdminAuth } from '@elzatona/shared-contexts';
+import AdminNavbar from '@elzatona/shared-components';
+import { NotificationContainer } from '@elzatona/shared-components';
+import FirestoreErrorBoundary from '@elzatona/shared-components';
 import { usePathname } from 'next/navigation';
 // ThemeProvider is already provided by root layout
 import '../globals.css';

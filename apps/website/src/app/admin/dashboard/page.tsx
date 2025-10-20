@@ -1,6 +1,6 @@
 'use client';
 
-import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import { useAdminAuth } from '@elzatona/shared-contexts';
 import {
   BookOpen,
   HelpCircle,
@@ -30,7 +30,7 @@ import {
   Info,
   ExternalLink,
 } from 'lucide-react';
-import { useAdminStats } from '@/hooks/useTanStackQuery';
+import { useAdminStats } from '@elzatona/shared-hooks';
 
 interface DashboardStats {
   questions: number;

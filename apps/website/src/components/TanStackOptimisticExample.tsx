@@ -13,19 +13,19 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
-import { Input } from '@/shared/components/ui/input';
-import { Label } from '@/shared/components/ui/label';
-import { Textarea } from '@/shared/components/ui/textarea';
-import { Badge } from '@/shared/components/ui/badge';
+} from '@elzatona/shared-components';
+import { Button } from '@elzatona/shared-components';
+import { Input } from '@elzatona/shared-components';
+import { Label } from '@elzatona/shared-components';
+import { Textarea } from '@elzatona/shared-components';
+import { Badge } from '@elzatona/shared-components';
 import {
   useCards,
   useCreateCard,
   useUpdateCard,
   useDeleteCard,
   queryKeys,
-} from '@/hooks/useTanStackQuery';
+} from '@elzatona/shared-hooks';
 import {
   Plus,
   Edit,

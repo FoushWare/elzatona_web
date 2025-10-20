@@ -34,7 +34,7 @@ import {
   Plus,
   X,
 } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@elzatona/shared-hooks';
 import {
   Dialog,
   DialogContent,
@@ -42,8 +42,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/shared/components/ui/dialog';
-import { Button } from '@/shared/components/ui/button';
+} from '@elzatona/shared-components';
+import { Button } from '@elzatona/shared-components';
 
 interface FrontendTaskFile {
   id: string;

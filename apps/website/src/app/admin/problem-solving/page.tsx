@@ -10,17 +10,15 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { Plus, Edit, Trash2, Eye, Search, Play, Code } from 'lucide-react';
-import ClientCodeRunner, {
-  TestCase,
-} from '@/shared/components/admin/ClientCodeRunner';
-import ProblemSolvingEditor from '@/shared/components/admin/ProblemSolvingEditor';
+import ClientCodeRunner, { TestCase } from '@elzatona/shared-components';
+import ProblemSolvingEditor from '@elzatona/shared-components';
 import { ProblemSolvingTask, ProblemSolvingTaskFormData } from '@/types/admin';
 import {
   useProblemSolvingTasks,
   useCreateProblemSolvingTask,
   useUpdateProblemSolvingTask,
   useDeleteProblemSolvingTask,
-} from '@/hooks/useTanStackQuery';
+} from '@elzatona/shared-hooks';
 
 export default function ProblemSolvingAdminPage() {
   // TanStack Query hooks
