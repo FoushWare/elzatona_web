@@ -102,8 +102,16 @@ export const createDatabaseService = (
 
 // Database service factory
 export class DatabaseServiceFactory {
-  static create(config: DatabaseConfig, useFirebase = false): IDatabaseService {
-    return createDatabaseService(config, useFirebase);
+  static create(
+    config?: DatabaseConfig,
+    useFirebase = false
+  ): IDatabaseService {
+    const defaultConfig: DatabaseConfig = config || {
+      url: getEnvVar('NEXT_PUBLIC_SUPABASE_URL'),
+      key: getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
+      serviceRoleKey: getEnvVar('SUPABASE_SERVICE_ROLE_KEY'),
+    };
+    return createDatabaseService(defaultConfig, useFirebase);
   }
 
   static createFirebase(config: DatabaseConfig): IDatabaseService {
