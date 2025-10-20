@@ -126,9 +126,9 @@ The Firebase removal is **75% complete**. The core infrastructure has been succe
 
 ## 🔧 Tools Created
 
-- `scripts/fix-firebase-imports.js` - Fixed import statements
-- `scripts/fix-all-firebase-imports.js` - Comprehensive import fixing
-- `scripts/fix-syntax-errors.js` - Basic syntax error fixing
-- `scripts/fix-complex-syntax-errors.js` - Advanced syntax error fixing
+- `apps/admin/Utils/scripts/fix-firebase-imports.js` - Fixed import statements
+- `apps/admin/Utils/scripts/fix-all-firebase-imports.js` - Comprehensive import fixing
+- `apps/admin/Utils/scripts/fix-syntax-errors.js` - Basic syntax error fixing
+- `apps/admin/Utils/scripts/fix-complex-syntax-errors.js` - Advanced syntax error fixing
 
 These tools can be reused for similar Firebase removal projects in the future.
