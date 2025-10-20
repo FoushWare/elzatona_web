@@ -12,6 +12,20 @@ import {
   SelectValue,
 } from '@/shared/components/ui/select';
 
+export interface PlanFormErrors {
+  name?: string;
+  slug?: string;
+  description?: string;
+  duration?: string;
+  difficulty?: string;
+  color?: string;
+  icon?: string;
+  order?: string;
+  estimatedHours?: string;
+  prerequisites?: string;
+  learningObjectives?: string;
+}
+
 export interface PlanFormData {
   name: string;
   slug: string;
@@ -80,7 +94,7 @@ export const PlanForm: React.FC<PlanFormProps> = ({
     prerequisites: [],
     learningObjectives: [],
   });
-  const [errors, setErrors] = useState<Partial<PlanFormData>>({});
+  const [errors, setErrors] = useState<PlanFormErrors>({});
   const [prerequisiteInput, setPrerequisiteInput] = useState('');
   const [objectiveInput, setObjectiveInput] = useState('');
 
@@ -155,7 +169,7 @@ export const PlanForm: React.FC<PlanFormProps> = ({
   };
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<PlanFormData> = {};
+    const newErrors: PlanFormErrors = {};
 
     if (!formData.name.trim()) {
       newErrors.name = 'Plan name is required';

@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
-  firebaseUserAtom,
+  supabaseUserAtom,
   authLoadingAtom,
   authErrorAtom,
   userProfileAtom,
@@ -11,7 +11,7 @@ import {
 } from '@/atoms/auth';
 
 export function useAuth() {
-  const [user, setUser] = useAtom(firebaseUserAtom);
+  const [user, setUser] = useAtom(supabaseUserAtom);
   const [loading, setLoading] = useAtom(authLoadingAtom);
   const [error, setError] = useAtom(authErrorAtom);
   const [userProfile, setUserProfile] = useAtom(userProfileAtom);

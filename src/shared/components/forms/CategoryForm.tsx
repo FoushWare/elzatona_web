@@ -1,7 +1,7 @@
 // Category Form Component
 // v1.0 - Form for creating and editing categories
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
-import { CardType } from '@/lib/unified-question-schema';
+import { CardType } from '@/types/learning-cards';
 
 interface CategoryFormProps {
   category?: {
@@ -48,10 +48,10 @@ export interface CategoryFormData {
 }
 
 const CARD_TYPES: CardType[] = [
-  'Core Technologies',
-  'Framework Questions',
-  'Problem Solving',
-  'System Design',
+  'core-technologies',
+  'framework-questions',
+  'problem-solving',
+  'system-design',
 ];
 
 const COLORS = [
