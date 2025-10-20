@@ -18,9 +18,9 @@ import {
   Sparkles,
   Zap,
 } from 'lucide-react';
-import { useUserType } from '@/contexts/UserTypeContextSafe';
-import { UserStatistics } from '@/shared/components/common/UserStatisticsSafe';
-import { ErrorBoundary } from '@/shared/components/common/ErrorBoundary';
+import { useUserType } from '@elzatona/shared-contexts';
+import { UserStatistics } from '@elzatona/shared-components';
+import { ErrorBoundary } from '@elzatona/shared-components';
 
 function HomePageContent() {
   const { userType } = useUserType();

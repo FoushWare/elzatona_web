@@ -7,8 +7,8 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-import { useAuth } from '@/contexts/AuthContext';
-import { useRoleBasedAccess } from '@/hooks/useRoleBasedAccess';
+import { useAuth } from '@elzatona/shared-contexts';
+import { useRoleBasedAccess } from '@elzatona/shared-hooks';
 import {
   Users,
   UserPlus,

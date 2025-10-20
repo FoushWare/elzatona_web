@@ -34,14 +34,14 @@ import {
   useCreateQuestion,
   useUpdateQuestion,
   useDeleteQuestion,
-} from '@/hooks/useTanStackQuery';
+} from '@elzatona/shared-hooks';
 import { useQueryClient } from '@tanstack/react-query';
-import { useNotificationActions } from '@/hooks/useNotificationActions';
-import { BulkOperations } from '@/shared/components/admin/BulkOperations';
-import { LearningCard } from '@/types/learning-cards';
-import { UnifiedQuestion } from '@/lib/unified-question-schema';
-import { useToast } from '@/shared/components/common/Toast';
-import ToastContainer from '@/shared/components/common/Toast';
+import { useNotificationActions } from '@elzatona/shared-hooks';
+import { BulkOperations } from '@elzatona/shared-components';
+import { LearningCard } from '@elzatona/shared-types';
+import { UnifiedQuestion } from '@elzatona/shared-types';
+import { useToast } from '@elzatona/shared-components';
+import ToastContainer from '@elzatona/shared-components';
 
 // Define types for other entities (these should be moved to proper type files)
 type LearningPlan = any;
@@ -77,17 +77,17 @@ interface BasicPlan {
 
 // Lazy load UI components to improve initial bundle size
 const Button = React.lazy(() =>
-  import('@/shared/components/ui/button').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.Button,
   }))
 );
 const Input = React.lazy(() =>
-  import('@/shared/components/ui/input').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.Input,
   }))
 );
 const Badge = React.lazy(() =>
-  import('@/shared/components/ui/badge').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.Badge,
   }))
 );
@@ -136,7 +136,7 @@ const SelectValue = React.lazy(() =>
     default: module.SelectValue,
   }))
 );
-import { Modal } from '@/shared/components/ui/modal';
+import { Modal } from '@elzatona/shared-components';
 
 // Import icons with tree shaking
 import {

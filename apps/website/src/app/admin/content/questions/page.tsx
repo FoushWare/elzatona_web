@@ -12,17 +12,17 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
-import { Badge } from '@/shared/components/ui/badge';
+} from '@elzatona/shared-components';
+import { Button } from '@elzatona/shared-components';
+import { Badge } from '@elzatona/shared-components';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/shared/components/ui/select';
-import { Input } from '@/shared/components/ui/input';
+} from '@elzatona/shared-components';
+import { Input } from '@elzatona/shared-components';
 import {
   Plus,
   Edit,
@@ -40,11 +40,10 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from '@/shared/components/ui/dialog';
-import { Label } from '@/shared/components/ui/label';
-import { Textarea } from '@/shared/components/ui/textarea';
-import { Checkbox } from '@/shared/components/ui/checkbox';
-import { AdvancedSearch } from '@/shared/components/common/AdvancedSearch';
+} from '@elzatona/shared-components';
+import { Label } from '@elzatona/shared-components';
+import { Textarea } from '@elzatona/shared-components';
+import { Checkbox } from '@elzatona/shared-components';
 import { UnifiedQuestion } from '@/lib/unified-question-schema';
 
 type Question = UnifiedQuestion;
@@ -53,6 +52,7 @@ export default function AdminContentQuestionsPage() {
   // Local state for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Data state
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -367,21 +367,22 @@ export default function AdminContentQuestionsPage() {
           </Card>
         </div>
 
-        {/* Advanced Search */}
-        <AdvancedSearch
-          onResultsChange={results => {
-            setQuestions(results);
-            setTotalCount(results.length);
-          }}
-          onFacetsChange={facets => {
-            // Update facets if needed
-          }}
-          placeholder='Search questions by title, content, tags...'
-          showFilters={true}
-          showFacets={true}
-          showSuggestions={true}
-          showAnalytics={true}
-        />
+        {/* Simple Search */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Search Questions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className='flex space-x-2'>
+              <Input
+                placeholder='Search questions by title, content, tags...'
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className='flex-1'
+              />
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Questions List */}
         <Card>
