@@ -6,7 +6,7 @@ const path = require('path');
 // Read the file
 const filePath = path.join(
   __dirname,
-  'data/json/system_design/questions-system-design.json'
+  'apps/admin/network/data/json/system_design/questions-system-design.json'
 );
 let content = fs.readFileSync(filePath, 'utf8');
 

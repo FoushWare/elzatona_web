@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "npmScope": "@zatona-web",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -58,6 +59,10 @@
         "{workspaceRoot}/src/test-setup.ts"
       ],
       "cache": true
+    },
+    "e2e": {
+      "inputs": ["default", "^production"],
+      "cache": true
     }
   },
   "generators": {
@@ -66,7 +71,17 @@
         "style": "tailwind",
         "linter": "eslint"
       }
+    },
+    "@nx/react": {
+      "component": {
+        "style": "css",
+        "export": true
+      },
+      "library": {
+        "style": "css",
+        "linter": "eslint"
+      }
     }
   },
-  "defaultProject": "elzatona-web"
+  "defaultProject": "website"
 }

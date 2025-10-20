@@ -2,7 +2,7 @@ const fs = require('fs');
 
 // Read the file
 let content = fs.readFileSync(
-  'data/json/system_design/questions-system-design.json',
+  'apps/admin/network/data/json/system_design/questions-system-design.json',
   'utf8'
 );
 
@@ -20,7 +20,7 @@ content = content
 
 // Write back
 fs.writeFileSync(
-  'data/json/system_design/questions-system-design.json',
+  'apps/admin/network/data/json/system_design/questions-system-design.json',
   content,
   'utf8'
 );

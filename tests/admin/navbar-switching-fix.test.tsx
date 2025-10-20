@@ -30,13 +30,13 @@ jest.mock('@/contexts/AdminAuthContext', () => ({
 // Mock admin components
 jest.mock('@/shared/components/auth/AdminNavbar', () => {
   return function MockAdminNavbar() {
-    return <div data-testid="admin-navbar">Admin Navbar</div>;
+    return <div data-testid='admin-navbar'>Admin Navbar</div>;
   };
 });
 
 jest.mock('@/shared/components/common/NavbarSimple', () => {
   return function MockNavbarSimple() {
-    return <div data-testid="website-navbar">Website Navbar</div>;
+    return <div data-testid='website-navbar'>Website Navbar</div>;
   };
 });
 

@@ -203,7 +203,7 @@ When adding new admin login functionality:
 
 1. **Update existing test files** if the functionality affects existing features
 2. **Create new test files** for new features
-3. **Update the test runner script** (`scripts/run-admin-login-tests.js`) to include new tests
+3. **Update the test runner script** (`apps/admin/Utils/scripts/run-admin-login-tests.js`) to include new tests
 4. **Update this README** with new test descriptions
 
 ### Test File Naming Convention

@@ -80,8 +80,8 @@ PostgreSQL Tables:
 ### **4. Migration Scripts**
 
 - **Files**:
-  - `scripts/migrate-firebase-to-supabase.js` (JavaScript)
-  - `scripts/migrate-firebase-to-supabase.ts` (TypeScript)
+  - `apps/admin/Utils/scripts/migrate-firebase-to-supabase.js` (JavaScript)
+  - `apps/admin/Utils/scripts/migrate-firebase-to-supabase.ts` (TypeScript)
 - **Content**: Automated data migration from Firebase to Supabase
 - **Purpose**: Transfer existing data while maintaining relationships
 
