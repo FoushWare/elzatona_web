@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
-import { CardType } from '@/lib/unified-question-schema';
+import { CardType } from '@/types/learning-cards';
 
 interface QuestionFormProps {
   question?: {
@@ -65,10 +65,10 @@ const DIFFICULTIES = [
 ];
 
 const CARD_TYPES: CardType[] = [
-  'Core Technologies',
-  'Framework Questions',
-  'Problem Solving',
-  'System Design',
+  'core-technologies',
+  'framework-questions',
+  'problem-solving',
+  'system-design',
 ];
 
 export const QuestionForm: React.FC<QuestionFormProps> = ({
