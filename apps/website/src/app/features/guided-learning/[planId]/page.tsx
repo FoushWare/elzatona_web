@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -8,8 +8,6 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { useRouter, useParams } from 'next/navigation';
-
-import { useLearningPlanTemplates } from '@/hooks/useLearningPlanTemplates';
 import {
   ArrowLeft,
   Clock,
@@ -51,12 +49,33 @@ export default function LearningPlanDetailPage() {
   const params = useParams();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
-  const { templates, isLoading, getTemplate } = useLearningPlanTemplates();
+  const [templates, setTemplates] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isStarting, setIsStarting] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
 
   const planId = params?.planId as string;
-  const plan = getTemplate(planId);
+  const plan = templates.find(t => t.id === planId);
+
+  // Load templates
+  useEffect(() => {
+    const loadTemplates = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/plans');
+        if (response.ok) {
+          const data = await response.json();
+          setTemplates(data.data || []);
+        }
+      } catch (error) {
+        console.error('Error loading templates:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTemplates();
+  }, []);
 
   // Add loading state for navigation
   const handleBackClick = () => {

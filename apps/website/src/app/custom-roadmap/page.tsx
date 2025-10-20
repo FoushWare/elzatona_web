@@ -9,7 +9,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { useRouter } from 'next/navigation';
 
-import { SignInPopup } from '@/shared/components/auth/SignInPopup';
+import { SignInPopup } from '@elzatona/shared-components';
 import {
   Plus,
   Minus,

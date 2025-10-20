@@ -12,10 +12,10 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
-import { Button } from '@/shared/components/ui/button';
-import { Skeleton } from '@/shared/components/ui/skeleton';
+} from '@elzatona/shared-components';
+import { Badge } from '@elzatona/shared-components';
+import { Button } from '@elzatona/shared-components';
+import { Skeleton } from '@elzatona/shared-components';
 import {
   useAdminStats,
   useCards,
@@ -24,7 +24,7 @@ import {
   useTopics,
   useQuestionsUnified,
   usePrefetchRelatedData,
-} from '@/hooks/useTanStackQuery';
+} from '@elzatona/shared-hooks';
 import {
   BarChart3,
   BookOpen,
