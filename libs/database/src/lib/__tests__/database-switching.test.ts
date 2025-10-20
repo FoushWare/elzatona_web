@@ -1,8 +1,8 @@
 // Test file for database switching functionality
 // This file demonstrates how the database abstraction works
 
-import { DatabaseServiceFactory } from './libs/database/src/lib/DatabaseContext';
-import { IDatabaseService } from './libs/database/src/lib/IDatabaseService';
+import { DatabaseServiceFactory } from '../DatabaseContext';
+import { IDatabaseService } from '../IDatabaseService';
 
 // Mock environment variables for testing
 const originalEnv = process.env;
@@ -128,10 +128,7 @@ describe('Database Integration', () => {
     // This would test the DatabaseProvider and useDatabase hook
     // In a real test environment, you'd render a component that uses the hook
 
-    const {
-      DatabaseProvider,
-      useDatabase,
-    } = require('./libs/database/src/lib/DatabaseContext');
+    const { DatabaseProvider, useDatabase } = require('../DatabaseContext');
 
     expect(DatabaseProvider).toBeDefined();
     expect(useDatabase).toBeDefined();

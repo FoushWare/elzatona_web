@@ -11,7 +11,7 @@ function TestComponent() {
   const { isMobileMenuOpen, toggleMobileMenu } = useMobileMenu();
 
   return (
-    <div className="p-4">
+    <div className='p-4'>
       <h1>Jotai Test Component</h1>
       <div>
         <p>Theme: {isDarkMode ? 'dark' : 'light'}</p>

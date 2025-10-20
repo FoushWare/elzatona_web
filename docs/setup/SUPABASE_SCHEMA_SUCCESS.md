@@ -78,10 +78,10 @@ Now that we have a working foundation, you can:
 
 ## 🎯 Working Scripts
 
-- ✅ `scripts/clear-supabase-direct.js` - Clears all Supabase tables
-- ✅ `scripts/test-small-records-fixed.js` - Creates test records with correct schema
-- ✅ `scripts/supabase-diagnostic.js` - Diagnoses schema issues
-- ✅ `scripts/find-*-values.js` - Discovers correct field values
+- ✅ `apps/admin/Utils/scripts/clear-supabase-direct.js` - Clears all Supabase tables
+- ✅ `apps/admin/Utils/scripts/test-small-records-fixed.js` - Creates test records with correct schema
+- ✅ `apps/admin/Utils/scripts/supabase-diagnostic.js` - Diagnoses schema issues
+- ✅ `apps/admin/Utils/scripts/find-*-values.js` - Discovers correct field values
 
 ## 🚀 Ready for Production Seeding!
 
