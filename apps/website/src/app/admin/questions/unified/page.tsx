@@ -3,7 +3,7 @@
 
 import { Metadata } from 'next';
 
-// import UnifiedQuestionManager from '@/shared/components/learning/UnifiedQuestionManager';
+// import UnifiedQuestionManager from '@elzatona/shared-components';
 
 export const metadata: Metadata = {
   title: 'Unified Questions | Admin Panel',

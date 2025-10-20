@@ -22,9 +22,9 @@ import {
   Compass,
   ExternalLink,
 } from 'lucide-react';
-import { UserTypeSelector } from '@/shared/components/common/UserTypeSelector';
-import { LoadingTransition } from '@/shared/components/common/LoadingTransition';
-import { useUserType } from '@/contexts/UserTypeContextSafe';
+import { UserTypeSelector } from '@elzatona/shared-components';
+import { LoadingTransition } from '@elzatona/shared-components';
+import { useUserType } from '@elzatona/shared-contexts';
 
 type UserType = 'guided' | 'self-directed' | null;
 

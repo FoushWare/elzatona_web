@@ -12,9 +12,9 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
-import { Badge } from '@/shared/components/ui/badge';
+} from '@elzatona/shared-components';
+import { Button } from '@elzatona/shared-components';
+import { Badge } from '@elzatona/shared-components';
 import { Plus, Edit, Trash2, Loader2, Eye } from 'lucide-react';
 import { UnifiedQuestion } from '@/lib/unified-question-schema';
 

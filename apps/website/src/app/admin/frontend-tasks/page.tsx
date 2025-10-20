@@ -15,13 +15,13 @@ import {
   FrontendTaskFormData,
   FrontendTaskFile,
 } from '@/types/admin';
-import FrontendTaskEditor from '@/shared/components/admin/FrontendTaskEditor';
+import FrontendTaskEditor from '@elzatona/shared-components';
 import {
   useFrontendTasks,
   useCreateFrontendTask,
   useUpdateFrontendTask,
   useDeleteFrontendTask,
-} from '@/hooks/useTanStackQuery';
+} from '@elzatona/shared-hooks';
 
 export default function FrontendTasksAdminPage() {
   // TanStack Query hooks

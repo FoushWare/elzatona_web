@@ -4,13 +4,13 @@ import './globals.css';
 import { JotaiProvider } from '@/providers/JotaiProvider';
 import { QueryProvider } from '@/providers/QueryProvider';
 
-import { UserTypeProvider } from '@/contexts/UserTypeContextSafe';
-import { MobileMenuProvider } from '@/contexts/MobileMenuContext';
-import { ThemeProvider } from '@/contexts/ThemeContext';
-import { LanguageProvider } from '@/contexts/LanguageContext';
-import { OnboardingProvider } from '@/contexts/OnboardingContext';
-import { NotificationProvider } from '@/contexts/NotificationContext';
-import { ConditionalLayout } from '@/shared/components/common/ConditionalLayout';
+import { UserTypeProvider } from '@elzatona/shared-contexts';
+import { MobileMenuProvider } from '@elzatona/shared-contexts';
+import { ThemeProvider } from '@elzatona/shared-contexts';
+import { LanguageProvider } from '@elzatona/shared-contexts';
+import { OnboardingProvider } from '@elzatona/shared-contexts';
+import { NotificationProvider } from '@elzatona/shared-contexts';
+import { ConditionalLayout } from '@elzatona/shared-components';
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = 'force-dynamic';

@@ -3,7 +3,13 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/website/src",
   "projectType": "application",
-  "tags": ["type:app", "scope:website"],
+  "implicitDependencies": [
+    "shared-components",
+    "shared-contexts",
+    "shared-hooks",
+    "shared-atoms",
+    "shared-types"
+  ],
   "targets": {
     "build": {
       "executor": "@nx/next:build",
