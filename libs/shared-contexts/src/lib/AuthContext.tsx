@@ -7,7 +7,7 @@ import {
   useEffect,
   ReactNode,
 } from 'react';
-import { UserAuthService } from '@/lib/user-auth';
+// import { UserAuthService } from '@/lib/user-auth';
 
 interface User {
   id: string;

@@ -32,7 +32,7 @@
     },
     "supabase": {
       "command": "npx",
-      "args": ["-y", "supabase-mcp-server"],
+      "args": ["-y", "@supabase/mcp-server-supabase"],
       "env": {
         "SUPABASE_PROJECT_REF": "hpnewqkvpnthpohvxcmq",
         "SUPABASE_DB_PASSWORD": "zatona-web",

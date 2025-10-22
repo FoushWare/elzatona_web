@@ -8,5 +8,4 @@ export * from './NotificationContext';
 export * from './OnboardingContext';
 export * from './ThemeContext';
 export * from './UserPreferencesContext';
-export * from './UserTypeContext';
 export * from './UserTypeContextSafe';
