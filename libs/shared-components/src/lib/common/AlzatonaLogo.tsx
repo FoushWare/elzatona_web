@@ -1,10 +1,6 @@
-import React from 'react';
-import { createClient } from '@supabase/supabase-js';
+'use client';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useTheme } from '@elzatona/shared-contexts';
 
@@ -24,6 +20,12 @@ export const AlzatonaLogo: React.FC<AlzatonaLogoProps> = ({
   forceDarkMode = false,
 }) => {
   const { isDarkMode } = useTheme();
+  const [isClient, setIsClient] = useState(false);
+
+  // Prevent hydration mismatch by only using theme after client-side hydration
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const sizeConfig = {
     xs: { class: 'w-20 h-20', width: 80, height: 80 }, // Increased from 16x16
@@ -35,13 +37,14 @@ export const AlzatonaLogo: React.FC<AlzatonaLogoProps> = ({
   const config = sizeConfig[size];
 
   // Determine which logo to use based on dark mode
-  const shouldUseDarkLogo = forceDarkMode || isDarkMode;
+  // Use forceDarkMode as the primary decision factor to avoid hydration issues
+  // Only use theme after client-side hydration to prevent mismatches
+  const shouldUseDarkLogo = forceDarkMode || (isClient && isDarkMode);
   const logoSrc = shouldUseDarkLogo
     ? '/Elzatona-web01.png'
     : '/Elzatona-black-all.png';
-  const logoAlt = shouldUseDarkLogo
-    ? 'Frontend Development Platform Icon (Dark Mode)'
-    : 'Frontend Development Platform Icon (Light Mode)';
+  // Use a consistent alt text to avoid hydration mismatches
+  const logoAlt = 'Elzatona Logo';
 
   return (
     <div className={`${className}`}>
@@ -52,6 +55,7 @@ export const AlzatonaLogo: React.FC<AlzatonaLogoProps> = ({
         height={config.height}
         className={`${config.class} object-contain`}
         priority
+        suppressHydrationWarning
       />
     </div>
   );

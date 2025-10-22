@@ -1,0 +1,1247 @@
+openapi: 3.0.3
+info:
+  title: Elzatona Admin API
+  description: |
+    Comprehensive API for managing Elzatona learning platform content.
+
+    This API provides endpoints for:
+    - Managing questions, categories, and topics
+    - Creating and managing learning cards and plans
+    - Handling frontend tasks and problem-solving challenges
+    - User management and authentication
+    - Analytics and reporting
+
+    ## Authentication
+    Most endpoints require authentication. Use the `/auth/login` endpoint to obtain a JWT token,
+    then include it in the Authorization header: `Bearer <token>`
+
+    ## Rate Limiting
+    API requests are rate limited to 1000 requests per hour per user.
+
+    ## Error Handling
+    All errors follow a consistent format with appropriate HTTP status codes.
+  version: 1.0.0
+  contact:
+    name: Elzatona API Support
+    email: support@elzatona.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3000/api
+    description: Development server
+  - url: https://api.elzatona.com
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Questions
+    description: Learning questions management
+  - name: Categories
+    description: Question categories management
+  - name: Topics
+    description: Learning topics management
+  - name: Learning Cards
+    description: Learning cards and plans management
+  - name: Frontend Tasks
+    description: React/frontend coding challenges
+  - name: Problem Solving
+    description: Algorithmic coding challenges
+  - name: Users
+    description: User management
+  - name: Analytics
+    description: Analytics and reporting
+
+paths:
+  # Authentication Endpoints
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Admin login
+      description: Authenticate admin user and return JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: admin@elzatona.com
+                password:
+                  type: string
+                  format: password
+                  example: admin123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Admin logout
+      description: Logout admin user and invalidate token
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Logged out successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Questions Endpoints
+  /questions:
+    get:
+      tags:
+        - Questions
+      summary: Get all questions
+      description: Retrieve all learning questions with optional filtering
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of questions per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: category
+          in: query
+          description: Filter by category ID
+          schema:
+            type: string
+        - name: topic
+          in: query
+          description: Filter by topic ID
+          schema:
+            type: string
+        - name: difficulty
+          in: query
+          description: Filter by difficulty level
+          schema:
+            type: string
+            enum: [easy, medium, hard]
+        - name: type
+          in: query
+          description: Filter by question type
+          schema:
+            type: string
+            enum: [mcq, coding, fill-in-the-blanks, true-false]
+      responses:
+        '200':
+          description: Questions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Questions
+      summary: Create new question
+      description: Create a new learning question
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateQuestionRequest'
+      responses:
+        '201':
+          description: Question created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Question'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /questions/{id}:
+    get:
+      tags:
+        - Questions
+      summary: Get question by ID
+      description: Retrieve a specific question by its ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Question ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Question retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Question'
+        '404':
+          description: Question not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Questions
+      summary: Update question
+      description: Update an existing question
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Question ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateQuestionRequest'
+      responses:
+        '200':
+          description: Question updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Question'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Question not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Questions
+      summary: Delete question
+      description: Delete a question by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Question ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Question deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Question deleted successfully
+        '404':
+          description: Question not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Categories Endpoints
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: Get all categories
+      description: Retrieve all question categories
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Categories retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Categories
+      summary: Create new category
+      description: Create a new question category
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategoryRequest'
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Topics Endpoints
+  /topics:
+    get:
+      tags:
+        - Topics
+      summary: Get all topics
+      description: Retrieve all learning topics
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: category
+          in: query
+          description: Filter by category ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Topics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Topic'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Topics
+      summary: Create new topic
+      description: Create a new learning topic
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTopicRequest'
+      responses:
+        '201':
+          description: Topic created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Topic'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Learning Cards Endpoints
+  /learning-cards:
+    get:
+      tags:
+        - Learning Cards
+      summary: Get all learning cards
+      description: Retrieve all learning cards and plans
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Learning cards retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LearningCard'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Frontend Tasks Endpoints
+  /frontend-tasks:
+    get:
+      tags:
+        - Frontend Tasks
+      summary: Get all frontend tasks
+      description: Retrieve all React/frontend coding challenges
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Frontend tasks retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FrontendTask'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Problem Solving Endpoints
+  /problem-solving:
+    get:
+      tags:
+        - Problem Solving
+      summary: Get all problem solving tasks
+      description: Retrieve all algorithmic coding challenges
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Problem solving tasks retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProblemSolvingTask'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Analytics Endpoints
+  /analytics/dashboard:
+    get:
+      tags:
+        - Analytics
+      summary: Get dashboard analytics
+      description: Retrieve analytics data for the admin dashboard
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Analytics data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/DashboardAnalytics'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: user_123
+        email:
+          type: string
+          format: email
+          example: admin@elzatona.com
+        name:
+          type: string
+          example: Admin User
+        role:
+          type: string
+          enum: [admin, moderator, editor]
+          example: admin
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+          example: q_123
+        title:
+          type: string
+          example: What is React?
+        content:
+          type: string
+          example: React is a JavaScript library for building user interfaces...
+        type:
+          type: string
+          enum: [mcq, coding, fill-in-the-blanks, true-false]
+          example: mcq
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+          example: medium
+        categoryId:
+          type: string
+          example: cat_123
+        topicId:
+          type: string
+          example: topic_123
+        options:
+          type: array
+          items:
+            type: string
+          example: ['Option A', 'Option B', 'Option C', 'Option D']
+        correctAnswer:
+          type: string
+          example: 'Option A'
+        explanation:
+          type: string
+          example: React is a library created by Facebook...
+        hints:
+          type: array
+          items:
+            type: string
+          example:
+            [
+              'Think about UI libraries',
+              'Consider component-based architecture',
+            ]
+        tags:
+          type: array
+          items:
+            type: string
+          example: ['react', 'javascript', 'frontend']
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+
+    CreateQuestionRequest:
+      type: object
+      required:
+        - title
+        - content
+        - type
+        - difficulty
+        - categoryId
+        - topicId
+      properties:
+        title:
+          type: string
+          example: What is React?
+        content:
+          type: string
+          example: React is a JavaScript library for building user interfaces...
+        type:
+          type: string
+          enum: [mcq, coding, fill-in-the-blanks, true-false]
+          example: mcq
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+          example: medium
+        categoryId:
+          type: string
+          example: cat_123
+        topicId:
+          type: string
+          example: topic_123
+        options:
+          type: array
+          items:
+            type: string
+          example: ['Option A', 'Option B', 'Option C', 'Option D']
+        correctAnswer:
+          type: string
+          example: 'Option A'
+        explanation:
+          type: string
+          example: React is a library created by Facebook...
+        hints:
+          type: array
+          items:
+            type: string
+          example:
+            [
+              'Think about UI libraries',
+              'Consider component-based architecture',
+            ]
+        tags:
+          type: array
+          items:
+            type: string
+          example: ['react', 'javascript', 'frontend']
+
+    UpdateQuestionRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: What is React?
+        content:
+          type: string
+          example: React is a JavaScript library for building user interfaces...
+        type:
+          type: string
+          enum: [mcq, coding, fill-in-the-blanks, true-false]
+          example: mcq
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+          example: medium
+        categoryId:
+          type: string
+          example: cat_123
+        topicId:
+          type: string
+          example: topic_123
+        options:
+          type: array
+          items:
+            type: string
+          example: ['Option A', 'Option B', 'Option C', 'Option D']
+        correctAnswer:
+          type: string
+          example: 'Option A'
+        explanation:
+          type: string
+          example: React is a library created by Facebook...
+        hints:
+          type: array
+          items:
+            type: string
+          example:
+            [
+              'Think about UI libraries',
+              'Consider component-based architecture',
+            ]
+        tags:
+          type: array
+          items:
+            type: string
+          example: ['react', 'javascript', 'frontend']
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          example: cat_123
+        name:
+          type: string
+          example: JavaScript
+        description:
+          type: string
+          example: Questions about JavaScript programming language
+        color:
+          type: string
+          example: '#f59e0b'
+        icon:
+          type: string
+          example: 'javascript'
+        order:
+          type: integer
+          example: 1
+        questionCount:
+          type: integer
+          example: 150
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+
+    CreateCategoryRequest:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+          example: JavaScript
+        description:
+          type: string
+          example: Questions about JavaScript programming language
+        color:
+          type: string
+          example: '#f59e0b'
+        icon:
+          type: string
+          example: 'javascript'
+        order:
+          type: integer
+          example: 1
+
+    Topic:
+      type: object
+      properties:
+        id:
+          type: string
+          example: topic_123
+        name:
+          type: string
+          example: React Hooks
+        description:
+          type: string
+          example: Questions about React Hooks
+        categoryId:
+          type: string
+          example: cat_123
+        order:
+          type: integer
+          example: 1
+        questionCount:
+          type: integer
+          example: 25
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+
+    CreateTopicRequest:
+      type: object
+      required:
+        - name
+        - description
+        - categoryId
+      properties:
+        name:
+          type: string
+          example: React Hooks
+        description:
+          type: string
+          example: Questions about React Hooks
+        categoryId:
+          type: string
+          example: cat_123
+        order:
+          type: integer
+          example: 1
+
+    LearningCard:
+      type: object
+      properties:
+        id:
+          type: string
+          example: card_123
+        title:
+          type: string
+          example: JavaScript Fundamentals
+        description:
+          type: string
+          example: Learn the basics of JavaScript programming
+        type:
+          type: string
+          enum:
+            [
+              core-technologies,
+              framework-questions,
+              problem-solving,
+              system-design,
+            ]
+          example: core-technologies
+        color:
+          type: string
+          example: '#3b82f6'
+        icon:
+          type: string
+          example: 'javascript'
+        order:
+          type: integer
+          example: 1
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/LearningSection'
+        topics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Topic'
+        questionCount:
+          type: integer
+          example: 50
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+
+    LearningSection:
+      type: object
+      properties:
+        id:
+          type: string
+          example: section_123
+        title:
+          type: string
+          example: Variables and Data Types
+        description:
+          type: string
+          example: Learn about JavaScript variables and data types
+        order:
+          type: integer
+          example: 1
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+
+    FrontendTask:
+      type: object
+      properties:
+        id:
+          type: string
+          example: task_123
+        title:
+          type: string
+          example: Build a Todo App
+        description:
+          type: string
+          example: Create a React todo application with add, edit, delete functionality
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+          example: medium
+        estimatedTime:
+          type: string
+          example: '2-3 hours'
+        requirements:
+          type: array
+          items:
+            type: string
+          example:
+            [
+              'Use React hooks',
+              'Implement local storage',
+              'Add form validation',
+            ]
+        starterCode:
+          type: string
+          example: '// Starter code here...'
+        solution:
+          type: string
+          example: '// Solution code here...'
+        tags:
+          type: array
+          items:
+            type: string
+          example: ['react', 'hooks', 'forms', 'local-storage']
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+
+    ProblemSolvingTask:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ps_123
+        title:
+          type: string
+          example: Two Sum Problem
+        description:
+          type: string
+          example: Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+          example: easy
+        estimatedTime:
+          type: string
+          example: '30 minutes'
+        constraints:
+          type: array
+          items:
+            type: string
+          example: ['Array length <= 10^4', 'Each element <= 10^9']
+        examples:
+          type: array
+          items:
+            type: object
+            properties:
+              input:
+                type: string
+                example: '[2,7,11,15], 9'
+              output:
+                type: string
+                example: '[0,1]'
+              explanation:
+                type: string
+                example: 'nums[0] + nums[1] = 2 + 7 = 9'
+        hints:
+          type: array
+          items:
+            type: string
+          example: ['Use a hash map', 'Store complement values']
+        solution:
+          type: string
+          example: '// Solution code here...'
+        tags:
+          type: array
+          items:
+            type: string
+          example: ['array', 'hash-table', 'two-pointers']
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00Z'
+
+    DashboardAnalytics:
+      type: object
+      properties:
+        totalQuestions:
+          type: integer
+          example: 1200
+        totalCategories:
+          type: integer
+          example: 15
+        totalTopics:
+          type: integer
+          example: 75
+        totalLearningCards:
+          type: integer
+          example: 500
+        totalLearningPlans:
+          type: integer
+          example: 10
+        totalFrontendTasks:
+          type: integer
+          example: 80
+        totalProblemSolvingTasks:
+          type: integer
+          example: 150
+        totalUsers:
+          type: integer
+          example: 5000
+        recentActivity:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: activity_123
+              action:
+                type: string
+                example: Question added
+              timestamp:
+                type: string
+                format: date-time
+                example: '2023-01-01T00:00:00Z'
+              user:
+                type: string
+                example: Admin User
+              details:
+                type: string
+                example: New question on React Hooks
+        systemHealth:
+          type: object
+          properties:
+            databaseConnected:
+              type: boolean
+              example: true
+            lastUpdated:
+              type: string
+              format: date-time
+              example: '2023-01-01T00:00:00Z'
+            apiResponseTime:
+              type: integer
+              example: 50
+            totalCollections:
+              type: integer
+              example: 10
+            activeCollections:
+              type: integer
+              example: 8
+            errorRate:
+              type: number
+              example: 0.01
+            uptime:
+              type: string
+              example: '99.9%'
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 100
+        totalPages:
+          type: integer
+          example: 5
+        hasNext:
+          type: boolean
+          example: true
+        hasPrev:
+          type: boolean
+          example: false
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: Error message
+        code:
+          type: string
+          example: VALIDATION_ERROR
+        details:
+          type: object
+          additionalProperties: true
