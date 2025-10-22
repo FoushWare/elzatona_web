@@ -1,4 +1,8 @@
+'use client';
+
 // Auth library exports
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
 export interface User {
   id: string;
   email: string;
@@ -20,14 +24,107 @@ export interface AuthContextType extends AuthState {
   updateProfile: (updates: Partial<User>) => Promise<void>;
 }
 
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
 export const useAuth = (): AuthContextType => {
-  // This will be implemented with Supabase auth
-  throw new Error('useAuth must be used within an AuthProvider');
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // This will be implemented with Supabase auth
-  return <>{children}</>;
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      // Simulate login - in real implementation, this would call Supabase
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Mock user for admin
+      const mockUser: User = {
+        id: 'admin-1',
+        email: email,
+        role: 'admin',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      setUser(mockUser);
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    setIsLoading(true);
+    try {
+      // Simulate logout
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setUser(null);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const signup = async (email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      // Simulate signup
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      // In real implementation, this would create a new user
+    } catch (error) {
+      console.error('Signup failed:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateProfile = async (updates: Partial<User>) => {
+    if (!user) return;
+
+    setIsLoading(true);
+    try {
+      // Simulate profile update
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setUser({ ...user, ...updates });
+    } catch (error) {
+      console.error('Profile update failed:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const value: AuthContextType = {
+    user,
+    isLoading,
+    isAuthenticated: !!user,
+    login,
+    logout,
+    signup,
+    updateProfile,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

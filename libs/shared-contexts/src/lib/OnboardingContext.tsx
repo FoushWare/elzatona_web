@@ -1,5 +1,16 @@
 'use client';
 
+// Only create Supabase client if environment variables are available
+let supabase: any = null;
+if (
+  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+) {
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+}
 import React, {
   useState,
   useEffect,
@@ -7,11 +18,6 @@ import React, {
   createContext,
   useContext,
 } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 interface OnboardingContextType {
   hasSeenOnboarding: boolean;
