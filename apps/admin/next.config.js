@@ -11,7 +11,18 @@ const nextConfig = {
     '@elzatona/shared-hooks',
     '@elzatona/shared-atoms',
     '@elzatona/shared-types',
+    'nuqs',
   ],
+  experimental: {
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  },
 };
 
 module.exports = nextConfig;
