@@ -361,11 +361,39 @@ export function AdvancedSearch({
 
           {showAdvancedFilters && (
             <Card className='mt-2'>
+              <CardHeader className='pb-3'>
+                <div className='flex items-center justify-between'>
+                  <CardTitle className='text-lg'>Filter Options</CardTitle>
+                  {activeFilterCount > 0 && (
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={clearFilters}
+                      className='text-red-600 hover:text-red-700 hover:bg-red-50'
+                    >
+                      <X className='w-4 h-4 mr-2' />
+                      Clear All Filters ({activeFilterCount})
+                    </Button>
+                  )}
+                </div>
+              </CardHeader>
               <CardContent className='p-4'>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                   {/* Category Filter */}
                   <div>
-                    <Label className='text-sm font-medium'>Category</Label>
+                    <div className='flex items-center justify-between mb-2'>
+                      <Label className='text-sm font-medium'>Category</Label>
+                      {category !== 'all' && (
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          onClick={() => setCategory('all')}
+                          className='h-6 px-2 text-xs text-gray-500 hover:text-gray-700'
+                        >
+                          <X className='w-3 h-3' />
+                        </Button>
+                      )}
+                    </div>
                     <Select value={category} onValueChange={setCategory}>
                       <SelectTrigger>
                         <SelectValue placeholder='All Categories' />
@@ -383,7 +411,19 @@ export function AdvancedSearch({
 
                   {/* Difficulty Filter */}
                   <div>
-                    <Label className='text-sm font-medium'>Difficulty</Label>
+                    <div className='flex items-center justify-between mb-2'>
+                      <Label className='text-sm font-medium'>Difficulty</Label>
+                      {difficulty !== 'all' && (
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          onClick={() => setDifficulty('all')}
+                          className='h-6 px-2 text-xs text-gray-500 hover:text-gray-700'
+                        >
+                          <X className='w-3 h-3' />
+                        </Button>
+                      )}
+                    </div>
                     <Select value={difficulty} onValueChange={setDifficulty}>
                       <SelectTrigger>
                         <SelectValue placeholder='All Difficulties' />
@@ -404,7 +444,19 @@ export function AdvancedSearch({
 
                   {/* Type Filter */}
                   <div>
-                    <Label className='text-sm font-medium'>Type</Label>
+                    <div className='flex items-center justify-between mb-2'>
+                      <Label className='text-sm font-medium'>Type</Label>
+                      {type !== 'all' && (
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          onClick={() => setType('all')}
+                          className='h-6 px-2 text-xs text-gray-500 hover:text-gray-700'
+                        >
+                          <X className='w-3 h-3' />
+                        </Button>
+                      )}
+                    </div>
                     <Select value={type} onValueChange={setType}>
                       <SelectTrigger>
                         <SelectValue placeholder='All Types' />
@@ -422,7 +474,19 @@ export function AdvancedSearch({
 
                   {/* Status Filter */}
                   <div>
-                    <Label className='text-sm font-medium'>Status</Label>
+                    <div className='flex items-center justify-between mb-2'>
+                      <Label className='text-sm font-medium'>Status</Label>
+                      {isActive !== 'all' && (
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          onClick={() => setIsActive('all')}
+                          className='h-6 px-2 text-xs text-gray-500 hover:text-gray-700'
+                        >
+                          <X className='w-3 h-3' />
+                        </Button>
+                      )}
+                    </div>
                     <Select value={isActive} onValueChange={setIsActive}>
                       <SelectTrigger>
                         <SelectValue placeholder='All Status' />
@@ -437,7 +501,19 @@ export function AdvancedSearch({
 
                   {/* Topics Filter with Search */}
                   <div>
-                    <Label className='text-sm font-medium'>Topic</Label>
+                    <div className='flex items-center justify-between mb-2'>
+                      <Label className='text-sm font-medium'>Topic</Label>
+                      {topic !== 'all' && (
+                        <Button
+                          variant='ghost'
+                          size='sm'
+                          onClick={() => setTopic('all')}
+                          className='h-6 px-2 text-xs text-gray-500 hover:text-gray-700'
+                        >
+                          <X className='w-3 h-3' />
+                        </Button>
+                      )}
+                    </div>
                     <Select value={topic} onValueChange={setTopic}>
                       <SelectTrigger>
                         <SelectValue placeholder='All Topics' />
