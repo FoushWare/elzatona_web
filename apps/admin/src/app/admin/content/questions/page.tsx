@@ -455,10 +455,9 @@ export default function AdminContentQuestionsPage() {
         {/* Advanced Search */}
         <AdvancedSearch
           onResultsChange={results => {
-            // Update questions with filtered results
+            // Update questions with server-side search results
             setQuestions(results);
-            // Don't override totalCount for server-side pagination
-            // setTotalCount(results.length);
+            // Server-side search handles pagination, so we don't override totalCount
           }}
           onFacetsChange={facets => {
             // Update facets if needed
@@ -468,7 +467,6 @@ export default function AdminContentQuestionsPage() {
           showFacets={false}
           showSuggestions={false}
           showAnalytics={true}
-          allQuestions={questions}
           allCategories={allCategories}
           allTopics={allTopics}
         />

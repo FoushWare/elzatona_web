@@ -42,7 +42,6 @@ interface AdvancedSearchProps {
   showSuggestions?: boolean;
   showAnalytics?: boolean;
   className?: string;
-  allQuestions?: any[];
   allCategories?: any[];
   allTopics?: any[];
   // Pagination props
@@ -63,7 +62,6 @@ export function AdvancedSearch({
   showSuggestions = true,
   showAnalytics = true,
   className = '',
-  allQuestions = [],
   allCategories = [],
   allTopics = [],
   // Pagination props
@@ -107,84 +105,7 @@ export function AdvancedSearch({
   const [isLoading, setIsLoading] = useState(false);
   const [searchTime, setSearchTime] = useState(0);
   const [topicSearchQuery, setTopicSearchQuery] = useState('');
-  const [actualFacets, setActualFacets] = useState({
-    categories: {} as Record<string, number>,
-    difficulties: {} as Record<string, number>,
-    types: {} as Record<string, number>,
-    tags: {} as Record<string, number>,
-  });
-
-  // Generate facets from actual data
-  useEffect(() => {
-    if (allQuestions.length > 0) {
-      const facets = {
-        categories: {} as Record<string, number>,
-        difficulties: {} as Record<string, number>,
-        types: {} as Record<string, number>,
-        tags: {} as Record<string, number>,
-      };
-
-      allQuestions.forEach(question => {
-        // Count categories
-        if (question.category) {
-          facets.categories[question.category] =
-            (facets.categories[question.category] || 0) + 1;
-        }
-
-        // Count difficulties
-        if (question.difficulty) {
-          facets.difficulties[question.difficulty] =
-            (facets.difficulties[question.difficulty] || 0) + 1;
-        }
-
-        // Count types
-        if (question.type) {
-          facets.types[question.type] = (facets.types[question.type] || 0) + 1;
-        }
-
-        // Count tags
-        if (question.tags && Array.isArray(question.tags)) {
-          question.tags.forEach(tag => {
-            facets.tags[tag] = (facets.tags[tag] || 0) + 1;
-          });
-        }
-      });
-
-      setActualFacets(facets);
-      onFacetsChange?.(facets);
-    }
-  }, [allQuestions, onFacetsChange]);
-
-  // Generate suggestions from actual data
-  const actualSuggestions = React.useMemo(() => {
-    const suggestions = new Set<string>();
-
-    allQuestions.forEach(question => {
-      // Add category names
-      if (question.category) {
-        suggestions.add(question.category);
-      }
-
-      // Add tags
-      if (question.tags && Array.isArray(question.tags)) {
-        question.tags.forEach(tag => {
-          suggestions.add(tag);
-        });
-      }
-
-      // Add words from titles
-      if (question.title) {
-        const words = question.title.toLowerCase().split(/\s+/);
-        words.forEach(word => {
-          if (word.length > 3) {
-            suggestions.add(word);
-          }
-        });
-      }
-    });
-
-    return Array.from(suggestions).slice(0, 10);
-  }, [allQuestions]);
+  // Server-side search - no need for client-side facets or suggestions
 
   // Perform actual search on real data
   const performSearch = async () => {
@@ -192,25 +113,7 @@ export function AdvancedSearch({
     const startTime = Date.now();
 
     try {
-      // Check if we have any active search or filters
-      const hasSearchQuery = query.trim() !== '';
-      const hasActiveFilters =
-        category !== 'all' ||
-        difficulty !== 'all' ||
-        type !== 'all' ||
-        isActive !== 'all' ||
-        topic !== 'all' ||
-        selectedTopics.length > 0;
-
-      // If no search query and no active filters, don't make API call
-      // Let the parent component handle the original pagination
-      if (!hasSearchQuery && !hasActiveFilters) {
-        setIsLoading(false);
-        onResultsChange?.(allQuestions);
-        return;
-      }
-
-      // Build search parameters
+      // Build search parameters for server-side search
       const searchParams = new URLSearchParams();
 
       // Add pagination
@@ -218,7 +121,7 @@ export function AdvancedSearch({
       searchParams.set('pageSize', size.toString());
 
       // Add search query
-      if (hasSearchQuery) {
+      if (query.trim()) {
         searchParams.set('search', query.trim());
       }
 
@@ -242,7 +145,7 @@ export function AdvancedSearch({
         searchParams.set('topics', selectedTopics.join(','));
       }
 
-      // Make API call
+      // Make API call for server-side search
       const response = await fetch(
         `/api/questions/unified?${searchParams.toString()}`
       );
@@ -418,9 +321,9 @@ export function AdvancedSearch({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value='all'>All Categories</SelectItem>
-                        {Object.keys(actualFacets.categories).map(category => (
-                          <SelectItem key={category} value={category}>
-                            {category} ({actualFacets.categories[category]})
+                        {allCategories.map(category => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -448,14 +351,11 @@ export function AdvancedSearch({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value='all'>All Difficulties</SelectItem>
-                        {Object.keys(actualFacets.difficulties).map(
-                          difficulty => (
-                            <SelectItem key={difficulty} value={difficulty}>
-                              {difficulty} (
-                              {actualFacets.difficulties[difficulty]})
-                            </SelectItem>
-                          )
-                        )}
+                        <SelectItem value='beginner'>Beginner</SelectItem>
+                        <SelectItem value='intermediate'>
+                          Intermediate
+                        </SelectItem>
+                        <SelectItem value='advanced'>Advanced</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -481,11 +381,12 @@ export function AdvancedSearch({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value='all'>All Types</SelectItem>
-                        {Object.keys(actualFacets.types).map(type => (
-                          <SelectItem key={type} value={type}>
-                            {type} ({actualFacets.types[type]})
-                          </SelectItem>
-                        ))}
+                        <SelectItem value='multiple-choice'>
+                          Multiple Choice
+                        </SelectItem>
+                        <SelectItem value='open-ended'>Open Ended</SelectItem>
+                        <SelectItem value='true-false'>True/False</SelectItem>
+                        <SelectItem value='code'>Code</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
