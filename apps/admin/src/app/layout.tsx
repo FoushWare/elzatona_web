@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { AdminAuthProvider, ThemeProvider } from '@elzatona/shared-contexts';
 import { AdminNavbar } from '@elzatona/shared-components';
-import { NuqsAdapter } from 'nuqs/adapters/next';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import './globals.css';
 
 export const metadata: Metadata = {
