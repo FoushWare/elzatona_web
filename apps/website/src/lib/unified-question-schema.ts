@@ -59,6 +59,30 @@ export interface UnifiedQuestion {
     averageTime: number;
     difficultyRating: number;
   };
+  // New fields with junction table data
+  topics?: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    difficulty: string;
+    is_primary: boolean;
+    order_index: number;
+  }>;
+  categories?: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    card_type: string;
+    is_primary: boolean;
+    order_index: number;
+  }>;
+  learning_card?: {
+    id: string;
+    title: string;
+    type: string;
+    color: string;
+    icon: string;
+  };
 }
 
 export interface BulkQuestionData {

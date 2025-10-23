@@ -4,6 +4,13 @@
   "sourceRoot": "libs/shared-components/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared-components"
+      }
+    },
     "test": {
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
