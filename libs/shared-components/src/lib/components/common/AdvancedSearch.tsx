@@ -2,6 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import {
+  useQueryState,
+  parseAsString,
+  parseAsInteger,
+  parseAsArrayOf,
+} from 'nuqs';
+import {
   Search,
   Filter,
   X,
@@ -68,15 +74,36 @@ export function AdvancedSearch({
   onPageChange,
   onPageSizeChange,
 }: AdvancedSearchProps) {
+  // URL state management with nuqs
+  const [query, setQuery] = useQueryState('q', parseAsString.withDefault(''));
+  const [category, setCategory] = useQueryState(
+    'category',
+    parseAsString.withDefault('all')
+  );
+  const [difficulty, setDifficulty] = useQueryState(
+    'difficulty',
+    parseAsString.withDefault('all')
+  );
+  const [type, setType] = useQueryState(
+    'type',
+    parseAsString.withDefault('all')
+  );
+  const [isActive, setIsActive] = useQueryState(
+    'active',
+    parseAsString.withDefault('all')
+  );
+  const [topic, setTopic] = useQueryState(
+    'topic',
+    parseAsString.withDefault('all')
+  );
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10));
+  const [selectedTopics, setSelectedTopics] = useQueryState(
+    'topics',
+    parseAsArrayOf(parseAsString).withDefault([])
+  );
+
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [query, setQuery] = useState('');
-  const [filters, setFilters] = useState({
-    category: 'all',
-    difficulty: 'all',
-    type: 'all',
-    isActive: 'all',
-    topic: 'all',
-  });
   const [isLoading, setIsLoading] = useState(false);
   const [searchTime, setSearchTime] = useState(0);
   const [topicSearchQuery, setTopicSearchQuery] = useState('');
@@ -179,35 +206,42 @@ export function AdvancedSearch({
       );
     }
 
-    // Apply filters
-    if (filters.category !== 'all') {
+    // Apply filters using nuqs state
+    if (category !== 'all') {
       filteredQuestions = filteredQuestions.filter(
-        question => question.category === filters.category
+        question => question.category === category
       );
     }
 
-    if (filters.difficulty !== 'all') {
+    if (difficulty !== 'all') {
       filteredQuestions = filteredQuestions.filter(
-        question => question.difficulty === filters.difficulty
+        question => question.difficulty === difficulty
       );
     }
 
-    if (filters.type !== 'all') {
+    if (type !== 'all') {
       filteredQuestions = filteredQuestions.filter(
-        question => question.type === filters.type
+        question => question.type === type
       );
     }
 
-    if (filters.isActive !== 'all') {
-      const isActive = filters.isActive === 'active';
+    if (isActive !== 'all') {
+      const isActiveFilter = isActive === 'true';
       filteredQuestions = filteredQuestions.filter(
-        question => question.isActive === isActive
+        question => question.isActive === isActiveFilter
       );
     }
 
-    if (filters.topic !== 'all') {
-      filteredQuestions = filteredQuestions.filter(
-        question => question.topic_id === filters.topic
+    if (topic !== 'all') {
+      filteredQuestions = filteredQuestions.filter(question =>
+        question.topics?.some(t => t.name === topic)
+      );
+    }
+
+    // Apply selected topics filter
+    if (selectedTopics.length > 0) {
+      filteredQuestions = filteredQuestions.filter(question =>
+        question.topics?.some(t => selectedTopics.includes(t.name))
       );
     }
 
@@ -226,27 +260,58 @@ export function AdvancedSearch({
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [query, filters, allQuestions]);
+  }, [
+    query,
+    category,
+    difficulty,
+    type,
+    isActive,
+    topic,
+    selectedTopics,
+    allQuestions,
+  ]);
 
   const handleFilterChange = (key: string, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    switch (key) {
+      case 'category':
+        setCategory(value);
+        break;
+      case 'difficulty':
+        setDifficulty(value);
+        break;
+      case 'type':
+        setType(value);
+        break;
+      case 'isActive':
+        setIsActive(value);
+        break;
+      case 'topic':
+        setTopic(value);
+        break;
+      default:
+        break;
+    }
   };
 
   const clearFilters = () => {
     setQuery('');
     setTopicSearchQuery('');
-    setFilters({
-      category: 'all',
-      difficulty: 'all',
-      type: 'all',
-      isActive: 'all',
-      topic: 'all',
-    });
+    setCategory('all');
+    setDifficulty('all');
+    setType('all');
+    setIsActive('all');
+    setTopic('all');
+    setSelectedTopics([]);
   };
 
-  const activeFilterCount = Object.values(filters).filter(
-    f => f !== 'all'
-  ).length;
+  const activeFilterCount = [
+    category,
+    difficulty,
+    type,
+    isActive,
+    topic,
+    ...selectedTopics,
+  ].filter(f => f !== 'all' && f !== '').length;
 
   return (
     <div className={`space-y-4 ${className}`}>
@@ -301,12 +366,7 @@ export function AdvancedSearch({
                   {/* Category Filter */}
                   <div>
                     <Label className='text-sm font-medium'>Category</Label>
-                    <Select
-                      value={filters.category}
-                      onValueChange={value =>
-                        handleFilterChange('category', value)
-                      }
-                    >
+                    <Select value={category} onValueChange={setCategory}>
                       <SelectTrigger>
                         <SelectValue placeholder='All Categories' />
                       </SelectTrigger>
@@ -324,12 +384,7 @@ export function AdvancedSearch({
                   {/* Difficulty Filter */}
                   <div>
                     <Label className='text-sm font-medium'>Difficulty</Label>
-                    <Select
-                      value={filters.difficulty}
-                      onValueChange={value =>
-                        handleFilterChange('difficulty', value)
-                      }
-                    >
+                    <Select value={difficulty} onValueChange={setDifficulty}>
                       <SelectTrigger>
                         <SelectValue placeholder='All Difficulties' />
                       </SelectTrigger>
@@ -350,10 +405,7 @@ export function AdvancedSearch({
                   {/* Type Filter */}
                   <div>
                     <Label className='text-sm font-medium'>Type</Label>
-                    <Select
-                      value={filters.type}
-                      onValueChange={value => handleFilterChange('type', value)}
-                    >
+                    <Select value={type} onValueChange={setType}>
                       <SelectTrigger>
                         <SelectValue placeholder='All Types' />
                       </SelectTrigger>
@@ -371,12 +423,7 @@ export function AdvancedSearch({
                   {/* Status Filter */}
                   <div>
                     <Label className='text-sm font-medium'>Status</Label>
-                    <Select
-                      value={filters.isActive}
-                      onValueChange={value =>
-                        handleFilterChange('isActive', value)
-                      }
-                    >
+                    <Select value={isActive} onValueChange={setIsActive}>
                       <SelectTrigger>
                         <SelectValue placeholder='All Status' />
                       </SelectTrigger>
@@ -391,12 +438,7 @@ export function AdvancedSearch({
                   {/* Topics Filter with Search */}
                   <div>
                     <Label className='text-sm font-medium'>Topic</Label>
-                    <Select
-                      value={filters.topic}
-                      onValueChange={value =>
-                        handleFilterChange('topic', value)
-                      }
-                    >
+                    <Select value={topic} onValueChange={setTopic}>
                       <SelectTrigger>
                         <SelectValue placeholder='All Topics' />
                       </SelectTrigger>
@@ -446,8 +488,8 @@ export function AdvancedSearch({
                 Show:
               </span>
               <Select
-                value={pageSize.toString()}
-                onValueChange={value => onPageSizeChange?.(parseInt(value))}
+                value={size.toString()}
+                onValueChange={value => setSize(parseInt(value))}
               >
                 <SelectTrigger className='w-20'>
                   <SelectValue />
@@ -467,19 +509,19 @@ export function AdvancedSearch({
               <Button
                 variant='outline'
                 size='sm'
-                onClick={() => onPageChange?.(currentPage - 1)}
-                disabled={currentPage === 1}
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1}
               >
                 <ChevronLeft className='h-4 w-4' />
               </Button>
               <span className='text-sm text-gray-600 dark:text-gray-400'>
-                Page {currentPage} of {totalPages}
+                Page {page} of {totalPages}
               </span>
               <Button
                 variant='outline'
                 size='sm'
-                onClick={() => onPageChange?.(currentPage + 1)}
-                disabled={currentPage >= totalPages}
+                onClick={() => setPage(page + 1)}
+                disabled={page >= totalPages}
               >
                 <ChevronRight className='h-4 w-4' />
               </Button>
