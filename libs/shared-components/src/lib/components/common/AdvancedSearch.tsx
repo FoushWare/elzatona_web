@@ -173,23 +173,36 @@ export function AdvancedSearch({
     }
   };
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      performSearch();
-    }, 300);
+  // Remove automatic search - only search on submit
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(() => {
+  //     performSearch();
+  //   }, 300);
 
-    return () => clearTimeout(timeoutId);
-  }, [
-    query,
-    category,
-    difficulty,
-    type,
-    isActive,
-    topic,
-    selectedTopics,
-    page,
-    size,
-  ]);
+  //   return () => clearTimeout(timeoutId);
+  // }, [
+  //   query,
+  //   category,
+  //   difficulty,
+  //   type,
+  //   isActive,
+  //   topic,
+  //   selectedTopics,
+  //   page,
+  //   size,
+  // ]);
+
+  // Handle search submission
+  const handleSearchSubmit = () => {
+    performSearch();
+  };
+
+  // Handle Enter key press
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit();
+    }
+  };
 
   const handleFilterChange = (key: string, value: string) => {
     switch (key) {
@@ -211,6 +224,10 @@ export function AdvancedSearch({
       default:
         break;
     }
+    // Trigger search immediately when filters change
+    setTimeout(() => {
+      performSearch();
+    }, 100);
   };
 
   const clearFilters = () => {
@@ -223,6 +240,10 @@ export function AdvancedSearch({
     setTopic('all');
     setSelectedTopics([]);
     setPage(1); // Reset to first page when clearing filters
+    // Trigger search after clearing filters
+    setTimeout(() => {
+      performSearch();
+    }, 100);
   };
 
   const activeFilterCount = [
@@ -243,17 +264,27 @@ export function AdvancedSearch({
           placeholder={placeholder}
           value={query}
           onChange={e => setQuery(e.target.value)}
-          className='pl-10 pr-20'
+          onKeyPress={handleKeyPress}
+          className='pl-10 pr-24'
         />
-        {isLoading && (
-          <Loader2 className='absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 animate-spin text-gray-400' />
-        )}
+        <Button
+          onClick={handleSearchSubmit}
+          disabled={isLoading}
+          className='absolute right-2 top-1/2 transform -translate-y-1/2 h-8 px-3'
+          size='sm'
+        >
+          {isLoading ? (
+            <Loader2 className='w-4 h-4 animate-spin' />
+          ) : (
+            <Search className='w-4 h-4' />
+          )}
+        </Button>
         {activeFilterCount > 0 && (
           <Button
             variant='outline'
             size='sm'
             onClick={clearFilters}
-            className='absolute right-3 top-1/2 transform -translate-y-1/2 h-6 px-2'
+            className='absolute right-20 top-1/2 transform -translate-y-1/2 h-6 px-2'
           >
             <X className='w-3 h-3 mr-1' />
             Clear ({activeFilterCount})
@@ -315,7 +346,12 @@ export function AdvancedSearch({
                         </Button>
                       )}
                     </div>
-                    <Select value={category} onValueChange={setCategory}>
+                    <Select
+                      value={category}
+                      onValueChange={value =>
+                        handleFilterChange('category', value)
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder='All Categories' />
                       </SelectTrigger>
@@ -345,7 +381,12 @@ export function AdvancedSearch({
                         </Button>
                       )}
                     </div>
-                    <Select value={difficulty} onValueChange={setDifficulty}>
+                    <Select
+                      value={difficulty}
+                      onValueChange={value =>
+                        handleFilterChange('difficulty', value)
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder='All Difficulties' />
                       </SelectTrigger>
@@ -375,7 +416,10 @@ export function AdvancedSearch({
                         </Button>
                       )}
                     </div>
-                    <Select value={type} onValueChange={setType}>
+                    <Select
+                      value={type}
+                      onValueChange={value => handleFilterChange('type', value)}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder='All Types' />
                       </SelectTrigger>
@@ -406,7 +450,12 @@ export function AdvancedSearch({
                         </Button>
                       )}
                     </div>
-                    <Select value={isActive} onValueChange={setIsActive}>
+                    <Select
+                      value={isActive}
+                      onValueChange={value =>
+                        handleFilterChange('isActive', value)
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder='All Status' />
                       </SelectTrigger>
@@ -433,7 +482,12 @@ export function AdvancedSearch({
                         </Button>
                       )}
                     </div>
-                    <Select value={topic} onValueChange={setTopic}>
+                    <Select
+                      value={topic}
+                      onValueChange={value =>
+                        handleFilterChange('topic', value)
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder='All Topics' />
                       </SelectTrigger>
