@@ -22,9 +22,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@elzatona/shared-components": [
-        "../../libs/shared-components/src/lib/shared-components"
-      ],
+      "@elzatona/shared-components": ["../../libs/shared-components/src"],
       "@elzatona/shared-contexts": [
         "../../libs/shared-contexts/src/lib/shared-contexts"
       ],

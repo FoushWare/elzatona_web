@@ -66,59 +66,61 @@ export async function GET(request: NextRequest) {
       Object.entries(filters).filter(([, value]) => value !== undefined)
     );
 
-    // Check cache first
-    const now = Date.now();
-    let allQuestions: Array<{
-      id: string;
-      [key: string]: unknown;
-    }>;
+    // Build query with learning cards
+    let query = supabase.from('questions').select(`
+      *,
+      learning_cards (
+        id,
+        title,
+        type,
+        color,
+        icon
+      )
+    `);
 
-    if (questionsCache && now - cacheTimestamp < CACHE_DURATION) {
-      // Use cached data
-      allQuestions = questionsCache;
-      console.log('📦 Using cached questions:', allQuestions.length);
-    } else {
-      // Fetch from Supabase
-      let query = supabase.from('questions').select('*');
-
-      // Apply filters
-      if (cleanFilters.category) {
-        query = query.eq('category_id', cleanFilters.category);
-      }
-      if (cleanFilters.difficulty) {
-        query = query.eq('difficulty', cleanFilters.difficulty);
-      }
-      if (cleanFilters.learningPath) {
-        query = query.eq('learning_card_id', cleanFilters.learningPath);
-      }
-      if (cleanFilters.isActive !== undefined) {
-        query = query.eq('is_active', cleanFilters.isActive);
-      }
-
-      // Order by created_at descending
-      query = query.order('created_at', { ascending: false });
-
-      const { data, error } = await query;
-
-      if (error) throw error;
-
-      allQuestions = data || [];
-
-      // Update cache
-      questionsCache = allQuestions;
-      cacheTimestamp = now;
-      console.log(
-        '🔄 Fetched fresh questions from Supabase:',
-        allQuestions.length
-      );
+    // Apply filters
+    if (cleanFilters.category) {
+      query = query.eq('category_id', cleanFilters.category);
+    }
+    if (cleanFilters.difficulty) {
+      query = query.eq('difficulty', cleanFilters.difficulty);
+    }
+    if (cleanFilters.learningPath) {
+      query = query.eq('learning_card_id', cleanFilters.learningPath);
+    }
+    if (cleanFilters.isActive !== undefined) {
+      query = query.eq('is_active', cleanFilters.isActive);
     }
 
-    const totalCount = allQuestions.length;
+    // Get total count with same filters
+    let countQuery = supabase
+      .from('questions')
+      .select('*', { count: 'exact', head: true });
+    if (cleanFilters.category) {
+      countQuery = countQuery.eq('category_id', cleanFilters.category);
+    }
+    if (cleanFilters.difficulty) {
+      countQuery = countQuery.eq('difficulty', cleanFilters.difficulty);
+    }
+    if (cleanFilters.learningPath) {
+      countQuery = countQuery.eq('learning_card_id', cleanFilters.learningPath);
+    }
+    if (cleanFilters.isActive !== undefined) {
+      countQuery = countQuery.eq('is_active', cleanFilters.isActive);
+    }
 
-    // Apply pagination in memory
-    const startIndex = offset;
-    const endIndex = startIndex + pageSize;
-    const questions = allQuestions.slice(startIndex, endIndex);
+    const { count, error: countError } = await countQuery;
+    if (countError) throw countError;
+
+    // Apply pagination
+    query = query.range(offset, offset + pageSize - 1);
+    query = query.order('created_at', { ascending: false });
+
+    const { data, error } = await query;
+    if (error) throw error;
+
+    const questions = data || [];
+    const totalCount = count || 0;
 
     const totalPages = Math.ceil(totalCount / pageSize);
 

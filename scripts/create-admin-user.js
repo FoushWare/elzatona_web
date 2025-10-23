@@ -1,126 +1,82 @@
-#!/usr/bin/env node
+const { createClient } = require('@supabase/supabase-js');
 
-import { createClient } from '@supabase/supabase-js';
+// Use service role key for admin operations
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-console.log('🛡️ Creating Admin User in Supabase Auth\n');
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error('❌ Missing Supabase environment variables');
+  console.error(
+    'Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY'
+  );
+  process.exit(1);
+}
 
-// Supabase configuration
-const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  'https://hpnewqkvpnthpohvxcmq.supabase.co';
-const supabaseServiceRoleKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  'YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDY2MDQxOCwiZXhwIjoyMDc2MjM2NDE4fQ.process.env.SUPABASE_SERVICE_ROLE_KEY';
-
-// Create Supabase client with service role key for admin operations
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+  },
+});
 
 async function createAdminUser() {
   try {
-    const adminEmail = 'afouadsoftwareengineer@gmail.com';
-    const adminPassword = 'ZatonaFoushware$8888';
-    const adminName = 'Super Admin';
-    const adminRole = 'super_admin';
+    console.log('🔐 Creating admin user...');
 
-    console.log('🔄 Creating admin user in Supabase Auth...');
-    console.log(`   Email: ${adminEmail}`);
-    console.log(`   Password: ${adminPassword}`);
-    console.log(`   Name: ${adminName}`);
-    console.log(`   Role: ${adminRole}\n`);
+    const email = 'afouadsoftwareengineer@gmail.com';
+    const password = 'ZatonaFoushware$8888';
 
-    // Check if user already exists
-    const { data: existingUsers, error: listError } =
-      await supabase.auth.admin.listUsers();
+    // Create user using Supabase Admin API
+    const { data: authData, error: authError } =
+      await supabase.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true, // Auto-confirm email
+        user_metadata: {
+          name: 'Admin User',
+          role: 'super_admin',
+        },
+      });
 
-    if (listError) {
-      console.error('❌ Error listing users:', listError.message);
+    if (authError) {
+      console.error('❌ Auth creation error:', authError);
       return;
     }
 
-    const existingUser = existingUsers.users.find(u => u.email === adminEmail);
+    console.log('✅ User created in auth.users:', authData.user.id);
 
-    if (existingUser) {
-      console.log('✅ Admin user already exists in auth:');
-      console.log(`   User ID: ${existingUser.id}`);
-      console.log(`   Email: ${existingUser.email}`);
-      console.log(`   Created: ${existingUser.created_at}`);
-      console.log(
-        `   Email Confirmed: ${existingUser.email_confirmed_at ? 'Yes' : 'No'}\n`
-      );
+    // Create admin record
+    const { data: adminData, error: adminError } = await supabase
+      .from('admins')
+      .insert({
+        user_id: authData.user.id,
+        email: email,
+        name: 'Admin User',
+        role: 'super_admin',
+        permissions: {
+          can_manage_users: true,
+          can_manage_content: true,
+          can_view_analytics: true,
+          can_manage_settings: true,
+        },
+        is_active: true,
+      })
+      .select()
+      .single();
 
-      console.log('📝 Next steps:');
-      console.log('   1. Create the admins table using the SQL provided below');
-      console.log('   2. Run the admin record creation script\n');
-    } else {
-      // Create new user
-      const { data: authData, error: authError } =
-        await supabase.auth.admin.createUser({
-          email: adminEmail,
-          password: adminPassword,
-          email_confirm: true,
-          user_metadata: {
-            name: adminName,
-            role: adminRole,
-          },
-        });
-
-      if (authError) {
-        console.error('❌ Error creating auth user:', authError.message);
-        return;
-      }
-
-      console.log('✅ Admin user created successfully in Supabase Auth:');
-      console.log(`   User ID: ${authData.user?.id}`);
-      console.log(`   Email: ${authData.user?.email}`);
-      console.log(`   Created: ${authData.user?.created_at}`);
-      console.log(
-        `   Email Confirmed: ${authData.user?.email_confirmed_at ? 'Yes' : 'No'}\n`
-      );
-
-      console.log('📝 Next steps:');
-      console.log('   1. Create the admins table using the SQL provided below');
-      console.log('   2. Run the admin record creation script\n');
+    if (adminError) {
+      console.error('❌ Admin creation error:', adminError);
+      return;
     }
 
-    console.log('📋 SQL to create the admins table:');
-    console.log('   Copy and paste this into your Supabase SQL Editor:\n');
-    console.log('```sql');
-    console.log('CREATE TABLE IF NOT EXISTS admins (');
-    console.log('  id UUID PRIMARY KEY,');
-    console.log('  email VARCHAR(255) UNIQUE NOT NULL,');
-    console.log('  name VARCHAR(255),');
-    console.log(
-      "  role VARCHAR(50) DEFAULT 'admin' CHECK (role IN ('admin', 'super_admin', 'moderator')),"
-    );
-    console.log('  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),');
-    console.log('  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()');
-    console.log(');');
-    console.log('');
-    console.log('-- Enable RLS');
-    console.log('ALTER TABLE admins ENABLE ROW LEVEL SECURITY;');
-    console.log('');
-    console.log('-- Create policy for service role to manage admins');
-    console.log(
-      'CREATE POLICY IF NOT EXISTS "Service role can manage admins" ON admins FOR ALL USING ('
-    );
-    console.log("  auth.role() = 'service_role'");
-    console.log(');');
-    console.log('');
-    console.log('-- Create policy for admins to read admins');
-    console.log(
-      'CREATE POLICY IF NOT EXISTS "Admins can read admins" ON admins FOR SELECT USING ('
-    );
-    console.log("  auth.role() = 'authenticated' AND ");
-    console.log('  EXISTS (SELECT 1 FROM admins WHERE id = auth.uid())');
-    console.log(');');
-    console.log('```\n');
-
-    console.log('🎯 After creating the table, run:');
-    console.log('   node scripts/create-admin-record.js\n');
+    console.log('✅ Admin record created:', adminData.id);
+    console.log('🎉 Admin user created successfully!');
+    console.log('📧 Email:', email);
+    console.log('🔑 Password:', password);
+    console.log('👤 Role: super_admin');
   } catch (error) {
-    console.error('❌ Error creating admin user:', error.message);
+    console.error('❌ Unexpected error:', error);
   }
 }
 
-// Run the setup
 createAdminUser();

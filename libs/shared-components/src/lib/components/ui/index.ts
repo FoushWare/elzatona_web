@@ -9,6 +9,3 @@ export * from './checkbox';
 export * from './dialog';
 export * from './select';
 export * from './collapsible';
-
-// Common Components
-export * from './common/AdvancedSearch';
