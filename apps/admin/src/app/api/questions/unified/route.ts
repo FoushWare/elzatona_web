@@ -15,6 +15,33 @@ if (!supabaseUrl || !supabaseServiceRoleKey) {
 
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
+// Helper function to get question IDs for topic filtering
+async function getQuestionIdsForTopics(
+  topicNames: string[]
+): Promise<string[]> {
+  if (topicNames.length === 0) return [];
+
+  // Get topic IDs by names
+  const { data: topicsData } = await supabase
+    .from('topics')
+    .select('id')
+    .in('name', topicNames);
+
+  if (!topicsData || topicsData.length === 0) return [];
+
+  const topicIds = topicsData.map(t => t.id);
+
+  // Get question IDs that have any of these topics
+  const { data: questionTopicData } = await supabase
+    .from('questions_topics')
+    .select('question_id')
+    .in('topic_id', topicIds);
+
+  if (!questionTopicData || questionTopicData.length === 0) return [];
+
+  return questionTopicData.map(qt => qt.question_id);
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -25,6 +52,8 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type');
     const isActive = searchParams.get('isActive');
     const search = searchParams.get('search');
+    const topic = searchParams.get('topic');
+    const topics = searchParams.get('topics'); // comma-separated topic names
 
     // Build query using junction tables to get topics and categories
     let query = supabase.from('questions').select(`
@@ -59,6 +88,25 @@ export async function GET(request: NextRequest) {
       query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%`);
     }
 
+    // Apply topic filtering using junction table
+    let topicQuestionIds: string[] = [];
+    if (topic && topic !== 'all') {
+      topicQuestionIds = await getQuestionIdsForTopics([topic]);
+    } else if (topics) {
+      const topicNames = topics
+        .split(',')
+        .map(t => t.trim())
+        .filter(t => t);
+      topicQuestionIds = await getQuestionIdsForTopics(topicNames);
+    }
+
+    if (topicQuestionIds.length > 0) {
+      query = query.in('id', topicQuestionIds);
+    } else if ((topic && topic !== 'all') || topics) {
+      // No questions found with these topics, return empty result
+      query = query.eq('id', 'no-results');
+    }
+
     // Get total count with same filters
     let countQuery = supabase
       .from('questions')
@@ -85,6 +133,14 @@ export async function GET(request: NextRequest) {
       countQuery = countQuery.or(
         `title.ilike.%${search}%,content.ilike.%${search}%`
       );
+    }
+
+    // Apply same topic filtering to count query
+    if (topicQuestionIds.length > 0) {
+      countQuery = countQuery.in('id', topicQuestionIds);
+    } else if ((topic && topic !== 'all') || topics) {
+      // No questions found with these topics, return empty result
+      countQuery = countQuery.eq('id', 'no-results');
     }
 
     const { count, error: countError } = await countQuery;
