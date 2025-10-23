@@ -192,6 +192,24 @@ export function AdvancedSearch({
     const startTime = Date.now();
 
     try {
+      // Check if we have any active search or filters
+      const hasSearchQuery = query.trim() !== '';
+      const hasActiveFilters =
+        category !== 'all' ||
+        difficulty !== 'all' ||
+        type !== 'all' ||
+        isActive !== 'all' ||
+        topic !== 'all' ||
+        selectedTopics.length > 0;
+
+      // If no search query and no active filters, don't make API call
+      // Let the parent component handle the original pagination
+      if (!hasSearchQuery && !hasActiveFilters) {
+        setIsLoading(false);
+        onResultsChange?.(allQuestions);
+        return;
+      }
+
       // Build search parameters
       const searchParams = new URLSearchParams();
 
@@ -200,7 +218,7 @@ export function AdvancedSearch({
       searchParams.set('pageSize', size.toString());
 
       // Add search query
-      if (query.trim()) {
+      if (hasSearchQuery) {
         searchParams.set('search', query.trim());
       }
 
@@ -301,6 +319,7 @@ export function AdvancedSearch({
     setIsActive('all');
     setTopic('all');
     setSelectedTopics([]);
+    setPage(1); // Reset to first page when clearing filters
   };
 
   const activeFilterCount = [
