@@ -105,7 +105,7 @@ export function AdvancedSearch({
   const [isLoading, setIsLoading] = useState(false);
   const [searchTime, setSearchTime] = useState(0);
   const [topicSearchQuery, setTopicSearchQuery] = useState('');
-  const [totalPages, setTotalPages] = useState(1);
+  const [internalTotalPages, setInternalTotalPages] = useState(1);
   // Server-side search - no need for client-side facets or suggestions
 
   // Perform actual search on real data
@@ -164,7 +164,7 @@ export function AdvancedSearch({
       setIsLoading(false);
 
       // Update pagination info
-      setTotalPages(Math.ceil(totalCount / size));
+      setInternalTotalPages(Math.ceil(totalCount / size));
 
       onResultsChange?.(filteredQuestions);
     } catch (error) {
