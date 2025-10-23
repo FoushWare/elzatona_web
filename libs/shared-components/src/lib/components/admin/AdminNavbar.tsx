@@ -179,8 +179,8 @@ export default function AdminNavbar() {
     >
       <div className='w-full px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-16'>
-          {/* Left side - Logo and User Profile */}
-          <div className='flex items-center space-x-4'>
+          {/* Left side - Logo only */}
+          <div className='flex items-center'>
             {/* Logo */}
             <Link
               href='/admin/dashboard'
@@ -195,70 +195,7 @@ export default function AdminNavbar() {
                 showText={false}
                 forceDarkMode={!isScrolled}
               />
-              <span className='text-lg font-bold'>Admin</span>
             </Link>
-
-            {/* User Profile Dropdown */}
-            {isAuthenticated && user && (
-              <div className='relative'>
-                <button
-                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                  className={`flex items-center space-x-2 p-2 rounded-md transition-colors duration-200 ${
-                    isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800'
-                      : 'text-white hover:text-red-100 hover:bg-red-700/50'
-                  }`}
-                >
-                  <User className='w-5 h-5' />
-                  <span className='hidden sm:block text-sm font-medium'>
-                    {user.email}
-                  </span>
-                  <ChevronDown className='w-4 h-4' />
-                </button>
-
-                {/* User Dropdown */}
-                {isUserDropdownOpen && (
-                  <div className='absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50'>
-                    <div className='px-4 py-2 border-b border-gray-200 dark:border-gray-700'>
-                      <p className='text-sm font-medium text-gray-900 dark:text-white truncate'>
-                        {user.email}
-                      </p>
-                      <p className='text-xs text-gray-500 dark:text-gray-400 capitalize'>
-                        Role: {user.role}
-                      </p>
-                    </div>
-
-                    <Link
-                      href='/admin/profile'
-                      className='flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                      onClick={() => setIsUserDropdownOpen(false)}
-                    >
-                      <User className='w-4 h-4 mr-2' />
-                      Profile
-                    </Link>
-
-                    <Link
-                      href='/admin/settings'
-                      className='flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                      onClick={() => setIsUserDropdownOpen(false)}
-                    >
-                      <Settings className='w-4 h-4 mr-2' />
-                      Settings
-                    </Link>
-
-                    <div className='border-t border-gray-200 dark:border-gray-700'>
-                      <button
-                        onClick={handleLogout}
-                        className='flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                      >
-                        <LogOut className='w-4 h-4 mr-2' />
-                        Logout
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
 
           {/* Desktop Navigation - Single Dropdown */}
@@ -314,8 +251,70 @@ export default function AdminNavbar() {
             </div>
           </div>
 
-          {/* Right side - Mobile menu button */}
+          {/* Right side - User Profile Dropdown and Mobile menu button */}
           <div className='flex items-center space-x-4'>
+            {/* User Profile Dropdown */}
+            {isAuthenticated && user && (
+              <div className='relative'>
+                <button
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className={`flex items-center space-x-2 p-2 rounded-md transition-colors duration-200 ${
+                    isScrolled
+                      ? 'text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      : 'text-white hover:text-red-100 hover:bg-red-700/50'
+                  }`}
+                >
+                  <User className='w-5 h-5' />
+                  <span className='hidden sm:block text-sm font-medium'>
+                    {user.email}
+                  </span>
+                  <ChevronDown className='w-4 h-4' />
+                </button>
+
+                {/* User Dropdown */}
+                {isUserDropdownOpen && (
+                  <div className='absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50'>
+                    <div className='px-4 py-2 border-b border-gray-200 dark:border-gray-700'>
+                      <p className='text-sm font-medium text-gray-900 dark:text-white truncate'>
+                        {user.email}
+                      </p>
+                      <p className='text-xs text-gray-500 dark:text-gray-400 capitalize'>
+                        Role: {user.role}
+                      </p>
+                    </div>
+
+                    <Link
+                      href='/admin/profile'
+                      className='flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      onClick={() => setIsUserDropdownOpen(false)}
+                    >
+                      <User className='w-4 h-4 mr-2' />
+                      Profile
+                    </Link>
+
+                    <Link
+                      href='/admin/settings'
+                      className='flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      onClick={() => setIsUserDropdownOpen(false)}
+                    >
+                      <Settings className='w-4 h-4 mr-2' />
+                      Settings
+                    </Link>
+
+                    <div className='border-t border-gray-200 dark:border-gray-700'>
+                      <button
+                        onClick={handleLogout}
+                        className='flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      >
+                        <LogOut className='w-4 h-4 mr-2' />
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Mobile menu button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
