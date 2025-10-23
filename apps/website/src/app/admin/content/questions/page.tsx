@@ -60,6 +60,9 @@ export default function AdminContentQuestionsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Calculate total pages
+  const totalPages = Math.ceil(totalCount / pageSize);
+
   // Additional data for forms (cards)
   const [cardsData, setCardsData] = useState<any>(null);
 
@@ -398,6 +401,67 @@ export default function AdminContentQuestionsPage() {
               </Button>
             </CardTitle>
           </CardHeader>
+
+          {/* Pagination Before Questions List */}
+          {totalPages > 1 && (
+            <div className='px-6 pb-4 border-b border-gray-200 dark:border-gray-700'>
+              <div className='flex items-center justify-between'>
+                <div className='text-sm text-gray-700 dark:text-gray-300'>
+                  Showing{' '}
+                  {Math.min((currentPage - 1) * pageSize + 1, totalCount)} to{' '}
+                  {Math.min(currentPage * pageSize, totalCount)} of {totalCount}{' '}
+                  questions
+                </div>
+                <div className='flex items-center space-x-4'>
+                  {/* Per Page Select */}
+                  <div className='flex items-center space-x-2'>
+                    <span className='text-sm text-gray-600 dark:text-gray-400'>
+                      Show:
+                    </span>
+                    <Select
+                      value={pageSize.toString()}
+                      onValueChange={value => setPageSize(parseInt(value))}
+                    >
+                      <SelectTrigger className='w-20'>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value='5'>5</SelectItem>
+                        <SelectItem value='10'>10</SelectItem>
+                        <SelectItem value='20'>20</SelectItem>
+                        <SelectItem value='50'>50</SelectItem>
+                        <SelectItem value='100'>100</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Navigation Buttons */}
+                  <div className='flex items-center space-x-2'>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className='h-4 w-4' />
+                    </Button>
+                    <span className='text-sm text-gray-600 dark:text-gray-400'>
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                      disabled={currentPage >= totalPages}
+                    >
+                      <ChevronRight className='h-4 w-4' />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <CardContent className='p-0'>
             <div className='overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800'>
               {displayQuestions.length === 0 ? (
@@ -426,11 +490,80 @@ export default function AdminContentQuestionsPage() {
                             {question.content}
                           </p>
                           <div className='mt-2 flex flex-wrap gap-2'>
-                            {question.category && (
-                              <Badge variant='secondary'>
-                                {question.category}
+                            {/* Topics Badges */}
+                            {question.topics && question.topics.length > 0 ? (
+                              question.topics.map((topic, index) => (
+                                <Badge
+                                  key={`${question.id}-topic-${index}`}
+                                  variant={
+                                    topic.is_primary ? 'default' : 'outline'
+                                  }
+                                  className={`${
+                                    topic.is_primary
+                                      ? 'bg-purple-600 text-white'
+                                      : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                                  }`}
+                                >
+                                  {topic.is_primary && '⭐ '}Topic: {topic.name}
+                                </Badge>
+                              ))
+                            ) : (
+                              <Badge
+                                variant='outline'
+                                className='bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+                              >
+                                Topic: No Topic
                               </Badge>
                             )}
+
+                            {/* Categories Badges */}
+                            {question.categories &&
+                            question.categories.length > 0 ? (
+                              question.categories.map((category, index) => (
+                                <Badge
+                                  key={`${question.id}-category-${index}`}
+                                  variant={
+                                    category.is_primary
+                                      ? 'default'
+                                      : 'secondary'
+                                  }
+                                  className={`${
+                                    category.is_primary
+                                      ? 'bg-green-600 text-white'
+                                      : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                  }`}
+                                >
+                                  {category.is_primary && '⭐ '}Category:{' '}
+                                  {category.name}
+                                </Badge>
+                              ))
+                            ) : (
+                              <Badge
+                                variant='outline'
+                                className='bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+                              >
+                                Category: No Category
+                              </Badge>
+                            )}
+
+                            {/* Card Badge */}
+                            {question.learning_card ? (
+                              <Badge
+                                variant='secondary'
+                                className='bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                              >
+                                Card: {question.learning_card.title}
+                              </Badge>
+                            ) : (
+                              <Badge
+                                variant='outline'
+                                className='bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+                              >
+                                Card: No Card
+                              </Badge>
+                            )}
+
+                            {/* Difficulty Badge */}
                             {question.difficulty && (
                               <Badge
                                 variant={
@@ -444,16 +577,10 @@ export default function AdminContentQuestionsPage() {
                                 {question.difficulty}
                               </Badge>
                             )}
+
+                            {/* Type Badge */}
                             {question.type && (
                               <Badge variant='outline'>{question.type}</Badge>
-                            )}
-                            {question.learningCardId && (
-                              <Badge
-                                variant='secondary'
-                                className='bg-blue-100 text-blue-800'
-                              >
-                                {getCardTitleById(question.learningCardId)}
-                              </Badge>
                             )}
                           </div>
                         </div>

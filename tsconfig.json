@@ -19,7 +19,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./apps/website/src/*"],
+      "@/*": ["./src/*"],
       "ui": ["./libs/ui/src/index.ts"],
       "auth": ["./libs/auth/src/index.ts"],
       "database": ["./libs/database/src/index.ts"],
