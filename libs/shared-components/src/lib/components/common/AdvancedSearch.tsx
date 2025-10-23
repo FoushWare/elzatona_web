@@ -105,6 +105,7 @@ export function AdvancedSearch({
   const [isLoading, setIsLoading] = useState(false);
   const [searchTime, setSearchTime] = useState(0);
   const [topicSearchQuery, setTopicSearchQuery] = useState('');
+  const [totalPages, setTotalPages] = useState(1);
   // Server-side search - no need for client-side facets or suggestions
 
   // Perform actual search on real data
