@@ -191,72 +191,70 @@ export function AdvancedSearch({
     setIsLoading(true);
     const startTime = Date.now();
 
-    // Filter questions based on query and filters
-    let filteredQuestions = allQuestions;
+    try {
+      // Build search parameters
+      const searchParams = new URLSearchParams();
 
-    // Text search
-    if (query.trim()) {
-      const searchTerm = query.toLowerCase();
-      filteredQuestions = filteredQuestions.filter(
-        question =>
-          question.title?.toLowerCase().includes(searchTerm) ||
-          question.content?.toLowerCase().includes(searchTerm) ||
-          question.tags?.some(tag => tag.toLowerCase().includes(searchTerm)) ||
-          question.category?.toLowerCase().includes(searchTerm)
+      // Add pagination
+      searchParams.set('page', page.toString());
+      searchParams.set('pageSize', size.toString());
+
+      // Add search query
+      if (query.trim()) {
+        searchParams.set('search', query.trim());
+      }
+
+      // Add filters
+      if (category !== 'all') {
+        searchParams.set('category', category);
+      }
+      if (difficulty !== 'all') {
+        searchParams.set('difficulty', difficulty);
+      }
+      if (type !== 'all') {
+        searchParams.set('type', type);
+      }
+      if (isActive !== 'all') {
+        searchParams.set('isActive', isActive);
+      }
+      if (topic !== 'all') {
+        searchParams.set('topic', topic);
+      }
+      if (selectedTopics.length > 0) {
+        searchParams.set('topics', selectedTopics.join(','));
+      }
+
+      // Make API call
+      const response = await fetch(
+        `/api/questions/unified?${searchParams.toString()}`
       );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const filteredQuestions = result.data || [];
+      const totalCount = result.pagination?.totalCount || 0;
+
+      const endTime = Date.now();
+      setSearchTime(endTime - startTime);
+      setIsLoading(false);
+
+      // Update pagination info
+      setTotalPages(Math.ceil(totalCount / size));
+
+      onResultsChange?.(filteredQuestions);
+    } catch (error) {
+      console.error('Search error:', error);
+      setIsLoading(false);
+      onResultsChange?.([]);
     }
-
-    // Apply filters using nuqs state
-    if (category !== 'all') {
-      filteredQuestions = filteredQuestions.filter(
-        question => question.category === category
-      );
-    }
-
-    if (difficulty !== 'all') {
-      filteredQuestions = filteredQuestions.filter(
-        question => question.difficulty === difficulty
-      );
-    }
-
-    if (type !== 'all') {
-      filteredQuestions = filteredQuestions.filter(
-        question => question.type === type
-      );
-    }
-
-    if (isActive !== 'all') {
-      const isActiveFilter = isActive === 'true';
-      filteredQuestions = filteredQuestions.filter(
-        question => question.isActive === isActiveFilter
-      );
-    }
-
-    if (topic !== 'all') {
-      filteredQuestions = filteredQuestions.filter(question =>
-        question.topics?.some(t => t.name === topic)
-      );
-    }
-
-    // Apply selected topics filter
-    if (selectedTopics.length > 0) {
-      filteredQuestions = filteredQuestions.filter(question =>
-        question.topics?.some(t => selectedTopics.includes(t.name))
-      );
-    }
-
-    const endTime = Date.now();
-    setSearchTime(endTime - startTime);
-    setIsLoading(false);
-
-    onResultsChange?.(filteredQuestions);
   };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (allQuestions.length > 0) {
-        performSearch();
-      }
+      performSearch();
     }, 300);
 
     return () => clearTimeout(timeoutId);
@@ -268,7 +266,8 @@ export function AdvancedSearch({
     isActive,
     topic,
     selectedTopics,
-    allQuestions,
+    page,
+    size,
   ]);
 
   const handleFilterChange = (key: string, value: string) => {
