@@ -8,6 +8,7 @@ import React, {
   Suspense,
 } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { toast } from 'sonner';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -211,6 +212,31 @@ export default function ContentManagementPage() {
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set());
   const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
 
+  // Plan structure collapsible states
+  const [expandedPlanCards, setExpandedPlanCards] = useState<Set<string>>(
+    new Set()
+  );
+  const [expandedPlanCategories, setExpandedPlanCategories] = useState<
+    Set<string>
+  >(new Set());
+  const [expandedPlanTopics, setExpandedPlanTopics] = useState<Set<string>>(
+    new Set()
+  );
+
+  // Modal states
+  const [isTopicQuestionsModalOpen, setIsTopicQuestionsModalOpen] =
+    useState(false);
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<LearningPlan | null>(null);
+  const [selectedQuestions, setSelectedQuestions] = useState<Set<string>>(
+    new Set()
+  );
+
+  // Delete modal states
+  const [isDeleteCardModalOpen, setIsDeleteCardModalOpen] = useState(false);
+  const [cardToDelete, setCardToDelete] = useState<LearningCard | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   // Fetch data from Supabase
   const fetchData = useCallback(async () => {
     try {
@@ -370,6 +396,146 @@ export default function ContentManagementPage() {
     });
   }, []);
 
+  // Plan structure toggle functions
+  const togglePlanCard = useCallback((cardId: string) => {
+    setExpandedPlanCards(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(cardId)) {
+        newExpanded.delete(cardId);
+      } else {
+        newExpanded.add(cardId);
+      }
+      return newExpanded;
+    });
+  }, []);
+
+  const togglePlanCategory = useCallback((categoryId: string) => {
+    setExpandedPlanCategories(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(categoryId)) {
+        newExpanded.delete(categoryId);
+      } else {
+        newExpanded.add(categoryId);
+      }
+      return newExpanded;
+    });
+  }, []);
+
+  const togglePlanTopic = useCallback((topicId: string) => {
+    setExpandedPlanTopics(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(topicId)) {
+        newExpanded.delete(topicId);
+      } else {
+        newExpanded.add(topicId);
+      }
+      return newExpanded;
+    });
+  }, []);
+
+  // Modal helper functions
+  const openTopicQuestionsModal = useCallback(
+    (topic: Topic, plan: LearningPlan) => {
+      setSelectedTopic(topic);
+      setSelectedPlan(plan);
+      setSelectedQuestions(new Set());
+      setIsTopicQuestionsModalOpen(true);
+    },
+    []
+  );
+
+  const closeTopicQuestionsModal = useCallback(() => {
+    setIsTopicQuestionsModalOpen(false);
+    setSelectedTopic(null);
+    setSelectedPlan(null);
+    setSelectedQuestions(new Set());
+  }, []);
+
+  const toggleQuestionSelection = useCallback((questionId: string) => {
+    setSelectedQuestions(prev => {
+      const newSelected = new Set(prev);
+      if (newSelected.has(questionId)) {
+        newSelected.delete(questionId);
+      } else {
+        newSelected.add(questionId);
+      }
+      return newSelected;
+    });
+  }, []);
+
+  const selectAllQuestions = useCallback(() => {
+    if (!selectedTopic) return;
+    const topicQuestions = questions.filter(
+      q => q.category_id === selectedTopic.category_id
+    );
+    setSelectedQuestions(new Set(topicQuestions.map(q => q.id)));
+  }, [selectedTopic, questions]);
+
+  const deselectAllQuestions = useCallback(() => {
+    setSelectedQuestions(new Set());
+  }, []);
+
+  const addSelectedQuestionsToPlan = useCallback(async () => {
+    if (!selectedPlan || selectedQuestions.size === 0) return;
+
+    try {
+      // TODO: Implement API call to add questions to plan
+      console.log('Adding questions to plan:', {
+        planId: selectedPlan.id,
+        questionIds: Array.from(selectedQuestions),
+      });
+
+      // For now, just show success message
+      toast.success(
+        `Successfully added ${selectedQuestions.size} questions to plan "${selectedPlan.name}"`
+      );
+      closeTopicQuestionsModal();
+    } catch (error) {
+      console.error('Error adding questions to plan:', error);
+      toast.error('Failed to add questions to plan');
+    }
+  }, [selectedPlan, selectedQuestions, closeTopicQuestionsModal]);
+
+  // Delete card helper functions
+  const openDeleteCardModal = useCallback((card: LearningCard) => {
+    setCardToDelete(card);
+    setIsDeleteCardModalOpen(true);
+  }, []);
+
+  const closeDeleteCardModal = useCallback(() => {
+    setIsDeleteCardModalOpen(false);
+    setCardToDelete(null);
+    setIsDeleting(false);
+  }, []);
+
+  const deleteCard = useCallback(async () => {
+    if (!cardToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      // Delete the card from Supabase
+      const { error } = await supabase
+        .from('learning_cards')
+        .delete()
+        .eq('id', cardToDelete.id);
+
+      if (error) {
+        throw error;
+      }
+
+      // Show success toast
+      toast.success(`Successfully deleted card "${cardToDelete.title}"`);
+
+      // Refresh the data to reflect the deletion
+      await fetchData();
+      closeDeleteCardModal();
+    } catch (error) {
+      console.error('Error deleting card:', error);
+      toast.error('Failed to delete card. Please try again.');
+      setIsDeleting(false);
+    }
+  }, [cardToDelete, fetchData, closeDeleteCardModal]);
+
   if (loading) {
     return (
       <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800'>
@@ -505,6 +671,31 @@ export default function ContentManagementPage() {
               <Layers className='h-5 w-5 mr-2 text-blue-600' />
               Learning Cards ({stats.totalCards})
             </h2>
+            <div className='flex items-center space-x-2'>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() => {
+                  // TODO: Implement edit cards functionality
+                  console.log('Edit cards clicked');
+                }}
+                className='flex items-center space-x-1'
+              >
+                <Edit className='h-4 w-4' />
+                <span>Edit Cards</span>
+              </Button>
+              <Button
+                size='sm'
+                onClick={() => {
+                  // TODO: Implement create card functionality
+                  console.log('Create card clicked');
+                }}
+                className='flex items-center space-x-1 bg-blue-600 hover:bg-blue-700'
+              >
+                <Plus className='h-4 w-4' />
+                <span>Create Card</span>
+              </Button>
+            </div>
           </div>
 
           <div className='space-y-4'>
@@ -601,6 +792,29 @@ export default function ContentManagementPage() {
                             }, 0)}{' '}
                             Questions
                           </Badge>
+                          <div className='flex items-center space-x-1 ml-2'>
+                            <Button
+                              variant='ghost'
+                              size='sm'
+                              onClick={() => {
+                                // TODO: Implement edit card functionality
+                                console.log('Edit card clicked:', card.id);
+                              }}
+                              className='h-8 w-8 p-0 hover:bg-blue-100'
+                            >
+                              <Edit className='h-4 w-4 text-blue-600' />
+                            </Button>
+                            <Button
+                              variant='ghost'
+                              size='sm'
+                              onClick={() => {
+                                openDeleteCardModal(card);
+                              }}
+                              className='h-8 w-8 p-0 hover:bg-red-100'
+                            >
+                              <Trash2 className='h-4 w-4 text-red-600' />
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </CardHeader>
@@ -770,6 +984,31 @@ export default function ContentManagementPage() {
               <Users className='h-5 w-5 mr-2 text-green-600' />
               Learning Plans ({stats.totalPlans})
             </h2>
+            <div className='flex items-center space-x-2'>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() => {
+                  // TODO: Implement edit plans functionality
+                  console.log('Edit plans clicked');
+                }}
+                className='flex items-center space-x-1'
+              >
+                <Edit className='h-4 w-4' />
+                <span>Edit Plans</span>
+              </Button>
+              <Button
+                size='sm'
+                onClick={() => {
+                  // TODO: Implement create plan functionality
+                  console.log('Create plan clicked');
+                }}
+                className='flex items-center space-x-1 bg-green-600 hover:bg-green-700'
+              >
+                <Plus className='h-4 w-4' />
+                <span>Create Plan</span>
+              </Button>
+            </div>
           </div>
 
           <div className='space-y-4'>
@@ -817,25 +1056,398 @@ export default function ContentManagementPage() {
                         <Badge variant='outline'>
                           {plan.is_public ? 'Public' : 'Private'}
                         </Badge>
+                        <div className='flex items-center space-x-1 ml-2'>
+                          <Button
+                            variant='ghost'
+                            size='sm'
+                            onClick={() => {
+                              // TODO: Implement edit plan functionality
+                              console.log('Edit plan clicked:', plan.id);
+                            }}
+                            className='h-8 w-8 p-0 hover:bg-green-100'
+                          >
+                            <Edit className='h-4 w-4 text-green-600' />
+                          </Button>
+                          <Button
+                            variant='ghost'
+                            size='sm'
+                            onClick={() => {
+                              // TODO: Implement delete plan functionality
+                              console.log('Delete plan clicked:', plan.id);
+                            }}
+                            className='h-8 w-8 p-0 hover:bg-red-100'
+                          >
+                            <Trash2 className='h-4 w-4 text-red-600' />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </CardHeader>
 
                   {expandedPlans.has(plan.id) && (
                     <CardContent className='pt-0'>
-                      <div className='text-sm text-gray-600 dark:text-gray-400'>
-                        <p>
-                          <strong>Duration:</strong> {plan.estimated_duration}{' '}
-                          days
-                        </p>
-                        <p>
-                          <strong>Status:</strong>{' '}
-                          {plan.is_active ? 'Active' : 'Inactive'}
-                        </p>
-                        <p>
-                          <strong>Visibility:</strong>{' '}
-                          {plan.is_public ? 'Public' : 'Private'}
-                        </p>
+                      <div className='space-y-6'>
+                        {/* Plan Details */}
+                        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg'>
+                          <div className='text-sm'>
+                            <strong className='text-gray-900 dark:text-white'>
+                              Duration:
+                            </strong>{' '}
+                            <span className='text-gray-600 dark:text-gray-400'>
+                              {plan.estimated_duration} days
+                            </span>
+                          </div>
+                          <div className='text-sm'>
+                            <strong className='text-gray-900 dark:text-white'>
+                              Status:
+                            </strong>{' '}
+                            <Badge
+                              variant={plan.is_active ? 'default' : 'secondary'}
+                            >
+                              {plan.is_active ? 'Active' : 'Inactive'}
+                            </Badge>
+                          </div>
+                          <div className='text-sm'>
+                            <strong className='text-gray-900 dark:text-white'>
+                              Visibility:
+                            </strong>{' '}
+                            <Badge
+                              variant={plan.is_public ? 'default' : 'outline'}
+                            >
+                              {plan.is_public ? 'Public' : 'Private'}
+                            </Badge>
+                          </div>
+                        </div>
+
+                        {/* Plan Management Actions */}
+                        <div className='flex flex-wrap gap-2 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg'>
+                          <Button
+                            size='sm'
+                            onClick={() => {
+                              // TODO: Implement add cards to plan functionality
+                              console.log('Add cards to plan:', plan.id);
+                            }}
+                            className='flex items-center space-x-1 bg-blue-600 hover:bg-blue-700'
+                          >
+                            <Layers className='h-4 w-4' />
+                            <span>Add Cards</span>
+                          </Button>
+                          <Button
+                            variant='outline'
+                            size='sm'
+                            onClick={() => {
+                              // TODO: Implement add questions to plan functionality
+                              console.log('Add questions to plan:', plan.id);
+                            }}
+                            className='flex items-center space-x-1'
+                          >
+                            <MessageSquare className='h-4 w-4' />
+                            <span>Add Questions</span>
+                          </Button>
+                          <Button
+                            variant='outline'
+                            size='sm'
+                            onClick={() => {
+                              // TODO: Implement copy from another plan functionality
+                              console.log('Copy from another plan:', plan.id);
+                            }}
+                            className='flex items-center space-x-1'
+                          >
+                            <Target className='h-4 w-4' />
+                            <span>Copy from Plan</span>
+                          </Button>
+                          <Button
+                            variant='outline'
+                            size='sm'
+                            onClick={() => {
+                              // TODO: Implement plan structure management functionality
+                              console.log('Manage plan structure:', plan.id);
+                            }}
+                            className='flex items-center space-x-1'
+                          >
+                            <Network className='h-4 w-4' />
+                            <span>Manage Structure</span>
+                          </Button>
+                        </div>
+
+                        {/* Plan Structure: Cards -> Categories -> Topics -> Questions */}
+                        <div className='space-y-4'>
+                          <h4 className='text-lg font-semibold text-gray-900 dark:text-white flex items-center'>
+                            <Layers className='h-5 w-5 mr-2 text-blue-600' />
+                            Plan Structure
+                          </h4>
+
+                          {/* Cards in this plan */}
+                          {cards.map(card => {
+                            const cardCategories = categories.filter(
+                              cat => cat.learning_card_id === card.id
+                            );
+                            const IconComponent =
+                              CARD_ICONS[card.title as keyof typeof CARD_ICONS]
+                                ?.icon || Layers;
+
+                            return (
+                              <div
+                                key={card.id}
+                                className='ml-4 border-l-2 border-blue-200 pl-4'
+                              >
+                                <div className='flex items-center justify-between py-2'>
+                                  <div className='flex items-center space-x-2'>
+                                    <button
+                                      onClick={() => togglePlanCard(card.id)}
+                                      className='p-1 hover:bg-gray-100 rounded'
+                                    >
+                                      {expandedPlanCards.has(card.id) ? (
+                                        <ChevronDown className='h-4 w-4' />
+                                      ) : (
+                                        <ChevronRight className='h-4 w-4' />
+                                      )}
+                                    </button>
+                                    <IconComponent
+                                      className='h-4 w-4'
+                                      style={{ color: card.color }}
+                                    />
+                                    <div>
+                                      <h5 className='font-medium text-gray-900 dark:text-white'>
+                                        {card.title}
+                                      </h5>
+                                      <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                        {card.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className='flex items-center space-x-2'>
+                                    <Badge
+                                      variant='outline'
+                                      className='bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                                    >
+                                      {cardCategories.length} Categories
+                                    </Badge>
+                                    <div className='flex items-center space-x-1'>
+                                      <Button
+                                        variant='ghost'
+                                        size='sm'
+                                        onClick={() => {
+                                          // TODO: Implement add card to plan functionality
+                                          console.log(
+                                            'Add card to plan:',
+                                            card.id,
+                                            plan.id
+                                          );
+                                        }}
+                                        className='h-6 px-2 text-blue-600 hover:bg-blue-100'
+                                      >
+                                        <Plus className='h-3 w-3' />
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Categories under this card */}
+                                {expandedPlanCards.has(card.id) &&
+                                  cardCategories.map(category => {
+                                    const categoryTopics = topics.filter(
+                                      topic => topic.category_id === category.id
+                                    );
+
+                                    return (
+                                      <div
+                                        key={category.id}
+                                        className='ml-6 border-l-2 border-purple-200 pl-4 mt-2'
+                                      >
+                                        <div className='flex items-center justify-between py-2'>
+                                          <div className='flex items-center space-x-2'>
+                                            <button
+                                              onClick={() =>
+                                                togglePlanCategory(category.id)
+                                              }
+                                              className='p-1 hover:bg-gray-100 rounded'
+                                            >
+                                              {expandedPlanCategories.has(
+                                                category.id
+                                              ) ? (
+                                                <ChevronDown className='h-4 w-4' />
+                                              ) : (
+                                                <ChevronRight className='h-4 w-4' />
+                                              )}
+                                            </button>
+                                            <BookOpen className='h-4 w-4 text-purple-600' />
+                                            <div>
+                                              <h6 className='font-medium text-gray-900 dark:text-white'>
+                                                {category.name}
+                                              </h6>
+                                              <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                                {category.description}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <div className='flex items-center space-x-2'>
+                                            <Badge
+                                              variant='outline'
+                                              className='bg-purple-50 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                                            >
+                                              {categoryTopics.length} Topics
+                                            </Badge>
+                                            <div className='flex items-center space-x-1'>
+                                              <Button
+                                                variant='ghost'
+                                                size='sm'
+                                                onClick={() => {
+                                                  // TODO: Implement add category to plan functionality
+                                                  console.log(
+                                                    'Add category to plan:',
+                                                    category.id,
+                                                    plan.id
+                                                  );
+                                                }}
+                                                className='h-6 px-2 text-purple-600 hover:bg-purple-100'
+                                              >
+                                                <Plus className='h-3 w-3' />
+                                              </Button>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        {/* Topics under this category */}
+                                        {expandedPlanCategories.has(
+                                          category.id
+                                        ) &&
+                                          categoryTopics.map(topic => {
+                                            const topicQuestions =
+                                              questions.filter(
+                                                q =>
+                                                  q.category_id === category.id
+                                              );
+
+                                            return (
+                                              <div
+                                                key={topic.id}
+                                                className='ml-6 border-l-2 border-orange-200 pl-4 mt-2'
+                                              >
+                                                <div className='flex items-center justify-between py-2'>
+                                                  <div className='flex items-center space-x-2'>
+                                                    <button
+                                                      onClick={() =>
+                                                        togglePlanTopic(
+                                                          topic.id
+                                                        )
+                                                      }
+                                                      className='p-1 hover:bg-gray-100 rounded'
+                                                    >
+                                                      {expandedPlanTopics.has(
+                                                        topic.id
+                                                      ) ? (
+                                                        <ChevronDown className='h-4 w-4' />
+                                                      ) : (
+                                                        <ChevronRight className='h-4 w-4' />
+                                                      )}
+                                                    </button>
+                                                    <Target className='h-4 w-4 text-orange-600' />
+                                                    <div>
+                                                      <h6 className='font-medium text-gray-900 dark:text-white'>
+                                                        {topic.name}
+                                                      </h6>
+                                                      <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                                        {topic.description}
+                                                      </p>
+                                                    </div>
+                                                  </div>
+                                                  <div className='flex items-center space-x-2'>
+                                                    <Badge
+                                                      variant='outline'
+                                                      className='bg-orange-50 text-orange-700 dark:bg-orange-900 dark:text-orange-300'
+                                                    >
+                                                      {topicQuestions.length}{' '}
+                                                      Questions
+                                                    </Badge>
+                                                    <div className='flex items-center space-x-1'>
+                                                      <Button
+                                                        variant='ghost'
+                                                        size='sm'
+                                                        onClick={() => {
+                                                          openTopicQuestionsModal(
+                                                            topic,
+                                                            plan
+                                                          );
+                                                        }}
+                                                        className='h-6 px-2 text-orange-600 hover:bg-orange-100'
+                                                      >
+                                                        <Plus className='h-3 w-3' />
+                                                      </Button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+
+                                                {/* Questions under this topic */}
+                                                {expandedPlanTopics.has(
+                                                  topic.id
+                                                ) &&
+                                                  topicQuestions
+                                                    .slice(0, 3)
+                                                    .map(question => (
+                                                      <div
+                                                        key={question.id}
+                                                        className='ml-6 border-l-2 border-green-200 pl-4 mt-2'
+                                                      >
+                                                        <div className='flex items-center justify-between py-2'>
+                                                          <div className='flex items-center space-x-2'>
+                                                            <MessageSquare className='h-4 w-4 text-green-600' />
+                                                            <div>
+                                                              <h6 className='font-medium text-gray-900 dark:text-white text-sm'>
+                                                                {question.title}
+                                                              </h6>
+                                                              <p className='text-xs text-gray-600 dark:text-gray-400'>
+                                                                {
+                                                                  question.difficulty
+                                                                }{' '}
+                                                                •{' '}
+                                                                {question.type}
+                                                              </p>
+                                                            </div>
+                                                          </div>
+                                                          <div className='flex items-center space-x-1'>
+                                                            <Button
+                                                              variant='ghost'
+                                                              size='sm'
+                                                              onClick={() => {
+                                                                // TODO: Implement add question to plan functionality
+                                                                console.log(
+                                                                  'Add question to plan:',
+                                                                  question.id,
+                                                                  plan.id
+                                                                );
+                                                              }}
+                                                              className='h-6 px-2 text-green-600 hover:bg-green-100'
+                                                            >
+                                                              <Plus className='h-3 w-3' />
+                                                            </Button>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    ))}
+                                                {expandedPlanTopics.has(
+                                                  topic.id
+                                                ) &&
+                                                  topicQuestions.length > 3 && (
+                                                    <div className='ml-6 pl-4 mt-2'>
+                                                      <p className='text-xs text-gray-500'>
+                                                        ... and{' '}
+                                                        {topicQuestions.length -
+                                                          3}{' '}
+                                                        more questions
+                                                      </p>
+                                                    </div>
+                                                  )}
+                                              </div>
+                                            );
+                                          })}
+                                      </div>
+                                    );
+                                  })}
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
                     </CardContent>
                   )}
@@ -845,6 +1457,199 @@ export default function ContentManagementPage() {
           </div>
         </div>
       </div>
+
+      {/* Topic Questions Modal */}
+      <Dialog
+        open={isTopicQuestionsModalOpen}
+        onOpenChange={setIsTopicQuestionsModalOpen}
+      >
+        <DialogContent className='max-w-4xl max-h-[80vh] overflow-hidden flex flex-col'>
+          <DialogHeader>
+            <DialogTitle className='flex items-center space-x-2'>
+              <Target className='h-5 w-5 text-orange-600' />
+              <span>Add Questions to Plan</span>
+            </DialogTitle>
+            <DialogDescription>
+              Select questions from "{selectedTopic?.name}" to add to "
+              {selectedPlan?.name}"
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className='flex-1 overflow-hidden flex flex-col'>
+            {/* Selection Controls */}
+            <div className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg mb-4'>
+              <div className='flex items-center space-x-2'>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  onClick={selectAllQuestions}
+                  className='flex items-center space-x-1'
+                >
+                  <Checkbox className='h-4 w-4' />
+                  <span>Select All</span>
+                </Button>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  onClick={deselectAllQuestions}
+                  className='flex items-center space-x-1'
+                >
+                  <span>Deselect All</span>
+                </Button>
+              </div>
+              <div className='text-sm text-gray-600 dark:text-gray-400'>
+                {selectedQuestions.size} of{' '}
+                {
+                  questions.filter(
+                    q => q.category_id === selectedTopic?.category_id
+                  ).length
+                }{' '}
+                selected
+              </div>
+            </div>
+
+            {/* Questions List */}
+            <div className='flex-1 overflow-y-auto space-y-2'>
+              {selectedTopic &&
+                questions
+                  .filter(q => q.category_id === selectedTopic.category_id)
+                  .map(question => (
+                    <div
+                      key={question.id}
+                      className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                        selectedQuestions.has(question.id)
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                          : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      }`}
+                      onClick={() => toggleQuestionSelection(question.id)}
+                    >
+                      <div className='flex items-start space-x-3'>
+                        <div className='mt-1'>
+                          <Checkbox
+                            checked={selectedQuestions.has(question.id)}
+                            onChange={() =>
+                              toggleQuestionSelection(question.id)
+                            }
+                          />
+                        </div>
+                        <div className='flex-1'>
+                          <div className='flex items-center justify-between'>
+                            <h4 className='font-medium text-gray-900 dark:text-white'>
+                              {question.title}
+                            </h4>
+                            <div className='flex items-center space-x-2'>
+                              <Badge
+                                variant='outline'
+                                className={`text-xs ${
+                                  question.difficulty === 'beginner'
+                                    ? 'bg-green-50 text-green-700 dark:bg-green-900 dark:text-green-300'
+                                    : question.difficulty === 'intermediate'
+                                      ? 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
+                                      : 'bg-red-50 text-red-700 dark:bg-red-900 dark:text-red-300'
+                                }`}
+                              >
+                                {question.difficulty}
+                              </Badge>
+                              <Badge variant='outline' className='text-xs'>
+                                {question.type}
+                              </Badge>
+                            </div>
+                          </div>
+                          {question.explanation && (
+                            <p className='text-sm text-gray-600 dark:text-gray-400 mt-2'>
+                              {question.explanation}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+            </div>
+          </div>
+
+          <DialogFooter className='flex items-center justify-between'>
+            <Button variant='outline' onClick={closeTopicQuestionsModal}>
+              Cancel
+            </Button>
+            <Button
+              onClick={addSelectedQuestionsToPlan}
+              disabled={selectedQuestions.size === 0}
+              className='flex items-center space-x-2'
+            >
+              <Plus className='h-4 w-4' />
+              <span>Add {selectedQuestions.size} Questions to Plan</span>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Card Confirmation Modal */}
+      <Dialog
+        open={isDeleteCardModalOpen}
+        onOpenChange={setIsDeleteCardModalOpen}
+      >
+        <DialogContent className='max-w-md mx-auto'>
+          <DialogHeader>
+            <DialogTitle className='flex items-center space-x-2'>
+              <Trash2 className='h-5 w-5 text-red-600' />
+              <span>Delete Learning Card</span>
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete "{cardToDelete?.title}"? This
+              action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className='py-4'>
+            <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4'>
+              <div className='flex items-start space-x-3'>
+                <div className='flex-shrink-0'>
+                  <div className='w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center'>
+                    <Trash2 className='h-4 w-4 text-red-600' />
+                  </div>
+                </div>
+                <div className='flex-1'>
+                  <h4 className='text-sm font-medium text-red-800 dark:text-red-200'>
+                    Warning: This will permanently delete the card
+                  </h4>
+                  <p className='text-sm text-red-700 dark:text-red-300 mt-1'>
+                    All associated categories, topics, and questions will be
+                    affected. This action cannot be undone.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter className='flex items-center justify-between'>
+            <Button
+              variant='outline'
+              onClick={closeDeleteCardModal}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant='destructive'
+              onClick={deleteCard}
+              disabled={isDeleting}
+              className='flex items-center space-x-2'
+            >
+              {isDeleting ? (
+                <>
+                  <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />
+                  <span>Deleting...</span>
+                </>
+              ) : (
+                <>
+                  <Trash2 className='h-4 w-4' />
+                  <span>Delete Card</span>
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
