@@ -37,6 +37,7 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  HelpCircle,
 } from 'lucide-react';
 import { AdvancedSearch } from '@elzatona/shared-components';
 
@@ -137,9 +138,11 @@ export default function AdminContentQuestionsPage() {
   // Calculate total pages
   const totalPages = Math.ceil(totalCount / pageSize);
 
-  // Additional data for forms (cards)
+  // Additional data for forms (cards, topics, categories)
   const [cardsData, setCardsData] = useState<any>(null);
   const [topicsData, setTopicsData] = useState<any>(null);
+  const [categoriesData, setCategoriesData] = useState<any>(null);
+  const [categoryCounts, setCategoryCounts] = useState<any[]>([]);
 
   // Modal states
   const [selectedQuestion, setSelectedQuestion] =
@@ -210,21 +213,41 @@ export default function AdminContentQuestionsPage() {
     fetchTopics();
   }, []);
 
+  // Fetch categories data
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        if (response.ok) {
+          const data = await response.json();
+          setCategoriesData(data);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch category question counts
+  useEffect(() => {
+    const fetchCategoryCounts = async () => {
+      try {
+        const response = await fetch('/api/categories/question-counts');
+        if (response.ok) {
+          const data = await response.json();
+          setCategoryCounts(data.data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching category question counts:', error);
+      }
+    };
+    fetchCategoryCounts();
+  }, []);
+
   const cards = cardsData?.data || [];
   const allTopics = topicsData?.data || [];
-
-  // Derived data
-  const allCategories = useMemo(() => {
-    if (!questions || !Array.isArray(questions)) {
-      return [];
-    }
-    const categories = [
-      ...new Set(
-        questions.map((q: UnifiedQuestion) => q.category).filter(Boolean)
-      ),
-    ] as string[];
-    return categories.sort();
-  }, [questions]);
+  const allCategories = categoriesData?.data || [];
 
   const allTypes = useMemo(() => {
     if (!questions || !Array.isArray(questions)) {
@@ -409,7 +432,7 @@ export default function AdminContentQuestionsPage() {
                   Categories
                 </p>
                 <p className='text-2xl font-bold text-gray-900 dark:text-white'>
-                  {allCategories.length}
+                  {categoryCounts.length}
                 </p>
               </div>
             </CardContent>
@@ -452,24 +475,129 @@ export default function AdminContentQuestionsPage() {
           </Card>
         </div>
 
+        {/* Categories Overview */}
+        <Card className='mb-8'>
+          <CardHeader>
+            <CardTitle className='flex items-center space-x-2'>
+              <BookOpen className='h-5 w-5 text-blue-600' />
+              <span>Categories Overview</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {categoryCounts.length === 0 ? (
+              <div className='text-center py-8'>
+                <BookOpen className='w-12 h-12 text-gray-400 mx-auto mb-4' />
+                <h3 className='text-lg font-medium text-gray-900 dark:text-white mb-2'>
+                  No Categories Found
+                </h3>
+                <p className='text-gray-600 dark:text-gray-400'>
+                  No categories available in the system.
+                </p>
+              </div>
+            ) : (
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                {categoryCounts.map((category: any) => {
+                  return (
+                    <div
+                      key={category.id}
+                      className='p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow duration-200'
+                    >
+                      <div className='flex items-center justify-between mb-2'>
+                        <h4 className='font-semibold text-gray-900 dark:text-white'>
+                          {category.name}
+                        </h4>
+                        <Badge
+                          variant='outline'
+                          className='bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                        >
+                          {category.questionCount} questions
+                        </Badge>
+                      </div>
+                      <p className='text-sm text-gray-600 dark:text-gray-400 mb-3'>
+                        {category.description || 'No description available'}
+                      </p>
+                      <div className='flex items-center justify-between'>
+                        <div className='flex items-center space-x-2'>
+                          <span className='text-xs text-gray-500 dark:text-gray-400'>
+                            Slug: {category.slug}
+                          </span>
+                        </div>
+                        <div className='flex items-center space-x-1'>
+                          <Button
+                            variant='ghost'
+                            size='sm'
+                            onClick={() => {
+                              // TODO: Implement view category questions functionality
+                              console.log(
+                                'View category questions:',
+                                category.id
+                              );
+                            }}
+                            className='h-8 px-2 text-blue-600 hover:bg-blue-100'
+                          >
+                            <Eye className='h-4 w-4' />
+                          </Button>
+                          <Button
+                            variant='ghost'
+                            size='sm'
+                            onClick={() => {
+                              // TODO: Implement edit category functionality
+                              console.log('Edit category:', category.id);
+                            }}
+                            className='h-8 px-2 text-green-600 hover:bg-green-100'
+                          >
+                            <Edit className='h-4 w-4' />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Advanced Search */}
-        <AdvancedSearch
-          onResultsChange={results => {
-            // Update questions with server-side search results
-            setQuestions(results);
-            // Server-side search handles pagination, so we don't override totalCount
-          }}
-          onFacetsChange={facets => {
-            // Update facets if needed
-          }}
-          placeholder='Search questions by title, content, tags...'
-          showFilters={true}
-          showFacets={false}
-          showSuggestions={false}
-          showAnalytics={true}
-          allCategories={allCategories}
-          allTopics={allTopics}
-        />
+        {categoriesData && topicsData ? (
+          <AdvancedSearch
+            onResultsChange={results => {
+              // Update questions with server-side search results
+              setQuestions(results);
+              // Server-side search handles pagination, so we don't override totalCount
+            }}
+            onFacetsChange={facets => {
+              // Update facets if needed
+            }}
+            placeholder='Search questions by title, content, tags...'
+            showFilters={true}
+            showFacets={false}
+            showSuggestions={false}
+            showAnalytics={true}
+            allCategories={allCategories}
+            allTopics={allTopics}
+            // Pagination props
+            currentPage={currentPage}
+            totalPages={Math.ceil(totalCount / pageSize)}
+            totalCount={totalCount}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={setPageSize}
+          />
+        ) : (
+          <Card>
+            <CardContent className='p-6'>
+              <div className='flex items-center justify-center'>
+                <div className='text-center'>
+                  <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4'></div>
+                  <p className='text-gray-600 dark:text-gray-400'>
+                    Loading search filters...
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Questions List */}
         <Card>
@@ -1021,14 +1149,14 @@ export default function AdminContentQuestionsPage() {
                     {/* Answer/Explanation Section */}
                     <div className='bg-white dark:bg-gray-800 p-6 rounded-lg border shadow-sm'>
                       <h4 className='text-lg font-semibold mb-4 flex items-center gap-2'>
-                        <Clock className='w-5 h-5 text-orange-600' />
+                        <HelpCircle className='w-5 h-5 text-orange-600' />
                         {selectedQuestion.type === 'multiple-choice'
                           ? 'Explanation'
                           : 'Correct Answer'}
                       </h4>
                       <div className='bg-gray-50 dark:bg-gray-700 p-4 rounded-lg'>
                         <p className='text-sm text-gray-700 dark:text-gray-300 leading-relaxed'>
-                          {selectedQuestion.correct_answer ||
+                          {selectedQuestion.explanation ||
                             'No explanation provided'}
                         </p>
                       </div>
@@ -1195,6 +1323,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     initialData || {
       title: '',
       content: '',
+      explanation: '',
       type: 'multiple-choice',
       difficulty: 'beginner',
       isActive: true,
@@ -1401,7 +1530,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                   ...prev,
                   options: [
                     ...(prev.options || []),
-                    { text: '', isCorrect: false },
+                    { id: `option-${Date.now()}`, text: '', isCorrect: false },
                   ],
                 }));
               }}
@@ -1494,25 +1623,25 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       {/* Answer/Explanation Section */}
       <div className='bg-white dark:bg-gray-800 p-6 rounded-lg border shadow-sm'>
         <h4 className='text-lg font-semibold mb-4 flex items-center gap-2'>
-          <Clock className='w-5 h-5 text-orange-600' />
+          <HelpCircle className='w-5 h-5 text-orange-600' />
           {formData.type === 'multiple-choice'
             ? 'Explanation'
             : 'Correct Answer'}
         </h4>
         <div>
-          <Label htmlFor='correct_answer' className='text-sm font-medium'>
+          <Label htmlFor='explanation' className='text-sm font-medium'>
             {formData.type === 'multiple-choice' ? 'Explanation' : 'Answer'}
           </Label>
           <Textarea
-            id='correct_answer'
-            name='correct_answer'
-            value={formData.correct_answer || ''}
+            id='explanation'
+            name='explanation'
+            value={formData.explanation || ''}
             onChange={handleChange}
-            rows={3}
+            rows={4}
             className='mt-1'
             placeholder={
               formData.type === 'multiple-choice'
-                ? 'Enter explanation or additional notes...'
+                ? 'Enter explanation for the correct answer...'
                 : 'Enter the correct answer...'
             }
           />

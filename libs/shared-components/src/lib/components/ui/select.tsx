@@ -12,25 +12,66 @@ const Select = React.forwardRef<
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(value || '');
 
+  React.useEffect(() => {
+    setSelectedValue(value || '');
+  }, [value]);
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        open &&
+        ref &&
+        'current' in ref &&
+        ref.current &&
+        !ref.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open, ref]);
+
   const handleValueChange = (newValue: string) => {
     setSelectedValue(newValue);
     onValueChange?.(newValue);
     setOpen(false);
   };
 
+  // Find SelectTrigger and SelectContent children
+  const selectTrigger = React.Children.toArray(children).find(
+    child => React.isValidElement(child) && child.type === SelectTrigger
+  );
+
+  const selectContent = React.Children.toArray(children).find(
+    child => React.isValidElement(child) && child.type === SelectContent
+  );
+
+  // Extract SelectItems from SelectContent
+  const selectItems = React.Children.toArray(
+    selectContent?.props.children || []
+  ).filter(child => React.isValidElement(child) && child.type === SelectItem);
+
+  // Find the selected item text
+  const selectedItem = selectItems.find(
+    item => React.isValidElement(item) && item.props.value === selectedValue
+  );
+  const selectedText = React.isValidElement(selectedItem)
+    ? selectedItem.props.children
+    : 'Select...';
+
   return (
     <div ref={ref} className={cn('relative', className)} {...props}>
       <button
         type='button'
-        className='flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+        className='flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground cursor-pointer'
         onClick={() => setOpen(!open)}
       >
-        <span className='truncate'>
-          {React.Children.toArray(children).find(
-            child =>
-              React.isValidElement(child) && child.props.value === selectedValue
-          )?.props?.children || 'Select...'}
-        </span>
+        <span className='truncate'>{selectedText}</span>
         {open ? (
           <ChevronUp className='h-4 w-4 opacity-50' />
         ) : (
@@ -40,14 +81,19 @@ const Select = React.forwardRef<
       {open && (
         <div className='absolute z-50 w-full mt-1 rounded-md border bg-background shadow-lg'>
           <div className='max-h-60 overflow-auto'>
-            {React.Children.map(children, child => {
-              if (React.isValidElement(child)) {
-                return React.cloneElement(child, {
-                  ...child.props,
-                  onClick: () => handleValueChange(child.props.value),
-                });
+            {selectItems.map(item => {
+              if (React.isValidElement(item)) {
+                return (
+                  <div
+                    key={item.props.value}
+                    className='px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer'
+                    onClick={() => handleValueChange(item.props.value)}
+                  >
+                    {item.props.children}
+                  </div>
+                );
               }
-              return child;
+              return item;
             })}
           </div>
         </div>
@@ -64,7 +110,7 @@ const SelectTrigger = React.forwardRef<
   <button
     ref={ref}
     className={cn(
-      'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+      'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground cursor-pointer',
       className
     )}
     {...props}

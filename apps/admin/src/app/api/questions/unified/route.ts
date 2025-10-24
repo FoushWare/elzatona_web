@@ -55,6 +55,16 @@ export async function GET(request: NextRequest) {
     const topic = searchParams.get('topic');
     const topics = searchParams.get('topics'); // comma-separated topic names
 
+    console.log('🔍 API Parameters:', {
+      category,
+      difficulty,
+      type,
+      isActive,
+      search,
+      topic,
+      topics,
+    });
+
     // Build query using junction tables to get topics and categories
     let query = supabase.from('questions').select(`
         *,
@@ -68,8 +78,29 @@ export async function GET(request: NextRequest) {
       `);
 
     // Apply filters
-    if (category && category !== 'all') {
-      query = query.eq('category_id', category);
+    if (category && category !== 'all' && category !== 'undefined') {
+      // Check if category is a UUID or a name
+      const isUUID =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+          category
+        );
+
+      if (isUUID) {
+        // Direct UUID filtering
+        query = query.eq('category_id', category);
+      } else {
+        // Category name filtering - get UUID from name
+        const { data: categoryData } = await supabase
+          .from('categories')
+          .select('id')
+          .eq('name', category)
+          .eq('is_active', true)
+          .single();
+
+        if (categoryData) {
+          query = query.eq('category_id', categoryData.id);
+        }
+      }
     }
 
     if (difficulty && difficulty !== 'all') {
@@ -113,8 +144,29 @@ export async function GET(request: NextRequest) {
       .select('*', { count: 'exact', head: true });
 
     // Apply same filters to count query
-    if (category && category !== 'all') {
-      countQuery = countQuery.eq('category_id', category);
+    if (category && category !== 'all' && category !== 'undefined') {
+      // Check if category is a UUID or a name
+      const isUUID =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+          category
+        );
+
+      if (isUUID) {
+        // Direct UUID filtering
+        countQuery = countQuery.eq('category_id', category);
+      } else {
+        // Category name filtering - get UUID from name
+        const { data: categoryData } = await supabase
+          .from('categories')
+          .select('id')
+          .eq('name', category)
+          .eq('is_active', true)
+          .single();
+
+        if (categoryData) {
+          countQuery = countQuery.eq('category_id', categoryData.id);
+        }
+      }
     }
 
     if (difficulty && difficulty !== 'all') {
@@ -184,6 +236,12 @@ export async function GET(request: NextRequest) {
       ...new Set(data?.map(q => q.learning_card_id).filter(Boolean)),
     ];
 
+    // Fetch all categories for direct category_id lookups
+    const { data: allCategories } = await supabase
+      .from('categories')
+      .select('id, name, slug, card_type')
+      .eq('is_active', true);
+
     // Batch fetch all categories for these learning cards
     const { data: allCardCategories } = await supabase
       .from('card_categories')
@@ -234,8 +292,12 @@ export async function GET(request: NextRequest) {
 
         // Get primary topic and category
         const primaryTopic = topics.find(t => t.is_primary) || topics[0];
+        // Use the question's direct category_id instead of card categories
+        const directCategory = allCategories.find(
+          c => c.id === question.category_id
+        );
         const primaryCategory =
-          categories.find(c => c.is_primary) || categories[0];
+          directCategory || categories.find(c => c.is_primary) || categories[0];
 
         return {
           id: question.id,
