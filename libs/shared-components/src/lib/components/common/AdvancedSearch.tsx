@@ -78,6 +78,9 @@ export function AdvancedSearch({
     'category',
     parseAsString.withDefault('all')
   );
+
+  console.log('🔍 Current category value:', category);
+  console.log('🔍 Available categories:', allCategories);
   const [difficulty, setDifficulty] = useQueryState(
     'difficulty',
     parseAsString.withDefault('all')
@@ -96,6 +99,19 @@ export function AdvancedSearch({
   );
   const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [size, setSize] = useQueryState('size', parseAsInteger.withDefault(10));
+
+  // Sync with parent pagination props
+  useEffect(() => {
+    if (onPageChange && currentPage !== undefined) {
+      setPage(currentPage);
+    }
+  }, [currentPage, onPageChange, setPage]);
+
+  useEffect(() => {
+    if (onPageSizeChange && pageSize !== undefined) {
+      setSize(pageSize);
+    }
+  }, [pageSize, onPageSizeChange, setSize]);
   const [selectedTopics, setSelectedTopics] = useQueryState(
     'topics',
     parseAsArrayOf(parseAsString).withDefault([])
@@ -110,6 +126,16 @@ export function AdvancedSearch({
 
   // Perform actual search on real data
   const performSearch = async () => {
+    console.log('🔍 performSearch called with current state:', {
+      query,
+      category,
+      difficulty,
+      type,
+      isActive,
+      topic,
+      selectedTopics,
+    });
+
     setIsLoading(true);
     const startTime = Date.now();
 
@@ -128,7 +154,10 @@ export function AdvancedSearch({
 
       // Add filters
       if (category !== 'all') {
+        console.log('🔍 Adding category to search params:', category);
         searchParams.set('category', category);
+      } else {
+        console.log('🔍 Category not added to search params:', category);
       }
       if (difficulty !== 'all') {
         searchParams.set('difficulty', difficulty);
@@ -147,9 +176,10 @@ export function AdvancedSearch({
       }
 
       // Make API call for server-side search
-      const response = await fetch(
-        `/api/questions/unified?${searchParams.toString()}`
-      );
+      const apiUrl = `/api/questions/unified?${searchParams.toString()}`;
+      console.log('🔍 Making API call to:', apiUrl);
+
+      const response = await fetch(apiUrl);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -175,23 +205,24 @@ export function AdvancedSearch({
   };
 
   // Remove automatic search - only search on submit
-  // useEffect(() => {
-  //   const timeoutId = setTimeout(() => {
-  //     performSearch();
-  //   }, 300);
+  // Auto-search when filters change
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      performSearch();
+    }, 300);
 
-  //   return () => clearTimeout(timeoutId);
-  // }, [
-  //   query,
-  //   category,
-  //   difficulty,
-  //   type,
-  //   isActive,
-  //   topic,
-  //   selectedTopics,
-  //   page,
-  //   size,
-  // ]);
+    return () => clearTimeout(timeoutId);
+  }, [
+    query,
+    category,
+    difficulty,
+    type,
+    isActive,
+    topic,
+    selectedTopics,
+    page,
+    size,
+  ]);
 
   // Handle search submission
   const handleSearchSubmit = () => {
@@ -206,6 +237,11 @@ export function AdvancedSearch({
   };
 
   const handleFilterChange = (key: string, value: string) => {
+    // Prevent undefined values from being set
+    if (value === 'undefined' || value === undefined) {
+      return;
+    }
+
     switch (key) {
       case 'category':
         setCategory(value);
@@ -225,10 +261,6 @@ export function AdvancedSearch({
       default:
         break;
     }
-    // Trigger search immediately when filters change
-    setTimeout(() => {
-      performSearch();
-    }, 100);
   };
 
   const clearFilters = () => {
@@ -241,10 +273,68 @@ export function AdvancedSearch({
     setTopic('all');
     setSelectedTopics([]);
     setPage(1); // Reset to first page when clearing filters
-    // Trigger search after clearing filters
-    setTimeout(() => {
+    onPageChange?.(1); // Also reset parent pagination
+  };
+
+  const clearSearch = () => {
+    setQuery('');
+
+    // Check if there are any active filters
+    const hasActiveFilters = [
+      category,
+      difficulty,
+      type,
+      isActive,
+      topic,
+      ...selectedTopics,
+    ].some(f => f !== 'all' && f !== '');
+
+    if (hasActiveFilters) {
+      // If there are active filters, perform search to maintain filter state
       performSearch();
-    }, 100);
+    } else {
+      // If no active filters, fetch original paginated data
+      fetchOriginalData();
+    }
+  };
+
+  const fetchOriginalData = async () => {
+    setIsLoading(true);
+    const startTime = Date.now();
+
+    try {
+      // Build parameters for original paginated data (no search, no filters)
+      const searchParams = new URLSearchParams();
+      searchParams.set('page', page.toString());
+      searchParams.set('pageSize', size.toString());
+
+      // Make API call for original paginated data
+      const response = await fetch(
+        `/api/questions/unified?${searchParams.toString()}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const questions = result.data || [];
+      const totalCount = result.pagination?.totalCount || 0;
+
+      const endTime = Date.now();
+      setSearchTime(endTime - startTime);
+      setIsLoading(false);
+
+      // Update pagination info
+      setInternalTotalPages(Math.ceil(totalCount / size));
+
+      // Restore original data
+      onResultsChange?.(questions);
+    } catch (error) {
+      console.error('Error fetching original data:', error);
+      setIsLoading(false);
+      onResultsChange?.([]);
+    }
   };
 
   const activeFilterCount = [
@@ -266,8 +356,21 @@ export function AdvancedSearch({
           value={query}
           onChange={e => setQuery(e.target.value)}
           onKeyPress={handleKeyPress}
-          className='pl-10 pr-24'
+          className='pl-10 pr-32' // Increased padding to accommodate both buttons
         />
+        {/* Clear Search Button */}
+        {query && (
+          <Button
+            type='button'
+            variant='ghost'
+            size='sm'
+            onClick={clearSearch}
+            className='absolute right-24 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-gray-100'
+          >
+            <X className='w-4 h-4 text-gray-500' />
+          </Button>
+        )}
+        {/* Search Submit Button */}
         <Button
           onClick={handleSearchSubmit}
           disabled={isLoading}
@@ -280,12 +383,13 @@ export function AdvancedSearch({
             <Search className='w-4 h-4' />
           )}
         </Button>
+        {/* Clear All Filters Button */}
         {activeFilterCount > 0 && (
           <Button
             variant='outline'
             size='sm'
             onClick={clearFilters}
-            className='absolute right-20 top-1/2 transform -translate-y-1/2 h-6 px-2'
+            className='absolute right-32 top-1/2 transform -translate-y-1/2 h-6 px-2'
           >
             <X className='w-3 h-3 mr-1' />
             Clear ({activeFilterCount})
@@ -349,20 +453,34 @@ export function AdvancedSearch({
                     </div>
                     <Select
                       value={category}
-                      onValueChange={value =>
-                        handleFilterChange('category', value)
-                      }
+                      onValueChange={value => {
+                        handleFilterChange('category', value);
+                      }}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder='All Categories' />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value='all'>All Categories</SelectItem>
-                        {allCategories.map(category => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
+                        {allCategories
+                          .filter(category => {
+                            const isValid =
+                              category &&
+                              category.id &&
+                              category.name &&
+                              category.id !== 'undefined';
+                            return isValid;
+                          })
+                          .map(category => {
+                            return (
+                              <SelectItem
+                                key={category.id}
+                                value={category.name}
+                              >
+                                {category.name}
+                              </SelectItem>
+                            );
+                          })}
                       </SelectContent>
                     </Select>
                   </div>
@@ -539,7 +657,11 @@ export function AdvancedSearch({
               </span>
               <Select
                 value={size.toString()}
-                onValueChange={value => setSize(parseInt(value))}
+                onValueChange={value => {
+                  const newSize = parseInt(value);
+                  setSize(newSize);
+                  onPageSizeChange?.(newSize);
+                }}
               >
                 <SelectTrigger className='w-20'>
                   <SelectValue />
@@ -559,19 +681,27 @@ export function AdvancedSearch({
               <Button
                 variant='outline'
                 size='sm'
-                onClick={() => setPage(page - 1)}
+                onClick={() => {
+                  const newPage = page - 1;
+                  setPage(newPage);
+                  onPageChange?.(newPage);
+                }}
                 disabled={page === 1}
               >
                 <ChevronLeft className='h-4 w-4' />
               </Button>
               <span className='text-sm text-gray-600 dark:text-gray-400'>
-                Page {page} of {totalPages}
+                Page {page} of {internalTotalPages}
               </span>
               <Button
                 variant='outline'
                 size='sm'
-                onClick={() => setPage(page + 1)}
-                disabled={page >= totalPages}
+                onClick={() => {
+                  const newPage = page + 1;
+                  setPage(newPage);
+                  onPageChange?.(newPage);
+                }}
+                disabled={page >= internalTotalPages}
               >
                 <ChevronRight className='h-4 w-4' />
               </Button>
