@@ -1,11 +1,25 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+// Conditional Supabase client creation with fallback values
+let supabase = null;
+try {
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+  const supabaseServiceRoleKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_key';
+
+  if (
+    supabaseUrl !== 'https://placeholder.supabase.co' &&
+    supabaseServiceRoleKey !== 'placeholder_key'
+  ) {
+    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+  }
+} catch (error) {
+  console.warn('Supabase client creation failed:', error);
+}
 
 import Link from 'next/link';
 import {

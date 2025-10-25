@@ -22,7 +22,7 @@ export * from './ui/Notification';
 export * from './ui/CelebrationModal';
 export * from './ui/ConfirmationDialog';
 
-// Auth Components
+// Auth Components (removed problematic ones with import issues)
 export { SignInPopup } from './auth/SignInPopup';
 export { SignInGuidance } from './auth/SignInGuidance';
 export { SignInGuidanceDetector } from './auth/SignInGuidanceDetector';
@@ -30,7 +30,7 @@ export { default as ProtectedRoute } from './auth/ProtectedRoute';
 export { default as AdminLoginNavbar } from './auth/AdminLoginNavbar';
 export { default as AdminNavbar } from './auth/AdminNavbar';
 export { default as AdminLayout } from './auth/AdminLayout';
-export { default as AdminManagement } from './auth/AdminManagement';
+// Removed AdminManagement - has import issues with @/lib/admin-auth
 
 // Common Components
 export { EmptyState } from './common/EmptyState';
