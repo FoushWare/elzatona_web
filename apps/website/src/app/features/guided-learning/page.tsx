@@ -1,11 +1,25 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+// Conditional Supabase client creation with fallback values
+let supabase = null;
+try {
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+  const supabaseServiceRoleKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_key';
+
+  if (
+    supabaseUrl !== 'https://placeholder.supabase.co' &&
+    supabaseServiceRoleKey !== 'placeholder_key'
+  ) {
+    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+  }
+} catch (error) {
+  console.warn('Supabase client creation failed:', error);
+}
 
 import { useRouter } from 'next/navigation';
 import {
@@ -65,28 +79,28 @@ export default function GuidedLearningPage() {
   const [templatesError, setTemplatesError] = useState<string | null>(null);
   const router = useRouter();
 
-  // Filter to only show day-based plans (1-day, 2-day, 3-day, 4-day, 5-day, 6-day, 7-day)
+  // Filter to only show day-based plans (1-Day, 2-Day, 3-Day, 4-Day, 5-Day, 6-Day, 7-Day)
   const templates = allTemplates
     .filter(plan => {
       const dayBasedPlans = [
-        '1-day-plan',
-        '2-day-plan',
-        '3-day-plan',
-        '4-day-plan',
-        '5-day-plan',
-        '6-day-plan',
-        '7-day-plan',
+        '1-Day Interview Prep',
+        '2-Day Interview Prep',
+        '3-Day Interview Prep',
+        '4-Day Interview Prep',
+        '5-Day Interview Prep',
+        '6-Day Interview Prep',
+        '7-Day Interview Prep',
       ];
-      return dayBasedPlans.includes(plan.id);
+      return dayBasedPlans.includes(plan.name);
     })
     .sort((a, b) => {
-      // Extract day number from plan ID (e.g., "1-day-plan" -> 1)
-      const getDayNumber = (plan_id: string) => {
-        const match = plan_id.match(/(\d+)-day-plan/);
+      // Extract day number from plan name (e.g., "1-Day Interview Prep" -> 1)
+      const getDayNumber = (plan_name: string) => {
+        const match = plan_name.match(/(\d+)-Day Interview Prep/);
         return match ? parseInt(match[1], 10) : 0;
       };
 
-      return getDayNumber(a.id) - getDayNumber(b.id);
+      return getDayNumber(a.name) - getDayNumber(b.name);
     });
 
   // Load learning plan templates
@@ -95,10 +109,23 @@ export default function GuidedLearningPage() {
       try {
         setTemplatesLoading(true);
         const response = await fetch('/api/plans');
+        console.log('🔍 Frontend Debug: API Response status:', response.status);
+
         if (response.ok) {
           const data = await response.json();
+          console.log('🔍 Frontend Debug: API Response data:', data);
+          console.log(
+            '🔍 Frontend Debug: Plans received:',
+            data.data?.length || 0
+          );
           setAllTemplates(data.data || []);
         } else {
+          const errorText = await response.text();
+          console.error(
+            '❌ Frontend Debug: API Error:',
+            response.status,
+            errorText
+          );
           setTemplatesError('Failed to load templates');
         }
       } catch (error) {

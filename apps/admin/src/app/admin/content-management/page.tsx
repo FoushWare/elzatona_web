@@ -36,7 +36,7 @@ import {
   Label,
   Textarea,
   Checkbox,
-} from '@elzatona/shared-components';
+} from '@/components/ui';
 
 // Import icons with tree shaking
 import {
@@ -119,6 +119,7 @@ interface Question {
   type: string;
   difficulty: string;
   category_id: string;
+  topic_id: string;
   learning_card_id: string;
   options: string[];
   correct_answer: string;
@@ -144,6 +145,7 @@ const CARD_ICONS = {
   'Framework Questions': { icon: Layers, color: '#10B981' },
   'Problem Solving': { icon: Puzzle, color: '#F59E0B' },
   'System Design': { icon: Network, color: '#EF4444' },
+  'Frontend Tasks': { icon: Target, color: '#8B5CF6' },
 } as const;
 
 // Loading skeleton component for better UX
@@ -237,6 +239,20 @@ export default function ContentManagementPage() {
   const [cardToDelete, setCardToDelete] = useState<LearningCard | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Card management modal states
+  const [isCardManagementModalOpen, setIsCardManagementModalOpen] =
+    useState(false);
+  const [selectedPlanForCards, setSelectedPlanForCards] =
+    useState<LearningPlan | null>(null);
+  const [planCards, setPlanCards] = useState<
+    { card_id: string; order_index: number; is_active: boolean }[]
+  >([]);
+  const [availableCards, setAvailableCards] = useState<LearningCard[]>([]);
+  const [isManagingCards, setIsManagingCards] = useState(false);
+
+  // Plan questions state
+  const [planQuestions, setPlanQuestions] = useState<Set<string>>(new Set());
+
   // Fetch data from Supabase
   const fetchData = useCallback(async () => {
     try {
@@ -250,12 +266,17 @@ export default function ContentManagementPage() {
         categoriesResult,
         topicsResult,
         questionsResult,
+        planQuestionsResult,
       ] = await Promise.all([
         supabase.from('learning_cards').select('*').order('order_index'),
         supabase.from('learning_plans').select('*').order('created_at'),
         supabase.from('categories').select('*').order('created_at'),
         supabase.from('topics').select('*').order('order_index'),
         supabase.from('questions').select('*').order('created_at').limit(1000), // Limit to prevent performance issues
+        supabase
+          .from('plan_questions')
+          .select('plan_id, question_id')
+          .eq('is_active', true),
       ]);
 
       if (cardsResult.error) throw cardsResult.error;
@@ -263,6 +284,7 @@ export default function ContentManagementPage() {
       if (categoriesResult.error) throw categoriesResult.error;
       if (topicsResult.error) throw topicsResult.error;
       if (questionsResult.error) throw questionsResult.error;
+      if (planQuestionsResult.error) throw planQuestionsResult.error;
 
       setCards(cardsResult.data || []);
       setPlans(plansResult.data || []);
@@ -270,12 +292,21 @@ export default function ContentManagementPage() {
       setTopics(topicsResult.data || []);
       setQuestions(questionsResult.data || []);
 
+      // Convert plan questions to Set for efficient lookup
+      const planQuestionsSet = new Set(
+        planQuestionsResult.data?.map(
+          pq => `${pq.plan_id}-${pq.question_id}`
+        ) || []
+      );
+      setPlanQuestions(planQuestionsSet);
+
       console.log('📊 Data loaded:', {
         cards: cardsResult.data?.length || 0,
         plans: plansResult.data?.length || 0,
         categories: categoriesResult.data?.length || 0,
         topics: topicsResult.data?.length || 0,
         questions: questionsResult.data?.length || 0,
+        planQuestions: planQuestionsResult.data?.length || 0,
       });
     } catch (err) {
       console.error('❌ Error fetching data:', err);
@@ -466,7 +497,7 @@ export default function ContentManagementPage() {
   const selectAllQuestions = useCallback(() => {
     if (!selectedTopic) return;
     const topicQuestions = questions.filter(
-      q => q.category_id === selectedTopic.category_id
+      q => q.topic_id === selectedTopic.id
     );
     setSelectedQuestions(new Set(topicQuestions.map(q => q.id)));
   }, [selectedTopic, questions]);
@@ -476,16 +507,32 @@ export default function ContentManagementPage() {
   }, []);
 
   const addSelectedQuestionsToPlan = useCallback(async () => {
-    if (!selectedPlan || selectedQuestions.size === 0) return;
+    if (!selectedPlan || !selectedTopic || selectedQuestions.size === 0) return;
 
     try {
-      // TODO: Implement API call to add questions to plan
-      console.log('Adding questions to plan:', {
-        planId: selectedPlan.id,
-        questionIds: Array.from(selectedQuestions),
-      });
+      // Add questions to plan_questions table
+      const planQuestionInserts = Array.from(selectedQuestions).map(
+        questionId => ({
+          plan_id: selectedPlan.id,
+          question_id: questionId,
+          topic_id: selectedTopic.id,
+          is_active: true,
+        })
+      );
 
-      // For now, just show success message
+      const { error } = await supabase
+        .from('plan_questions')
+        .insert(planQuestionInserts);
+
+      if (error) throw error;
+
+      // Update local state
+      const newPlanQuestions = new Set(planQuestions);
+      selectedQuestions.forEach(questionId => {
+        newPlanQuestions.add(`${selectedPlan.id}-${questionId}`);
+      });
+      setPlanQuestions(newPlanQuestions);
+
       toast.success(
         `Successfully added ${selectedQuestions.size} questions to plan "${selectedPlan.name}"`
       );
@@ -494,7 +541,68 @@ export default function ContentManagementPage() {
       console.error('Error adding questions to plan:', error);
       toast.error('Failed to add questions to plan');
     }
-  }, [selectedPlan, selectedQuestions, closeTopicQuestionsModal]);
+  }, [
+    selectedPlan,
+    selectedTopic,
+    selectedQuestions,
+    planQuestions,
+    closeTopicQuestionsModal,
+  ]);
+
+  // Toggle question in plan (for radio button functionality)
+  const toggleQuestionInPlan = useCallback(
+    async (
+      questionId: string,
+      planId: string,
+      topicId: string,
+      isInPlan: boolean
+    ) => {
+      try {
+        if (isInPlan) {
+          // Remove question from plan
+          const { error } = await supabase
+            .from('plan_questions')
+            .delete()
+            .eq('plan_id', planId)
+            .eq('question_id', questionId);
+
+          if (error) throw error;
+
+          // Update local state
+          setPlanQuestions(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(`${planId}-${questionId}`);
+            return newSet;
+          });
+
+          toast.success('Question removed from plan');
+        } else {
+          // Add question to plan
+          const { error } = await supabase.from('plan_questions').insert({
+            plan_id: planId,
+            question_id: questionId,
+            topic_id: topicId,
+            is_active: true,
+          });
+
+          if (error) throw error;
+
+          // Update local state
+          setPlanQuestions(prev => {
+            const newSet = new Set(prev);
+            newSet.add(`${planId}-${questionId}`);
+            return newSet;
+          });
+
+          toast.success('Question added to plan');
+        }
+      } catch (error) {
+        console.error('Error toggling question in plan:', error);
+        toast.error('Failed to update question in plan');
+      }
+    },
+    []
+  );
 
   // Delete card helper functions
   const openDeleteCardModal = useCallback((card: LearningCard) => {
@@ -535,6 +643,152 @@ export default function ContentManagementPage() {
       setIsDeleting(false);
     }
   }, [cardToDelete, fetchData, closeDeleteCardModal]);
+
+  // Card management helper functions
+  const openCardManagementModal = useCallback(async (plan: LearningPlan) => {
+    setSelectedPlanForCards(plan);
+    setIsCardManagementModalOpen(true);
+    setIsManagingCards(true);
+
+    try {
+      // Fetch current cards in this plan
+      const { data: currentPlanCards, error: planCardsError } = await supabase
+        .from('plan_cards')
+        .select('card_id, order_index, is_active')
+        .eq('plan_id', plan.id)
+        .order('order_index');
+
+      if (planCardsError) throw planCardsError;
+
+      setPlanCards(currentPlanCards || []);
+
+      // Get all available cards
+      const { data: allCards, error: cardsError } = await supabase
+        .from('learning_cards')
+        .select('*')
+        .eq('is_active', true)
+        .order('title');
+
+      if (cardsError) throw cardsError;
+
+      setAvailableCards(allCards || []);
+    } catch (error) {
+      console.error('Error fetching plan cards:', error);
+      toast.error('Failed to load plan cards');
+    } finally {
+      setIsManagingCards(false);
+    }
+  }, []);
+
+  const closeCardManagementModal = useCallback(() => {
+    setIsCardManagementModalOpen(false);
+    setSelectedPlanForCards(null);
+    setPlanCards([]);
+    setAvailableCards([]);
+    setIsManagingCards(false);
+  }, []);
+
+  const addCardToPlan = useCallback(
+    async (cardId: string) => {
+      if (!selectedPlanForCards) return;
+
+      try {
+        // Check if card is already in plan
+        const existingCard = planCards.find(pc => pc.card_id === cardId);
+        if (existingCard) {
+          toast.error('This card is already in the plan');
+          return;
+        }
+
+        // Get the next order index
+        const maxOrderIndex = Math.max(
+          ...planCards.map(pc => pc.order_index),
+          0
+        );
+        const nextOrderIndex = maxOrderIndex + 1;
+
+        // Add card to plan
+        const { error } = await supabase.from('plan_cards').insert({
+          plan_id: selectedPlanForCards.id,
+          card_id: cardId,
+          order_index: nextOrderIndex,
+          is_active: true,
+        });
+
+        if (error) throw error;
+
+        // Update local state
+        setPlanCards(prev => [
+          ...prev,
+          { card_id: cardId, order_index: nextOrderIndex, is_active: true },
+        ]);
+
+        toast.success('Card added to plan successfully');
+      } catch (error) {
+        console.error('Error adding card to plan:', error);
+        toast.error('Failed to add card to plan');
+      }
+    },
+    [selectedPlanForCards, planCards]
+  );
+
+  const removeCardFromPlan = useCallback(
+    async (cardId: string) => {
+      if (!selectedPlanForCards) return;
+
+      try {
+        // Remove card from plan
+        const { error } = await supabase
+          .from('plan_cards')
+          .delete()
+          .eq('plan_id', selectedPlanForCards.id)
+          .eq('card_id', cardId);
+
+        if (error) throw error;
+
+        // Update local state
+        setPlanCards(prev => prev.filter(pc => pc.card_id !== cardId));
+
+        toast.success('Card removed from plan successfully');
+      } catch (error) {
+        console.error('Error removing card from plan:', error);
+        toast.error('Failed to remove card from plan');
+      }
+    },
+    [selectedPlanForCards]
+  );
+
+  const toggleCardActiveStatus = useCallback(
+    async (cardId: string, isActive: boolean) => {
+      if (!selectedPlanForCards) return;
+
+      try {
+        // Update card status in plan
+        const { error } = await supabase
+          .from('plan_cards')
+          .update({ is_active: !isActive })
+          .eq('plan_id', selectedPlanForCards.id)
+          .eq('card_id', cardId);
+
+        if (error) throw error;
+
+        // Update local state
+        setPlanCards(prev =>
+          prev.map(pc =>
+            pc.card_id === cardId ? { ...pc, is_active: !isActive } : pc
+          )
+        );
+
+        toast.success(
+          `Card ${!isActive ? 'activated' : 'deactivated'} in plan`
+        );
+      } catch (error) {
+        console.error('Error updating card status:', error);
+        toast.error('Failed to update card status');
+      }
+    },
+    [selectedPlanForCards]
+  );
 
   if (loading) {
     return (
@@ -1123,14 +1377,11 @@ export default function ContentManagementPage() {
                         <div className='flex flex-wrap gap-2 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg'>
                           <Button
                             size='sm'
-                            onClick={() => {
-                              // TODO: Implement add cards to plan functionality
-                              console.log('Add cards to plan:', plan.id);
-                            }}
+                            onClick={() => openCardManagementModal(plan)}
                             className='flex items-center space-x-1 bg-blue-600 hover:bg-blue-700'
                           >
                             <Layers className='h-4 w-4' />
-                            <span>Add Cards</span>
+                            <span>Manage Cards</span>
                           </Button>
                           <Button
                             variant='outline'
@@ -1315,8 +1566,7 @@ export default function ContentManagementPage() {
                                           categoryTopics.map(topic => {
                                             const topicQuestions =
                                               questions.filter(
-                                                q =>
-                                                  q.category_id === category.id
+                                                q => q.topic_id === topic.id
                                               );
 
                                             return (
@@ -1324,7 +1574,17 @@ export default function ContentManagementPage() {
                                                 key={topic.id}
                                                 className='ml-6 border-l-2 border-orange-200 pl-4 mt-2'
                                               >
-                                                <div className='flex items-center justify-between py-2'>
+                                                <div
+                                                  className={`flex items-center justify-between py-2 px-3 rounded-lg transition-colors ${
+                                                    topicQuestions.some(q =>
+                                                      planQuestions.has(
+                                                        `${plan.id}-${q.id}`
+                                                      )
+                                                    )
+                                                      ? 'bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800'
+                                                      : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                                                  }`}
+                                                >
                                                   <div className='flex items-center space-x-2'>
                                                     <button
                                                       onClick={() =>
@@ -1342,9 +1602,40 @@ export default function ContentManagementPage() {
                                                         <ChevronRight className='h-4 w-4' />
                                                       )}
                                                     </button>
-                                                    <Target className='h-4 w-4 text-orange-600' />
+                                                    <div className='flex items-center space-x-2'>
+                                                      <Target
+                                                        className={`h-4 w-4 ${
+                                                          topicQuestions.some(
+                                                            q =>
+                                                              planQuestions.has(
+                                                                `${plan.id}-${q.id}`
+                                                              )
+                                                          )
+                                                            ? 'text-orange-600'
+                                                            : 'text-gray-400'
+                                                        }`}
+                                                      />
+                                                      {topicQuestions.some(q =>
+                                                        planQuestions.has(
+                                                          `${plan.id}-${q.id}`
+                                                        )
+                                                      ) && (
+                                                        <div className='w-2 h-2 bg-orange-500 rounded-full'></div>
+                                                      )}
+                                                    </div>
                                                     <div>
-                                                      <h6 className='font-medium text-gray-900 dark:text-white'>
+                                                      <h6
+                                                        className={`font-medium ${
+                                                          topicQuestions.some(
+                                                            q =>
+                                                              planQuestions.has(
+                                                                `${plan.id}-${q.id}`
+                                                              )
+                                                          )
+                                                            ? 'text-orange-900 dark:text-orange-100'
+                                                            : 'text-gray-900 dark:text-white'
+                                                        }`}
+                                                      >
                                                         {topic.name}
                                                       </h6>
                                                       <p className='text-sm text-gray-600 dark:text-gray-400'>
@@ -1360,9 +1651,109 @@ export default function ContentManagementPage() {
                                                       {topicQuestions.length}{' '}
                                                       Questions
                                                     </Badge>
-                                                    <div className='flex items-center space-x-1'>
+                                                    <div className='flex items-center space-x-2'>
+                                                      <div className='flex items-center space-x-2'>
+                                                        <div className='relative'>
+                                                          <input
+                                                            type='checkbox'
+                                                            checked={topicQuestions.some(
+                                                              q =>
+                                                                planQuestions.has(
+                                                                  `${plan.id}-${q.id}`
+                                                                )
+                                                            )}
+                                                            onChange={() => {
+                                                              const hasQuestionsInPlan =
+                                                                topicQuestions.some(
+                                                                  q =>
+                                                                    planQuestions.has(
+                                                                      `${plan.id}-${q.id}`
+                                                                    )
+                                                                );
+
+                                                              if (
+                                                                hasQuestionsInPlan
+                                                              ) {
+                                                                // Remove all questions from this topic in the plan
+                                                                topicQuestions.forEach(
+                                                                  question => {
+                                                                    if (
+                                                                      planQuestions.has(
+                                                                        `${plan.id}-${question.id}`
+                                                                      )
+                                                                    ) {
+                                                                      toggleQuestionInPlan(
+                                                                        question.id,
+                                                                        plan.id,
+                                                                        topic.id,
+                                                                        true
+                                                                      );
+                                                                    }
+                                                                  }
+                                                                );
+                                                              } else {
+                                                                // Add all questions from this topic to the plan
+                                                                topicQuestions.forEach(
+                                                                  question => {
+                                                                    if (
+                                                                      !planQuestions.has(
+                                                                        `${plan.id}-${question.id}`
+                                                                      )
+                                                                    ) {
+                                                                      toggleQuestionInPlan(
+                                                                        question.id,
+                                                                        plan.id,
+                                                                        topic.id,
+                                                                        false
+                                                                      );
+                                                                    }
+                                                                  }
+                                                                );
+                                                              }
+                                                            }}
+                                                            className='sr-only'
+                                                            id={`topic-${topic.id}-${plan.id}`}
+                                                          />
+                                                          <label
+                                                            htmlFor={`topic-${topic.id}-${plan.id}`}
+                                                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
+                                                              topicQuestions.some(
+                                                                q =>
+                                                                  planQuestions.has(
+                                                                    `${plan.id}-${q.id}`
+                                                                  )
+                                                              )
+                                                                ? 'bg-orange-500'
+                                                                : 'bg-gray-300 dark:bg-gray-600'
+                                                            }`}
+                                                          >
+                                                            <span
+                                                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                                                topicQuestions.some(
+                                                                  q =>
+                                                                    planQuestions.has(
+                                                                      `${plan.id}-${q.id}`
+                                                                    )
+                                                                )
+                                                                  ? 'translate-x-6'
+                                                                  : 'translate-x-1'
+                                                              }`}
+                                                            />
+                                                          </label>
+                                                        </div>
+                                                        <span className='text-xs font-medium text-gray-700 dark:text-gray-300'>
+                                                          {topicQuestions.some(
+                                                            q =>
+                                                              planQuestions.has(
+                                                                `${plan.id}-${q.id}`
+                                                              )
+                                                          )
+                                                            ? 'Included'
+                                                            : 'Include Topic'}
+                                                        </span>
+                                                      </div>
                                                       <Button
-                                                        variant='ghost'
+                                                        variant='outline'
                                                         size='sm'
                                                         onClick={() => {
                                                           openTopicQuestionsModal(
@@ -1370,9 +1761,13 @@ export default function ContentManagementPage() {
                                                             plan
                                                           );
                                                         }}
-                                                        className='h-6 px-2 text-orange-600 hover:bg-orange-100'
+                                                        className='h-7 px-3 text-orange-600 border-orange-200 hover:bg-orange-50 hover:border-orange-300'
+                                                        title='Manage individual questions'
                                                       >
-                                                        <Plus className='h-3 w-3' />
+                                                        <Plus className='h-3 w-3 mr-1' />
+                                                        <span className='text-xs'>
+                                                          Manage
+                                                        </span>
                                                       </Button>
                                                     </div>
                                                   </div>
@@ -1389,11 +1784,42 @@ export default function ContentManagementPage() {
                                                         key={question.id}
                                                         className='ml-6 border-l-2 border-green-200 pl-4 mt-2'
                                                       >
-                                                        <div className='flex items-center justify-between py-2'>
+                                                        <div
+                                                          className={`flex items-center justify-between py-2 px-3 rounded-lg transition-colors ${
+                                                            planQuestions.has(
+                                                              `${plan.id}-${question.id}`
+                                                            )
+                                                              ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
+                                                              : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                                                          }`}
+                                                        >
                                                           <div className='flex items-center space-x-2'>
-                                                            <MessageSquare className='h-4 w-4 text-green-600' />
+                                                            <div className='flex items-center space-x-2'>
+                                                              <MessageSquare
+                                                                className={`h-4 w-4 ${
+                                                                  planQuestions.has(
+                                                                    `${plan.id}-${question.id}`
+                                                                  )
+                                                                    ? 'text-green-600'
+                                                                    : 'text-gray-400'
+                                                                }`}
+                                                              />
+                                                              {planQuestions.has(
+                                                                `${plan.id}-${question.id}`
+                                                              ) && (
+                                                                <div className='w-2 h-2 bg-green-500 rounded-full'></div>
+                                                              )}
+                                                            </div>
                                                             <div>
-                                                              <h6 className='font-medium text-gray-900 dark:text-white text-sm'>
+                                                              <h6
+                                                                className={`font-medium text-sm ${
+                                                                  planQuestions.has(
+                                                                    `${plan.id}-${question.id}`
+                                                                  )
+                                                                    ? 'text-green-900 dark:text-green-100'
+                                                                    : 'text-gray-900 dark:text-white'
+                                                                }`}
+                                                              >
                                                                 {question.title}
                                                               </h6>
                                                               <p className='text-xs text-gray-600 dark:text-gray-400'>
@@ -1405,22 +1831,58 @@ export default function ContentManagementPage() {
                                                               </p>
                                                             </div>
                                                           </div>
-                                                          <div className='flex items-center space-x-1'>
-                                                            <Button
-                                                              variant='ghost'
-                                                              size='sm'
-                                                              onClick={() => {
-                                                                // TODO: Implement add question to plan functionality
-                                                                console.log(
-                                                                  'Add question to plan:',
-                                                                  question.id,
-                                                                  plan.id
-                                                                );
-                                                              }}
-                                                              className='h-6 px-2 text-green-600 hover:bg-green-100'
-                                                            >
-                                                              <Plus className='h-3 w-3' />
-                                                            </Button>
+                                                          <div className='flex items-center space-x-2'>
+                                                            <div className='flex items-center space-x-2'>
+                                                              <div className='relative'>
+                                                                <input
+                                                                  type='checkbox'
+                                                                  checked={planQuestions.has(
+                                                                    `${plan.id}-${question.id}`
+                                                                  )}
+                                                                  onChange={() => {
+                                                                    const isInPlan =
+                                                                      planQuestions.has(
+                                                                        `${plan.id}-${question.id}`
+                                                                      );
+                                                                    toggleQuestionInPlan(
+                                                                      question.id,
+                                                                      plan.id,
+                                                                      topic.id,
+                                                                      isInPlan
+                                                                    );
+                                                                  }}
+                                                                  className='sr-only'
+                                                                  id={`question-${question.id}-${plan.id}`}
+                                                                />
+                                                                <label
+                                                                  htmlFor={`question-${question.id}-${plan.id}`}
+                                                                  className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors cursor-pointer ${
+                                                                    planQuestions.has(
+                                                                      `${plan.id}-${question.id}`
+                                                                    )
+                                                                      ? 'bg-green-500'
+                                                                      : 'bg-gray-300 dark:bg-gray-600'
+                                                                  }`}
+                                                                >
+                                                                  <span
+                                                                    className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
+                                                                      planQuestions.has(
+                                                                        `${plan.id}-${question.id}`
+                                                                      )
+                                                                        ? 'translate-x-5'
+                                                                        : 'translate-x-1'
+                                                                    }`}
+                                                                  />
+                                                                </label>
+                                                              </div>
+                                                              <span className='text-xs font-medium text-gray-700 dark:text-gray-300'>
+                                                                {planQuestions.has(
+                                                                  `${plan.id}-${question.id}`
+                                                                )
+                                                                  ? 'Included'
+                                                                  : 'Include'}
+                                                              </span>
+                                                            </div>
                                                           </div>
                                                         </div>
                                                       </div>
@@ -1463,7 +1925,7 @@ export default function ContentManagementPage() {
         open={isTopicQuestionsModalOpen}
         onOpenChange={setIsTopicQuestionsModalOpen}
       >
-        <DialogContent className='max-w-4xl max-h-[80vh] overflow-hidden flex flex-col'>
+        <DialogContent className='max-w-4xl max-h-[80vh] overflow-hidden flex flex-col mx-auto my-auto'>
           <DialogHeader>
             <DialogTitle className='flex items-center space-x-2'>
               <Target className='h-5 w-5 text-orange-600' />
@@ -1499,11 +1961,7 @@ export default function ContentManagementPage() {
               </div>
               <div className='text-sm text-gray-600 dark:text-gray-400'>
                 {selectedQuestions.size} of{' '}
-                {
-                  questions.filter(
-                    q => q.category_id === selectedTopic?.category_id
-                  ).length
-                }{' '}
+                {questions.filter(q => q.topic_id === selectedTopic?.id).length}{' '}
                 selected
               </div>
             </div>
@@ -1512,7 +1970,7 @@ export default function ContentManagementPage() {
             <div className='flex-1 overflow-y-auto space-y-2'>
               {selectedTopic &&
                 questions
-                  .filter(q => q.category_id === selectedTopic.category_id)
+                  .filter(q => q.topic_id === selectedTopic.id)
                   .map(question => (
                     <div
                       key={question.id}
@@ -1588,7 +2046,7 @@ export default function ContentManagementPage() {
         open={isDeleteCardModalOpen}
         onOpenChange={setIsDeleteCardModalOpen}
       >
-        <DialogContent className='max-w-md mx-auto'>
+        <DialogContent className='max-w-md mx-auto my-auto'>
           <DialogHeader>
             <DialogTitle className='flex items-center space-x-2'>
               <Trash2 className='h-5 w-5 text-red-600' />
@@ -1647,6 +2105,188 @@ export default function ContentManagementPage() {
                 </>
               )}
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Card Management Modal */}
+      <Dialog
+        open={isCardManagementModalOpen}
+        onOpenChange={setIsCardManagementModalOpen}
+      >
+        <DialogContent className='max-w-4xl max-h-[80vh] overflow-hidden flex flex-col mx-auto my-auto'>
+          <DialogHeader>
+            <DialogTitle className='flex items-center space-x-2'>
+              <Layers className='h-5 w-5 text-blue-600' />
+              <span>Manage Cards for "{selectedPlanForCards?.name}"</span>
+            </DialogTitle>
+            <DialogDescription>
+              Add or remove learning cards from this plan. You can also
+              activate/deactivate cards.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className='flex-1 overflow-hidden flex flex-col'>
+            {isManagingCards ? (
+              <div className='flex items-center justify-center py-8'>
+                <Loader2 className='h-8 w-8 animate-spin text-blue-600' />
+                <span className='ml-2 text-gray-600'>Loading cards...</span>
+              </div>
+            ) : (
+              <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+                {/* Current Cards in Plan */}
+                <div className='space-y-4'>
+                  <h3 className='text-lg font-semibold text-gray-900 dark:text-white flex items-center'>
+                    <Layers className='h-5 w-5 mr-2 text-green-600' />
+                    Cards in Plan ({planCards.length})
+                  </h3>
+
+                  <div className='max-h-96 overflow-y-auto space-y-2'>
+                    {planCards.length === 0 ? (
+                      <div className='text-center py-8 text-gray-500'>
+                        <Layers className='h-12 w-12 mx-auto mb-2 text-gray-400' />
+                        <p>No cards in this plan</p>
+                      </div>
+                    ) : (
+                      planCards.map(planCard => {
+                        const card = availableCards.find(
+                          c => c.id === planCard.card_id
+                        );
+                        if (!card) return null;
+
+                        const IconComponent =
+                          CARD_ICONS[card.title as keyof typeof CARD_ICONS]
+                            ?.icon || Layers;
+
+                        return (
+                          <div
+                            key={planCard.card_id}
+                            className={`p-4 border rounded-lg transition-colors ${
+                              planCard.is_active
+                                ? 'border-green-200 bg-green-50 dark:bg-green-900/20'
+                                : 'border-gray-200 bg-gray-50 dark:bg-gray-800'
+                            }`}
+                          >
+                            <div className='flex items-center justify-between'>
+                              <div className='flex items-center space-x-3'>
+                                <IconComponent
+                                  className='h-5 w-5'
+                                  style={{ color: card.color }}
+                                />
+                                <div>
+                                  <h4 className='font-medium text-gray-900 dark:text-white'>
+                                    {card.title}
+                                  </h4>
+                                  <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                    {card.description}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className='flex items-center space-x-2'>
+                                <Button
+                                  variant='ghost'
+                                  size='sm'
+                                  onClick={() =>
+                                    toggleCardActiveStatus(
+                                      planCard.card_id,
+                                      planCard.is_active
+                                    )
+                                  }
+                                  className={`h-8 px-2 ${
+                                    planCard.is_active
+                                      ? 'text-green-600 hover:bg-green-100'
+                                      : 'text-gray-400 hover:bg-gray-100'
+                                  }`}
+                                >
+                                  {planCard.is_active ? 'Active' : 'Inactive'}
+                                </Button>
+                                <Button
+                                  variant='ghost'
+                                  size='sm'
+                                  onClick={() =>
+                                    removeCardFromPlan(planCard.card_id)
+                                  }
+                                  className='h-8 w-8 p-0 hover:bg-red-100'
+                                >
+                                  <Trash2 className='h-4 w-4 text-red-600' />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+
+                {/* Available Cards to Add */}
+                <div className='space-y-4'>
+                  <h3 className='text-lg font-semibold text-gray-900 dark:text-white flex items-center'>
+                    <Plus className='h-5 w-5 mr-2 text-blue-600' />
+                    Available Cards (
+                    {
+                      availableCards.filter(
+                        card => !planCards.find(pc => pc.card_id === card.id)
+                      ).length
+                    }
+                    )
+                  </h3>
+
+                  <div className='max-h-96 overflow-y-auto space-y-2'>
+                    {availableCards
+                      .filter(
+                        card => !planCards.find(pc => pc.card_id === card.id)
+                      )
+                      .map(card => {
+                        const IconComponent =
+                          CARD_ICONS[card.title as keyof typeof CARD_ICONS]
+                            ?.icon || Layers;
+
+                        return (
+                          <div
+                            key={card.id}
+                            className='p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                          >
+                            <div className='flex items-center justify-between'>
+                              <div className='flex items-center space-x-3'>
+                                <IconComponent
+                                  className='h-5 w-5'
+                                  style={{ color: card.color }}
+                                />
+                                <div>
+                                  <h4 className='font-medium text-gray-900 dark:text-white'>
+                                    {card.title}
+                                  </h4>
+                                  <p className='text-sm text-gray-600 dark:text-gray-400'>
+                                    {card.description}
+                                  </p>
+                                </div>
+                              </div>
+                              <Button
+                                size='sm'
+                                onClick={() => addCardToPlan(card.id)}
+                                className='flex items-center space-x-1 bg-blue-600 hover:bg-blue-700'
+                              >
+                                <Plus className='h-4 w-4' />
+                                <span>Add</span>
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <DialogFooter className='flex items-center justify-between'>
+            <Button variant='outline' onClick={closeCardManagementModal}>
+              Close
+            </Button>
+            <div className='text-sm text-gray-600 dark:text-gray-400'>
+              {planCards.length} cards in plan
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>

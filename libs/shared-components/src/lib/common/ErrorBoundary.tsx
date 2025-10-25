@@ -1,13 +1,26 @@
 'use client';
 
 import React, { Component, ReactNode, ErrorInfo } from 'react';
-import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+// Conditional Supabase client creation with fallback values
+let supabase = null;
+try {
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+  const supabaseServiceRoleKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_key';
 
-import { ErrorLoggingService } from '@/lib/error-logging-service';
+  if (
+    supabaseUrl !== 'https://placeholder.supabase.co' &&
+    supabaseServiceRoleKey !== 'placeholder_key'
+  ) {
+    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+  }
+} catch (error) {
+  console.warn('Supabase client creation failed in ErrorBoundary:', error);
+}
+
 import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react';
 
 interface Props {
@@ -52,23 +65,12 @@ export class ErrorBoundary extends Component<Props, State> {
 
   private async logError(error: Error, errorInfo: ErrorInfo) {
     try {
-      const errorId = await ErrorLoggingService.logError(
-        'error',
-        error.message,
-        error,
-        {
-          userAgent:
-            typeof window !== 'undefined'
-              ? window.navigator.userAgent
-              : undefined,
-          url: typeof window !== 'undefined' ? window.location.href : undefined,
-        },
-        {
-          component: 'ErrorBoundary',
-          componentStack: errorInfo.componentStack,
-        }
-      );
+      // Simple error logging without external service dependency
+      console.error('ErrorBoundary caught an error:', error);
+      console.error('Error info:', errorInfo);
 
+      // Generate a simple error ID
+      const errorId = `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       this.setState({ errorId });
     } catch (logError) {
       console.error('Failed to log error:', logError);

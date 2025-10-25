@@ -23,7 +23,12 @@
       "ui": ["./libs/ui/src/index.ts"],
       "auth": ["./libs/auth/src/index.ts"],
       "database": ["./libs/database/src/index.ts"],
-      "utils": ["./libs/utils/src/index.ts"]
+      "utils": ["./libs/utils/src/index.ts"],
+      "@elzatona/shared-contexts": ["./libs/shared-contexts/src/index.ts"],
+      "@elzatona/shared-components": ["./libs/shared-components/src/index.ts"],
+      "@elzatona/shared-hooks": ["./libs/shared-hooks/src/index.ts"],
+      "@elzatona/shared-types": ["./libs/shared-types/src/index.ts"],
+      "@elzatona/shared-atoms": ["./libs/shared-atoms/src/index.ts"]
     }
   },
   "include": [
