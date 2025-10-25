@@ -18,6 +18,12 @@ export default function Navigation() {
 
           <div className='flex items-center space-x-4'>
             <Link
+              href='/features/guided-learning'
+              className='text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+            >
+              Guided Learning
+            </Link>
+            <Link
               href='/practice'
               className='text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
             >
