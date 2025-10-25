@@ -7,7 +7,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-import { motion, AnimatePresence } from 'framer-motion';
+// Removed framer-motion dependency - using CSS animations instead
 import { CheckCircle, XCircle, Info, X } from 'lucide-react';
 
 export interface Toast {
@@ -59,12 +59,8 @@ function ToastComponent({ toast, onRemove }: ToastProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -50, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -50, scale: 0.95 }}
-      transition={{ duration: 0.2, ease: 'easeOut' }}
-      className={`max-w-sm w-full ${getBackgroundColor()} border rounded-lg shadow-lg p-4 relative`}
+    <div
+      className={`max-w-sm w-full ${getBackgroundColor()} border rounded-lg shadow-lg p-4 relative animate-in slide-in-from-top-2 fade-in duration-200`}
     >
       <div className='flex items-start space-x-3'>
         {getIcon()}
@@ -85,7 +81,7 @@ function ToastComponent({ toast, onRemove }: ToastProps) {
           <X className='w-4 h-4 text-gray-500 dark:text-gray-400' />
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -100,11 +96,9 @@ export default function ToastContainer({
 }: ToastContainerProps) {
   return (
     <div className='fixed top-4 right-4 z-50 space-y-2'>
-      <AnimatePresence>
-        {toasts.map(toast => (
-          <ToastComponent key={toast.id} toast={toast} onRemove={onRemove} />
-        ))}
-      </AnimatePresence>
+      {toasts.map(toast => (
+        <ToastComponent key={toast.id} toast={toast} onRemove={onRemove} />
+      ))}
     </div>
   );
 }
