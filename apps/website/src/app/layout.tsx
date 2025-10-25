@@ -11,6 +11,7 @@ import { LanguageProvider } from '@elzatona/shared-contexts';
 import { OnboardingProvider } from '@elzatona/shared-contexts';
 import { NotificationProvider } from '@elzatona/shared-contexts';
 import { AuthProvider } from '@elzatona/shared-contexts';
+import { Navigation } from '@elzatona/shared-components';
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = 'force-dynamic';
@@ -68,7 +69,10 @@ export default function RootLayout({
                   <ThemeProvider>
                     <LanguageProvider>
                       <OnboardingProvider>
-                        <NotificationProvider>{children}</NotificationProvider>
+                        <NotificationProvider>
+                          <Navigation />
+                          {children}
+                        </NotificationProvider>
                       </OnboardingProvider>
                     </LanguageProvider>
                   </ThemeProvider>
