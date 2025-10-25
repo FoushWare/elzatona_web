@@ -10,7 +10,7 @@ import { ThemeProvider } from '@elzatona/shared-contexts';
 import { LanguageProvider } from '@elzatona/shared-contexts';
 import { OnboardingProvider } from '@elzatona/shared-contexts';
 import { NotificationProvider } from '@elzatona/shared-contexts';
-import { ConditionalLayout } from '@elzatona/shared-components';
+import { AuthProvider } from '@elzatona/shared-contexts';
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = 'force-dynamic';
@@ -62,19 +62,19 @@ export default function RootLayout({
       <body className={inter.className}>
         <QueryProvider>
           <JotaiProvider>
-            <UserTypeProvider>
-              <MobileMenuProvider>
-                <ThemeProvider>
-                  <LanguageProvider>
-                    <OnboardingProvider>
-                      <NotificationProvider>
-                        <ConditionalLayout>{children}</ConditionalLayout>
-                      </NotificationProvider>
-                    </OnboardingProvider>
-                  </LanguageProvider>
-                </ThemeProvider>
-              </MobileMenuProvider>
-            </UserTypeProvider>
+            <AuthProvider>
+              <UserTypeProvider>
+                <MobileMenuProvider>
+                  <ThemeProvider>
+                    <LanguageProvider>
+                      <OnboardingProvider>
+                        <NotificationProvider>{children}</NotificationProvider>
+                      </OnboardingProvider>
+                    </LanguageProvider>
+                  </ThemeProvider>
+                </MobileMenuProvider>
+              </UserTypeProvider>
+            </AuthProvider>
           </JotaiProvider>
         </QueryProvider>
       </body>
