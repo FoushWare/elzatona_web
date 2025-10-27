@@ -263,7 +263,7 @@ export default function GuidedLearningPage() {
 
   if (currentPlan) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 py-8'>
+      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 pt-24 pb-8'>
         <div className='container mx-auto px-4 max-w-6xl'>
           {/* Header */}
           <div className='text-center mb-8'>
@@ -402,7 +402,7 @@ export default function GuidedLearningPage() {
   // Remove the authentication requirement to align with design document
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 py-8'>
+    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 pt-24 pb-8'>
       <div className='container mx-auto px-4 max-w-6xl'>
         {/* Header */}
         <div className='text-center mb-16'>

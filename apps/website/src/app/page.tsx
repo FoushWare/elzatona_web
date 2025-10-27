@@ -164,7 +164,7 @@ function HomePageContent() {
       </div>
 
       {/* Hero Section */}
-      <section className='relative py-20 px-4 sm:px-6 lg:px-8 z-10'>
+      <section className='relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 z-10'>
         <div className='max-w-7xl mx-auto text-center'>
           <div className='mb-8'>
             {/* Animated title with sparkles */}
