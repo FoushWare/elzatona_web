@@ -335,6 +335,7 @@ export async function GET(
           categories: categories || [],
           topics: topics || [],
           questions: questions || [],
+          planQuestionsCount: planQuestionsData?.length || 0,
         },
         // Legacy compatibility - create sections from cards for backward compatibility
         sections: cardsWithData.map((card, index) => ({
@@ -354,22 +355,6 @@ export async function GET(
           icon: card.icon,
           hasQuestions: card.questionCount > 0,
         })),
-      },
-    });
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        ...plan,
-        cards: cardsWithData,
-        totalQuestions: totalQuestions,
-        rawData: {
-          cards,
-          categories,
-          topics,
-          questions,
-          planQuestionsCount: planQuestionsData?.length || 0,
-        },
       },
     });
   } catch (error) {
