@@ -1,52 +1,27 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-
-// Conditional Supabase client creation with fallback values
-let supabase = null;
-try {
-  const { createClient } = require('@supabase/supabase-js');
-  const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-  const supabaseServiceRoleKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_key';
-
-  if (
-    supabaseUrl !== 'https://placeholder.supabase.co' &&
-    supabaseServiceRoleKey !== 'placeholder_key'
-  ) {
-    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-  }
-} catch (error) {
-  console.warn('Supabase client creation failed in guided practice:', error);
-}
-
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
   ArrowLeft,
+  CheckCircle,
   Clock,
   Target,
-  CheckCircle,
   BookOpen,
-  Zap,
-  TrendingUp,
-  Award,
-  Users,
-  Star,
   Play,
-  Calendar,
-  BarChart3,
   ArrowRight,
   Loader2,
-  RotateCcw,
-  Home,
+  Zap,
+  XCircle,
+  Info,
 } from 'lucide-react';
+import { useNotifications } from '@/components/NotificationSystem';
 
 interface Question {
   id: string;
   title: string;
   content: string;
-  topic?: string;
   difficulty: string;
   type: string;
   options?: Array<{
@@ -94,541 +69,807 @@ interface Plan {
   totalQuestions: number;
 }
 
-export default function GuidedPracticePage() {
-  const [plan, setPlan] = useState<Plan | null>(null);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
-  const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [progress, setProgress] = useState({
-    totalQuestions: 0,
-    answeredQuestions: 0,
-    correctAnswers: 0,
-    currentCard: 0,
-    completedCards: [] as number[],
-    completedCategories: [] as string[],
-    completedTopics: [] as string[],
-    answeredQuestionIds: [] as string[], // Track which specific questions were answered
-  });
-  const [currentAnswer, setCurrentAnswer] = useState<{
-    isCorrect: boolean;
-    selectedOption?: string;
-  } | null>(null);
+interface Progress {
+  planId: string;
+  completedQuestions: string[];
+  completedTopics: string[];
+  completedCategories: string[];
+  completedCards: string[];
+  currentPosition: {
+    cardIndex: number;
+    categoryIndex: number;
+    topicIndex: number;
+    questionIndex: number;
+  };
+  lastUpdated: string;
+}
 
-  const router = useRouter();
+export default function GuidedPracticePage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { addNotification } = useNotifications();
   const planId = searchParams.get('plan');
   const categoryId = searchParams.get('category');
 
-  // Load plan data
+  const [plan, setPlan] = useState<Plan | null>(null);
+  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
+  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [currentAnswer, setCurrentAnswer] = useState<string | null>(null);
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState<Progress | null>(null);
+
+  // Progress management functions
+  const getProgressKey = () => `guided-practice-progress-${planId}`;
+
+  const loadProgress = (): Progress | null => {
+    if (!planId) return null;
+    try {
+      const saved = localStorage.getItem(getProgressKey());
+      return saved ? JSON.parse(saved) : null;
+    } catch (error) {
+      console.error('Error loading progress:', error);
+      return null;
+    }
+  };
+
+  const saveProgress = (newProgress: Progress) => {
+    if (!planId) return;
+    try {
+      localStorage.setItem(getProgressKey(), JSON.stringify(newProgress));
+      setProgress(newProgress);
+    } catch (error) {
+      console.error('Error saving progress:', error);
+    }
+  };
+
+  const initializeProgress = (): Progress => {
+    return {
+      planId: planId!,
+      completedQuestions: [],
+      completedTopics: [],
+      completedCategories: [],
+      completedCards: [],
+      currentPosition: {
+        cardIndex: 0,
+        categoryIndex: 0,
+        topicIndex: 0,
+        questionIndex: 0,
+      },
+      lastUpdated: new Date().toISOString(),
+    };
+  };
+
+  const markQuestionCompleted = (questionId: string) => {
+    if (!progress) return;
+    const updatedProgress = {
+      ...progress,
+      completedQuestions: [...progress.completedQuestions, questionId],
+      lastUpdated: new Date().toISOString(),
+    };
+    saveProgress(updatedProgress);
+  };
+
+  const markTopicCompleted = (topicId: string) => {
+    if (!progress) return;
+    const updatedProgress = {
+      ...progress,
+      completedTopics: [...progress.completedTopics, topicId],
+      lastUpdated: new Date().toISOString(),
+    };
+    saveProgress(updatedProgress);
+  };
+
+  const markCategoryCompleted = (categoryId: string) => {
+    if (!progress) return;
+    const updatedProgress = {
+      ...progress,
+      completedCategories: [...progress.completedCategories, categoryId],
+      lastUpdated: new Date().toISOString(),
+    };
+    saveProgress(updatedProgress);
+  };
+
+  const markCardCompleted = (cardId: string) => {
+    if (!progress) return;
+    const updatedProgress = {
+      ...progress,
+      completedCards: [...progress.completedCards, cardId],
+      lastUpdated: new Date().toISOString(),
+    };
+    saveProgress(updatedProgress);
+  };
+
+  // Fetch plan data
   useEffect(() => {
-    const loadPlan = async () => {
+    const fetchPlanData = async () => {
       if (!planId) {
-        setError('No plan ID provided');
+        setError('Plan ID is required');
         setIsLoading(false);
         return;
       }
 
       try {
         setIsLoading(true);
+        const baseUrl =
+          process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
         const response = await fetch(
-          `/api/guided-learning/plan-details/${planId}`
+          `${baseUrl}/api/guided-learning/plan-details/${planId}`,
+          {
+            cache: 'no-store',
+          }
         );
 
         if (!response.ok) {
-          throw new Error('Failed to load plan');
+          throw new Error(`Failed to fetch plan data: ${response.status}`);
         }
 
         const data = await response.json();
-        if (data.success) {
-          console.log('🔍 Guided Practice: Plan data loaded:', {
-            planName: data.data.name,
-            totalQuestions: data.data.totalQuestions,
-            cardsCount: data.data.cards?.length || 0,
-            firstCard: data.data.cards?.[0]
-              ? {
-                  title: data.data.cards[0].title,
-                  questionCount: data.data.cards[0].questionCount,
-                  categoriesCount: data.data.cards[0].categories?.length || 0,
-                  firstCategory: data.data.cards[0].categories?.[0]
-                    ? {
-                        name: data.data.cards[0].categories[0].name,
-                        questionCount:
-                          data.data.cards[0].categories[0].questionCount,
-                        topicsCount:
-                          data.data.cards[0].categories[0].topics?.length || 0,
-                      }
-                    : null,
-                }
-              : null,
-          });
 
-          setPlan(data.data);
-          setProgress(prev => ({
-            ...prev,
-            totalQuestions: data.data.totalQuestions || 0,
-          }));
+        if (!data.success) {
+          throw new Error('API returned success: false');
+        }
 
-          // Find the first available question and set initial state
-          const firstAvailableQuestion = findFirstAvailableQuestion(
-            data.data,
-            categoryId
-          );
-          if (firstAvailableQuestion) {
-            setCurrentCardIndex(firstAvailableQuestion.cardIndex);
-            setCurrentCategoryIndex(firstAvailableQuestion.categoryIndex);
-            setCurrentTopicIndex(firstAvailableQuestion.topicIndex);
-            setCurrentQuestionIndex(firstAvailableQuestion.questionIndex);
-            console.log(
-              '🔍 Guided Practice: Starting with first available question:',
-              firstAvailableQuestion
-            );
-          } else {
-            console.log('🔍 Guided Practice: No questions found in plan');
-          }
+        setPlan(data.data);
+
+        // Load or initialize progress
+        const savedProgress = loadProgress();
+        if (savedProgress) {
+          setProgress(savedProgress);
+          resumeFromProgress(data.data, savedProgress);
         } else {
-          throw new Error(data.error || 'Failed to load plan');
+          const newProgress = initializeProgress();
+          setProgress(newProgress);
+          saveProgress(newProgress);
+          findFirstQuestion(data.data);
         }
       } catch (error) {
-        console.error('Error loading plan:', error);
-        setError('Failed to load learning plan');
+        console.error('Error fetching plan data:', error);
+        setError('Failed to load plan data');
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadPlan();
-  }, [planId, categoryId]);
-
-  // Helper function to find the first available question
-  const findFirstAvailableQuestion = (
-    planData: Plan,
-    targetCategoryId?: string | null
-  ) => {
-    for (let cardIndex = 0; cardIndex < planData.cards.length; cardIndex++) {
-      const card = planData.cards[cardIndex];
-      for (
-        let categoryIndex = 0;
-        categoryIndex < card.categories.length;
-        categoryIndex++
-      ) {
-        const category = card.categories[categoryIndex];
-
-        // If a specific category is requested, only look in that category
-        if (targetCategoryId && category.id !== targetCategoryId) {
-          continue;
-        }
-
-        for (
-          let topicIndex = 0;
-          topicIndex < category.topics.length;
-          topicIndex++
-        ) {
-          const topic = category.topics[topicIndex];
-          if (topic.questions && topic.questions.length > 0) {
-            return {
-              cardIndex,
-              categoryIndex,
-              topicIndex,
-              questionIndex: 0,
-              question: topic.questions[0],
-            };
-          }
-        }
-      }
-    }
-    return null;
-  };
-
-  // Load saved progress from localStorage
-  useEffect(() => {
-    const savedProgress = localStorage.getItem(
-      `guided-practice-progress-${planId}`
-    );
-
-    if (savedProgress) {
-      try {
-        const parsed = JSON.parse(savedProgress);
-        setProgress(prev => ({ ...prev, ...parsed }));
-        console.log('📊 Loaded saved progress:', parsed);
-      } catch (error) {
-        console.error('Error loading saved progress:', error);
-      }
-    }
+    fetchPlanData();
   }, [planId]);
 
-  // Load saved position after plan data is loaded
-  useEffect(() => {
-    if (!plan) {
-      console.log('📍 Plan not loaded yet, skipping position restoration');
-      return;
-    }
+  const resumeFromProgress = (planData: Plan, savedProgress: Progress) => {
+    const { currentPosition } = savedProgress;
 
-    const savedPosition = localStorage.getItem(
-      `guided-practice-position-${planId}`
-    );
+    // Try to resume from saved position
+    if (currentPosition.cardIndex < planData.cards.length) {
+      const card = planData.cards[currentPosition.cardIndex];
+      if (currentPosition.categoryIndex < card.categories.length) {
+        const category = card.categories[currentPosition.categoryIndex];
+        if (currentPosition.topicIndex < category.topics.length) {
+          const topic = category.topics[currentPosition.topicIndex];
+          if (
+            topic.questions &&
+            currentPosition.questionIndex < topic.questions.length
+          ) {
+            const question = topic.questions[currentPosition.questionIndex];
 
-    console.log('📍 Attempting to load saved position...');
-    console.log('📍 Current URL categoryId:', categoryId);
-    console.log('📍 Plan loaded with cards:', plan.cards.length);
-
-    if (savedPosition) {
-      try {
-        const parsed = JSON.parse(savedPosition);
-        console.log('📍 Parsed saved position:', parsed);
-
-        // If we're in a category-specific session, only restore position if it matches the saved category
-        if (categoryId) {
-          console.log('📍 Category-specific session detected');
-          console.log('📍 Saved categoryId:', parsed.categoryId);
-          console.log('📍 Current categoryId:', categoryId);
-          console.log('📍 Category match:', parsed.categoryId === categoryId);
-
-          // Check if the saved position is for the same category
-          if (parsed.categoryId === categoryId) {
-            console.log('📍 Same category, attempting to restore position');
-
-            // Find the correct card and category indices for this categoryId
-            const targetCardIndex = plan.cards.findIndex(card =>
-              card.categories.some(cat => cat.id === categoryId)
-            );
-            const targetCategoryIndex = plan.cards[
-              targetCardIndex
-            ]?.categories.findIndex(cat => cat.id === categoryId);
-
-            console.log('📍 Found targetCardIndex:', targetCardIndex);
-            console.log('📍 Found targetCategoryIndex:', targetCategoryIndex);
-
-            if (targetCardIndex !== -1 && targetCategoryIndex !== -1) {
-              setCurrentCardIndex(targetCardIndex);
-              setCurrentCategoryIndex(targetCategoryIndex);
-              setCurrentTopicIndex(parsed.topicIndex || 0);
-              setCurrentQuestionIndex(parsed.questionIndex || 0);
-              console.log(
-                '📍 Successfully restored position for same category session:',
-                {
-                  cardIndex: targetCardIndex,
-                  categoryIndex: targetCategoryIndex,
-                  topicIndex: parsed.topicIndex || 0,
-                  questionIndex: parsed.questionIndex || 0,
-                }
-              );
-            } else {
-              console.log(
-                '📍 Category not found in plan, starting from beginning'
-              );
-            }
-          } else {
-            console.log(
-              '📍 Different category session, starting from beginning of this category'
-            );
-            // Start from the beginning of the current category
-            const targetCardIndex = plan.cards.findIndex(card =>
-              card.categories.some(cat => cat.id === categoryId)
-            );
-            const targetCategoryIndex = plan.cards[
-              targetCardIndex
-            ]?.categories.findIndex(cat => cat.id === categoryId);
-
-            if (targetCardIndex !== -1 && targetCategoryIndex !== -1) {
-              setCurrentCardIndex(targetCardIndex);
-              setCurrentCategoryIndex(targetCategoryIndex);
-              setCurrentTopicIndex(0);
-              setCurrentQuestionIndex(0);
-              console.log('📍 Started fresh category session');
+            // Check if this question is already completed and has options
+            if (
+              !savedProgress.completedQuestions.includes(question.id) &&
+              question.options &&
+              Array.isArray(question.options) &&
+              question.options.length > 0
+            ) {
+              setCurrentQuestion(question);
+              setCurrentQuestionIndex(currentPosition.questionIndex);
+              setCurrentTopicIndex(currentPosition.topicIndex);
+              setCurrentCategoryIndex(currentPosition.categoryIndex);
+              setCurrentCardIndex(currentPosition.cardIndex);
+              return;
             }
           }
-        } else {
-          // Full plan session - restore exact position
-          setCurrentCardIndex(parsed.cardIndex || 0);
-          setCurrentCategoryIndex(parsed.categoryIndex || 0);
-          setCurrentTopicIndex(parsed.topicIndex || 0);
-          setCurrentQuestionIndex(parsed.questionIndex || 0);
-          console.log('📍 Loaded saved position for full plan:', parsed);
         }
-      } catch (error) {
-        console.error('Error loading saved position:', error);
       }
+    }
+
+    // If we can't resume from saved position, find next incomplete question
+    findNextIncompleteQuestion(planData, savedProgress);
+  };
+
+  const findFirstQuestion = (planData: Plan) => {
+    // Define the sequential order for cards
+    const cardOrder = [
+      'Core Technologies',
+      'Framework Questions',
+      'Problem Solving',
+      'System Design',
+      'Frontend Tasks',
+    ];
+
+    let foundQuestion: Question | null = null;
+    let foundQuestionIndex = 0;
+    let foundTopicIndex = 0;
+    let foundCategoryIndex = 0;
+    let foundCardIndex = 0;
+
+    // Find cards in the specified order
+    for (const cardTitle of cardOrder) {
+      const cardIndex = planData.cards.findIndex(card =>
+        card.title.toLowerCase().includes(cardTitle.toLowerCase())
+      );
+
+      if (cardIndex !== -1) {
+        const card = planData.cards[cardIndex];
+
+        for (
+          let categoryIndex = 0;
+          categoryIndex < card.categories.length;
+          categoryIndex++
+        ) {
+          const category = card.categories[categoryIndex];
+
+          // Skip if we're looking for a specific category and this isn't it
+          if (categoryId && category.id !== categoryId) continue;
+
+          for (
+            let topicIndex = 0;
+            topicIndex < category.topics.length;
+            topicIndex++
+          ) {
+            const topic = category.topics[topicIndex];
+
+            if (topic.questions && topic.questions.length > 0) {
+              // Find first question with options
+              const questionWithOptions = topic.questions.find(
+                q =>
+                  q.options && Array.isArray(q.options) && q.options.length > 0
+              );
+
+              if (questionWithOptions) {
+                foundQuestion = questionWithOptions;
+                foundQuestionIndex =
+                  topic.questions.indexOf(questionWithOptions);
+                foundTopicIndex = topicIndex;
+                foundCategoryIndex = categoryIndex;
+                foundCardIndex = cardIndex;
+                break;
+              }
+            }
+          }
+          if (foundQuestion) break;
+        }
+      }
+      if (foundQuestion) break;
+    }
+
+    // Fallback: find any available question
+    if (!foundQuestion) {
+      for (let cardIndex = 0; cardIndex < planData.cards.length; cardIndex++) {
+        const card = planData.cards[cardIndex];
+
+        for (
+          let categoryIndex = 0;
+          categoryIndex < card.categories.length;
+          categoryIndex++
+        ) {
+          const category = card.categories[categoryIndex];
+
+          // Skip if we're looking for a specific category and this isn't it
+          if (categoryId && category.id !== categoryId) continue;
+
+          for (
+            let topicIndex = 0;
+            topicIndex < category.topics.length;
+            topicIndex++
+          ) {
+            const topic = category.topics[topicIndex];
+
+            if (topic.questions && topic.questions.length > 0) {
+              // Find first question with options
+              const questionWithOptions = topic.questions.find(
+                q =>
+                  q.options && Array.isArray(q.options) && q.options.length > 0
+              );
+
+              if (questionWithOptions) {
+                foundQuestion = questionWithOptions;
+                foundQuestionIndex =
+                  topic.questions.indexOf(questionWithOptions);
+                foundTopicIndex = topicIndex;
+                foundCategoryIndex = categoryIndex;
+                foundCardIndex = cardIndex;
+                break;
+              }
+            }
+          }
+          if (foundQuestion) break;
+        }
+        if (foundQuestion) break;
+      }
+    }
+
+    // Set all state at once if we found a question
+    if (foundQuestion) {
+      console.log('Found first question:', {
+        id: foundQuestion.id,
+        title: foundQuestion.title,
+        hasOptions: foundQuestion.options?.length || 0,
+        cardIndex: foundCardIndex,
+        categoryIndex: foundCategoryIndex,
+        topicIndex: foundTopicIndex,
+        questionIndex: foundQuestionIndex,
+      });
+
+      setCurrentQuestion(foundQuestion);
+      setCurrentQuestionIndex(foundQuestionIndex);
+      setCurrentTopicIndex(foundTopicIndex);
+      setCurrentCategoryIndex(foundCategoryIndex);
+      setCurrentCardIndex(foundCardIndex);
     } else {
-      console.log('📍 No saved position found');
+      console.warn('No question with options found in plan data');
     }
-  }, [planId, categoryId, plan]);
-
-  // Auto-save position with proper delay to ensure state is updated
-  useEffect(() => {
-    if (plan && planId) {
-      // Use a longer delay to ensure React has finished updating state
-      const timeoutId = setTimeout(() => {
-        console.log('📍 Auto-saving position after state update:', {
-          currentCardIndex,
-          currentCategoryIndex,
-          currentTopicIndex,
-          currentQuestionIndex,
-        });
-        savePosition();
-      }, 200);
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [
-    currentCardIndex,
-    currentCategoryIndex,
-    currentTopicIndex,
-    currentQuestionIndex,
-    planId,
-  ]);
-
-  // Save progress to localStorage
-  const saveProgress = (newProgress: typeof progress) => {
-    localStorage.setItem(
-      `guided-practice-progress-${planId}`,
-      JSON.stringify(newProgress)
-    );
-    setProgress(newProgress);
   };
 
-  // Save current position to localStorage
-  const savePosition = () => {
-    const position = {
-      cardIndex: currentCardIndex,
-      categoryIndex: currentCategoryIndex,
-      topicIndex: currentTopicIndex,
-      questionIndex: currentQuestionIndex,
-      categoryId: categoryId, // Include categoryId to identify category-specific sessions
-      timestamp: new Date().toISOString(),
-    };
-    localStorage.setItem(
-      `guided-practice-position-${planId}`,
-      JSON.stringify(position)
-    );
-    console.log('📍 Saved position:', position);
-    console.log('📍 Current URL categoryId:', categoryId);
-    console.log('📍 Current indices:', {
-      currentCardIndex,
-      currentCategoryIndex,
-      currentTopicIndex,
-      currentQuestionIndex,
-    });
-  };
-
-  const handleAnswerQuestion = (
-    isCorrect: boolean,
-    selectedOption?: string
+  const findNextIncompleteQuestion = (
+    planData: Plan,
+    savedProgress: Progress
   ) => {
-    setCurrentAnswer({ isCorrect, selectedOption });
+    // Define the sequential order for cards
+    const cardOrder = [
+      'Core Technologies',
+      'Framework Questions',
+      'Problem Solving',
+      'System Design',
+      'Frontend Tasks',
+    ];
+
+    let foundQuestion: Question | null = null;
+    let foundQuestionIndex = 0;
+    let foundTopicIndex = 0;
+    let foundCategoryIndex = 0;
+    let foundCardIndex = 0;
+
+    // Find next incomplete question following the sequential order
+    for (const cardTitle of cardOrder) {
+      const cardIndex = planData.cards.findIndex(card =>
+        card.title.toLowerCase().includes(cardTitle.toLowerCase())
+      );
+
+      if (cardIndex !== -1) {
+        const card = planData.cards[cardIndex];
+
+        for (
+          let categoryIndex = 0;
+          categoryIndex < card.categories.length;
+          categoryIndex++
+        ) {
+          const category = card.categories[categoryIndex];
+
+          // Skip if we're looking for a specific category and this isn't it
+          if (categoryId && category.id !== categoryId) continue;
+
+          for (
+            let topicIndex = 0;
+            topicIndex < category.topics.length;
+            topicIndex++
+          ) {
+            const topic = category.topics[topicIndex];
+
+            if (topic.questions && topic.questions.length > 0) {
+              for (
+                let questionIndex = 0;
+                questionIndex < topic.questions.length;
+                questionIndex++
+              ) {
+                const question = topic.questions[questionIndex];
+
+                // Check if this question is not completed and has options
+                if (
+                  !savedProgress.completedQuestions.includes(question.id) &&
+                  question.options &&
+                  Array.isArray(question.options) &&
+                  question.options.length > 0
+                ) {
+                  foundQuestion = question;
+                  foundQuestionIndex = questionIndex;
+                  foundTopicIndex = topicIndex;
+                  foundCategoryIndex = categoryIndex;
+                  foundCardIndex = cardIndex;
+                  break;
+                }
+              }
+            }
+            if (foundQuestion) break;
+          }
+          if (foundQuestion) break;
+        }
+      }
+      if (foundQuestion) break;
+    }
+
+    // Set all state at once if we found a question
+    if (foundQuestion) {
+      setCurrentQuestion(foundQuestion);
+      setCurrentQuestionIndex(foundQuestionIndex);
+      setCurrentTopicIndex(foundTopicIndex);
+      setCurrentCategoryIndex(foundCategoryIndex);
+      setCurrentCardIndex(foundCardIndex);
+    }
+  };
+
+  const handleAnswerSelect = (answer: string) => {
+    if (currentAnswer) return; // Already answered
+    setCurrentAnswer(answer);
+    setShowExplanation(true);
+
+    // Mark question as completed
+    if (currentQuestion) {
+      markQuestionCompleted(currentQuestion.id);
+    }
   };
 
   const proceedToNext = () => {
-    if (!currentAnswer) return;
+    if (!plan || !currentQuestion || !progress) return;
 
-    const currentCard = plan?.cards[currentCardIndex];
-    const currentCategory = currentCard?.categories[currentCategoryIndex];
-    const currentTopic = currentCategory?.topics[currentTopicIndex];
-    const currentQuestion = currentTopic?.questions[currentQuestionIndex];
-
-    if (!currentQuestion) return;
-
-    const newProgress = {
-      ...progress,
-      answeredQuestions: progress.answeredQuestions + 1,
-      correctAnswers: currentAnswer.isCorrect
-        ? progress.correctAnswers + 1
-        : progress.correctAnswers,
-      answeredQuestionIds: [
-        ...progress.answeredQuestionIds,
-        currentQuestion.id,
-      ],
-    };
+    const currentCard = plan.cards[currentCardIndex];
+    const currentCategory = currentCard.categories[currentCategoryIndex];
+    const currentTopic = currentCategory.topics[currentTopicIndex];
 
     // Check if current topic is completed
-    if (currentTopic && !progress.completedTopics.includes(currentTopic.id)) {
-      const allTopicQuestionsAnswered = currentTopic.questions.every(q =>
-        newProgress.answeredQuestionIds.includes(q.id)
-      );
+    const allQuestionsInTopicCompleted = currentTopic.questions.every(q =>
+      progress.completedQuestions.includes(q.id)
+    );
 
-      if (allTopicQuestionsAnswered) {
-        newProgress.completedTopics.push(currentTopic.id);
-        console.log(`🎉 Topic completed: ${currentTopic.name}`);
-      }
+    if (
+      allQuestionsInTopicCompleted &&
+      !progress.completedTopics.includes(currentTopic.id)
+    ) {
+      markTopicCompleted(currentTopic.id);
     }
 
     // Check if current category is completed
+    const allTopicsInCategoryCompleted = currentCategory.topics.every(
+      topic =>
+        progress.completedTopics.includes(topic.id) ||
+        topic.questions.every(q => progress.completedQuestions.includes(q.id))
+    );
+
     if (
-      currentCategory &&
+      allTopicsInCategoryCompleted &&
       !progress.completedCategories.includes(currentCategory.id)
     ) {
-      const allCategoryQuestionsAnswered = currentCategory.topics.every(topic =>
-        topic.questions.every(q =>
-          newProgress.answeredQuestionIds.includes(q.id)
-        )
-      );
-
-      if (allCategoryQuestionsAnswered) {
-        newProgress.completedCategories.push(currentCategory.id);
-        console.log(`🎉 Category completed: ${currentCategory.name}`);
-      }
+      markCategoryCompleted(currentCategory.id);
     }
 
     // Check if current card is completed
-    if (currentCard && !progress.completedCards.includes(currentCardIndex)) {
-      const allCardQuestionsAnswered = currentCard.categories.every(category =>
-        category.topics.every(topic =>
-          topic.questions.every(q =>
-            newProgress.answeredQuestionIds.includes(q.id)
-          )
+    const allCategoriesInCardCompleted = currentCard.categories.every(
+      category =>
+        progress.completedCategories.includes(category.id) ||
+        category.topics.every(
+          topic =>
+            progress.completedTopics.includes(topic.id) ||
+            topic.questions.every(q =>
+              progress.completedQuestions.includes(q.id)
+            )
         )
+    );
+
+    if (
+      allCategoriesInCardCompleted &&
+      !progress.completedCards.includes(currentCard.id)
+    ) {
+      markCardCompleted(currentCard.id);
+    }
+
+    // Define the sequential order for cards
+    const cardOrder = [
+      'Core Technologies',
+      'Framework Questions',
+      'Problem Solving',
+      'System Design',
+      'Frontend Tasks',
+    ];
+
+    let foundQuestion: Question | null = null;
+    let foundQuestionIndex = 0;
+    let foundTopicIndex = 0;
+    let foundCategoryIndex = 0;
+    let foundCardIndex = 0;
+
+    // Find next incomplete question following sequential order
+    for (const cardTitle of cardOrder) {
+      const cardIndex = plan.cards.findIndex(card =>
+        card.title.toLowerCase().includes(cardTitle.toLowerCase())
       );
 
-      if (allCardQuestionsAnswered) {
-        newProgress.completedCards.push(currentCardIndex);
-        console.log(`🎉 Card completed: ${currentCard.title}`);
+      if (cardIndex !== -1) {
+        const card = plan.cards[cardIndex];
+
+        for (
+          let categoryIndex = 0;
+          categoryIndex < card.categories.length;
+          categoryIndex++
+        ) {
+          const category = card.categories[categoryIndex];
+
+          // Skip if we're looking for a specific category and this isn't it
+          if (categoryId && category.id !== categoryId) continue;
+
+          for (
+            let topicIndex = 0;
+            topicIndex < category.topics.length;
+            topicIndex++
+          ) {
+            const topic = category.topics[topicIndex];
+
+            if (topic.questions && topic.questions.length > 0) {
+              for (
+                let questionIndex = 0;
+                questionIndex < topic.questions.length;
+                questionIndex++
+              ) {
+                const question = topic.questions[questionIndex];
+
+                // Check if this question is not completed and has options
+                if (
+                  !progress.completedQuestions.includes(question.id) &&
+                  question.options &&
+                  Array.isArray(question.options) &&
+                  question.options.length > 0
+                ) {
+                  foundQuestion = question;
+                  foundQuestionIndex = questionIndex;
+                  foundTopicIndex = topicIndex;
+                  foundCategoryIndex = categoryIndex;
+                  foundCardIndex = cardIndex;
+                  break;
+                }
+              }
+            }
+            if (foundQuestion) break;
+          }
+          if (foundQuestion) break;
+        }
+      }
+      if (foundQuestion) break;
+    }
+
+    // If we found a question, update all state at once
+    if (foundQuestion) {
+      setCurrentQuestion(foundQuestion);
+      setCurrentQuestionIndex(foundQuestionIndex);
+      setCurrentTopicIndex(foundTopicIndex);
+      setCurrentCategoryIndex(foundCategoryIndex);
+      setCurrentCardIndex(foundCardIndex);
+
+      // Update progress position
+      const updatedProgress = {
+        ...progress,
+        currentPosition: {
+          cardIndex: foundCardIndex,
+          categoryIndex: foundCategoryIndex,
+          topicIndex: foundTopicIndex,
+          questionIndex: foundQuestionIndex,
+        },
+        lastUpdated: new Date().toISOString(),
+      };
+      saveProgress(updatedProgress);
+
+      // Reset answer state for next question
+      setCurrentAnswer(null);
+      setShowExplanation(false);
+      return;
+    }
+
+    // If we reach here, all questions are completed
+    addNotification({
+      type: 'success',
+      title: 'Congratulations! 🎉',
+      message:
+        'You have completed all questions in this practice session. Great work!',
+      duration: 5000,
+      action: {
+        label: 'Back to Plan',
+        onClick: () => router.push(`/features/guided-learning/${planId}`),
+      },
+    });
+  };
+
+  const getOptionLetter = (index: number) => String.fromCharCode(65 + index);
+
+  const isCorrectAnswer = (option: string) => {
+    if (!currentQuestion) return false;
+    return option === currentQuestion.correct_answer;
+  };
+
+  const getOptionClasses = (option: string) => {
+    if (!currentAnswer) {
+      return 'w-full text-left p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white transition-colors';
+    }
+
+    const isCorrect = isCorrectAnswer(option);
+    const isSelected = currentAnswer === option;
+
+    if (isCorrect) {
+      return 'w-full text-left p-4 rounded-lg border-2 border-green-500 bg-green-50 dark:bg-green-900/30 text-green-900 dark:text-green-100 transition-colors';
+    } else if (isSelected && !isCorrect) {
+      return 'w-full text-left p-4 rounded-lg border-2 border-red-500 bg-red-50 dark:bg-red-900/30 text-red-900 dark:text-red-100 transition-colors';
+    } else {
+      return 'w-full text-left p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors';
+    }
+  };
+
+  // Calculate overall progress
+  const getOverallProgress = () => {
+    if (!plan || !progress)
+      return { completed: 0, total: plan.totalQuestions, percentage: 0 };
+
+    let completed = 0;
+    for (const card of plan.cards) {
+      for (const category of card.categories) {
+        for (const topic of category.topics) {
+          for (const question of topic.questions) {
+            if (progress.completedQuestions.includes(question.id)) {
+              completed++;
+            }
+          }
+        }
       }
     }
 
-    saveProgress(newProgress);
-
-    // Reset current answer
-    setCurrentAnswer(null);
-
-    // Move to next question
-    if (
-      currentTopic &&
-      currentQuestionIndex < currentTopic.questions.length - 1
-    ) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      // Position will be auto-saved by useEffect
-    } else {
-      // Move to next topic/category/card
-      handleNext();
-    }
+    const percentage =
+      plan.totalQuestions > 0
+        ? Math.round((completed / plan.totalQuestions) * 100)
+        : 0;
+    return { completed, total: plan.totalQuestions, percentage };
   };
 
-  const handleNext = () => {
-    const currentCard = plan?.cards[currentCardIndex];
-    const currentCategory = currentCard?.categories[currentCategoryIndex];
+  // Get current question number across all questions
+  const getCurrentQuestionNumber = () => {
+    if (!plan || !currentQuestion || !progress) return 1;
 
-    if (currentTopicIndex < (currentCategory?.topics.length || 0) - 1) {
-      setCurrentTopicIndex(currentTopicIndex + 1);
-      setCurrentQuestionIndex(0);
-      // Position will be auto-saved by useEffect
-    } else if (
-      currentCategoryIndex <
-      (currentCard?.categories.length || 0) - 1
-    ) {
-      setCurrentCategoryIndex(currentCategoryIndex + 1);
-      setCurrentTopicIndex(0);
-      setCurrentQuestionIndex(0);
-      // Position will be auto-saved by useEffect
-    } else if (currentCardIndex < (plan?.cards.length || 0) - 1) {
-      setCurrentCardIndex(currentCardIndex + 1);
-      setCurrentCategoryIndex(0);
-      setCurrentTopicIndex(0);
-      setCurrentQuestionIndex(0);
-
-      // Mark current card as completed
-      const newProgress = {
-        ...progress,
-        currentCard: currentCardIndex + 1,
-        completedCards: [...progress.completedCards, currentCardIndex],
-      };
-      saveProgress(newProgress);
-      // Position will be auto-saved by useEffect
-    } else {
-      // Plan completed
-      router.push(`/features/guided-learning/${planId}?completed=true`);
+    let questionNumber = 1;
+    for (const card of plan.cards) {
+      for (const category of card.categories) {
+        for (const topic of category.topics) {
+          for (const question of topic.questions) {
+            if (question.id === currentQuestion.id) {
+              return questionNumber;
+            }
+            // Only count completed questions
+            if (progress.completedQuestions.includes(question.id)) {
+              questionNumber++;
+            }
+          }
+        }
+      }
     }
-  };
-
-  const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-    } else if (currentTopicIndex > 0) {
-      setCurrentTopicIndex(currentTopicIndex - 1);
-      const currentCard = plan?.cards[currentCardIndex];
-      const currentCategory = currentCard?.categories[currentCategoryIndex];
-      const prevTopic = currentCategory?.topics[currentTopicIndex - 1];
-      setCurrentQuestionIndex((prevTopic?.questions.length || 1) - 1);
-    } else if (currentCategoryIndex > 0) {
-      setCurrentCategoryIndex(currentCategoryIndex - 1);
-      const currentCard = plan?.cards[currentCardIndex];
-      const prevCategory = currentCard?.categories[currentCategoryIndex - 1];
-      setCurrentTopicIndex((prevCategory?.topics.length || 1) - 1);
-      const prevTopic =
-        prevCategory?.topics[(prevCategory?.topics.length || 1) - 1];
-      setCurrentQuestionIndex((prevTopic?.questions.length || 1) - 1);
-    } else if (currentCardIndex > 0) {
-      setCurrentCardIndex(currentCardIndex - 1);
-      const prevCard = plan?.cards[currentCardIndex - 1];
-      setCurrentCategoryIndex((prevCard?.categories.length || 1) - 1);
-      const prevCategory =
-        prevCard?.categories[(prevCard?.categories.length || 1) - 1];
-      setCurrentTopicIndex((prevCategory?.topics.length || 1) - 1);
-      const prevTopic =
-        prevCategory?.topics[(prevCategory?.topics.length || 1) - 1];
-      setCurrentQuestionIndex((prevTopic?.questions.length || 1) - 1);
-    }
-  };
-
-  const resetProgress = () => {
-    const newProgress = {
-      totalQuestions: plan?.totalQuestions || 0,
-      answeredQuestions: 0,
-      correctAnswers: 0,
-      currentCard: 0,
-      completedCards: [],
-      completedCategories: [],
-      completedTopics: [],
-      answeredQuestionIds: [],
-    };
-    saveProgress(newProgress);
-    setCurrentCardIndex(0);
-    setCurrentCategoryIndex(0);
-    setCurrentTopicIndex(0);
-    setCurrentQuestionIndex(0);
-
-    // Clear saved position
-    localStorage.removeItem(`guided-practice-position-${planId}`);
-    console.log('🔄 Reset progress and cleared saved position');
+    return questionNumber;
   };
 
   if (isLoading) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 flex items-center justify-center'>
+      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 pt-24 pb-8 flex items-center justify-center'>
         <div className='text-center'>
-          <Loader2 className='w-12 h-12 animate-spin text-blue-600 dark:text-blue-400 mx-auto mb-4' />
-          <h2 className='text-xl font-semibold text-gray-900 dark:text-white mb-2'>
-            Loading Practice Session
-          </h2>
+          <Loader2 className='w-8 h-8 animate-spin text-blue-600 mx-auto mb-4' />
           <p className='text-gray-600 dark:text-gray-400'>
-            Preparing your learning plan...
+            Loading practice session...
           </p>
         </div>
       </div>
     );
   }
 
-  if (error || !plan) {
+  if (error || !planId) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 flex items-center justify-center'>
-        <div className='max-w-md w-full text-center'>
-          <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8'>
-            <div className='w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-              <Target className='w-8 h-8 text-red-600 dark:text-red-400' />
-            </div>
-            <h2 className='text-xl font-semibold text-gray-900 dark:text-white mb-2'>
-              Plan Not Found
-            </h2>
-            <p className='text-gray-600 dark:text-gray-400 mb-6'>
-              {error || "The learning plan you're looking for doesn't exist."}
+      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 pt-24 pb-8 flex items-center justify-center'>
+        <div className='text-center'>
+          <XCircle className='w-16 h-16 text-red-500 mx-auto mb-6' />
+          <h1 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
+            {error || 'Plan ID Required'}
+          </h1>
+          <p className='text-gray-600 dark:text-gray-400 mb-6'>
+            {error || 'Please provide a plan ID to start the practice session.'}
+          </p>
+          <Link
+            href='/features/guided-learning'
+            className='px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
+          >
+            Back to Plans
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!plan) {
+    return (
+      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 pt-24 pb-8 flex items-center justify-center'>
+        <div className='text-center'>
+          <XCircle className='w-16 h-16 text-red-500 mx-auto mb-6' />
+          <h1 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
+            Plan Not Found
+          </h1>
+          <p className='text-gray-600 dark:text-gray-400 mb-6'>
+            The requested learning plan could not be found.
+          </p>
+          <Link
+            href='/features/guided-learning'
+            className='px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
+          >
+            Back to Plans
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentQuestion) {
+    // Debug info
+    const totalQuestionsWithOptions =
+      plan?.cards.reduce((total, card) => {
+        return (
+          total +
+          card.categories.reduce((catTotal, category) => {
+            return (
+              catTotal +
+              category.topics.reduce((topicTotal, topic) => {
+                return (
+                  topicTotal +
+                  topic.questions.filter(
+                    q =>
+                      q.options &&
+                      Array.isArray(q.options) &&
+                      q.options.length > 0
+                  ).length
+                );
+              }, 0)
+            );
+          }, 0)
+        );
+      }, 0) || 0;
+
+    console.error(
+      'No question found with valid options. Total questions with options:',
+      totalQuestionsWithOptions
+    );
+
+    return (
+      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 pt-24 pb-8 flex items-center justify-center'>
+        <div className='text-center max-w-2xl mx-auto px-4'>
+          <div className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-xl border-2 border-white/20 dark:border-gray-700/20'>
+            <CheckCircle className='w-16 h-16 text-green-500 mx-auto mb-6' />
+            <h1 className='text-3xl font-bold text-gray-900 dark:text-white mb-4'>
+              No Questions Available
+            </h1>
+            <p className='text-lg text-gray-600 dark:text-gray-400 mb-8'>
+              This plan doesn't have any questions with answer options available
+              for practice.
+              <br />
+              <span className='text-sm'>
+                Total questions: {plan?.totalQuestions || 0}, Questions with
+                options: {totalQuestionsWithOptions}
+              </span>
             </p>
-            <button
-              onClick={() => router.push('/features/guided-learning')}
-              className='px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
-            >
-              Back to Plans
-            </button>
+
+            <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+              <Link
+                href={`/features/guided-learning/${planId}`}
+                className='inline-flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors'
+              >
+                <ArrowLeft className='w-4 h-4' />
+                <span>Back to Plan</span>
+              </Link>
+
+              <Link
+                href='/features/guided-learning'
+                className='inline-flex items-center space-x-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-colors'
+              >
+                <BookOpen className='w-4 h-4' />
+                <span>View All Plans</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -638,568 +879,276 @@ export default function GuidedPracticePage() {
   const currentCard = plan.cards[currentCardIndex];
   const currentCategory = currentCard?.categories[currentCategoryIndex];
   const currentTopic = currentCategory?.topics[currentTopicIndex];
-  const currentQuestion = currentTopic?.questions[currentQuestionIndex];
-
-  // Debug logging
-  console.log('🔍 Guided Practice Debug:', {
-    currentCardIndex,
-    currentCategoryIndex,
-    currentTopicIndex,
-    currentQuestionIndex,
-    currentCard: currentCard
-      ? {
-          title: currentCard.title,
-          questionCount: currentCard.questionCount,
-          categoriesCount: currentCard.categories?.length || 0,
-        }
-      : null,
-    currentCategory: currentCategory
-      ? {
-          name: currentCategory.name,
-          questionCount: currentCategory.questionCount,
-          topicsCount: currentCategory.topics?.length || 0,
-        }
-      : null,
-    currentTopic: currentTopic
-      ? {
-          name: currentTopic.name,
-          questionCount: currentTopic.questionCount,
-          questionsCount: currentTopic.questions?.length || 0,
-        }
-      : null,
-    currentQuestion: currentQuestion
-      ? {
-          id: currentQuestion.id,
-          title: currentQuestion.title,
-        }
-      : null,
-  });
-
-  const progressPercentage =
-    progress.totalQuestions > 0
-      ? Math.round((progress.answeredQuestions / progress.totalQuestions) * 100)
-      : 0;
-
-  const accuracyPercentage =
-    progress.answeredQuestions > 0
-      ? Math.round((progress.correctAnswers / progress.answeredQuestions) * 100)
-      : 0;
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900'>
-      {/* Header */}
-      <div className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-white/20 dark:border-gray-700/20'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center space-x-4'>
-              <button
-                onClick={() =>
-                  router.push(`/features/guided-learning/${planId}`)
-                }
-                className='p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors'
-              >
-                <ArrowLeft className='w-6 h-6 text-gray-600 dark:text-gray-400' />
-              </button>
+    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 pt-24 pb-8'>
+      <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
+        {/* Header */}
+        <div className='mb-8'>
+          <Link
+            href={`/features/guided-learning/${planId}`}
+            className='inline-flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors mb-4'
+          >
+            <ArrowLeft className='w-5 h-5' />
+            <span>Back to Plan</span>
+          </Link>
+
+          <div className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border-2 border-white/20 dark:border-gray-700/20'>
+            <div className='flex items-center justify-between mb-4'>
               <div>
-                <h1 className='text-xl font-bold text-gray-900 dark:text-white'>
+                <h1 className='text-2xl font-bold text-gray-900 dark:text-white'>
                   {plan.name}
                 </h1>
-                <p className='text-sm text-gray-600 dark:text-gray-400'>
-                  Practice Session
+                <p className='text-gray-600 dark:text-gray-400'>
+                  {currentCard?.title} → {currentCategory?.name} →{' '}
+                  {currentTopic?.name}
                 </p>
               </div>
-            </div>
-
-            <div className='flex items-center space-x-4'>
-              <button
-                onClick={resetProgress}
-                className='flex items-center space-x-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors'
-              >
-                <RotateCcw className='w-4 h-4' />
-                <span>Reset</span>
-              </button>
-              <button
-                onClick={() => router.push('/')}
-                className='flex items-center space-x-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors'
-              >
-                <Home className='w-4 h-4' />
-                <span>Home</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Progress Bar */}
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4'>
-        <div className='bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm'>
-          <div className='flex items-center justify-between mb-2'>
-            <div className='flex items-center space-x-4'>
-              <div className='text-sm font-medium text-gray-900 dark:text-white'>
-                Progress: {progress.answeredQuestions}/{progress.totalQuestions}
-              </div>
-              <div className='text-sm text-gray-600 dark:text-gray-400'>
-                Accuracy: {accuracyPercentage}%
-              </div>
-            </div>
-            <div className='text-sm text-gray-600 dark:text-gray-400'>
-              {progressPercentage}%
-            </div>
-          </div>
-          <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
-            <div
-              className='bg-blue-600 h-2 rounded-full transition-all duration-300'
-              style={{ width: `${progressPercentage}%` }}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-        {currentQuestion ? (
-          <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-            {/* Question Panel */}
-            <div className='lg:col-span-2'>
-              <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8'>
-                {/* Card Info */}
-                <div className='flex items-center justify-between mb-6'>
-                  <div className='flex items-center space-x-3'>
-                    <div
-                      className='w-3 h-3 rounded-full'
-                      style={{
-                        backgroundColor: currentCard?.color || '#3B82F6',
-                      }}
-                    />
-                    <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
-                      {currentCard?.title} → {currentCategory?.name} →{' '}
-                      {currentTopic?.name}
-                    </span>
-                  </div>
-
-                  {/* Completion Badges */}
-                  <div className='flex items-center space-x-2'>
-                    {currentCard &&
-                      progress.completedCards.includes(currentCardIndex) && (
-                        <div className='flex items-center space-x-1 px-2 py-1 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 text-xs font-medium rounded-full'>
-                          <CheckCircle className='w-3 h-3' />
-                          <span>Card Complete</span>
-                        </div>
-                      )}
-                    {currentCategory &&
-                      progress.completedCategories.includes(
-                        currentCategory.id
-                      ) && (
-                        <div className='flex items-center space-x-1 px-2 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 text-xs font-medium rounded-full'>
-                          <CheckCircle className='w-3 h-3' />
-                          <span>Category Complete</span>
-                        </div>
-                      )}
-                    {currentTopic &&
-                      progress.completedTopics.includes(currentTopic.id) && (
-                        <div className='flex items-center space-x-1 px-2 py-1 bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-200 text-xs font-medium rounded-full'>
-                          <CheckCircle className='w-3 h-3' />
-                          <span>Topic Complete</span>
-                        </div>
-                      )}
-                  </div>
+              <div className='text-right'>
+                <div className='text-sm text-gray-500 dark:text-gray-400'>
+                  Question
                 </div>
+                <div className='text-lg font-semibold text-gray-900 dark:text-white'>
+                  {getCurrentQuestionNumber()} of {plan.totalQuestions}
+                </div>
+              </div>
+            </div>
 
-                {/* Question */}
-                <div className='mb-8'>
-                  <div className='flex items-center space-x-2 mb-4'>
-                    <span className='px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 text-sm font-medium rounded-full'>
-                      Question {currentQuestionIndex + 1} of{' '}
-                      {currentTopic?.questions.length}
-                    </span>
-                    <span className='px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm font-medium rounded-full'>
-                      {currentQuestion.difficulty}
-                    </span>
-                  </div>
+            {/* Overall Progress Bar */}
+            <div className='mb-4'>
+              <div className='flex items-center justify-between mb-2'>
+                <span className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+                  Overall Progress
+                </span>
+                <span className='text-sm font-medium text-gray-900 dark:text-white'>
+                  {getOverallProgress().completed}/{getOverallProgress().total}{' '}
+                  ({getOverallProgress().percentage}%)
+                </span>
+              </div>
+              <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3'>
+                <div
+                  className='bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500'
+                  style={{ width: `${getOverallProgress().percentage}%` }}
+                ></div>
+              </div>
+            </div>
 
-                  {/* Topic and Category Badges */}
-                  <div className='flex items-center space-x-2 mb-6'>
-                    {currentCard && (
-                      <span className='px-3 py-1 bg-indigo-100 dark:bg-indigo-900/20 text-indigo-800 dark:text-indigo-200 text-sm font-medium rounded-full flex items-center space-x-1'>
-                        <div
-                          className='w-2 h-2 rounded-full'
-                          style={{
-                            backgroundColor: currentCard.color || '#3B82F6',
-                          }}
-                        />
-                        <span>{currentCard.title}</span>
-                      </span>
-                    )}
-                    {currentCategory && (
-                      <span className='px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 text-sm font-medium rounded-full'>
-                        📚 {currentCategory.name}
-                      </span>
-                    )}
-                    {currentTopic && (
-                      <span className='px-3 py-1 bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-200 text-sm font-medium rounded-full'>
-                        🎯 {currentTopic.name}
-                      </span>
-                    )}
-                  </div>
+            {/* Progress indicators */}
+            <div className='flex flex-wrap gap-2 mb-4'>
+              <span
+                className={`px-3 py-1 rounded-full text-sm flex items-center space-x-2 ${
+                  progress?.completedCards.includes(currentCard?.id || '')
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
+                    : 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200'
+                }`}
+              >
+                <span>
+                  {currentCard?.icon} {currentCard?.title}
+                </span>
+                {progress?.completedCards.includes(currentCard?.id || '') && (
+                  <CheckCircle className='w-4 h-4' />
+                )}
+              </span>
+              <span
+                className={`px-3 py-1 rounded-full text-sm flex items-center space-x-2 ${
+                  progress?.completedCategories.includes(
+                    currentCategory?.id || ''
+                  )
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
+                    : 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
+                }`}
+              >
+                <span>{currentCategory?.name}</span>
+                {progress?.completedCategories.includes(
+                  currentCategory?.id || ''
+                ) && <CheckCircle className='w-4 h-4' />}
+              </span>
+              <span
+                className={`px-3 py-1 rounded-full text-sm flex items-center space-x-2 ${
+                  progress?.completedTopics.includes(currentTopic?.id || '')
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
+                    : 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200'
+                }`}
+              >
+                <span>{currentTopic?.name}</span>
+                {progress?.completedTopics.includes(currentTopic?.id || '') && (
+                  <CheckCircle className='w-4 h-4' />
+                )}
+              </span>
+            </div>
+          </div>
+        </div>
 
-                  <h2 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
-                    {currentQuestion.title}
-                  </h2>
+        {/* Question */}
+        <div className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-xl border-2 border-white/20 dark:border-gray-700/20 mb-8'>
+          <div className='mb-6'>
+            <div className='flex items-center space-x-2 mb-4'>
+              <Target className='w-5 h-5 text-indigo-600' />
+              <span className='text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide'>
+                {currentQuestion.difficulty} • {currentQuestion.type}
+              </span>
+            </div>
 
-                  {currentQuestion.content && (
-                    <div className='bg-gray-50 dark:bg-gray-700/50 rounded-lg p-6 mb-6'>
-                      <p className='text-gray-700 dark:text-gray-300 leading-relaxed'>
-                        {currentQuestion.content}
-                      </p>
-                    </div>
-                  )}
+            <h2 className='text-xl font-semibold text-gray-900 dark:text-white mb-4'>
+              {currentQuestion.title}
+            </h2>
 
-                  {/* Multiple Choice Options */}
-                  {currentQuestion.type === 'multiple-choice' &&
-                    currentQuestion.options &&
-                    currentQuestion.options.length > 0 && (
-                      <div className='space-y-3 mb-6'>
-                        <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
-                          Choose your answer:
-                        </h3>
-                        {currentQuestion.options.map((option, index) => {
-                          const optionId = option.id || `option-${index}`;
-                          const optionLetter = option.id
-                            ? option.id.toUpperCase()
-                            : String.fromCharCode(65 + index); // A, B, C, D
-                          const isSelected =
-                            currentAnswer?.selectedOption === optionId;
-                          const isCorrect = option.isCorrect;
-                          const isDisabled = currentAnswer !== null;
+            <div className='prose dark:prose-invert max-w-none'>
+              <p className='text-gray-700 dark:text-gray-300 leading-relaxed'>
+                {currentQuestion.content}
+              </p>
+            </div>
+          </div>
 
-                          return (
-                            <button
-                              key={optionId}
-                              onClick={() =>
-                                handleAnswerQuestion(option.isCorrect, optionId)
-                              }
-                              disabled={isDisabled}
-                              className={`w-full text-left p-4 border rounded-lg transition-colors ${
-                                isDisabled
-                                  ? isSelected
-                                    ? isCorrect
-                                      ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-600'
-                                      : 'bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-600'
-                                    : 'bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 opacity-50'
-                                  : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 dark:hover:border-blue-500'
-                              }`}
-                            >
-                              <div className='flex items-center space-x-3'>
-                                <span
-                                  className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium ${
-                                    isDisabled && isSelected
-                                      ? isCorrect
-                                        ? 'bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300'
-                                        : 'bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-300'
-                                      : 'bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300'
-                                  }`}
-                                >
-                                  {optionLetter}
-                                </span>
-                                <span
-                                  className={`${
-                                    isDisabled && isSelected
-                                      ? isCorrect
-                                        ? 'text-green-900 dark:text-green-100'
-                                        : 'text-red-900 dark:text-red-100'
-                                      : 'text-gray-900 dark:text-white'
-                                  }`}
-                                >
-                                  {option.text}
-                                </span>
-                                {isDisabled && isCorrect && (
-                                  <CheckCircle className='w-5 h-5 text-green-600 dark:text-green-400 ml-auto' />
-                                )}
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
+          {/* Answer Options */}
+          {currentQuestion.options && currentQuestion.options.length > 0 ? (
+            <div className='space-y-3'>
+              {currentQuestion.options.map((option, index) => {
+                const optionId = option.id || `option-${index}`;
+                const optionLetter = getOptionLetter(index);
 
-                  {/* True/False Options */}
-                  {currentQuestion.type === 'true-false' && (
-                    <div className='space-y-3 mb-6'>
-                      <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
-                        Choose your answer:
-                      </h3>
-                      <div className='grid grid-cols-2 gap-4'>
-                        <button
-                          onClick={() => handleAnswerQuestion(true, 'true')}
-                          disabled={currentAnswer !== null}
-                          className={`p-4 border rounded-lg transition-colors ${
-                            currentAnswer !== null
-                              ? currentAnswer.selectedOption === 'true'
-                                ? currentAnswer.isCorrect
-                                  ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-600'
-                                  : 'bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-600'
-                                : 'bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 opacity-50'
-                              : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-green-50 dark:hover:bg-green-900/20 hover:border-green-300 dark:hover:border-green-500'
-                          }`}
-                        >
-                          <div className='flex items-center justify-center space-x-2'>
-                            <CheckCircle className='w-5 h-5 text-green-600 dark:text-green-400' />
-                            <span className='text-gray-900 dark:text-white font-medium'>
-                              True
-                            </span>
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => handleAnswerQuestion(false, 'false')}
-                          disabled={currentAnswer !== null}
-                          className={`p-4 border rounded-lg transition-colors ${
-                            currentAnswer !== null
-                              ? currentAnswer.selectedOption === 'false'
-                                ? !currentAnswer.isCorrect
-                                  ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-600'
-                                  : 'bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-600'
-                                : 'bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 opacity-50'
-                              : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-300 dark:hover:border-red-500'
-                          }`}
-                        >
-                          <div className='flex items-center justify-center space-x-2'>
-                            <Target className='w-5 h-5 text-red-600 dark:text-red-400' />
-                            <span className='text-gray-900 dark:text-white font-medium'>
-                              False
-                            </span>
-                          </div>
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Other question types fallback */}
-                  {currentQuestion.type !== 'multiple-choice' &&
-                    currentQuestion.type !== 'true-false' && (
-                      <div className='bg-gray-50 dark:bg-gray-700/50 rounded-lg p-6 mb-6'>
-                        <p className='text-gray-700 dark:text-gray-300 leading-relaxed'>
-                          This question type ({currentQuestion.type}) is not yet
-                          supported in the practice mode.
-                        </p>
-                      </div>
-                    )}
-
-                  {/* Answer Result and Explanation */}
-                  {currentAnswer && (
-                    <div className='mt-6 p-6 rounded-lg border-2'>
+                return (
+                  <button
+                    key={optionId}
+                    onClick={() => handleAnswerSelect(option.text)}
+                    disabled={!!currentAnswer}
+                    className={getOptionClasses(option.text)}
+                  >
+                    <div className='flex items-center space-x-3'>
                       <div
-                        className={`flex items-center space-x-3 mb-4 ${
-                          currentAnswer.isCorrect
-                            ? 'text-green-800 dark:text-green-200 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-                            : 'text-red-800 dark:text-red-200 bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                          currentAnswer && isCorrectAnswer(option.text)
+                            ? 'bg-green-500 text-white'
+                            : currentAnswer &&
+                                currentAnswer === option.text &&
+                                !isCorrectAnswer(option.text)
+                              ? 'bg-red-500 text-white'
+                              : 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
                         }`}
                       >
-                        {currentAnswer.isCorrect ? (
-                          <CheckCircle className='w-6 h-6 text-green-600 dark:text-green-400' />
-                        ) : (
-                          <Target className='w-6 h-6 text-red-600 dark:text-red-400' />
-                        )}
-                        <span className='text-lg font-semibold'>
-                          {currentAnswer.isCorrect ? 'Correct!' : 'Incorrect'}
-                        </span>
+                        {optionLetter}
                       </div>
-
-                      {currentQuestion.explanation && (
-                        <div className='mb-4'>
-                          <h4 className='text-sm font-semibold text-gray-900 dark:text-white mb-2'>
-                            Explanation:
-                          </h4>
-                          <p className='text-gray-700 dark:text-gray-300 leading-relaxed'>
-                            {currentQuestion.explanation}
-                          </p>
-                        </div>
+                      <span className='flex-1'>{option.text}</span>
+                      {currentAnswer && isCorrectAnswer(option.text) && (
+                        <CheckCircle className='w-5 h-5 text-green-500' />
                       )}
-
-                      <button
-                        onClick={proceedToNext}
-                        className='w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium'
-                      >
-                        Continue to Next Question
-                      </button>
+                      {currentAnswer &&
+                        currentAnswer === option.text &&
+                        !isCorrectAnswer(option.text) && (
+                          <XCircle className='w-5 h-5 text-red-500' />
+                        )}
                     </div>
-                  )}
-                </div>
-              </div>
+                  </button>
+                );
+              })}
             </div>
-
-            {/* Progress Panel */}
-            <div className='space-y-6'>
-              {/* Current Progress */}
-              <div className='bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6'>
-                <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
-                  Current Progress
-                </h3>
-                <div className='space-y-3'>
-                  <div className='flex justify-between'>
-                    <span className='text-sm text-gray-600 dark:text-gray-400'>
-                      Questions Answered
-                    </span>
-                    <span className='text-sm font-medium text-gray-900 dark:text-white'>
-                      {progress.answeredQuestions}/{progress.totalQuestions}
-                    </span>
-                  </div>
-                  <div className='flex justify-between'>
-                    <span className='text-sm text-gray-600 dark:text-gray-400'>
-                      Correct Answers
-                    </span>
-                    <span className='text-sm font-medium text-green-600 dark:text-green-400'>
-                      {progress.correctAnswers}
-                    </span>
-                  </div>
-                  <div className='flex justify-between'>
-                    <span className='text-sm text-gray-600 dark:text-gray-400'>
-                      Accuracy
-                    </span>
-                    <span className='text-sm font-medium text-blue-600 dark:text-blue-400'>
-                      {accuracyPercentage}%
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Completion Overview */}
-              <div className='bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6'>
-                <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
-                  Completion Status
-                </h3>
-                <div className='space-y-3'>
-                  <div className='flex justify-between items-center'>
-                    <span className='text-sm text-gray-600 dark:text-gray-400'>
-                      Cards Completed
-                    </span>
-                    <div className='flex items-center space-x-2'>
-                      <span className='text-sm font-medium text-gray-900 dark:text-white'>
-                        {progress.completedCards.length}/
-                        {plan?.cards.length || 0}
-                      </span>
-                      {progress.completedCards.length > 0 && (
-                        <CheckCircle className='w-4 h-4 text-green-600 dark:text-green-400' />
-                      )}
+          ) : currentQuestion.type === 'true-false' ? (
+            <div className='space-y-3'>
+              {['true', 'false'].map(option => (
+                <button
+                  key={option}
+                  onClick={() => handleAnswerSelect(option)}
+                  disabled={!!currentAnswer}
+                  className={getOptionClasses(option)}
+                >
+                  <div className='flex items-center space-x-3'>
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                        currentAnswer && isCorrectAnswer(option)
+                          ? 'bg-green-500 text-white'
+                          : currentAnswer &&
+                              currentAnswer === option &&
+                              !isCorrectAnswer(option)
+                            ? 'bg-red-500 text-white'
+                            : 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
+                      }`}
+                    >
+                      {option === 'true' ? 'T' : 'F'}
                     </div>
-                  </div>
-                  <div className='flex justify-between items-center'>
-                    <span className='text-sm text-gray-600 dark:text-gray-400'>
-                      Categories Completed
-                    </span>
-                    <div className='flex items-center space-x-2'>
-                      <span className='text-sm font-medium text-gray-900 dark:text-white'>
-                        {progress.completedCategories.length}
-                      </span>
-                      {progress.completedCategories.length > 0 && (
-                        <CheckCircle className='w-4 h-4 text-blue-600 dark:text-blue-400' />
+                    <span className='flex-1 capitalize'>{option}</span>
+                    {currentAnswer && isCorrectAnswer(option) && (
+                      <CheckCircle className='w-5 h-5 text-green-500' />
+                    )}
+                    {currentAnswer &&
+                      currentAnswer === option &&
+                      !isCorrectAnswer(option) && (
+                        <XCircle className='w-5 h-5 text-red-500' />
                       )}
-                    </div>
                   </div>
-                  <div className='flex justify-between items-center'>
-                    <span className='text-sm text-gray-600 dark:text-gray-400'>
-                      Topics Completed
-                    </span>
-                    <div className='flex items-center space-x-2'>
-                      <span className='text-sm font-medium text-gray-900 dark:text-white'>
-                        {progress.completedTopics.length}
-                      </span>
-                      {progress.completedTopics.length > 0 && (
-                        <CheckCircle className='w-4 h-4 text-purple-600 dark:text-purple-400' />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Navigation */}
-              <div className='bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6'>
-                <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
-                  Navigation
-                </h3>
-                <div className='space-y-3'>
-                  <button
-                    onClick={handlePrevious}
-                    disabled={
-                      currentCardIndex === 0 &&
-                      currentCategoryIndex === 0 &&
-                      currentTopicIndex === 0 &&
-                      currentQuestionIndex === 0
-                    }
-                    className='w-full flex items-center justify-center space-x-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
-                  >
-                    <ArrowLeft className='w-4 h-4' />
-                    <span>Previous</span>
-                  </button>
-                  <button
-                    onClick={handleNext}
-                    className='w-full flex items-center justify-center space-x-2 px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors'
-                  >
-                    <span>Next</span>
-                    <ArrowRight className='w-4 h-4' />
-                  </button>
-                </div>
-              </div>
-
-              {/* Progress Storage Info */}
-              <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4'>
-                <p className='text-blue-800 dark:text-blue-200 text-sm font-medium mb-2'>
-                  💾 Progress Saved Locally
-                </p>
-                <p className='text-blue-700 dark:text-blue-300 text-sm mb-3'>
-                  Your progress is automatically saved in your browser. This
-                  includes completed cards, categories, topics, answered
-                  questions, and your current position. You can reload the page
-                  and continue from where you left off.
-                </p>
-                <div className='space-y-2'>
-                  <button
-                    onClick={() => router.push('/auth')}
-                    className='text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 font-medium text-sm underline block'
-                  >
-                    Sign in to sync across devices →
-                  </button>
-                  <button
-                    onClick={resetProgress}
-                    className='text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 font-medium text-sm underline block'
-                  >
-                    Clear all progress
-                  </button>
-                </div>
-              </div>
+                </button>
+              ))}
             </div>
-          </div>
-        ) : (
-          <div className='text-center'>
-            <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md mx-auto'>
-              <div className='w-16 h-16 bg-yellow-100 dark:bg-yellow-900/20 rounded-full flex items-center justify-center mx-auto mb-4'>
-                <BookOpen className='w-8 h-8 text-yellow-600 dark:text-yellow-400' />
+          ) : (
+            <div className='mt-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg'>
+              <div className='flex items-center space-x-2'>
+                <XCircle className='w-5 h-5 text-red-600' />
+                <p className='text-red-800 dark:text-red-200 font-medium'>
+                  No answer options available for this question
+                </p>
               </div>
-              <h2 className='text-xl font-semibold text-gray-900 dark:text-white mb-2'>
-                No Questions Available
-              </h2>
-              <p className='text-gray-600 dark:text-gray-400 mb-6'>
-                This plan doesn't have any questions available yet. Please check
-                back later or try a different plan.
+              <p className='text-red-700 dark:text-red-300 text-sm mt-2'>
+                This question doesn't have answer options configured. Please
+                contact support or use manual mode to proceed.
               </p>
-              <div className='space-y-3'>
+              <div className='mt-4'>
                 <button
-                  onClick={() =>
-                    router.push(`/features/guided-learning/${planId}`)
-                  }
-                  className='w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
+                  onClick={proceedToNext}
+                  className='inline-flex items-center space-x-2 px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors'
                 >
-                  Back to Plan
-                </button>
-                <button
-                  onClick={() => router.push('/features/guided-learning')}
-                  className='w-full px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors'
-                >
-                  Choose Another Plan
+                  <span>Skip This Question</span>
+                  <ArrowRight className='w-4 h-4' />
                 </button>
               </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {/* Explanation */}
+          {showExplanation && currentQuestion.explanation && (
+            <div className='mt-6 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg'>
+              <div className='flex items-center space-x-2 mb-2'>
+                <Info className='w-5 h-5 text-blue-600' />
+                <p className='text-blue-800 dark:text-blue-200 font-medium'>
+                  Explanation
+                </p>
+              </div>
+              <p className='text-blue-700 dark:text-blue-300 text-sm'>
+                {currentQuestion.explanation}
+              </p>
+            </div>
+          )}
+
+          {/* Next Question Button */}
+          {currentAnswer && (
+            <div className='mt-6 text-center'>
+              <button
+                onClick={proceedToNext}
+                className='inline-flex items-center space-x-2 px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg transform hover:scale-105'
+              >
+                <span>Next Question</span>
+                <ArrowRight className='w-5 h-5' />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Navigation */}
+        <div className='flex justify-between'>
+          <Link
+            href={`/features/guided-learning/${planId}`}
+            className='inline-flex items-center space-x-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition-colors'
+          >
+            <ArrowLeft className='w-4 h-4' />
+            <span>Back to Plan</span>
+          </Link>
+
+          <Link
+            href='/features/guided-learning'
+            className='inline-flex items-center space-x-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-colors'
+          >
+            <BookOpen className='w-4 h-4' />
+            <span>View All Plans</span>
+          </Link>
+        </div>
       </div>
     </div>
   );
