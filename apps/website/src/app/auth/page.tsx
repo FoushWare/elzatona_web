@@ -2,32 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 
-// Conditional Supabase client creation with fallback values
-let supabase = null;
-try {
-  const { createClient } = require('@supabase/supabase-js');
-  const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-  // Use anonymous key for client-side authentication
-  const supabaseAnonKey =
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key';
-
-  if (
-    supabaseUrl !== 'https://placeholder.supabase.co' &&
-    supabaseAnonKey !== 'placeholder_key'
-  ) {
-    // Create client with anonymous key for client-side use
-    supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true,
-      },
-    });
-  }
-} catch (error) {
-  console.warn('Supabase client creation failed in auth page:', error);
-}
+import {
+  supabaseClient as supabase,
+  isSupabaseAvailable,
+} from '@/lib/supabase-client';
 
 import { useAuth } from '@elzatona/shared-contexts';
 import { useRouter } from 'next/navigation';
@@ -92,12 +70,12 @@ export default function AuthPage() {
   };
 
   const handleGoogleLogin = async () => {
-    if (!supabase) {
+    if (!isSupabaseAvailable() || !supabase) {
       setError(
-        'Authentication service not available. Please check environment variables.'
+        'Authentication service not configured. Please check your environment variables (NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY).'
       );
       console.error(
-        'Supabase client is null. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY'
+        '❌ Supabase client is not available. Check your environment variables.'
       );
       return;
     }
@@ -126,12 +104,12 @@ export default function AuthPage() {
   };
 
   const handleGitHubLogin = async () => {
-    if (!supabase) {
+    if (!isSupabaseAvailable() || !supabase) {
       setError(
-        'Authentication service not available. Please check environment variables.'
+        'Authentication service not configured. Please check your environment variables (NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY).'
       );
       console.error(
-        'Supabase client is null. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY'
+        '❌ Supabase client is not available. Check your environment variables.'
       );
       return;
     }
