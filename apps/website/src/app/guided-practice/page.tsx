@@ -127,6 +127,23 @@ export default function GuidedPracticePage() {
     }
   };
 
+  const resetProgress = (planData?: Plan) => {
+    if (!planId) return;
+    try {
+      localStorage.removeItem(getProgressKey());
+      const newProgress = initializeProgress();
+      setProgress(newProgress);
+      saveProgress(newProgress);
+      if (planData) {
+        findFirstQuestion(planData);
+      } else if (plan) {
+        findFirstQuestion(plan);
+      }
+    } catch (error) {
+      console.error('Error resetting progress:', error);
+    }
+  };
+
   const initializeProgress = (): Progress => {
     return {
       planId: planId!,
@@ -495,6 +512,10 @@ export default function GuidedPracticePage() {
       setCurrentTopicIndex(foundTopicIndex);
       setCurrentCategoryIndex(foundCategoryIndex);
       setCurrentCardIndex(foundCardIndex);
+    }
+    // Fallback: if no next incomplete question found, start from first available
+    else {
+      findFirstQuestion(planData);
     }
   };
 
@@ -869,6 +890,12 @@ export default function GuidedPracticePage() {
                 <BookOpen className='w-4 h-4' />
                 <span>View All Plans</span>
               </Link>
+              <button
+                onClick={() => resetProgress(plan!)}
+                className='inline-flex items-center space-x-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition-colors'
+              >
+                <span>Reset Progress</span>
+              </button>
             </div>
           </div>
         </div>
