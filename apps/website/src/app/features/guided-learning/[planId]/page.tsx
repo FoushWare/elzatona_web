@@ -149,45 +149,55 @@ export default function PlanDetailPage() {
   }, [planId]);
 
   const getCardProgress = (card: Card) => {
-    if (!progress)
-      return { completed: 0, total: card.questionCount, percentage: 0 };
-
+    let total = 0;
     let completed = 0;
+
+    // Count actual questions with options
     for (const category of card.categories) {
       for (const topic of category.topics) {
         for (const question of topic.questions) {
-          if (progress.completedQuestions.includes(question.id)) {
+          // Only count questions that have options (valid for practice)
+          if (
+            question.options &&
+            Array.isArray(question.options) &&
+            question.options.length > 0
+          ) {
+            total++;
+            if (progress && progress.completedQuestions.includes(question.id)) {
+              completed++;
+            }
+          }
+        }
+      }
+    }
+
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+    return { completed, total, percentage };
+  };
+
+  const getCategoryProgress = (category: Category) => {
+    let total = 0;
+    let completed = 0;
+
+    // Count actual questions with options
+    for (const topic of category.topics) {
+      for (const question of topic.questions) {
+        // Only count questions that have options (valid for practice)
+        if (
+          question.options &&
+          Array.isArray(question.options) &&
+          question.options.length > 0
+        ) {
+          total++;
+          if (progress && progress.completedQuestions.includes(question.id)) {
             completed++;
           }
         }
       }
     }
 
-    const percentage =
-      card.questionCount > 0
-        ? Math.round((completed / card.questionCount) * 100)
-        : 0;
-    return { completed, total: card.questionCount, percentage };
-  };
-
-  const getCategoryProgress = (category: Category) => {
-    if (!progress)
-      return { completed: 0, total: category.questionCount, percentage: 0 };
-
-    let completed = 0;
-    for (const topic of category.topics) {
-      for (const question of topic.questions) {
-        if (progress.completedQuestions.includes(question.id)) {
-          completed++;
-        }
-      }
-    }
-
-    const percentage =
-      category.questionCount > 0
-        ? Math.round((completed / category.questionCount) * 100)
-        : 0;
-    return { completed, total: category.questionCount, percentage };
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+    return { completed, total, percentage };
   };
 
   const isCardCompleted = (card: Card) => {
@@ -198,6 +208,18 @@ export default function PlanDetailPage() {
   const isCategoryCompleted = (category: Category) => {
     if (!progress) return false;
     return progress.completedCategories.includes(category.id);
+  };
+
+  const resetProgress = () => {
+    if (!planId) return;
+    try {
+      localStorage.removeItem(`guided-practice-progress-${planId}`);
+      setProgress(null);
+      // Show a success message
+      window.location.reload();
+    } catch (error) {
+      console.error('Error resetting progress:', error);
+    }
   };
 
   const getCardOrder = () => {
@@ -332,7 +354,7 @@ export default function PlanDetailPage() {
             </div>
 
             {/* Start Button */}
-            <div className='text-center'>
+            <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
               <Link
                 href={`/guided-practice?plan=${planId}`}
                 className='inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105'
@@ -341,6 +363,15 @@ export default function PlanDetailPage() {
                 <span>Start 1-Day Interview Prep</span>
                 <ArrowRight className='w-6 h-6' />
               </Link>
+
+              {progress && (
+                <button
+                  onClick={resetProgress}
+                  className='inline-flex items-center space-x-2 px-6 py-4 bg-gray-600 hover:bg-gray-700 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105'
+                >
+                  <span>Reset Progress</span>
+                </button>
+              )}
             </div>
           </div>
         </div>

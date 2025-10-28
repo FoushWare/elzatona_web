@@ -167,6 +167,41 @@ export async function GET(
         topic_id: q.topic_id,
       })) || []
     );
+
+    // Ensure options are properly parsed and structured
+    if (questions && questions.length > 0) {
+      questions = questions.map(q => {
+        // Parse options if it's a string or ensure it's an array
+        let parsedOptions = q.options;
+
+        // If options is a string (JSON stringified), parse it
+        if (typeof q.options === 'string') {
+          try {
+            parsedOptions = JSON.parse(q.options);
+          } catch (e) {
+            console.error(`Failed to parse options for question ${q.id}:`, e);
+            parsedOptions = null;
+          }
+        }
+
+        // Return question with properly parsed options
+        return {
+          ...q,
+          options: parsedOptions,
+        };
+      });
+
+      console.log(
+        '🔍 Plan Details Debug: Questions with options parsed. Sample:',
+        questions?.slice(0, 2).map(q => ({
+          id: q.id,
+          title: q.title,
+          options: q.options,
+          optionsType: typeof q.options,
+          optionsLength: Array.isArray(q.options) ? q.options.length : null,
+        })) || []
+      );
+    }
     console.log('🔍 Plan Details Debug: Raw data counts:', {
       cards: cards?.length || 0,
       categories: categories?.length || 0,
