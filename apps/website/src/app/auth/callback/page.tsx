@@ -9,14 +9,22 @@ try {
   const { createClient } = require('@supabase/supabase-js');
   const supabaseUrl =
     process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-  const supabaseServiceRoleKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_key';
+  // Use anonymous key for client-side authentication
+  const supabaseAnonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key';
 
   if (
     supabaseUrl !== 'https://placeholder.supabase.co' &&
-    supabaseServiceRoleKey !== 'placeholder_key'
+    supabaseAnonKey !== 'placeholder_key'
   ) {
-    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+    // Create client with anonymous key for client-side use
+    supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+      },
+    });
   }
 } catch (error) {
   console.warn('Supabase client creation failed in auth callback:', error);

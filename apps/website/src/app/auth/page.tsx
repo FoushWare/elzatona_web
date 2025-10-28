@@ -8,14 +8,22 @@ try {
   const { createClient } = require('@supabase/supabase-js');
   const supabaseUrl =
     process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-  const supabaseServiceRoleKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_key';
+  // Use anonymous key for client-side authentication
+  const supabaseAnonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key';
 
   if (
     supabaseUrl !== 'https://placeholder.supabase.co' &&
-    supabaseServiceRoleKey !== 'placeholder_key'
+    supabaseAnonKey !== 'placeholder_key'
   ) {
-    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+    // Create client with anonymous key for client-side use
+    supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+      },
+    });
   }
 } catch (error) {
   console.warn('Supabase client creation failed in auth page:', error);
@@ -85,7 +93,12 @@ export default function AuthPage() {
 
   const handleGoogleLogin = async () => {
     if (!supabase) {
-      setError('Authentication service not available');
+      setError(
+        'Authentication service not available. Please check environment variables.'
+      );
+      console.error(
+        'Supabase client is null. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY'
+      );
       return;
     }
 
@@ -101,7 +114,7 @@ export default function AuthPage() {
       });
 
       if (error) {
-        setError('Google login failed');
+        setError('Google login failed: ' + error.message);
         console.error('Google login error:', error);
       }
     } catch (error) {
@@ -114,7 +127,12 @@ export default function AuthPage() {
 
   const handleGitHubLogin = async () => {
     if (!supabase) {
-      setError('Authentication service not available');
+      setError(
+        'Authentication service not available. Please check environment variables.'
+      );
+      console.error(
+        'Supabase client is null. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY'
+      );
       return;
     }
 
@@ -130,7 +148,7 @@ export default function AuthPage() {
       });
 
       if (error) {
-        setError('GitHub login failed');
+        setError('GitHub login failed: ' + error.message);
         console.error('GitHub login error:', error);
       }
     } catch (error) {
