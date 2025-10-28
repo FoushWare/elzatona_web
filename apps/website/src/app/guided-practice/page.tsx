@@ -144,6 +144,65 @@ export default function GuidedPracticePage() {
     }
   };
 
+  // Sync localStorage progress to database
+  const syncProgressToDatabase = async () => {
+    if (!progress || !planId) return;
+
+    try {
+      const response = await fetch('/api/progress/guided-learning/sync', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          planId,
+          completedQuestions: progress.completedQuestions,
+          completedTopics: progress.completedTopics,
+          completedCategories: progress.completedCategories,
+          completedCards: progress.completedCards,
+          currentPosition: progress.currentPosition,
+          lastUpdated: progress.lastUpdated,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('✅ Progress synced to database');
+      }
+    } catch (error) {
+      console.error('❌ Error syncing progress to database:', error);
+    }
+  };
+
+  // Load progress from database on mount
+  const loadProgressFromDatabase = async () => {
+    if (!planId) return;
+
+    try {
+      const response = await fetch(
+        `/api/progress/guided-learning/load?planId=${planId}`
+      );
+      const data = await response.json();
+
+      if (data.success && data.progress) {
+        // Merge database progress with localStorage if localStorage has more recent data
+        const localProgress = loadProgress();
+
+        if (
+          !localProgress ||
+          new Date(data.progress.lastUpdated) >
+            new Date(localProgress.lastUpdated)
+        ) {
+          // Database is more recent, use it
+          console.log('📥 Loading progress from database');
+          setProgress(data.progress);
+          saveProgress(data.progress);
+        }
+      }
+    } catch (error) {
+      console.error('❌ Error loading progress from database:', error);
+    }
+  };
+
   const initializeProgress = (): Progress => {
     return {
       planId: planId!,
@@ -200,6 +259,25 @@ export default function GuidedPracticePage() {
     };
     saveProgress(updatedProgress);
   };
+
+  // Load progress from database on mount
+  useEffect(() => {
+    loadProgressFromDatabase();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planId]);
+
+  // Sync progress to database when it changes
+  useEffect(() => {
+    if (progress) {
+      // Debounce database sync to avoid too many requests
+      const timeoutId = setTimeout(() => {
+        syncProgressToDatabase();
+      }, 2000);
+
+      return () => clearTimeout(timeoutId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [progress]);
 
   // Fetch plan data
   useEffect(() => {
