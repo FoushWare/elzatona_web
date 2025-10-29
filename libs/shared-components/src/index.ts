@@ -9,3 +9,8 @@ export { ErrorBoundary, UserStatistics } from './lib/common';
 // Explicitly export dashboards required by website app
 export { default as EnhancedDashboard } from './lib/common/EnhancedDashboard';
 export { default as EnhancedUserDashboard } from './lib/common/EnhancedUserDashboard';
+// Re-export commonly used UI primitives for app imports
+export { Button } from './lib/ui/button';
+export { Badge } from './lib/ui/badge';
+export { Progress } from './lib/ui/progress';
+export { Card, CardContent, CardHeader, CardTitle } from './lib/ui/card';
