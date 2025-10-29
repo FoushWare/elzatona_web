@@ -112,7 +112,7 @@ export default function EnhancedDashboard() {
       description: 'Explore topics at your own pace with a custom roadmap',
       icon: Zap,
       color: 'from-emerald-500 to-teal-600',
-      href: '/learning-paths',
+      href: '/free-style',
       stats: 'Browse learning paths and topics',
       progress: undefined,
     },
