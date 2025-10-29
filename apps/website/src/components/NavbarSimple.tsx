@@ -24,6 +24,7 @@ import {
   supabaseClient as supabase,
   isSupabaseAvailable,
 } from '@/lib/supabase-client';
+import { clearSession } from '@/lib/auth-session';
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -182,7 +183,16 @@ export const NavbarSimple: React.FC = () => {
   // Handle sign out
   const handleSignOut = async () => {
     try {
+      // Sign out from app auth context (if used)
       await signOut();
+      // Sign out from Supabase OAuth session
+      if (isSupabaseAvailable() && supabase) {
+        try {
+          await supabase.auth.signOut();
+        } catch (_) {}
+      }
+      // Clear persisted markers
+      clearSession();
       setIsOpen(false);
       setIsUserDropdownOpen(false);
       // Clear the stable auth state and session storage

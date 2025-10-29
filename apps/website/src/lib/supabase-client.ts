@@ -37,3 +37,24 @@ export const supabaseClient = isValidConfig
 
 // Export a helper to check if Supabase is available
 export const isSupabaseAvailable = () => supabaseClient !== null;
+
+// Mirror auth session to cookie for simple client persistence across reloads
+if (supabaseClient) {
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    try {
+      if (typeof document === 'undefined') return;
+      if (session?.access_token) {
+        const expires = new Date(
+          Date.now() +
+            (session.expires_in ? session.expires_in * 1000 : 7 * 86400000)
+        ).toUTCString();
+        document.cookie = `sb_session=1; path=/; expires=${expires}`;
+      } else {
+        document.cookie =
+          'sb_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      }
+    } catch (e) {
+      // no-op
+    }
+  });
+}
