@@ -12,6 +12,7 @@ import { OnboardingProvider } from '@elzatona/shared-contexts';
 import { AuthProvider } from '@elzatona/shared-contexts';
 import NavbarSimple from '@/components/NavbarSimple';
 import { NotificationProvider } from '@/components/NotificationSystem';
+import AuthSessionSync from '@/components/AuthSessionSync';
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = 'force-dynamic';
@@ -71,6 +72,7 @@ export default function RootLayout({
                       <OnboardingProvider>
                         <NotificationProvider>
                           <NavbarSimple />
+                          <AuthSessionSync />
                           {children}
                         </NotificationProvider>
                       </OnboardingProvider>
