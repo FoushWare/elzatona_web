@@ -115,13 +115,16 @@ export default function LearningPathsPage() {
 
   // Filtered learning paths based on search
   const filteredPaths = useMemo(() => {
-    return learningPaths.filter(
-      path =>
-        path.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        path.sectors.some((sector: any) =>
-          sector.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-    );
+    return learningPaths.filter(path => {
+      const byName = path.name
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const sectors = Array.isArray(path.sectors) ? path.sectors : [];
+      const bySector = sectors.some((sector: any) =>
+        sector?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      return byName || bySector;
+    });
   }, [learningPaths, searchTerm]);
 
   const getPathIcon = (pathId: string) => {
@@ -319,7 +322,7 @@ export default function LearningPathsPage() {
                           <div className='flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400'>
                             <div className='flex items-center gap-1'>
                               <Target className='w-4 h-4' />
-                              <span>{path.sectors.length} topics</span>
+                              <span>{path.sectors?.length || 0} topics</span>
                             </div>
                             <div className='flex items-center gap-1'>
                               <BookOpen className='w-4 h-4' />
@@ -335,17 +338,19 @@ export default function LearningPathsPage() {
                           Topics:
                         </h4>
                         <div className='flex flex-wrap gap-2'>
-                          {path.sectors.slice(0, 3).map((sector: any) => (
-                            <span
-                              key={sector.id}
-                              className='px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium'
-                            >
-                              {sector.name}
-                            </span>
-                          ))}
-                          {path.sectors.length > 3 && (
+                          {(path.sectors?.slice(0, 3) || []).map(
+                            (sector: any) => (
+                              <span
+                                key={sector.id}
+                                className='px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium'
+                              >
+                                {sector.name}
+                              </span>
+                            )
+                          )}
+                          {(path.sectors?.length || 0) > 3 && (
                             <span className='px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full text-xs font-medium'>
-                              +{path.sectors.length - 3} more
+                              +{(path.sectors?.length || 0) - 3} more
                             </span>
                           )}
                         </div>
@@ -455,7 +460,7 @@ export default function LearningPathsPage() {
                       <div className='flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400 mb-2'>
                         <div className='flex items-center gap-1'>
                           <Target className='w-4 h-4' />
-                          <span>{path.sectors.length} topics</span>
+                          <span>{path.sectors?.length || 0} topics</span>
                         </div>
                         <div className='flex items-center gap-1'>
                           <BookOpen className='w-4 h-4' />
@@ -463,17 +468,19 @@ export default function LearningPathsPage() {
                         </div>
                       </div>
                       <div className='flex flex-wrap gap-2'>
-                        {path.sectors.slice(0, 4).map((sector: any) => (
-                          <span
-                            key={sector.id}
-                            className='px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs'
-                          >
-                            {sector.name}
-                          </span>
-                        ))}
-                        {path.sectors.length > 4 && (
+                        {(path.sectors?.slice(0, 4) || []).map(
+                          (sector: any) => (
+                            <span
+                              key={sector.id}
+                              className='px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs'
+                            >
+                              {sector.name}
+                            </span>
+                          )
+                        )}
+                        {(path.sectors?.length || 0) > 4 && (
                           <span className='px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded text-xs'>
-                            +{path.sectors.length - 4} more
+                            +{(path.sectors?.length || 0) - 4} more
                           </span>
                         )}
                       </div>
