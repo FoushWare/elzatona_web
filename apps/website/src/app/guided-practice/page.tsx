@@ -17,8 +17,10 @@ import {
   Info,
   BookmarkPlus,
   BookmarkCheck,
+  ShoppingCart,
 } from 'lucide-react';
 import { addFlashcard, isInFlashcards } from '@/lib/flashcards';
+import { addToCart } from '@/lib/cart';
 import { useNotifications } from '@/components/NotificationSystem';
 
 interface Question {
@@ -1002,6 +1004,27 @@ export default function GuidedPracticePage() {
                 className='inline-flex items-center space-x-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition-colors'
               >
                 <span>Reset Progress</span>
+              </button>
+              <button
+                title='Add to Plan'
+                onClick={() => {
+                  if (!currentQuestion) return;
+                  try {
+                    addToCart({
+                      id: currentQuestion.id,
+                      question:
+                        currentQuestion.title ||
+                        currentQuestion.content ||
+                        'Question',
+                      section: currentCategory?.name,
+                      difficulty: currentQuestion.difficulty,
+                      addedAt: Date.now(),
+                    });
+                  } catch (_) {}
+                }}
+                className='p-2 rounded-md border border-gray-200 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800'
+              >
+                <ShoppingCart className='w-4 h-4' />
               </button>
             </div>
           </div>

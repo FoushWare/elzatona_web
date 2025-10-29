@@ -18,9 +18,11 @@ import {
   Star,
   BookmarkPlus,
   BookmarkCheck,
+  ShoppingCart,
 } from 'lucide-react';
 import { useUserType } from '@elzatona/shared-contexts';
 import { addFlashcard, isInFlashcards, FlashcardItem } from '@/lib/flashcards';
+import { addToCart, CartItem } from '@/lib/cart';
 
 interface Question {
   id: string;
@@ -577,6 +579,25 @@ export default function FreeStylePracticePage() {
                   ) : (
                     <BookmarkPlus className='w-4 h-4' />
                   )}
+                </button>
+
+                {/* Add to Plan (cart) */}
+                <button
+                  title='Add to Plan'
+                  onClick={() => {
+                    if (!currentQuestion) return;
+                    const item: CartItem = {
+                      id: currentQuestion.id,
+                      question: currentQuestion.question,
+                      section: currentQuestion.section,
+                      difficulty: currentQuestion.difficulty,
+                      addedAt: Date.now(),
+                    };
+                    addToCart(item);
+                  }}
+                  className='ml-1 p-2 rounded-md border border-gray-200 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800'
+                >
+                  <ShoppingCart className='w-4 h-4' />
                 </button>
               </div>
             </div>
