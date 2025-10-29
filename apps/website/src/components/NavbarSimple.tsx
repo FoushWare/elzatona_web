@@ -315,34 +315,36 @@ export const NavbarSimple: React.FC = () => {
           <div className='hidden lg:flex items-center space-x-4'>
             {/* Cart - visible only in Free Style */}
             {isFreeStyle && (
-              <div className='flex items-center gap-2'>
-                <Link
-                  href='/free-style/cart'
-                  className={`relative p-2.5 rounded-lg transition-colors duration-200 ${
-                    isScrolled
-                      ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
-                      : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
-                  }`}
-                  title='Your Selection (Custom Plan)'
-                  aria-label='Your Selection (Custom Plan)'
-                >
-                  <ShoppingCart size={20} />
-                  {cartCount > 0 && (
-                    <span className='absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center'>
-                      {cartCount}
-                    </span>
-                  )}
-                </Link>
-                <span
-                  className={`hidden xl:inline text-xs font-medium px-2 py-1 rounded-md ${
-                    isScrolled
-                      ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-200'
-                      : 'bg-white/20 text-white border border-white/30'
-                  }`}
-                >
-                  Custom Plan
-                </span>
-              </div>
+              <Link
+                href='/free-style/cart'
+                className={`p-2.5 rounded-lg transition-colors duration-200 text-center ${
+                  isScrolled
+                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
+                    : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                }`}
+                title='Your Selection (Custom Free-Style)'
+                aria-label='Your Selection (Custom Free-Style)'
+              >
+                <div className='flex flex-col items-center -mb-0.5'>
+                  <div className='relative'>
+                    <ShoppingCart size={20} />
+                    {cartCount > 0 && (
+                      <span className='absolute -top-1 -right-2 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center'>
+                        {cartCount}
+                      </span>
+                    )}
+                  </div>
+                  <span
+                    className={`mt-1 leading-none text-[10px] font-medium ${
+                      isScrolled
+                        ? 'text-indigo-700 dark:text-indigo-300'
+                        : 'text-white'
+                    }`}
+                  >
+                    Custom Free-Style
+                  </span>
+                </div>
+              </Link>
             )}
 
             {/* Learning Mode Switcher */}
