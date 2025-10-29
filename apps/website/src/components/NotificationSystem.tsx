@@ -128,15 +128,15 @@ const NotificationItem: React.FC<{
   const getBgColor = () => {
     switch (notification.type) {
       case 'success':
-        return 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800';
+        return 'bg-white dark:bg-gray-800 border-green-500';
       case 'info':
-        return 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800';
+        return 'bg-white dark:bg-gray-800 border-blue-500';
       case 'warning':
-        return 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800';
+        return 'bg-white dark:bg-gray-800 border-yellow-500';
       case 'error':
-        return 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800';
+        return 'bg-white dark:bg-gray-800 border-red-500';
       default:
-        return 'bg-gray-50 dark:bg-gray-900/20 border-gray-200 dark:border-gray-800';
+        return 'bg-white dark:bg-gray-800 border-gray-600';
     }
   };
 
@@ -146,9 +146,7 @@ const NotificationItem: React.FC<{
         isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
       }`}
     >
-      <div
-        className={`rounded-lg border p-4 shadow-lg backdrop-blur-sm ${getBgColor()}`}
-      >
+      <div className={`rounded-lg border p-4 shadow-lg ${getBgColor()}`}>
         <div className='flex items-start space-x-3'>
           {getIcon()}
           <div className='flex-1 min-w-0'>
