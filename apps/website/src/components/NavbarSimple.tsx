@@ -38,7 +38,23 @@ export const NavbarSimple: React.FC = () => {
   const [stableAuthState, setStableAuthState] = useState<{
     isAuthenticated: boolean;
     isLoading: boolean;
-  }>({ isAuthenticated: false, isLoading: true });
+  }>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = window.sessionStorage.getItem('navbar-auth-state');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (
+            typeof parsed?.isAuthenticated === 'boolean' &&
+            typeof parsed?.isLoading === 'boolean'
+          ) {
+            return parsed;
+          }
+        }
+      } catch (_) {}
+    }
+    return { isAuthenticated: false, isLoading: true };
+  });
   const [cartCount, setCartCount] = useState(0);
 
   const { userType, setUserType } = useUserType();
@@ -60,17 +76,6 @@ export const NavbarSimple: React.FC = () => {
   // Prevent hydration mismatch and flashing by using stable auth state
   useEffect(() => {
     setIsHydrated(true);
-
-    // Initialize stable auth state from session storage if available
-    const storedAuthState = sessionStorage.getItem('navbar-auth-state');
-    if (storedAuthState) {
-      try {
-        const parsed = JSON.parse(storedAuthState);
-        setStableAuthState(parsed);
-      } catch (error) {
-        console.warn('Failed to parse stored auth state:', error);
-      }
-    }
   }, []);
 
   // Update stable auth state when auth changes, but only after hydration
