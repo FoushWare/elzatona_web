@@ -1,0 +1,126 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { loadCart, removeFromCart, clearCart, CartItem } from '@/lib/cart';
+import { ShoppingCart, Trash2, CheckCircle2, BookOpen } from 'lucide-react';
+
+export default function FreeStyleCartPage() {
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [created, setCreated] = useState<string | null>(null);
+
+  useEffect(() => {
+    setItems(loadCart());
+  }, []);
+
+  const handleRemove = (id: string) => {
+    removeFromCart(id);
+    setItems(loadCart());
+  };
+
+  const handleCreatePlan = () => {
+    if (items.length === 0) return;
+    try {
+      const planId = `custom-plan-${Date.now()}`;
+      const entry = {
+        id: planId,
+        name: 'My Custom Plan',
+        createdAt: Date.now(),
+        questionIds: items.map(i => i.id),
+      };
+      const raw = localStorage.getItem('my-custom-plans:v1');
+      const list = raw ? JSON.parse(raw) : [];
+      list.unshift(entry);
+      localStorage.setItem('my-custom-plans:v1', JSON.stringify(list));
+      clearCart();
+      setItems([]);
+      setCreated(planId);
+    } catch (_) {}
+  };
+
+  return (
+    <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-24 pb-10'>
+      <div className='container mx-auto px-4 max-w-4xl'>
+        <div className='text-center mb-8'>
+          <div className='w-20 h-20 bg-gradient-to-r from-emerald-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6'>
+            <ShoppingCart className='w-10 h-10 text-white' />
+          </div>
+          <h1 className='text-3xl font-bold text-gray-900 dark:text-white'>
+            Your Selection
+          </h1>
+          <p className='text-gray-600 dark:text-gray-400 mt-2'>
+            Review chosen questions and create your personal plan.
+          </p>
+        </div>
+
+        {created && (
+          <div className='mb-6 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 flex items-center gap-2'>
+            <CheckCircle2 className='w-5 h-5' />
+            <span>Plan created! You can find it later in your dashboard.</span>
+          </div>
+        )}
+
+        {items.length === 0 ? (
+          <div className='text-center text-gray-600 dark:text-gray-400'>
+            No questions added yet. Browse Free Style paths to add questions.
+            <div className='mt-4'>
+              <Link
+                href='/free-style'
+                className='px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700'
+              >
+                Explore Free Style
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className='grid grid-cols-1 gap-4 mb-8'>
+              {items.map(item => (
+                <div
+                  key={item.id}
+                  className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-5 border border-white/30 dark:border-gray-700/30 shadow'
+                >
+                  <div className='flex justify-between items-start gap-4'>
+                    <div>
+                      <div className='text-sm text-gray-500 dark:text-gray-400 mb-1'>
+                        {item.section || 'General'}{' '}
+                        {item.difficulty ? `• ${item.difficulty}` : ''}
+                      </div>
+                      <div className='font-medium text-gray-900 dark:text-white'>
+                        {item.question}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleRemove(item.id)}
+                      className='p-2 rounded-md text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20'
+                      title='Remove from Selection'
+                    >
+                      <Trash2 className='w-4 h-4' />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className='flex items-center justify-between'>
+              <Link
+                href='/free-style'
+                className='inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 hover:bg-white'
+              >
+                <BookOpen className='w-4 h-4' />
+                Continue Browsing
+              </Link>
+
+              <button
+                onClick={handleCreatePlan}
+                className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-indigo-600 text-white rounded-xl font-semibold shadow hover:shadow-md'
+              >
+                Create Plan
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
