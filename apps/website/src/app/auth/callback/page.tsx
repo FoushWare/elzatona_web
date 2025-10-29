@@ -61,7 +61,7 @@ export default function AuthCallback() {
           }
 
           setTimeout(() => {
-            router.push('/');
+            router.push('/dashboard');
           }, 500);
         } else {
           console.log('⚠️ No session found, redirecting to auth page');
@@ -88,7 +88,7 @@ export default function AuthCallback() {
 
       if (event === 'SIGNED_IN' && session) {
         console.log('✅ User signed in:', session.user.email);
-        router.push('/');
+        router.push('/dashboard');
       } else if (event === 'SIGNED_OUT') {
         console.log('👋 User signed out');
         router.push('/auth');

@@ -382,16 +382,29 @@ export const NavbarSimple: React.FC = () => {
                 Loading...
               </div>
             ) : stableAuthState.isAuthenticated ? (
-              <button
-                onClick={handleSignOut}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-                  isScrolled
-                    ? 'bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg'
-                    : 'bg-red-500 hover:bg-red-600 text-white shadow-md hover:shadow-lg'
-                }`}
-              >
-                Logout
-              </button>
+              <div className='flex items-center gap-2'>
+                <Link
+                  href='/dashboard'
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                    isScrolled
+                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg'
+                      : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-md hover:shadow-lg'
+                  }`}
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  title='Sign out'
+                  className={`px-3 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                    isScrolled
+                      ? 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+                      : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
+                  }`}
+                >
+                  <LogOut size={18} />
+                </button>
+              </div>
             ) : (
               <Link
                 href='/auth'
