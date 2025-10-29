@@ -52,7 +52,7 @@ export const NavbarSimple: React.FC = () => {
   const { addNotification } = useNotifications();
   const pathname = usePathname();
   const router = useRouter();
-  const isFreeStyle = pathname?.startsWith('/free-style');
+  const isFreeStyle = userType === 'self-directed';
 
   // Prevent hydration mismatch and flashing by using stable auth state
   useEffect(() => {
