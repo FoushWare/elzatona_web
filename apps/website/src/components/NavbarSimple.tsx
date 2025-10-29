@@ -27,6 +27,7 @@ import {
 } from '@/lib/supabase-client';
 import { clearSession } from '@/lib/auth-session';
 import { loadCart } from '@/lib/cart';
+import { useLearningType } from '@/context/LearningTypeContext';
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,6 +42,7 @@ export const NavbarSimple: React.FC = () => {
   const [cartCount, setCartCount] = useState(0);
 
   const { userType, setUserType } = useUserType();
+  const { learningType, setLearningType } = useLearningType();
   const { setIsMobileMenuOpen } = useMobileMenu();
   const { isDarkMode, toggleDarkMode } = useTheme();
   const {
@@ -52,7 +54,8 @@ export const NavbarSimple: React.FC = () => {
   const { addNotification } = useNotifications();
   const pathname = usePathname();
   const router = useRouter();
-  const isFreeStyle = userType === 'self-directed';
+  const isFreeStyle =
+    learningType === 'free-style' || learningType === 'custom';
 
   // Prevent hydration mismatch and flashing by using stable auth state
   useEffect(() => {
@@ -162,6 +165,7 @@ export const NavbarSimple: React.FC = () => {
 
     const previousMode = userType;
     setUserType(newMode);
+    setLearningType(newMode === 'guided' ? 'guided' : 'free-style');
 
     // Show notification
     if (newMode === 'guided') {
