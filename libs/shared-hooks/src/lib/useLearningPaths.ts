@@ -42,7 +42,8 @@ export function useLearningPaths(): UseLearningPathsReturn {
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch('/api/learning-paths', {
+      // Fallback to existing plans endpoint since learning_paths table is not present
+      const response = await fetch('/api/plans', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +59,25 @@ export function useLearningPaths(): UseLearningPathsReturn {
       const data = await response.json();
       console.log('📊 API response data:', data);
 
-      if (data.success && Array.isArray(data.data)) {
+      // Map plans to LearningPath shape minimally
+      if (Array.isArray(data.plans)) {
+        const mapped = data.plans.map((p: any) => ({
+          id: p.id,
+          name: p.name || 'Plan',
+          description: p.title || '',
+          question_count: 0,
+          icon: 'Target',
+          color: 'indigo',
+          order: 0,
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          sectors: [],
+        }));
+        console.log('✅ Learning plans mapped:', mapped.length);
+        setLearningPaths(mapped);
+      } else if (data.success && Array.isArray(data.data)) {
+        // Support original learning-paths response shape if added later
         console.log('✅ Learning paths loaded:', data.data.length);
         setLearningPaths(data.data);
       } else {
