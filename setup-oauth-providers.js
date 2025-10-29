@@ -25,23 +25,25 @@ if (!SUPABASE_ACCESS_TOKEN) {
 }
 
 // OAuth provider configurations
-const OAUTH_CONFIGS = {
-  google: {
-    enabled: true,
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    secret: process.env.GOOGLE_CLIENT_SECRET,
-    external_google_enabled: true,
-    external_google_client_id: process.env.GOOGLE_CLIENT_ID,
-    external_google_secret: process.env.GOOGLE_CLIENT_SECRET,
-  },
-  github: {
-    enabled: true,
-    client_id: process.env.GITHUB_CLIENT_ID,
-    secret: process.env.GITHUB_CLIENT_SECRET,
-    external_github_enabled: true,
-    external_github_client_id: process.env.GITHUB_CLIENT_ID,
-    external_github_secret: process.env.GITHUB_CLIENT_SECRET,
-  },
+// Based on Supabase Management API documentation
+const buildOAuthConfig = () => {
+  const config = {};
+
+  // Google OAuth configuration
+  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    config.external_google_enabled = true;
+    config.external_google_client_id = process.env.GOOGLE_CLIENT_ID;
+    config.external_google_secret = process.env.GOOGLE_CLIENT_SECRET;
+  }
+
+  // GitHub OAuth configuration
+  if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
+    config.external_github_enabled = true;
+    config.external_github_client_id = process.env.GITHUB_CLIENT_ID;
+    config.external_github_secret = process.env.GITHUB_CLIENT_SECRET;
+  }
+
+  return config;
 };
 
 function makeRequest(method, path, data = null) {
@@ -191,16 +193,26 @@ async function setupOAuthProviders() {
     process.exit(1);
   }
 
-  // Merge OAuth configurations
-  const updatedConfig = {
-    ...currentConfig,
-    ...OAUTH_CONFIGS.google,
-    ...OAUTH_CONFIGS.github,
-  };
+  // Build OAuth configuration
+  const oauthConfig = buildOAuthConfig();
 
   console.log('📝 OAuth providers to configure:');
-  console.log('   ✅ Google OAuth');
-  console.log('   ✅ GitHub OAuth');
+  if (oauthConfig.external_google_enabled) {
+    console.log('   ✅ Google OAuth');
+  }
+  if (oauthConfig.external_github_enabled) {
+    console.log('   ✅ GitHub OAuth');
+  }
+  console.log('');
+
+  // Merge with current config - only update OAuth-related fields
+  const updatedConfig = {
+    ...currentConfig,
+    ...oauthConfig,
+  };
+
+  console.log('📋 Configuration to send:');
+  console.log(JSON.stringify(updatedConfig, null, 2));
   console.log('');
 
   // Update the configuration
