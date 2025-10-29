@@ -2,9 +2,10 @@
 
 import dynamic from 'next/dynamic';
 
-// Lazy-load the dashboard component to avoid SSR issues
+// Lazy-load from the shared-components barrel export
 const EnhancedUserDashboard = dynamic(
-  () => import('@elzatona/shared-components/lib/common/EnhancedUserDashboard'),
+  () =>
+    import('@elzatona/shared-components').then(m => m.EnhancedUserDashboard),
   { ssr: false }
 );
 
