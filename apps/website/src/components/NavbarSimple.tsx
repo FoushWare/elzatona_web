@@ -407,6 +407,22 @@ export const NavbarSimple: React.FC = () => {
               )}
             </button>
 
+            {/* Mobile Logout (visible when authenticated) */}
+            {stableAuthState.isAuthenticated && (
+              <button
+                onClick={handleSignOut}
+                title='Sign out'
+                className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 ${
+                  isScrolled
+                    ? 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+                    : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
+                }`}
+                aria-label='Sign out'
+              >
+                <LogOut size={18} className='sm:w-5 sm:h-5' />
+              </button>
+            )}
+
             {/* Mobile menu button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
