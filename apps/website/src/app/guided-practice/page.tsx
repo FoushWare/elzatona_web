@@ -15,7 +15,10 @@ import {
   Zap,
   XCircle,
   Info,
+  BookmarkPlus,
+  BookmarkCheck,
 } from 'lucide-react';
+import { addFlashcard, isInFlashcards } from '@/lib/flashcards';
 import { useNotifications } from '@/components/NotificationSystem';
 
 interface Question {
@@ -102,6 +105,7 @@ export default function GuidedPracticePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<Progress | null>(null);
+  const [inFlashcards, setInFlashcards] = useState(false);
 
   // Progress management functions
   const getProgressKey = () => `guided-practice-progress-${planId}`;
@@ -605,6 +609,21 @@ export default function GuidedPracticePage() {
     // Mark question as completed
     if (currentQuestion) {
       markQuestionCompleted(currentQuestion.id);
+      // Auto-add to flashcards on wrong answer
+      const correct = isCorrectAnswer(answer);
+      if (!correct) {
+        try {
+          addFlashcard({
+            id: currentQuestion.id,
+            question:
+              currentQuestion.title || currentQuestion.content || 'Question',
+            section: currentCategory?.name,
+            difficulty: currentQuestion.difficulty,
+            addedAt: Date.now(),
+          });
+          setInFlashcards(true);
+        } catch (_) {}
+      }
     }
   };
 
@@ -781,6 +800,16 @@ export default function GuidedPracticePage() {
     if (!currentQuestion) return false;
     return option === currentQuestion.correct_answer;
   };
+
+  // Reflect flashcard state when question changes
+  useEffect(() => {
+    try {
+      if (currentQuestion) setInFlashcards(isInFlashcards(currentQuestion.id));
+      else setInFlashcards(false);
+    } catch (_) {
+      setInFlashcards(false);
+    }
+  }, [currentQuestion]);
 
   const getOptionClasses = (option: string) => {
     if (!currentAnswer) {
@@ -1094,9 +1123,44 @@ export default function GuidedPracticePage() {
               </span>
             </div>
 
-            <h2 className='text-xl font-semibold text-gray-900 dark:text-white mb-4'>
-              {currentQuestion.title}
-            </h2>
+            <div className='flex items-start justify-between gap-3 mb-4'>
+              <h2 className='text-xl font-semibold text-gray-900 dark:text-white'>
+                {currentQuestion.title}
+              </h2>
+              <button
+                title={
+                  inFlashcards ? 'Added to Flashcards' : 'Add to Flashcards'
+                }
+                onClick={() => {
+                  if (!currentQuestion) return;
+                  if (inFlashcards) return;
+                  try {
+                    addFlashcard({
+                      id: currentQuestion.id,
+                      question:
+                        currentQuestion.title ||
+                        currentQuestion.content ||
+                        'Question',
+                      section: currentCategory?.name,
+                      difficulty: currentQuestion.difficulty,
+                      addedAt: Date.now(),
+                    });
+                    setInFlashcards(true);
+                  } catch (_) {}
+                }}
+                className={`p-2 rounded-md border transition-colors ${
+                  inFlashcards
+                    ? 'border-green-300 text-green-600 dark:text-green-400'
+                    : 'border-indigo-200 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20'
+                }`}
+              >
+                {inFlashcards ? (
+                  <BookmarkCheck className='w-4 h-4' />
+                ) : (
+                  <BookmarkPlus className='w-4 h-4' />
+                )}
+              </button>
+            </div>
 
             <div className='prose dark:prose-invert max-w-none'>
               <p className='text-gray-700 dark:text-gray-300 leading-relaxed'>

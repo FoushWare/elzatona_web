@@ -117,6 +117,16 @@ export default function EnhancedDashboard() {
       progress: undefined,
     },
     {
+      id: 'flashcards',
+      title: 'Flashcards',
+      description: 'Review questions you saved from practice',
+      icon: BookOpen,
+      color: 'from-amber-500 to-rose-600',
+      href: '/flashcards',
+      stats: 'Revise weak points efficiently',
+      progress: undefined,
+    },
+    {
       id: 'questions',
       title: 'Practice Questions',
       description: 'Continue practicing frontend questions',

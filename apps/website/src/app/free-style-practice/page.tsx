@@ -16,10 +16,13 @@ import {
   TrendingUp,
   Clock,
   Star,
+  BookmarkPlus,
+  BookmarkCheck,
 } from 'lucide-react';
 import { useUserType } from '@elzatona/shared-contexts';
 
 import { useSecureProgress } from '@elzatona/shared-hooks';
+import { addFlashcard, isInFlashcards, FlashcardItem } from '@/lib/flashcards';
 
 interface Question {
   id: string;
@@ -49,6 +52,7 @@ export default function FreeStylePracticePage() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [inFlashcards, setInFlashcards] = useState(false);
   const [sessionStats, setSessionStats] = useState({
     correct: 0,
     total: 0,
@@ -239,6 +243,7 @@ export default function FreeStylePracticePage() {
     setShowExplanation(false);
     setIsCorrect(null);
     setQuestionStartTime(Date.now());
+    setInFlashcards(randomQuestion ? isInFlashcards(randomQuestion.id) : false);
   };
 
   const handleAnswerSelect = async (answerIndex: number) => {
@@ -284,6 +289,19 @@ export default function FreeStylePracticePage() {
         console.error('❌ Error saving progress:', error);
         // Continue with the question flow even if progress save fails
       }
+    }
+
+    // Auto-add to flashcards on wrong answer
+    if (!correct && currentQuestion) {
+      const item: FlashcardItem = {
+        id: currentQuestion.id,
+        question: currentQuestion.question,
+        section: currentQuestion.section,
+        difficulty: currentQuestion.difficulty,
+        addedAt: Date.now(),
+      };
+      addFlashcard(item);
+      setInFlashcards(true);
     }
   };
 
@@ -528,6 +546,36 @@ export default function FreeStylePracticePage() {
                     {tag}
                   </span>
                 ))}
+                {/* Manual add to flashcards */}
+                <button
+                  title={
+                    inFlashcards ? 'Added to Flashcards' : 'Add to Flashcards'
+                  }
+                  onClick={() => {
+                    if (!currentQuestion) return;
+                    if (inFlashcards) return;
+                    const item: FlashcardItem = {
+                      id: currentQuestion.id,
+                      question: currentQuestion.question,
+                      section: currentQuestion.section,
+                      difficulty: currentQuestion.difficulty,
+                      addedAt: Date.now(),
+                    };
+                    addFlashcard(item);
+                    setInFlashcards(true);
+                  }}
+                  className={`ml-2 p-2 rounded-md border transition-colors ${
+                    inFlashcards
+                      ? 'border-green-300 text-green-600 dark:text-green-400'
+                      : 'border-purple-200 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20'
+                  }`}
+                >
+                  {inFlashcards ? (
+                    <BookmarkCheck className='w-4 h-4' />
+                  ) : (
+                    <BookmarkPlus className='w-4 h-4' />
+                  )}
+                </button>
               </div>
             </div>
 
