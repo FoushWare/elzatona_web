@@ -148,6 +148,41 @@ export default function GuidedLearningPage() {
       templates: templates.map(t => ({ id: t.id, name: t.name })),
     });
   }, [templates, templatesLoading, templatesError]);
+
+  // Helpers to derive safe ranges
+  const getDayNumberFromName = (planName: string): number => {
+    const match = planName?.match(/(\d+)-Day/);
+    return match ? parseInt(match[1], 10) : NaN;
+  };
+
+  const getQuestionsRangeLabel = (): string => {
+    const nums = templates
+      .map(p => p.totalQuestions)
+      .filter((n: any) => typeof n === 'number' && !isNaN(n));
+    if (nums.length >= 1) {
+      const min = Math.min(...nums);
+      const max = Math.max(...nums);
+      return `${min}-${max}`;
+    }
+    // Fallback until totals are provided by API
+    return '100-400';
+  };
+
+  const getDaysRangeLabel = (): string => {
+    const durations = templates
+      .map(p =>
+        typeof p.duration === 'number' && !isNaN(p.duration)
+          ? p.duration
+          : getDayNumberFromName(p.name)
+      )
+      .filter((n: any) => typeof n === 'number' && !isNaN(n));
+    if (durations.length >= 1) {
+      const min = Math.min(...durations);
+      const max = Math.max(...durations);
+      return `${min}-${max}`;
+    }
+    return '1-7';
+  };
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
   const [currentPlan, setCurrentPlan] = useState<LearningPlan | null>(null);
   const [dailyGoals, setDailyGoals] = useState<DailyGoal[]>([]);
@@ -436,11 +471,7 @@ export default function GuidedLearningPage() {
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto'>
             <div className='bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-4'>
               <div className='text-2xl font-bold text-blue-600 dark:text-blue-400'>
-                {templatesLoading
-                  ? '...'
-                  : templates.length > 0
-                    ? `${Math.min(...templates.map(p => p.totalQuestions))}-${Math.max(...templates.map(p => p.totalQuestions))}`
-                    : '100-400'}
+                {templatesLoading ? '...' : getQuestionsRangeLabel()}
               </div>
               <div className='text-sm text-gray-600 dark:text-gray-400'>
                 Questions per Plan
@@ -448,11 +479,7 @@ export default function GuidedLearningPage() {
             </div>
             <div className='bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-4'>
               <div className='text-2xl font-bold text-purple-600 dark:text-purple-400'>
-                {templatesLoading
-                  ? '...'
-                  : templates.length > 0
-                    ? `${Math.min(...templates.map(p => p.duration))}-${Math.max(...templates.map(p => p.duration))}`
-                    : '1-7'}
+                {templatesLoading ? '...' : getDaysRangeLabel()}
               </div>
               <div className='text-sm text-gray-600 dark:text-gray-400'>
                 Days Available
