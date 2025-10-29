@@ -20,6 +20,10 @@ import { useMobileMenu } from '@elzatona/shared-contexts';
 import { useTheme } from '@elzatona/shared-contexts';
 import { useAuth } from '@elzatona/shared-contexts';
 import { useNotifications } from './NotificationSystem';
+import {
+  supabaseClient as supabase,
+  isSupabaseAvailable,
+} from '@/lib/supabase-client';
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -87,6 +91,36 @@ export const NavbarSimple: React.FC = () => {
     stableAuthState.isAuthenticated,
     stableAuthState.isLoading,
   ]);
+
+  // Also reflect Supabase auth state in navbar (for OAuth logins)
+  useEffect(() => {
+    if (!isSupabaseAvailable() || !supabase) return;
+
+    // Initial check
+    supabase.auth.getSession().then(({ data }) => {
+      if (data?.session) {
+        setStableAuthState({ isAuthenticated: true, isLoading: false });
+        sessionStorage.setItem(
+          'navbar-auth-state',
+          JSON.stringify({ isAuthenticated: true, isLoading: false })
+        );
+      }
+    });
+
+    // Subscribe to changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      const authed = !!session;
+      setStableAuthState({ isAuthenticated: authed, isLoading: false });
+      sessionStorage.setItem(
+        'navbar-auth-state',
+        JSON.stringify({ isAuthenticated: authed, isLoading: false })
+      );
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Helper function to check if a link is active
   const isActiveLink = (href: string) => {
