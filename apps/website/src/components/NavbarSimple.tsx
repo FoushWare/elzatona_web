@@ -52,6 +52,7 @@ export const NavbarSimple: React.FC = () => {
   const { addNotification } = useNotifications();
   const pathname = usePathname();
   const router = useRouter();
+  const isFreeStyle = pathname?.startsWith('/free-style');
 
   // Prevent hydration mismatch and flashing by using stable auth state
   useEffect(() => {
@@ -312,23 +313,37 @@ export const NavbarSimple: React.FC = () => {
 
           {/* Right Section - Desktop Only */}
           <div className='hidden lg:flex items-center space-x-4'>
-            {/* Cart */}
-            <Link
-              href='/free-style/cart'
-              className={`relative p-2.5 rounded-lg transition-colors duration-200 ${
-                isScrolled
-                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
-                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
-              }`}
-              title='Your Selection'
-            >
-              <ShoppingCart size={20} />
-              {cartCount > 0 && (
-                <span className='absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center'>
-                  {cartCount}
+            {/* Cart - visible only in Free Style */}
+            {isFreeStyle && (
+              <div className='flex items-center gap-2'>
+                <Link
+                  href='/free-style/cart'
+                  className={`relative p-2.5 rounded-lg transition-colors duration-200 ${
+                    isScrolled
+                      ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
+                      : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                  }`}
+                  title='Your Selection (Custom Plan)'
+                  aria-label='Your Selection (Custom Plan)'
+                >
+                  <ShoppingCart size={20} />
+                  {cartCount > 0 && (
+                    <span className='absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center'>
+                      {cartCount}
+                    </span>
+                  )}
+                </Link>
+                <span
+                  className={`hidden xl:inline text-xs font-medium px-2 py-1 rounded-md ${
+                    isScrolled
+                      ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-200'
+                      : 'bg-white/20 text-white border border-white/30'
+                  }`}
+                >
+                  Custom Plan
                 </span>
-              )}
-            </Link>
+              </div>
+            )}
 
             {/* Learning Mode Switcher */}
             <div className='flex items-center space-x-1 bg-white/20 dark:bg-gray-800/20 rounded-lg p-1'>
