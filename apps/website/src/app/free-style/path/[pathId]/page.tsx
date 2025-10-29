@@ -191,6 +191,14 @@ interface LearningPathPageProps {
   params: Promise<{ pathId: string }>;
 }
 
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '') // remove special chars like '+'
+    .replace(/\s+/g, '-') // spaces to dashes
+    .replace(/-+/g, '-'); // collapse dashes
+
 export default async function LearningPathPage({
   params,
 }: LearningPathPageProps) {
@@ -342,7 +350,9 @@ export default async function LearningPathPage({
                   practice and real-world examples.
                 </p>
                 <Link
-                  href={`/questions?topic=${pathId}&subtopic=${topic.toLowerCase().replace(/\s+/g, '-')}`}
+                  href={`/questions?topic=${encodeURIComponent(
+                    pathId
+                  )}&subtopic=${encodeURIComponent(slugify(topic))}`}
                   className='block w-full text-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg font-semibold transition-all duration-300 hover:shadow-lg'
                 >
                   Practice {topic}
