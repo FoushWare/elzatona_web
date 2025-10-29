@@ -341,6 +341,20 @@ export const NavbarSimple: React.FC = () => {
               >
                 Resources
               </Link>
+              <Link
+                href='/learning-paths'
+                className={`font-medium transition-colors duration-200 ${
+                  isActiveLink('/learning-paths')
+                    ? isScrolled
+                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
+                      : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
+                    : isScrolled
+                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
+                      : 'text-white hover:text-indigo-100'
+                }`}
+              >
+                Learning Paths
+              </Link>
             </div>
           )}
 
@@ -547,6 +561,17 @@ export const NavbarSimple: React.FC = () => {
                   onClick={() => setIsOpen(false)}
                 >
                   Resources
+                </Link>
+                <Link
+                  href='/learning-paths'
+                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
+                    isActiveLink('/learning-paths')
+                      ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
+                      : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Learning Paths
                 </Link>
               </div>
             )}
