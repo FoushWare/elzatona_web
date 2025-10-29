@@ -1,7 +1,7 @@
 // v1.0 - Enhanced User Dashboard with Progress Tracking
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 // useUserProgress is not exported from shared-hooks in this workspace build.
 // Provide a safe local fallback that returns empty data to avoid runtime errors.
@@ -92,9 +92,30 @@ export default function EnhancedDashboard() {
 
   const [showStats, setShowStats] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [plans, setPlans] = useState<{ id: string; name: string }[]>([]);
 
   // Dashboard cards with real progress data
   const dashboardCards: DashboardCard[] = [
+    {
+      id: 'guided-learning',
+      title: 'Guided Learning',
+      description: 'Follow structured, time-based plans (1–7 days)',
+      icon: Target,
+      color: 'from-indigo-500 to-purple-600',
+      href: '/features/guided-learning',
+      stats: 'Structured plans with cards and progress',
+      progress: undefined,
+    },
+    {
+      id: 'free-style',
+      title: 'Free Style Learning',
+      description: 'Explore topics at your own pace with a custom roadmap',
+      icon: Zap,
+      color: 'from-emerald-500 to-teal-600',
+      href: '/learning-paths',
+      stats: 'Browse learning paths and topics',
+      progress: undefined,
+    },
     {
       id: 'questions',
       title: 'Practice Questions',
@@ -135,6 +156,22 @@ export default function EnhancedDashboard() {
       stats: `${Math.round(dashboardStats?.accuracy || 0)}% accuracy rate`,
     },
   ];
+
+  // Load available guided-learning plans from API
+  useEffect(() => {
+    const loadPlans = async () => {
+      try {
+        const res = await fetch('/api/plans');
+        const json = await res.json();
+        if (json?.plans && Array.isArray(json.plans)) {
+          setPlans(json.plans);
+        }
+      } catch (e) {
+        console.warn('Failed to load plans', e);
+      }
+    };
+    loadPlans();
+  }, []);
 
   // Recent activities from real data
   const recentActivities: RecentActivity[] =
@@ -480,8 +517,38 @@ export default function EnhancedDashboard() {
           ))}
         </div>
 
-        {/* Recent Activities & Recommendations */}
+        {/* Guided Plans & Recommendations */}
         <div className='grid lg:grid-cols-2 gap-8'>
+          {/* Available Guided Plans (1–7 days) */}
+          <div className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700'>
+            <h3 className='text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center'>
+              <Target className='w-5 h-5 mr-2 text-purple-500' />
+              Guided Learning Plans
+            </h3>
+            {plans.length > 0 ? (
+              <div className='grid sm:grid-cols-2 gap-4'>
+                {plans.map(p => (
+                  <Link
+                    key={p.id}
+                    href={`/features/guided-learning/${p.id}`}
+                    className='block p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 transition-colors'
+                  >
+                    <div className='flex items-center justify-between'>
+                      <div className='font-semibold text-gray-900 dark:text-white'>
+                        {p.name}
+                      </div>
+                      <ChevronRight className='w-5 h-5 text-gray-400' />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className='text-gray-500 dark:text-gray-400'>
+                No plans found.
+              </div>
+            )}
+          </div>
+
           {/* Recent Activities */}
           <div className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700'>
             <h3 className='text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center'>
