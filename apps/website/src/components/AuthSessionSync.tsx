@@ -5,7 +5,7 @@ import {
   supabaseClient as supabase,
   isSupabaseAvailable,
 } from '@/lib/supabase-client';
-import { setSessionCookie, clearSession } from '@/lib/auth-session';
+import { persistSession, clearSession } from '@/lib/auth-session';
 
 export default function AuthSessionSync() {
   useEffect(() => {
@@ -13,10 +13,10 @@ export default function AuthSessionSync() {
 
     // Initial session sync
     supabase.auth.getSession().then(({ data }) => {
-      const token = data?.session?.access_token;
-      if (token) {
+      const session = data?.session;
+      if (session) {
         try {
-          setSessionCookie(token);
+          persistSession(session as any);
         } catch (_) {}
         try {
           sessionStorage.setItem(
@@ -38,8 +38,7 @@ export default function AuthSessionSync() {
           );
         } catch (_) {}
         try {
-          if (authed && session?.access_token)
-            setSessionCookie(session.access_token);
+          if (authed && session) persistSession(session as any);
           else clearSession();
         } catch (_) {}
       }
