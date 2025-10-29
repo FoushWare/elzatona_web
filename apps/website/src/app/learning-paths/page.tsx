@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, ReactNode } from 'react';
+import React, { useState, useMemo, ReactNode, useCallback } from 'react';
 
 import { useRouter } from 'next/navigation';
 import {
@@ -25,6 +25,7 @@ import {
   List,
 } from 'lucide-react';
 import { useLearningPaths } from '@elzatona/shared-hooks';
+import Link from 'next/link';
 
 interface LearningPath {
   id: string;
@@ -38,28 +39,79 @@ interface LearningPath {
   }>;
 }
 
+interface PlanDetailsCategory {
+  id: string;
+  name: string;
+  topics: Array<{
+    id: string;
+    name: string;
+    questions: Array<{
+      id: string;
+      text: string;
+      options?: any[];
+    }>;
+  }>;
+}
+
 export default function LearningPathsPage() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // Use TanStack Query hook
+  // Use shared hook
   const {
-    data: learningPathsData,
+    learningPaths,
     isLoading: loading,
     error,
+    refetch,
   } = useLearningPaths();
 
-  // Derived data
-  const learningPaths = learningPathsData?.data || [];
+  const [expandedPathId, setExpandedPathId] = useState<string | null>(null);
+  const [pathDetails, setPathDetails] = useState<
+    Record<
+      string,
+      {
+        loading: boolean;
+        error: string | null;
+        categories: PlanDetailsCategory[];
+      }
+    >
+  >({});
 
-  const handlePathClick = (pathId: string) => {
-    router.push(`/learning-paths/${pathId}`);
-  };
-
-  const handleSectionClick = (pathId: string, sectionId: string) => {
-    router.push(`/learning-paths/${pathId}/sections/${sectionId}`);
-  };
+  const toggleExpand = useCallback(
+    async (pathId: string) => {
+      setExpandedPathId(prev => (prev === pathId ? null : pathId));
+      if (!pathDetails[pathId]) {
+        setPathDetails(prev => ({
+          ...prev,
+          [pathId]: { loading: true, error: null, categories: [] },
+        }));
+        try {
+          const res = await fetch(
+            `/api/guided-learning/plan-details/${pathId}`
+          );
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          const categories: PlanDetailsCategory[] =
+            data?.data?.categories || data?.categories || [];
+          setPathDetails(prev => ({
+            ...prev,
+            [pathId]: { loading: false, error: null, categories },
+          }));
+        } catch (e: any) {
+          setPathDetails(prev => ({
+            ...prev,
+            [pathId]: {
+              loading: false,
+              error: e?.message || 'Failed to load details',
+              categories: [],
+            },
+          }));
+        }
+      }
+    },
+    [pathDetails]
+  );
 
   // Filtered learning paths based on search
   const filteredPaths = useMemo(() => {
@@ -242,7 +294,7 @@ export default function LearningPathsPage() {
                 className={`bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-gray-100 dark:border-gray-700 hover:border-transparent hover:scale-105 ${
                   viewMode === 'list' ? 'flex items-center p-6' : 'p-6'
                 }`}
-                onClick={() => handlePathClick(path.id)}
+                onClick={() => toggleExpand(path.id)}
               >
                 {viewMode === 'grid' ? (
                   <>
@@ -301,11 +353,91 @@ export default function LearningPathsPage() {
 
                       {/* CTA */}
                       <div className='flex items-center justify-between'>
-                        <button className='inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl'>
-                          <span>Start Learning</span>
+                        <Link
+                          href={`/guided-practice?plan=${path.id}`}
+                          className='inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl'
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <span>Start Quizzes</span>
                           <ArrowRight className='w-4 h-4' />
-                        </button>
+                        </Link>
                       </div>
+
+                      {/* Expandable details: categories -> topics -> questions */}
+                      {expandedPathId === path.id && (
+                        <div className='mt-6 border-t border-gray-200 dark:border-gray-700 pt-4'>
+                          {pathDetails[path.id]?.loading && (
+                            <p className='text-gray-500 dark:text-gray-400'>
+                              Loading details...
+                            </p>
+                          )}
+                          {pathDetails[path.id]?.error && (
+                            <p className='text-red-600 dark:text-red-400'>
+                              {pathDetails[path.id]?.error}
+                            </p>
+                          )}
+                          {!!pathDetails[path.id]?.categories?.length && (
+                            <div className='space-y-4'>
+                              {pathDetails[path.id].categories.map(cat => (
+                                <div
+                                  key={cat.id}
+                                  className='bg-gray-50 dark:bg-gray-900/40 rounded-xl p-4'
+                                >
+                                  <div className='flex items-center justify-between'>
+                                    <h4 className='font-semibold text-gray-900 dark:text-white'>
+                                      {cat.name}
+                                    </h4>
+                                    <span className='text-xs text-gray-500 dark:text-gray-400'>
+                                      {cat.topics.length} topics
+                                    </span>
+                                  </div>
+                                  <div className='mt-3 space-y-3'>
+                                    {cat.topics.map(topic => (
+                                      <div
+                                        key={topic.id}
+                                        className='bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-100 dark:border-gray-700'
+                                      >
+                                        <div className='flex items-center justify-between'>
+                                          <div>
+                                            <p className='text-sm font-medium text-gray-800 dark:text-gray-200'>
+                                              {topic.name}
+                                            </p>
+                                            <p className='text-xs text-gray-500 dark:text-gray-400'>
+                                              {topic.questions.length} questions
+                                            </p>
+                                          </div>
+                                          <Link
+                                            href={`/guided-practice?plan=${path.id}`}
+                                            className='inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md bg-indigo-600 text-white hover:bg-indigo-700'
+                                            onClick={e => e.stopPropagation()}
+                                          >
+                                            Start Quiz
+                                            <ArrowRight className='w-3 h-3' />
+                                          </Link>
+                                        </div>
+                                        {topic.questions.length > 0 && (
+                                          <div className='mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2'>
+                                            {topic.questions
+                                              .slice(0, 4)
+                                              .map(q => (
+                                                <div
+                                                  key={q.id}
+                                                  className='text-xs text-gray-600 dark:text-gray-400 truncate'
+                                                >
+                                                  • {q.text}
+                                                </div>
+                                              ))}
+                                          </div>
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </>
                 ) : (
