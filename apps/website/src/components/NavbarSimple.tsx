@@ -14,6 +14,7 @@ import {
   LogOut,
   Settings,
 } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import AlzatonaLogo from './AlzatonaLogo';
 import { useUserType } from '@elzatona/shared-contexts';
 import { useMobileMenu } from '@elzatona/shared-contexts';
@@ -25,6 +26,7 @@ import {
   isSupabaseAvailable,
 } from '@/lib/supabase-client';
 import { clearSession } from '@/lib/auth-session';
+import { loadCart } from '@/lib/cart';
 
 export const NavbarSimple: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -36,6 +38,7 @@ export const NavbarSimple: React.FC = () => {
     isAuthenticated: boolean;
     isLoading: boolean;
   }>({ isAuthenticated: false, isLoading: true });
+  const [cartCount, setCartCount] = useState(0);
 
   const { userType, setUserType } = useUserType();
   const { setIsMobileMenuOpen } = useMobileMenu();
@@ -92,6 +95,27 @@ export const NavbarSimple: React.FC = () => {
     stableAuthState.isAuthenticated,
     stableAuthState.isLoading,
   ]);
+
+  // Cart count from localStorage
+  useEffect(() => {
+    const refresh = () => {
+      try {
+        setCartCount(loadCart().length);
+      } catch (_) {
+        setCartCount(0);
+      }
+    };
+    refresh();
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'question-cart:v1') refresh();
+    };
+    window.addEventListener('storage', onStorage);
+    const interval = setInterval(refresh, 1500);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      clearInterval(interval);
+    };
+  }, []);
 
   // Also reflect Supabase auth state in navbar (for OAuth logins)
   useEffect(() => {
@@ -288,6 +312,24 @@ export const NavbarSimple: React.FC = () => {
 
           {/* Right Section - Desktop Only */}
           <div className='hidden lg:flex items-center space-x-4'>
+            {/* Cart */}
+            <Link
+              href='/free-style/cart'
+              className={`relative p-2.5 rounded-lg transition-colors duration-200 ${
+                isScrolled
+                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
+                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+              }`}
+              title='Your Selection'
+            >
+              <ShoppingCart size={20} />
+              {cartCount > 0 && (
+                <span className='absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center'>
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+
             {/* Learning Mode Switcher */}
             <div className='flex items-center space-x-1 bg-white/20 dark:bg-gray-800/20 rounded-lg p-1'>
               <button
