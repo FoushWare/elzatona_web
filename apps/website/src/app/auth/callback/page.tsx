@@ -7,6 +7,7 @@ import {
   supabaseClient as supabase,
   isSupabaseAvailable,
 } from '@/lib/supabase-client';
+import { persistSession } from '@/lib/auth-session';
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -34,6 +35,10 @@ export default function AuthCallback() {
 
         if (data.session) {
           console.log('✅ User authenticated successfully');
+          // Persist lightweight session indicator
+          try {
+            persistSession(data.session);
+          } catch (_) {}
           // User is authenticated, sync any local progress, then redirect
           try {
             // Batch sync all guided-practice progress keys from localStorage
@@ -88,6 +93,9 @@ export default function AuthCallback() {
 
       if (event === 'SIGNED_IN' && session) {
         console.log('✅ User signed in:', session.user.email);
+        try {
+          persistSession(session);
+        } catch (_) {}
         router.push('/dashboard');
       } else if (event === 'SIGNED_OUT') {
         console.log('👋 User signed out');
