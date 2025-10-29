@@ -24,19 +24,15 @@ import {
   Grid,
   List,
 } from 'lucide-react';
-import { useLearningPaths } from '@elzatona/shared-hooks';
+// This page shows categories → topics → questions (not time-based plans)
 import Link from 'next/link';
 
-interface LearningPath {
+interface CategoryItem {
   id: string;
   name: string;
-  order?: number;
-  questionCount?: number;
-  sectors: Array<{
-    id: string;
-    name: string;
-    question_count: number;
-  }>;
+  description?: string;
+  color?: string;
+  icon?: string;
 }
 
 interface PlanDetailsCategory {
@@ -58,13 +54,30 @@ export default function LearningPathsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // Use shared hook
-  const {
-    learningPaths,
-    isLoading: loading,
-    error,
-    refetch,
-  } = useLearningPaths();
+  // Local data for categories/topics/questions
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  React.useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch('/api/categories');
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        const json = await res.json();
+        if (active) setCategories(json?.data || []);
+      } catch (e: any) {
+        if (active)
+          setError(new Error(e?.message || 'Failed to load categories'));
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const [expandedPathId, setExpandedPathId] = useState<string | null>(null);
   const [pathDetails, setPathDetails] = useState<
@@ -79,29 +92,74 @@ export default function LearningPathsPage() {
   >({});
 
   const toggleExpand = useCallback(
-    async (pathId: string) => {
-      setExpandedPathId(prev => (prev === pathId ? null : pathId));
-      if (!pathDetails[pathId]) {
+    async (categoryId: string) => {
+      setExpandedPathId(prev => (prev === categoryId ? null : categoryId));
+      if (!pathDetails[categoryId]) {
         setPathDetails(prev => ({
           ...prev,
-          [pathId]: { loading: true, error: null, categories: [] },
+          [categoryId]: { loading: true, error: null, categories: [] },
         }));
         try {
-          const res = await fetch(
-            `/api/guided-learning/plan-details/${pathId}`
+          // Load all topics then filter by category; then load preview questions per topic
+          const topicsRes = await fetch('/api/topics');
+          if (!topicsRes.ok)
+            throw new Error(
+              `HTTP ${topicsRes.status}: ${topicsRes.statusText}`
+            );
+          const topicsJson = await topicsRes.json();
+          const topics = (topicsJson?.data || []).filter(
+            (t: any) => t.categoryId === categoryId
           );
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const data = await res.json();
-          const categories: PlanDetailsCategory[] =
-            data?.data?.categories || data?.categories || [];
+
+          const topicsWithQuestions: Array<{
+            id: string;
+            name: string;
+            questions: Array<{ id: string; text: string; options?: any[] }>;
+          }> = [];
+          for (const t of topics) {
+            try {
+              const qRes = await fetch(`/api/questions?topic=${t.id}&limit=4`);
+              const qJson = qRes.ok ? await qRes.json() : { data: [] };
+              const qs = (qJson?.data || []).map((q: any) => ({
+                id: q.id,
+                text: q.question || q.question_text || '',
+                options: q.options || [],
+              }));
+              topicsWithQuestions.push({
+                id: t.id,
+                name: t.name,
+                questions: qs,
+              });
+            } catch (_) {
+              topicsWithQuestions.push({
+                id: t.id,
+                name: t.name,
+                questions: [],
+              });
+            }
+          }
+
+          const categoriesTransformed: PlanDetailsCategory[] = [
+            {
+              id: categoryId,
+              name:
+                categories.find(c => c.id === categoryId)?.name || 'Category',
+              topics: topicsWithQuestions,
+            },
+          ];
+
           setPathDetails(prev => ({
             ...prev,
-            [pathId]: { loading: false, error: null, categories },
+            [categoryId]: {
+              loading: false,
+              error: null,
+              categories: categoriesTransformed,
+            },
           }));
         } catch (e: any) {
           setPathDetails(prev => ({
             ...prev,
-            [pathId]: {
+            [categoryId]: {
               loading: false,
               error: e?.message || 'Failed to load details',
               categories: [],
@@ -110,22 +168,15 @@ export default function LearningPathsPage() {
         }
       }
     },
-    [pathDetails]
+    [pathDetails, categories]
   );
 
   // Filtered learning paths based on search
   const filteredPaths = useMemo(() => {
-    return learningPaths.filter(path => {
-      const byName = path.name
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase());
-      const sectors = Array.isArray(path.sectors) ? path.sectors : [];
-      const bySector = sectors.some((sector: any) =>
-        sector?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      return byName || bySector;
-    });
-  }, [learningPaths, searchTerm]);
+    return categories.filter(cat =>
+      cat.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [categories, searchTerm]);
 
   const getPathIcon = (pathId: string) => {
     const iconMap: Record<string, React.ReactNode> = {
@@ -224,9 +275,9 @@ export default function LearningPathsPage() {
             Learning Paths
           </h1>
           <p className='text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed'>
-            Choose from structured learning paths covering all aspects of
-            frontend development. Each path contains curated topics and
-            questions to master specific skills.
+            Browse core knowledge categories (HTML, CSS, JavaScript, React,
+            TypeScript, etc.). Expand a category to see its topics and preview
+            questions.
           </p>
         </div>
 
@@ -238,7 +289,7 @@ export default function LearningPathsPage() {
                 <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5' />
                 <input
                   type='text'
-                  placeholder='Search learning paths or topics...'
+                  placeholder='Search categories or topics...'
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   className='w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white'
@@ -322,44 +373,29 @@ export default function LearningPathsPage() {
                           <div className='flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400'>
                             <div className='flex items-center gap-1'>
                               <Target className='w-4 h-4' />
-                              <span>{path.sectors?.length || 0} topics</span>
+                              {/* Topic count is shown after expand; show placeholder */}
+                              <span>Topics</span>
                             </div>
                             <div className='flex items-center gap-1'>
                               <BookOpen className='w-4 h-4' />
-                              <span>{path.questionCount || 0} questions</span>
+                              <span>Questions</span>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* Topics Preview */}
+                      {/* Topics Preview (after expand will show details) */}
                       <div className='mb-4'>
                         <h4 className='text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2'>
-                          Topics:
+                          Category
                         </h4>
-                        <div className='flex flex-wrap gap-2'>
-                          {(path.sectors?.slice(0, 3) || []).map(
-                            (sector: any) => (
-                              <span
-                                key={sector.id}
-                                className='px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium'
-                              >
-                                {sector.name}
-                              </span>
-                            )
-                          )}
-                          {(path.sectors?.length || 0) > 3 && (
-                            <span className='px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full text-xs font-medium'>
-                              +{(path.sectors?.length || 0) - 3} more
-                            </span>
-                          )}
-                        </div>
+                        <div className='flex flex-wrap gap-2'></div>
                       </div>
 
                       {/* CTA */}
                       <div className='flex items-center justify-between'>
                         <Link
-                          href={`/guided-practice?plan=${path.id}`}
+                          href={`/questions?category=${path.id}`}
                           className='inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl'
                           onClick={e => e.stopPropagation()}
                         >
@@ -412,7 +448,7 @@ export default function LearningPathsPage() {
                                             </p>
                                           </div>
                                           <Link
-                                            href={`/guided-practice?plan=${path.id}`}
+                                            href={`/questions?topic=${topic.id}`}
                                             className='inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md bg-indigo-600 text-white hover:bg-indigo-700'
                                             onClick={e => e.stopPropagation()}
                                           >
@@ -460,30 +496,14 @@ export default function LearningPathsPage() {
                       <div className='flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400 mb-2'>
                         <div className='flex items-center gap-1'>
                           <Target className='w-4 h-4' />
-                          <span>{path.sectors?.length || 0} topics</span>
+                          <span>Topics</span>
                         </div>
                         <div className='flex items-center gap-1'>
                           <BookOpen className='w-4 h-4' />
-                          <span>{path.questionCount || 0} questions</span>
+                          <span>Questions</span>
                         </div>
                       </div>
-                      <div className='flex flex-wrap gap-2'>
-                        {(path.sectors?.slice(0, 4) || []).map(
-                          (sector: any) => (
-                            <span
-                              key={sector.id}
-                              className='px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs'
-                            >
-                              {sector.name}
-                            </span>
-                          )
-                        )}
-                        {(path.sectors?.length || 0) > 4 && (
-                          <span className='px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded text-xs'>
-                            +{(path.sectors?.length || 0) - 4} more
-                          </span>
-                        )}
-                      </div>
+                      <div className='flex flex-wrap gap-2'></div>
                     </div>
                     <div className='flex-shrink-0'>
                       <ChevronRight className='w-6 h-6 text-gray-400' />
