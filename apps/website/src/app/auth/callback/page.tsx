@@ -20,28 +20,59 @@ export default function AuthCallback() {
       }
 
       try {
+        // Handle the OAuth callback from the URL hash
         const { data, error } = await supabase.auth.getSession();
 
+        console.log('📥 Auth callback - Session data:', data);
+        console.log('📥 Auth callback - Error:', error);
+
         if (error) {
-          console.error('Auth callback error:', error);
+          console.error('❌ Auth callback error:', error);
           router.push('/auth?error=auth_failed');
           return;
         }
 
         if (data.session) {
+          console.log('✅ User authenticated successfully');
           // User is authenticated, redirect to home
-          router.push('/');
+          setTimeout(() => {
+            router.push('/');
+          }, 1000);
         } else {
+          console.log('⚠️ No session found, redirecting to auth page');
           // No session, redirect to auth page
           router.push('/auth');
         }
       } catch (error) {
-        console.error('Auth callback error:', error);
+        console.error('❌ Auth callback error:', error);
         router.push('/auth?error=unexpected_error');
       }
     };
 
     handleAuthCallback();
+  }, [router]);
+
+  // Listen for auth state changes
+  useEffect(() => {
+    if (!isSupabaseAvailable() || !supabase) return;
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('🔄 Auth state changed:', event, session);
+
+      if (event === 'SIGNED_IN' && session) {
+        console.log('✅ User signed in:', session.user.email);
+        router.push('/');
+      } else if (event === 'SIGNED_OUT') {
+        console.log('👋 User signed out');
+        router.push('/auth');
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [router]);
 
   return (
