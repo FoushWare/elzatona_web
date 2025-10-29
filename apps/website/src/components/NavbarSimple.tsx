@@ -281,68 +281,9 @@ export const NavbarSimple: React.FC = () => {
             <AlzatonaLogo size='sm' showText={false} />
           </Link>
 
-          {/* Desktop Navigation - Only show for authenticated users */}
+          {/* Desktop Navigation - hidden for now per product decision */}
           {stableAuthState.isAuthenticated && (
-            <div className='hidden lg:flex items-center space-x-6 flex-1 justify-center'>
-              {/* Navigation Links - Only for authenticated users */}
-              <Link
-                href='/practice'
-                className={`font-medium transition-colors duration-200 ${
-                  isActiveLink('/practice')
-                    ? isScrolled
-                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
-                      : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
-                    : isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                      : 'text-white hover:text-indigo-100'
-                }`}
-              >
-                Practice
-              </Link>
-              <Link
-                href='/features/guided-learning'
-                className={`font-medium transition-colors duration-200 ${
-                  isActiveLink('/features/guided-learning')
-                    ? isScrolled
-                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
-                      : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
-                    : isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                      : 'text-white hover:text-indigo-100'
-                }`}
-              >
-                Guided Learning
-              </Link>
-              <Link
-                href='/questions'
-                className={`font-medium transition-colors duration-200 ${
-                  isActiveLink('/questions')
-                    ? isScrolled
-                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
-                      : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
-                    : isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                      : 'text-white hover:text-indigo-100'
-                }`}
-              >
-                Questions
-              </Link>
-              <Link
-                href='/resources'
-                className={`font-medium transition-colors duration-200 ${
-                  isActiveLink('/resources')
-                    ? isScrolled
-                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
-                      : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
-                    : isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                      : 'text-white hover:text-indigo-100'
-                }`}
-              >
-                Resources
-              </Link>
-              {/* Learning Paths removed */}
-            </div>
+            <div className='hidden lg:flex items-center space-x-6 flex-1 justify-center'></div>
           )}
 
           {/* Right Section - Desktop Only */}
@@ -502,55 +443,9 @@ export const NavbarSimple: React.FC = () => {
               </button>
             </div>
 
-            {/* Mobile Navigation Links - Only for authenticated users */}
+            {/* Mobile Navigation Links - hidden for now per product decision */}
             {stableAuthState.isAuthenticated && (
-              <div className='flex-1 px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4'>
-                <Link
-                  href='/practice'
-                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink('/practice')
-                      ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
-                      : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Practice
-                </Link>
-                <Link
-                  href='/features/guided-learning'
-                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink('/features/guided-learning')
-                      ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
-                      : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Guided Learning
-                </Link>
-                <Link
-                  href='/questions'
-                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink('/questions')
-                      ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
-                      : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Questions
-                </Link>
-                <Link
-                  href='/resources'
-                  className={`block text-base sm:text-lg font-medium py-2 px-3 rounded-lg transition-colors ${
-                    isActiveLink('/resources')
-                      ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
-                      : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Resources
-                </Link>
-                {/* Learning Paths removed */}
-              </div>
+              <div className='flex-1 px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4'></div>
             )}
 
             {/* Mobile CTAs */}
