@@ -34,10 +34,35 @@ export default function AuthCallback() {
 
         if (data.session) {
           console.log('✅ User authenticated successfully');
-          // User is authenticated, redirect to home
+          // User is authenticated, sync any local progress, then redirect
+          try {
+            // Batch sync all guided-practice progress keys from localStorage
+            const keys = Object.keys(localStorage).filter(k =>
+              k.startsWith('guided-practice-progress-')
+            );
+            for (const key of keys) {
+              try {
+                const raw = localStorage.getItem(key);
+                if (!raw) continue;
+                const parsed = JSON.parse(raw);
+                // Expect key format guided-practice-progress-<planId>
+                const planId = key.replace('guided-practice-progress-', '');
+                await fetch('/api/progress/guided-learning/sync', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ planId, progress: parsed }),
+                });
+              } catch (e) {
+                console.warn('Progress sync failed for key:', key, e);
+              }
+            }
+          } catch (e) {
+            console.warn('Progress sync batch failed:', e);
+          }
+
           setTimeout(() => {
             router.push('/');
-          }, 1000);
+          }, 500);
         } else {
           console.log('⚠️ No session found, redirecting to auth page');
           // No session, redirect to auth page
