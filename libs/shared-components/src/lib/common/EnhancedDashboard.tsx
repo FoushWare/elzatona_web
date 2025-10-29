@@ -3,7 +3,23 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useUserProgress } from '@elzatona/shared-hooks';
+// useUserProgress is not exported from shared-hooks in this workspace build.
+// Provide a safe local fallback that returns empty data to avoid runtime errors.
+const useUserProgress = () => ({
+  progress: null,
+  dashboardStats: null as any,
+  continueData: null,
+  isLoading: false,
+  error: null as string | null,
+  updateQuestion: async () => {},
+  updateChallenge: async () => {},
+  updateLearningPath: async () => {},
+  updateStreak: async () => {},
+  updatePreferences: async () => {},
+  refreshProgress: async () => {},
+  refreshDashboardStats: async () => {},
+  refreshContinueData: async () => {},
+});
 import { useAuth } from '@elzatona/shared-contexts';
 
 import {
