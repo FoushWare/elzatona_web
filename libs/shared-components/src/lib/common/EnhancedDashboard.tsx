@@ -126,16 +126,7 @@ export default function EnhancedDashboard() {
       stats: `${progress?.total_questions_answered || 0} completed`,
       progress: dashboardStats ? dashboardStats.accuracy || 0 : 0,
     },
-    {
-      id: 'learning-paths',
-      title: 'Learning Paths',
-      description: 'Follow structured learning paths',
-      icon: Target,
-      color: 'from-purple-500 to-purple-600',
-      href: '/learning-paths',
-      stats: `0 paths in progress`,
-      progress: dashboardStats ? dashboardStats.accuracy || 0 : 0,
-    },
+    // Learning Paths card removed per product decision
     {
       id: 'challenges',
       title: 'Coding Challenges',
