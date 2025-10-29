@@ -4,14 +4,35 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { loadCart, removeFromCart, clearCart, CartItem } from '@/lib/cart';
 import { ShoppingCart, Trash2, CheckCircle2, BookOpen } from 'lucide-react';
+import { useLearningType } from '@/context/LearningTypeContext';
 
 export default function FreeStyleCartPage() {
   const [items, setItems] = useState<CartItem[]>([]);
   const [created, setCreated] = useState<string | null>(null);
+  const [planName, setPlanName] = useState('My Custom Plan');
+  const [durationDays, setDurationDays] = useState<number>(7);
+  const [questionsPerDay, setQuestionsPerDay] = useState<number>(0);
+  const { setLearningType } = useLearningType();
 
   useEffect(() => {
-    setItems(loadCart());
-  }, []);
+    const loaded = loadCart();
+    setItems(loaded);
+    // default questions per day from current selection
+    if (loaded.length > 0) {
+      setQuestionsPerDay(Math.max(1, Math.floor(loaded.length / durationDays)));
+    }
+    // ensure we are in custom mode for this page
+    setLearningType('custom');
+  }, [durationDays, setLearningType]);
+
+  useEffect(() => {
+    // recompute questionsPerDay when items change
+    if (items.length > 0) {
+      setQuestionsPerDay(prev =>
+        prev > 0 ? prev : Math.max(1, Math.floor(items.length / durationDays))
+      );
+    }
+  }, [items, durationDays]);
 
   const handleRemove = (id: string) => {
     removeFromCart(id);
@@ -24,9 +45,13 @@ export default function FreeStyleCartPage() {
       const planId = `custom-plan-${Date.now()}`;
       const entry = {
         id: planId,
-        name: 'My Custom Plan',
+        name: planName || 'My Custom Plan',
         createdAt: Date.now(),
         questionIds: items.map(i => i.id),
+        durationDays,
+        questionsPerDay,
+        totalQuestions: items.length,
+        type: 'custom' as const,
       };
       const raw = localStorage.getItem('my-custom-plans:v1');
       const list = raw ? JSON.parse(raw) : [];
@@ -74,6 +99,63 @@ export default function FreeStyleCartPage() {
           </div>
         ) : (
           <>
+            {/* Plan settings */}
+            <div className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl p-5 border border-white/30 dark:border-gray-700/30 shadow mb-6'>
+              <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    Plan Name
+                  </label>
+                  <input
+                    value={planName}
+                    onChange={e => setPlanName(e.target.value)}
+                    className='w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-900 dark:text-gray-100'
+                    placeholder='My Custom Plan'
+                  />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    Duration (days)
+                  </label>
+                  <input
+                    type='number'
+                    min={1}
+                    max={60}
+                    value={durationDays}
+                    onChange={e =>
+                      setDurationDays(
+                        Math.max(1, Math.min(60, Number(e.target.value) || 1))
+                      )
+                    }
+                    className='w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-900 dark:text-gray-100'
+                  />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+                    Questions per day
+                  </label>
+                  <input
+                    type='number'
+                    min={1}
+                    max={Math.max(1, items.length)}
+                    value={questionsPerDay}
+                    onChange={e =>
+                      setQuestionsPerDay(
+                        Math.max(
+                          1,
+                          Math.min(items.length, Number(e.target.value) || 1)
+                        )
+                      )
+                    }
+                    className='w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-900 dark:text-gray-100'
+                  />
+                  <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
+                    Total questions: {items.length}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div className='grid grid-cols-1 gap-4 mb-8'>
               {items.map(item => (
                 <div
