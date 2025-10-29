@@ -2,10 +2,12 @@
 
 import dynamic from 'next/dynamic';
 
-// Lazy-load from the shared-components barrel export
+// Lazy-load directly from module default export to avoid named export ambiguity
 const EnhancedUserDashboard = dynamic(
   () =>
-    import('@elzatona/shared-components').then(m => m.EnhancedUserDashboard),
+    import('@elzatona/shared-components/lib/common/EnhancedUserDashboard').then(
+      mod => mod.default
+    ),
   { ssr: false }
 );
 
