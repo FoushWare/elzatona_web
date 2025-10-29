@@ -1,7 +1,7 @@
 'use client';
 
-import { EnhancedUserDashboard } from '@elzatona/shared-components';
+import { EnhancedDashboard } from '@elzatona/shared-components';
 
 export default function DashboardPage() {
-  return <EnhancedUserDashboard />;
+  return <EnhancedDashboard />;
 }
