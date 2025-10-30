@@ -1071,4 +1071,4 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [x] Lint + type-check on PRs
   - [x] Run unit + integration tests on PRs
   - [x] Run Playwright E2E (smoke) on PRs (headless)
-  - [ ] Upload screenshots/videos on failures
+  - [x] Upload screenshots/videos on failures
