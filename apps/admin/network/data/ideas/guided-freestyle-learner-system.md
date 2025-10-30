@@ -1031,7 +1031,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
     - [x] Defaults to `guided`
     - [x] `setLearningType` updates and persists to localStorage
     - [x] User-scoped keys respected when session exists
-  - [ ] NavbarSimple
+  - [x] NavbarSimple
     - [x] Renders Dashboard when auth state is authenticated
     - [x] No flicker when session state is present in sessionStorage
   - [ ] Flashcards utilities
@@ -1039,24 +1039,24 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [ ] Cart utilities
     - [x] add/remove/clear/isQuestionInCart work as expected
 
-- [ ] Integration Tests (API + pages)
+- [x] Integration Tests (API + pages)
   - [x] `/api/plans` returns 200 and JSON
   - [x] Guided plan details page renders categories, topics, and correct counts (only questions with options)
     - [x] Navigates from listing to plan details route
     - [x] Progress totals match API options-only counts
   - [x] OAuth callback page redirects to `/auth` or `/dashboard` and attempts sync
 
-- [ ] E2E Smoke (Playwright)
+- [x] E2E Smoke (Playwright)
   - [x] Routes load without errors: `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/features/guided-learning`
   - [x] Guided entry shows at least one Start CTA
   - [x] Custom plan cart shows Plan Name, Duration, Questions/day fields
 
 - [ ] E2E Flows
-  - [ ] Guided (anon)
+  - [x] Guided (anon)
     - [x] Start plan → progress key persists locally
-  - [ ] Free Style (anon)
+  - [x] Free Style (anon)
     - [x] Wrong answer adds to flashcards (or manual add available)
-  - [ ] Custom Plan (anon)
+  - [x] Custom Plan (anon)
     - [x] Add questions to cart → set plan metadata → Create Plan → plan saved locally
   - [ ] Social Login
     - [ ] Google → redirects to `/dashboard`
