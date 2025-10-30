@@ -919,3 +919,81 @@ This comprehensive testing guide ensures both admin pages and website integratio
 **Estimated Effort**: 12 weeks  
 **Team Size**: 3-4 developers  
 **Status**: ✅ **IMPLEMENTATION COMPLETE** - Core Features Implemented
+
+---
+
+## 🧪 Manual QA Checklist
+
+- [ ] Test the flow without login (Guided)
+  - [ ] Visit `/features/guided-learning`
+  - [ ] Open a plan → Start practice → Answer a few questions
+  - [ ] Verify local progress saved, reset progress works from plan details
+  - [ ] Refresh: progress persists locally; progress counts exclude questions without options
+
+- [ ] Test the flow without login (Free Style)
+  - [ ] Visit `/free-style` → open a path/topic → practice questions
+  - [ ] Answer a few questions and verify local progress
+  - [ ] Add/remove flashcards manually and on wrong answers
+  - [ ] Refresh: progress and flashcards persist locally
+
+- [ ] Test the flow without login (Custom Plan in Free Style)
+  - [ ] Add multiple questions to cart from Free Style
+  - [ ] Open `/free-style/cart` → set Plan Name, Duration (days), Questions/day
+  - [ ] Create the plan → plan metadata saved to local storage and cart cleared
+  - [ ] Navbar shows cart and "Custom Free-Style" only in Free Style/custom mode
+
+- [ ] Test login with social
+  - [ ] Google login redirects back to `/dashboard`
+  - [ ] GitHub login redirects back to `/dashboard`
+  - [ ] Navbar shows Dashboard + Logout immediately (no Sign In → Dashboard flicker)
+  - [ ] OAuth callback URLs configured in providers (GitHub/Google)
+
+- [ ] Register / Login with email & password
+  - [ ] Register via `/auth` then login
+  - [ ] Session persists across refresh and navigation
+
+- [ ] Transfer history from non-logged → logged
+  - [ ] Ensure local guided/free-style/custom progress syncs to DB on first login
+  - [ ] Verify progress appears on `/dashboard` after redirect
+
+- [ ] Test the flow with logged in (Guided)
+  - [ ] Start a plan, answer questions, check DB-backed progress updates
+  - [ ] Refresh/device switch: progress persists
+
+- [ ] Test the flow with logged in (Free Style)
+  - [ ] Practice questions and verify DB progress recording
+  - [ ] Flashcards add/remove persists across sessions
+
+- [ ] Test the flow with logged in (Custom)
+  - [ ] Build a custom plan from cart; ensure plan saved with duration/questions/day
+  - [ ] Practice custom plan questions; progress persists (DB/local as applicable)
+
+- [ ] Admin: Create question banks
+  - [ ] Add categories/topics/questions
+  - [ ] New questions appear on website fetches
+
+- [ ] Admin: Add questions to plans
+  - [ ] Assign to cards/categories/topics; verify guided plan counts update
+
+- [ ] Flashcards
+  - [ ] CRUD operations on `/flashcards`
+  - [ ] Auto-add flashcard on wrong answers
+
+- [ ] Deployment readiness
+  - [ ] Local build succeeds (`nx build website` or `next build`)
+  - [ ] Env vars set (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, provider IDs/secrets)
+  - [ ] Supabase RLS policies verified for progress tables
+  - [ ] Deployed app smoke test routes:
+    - [ ] `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/features/guided-learning`, guided practice
+
+- [ ] Visual/UX checks
+  - [ ] Navbar items correct for auth state (no flicker)
+  - [ ] Toasts have solid backgrounds, readable in light/dark
+  - [ ] Pages include top padding under navbar (pt-24 where needed)
+  - [ ] 404 page styled per system and navbar correct
+
+- [ ] Edge cases
+  - [ ] Plans with no valid options-questions don’t inflate totals
+  - [ ] Reset progress per plan updates UI and storage
+  - [ ] Topic/subtopic links encoded correctly; `/questions` entry page loads (no 404)
+  - [ ] Learning type persists globally (guided/free-style/custom) and drives navbar/cart
