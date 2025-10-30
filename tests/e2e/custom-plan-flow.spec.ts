@@ -2,13 +2,24 @@
 import { test, expect } from '@playwright/test';
 
 test('custom plan: open cart and set metadata', async ({ page }) => {
+  await page.addInitScript(() => {
+    try {
+      const seed = [
+        {
+          id: 'q-1',
+          question: 'What is React reconciliation?',
+          section: 'React',
+          topic: 'Rendering',
+          difficulty: 'Medium',
+          addedAt: Date.now(),
+        },
+      ];
+      localStorage.setItem('question-cart:v1', JSON.stringify(seed));
+    } catch {}
+  });
   await page.goto('/free-style/cart');
-  await page.fill('input[placeholder="My Custom Plan"]', 'My Interview Plan');
-  await page.fill('input[type="number"]:below(:text("Duration (days)"))', '7');
-  await page.fill(
-    'input[type="number"]:below(:text("Questions per day"))',
-    '5'
-  );
-  // Button exists
-  await expect(page.getByRole('button', { name: 'Create Plan' })).toBeVisible();
+  await page.getByTestId('plan-name-input').fill('My Interview Plan');
+  await page.getByTestId('duration-input').fill('7');
+  await page.getByTestId('questions-per-day-input').fill('5');
+  await expect(page.getByTestId('create-plan-button')).toBeVisible();
 });

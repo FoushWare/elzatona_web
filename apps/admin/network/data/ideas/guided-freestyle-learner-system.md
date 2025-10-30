@@ -1021,3 +1021,54 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [ ] Reset progress per plan updates UI and storage
   - [ ] Topic/subtopic links encoded correctly; `/questions` entry page loads (no 404)
   - [ ] Learning type persists globally (guided/free-style/custom) and drives navbar/cart
+
+---
+
+## 🤖 Automated Testing Checklist
+
+- [ ] Unit Tests
+  - [ ] LearningTypeContext
+    - [ ] Defaults to `guided`
+    - [ ] `setLearningType` updates and persists to localStorage
+    - [ ] User-scoped keys respected when session exists
+  - [ ] NavbarSimple
+    - [ ] Renders Dashboard when auth state is authenticated
+    - [ ] No flicker when session state is present in sessionStorage
+  - [ ] Flashcards utilities
+    - [ ] add/remove/isFlashcardAdded work as expected
+  - [ ] Cart utilities
+    - [ ] add/remove/clear/isQuestionInCart work as expected
+
+- [ ] Integration Tests (API + pages)
+  - [ ] `/api/plans` returns 200 and 7 plans
+  - [ ] Guided plan details page renders categories, topics, and correct counts (only questions with options)
+  - [ ] OAuth callback page syncs local progress to DB before redirect
+
+- [ ] E2E Smoke (Playwright)
+  - [ ] Routes load without errors: `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/features/guided-learning`
+  - [ ] Guided entry shows at least one Start CTA
+  - [ ] Custom plan cart shows Plan Name, Duration, Questions/day fields
+
+- [ ] E2E Flows
+  - [ ] Guided (anon)
+    - [ ] Start plan → answer few questions → progress persists locally
+  - [ ] Free Style (anon)
+    - [ ] Practice few questions → progress persists locally
+    - [ ] Wrong answer adds to flashcards
+  - [ ] Custom Plan (anon)
+    - [ ] Add questions to cart → set plan metadata → Create Plan → plan saved locally
+  - [ ] Social Login
+    - [ ] Google → redirects to `/dashboard`
+    - [ ] GitHub → redirects to `/dashboard`
+    - [ ] Navbar reflects authenticated state with no flicker
+  - [ ] Transfer history
+    - [ ] On first login, local progress synced to DB; dashboard reflects it
+
+- [ ] Responsive Snapshot Tests (optional per component)
+  - [ ] Key components render without overflow at 320/360/390/414/540/768/1024/1280/1440/1920 widths
+
+- [ ] CI Setup
+  - [ ] Lint + type-check on PRs
+  - [ ] Run unit + integration tests on PRs
+  - [ ] Run Playwright E2E (smoke) on PRs (headless)
+  - [ ] Upload screenshots/videos on failures
