@@ -111,6 +111,7 @@ export default function FreeStyleCartPage() {
                     onChange={e => setPlanName(e.target.value)}
                     className='w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-900 dark:text-gray-100'
                     placeholder='My Custom Plan'
+                    data-testid='plan-name-input'
                   />
                 </div>
                 <div>
@@ -128,6 +129,7 @@ export default function FreeStyleCartPage() {
                       )
                     }
                     className='w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-900 dark:text-gray-100'
+                    data-testid='duration-input'
                   />
                 </div>
                 <div>
@@ -148,6 +150,7 @@ export default function FreeStyleCartPage() {
                       )
                     }
                     className='w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-900 dark:text-gray-100'
+                    data-testid='questions-per-day-input'
                   />
                   <p className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
                     Total questions: {items.length}
@@ -196,6 +199,7 @@ export default function FreeStyleCartPage() {
               <button
                 onClick={handleCreatePlan}
                 className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-indigo-600 text-white rounded-xl font-semibold shadow hover:shadow-md'
+                data-testid='create-plan-button'
               >
                 Create Plan
               </button>
