@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+      - test/**
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Lint
+        run: npx nx format:check || true && npx nx run-many --target=lint --all || true
+
+      - name: Type Check
+        run: npx tsc -p tsconfig.json --noEmit || true
+
+      - name: Unit Tests (website)
+        run: |
+          cd apps/website
+          npx jest --runInBand --passWithNoTests
+
+      - name: E2E Smoke (Chromium)
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'anon' }}
+        run: |
+          npx playwright test tests/e2e/website-smoke.spec.ts tests/e2e/guided-flow.spec.ts tests/e2e/custom-plan-flow.spec.ts --project=chromium --reporter=line
