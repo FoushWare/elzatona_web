@@ -394,6 +394,7 @@ export default function PlanDetailPage() {
                     ? 'border-green-500/50 bg-green-50/50 dark:bg-green-900/20'
                     : 'border-white/20 dark:border-gray-700/20'
                 }`}
+                data-testid='guided-card'
               >
                 <div className='flex items-center justify-between mb-4'>
                   <div className='flex items-center space-x-4'>
@@ -427,7 +428,10 @@ export default function PlanDetailPage() {
                     <div className='text-sm text-gray-500 dark:text-gray-400 mb-1'>
                       Progress
                     </div>
-                    <div className='text-lg font-semibold text-gray-900 dark:text-white'>
+                    <div
+                      className='text-lg font-semibold text-gray-900 dark:text-white'
+                      data-testid='guided-card-progress'
+                    >
                       {cardProgress.completed}/{cardProgress.total}
                     </div>
                     <div className='text-sm text-gray-500 dark:text-gray-400'>
@@ -464,6 +468,7 @@ export default function PlanDetailPage() {
                             ? 'border-green-500/50 bg-green-50/50 dark:bg-green-900/20'
                             : 'border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-700/50'
                         }`}
+                        data-testid='guided-category'
                       >
                         <div className='flex items-center justify-between mb-2'>
                           <h4 className='font-semibold text-gray-900 dark:text-white flex items-center space-x-2'>
@@ -472,7 +477,10 @@ export default function PlanDetailPage() {
                               <CheckCircle className='w-4 h-4 text-green-500' />
                             )}
                           </h4>
-                          <span className='text-sm text-gray-500 dark:text-gray-400'>
+                          <span
+                            className='text-sm text-gray-500 dark:text-gray-400'
+                            data-testid='guided-category-progress'
+                          >
                             {categoryProgress.completed}/
                             {categoryProgress.total}
                           </span>
