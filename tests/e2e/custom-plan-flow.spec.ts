@@ -22,4 +22,6 @@ test('custom plan: open cart and set metadata', async ({ page }) => {
   await page.getByTestId('duration-input').fill('7');
   await page.getByTestId('questions-per-day-input').fill('5');
   await expect(page.getByTestId('create-plan-button')).toBeVisible();
+  await page.getByTestId('create-plan-button').click();
+  await expect(page.getByText('Plan created!')).toBeVisible();
 });
