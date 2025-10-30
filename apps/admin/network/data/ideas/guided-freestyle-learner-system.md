@@ -986,11 +986,35 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [ ] Deployed app smoke test routes:
     - [ ] `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/features/guided-learning`, guided practice
 
+- [ ] Coding Challenges (Frontend & Problem Solving)
+  - Frontend Tasks
+    - [ ] Admin: create/edit/delete a frontend task at `/admin/frontend-tasks`
+    - [ ] Verify starter code loads in editor, preview renders, console shows logs
+    - [ ] Run provided tests (if present) and confirm pass/fail feedback appears
+    - [ ] Practice flow from website entry (browse → open task → code → preview)
+    - [ ] Progress persists locally; re-open task shows last code
+    - [ ] Large code edits do not freeze UI (performance check)
+  - Problem Solving
+    - [ ] Admin: create/edit/delete a problem at `/admin/problem-solving`
+    - [ ] Website: open problem → run solution against sample tests
+    - [ ] Add custom input; verify correct output/error handling/timeouts
+    - [ ] Wrong attempts increment analytics where applicable and can add to flashcards
+    - [ ] Progress/resume works after refresh
+
 - [ ] Visual/UX checks
   - [ ] Navbar items correct for auth state (no flicker)
   - [ ] Toasts have solid backgrounds, readable in light/dark
   - [ ] Pages include top padding under navbar (pt-24 where needed)
   - [ ] 404 page styled per system and navbar correct
+  - [ ] Responsive testing across screen sizes
+    - [ ] Breakpoints: 320, 360, 390, 414, 540, 768, 1024, 1280, 1440, 1920
+    - [ ] Key pages: `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/features/guided-learning`, guided practice, `/flashcards`
+    - [ ] Navbar: collapses correctly, mobile menu opens/closes, actions accessible
+    - [ ] Cards/lists: no overflow, proper wrapping, readable spacing
+    - [ ] Modals/dialogs/sheets: fit viewport, scrollable content
+    - [ ] Tables/grids: horizontal scroll where needed, headers readable
+    - [ ] Buttons/touch targets: minimum 44px height, adequate spacing
+    - [ ] Toasts/tooltips: visible and not clipped on small screens
 
 - [ ] Edge cases
   - [ ] Plans with no valid options-questions don’t inflate totals
