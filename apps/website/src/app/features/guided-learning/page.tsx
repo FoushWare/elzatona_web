@@ -592,6 +592,7 @@ export default function GuidedLearningPage() {
                 }}
                 onMouseEnter={() => setHoveredPlan(plan.id)}
                 onMouseLeave={() => setHoveredPlan(null)}
+                data-testid='guided-plan-card'
               >
                 {/* Recommended Badge */}
                 {plan.isRecommended && (
@@ -689,6 +690,7 @@ export default function GuidedLearningPage() {
                           ? 'text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300'
                           : 'text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300'
                     }`}
+                    data-testid='guided-plan-start-cta'
                   >
                     {isNavigatingToPlan === plan.id ? (
                       <>
