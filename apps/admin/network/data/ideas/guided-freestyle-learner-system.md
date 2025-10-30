@@ -1032,8 +1032,8 @@ This comprehensive testing guide ensures both admin pages and website integratio
     - [x] `setLearningType` updates and persists to localStorage
     - [ ] User-scoped keys respected when session exists
   - [ ] NavbarSimple
-    - [ ] Renders Dashboard when auth state is authenticated
-    - [ ] No flicker when session state is present in sessionStorage
+    - [x] Renders Dashboard when auth state is authenticated
+    - [x] No flicker when session state is present in sessionStorage
   - [ ] Flashcards utilities
     - [x] add/remove/isFlashcardAdded work as expected
   - [ ] Cart utilities
