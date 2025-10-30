@@ -5,6 +5,9 @@ import '@testing-library/jest-dom';
 jest.mock('@/lib/supabase-client', () => ({
   supabaseClient: {
     auth: {
+      getSession: jest
+        .fn()
+        .mockResolvedValue({ data: { session: { user: { id: 'user_123' } } } }),
       getUser: jest.fn().mockResolvedValue({ data: { user: null } }),
       onAuthStateChange: jest.fn(() => ({
         data: { subscription: { unsubscribe: () => {} } },
@@ -52,5 +55,21 @@ describe('LearningTypeContext (app colocated)', () => {
       screen.getByText('set-free').click();
     });
     expect(screen.getByTestId('type')).toHaveTextContent('free-style');
+  });
+
+  it('persists learning type under user-scoped key when session exists', async () => {
+    render(
+      <LearningTypeProvider>
+        <Consumer />
+      </LearningTypeProvider>
+    );
+    // wait a tick for provider to initialize userId via getSession
+    await act(async () => {});
+    await act(async () => {
+      screen.getByText('set-free').click();
+    });
+    expect(
+      window.localStorage.getItem('learning-preferences:user_123:type')
+    ).toBe('free-style');
   });
 });
