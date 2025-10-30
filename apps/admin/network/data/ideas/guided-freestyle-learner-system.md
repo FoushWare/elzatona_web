@@ -1030,7 +1030,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [x] LearningTypeContext
     - [x] Defaults to `guided`
     - [x] `setLearningType` updates and persists to localStorage
-    - [ ] User-scoped keys respected when session exists
+    - [x] User-scoped keys respected when session exists
   - [ ] NavbarSimple
     - [x] Renders Dashboard when auth state is authenticated
     - [x] No flicker when session state is present in sessionStorage
