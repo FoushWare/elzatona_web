@@ -1005,7 +1005,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [ ] Navbar items correct for auth state (no flicker)
   - [ ] Toasts have solid backgrounds, readable in light/dark
   - [ ] Pages include top padding under navbar (pt-24 where needed)
-  - [ ] 404 page styled per system and navbar correct
+    - [x] 404 page styled per system and navbar correct
   - [ ] Responsive testing across screen sizes
     - [ ] Breakpoints: 320, 360, 390, 414, 540, 768, 1024, 1280, 1440, 1920
     - [ ] Key pages: `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/features/guided-learning`, guided practice, `/flashcards`
