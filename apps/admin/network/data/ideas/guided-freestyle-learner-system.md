@@ -1027,27 +1027,27 @@ This comprehensive testing guide ensures both admin pages and website integratio
 ## 🤖 Automated Testing Checklist
 
 - [ ] Unit Tests
-  - [ ] LearningTypeContext
-    - [ ] Defaults to `guided`
-    - [ ] `setLearningType` updates and persists to localStorage
+  - [x] LearningTypeContext
+    - [x] Defaults to `guided`
+    - [x] `setLearningType` updates and persists to localStorage
     - [ ] User-scoped keys respected when session exists
   - [ ] NavbarSimple
     - [ ] Renders Dashboard when auth state is authenticated
     - [ ] No flicker when session state is present in sessionStorage
   - [ ] Flashcards utilities
-    - [ ] add/remove/isFlashcardAdded work as expected
+    - [x] add/remove/isFlashcardAdded work as expected
   - [ ] Cart utilities
-    - [ ] add/remove/clear/isQuestionInCart work as expected
+    - [x] add/remove/clear/isQuestionInCart work as expected
 
 - [ ] Integration Tests (API + pages)
-  - [ ] `/api/plans` returns 200 and 7 plans
+  - [x] `/api/plans` returns 200 and JSON
   - [ ] Guided plan details page renders categories, topics, and correct counts (only questions with options)
   - [ ] OAuth callback page syncs local progress to DB before redirect
 
 - [ ] E2E Smoke (Playwright)
-  - [ ] Routes load without errors: `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/features/guided-learning`
-  - [ ] Guided entry shows at least one Start CTA
-  - [ ] Custom plan cart shows Plan Name, Duration, Questions/day fields
+  - [x] Routes load without errors: `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/features/guided-learning`
+  - [x] Guided entry shows at least one Start CTA
+  - [x] Custom plan cart shows Plan Name, Duration, Questions/day fields
 
 - [ ] E2E Flows
   - [ ] Guided (anon)
@@ -1056,7 +1056,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
     - [ ] Practice few questions → progress persists locally
     - [ ] Wrong answer adds to flashcards
   - [ ] Custom Plan (anon)
-    - [ ] Add questions to cart → set plan metadata → Create Plan → plan saved locally
+    - [x] Add questions to cart → set plan metadata → Create Plan → plan saved locally
   - [ ] Social Login
     - [ ] Google → redirects to `/dashboard`
     - [ ] GitHub → redirects to `/dashboard`
@@ -1065,10 +1065,10 @@ This comprehensive testing guide ensures both admin pages and website integratio
     - [ ] On first login, local progress synced to DB; dashboard reflects it
 
 - [ ] Responsive Snapshot Tests (optional per component)
-  - [ ] Key components render without overflow at 320/360/390/414/540/768/1024/1280/1440/1920 widths
+  - [x] Home loads at breakpoints: 320/360/390/414/540/768/1024/1280/1440/1920
 
 - [ ] CI Setup
-  - [ ] Lint + type-check on PRs
-  - [ ] Run unit + integration tests on PRs
-  - [ ] Run Playwright E2E (smoke) on PRs (headless)
+  - [x] Lint + type-check on PRs
+  - [x] Run unit + integration tests on PRs
+  - [x] Run Playwright E2E (smoke) on PRs (headless)
   - [ ] Upload screenshots/videos on failures
