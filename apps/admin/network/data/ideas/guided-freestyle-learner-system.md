@@ -1042,6 +1042,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
 - [ ] Integration Tests (API + pages)
   - [x] `/api/plans` returns 200 and JSON
   - [ ] Guided plan details page renders categories, topics, and correct counts (only questions with options)
+    - [x] Navigates from listing to plan details route
   - [ ] OAuth callback page syncs local progress to DB before redirect
 
 - [ ] E2E Smoke (Playwright)
