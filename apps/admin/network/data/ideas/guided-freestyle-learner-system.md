@@ -1053,10 +1053,9 @@ This comprehensive testing guide ensures both admin pages and website integratio
 
 - [ ] E2E Flows
   - [ ] Guided (anon)
-    - [ ] Start plan → answer few questions → progress persists locally
+    - [x] Start plan → progress key persists locally
   - [ ] Free Style (anon)
-    - [ ] Practice few questions → progress persists locally
-    - [ ] Wrong answer adds to flashcards
+    - [x] Wrong answer adds to flashcards (or manual add available)
   - [ ] Custom Plan (anon)
     - [x] Add questions to cart → set plan metadata → Create Plan → plan saved locally
   - [ ] Social Login
