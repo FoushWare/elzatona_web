@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -35,27 +35,14 @@ export const NavbarSimple: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [hasSnapshotApplied, setHasSnapshotApplied] = useState(false);
+  const [supabaseChecked, setSupabaseChecked] = useState(false);
   const [stableAuthState, setStableAuthState] = useState<{
     isAuthenticated: boolean;
     isLoading: boolean;
-  }>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = window.sessionStorage.getItem('navbar-auth-state');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (
-            typeof parsed?.isAuthenticated === 'boolean' &&
-            typeof parsed?.isLoading === 'boolean'
-          ) {
-            return parsed;
-          }
-        }
-      } catch (_) {}
-    }
-    return { isAuthenticated: false, isLoading: true };
-  });
+  }>(() => ({ isAuthenticated: false, isLoading: true }));
   const [cartCount, setCartCount] = useState(0);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const { userType, setUserType } = useUserType();
   const { learningType, setLearningType } = useLearningType();
@@ -73,29 +60,40 @@ export const NavbarSimple: React.FC = () => {
   const isFreeStyle =
     learningType === 'free-style' || learningType === 'custom';
 
-  // Prevent hydration mismatch and flashing by using stable auth state
-  useEffect(() => {
+  // Read persisted auth snapshot before paint to avoid visible flicker
+  useLayoutEffect(() => {
+    try {
+      const stored = window.sessionStorage.getItem('navbar-auth-state');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (
+          typeof parsed?.isAuthenticated === 'boolean' &&
+          typeof parsed?.isLoading === 'boolean'
+        ) {
+          setStableAuthState(parsed);
+        }
+      }
+    } catch (_) {}
+    setHasSnapshotApplied(true);
     setIsHydrated(true);
   }, []);
 
   // Update stable auth state when auth changes, but only after hydration
   useEffect(() => {
-    if (isHydrated) {
-      const newState = {
-        isAuthenticated,
-        isLoading: isAuthLoading,
-      };
+    if (!isHydrated) return;
+    // Never downgrade to unauthenticated from the app auth context; Supabase owns final truth.
+    if (!isAuthenticated) return;
+    const newState = {
+      isAuthenticated: true,
+      isLoading: isAuthLoading,
+    };
 
-      // Only update if the state actually changed to prevent unnecessary re-renders
-      if (
-        stableAuthState.isAuthenticated !== newState.isAuthenticated ||
-        stableAuthState.isLoading !== newState.isLoading
-      ) {
-        setStableAuthState(newState);
-
-        // Store in session storage for persistence across page reloads
-        sessionStorage.setItem('navbar-auth-state', JSON.stringify(newState));
-      }
+    if (
+      stableAuthState.isAuthenticated !== newState.isAuthenticated ||
+      stableAuthState.isLoading !== newState.isLoading
+    ) {
+      setStableAuthState(newState);
+      sessionStorage.setItem('navbar-auth-state', JSON.stringify(newState));
     }
   }, [
     isAuthenticated,
@@ -131,15 +129,44 @@ export const NavbarSimple: React.FC = () => {
     if (!isSupabaseAvailable() || !supabase) return;
 
     // Initial check
-    supabase.auth.getSession().then(({ data }) => {
-      if (data?.session) {
-        setStableAuthState({ isAuthenticated: true, isLoading: false });
-        sessionStorage.setItem(
-          'navbar-auth-state',
-          JSON.stringify({ isAuthenticated: true, isLoading: false })
-        );
+    supabase.auth
+      .getSession()
+      .then(({ data }) => {
+        const authed = !!data?.session;
+        if (authed) {
+          setStableAuthState({ isAuthenticated: true, isLoading: false });
+          sessionStorage.setItem(
+            'navbar-auth-state',
+            JSON.stringify({ isAuthenticated: true, isLoading: false })
+          );
+        }
+      })
+      .finally(() => setSupabaseChecked(true));
+
+    // Fast retry loop for first load after social redirect (max ~2s)
+    let retries = 10;
+    const interval = setInterval(async () => {
+      if (supabaseChecked) {
+        clearInterval(interval);
+        return;
       }
-    });
+      try {
+        const { data } = await supabase.auth.getSession();
+        if (data?.session) {
+          setStableAuthState({ isAuthenticated: true, isLoading: false });
+          sessionStorage.setItem(
+            'navbar-auth-state',
+            JSON.stringify({ isAuthenticated: true, isLoading: false })
+          );
+          clearInterval(interval);
+          setSupabaseChecked(true);
+        }
+      } catch (_) {}
+      if (--retries <= 0) {
+        clearInterval(interval);
+        setSupabaseChecked(true);
+      }
+    }, 200);
 
     // Subscribe to changes
     const {
@@ -151,9 +178,12 @@ export const NavbarSimple: React.FC = () => {
         'navbar-auth-state',
         JSON.stringify({ isAuthenticated: authed, isLoading: false })
       );
+      setSupabaseChecked(true);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Helper function to check if a link is active
@@ -166,8 +196,7 @@ export const NavbarSimple: React.FC = () => {
 
   // Handle learning mode switching
   const handleModeSwitch = (newMode: 'guided' | 'self-directed') => {
-    if (newMode === userType) return; // Already in this mode
-
+    // Allow navigation even if already in the same mode
     const previousMode = userType;
     setUserType(newMode);
     setLearningType(newMode === 'guided' ? 'guided' : 'free-style');
@@ -217,8 +246,11 @@ export const NavbarSimple: React.FC = () => {
   // Handle sign out
   const handleSignOut = async () => {
     try {
+      setIsSigningOut(true);
       // Sign out from app auth context (if used)
-      await signOut();
+      if (typeof signOut === 'function') {
+        await signOut();
+      }
       // Sign out from Supabase OAuth session
       if (isSupabaseAvailable() && supabase) {
         try {
@@ -231,9 +263,19 @@ export const NavbarSimple: React.FC = () => {
       setIsUserDropdownOpen(false);
       // Clear the stable auth state and session storage
       setStableAuthState({ isAuthenticated: false, isLoading: false });
-      sessionStorage.removeItem('navbar-auth-state');
+      try {
+        sessionStorage.clear();
+      } catch (_) {}
+      try {
+        localStorage.clear();
+      } catch (_) {}
+      // Navigate to home after logout for clarity
+      router.push('/');
     } catch (error) {
       console.error('Sign out error:', error);
+    } finally {
+      // If navigation is blocked for any reason, avoid leaving the UI stuck
+      setIsSigningOut(false);
     }
   };
 
@@ -279,19 +321,8 @@ export const NavbarSimple: React.FC = () => {
     };
   }, [isOpen, setIsMobileMenuOpen, isHydrated]);
 
-  // Cleanup effect for page unload
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Clear session storage on page unload to ensure fresh state on next visit
-      sessionStorage.removeItem('navbar-auth-state');
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
+  // Persist last-known auth state across reloads to prevent flicker
+  // (No beforeunload cleanup to keep navbar-auth-state available on refresh)
 
   return (
     <nav
@@ -321,7 +352,10 @@ export const NavbarSimple: React.FC = () => {
           )}
 
           {/* Right Section - Desktop Only */}
-          <div className='hidden lg:flex items-center space-x-4'>
+          <div
+            className='hidden lg:flex items-center space-x-4'
+            suppressHydrationWarning
+          >
             {/* Cart - visible only in Free Style */}
             {isFreeStyle && (
               <Link
@@ -390,8 +424,18 @@ export const NavbarSimple: React.FC = () => {
               </button>
             </div>
 
-            {/* Sign In / Logout Link */}
-            {stableAuthState.isLoading ? (
+            {/* Auth Controls - render stable placeholder until snapshot applied */}
+            {!hasSnapshotApplied ? (
+              <div
+                className={`px-4 py-2 rounded-lg font-medium ${
+                  isScrolled
+                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                    : 'bg-gray-200/20 text-gray-300'
+                }`}
+              >
+                Loading...
+              </div>
+            ) : stableAuthState.isLoading ? (
               <div
                 className={`px-4 py-2 rounded-lg font-medium ${
                   isScrolled
@@ -402,7 +446,7 @@ export const NavbarSimple: React.FC = () => {
                 Loading...
               </div>
             ) : stableAuthState.isAuthenticated ? (
-              <div className='flex items-center gap-2'>
+              <div className='flex items-center gap-2 relative'>
                 <Link
                   href='/dashboard'
                   className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
@@ -410,20 +454,72 @@ export const NavbarSimple: React.FC = () => {
                       ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg'
                       : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-md hover:shadow-lg'
                   }`}
+                  data-testid='dashboard-link'
                 >
                   Dashboard
                 </Link>
+                {/* User menu trigger */}
                 <button
-                  onClick={handleSignOut}
-                  title='Sign out'
-                  className={`px-3 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                  type='button'
+                  aria-haspopup='menu'
+                  aria-expanded={isUserDropdownOpen}
+                  onClick={() => setIsUserDropdownOpen(v => !v)}
+                  title='Account menu'
+                  data-testid='user-menu-button'
+                  className={`px-2.5 py-2 rounded-lg transition-colors duration-200 ${
                     isScrolled
                       ? 'bg-gray-200 hover:bg-gray-300 text-gray-800'
                       : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
                   }`}
                 >
-                  <LogOut size={18} />
+                  <User size={18} />
                 </button>
+
+                {/* Dropdown menu */}
+                {isUserDropdownOpen && (
+                  <div
+                    role='menu'
+                    aria-label='User menu'
+                    className={`absolute right-0 top-12 w-44 rounded-lg shadow-lg border ${
+                      isScrolled
+                        ? 'bg-white border-gray-200'
+                        : 'bg-white/95 border-white/30 backdrop-blur'
+                    }`}
+                  >
+                    <Link
+                      href='/dashboard'
+                      role='menuitem'
+                      className='block w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded-t-lg'
+                      onClick={() => setIsUserDropdownOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      href='/settings'
+                      role='menuitem'
+                      className='block w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-100'
+                      onClick={() => setIsUserDropdownOpen(false)}
+                    >
+                      Settings
+                    </Link>
+                    <button
+                      role='menuitem'
+                      onClick={() => {
+                        setIsUserDropdownOpen(false);
+                        handleSignOut();
+                      }}
+                      data-testid='user-menu-logout'
+                      disabled={isSigningOut}
+                      className={`block w-full text-left px-3 py-2 text-sm rounded-b-lg ${
+                        isSigningOut
+                          ? 'text-red-400 bg-red-50/70 cursor-not-allowed'
+                          : 'text-red-600 hover:bg-red-50'
+                      }`}
+                    >
+                      {isSigningOut ? 'Signing out…' : 'Sign out'}
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <Link
@@ -437,6 +533,7 @@ export const NavbarSimple: React.FC = () => {
                       ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
                       : 'text-white hover:text-indigo-100'
                 }`}
+                data-testid='signin-link'
               >
                 Sign In
               </Link>
@@ -480,12 +577,9 @@ export const NavbarSimple: React.FC = () => {
               <button
                 onClick={handleSignOut}
                 title='Sign out'
-                className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 ${
-                  isScrolled
-                    ? 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-                    : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
-                }`}
+                className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 bg-gray-200 hover:bg-gray-300 text-gray-800`}
                 aria-label='Sign out'
+                disabled={isSigningOut}
               >
                 <LogOut size={18} className='sm:w-5 sm:h-5' />
               </button>
@@ -494,11 +588,7 @@ export const NavbarSimple: React.FC = () => {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 ${
-                isScrolled
-                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
-                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
-              }`}
+              className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800`}
               aria-label='Toggle mobile menu'
             >
               {isOpen ? (
@@ -528,15 +618,13 @@ export const NavbarSimple: React.FC = () => {
             </div>
 
             {/* Mobile Navigation Links - hidden for now per product decision */}
-            {stableAuthState.isAuthenticated && (
-              <div className='flex-1 px-3 sm:px-4 py-4 sm:py-6 space-y-3 sm:space-y-4'></div>
-            )}
+            {/* Remove spacer to reduce extra empty space before CTAs */}
 
             {/* Mobile CTAs */}
-            <div className='p-3 sm:p-4 border-t border-gray-200 dark:border-gray-700 space-y-2 sm:space-y-3'>
+            <div className='pt-2 pb-3 px-2 sm:px-3 border-t border-gray-200 dark:border-gray-700 space-y-2 sm:space-y-2'>
               {/* Learning Mode Switcher for Mobile */}
-              <div className='mb-4'>
-                <div className='text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3'>
+              <div className='mb-2'>
+                <div className='text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-1 sm:mb-2 px-2'>
                   Learning Mode
                 </div>
                 <div className='space-y-1 sm:space-y-2'>

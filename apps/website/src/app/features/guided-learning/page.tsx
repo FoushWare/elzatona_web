@@ -498,16 +498,53 @@ export default function GuidedLearningPage() {
 
         {/* Sign-in Encouragement for Non-authenticated Users */}
         {!isAuthenticated && (
-          <div className='mb-8 text-center'>
-            <div className='inline-flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-xl'>
-              <Star className='w-6 h-6 text-blue-600 dark:text-blue-400' />
-              <div className='text-left'>
-                <p className='text-blue-800 dark:text-blue-200 font-medium'>
-                  💡 You can explore freely, but sign in to save your progress!
-                </p>
-                <p className='text-blue-600 dark:text-blue-300 text-sm'>
-                  Your progress will be saved across devices and sessions
-                </p>
+          <div className='mb-8 px-3 sm:px-0'>
+            <div
+              className='relative overflow-hidden px-6 py-6 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-700 dark:via-indigo-700 dark:to-purple-700 rounded-2xl shadow-xl border border-blue-500/20'
+              data-testid='signup-cta-banner'
+            >
+              {/* Decorative background pattern */}
+              <div className='absolute inset-0 opacity-10'>
+                <div className='absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2'></div>
+                <div className='absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2'></div>
+              </div>
+
+              <div className='relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6'>
+                {/* Left: Content */}
+                <div className='flex-1'>
+                  <div className='flex items-center gap-2 mb-3'>
+                    <Star
+                      className='w-5 h-5 text-yellow-300'
+                      fill='currentColor'
+                    />
+                    <h3 className='text-white font-bold text-lg sm:text-xl'>
+                      Create a free account to unlock full features
+                    </h3>
+                  </div>
+                  <div className='grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3'>
+                    <div className='flex items-center gap-2 text-blue-100 text-sm'>
+                      <CheckCircle className='w-4 h-4 text-green-300 flex-shrink-0' />
+                      <span>Save progress</span>
+                    </div>
+                    <div className='flex items-center gap-2 text-blue-100 text-sm'>
+                      <TrendingUp className='w-4 h-4 text-green-300 flex-shrink-0' />
+                      <span>Track accuracy</span>
+                    </div>
+                    <div className='flex items-center gap-2 text-blue-100 text-sm'>
+                      <Award className='w-4 h-4 text-green-300 flex-shrink-0' />
+                      <span>Sync flashcards</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: CTA Button */}
+                <a
+                  href='/auth'
+                  className='inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-600 rounded-xl font-bold text-base hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap'
+                >
+                  Create free account
+                  <ArrowRight className='w-5 h-5' />
+                </a>
               </div>
             </div>
           </div>
