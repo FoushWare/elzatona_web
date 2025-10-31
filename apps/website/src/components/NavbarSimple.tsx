@@ -13,6 +13,7 @@ import {
   User,
   LogOut,
   Settings,
+  Loader2,
 } from 'lucide-react';
 import { ShoppingCart } from 'lucide-react';
 import AlzatonaLogo from './AlzatonaLogo';
@@ -20,7 +21,6 @@ import { useUserType } from '@elzatona/shared-contexts';
 import { useMobileMenu } from '@elzatona/shared-contexts';
 import { useTheme } from '@elzatona/shared-contexts';
 import { useAuth } from '@elzatona/shared-contexts';
-import { useNotifications } from './NotificationSystem';
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
@@ -43,6 +43,10 @@ export const NavbarSimple: React.FC = () => {
   }>(() => ({ isAuthenticated: false, isLoading: true }));
   const [cartCount, setCartCount] = useState(0);
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [isModeSwitching, setIsModeSwitching] = useState(false);
+  const [switchingToMode, setSwitchingToMode] = useState<
+    'guided' | 'self-directed' | null
+  >(null);
 
   const { userType, setUserType } = useUserType();
   const { learningType, setLearningType } = useLearningType();
@@ -54,7 +58,6 @@ export const NavbarSimple: React.FC = () => {
     isLoading: isAuthLoading,
     signOut,
   } = useAuth();
-  const { addNotification } = useNotifications();
   const pathname = usePathname();
   const router = useRouter();
   const isFreeStyle =
@@ -195,50 +198,48 @@ export const NavbarSimple: React.FC = () => {
   };
 
   // Handle learning mode switching
-  const handleModeSwitch = (newMode: 'guided' | 'self-directed') => {
-    // Allow navigation even if already in the same mode
-    const previousMode = userType;
+  const handleModeSwitch = async (newMode: 'guided' | 'self-directed') => {
+    // Don't switch if already in that mode or currently switching
+    if (userType === newMode || isModeSwitching) return;
+
+    // Set loading state
+    setIsModeSwitching(true);
+    setSwitchingToMode(newMode);
+
+    // Update user type and learning type
     setUserType(newMode);
     setLearningType(newMode === 'guided' ? 'guided' : 'free-style');
 
-    // Show notification
+    // Navigate to the appropriate page
     if (newMode === 'guided') {
-      addNotification({
-        type: 'info',
-        title: 'Switched to Guided Learning',
-        message:
-          "You're now in guided learning mode with structured plans and timelines.",
-        duration: 4000,
-        action: {
-          label: 'View Plans',
-          onClick: () => router.push('/features/guided-learning'),
-        },
-      });
-
       // Redirect to guided learning if not already there
       if (!pathname?.startsWith('/features/guided-learning')) {
-        setTimeout(() => {
-          router.push('/features/guided-learning');
-        }, 1000);
+        try {
+          await router.push('/features/guided-learning');
+        } catch (error) {
+          console.error('Navigation error:', error);
+          setIsModeSwitching(false);
+          setSwitchingToMode(null);
+        }
+      } else {
+        // Already on the page, clear loading immediately
+        setIsModeSwitching(false);
+        setSwitchingToMode(null);
       }
     } else {
-      addNotification({
-        type: 'info',
-        title: 'Switched to Free Style Learning',
-        message:
-          "You're now in free style mode. Learn at your own pace with custom practice sessions.",
-        duration: 4000,
-        action: {
-          label: 'Explore Paths',
-          onClick: () => router.push('/free-style'),
-        },
-      });
-
       // Redirect to free style learning if not already there
       if (!pathname?.startsWith('/free-style')) {
-        setTimeout(() => {
-          router.push('/free-style');
-        }, 1000);
+        try {
+          await router.push('/free-style');
+        } catch (error) {
+          console.error('Navigation error:', error);
+          setIsModeSwitching(false);
+          setSwitchingToMode(null);
+        }
+      } else {
+        // Already on the page, clear loading immediately
+        setIsModeSwitching(false);
+        setSwitchingToMode(null);
       }
     }
   };
@@ -321,460 +322,497 @@ export const NavbarSimple: React.FC = () => {
     };
   }, [isOpen, setIsMobileMenuOpen, isHydrated]);
 
+  // Clear mode switching state when pathname changes (navigation completed)
+  useEffect(() => {
+    if (isModeSwitching && pathname) {
+      // Clear loading state after navigation completes
+      const timer = setTimeout(() => {
+        setIsModeSwitching(false);
+        setSwitchingToMode(null);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname, isModeSwitching]);
+
   // Persist last-known auth state across reloads to prevent flicker
   // (No beforeunload cleanup to keep navbar-auth-state available on refresh)
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
-        isScrolled
-          ? 'bg-white/98 dark:bg-gray-900/98 backdrop-blur-lg shadow-xl border-b border-gray-200 dark:border-gray-700'
-          : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600'
-      }`}
-    >
-      <div className='w-full px-3 sm:px-4 lg:px-8'>
-        <div className='flex items-center justify-between h-16 sm:h-18 lg:h-20'>
-          {/* Logo */}
-          <Link
-            href='/'
-            className={`flex items-center transition-colors duration-200 ${
-              isScrolled
-                ? 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400'
-                : 'text-white hover:text-indigo-100'
-            }`}
-          >
-            <AlzatonaLogo size='sm' showText={false} />
-          </Link>
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
+          isScrolled
+            ? 'bg-white/98 dark:bg-gray-900/98 backdrop-blur-lg shadow-xl border-b border-gray-200 dark:border-gray-700'
+            : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600'
+        }`}
+      >
+        <div className='w-full px-3 sm:px-4 lg:px-8'>
+          <div className='flex items-center justify-between h-16 sm:h-18 lg:h-20'>
+            {/* Logo */}
+            <Link
+              href='/'
+              className={`flex items-center transition-colors duration-200 ${
+                isScrolled
+                  ? 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400'
+                  : 'text-white hover:text-indigo-100'
+              }`}
+            >
+              <AlzatonaLogo size='sm' showText={false} />
+            </Link>
 
-          {/* Desktop Navigation - hidden for now per product decision */}
-          {stableAuthState.isAuthenticated && (
-            <div className='hidden lg:flex items-center space-x-6 flex-1 justify-center'></div>
-          )}
+            {/* Desktop Navigation - hidden for now per product decision */}
+            {stableAuthState.isAuthenticated && (
+              <div className='hidden lg:flex items-center space-x-6 flex-1 justify-center'></div>
+            )}
 
-          {/* Right Section - Desktop Only */}
-          <div
-            className='hidden lg:flex items-center space-x-4'
-            suppressHydrationWarning
-          >
-            {/* Cart - visible only in Free Style */}
-            {isFreeStyle && (
-              <Link
-                href='/free-style/cart'
-                className={`p-2.5 rounded-lg transition-colors duration-200 text-center ${
+            {/* Right Section - Desktop Only */}
+            <div
+              className='hidden lg:flex items-center space-x-4'
+              suppressHydrationWarning
+            >
+              {/* Cart - visible only in Free Style */}
+              {isFreeStyle && (
+                <Link
+                  href='/free-style/cart'
+                  className={`p-2.5 rounded-lg transition-colors duration-200 text-center ${
+                    isScrolled
+                      ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
+                      : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                  }`}
+                  title='Your Selection (Custom Free-Style)'
+                  aria-label='Your Selection (Custom Free-Style)'
+                >
+                  <div className='flex flex-col items-center -mb-0.5'>
+                    <div className='relative'>
+                      <ShoppingCart size={20} />
+                      {cartCount > 0 && (
+                        <span className='absolute -top-1 -right-2 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center'>
+                          {cartCount}
+                        </span>
+                      )}
+                    </div>
+                    <span
+                      className={`mt-1 leading-none text-[10px] font-medium ${
+                        isScrolled
+                          ? 'text-indigo-700 dark:text-indigo-300'
+                          : 'text-white'
+                      }`}
+                    >
+                      Custom Free-Style
+                    </span>
+                  </div>
+                </Link>
+              )}
+
+              {/* Learning Mode Switcher */}
+              <div className='flex items-center space-x-1 bg-white/20 dark:bg-gray-800/20 rounded-lg p-1'>
+                <button
+                  onClick={() => handleModeSwitch('guided')}
+                  disabled={isModeSwitching}
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed ${
+                    userType === 'guided'
+                      ? isScrolled
+                        ? 'bg-indigo-600 text-white shadow-sm'
+                        : 'bg-white text-indigo-600 shadow-sm'
+                      : isScrolled
+                        ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
+                        : 'text-white hover:text-indigo-100'
+                  }`}
+                >
+                  {isModeSwitching && switchingToMode === 'guided' ? (
+                    <Loader2 className='w-4 h-4 inline mr-1 animate-spin' />
+                  ) : (
+                    <Compass className='w-4 h-4 inline mr-1' />
+                  )}
+                  Guided
+                </button>
+                <button
+                  onClick={() => handleModeSwitch('self-directed')}
+                  disabled={isModeSwitching}
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed ${
+                    userType === 'self-directed'
+                      ? isScrolled
+                        ? 'bg-indigo-600 text-white shadow-sm'
+                        : 'bg-white text-indigo-600 shadow-sm'
+                      : isScrolled
+                        ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
+                        : 'text-white hover:text-indigo-100'
+                  }`}
+                >
+                  {isModeSwitching && switchingToMode === 'self-directed' ? (
+                    <Loader2 className='w-4 h-4 inline mr-1 animate-spin' />
+                  ) : (
+                    <Map className='w-4 h-4 inline mr-1' />
+                  )}
+                  Free Style
+                </button>
+              </div>
+
+              {/* Auth Controls - render stable placeholder until snapshot applied */}
+              {!hasSnapshotApplied ? (
+                <div
+                  className={`px-4 py-2 rounded-lg font-medium ${
+                    isScrolled
+                      ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                      : 'bg-gray-200/20 text-gray-300'
+                  }`}
+                >
+                  Loading...
+                </div>
+              ) : stableAuthState.isLoading ? (
+                <div
+                  className={`px-4 py-2 rounded-lg font-medium ${
+                    isScrolled
+                      ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                      : 'bg-gray-200/20 text-gray-300'
+                  }`}
+                >
+                  Loading...
+                </div>
+              ) : stableAuthState.isAuthenticated ? (
+                <div className='flex items-center gap-2 relative'>
+                  <Link
+                    href='/dashboard'
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                      isScrolled
+                        ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg'
+                        : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-md hover:shadow-lg'
+                    }`}
+                    data-testid='dashboard-link'
+                  >
+                    Dashboard
+                  </Link>
+                  {/* User menu trigger */}
+                  <button
+                    type='button'
+                    aria-haspopup='menu'
+                    aria-expanded={isUserDropdownOpen}
+                    onClick={() => setIsUserDropdownOpen(v => !v)}
+                    title='Account menu'
+                    data-testid='user-menu-button'
+                    className={`px-2.5 py-2 rounded-lg transition-colors duration-200 ${
+                      isScrolled
+                        ? 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+                        : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
+                    }`}
+                  >
+                    <User size={18} />
+                  </button>
+
+                  {/* Dropdown menu */}
+                  {isUserDropdownOpen && (
+                    <div
+                      role='menu'
+                      aria-label='User menu'
+                      className={`absolute right-0 top-12 w-44 rounded-lg shadow-lg border ${
+                        isScrolled
+                          ? 'bg-white border-gray-200'
+                          : 'bg-white/95 border-white/30 backdrop-blur'
+                      }`}
+                    >
+                      <Link
+                        href='/dashboard'
+                        role='menuitem'
+                        className='block w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded-t-lg'
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        Dashboard
+                      </Link>
+                      <Link
+                        href='/settings'
+                        role='menuitem'
+                        className='block w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-100'
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        Settings
+                      </Link>
+                      <button
+                        role='menuitem'
+                        onClick={() => {
+                          setIsUserDropdownOpen(false);
+                          handleSignOut();
+                        }}
+                        data-testid='user-menu-logout'
+                        disabled={isSigningOut}
+                        className={`block w-full text-left px-3 py-2 text-sm rounded-b-lg ${
+                          isSigningOut
+                            ? 'text-red-400 bg-red-50/70 cursor-not-allowed'
+                            : 'text-red-600 hover:bg-red-50'
+                        }`}
+                      >
+                        {isSigningOut ? 'Signing out…' : 'Sign out'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  href='/auth'
+                  className={`font-medium transition-colors duration-200 ${
+                    isActiveLink('/auth')
+                      ? isScrolled
+                        ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
+                        : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
+                      : isScrolled
+                        ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
+                        : 'text-white hover:text-indigo-100'
+                  }`}
+                  data-testid='signin-link'
+                >
+                  Sign In
+                </Link>
+              )}
+
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleDarkMode}
+                className={`p-2.5 rounded-lg transition-colors duration-200 ${
                   isScrolled
                     ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
                     : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
                 }`}
-                title='Your Selection (Custom Free-Style)'
-                aria-label='Your Selection (Custom Free-Style)'
+                aria-label='Toggle theme'
               >
-                <div className='flex flex-col items-center -mb-0.5'>
-                  <div className='relative'>
-                    <ShoppingCart size={20} />
-                    {cartCount > 0 && (
-                      <span className='absolute -top-1 -right-2 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center'>
-                        {cartCount}
-                      </span>
-                    )}
-                  </div>
-                  <span
-                    className={`mt-1 leading-none text-[10px] font-medium ${
-                      isScrolled
-                        ? 'text-indigo-700 dark:text-indigo-300'
-                        : 'text-white'
-                    }`}
-                  >
-                    Custom Free-Style
-                  </span>
-                </div>
-              </Link>
-            )}
-
-            {/* Learning Mode Switcher */}
-            <div className='flex items-center space-x-1 bg-white/20 dark:bg-gray-800/20 rounded-lg p-1'>
-              <button
-                onClick={() => handleModeSwitch('guided')}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 ${
-                  userType === 'guided'
-                    ? isScrolled
-                      ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'bg-white text-indigo-600 shadow-sm'
-                    : isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                      : 'text-white hover:text-indigo-100'
-                }`}
-              >
-                <Compass className='w-4 h-4 inline mr-1' />
-                Guided
-              </button>
-              <button
-                onClick={() => handleModeSwitch('self-directed')}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 ${
-                  userType === 'self-directed'
-                    ? isScrolled
-                      ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'bg-white text-indigo-600 shadow-sm'
-                    : isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                      : 'text-white hover:text-indigo-100'
-                }`}
-              >
-                <Map className='w-4 h-4 inline mr-1' />
-                Free Style
+                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
               </button>
             </div>
 
-            {/* Auth Controls - render stable placeholder until snapshot applied */}
-            {!hasSnapshotApplied ? (
-              <div
-                className={`px-4 py-2 rounded-lg font-medium ${
-                  isScrolled
-                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                    : 'bg-gray-200/20 text-gray-300'
-                }`}
-              >
-                Loading...
-              </div>
-            ) : stableAuthState.isLoading ? (
-              <div
-                className={`px-4 py-2 rounded-lg font-medium ${
-                  isScrolled
-                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                    : 'bg-gray-200/20 text-gray-300'
-                }`}
-              >
-                Loading...
-              </div>
-            ) : stableAuthState.isAuthenticated ? (
-              <div className='flex items-center gap-2 relative'>
-                <Link
-                  href='/dashboard'
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-                    isScrolled
-                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg'
-                      : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-md hover:shadow-lg'
-                  }`}
-                  data-testid='dashboard-link'
-                >
-                  Dashboard
-                </Link>
-                {/* User menu trigger */}
-                <button
-                  type='button'
-                  aria-haspopup='menu'
-                  aria-expanded={isUserDropdownOpen}
-                  onClick={() => setIsUserDropdownOpen(v => !v)}
-                  title='Account menu'
-                  data-testid='user-menu-button'
-                  className={`px-2.5 py-2 rounded-lg transition-colors duration-200 ${
-                    isScrolled
-                      ? 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-                      : 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
-                  }`}
-                >
-                  <User size={18} />
-                </button>
-
-                {/* Dropdown menu */}
-                {isUserDropdownOpen && (
-                  <div
-                    role='menu'
-                    aria-label='User menu'
-                    className={`absolute right-0 top-12 w-44 rounded-lg shadow-lg border ${
-                      isScrolled
-                        ? 'bg-white border-gray-200'
-                        : 'bg-white/95 border-white/30 backdrop-blur'
-                    }`}
-                  >
-                    <Link
-                      href='/dashboard'
-                      role='menuitem'
-                      className='block w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded-t-lg'
-                      onClick={() => setIsUserDropdownOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                    <Link
-                      href='/settings'
-                      role='menuitem'
-                      className='block w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-100'
-                      onClick={() => setIsUserDropdownOpen(false)}
-                    >
-                      Settings
-                    </Link>
-                    <button
-                      role='menuitem'
-                      onClick={() => {
-                        setIsUserDropdownOpen(false);
-                        handleSignOut();
-                      }}
-                      data-testid='user-menu-logout'
-                      disabled={isSigningOut}
-                      className={`block w-full text-left px-3 py-2 text-sm rounded-b-lg ${
-                        isSigningOut
-                          ? 'text-red-400 bg-red-50/70 cursor-not-allowed'
-                          : 'text-red-600 hover:bg-red-50'
-                      }`}
-                    >
-                      {isSigningOut ? 'Signing out…' : 'Sign out'}
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link
-                href='/auth'
-                className={`font-medium transition-colors duration-200 ${
-                  isActiveLink('/auth')
-                    ? isScrolled
-                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold border-b-2 border-indigo-600 dark:border-indigo-400 pb-1'
-                      : 'text-indigo-100 font-semibold border-b-2 border-indigo-100 pb-1'
-                    : isScrolled
-                      ? 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
-                      : 'text-white hover:text-indigo-100'
-                }`}
-                data-testid='signin-link'
-              >
-                Sign In
-              </Link>
-            )}
-
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleDarkMode}
-              className={`p-2.5 rounded-lg transition-colors duration-200 ${
-                isScrolled
-                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
-                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
-              }`}
-              aria-label='Toggle theme'
-            >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-          </div>
-
-          {/* Mobile/Tablet Menu Button */}
-          <div className='flex items-center space-x-1 sm:space-x-2 lg:hidden'>
-            {/* Theme Toggle for Mobile/Tablet */}
-            <button
-              onClick={toggleDarkMode}
-              className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 ${
-                isScrolled
-                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
-                  : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
-              }`}
-              aria-label='Toggle theme'
-            >
-              {isDarkMode ? (
-                <Sun size={18} className='sm:w-5 sm:h-5' />
-              ) : (
-                <Moon size={18} className='sm:w-5 sm:h-5' />
-              )}
-            </button>
-
-            {/* Mobile Logout (visible when authenticated) */}
-            {stableAuthState.isAuthenticated && (
+            {/* Mobile/Tablet Menu Button */}
+            <div className='flex items-center space-x-1 sm:space-x-2 lg:hidden'>
+              {/* Theme Toggle for Mobile/Tablet */}
               <button
-                onClick={handleSignOut}
-                title='Sign out'
-                className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 bg-gray-200 hover:bg-gray-300 text-gray-800`}
-                aria-label='Sign out'
-                disabled={isSigningOut}
+                onClick={toggleDarkMode}
+                className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 ${
+                  isScrolled
+                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800'
+                    : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                }`}
+                aria-label='Toggle theme'
               >
-                <LogOut size={18} className='sm:w-5 sm:h-5' />
+                {isDarkMode ? (
+                  <Sun size={18} className='sm:w-5 sm:h-5' />
+                ) : (
+                  <Moon size={18} className='sm:w-5 sm:h-5' />
+                )}
               </button>
-            )}
 
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800`}
-              aria-label='Toggle mobile menu'
-            >
-              {isOpen ? (
-                <X size={18} className='sm:w-5 sm:h-5' />
-              ) : (
-                <Menu size={18} className='sm:w-5 sm:h-5' />
+              {/* Mobile Logout (visible when authenticated) */}
+              {stableAuthState.isAuthenticated && (
+                <button
+                  onClick={handleSignOut}
+                  title='Sign out'
+                  className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 bg-gray-200 hover:bg-gray-300 text-gray-800`}
+                  aria-label='Sign out'
+                  disabled={isSigningOut}
+                >
+                  <LogOut size={18} className='sm:w-5 sm:h-5' />
+                </button>
               )}
-            </button>
+
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className={`p-2 sm:p-2.5 rounded-lg transition-colors duration-200 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-800`}
+                aria-label='Toggle mobile menu'
+              >
+                {isOpen ? (
+                  <X size={18} className='sm:w-5 sm:h-5' />
+                ) : (
+                  <Menu size={18} className='sm:w-5 sm:h-5' />
+                )}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Navigation - Full Screen Overlay */}
-      {isOpen && (
-        <div className='fixed inset-0 bg-white dark:bg-gray-900 z-50 lg:hidden'>
-          <div className='flex flex-col h-full'>
-            {/* Mobile Header */}
-            <div className='flex items-center justify-between p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700'>
-              <AlzatonaLogo size='sm' showText={false} />
-              <button
-                onClick={() => setIsOpen(false)}
-                className='p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors'
-                aria-label='Close mobile menu'
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Mobile Navigation Links - hidden for now per product decision */}
-            {/* Remove spacer to reduce extra empty space before CTAs */}
-
-            {/* Mobile CTAs */}
-            <div className='pt-2 pb-3 px-2 sm:px-3 border-t border-gray-200 dark:border-gray-700 space-y-2 sm:space-y-2'>
-              {/* Learning Mode Switcher for Mobile */}
-              <div className='mb-2'>
-                <div className='text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-1 sm:mb-2 px-2'>
-                  Learning Mode
-                </div>
-                <div className='space-y-1 sm:space-y-2'>
-                  <button
-                    onClick={() => {
-                      handleModeSwitch('guided');
-                      setIsOpen(false);
-                    }}
-                    className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
-                      userType === 'guided'
-                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
-                        : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
-                    }`}
-                  >
-                    <Compass className='w-4 h-4 flex-shrink-0' />
-                    <span className='text-sm sm:text-base font-medium'>
-                      Guided Learning
-                    </span>
-                    {userType === 'guided' && (
-                      <div className='w-2 h-2 bg-indigo-600 rounded-full ml-auto'></div>
-                    )}
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleModeSwitch('self-directed');
-                      setIsOpen(false);
-                    }}
-                    className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
-                      userType === 'self-directed'
-                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
-                        : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
-                    }`}
-                  >
-                    <Map className='w-4 h-4 flex-shrink-0' />
-                    <span className='text-sm sm:text-base font-medium'>
-                      Free Style Learning
-                    </span>
-                    {userType === 'self-directed' && (
-                      <div className='w-2 h-2 bg-indigo-600 rounded-full ml-auto'></div>
-                    )}
-                  </button>
-                </div>
+        {/* Mobile Navigation - Full Screen Overlay */}
+        {isOpen && (
+          <div className='fixed inset-0 bg-white dark:bg-gray-900 z-50 lg:hidden'>
+            <div className='flex flex-col h-full'>
+              {/* Mobile Header */}
+              <div className='flex items-center justify-between p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700'>
+                <AlzatonaLogo size='sm' showText={false} />
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className='p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors'
+                  aria-label='Close mobile menu'
+                >
+                  <X size={20} />
+                </button>
               </div>
 
-              {stableAuthState.isAuthenticated ? (
-                <>
-                  {/* User Profile Section */}
-                  <div className='flex items-center space-x-3 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg'>
-                    {user?.photoURL ? (
-                      <img
-                        src={user.photoURL}
-                        alt='Profile'
-                        className='w-8 h-8 rounded-full object-cover'
-                      />
-                    ) : (
-                      <div className='w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center'>
-                        <User className='w-4 h-4 text-white' />
-                      </div>
-                    )}
-                    <div className='flex-1 min-w-0'>
-                      <p className='text-sm font-medium text-gray-900 dark:text-white truncate'>
-                        {user?.displayName || 'User'}
-                      </p>
-                      <p className='text-xs text-gray-500 dark:text-gray-400 truncate'>
-                        {user?.email}
-                      </p>
-                    </div>
-                  </div>
+              {/* Mobile Navigation Links - hidden for now per product decision */}
+              {/* Remove spacer to reduce extra empty space before CTAs */}
 
-                  <button
-                    onClick={handleSignOut}
-                    className='block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20'
-                  >
-                    <LogOut className='w-4 h-4 inline mr-2' />
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <>
-                  {/* Learning Mode Switcher for non-authenticated users */}
-                  <div className='mb-4'>
-                    <div className='text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3'>
-                      Learning Mode
-                    </div>
-                    <div className='space-y-1 sm:space-y-2'>
-                      <button
-                        onClick={() => {
-                          handleModeSwitch('guided');
-                          setIsOpen(false);
-                        }}
-                        className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
-                          userType === 'guided'
-                            ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
-                            : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
-                        }`}
-                      >
-                        <Compass className='w-4 h-4 flex-shrink-0' />
-                        <span className='text-sm sm:text-base font-medium'>
-                          Guided Learning
-                        </span>
-                        {userType === 'guided' && (
-                          <div className='w-2 h-2 bg-indigo-600 rounded-full ml-auto'></div>
-                        )}
-                      </button>
-                      <button
-                        onClick={() => {
-                          handleModeSwitch('self-directed');
-                          setIsOpen(false);
-                        }}
-                        className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
-                          userType === 'self-directed'
-                            ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
-                            : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
-                        }`}
-                      >
-                        <Map className='w-4 h-4 flex-shrink-0' />
-                        <span className='text-sm sm:text-base font-medium'>
-                          Free Style Learning
-                        </span>
-                        {userType === 'self-directed' && (
-                          <div className='w-2 h-2 bg-indigo-600 rounded-full ml-auto'></div>
-                        )}
-                      </button>
-                    </div>
+              {/* Mobile CTAs */}
+              <div className='pt-2 pb-3 px-2 sm:px-3 border-t border-gray-200 dark:border-gray-700 space-y-2 sm:space-y-2'>
+                {/* Learning Mode Switcher for Mobile */}
+                <div className='mb-2'>
+                  <div className='text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-1 sm:mb-2 px-2'>
+                    Learning Mode
                   </div>
-
-                  {stableAuthState.isLoading ? (
-                    <div className='block w-full text-center py-2.5 sm:py-3 font-medium text-sm sm:text-base rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'>
-                      Loading...
-                    </div>
-                  ) : (
-                    <Link
-                      href='/auth'
-                      className={`block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg ${
-                        isActiveLink('/auth')
-                          ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
-                          : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  <div className='space-y-1 sm:space-y-2'>
+                    <button
+                      onClick={() => {
+                        handleModeSwitch('guided');
+                        setIsOpen(false);
+                      }}
+                      className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
+                        userType === 'guided'
+                          ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
+                          : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
                       }`}
-                      onClick={() => setIsOpen(false)}
                     >
-                      Sign In
-                    </Link>
-                  )}
-                </>
-              )}
+                      <Compass className='w-4 h-4 flex-shrink-0' />
+                      <span className='text-sm sm:text-base font-medium'>
+                        Guided Learning
+                      </span>
+                      {userType === 'guided' && (
+                        <div className='w-2 h-2 bg-indigo-600 rounded-full ml-auto'></div>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleModeSwitch('self-directed');
+                        setIsOpen(false);
+                      }}
+                      className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
+                        userType === 'self-directed'
+                          ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
+                          : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
+                      }`}
+                    >
+                      <Map className='w-4 h-4 flex-shrink-0' />
+                      <span className='text-sm sm:text-base font-medium'>
+                        Free Style Learning
+                      </span>
+                      {userType === 'self-directed' && (
+                        <div className='w-2 h-2 bg-indigo-600 rounded-full ml-auto'></div>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {stableAuthState.isAuthenticated ? (
+                  <>
+                    {/* User Profile Section */}
+                    <div className='flex items-center space-x-3 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg'>
+                      {user?.photoURL ? (
+                        <img
+                          src={user.photoURL}
+                          alt='Profile'
+                          className='w-8 h-8 rounded-full object-cover'
+                        />
+                      ) : (
+                        <div className='w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center'>
+                          <User className='w-4 h-4 text-white' />
+                        </div>
+                      )}
+                      <div className='flex-1 min-w-0'>
+                        <p className='text-sm font-medium text-gray-900 dark:text-white truncate'>
+                          {user?.displayName || 'User'}
+                        </p>
+                        <p className='text-xs text-gray-500 dark:text-gray-400 truncate'>
+                          {user?.email}
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={handleSignOut}
+                      className='block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20'
+                    >
+                      <LogOut className='w-4 h-4 inline mr-2' />
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {/* Learning Mode Switcher for non-authenticated users */}
+                    <div className='mb-4'>
+                      <div className='text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 sm:mb-3 px-3'>
+                        Learning Mode
+                      </div>
+                      <div className='space-y-1 sm:space-y-2'>
+                        <button
+                          onClick={() => {
+                            handleModeSwitch('guided');
+                            setIsOpen(false);
+                          }}
+                          className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
+                            userType === 'guided'
+                              ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
+                              : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <Compass className='w-4 h-4 flex-shrink-0' />
+                          <span className='text-sm sm:text-base font-medium'>
+                            Guided Learning
+                          </span>
+                          {userType === 'guided' && (
+                            <div className='w-2 h-2 bg-indigo-600 rounded-full ml-auto'></div>
+                          )}
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleModeSwitch('self-directed');
+                            setIsOpen(false);
+                          }}
+                          className={`w-full flex items-center space-x-2 sm:space-x-3 px-3 py-2 sm:py-2.5 rounded-lg text-left transition-colors ${
+                            userType === 'self-directed'
+                              ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100'
+                              : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <Map className='w-4 h-4 flex-shrink-0' />
+                          <span className='text-sm sm:text-base font-medium'>
+                            Free Style Learning
+                          </span>
+                          {userType === 'self-directed' && (
+                            <div className='w-2 h-2 bg-indigo-600 rounded-full ml-auto'></div>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {stableAuthState.isLoading ? (
+                      <div className='block w-full text-center py-2.5 sm:py-3 font-medium text-sm sm:text-base rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'>
+                        Loading...
+                      </div>
+                    ) : (
+                      <Link
+                        href='/auth'
+                        className={`block w-full text-center py-2.5 sm:py-3 font-medium transition-colors duration-200 text-sm sm:text-base rounded-lg ${
+                          isActiveLink('/auth')
+                            ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-semibold'
+                            : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                        }`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Sign In
+                      </Link>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
+          </div>
+        )}
+      </nav>
+      {/* Page Loading Overlay */}
+      {isModeSwitching && (
+        <div className='fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-center justify-center'>
+          <div className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-2xl flex flex-col items-center space-y-4'>
+            <Loader2 className='w-8 h-8 text-indigo-600 dark:text-indigo-400 animate-spin' />
+            <p className='text-gray-900 dark:text-white font-medium'>
+              Switching to{' '}
+              {switchingToMode === 'guided' ? 'Guided' : 'Free Style'}{' '}
+              Learning...
+            </p>
           </div>
         </div>
       )}
-    </nav>
+    </>
   );
 };
 
