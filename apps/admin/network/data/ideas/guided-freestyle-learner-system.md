@@ -975,9 +975,9 @@ This comprehensive testing guide ensures both admin pages and website integratio
 - [ ] Admin: Add questions to plans
   - [ ] Assign to cards/categories/topics; verify guided plan counts update
 
-- [ ] Flashcards
-  - [ ] CRUD operations on `/flashcards`
-  - [ ] Auto-add flashcard on wrong answers
+- [x] Flashcards
+  - [x] CRUD operations on `/flashcards`
+  - [x] Auto-add flashcard on wrong answers
 
 - [ ] Deployment readiness
   - [ ] Local build succeeds (`nx build website` or `next build`)

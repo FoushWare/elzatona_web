@@ -19,6 +19,10 @@ import {
   Shuffle,
   Filter,
   Target,
+  X,
+  Eye,
+  EyeOff,
+  Loader2,
 } from 'lucide-react';
 
 type PracticeMode = 'list' | 'flip' | 'quiz';
@@ -211,82 +215,175 @@ export default function FlashcardsPage() {
                 setIsFlipped(false);
                 setCurrentQuestion(null);
               }}
-              className='p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700'
-              title='Shuffle'
+              className='inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95'
+              title='Shuffle Cards'
             >
               <Shuffle className='w-4 h-4' />
+              <span className='hidden sm:inline'>Shuffle</span>
             </button>
           </div>
 
-          {/* Flashcard */}
+          {/* Flashcard Preview */}
           <div className='mb-8'>
             <div
-              className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-xl border-2 border-white/20 dark:border-gray-700/20 min-h-[400px] flex items-center justify-center cursor-pointer transition-all hover:scale-[1.02]'
+              className='bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 backdrop-blur-xl rounded-2xl p-8 shadow-xl border-2 border-gray-200 dark:border-gray-700 min-h-[400px] flex items-center justify-center cursor-pointer transition-all hover:scale-[1.02] hover:shadow-2xl group'
               onClick={handleFlip}
             >
               <div className='text-center w-full'>
-                {!isFlipped ? (
-                  <div>
-                    <div className='text-sm text-gray-500 dark:text-gray-400 mb-4'>
+                <div className='mb-6'>
+                  <div className='inline-flex items-center space-x-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full'>
+                    <BookOpen className='w-4 h-4 text-blue-600 dark:text-blue-400' />
+                    <span className='text-sm font-medium text-blue-900 dark:text-blue-100'>
                       {currentCard?.section || 'General'}{' '}
                       {currentCard?.difficulty
                         ? `• ${currentCard.difficulty}`
                         : ''}
+                    </span>
+                  </div>
+                </div>
+                <div className='w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-amber-400 to-rose-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform'>
+                  <FlipHorizontal className='w-10 h-10 text-white' />
+                </div>
+                <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-4'>
+                  Question
+                </h2>
+                <p className='text-xl text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed'>
+                  {currentCard?.question}
+                </p>
+                <div className='inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-amber-400 to-rose-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all'>
+                  <Eye className='w-5 h-5' />
+                  <span>Click to Reveal Answer</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Popup for Answer */}
+          {isFlipped && (
+            <div
+              className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300'
+              onClick={() => setIsFlipped(false)}
+            >
+              <div
+                className='bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border-2 border-gray-200 dark:border-gray-700 transform transition-all duration-300 scale-100'
+                onClick={e => e.stopPropagation()}
+              >
+                {/* Modal Header */}
+                <div className='sticky top-0 z-10 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 px-6 py-4 rounded-t-3xl flex items-center justify-between'>
+                  <div className='flex items-center space-x-3'>
+                    <div className='w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center'>
+                      <CheckCircle className='w-6 h-6 text-white' />
                     </div>
-                    <h2 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
+                    <div>
+                      <h3 className='text-lg font-bold text-white'>Answer</h3>
+                      <p className='text-xs text-white/80'>
+                        {currentCard?.section || 'General'}{' '}
+                        {currentCard?.difficulty
+                          ? `• ${currentCard.difficulty}`
+                          : ''}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsFlipped(false)}
+                    className='p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors'
+                    aria-label='Close'
+                  >
+                    <X className='w-5 h-5 text-white' />
+                  </button>
+                </div>
+
+                {/* Modal Content */}
+                <div className='p-8'>
+                  {/* Question Display */}
+                  <div className='mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border-l-4 border-blue-500'>
+                    <div className='text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide mb-2'>
                       Question
-                    </h2>
-                    <p className='text-xl text-gray-700 dark:text-gray-300'>
+                    </div>
+                    <p className='text-gray-800 dark:text-gray-200 font-medium'>
                       {currentCard?.question}
                     </p>
-                    <div className='mt-6 text-sm text-gray-500 dark:text-gray-400'>
-                      Click to reveal answer
-                    </div>
-                    <FlipHorizontal className='w-6 h-6 mx-auto mt-2 text-gray-400' />
                   </div>
-                ) : (
-                  <div className='w-full'>
-                    <div className='text-sm text-gray-500 dark:text-gray-400 mb-4'>
-                      Answer
-                    </div>
+
+                  {/* Answer Display */}
+                  <div className='mb-6'>
                     {currentQuestion ? (
                       <>
                         {currentQuestion.correct_answer && (
-                          <p className='text-xl text-gray-700 dark:text-gray-300 mb-6'>
-                            {currentQuestion.correct_answer}
-                          </p>
+                          <div className='p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border-2 border-green-200 dark:border-green-800 mb-4'>
+                            <div className='flex items-center space-x-3 mb-3'>
+                              <div className='w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center'>
+                                <CheckCircle className='w-6 h-6 text-white' />
+                              </div>
+                              <h4 className='text-lg font-bold text-green-900 dark:text-green-100'>
+                                Correct Answer
+                              </h4>
+                            </div>
+                            <p className='text-xl text-green-800 dark:text-green-200 font-semibold'>
+                              {currentQuestion.correct_answer}
+                            </p>
+                          </div>
                         )}
                         {currentQuestion.explanation && (
-                          <div className='mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-left'>
-                            <p className='text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2'>
-                              Explanation:
-                            </p>
-                            <p className='text-blue-800 dark:text-blue-200'>
+                          <div className='p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border-2 border-blue-200 dark:border-blue-800'>
+                            <div className='flex items-center space-x-3 mb-4'>
+                              <div className='w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center'>
+                                <BookOpen className='w-6 h-6 text-white' />
+                              </div>
+                              <h4 className='text-lg font-bold text-blue-900 dark:text-blue-100'>
+                                Explanation
+                              </h4>
+                            </div>
+                            <p className='text-blue-800 dark:text-blue-200 leading-relaxed'>
                               {currentQuestion.explanation}
                             </p>
                           </div>
                         )}
                         {!currentQuestion.correct_answer &&
                           !currentQuestion.explanation && (
-                            <p className='text-lg text-gray-500 dark:text-gray-400'>
-                              Full answer details not available for this
-                              question.
-                            </p>
+                            <div className='p-6 bg-yellow-50 dark:bg-yellow-900/20 rounded-2xl border-2 border-yellow-200 dark:border-yellow-800 text-center'>
+                              <p className='text-yellow-800 dark:text-yellow-200'>
+                                Full answer details not available for this
+                                question.
+                              </p>
+                            </div>
                           )}
                       </>
                     ) : (
-                      <p className='text-lg text-gray-500 dark:text-gray-400'>
-                        Loading answer details...
-                      </p>
+                      <div className='p-6 bg-gray-50 dark:bg-gray-700/50 rounded-2xl text-center'>
+                        <Loader2 className='w-8 h-8 animate-spin text-blue-500 mx-auto mb-3' />
+                        <p className='text-gray-600 dark:text-gray-400'>
+                          Loading answer details...
+                        </p>
+                      </div>
                     )}
-                    <div className='mt-6 text-sm text-gray-500 dark:text-gray-400'>
-                      Click to see question again
-                    </div>
                   </div>
-                )}
+
+                  {/* Action Buttons */}
+                  <div className='flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-700'>
+                    <button
+                      onClick={() => setIsFlipped(false)}
+                      className='flex-1 inline-flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl'
+                    >
+                      <EyeOff className='w-4 h-4' />
+                      <span>Hide Answer</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsFlipped(false);
+                        nextCard();
+                      }}
+                      disabled={currentIndex === shuffledItems.length - 1}
+                      className='flex-1 inline-flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl'
+                    >
+                      <ArrowRight className='w-4 h-4' />
+                      <span>Next Card</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Navigation */}
           <div className='flex justify-between items-center'>
@@ -359,10 +456,11 @@ export default function FlashcardsPage() {
                 setCorrectAnswers(0);
                 fetchQuestionDetails(shuffled[0].id);
               }}
-              className='p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700'
-              title='Shuffle'
+              className='inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95'
+              title='Shuffle Cards'
             >
               <Shuffle className='w-4 h-4' />
+              <span className='hidden sm:inline'>Shuffle</span>
             </button>
           </div>
 
