@@ -26,27 +26,79 @@ export async function GET(request: NextRequest) {
       await supabaseOperations.getQuestions(filters);
 
     if (error) {
-      throw new Error(error.message);
+      console.error('Supabase error fetching questions:', error);
+      throw new Error(
+        error.message || 'Failed to fetch questions from database'
+      );
+    }
+
+    // Handle null or undefined questions
+    if (!questions) {
+      console.warn('No questions returned from database');
+      return NextResponse.json({
+        success: true,
+        data: [],
+        count: 0,
+      });
     }
 
     // Transform data to match expected format
     const transformedQuestions =
-      (questions as any[])?.map(question => ({
-        id: question.id,
-        question: question.question_text,
-        answer: question.correct_answer,
-        explanation: question.explanation,
-        topicId: question.topic_id,
-        difficulty: question.difficulty,
-        type: question.question_type,
-        questionType: question.question_type,
-        options: question.options ? JSON.parse(question.options) : null,
-        correctAnswer: question.correct_answer,
-        tags: question.tags ? JSON.parse(question.tags) : null,
-        is_active: question.is_active,
-        created_at: new Date(question.created_at),
-        updated_at: new Date(question.updated_at),
-      })) || [];
+      (questions as any[])
+        ?.map(question => {
+          try {
+            // Try multiple possible field names for question text
+            const questionText =
+              question.question_text ||
+              question.question ||
+              question.title ||
+              question.content ||
+              question.text ||
+              '';
+
+            if (!questionText) {
+              console.warn('Question missing text field:', {
+                id: question.id,
+                availableFields: Object.keys(question),
+              });
+            }
+
+            return {
+              id: question.id,
+              question: questionText,
+              question_text: questionText, // Also include raw field for backward compatibility
+              answer: question.correct_answer,
+              explanation: question.explanation || '',
+              topicId: question.topic_id,
+              categoryId: question.category_id,
+              difficulty: question.difficulty,
+              type: question.question_type,
+              questionType: question.question_type,
+              options: question.options
+                ? typeof question.options === 'string'
+                  ? JSON.parse(question.options)
+                  : question.options
+                : null,
+              correctAnswer: question.correct_answer,
+              tags: question.tags
+                ? typeof question.tags === 'string'
+                  ? JSON.parse(question.tags)
+                  : question.tags
+                : [],
+              is_active: question.is_active,
+              created_at: question.created_at
+                ? new Date(question.created_at)
+                : new Date(),
+              updated_at: question.updated_at
+                ? new Date(question.updated_at)
+                : new Date(),
+            };
+          } catch (parseError) {
+            console.error('Error parsing question:', question.id, parseError);
+            return null;
+          }
+        })
+        .filter(q => q !== null && q.question) || []; // Filter out questions without text
 
     // Apply additional filters that aren't handled by Supabase
     let filteredQuestions = transformedQuestions;
@@ -67,8 +119,14 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching questions:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to fetch questions';
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch questions' },
+      {
+        success: false,
+        error: errorMessage,
+        details: error instanceof Error ? error.stack : String(error),
+      },
       { status: 500 }
     );
   }
