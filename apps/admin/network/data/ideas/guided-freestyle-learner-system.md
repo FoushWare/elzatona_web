@@ -924,11 +924,11 @@ This comprehensive testing guide ensures both admin pages and website integratio
 
 ## 🧪 Manual QA Checklist
 
-- [ ] Test the flow without login (Guided)
-  - [ ] Visit `/features/guided-learning`
-  - [ ] Open a plan → Start practice → Answer a few questions
-  - [ ] Verify local progress saved, reset progress works from plan details
-  - [ ] Refresh: progress persists locally; progress counts exclude questions without options
+- [x] Test the flow without login (Guided)
+  - [x] Visit `/features/guided-learning`
+  - [x] Open a plan → Start practice → Answer a few questions
+  - [x] Verify local progress saved, reset progress works from plan details
+  - [x] Refresh: progress persists locally; progress counts exclude questions without options
 
 - [ ] Test the flow without login (Free Style)
   - [ ] Visit `/free-style` → open a path/topic → practice questions

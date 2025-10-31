@@ -80,6 +80,7 @@ interface Progress {
   completedTopics: string[];
   completedCategories: string[];
   completedCards: string[];
+  correctAnswers: string[]; // Track correct answers for scoring
   currentPosition: {
     cardIndex: number;
     categoryIndex: number;
@@ -108,6 +109,12 @@ export default function GuidedPracticePage() {
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<Progress | null>(null);
   const [inFlashcards, setInFlashcards] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [finalScore, setFinalScore] = useState<{
+    correct: number;
+    total: number;
+    percentage: number;
+  } | null>(null);
 
   // Progress management functions
   const getProgressKey = () => `guided-practice-progress-${planId}`;
@@ -216,6 +223,7 @@ export default function GuidedPracticePage() {
       completedTopics: [],
       completedCategories: [],
       completedCards: [],
+      correctAnswers: [],
       currentPosition: {
         cardIndex: 0,
         categoryIndex: 0,
@@ -320,8 +328,66 @@ export default function GuidedPracticePage() {
         // Load or initialize progress
         const savedProgress = loadProgress();
         if (savedProgress) {
+          // Ensure correctAnswers exists (for legacy data)
+          if (!savedProgress.correctAnswers) {
+            savedProgress.correctAnswers = [];
+          }
+
           setProgress(savedProgress);
-          resumeFromProgress(data.data, savedProgress);
+
+          // Check if all questions are completed
+          const totalQuestionsWithOptions = data.data.cards.reduce(
+            (total: number, card: Card) => {
+              return (
+                total +
+                card.categories.reduce(
+                  (catTotal: number, category: Category) => {
+                    return (
+                      catTotal +
+                      category.topics.reduce(
+                        (topicTotal: number, topic: Topic) => {
+                          return (
+                            topicTotal +
+                            topic.questions.filter(
+                              (q: Question) =>
+                                q.options &&
+                                Array.isArray(q.options) &&
+                                q.options.length > 0
+                            ).length
+                          );
+                        },
+                        0
+                      )
+                    );
+                  },
+                  0
+                )
+              );
+            },
+            0
+          );
+
+          if (
+            savedProgress.completedQuestions.length >=
+              totalQuestionsWithOptions &&
+            totalQuestionsWithOptions > 0
+          ) {
+            // Plan is completed, show score screen
+            const correctCount = savedProgress.correctAnswers.length;
+            const completedCount = savedProgress.completedQuestions.length;
+            const percentage =
+              completedCount > 0
+                ? Math.round((correctCount / completedCount) * 100)
+                : 0;
+            setIsCompleted(true);
+            setFinalScore({
+              correct: correctCount,
+              total: completedCount,
+              percentage,
+            });
+          } else {
+            resumeFromProgress(data.data, savedProgress);
+          }
         } else {
           const newProgress = initializeProgress();
           setProgress(newProgress);
@@ -609,10 +675,21 @@ export default function GuidedPracticePage() {
     setShowExplanation(true);
 
     // Mark question as completed
-    if (currentQuestion) {
+    if (currentQuestion && progress) {
       markQuestionCompleted(currentQuestion.id);
-      // Auto-add to flashcards on wrong answer
+
+      // Track correct answers for scoring
       const correct = isCorrectAnswer(answer);
+      if (correct && !progress.correctAnswers.includes(currentQuestion.id)) {
+        const updatedProgress = {
+          ...progress,
+          correctAnswers: [...progress.correctAnswers, currentQuestion.id],
+          lastUpdated: new Date().toISOString(),
+        };
+        saveProgress(updatedProgress);
+      }
+
+      // Auto-add to flashcards on wrong answer
       if (!correct) {
         try {
           addFlashcard({
@@ -783,16 +860,50 @@ export default function GuidedPracticePage() {
     }
 
     // If we reach here, all questions are completed
+    const completedCount = progress.completedQuestions.length;
+    const correctCount = progress.correctAnswers.length;
+    const percentage =
+      completedCount > 0
+        ? Math.round((correctCount / completedCount) * 100)
+        : 0;
+
+    // Mark plan as completed
+    setIsCompleted(true);
+    setFinalScore({ correct: correctCount, total: completedCount, percentage });
+
+    // Save completion and score to localStorage
+    if (planId) {
+      try {
+        // Save completed plan
+        const completedPlansData = localStorage.getItem(
+          'completed-guided-plans'
+        );
+        const completedPlans = completedPlansData
+          ? JSON.parse(completedPlansData)
+          : [];
+        if (!completedPlans.includes(planId)) {
+          completedPlans.push(planId);
+          localStorage.setItem(
+            'completed-guided-plans',
+            JSON.stringify(completedPlans)
+          );
+        }
+
+        // Save plan grade
+        const planGradesData = localStorage.getItem('plan-grades');
+        const planGrades = planGradesData ? JSON.parse(planGradesData) : {};
+        planGrades[planId] = percentage;
+        localStorage.setItem('plan-grades', JSON.stringify(planGrades));
+      } catch (error) {
+        console.error('Error saving completion data:', error);
+      }
+    }
+
     addNotification({
       type: 'success',
       title: 'Congratulations! 🎉',
-      message:
-        'You have completed all questions in this practice session. Great work!',
+      message: `You completed the plan with ${percentage}% accuracy!`,
       duration: 5000,
-      action: {
-        label: 'Back to Plan',
-        onClick: () => router.push(`/features/guided-learning/${planId}`),
-      },
     });
   };
 
@@ -930,6 +1041,125 @@ export default function GuidedPracticePage() {
           >
             Back to Plans
           </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Show completion screen with score
+  if (isCompleted && finalScore) {
+    const getGradeColor = (percentage: number) => {
+      if (percentage >= 90) return 'text-yellow-600 dark:text-yellow-400';
+      if (percentage >= 80) return 'text-green-600 dark:text-green-400';
+      if (percentage >= 70) return 'text-blue-600 dark:text-blue-400';
+      if (percentage >= 60) return 'text-orange-600 dark:text-orange-400';
+      return 'text-red-600 dark:text-red-400';
+    };
+
+    const getGradeText = (percentage: number) => {
+      if (percentage >= 90) return 'A+ (Excellent!)';
+      if (percentage >= 80) return 'A (Great!)';
+      if (percentage >= 70) return 'B+ (Good!)';
+      if (percentage >= 60) return 'B (Not bad!)';
+      return 'C (Keep practicing!)';
+    };
+
+    const gradeColor = getGradeColor(finalScore.percentage);
+    const gradeText = getGradeText(finalScore.percentage);
+
+    return (
+      <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 pt-24 pb-8 flex items-center justify-center'>
+        <div className='max-w-2xl mx-auto px-4'>
+          <div className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-xl border-2 border-white/20 dark:border-gray-700/20 text-center'>
+            {/* Celebration Icon */}
+            <div className='w-24 h-24 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg'>
+              <CheckCircle className='w-12 h-12 text-white' />
+            </div>
+
+            {/* Title */}
+            <h1 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
+              Congratulations! 🎉
+            </h1>
+            <p className='text-xl text-gray-600 dark:text-gray-400 mb-8'>
+              You completed {plan.name}
+            </p>
+
+            {/* Score Display */}
+            <div className='bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-6 mb-8 border border-blue-200 dark:border-blue-800'>
+              <div className='text-6xl font-bold mb-2'>
+                <span className={gradeColor}>{finalScore.percentage}%</span>
+              </div>
+              <div className={`text-2xl font-semibold mb-4 ${gradeColor}`}>
+                {gradeText}
+              </div>
+              <div className='text-gray-600 dark:text-gray-400'>
+                <span className='font-semibold text-gray-900 dark:text-white'>
+                  {finalScore.correct}
+                </span>{' '}
+                out of{' '}
+                <span className='font-semibold text-gray-900 dark:text-white'>
+                  {finalScore.total}
+                </span>{' '}
+                questions answered correctly
+              </div>
+            </div>
+
+            {/* Progress Stats */}
+            <div className='grid grid-cols-3 gap-4 mb-8'>
+              <div className='bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4'>
+                <div className='text-2xl font-bold text-gray-900 dark:text-white'>
+                  {getOverallProgress().completed}
+                </div>
+                <div className='text-sm text-gray-600 dark:text-gray-400'>
+                  Questions Done
+                </div>
+              </div>
+              <div className='bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4'>
+                <div className='text-2xl font-bold text-green-600 dark:text-green-400'>
+                  {finalScore.correct}
+                </div>
+                <div className='text-sm text-gray-600 dark:text-gray-400'>
+                  Correct Answers
+                </div>
+              </div>
+              <div className='bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4'>
+                <div className='text-2xl font-bold text-blue-600 dark:text-blue-400'>
+                  {progress?.completedCards.length || 0}
+                </div>
+                <div className='text-sm text-gray-600 dark:text-gray-400'>
+                  Cards Completed
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+              <Link
+                href={`/features/guided-learning/${planId}`}
+                className='inline-flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors'
+              >
+                <ArrowLeft className='w-4 h-4' />
+                <span>Back to Plan</span>
+              </Link>
+              <Link
+                href='/features/guided-learning'
+                className='inline-flex items-center justify-center space-x-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-colors'
+              >
+                <BookOpen className='w-4 h-4' />
+                <span>View All Plans</span>
+              </Link>
+              <button
+                onClick={() => {
+                  resetProgress(plan);
+                  setIsCompleted(false);
+                  setFinalScore(null);
+                }}
+                className='inline-flex items-center justify-center space-x-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition-colors'
+              >
+                <span>Try Again</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
