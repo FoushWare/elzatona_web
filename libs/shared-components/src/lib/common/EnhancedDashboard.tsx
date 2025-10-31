@@ -43,7 +43,6 @@ import {
   Play,
   ArrowRight,
   Timer,
-  Brain,
   Flame,
   Medal,
   ChevronRight,
@@ -70,17 +69,6 @@ interface RecentActivity {
   points: number;
   icon: React.ComponentType<{ className?: string }>;
   color: string;
-}
-
-interface Recommendation {
-  id: string;
-  title: string;
-  description: string;
-  difficulty: string;
-  estimatedTime: string;
-  icon: React.ComponentType<{ className?: string }>;
-  color: string;
-  href: string;
 }
 
 export default function EnhancedDashboard() {
@@ -202,40 +190,6 @@ export default function EnhancedDashboard() {
             ? 'text-blue-500'
             : 'text-purple-500',
     })) || [];
-
-  // Recommendations based on user progress
-  const recommendations: Recommendation[] = [
-    {
-      id: 'react-hooks',
-      title: 'React Hooks Deep Dive',
-      description: 'Master useState, useEffect, and custom hooks',
-      difficulty: 'Intermediate',
-      estimatedTime: '2-3 hours',
-      icon: Code,
-      color: 'from-blue-500 to-cyan-500',
-      href: '/learning-paths/react-hooks',
-    },
-    {
-      id: 'css-grid',
-      title: 'CSS Grid Mastery',
-      description: 'Learn advanced CSS Grid layouts and techniques',
-      difficulty: 'Advanced',
-      estimatedTime: '3-4 hours',
-      icon: Target,
-      color: 'from-purple-500 to-pink-500',
-      href: '/learning-paths/css-grid',
-    },
-    {
-      id: 'javascript-es6',
-      title: 'JavaScript ES6+ Features',
-      description: 'Explore modern JavaScript features and syntax',
-      difficulty: 'Intermediate',
-      estimatedTime: '2-3 hours',
-      icon: Zap,
-      color: 'from-green-500 to-emerald-500',
-      href: '/learning-paths/javascript-es6',
-    },
-  ];
 
   const handleLogout = async () => {
     try {
@@ -626,50 +580,6 @@ export default function EnhancedDashboard() {
                   </p>
                 </div>
               )}
-            </div>
-          </div>
-
-          {/* Recommendations */}
-          <div className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700'>
-            <h3 className='text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center'>
-              <Brain className='w-5 h-5 mr-2 text-yellow-500' />
-              Recommended for You
-            </h3>
-            <div className='space-y-4'>
-              {recommendations.map(rec => (
-                <Link
-                  key={rec.id}
-                  href={rec.href}
-                  className='block p-4 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 transition-colors'
-                >
-                  <div className='flex items-start space-x-3'>
-                    <div
-                      className={`w-12 h-12 bg-gradient-to-r ${rec.color} rounded-lg flex items-center justify-center flex-shrink-0`}
-                    >
-                      <rec.icon className='w-6 h-6 text-white' />
-                    </div>
-                    <div className='flex-1'>
-                      <h4 className='font-semibold text-gray-900 dark:text-white mb-1'>
-                        {rec.title}
-                      </h4>
-                      <p className='text-sm text-gray-600 dark:text-gray-400 mb-2'>
-                        {rec.description}
-                      </p>
-                      <div className='flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400'>
-                        <span className='flex items-center'>
-                          <Target className='w-3 h-3 mr-1' />
-                          {rec.difficulty}
-                        </span>
-                        <span className='flex items-center'>
-                          <Clock className='w-3 h-3 mr-1' />
-                          {rec.estimatedTime}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className='w-5 h-5 text-gray-400' />
-                  </div>
-                </Link>
-              ))}
             </div>
           </div>
         </div>
