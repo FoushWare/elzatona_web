@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 // useUserProgress is not exported from shared-hooks in this workspace build.
 // Provide a safe local fallback that returns empty data to avoid runtime errors.
@@ -21,6 +22,10 @@ const useUserProgress = () => ({
   refreshContinueData: async () => {},
 });
 import { useAuth } from '@elzatona/shared-contexts';
+import {
+  supabaseClient as supabase,
+  isSupabaseAvailable,
+} from '@/lib/supabase-client';
 
 import {
   BookOpen,
@@ -80,6 +85,7 @@ interface Recommendation {
 
 export default function EnhancedDashboard() {
   const { user, logout } = useAuth();
+  const router = useRouter();
   const {
     progress,
     dashboardStats,
@@ -92,6 +98,7 @@ export default function EnhancedDashboard() {
 
   const [showStats, setShowStats] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
   const [plans, setPlans] = useState<{ id: string; name: string }[]>([]);
 
   // Dashboard cards with real progress data
@@ -230,6 +237,32 @@ export default function EnhancedDashboard() {
     },
   ];
 
+  const handleLogout = async () => {
+    try {
+      setIsSigningOut(true);
+      // Call app context logout (clears any local user state)
+      try {
+        logout();
+      } catch (_) {}
+      // Ensure Supabase session is cleared (for social logins)
+      if (isSupabaseAvailable() && supabase) {
+        try {
+          await supabase.auth.signOut();
+        } catch (_) {}
+      }
+      // Clear storage and redirect
+      try {
+        sessionStorage.clear();
+      } catch (_) {}
+      try {
+        localStorage.clear();
+      } catch (_) {}
+      router.push('/');
+    } finally {
+      setIsSigningOut(false);
+    }
+  };
+
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
@@ -347,11 +380,16 @@ export default function EnhancedDashboard() {
               <Settings className='w-5 h-5' />
             </button>
             <button
-              onClick={logout}
-              className='flex items-center space-x-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors'
+              onClick={handleLogout}
+              disabled={isSigningOut}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                isSigningOut
+                  ? 'bg-red-400 cursor-not-allowed'
+                  : 'bg-red-500 hover:bg-red-600 text-white'
+              }`}
             >
               <LogOut className='w-4 h-4' />
-              <span>Sign Out</span>
+              <span>{isSigningOut ? 'Signing out…' : 'Sign Out'}</span>
             </button>
           </div>
         </div>

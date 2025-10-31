@@ -1062,6 +1062,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
     - [ ] Google → redirects to `/dashboard`
     - [ ] GitHub → redirects to `/dashboard`
     - [x] Navbar reflects authenticated state with no flicker
+  - [x] Dashboard refresh shows Dashboard when authenticated (no Sign In)
   - [ ] Transfer history
     - [ ] On first login, local progress synced to DB; dashboard reflects it
 

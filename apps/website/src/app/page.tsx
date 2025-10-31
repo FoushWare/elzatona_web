@@ -282,7 +282,7 @@ function HomePageContent() {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto'>
             {/* Guided Learning */}
             <Link
-              href='/learn'
+              href='/features/guided-learning'
               className={`group bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl p-8 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 ${
                 showAnimation
                   ? 'opacity-100 translate-y-0'
@@ -310,7 +310,7 @@ function HomePageContent() {
 
             {/* Free Style Learning */}
             <Link
-              href='/browse-practice-questions'
+              href='/free-style'
               className={`group bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 ${
                 showAnimation
                   ? 'opacity-100 translate-y-0'

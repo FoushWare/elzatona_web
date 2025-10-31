@@ -42,7 +42,8 @@ interface UserTypeProviderProps {
 export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
   children,
 }) => {
-  const [userType, setUserType] = useState<UserType>(null);
+  // Default to 'guided' when no preference exists
+  const [userType, setUserType] = useState<UserType>('guided');
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
   const [isFirstVisit, setIsFirstVisit] = useState(false);
 
@@ -54,6 +55,9 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
         const savedUserType = localStorage.getItem('userType') as UserType;
         if (savedUserType) {
           setUserType(savedUserType);
+        } else {
+          setUserType('guided');
+          localStorage.setItem('userType', 'guided');
         }
 
         const savedOnboarding =
@@ -65,7 +69,7 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
       } catch (error) {
         console.error('Error loading user preferences:', error);
         // Set defaults if localStorage fails
-        setUserType(null);
+        setUserType('guided');
         setHasCompletedOnboarding(false);
         setIsFirstVisit(true);
       }
@@ -91,7 +95,7 @@ export const UserTypeProvider: React.FC<UserTypeProviderProps> = ({
   }, [userType, hasCompletedOnboarding, isFirstVisit]);
 
   const resetUserPreferences = () => {
-    setUserType(null);
+    setUserType('guided');
     setHasCompletedOnboarding(false);
     setIsFirstVisit(false);
     if (typeof window !== 'undefined') {
