@@ -1,21 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+// Helper function to create Supabase client
+function createSupabaseClient() {
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    'https://hpnewqkvpnthpohvxcmq.supabase.co';
+  const supabaseAnonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s';
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Supabase credentials are missing');
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey);
+}
+
 // GET /api/plans - Get all learning plans
 export async function GET(request: NextRequest) {
   try {
-    // Use environment variables for Supabase credentials with fallback
-    const supabaseUrl =
-      process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      'https://hpnewqkvpnthpohvxcmq.supabase.co';
-    const supabaseAnonKey =
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s';
+    console.log('🔍 API Debug: Starting GET /api/plans');
 
-    console.log('🔍 API Debug: Using Supabase URL:', supabaseUrl);
-    console.log('🔍 API Debug: Anon key exists:', !!supabaseAnonKey);
+    const supabase = createSupabaseClient();
+    console.log('🔍 API Debug: Supabase client created');
 
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
     const { data: plans, error } = await supabase
       .from('learning_plans')
       .select('*')
@@ -52,9 +61,20 @@ export async function GET(request: NextRequest) {
       count: plans?.length || 0,
     });
   } catch (error) {
-    console.error('Error fetching plans:', error);
+    console.error('❌ Error in GET /api/plans:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
+    const isFetchError =
+      errorMessage.includes('fetch') || errorMessage.includes('network');
+
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch plans' },
+      {
+        success: false,
+        error: isFetchError
+          ? 'Failed to connect to database. Please check your network connection and Supabase configuration.'
+          : 'Failed to fetch plans from database',
+        details: errorMessage,
+      },
       { status: 500 }
     );
   }
@@ -64,6 +84,8 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const planData = await request.json();
+
+    const supabase = createSupabaseClient();
 
     const planWithTimestamps = {
       ...planData,
@@ -81,7 +103,15 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      throw error;
+      console.error('❌ Error creating plan:', error);
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Failed to create plan in database',
+          details: error.message,
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
@@ -90,9 +120,15 @@ export async function POST(request: NextRequest) {
       message: 'Plan created successfully',
     });
   } catch (error) {
-    console.error('Error creating plan:', error);
+    console.error('❌ Error in POST /api/plans:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { success: false, error: 'Failed to create plan' },
+      {
+        success: false,
+        error: 'Failed to create plan',
+        details: errorMessage,
+      },
       { status: 500 }
     );
   }
