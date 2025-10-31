@@ -11,8 +11,8 @@ test('navbar reflects authenticated state with no flicker', async ({
     );
   });
   await page.goto('/');
-  await expect(page.getByText('Dashboard')).toBeVisible();
-  await expect(page.getByText('Sign In')).toHaveCount(0);
+  await expect(page.getByTestId('dashboard-link')).toBeVisible();
+  await expect(page.getByTestId('signin-link')).toHaveCount(0);
 });
 
 test('google login redirects to dashboard (conditional)', async ({ page }) => {
