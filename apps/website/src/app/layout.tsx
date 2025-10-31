@@ -73,8 +73,9 @@ export default function RootLayout({
                       <OnboardingProvider>
                         <NotificationProvider>
                           <LearningTypeProvider>
-                            <NavbarSimple />
+                            {/* Ensure auth snapshot sync runs before navbar to avoid flicker */}
                             <AuthSessionSync />
+                            <NavbarSimple />
                             {children}
                           </LearningTypeProvider>
                         </NotificationProvider>
