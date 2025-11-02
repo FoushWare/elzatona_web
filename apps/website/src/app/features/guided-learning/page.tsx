@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useAuth } from '@elzatona/shared-contexts';
+import { useLearningType } from '@/context/LearningTypeContext';
 
 // Conditional Supabase client creation with fallback values
 let supabase = null;
@@ -72,12 +74,223 @@ interface DailyGoal {
 // Learning plans are now loaded dynamically from Firestore via useLearningPlanTemplates hook
 
 export default function GuidedLearningPage() {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Use AuthContext to get authentication state
+  const { user, isAuthenticated: authIsAuthenticated } = useAuth();
+  const { setLearningType } = useLearningType();
   const [allTemplates, setAllTemplates] = useState<any[]>([]);
   const [templatesLoading, setTemplatesLoading] = useState(true);
   const [templatesError, setTemplatesError] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+
+  // Set learning type to 'guided' when component mounts to hide cart icon
+  useEffect(() => {
+    setLearningType('guided');
+  }, [setLearningType]);
+
+  // Check authentication status from multiple sources
+  useEffect(() => {
+    const checkAuth = () => {
+      // Check AuthContext first
+      if (authIsAuthenticated && user) {
+        console.log('✅ Auth: Authenticated via AuthContext');
+        setIsAuthenticated(true);
+        return;
+      }
+
+      // Check localStorage and sessionStorage for various auth indicators
+      if (typeof window !== 'undefined') {
+        // Check sessionStorage for isAuthenticated (could be string or JSON object)
+        try {
+          // Check common sessionStorage keys for auth data
+          const commonAuthKeys = [
+            'navbar-auth-state', // Used by NavbarSimple component
+            'auth',
+            'auth-state',
+            'authentication',
+            'isAuthenticated',
+            'authStatus',
+            'authState',
+            'user-auth',
+            'session-auth',
+          ];
+
+          for (const key of commonAuthKeys) {
+            const value = sessionStorage.getItem(key);
+            if (value) {
+              try {
+                const parsed = JSON.parse(value);
+                if (
+                  parsed &&
+                  typeof parsed === 'object' &&
+                  parsed.isAuthenticated === true
+                ) {
+                  console.log(
+                    `✅ Auth: Authenticated via sessionStorage (${key} with isAuthenticated=true)`
+                  );
+                  setIsAuthenticated(true);
+                  return;
+                }
+              } catch {
+                // Not JSON, check if it's the string "true"
+                if (value === 'true') {
+                  console.log(
+                    `✅ Auth: Authenticated via sessionStorage (${key}=true string)`
+                  );
+                  setIsAuthenticated(true);
+                  return;
+                }
+              }
+            }
+          }
+
+          // Also check all sessionStorage keys for JSON objects with isAuthenticated
+          for (let i = 0; i < sessionStorage.length; i++) {
+            const key = sessionStorage.key(i);
+            if (key && !commonAuthKeys.includes(key)) {
+              const value = sessionStorage.getItem(key);
+              if (value) {
+                try {
+                  const parsed = JSON.parse(value);
+                  if (
+                    parsed &&
+                    typeof parsed === 'object' &&
+                    parsed.isAuthenticated === true
+                  ) {
+                    console.log(
+                      `✅ Auth: Authenticated via sessionStorage (${key} with isAuthenticated=true)`
+                    );
+                    setIsAuthenticated(true);
+                    return;
+                  }
+                } catch {
+                  // Not JSON, skip
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error checking sessionStorage:', error);
+        }
+
+        // Check localStorage for isAuthenticated (could be string or JSON object)
+        const storedAuthStatus = localStorage.getItem('isAuthenticated');
+        if (storedAuthStatus === 'true') {
+          console.log(
+            '✅ Auth: Authenticated via localStorage (isAuthenticated=true)'
+          );
+          setIsAuthenticated(true);
+          return;
+        }
+
+        // Check if localStorage has a JSON object with isAuthenticated
+        try {
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key) {
+              const value = localStorage.getItem(key);
+              if (value) {
+                try {
+                  const parsed = JSON.parse(value);
+                  if (
+                    parsed &&
+                    typeof parsed === 'object' &&
+                    parsed.isAuthenticated === true
+                  ) {
+                    console.log(
+                      '✅ Auth: Authenticated via localStorage (JSON object with isAuthenticated=true)'
+                    );
+                    setIsAuthenticated(true);
+                    return;
+                  }
+                } catch {
+                  // Not JSON, skip
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error checking localStorage:', error);
+        }
+
+        // Check for auth token and user data
+        const authToken = localStorage.getItem('auth-token');
+        const storedUser = localStorage.getItem('frontend-koddev-user');
+
+        if (authToken && storedUser) {
+          try {
+            const userData = JSON.parse(storedUser);
+            if (userData.id) {
+              console.log(
+                '✅ Auth: Authenticated via localStorage (auth-token + user data)'
+              );
+              setIsAuthenticated(true);
+              return;
+            }
+          } catch (error) {
+            console.error('Error parsing stored user:', error);
+          }
+        }
+
+        // Check sessionStorage for user data
+        const sessionUser = sessionStorage.getItem('frontend-koddev-user');
+        const sessionToken = sessionStorage.getItem('auth-token');
+        if (sessionToken && sessionUser) {
+          try {
+            const userData = JSON.parse(sessionUser);
+            if (userData.id) {
+              console.log(
+                '✅ Auth: Authenticated via sessionStorage (auth-token + user data)'
+              );
+              setIsAuthenticated(true);
+              return;
+            }
+          } catch (error) {
+            console.error('Error parsing session user:', error);
+          }
+        }
+      }
+
+      console.log('❌ Auth: Not authenticated');
+      setIsAuthenticated(false);
+    };
+
+    // Check auth on mount and when dependencies change
+    checkAuth();
+
+    // Listen for storage changes (e.g., when user logs in/out in another tab)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (
+        e.key === 'auth-token' ||
+        e.key === 'frontend-koddev-user' ||
+        e.key === 'isAuthenticated'
+      ) {
+        console.log('🔄 Auth: Storage changed, rechecking auth:', e.key);
+        checkAuth();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    // Also listen for custom events (for same-tab auth changes)
+    const handleAuthChange = () => {
+      console.log('🔄 Auth: Auth state changed event, rechecking auth');
+      checkAuth();
+    };
+
+    window.addEventListener('auth-state-changed', handleAuthChange);
+
+    // Poll for changes (in case event listeners don't fire)
+    const pollInterval = setInterval(() => {
+      checkAuth();
+    }, 1000); // Check every second
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('auth-state-changed', handleAuthChange);
+      clearInterval(pollInterval);
+    };
+  }, [authIsAuthenticated, user]);
 
   // Filter to only show day-based plans (1-Day, 2-Day, 3-Day, 4-Day, 5-Day, 6-Day, 7-Day)
   const templates = allTemplates
@@ -198,7 +411,25 @@ export default function GuidedLearningPage() {
 
   // Check if user has an active plan
   useEffect(() => {
-    if (isAuthenticated && user) {
+    // Use the computed isAuthenticated value
+    const authStatus = (() => {
+      if (authIsAuthenticated && user) return true;
+      if (typeof window !== 'undefined') {
+        const authToken = localStorage.getItem('auth-token');
+        const storedUser = localStorage.getItem('frontend-koddev-user');
+        if (authToken && storedUser) {
+          try {
+            const userData = JSON.parse(storedUser);
+            return !!userData.id;
+          } catch {
+            return false;
+          }
+        }
+      }
+      return false;
+    })();
+
+    if (authStatus && user) {
       // Check localStorage for active plan
       const activePlan = localStorage.getItem('active-guided-plan');
       if (activePlan) {
@@ -213,7 +444,7 @@ export default function GuidedLearningPage() {
         }
       }
     }
-  }, [isAuthenticated, user]);
+  }, [authIsAuthenticated, user]);
 
   // Load completed plans and grades from localStorage
   useEffect(() => {
@@ -503,54 +734,60 @@ export default function GuidedLearningPage() {
               className='relative overflow-hidden px-6 py-6 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-700 dark:via-indigo-700 dark:to-purple-700 rounded-2xl shadow-xl border border-blue-500/20'
               data-testid='signup-cta-banner'
             >
-              {/* Decorative background pattern */}
-              <div className='absolute inset-0 opacity-10 overflow-hidden rounded-2xl'>
-                <div className='absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2'></div>
-                <div className='absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2'></div>
-              </div>
+              {/* Decorative background pattern - Hidden if user is logged in */}
+              {!isAuthenticated && (
+                <div className='absolute inset-0 opacity-10 overflow-hidden rounded-2xl'>
+                  <div className='absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2'></div>
+                  <div className='absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2'></div>
+                </div>
+              )}
 
               <div className='relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6'>
                 {/* Left: Content */}
-                <div className='flex-1'>
-                  <div className='flex items-center gap-2 mb-3'>
-                    <Star
-                      className='w-5 h-5 text-yellow-300'
-                      fill='currentColor'
-                    />
-                    <h3 className='text-white font-bold text-lg sm:text-xl'>
-                      Create a free account to unlock full features
-                    </h3>
+                {!isAuthenticated && (
+                  <div className='flex-1'>
+                    <div className='flex items-center gap-2 mb-3'>
+                      <Star
+                        className='w-5 h-5 text-yellow-300'
+                        fill='currentColor'
+                      />
+                      <h3 className='text-white font-bold text-lg sm:text-xl'>
+                        Create a free account to unlock full features
+                      </h3>
+                    </div>
+                    <div
+                      className='grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3'
+                      data-testid='signup-cta-benefits'
+                    >
+                      <div className='flex items-center gap-2 text-blue-100 text-sm'>
+                        <CheckCircle className='w-4 h-4 text-green-300 flex-shrink-0' />
+                        <span>Save progress</span>
+                      </div>
+                      <div className='flex items-center gap-2 text-blue-100 text-sm'>
+                        <TrendingUp className='w-4 h-4 text-green-300 flex-shrink-0' />
+                        <span>Track accuracy</span>
+                      </div>
+                      <div className='flex items-center gap-2 text-blue-100 text-sm'>
+                        <Award className='w-4 h-4 text-green-300 flex-shrink-0' />
+                        <span>Sync flashcards</span>
+                      </div>
+                    </div>
                   </div>
-                  <div
-                    className='grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3'
-                    data-testid='signup-cta-benefits'
-                  >
-                    <div className='flex items-center gap-2 text-blue-100 text-sm'>
-                      <CheckCircle className='w-4 h-4 text-green-300 flex-shrink-0' />
-                      <span>Save progress</span>
-                    </div>
-                    <div className='flex items-center gap-2 text-blue-100 text-sm'>
-                      <TrendingUp className='w-4 h-4 text-green-300 flex-shrink-0' />
-                      <span>Track accuracy</span>
-                    </div>
-                    <div className='flex items-center gap-2 text-blue-100 text-sm'>
-                      <Award className='w-4 h-4 text-green-300 flex-shrink-0' />
-                      <span>Sync flashcards</span>
-                    </div>
-                  </div>
-                </div>
+                )}
 
                 {/* Right: CTA Button Container - allows scale transform */}
-                <div className='p-2 -m-2 relative z-10'>
-                  <a
-                    href='/auth'
-                    className='inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-600 hover:text-blue-700 dark:text-blue-700 dark:hover:text-blue-800 rounded-xl font-bold text-base hover:bg-blue-50 dark:hover:bg-blue-100 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap will-change-transform transform-gpu relative'
-                    style={{ transformOrigin: 'center' }}
-                  >
-                    Create free account
-                    <ArrowRight className='w-5 h-5' />
-                  </a>
-                </div>
+                {!isAuthenticated && (
+                  <div className='p-2 -m-2 relative z-10'>
+                    <a
+                      href='/auth'
+                      className='inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-600 hover:text-blue-700 dark:text-blue-700 dark:hover:text-blue-800 rounded-xl font-bold text-base hover:bg-blue-50 dark:hover:bg-blue-100 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap will-change-transform transform-gpu relative'
+                      style={{ transformOrigin: 'center' }}
+                    >
+                      Create free account
+                      <ArrowRight className='w-5 h-5' />
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>

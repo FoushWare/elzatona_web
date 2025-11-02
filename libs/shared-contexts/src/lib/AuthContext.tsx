@@ -8,6 +8,8 @@ import {
   ReactNode,
 } from 'react';
 // import { UserAuthService } from '@/lib/user-auth';
+import { syncAllProgressOnLogin } from '@/lib/sync-progress-on-login';
+import { Loader2 } from 'lucide-react';
 
 interface User {
   id: string;
@@ -32,9 +34,10 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isLoggingOut: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   signup: (name: string, email: string, password: string) => Promise<boolean>;
-  logout: () => void;
+  logout: () => Promise<void>;
   updateUser: (userData: Partial<User>) => void;
 }
 
@@ -55,6 +58,7 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Check if user is already logged in on mount
   useEffect(() => {
@@ -103,6 +107,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser(userData);
         localStorage.setItem('frontend-koddev-user', JSON.stringify(userData));
         localStorage.setItem('auth-token', data.user.token);
+
+        // Sync all localStorage progress to database after successful login
+        try {
+          console.log('🔄 Syncing progress to database after login...');
+          const syncResult = await syncAllProgressOnLogin(
+            data.user.token,
+            data.user.id
+          );
+          if (syncResult.success) {
+            console.log('✅ Progress synced successfully after login');
+          } else {
+            console.warn('⚠️ Some progress failed to sync:', {
+              guided: syncResult.guided.errors,
+              freeStyle: syncResult.freeStyle.error,
+            });
+          }
+        } catch (syncError) {
+          // Don't block login if sync fails
+          console.error(
+            '❌ Error syncing progress on login (non-blocking):',
+            syncError
+          );
+        }
+
         return true;
       }
 
@@ -148,10 +176,49 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('frontend-koddev-user');
-    localStorage.removeItem('auth-token');
+  const logout = async () => {
+    try {
+      setIsLoggingOut(true);
+
+      // Clear user state
+      setUser(null);
+
+      // Clear localStorage
+      localStorage.removeItem('frontend-koddev-user');
+      localStorage.removeItem('auth-token');
+
+      // Clear sessionStorage (including navbar-auth-state)
+      try {
+        sessionStorage.clear();
+      } catch (error) {
+        console.error('Error clearing sessionStorage:', error);
+      }
+
+      // Clear isAuthenticated flags
+      localStorage.removeItem('isAuthenticated');
+
+      // Dispatch auth state change event
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('auth-state-changed'));
+      }
+
+      // Small delay to ensure state updates are processed
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Navigate to home page
+      if (typeof window !== 'undefined') {
+        window.location.href = '/';
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still navigate even if there's an error
+      if (typeof window !== 'undefined') {
+        window.location.href = '/';
+      }
+    } finally {
+      // This may not execute if navigation happens, but it's good to have
+      setIsLoggingOut(false);
+    }
   };
 
   const updateUser = (userData: Partial<User>) => {
@@ -166,11 +233,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
     user,
     isAuthenticated: !!user,
     isLoading,
+    isLoggingOut,
     login,
     signup,
     logout,
     updateUser,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+      {/* Global logout loading overlay */}
+      {isLoggingOut && (
+        <div className='fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-center justify-center'>
+          <div className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-2xl flex flex-col items-center space-y-4 min-w-[200px]'>
+            <Loader2 className='w-8 h-8 text-indigo-600 dark:text-indigo-400 animate-spin' />
+            <p className='text-gray-900 dark:text-white font-medium text-center'>
+              Logging out...
+            </p>
+            <p className='text-sm text-gray-500 dark:text-gray-400 text-center'>
+              Redirecting to home
+            </p>
+          </div>
+        </div>
+      )}
+    </AuthContext.Provider>
+  );
 }
