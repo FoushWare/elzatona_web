@@ -227,6 +227,7 @@ export const supabaseOperations = {
   // Questions
   async getQuestions(filters?: {
     topicId?: string;
+    categoryId?: string | string[];
     difficulty?: string;
     questionType?: string;
     isActive?: boolean;
@@ -239,7 +240,21 @@ export const supabaseOperations = {
     let query = (supabase as any).from('questions').select('*');
 
     if (filters?.topicId) {
+      console.log(
+        `🔍 getQuestions - Applying topic_id filter: ${filters.topicId}`
+      );
       query = query.eq('topic_id', filters.topicId);
+    } else {
+      console.log('⚠️ getQuestions - No topic_id filter provided');
+    }
+    if (filters?.categoryId) {
+      if (Array.isArray(filters.categoryId)) {
+        // Filter by multiple category IDs
+        query = query.in('category_id', filters.categoryId);
+      } else {
+        // Filter by single category ID
+        query = query.eq('category_id', filters.categoryId);
+      }
     }
     if (filters?.difficulty) {
       query = query.eq('difficulty', filters.difficulty);

@@ -24,9 +24,17 @@ interface GuidedProgress {
 
 export async function POST(request: NextRequest) {
   try {
-    // Get the Firebase token from cookies
+    // Get the auth token from cookies or Authorization header
     const cookieStore = await cookies();
-    const token = cookieStore.get('firebase_token')?.value;
+    let token = cookieStore.get('firebase_token')?.value;
+
+    // Try Authorization header if cookie not found
+    if (!token) {
+      const authHeader = request.headers.get('authorization');
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
+    }
 
     if (!token) {
       console.log('⚠️ No authentication token found, using development mode');
@@ -40,19 +48,50 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Verify the token
-    const decodedToken = await verifySupabaseToken(token);
-    if (!decodedToken) {
-      const progressData: GuidedProgress = await request.json();
-
-      return NextResponse.json({
-        success: true,
-        message: 'Progress would be saved (development mode - token invalid)',
-        warning: 'Using development mode due to invalid token',
-      });
-    }
-
+    // Parse request body first (can only be called once)
     const progressData: GuidedProgress = await request.json();
+
+    // Verify the token
+    let decodedToken = await verifySupabaseToken(token);
+
+    // If Supabase token verification fails, try to get user ID from request body
+    // (for custom auth systems that send userId)
+    if (!decodedToken) {
+      // If request body has userId and the token is from our custom auth system,
+      // we can validate the user exists in the database
+      if (
+        progressData &&
+        typeof progressData === 'object' &&
+        'userId' in progressData
+      ) {
+        const userId = (progressData as any).userId as string;
+        // Verify user exists in database
+        const { data: user, error: userError } = await supabase
+          .from('users')
+          .select('id, email, role, name')
+          .eq('id', userId)
+          .single();
+
+        if (!userError && user) {
+          // User exists, we can proceed with sync
+          decodedToken = {
+            id: user.id,
+            email: user.email || '',
+            role: user.role || 'user',
+            name: user.name,
+          };
+        }
+      }
+
+      if (!decodedToken) {
+        return NextResponse.json({
+          success: false,
+          error: 'Invalid authentication token',
+          message: 'Progress would be saved (development mode - token invalid)',
+          warning: 'Using development mode due to invalid token',
+        });
+      }
+    }
     console.log(
       '📄 Syncing guided learning progress for user:',
       decodedToken.id

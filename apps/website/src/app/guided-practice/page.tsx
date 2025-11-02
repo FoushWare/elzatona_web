@@ -18,10 +18,12 @@ import {
   BookmarkPlus,
   BookmarkCheck,
   ShoppingCart,
+  BarChart3,
 } from 'lucide-react';
 import { addFlashcard, isInFlashcards } from '@/lib/flashcards';
 import { addToCart } from '@/lib/cart';
 import { useNotifications } from '@/components/NotificationSystem';
+import { useLearningType } from '@/context/LearningTypeContext';
 
 interface Question {
   id: string;
@@ -94,10 +96,16 @@ export default function GuidedPracticePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { addNotification } = useNotifications();
+  const { setLearningType } = useLearningType();
   const planId = searchParams.get('plan');
   const categoryId = searchParams.get('category');
 
   const [plan, setPlan] = useState<Plan | null>(null);
+
+  // Set learning type to 'guided' when component mounts to hide cart icon
+  useEffect(() => {
+    setLearningType('guided');
+  }, [setLearningType]);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
@@ -235,10 +243,31 @@ export default function GuidedPracticePage() {
   };
 
   const markQuestionCompleted = (questionId: string) => {
-    if (!progress) return;
+    // Always get the latest progress from localStorage to avoid stale state
+    const latestProgress = loadProgress();
+    if (!latestProgress) {
+      console.error(
+        '❌ No progress found when marking question completed:',
+        questionId
+      );
+      return;
+    }
+
+    // Prevent duplicates
+    if (latestProgress.completedQuestions.includes(questionId)) {
+      console.log('⚠️ Question already marked as completed:', questionId);
+      return;
+    }
+
+    console.log('✅ Marking question as completed:', {
+      questionId,
+      currentCompletedCount: latestProgress.completedQuestions.length,
+      willBeCompletedCount: latestProgress.completedQuestions.length + 1,
+    });
+
     const updatedProgress = {
-      ...progress,
-      completedQuestions: [...progress.completedQuestions, questionId],
+      ...latestProgress,
+      completedQuestions: [...latestProgress.completedQuestions, questionId],
       lastUpdated: new Date().toISOString(),
     };
     saveProgress(updatedProgress);
@@ -675,18 +704,40 @@ export default function GuidedPracticePage() {
     setShowExplanation(true);
 
     // Mark question as completed
-    if (currentQuestion && progress) {
+    if (currentQuestion) {
+      console.log('📝 Answer selected for question:', {
+        questionId: currentQuestion.id,
+        questionTitle: currentQuestion.title,
+        answer,
+      });
+
       markQuestionCompleted(currentQuestion.id);
 
-      // Track correct answers for scoring
+      // Track correct answers for scoring - get latest progress after marking completed
+      const latestProgress = loadProgress();
       const correct = isCorrectAnswer(answer);
-      if (correct && !progress.correctAnswers.includes(currentQuestion.id)) {
-        const updatedProgress = {
-          ...progress,
-          correctAnswers: [...progress.correctAnswers, currentQuestion.id],
-          lastUpdated: new Date().toISOString(),
-        };
-        saveProgress(updatedProgress);
+
+      console.log('🎯 Answer correctness:', {
+        questionId: currentQuestion.id,
+        isCorrect: correct,
+        selectedAnswer: answer,
+      });
+
+      if (latestProgress) {
+        if (
+          correct &&
+          !latestProgress.correctAnswers.includes(currentQuestion.id)
+        ) {
+          const updatedProgress = {
+            ...latestProgress,
+            correctAnswers: [
+              ...latestProgress.correctAnswers,
+              currentQuestion.id,
+            ],
+            lastUpdated: new Date().toISOString(),
+          };
+          saveProgress(updatedProgress);
+        }
       }
 
       // Auto-add to flashcards on wrong answer
@@ -707,7 +758,30 @@ export default function GuidedPracticePage() {
   };
 
   const proceedToNext = () => {
-    if (!plan || !currentQuestion || !progress) return;
+    if (!plan || !currentQuestion) return;
+
+    console.log('➡️ Proceeding to next question...', {
+      currentQuestionId: currentQuestion.id,
+      currentQuestionTitle: currentQuestion.title?.substring(0, 50),
+    });
+
+    // Always get the latest progress from localStorage to avoid stale state
+    const latestProgress = loadProgress();
+    if (!latestProgress) {
+      console.error('❌ No progress found when proceeding to next question');
+      return;
+    }
+
+    console.log('📊 Current progress state:', {
+      completedQuestionsCount: latestProgress.completedQuestions.length,
+      completedQuestions: latestProgress.completedQuestions.slice(0, 5),
+      currentQuestionIdInCompleted: latestProgress.completedQuestions.includes(
+        currentQuestion.id
+      ),
+    });
+
+    // Use the latest progress instead of the closure variable
+    const progress = latestProgress;
 
     const currentCard = plan.cards[currentCardIndex];
     const currentCategory = currentCard.categories[currentCategoryIndex];
@@ -809,18 +883,34 @@ export default function GuidedPracticePage() {
                 const question = topic.questions[questionIndex];
 
                 // Check if this question is not completed and has options
+                const isCompleted = progress.completedQuestions.includes(
+                  question.id
+                );
                 if (
-                  !progress.completedQuestions.includes(question.id) &&
+                  !isCompleted &&
                   question.options &&
                   Array.isArray(question.options) &&
                   question.options.length > 0
                 ) {
+                  console.log('✅ Found next incomplete question:', {
+                    questionId: question.id,
+                    questionTitle: question.title?.substring(0, 50),
+                    cardIndex,
+                    categoryIndex,
+                    topicIndex,
+                    questionIndex,
+                  });
                   foundQuestion = question;
                   foundQuestionIndex = questionIndex;
                   foundTopicIndex = topicIndex;
                   foundCategoryIndex = categoryIndex;
                   foundCardIndex = cardIndex;
                   break;
+                } else if (isCompleted) {
+                  console.log('⏭️ Skipping completed question:', {
+                    questionId: question.id,
+                    questionTitle: question.title?.substring(0, 50),
+                  });
                 }
               }
             }
@@ -911,6 +1001,22 @@ export default function GuidedPracticePage() {
 
   const isCorrectAnswer = (option: string) => {
     if (!currentQuestion) return false;
+
+    // If currentQuestion has options array, find the option by text and check its id
+    if (currentQuestion.options && Array.isArray(currentQuestion.options)) {
+      const optionObj = currentQuestion.options.find(
+        opt => opt.text === option
+      );
+      if (optionObj) {
+        // Compare option id (e.g., "c") with correct_answer (e.g., "c")
+        return (
+          optionObj.id?.toLowerCase() ===
+          String(currentQuestion.correct_answer || '').toLowerCase()
+        );
+      }
+    }
+
+    // Fallback: direct comparison (for backwards compatibility)
     return option === currentQuestion.correct_answer;
   };
 
@@ -1134,6 +1240,16 @@ export default function GuidedPracticePage() {
 
             {/* Actions */}
             <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+              <Link
+                href='/dashboard'
+                title='Go to Dashboard'
+                className='group relative inline-flex items-center justify-center space-x-2 px-6 py-3 bg-white hover:bg-green-50 text-green-600 hover:text-green-700 rounded-lg font-semibold transition-all duration-200 hover:shadow-md hover:scale-105'
+              >
+                <BarChart3 className='w-4 h-4 transition-transform duration-200 group-hover:scale-110' />
+                <span className='transition-all duration-200'>
+                  Go to Dashboard
+                </span>
+              </Link>
               <Link
                 href={`/features/guided-learning/${planId}`}
                 className='inline-flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors'

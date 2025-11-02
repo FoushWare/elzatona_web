@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseOperations } from '@/lib/supabase-server';
+import { supabaseOperations, supabase } from '@/lib/supabase-server';
 
 // GET /api/questions - Get all questions with optional filtering
 export async function GET(request: NextRequest) {
@@ -7,13 +7,140 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const cardType = searchParams.get('cardType');
     const category = searchParams.get('category');
+    const categories = searchParams.getAll('categories'); // Support multiple categories
     const topic = searchParams.get('topic');
+    const subtopic = searchParams.get('subtopic'); // Support subtopic slug
     const difficulty = searchParams.get('difficulty');
     const type = searchParams.get('type');
     const limit = searchParams.get('limit');
 
+    // Validate topic is a UUID, or resolve subtopic slug to topic ID
+    let topicId: string | undefined = undefined;
+
+    // Check if topic is a valid UUID format
+    const isValidUUID = (str: string) => {
+      const uuidRegex =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      return uuidRegex.test(str);
+    };
+
+    if (topic && isValidUUID(topic)) {
+      topicId = topic;
+    } else if (subtopic || (topic && !isValidUUID(topic))) {
+      // Resolve topic/subtopic slug to topic ID
+      try {
+        const { data: topics, error: topicsError } =
+          await supabaseOperations.getTopics({
+            isActive: true,
+          });
+
+        if (!topicsError && topics) {
+          const slugToFind = subtopic || topic || '';
+          const slugLower = slugToFind.toLowerCase();
+
+          console.log(`🔍 API: Searching for topic/subtopic "${slugToFind}"`);
+
+          // Normalize slug for better matching (remove plural 's', handle common variations)
+          const normalizeForMatch = (str: string) => {
+            return str
+              .toLowerCase()
+              .replace(/s$/, '') // Remove trailing 's' for plural matching
+              .replace(/\s+/g, '-')
+              .replace(/[^a-z0-9-]/g, '');
+          };
+
+          const slugNormalized = normalizeForMatch(slugLower);
+
+          // Try multiple matching strategies
+          const matchingTopic = (topics as any[]).find((t: any) => {
+            const topicSlug = t.slug?.toLowerCase() || '';
+            const topicName = t.name?.toLowerCase() || '';
+            const topicNameSlug = topicName.replace(/\s+/g, '-');
+            const topicSlugNormalized = normalizeForMatch(topicSlug);
+            const topicNameNormalized = normalizeForMatch(topicName);
+
+            // Exact matches
+            if (
+              topicSlug === slugLower ||
+              topicNameSlug === slugLower ||
+              t.id?.toLowerCase() === slugLower
+            ) {
+              return true;
+            }
+
+            // Check if slug contains the subtopic (e.g., "js-scope-closure" contains "closure")
+            if (
+              topicSlug.includes(slugLower) ||
+              topicSlug.includes(slugNormalized)
+            ) {
+              return true;
+            }
+
+            // Check normalized matching (handles plural/singular)
+            if (
+              topicSlugNormalized.includes(slugNormalized) ||
+              slugNormalized.includes(topicSlugNormalized)
+            ) {
+              return true;
+            }
+
+            // Check if the subtopic appears as a word boundary in the slug
+            const escapedSlug = slugLower.replace(
+              /[.*+?^${}()|[\]\\]/g,
+              '\\$&'
+            );
+            const escapedSlugNormalized = slugNormalized.replace(
+              /[.*+?^${}()|[\]\\]/g,
+              '\\$&'
+            );
+
+            if (
+              new RegExp(`(^|-)${escapedSlug}(-|$)`).test(topicSlug) ||
+              new RegExp(`(^|-)${escapedSlugNormalized}(-|$)`).test(topicSlug)
+            ) {
+              return true;
+            }
+
+            // Check name matching
+            if (
+              topicName.includes(slugLower.replace(/-/g, ' ')) ||
+              topicNameNormalized.includes(slugNormalized) ||
+              slugNormalized.includes(topicNameNormalized)
+            ) {
+              return true;
+            }
+
+            return false;
+          });
+
+          if (matchingTopic) {
+            topicId = matchingTopic.id;
+            console.log(
+              `✅ Resolved topic/subtopic "${slugToFind}" to topic: "${matchingTopic.name}" (ID: ${topicId})`
+            );
+          } else {
+            console.warn(
+              `⚠️ Could not resolve topic/subtopic "${slugToFind}" to a topic ID`
+            );
+            console.log(
+              'Available topics:',
+              (topics as any[]).slice(0, 10).map((t: any) => ({
+                id: t.id,
+                name: t.name,
+                slug: t.slug,
+              }))
+            );
+          }
+        }
+      } catch (error) {
+        console.error('Error resolving topic:', error);
+      }
+    }
+
     const filters = {
-      topicId: topic || undefined,
+      topicId: topicId,
+      categoryId:
+        categories.length > 0 ? categories : category ? [category] : undefined,
       difficulty: difficulty || undefined,
       questionType: type || undefined,
       is_active: true,
@@ -21,6 +148,48 @@ export async function GET(request: NextRequest) {
       orderBy: 'created_at',
       orderDirection: 'desc' as const,
     };
+
+    // Log the filters being applied
+    console.log('🔍 API Questions Route - Applied Filters:', {
+      topicId: topicId || 'none',
+      categoryId: filters.categoryId || 'none',
+      difficulty: filters.difficulty || 'none',
+      questionType: filters.questionType || 'none',
+      limit: filters.limit || 'none',
+    });
+
+    // Get the filtered count (same filters, without limit)
+    if (!supabase) {
+      throw new Error('Supabase client not initialized');
+    }
+
+    let countQuery = supabase
+      .from('questions')
+      .select('*', { count: 'exact', head: true });
+
+    countQuery = countQuery.eq('is_active', true);
+
+    if (filters.categoryId) {
+      if (Array.isArray(filters.categoryId)) {
+        countQuery = countQuery.in('category_id', filters.categoryId);
+      } else {
+        countQuery = countQuery.eq('category_id', filters.categoryId);
+      }
+    }
+    if (filters.difficulty) {
+      countQuery = countQuery.eq('difficulty', filters.difficulty);
+    }
+    if (filters.questionType) {
+      countQuery = countQuery.eq('question_type', filters.questionType);
+    }
+    if (filters.topicId) {
+      console.log(`📌 Applying topic_id filter: ${filters.topicId}`);
+      countQuery = countQuery.eq('topic_id', filters.topicId);
+    } else {
+      console.log('⚠️ No topic_id filter applied');
+    }
+
+    const { count: filteredCount } = await countQuery;
 
     const { data: questions, error } =
       await supabaseOperations.getQuestions(filters);
@@ -39,7 +208,17 @@ export async function GET(request: NextRequest) {
         success: true,
         data: [],
         count: 0,
+        totalCount: filteredCount || 0,
       });
+    }
+
+    // Log the results for debugging
+    console.log(`📊 Questions fetched: ${questions.length || 0}`);
+    if (filters.topicId && questions.length > 0) {
+      console.log(
+        'Sample question topic_ids:',
+        questions.slice(0, 3).map((q: any) => q.topic_id || 'NULL')
+      );
     }
 
     // Transform data to match expected format
@@ -100,22 +279,19 @@ export async function GET(request: NextRequest) {
         })
         .filter(q => q !== null && q.question) || []; // Filter out questions without text
 
-    // Apply additional filters that aren't handled by Supabase
+    // Additional filters that aren't handled by Supabase (already filtered by categoryId above)
     let filteredQuestions = transformedQuestions;
 
     if (cardType && cardType !== 'all') {
       // This would need to be handled by joining with learning_cards table
       // For now, we'll skip this filter
     }
-    if (category && category !== 'all') {
-      // This would need to be handled by joining with topics and categories
-      // For now, we'll skip this filter
-    }
 
     return NextResponse.json({
       success: true,
       data: filteredQuestions,
-      count: filteredQuestions.length,
+      count: filteredCount || filteredQuestions.length, // Actual filtered count from database
+      totalCount: filteredCount || filteredQuestions.length, // Total count after filtering
     });
   } catch (error) {
     console.error('Error fetching questions:', error);
