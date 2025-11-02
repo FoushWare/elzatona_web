@@ -65,8 +65,14 @@ export default function AuthCallback() {
             console.warn('Progress sync batch failed:', e);
           }
 
+          // Get redirect URL from sessionStorage (set during OAuth login)
+          const redirectUrl =
+            sessionStorage.getItem('auth_redirect') || '/dashboard';
+          // Clear the stored redirect
+          sessionStorage.removeItem('auth_redirect');
+
           setTimeout(() => {
-            router.push('/dashboard');
+            router.push(redirectUrl);
           }, 500);
         } else {
           console.log('⚠️ No session found, redirecting to auth page');
@@ -96,7 +102,12 @@ export default function AuthCallback() {
         try {
           persistSession(session);
         } catch (_) {}
-        router.push('/dashboard');
+        // Get redirect URL from sessionStorage (set during OAuth login)
+        const redirectUrl =
+          sessionStorage.getItem('auth_redirect') || '/dashboard';
+        // Clear the stored redirect
+        sessionStorage.removeItem('auth_redirect');
+        router.push(redirectUrl);
       } else if (event === 'SIGNED_OUT') {
         console.log('👋 User signed out');
         router.push('/auth');

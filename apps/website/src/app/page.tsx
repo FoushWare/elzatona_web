@@ -33,11 +33,17 @@ import {
   Zap,
 } from 'lucide-react';
 import { useUserType } from '@elzatona/shared-contexts';
+import { useAuth } from '@elzatona/shared-contexts';
 import { UserStatistics } from '@elzatona/shared-components';
 import { ErrorBoundary } from '@elzatona/shared-components';
+import { useRouter } from 'next/navigation';
+import { useLearningType } from '@/context/LearningTypeContext';
 
 function HomePageContent() {
-  const { userType } = useUserType();
+  const { userType, setUserType } = useUserType();
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+  const { setLearningType } = useLearningType();
   const [hasActivePlan, setHasActivePlan] = useState(false);
   const [activePlan, setActivePlan] = useState<{
     id: string;
@@ -88,7 +94,7 @@ function HomePageContent() {
           title: 'Start Your Learning Path',
           subtitle: 'Choose a structured learning plan to begin your journey',
           cta: 'Choose Learning Plan',
-          ctaLink: '/features/guided-learning',
+          ctaLink: '/get-started',
           icon: <Map className='w-6 h-6' />,
           color: 'indigo',
         };
@@ -281,9 +287,13 @@ function HomePageContent() {
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto'>
             {/* Guided Learning */}
-            <Link
-              href='/features/guided-learning'
-              className={`group bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl p-8 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 ${
+            <div
+              onClick={() => {
+                setUserType('guided');
+                setLearningType('guided');
+                router.push('/features/guided-learning');
+              }}
+              className={`group bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl p-8 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 cursor-pointer ${
                 showAnimation
                   ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-8'
@@ -306,12 +316,16 @@ function HomePageContent() {
                   <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform duration-300' />
                 </div>
               </div>
-            </Link>
+            </div>
 
             {/* Free Style Learning */}
-            <Link
-              href='/free-style'
-              className={`group bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 ${
+            <div
+              onClick={() => {
+                setUserType('self-directed');
+                setLearningType('free-style');
+                router.push('/browse-practice-questions');
+              }}
+              className={`group bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 hover:shadow-xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 cursor-pointer ${
                 showAnimation
                   ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-8'
@@ -334,7 +348,7 @@ function HomePageContent() {
                   <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform duration-300' />
                 </div>
               </div>
-            </Link>
+            </div>
           </div>
         </div>
       </section>

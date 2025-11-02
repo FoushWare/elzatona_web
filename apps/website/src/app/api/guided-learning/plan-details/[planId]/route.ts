@@ -139,20 +139,76 @@ export async function GET(
       );
     }
 
-    // Filter questions based on plan_questions associations
+    // Filter questions: PRIORITIZE plan_questions table - use ONLY those if they exist
+    // Otherwise, fall back to topic-based filtering
     let questions;
+
     if (planQuestionsData && planQuestionsData.length > 0 && allQuestionsData) {
-      const planQuestionIds = planQuestionsData.map(pq => pq.question_id);
-      questions = allQuestionsData.filter(q => planQuestionIds.includes(q.id));
+      // Use ONLY questions explicitly linked via plan_questions table
+      const planQuestionIds = new Set(
+        planQuestionsData.map(pq => pq.question_id)
+      );
+      questions = allQuestionsData.filter(q => planQuestionIds.has(q.id));
+
       console.log(
-        '🔍 Plan Details Debug: Filtered questions count:',
-        questions.length
+        '🔍 Plan Details Debug: Using ONLY plan_questions filter (explicitly linked questions)',
+        {
+          totalQuestions: questions.length,
+          planQuestionsLinked: planQuestionsData.length,
+          planQuestionIds: Array.from(planQuestionIds).slice(0, 5),
+        }
       );
     } else {
-      questions = allQuestionsData || [];
-      console.log(
-        '🔍 Plan Details Debug: Using all questions (no plan_questions filter)'
-      );
+      // Fallback: Get questions from topics associated with plan's categories
+      // First, get all category IDs from the plan's cards
+      const planCategoryIds = new Set<string>();
+      const planTopicIds = new Set<string>();
+
+      (cards || []).forEach(card => {
+        (categories || []).forEach(category => {
+          // Match categories to cards
+          if (
+            category.learning_card_id === card.id ||
+            category.card_type === card.type
+          ) {
+            planCategoryIds.add(category.id);
+          }
+        });
+      });
+
+      // Get all topics that belong to these categories
+      (topics || []).forEach(topic => {
+        if (topic.category_id && planCategoryIds.has(topic.category_id)) {
+          planTopicIds.add(topic.id);
+        }
+      });
+
+      // Include questions from plan topics as fallback
+      if (planTopicIds.size > 0 && allQuestionsData) {
+        questions = allQuestionsData.filter(
+          q => q.topic_id && planTopicIds.has(q.topic_id)
+        );
+
+        console.log(
+          '🔍 Plan Details Debug: Fallback - Filtered questions by plan topics',
+          {
+            totalQuestions: questions.length,
+            planTopicsCount: planTopicIds.size,
+            planCategoriesCount: planCategoryIds.size,
+            note: 'No plan_questions found, using topic-based filtering',
+          }
+        );
+      } else {
+        // Last resort: use all questions (should not happen in normal operation)
+        questions = allQuestionsData || [];
+        console.log(
+          '🔍 Plan Details Debug: Last resort - Using all questions (no filters available)',
+          {
+            totalQuestions: questions.length,
+            warning: 'No plan_questions and no matching topics found!',
+          }
+        );
+      }
     }
 
     console.log(

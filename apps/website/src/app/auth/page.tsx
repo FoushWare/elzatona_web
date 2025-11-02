@@ -8,7 +8,7 @@ import {
 } from '@/lib/supabase-client';
 
 import { useAuth } from '@elzatona/shared-contexts';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
 
 export default function AuthPage() {
@@ -24,13 +24,17 @@ export default function AuthPage() {
 
   const { login, signup, isAuthenticated } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get redirect URL from query parameters, default to dashboard
+  const redirectTo = searchParams.get('redirect') || '/dashboard';
 
   // Redirect if already authenticated
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push('/');
+      router.push(redirectTo);
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, router, redirectTo]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,7 +55,8 @@ export default function AuthPage() {
       }
 
       if (success) {
-        router.push('/');
+        // Redirect to the specified URL (defaults to /dashboard)
+        router.push(redirectTo);
       } else {
         setError(isLogin ? 'Invalid credentials' : 'Registration failed');
       }
@@ -83,6 +88,9 @@ export default function AuthPage() {
     try {
       setLoading(true);
       setError(null);
+
+      // Store redirect URL in sessionStorage for OAuth callback
+      sessionStorage.setItem('auth_redirect', redirectTo);
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -117,6 +125,9 @@ export default function AuthPage() {
     try {
       setLoading(true);
       setError(null);
+
+      // Store redirect URL in sessionStorage for OAuth callback
+      sessionStorage.setItem('auth_redirect', redirectTo);
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',

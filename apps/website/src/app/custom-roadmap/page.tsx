@@ -1,15 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { useRouter } from 'next/navigation';
 
-import { SignInPopup } from '@elzatona/shared-components';
+// import { SignInPopup } from '@elzatona/shared-components'; // Temporarily disabled due to import issues
+import { useAuth } from '@elzatona/shared-contexts';
 import {
   Plus,
   Minus,
@@ -61,9 +57,10 @@ interface CustomPlan {
 
 export default function CustomRoadmapPage() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
-  const [showSignInPopup, setShowSignInPopup] = useState(false);
+  const { isAuthenticated: authIsAuthenticated, user } = useAuth();
+
+  // Determine if user is authenticated
+  const isAuthenticated = authIsAuthenticated && !!user;
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
@@ -77,13 +74,28 @@ export default function CustomRoadmapPage() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      setShowSignInPopup(true);
+    // Clear any pending intent flags when user reaches this page (authenticated)
+    if (isAuthenticated) {
+      try {
+        localStorage.removeItem('pending_browse_practice_questions_intent');
+        localStorage.removeItem('pending_custom_roadmap_intent');
+        console.log('✅ Cleared pending intent flags on custom-roadmap page');
+      } catch (e) {
+        console.warn('Error clearing localStorage flags:', e);
+      }
+      loadSections();
       return;
     }
 
-    loadSections();
-  }, [isAuthenticated]);
+    // If not authenticated, store intent and redirect to auth
+    try {
+      localStorage.setItem('pending_browse_practice_questions_intent', 'true');
+      // Redirect to auth page, which will then redirect to dashboard
+      router.push('/auth?redirect=/dashboard');
+    } catch (e) {
+      console.warn('Error setting localStorage flag:', e);
+    }
+  }, [isAuthenticated, router]);
 
   const loadSections = async () => {
     setIsLoading(true);
@@ -446,21 +458,6 @@ export default function CustomRoadmapPage() {
 
     setIsSaving(false);
     router.push('/my-plans');
-  };
-
-  const handleSignInSuccess = () => {
-    setShowSignInPopup(false);
-    loadSections();
-  };
-
-  const handleSignInSkip = () => {
-    setShowSignInPopup(false);
-    router.push('/browse-practice-questions');
-  };
-
-  const handleSignInClose = () => {
-    setShowSignInPopup(false);
-    router.push('/browse-practice-questions');
   };
 
   const { totalQuestions, dailyQuestions } = calculatePlanStats();
@@ -861,13 +858,7 @@ export default function CustomRoadmapPage() {
       </div>
 
       {/* Sign-in Popup */}
-      {showSignInPopup && (
-        <SignInPopup
-          isOpen={showSignInPopup}
-          onClose={handleSignInClose}
-          onSuccess={handleSignInSuccess}
-        />
-      )}
+      {/* Sign-in Popup - Redirected to /auth page instead */}
     </div>
   );
 }

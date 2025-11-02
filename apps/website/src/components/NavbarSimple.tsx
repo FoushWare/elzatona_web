@@ -60,8 +60,13 @@ export const NavbarSimple: React.FC = () => {
   } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  // Only compute isFreeStyle after hydration to avoid SSR mismatch
+  // Cart should only show when learning type is explicitly free-style or custom (NOT guided)
+  // Use strict comparison - if guided, never show cart
   const isFreeStyle =
-    learningType === 'free-style' || learningType === 'custom';
+    isHydrated &&
+    learningType !== 'guided' &&
+    (learningType === 'free-style' || learningType === 'custom');
 
   // Read persisted auth snapshot before paint to avoid visible flicker
   useLayoutEffect(() => {
@@ -206,9 +211,14 @@ export const NavbarSimple: React.FC = () => {
     setIsModeSwitching(true);
     setSwitchingToMode(newMode);
 
-    // Update user type and learning type
+    // Update user type and learning type IMMEDIATELY to hide/show cart
     setUserType(newMode);
-    setLearningType(newMode === 'guided' ? 'guided' : 'free-style');
+    // Explicitly set learning type to hide cart when guided is selected
+    if (newMode === 'guided') {
+      setLearningType('guided');
+    } else {
+      setLearningType('free-style');
+    }
 
     // Navigate to the appropriate page
     if (newMode === 'guided') {
@@ -227,10 +237,10 @@ export const NavbarSimple: React.FC = () => {
         setSwitchingToMode(null);
       }
     } else {
-      // Redirect to free style learning if not already there
-      if (!pathname?.startsWith('/free-style')) {
+      // Redirect to browse practice questions for free style
+      if (!pathname?.startsWith('/browse-practice-questions')) {
         try {
-          await router.push('/free-style');
+          await router.push('/browse-practice-questions');
         } catch (error) {
           console.error('Navigation error:', error);
           setIsModeSwitching(false);
@@ -279,6 +289,24 @@ export const NavbarSimple: React.FC = () => {
       setIsSigningOut(false);
     }
   };
+
+  // Sync learningType with userType on mount and when userType changes
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    // If userType is 'guided', ensure learningType is also 'guided'
+    if (userType === 'guided' && learningType !== 'guided') {
+      setLearningType('guided');
+    }
+    // If userType is 'self-directed', ensure learningType is 'free-style'
+    else if (
+      userType === 'self-directed' &&
+      learningType !== 'free-style' &&
+      learningType !== 'custom'
+    ) {
+      setLearningType('free-style');
+    }
+  }, [isHydrated, userType, learningType, setLearningType]);
 
   // Handle scroll effect and mobile detection
   useEffect(() => {
@@ -371,7 +399,8 @@ export const NavbarSimple: React.FC = () => {
               suppressHydrationWarning
             >
               {/* Cart - visible only in Free Style */}
-              {isFreeStyle && (
+              {/* Only render cart after hydration to avoid SSR mismatch */}
+              {isHydrated && isFreeStyle && (
                 <Link
                   href='/free-style/cart'
                   className={`p-2.5 rounded-lg transition-colors duration-200 text-center ${

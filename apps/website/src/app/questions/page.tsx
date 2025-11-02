@@ -44,7 +44,14 @@ export default function QuestionsEntryPage() {
           </p>
 
           <Link
-            href={'/free-style-practice'}
+            href={
+              topic || subtopic
+                ? `/free-style-practice?${new URLSearchParams({
+                    ...(topic && { topic }),
+                    ...(subtopic && { subtopic }),
+                  }).toString()}`
+                : '/free-style-practice'
+            }
             className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200'
           >
             <Target className='w-5 h-5' />

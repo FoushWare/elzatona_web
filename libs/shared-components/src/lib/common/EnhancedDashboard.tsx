@@ -1,7 +1,7 @@
 // v1.0 - Enhanced User Dashboard with Progress Tracking
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 // useUserProgress is not exported from shared-hooks in this workspace build.
@@ -71,12 +71,25 @@ interface RecentActivity {
   color: string;
 }
 
+interface DashboardStats {
+  questionsCompleted: number;
+  totalPoints: number;
+  dayStreak: number;
+  longestStreak: number;
+  achievements: Array<{
+    id: string;
+    name: string;
+    description: string;
+    unlockedAt: string;
+  }>;
+}
+
 export default function EnhancedDashboard() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const {
     progress,
-    dashboardStats,
+    dashboardStats: oldDashboardStats,
     continueData,
     isLoading,
     error,
@@ -88,6 +101,11 @@ export default function EnhancedDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [plans, setPlans] = useState<{ id: string; name: string }[]>([]);
+  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(
+    null
+  );
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [statsError, setStatsError] = useState<string | null>(null);
 
   // Dashboard cards with real progress data
   const dashboardCards: DashboardCard[] = [
@@ -149,9 +167,114 @@ export default function EnhancedDashboard() {
       icon: BarChart3,
       color: 'from-orange-500 to-orange-600',
       href: '/progress',
-      stats: `${Math.round(dashboardStats?.accuracy || 0)}% accuracy rate`,
+      stats: `${Math.round(oldDashboardStats?.accuracy || 0)}% accuracy rate`,
     },
   ];
+
+  // Check for pending browse practice questions intent after login
+  // Use useLayoutEffect to run synchronously before paint to catch redirects early
+  useLayoutEffect(() => {
+    // Check localStorage flags immediately (before any auth checks)
+    const pendingBrowseIntent = localStorage.getItem(
+      'pending_browse_practice_questions_intent'
+    );
+    const pendingRoadmapIntent = localStorage.getItem(
+      'pending_custom_roadmap_intent'
+    );
+
+    console.log(
+      '🔍 Dashboard (useLayoutEffect): Checking for pending intents...'
+    );
+    console.log(
+      '🔍 Dashboard: pending_browse_practice_questions_intent =',
+      pendingBrowseIntent
+    );
+    console.log(
+      '🔍 Dashboard: pending_custom_roadmap_intent =',
+      pendingRoadmapIntent
+    );
+
+    // If we have a flag, redirect immediately - don't wait for anything
+    if (pendingBrowseIntent === 'true' || pendingRoadmapIntent === 'true') {
+      console.log(
+        '✅ Dashboard: Found pending intent, redirecting to /custom-roadmap immediately...'
+      );
+      // Use replace instead of push to avoid adding to history
+      router.replace('/custom-roadmap');
+      return;
+    }
+
+    console.log('ℹ️ Dashboard: No pending intents found');
+  }, [router]); // Only depend on router, not user, to run early
+
+  // Also check in useEffect as a backup (in case useLayoutEffect didn't catch it)
+  useEffect(() => {
+    const checkAndRedirect = () => {
+      const pendingBrowseIntent = localStorage.getItem(
+        'pending_browse_practice_questions_intent'
+      );
+      const pendingRoadmapIntent = localStorage.getItem(
+        'pending_custom_roadmap_intent'
+      );
+
+      if (pendingBrowseIntent === 'true' || pendingRoadmapIntent === 'true') {
+        console.log(
+          '✅ Dashboard (useEffect backup): Found pending intent, redirecting to /custom-roadmap...'
+        );
+        router.replace('/custom-roadmap');
+        return;
+      }
+    };
+
+    // Check immediately
+    checkAndRedirect();
+    // Also check after a short delay as backup
+    const timeout = setTimeout(checkAndRedirect, 100);
+
+    return () => clearTimeout(timeout);
+  }, [router]);
+
+  // Load dashboard stats from API
+  useEffect(() => {
+    const loadDashboardStats = async () => {
+      try {
+        setStatsLoading(true);
+        setStatsError(null);
+
+        // Get auth token from localStorage (for custom auth) or use cookie
+        const authToken = localStorage.getItem('auth-token');
+
+        const headers: HeadersInit = {
+          'Content-Type': 'application/json',
+        };
+
+        if (authToken) {
+          headers['Authorization'] = `Bearer ${authToken}`;
+        }
+
+        const res = await fetch('/api/dashboard/stats', {
+          headers,
+        });
+
+        const json = await res.json();
+
+        if (json.success && json.stats) {
+          setDashboardStats(json.stats);
+          console.log('✅ Dashboard stats loaded:', json.stats);
+        } else {
+          setStatsError(json.error || 'Failed to load dashboard stats');
+          console.warn('⚠️ Dashboard stats API warning:', json.warning);
+        }
+      } catch (e) {
+        console.error('❌ Error loading dashboard stats:', e);
+        setStatsError('Failed to load dashboard stats');
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+
+    loadDashboardStats();
+  }, []);
 
   // Load available guided-learning plans from API
   useEffect(() => {
@@ -171,7 +294,7 @@ export default function EnhancedDashboard() {
 
   // Recent activities from real data
   const recentActivities: RecentActivity[] =
-    dashboardStats?.recentActivity?.slice(0, 4).map((activity, index) => ({
+    oldDashboardStats?.recentActivity?.slice(0, 4).map((activity, index) => ({
       id: `activity-${index}`,
       type: activity.type as 'question' | 'challenge' | 'path',
       title: activity.description,
@@ -220,7 +343,30 @@ export default function EnhancedDashboard() {
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      await Promise.all([refreshProgress(), refreshDashboardStats()]);
+      // Refresh both old progress and new dashboard stats
+      await Promise.all([
+        refreshProgress?.() || Promise.resolve(),
+        refreshDashboardStats?.() || Promise.resolve(),
+        // Also refresh new dashboard stats
+        (async () => {
+          try {
+            const authToken = localStorage.getItem('auth-token');
+            const headers: HeadersInit = {
+              'Content-Type': 'application/json',
+            };
+            if (authToken) {
+              headers['Authorization'] = `Bearer ${authToken}`;
+            }
+            const res = await fetch('/api/dashboard/stats', { headers });
+            const json = await res.json();
+            if (json.success && json.stats) {
+              setDashboardStats(json.stats);
+            }
+          } catch (e) {
+            console.error('Error refreshing dashboard stats:', e);
+          }
+        })(),
+      ]);
     } catch (error) {
       console.error('Error refreshing dashboard:', error);
     } finally {
@@ -421,7 +567,13 @@ export default function EnhancedDashboard() {
                 <div className='flex items-center justify-between'>
                   <div>
                     <div className='text-2xl font-bold text-blue-600'>
-                      {progress?.total_questions_answered || 0}
+                      {statsLoading ? (
+                        <Loader2 className='w-6 h-6 animate-spin inline-block' />
+                      ) : (
+                        (dashboardStats?.questionsCompleted ??
+                        progress?.total_questions_answered ??
+                        0)
+                      )}
                     </div>
                     <div className='text-gray-600 dark:text-gray-400'>
                       Questions Completed
@@ -435,7 +587,13 @@ export default function EnhancedDashboard() {
                 <div className='flex items-center justify-between'>
                   <div>
                     <div className='text-2xl font-bold text-purple-600'>
-                      {progress?.total_points || 0}
+                      {statsLoading ? (
+                        <Loader2 className='w-6 h-6 animate-spin inline-block' />
+                      ) : (
+                        (dashboardStats?.totalPoints ??
+                        progress?.total_points ??
+                        0)
+                      )}
                     </div>
                     <div className='text-gray-600 dark:text-gray-400'>
                       Total Points
@@ -449,7 +607,13 @@ export default function EnhancedDashboard() {
                 <div className='flex items-center justify-between'>
                   <div>
                     <div className='text-2xl font-bold text-green-600'>
-                      {progress?.current_streak || 0}
+                      {statsLoading ? (
+                        <Loader2 className='w-6 h-6 animate-spin inline-block' />
+                      ) : (
+                        (dashboardStats?.dayStreak ??
+                        progress?.current_streak ??
+                        0)
+                      )}
                     </div>
                     <div className='text-gray-600 dark:text-gray-400'>
                       Day Streak
@@ -463,7 +627,13 @@ export default function EnhancedDashboard() {
                 <div className='flex items-center justify-between'>
                   <div>
                     <div className='text-2xl font-bold text-orange-600'>
-                      {progress?.achievements?.length || 0}
+                      {statsLoading ? (
+                        <Loader2 className='w-6 h-6 animate-spin inline-block' />
+                      ) : (
+                        (dashboardStats?.achievements?.length ??
+                        progress?.achievements?.length ??
+                        0)
+                      )}
                     </div>
                     <div className='text-gray-600 dark:text-gray-400'>
                       Achievements

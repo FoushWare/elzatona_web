@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@elzatona/shared-contexts';
 
-import { SignInPopup } from '@elzatona/shared-components';
+// import { SignInPopup } from '@elzatona/shared-components'; // Temporarily disabled due to import issues
 import {
   Code,
   Target,
@@ -47,10 +48,12 @@ interface CustomPlan {
 
 export default function BrowsePracticeQuestionsPage() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showSignInPopup, setShowSignInPopup] = useState(false);
+  const { isAuthenticated: authIsAuthenticated, user } = useAuth();
   const [customRoadmaps, setCustomRoadmaps] = useState<CustomPlan[]>([]);
   const [isLoadingRoadmaps, setIsLoadingRoadmaps] = useState(false);
+
+  // Determine if user is authenticated
+  const isAuthenticated = authIsAuthenticated && !!user;
 
   // Load custom roadmaps when component mounts
   useEffect(() => {
@@ -83,8 +86,9 @@ export default function BrowsePracticeQuestionsPage() {
       description: 'Master technical interviews with curated questions',
       icon: <Users className='w-12 h-12' />,
       color: 'blue',
-      path: '/learning-paths',
+      path: '/free-style',
       isPopular: true,
+      comingSoon: false,
     },
     {
       id: 'frontend-tasks',
@@ -94,6 +98,7 @@ export default function BrowsePracticeQuestionsPage() {
       color: 'purple',
       path: '/frontend-tasks',
       isPopular: false,
+      comingSoon: true,
     },
     {
       id: 'problem-solving',
@@ -103,33 +108,26 @@ export default function BrowsePracticeQuestionsPage() {
       color: 'green',
       path: '/free-style-practice',
       isPopular: false,
+      comingSoon: true,
     },
   ];
 
-  const handleOptionClick = (path: string) => {
-    router.push(path);
+  const handleOptionClick = (option: (typeof practiceOptions)[0]) => {
+    if (option.comingSoon) {
+      return; // Don't navigate if coming soon
+    }
+    router.push(option.path);
   };
 
   const handleCustomRoadmapClick = () => {
     if (isAuthenticated) {
       router.push('/custom-roadmap');
     } else {
-      setShowSignInPopup(true);
+      // Store intent to browse practice questions in localStorage
+      localStorage.setItem('pending_browse_practice_questions_intent', 'true');
+      // Redirect to auth page, which will then redirect to dashboard
+      router.push('/auth?redirect=/dashboard');
     }
-  };
-
-  const handleSignInSuccess = () => {
-    setShowSignInPopup(false);
-    router.push('/custom-roadmap');
-  };
-
-  const handleSignInSkip = () => {
-    setShowSignInPopup(false);
-    // User can still access other practice options without auth
-  };
-
-  const handleSignInClose = () => {
-    setShowSignInPopup(false);
   };
 
   const handleStartRoadmap = (plan_id: string) => {
@@ -151,7 +149,7 @@ export default function BrowsePracticeQuestionsPage() {
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900'>
-      <div className='container mx-auto px-4 py-12'>
+      <div className='container mx-auto px-4 pt-24 pb-12'>
         {/* Header */}
         <div className='text-center mb-20'>
           <div className='relative mb-8'>
@@ -214,12 +212,16 @@ export default function BrowsePracticeQuestionsPage() {
           {practiceOptions.map((option, index) => (
             <div
               key={option.id}
-              className={`group relative bg-white dark:bg-gray-800 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden border border-gray-100 dark:border-gray-700 hover:border-transparent hover:scale-105 ${
-                option.isPopular
+              className={`group relative bg-white dark:bg-gray-800 rounded-3xl shadow-xl transition-all duration-500 overflow-hidden border border-gray-100 dark:border-gray-700 ${
+                option.comingSoon
+                  ? 'opacity-60 cursor-not-allowed'
+                  : 'hover:shadow-2xl cursor-pointer hover:border-transparent hover:scale-105'
+              } ${
+                option.isPopular && !option.comingSoon
                   ? 'ring-4 ring-blue-200 dark:ring-blue-800 scale-105 border-blue-300 dark:border-blue-600 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20'
                   : ''
               }`}
-              onClick={() => handleOptionClick(option.path)}
+              onClick={() => handleOptionClick(option)}
             >
               {/* Gradient Background Overlay */}
               <div
@@ -248,11 +250,17 @@ export default function BrowsePracticeQuestionsPage() {
                 </div>
 
                 {/* Title & Description */}
-                <div className='flex items-center justify-center gap-2 mb-3'>
+                <div className='flex items-center justify-center gap-2 mb-3 flex-wrap'>
                   <h3 className='text-2xl font-bold text-gray-900 dark:text-white group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors'>
                     {option.title}
                   </h3>
-                  {option.isPopular && (
+                  {option.comingSoon && (
+                    <div className='flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-full text-xs font-bold shadow-lg'>
+                      <Clock className='w-3 h-3 fill-current' />
+                      <span>Coming Soon</span>
+                    </div>
+                  )}
+                  {option.isPopular && !option.comingSoon && (
                     <div className='flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full text-xs font-bold shadow-lg'>
                       <Star className='w-3 h-3 fill-current' />
                       <span>Popular</span>
@@ -265,19 +273,29 @@ export default function BrowsePracticeQuestionsPage() {
 
                 {/* CTA Button */}
                 <div className='text-center'>
-                  <button
-                    className={`inline-flex items-center space-x-3 px-8 py-4 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ${
-                      option.color === 'blue'
-                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white'
-                        : option.color === 'purple'
-                          ? 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white'
-                          : 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white'
-                    } group-hover:scale-105 group-hover:-translate-y-1`}
-                  >
-                    <Play className='w-5 h-5' />
-                    <span>Get Started</span>
-                    <ArrowRight className='w-4 h-4 group-hover:translate-x-1 transition-transform' />
-                  </button>
+                  {option.comingSoon ? (
+                    <button
+                      disabled
+                      className='inline-flex items-center space-x-3 px-8 py-4 rounded-2xl font-semibold transition-all duration-300 shadow-lg bg-gray-400 dark:bg-gray-600 text-white cursor-not-allowed opacity-75'
+                    >
+                      <Clock className='w-5 h-5' />
+                      <span>Coming Soon</span>
+                    </button>
+                  ) : (
+                    <button
+                      className={`inline-flex items-center space-x-3 px-8 py-4 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl ${
+                        option.color === 'blue'
+                          ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white'
+                          : option.color === 'purple'
+                            ? 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white'
+                            : 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white'
+                      } group-hover:scale-105 group-hover:-translate-y-1`}
+                    >
+                      <Play className='w-5 h-5' />
+                      <span>Get Started</span>
+                      <ArrowRight className='w-4 h-4 group-hover:translate-x-1 transition-transform' />
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -537,14 +555,7 @@ export default function BrowsePracticeQuestionsPage() {
         </div>
       </div>
 
-      {/* Sign-in Popup */}
-      {showSignInPopup && (
-        <SignInPopup
-          isOpen={showSignInPopup}
-          onClose={handleSignInClose}
-          onSuccess={handleSignInSuccess}
-        />
-      )}
+      {/* Sign-in Popup - Redirected to /auth page instead */}
     </div>
   );
 }

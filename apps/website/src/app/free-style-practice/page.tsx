@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowLeft,
   ArrowRight,
@@ -19,6 +19,8 @@ import {
   BookmarkPlus,
   BookmarkCheck,
   ShoppingCart,
+  Trophy,
+  BarChart3,
 } from 'lucide-react';
 import { useUserType, useAuth } from '@elzatona/shared-contexts';
 import { addFlashcard, isInFlashcards, FlashcardItem } from '@/lib/flashcards';
@@ -61,12 +63,22 @@ interface FilterOptions {
   difficulties: string[];
   tags: string[];
   categories: string[];
+  topics: string[];
 }
 
 export default function FreeStylePracticePage() {
   const { userType } = useUserType();
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get topic and subtopic from URL query params
+  const urlTopic = searchParams?.get('topic') || '';
+  const urlSubtopic = searchParams?.get('subtopic') || '';
+
+  // State to store the resolved topic ID from subtopic slug
+  const [resolvedTopicId, setResolvedTopicId] = useState<string | null>(null);
+  const [isResolvingTopic, setIsResolvingTopic] = useState(false);
 
   // Save progress function
   const saveProgress = async (data: {
@@ -139,8 +151,10 @@ export default function FreeStylePracticePage() {
     difficulties: [],
     tags: [],
     categories: [],
+    topics: [],
   });
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [showTopicDropdown, setShowTopicDropdown] = useState(false);
   const [showDifficultyDropdown, setShowDifficultyDropdown] = useState(false);
   const [showLimitDropdown, setShowLimitDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -148,12 +162,16 @@ export default function FreeStylePracticePage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
   const [totalQuestionCount, setTotalQuestionCount] = useState(0);
+  const [filteredQuestionCount, setFilteredQuestionCount] = useState(0); // Count from API response
   const [questionsLimit, setQuestionsLimit] = useState(5); // Start with 5 questions
   const [hasMoreQuestions, setHasMoreQuestions] = useState(true);
   const [availableSections, setAvailableSections] = useState<string[]>([]);
   const [availableTags, setAvailableTags] = useState<string[]>([]);
   const [categories, setCategories] = useState<
     Array<{ id: string; name: string }>
+  >([]);
+  const [topics, setTopics] = useState<
+    Array<{ id: string; name: string; slug?: string }>
   >([]);
   const [userProgress, setUserProgress] = useState<{
     totalQuestions: number;
@@ -173,9 +191,50 @@ export default function FreeStylePracticePage() {
 
       // Build query parameters
       const params = new URLSearchParams();
-      if (filters.difficulties.length > 0) {
-        params.append('difficulty', filters.difficulties[0]); // API supports single difficulty
+
+      // Add topic filter - prioritize user-selected topics, then URL topic, then resolved topic from subtopic
+      const isValidUUID = (str: string) => {
+        const uuidRegex =
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        return uuidRegex.test(str);
+      };
+
+      // Use user-selected topics from filter first, otherwise fall back to URL/resolved topic
+      if (filters.topics.length > 0) {
+        // If multiple topics selected, use the first one (API supports single topic for now)
+        // TODO: Update API to support multiple topics
+        const topicIdToUse = filters.topics[0];
+        params.append('topic', topicIdToUse);
+        console.log(
+          '📌 Filtering questions by selected topic ID:',
+          topicIdToUse
+        );
+      } else {
+        // Fallback to URL topic or resolved topic from subtopic
+        const topicIdToUse =
+          resolvedTopicId ||
+          (urlTopic && isValidUUID(urlTopic) ? urlTopic : null);
+        if (topicIdToUse) {
+          params.append('topic', topicIdToUse);
+          console.log(
+            '📌 Filtering questions by URL/resolved topic ID:',
+            topicIdToUse
+          );
+        }
       }
+
+      // Add category filters (multiple categories supported)
+      if (filters.categories.length > 0) {
+        filters.categories.forEach(catId => {
+          params.append('categories', catId);
+        });
+      }
+
+      // Add difficulty filter (API supports single difficulty for now)
+      if (filters.difficulties.length > 0) {
+        params.append('difficulty', filters.difficulties[0]);
+      }
+
       params.append('limit', questionsLimit.toString()); // Use configurable limit
 
       const response = await fetch(`/api/questions?${params.toString()}`);
@@ -286,18 +345,65 @@ export default function FreeStylePracticePage() {
                         firstOption !== null &&
                         'isCorrect' in firstOption
                       ) {
-                        // Format: [{text: "...", isCorrect: true}, ...]
+                        // Format: [{text: "...", isCorrect: true}, ...] or [{id: "a", text: "...", isCorrect: true}, ...]
                         options = parsedOptions.map((opt: any) => {
                           if (typeof opt === 'string') return opt;
                           return (
                             opt.text || opt.label || opt.content || String(opt)
                           );
                         });
+                        // First try to find by isCorrect flag
                         const correctOption = parsedOptions.findIndex(
                           (opt: any) => opt.isCorrect === true
                         );
                         if (correctOption >= 0) {
-                          correctAnswerIndex = correctOption;
+                          correctAnswerIndex = Number(correctOption); // Ensure it's a number
+                          console.log(
+                            '✅ Found correct answer from isCorrect flag at index:',
+                            correctAnswerIndex,
+                            {
+                              questionId: q.id?.substring(0, 8),
+                              optionText: parsedOptions[
+                                correctOption
+                              ]?.text?.substring(0, 50),
+                              optionId: parsedOptions[correctOption]?.id,
+                            }
+                          );
+                        } else {
+                          // Fallback: try to match correct_answer against option id
+                          if (typeof q.correct_answer === 'string') {
+                            const correctById = parsedOptions.findIndex(
+                              (opt: any) =>
+                                opt.id?.toLowerCase() ===
+                                q.correct_answer.toLowerCase()
+                            );
+                            if (correctById >= 0) {
+                              correctAnswerIndex = Number(correctById); // Ensure it's a number
+                              console.log(
+                                '✅ Found correct answer from id match at index:',
+                                correctAnswerIndex,
+                                {
+                                  questionId: q.id?.substring(0, 8),
+                                  optionText: parsedOptions[
+                                    correctById
+                                  ]?.text?.substring(0, 50),
+                                  optionId: parsedOptions[correctById]?.id,
+                                  correct_answer: q.correct_answer,
+                                }
+                              );
+                            } else {
+                              console.warn(
+                                '⚠️ Could not find correct answer by id:',
+                                {
+                                  questionId: q.id?.substring(0, 8),
+                                  correct_answer: q.correct_answer,
+                                  availableIds: parsedOptions.map(
+                                    (opt: any) => opt.id
+                                  ),
+                                }
+                              );
+                            }
+                          }
                         }
                       } else {
                         // Format: ["Option A", "Option B", ...] or array of strings
@@ -391,6 +497,16 @@ export default function FreeStylePracticePage() {
 
               // Parse correct answer - handle different formats (only if not already set from options)
               if (correctAnswerIndex === null && options.length > 0) {
+                console.log(
+                  '🔄 correctAnswerIndex is null, attempting to parse from correct_answer field:',
+                  {
+                    questionId: q.id?.substring(0, 8),
+                    correct_answer: q.correct_answer,
+                    correctAnswer: q.correctAnswer,
+                    answer: q.answer,
+                    optionsLength: options.length,
+                  }
+                );
                 // Try transformed fields first
                 if (typeof q.correctAnswer === 'number') {
                   correctAnswerIndex =
@@ -432,15 +548,56 @@ export default function FreeStylePracticePage() {
                   ) {
                     correctAnswerIndex = parsedNum;
                   } else {
-                    // Try to find the index of the correct answer in options
-                    const correctIndex = options.findIndex(
-                      opt =>
-                        opt.toLowerCase() === q.correct_answer.toLowerCase()
-                    );
-                    if (correctIndex >= 0) {
-                      correctAnswerIndex = correctIndex;
+                    // Check if options are objects with 'id' property (original format from DB)
+                    // This handles cases where correct_answer is "a", "b", "c", etc.
+                    if (q.options && Array.isArray(q.options)) {
+                      const firstOption = q.options[0];
+                      if (
+                        firstOption &&
+                        typeof firstOption === 'object' &&
+                        firstOption !== null &&
+                        'id' in firstOption
+                      ) {
+                        // Options are objects with id property - match correct_answer against id
+                        const correctOptionIndex = q.options.findIndex(
+                          (opt: any) =>
+                            opt.id?.toLowerCase() ===
+                            q.correct_answer.toLowerCase()
+                        );
+                        if (correctOptionIndex >= 0) {
+                          correctAnswerIndex = correctOptionIndex;
+                        } else {
+                          // Fallback: try to match against isCorrect
+                          const correctByFlag = q.options.findIndex(
+                            (opt: any) => opt.isCorrect === true
+                          );
+                          if (correctByFlag >= 0) {
+                            correctAnswerIndex = correctByFlag;
+                          }
+                        }
+                      } else {
+                        // Options are strings - try to find the index of the correct answer text
+                        const correctIndex = options.findIndex(
+                          opt =>
+                            opt.toLowerCase() === q.correct_answer.toLowerCase()
+                        );
+                        if (correctIndex >= 0) {
+                          correctAnswerIndex = correctIndex;
+                        } else {
+                          correctAnswerIndex = 0; // Default to first option
+                        }
+                      }
                     } else {
-                      correctAnswerIndex = 0; // Default to first option
+                      // Options are strings - try to find the index of the correct answer text
+                      const correctIndex = options.findIndex(
+                        opt =>
+                          opt.toLowerCase() === q.correct_answer.toLowerCase()
+                      );
+                      if (correctIndex >= 0) {
+                        correctAnswerIndex = correctIndex;
+                      } else {
+                        correctAnswerIndex = 0; // Default to first option
+                      }
                     }
                   }
                 } else {
@@ -451,11 +608,53 @@ export default function FreeStylePracticePage() {
               // Ensure correctAnswerIndex is valid
               if (
                 correctAnswerIndex === null ||
+                correctAnswerIndex === undefined ||
                 correctAnswerIndex < 0 ||
                 correctAnswerIndex >= options.length
               ) {
-                correctAnswerIndex = 0;
+                console.warn(
+                  '⚠️ Invalid correctAnswerIndex, defaulting to 0:',
+                  {
+                    correctAnswerIndex,
+                    correctAnswerIndexType: typeof correctAnswerIndex,
+                    optionsLength: options.length,
+                    questionId: q.id,
+                    correct_answer: q.correct_answer,
+                    options: options.map(
+                      (opt, idx) => `${idx}: ${opt.substring(0, 30)}...`
+                    ),
+                  }
+                );
+                // Only default to 0 if it's truly invalid - don't overwrite a valid value
+                if (
+                  correctAnswerIndex === null ||
+                  correctAnswerIndex === undefined ||
+                  isNaN(Number(correctAnswerIndex))
+                ) {
+                  correctAnswerIndex = 0;
+                } else {
+                  // Clamp to valid range instead of defaulting
+                  correctAnswerIndex = Math.max(
+                    0,
+                    Math.min(Number(correctAnswerIndex), options.length - 1)
+                  );
+                }
+              } else {
+                console.log('✅ Correct answer index validated:', {
+                  questionId: q.id?.substring(0, 8) + '...',
+                  correctAnswerIndex,
+                  correctAnswerIndexType: typeof correctAnswerIndex,
+                  correctAnswerText: options[correctAnswerIndex]?.substring(
+                    0,
+                    50
+                  ),
+                  optionsLength: options.length,
+                });
               }
+
+              // Store the original for debugging and ensure it's a number
+              const originalCorrectAnswerIndex = Number(correctAnswerIndex);
+              correctAnswerIndex = originalCorrectAnswerIndex; // Ensure we're working with a number
 
               // Parse tags
               let tags: string[] = [];
@@ -505,11 +704,105 @@ export default function FreeStylePracticePage() {
                 ];
               }
 
+              // Filter out empty options BEFORE setting final correct answer
+              const filteredOptions = options.filter(
+                opt => opt && opt.trim() !== ''
+              );
+
+              // If options were filtered, we need to adjust the correct answer index
+              // The correct answer index should point to the same option text
+              let finalCorrectAnswer = correctAnswerIndex ?? 0;
+
+              // Debug: Log before filtering adjustment
+              if (questionText?.includes('What is CSS')) {
+                console.log('🔍 Before filtering adjustment:', {
+                  originalCorrectAnswerIndex,
+                  correctAnswerIndex,
+                  optionsLength: options.length,
+                  filteredOptionsLength: filteredOptions.length,
+                  options: options.map((opt, idx) => ({
+                    idx,
+                    text: opt.substring(0, 30),
+                  })),
+                });
+              }
+
+              // If filtering removed options, find the correct answer in the filtered array
+              if (
+                filteredOptions.length !== options.length &&
+                finalCorrectAnswer >= 0 &&
+                finalCorrectAnswer < options.length
+              ) {
+                const correctOptionText = options[finalCorrectAnswer];
+                const newIndex = filteredOptions.findIndex(
+                  opt => opt === correctOptionText
+                );
+                if (newIndex >= 0) {
+                  finalCorrectAnswer = newIndex;
+                } else {
+                  // If the correct option was filtered out (shouldn't happen), default to 0
+                  console.warn('⚠️ Correct answer option was filtered out!', {
+                    questionId: q.id,
+                    originalIndex: correctAnswerIndex,
+                    correctOptionText,
+                  });
+                  finalCorrectAnswer = 0;
+                }
+              }
+
+              // Final validation - ensure we have a valid number index
+              if (
+                finalCorrectAnswer === null ||
+                finalCorrectAnswer === undefined ||
+                isNaN(finalCorrectAnswer) ||
+                finalCorrectAnswer < 0 ||
+                finalCorrectAnswer >= filteredOptions.length
+              ) {
+                console.error('❌ Invalid final correct answer index:', {
+                  questionId: q.id,
+                  finalCorrectAnswer,
+                  correctAnswerIndex,
+                  optionsLength: filteredOptions.length,
+                  options: filteredOptions.map(
+                    (opt, idx) => `${idx}: ${opt.substring(0, 30)}...`
+                  ),
+                  originalCorrectAnswerIndex: correctAnswerIndex,
+                  q_correct_answer: q.correct_answer,
+                });
+                // Fix invalid index - default to 0 but ensure it's valid
+                finalCorrectAnswer = Math.max(
+                  0,
+                  Math.min(
+                    filteredOptions.length > 0 ? finalCorrectAnswer || 0 : 0,
+                    Math.max(0, filteredOptions.length - 1)
+                  )
+                );
+              }
+
+              // Ensure it's a number
+              finalCorrectAnswer = Number(finalCorrectAnswer);
+
+              // Debug logging for "What is CSS?" question
+              if (questionText?.includes('What is CSS')) {
+                console.log('🔧 Final Question Object for "What is CSS?":', {
+                  questionId: q.id,
+                  correctAnswer: finalCorrectAnswer,
+                  correctAnswerType: typeof finalCorrectAnswer,
+                  optionsCount: filteredOptions.length,
+                  options: filteredOptions.map((opt, idx) => ({
+                    index: idx,
+                    letter: String.fromCharCode(65 + idx),
+                    text: opt.substring(0, 40) + '...',
+                    isCorrect: idx === finalCorrectAnswer,
+                  })),
+                });
+              }
+
               return {
                 id: q.id,
                 question: questionText.trim(),
-                options: options.filter(opt => opt && opt.trim() !== ''), // Remove empty options
-                correctAnswer: correctAnswerIndex ?? 0,
+                options: filteredOptions,
+                correctAnswer: finalCorrectAnswer,
                 explanation: q.explanation || '',
                 section,
                 difficulty: (q.difficulty || 'medium') as
@@ -538,9 +831,43 @@ export default function FreeStylePracticePage() {
           `📊 Transformation complete: ${transformedQuestions.length} valid, ${skippedCount} skipped`
         );
 
+        // Debug: Log questions with their correct answers
+        transformedQuestions.forEach((q, idx) => {
+          if (q.question?.includes('What is CSS')) {
+            console.log('🔍 Found "What is CSS?" question:', {
+              index: idx,
+              id: q.id,
+              question: q.question,
+              correctAnswerIndex: q.correctAnswer,
+              options: q.options.map((opt, optIdx) => ({
+                index: optIdx,
+                text: opt.substring(0, 50) + '...',
+                isCorrectAnswer: optIdx === q.correctAnswer,
+              })),
+            });
+          }
+        });
+
         setQuestions(transformedQuestions);
+
+        // Update filtered count from API response (actual count after server-side filtering)
+        if (data.count !== undefined) {
+          setFilteredQuestionCount(data.count);
+        } else if (data.totalCount !== undefined) {
+          setFilteredQuestionCount(data.totalCount);
+        } else {
+          // Fallback to transformed questions length
+          setFilteredQuestionCount(transformedQuestions.length);
+        }
+
+        // Update total count (only if not filtered, otherwise use filtered count)
         const totalInDB = data.count || transformedQuestions.length;
-        setTotalQuestionCount(totalInDB);
+        if (
+          filters.categories.length === 0 &&
+          filters.difficulties.length === 0
+        ) {
+          setTotalQuestionCount(totalInDB);
+        }
 
         // Check if there are more questions to load
         setHasMoreQuestions(transformedQuestions.length < totalInDB);
@@ -642,6 +969,24 @@ export default function FreeStylePracticePage() {
     }
   };
 
+  // Fetch topics for filtering
+  const fetchTopics = async () => {
+    try {
+      const response = await fetch('/api/topics');
+      const data = await response.json();
+      if (data.success && data.data) {
+        const topicList = data.data.map((topic: any) => ({
+          id: topic.id,
+          name: topic.name,
+          slug: topic.slug,
+        }));
+        setTopics(topicList);
+      }
+    } catch (error) {
+      console.error('Error fetching topics:', error);
+    }
+  };
+
   // Fetch question count
   const fetchQuestionCount = async () => {
     try {
@@ -698,20 +1043,197 @@ export default function FreeStylePracticePage() {
       return;
     }
 
-    // Fetch categories, question count, and user progress first
+    // Fetch categories, topics, question count, and user progress first
     fetchCategories();
+    fetchTopics();
     fetchQuestionCount();
     fetchUserProgress();
   }, [userType, isAuthLoading, router, isAuthenticated]);
 
-  // Fetch questions when filters, search, or limit changes
+  // Resolve topic ID from subtopic slug
+  useEffect(() => {
+    const resolveTopicFromSubtopic = async () => {
+      if (!urlSubtopic) {
+        setResolvedTopicId(null);
+        return;
+      }
+
+      try {
+        setIsResolvingTopic(true);
+        console.log('🔍 Resolving topic from subtopic slug:', urlSubtopic);
+
+        // Fetch all topics to find by slug
+        const topicsResponse = await fetch('/api/topics');
+        const topicsData = await topicsResponse.json();
+
+        if (topicsData.success && topicsData.data) {
+          // Find topic by slug (case-insensitive, handle various formats including partial matches)
+          const subtopicLower = urlSubtopic.toLowerCase();
+          console.log('🔍 Searching for topic with subtopic:', subtopicLower);
+          console.log(
+            '📋 Available topics:',
+            topicsData.data.slice(0, 10).map((t: any) => ({
+              id: t.id?.substring(0, 8),
+              name: t.name,
+              slug: t.slug,
+            }))
+          );
+
+          // Normalize subtopic for better matching (remove plural 's', handle common variations)
+          const normalizeForMatch = (str: string) => {
+            return str
+              .toLowerCase()
+              .replace(/s$/, '') // Remove trailing 's' for plural matching
+              .replace(/\s+/g, '-')
+              .replace(/[^a-z0-9-]/g, '');
+          };
+
+          const subtopicNormalized = normalizeForMatch(subtopicLower);
+
+          const matchingTopic = topicsData.data.find((topic: any) => {
+            const topicSlug = topic.slug?.toLowerCase() || '';
+            const topicName = topic.name?.toLowerCase() || '';
+            const topicNameSlug = topicName.replace(/\s+/g, '-');
+            const topicSlugNormalized = normalizeForMatch(topicSlug);
+            const topicNameNormalized = normalizeForMatch(topicName);
+
+            // Exact matches
+            if (
+              topicSlug === subtopicLower ||
+              topicNameSlug === subtopicLower ||
+              topic.id?.toLowerCase() === subtopicLower
+            ) {
+              return true;
+            }
+
+            // Check if slug contains the subtopic (e.g., "js-scope-closure" contains "closure")
+            if (
+              topicSlug.includes(subtopicLower) ||
+              topicSlug.includes(subtopicNormalized)
+            ) {
+              return true;
+            }
+
+            // Check normalized matching (handles plural/singular)
+            if (
+              topicSlugNormalized.includes(subtopicNormalized) ||
+              subtopicNormalized.includes(topicSlugNormalized)
+            ) {
+              return true;
+            }
+
+            // Check if the subtopic appears as a word boundary in the slug
+            const escapedSubtopic = subtopicLower.replace(
+              /[.*+?^${}()|[\]\\]/g,
+              '\\$&'
+            );
+            const escapedSubtopicNormalized = subtopicNormalized.replace(
+              /[.*+?^${}()|[\]\\]/g,
+              '\\$&'
+            );
+
+            if (
+              new RegExp(`(^|-)${escapedSubtopic}(-|$)`).test(topicSlug) ||
+              new RegExp(`(^|-)${escapedSubtopicNormalized}(-|$)`).test(
+                topicSlug
+              )
+            ) {
+              return true;
+            }
+
+            // Check name matching
+            if (
+              topicName.includes(subtopicLower.replace(/-/g, ' ')) ||
+              topicNameNormalized.includes(subtopicNormalized) ||
+              subtopicNormalized.includes(topicNameNormalized)
+            ) {
+              return true;
+            }
+
+            return false;
+          });
+
+          if (matchingTopic) {
+            console.log(
+              '✅ Found topic:',
+              matchingTopic.id,
+              matchingTopic.name
+            );
+            console.log(`📌 Setting resolvedTopicId to: ${matchingTopic.id}`);
+            setResolvedTopicId(matchingTopic.id);
+
+            // Auto-select the topic in the filter UI so user can see it's selected
+            if (!filters.topics.includes(matchingTopic.id)) {
+              console.log(
+                `📌 Auto-selecting topic in filter: ${matchingTopic.name}`
+              );
+              setFilters(prev => ({
+                ...prev,
+                topics: prev.topics.includes(matchingTopic.id)
+                  ? prev.topics
+                  : [...prev.topics, matchingTopic.id],
+              }));
+            }
+
+            // Also auto-select the category if the topic has one
+            if (
+              matchingTopic.categoryId &&
+              !filters.categories.includes(matchingTopic.categoryId)
+            ) {
+              setFilters(prev => ({
+                ...prev,
+                categories: prev.categories.includes(matchingTopic.categoryId)
+                  ? prev.categories
+                  : [...prev.categories, matchingTopic.categoryId],
+              }));
+            }
+          } else {
+            console.warn('⚠️ Topic not found for subtopic:', urlSubtopic);
+            console.log(
+              'Available topics (first 20):',
+              topicsData.data.slice(0, 20).map((t: any) => ({
+                slug: t.slug,
+                name: t.name,
+                id: t.id?.substring(0, 8) + '...',
+              }))
+            );
+            setResolvedTopicId(null);
+          }
+        }
+      } catch (error) {
+        console.error('Error resolving topic:', error);
+        setResolvedTopicId(null);
+      } finally {
+        setIsResolvingTopic(false);
+      }
+    };
+
+    resolveTopicFromSubtopic();
+  }, [urlSubtopic]);
+
+  // Fetch questions when filters, search, limit, or topic changes
   useEffect(() => {
     if (userType === 'self-directed' && !isAuthLoading) {
       // Don't wait for categories - questions can load with default section names
+      // If we're resolving a topic, wait for resolution to complete
+      if (urlSubtopic && isResolvingTopic) {
+        console.log('⏳ Waiting for topic resolution...');
+        return;
+      }
       fetchQuestions();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, searchTerm, userType, isAuthLoading, questionsLimit]);
+  }, [
+    filters,
+    searchTerm,
+    userType,
+    isAuthLoading,
+    questionsLimit,
+    resolvedTopicId,
+    urlTopic,
+    urlSubtopic,
+    isResolvingTopic,
+  ]);
 
   // Re-fetch questions when categories load (to update section names)
   useEffect(() => {
@@ -732,21 +1254,33 @@ export default function FreeStylePracticePage() {
       const target = event.target as HTMLElement;
       if (
         !target.closest('.category-dropdown-container') &&
+        !target.closest('.topic-dropdown-container') &&
         !target.closest('.difficulty-dropdown-container') &&
         !target.closest('.limit-dropdown-container')
       ) {
         setShowCategoryDropdown(false);
+        setShowTopicDropdown(false);
         setShowDifficultyDropdown(false);
         setShowLimitDropdown(false);
       }
     };
 
-    if (showCategoryDropdown || showDifficultyDropdown || showLimitDropdown) {
+    if (
+      showCategoryDropdown ||
+      showTopicDropdown ||
+      showDifficultyDropdown ||
+      showLimitDropdown
+    ) {
       document.addEventListener('mousedown', handleClickOutside);
       return () =>
         document.removeEventListener('mousedown', handleClickOutside);
     }
-  }, [showCategoryDropdown, showDifficultyDropdown, showLimitDropdown]);
+  }, [
+    showCategoryDropdown,
+    showTopicDropdown,
+    showDifficultyDropdown,
+    showLimitDropdown,
+  ]);
 
   // Reset to saved/last question when questions load or filters change
   useEffect(() => {
@@ -815,6 +1349,15 @@ export default function FreeStylePracticePage() {
         filters.categories.length > 0 &&
         question.categoryId &&
         !filters.categories.includes(question.categoryId)
+      ) {
+        return false;
+      }
+
+      // Filter by topics (using topicId)
+      if (
+        filters.topics.length > 0 &&
+        question.topicId &&
+        !filters.topics.includes(question.topicId)
       ) {
         return false;
       }
@@ -949,6 +1492,22 @@ export default function FreeStylePracticePage() {
     }
 
     const question = filteredQuestions[index];
+
+    // Debug logging for "What is CSS?" question
+    if (question.question?.includes('What is CSS')) {
+      console.log('📚 Loading "What is CSS?" question:', {
+        questionId: question.id,
+        question: question.question,
+        correctAnswerIndex: question.correctAnswer,
+        options: question.options.map((opt, optIdx) => ({
+          index: optIdx,
+          letter: String.fromCharCode(65 + optIdx),
+          text: opt.substring(0, 50) + '...',
+          isCorrect: optIdx === question.correctAnswer,
+        })),
+      });
+    }
+
     setCurrentQuestion(question);
     setCurrentQuestionIndex(index);
     setQuestionStartTime(Date.now());
@@ -1006,7 +1565,25 @@ export default function FreeStylePracticePage() {
     if (showExplanation || !currentQuestion) return;
 
     setSelectedAnswer(answerIndex);
-    const correct = answerIndex === currentQuestion.correctAnswer;
+
+    // Ensure both values are numbers for comparison
+    const selectedIndex = Number(answerIndex);
+    const correctIndex = Number(currentQuestion.correctAnswer);
+    const correct = selectedIndex === correctIndex;
+
+    // Debug logging
+    console.log('🔍 Answer Selection Debug:', {
+      selectedIndex,
+      selectedIndexType: typeof selectedIndex,
+      expectedCorrectIndex: correctIndex,
+      correctIndexType: typeof correctIndex,
+      isCorrect: correct,
+      questionId: currentQuestion.id,
+      optionsCount: currentQuestion.options.length,
+      rawCorrectAnswer: currentQuestion.correctAnswer,
+      rawCorrectAnswerType: typeof currentQuestion.correctAnswer,
+    });
+
     setIsCorrect(correct);
     setShowExplanation(true);
 
@@ -1094,6 +1671,7 @@ export default function FreeStylePracticePage() {
       difficulties: [],
       tags: [],
       categories: [],
+      topics: [],
     });
     setSearchTerm('');
   };
@@ -1168,10 +1746,24 @@ export default function FreeStylePracticePage() {
               </div>
               <div className='text-center'>
                 <div className='text-lg font-bold text-gray-900 dark:text-white'>
-                  {questions.length} / {totalQuestionCount}
+                  {filters.categories.length > 0 ||
+                  filters.difficulties.length > 0
+                    ? `${questions.length} / ${filteredQuestionCount}`
+                    : `${questions.length} / ${totalQuestionCount}`}
                 </div>
                 <div className='text-xs text-gray-600 dark:text-gray-400'>
-                  Loaded / Total
+                  {filters.categories.length > 0 ||
+                  filters.difficulties.length > 0
+                    ? 'Loaded / Filtered'
+                    : 'Loaded / Total'}
+                  {filters.categories.length > 0 && (
+                    <span className='block mt-0.5 text-purple-600 dark:text-purple-400'>
+                      {filteredQuestionCount} in selected{' '}
+                      {filters.categories.length === 1
+                        ? 'category'
+                        : 'categories'}
+                    </span>
+                  )}
                 </div>
               </div>
               {isAuthenticated && userProgress && (
@@ -1212,6 +1804,7 @@ export default function FreeStylePracticePage() {
                 <button
                   onClick={() => {
                     setShowCategoryDropdown(!showCategoryDropdown);
+                    setShowTopicDropdown(false);
                     setShowDifficultyDropdown(false);
                     setShowLimitDropdown(false);
                   }}
@@ -1269,10 +1862,11 @@ export default function FreeStylePracticePage() {
                                 } else {
                                   setFilters(prev => ({
                                     ...prev,
-                                    categories: [
-                                      ...prev.categories,
-                                      category.id,
-                                    ],
+                                    categories: prev.categories.includes(
+                                      category.id
+                                    )
+                                      ? prev.categories
+                                      : [...prev.categories, category.id],
                                   }));
                                 }
                               }}
@@ -1289,12 +1883,99 @@ export default function FreeStylePracticePage() {
                 )}
               </div>
 
+              {/* Topic Filter - Button-based */}
+              <div className='relative topic-dropdown-container'>
+                <button
+                  onClick={() => {
+                    setShowTopicDropdown(!showTopicDropdown);
+                    setShowCategoryDropdown(false);
+                    setShowDifficultyDropdown(false);
+                    setShowLimitDropdown(false);
+                  }}
+                  className={`px-3 py-2 text-sm border rounded-lg transition-all flex items-center space-x-1.5 ${
+                    filters.topics.length > 0
+                      ? 'bg-indigo-50 dark:bg-indigo-900/30 border-indigo-300 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300'
+                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
+                  }`}
+                >
+                  <span>Topic</span>
+                  {filters.topics.length > 0 && (
+                    <span className='bg-indigo-600 text-white text-xs font-medium rounded-full w-5 h-5 flex items-center justify-center'>
+                      {filters.topics.length}
+                    </span>
+                  )}
+                  <svg
+                    className='w-4 h-4'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M19 9l-7 7-7-7'
+                    />
+                  </svg>
+                </button>
+
+                {/* Topic Dropdown Menu */}
+                {showTopicDropdown && (
+                  <div className='absolute top-full left-0 mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-20 min-w-[200px] max-h-64 overflow-y-auto'>
+                    <div className='p-2'>
+                      {topics.length > 0 ? (
+                        topics.map(topic => {
+                          const isSelected = filters.topics.includes(topic.id);
+                          return (
+                            <label
+                              key={topic.id}
+                              className='flex items-center px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer'
+                            >
+                              <input
+                                type='checkbox'
+                                checked={isSelected}
+                                onChange={() => {
+                                  if (isSelected) {
+                                    setFilters(prev => ({
+                                      ...prev,
+                                      topics: prev.topics.filter(
+                                        id => id !== topic.id
+                                      ),
+                                    }));
+                                  } else {
+                                    setFilters(prev => ({
+                                      ...prev,
+                                      topics: prev.topics.includes(topic.id)
+                                        ? prev.topics
+                                        : [...prev.topics, topic.id],
+                                    }));
+                                  }
+                                }}
+                                className='mr-2 w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded'
+                              />
+                              <span className='text-sm text-gray-700 dark:text-gray-300'>
+                                {topic.name}
+                              </span>
+                            </label>
+                          );
+                        })
+                      ) : (
+                        <div className='px-3 py-2 text-sm text-gray-500 dark:text-gray-400'>
+                          No topics available
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Difficulty Filter - Button-based */}
               <div className='relative difficulty-dropdown-container'>
                 <button
                   onClick={() => {
                     setShowDifficultyDropdown(!showDifficultyDropdown);
                     setShowCategoryDropdown(false);
+                    setShowTopicDropdown(false);
                     setShowLimitDropdown(false);
                   }}
                   className={`px-3 py-2 text-sm border rounded-lg transition-all flex items-center space-x-1.5 ${
@@ -1350,10 +2031,11 @@ export default function FreeStylePracticePage() {
                                 } else {
                                   setFilters(prev => ({
                                     ...prev,
-                                    difficulties: [
-                                      ...prev.difficulties,
-                                      difficulty,
-                                    ],
+                                    difficulties: prev.difficulties.includes(
+                                      difficulty
+                                    )
+                                      ? prev.difficulties
+                                      : [...prev.difficulties, difficulty],
                                   }));
                                 }
                               }}
@@ -1376,6 +2058,7 @@ export default function FreeStylePracticePage() {
                   onClick={() => {
                     setShowLimitDropdown(!showLimitDropdown);
                     setShowCategoryDropdown(false);
+                    setShowTopicDropdown(false);
                     setShowDifficultyDropdown(false);
                   }}
                   disabled={isLoadingQuestions}
@@ -1530,6 +2213,7 @@ export default function FreeStylePracticePage() {
             <div className='flex items-center gap-2'>
               {/* Clear Filters Button */}
               {(filters.categories.length > 0 ||
+                filters.topics.length > 0 ||
                 filters.difficulties.length > 0 ||
                 filters.sections.length > 0 ||
                 filters.tags.length > 0 ||
@@ -1546,9 +2230,11 @@ export default function FreeStylePracticePage() {
 
           {/* Selected Filters Chips */}
           {(filters.categories.length > 0 ||
+            filters.topics.length > 0 ||
             filters.difficulties.length > 0) && (
             <div className='mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-2'>
-              {filters.categories.map(catId => {
+              {/* Deduplicate categories to prevent duplicate keys */}
+              {Array.from(new Set(filters.categories)).map(catId => {
                 const category = categories.find(c => c.id === catId);
                 return category ? (
                   <span
@@ -1572,7 +2258,31 @@ export default function FreeStylePracticePage() {
                   </span>
                 ) : null;
               })}
-              {filters.difficulties.map(diff => (
+              {/* Deduplicate topics to prevent duplicate keys */}
+              {Array.from(new Set(filters.topics)).map(topicId => {
+                const topic = topics.find(t => t.id === topicId);
+                return topic ? (
+                  <span
+                    key={topicId}
+                    className='inline-flex items-center px-2.5 py-1 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-xs font-medium rounded-md'
+                  >
+                    {topic.name}
+                    <button
+                      onClick={() => {
+                        setFilters(prev => ({
+                          ...prev,
+                          topics: prev.topics.filter(id => id !== topicId),
+                        }));
+                      }}
+                      className='ml-1.5 hover:text-indigo-900 dark:hover:text-indigo-100'
+                    >
+                      ×
+                    </button>
+                  </span>
+                ) : null;
+              })}
+              {/* Deduplicate difficulties to prevent duplicate keys */}
+              {Array.from(new Set(filters.difficulties)).map(diff => (
                 <span
                   key={diff}
                   className='inline-flex items-center px-2.5 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-medium rounded-md'
@@ -1771,12 +2481,38 @@ export default function FreeStylePracticePage() {
 
             {showExplanation && (
               <div className='bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6'>
-                <h4 className='font-semibold text-gray-900 dark:text-white mb-2'>
-                  Explanation:
-                </h4>
-                <p className='text-gray-700 dark:text-gray-300'>
-                  {currentQuestion.explanation}
-                </p>
+                <div className='mb-3'>
+                  <h4 className='font-semibold text-gray-900 dark:text-white mb-2'>
+                    {isCorrect ? (
+                      <span className='text-green-600 dark:text-green-400 flex items-center gap-2'>
+                        <CheckCircle className='w-5 h-5' />
+                        Correct Answer!
+                      </span>
+                    ) : (
+                      <span className='text-red-600 dark:text-red-400 flex items-center gap-2'>
+                        <XCircle className='w-5 h-5' />
+                        Incorrect
+                      </span>
+                    )}
+                  </h4>
+                  <p className='text-sm text-gray-600 dark:text-gray-400'>
+                    The correct answer is{' '}
+                    <span className='font-semibold text-gray-900 dark:text-white'>
+                      {String.fromCharCode(65 + currentQuestion.correctAnswer)}:{' '}
+                      {currentQuestion.options[currentQuestion.correctAnswer]}
+                    </span>
+                  </p>
+                </div>
+                {currentQuestion.explanation && (
+                  <>
+                    <h4 className='font-semibold text-gray-900 dark:text-white mb-2'>
+                      Explanation:
+                    </h4>
+                    <p className='text-gray-700 dark:text-gray-300'>
+                      {currentQuestion.explanation}
+                    </p>
+                  </>
+                )}
               </div>
             )}
 
@@ -1796,6 +2532,55 @@ export default function FreeStylePracticePage() {
                 </div>
               </div>
             )}
+
+            {/* Completion Check */}
+            {(() => {
+              const filteredQuestions = getFilteredQuestions();
+              const allAnswered =
+                filteredQuestions.length > 0 &&
+                filteredQuestions.every(q => answeredQuestions.has(q.id));
+              const isLastQuestion =
+                currentQuestionIndex >= filteredQuestions.length - 1 &&
+                !hasMoreQuestions;
+
+              return allAnswered && isLastQuestion ? (
+                <div className='mb-6 p-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl text-white text-center shadow-lg'>
+                  <Trophy className='w-16 h-16 mx-auto mb-4' />
+                  <h3 className='text-2xl font-bold mb-2'>
+                    Congratulations! 🎉
+                  </h3>
+                  <p className='text-green-100 mb-6'>
+                    You&apos;ve completed all questions in this session!
+                  </p>
+                  <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+                    <button
+                      onClick={() => router.push('/dashboard')}
+                      className='inline-flex items-center justify-center space-x-2 px-6 py-3 bg-white text-green-600 rounded-lg font-semibold hover:bg-green-50 transition-colors'
+                    >
+                      <BarChart3 className='w-5 h-5' />
+                      <span>Go to Dashboard</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        // Reset session
+                        localStorage.removeItem('free-style-practice-progress');
+                        setAnsweredQuestions(new Set());
+                        setAnsweredQuestionsData({});
+                        setSessionStats({ correct: 0, total: 0, timeSpent: 0 });
+                        setCurrentQuestionIndex(0);
+                        if (filteredQuestions.length > 0) {
+                          loadQuestion(0);
+                        }
+                      }}
+                      className='inline-flex items-center justify-center space-x-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors'
+                    >
+                      <ArrowRight className='w-5 h-5' />
+                      <span>Start New Session</span>
+                    </button>
+                  </div>
+                </div>
+              ) : null;
+            })()}
 
             {/* Navigation Buttons */}
             <div className='flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700'>
