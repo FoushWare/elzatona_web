@@ -936,6 +936,16 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [ ] Add/remove flashcards manually and on wrong answers
   - [ ] Refresh: progress and flashcards persist locally
 
+- [ ] Browse Practice Questions page (`/browse-practice-questions`)
+  - [x] Page loads and displays all practice options (Interview Questions, Frontend Tasks, Problem Solving)
+  - [x] "Interview Questions" option navigates to `/free-style`
+  - [x] "Frontend Tasks" shows "Coming Soon" badge and is disabled
+  - [x] "Problem Solving" shows "Coming Soon" badge and is disabled
+  - [x] Clicking disabled options does not navigate
+  - [x] Custom roadmaps section displays if user is authenticated
+  - [ ] "Create Custom Roadmap" button works correctly
+  - [ ] Navigation from home page "Free Style Learning" button works
+
 - [ ] Test the flow without login (Custom Plan in Free Style)
   - [ ] Add multiple questions to cart from Free Style
   - [ ] Open `/free-style/cart` → set Plan Name, Duration (days), Questions/day
@@ -984,7 +994,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [ ] Env vars set (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, provider IDs/secrets)
   - [ ] Supabase RLS policies verified for progress tables
   - [ ] Deployed app smoke test routes:
-    - [ ] `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/features/guided-learning`, guided practice
+    - [ ] `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/browse-practice-questions`, `/features/guided-learning`, guided practice
 
 - [ ] Coding Challenges (Frontend & Problem Solving)
   - Frontend Tasks
@@ -1008,7 +1018,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
     - [x] 404 page styled per system and navbar correct
   - [ ] Responsive testing across screen sizes
     - [ ] Breakpoints: 320, 360, 390, 414, 540, 768, 1024, 1280, 1440, 1920
-    - [ ] Key pages: `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/features/guided-learning`, guided practice, `/flashcards`
+    - [ ] Key pages: `/`, `/auth`, `/dashboard`, `/free-style`, `/free-style/cart`, `/browse-practice-questions`, `/features/guided-learning`, guided practice, `/flashcards`
     - [ ] Navbar: collapses correctly, mobile menu opens/closes, actions accessible
     - [ ] Cards/lists: no overflow, proper wrapping, readable spacing
     - [ ] Modals/dialogs/sheets: fit viewport, scrollable content
@@ -1026,7 +1036,7 @@ This comprehensive testing guide ensures both admin pages and website integratio
 
 ## 🤖 Automated Testing Checklist
 
-- [ ] Unit Tests
+- [x] Unit Tests
   - [x] LearningTypeContext
     - [x] Defaults to `guided`
     - [x] `setLearningType` updates and persists to localStorage
@@ -1034,9 +1044,9 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [x] NavbarSimple
     - [x] Renders Dashboard when auth state is authenticated
     - [x] No flicker when session state is present in sessionStorage
-  - [ ] Flashcards utilities
+  - [x] Flashcards utilities
     - [x] add/remove/isFlashcardAdded work as expected
-  - [ ] Cart utilities
+  - [x] Cart utilities
     - [x] add/remove/clear/isQuestionInCart work as expected
 
 - [x] Integration Tests (API + pages)
@@ -1051,25 +1061,25 @@ This comprehensive testing guide ensures both admin pages and website integratio
   - [x] Guided entry shows at least one Start CTA
   - [x] Custom plan cart shows Plan Name, Duration, Questions/day fields
 
-- [ ] E2E Flows
+- [x] E2E Flows
   - [x] Guided (anon)
     - [x] Start plan → progress key persists locally
   - [x] Free Style (anon)
     - [x] Wrong answer adds to flashcards (or manual add available)
   - [x] Custom Plan (anon)
     - [x] Add questions to cart → set plan metadata → Create Plan → plan saved locally
-  - [ ] Social Login
-    - [ ] Google → redirects to `/dashboard`
-    - [ ] GitHub → redirects to `/dashboard`
+  - [x] Social Login
+    - [x] Google → redirects to `/dashboard`
+    - [x] GitHub → redirects to `/dashboard`
     - [x] Navbar reflects authenticated state with no flicker
   - [x] Dashboard refresh shows Dashboard when authenticated (no Sign In)
-  - [ ] Transfer history
-    - [ ] On first login, local progress synced to DB; dashboard reflects it
+  - [x] Transfer history
+    - [x] On first login, local progress synced to DB; dashboard reflects it
 
-- [ ] Responsive Snapshot Tests (optional per component)
+- [x] Responsive Snapshot Tests (optional per component)
   - [x] Home loads at breakpoints: 320/360/390/414/540/768/1024/1280/1440/1920
 
-- [ ] CI Setup
+- [x] CI Setup
   - [x] Lint + type-check on PRs
   - [x] Run unit + integration tests on PRs
   - [x] Run Playwright E2E (smoke) on PRs (headless)

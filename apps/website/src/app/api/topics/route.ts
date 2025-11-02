@@ -24,6 +24,7 @@ export async function GET() {
       (topics as any[])?.map(topic => ({
         id: topic.id,
         name: topic.name,
+        slug: topic.slug,
         description: topic.description,
         category: topic.category_id,
         categoryId: topic.category_id,
