@@ -250,7 +250,7 @@ export default function FreeStyleLearningPage() {
 
               <div className='flex flex-col sm:flex-row gap-4 justify-center'>
                 <Link
-                  href='/browse-practice-questions'
+                  href='/custom-roadmap'
                   className='inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg transform hover:scale-105'
                 >
                   <Zap className='w-5 h-5' />

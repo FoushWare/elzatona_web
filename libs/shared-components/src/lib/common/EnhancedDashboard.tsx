@@ -22,6 +22,8 @@ const useUserProgress = () => ({
   refreshContinueData: async () => {},
 });
 import { useAuth } from '@elzatona/shared-contexts';
+
+// Import Supabase client (available in both website and admin apps)
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
@@ -46,6 +48,7 @@ import {
   Flame,
   Medal,
   ChevronRight,
+  FolderOpen,
   Activity,
   RefreshCw,
 } from 'lucide-react';
@@ -125,8 +128,18 @@ export default function EnhancedDashboard() {
       description: 'Explore topics at your own pace with a custom roadmap',
       icon: Zap,
       color: 'from-emerald-500 to-teal-600',
-      href: '/free-style',
+      href: '/browse-practice-questions',
       stats: 'Browse learning paths and topics',
+      progress: undefined,
+    },
+    {
+      id: 'my-plans',
+      title: 'My Plans',
+      description: 'View and manage your custom learning plans',
+      icon: FolderOpen,
+      color: 'from-purple-500 to-pink-600',
+      href: '/my-plans',
+      stats: 'Your personalized learning plans',
       progress: undefined,
     },
     {
@@ -174,42 +187,11 @@ export default function EnhancedDashboard() {
   // Check for pending browse practice questions intent after login
   // Use useLayoutEffect to run synchronously before paint to catch redirects early
   useLayoutEffect(() => {
-    // Check localStorage flags immediately (before any auth checks)
-    const pendingBrowseIntent = localStorage.getItem(
-      'pending_browse_practice_questions_intent'
-    );
-    const pendingRoadmapIntent = localStorage.getItem(
-      'pending_custom_roadmap_intent'
-    );
+    // Only run on client side
+    if (typeof window === 'undefined') return;
 
-    console.log(
-      '🔍 Dashboard (useLayoutEffect): Checking for pending intents...'
-    );
-    console.log(
-      '🔍 Dashboard: pending_browse_practice_questions_intent =',
-      pendingBrowseIntent
-    );
-    console.log(
-      '🔍 Dashboard: pending_custom_roadmap_intent =',
-      pendingRoadmapIntent
-    );
-
-    // If we have a flag, redirect immediately - don't wait for anything
-    if (pendingBrowseIntent === 'true' || pendingRoadmapIntent === 'true') {
-      console.log(
-        '✅ Dashboard: Found pending intent, redirecting to /custom-roadmap immediately...'
-      );
-      // Use replace instead of push to avoid adding to history
-      router.replace('/custom-roadmap');
-      return;
-    }
-
-    console.log('ℹ️ Dashboard: No pending intents found');
-  }, [router]); // Only depend on router, not user, to run early
-
-  // Also check in useEffect as a backup (in case useLayoutEffect didn't catch it)
-  useEffect(() => {
-    const checkAndRedirect = () => {
+    try {
+      // Check localStorage flags immediately (before any auth checks)
       const pendingBrowseIntent = localStorage.getItem(
         'pending_browse_practice_questions_intent'
       );
@@ -217,22 +199,99 @@ export default function EnhancedDashboard() {
         'pending_custom_roadmap_intent'
       );
 
+      console.log(
+        '🔍 Dashboard (useLayoutEffect): Checking for pending intents...'
+      );
+      console.log(
+        '🔍 Dashboard: pending_browse_practice_questions_intent =',
+        pendingBrowseIntent
+      );
+      console.log(
+        '🔍 Dashboard: pending_custom_roadmap_intent =',
+        pendingRoadmapIntent
+      );
+
+      // If we have a flag, redirect immediately - don't wait for anything
       if (pendingBrowseIntent === 'true' || pendingRoadmapIntent === 'true') {
         console.log(
-          '✅ Dashboard (useEffect backup): Found pending intent, redirecting to /custom-roadmap...'
+          '✅ Dashboard: Found pending intent, redirecting to /custom-roadmap...'
         );
-        router.replace('/custom-roadmap');
+
+        // Clean up localStorage values immediately after reading them
+        try {
+          localStorage.removeItem('pending_browse_practice_questions_intent');
+          localStorage.removeItem('pending_custom_roadmap_intent');
+          console.log(
+            '🧹 Dashboard: Cleared pending intent flags from localStorage'
+          );
+        } catch (e) {
+          console.warn('⚠️ Dashboard: Error clearing localStorage flags:', e);
+        }
+
+        // Use a small delay to ensure component can render loading state first
+        setTimeout(() => {
+          window.location.href = '/custom-roadmap';
+        }, 50);
         return;
+      }
+
+      console.log('ℹ️ Dashboard: No pending intents found');
+    } catch (error) {
+      console.error('❌ Error checking pending intents:', error);
+    }
+  }, [router]); // Include router in deps
+
+  // Also check in useEffect as a backup (in case useLayoutEffect didn't catch it)
+  useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+
+    const checkAndRedirect = () => {
+      try {
+        const pendingBrowseIntent = localStorage.getItem(
+          'pending_browse_practice_questions_intent'
+        );
+        const pendingRoadmapIntent = localStorage.getItem(
+          'pending_custom_roadmap_intent'
+        );
+
+        if (pendingBrowseIntent === 'true' || pendingRoadmapIntent === 'true') {
+          console.log(
+            '✅ Dashboard (useEffect backup): Found pending intent, redirecting to /custom-roadmap...'
+          );
+
+          // Clean up localStorage values immediately after reading them
+          try {
+            localStorage.removeItem('pending_browse_practice_questions_intent');
+            localStorage.removeItem('pending_custom_roadmap_intent');
+            console.log(
+              '🧹 Dashboard (useEffect): Cleared pending intent flags from localStorage'
+            );
+          } catch (e) {
+            console.warn(
+              '⚠️ Dashboard (useEffect): Error clearing localStorage flags:',
+              e
+            );
+          }
+
+          // Use a small delay to ensure component can render loading state first
+          setTimeout(() => {
+            window.location.href = '/custom-roadmap';
+          }, 50);
+          return;
+        }
+      } catch (error) {
+        console.error('❌ Error in backup redirect check:', error);
       }
     };
 
     // Check immediately
     checkAndRedirect();
-    // Also check after a short delay as backup
-    const timeout = setTimeout(checkAndRedirect, 100);
+    // Also check after a short delay as backup (in case localStorage wasn't ready)
+    const timeout = setTimeout(checkAndRedirect, 50);
 
     return () => clearTimeout(timeout);
-  }, [router]);
+  }, [router]); // Include router in deps
 
   // Load dashboard stats from API
   useEffect(() => {
@@ -394,12 +453,15 @@ export default function EnhancedDashboard() {
     return `${hours}h ${remainingMinutes}m`;
   };
 
+  // Show loading state
   if (isLoading) {
     return (
       <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center'>
         <div className='text-center'>
-          <Loader2 className='w-8 h-8 animate-spin text-blue-600 mx-auto mb-4' />
-          <p className='text-muted-foreground'>Loading your dashboard...</p>
+          <Loader2 className='w-8 h-8 animate-spin text-blue-600 dark:text-blue-400 mx-auto mb-4' />
+          <p className='text-gray-700 dark:text-gray-300'>
+            Loading your dashboard...
+          </p>
         </div>
       </div>
     );

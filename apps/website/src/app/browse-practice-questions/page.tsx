@@ -125,6 +125,7 @@ export default function BrowsePracticeQuestionsPage() {
     } else {
       // Store intent to browse practice questions in localStorage
       localStorage.setItem('pending_browse_practice_questions_intent', 'true');
+      localStorage.setItem('pending_custom_roadmap_intent', 'true');
       // Redirect to auth page, which will then redirect to dashboard
       router.push('/auth?redirect=/dashboard');
     }
