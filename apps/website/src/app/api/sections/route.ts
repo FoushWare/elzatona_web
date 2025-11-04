@@ -11,12 +11,63 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 // GET /api/sections - Get all sections
 export async function GET() {
   try {
-    const { data: sectionsData, error } = await supabase
+    // Check if Supabase is configured
+    if (!supabaseUrl || !supabaseServiceRoleKey) {
+      console.error('Supabase configuration missing');
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Database configuration missing',
+        },
+        { status: 500 }
+      );
+    }
+
+    // Try to fetch sections with order_index, fallback to created_at if order_index doesn't exist
+    let { data: sectionsData, error } = await supabase
       .from('sections')
       .select('*')
       .order('order_index', { ascending: true });
 
+    // If order_index column doesn't exist, try ordering by created_at instead
+    if (
+      error &&
+      (error.message?.includes('order_index') || error.code === '42703')
+    ) {
+      console.warn('order_index column not found, trying created_at instead');
+      const fallbackQuery = await supabase
+        .from('sections')
+        .select('*')
+        .order('created_at', { ascending: true });
+
+      if (!fallbackQuery.error) {
+        sectionsData = fallbackQuery.data;
+        error = null;
+      } else {
+        // If that also fails, try without ordering
+        const noOrderQuery = await supabase.from('sections').select('*');
+
+        if (!noOrderQuery.error) {
+          sectionsData = noOrderQuery.data;
+          error = null;
+        } else {
+          error = fallbackQuery.error;
+        }
+      }
+    }
+
     if (error) {
+      console.error('Supabase error fetching sections:', error);
+      // If table doesn't exist or query fails, return empty array instead of error
+      // This allows the frontend to handle empty sections gracefully
+      if (error.code === '42P01' || error.message?.includes('does not exist')) {
+        console.warn('Sections table does not exist, returning empty array');
+        return NextResponse.json({
+          success: true,
+          data: [],
+          count: 0,
+        });
+      }
       throw error;
     }
 
@@ -29,10 +80,18 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Error fetching sections:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to fetch sections';
+    const errorDetails =
+      error instanceof Error && 'code' in error
+        ? { code: (error as any).code }
+        : {};
+
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch sections',
+        error: errorMessage,
+        details: errorDetails,
       },
       { status: 500 }
     );
