@@ -25,6 +25,9 @@ jobs:
 
       - name: Build application
         run: npm run build
+        continue-on-error: false
+        env:
+          NODE_ENV: production
 
       - name: Deploy to Vercel (Main Website)
         uses: amondnet/vercel-action@v25

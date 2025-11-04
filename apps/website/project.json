@@ -4,7 +4,6 @@
   "sourceRoot": "apps/website/src",
   "projectType": "application",
   "implicitDependencies": [
-    "shared-components",
     "shared-contexts",
     "shared-hooks",
     "shared-atoms",
@@ -15,6 +14,7 @@
       "executor": "@nx/next:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": [],
       "options": {
         "outputPath": "apps/website/.next"
       },
