@@ -41,6 +41,9 @@ export async function GET() {
         icon: category.icon,
         orderIndex: category.order_index,
         is_active: category.is_active,
+        learning_card_id: category.learning_card_id || null,
+        card_type: category.card_type || null,
+        cardType: category.card_type || null, // Also include camelCase for compatibility
         created_at: new Date(category.created_at),
         updated_at: new Date(category.updated_at),
       })) || [];
