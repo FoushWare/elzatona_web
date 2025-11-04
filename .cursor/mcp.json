@@ -29,6 +29,16 @@
     "chrome-devtools": {
       "command": "npx",
       "args": ["-y", "chrome-devtools-mcp@latest"]
+    },
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase"],
+      "env": {
+        "SUPABASE_PROJECT_REF": "hpnewqkvpnthpohvxcmq",
+        "SUPABASE_DB_PASSWORD": "zatona-web",
+        "SUPABASE_REGION": "us-east-1",
+        "SUPABASE_ACCESS_TOKEN": "sbp_02fa87fd2f5fe474ab07cbd1640e7f756092fb6d"
+      }
     }
   }
 }

@@ -1,0 +1,207 @@
+export interface AudioUploadResult {
+  success: boolean;
+  url?: string;
+  error?: string;
+}
+
+export interface AudioDeleteResult {
+  success: boolean;
+  message?: string;
+  error?: string;
+}
+
+export class ClientAudioUploadService {
+  private static readonly MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+  private static readonly ALLOWED_TYPES = [
+    'audio/mpeg',
+    'audio/mp3',
+    'audio/wav',
+    'audio/ogg',
+    'audio/m4a',
+    'audio/aac',
+    'audio/webm',
+  ];
+
+  private questionId?: string;
+
+  constructor(questionId?: string) {
+    this.questionId = questionId;
+  }
+
+  /**
+   * Upload audio file (instance method)
+   */
+  async uploadAudio(
+    file: File,
+    type: 'question' | 'answer' = 'question'
+  ): Promise<string> {
+    if (!this.questionId) {
+      throw new Error('Question ID is required for audio upload');
+    }
+
+    const result =
+      type === 'question'
+        ? await ClientAudioUploadService.uploadQuestionAudio(
+            this.questionId,
+            file
+          )
+        : await ClientAudioUploadService.uploadAnswerAudio(
+            this.questionId,
+            file
+          );
+
+    if (result.success && result.url) {
+      return result.url;
+    } else {
+      throw new Error(result.error || 'Failed to upload audio');
+    }
+  }
+
+  /**
+   * Upload question audio file via API
+   */
+  static async uploadQuestionAudio(
+    question_id: string,
+    file: File
+  ): Promise<AudioUploadResult> {
+    try {
+      const validation = this.validateAudioFile(file);
+      if (!validation.isValid) {
+        return { success: false, error: validation.error };
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('questionId', question_id);
+      formData.append('type', 'question');
+
+      const response = await fetch('/api/audio/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        console.log(`✅ Question audio uploaded: ${data.url}`);
+        return { success: true, url: data.url };
+      } else {
+        return { success: false, error: data.error };
+      }
+    } catch (error) {
+      console.error('Error uploading question audio:', error);
+      return { success: false, error: 'Failed to upload question audio' };
+    }
+  }
+
+  /**
+   * Upload answer audio file via API
+   */
+  static async uploadAnswerAudio(
+    question_id: string,
+    file: File
+  ): Promise<AudioUploadResult> {
+    try {
+      const validation = this.validateAudioFile(file);
+      if (!validation.isValid) {
+        return { success: false, error: validation.error };
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('questionId', question_id);
+      formData.append('type', 'answer');
+
+      const response = await fetch('/api/audio/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        console.log(`✅ Answer audio uploaded: ${data.url}`);
+        return { success: true, url: data.url };
+      } else {
+        return { success: false, error: data.error };
+      }
+    } catch (error) {
+      console.error('Error uploading answer audio:', error);
+      return { success: false, error: 'Failed to upload answer audio' };
+    }
+  }
+
+  /**
+   * Delete audio file via API
+   */
+  static async deleteAudio(audioUrl: string): Promise<AudioDeleteResult> {
+    try {
+      const response = await fetch('/api/audio/upload', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ audioUrl }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        console.log(`✅ Audio file deleted: ${audioUrl}`);
+        return { success: true, message: 'Audio file deleted successfully' };
+      } else {
+        return {
+          success: false,
+          error: data.error || 'Failed to delete audio file',
+        };
+      }
+    } catch (error) {
+      console.error('Error deleting audio file:', error);
+      return { success: false, error: 'Failed to delete audio file' };
+    }
+  }
+
+  /**
+   * Validate audio file
+   */
+  static validateAudioFile(file: File): {
+    isValid: boolean;
+    error?: string;
+  } {
+    if (file.size > this.MAX_FILE_SIZE) {
+      return {
+        isValid: false,
+        error: `File size exceeds ${this.MAX_FILE_SIZE / (1024 * 1024)}MB limit`,
+      };
+    }
+
+    if (!this.ALLOWED_TYPES.includes(file.type)) {
+      return {
+        isValid: false,
+        error: 'Invalid file type. Only audio files are allowed.',
+      };
+    }
+
+    return { isValid: true };
+  }
+
+  /**
+   * Get file size in MB
+   */
+  static getFileSizeMB(file: File): number {
+    return file.size / (1024 * 1024);
+  }
+
+  /**
+   * Format file size for display
+   */
+  static formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+}

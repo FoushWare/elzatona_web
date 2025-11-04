@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./apps/website/src/*"],
+      "ui": ["./libs/ui/src/index.ts"],
+      "auth": ["./libs/auth/src/index.ts"],
+      "database": ["./libs/database/src/index.ts"],
+      "utils": ["./libs/utils/src/index.ts"],
+      "@elzatona/shared-components": ["./libs/shared-components/src/index.ts"],
+      "@elzatona/shared-contexts": ["./libs/shared-contexts/src/index.ts"],
+      "@elzatona/shared-hooks": ["./libs/shared-hooks/src/index.ts"],
+      "@elzatona/shared-atoms": ["./libs/shared-atoms/src/index.ts"],
+      "@elzatona/shared-types": ["./libs/shared-types/src/index.ts"]
+    }
+  },
+  "include": [
+    "apps/**/*.ts",
+    "apps/**/*.tsx",
+    "libs/**/*.ts",
+    "libs/**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "tests/**/*",
+    "scripts-backup/**/*",
+    "apps/admin/Utils/scripts/**/*",
+    "apps/website/src/scripts/**/*",
+    "apps/admin/Utils/scripts/firebase/**/*"
+  ]
+}
