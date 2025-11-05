@@ -22,7 +22,7 @@ export * from './useProgressTracking';
 // export * from './useRoleBasedAccess'; // Removed - missing user-auth dependency
 export * from './useSectorProgress';
 // export * from './useSecureProgress'; // Removed - missing cookie-manager dependency
-// export * from './useTanStackQuery'; // Removed - conflicting exports
+export * from './useTanStackQuery';
 // export * from './useTranslation'; // Removed - missing translations dependency
 export * from './useUnifiedQuestions';
 export * from './useUserPreferences';
