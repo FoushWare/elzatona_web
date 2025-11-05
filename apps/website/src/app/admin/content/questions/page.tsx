@@ -151,8 +151,6 @@ export default function AdminContentQuestionsPage() {
   // Questions list - now managed by AdvancedSearch component
   const displayQuestions = questions;
 
-  const totalPages = Math.ceil(totalCount / pageSize);
-
   // Close modals
   const closeModals = () => {
     setIsViewModalOpen(false);
