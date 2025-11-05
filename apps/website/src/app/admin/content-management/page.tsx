@@ -40,8 +40,7 @@ import { useNotificationActions } from '@elzatona/shared-hooks';
 import { BulkOperations } from '@elzatona/shared-components';
 import { LearningCard } from '@elzatona/shared-types';
 import { UnifiedQuestion } from '@elzatona/shared-types';
-import { useToast } from '@elzatona/shared-components';
-import ToastContainer from '@elzatona/shared-components';
+import { useToast, ToastContainer } from '@elzatona/shared-components';
 
 // Define types for other entities (these should be moved to proper type files)
 type LearningPlan = any;
@@ -92,47 +91,47 @@ const Badge = React.lazy(() =>
   }))
 );
 const Card = React.lazy(() =>
-  import('@/shared/components/ui/card').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.Card,
   }))
 );
 const CardContent = React.lazy(() =>
-  import('@/shared/components/ui/card').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.CardContent,
   }))
 );
 const CardHeader = React.lazy(() =>
-  import('@/shared/components/ui/card').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.CardHeader,
   }))
 );
 const CardTitle = React.lazy(() =>
-  import('@/shared/components/ui/card').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.CardTitle,
   }))
 );
 const Select = React.lazy(() =>
-  import('@/shared/components/ui/select').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.Select,
   }))
 );
 const SelectContent = React.lazy(() =>
-  import('@/shared/components/ui/select').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.SelectContent,
   }))
 );
 const SelectItem = React.lazy(() =>
-  import('@/shared/components/ui/select').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.SelectItem,
   }))
 );
 const SelectTrigger = React.lazy(() =>
-  import('@/shared/components/ui/select').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.SelectTrigger,
   }))
 );
 const SelectValue = React.lazy(() =>
-  import('@/shared/components/ui/select').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.SelectValue,
   }))
 );
@@ -157,32 +156,32 @@ import {
 
 // Lazy load forms to reduce initial bundle size
 const CategoryForm = React.lazy(() =>
-  import('@/shared/components/forms/CategoryForm').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.CategoryForm,
   }))
 );
 const TopicForm = React.lazy(() =>
-  import('@/shared/components/forms/TopicForm').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.TopicForm,
   }))
 );
 const QuestionForm = React.lazy(() =>
-  import('@/shared/components/forms/QuestionForm').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.QuestionForm,
   }))
 );
 const CardForm = React.lazy(() =>
-  import('@/shared/components/forms/CardForm').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.CardForm,
   }))
 );
 const PlanForm = React.lazy(() =>
-  import('@/shared/components/forms/PlanForm').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.PlanForm,
   }))
 );
 const EmptyState = React.lazy(() =>
-  import('@/shared/components/ui/empty-state').then(module => ({
+  import('@elzatona/shared-components').then(module => ({
     default: module.EmptyState,
   }))
 );

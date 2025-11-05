@@ -232,7 +232,7 @@ A comprehensive learning system for frontend developers preparing for interviews
 - Main Dashboard: `/admin/dashboard`
 - Authentication: Admin-only access with role-based permissions
 - Features: Comprehensive admin panel for managing all aspects of the learning platform
-- **Note**: Admin runs on port 3001 (separate from main web app on port 3000)
+- **Note**: Admin runs on port 3000 (same port as main web app)
 
 **Admin Panel Routes:**
 
@@ -597,7 +597,7 @@ interface LearningPlan {
 - ✅ **Free-style Learning**: Custom roadmap creation and management
 - ✅ **Mode Switching**: Seamless switching between learning modes
 - ✅ **Progress Tracking**: Supabase-based progress with card analytics
-- ✅ **Admin Panel**: Comprehensive admin dashboard (port 3001)
+- ✅ **Admin Panel**: Comprehensive admin dashboard (port 3000)
 
 #### **Learning Cards System**
 
