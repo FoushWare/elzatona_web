@@ -1,4 +1,6 @@
 // v1.0 test mock
+import React from 'react';
+
 export const useUserType = () => ({
   userType: 'guided',
   setUserType: () => {},
@@ -11,3 +13,20 @@ export const useAuth = () => ({
   isLoading: false,
   signOut: async () => {},
 });
+
+// Admin auth mocks
+export const AdminAuthProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => children;
+
+const defaultAdminAuth = {
+  isAuthenticated: false,
+  isLoading: false,
+  login: jest.fn(),
+  logout: jest.fn(),
+  user: null,
+};
+
+export const useAdminAuth = jest.fn(() => defaultAdminAuth);

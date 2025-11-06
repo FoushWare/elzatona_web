@@ -28,13 +28,24 @@ let passedTests = 0;
 let failedTests = 0;
 const results = [];
 
+// Change to website directory for Next.js Jest config
+const websiteDir = path.resolve(__dirname, '../../apps/website');
+const originalCwd = process.cwd();
+
+// Change to website directory before running tests
+process.chdir(websiteDir);
+
 for (const testFile of testFiles) {
   try {
     console.log(`📋 Running ${testFile}...`);
 
-    const result = execSync(`npx jest ${testFile} --verbose`, {
+    // Use absolute path from root for test files
+    const testFilePath = path.resolve(originalCwd, testFile);
+    // Use absolute path so Jest can find it regardless of cwd
+    const result = execSync(`npx jest ${testFilePath} --verbose`, {
       encoding: 'utf8',
       stdio: 'pipe',
+      cwd: websiteDir,
     });
 
     console.log(`✅ ${testFile} - PASSED`);
@@ -66,6 +77,9 @@ if (failedTests > 0) {
     });
 }
 
+// Restore original directory
+process.chdir(originalCwd);
+
 if (failedTests === 0) {
   console.log(
     '\n🎉 All admin login tests passed! The admin authentication system is working correctly.'
@@ -73,5 +87,6 @@ if (failedTests === 0) {
   process.exit(0);
 } else {
   console.log('\n⚠️  Some tests failed. Please review the output above.');
+  process.chdir(originalCwd);
   process.exit(1);
 }

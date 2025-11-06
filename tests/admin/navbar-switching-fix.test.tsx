@@ -11,34 +11,64 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { usePathname } from 'next/navigation';
-import { useAdminAuth } from '@/contexts/AdminAuthContext';
-import { ConditionalLayout } from '@/shared/components/common/ConditionalLayout';
+import { useAdminAuth } from '@elzatona/shared-contexts';
 import AdminLayout from '@/app/admin/layout';
-import { AdminAuthProvider } from '@/contexts/AdminAuthContext';
+import { AdminAuthProvider } from '@elzatona/shared-contexts';
+
+// Set up environment variables before any imports
+process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
+process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
+
+// Mock Supabase before admin layout imports it
+jest.mock('@supabase/supabase-js', () => ({
+  createClient: jest.fn(() => ({
+    from: jest.fn(() => ({
+      select: jest.fn(() => ({
+        eq: jest.fn(() => ({
+          single: jest.fn().mockResolvedValue({ data: null, error: null }),
+        })),
+      })),
+    })),
+  })),
+}));
+
+// Mock nuqs before any imports
+jest.mock('nuqs', () => ({
+  useQueryState: jest.fn(() => [null, jest.fn()]),
+  useQueryStates: jest.fn(() => [{}, jest.fn()]),
+  parseAsString: jest.fn(),
+  parseAsInteger: jest.fn(),
+  createSearchParamsCache: jest.fn(),
+}));
 
 // Mock Next.js navigation
 jest.mock('next/navigation', () => ({
   usePathname: jest.fn(),
 }));
 
-// Mock AdminAuthContext
-jest.mock('@/contexts/AdminAuthContext', () => ({
-  AdminAuthProvider: ({ children }: { children: React.ReactNode }) => children,
-  useAdminAuth: jest.fn(),
+// Mock AdminAuthContext from shared-contexts
+const mockUseAdminAuth = jest.fn(() => ({
+  isAuthenticated: false,
+  isLoading: false,
+  login: jest.fn(),
+  logout: jest.fn(),
+  user: null,
 }));
 
-// Mock admin components
-jest.mock('@/shared/components/auth/AdminNavbar', () => {
-  return function MockAdminNavbar() {
-    return <div data-testid='admin-navbar'>Admin Navbar</div>;
-  };
-});
+jest.mock('@elzatona/shared-contexts', () => ({
+  AdminAuthProvider: ({ children }: { children: React.ReactNode }) => children,
+  useAdminAuth: () => mockUseAdminAuth(),
+}));
 
-jest.mock('@/shared/components/common/NavbarSimple', () => {
-  return function MockNavbarSimple() {
+// Mock admin components from shared-components
+jest.mock('@elzatona/shared-components', () => ({
+  AdminNavbar: function MockAdminNavbar() {
+    return <div data-testid='admin-navbar'>Admin Navbar</div>;
+  },
+  NavbarSimple: function MockNavbarSimple() {
     return <div data-testid='website-navbar'>Website Navbar</div>;
-  };
-});
+  },
+}));
 
 // Type definitions for mocks
 interface MockAdminAuth {
@@ -54,9 +84,6 @@ interface MockAdminAuth {
 describe('Navbar Switching Fix', () => {
   const mockUsePathname = usePathname as jest.MockedFunction<
     typeof usePathname
-  >;
-  const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<
-    () => MockAdminAuth
   >;
 
   beforeEach(() => {
