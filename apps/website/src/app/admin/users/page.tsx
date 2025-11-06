@@ -8,7 +8,7 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { useAuth } from '@elzatona/shared-contexts';
-import { useRoleBasedAccess } from '@elzatona/shared-hooks';
+import { useAdminAuth } from '@elzatona/shared-contexts';
 import {
   Users,
   UserPlus,
@@ -50,7 +50,9 @@ interface User {
 
 export default function UserManagementPage() {
   const { user: currentUser } = useAuth();
-  const { isAdmin, isSuperAdmin } = useRoleBasedAccess();
+  const { isAuthenticated } = useAdminAuth();
+  const isAdmin = isAuthenticated;
+  const isSuperAdmin = isAuthenticated;
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,7 +61,7 @@ export default function UserManagementPage() {
   const [refreshing, setRefreshing] = useState(false);
 
   // Check permissions
-  if (!isAdmin()) {
+  if (!isAdmin) {
     return (
       <div className='min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center'>
         <div className='text-center'>
@@ -350,7 +352,7 @@ export default function UserManagementPage() {
                         <button className='text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300'>
                           <Eye className='h-4 w-4' />
                         </button>
-                        {isSuperAdmin() && (
+                        {isSuperAdmin && (
                           <>
                             <button className='text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300'>
                               <Edit className='h-4 w-4' />

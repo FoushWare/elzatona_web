@@ -9,7 +9,7 @@ export default function MinimalGuidedPracticePage() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const planId = searchParams.get('plan');
+  const planId = searchParams?.get('plan');
 
   useEffect(() => {
     const loadPlan = async () => {

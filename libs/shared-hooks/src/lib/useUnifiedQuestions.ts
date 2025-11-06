@@ -7,7 +7,7 @@ import {
   BulkQuestionData,
   QuestionStats,
   LearningPath,
-} from '@/lib/unified-question-schema';
+} from '@elzatona/shared-types';
 
 interface UseUnifiedQuestionsOptions {
   autoLoad?: boolean;
@@ -677,4 +677,4 @@ export function useUnifiedQuestions(
   };
 }
 
-export default useUnifiedQuestions;
+// export default useUnifiedQuestions; // Removed default export, use named export instead

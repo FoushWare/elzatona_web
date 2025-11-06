@@ -232,9 +232,9 @@ export async function GET(request: NextRequest) {
       .in('question_id', questionIds);
 
     // Get unique learning card IDs
-    const learningCardIds = [
-      ...new Set(data?.map(q => q.learning_card_id).filter(Boolean)),
-    ];
+    const learningCardIds = Array.from(
+      new Set(data?.map(q => q.learning_card_id).filter(Boolean))
+    );
 
     // Fetch all categories for direct category_id lookups
     const { data: allCategories } = await supabase
@@ -267,33 +267,43 @@ export async function GET(request: NextRequest) {
         // Get topics for this question
         const questionTopics =
           allQuestionTopics?.filter(qt => qt.question_id === question.id) || [];
-        const topics = questionTopics.map(qt => ({
-          id: qt.topics?.id,
-          name: qt.topics?.name,
-          slug: qt.topics?.slug,
-          difficulty: qt.topics?.difficulty,
-          is_primary: qt.is_primary,
-          order_index: qt.order_index,
-        }));
+        const topics = questionTopics.map((qt: any) => {
+          // Handle topics as array or single object
+          const topic = Array.isArray(qt.topics) ? qt.topics[0] : qt.topics;
+          return {
+            id: topic?.id,
+            name: topic?.name,
+            slug: topic?.slug,
+            difficulty: topic?.difficulty,
+            is_primary: qt.is_primary,
+            order_index: qt.order_index,
+          };
+        });
 
         // Get categories for this question's learning card
         const cardCategories =
           allCardCategories?.filter(
             cc => cc.card_id === question.learning_card_id
           ) || [];
-        const categories = cardCategories.map(cc => ({
-          id: cc.categories?.id,
-          name: cc.categories?.name,
-          slug: cc.categories?.slug,
-          card_type: cc.categories?.card_type,
-          is_primary: cc.is_primary,
-          order_index: cc.order_index,
-        }));
+        const categories = cardCategories.map((cc: any) => {
+          // Handle categories as array or single object
+          const category = Array.isArray(cc.categories)
+            ? cc.categories[0]
+            : cc.categories;
+          return {
+            id: category?.id,
+            name: category?.name,
+            slug: category?.slug,
+            card_type: category?.card_type,
+            is_primary: cc.is_primary,
+            order_index: cc.order_index,
+          };
+        });
 
         // Get primary topic and category
         const primaryTopic = topics.find(t => t.is_primary) || topics[0];
         // Use the question's direct category_id instead of card categories
-        const directCategory = allCategories.find(
+        const directCategory = allCategories?.find(
           c => c.id === question.category_id
         );
         const primaryCategory =

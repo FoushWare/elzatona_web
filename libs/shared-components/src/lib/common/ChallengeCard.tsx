@@ -1,6 +1,6 @@
 'use client';
 
-import { Challenge } from '@/types/challenge';
+import { Challenge } from '@elzatona/shared-types';
 
 interface ChallengeCardProps {
   challenge: Challenge;
@@ -61,7 +61,7 @@ export default function ChallengeCard({
         </p>
 
         <div className='flex flex-wrap gap-1 mb-4'>
-          {challenge.tags.slice(0, 3).map((tag, index) => (
+          {challenge.tags.slice(0, 3).map((tag: any, index: number) => (
             <span
               key={index}
               className='px-2 py-1 bg-muted text-muted-foreground text-xs rounded font-medium'

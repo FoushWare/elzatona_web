@@ -3,16 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-import {
-  UnifiedQuestion,
-  BulkQuestionData,
-} from '@/lib/unified-question-schema';
-import { MarkdownQuestionParser } from '@/lib/markdown-question-parser';
-import useUnifiedQuestions from '@elzatona/shared-hooks';
+import { UnifiedQuestion, BulkQuestionData } from '@elzatona/shared-types';
+// Note: MarkdownQuestionParser is website-specific and should be imported where needed
+// import { MarkdownQuestionParser } from '@/lib/markdown-question-parser';
+import { useUnifiedQuestions } from '@elzatona/shared-hooks';
 import {
   Download,
   AlertCircle,
@@ -255,143 +253,18 @@ export default function BulkQuestionUploader({
 
   // Handle Markdown input parsing
   const parseMarkdownInput = () => {
-    try {
-      console.log('🔄 Starting markdown parsing...');
-      console.log('📝 Input length:', markdownInput.length);
-      console.log('📝 Input preview:', markdownInput.substring(0, 200));
-      console.log(
-        '🔧 MarkdownQuestionParser available:',
-        !!MarkdownQuestionParser
-      );
-      console.log(
-        '🔧 parseMarkdown method available:',
-        typeof MarkdownQuestionParser.parseMarkdown
-      );
-
-      const result = MarkdownQuestionParser.parseMarkdown(markdownInput);
-
-      console.log('📊 Parse result:', {
-        questionsCount: result.questions.length,
-        errorsCount: result.errors.length,
-        warningsCount: result.warnings.length,
-        errors: result.errors,
-        warnings: result.warnings,
-      });
-
-      if (result.errors.length > 0) {
-        console.error('❌ Markdown parsing errors:', result.errors);
-        setError(`Markdown parsing errors:\n${result.errors.join('\n')}`);
-        setSuccess(null);
-        setMarkdownParsed(false);
-        return;
-      }
-
-      if (result.warnings.length > 0) {
-        console.warn('⚠️ Markdown parsing warnings:', result.warnings);
-      }
-
-      if (result.questions.length === 0) {
-        console.warn('⚠️ No questions found in markdown');
-        setError(
-          'No questions found in the markdown. Please check the format.'
-        );
-        setSuccess(null);
-        setMarkdownParsed(false);
-        return;
-      }
-
-      const bulkData = MarkdownQuestionParser.convertToBulkData(
-        result.questions
-      );
-
-      console.log('📦 Converted to bulk data:', {
-        questionsCount: bulkData.questions.length,
-        metadata: bulkData.metadata,
-      });
-
-      // Validate the converted data
-      const validatedQuestions = bulkData.questions.map((q, index) => {
-        if (!q.title || !q.content) {
-          throw new Error(
-            `Question ${index + 1}: title and content are required`
-          );
-        }
-
-        if (!q.options || !Array.isArray(q.options)) {
-          throw new Error(`Question ${index + 1}: options array is required`);
-        }
-
-        if (q.options.length < 2) {
-          throw new Error(
-            `Question ${index + 1}: at least 2 options are required`
-          );
-        }
-
-        if (!q.options.some((opt: { isCorrect: boolean }) => opt.isCorrect)) {
-          throw new Error(
-            `Question ${index + 1}: at least one option must be marked as correct`
-          );
-        }
-
-        return {
-          id: q.id || `q-${Date.now()}-${index}`,
-          title: q.title || '',
-          content: q.content || '',
-          type: q.type || 'multiple-choice',
-          difficulty: q.difficulty || 'beginner',
-          is_active: true,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          options: q.options.map(
-            (
-              opt: { id: string; text: string; isCorrect: boolean },
-              optIndex: number
-            ) => ({
-              id: opt.id || String.fromCharCode(97 + optIndex), // a, b, c, d...
-              text: opt.text || '',
-              isCorrect: opt.isCorrect || false,
-            })
-          ),
-          explanation: q.explanation || '',
-          category: q.category || sectionName || 'General',
-          learningPath: q.learningPath || sectionId || 'Default Learning Path',
-          topic: q.topic || 'General Topic',
-          tags: q.tags || [],
-          points: q.points || 1,
-        };
-      });
-
-      setQuestions(validatedQuestions);
-      setError(null);
-      setSuccess(
-        `Successfully parsed ${validatedQuestions.length} questions from Markdown!`
-      );
-      setMarkdownParsed(true);
-
-      console.log('✅ Markdown parsing successful:', {
-        questionsCount: validatedQuestions.length,
-        firstQuestion: validatedQuestions[0]?.title || 'No title',
-      });
-    } catch (error) {
-      setError(
-        `Markdown parsing error: ${error instanceof Error ? error.message : 'Unknown error'}`
-      );
-      setSuccess(null);
-      setMarkdownParsed(false);
-    }
+    // MarkdownQuestionParser is website-specific and not available in admin builds
+    setError(
+      'Markdown parsing is not available in the admin build. Please use JSON format instead.'
+    );
+    setSuccess(null);
+    setMarkdownParsed(false);
   };
 
   const downloadMarkdownTemplate = () => {
-    const template = MarkdownQuestionParser.generateTemplate();
-    const blob = new Blob([template], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'questions-template.md';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // MarkdownQuestionParser is website-specific and not available in admin builds
+    setError('Markdown template download is not available in the admin build.');
+    // Note: In website builds, this would generate and download a markdown template
   };
 
   // Generate JSON from current questions

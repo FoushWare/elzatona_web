@@ -27,7 +27,7 @@ export default function AuthPage() {
   const searchParams = useSearchParams();
 
   // Get redirect URL from query parameters, default to dashboard
-  const redirectTo = searchParams.get('redirect') || '/dashboard';
+  const redirectTo = searchParams?.get('redirect') || '/dashboard';
 
   // Redirect if already authenticated
   React.useEffect(() => {

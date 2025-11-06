@@ -72,6 +72,7 @@ export function LearningTypeProvider({
     let mounted = true;
     const init = async () => {
       try {
+        if (!supabaseClient) return;
         const { data } = await supabaseClient.auth.getUser();
         if (!mounted) return;
         const newUserId = data.user?.id ?? null;
@@ -113,6 +114,11 @@ export function LearningTypeProvider({
       }
     };
     init();
+    if (!supabaseClient) {
+      return () => {
+        mounted = false;
+      };
+    }
     const { data: sub } = supabaseClient.auth.onAuthStateChange(
       (_event, session) => {
         const newUserId = session?.user?.id ?? null;
@@ -139,7 +145,7 @@ export function LearningTypeProvider({
     );
     return () => {
       mounted = false;
-      sub.subscription.unsubscribe();
+      sub.subscription?.unsubscribe();
     };
   }, []);
 

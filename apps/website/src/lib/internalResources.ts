@@ -814,7 +814,7 @@ function SafeComponent({ userInput }) {
 // Example of CDN configuration in webpack
 module.exports = {
   output: {
-    publicPath: process.env.NODE_ENV === 'production' 
+    publicPath: process.env['NODE_ENV'] === 'production' 
         ? 'https://cdn.example.com/' 
   : '\\/'
   }
@@ -845,8 +845,8 @@ module.exports = {
 import React from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 
@@ -902,7 +902,7 @@ export const generalFrontendPhase3Questions: InternalQuestion[] = [
 // Example of CDN configuration in webpack
 module.exports = {
   output: {
-    publicPath: process.env.NODE_ENV === 'production' 
+    publicPath: process.env['NODE_ENV'] === 'production' 
         ? 'https://cdn.example.com/' 
   : '\\/'
   }
