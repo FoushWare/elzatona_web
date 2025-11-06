@@ -61,6 +61,7 @@ export default function AdminNavbar() {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
+    return undefined;
   }, [isUserDropdownOpen, isAdminDropdownOpen]);
 
   const handleLogout = () => {

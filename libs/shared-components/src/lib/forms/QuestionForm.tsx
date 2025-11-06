@@ -1,11 +1,13 @@
 // Question Form Component
 // v1.0 - Form for creating and editing questions
 
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { Button } from '@elzatona/shared-components';
@@ -19,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@elzatona/shared-components';
-import { CardType } from '@/types/learning-cards';
+import { CardType } from '@elzatona/shared-types';
 
 interface QuestionFormProps {
   question?: {
@@ -95,36 +97,36 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
 
   // Filter topics based on selected category
   const filteredTopics = topics.filter(
-    topic => topic.categoryId === formData.categoryId
+    topic => topic.categoryId === formData['categoryId']
   );
 
   // Update topicId when category changes
   useEffect(() => {
     if (
-      formData.categoryId &&
-      !filteredTopics.find(topic => topic.id === formData.topicId)
+      formData['categoryId'] &&
+      !filteredTopics.find(topic => topic.id === formData['topicId'])
     ) {
       setFormData(prev => ({ ...prev, topicId: filteredTopics[0]?.id || '' }));
     }
-  }, [formData.categoryId, filteredTopics, formData.topicId]);
+  }, [formData['categoryId'], filteredTopics, formData['topicId']]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.title.trim()) {
-      newErrors.title = 'Question title is required';
+    if (!formData['title'].trim()) {
+      newErrors['title'] = 'Question title is required';
     }
 
-    if (!formData.content.trim()) {
-      newErrors.content = 'Question content is required';
+    if (!formData['content'].trim()) {
+      newErrors['content'] = 'Question content is required';
     }
 
-    if (!formData.categoryId) {
-      newErrors.categoryId = 'Category is required';
+    if (!formData['categoryId']) {
+      newErrors['categoryId'] = 'Category is required';
     }
 
-    if (!formData.topicId) {
-      newErrors.topicId = 'Topic is required';
+    if (!formData['topicId']) {
+      newErrors['topicId'] = 'Topic is required';
     }
 
     setErrors(newErrors);
@@ -157,7 +159,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   };
 
   const addTag = () => {
-    if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
+    if (tagInput.trim() && !formData['tags'].includes(tagInput.trim())) {
       setFormData(prev => ({
         ...prev,
         tags: [...prev.tags, tagInput.trim()],
@@ -188,13 +190,13 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           <Label htmlFor='title'>Question Title *</Label>
           <Input
             id='title'
-            value={formData.title}
+            value={formData['title']}
             onChange={e => handleChange('title', e.target.value)}
             placeholder='e.g., What is React?'
-            className={errors.title ? 'border-red-500' : ''}
+            className={errors['title'] ? 'border-red-500' : ''}
           />
-          {errors.title && (
-            <p className='text-sm text-red-500'>{errors.title}</p>
+          {errors['title'] && (
+            <p className='text-sm text-red-500'>{errors['title']}</p>
           )}
         </div>
 
@@ -202,11 +204,11 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         <div className='space-y-2'>
           <Label htmlFor='categoryId'>Category *</Label>
           <Select
-            value={formData.categoryId}
+            value={formData['categoryId']}
             onValueChange={value => handleChange('categoryId', value)}
           >
             <SelectTrigger
-              className={errors.categoryId ? 'border-red-500' : ''}
+              className={errors['categoryId'] ? 'border-red-500' : ''}
             >
               <SelectValue placeholder='Select category' />
             </SelectTrigger>
@@ -218,8 +220,8 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
               ))}
             </SelectContent>
           </Select>
-          {errors.categoryId && (
-            <p className='text-sm text-red-500'>{errors.categoryId}</p>
+          {errors['categoryId'] && (
+            <p className='text-sm text-red-500'>{errors['categoryId']}</p>
           )}
         </div>
 
@@ -227,10 +229,12 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         <div className='space-y-2'>
           <Label htmlFor='topicId'>Topic *</Label>
           <Select
-            value={formData.topicId}
+            value={formData['topicId']}
             onValueChange={value => handleChange('topicId', value)}
           >
-            <SelectTrigger className={errors.topicId ? 'border-red-500' : ''}>
+            <SelectTrigger
+              className={errors['topicId'] ? 'border-red-500' : ''}
+            >
               <SelectValue placeholder='Select topic' />
             </SelectTrigger>
             <SelectContent>
@@ -241,8 +245,8 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
               ))}
             </SelectContent>
           </Select>
-          {errors.topicId && (
-            <p className='text-sm text-red-500'>{errors.topicId}</p>
+          {errors['topicId'] && (
+            <p className='text-sm text-red-500'>{errors['topicId']}</p>
           )}
         </div>
 
@@ -250,7 +254,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         <div className='space-y-2'>
           <Label htmlFor='type'>Question Type</Label>
           <Select
-            value={formData.type}
+            value={formData['type']}
             onValueChange={value => handleChange('type', value)}
           >
             <SelectTrigger>
@@ -270,7 +274,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         <div className='space-y-2'>
           <Label htmlFor='difficulty'>Difficulty</Label>
           <Select
-            value={formData.difficulty}
+            value={formData['difficulty']}
             onValueChange={value => handleChange('difficulty', value)}
           >
             <SelectTrigger>
@@ -316,10 +320,10 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           onChange={e => handleChange('content', e.target.value)}
           placeholder='Write the question content here... (Markdown supported)'
           rows={6}
-          className={errors.content ? 'border-red-500' : ''}
+          className={errors['content'] ? 'border-red-500' : ''}
         />
-        {errors.content && (
-          <p className='text-sm text-red-500'>{errors.content}</p>
+        {errors['content'] && (
+          <p className='text-sm text-red-500'>{errors['content']}</p>
         )}
       </div>
 
@@ -338,9 +342,9 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
             Add
           </Button>
         </div>
-        {formData.tags.length > 0 && (
+        {formData['tags'].length > 0 && (
           <div className='flex flex-wrap gap-2 mt-2'>
-            {formData.tags.map(tag => (
+            {formData['tags'].map(tag => (
               <span
                 key={tag}
                 className='inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-sm'

@@ -8,8 +8,8 @@ import { BookOpen, Target, ArrowRight } from 'lucide-react';
 export default function QuestionsEntryPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const topic = searchParams.get('topic') || '';
-  const subtopic = searchParams.get('subtopic') || '';
+  const topic = searchParams?.get('topic') || '';
+  const subtopic = searchParams?.get('subtopic') || '';
 
   const prettyTopic = topic
     ? topic.charAt(0).toUpperCase() + topic.slice(1)

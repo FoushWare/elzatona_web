@@ -13,10 +13,10 @@ import { createClient } from '@supabase/supabase-js';
 
 // Create Supabase client
 const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  process.env['NEXT_PUBLIC_SUPABASE_URL'] ||
   'https://hpnewqkvpnthpohvxcmq.supabase.co';
 const supabaseAnonKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] ||
   'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -168,7 +168,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
     const isAdminRootPage = pathname === '/admin';
 
     // TEMPORARY: Skip authentication for development/testing
-    const isDevelopment = process.env.NODE_ENV === 'development';
+    const isDevelopment = process.env['NODE_ENV'] === 'development';
     const skipAuthForTesting =
       isDevelopment &&
       (pathname === '/' ||

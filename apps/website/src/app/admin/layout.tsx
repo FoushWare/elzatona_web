@@ -8,9 +8,11 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { AdminAuthProvider, useAdminAuth } from '@elzatona/shared-contexts';
-import AdminNavbar from '@elzatona/shared-components';
-import { NotificationContainer } from '@elzatona/shared-components';
-import FirestoreErrorBoundary from '@elzatona/shared-components';
+import {
+  AdminNavbar,
+  NotificationContainer,
+  FirestoreErrorBoundary,
+} from '@elzatona/shared-components';
 import { usePathname } from 'next/navigation';
 // ThemeProvider is already provided by root layout
 import '../globals.css';
@@ -28,7 +30,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   const isAdminRootPage = pathname === '/admin';
 
   // TEMPORARY: Skip authentication for development/testing
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isDevelopment = process.env['NODE_ENV'] === 'development';
   const skipAuthForTesting =
     isDevelopment &&
     (pathname?.includes('/admin/content/questions') ||
@@ -84,7 +86,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   // TEMPORARY: Skip AdminAuthProvider for testing
   const pathname = usePathname();
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isDevelopment = process.env['NODE_ENV'] === 'development';
   const skipAuthForTesting =
     isDevelopment &&
     (pathname?.includes('/admin/content/questions') ||

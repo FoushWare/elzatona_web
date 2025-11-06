@@ -53,7 +53,9 @@ const Select = React.forwardRef<
 
   // Extract SelectItems from SelectContent
   const selectItems = React.Children.toArray(
-    selectContent?.props.children || []
+    (React.isValidElement(selectContent) && 'children' in selectContent.props
+      ? (selectContent.props as { children?: React.ReactNode }).children
+      : undefined) || []
   ).filter(child => React.isValidElement(child) && child.type === SelectItem);
 
   // Find the selected item text

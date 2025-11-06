@@ -3,10 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 
 // Supabase configuration
 const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  process.env['NEXT_PUBLIC_SUPABASE_URL'] ||
   'https://hpnewqkvpnthpohvxcmq.supabase.co';
 const supabaseServiceRoleKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env['SUPABASE_SERVICE_ROLE_KEY'] ||
   'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
 
 // Initialize Supabase client (server-side with service role key)

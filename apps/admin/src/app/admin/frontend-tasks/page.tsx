@@ -7,6 +7,10 @@ import {
   Badge,
   Input,
   Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
 } from '@elzatona/shared-components';
 import {
   Plus,
@@ -215,33 +219,33 @@ export default function FrontendTasksPage() {
               value={selectedCategory}
               onValueChange={setSelectedCategory}
             >
-              <Select.Trigger className='w-full md:w-48'>
-                <Select.Value placeholder='All Categories' />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value=''>All Categories</Select.Item>
+              <SelectTrigger className='w-full md:w-48'>
+                <SelectValue placeholder='All Categories' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value=''>All Categories</SelectItem>
                 {categories.map(category => (
-                  <Select.Item key={category} value={category}>
+                  <SelectItem key={category} value={category}>
                     {category}
-                  </Select.Item>
+                  </SelectItem>
                 ))}
-              </Select.Content>
+              </SelectContent>
             </Select>
             <Select
               value={selectedDifficulty}
               onValueChange={setSelectedDifficulty}
             >
-              <Select.Trigger className='w-full md:w-48'>
-                <Select.Value placeholder='All Difficulties' />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value=''>All Difficulties</Select.Item>
+              <SelectTrigger className='w-full md:w-48'>
+                <SelectValue placeholder='All Difficulties' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value=''>All Difficulties</SelectItem>
                 {difficulties.map(difficulty => (
-                  <Select.Item key={difficulty} value={difficulty}>
+                  <SelectItem key={difficulty} value={difficulty}>
                     {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-                  </Select.Item>
+                  </SelectItem>
                 ))}
-              </Select.Content>
+              </SelectContent>
             </Select>
             <Button className='flex items-center space-x-2'>
               <Plus className='h-4 w-4' />

@@ -435,8 +435,8 @@ export async function GET(
           category: card.type,
           weight: Math.round((card.questionCount / totalQuestions) * 100) || 0,
           order: index + 1,
-          questions: card.categories.flatMap(cat =>
-            cat.topics.flatMap(topic => topic.questions)
+          questions: card.categories.flatMap((cat: any) =>
+            cat.topics.flatMap((topic: any) => topic.questions)
           ),
           questionCount: card.questionCount,
           // Add card-specific metadata

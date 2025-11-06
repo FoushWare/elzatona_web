@@ -5,8 +5,8 @@
 import React, { useState, useEffect, useMemo, useRef, ReactNode } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { Editor } from '@monaco-editor/react';
@@ -46,7 +46,7 @@ import {
   FrontendTask,
   FrontendTaskFile,
   FrontendTaskFormData,
-} from '@/types/admin';
+} from '@elzatona/shared-types';
 
 interface FrontendTaskEditorProps {
   task?: FrontendTask | null;
