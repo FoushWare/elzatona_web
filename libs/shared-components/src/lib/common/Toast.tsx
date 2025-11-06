@@ -1,11 +1,6 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 // Removed framer-motion dependency - using CSS animations instead
 import { CheckCircle, XCircle, Info, X } from 'lucide-react';
@@ -90,10 +85,7 @@ interface ToastContainerProps {
   onRemove: (id: string) => void;
 }
 
-export default function ToastContainer({
-  toasts,
-  onRemove,
-}: ToastContainerProps) {
+export function ToastContainer({ toasts, onRemove }: ToastContainerProps) {
   return (
     <div className='fixed top-4 right-4 z-50 space-y-2'>
       {toasts.map(toast => (

@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { usePathname } from 'next/navigation';
@@ -25,7 +25,7 @@ export const FirstTimeVisitorDetector: React.FC = () => {
   useEffect(() => {
     // Don't show onboarding on admin pages
     if (pathname?.startsWith('/admin')) {
-      return;
+      return undefined;
     }
 
     // Don't show onboarding during testing
@@ -34,7 +34,7 @@ export const FirstTimeVisitorDetector: React.FC = () => {
       ((window as WindowWithTestFlags).__DISABLE_GUIDANCE_MODALS__ ||
         (window as WindowWithTestFlags).__TEST_MODE__)
     ) {
-      return;
+      return undefined;
     }
 
     // Check if this is a first-time visitor
@@ -56,6 +56,7 @@ export const FirstTimeVisitorDetector: React.FC = () => {
         return () => clearTimeout(timer);
       }
     }
+    return undefined;
   }, [startOnboarding, pathname]);
 
   // Don't show onboarding if user has already seen it in this session or on admin pages

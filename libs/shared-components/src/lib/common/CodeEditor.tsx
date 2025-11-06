@@ -2,7 +2,7 @@
 
 import { useState, useRef, memo } from 'react';
 import Editor from '@monaco-editor/react';
-import { Challenge } from '@/types/challenge';
+import { Challenge } from '@elzatona/shared-types';
 
 interface CodeEditorProps {
   challenge: Challenge;

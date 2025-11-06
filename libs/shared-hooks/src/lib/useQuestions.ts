@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
-import { QuestionStats } from '@/lib/unified-question-schema';
+import { QuestionStats } from '@elzatona/shared-types';
 import {
   Question,
   QuestionCategory,

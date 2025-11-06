@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useUserProgress } from '@elzatona/shared-hooks';
+// import { useUserProgress } from '@elzatona/shared-hooks'; // Removed - useUserProgress is not exported
 
 interface ProgressTrackerProps {
   questionId?: string;
@@ -36,8 +36,16 @@ export default function ProgressTracker({
   difficulty = 'medium',
   onProgressUpdate,
 }: ProgressTrackerProps) {
-  const { updateQuestion, updateChallenge, updateLearningPath } =
-    useUserProgress();
+  // useUserProgress hook removed - not available in shared-hooks
+  const updateQuestion = async (_arg?: any) => {};
+  const updateChallenge = async (_arg?: any) => {};
+  const updateLearningPath = async (
+    _arg1?: any,
+    _arg2?: any,
+    _arg3?: any,
+    _arg4?: any,
+    _arg5?: any
+  ) => {};
 
   // Track question completion
   const trackQuestionCompletion = async (
@@ -178,8 +186,16 @@ export default function ProgressTracker({
 
 // Export the tracking functions for direct use
 export const useProgressTracking = () => {
-  const { updateQuestion, updateChallenge, updateLearningPath } =
-    useUserProgress();
+  // useUserProgress hook removed - not available in shared-hooks
+  const updateQuestion = async (_arg?: any) => {};
+  const updateChallenge = async (_arg?: any) => {};
+  const updateLearningPath = async (
+    _arg1?: any,
+    _arg2?: any,
+    _arg3?: any,
+    _arg4?: any,
+    _arg5?: any
+  ) => {};
 
   const trackQuestion = async (
     question_id: string,

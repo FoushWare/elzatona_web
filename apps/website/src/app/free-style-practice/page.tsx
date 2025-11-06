@@ -371,11 +371,15 @@ export default function FreeStylePracticePage() {
                           );
                         } else {
                           // Fallback: try to match correct_answer against option id
-                          if (typeof q.correct_answer === 'string') {
+                          if (
+                            typeof q.correct_answer === 'string' &&
+                            q.correct_answer
+                          ) {
+                            const correctAnswerStr = q.correct_answer;
                             const correctById = parsedOptions.findIndex(
                               (opt: any) =>
                                 opt.id?.toLowerCase() ===
-                                q.correct_answer.toLowerCase()
+                                correctAnswerStr.toLowerCase()
                             );
                             if (correctById >= 0) {
                               correctAnswerIndex = Number(correctById); // Ensure it's a number
@@ -533,7 +537,11 @@ export default function FreeStylePracticePage() {
                       correctAnswerIndex = parsedNum;
                     } else {
                       const correctIndex = options.findIndex(
-                        opt => opt.toLowerCase() === q.answer?.toLowerCase()
+                        opt =>
+                          opt.toLowerCase() ===
+                          (typeof q.answer === 'string'
+                            ? q.answer.toLowerCase()
+                            : String(q.answer || '').toLowerCase())
                       );
                       correctAnswerIndex = correctIndex >= 0 ? correctIndex : 0;
                     }
@@ -562,7 +570,9 @@ export default function FreeStylePracticePage() {
                         const correctOptionIndex = q.options.findIndex(
                           (opt: any) =>
                             opt.id?.toLowerCase() ===
-                            q.correct_answer.toLowerCase()
+                            (typeof q.correct_answer === 'string'
+                              ? q.correct_answer.toLowerCase()
+                              : String(q.correct_answer || '').toLowerCase())
                         );
                         if (correctOptionIndex >= 0) {
                           correctAnswerIndex = correctOptionIndex;
@@ -579,7 +589,10 @@ export default function FreeStylePracticePage() {
                         // Options are strings - try to find the index of the correct answer text
                         const correctIndex = options.findIndex(
                           opt =>
-                            opt.toLowerCase() === q.correct_answer.toLowerCase()
+                            opt.toLowerCase() ===
+                            (typeof q.correct_answer === 'string'
+                              ? q.correct_answer.toLowerCase()
+                              : String(q.correct_answer || '').toLowerCase())
                         );
                         if (correctIndex >= 0) {
                           correctAnswerIndex = correctIndex;
@@ -591,7 +604,10 @@ export default function FreeStylePracticePage() {
                       // Options are strings - try to find the index of the correct answer text
                       const correctIndex = options.findIndex(
                         opt =>
-                          opt.toLowerCase() === q.correct_answer.toLowerCase()
+                          opt.toLowerCase() ===
+                          (typeof q.correct_answer === 'string'
+                            ? q.correct_answer.toLowerCase()
+                            : String(q.correct_answer || '').toLowerCase())
                       );
                       if (correctIndex >= 0) {
                         correctAnswerIndex = correctIndex;

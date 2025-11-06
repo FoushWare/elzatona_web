@@ -36,7 +36,7 @@ import {
   Label,
   Textarea,
   Checkbox,
-} from '@/components/ui';
+} from '@elzatona/shared-components';
 
 // Import icons with tree shaking
 import {
@@ -893,7 +893,9 @@ export default function ContentManagementPage() {
               <Input
                 placeholder='Search cards, plans, categories, topics...'
                 value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchTerm(e.target.value)
+                }
                 className='w-full'
               />
             </Suspense>

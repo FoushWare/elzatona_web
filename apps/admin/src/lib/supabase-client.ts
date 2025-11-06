@@ -14,7 +14,7 @@ const isValidConfig =
   supabaseAnonKey !== 'placeholder_key';
 
 // Log configuration status (only in development)
-if (process.env.NODE_ENV === 'development' && !isValidConfig) {
+if (process.env['NODE_ENV'] === 'development' && !isValidConfig) {
   console.warn('⚠️ Supabase configuration is missing or invalid in admin app');
 }
 

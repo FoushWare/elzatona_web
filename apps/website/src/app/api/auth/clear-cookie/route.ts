@@ -11,7 +11,7 @@ export async function POST() {
     // Clear HTTP-only cookies
     response.cookies.set('firebase_token', '', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env['NODE_ENV'] === 'production',
       sameSite: 'strict',
       maxAge: 0, // Expire immediately
       path: '/',
@@ -19,7 +19,7 @@ export async function POST() {
 
     response.cookies.set('progress-summary', '', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env['NODE_ENV'] === 'production',
       sameSite: 'strict',
       maxAge: 0, // Expire immediately
       path: '/',

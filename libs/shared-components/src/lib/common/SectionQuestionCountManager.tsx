@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import {
@@ -252,7 +252,7 @@ export const SectionQuestionCountManager: React.FC<
       angular: 'bg-red-100 text-red-800',
       general: 'bg-gray-100 text-gray-800',
     };
-    return colors[category] || colors.general;
+    return colors[category] || colors['general'];
   };
 
   if (loading) {

@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     // Set HTTP-only cookie
     response.cookies.set('auth-token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env['NODE_ENV'] === 'production',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: '/',
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
       }),
       {
         httpOnly: false, // Allow client-side access for display
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env['NODE_ENV'] === 'production',
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7, // 7 days
         path: '/',
@@ -104,7 +104,7 @@ export async function DELETE(request: NextRequest) {
     // Clear HTTP-only cookie
     response.cookies.set('auth-token', '', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env['NODE_ENV'] === 'production',
       sameSite: 'lax',
       maxAge: 0,
       path: '/',
@@ -113,7 +113,7 @@ export async function DELETE(request: NextRequest) {
     // Clear user data cookie
     response.cookies.set('user-data', '', {
       httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env['NODE_ENV'] === 'production',
       sameSite: 'lax',
       maxAge: 0,
       path: '/',

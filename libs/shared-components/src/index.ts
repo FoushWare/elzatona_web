@@ -13,7 +13,11 @@ export { default as EnhancedUserDashboard } from './lib/common/EnhancedUserDashb
 export { Button } from './lib/ui/button';
 export { Badge } from './lib/ui/badge';
 export { Progress } from './lib/ui/progress';
+export { Skeleton } from './lib/ui/skeleton';
 export { Card, CardContent, CardHeader, CardTitle } from './lib/ui/card';
+export { Switch } from './lib/ui/switch';
+export { Input } from './lib/ui/input';
+export { Label } from './lib/ui/label';
 export {
   Select,
   SelectContent,
@@ -30,3 +34,24 @@ export { CardForm } from './lib/forms/CardForm';
 export { PlanForm } from './lib/forms/PlanForm';
 export { Modal } from './lib/ui/modal';
 export { Alert, AlertTitle, AlertDescription } from './lib/ui/alert';
+export { EmptyState } from './lib/ui/empty-state';
+export { SignInPopup } from './lib/auth/SignInPopup';
+export { default as AdminNavbar } from './lib/auth/AdminNavbar';
+export { default as AdminLoginNavbar } from './lib/auth/AdminLoginNavbar';
+export { default as FirestoreErrorBoundary } from './lib/common/FirestoreErrorBoundary';
+export { default as FrontendTaskEditor } from './lib/admin/FrontendTaskEditor';
+export { default as ProblemSolvingEditor } from './lib/admin/ProblemSolvingEditor';
+export {
+  default as ClientCodeRunner,
+  type TestCase,
+} from './lib/admin/ClientCodeRunner';
+export { NotificationContainer } from './lib/ui/Notification';
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './lib/ui/tabs';
+export {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './lib/ui/dialog';

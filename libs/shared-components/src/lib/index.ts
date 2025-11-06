@@ -37,7 +37,7 @@ export { EmptyState } from './common/EmptyState';
 export { LoadingTransition } from './common/LoadingTransition';
 export { ErrorBoundary } from './common/ErrorBoundary';
 export { default as FirestoreErrorBoundary } from './common/FirestoreErrorBoundary';
-export { default as Toast } from './common/Toast';
+export { ToastContainer as Toast, useToast } from './common/Toast';
 export { default as DarkModeToggle } from './common/DarkModeToggle';
 export { LanguageSwitcher } from './common/LanguageSwitcher';
 export { AlzatonaLogo } from './common/AlzatonaLogo';
