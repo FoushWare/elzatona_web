@@ -34,7 +34,7 @@
     "health-check": "node scripts/project-health-check.js",
     "maintenance": "npm run cleanup:project && npm run health-check",
     "setup-env": "node scripts/setup-env.mjs",
-    "test:admin-login": "node scripts/run-admin-login-tests.mjs",
+    "test:admin-login": "node tests/scripts/run-admin-login-tests.mjs",
     "test:admin-login:fast": "npx jest tests/admin/admin-login-api.test.ts --verbose",
     "test:admin-login:watch": "npx jest tests/admin/ --watch",
     "test:admin-login:coverage": "npx jest tests/admin/ --coverage",

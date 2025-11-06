@@ -9,26 +9,110 @@
  * - Responsive design
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { useRouter } from 'next/navigation';
-import { useAdminAuth } from '@/contexts/AdminAuthContext';
-import AdminLoginPage from '@/app/admin/login/page';
-import { AdminAuthProvider } from '@/contexts/AdminAuthContext';
+// Set up environment variables before any imports
+process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
+process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
+
+// Mock Supabase before any imports that use it
+jest.mock('@supabase/supabase-js', () => ({
+  createClient: jest.fn(() => ({
+    from: jest.fn(() => ({
+      select: jest.fn(() => ({
+        eq: jest.fn(() => ({
+          single: jest.fn().mockResolvedValue({ data: null, error: null }),
+        })),
+      })),
+    })),
+  })),
+}));
+
+// Mock nuqs before any imports
+jest.mock('nuqs', () => ({
+  useQueryState: jest.fn(() => [null, jest.fn()]),
+  useQueryStates: jest.fn(() => [{}, jest.fn()]),
+  parseAsString: jest.fn(),
+  parseAsInteger: jest.fn(),
+  createSearchParamsCache: jest.fn(),
+}));
 
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  usePathname: jest.fn(() => '/admin/login'),
 }));
 
-// Mock AdminAuthContext
-jest.mock('@/contexts/AdminAuthContext', () => ({
-  AdminAuthProvider: ({ children }: { children: React.ReactNode }) => children,
-  useAdminAuth: jest.fn(),
+// Mock AdminAuthContext from shared-contexts
+// Create a mock function that can be configured per test
+const mockUseAdminAuthFn = jest.fn(() => ({
+  isAuthenticated: false,
+  isLoading: false,
+  login: jest.fn(),
+  logout: jest.fn(),
+  user: null,
 }));
+
+// Mock the actual AdminAuthContext file
+jest.mock('../../libs/shared-contexts/src/lib/AdminAuthContext', () => {
+  const React = require('react');
+  const mockFn = jest.fn(() => ({
+    isAuthenticated: false,
+    isLoading: false,
+    login: jest.fn(),
+    logout: jest.fn(),
+    user: null,
+  }));
+  return {
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    useAdminAuth: mockFn,
+  };
+});
+
+// Mock the actual ThemeContext file
+jest.mock('../../libs/shared-contexts/src/lib/ThemeContext', () => {
+  const React = require('react');
+  return {
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    useTheme: jest.fn(() => ({
+      isDarkMode: false,
+      toggleDarkMode: jest.fn(),
+      setDarkMode: jest.fn(),
+      isLoaded: true,
+    })),
+  };
+});
+
+// Also mock the package entry point
+jest.mock('@elzatona/shared-contexts', () => {
+  const React = require('react');
+  const mockAdminAuthFn = jest.fn(() => ({
+    isAuthenticated: false,
+    isLoading: false,
+    login: jest.fn(),
+    logout: jest.fn(),
+    user: null,
+  }));
+  return {
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    useAdminAuth: mockAdminAuthFn,
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    useTheme: jest.fn(() => ({
+      isDarkMode: false,
+      toggleDarkMode: jest.fn(),
+    })),
+  };
+});
 
 // Mock fetch for API calls
 global.fetch = jest.fn();
+
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
+import { useAdminAuth } from '@elzatona/shared-contexts';
+import AdminLoginPage from '@/app/admin/login/page';
+import { AdminAuthProvider } from '@elzatona/shared-contexts';
 
 // Type definitions for mocks
 interface MockRouter {
@@ -53,12 +137,18 @@ interface MockAdminAuth {
 describe('Admin Login Page', () => {
   const mockPush = jest.fn();
   const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-  const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<
-    () => MockAdminAuth
-  >;
+  const mockLogin = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset mock admin auth function to return default values
+    mockUseAdminAuthFn.mockReturnValue({
+      isAuthenticated: false,
+      isLoading: false,
+      login: mockLogin,
+      logout: jest.fn(),
+      user: null,
+    });
     mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: jest.fn(),
@@ -67,15 +157,6 @@ describe('Admin Login Page', () => {
       forward: jest.fn(),
       refresh: jest.fn(),
     } as MockRouter);
-
-    // Default mock for useAdminAuth
-    mockUseAdminAuth.mockReturnValue({
-      isAuthenticated: false,
-      isLoading: false,
-      login: jest.fn(),
-      logout: jest.fn(),
-      user: null,
-    });
   });
 
   afterEach(() => {
@@ -84,13 +165,17 @@ describe('Admin Login Page', () => {
 
   describe('Page Rendering', () => {
     it('should render login form with all required elements', () => {
-      render(<AdminLoginPage />);
+      render(
+        <AdminAuthProvider>
+          <AdminLoginPage />
+        </AdminAuthProvider>
+      );
 
       expect(screen.getByText('Admin Login')).toBeInTheDocument();
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
       expect(
-        screen.getByRole('button', { name: /login/i })
+        screen.getByRole('button', { name: /sign in/i })
       ).toBeInTheDocument();
     });
 
@@ -102,10 +187,10 @@ describe('Admin Login Page', () => {
     });
 
     it('should show loading state when authentication is in progress', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValueOnce({
         isAuthenticated: false,
         isLoading: true,
-        login: jest.fn(),
+        login: mockLogin,
         logout: jest.fn(),
         user: null,
       });
@@ -116,12 +201,17 @@ describe('Admin Login Page', () => {
     });
 
     it('should redirect authenticated users to dashboard', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValueOnce({
         isAuthenticated: true,
         isLoading: false,
-        login: jest.fn(),
+        login: mockLogin,
         logout: jest.fn(),
-        user: { email: 'admin@example.com', role: 'super_admin' },
+        user: {
+          id: '1',
+          email: 'admin@example.com',
+          name: 'Admin',
+          role: 'super_admin',
+        },
       });
 
       render(<AdminLoginPage />);
@@ -134,7 +224,7 @@ describe('Admin Login Page', () => {
     it('should show validation errors for empty fields', async () => {
       render(<AdminLoginPage />);
 
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
       fireEvent.click(loginButton);
 
       await waitFor(() => {
@@ -147,7 +237,7 @@ describe('Admin Login Page', () => {
       render(<AdminLoginPage />);
 
       const emailInput = screen.getByLabelText(/email/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
       fireEvent.click(loginButton);
@@ -163,7 +253,7 @@ describe('Admin Login Page', () => {
       render(<AdminLoginPage />);
 
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       fireEvent.change(passwordInput, { target: { value: '123' } });
       fireEvent.click(loginButton);
@@ -180,7 +270,7 @@ describe('Admin Login Page', () => {
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       // Trigger validation errors
       fireEvent.click(loginButton);
@@ -205,11 +295,11 @@ describe('Admin Login Page', () => {
 
   describe('Form Submission', () => {
     it('should call login function with correct credentials', async () => {
-      const mockLogin = jest.fn().mockResolvedValue({ success: true });
-      mockUseAdminAuth.mockReturnValue({
+      const loginMock = jest.fn().mockResolvedValue({ success: true });
+      mockUseAdminAuthFn.mockReturnValueOnce({
         isAuthenticated: false,
         isLoading: false,
-        login: mockLogin,
+        login: loginMock,
         logout: jest.fn(),
         user: null,
       });
@@ -218,14 +308,14 @@ describe('Admin Login Page', () => {
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
       fireEvent.change(passwordInput, { target: { value: 'password123' } });
       fireEvent.click(loginButton);
 
       await waitFor(() => {
-        expect(mockLogin).toHaveBeenCalledWith(
+        expect(loginMock).toHaveBeenCalledWith(
           'admin@example.com',
           'password123'
         );
@@ -233,15 +323,15 @@ describe('Admin Login Page', () => {
     });
 
     it('should show loading state during login', async () => {
-      const mockLogin = jest
+      const loginMock = jest
         .fn()
         .mockImplementation(
           () => new Promise(resolve => setTimeout(resolve, 100))
         );
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuth.mockReturnValueOnce({
         isAuthenticated: false,
         isLoading: false,
-        login: mockLogin,
+        login: loginMock,
         logout: jest.fn(),
         user: null,
       });
@@ -250,7 +340,7 @@ describe('Admin Login Page', () => {
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
       fireEvent.change(passwordInput, { target: { value: 'password123' } });
@@ -261,13 +351,13 @@ describe('Admin Login Page', () => {
     });
 
     it('should show error message on login failure', async () => {
-      const mockLogin = jest
+      const loginMock = jest
         .fn()
         .mockResolvedValue({ success: false, error: 'Invalid credentials' });
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuth.mockReturnValueOnce({
         isAuthenticated: false,
         isLoading: false,
-        login: mockLogin,
+        login: loginMock,
         logout: jest.fn(),
         user: null,
       });
@@ -276,7 +366,7 @@ describe('Admin Login Page', () => {
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
       fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
@@ -288,11 +378,11 @@ describe('Admin Login Page', () => {
     });
 
     it('should handle network errors gracefully', async () => {
-      const mockLogin = jest.fn().mockRejectedValue(new Error('Network error'));
-      mockUseAdminAuth.mockReturnValue({
+      const loginMock = jest.fn().mockRejectedValue(new Error('Network error'));
+      mockUseAdminAuth.mockReturnValueOnce({
         isAuthenticated: false,
         isLoading: false,
-        login: mockLogin,
+        login: loginMock,
         logout: jest.fn(),
         user: null,
       });
@@ -301,7 +391,7 @@ describe('Admin Login Page', () => {
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
       fireEvent.change(passwordInput, { target: { value: 'password123' } });
@@ -334,11 +424,11 @@ describe('Admin Login Page', () => {
     });
 
     it('should submit form on Enter key press', async () => {
-      const mockLogin = jest.fn().mockResolvedValue({ success: true });
-      mockUseAdminAuth.mockReturnValue({
+      const loginMock = jest.fn().mockResolvedValue({ success: true });
+      mockUseAdminAuthFn.mockReturnValueOnce({
         isAuthenticated: false,
         isLoading: false,
-        login: mockLogin,
+        login: loginMock,
         logout: jest.fn(),
         user: null,
       });
@@ -353,7 +443,7 @@ describe('Admin Login Page', () => {
       fireEvent.keyDown(passwordInput, { key: 'Enter', code: 'Enter' });
 
       await waitFor(() => {
-        expect(mockLogin).toHaveBeenCalledWith(
+        expect(loginMock).toHaveBeenCalledWith(
           'admin@example.com',
           'password123'
         );
@@ -384,7 +474,7 @@ describe('Admin Login Page', () => {
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
       expect(
-        screen.getByRole('button', { name: /login/i })
+        screen.getByRole('button', { name: /sign in/i })
       ).toBeInTheDocument();
     });
 
@@ -393,7 +483,7 @@ describe('Admin Login Page', () => {
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       emailInput.focus();
       expect(emailInput).toHaveFocus();
@@ -408,7 +498,7 @@ describe('Admin Login Page', () => {
     it('should announce errors to screen readers', async () => {
       render(<AdminLoginPage />);
 
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
       fireEvent.click(loginButton);
 
       await waitFor(() => {

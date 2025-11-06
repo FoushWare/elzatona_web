@@ -11,10 +11,36 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useAdminAuth } from '@/contexts/AdminAuthContext';
-import { AdminAuthProvider } from '@/contexts/AdminAuthContext';
+import { useAdminAuth } from '@elzatona/shared-contexts';
+import { AdminAuthProvider } from '@elzatona/shared-contexts';
 import AdminLoginPage from '@/app/admin/login/page';
 import AdminDashboardPage from '@/app/admin/dashboard/page';
+
+// Set up environment variables before any imports
+process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
+process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
+
+// Mock Supabase before any imports that use it
+jest.mock('@supabase/supabase-js', () => ({
+  createClient: jest.fn(() => ({
+    from: jest.fn(() => ({
+      select: jest.fn(() => ({
+        eq: jest.fn(() => ({
+          single: jest.fn().mockResolvedValue({ data: null, error: null }),
+        })),
+      })),
+    })),
+  })),
+}));
+
+// Mock nuqs before any imports
+jest.mock('nuqs', () => ({
+  useQueryState: jest.fn(() => [null, jest.fn()]),
+  useQueryStates: jest.fn(() => [{}, jest.fn()]),
+  parseAsString: jest.fn(),
+  parseAsInteger: jest.fn(),
+  createSearchParamsCache: jest.fn(),
+}));
 
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
@@ -22,10 +48,18 @@ jest.mock('next/navigation', () => ({
   usePathname: jest.fn(),
 }));
 
-// Mock AdminAuthContext
-jest.mock('@/contexts/AdminAuthContext', () => ({
+// Mock AdminAuthContext from shared-contexts
+const mockUseAdminAuth = jest.fn(() => ({
+  isAuthenticated: false,
+  isLoading: false,
+  login: jest.fn(),
+  logout: jest.fn(),
+  user: null,
+}));
+
+jest.mock('@elzatona/shared-contexts', () => ({
   AdminAuthProvider: ({ children }: { children: React.ReactNode }) => children,
-  useAdminAuth: jest.fn(),
+  useAdminAuth: () => mockUseAdminAuth(),
 }));
 
 // Type definitions for mocks
@@ -52,9 +86,6 @@ describe('Admin Dashboard Redirection', () => {
   const mockPush = jest.fn();
   const mockReplace = jest.fn();
   const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-  const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<
-    () => MockAdminAuth
-  >;
 
   beforeEach(() => {
     jest.clearAllMocks();
