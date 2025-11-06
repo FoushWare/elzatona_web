@@ -46,8 +46,69 @@ jest.mock('next/navigation', () => ({
   usePathname: jest.fn(),
 }));
 
-// Mock AdminAuthContext from shared-contexts
-const mockUseAdminAuth = jest.fn(() => ({
+// Mock @tanstack/react-query
+jest.mock('@tanstack/react-query', () => {
+  const React = require('react');
+  return {
+    QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    QueryClient: jest.fn(() => ({
+      invalidateQueries: jest.fn(),
+      setQueryData: jest.fn(),
+      getQueryData: jest.fn(),
+    })),
+    useQueryClient: jest.fn(() => ({
+      invalidateQueries: jest.fn(),
+      setQueryData: jest.fn(),
+      getQueryData: jest.fn(),
+    })),
+    useQuery: jest.fn(() => ({
+      data: null,
+      isLoading: false,
+      error: null,
+    })),
+    useMutation: jest.fn(() => ({
+      mutate: jest.fn(),
+      mutateAsync: jest.fn(),
+      isLoading: false,
+      error: null,
+    })),
+  };
+});
+
+// Mock the actual AdminAuthContext file
+jest.mock('../../libs/shared-contexts/src/lib/AdminAuthContext', () => {
+  const React = require('react');
+  const mockFn = jest.fn(() => ({
+    isAuthenticated: false,
+    isLoading: false,
+    login: jest.fn(),
+    logout: jest.fn(),
+    user: null,
+  }));
+  return {
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    useAdminAuth: mockFn,
+  };
+});
+
+// Mock the actual ThemeContext file
+jest.mock('../../libs/shared-contexts/src/lib/ThemeContext', () => {
+  const React = require('react');
+  return {
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    useTheme: jest.fn(() => ({
+      isDarkMode: false,
+      toggleDarkMode: jest.fn(),
+      setDarkMode: jest.fn(),
+      isLoaded: true,
+    })),
+  };
+});
+
+// Also mock the package entry point
+const mockUseAdminAuthFn = jest.fn(() => ({
   isAuthenticated: false,
   isLoading: false,
   login: jest.fn(),
@@ -55,20 +116,39 @@ const mockUseAdminAuth = jest.fn(() => ({
   user: null,
 }));
 
-jest.mock('@elzatona/shared-contexts', () => ({
-  AdminAuthProvider: ({ children }: { children: React.ReactNode }) => children,
-  useAdminAuth: () => mockUseAdminAuth(),
-}));
+jest.mock('@elzatona/shared-contexts', () => {
+  const React = require('react');
+  return {
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    useAdminAuth: mockUseAdminAuthFn,
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    useTheme: jest.fn(() => ({
+      isDarkMode: false,
+      toggleDarkMode: jest.fn(),
+    })),
+  };
+});
 
 // Mock admin components from shared-components
-jest.mock('@elzatona/shared-components', () => ({
-  AdminNavbar: function MockAdminNavbar() {
-    return <div data-testid='admin-navbar'>Admin Navbar</div>;
-  },
-  NavbarSimple: function MockNavbarSimple() {
-    return <div data-testid='website-navbar'>Website Navbar</div>;
-  },
-}));
+jest.mock('@elzatona/shared-components', () => {
+  const React = require('react');
+  return {
+    AdminNavbar: function MockAdminNavbar() {
+      return <div data-testid='admin-navbar'>Admin Navbar</div>;
+    },
+    NavbarSimple: function MockNavbarSimple() {
+      return <div data-testid='website-navbar'>Website Navbar</div>;
+    },
+    ConditionalLayout: function MockConditionalLayout({
+      children,
+    }: {
+      children: React.ReactNode;
+    }) {
+      return <div data-testid='conditional-layout'>{children}</div>;
+    },
+  };
+});
 
 // Type definitions for mocks
 interface MockAdminAuth {
@@ -88,9 +168,16 @@ describe('Navbar Switching Fix', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-
+    // Reset mock admin auth function to return default values
+    mockUseAdminAuthFn.mockReturnValue({
+      isAuthenticated: false,
+      isLoading: false,
+      login: jest.fn(),
+      logout: jest.fn(),
+      user: null,
+    });
     // Default mock for useAdminAuth
-    mockUseAdminAuth.mockReturnValue({
+    mockUseAdminAuthFn.mockReturnValue({
       isAuthenticated: true,
       isLoading: false,
       login: jest.fn(),
@@ -203,7 +290,7 @@ describe('Navbar Switching Fix', () => {
   describe('Admin Layout Component', () => {
     it('should render admin navbar for authenticated users', () => {
       mockUsePathname.mockReturnValue('/admin/dashboard');
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -225,7 +312,7 @@ describe('Navbar Switching Fix', () => {
 
     it('should show loading state while checking authentication', () => {
       mockUsePathname.mockReturnValue('/admin/dashboard');
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: true,
         login: jest.fn(),
@@ -247,7 +334,7 @@ describe('Navbar Switching Fix', () => {
 
     it('should not render admin navbar for login page', () => {
       mockUsePathname.mockReturnValue('/admin/login');
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: jest.fn(),
@@ -269,7 +356,7 @@ describe('Navbar Switching Fix', () => {
 
     it('should not render admin navbar for admin root page', () => {
       mockUsePathname.mockReturnValue('/admin');
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: jest.fn(),
