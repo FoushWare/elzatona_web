@@ -12,6 +12,223 @@ This is an **Nx monorepo** workspace containing a comprehensive platform for fro
 
 ---
 
+## 🎯 Project Flow Diagram
+
+The following diagram illustrates the complete system flow covering Admin management, Guided Learning, Free-Style Learning, and Custom Roadmap features:
+
+![Project Flow Diagram](./docs/diagrams/project-flow-diagram.png)
+
+For more details, see the [complete flow documentation](./docs/diagrams/project-flow-diagram.md).
+
+---
+
+## 🔄 System Flows
+
+### 🔧 Admin Flow
+
+**Purpose:** Content management, plan configuration, and system administration
+
+**User Journey:**
+
+1. **Admin Login** → Access admin dashboard at `/admin/login`
+2. **Dashboard Overview** → View system statistics, recent activity, and content metrics
+3. **Content Management**:
+   - **Guided Learning Plans**: Create/edit 1-7 day learning plans with cumulative question distribution
+   - **Questions Management**: CRUD operations for all question types (multiple-choice, open-ended, code, true-false)
+   - **Sections Management**: Organize content by sections (HTML, CSS, JavaScript, React, etc.)
+   - **Learning Cards**: Configure four main card types (Core Technologies, Framework Questions, Problem Solving, System Design)
+   - **Frontend Tasks**: Manage React/frontend coding challenges with starter code
+   - **Problem Solving**: Manage algorithmic challenges with test cases
+4. **Configuration**:
+   - Set question counts per section/card
+   - Configure time limits and difficulty levels
+   - Assign questions to specific plans with cumulative distribution
+5. **Data Persistence** → All changes saved to Supabase Database
+
+**Key Features:**
+
+- Full CRUD operations for all content types
+- Bulk operations for efficient content management
+- Real-time preview of plan configurations
+- Question assignment with automatic cumulative distribution across plans
+
+---
+
+### 📚 Guided Learning Flow
+
+**Purpose:** Structured learning paths with predefined plans and progress tracking
+
+**User Journey:**
+
+1. **Entry Point** → User visits `/get-started` and selects **"I need guidance"**
+2. **Authentication** → Sign-in popup appears (if not authenticated)
+3. **Plan Selection** → Navigate to `/guided-learning` with dynamic plans (1-7 days)
+4. **Plan Overview** → View plan details:
+   - Total questions per plan
+   - Daily question distribution
+   - Estimated completion time
+   - Learning objectives
+5. **Practice Session** → Four learning cards:
+   - **Card 1: Core Technologies** (HTML, CSS, JavaScript, TypeScript fundamentals)
+   - **Card 2: Framework Questions** (React, Next.js, Vue, Angular, etc.)
+   - **Card 3: Problem Solving** (Frontend coding challenges and algorithms)
+   - **Card 4: System Design** (Frontend architecture patterns)
+6. **Question Practice**:
+   - Answer questions with real-time feedback
+   - View explanations and hints
+   - Track time spent per question
+7. **Progress Tracking**:
+   - Real-time progress saved to database
+   - Completion percentage per card
+   - Overall plan completion status
+8. **Results & Analytics** → View performance metrics and recommendations
+
+**Key Features:**
+
+- **Cumulative Question System**: Each plan includes all questions from previous plans plus new ones
+  - Plan 1 (1-Day): 100 base questions
+  - Plan 2 (2-Day): Plan 1 + 50 new questions = 150 total
+  - Plan 3 (3-Day): Plan 2 + 50 new questions = 200 total
+  - ...continues up to Plan 7
+- Dynamic content fetched from Supabase
+- Progress persistence across sessions
+- Adaptive difficulty based on performance
+
+---
+
+### 🎯 Free-Style Learning Flow
+
+**Purpose:** Flexible practice modes allowing users to learn at their own pace
+
+**User Journey:**
+
+1. **Entry Point** → User visits `/get-started` and selects **"I'm self-directed"**
+2. **Practice Selection** → Navigate to `/browse-practice-questions`
+3. **Choose Practice Mode**:
+   - **Interview Questions** → `/learning-paths` - Practice questions organized by topics
+   - **Frontend Tasks** → `/frontend-tasks` - React/frontend coding challenges with CodeSandbox-like environment
+   - **Problem Solving** → `/problem-solving` - Algorithmic challenges with test cases
+   - **Create Custom Roadmap** → `/custom-roadmap` - Build personalized learning path
+4. **Flexible Practice**:
+   - Select topics freely from available categories
+   - Practice questions at own pace
+   - No time constraints or mandatory order
+   - Access to all content without plan restrictions
+5. **Progress Tracking**:
+   - Save progress per question/task
+   - Track time spent
+   - View completion statistics
+
+**Key Features:**
+
+- No authentication required for basic practice
+- Full access to all questions and content
+- Flexible topic selection
+- Self-paced learning without structured timelines
+- Integration with custom roadmap creation
+
+---
+
+### 🗺️ Custom Roadmap Flow
+
+**Purpose:** User-created personalized learning paths with granular control
+
+**User Journey:**
+
+1. **Roadmap Builder** → Navigate to `/custom-roadmap` (requires authentication)
+2. **Card Selection** → Choose from learning cards:
+   - Core Technologies
+   - Framework Questions
+   - Problem Solving
+   - System Design
+3. **Category Selection** → Select categories within chosen cards
+4. **Topic Selection** → Choose specific topics within categories
+5. **Question Selection** → For each topic:
+   - View all available questions
+   - Select 3-5 questions or all questions per topic
+   - Preview question difficulty and estimated time
+6. **Plan Configuration**:
+   - Set plan name and description
+   - Configure duration (1 day to N days)
+   - Review total questions and daily distribution
+7. **Save Plan** → Save to "My Plans" with unique identifier
+8. **Plan Management** → Navigate to `/my-plans`:
+   - View all saved custom plans
+   - Edit existing plans
+   - Delete plans
+   - Start practice with selected plan
+9. **Practice Custom Plan**:
+   - Follow selected questions in configured order
+   - Track progress per question
+   - Complete plan at own pace
+
+**Key Features:**
+
+- **Granular Control**: Select specific questions from topics (not just topics)
+- **Flexible Duration**: Set custom timeline (1 day to unlimited)
+- **Question Preview**: See question details before selection
+- **Plan Persistence**: All plans saved per user in database
+- **Edit & Manage**: Modify saved plans anytime
+- **Progress Tracking**: Track completion of custom plans
+
+**Available Sections:**
+
+- HTML Fundamentals
+- CSS Fundamentals
+- JavaScript Fundamentals
+- TypeScript Fundamentals
+- React Mastery
+- Next.js Advanced
+- Behavioral & Soft Skills
+- AI Tools for Frontend
+- Performance Optimization
+- Security Best Practices
+- Design Patterns
+- System Design
+
+---
+
+## 🔄 Key Features Summary
+
+### Admin System
+
+- ✅ Full CRUD operations for all content types
+- ✅ Plan configuration with cumulative question distribution
+- ✅ Bulk operations for efficient content management
+- ✅ Real-time content preview and validation
+
+### Guided Learning
+
+- ✅ Structured 1-7 day plans with cumulative questions
+- ✅ Four learning cards per plan
+- ✅ Real-time progress tracking
+- ✅ Dynamic content from database
+- ✅ Performance analytics
+
+### Free-Style Learning
+
+- ✅ Flexible topic selection
+- ✅ Multiple practice modes (Interview, Frontend Tasks, Problem Solving)
+- ✅ Self-paced learning
+- ✅ No authentication required for basic access
+
+### Custom Roadmap
+
+- ✅ User-created personalized learning paths
+- ✅ Granular question selection (3-5 or all per topic)
+- ✅ Flexible duration configuration
+- ✅ Plan management (create, edit, delete, start)
+- ✅ Progress tracking for custom plans
+
+### Data & Infrastructure
+
+- ✅ Centralized Supabase storage for all data
+- ✅ Real-time progress synchronization
+- ✅ User authentication and session management
+- ✅ Scalable architecture with Nx monorepo
+
+---
+
 ## Root Directory Structure
 
 ```

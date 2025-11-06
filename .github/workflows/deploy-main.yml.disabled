@@ -3,8 +3,12 @@ name: Deploy Main Website
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
+    # Only deploy on push, not on every commit
+    # Remove this workflow if you prefer Vercel auto-deployments
+  workflow_dispatch:
+    # Allow manual deployments
+  # Removed pull_request trigger to avoid duplicate preview deployments
+  # Vercel will handle PR preview deployments automatically
 
 jobs:
   deploy-main:
