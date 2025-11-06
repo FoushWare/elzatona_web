@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { LearningResource } from '@/types/resource';
-import { resourceCategories } from '@/lib/resources';
+import { LearningResource } from '@elzatona/shared-types';
+// Note: resourceCategories is website-specific and should be passed as a prop or imported where needed
+// import { resourceCategories } from '@/lib/resources';
 
 interface ResourceCardProps {
   resource: LearningResource;
@@ -17,7 +18,9 @@ export default function ResourceCard({
     resource.isBookmarked || false
   );
 
-  const category = resourceCategories.find(cat => cat.id === resource.category);
+  // Note: resourceCategories should be passed as a prop or imported from the website app
+  // For now, using a fallback
+  const category: { icon?: string; name?: string } | null = null; // resourceCategories?.find(cat => cat.id === resource.category);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -134,9 +137,16 @@ export default function ResourceCard({
             {/* Category */}
             {category && (
               <div className='flex items-center space-x-1'>
-                <span className='text-sm'>{category.icon}</span>
+                <span className='text-sm'>{(category as any)?.icon}</span>
                 <span className='text-xs text-muted-foreground'>
-                  {category.name}
+                  {(category as any)?.name}
+                </span>
+              </div>
+            )}
+            {!category && resource.category && (
+              <div className='flex items-center space-x-1'>
+                <span className='text-xs text-muted-foreground'>
+                  {resource.category}
                 </span>
               </div>
             )}

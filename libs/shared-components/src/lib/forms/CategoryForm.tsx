@@ -1,11 +1,13 @@
+'use client';
+
 // Category Form Component
 // v1.0 - Form for creating and editing categories
 
 import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { Button } from '@elzatona/shared-components';
@@ -19,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@elzatona/shared-components';
-import { CardType } from '@/types/learning-cards';
+import { CardType } from '@elzatona/shared-types';
 
 interface CategoryFormProps {
   category?: {
@@ -96,39 +98,39 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     cardType: category?.cardType || CARD_TYPES[0],
     icon: category?.icon || ICONS[0],
     slug: category?.slug || '',
-    order: category?.order || 1,
+    order: category?.['order'] || 1,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Auto-generate slug from name
   useEffect(() => {
-    if (!category && formData.name) {
-      const slug = formData.name
+    if (!category && formData['name']) {
+      const slug = formData['name']
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '');
       setFormData(prev => ({ ...prev, slug }));
     }
-  }, [formData.name, category]);
+  }, [formData['name'], category]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Category name is required';
+    if (!formData['name'].trim()) {
+      newErrors['name'] = 'Category name is required';
     }
 
-    if (!formData.description.trim()) {
-      newErrors.description = 'Description is required';
+    if (!formData['description'].trim()) {
+      newErrors['description'] = 'Description is required';
     }
 
-    if (!formData.slug.trim()) {
-      newErrors.slug = 'Slug is required';
+    if (!formData['slug'].trim()) {
+      newErrors['slug'] = 'Slug is required';
     }
 
-    if (formData.order < 1) {
-      newErrors.order = 'Order must be at least 1';
+    if (formData['order'] < 1) {
+      newErrors['order'] = 'Order must be at least 1';
     }
 
     setErrors(newErrors);
@@ -168,12 +170,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
           <Label htmlFor='name'>Category Name *</Label>
           <Input
             id='name'
-            value={formData.name}
+            value={formData['name']}
             onChange={e => handleChange('name', e.target.value)}
             placeholder='e.g., React'
-            className={errors.name ? 'border-red-500' : ''}
+            className={errors['name'] ? 'border-red-500' : ''}
           />
-          {errors.name && <p className='text-sm text-red-500'>{errors.name}</p>}
+          {errors['name'] && (
+            <p className='text-sm text-red-500'>{errors['name']}</p>
+          )}
         </div>
 
         {/* Slug */}
@@ -181,19 +185,21 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
           <Label htmlFor='slug'>Slug *</Label>
           <Input
             id='slug'
-            value={formData.slug}
+            value={formData['slug']}
             onChange={e => handleChange('slug', e.target.value)}
             placeholder='e.g., react'
-            className={errors.slug ? 'border-red-500' : ''}
+            className={errors['slug'] ? 'border-red-500' : ''}
           />
-          {errors.slug && <p className='text-sm text-red-500'>{errors.slug}</p>}
+          {errors['slug'] && (
+            <p className='text-sm text-red-500'>{errors['slug']}</p>
+          )}
         </div>
 
         {/* Card Type */}
         <div className='space-y-2'>
           <Label htmlFor='cardType'>Card Type</Label>
           <Select
-            value={formData.cardType}
+            value={formData['cardType']}
             onValueChange={value => handleChange('cardType', value)}
           >
             <SelectTrigger>
@@ -216,12 +222,12 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             id='order'
             type='number'
             min='1'
-            value={formData.order}
+            value={formData['order']}
             onChange={e => handleChange('order', parseInt(e.target.value) || 1)}
-            className={errors.order ? 'border-red-500' : ''}
+            className={errors['order'] ? 'border-red-500' : ''}
           />
-          {errors.order && (
-            <p className='text-sm text-red-500'>{errors.order}</p>
+          {errors['order'] && (
+            <p className='text-sm text-red-500'>{errors['order']}</p>
           )}
         </div>
 
@@ -232,12 +238,12 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             <Input
               id='color'
               type='color'
-              value={formData.color}
+              value={formData['color']}
               onChange={e => handleChange('color', e.target.value)}
               className='w-16 h-10 p-1'
             />
             <Select
-              value={formData.color}
+              value={formData['color']}
               onValueChange={value => handleChange('color', value)}
             >
               <SelectTrigger className='flex-1'>
@@ -264,7 +270,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         <div className='space-y-2'>
           <Label htmlFor='icon'>Icon</Label>
           <Select
-            value={formData.icon}
+            value={formData['icon']}
             onValueChange={value => handleChange('icon', value)}
           >
             <SelectTrigger>
@@ -286,14 +292,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         <Label htmlFor='description'>Description *</Label>
         <Textarea
           id='description'
-          value={formData.description}
+          value={formData['description']}
           onChange={e => handleChange('description', e.target.value)}
           placeholder='Describe what this category covers...'
           rows={3}
-          className={errors.description ? 'border-red-500' : ''}
+          className={errors['description'] ? 'border-red-500' : ''}
         />
-        {errors.description && (
-          <p className='text-sm text-red-500'>{errors.description}</p>
+        {errors['description'] && (
+          <p className='text-sm text-red-500'>{errors['description']}</p>
         )}
       </div>
 

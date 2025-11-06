@@ -1,6 +1,6 @@
 'use client';
 
-import { ResourceCategoryInfo } from '@/types/resource';
+import { ResourceCategoryInfo } from '@elzatona/shared-types';
 
 interface CategoryCardProps {
   category: ResourceCategoryInfo;

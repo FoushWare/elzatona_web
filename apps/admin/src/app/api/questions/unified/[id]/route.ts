@@ -8,9 +8,10 @@ const supabase = createClient(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
 
     const {
@@ -55,7 +56,7 @@ export async function PUT(
         is_active: isActive,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
 
@@ -76,13 +77,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { error } = await supabase
-      .from('questions')
-      .delete()
-      .eq('id', params.id);
+    const { id } = await params;
+    const { error } = await supabase.from('questions').delete().eq('id', id);
 
     if (error) throw error;
 

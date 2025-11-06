@@ -31,8 +31,25 @@ export async function GET(request: NextRequest) {
       query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
     }
 
-    // Get total count for pagination
-    const { count } = await query.select('*', { count: 'exact', head: true });
+    // Get total count for pagination - create a separate count query
+    let countQuery = supabase
+      .from('frontend_tasks')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_active', true);
+
+    if (category) {
+      countQuery = countQuery.eq('category', category);
+    }
+    if (difficulty) {
+      countQuery = countQuery.eq('difficulty', difficulty);
+    }
+    if (search) {
+      countQuery = countQuery.or(
+        `title.ilike.%${search}%,description.ilike.%${search}%`
+      );
+    }
+
+    const { count } = await countQuery;
 
     // Apply pagination
     const from = (page - 1) * limit;

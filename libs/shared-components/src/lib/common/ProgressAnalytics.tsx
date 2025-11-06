@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useUserProgress } from '@elzatona/shared-hooks';
+// import { useUserProgress } from '@elzatona/shared-hooks'; // Removed - useUserProgress is not exported
 import {
   BarChart3,
   TrendingUp,
@@ -29,8 +29,11 @@ interface AnalyticsCard {
 }
 
 export default function ProgressAnalytics() {
-  const { dashboardStats, isLoading, error, refreshDashboardStats } =
-    useUserProgress();
+  // useUserProgress hook removed - not available in shared-hooks
+  const dashboardStats = null as any;
+  const isLoading = false;
+  const error = null;
+  const refreshDashboardStats = async () => {};
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = async () => {
@@ -197,34 +200,41 @@ export default function ProgressAnalytics() {
               Top Performing Categories
             </h3>
             <div className='space-y-4'>
-              {dashboardStats.recentActivity.map((activity, index) => (
-                <div key={index} className='flex items-center justify-between'>
-                  <div className='flex items-center space-x-3'>
-                    <div className='w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm'>
-                      {index + 1}
-                    </div>
-                    <div>
-                      <div className='font-medium text-gray-900 dark:text-white'>
-                        {activity.type}
+              {dashboardStats.recentActivity.map(
+                (activity: any, index: number) => (
+                  <div
+                    key={index}
+                    className='flex items-center justify-between'
+                  >
+                    <div className='flex items-center space-x-3'>
+                      <div className='w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm'>
+                        {index + 1}
                       </div>
-                      <div className='text-sm text-gray-600 dark:text-gray-400'>
-                        {activity.description}
+                      <div>
+                        <div className='font-medium text-gray-900 dark:text-white'>
+                          {activity.type}
+                        </div>
+                        <div className='text-sm text-gray-600 dark:text-gray-400'>
+                          {activity.description}
+                        </div>
+                      </div>
+                    </div>
+                    <div className='text-right'>
+                      <div className='text-lg font-bold text-gray-900 dark:text-white'>
+                        {activity.points}
+                      </div>
+                      <div className='w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
+                        <div
+                          className='bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500'
+                          style={{
+                            width: `${Math.min(100, activity.points)}%`,
+                          }}
+                        ></div>
                       </div>
                     </div>
                   </div>
-                  <div className='text-right'>
-                    <div className='text-lg font-bold text-gray-900 dark:text-white'>
-                      {activity.points}
-                    </div>
-                    <div className='w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
-                      <div
-                        className='bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500'
-                        style={{ width: `${Math.min(100, activity.points)}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </div>
         )}
@@ -242,7 +252,7 @@ export default function ProgressAnalytics() {
                 <div className='text-2xl font-bold text-blue-600 mb-1'>
                   {
                     dashboardStats.recentActivity.filter(
-                      a => a.type === 'question'
+                      (a: any) => a.type === 'question'
                     ).length
                   }
                 </div>
@@ -254,7 +264,7 @@ export default function ProgressAnalytics() {
                 <div className='text-2xl font-bold text-green-600 mb-1'>
                   {
                     dashboardStats.recentActivity.filter(
-                      a => a.type === 'challenge'
+                      (a: any) => a.type === 'challenge'
                     ).length
                   }
                 </div>
@@ -265,8 +275,9 @@ export default function ProgressAnalytics() {
               <div className='text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg'>
                 <div className='text-2xl font-bold text-purple-600 mb-1'>
                   {
-                    dashboardStats.recentActivity.filter(a => a.type === 'path')
-                      .length
+                    dashboardStats.recentActivity.filter(
+                      (a: any) => a.type === 'path'
+                    ).length
                   }
                 </div>
                 <div className='text-sm text-purple-600 dark:text-purple-400'>

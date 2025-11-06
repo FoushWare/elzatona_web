@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslation } from '@elzatona/shared-hooks';
+// import { useTranslation } from '@elzatona/shared-hooks'; // Removed - useTranslation is not exported
 import { useEffect } from 'react';
 
 interface LayoutWrapperProps {
@@ -8,12 +8,12 @@ interface LayoutWrapperProps {
 }
 
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {
-  const { locale } = useTranslation();
-
+  // useTranslation hook removed - not available in shared-hooks
+  // Default to 'en' for document language
   useEffect(() => {
-    // Update document language
-    document.documentElement.lang = locale;
-  }, [locale]);
+    // Update document language to default 'en'
+    document.documentElement.lang = 'en';
+  }, []);
 
   return <div className='min-h-screen'>{children}</div>;
 }

@@ -197,7 +197,7 @@ export async function POST(request: NextRequest) {
     // Set HTTP-only cookie with progress summary
     response.cookies.set('progress-summary', JSON.stringify(progressSummary), {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env['NODE_ENV'] === 'production',
       sameSite: 'strict',
       maxAge: 60 * 60 * 24 * 30, // 30 days
       path: '/',

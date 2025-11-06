@@ -10,7 +10,7 @@ export default function SimpleGuidedPracticePage() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const planId = searchParams.get('plan');
+  const planId = searchParams?.get('plan');
 
   useEffect(() => {
     console.log('🔍 Simple Guided Practice: Starting...');

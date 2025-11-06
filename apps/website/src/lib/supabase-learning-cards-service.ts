@@ -11,6 +11,9 @@ export class SupabaseLearningCardsService {
   // Learning Cards CRUD operations
   static async getAllCards(): Promise<LearningCard[]> {
     try {
+      if (!supabaseClient) {
+        throw new Error('Supabase client is not available');
+      }
       const { data: cards, error } = await supabaseClient.getLearningCards({
         isActive: true,
         orderBy: 'order_index',
@@ -51,6 +54,9 @@ export class SupabaseLearningCardsService {
 
   static async getCardById(card_id: string): Promise<LearningCard | null> {
     try {
+      if (!supabaseClient) {
+        throw new Error('Supabase client is not available');
+      }
       const { data: card, error } = await supabaseClient.getLearningCards({
         isActive: true,
       });
@@ -92,6 +98,9 @@ export class SupabaseLearningCardsService {
 
   static async createCard(cardData: LearningCardFormData): Promise<string> {
     try {
+      if (!supabaseClient) {
+        throw new Error('Supabase client is not available');
+      }
       // Transform form data to Supabase format
       const supabaseCardData = {
         title: cardData.title,
@@ -122,6 +131,9 @@ export class SupabaseLearningCardsService {
     cardData: Partial<LearningCardFormData>
   ): Promise<void> {
     try {
+      if (!supabaseClient) {
+        throw new Error('Supabase client is not available');
+      }
       // Transform form data to Supabase format
       const supabaseCardData: any = {};
 
@@ -152,6 +164,9 @@ export class SupabaseLearningCardsService {
 
   static async deleteCard(card_id: string): Promise<void> {
     try {
+      if (!supabaseClient) {
+        throw new Error('Supabase client is not available');
+      }
       const { error } = await supabaseClient.deleteLearningCard(card_id);
 
       if (error) {
@@ -235,6 +250,9 @@ export class SupabaseLearningCardsService {
   // Utility methods
   static async getCardsByType(type: CardType): Promise<LearningCard[]> {
     try {
+      if (!supabaseClient) {
+        throw new Error('Supabase client is not available');
+      }
       const { data: cards, error } = await supabaseClient.getLearningCards({
         type,
         isActive: true,
@@ -276,6 +294,9 @@ export class SupabaseLearningCardsService {
 
   static async getActiveCardsCount(): Promise<number> {
     try {
+      if (!supabaseClient) {
+        throw new Error('Supabase client is not available');
+      }
       const { data: cards, error } = await supabaseClient.getLearningCards({
         isActive: true,
       });

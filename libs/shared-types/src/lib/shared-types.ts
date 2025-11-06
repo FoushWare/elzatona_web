@@ -2,10 +2,20 @@
 export * from './learning-cards';
 export * from './unified-question-schema';
 export * from './admin';
-export * from './auth';
-export * from './common';
-export * from './frontend-tasks';
-export * from './learning-paths';
-export * from './problem-solving';
+// Export challenge types but exclude TestCase to avoid conflict with admin.ts
+export type { Difficulty, Category } from './challenge';
+export type {
+  Challenge,
+  ChallengeFilters,
+  ChallengeListResponse,
+} from './challenge';
+// Export resource types but exclude LearningPath to avoid conflict with unified-question-schema
+export type { ResourceCategory, ResourceType } from './resource';
+export type { LearningResource, ResourceCategoryInfo } from './resource';
+// export * from './auth'; // Auth types moved to shared-contexts
+// export * from './common'; // File does not exist
+// export * from './frontend-tasks'; // File does not exist
+// export * from './learning-paths'; // File does not exist
+// export * from './problem-solving'; // File does not exist
 export * from './progress';
-export * from './user';
+// export * from './user'; // File does not exist

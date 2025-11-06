@@ -24,9 +24,9 @@ export const LoadingTransition: React.FC<LoadingTransitionProps> = ({
       }, duration);
 
       return () => clearTimeout(timer);
-    } else {
-      setShouldRender(false);
     }
+    setShouldRender(false);
+    return undefined;
   }, [isVisible, duration]);
 
   if (!shouldRender) {

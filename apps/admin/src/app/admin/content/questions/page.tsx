@@ -253,9 +253,9 @@ export default function AdminContentQuestionsPage() {
     if (!questions || !Array.isArray(questions)) {
       return [];
     }
-    const types = [
-      ...new Set(questions.map((q: UnifiedQuestion) => q.type).filter(Boolean)),
-    ] as string[];
+    const types = Array.from(
+      new Set(questions.map((q: UnifiedQuestion) => q.type).filter(Boolean))
+    ) as string[];
     return types.sort();
   }, [questions]);
 
@@ -294,8 +294,14 @@ export default function AdminContentQuestionsPage() {
     }
   };
 
-  const handleUpdateQuestion = async (updatedQuestion: UnifiedQuestion) => {
+  const handleUpdateQuestion = async (formData: any) => {
     try {
+      // Convert form data to UnifiedQuestion format
+      const updatedQuestion: UnifiedQuestion = {
+        ...selectedQuestion!,
+        ...formData,
+      };
+
       const response = await fetch(
         `/api/questions/unified/${updatedQuestion.id}`,
         {

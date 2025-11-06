@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 interface PerformanceMetrics {
@@ -71,6 +71,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
       return () => fcpObserver.disconnect();
     }
+    return undefined;
   }, []);
 
   // Measure LCP (Largest Contentful Paint)
@@ -91,6 +92,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
       return () => lcpObserver.disconnect();
     }
+    return undefined;
   }, []);
 
   // Measure CLS (Cumulative Layout Shift)
@@ -118,6 +120,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
       return () => clsObserver.disconnect();
     }
+    return undefined;
   }, []);
 
   // Measure FID (First Input Delay)
@@ -145,6 +148,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
       return () => fidObserver.disconnect();
     }
+    return undefined;
   }, []);
 
   // Measure TTFB (Time to First Byte)
@@ -168,6 +172,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
       return () => navigationObserver.disconnect();
     }
+    return undefined;
   }, []);
 
   // Monitor image loading performance

@@ -23,6 +23,11 @@ const nextConfig = {
       },
     },
   },
+  // Configure build to handle error pages
+  generateBuildId: async () => {
+    // Use a static build ID to ensure consistent builds
+    return 'admin-build';
+  },
 };
 
 module.exports = nextConfig;

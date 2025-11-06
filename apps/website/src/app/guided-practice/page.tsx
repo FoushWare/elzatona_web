@@ -97,8 +97,8 @@ export default function GuidedPracticePage() {
   const router = useRouter();
   const { addNotification } = useNotifications();
   const { setLearningType } = useLearningType();
-  const planId = searchParams.get('plan');
-  const categoryId = searchParams.get('category');
+  const planId = searchParams?.get('plan');
+  const categoryId = searchParams?.get('category');
 
   const [plan, setPlan] = useState<Plan | null>(null);
 
@@ -1050,7 +1050,7 @@ export default function GuidedPracticePage() {
   // Calculate overall progress
   const getOverallProgress = () => {
     if (!plan || !progress)
-      return { completed: 0, total: plan.totalQuestions, percentage: 0 };
+      return { completed: 0, total: plan?.totalQuestions || 0, percentage: 0 };
 
     let completed = 0;
     for (const card of plan.cards) {
@@ -1356,14 +1356,13 @@ export default function GuidedPracticePage() {
                 onClick={() => {
                   if (!currentQuestion) return;
                   try {
+                    const question: Question = currentQuestion;
                     addToCart({
-                      id: currentQuestion.id,
+                      id: question.id,
                       question:
-                        currentQuestion.title ||
-                        currentQuestion.content ||
-                        'Question',
+                        question.title || question.content || 'Question',
                       section: currentCategory?.name,
-                      difficulty: currentQuestion.difficulty,
+                      difficulty: question.difficulty,
                       addedAt: Date.now(),
                     });
                   } catch (_) {}

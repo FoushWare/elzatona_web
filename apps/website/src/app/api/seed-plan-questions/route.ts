@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     if (topicsError) throw topicsError;
 
     // Create plan_questions associations
-    const planQuestionsToInsert = [];
+    const planQuestionsToInsert: any[] = [];
 
     plans.forEach(plan => {
       // Associate first 5 questions with each plan
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
       {
         success: false,
         error: 'Failed to seed plan_questions',
-        details: error.message,
+        details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }
     );

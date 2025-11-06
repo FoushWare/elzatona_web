@@ -159,8 +159,8 @@ export default function EnhancedDashboard() {
       icon: BookOpen,
       color: 'from-blue-500 to-blue-600',
       href: '/questions',
-      stats: `${progress?.total_questions_answered || 0} completed`,
-      progress: dashboardStats ? dashboardStats.accuracy || 0 : 0,
+      stats: `${(progress as any)?.total_questions_answered || 0} completed`,
+      progress: (dashboardStats as any)?.accuracy || 0,
     },
     // Learning Paths card removed per product decision
     {
@@ -171,7 +171,7 @@ export default function EnhancedDashboard() {
       color: 'from-green-500 to-green-600',
       href: '/challenges',
       stats: `${0} challenges solved`,
-      progress: dashboardStats ? dashboardStats.accuracy || 0 : 0,
+      progress: (dashboardStats as any)?.accuracy || 0,
     },
     {
       id: 'analytics',
@@ -353,25 +353,27 @@ export default function EnhancedDashboard() {
 
   // Recent activities from real data
   const recentActivities: RecentActivity[] =
-    oldDashboardStats?.recentActivity?.slice(0, 4).map((activity, index) => ({
-      id: `activity-${index}`,
-      type: activity.type as 'question' | 'challenge' | 'path',
-      title: activity.description,
-      time: formatTimeAgo(activity.timestamp),
-      points: activity.points,
-      icon:
-        activity.type === 'question'
-          ? CheckCircle
-          : activity.type === 'challenge'
-            ? Trophy
-            : Target,
-      color:
-        activity.type === 'question'
-          ? 'text-green-500'
-          : activity.type === 'challenge'
-            ? 'text-blue-500'
-            : 'text-purple-500',
-    })) || [];
+    oldDashboardStats?.recentActivity
+      ?.slice(0, 4)
+      .map((activity: any, index: number) => ({
+        id: `activity-${index}`,
+        type: activity.type as 'question' | 'challenge' | 'path',
+        title: activity.description,
+        time: formatTimeAgo(activity.timestamp),
+        points: activity.points,
+        icon:
+          activity.type === 'question'
+            ? CheckCircle
+            : activity.type === 'challenge'
+              ? Trophy
+              : Target,
+        color:
+          activity.type === 'question'
+            ? 'text-green-500'
+            : activity.type === 'challenge'
+              ? 'text-blue-500'
+              : 'text-purple-500',
+      })) || [];
 
   const handleLogout = async () => {
     try {
@@ -557,7 +559,7 @@ export default function EnhancedDashboard() {
         </div>
 
         {/* Continue Where You Left Off */}
-        {continueData?.recentPath && (
+        {(continueData as any)?.recentPath && (
           <div className='mb-8'>
             <div className='bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white'>
               <div className='flex items-center justify-between mb-4'>
@@ -566,31 +568,33 @@ export default function EnhancedDashboard() {
                   Continue Where You Left Off
                 </h2>
                 <span className='text-blue-200 text-sm'>
-                  {formatTimeAgo(continueData.recentPath.lastAccessed)}
+                  {formatTimeAgo((continueData as any).recentPath.lastAccessed)}
                 </span>
               </div>
               <div className='flex items-center justify-between'>
                 <div>
                   <h3 className='text-xl font-semibold mb-2'>
-                    {continueData.recentPath.pathName}
+                    {(continueData as any).recentPath.pathName}
                   </h3>
                   <p className='text-blue-100 mb-3'>
-                    {continueData.recentPath.completedSections.length} sections
-                    completed
+                    {(continueData as any).recentPath.completedSections.length}{' '}
+                    sections completed
                   </p>
                   <div className='flex items-center space-x-4 text-sm text-blue-200'>
                     <span className='flex items-center'>
                       <Timer className='w-4 h-4 mr-1' />
-                      {formatTimeSpent(continueData.recentPath.timeSpent)}
+                      {formatTimeSpent(
+                        (continueData as any).recentPath.timeSpent
+                      )}
                     </span>
                     <span className='flex items-center'>
                       <Target className='w-4 h-4 mr-1' />
-                      {continueData.recentPath.progress}% complete
+                      {(continueData as any).recentPath.progress}% complete
                     </span>
                   </div>
                 </div>
                 <Link
-                  href={`/learning-paths/${continueData.recentPath.pathId}`}
+                  href={`/learning-paths/${(continueData as any).recentPath.pathId}`}
                   className='flex items-center space-x-2 px-6 py-3 bg-white text-blue-600 rounded-xl hover:bg-blue-50 transition-colors font-semibold'
                 >
                   <span>Continue</span>
@@ -601,7 +605,9 @@ export default function EnhancedDashboard() {
                 <div className='w-full bg-blue-500/30 rounded-full h-2'>
                   <div
                     className='bg-white h-2 rounded-full transition-all duration-500'
-                    style={{ width: `${continueData.recentPath.progress}%` }}
+                    style={{
+                      width: `${(continueData as any).recentPath.progress}%`,
+                    }}
                   ></div>
                 </div>
               </div>
@@ -633,7 +639,7 @@ export default function EnhancedDashboard() {
                         <Loader2 className='w-6 h-6 animate-spin inline-block' />
                       ) : (
                         (dashboardStats?.questionsCompleted ??
-                        progress?.total_questions_answered ??
+                        (progress as any)?.total_questions_answered ??
                         0)
                       )}
                     </div>
@@ -653,7 +659,7 @@ export default function EnhancedDashboard() {
                         <Loader2 className='w-6 h-6 animate-spin inline-block' />
                       ) : (
                         (dashboardStats?.totalPoints ??
-                        progress?.total_points ??
+                        (progress as any)?.total_points ??
                         0)
                       )}
                     </div>
@@ -673,7 +679,7 @@ export default function EnhancedDashboard() {
                         <Loader2 className='w-6 h-6 animate-spin inline-block' />
                       ) : (
                         (dashboardStats?.dayStreak ??
-                        progress?.current_streak ??
+                        (progress as any)?.current_streak ??
                         0)
                       )}
                     </div>
@@ -693,7 +699,7 @@ export default function EnhancedDashboard() {
                         <Loader2 className='w-6 h-6 animate-spin inline-block' />
                       ) : (
                         (dashboardStats?.achievements?.length ??
-                        progress?.achievements?.length ??
+                        (progress as any)?.achievements?.length ??
                         0)
                       )}
                     </div>

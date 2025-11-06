@@ -44,7 +44,7 @@ import {
 import { Label } from '@elzatona/shared-components';
 import { Textarea } from '@elzatona/shared-components';
 import { Checkbox } from '@elzatona/shared-components';
-import { UnifiedQuestion } from '@/lib/unified-question-schema';
+import { UnifiedQuestion } from '@elzatona/shared-types';
 
 type Question = UnifiedQuestion;
 
@@ -489,22 +489,26 @@ export default function AdminContentQuestionsPage() {
                           </p>
                           <div className='mt-2 flex flex-wrap gap-2'>
                             {/* Topics Badges */}
-                            {question.topics && question.topics.length > 0 ? (
-                              question.topics.map((topic, index) => (
-                                <Badge
-                                  key={`${question.id}-topic-${index}`}
-                                  variant={
-                                    topic.is_primary ? 'default' : 'outline'
-                                  }
-                                  className={`${
-                                    topic.is_primary
-                                      ? 'bg-purple-600 text-white'
-                                      : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                                  }`}
-                                >
-                                  {topic.is_primary && '⭐ '}Topic: {topic.name}
-                                </Badge>
-                              ))
+                            {(question as any).topics &&
+                            (question as any).topics.length > 0 ? (
+                              (question as any).topics.map(
+                                (topic: any, index: number) => (
+                                  <Badge
+                                    key={`${question.id}-topic-${index}`}
+                                    variant={
+                                      topic.is_primary ? 'default' : 'outline'
+                                    }
+                                    className={`${
+                                      topic.is_primary
+                                        ? 'bg-purple-600 text-white'
+                                        : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                                    }`}
+                                  >
+                                    {topic.is_primary && '⭐ '}Topic:{' '}
+                                    {topic.name}
+                                  </Badge>
+                                )
+                              )
                             ) : (
                               <Badge
                                 variant='outline'
@@ -515,26 +519,28 @@ export default function AdminContentQuestionsPage() {
                             )}
 
                             {/* Categories Badges */}
-                            {question.categories &&
-                            question.categories.length > 0 ? (
-                              question.categories.map((category, index) => (
-                                <Badge
-                                  key={`${question.id}-category-${index}`}
-                                  variant={
-                                    category.is_primary
-                                      ? 'default'
-                                      : 'secondary'
-                                  }
-                                  className={`${
-                                    category.is_primary
-                                      ? 'bg-green-600 text-white'
-                                      : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                  }`}
-                                >
-                                  {category.is_primary && '⭐ '}Category:{' '}
-                                  {category.name}
-                                </Badge>
-                              ))
+                            {(question as any).categories &&
+                            (question as any).categories.length > 0 ? (
+                              (question as any).categories.map(
+                                (category: any, index: number) => (
+                                  <Badge
+                                    key={`${question.id}-category-${index}`}
+                                    variant={
+                                      category.is_primary
+                                        ? 'default'
+                                        : 'secondary'
+                                    }
+                                    className={`${
+                                      category.is_primary
+                                        ? 'bg-green-600 text-white'
+                                        : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                    }`}
+                                  >
+                                    {category.is_primary && '⭐ '}Category:{' '}
+                                    {category.name}
+                                  </Badge>
+                                )
+                              )
                             ) : (
                               <Badge
                                 variant='outline'
@@ -545,12 +551,12 @@ export default function AdminContentQuestionsPage() {
                             )}
 
                             {/* Card Badge */}
-                            {question.learning_card ? (
+                            {(question as any).learning_card ? (
                               <Badge
                                 variant='secondary'
                                 className='bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
                               >
-                                Card: {question.learning_card.title}
+                                Card: {(question as any).learning_card.title}
                               </Badge>
                             ) : (
                               <Badge
@@ -781,14 +787,14 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     >
   ) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
-    setFormData(prev => ({
+    setFormData((prev: any) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
   const handleSelectChange = (name: keyof Question, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev: any) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -926,7 +932,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           name='isActive'
           checked={formData.is_active || false}
           onCheckedChange={checked =>
-            setFormData(prev => ({ ...prev, is_active: !!checked }))
+            setFormData((prev: any) => ({ ...prev, is_active: !!checked }))
           }
         />
         <Label htmlFor='isActive'>Is Active</Label>

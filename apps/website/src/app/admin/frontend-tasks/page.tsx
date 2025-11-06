@@ -14,8 +14,8 @@ import {
   FrontendTask,
   FrontendTaskFormData,
   FrontendTaskFile,
-} from '@/types/admin';
-import FrontendTaskEditor from '@elzatona/shared-components';
+} from '@elzatona/shared-types';
+import { FrontendTaskEditor } from '@elzatona/shared-components';
 import {
   useFrontendTasks,
   useCreateFrontendTask,
@@ -398,14 +398,14 @@ function FrontendTaskModal({
     if (formData.files.length <= 1) return; // Keep at least one file
     setFormData({
       ...formData,
-      files: formData.files.filter(f => f.id !== fileId),
+      files: formData.files.filter((f: FrontendTaskFile) => f.id !== fileId),
     });
   };
 
   const updateFile = (fileId: string, updates: Partial<FrontendTaskFile>) => {
     setFormData({
       ...formData,
-      files: formData.files.map(f =>
+      files: formData.files.map((f: FrontendTaskFile) =>
         f.id === fileId ? { ...f, ...updates } : f
       ),
     });
@@ -421,7 +421,7 @@ function FrontendTaskModal({
   const removeHint = (index: number) => {
     setFormData({
       ...formData,
-      hints: formData.hints.filter((_, i) => i !== index),
+      hints: formData.hints.filter((_: string, i: number) => i !== index),
     });
   };
 

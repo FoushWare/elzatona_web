@@ -3,8 +3,8 @@
 import React, { useEffect, useCallback } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { TourProvider, useTour } from '@reactour/tour';
@@ -129,7 +129,9 @@ const TourContent: React.FC<GuidedTourProps> = ({
 export const GuidedTour: React.FC<GuidedTourProps> = props => {
   return (
     <>
-      <style jsx global>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         :root {
           --tour-bg: #ffffff;
           --tour-text: #1f2937;
@@ -185,7 +187,9 @@ export const GuidedTour: React.FC<GuidedTourProps> = props => {
           background-color: var(--tour-disabled, #9ca3af) !important;
           cursor: not-allowed !important;
         }
-      `}</style>
+      `,
+        }}
+      />
       <TourProvider
         steps={steps}
         styles={{

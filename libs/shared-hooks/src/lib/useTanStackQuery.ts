@@ -1060,7 +1060,7 @@ export const useDeleteProblemSolvingTask = () => {
 // LEARNING PATHS HOOKS
 // ============================================================================
 
-export const useLearningPaths = () => {
+export const useLearningPathsQuery = () => {
   return useQuery({
     queryKey: queryKeys.learningPaths,
     queryFn: api.getLearningPaths,

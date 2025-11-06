@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { Button } from '@elzatona/shared-components';
@@ -210,7 +210,7 @@ export const BulkOperations: React.FC<BulkOperationsProps> = ({
                   <Input
                     id='edit-field'
                     placeholder='Field name (e.g., isActive, difficulty)'
-                    value={editData.field || ''}
+                    value={editData['field'] || ''}
                     onChange={e =>
                       setEditData({ ...editData, field: e.target.value })
                     }
@@ -219,7 +219,7 @@ export const BulkOperations: React.FC<BulkOperationsProps> = ({
                   <Input
                     id='edit-value'
                     placeholder='New value'
-                    value={editData.value || ''}
+                    value={editData['value'] || ''}
                     onChange={e =>
                       setEditData({ ...editData, value: e.target.value })
                     }

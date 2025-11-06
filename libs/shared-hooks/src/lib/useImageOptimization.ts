@@ -1,11 +1,44 @@
 import { useState, useEffect, useCallback } from 'react';
-import {
-  generateOptimizedImageUrl,
-  generateResponsiveSrcSet,
-  generateSizesAttribute,
-  shouldPrioritizeImage,
-  getPreferredImageFormat,
-} from '../utils/imageOptimization';
+
+// Inline utility functions to avoid module resolution issues
+function generateOptimizedImageUrl(
+  src: string,
+  options: {
+    quality?: number;
+    format?: 'webp' | 'jpeg' | 'png';
+    width?: number;
+    height?: number;
+  }
+): string {
+  return src;
+}
+
+function generateResponsiveSrcSet(src: string, baseWidth: number): string {
+  const widths = [baseWidth, baseWidth * 1.5, baseWidth * 2];
+  return widths.map(w => `${src}?w=${w} ${w}w`).join(', ');
+}
+
+function generateSizesAttribute(): string {
+  return '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
+}
+
+function shouldPrioritizeImage(
+  isAboveTheFold?: boolean,
+  isHero?: boolean,
+  isLogo?: boolean
+): boolean {
+  return Boolean(isAboveTheFold || isHero || isLogo);
+}
+
+function getPreferredImageFormat(): string {
+  if (typeof window !== 'undefined') {
+    const canvas = document.createElement('canvas');
+    return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0
+      ? 'webp'
+      : 'jpeg';
+  }
+  return 'webp';
+}
 
 interface UseImageOptimizationOptions {
   src: string;

@@ -1,11 +1,13 @@
 // Topic Form Component
 // v1.0 - Form for creating and editing topics
 
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
+const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { Button } from '@elzatona/shared-components';
@@ -86,28 +88,29 @@ export const TopicForm: React.FC<TopicFormProps> = ({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Topic name is required';
+    if (!formData['name'].trim()) {
+      newErrors['name'] = 'Topic name is required';
     }
 
-    if (!formData.description.trim()) {
-      newErrors.description = 'Description is required';
+    if (!formData['description'].trim()) {
+      newErrors['description'] = 'Description is required';
     }
 
-    if (!formData.categoryId) {
-      newErrors.categoryId = 'Category is required';
+    if (!formData['categoryId']) {
+      newErrors['categoryId'] = 'Category is required';
     }
 
-    if (!formData.slug.trim()) {
-      newErrors.slug = 'Slug is required';
+    if (!formData['slug'].trim()) {
+      newErrors['slug'] = 'Slug is required';
     }
 
-    if (formData.estimatedQuestions < 1) {
-      newErrors.estimatedQuestions = 'Estimated questions must be at least 1';
+    if (formData['estimatedQuestions'] < 1) {
+      newErrors['estimatedQuestions'] =
+        'Estimated questions must be at least 1';
     }
 
-    if (formData.order < 1) {
-      newErrors.order = 'Order must be at least 1';
+    if (formData['order'] < 1) {
+      newErrors['order'] = 'Order must be at least 1';
     }
 
     setErrors(newErrors);
@@ -144,12 +147,14 @@ export const TopicForm: React.FC<TopicFormProps> = ({
           <Label htmlFor='name'>Topic Name *</Label>
           <Input
             id='name'
-            value={formData.name}
+            value={formData['name']}
             onChange={e => handleChange('name', e.target.value)}
             placeholder='e.g., React Hooks'
-            className={errors.name ? 'border-red-500' : ''}
+            className={errors['name'] ? 'border-red-500' : ''}
           />
-          {errors.name && <p className='text-sm text-red-500'>{errors.name}</p>}
+          {errors['name'] && (
+            <p className='text-sm text-red-500'>{errors['name']}</p>
+          )}
         </div>
 
         {/* Slug */}
@@ -157,23 +162,25 @@ export const TopicForm: React.FC<TopicFormProps> = ({
           <Label htmlFor='slug'>Slug *</Label>
           <Input
             id='slug'
-            value={formData.slug}
+            value={formData['slug']}
             onChange={e => handleChange('slug', e.target.value)}
             placeholder='e.g., react-hooks'
-            className={errors.slug ? 'border-red-500' : ''}
+            className={errors['slug'] ? 'border-red-500' : ''}
           />
-          {errors.slug && <p className='text-sm text-red-500'>{errors.slug}</p>}
+          {errors['slug'] && (
+            <p className='text-sm text-red-500'>{errors['slug']}</p>
+          )}
         </div>
 
         {/* Category */}
         <div className='space-y-2'>
           <Label htmlFor='categoryId'>Category *</Label>
           <Select
-            value={formData.categoryId}
+            value={formData['categoryId']}
             onValueChange={value => handleChange('categoryId', value)}
           >
             <SelectTrigger
-              className={errors.categoryId ? 'border-red-500' : ''}
+              className={errors['categoryId'] ? 'border-red-500' : ''}
             >
               <SelectValue placeholder='Select category' />
             </SelectTrigger>
@@ -185,8 +192,8 @@ export const TopicForm: React.FC<TopicFormProps> = ({
               ))}
             </SelectContent>
           </Select>
-          {errors.categoryId && (
-            <p className='text-sm text-red-500'>{errors.categoryId}</p>
+          {errors['categoryId'] && (
+            <p className='text-sm text-red-500'>{errors['categoryId']}</p>
           )}
         </div>
 
@@ -194,7 +201,7 @@ export const TopicForm: React.FC<TopicFormProps> = ({
         <div className='space-y-2'>
           <Label htmlFor='difficulty'>Difficulty</Label>
           <Select
-            value={formData.difficulty}
+            value={formData['difficulty']}
             onValueChange={value => handleChange('difficulty', value)}
           >
             <SelectTrigger>
@@ -217,14 +224,16 @@ export const TopicForm: React.FC<TopicFormProps> = ({
             id='estimatedQuestions'
             type='number'
             min='1'
-            value={formData.estimatedQuestions}
+            value={formData['estimatedQuestions']}
             onChange={e =>
               handleChange('estimatedQuestions', parseInt(e.target.value) || 1)
             }
-            className={errors.estimatedQuestions ? 'border-red-500' : ''}
+            className={errors['estimatedQuestions'] ? 'border-red-500' : ''}
           />
-          {errors.estimatedQuestions && (
-            <p className='text-sm text-red-500'>{errors.estimatedQuestions}</p>
+          {errors['estimatedQuestions'] && (
+            <p className='text-sm text-red-500'>
+              {errors['estimatedQuestions']}
+            </p>
           )}
         </div>
 
@@ -235,12 +244,12 @@ export const TopicForm: React.FC<TopicFormProps> = ({
             id='order'
             type='number'
             min='1'
-            value={formData.order}
+            value={formData['order']}
             onChange={e => handleChange('order', parseInt(e.target.value) || 1)}
-            className={errors.order ? 'border-red-500' : ''}
+            className={errors['order'] ? 'border-red-500' : ''}
           />
-          {errors.order && (
-            <p className='text-sm text-red-500'>{errors.order}</p>
+          {errors['order'] && (
+            <p className='text-sm text-red-500'>{errors['order']}</p>
           )}
         </div>
       </div>
@@ -250,14 +259,14 @@ export const TopicForm: React.FC<TopicFormProps> = ({
         <Label htmlFor='description'>Description *</Label>
         <Textarea
           id='description'
-          value={formData.description}
+          value={formData['description']}
           onChange={e => handleChange('description', e.target.value)}
           placeholder='Describe what this topic covers...'
           rows={3}
-          className={errors.description ? 'border-red-500' : ''}
+          className={errors['description'] ? 'border-red-500' : ''}
         />
-        {errors.description && (
-          <p className='text-sm text-red-500'>{errors.description}</p>
+        {errors['description'] && (
+          <p className='text-sm text-red-500'>{errors['description']}</p>
         )}
       </div>
 

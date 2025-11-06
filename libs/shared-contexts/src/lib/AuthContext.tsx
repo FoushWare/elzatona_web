@@ -8,7 +8,8 @@ import {
   ReactNode,
 } from 'react';
 // import { UserAuthService } from '@/lib/user-auth';
-import { syncAllProgressOnLogin } from '@/lib/sync-progress-on-login';
+// Note: syncAllProgressOnLogin is website-specific and should be imported where needed
+// import { syncAllProgressOnLogin } from '@/lib/sync-progress-on-login';
 import { Loader2 } from 'lucide-react';
 
 interface User {
@@ -109,27 +110,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
         localStorage.setItem('auth-token', data.user.token);
 
         // Sync all localStorage progress to database after successful login
-        try {
-          console.log('🔄 Syncing progress to database after login...');
-          const syncResult = await syncAllProgressOnLogin(
-            data.user.token,
-            data.user.id
-          );
-          if (syncResult.success) {
-            console.log('✅ Progress synced successfully after login');
-          } else {
-            console.warn('⚠️ Some progress failed to sync:', {
-              guided: syncResult.guided.errors,
-              freeStyle: syncResult.freeStyle.error,
-            });
-          }
-        } catch (syncError) {
-          // Don't block login if sync fails
-          console.error(
-            '❌ Error syncing progress on login (non-blocking):',
-            syncError
-          );
-        }
+        // Note: This is website-specific functionality and should be handled in the website app
+        // The syncAllProgressOnLogin function should be imported and called in the website app's login flow
+        // try {
+        //   console.log('🔄 Syncing progress to database after login...');
+        //   const syncResult = await syncAllProgressOnLogin(
+        //     data.user.token,
+        //     data.user.id
+        //   );
+        //   if (syncResult.success) {
+        //     console.log('✅ Progress synced successfully after login');
+        //   } else {
+        //     console.warn('⚠️ Some progress failed to sync:', {
+        //       guided: syncResult.guided.errors,
+        //       freeStyle: syncResult.freeStyle.error,
+        //     });
+        //   }
+        // } catch (syncError) {
+        //   // Don't block login if sync fails
+        //   console.error(
+        //     '❌ Error syncing progress on login (non-blocking):',
+        //     syncError
+        //   );
+        // }
 
         return true;
       }

@@ -49,12 +49,7 @@ export const NavbarSimple: React.FC = () => {
   const { learningType, setLearningType } = useLearningType();
   const { setIsMobileMenuOpen } = useMobileMenu();
   const { isDarkMode, toggleDarkMode } = useTheme();
-  const {
-    user,
-    isAuthenticated,
-    isLoading: isAuthLoading,
-    signOut,
-  } = useAuth();
+  const { user, isAuthenticated, isLoading: isAuthLoading, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -123,7 +118,7 @@ export const NavbarSimple: React.FC = () => {
     // Fast retry loop for first load after social redirect (max ~2s)
     let retries = 10;
     const interval = setInterval(async () => {
-      if (supabaseChecked) {
+      if (supabaseChecked || !supabase) {
         clearInterval(interval);
         return;
       }
@@ -146,6 +141,7 @@ export const NavbarSimple: React.FC = () => {
     }, 200);
 
     // Subscribe to changes
+    if (!supabase) return;
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
@@ -159,7 +155,7 @@ export const NavbarSimple: React.FC = () => {
     });
 
     return () => {
-      subscription.unsubscribe();
+      subscription?.unsubscribe();
     };
   }, []);
 
@@ -228,8 +224,8 @@ export const NavbarSimple: React.FC = () => {
     try {
       setIsSigningOut(true);
       // Sign out from app auth context (if used)
-      if (typeof signOut === 'function') {
-        await signOut();
+      if (typeof logout === 'function') {
+        await logout();
       }
       // Sign out from Supabase OAuth session
       if (isSupabaseAvailable() && supabase) {
@@ -668,9 +664,11 @@ export const NavbarSimple: React.FC = () => {
                   <>
                     {/* User Profile Section */}
                     <div className='flex items-center space-x-3 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg'>
-                      {user?.photoURL ? (
+                      {(user as any)?.photoURL || (user as any)?.avatar_url ? (
                         <img
-                          src={user.photoURL}
+                          src={
+                            (user as any)?.photoURL || (user as any)?.avatar_url
+                          }
                           alt='Profile'
                           className='w-8 h-8 rounded-full object-cover'
                         />
@@ -681,7 +679,9 @@ export const NavbarSimple: React.FC = () => {
                       )}
                       <div className='flex-1 min-w-0'>
                         <p className='text-sm font-medium text-gray-900 dark:text-white truncate'>
-                          {user?.displayName || 'User'}
+                          {(user as any)?.displayName ||
+                            (user as any)?.name ||
+                            'User'}
                         </p>
                         <p className='text-xs text-gray-500 dark:text-gray-400 truncate'>
                           {user?.email}

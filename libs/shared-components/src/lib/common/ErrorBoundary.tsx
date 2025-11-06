@@ -7,9 +7,10 @@ let supabase = null;
 try {
   const { createClient } = require('@supabase/supabase-js');
   const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+    process.env['NEXT_PUBLIC_SUPABASE_URL'] ||
+    'https://placeholder.supabase.co';
   const supabaseServiceRoleKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_key';
+    process.env['SUPABASE_SERVICE_ROLE_KEY'] || 'placeholder_key';
 
   if (
     supabaseUrl !== 'https://placeholder.supabase.co' &&
@@ -53,7 +54,7 @@ export class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log the error
     this.logError(error, errorInfo);
 
@@ -91,7 +92,7 @@ export class ErrorBoundary extends Component<Props, State> {
     }
   };
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       // Use custom fallback if provided
       if (this.props.fallback) {
@@ -137,7 +138,7 @@ export class ErrorBoundary extends Component<Props, State> {
               </button>
             </div>
 
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {process.env['NODE_ENV'] === 'development' && this.state.error && (
               <details className='mt-6 text-left'>
                 <summary className='cursor-pointer text-sm text-gray-500 dark:text-gray-400 mb-2'>
                   <Bug className='h-4 w-4 inline mr-1' />
