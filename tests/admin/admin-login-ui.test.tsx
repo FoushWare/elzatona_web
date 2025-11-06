@@ -35,6 +35,36 @@ jest.mock('nuqs', () => ({
   createSearchParamsCache: jest.fn(),
 }));
 
+// Mock @tanstack/react-query
+jest.mock('@tanstack/react-query', () => {
+  const React = require('react');
+  return {
+    QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    QueryClient: jest.fn(() => ({
+      invalidateQueries: jest.fn(),
+      setQueryData: jest.fn(),
+      getQueryData: jest.fn(),
+    })),
+    useQueryClient: jest.fn(() => ({
+      invalidateQueries: jest.fn(),
+      setQueryData: jest.fn(),
+      getQueryData: jest.fn(),
+    })),
+    useQuery: jest.fn(() => ({
+      data: null,
+      isLoading: false,
+      error: null,
+    })),
+    useMutation: jest.fn(() => ({
+      mutate: jest.fn(),
+      mutateAsync: jest.fn(),
+      isLoading: false,
+      error: null,
+    })),
+  };
+});
+
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),

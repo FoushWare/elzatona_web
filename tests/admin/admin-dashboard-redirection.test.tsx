@@ -42,14 +42,75 @@ jest.mock('nuqs', () => ({
   createSearchParamsCache: jest.fn(),
 }));
 
+// Mock @tanstack/react-query
+jest.mock('@tanstack/react-query', () => {
+  const React = require('react');
+  return {
+    QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    QueryClient: jest.fn(() => ({
+      invalidateQueries: jest.fn(),
+      setQueryData: jest.fn(),
+      getQueryData: jest.fn(),
+    })),
+    useQueryClient: jest.fn(() => ({
+      invalidateQueries: jest.fn(),
+      setQueryData: jest.fn(),
+      getQueryData: jest.fn(),
+    })),
+    useQuery: jest.fn(() => ({
+      data: null,
+      isLoading: false,
+      error: null,
+    })),
+    useMutation: jest.fn(() => ({
+      mutate: jest.fn(),
+      mutateAsync: jest.fn(),
+      isLoading: false,
+      error: null,
+    })),
+  };
+});
+
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
   usePathname: jest.fn(),
 }));
 
-// Mock AdminAuthContext from shared-contexts
-const mockUseAdminAuth = jest.fn(() => ({
+// Mock the actual AdminAuthContext file
+jest.mock('../../libs/shared-contexts/src/lib/AdminAuthContext', () => {
+  const React = require('react');
+  const mockFn = jest.fn(() => ({
+    isAuthenticated: false,
+    isLoading: false,
+    login: jest.fn(),
+    logout: jest.fn(),
+    user: null,
+  }));
+  return {
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    useAdminAuth: mockFn,
+  };
+});
+
+// Mock the actual ThemeContext file
+jest.mock('../../libs/shared-contexts/src/lib/ThemeContext', () => {
+  const React = require('react');
+  return {
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    useTheme: jest.fn(() => ({
+      isDarkMode: false,
+      toggleDarkMode: jest.fn(),
+      setDarkMode: jest.fn(),
+      isLoaded: true,
+    })),
+  };
+});
+
+// Also mock the package entry point
+const mockUseAdminAuthFn = jest.fn(() => ({
   isAuthenticated: false,
   isLoading: false,
   login: jest.fn(),
@@ -57,10 +118,19 @@ const mockUseAdminAuth = jest.fn(() => ({
   user: null,
 }));
 
-jest.mock('@elzatona/shared-contexts', () => ({
-  AdminAuthProvider: ({ children }: { children: React.ReactNode }) => children,
-  useAdminAuth: () => mockUseAdminAuth(),
-}));
+jest.mock('@elzatona/shared-contexts', () => {
+  const React = require('react');
+  return {
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    useAdminAuth: mockUseAdminAuthFn,
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    useTheme: jest.fn(() => ({
+      isDarkMode: false,
+      toggleDarkMode: jest.fn(),
+    })),
+  };
+});
 
 // Type definitions for mocks
 interface MockRouter {
@@ -89,6 +159,14 @@ describe('Admin Dashboard Redirection', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset mock admin auth function to return default values
+    mockUseAdminAuthFn.mockReturnValue({
+      isAuthenticated: false,
+      isLoading: false,
+      login: jest.fn(),
+      logout: jest.fn(),
+      user: null,
+    });
     mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: mockReplace,
@@ -102,7 +180,7 @@ describe('Admin Dashboard Redirection', () => {
   describe('Login Success Redirection', () => {
     it('should redirect to dashboard after successful login', async () => {
       const mockLogin = jest.fn().mockResolvedValue({ success: true });
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -114,7 +192,7 @@ describe('Admin Dashboard Redirection', () => {
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
       fireEvent.change(passwordInput, { target: { value: 'password123' } });
@@ -128,7 +206,7 @@ describe('Admin Dashboard Redirection', () => {
       });
 
       // Simulate successful authentication
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: mockLogin,
@@ -148,7 +226,7 @@ describe('Admin Dashboard Redirection', () => {
       const mockLogin = jest
         .fn()
         .mockResolvedValue({ success: false, error: 'Invalid credentials' });
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -160,7 +238,7 @@ describe('Admin Dashboard Redirection', () => {
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
       fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
@@ -180,7 +258,7 @@ describe('Admin Dashboard Redirection', () => {
 
   describe('Already Authenticated User Redirection', () => {
     it('should redirect authenticated users away from login page', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -194,7 +272,7 @@ describe('Admin Dashboard Redirection', () => {
     });
 
     it('should not redirect if user is still loading', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: true,
         login: jest.fn(),
@@ -209,7 +287,7 @@ describe('Admin Dashboard Redirection', () => {
 
     it('should redirect to dashboard when authentication completes', async () => {
       // Start with loading state
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: true,
         login: jest.fn(),
@@ -222,7 +300,7 @@ describe('Admin Dashboard Redirection', () => {
       expect(mockPush).not.toHaveBeenCalled();
 
       // Simulate authentication completing
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -240,7 +318,7 @@ describe('Admin Dashboard Redirection', () => {
 
   describe('Dashboard Access Protection', () => {
     it('should allow access to dashboard for authenticated users', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -255,7 +333,7 @@ describe('Admin Dashboard Redirection', () => {
     });
 
     it('should redirect unauthenticated users from dashboard to login', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: jest.fn(),
@@ -269,7 +347,7 @@ describe('Admin Dashboard Redirection', () => {
     });
 
     it('should show loading state while checking authentication', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: true,
         login: jest.fn(),
@@ -314,7 +392,7 @@ describe('Admin Dashboard Redirection', () => {
         writable: true,
       });
 
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -356,7 +434,7 @@ describe('Admin Dashboard Redirection', () => {
         writable: true,
       });
 
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: jest.fn(),
@@ -372,7 +450,7 @@ describe('Admin Dashboard Redirection', () => {
 
   describe('Role-Based Access', () => {
     it('should allow super_admin access to dashboard', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -387,7 +465,7 @@ describe('Admin Dashboard Redirection', () => {
     });
 
     it('should allow admin access to dashboard', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -402,7 +480,7 @@ describe('Admin Dashboard Redirection', () => {
     });
 
     it('should redirect users with invalid roles', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -422,7 +500,7 @@ describe('Admin Dashboard Redirection', () => {
       const mockUsePathname = usePathname as jest.MockedFunction<() => string>;
       mockUsePathname.mockReturnValue('/admin');
 
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -439,7 +517,7 @@ describe('Admin Dashboard Redirection', () => {
       const mockUsePathname = usePathname as jest.MockedFunction<() => string>;
       mockUsePathname.mockReturnValue('/admin/questions');
 
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: jest.fn(),
@@ -456,7 +534,7 @@ describe('Admin Dashboard Redirection', () => {
   describe('Error Handling', () => {
     it('should handle authentication errors gracefully', async () => {
       const mockLogin = jest.fn().mockRejectedValue(new Error('Network error'));
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -468,7 +546,7 @@ describe('Admin Dashboard Redirection', () => {
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByRole('button', { name: /sign in/i });
 
       fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
       fireEvent.change(passwordInput, { target: { value: 'password123' } });
@@ -485,7 +563,7 @@ describe('Admin Dashboard Redirection', () => {
     });
 
     it('should handle missing user data', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
