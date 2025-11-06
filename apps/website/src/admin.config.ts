@@ -11,7 +11,16 @@ export const adminConfig = {
     secret:
       process.env['JWT_SECRET'] ||
       (() => {
-        if (process.env['NODE_ENV'] === 'production') {
+        // Only enforce JWT_SECRET at runtime, not during build
+        // During build, Next.js may execute code for static analysis
+        // but we don't need the actual secret until runtime
+        // Check if we're in a build context (Next.js sets NEXT_PHASE during build)
+        const isBuildTime =
+          process.env['NEXT_PHASE'] === 'phase-production-build' ||
+          process.env['NEXT_PHASE'] === 'phase-development-build';
+
+        // Only throw error if we're in production runtime (not during build)
+        if (process.env['NODE_ENV'] === 'production' && !isBuildTime) {
           throw new Error('JWT_SECRET must be set in production environment');
         }
         return 'dev-secret-key-change-in-production';

@@ -112,6 +112,10 @@ jobs:
 
       - name: Run build check
         run: npm run build:check
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'build-time-secret-not-used-in-production' }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key' }}
 
       - name: Run linting
         run: npm run lint
