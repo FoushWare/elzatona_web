@@ -33,6 +33,7 @@ const eslintConfig = [
       'apps/admin/src/app/admin/login/page.tsx', // Has build artifact issues - ignore for now
       'apps/admin/.next/**', // Generated Next.js types
       'apps/website/.next/**', // Generated Next.js types
+      '**/.next/types/**', // Generated Next.js type definitions
     ],
   },
   {
