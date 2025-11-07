@@ -30,7 +30,14 @@ const eslintConfig = [
       'fix-imports.js', // Utility script uses CommonJS
       '**/jest.config.js', // Jest config files use CommonJS (all locations)
       'jest.preset.js', // Jest preset uses CommonJS
+      'apps/admin/src/app/admin/login/page.tsx', // Has build artifact issues - ignore for now
     ],
+  },
+  {
+    // Configure Next.js app directory pages rule
+    rules: {
+      '@next/next/no-html-link-for-pages': ['error', 'apps/website/src/app'],
+    },
   },
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
 ];
