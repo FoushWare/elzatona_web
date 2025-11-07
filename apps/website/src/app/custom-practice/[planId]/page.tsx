@@ -431,7 +431,7 @@ export default function CustomPracticePage() {
                 const isCorrectOption = index === currentQuestion.correctAnswer;
                 let bgColor = 'bg-gray-50 dark:bg-gray-700';
                 let borderColor = 'border-gray-200 dark:border-gray-600';
-                let textColor = 'text-gray-900 dark:text-white';
+                const textColor = 'text-gray-900 dark:text-white';
 
                 if (showExplanation && isSelected) {
                   bgColor = isCorrect

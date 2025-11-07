@@ -11,6 +11,8 @@
     "build:admin": "nx build admin",
     "build:all": "nx run-many --target=build --all",
     "build:check": "nx build website --turbopack && echo '✅ Build successful' || (echo '❌ Build failed' && exit 1)",
+    "build:check-and-push": "bash .cursor/check-build-and-push.sh",
+    "check-build-push": "bash .cursor/check-build-and-push.sh",
     "start": "nx start website",
     "start:admin": "nx start admin",
     "test": "nx run-many --target=test --all",

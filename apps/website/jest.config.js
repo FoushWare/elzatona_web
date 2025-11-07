@@ -1,8 +1,13 @@
 const nextJest = require('next/jest.js');
+const path = require('path');
+
+// Get the absolute path to the website directory
+const websiteDir = path.resolve(__dirname);
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files
-  dir: './',
+  // Use absolute path to ensure Next.js can find the app directory
+  dir: websiteDir,
 });
 
 // Add any custom config to be passed to Jest

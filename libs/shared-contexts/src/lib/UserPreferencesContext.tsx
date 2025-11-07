@@ -1,16 +1,5 @@
 'use client';
 
-// Only create Supabase client if environment variables are available
-let supabase: any = null;
-if (
-  process.env['NEXT_PUBLIC_SUPABASE_URL'] &&
-  process.env['SUPABASE_SERVICE_ROLE_KEY']
-) {
-  const { createClient } = require('@supabase/supabase-js');
-  const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
-  const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY'];
-  supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-}
 import {
   createContext,
   useContext,
@@ -18,6 +7,23 @@ import {
   useEffect,
   ReactNode,
 } from 'react';
+import type { SupabaseClient } from '@supabase/supabase-js';
+
+// Only create Supabase client if environment variables are available
+let supabase: SupabaseClient | null = null;
+if (
+  process.env['NEXT_PUBLIC_SUPABASE_URL'] &&
+  process.env['SUPABASE_SERVICE_ROLE_KEY']
+) {
+  // Dynamic import to avoid SSR issues
+  import('@supabase/supabase-js').then(({ createClient }) => {
+    const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'] as string;
+    const supabaseServiceRoleKey = process.env[
+      'SUPABASE_SERVICE_ROLE_KEY'
+    ] as string;
+    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+  });
+}
 
 interface UserPreferences {
   theme: 'light' | 'dark' | 'system';
@@ -68,10 +74,14 @@ interface UserPreferencesProviderProps {
 export function UserPreferencesProvider({
   children,
 }: UserPreferencesProviderProps) {
-  const [user, setUser] = useState(null);
-  const updateUserProfile = async (data: any) => {
+  const [user] = useState<{ id: string } | null>(null);
+  const updateUserProfile = async (data: { preferences: UserPreferences }) => {
     // Placeholder for user profile update
     console.log('User profile update:', data);
+    // If supabase is available, update user preferences in database
+    if (supabase && user) {
+      // Future implementation: update user preferences in Supabase
+    }
   };
   const [preferences, setPreferences] =
     useState<UserPreferences>(defaultPreferences);
