@@ -549,6 +549,35 @@ describe('Admin Authentication Integration', () => {
 
     it('should rate limit login attempts', async () => {
       // This test would be implemented if rate limiting is added
+      // Set up mock for failed authentication (wrong password)
+      const mockSingle = Promise.resolve({
+        data: {
+          id: 'admin_123',
+          email: 'test@example.com',
+          name: 'Test Admin',
+          role: 'super_admin',
+          password_hash: 'hashed_password',
+          is_active: true,
+          created_at: new Date().toISOString(),
+        },
+        error: null,
+      });
+
+      const mockEq = jest.fn().mockReturnValue({
+        single: () => mockSingle,
+      });
+
+      const mockSelect = jest.fn().mockReturnValue({
+        eq: mockEq,
+      });
+
+      mockSupabaseClient.from.mockReturnValue({
+        select: mockSelect,
+      });
+
+      // Mock bcrypt to return false (wrong password)
+      bcrypt.compare.mockResolvedValue(false);
+
       const requests = Array(10)
         .fill(null)
         .map(
