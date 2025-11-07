@@ -109,6 +109,7 @@ export const SectionQuestionCountManager: React.FC<
 
         // Convert plan sections to our format
         const sectionConfigs: SectionQuestionCount[] = plan.sections.map(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (section: any, index: number) => ({
             id: `section-${section.id}`,
             sectionId: section.id,
@@ -275,7 +276,7 @@ export const SectionQuestionCountManager: React.FC<
             Manage Section Questions
           </h2>
           <p className='text-gray-600 dark:text-gray-400'>
-            Configure question counts for each section in "{planName}"
+            Configure question counts for each section in &quot;{planName}&quot;
           </p>
         </div>
         <div className='flex items-center space-x-2'>
