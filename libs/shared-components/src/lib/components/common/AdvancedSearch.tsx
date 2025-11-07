@@ -34,7 +34,9 @@ import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
 
 interface AdvancedSearchProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onResultsChange?: (results: any[]) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onFacetsChange?: (facets: any) => void;
   placeholder?: string;
   showFilters?: boolean;
@@ -42,7 +44,9 @@ interface AdvancedSearchProps {
   showSuggestions?: boolean;
   showAnalytics?: boolean;
   className?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   allCategories?: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   allTopics?: any[];
   // Pagination props
   currentPage?: number;

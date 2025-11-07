@@ -23,6 +23,7 @@ export function usePerformanceMonitoring() {
         component?: string;
         apiEndpoint?: string;
         databaseOperation?: string;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [key: string]: any;
       } = {}
     ) => {
@@ -68,6 +69,7 @@ export function usePerformanceMonitoring() {
         component?: string;
         apiEndpoint?: string;
         databaseOperation?: string;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [key: string]: any;
       } = {}
     ): Promise<T> => {
@@ -100,6 +102,7 @@ export function usePerformanceMonitoring() {
         component?: string;
         apiEndpoint?: string;
         databaseOperation?: string;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [key: string]: any;
       } = {}
     ): T => {

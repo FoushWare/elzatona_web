@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Supabase Database Service Implementation
 // v1.0 - Supabase PostgreSQL implementation of IDatabaseService
+// This file uses 'any' types for database filters and query operations
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import {

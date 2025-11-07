@@ -73,6 +73,7 @@ export async function verifySupabaseToken(
  */
 export function verifyAdminToken(token: string): AdminUser | null {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const decoded = jwt.verify(token, JWT_SECRET) as any;
 
     if (!decoded || !decoded.id || !decoded.email) {

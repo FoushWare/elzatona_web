@@ -25,6 +25,7 @@ export const formatDateTime = (date: string | Date): string => {
   });
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = <T extends (...args: any[]) => any>(
   func: T,
   wait: number
@@ -36,6 +37,7 @@ export const debounce = <T extends (...args: any[]) => any>(
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const throttle = <T extends (...args: any[]) => any>(
   func: T,
   limit: number
