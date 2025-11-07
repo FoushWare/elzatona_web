@@ -11,7 +11,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { usePathname } from 'next/navigation';
-import { useAdminAuth } from '@elzatona/shared-contexts';
 import AdminLayout from '@/app/admin/layout';
 import { AdminAuthProvider, ThemeProvider } from '@elzatona/shared-contexts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

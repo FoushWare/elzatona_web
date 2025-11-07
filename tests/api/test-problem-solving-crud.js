@@ -4,7 +4,7 @@
 // Run with: node test-problem-solving-crud.js
 
 const testCRUD = async () => {
-  const baseUrl = 'http://localhost:3000'; // Try different ports if needed
+  // baseUrl not used - using workingUrl instead
   const ports = [3000, 3001, 3002];
 
   console.log('🧪 Testing CRUD operations for problem-solving tasks...\n');
@@ -21,7 +21,7 @@ const testCRUD = async () => {
         console.log(`✅ Found working server at port ${port}\n`);
         break;
       }
-    } catch (error) {
+    } catch (_error) {
       console.log(`❌ Port ${port} not responding`);
     }
   }
@@ -193,7 +193,7 @@ const testCRUD = async () => {
       const response = await fetch(
         `${workingUrl}/api/admin/problem-solving/${createdTaskId}`
       );
-      const data = await response.json();
+      const _data = await response.json();
       if (response.status === 404) {
         console.log(`✅ DELETE verification: SUCCESS - Task not found (404)\n`);
       } else {

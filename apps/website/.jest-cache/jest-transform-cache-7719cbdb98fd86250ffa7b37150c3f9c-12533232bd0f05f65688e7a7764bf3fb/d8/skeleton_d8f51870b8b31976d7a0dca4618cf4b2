@@ -1,0 +1,29 @@
+f41bccbc80b1dc7fe4f8f63a5d2bc8ba
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "Skeleton", {
+    enumerable: true,
+    get: function() {
+        return Skeleton;
+    }
+});
+const _jsxruntime = require("react/jsx-runtime");
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _utils = require("../utils");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Skeleton = /*#__PURE__*/ _react.default.forwardRef(({ className, ...props }, ref)=>{
+    return /*#__PURE__*/ (0, _jsxruntime.jsx)("div", {
+        ref: ref,
+        className: (0, _utils.cn)('animate-pulse rounded-md bg-gray-200 dark:bg-gray-700', className),
+        ...props
+    });
+});
+Skeleton.displayName = 'Skeleton';
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9hLmZvdWFkL1NpZGVQcm9qZWN0cy9FbHphdG9uYS1hbGwvRWx6YXRvbmEtd2ViL2xpYnMvc2hhcmVkLWNvbXBvbmVudHMvc3JjL2xpYi91aS9za2VsZXRvbi50c3giXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0IGZyb20gJ3JlYWN0JztcbmltcG9ydCB7IGNuIH0gZnJvbSAnLi4vdXRpbHMnO1xuXG4vLyBlc2xpbnQtZGlzYWJsZS1uZXh0LWxpbmUgQHR5cGVzY3JpcHQtZXNsaW50L25vLWVtcHR5LW9iamVjdC10eXBlXG5pbnRlcmZhY2UgU2tlbGV0b25Qcm9wcyBleHRlbmRzIFJlYWN0LkhUTUxBdHRyaWJ1dGVzPEhUTUxEaXZFbGVtZW50PiB7fVxuXG5jb25zdCBTa2VsZXRvbiA9IFJlYWN0LmZvcndhcmRSZWY8SFRNTERpdkVsZW1lbnQsIFNrZWxldG9uUHJvcHM+KFxuICAoeyBjbGFzc05hbWUsIC4uLnByb3BzIH0sIHJlZikgPT4ge1xuICAgIHJldHVybiAoXG4gICAgICA8ZGl2XG4gICAgICAgIHJlZj17cmVmfVxuICAgICAgICBjbGFzc05hbWU9e2NuKFxuICAgICAgICAgICdhbmltYXRlLXB1bHNlIHJvdW5kZWQtbWQgYmctZ3JheS0yMDAgZGFyazpiZy1ncmF5LTcwMCcsXG4gICAgICAgICAgY2xhc3NOYW1lXG4gICAgICAgICl9XG4gICAgICAgIHsuLi5wcm9wc31cbiAgICAgIC8+XG4gICAgKTtcbiAgfVxuKTtcblxuU2tlbGV0b24uZGlzcGxheU5hbWUgPSAnU2tlbGV0b24nO1xuXG5leHBvcnQgeyBTa2VsZXRvbiB9O1xuIl0sIm5hbWVzIjpbIlNrZWxldG9uIiwiUmVhY3QiLCJmb3J3YXJkUmVmIiwiY2xhc3NOYW1lIiwicHJvcHMiLCJyZWYiLCJkaXYiLCJjbiIsImRpc3BsYXlOYW1lIl0sIm1hcHBpbmdzIjoiOzs7OytCQXVCU0E7OztlQUFBQTs7Ozs4REF2QlM7dUJBQ0M7Ozs7OztBQUtuQixNQUFNQSx5QkFBV0MsY0FBSyxDQUFDQyxVQUFVLENBQy9CLENBQUMsRUFBRUMsU0FBUyxFQUFFLEdBQUdDLE9BQU8sRUFBRUM7SUFDeEIscUJBQ0UscUJBQUNDO1FBQ0NELEtBQUtBO1FBQ0xGLFdBQVdJLElBQUFBLFNBQUUsRUFDWCx5REFDQUo7UUFFRCxHQUFHQyxLQUFLOztBQUdmO0FBR0ZKLFNBQVNRLFdBQVcsR0FBRyJ9
