@@ -1320,8 +1320,8 @@ export default function GuidedPracticePage() {
               No Questions Available
             </h1>
             <p className='text-lg text-gray-600 dark:text-gray-400 mb-8'>
-              This plan doesn't have any questions with answer options available
-              for practice.
+              This plan doesn&apos;t have any questions with answer options
+              available for practice.
               <br />
               <span className='text-sm'>
                 Total questions: {plan?.totalQuestions || 0}, Questions with
@@ -1624,8 +1624,8 @@ export default function GuidedPracticePage() {
                 </p>
               </div>
               <p className='text-red-700 dark:text-red-300 text-sm mt-2'>
-                This question doesn't have answer options configured. Please
-                contact support or use manual mode to proceed.
+                This question doesn&apos;t have answer options configured.
+                Please contact support or use manual mode to proceed.
               </p>
               <div className='mt-4'>
                 <button

@@ -33,6 +33,7 @@ export interface CardFormErrors {
 }
 
 interface CardFormProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   card?: any;
   onSubmit: (data: CardFormData) => void;
   onCancel: () => void;

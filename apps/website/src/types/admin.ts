@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // v1.0 - Admin types for frontend tasks and problem solving
+// This file uses 'any' types for test case inputs/outputs which can be of various types
 
 export interface FrontendTaskTestCase {
   id: string;

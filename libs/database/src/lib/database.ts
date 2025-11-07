@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Database library exports
+// This file uses 'any' types for database operations and user data
 import { createClient } from '@supabase/supabase-js';
 
 export interface DatabaseConfig {

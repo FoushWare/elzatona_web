@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// This file uses 'any' types for API response data which can have various structures
 'use client';
 
 import React, { useState, useMemo, ReactNode, useCallback } from 'react';
