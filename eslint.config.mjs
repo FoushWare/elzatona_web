@@ -40,6 +40,15 @@ const eslintConfig = [
     // Configure Next.js app directory pages rule
     rules: {
       '@next/next/no-html-link-for-pages': ['error', 'apps/website/src/app'],
+      // Allow variables prefixed with _ to be unused (common pattern for intentionally unused vars)
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
   },
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
