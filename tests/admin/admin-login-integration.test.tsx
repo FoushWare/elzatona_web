@@ -10,6 +10,7 @@
 
 // Set up environment variables before any imports
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key';
 process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
 
 // Mock nuqs before any imports that use it
@@ -78,6 +79,7 @@ import AdminLoginPage from '@/app/admin/login/page';
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  usePathname: jest.fn(() => '/admin/login'),
 }));
 
 // Mock fetch for API calls

@@ -1,54 +1,122 @@
 name: CI
 
 on:
-  pull_request:
   push:
-    branches:
-      - main
-      - develop
-      - test/**
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
 
 jobs:
-  build-and-test:
+  # Fast checks that run first
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint:fix
 
-      - name: Install dependencies
-        run: |
-          npm ci
+  type-check:
+    name: TypeScript Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx tsc --noEmit
 
-      - name: Lint
-        run: npx nx format:check || true && npx nx run-many --target=lint --all || true
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
 
-      - name: Type Check
-        run: npx tsc -p tsconfig.json --noEmit || true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
 
-      - name: Unit Tests (website)
-        run: |
-          cd apps/website
-          npx jest --runInBand --passWithNoTests
+  # Test batches run in parallel (default)
+  test-batches:
+    name: Test Batches (Parallel)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        batch_num:
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 
-      - name: E2E Smoke (Chromium)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Run test batch ${{ matrix.batch_num }}
         env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost' }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'anon' }}
+          BATCH_NUM: ${{ matrix.batch_num }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://test.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-anon-key' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'test-service-role-key' }}
         run: |
-          npx playwright test tests/e2e/website-smoke.spec.ts tests/e2e/guided-flow.spec.ts tests/e2e/custom-plan-flow.spec.ts --project=chromium --reporter=html || true
-
-      - name: Upload Playwright report (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v4
+          chmod +x .cursor/run-tests-in-batches.sh
+          bash .cursor/run-tests-in-batches.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: playwright-report
-          path: playwright-report
-          retention-days: 7
+          name: test-results-batch-${{ matrix.batch_num }}
+          path: /tmp/batch-*-output.log
+          retention-days: 3
+
+  # Summary job
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [lint, type-check, build, test-batches]
+    if: always()
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        pattern: test-results-batch-*
+        merge-multiple: true
+      - name: Generate summary
+        run: |
+          echo "## CI Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Batches" >> $GITHUB_STEP_SUMMARY
+          echo "| Batch | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          FAILED_COUNT=0
+          for i in {1..18}; do
+            if [ -f "/tmp/batch-${i}-output.log" ]; then
+              if grep -q "Test Suites:.*failed" "/tmp/batch-${i}-output.log" 2>/dev/null; then
+                echo "| Batch $i | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+                FAILED_COUNT=$((FAILED_COUNT + 1))
+              else
+                echo "| Batch $i | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+              fi
+            fi
+          done
+
+          if [ $FAILED_COUNT -gt 0 ]; then
+            echo "::error::$FAILED_COUNT test batch(es) failed"
+            exit 1
+          fi
