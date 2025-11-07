@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { JotaiProvider } from '@/providers/JotaiProvider';
 import { QueryProvider } from '@/providers/QueryProvider';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import { UserTypeProvider } from '@elzatona/shared-contexts';
 import { MobileMenuProvider } from '@elzatona/shared-contexts';
@@ -77,6 +78,7 @@ export default function RootLayout({
                             <AuthSessionSync />
                             <NavbarSimple />
                             {children}
+                            <SpeedInsights />
                           </LearningTypeProvider>
                         </NotificationProvider>
                       </OnboardingProvider>
