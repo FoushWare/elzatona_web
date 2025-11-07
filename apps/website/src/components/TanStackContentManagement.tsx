@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// This file uses 'any' types for content creation data structures
 'use client';
 
 import React, { useState } from 'react';

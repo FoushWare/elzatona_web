@@ -39,8 +39,8 @@ export default function QuestionsEntryPage() {
 
         <div className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 dark:border-gray-700/20 text-center'>
           <p className='text-gray-700 dark:text-gray-300 mb-6'>
-            Start practicing right away in Free Style mode. We'll take you to
-            the practice interface.
+            Start practicing right away in Free Style mode. We&apos;ll take you
+            to the practice interface.
           </p>
 
           <Link
