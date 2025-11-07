@@ -1,13 +1,15 @@
-# Deployment Setup - Vercel Only
+# Deployment Setup - Vercel + GitHub Actions
 
 ## ✅ Current Configuration
 
-**Deployment Method:** Vercel Auto-Deployments Only
+**Deployment Method:** Both Vercel Auto-Deployments and GitHub Actions
 
-### Disabled
+### Active Deployments
 
-- ❌ GitHub Actions deployment workflow (`.github/workflows/deploy-main.yml.disabled`)
-  - This was causing duplicate deployments
+- ✅ Vercel auto-deployment (on push to `main`)
+- ✅ GitHub Actions deployment workflow (`.github/workflows/deploy-main.yml`)
+  - Deploys on push to `main` branch
+  - Can be manually triggered via `workflow_dispatch`
 
 ### Active (Testing Only - No Deployments)
 
@@ -19,8 +21,10 @@
 ### Production Deployments
 
 - **Trigger:** Push to `main` branch
-- **Method:** Vercel auto-deployment
-- **Result:** Single deployment per push (no duplicates)
+- **Methods:**
+  - Vercel auto-deployment (automatic)
+  - GitHub Actions deployment (automatic via workflow)
+- **Result:** Two deployments per push (Vercel + GitHub Actions)
 
 ### Preview Deployments
 
@@ -78,17 +82,17 @@ Single deployment ✅
 
 ## ⚠️ Important Notes
 
-1. **No duplicate deployments** - Only Vercel deploys now
-2. **CI still runs** - Tests continue on every push (no deployment)
-3. **Preview deployments** - Automatic for all PRs
-4. **Production deployments** - Automatic on push to `main`
+1. **Dual deployments** - Both Vercel and GitHub Actions deploy on push to `main`
+2. **CI still runs** - Tests continue on every push (separate from deployments)
+3. **Preview deployments** - Automatic for all PRs (Vercel only)
+4. **Production deployments** - Automatic on push to `main` (both Vercel and GitHub Actions)
 
-## 🔄 Re-enabling GitHub Actions Deployment
+## 🔄 Disabling GitHub Actions Deployment
 
-If you need to re-enable GitHub Actions deployment:
+If you want to use only Vercel auto-deployments:
 
 ```bash
-mv .github/workflows/deploy-main.yml.disabled .github/workflows/deploy-main.yml
+mv .github/workflows/deploy-main.yml .github/workflows/deploy-main.yml.disabled
 ```
 
-Then disable Vercel auto-deployments in the Vercel dashboard.
+This will stop GitHub Actions deployments while keeping Vercel auto-deployments active.
