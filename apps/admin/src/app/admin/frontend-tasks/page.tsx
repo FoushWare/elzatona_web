@@ -15,7 +15,6 @@ import {
 import {
   Plus,
   Search,
-  Filter,
   Edit,
   Trash2,
   Clock,
@@ -23,7 +22,6 @@ import {
   Building,
   Code,
   FileText,
-  TestTube,
   Tag,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -41,8 +39,8 @@ interface FrontendTask {
   hints: string[];
   solution?: string;
   starter_code?: string;
-  files: any[];
-  test_cases: any[];
+  files: Array<{ name: string; content: string }>;
+  test_cases: Array<{ input: unknown; expected: unknown }>;
   tags: string[];
   created_at: string;
   updated_at: string;
@@ -80,6 +78,7 @@ export default function FrontendTasksPage() {
 
   useEffect(() => {
     fetchTasks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, selectedCategory, selectedDifficulty, searchTerm]);
 
   const fetchTasks = async () => {

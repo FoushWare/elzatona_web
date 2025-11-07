@@ -33,8 +33,6 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  Label,
-  Textarea,
   Checkbox,
 } from '@elzatona/shared-components';
 
@@ -56,13 +54,13 @@ import {
   Loader2,
 } from 'lucide-react';
 
-// Types for API responses
-interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  count?: number;
-  error?: string;
-}
+// Types for API responses (commented out - not currently used)
+// interface ApiResponse<T> {
+//   success: boolean;
+//   data: T;
+//   count?: number;
+//   error?: string;
+// }
 
 interface LearningCard {
   id: string;
@@ -131,6 +129,7 @@ interface Question {
   updated_at: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Stats {
   totalCards: number;
   totalPlans: number;
@@ -1934,8 +1933,9 @@ export default function ContentManagementPage() {
               <span>Add Questions to Plan</span>
             </DialogTitle>
             <DialogDescription>
-              Select questions from "{selectedTopic?.name}" to add to "
-              {selectedPlan?.name}"
+              Select questions from &quot;{selectedTopic?.name}&quot; to add to
+              &quot;
+              {selectedPlan?.name}&quot;
             </DialogDescription>
           </DialogHeader>
 
@@ -2055,8 +2055,8 @@ export default function ContentManagementPage() {
               <span>Delete Learning Card</span>
             </DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{cardToDelete?.title}"? This
-              action cannot be undone.
+              Are you sure you want to delete &quot;{cardToDelete?.title}&quot;?
+              This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
 
@@ -2120,7 +2120,9 @@ export default function ContentManagementPage() {
           <DialogHeader>
             <DialogTitle className='flex items-center space-x-2'>
               <Layers className='h-5 w-5 text-blue-600' />
-              <span>Manage Cards for "{selectedPlanForCards?.name}"</span>
+              <span>
+                Manage Cards for &quot;{selectedPlanForCards?.name}&quot;
+              </span>
             </DialogTitle>
             <DialogDescription>
               Add or remove learning cards from this plan. You can also
