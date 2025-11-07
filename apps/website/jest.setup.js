@@ -1,5 +1,14 @@
 import '@testing-library/jest-dom';
 
+// Set up environment variables before any module imports
+// This ensures supabase-client.ts and other modules have access to these values
+process.env.NEXT_PUBLIC_SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://test.supabase.co';
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-anon-key';
+process.env.SUPABASE_SERVICE_ROLE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || 'test-service-role-key';
+
 // Polyfill for Web APIs needed by Next.js in Node.js test environment
 // Next.js requires these globals to be available
 if (typeof global.Request === 'undefined') {
