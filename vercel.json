@@ -4,7 +4,6 @@
   "framework": "nextjs",
   "installCommand": "npm install",
   "devCommand": "npx nx serve website",
-  "rootDirectory": "apps/website",
   "functions": {
     "apps/website/src/app/api/**/*.ts": {
       "runtime": "nodejs18.x"
