@@ -50,7 +50,6 @@ jest.mock('next/navigation', () => ({
 
 // Mock @tanstack/react-query
 jest.mock('@tanstack/react-query', () => {
-  const React = require('react');
   return {
     QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
       children,
@@ -80,7 +79,6 @@ jest.mock('@tanstack/react-query', () => {
 
 // Mock the actual AdminAuthContext file
 jest.mock('../../libs/shared-contexts/src/lib/AdminAuthContext', () => {
-  const React = require('react');
   const mockFn = jest.fn(() => ({
     isAuthenticated: false,
     isLoading: false,
@@ -97,7 +95,6 @@ jest.mock('../../libs/shared-contexts/src/lib/AdminAuthContext', () => {
 
 // Mock the actual ThemeContext file
 jest.mock('../../libs/shared-contexts/src/lib/ThemeContext', () => {
-  const React = require('react');
   return {
     ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
     useTheme: jest.fn(() => ({
@@ -119,7 +116,6 @@ const mockUseAdminAuthFn = jest.fn(() => ({
 }));
 
 jest.mock('@elzatona/shared-contexts', () => {
-  const React = require('react');
   return {
     AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
       children,
@@ -134,9 +130,8 @@ jest.mock('@elzatona/shared-contexts', () => {
 
 // Mock admin components from shared-components
 jest.mock('@elzatona/shared-components', () => {
-  const React = require('react');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { usePathname } = require('next/navigation');
-
   return {
     AdminNavbar: function MockAdminNavbar() {
       return <div data-testid='admin-navbar'>Admin Navbar</div>;
@@ -180,17 +175,6 @@ jest.mock('@elzatona/shared-components', () => {
   };
 });
 
-// Type definitions for mocks
-interface MockAdminAuth {
-  login: jest.MockedFunction<
-    (email: string, password: string) => Promise<{ success: boolean }>
-  >;
-  logout: jest.MockedFunction<() => void>;
-  user: { id: string; email: string; name: string; role: string } | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-}
-
 describe('Navbar Switching Fix', () => {
   const mockUsePathname = usePathname as jest.MockedFunction<
     typeof usePathname
@@ -198,6 +182,7 @@ describe('Navbar Switching Fix', () => {
   const queryClient = new QueryClient();
 
   // Get ConditionalLayout from the mock
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { ConditionalLayout } = require('@elzatona/shared-components');
 
   // Helper function to wrap components with providers
@@ -566,6 +551,7 @@ describe('Navbar Switching Fix', () => {
 
   describe('Edge Cases', () => {
     it('should handle undefined pathname', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       mockUsePathname.mockReturnValue(undefined as any);
 
       const { container } = renderWithProviders(
@@ -582,6 +568,7 @@ describe('Navbar Switching Fix', () => {
     });
 
     it('should handle null pathname', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       mockUsePathname.mockReturnValue(null as any);
 
       const { container } = renderWithProviders(
