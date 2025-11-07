@@ -19,6 +19,7 @@ const config = {
       '<rootDir>/../../libs/shared-components/src/index.ts',
   },
   // Include tests from root tests directory, but exclude e2e tests (Playwright)
+  // Note: testPathIgnorePatterns handles the exclusion, so we keep testMatch simple
   testMatch: [
     '<rootDir>/**/*.{test,spec}.{js,jsx,ts,tsx}',
     '<rootDir>/../../tests/**/*.{test,spec}.{js,jsx,ts,tsx}',
@@ -32,6 +33,8 @@ const config = {
     '.*/e2e/.*', // Exclude any path with /e2e/ in it
     '.*\\.spec\\.ts$', // Exclude .spec.ts files (Playwright convention)
     '.*\\.spec\\.tsx$', // Exclude .spec.tsx files (Playwright convention)
+    '.*/tests/e2e/.*', // More specific pattern for e2e tests
+    '.*e2e.*', // Catch-all for any path containing "e2e"
   ],
   // Allow tests outside the app directory
   roots: ['<rootDir>', '<rootDir>/../../tests'],

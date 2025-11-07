@@ -378,7 +378,7 @@ describe('Navbar Switching Fix', () => {
         user: null,
       });
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <AdminLayout>
           <div>Admin Root Content</div>
         </AdminLayout>
