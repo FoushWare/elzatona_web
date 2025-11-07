@@ -160,6 +160,7 @@ describe('Admin Dashboard Redirection', () => {
   const mockPush = jest.fn();
   const mockReplace = jest.fn();
   const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
+  const queryClient = new QueryClient();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -192,7 +193,15 @@ describe('Admin Dashboard Redirection', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
@@ -219,7 +228,15 @@ describe('Admin Dashboard Redirection', () => {
       });
 
       // Re-render to trigger redirection
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       await waitFor(() => {
         expect(mockPush).toHaveBeenCalledWith('/admin/dashboard');
@@ -238,7 +255,15 @@ describe('Admin Dashboard Redirection', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
@@ -270,7 +295,15 @@ describe('Admin Dashboard Redirection', () => {
         user: { email: 'admin@example.com', role: 'super_admin' },
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(mockPush).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -284,7 +317,15 @@ describe('Admin Dashboard Redirection', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(mockPush).not.toHaveBeenCalled();
     });
@@ -299,7 +340,15 @@ describe('Admin Dashboard Redirection', () => {
         user: null,
       });
 
-      const { rerender } = render(<AdminLoginPage />);
+      const { rerender } = render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(mockPush).not.toHaveBeenCalled();
 
@@ -393,7 +442,7 @@ describe('Admin Dashboard Redirection', () => {
         </QueryClientProvider>
       );
 
-      expect(screen.getByText('Loading admin panel...')).toBeInTheDocument();
+      expect(screen.getByText(/Loading admin panel.../i)).toBeInTheDocument();
       expect(mockReplace).not.toHaveBeenCalled();
     });
   });
@@ -618,7 +667,15 @@ describe('Admin Dashboard Redirection', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
