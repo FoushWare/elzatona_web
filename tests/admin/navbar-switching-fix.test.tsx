@@ -13,7 +13,8 @@ import { render, screen } from '@testing-library/react';
 import { usePathname } from 'next/navigation';
 import { useAdminAuth } from '@elzatona/shared-contexts';
 import AdminLayout from '@/app/admin/layout';
-import { AdminAuthProvider } from '@elzatona/shared-contexts';
+import { AdminAuthProvider, ThemeProvider } from '@elzatona/shared-contexts';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Set up environment variables before any imports
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
@@ -165,6 +166,21 @@ describe('Navbar Switching Fix', () => {
   const mockUsePathname = usePathname as jest.MockedFunction<
     typeof usePathname
   >;
+  const queryClient = new QueryClient();
+
+  // Get ConditionalLayout from the mock
+  const { ConditionalLayout } = require('@elzatona/shared-components');
+
+  // Helper function to wrap components with providers
+  const renderWithProviders = (component: React.ReactElement) => {
+    return render(
+      <QueryClientProvider client={queryClient}>
+        <AdminAuthProvider>
+          <ThemeProvider>{component}</ThemeProvider>
+        </AdminAuthProvider>
+      </QueryClientProvider>
+    );
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -176,21 +192,13 @@ describe('Navbar Switching Fix', () => {
       logout: jest.fn(),
       user: null,
     });
-    // Default mock for useAdminAuth
-    mockUseAdminAuthFn.mockReturnValue({
-      isAuthenticated: true,
-      isLoading: false,
-      login: jest.fn(),
-      logout: jest.fn(),
-      user: { email: 'admin@example.com', role: 'super_admin' },
-    });
   });
 
   describe('ConditionalLayout Component', () => {
     it('should render admin layout for admin routes during SSR', () => {
       mockUsePathname.mockReturnValue('/admin/dashboard');
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <ConditionalLayout>
           <div>Admin Dashboard Content</div>
         </ConditionalLayout>
@@ -209,7 +217,7 @@ describe('Navbar Switching Fix', () => {
     it('should render website layout for non-admin routes during SSR', () => {
       mockUsePathname.mockReturnValue('/');
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <ConditionalLayout>
           <div>Home Page Content</div>
         </ConditionalLayout>
@@ -225,7 +233,7 @@ describe('Navbar Switching Fix', () => {
     it('should render website layout for non-admin routes after hydration', () => {
       mockUsePathname.mockReturnValue('/practice');
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <ConditionalLayout>
           <div>Practice Page Content</div>
         </ConditionalLayout>
@@ -241,7 +249,7 @@ describe('Navbar Switching Fix', () => {
     it('should handle admin root route correctly', () => {
       mockUsePathname.mockReturnValue('/admin');
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <ConditionalLayout>
           <div>Admin Root Content</div>
         </ConditionalLayout>
@@ -257,7 +265,7 @@ describe('Navbar Switching Fix', () => {
     it('should handle admin login route correctly', () => {
       mockUsePathname.mockReturnValue('/admin/login');
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <ConditionalLayout>
           <div>Admin Login Content</div>
         </ConditionalLayout>
@@ -273,7 +281,7 @@ describe('Navbar Switching Fix', () => {
     it('should handle nested admin routes correctly', () => {
       mockUsePathname.mockReturnValue('/admin/questions/unified');
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <ConditionalLayout>
           <div>Admin Questions Content</div>
         </ConditionalLayout>
@@ -321,9 +329,15 @@ describe('Navbar Switching Fix', () => {
       });
 
       render(
-        <AdminLayout>
-          <div>Admin Dashboard Content</div>
-        </AdminLayout>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLayout>
+                <div>Admin Dashboard Content</div>
+              </AdminLayout>
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       expect(screen.getByText('Loading admin panel...')).toBeInTheDocument();
@@ -382,7 +396,7 @@ describe('Navbar Switching Fix', () => {
       mockUsePathname.mockReturnValue('/admin/dashboard');
 
       // Simulate SSR rendering
-      const ssrResult = render(
+      const ssrResult = renderWithProviders(
         <ConditionalLayout>
           <div>Admin Dashboard Content</div>
         </ConditionalLayout>
@@ -391,7 +405,7 @@ describe('Navbar Switching Fix', () => {
       const ssrContainer = ssrResult.container;
 
       // Simulate client-side hydration
-      const clientResult = render(
+      const clientResult = renderWithProviders(
         <ConditionalLayout>
           <div>Admin Dashboard Content</div>
         </ConditionalLayout>
@@ -407,7 +421,7 @@ describe('Navbar Switching Fix', () => {
       mockUsePathname.mockReturnValue('/');
 
       // Simulate SSR rendering
-      const ssrResult = render(
+      const ssrResult = renderWithProviders(
         <ConditionalLayout>
           <div>Home Page Content</div>
         </ConditionalLayout>
@@ -416,7 +430,7 @@ describe('Navbar Switching Fix', () => {
       const ssrContainer = ssrResult.container;
 
       // Simulate client-side hydration
-      const clientResult = render(
+      const clientResult = renderWithProviders(
         <ConditionalLayout>
           <div>Home Page Content</div>
         </ConditionalLayout>
@@ -445,7 +459,7 @@ describe('Navbar Switching Fix', () => {
       adminRoutes.forEach(route => {
         mockUsePathname.mockReturnValue(route);
 
-        const { container } = render(
+        const { container } = renderWithProviders(
           <ConditionalLayout>
             <div>Content for {route}</div>
           </ConditionalLayout>
@@ -476,7 +490,7 @@ describe('Navbar Switching Fix', () => {
       nonAdminRoutes.forEach(route => {
         mockUsePathname.mockReturnValue(route);
 
-        const { container } = render(
+        const { container } = renderWithProviders(
           <ConditionalLayout>
             <div>Content for {route}</div>
           </ConditionalLayout>
@@ -495,7 +509,7 @@ describe('Navbar Switching Fix', () => {
     it('should handle undefined pathname', () => {
       mockUsePathname.mockReturnValue(undefined);
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <ConditionalLayout>
           <div>Content</div>
         </ConditionalLayout>
@@ -510,7 +524,7 @@ describe('Navbar Switching Fix', () => {
     it('should handle null pathname', () => {
       mockUsePathname.mockReturnValue(null);
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <ConditionalLayout>
           <div>Content</div>
         </ConditionalLayout>
@@ -525,7 +539,7 @@ describe('Navbar Switching Fix', () => {
     it('should handle empty pathname', () => {
       mockUsePathname.mockReturnValue('');
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <ConditionalLayout>
           <div>Content</div>
         </ConditionalLayout>
@@ -540,7 +554,7 @@ describe('Navbar Switching Fix', () => {
     it('should handle routes that start with admin but are not admin routes', () => {
       mockUsePathname.mockReturnValue('/admin-panel-public');
 
-      const { container } = render(
+      const { container } = renderWithProviders(
         <ConditionalLayout>
           <div>Public Admin Panel Content</div>
         </ConditionalLayout>
@@ -567,7 +581,7 @@ describe('Navbar Switching Fix', () => {
         return <div>Test Content</div>;
       }
 
-      const { rerender } = render(
+      const { rerender } = renderWithProviders(
         <ConditionalLayout>
           <TestComponent />
         </ConditionalLayout>
@@ -577,9 +591,15 @@ describe('Navbar Switching Fix', () => {
 
       // Re-render with same props
       rerender(
-        <ConditionalLayout>
-          <TestComponent />
-        </ConditionalLayout>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <ConditionalLayout>
+                <TestComponent />
+              </ConditionalLayout>
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       // Should not cause additional renders
@@ -597,7 +617,7 @@ describe('Navbar Switching Fix', () => {
       routes.forEach(route => {
         mockUsePathname.mockReturnValue(route);
 
-        const { container } = render(
+        const { container } = renderWithProviders(
           <ConditionalLayout>
             <div>Content for {route}</div>
           </ConditionalLayout>
