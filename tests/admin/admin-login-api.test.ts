@@ -40,7 +40,7 @@ async function getResponseData(response: any): Promise<any> {
     if (data && typeof data === 'object' && Object.keys(data).length > 0) {
       return data;
     }
-  } catch (e) {
+  } catch (_e) {
     // Continue to other methods
   }
 
@@ -65,7 +65,7 @@ async function getResponseData(response: any): Promise<any> {
     if (text) {
       return JSON.parse(text);
     }
-  } catch (e) {
+  } catch (_e) {
     // Continue
   }
 
@@ -78,7 +78,7 @@ async function getResponseData(response: any): Promise<any> {
         const text = new TextDecoder().decode(value);
         return JSON.parse(text);
       }
-    } catch (e) {
+    } catch (_e) {
       // Continue
     }
   }
