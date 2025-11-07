@@ -19,10 +19,7 @@ const config = {
   cache: true, // Enable Jest cache for faster subsequent runs
   cacheDirectory: '<rootDir>/.jest-cache',
   // Run tests in sequence if SKIP_TESTS is not set and we want to reduce load
-  runInBand:
-    process.env.SKIP_TESTS === 'true'
-      ? false
-      : process.env.JEST_RUN_IN_BAND === 'true',
+  ...(process.env.JEST_RUN_IN_BAND === 'true' ? { runInBand: true } : {}),
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
