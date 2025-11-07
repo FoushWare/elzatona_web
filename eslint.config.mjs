@@ -10,7 +10,7 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  // Ignore patterns must be separate config objects in flat config
   {
     ignores: [
       'node_modules/**',
@@ -20,8 +20,14 @@ const eslintConfig = [
       'build/**',
       'dist/**',
       'next-env.d.ts',
+      'tests/scripts/**', // Test utility scripts use CommonJS
+      'scripts/**', // Build/utility scripts use CommonJS
+      'setup/**', // Setup scripts use CommonJS
+      'verify-oauth-config.js', // Utility script uses CommonJS
+      'setup-oauth-providers.js', // Utility script uses CommonJS
     ],
   },
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
 ];
 
 export default eslintConfig;
