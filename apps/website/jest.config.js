@@ -18,10 +18,17 @@ const config = {
     '^@elzatona/shared-components$':
       '<rootDir>/../../libs/shared-components/src/index.ts',
   },
-  // Include tests from root tests directory
+  // Include tests from root tests directory, but exclude e2e tests (Playwright)
   testMatch: [
     '<rootDir>/**/*.{test,spec}.{js,jsx,ts,tsx}',
     '<rootDir>/../../tests/**/*.{test,spec}.{js,jsx,ts,tsx}',
+  ],
+  // Exclude e2e tests - these should only be run by Playwright
+  // Jest uses regex patterns, so we match any path containing e2e
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/.next/',
+    '.*e2e.*', // Exclude any test file in e2e directories
   ],
   // Allow tests outside the app directory
   roots: ['<rootDir>', '<rootDir>/../../tests'],
