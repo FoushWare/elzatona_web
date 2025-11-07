@@ -28,13 +28,17 @@ const config = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/.next/',
-    '.*e2e.*', // Exclude any test file in e2e directories
+    '/tests/e2e/', // Exclude e2e directory
+    '.*/e2e/.*', // Exclude any path with /e2e/ in it
+    '.*\\.spec\\.ts$', // Exclude .spec.ts files (Playwright convention)
+    '.*\\.spec\\.tsx$', // Exclude .spec.tsx files (Playwright convention)
   ],
   // Allow tests outside the app directory
   roots: ['<rootDir>', '<rootDir>/../../tests'],
   // Transform ESM modules - allow nuqs and other ESM packages
+  // Need to include the full path for nuqs submodules
   transformIgnorePatterns: [
-    'node_modules/(?!(nuqs|@supabase|@tanstack|@react-hook-form|lucide-react|@radix-ui)/)',
+    'node_modules/(?!(nuqs|@supabase/supabase-js|@tanstack|@react-hook-form|lucide-react|@radix-ui)/)',
   ],
 };
 
