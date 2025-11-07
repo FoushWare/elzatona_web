@@ -118,7 +118,7 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key' }}
 
       - name: Run linting
-        run: npm run lint
+        run: npm run lint:fix
 
       - name: Check for TypeScript errors
         run: npx tsc --noEmit
