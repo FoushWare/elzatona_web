@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     let body;
     try {
       body = await request.json();
-    } catch (jsonError) {
+    } catch (_jsonError) {
       // Handle invalid JSON
       return NextResponse.json(
         { success: false, error: 'Invalid JSON in request body' },
