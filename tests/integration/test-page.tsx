@@ -5,10 +5,18 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
+interface Question {
+  id?: string;
+  title?: string;
+  category?: string;
+  difficulty?: string;
+}
+
 export default function TestQuestionsPage() {
-  const [questions, setQuestions] = useState<any[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
