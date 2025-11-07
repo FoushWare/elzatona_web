@@ -8,9 +8,9 @@
  * - Environment configuration
  */
 
-import { chromium, FullConfig } from '@playwright/test';
+import { chromium, FullConfig, Page } from '@playwright/test';
 
-async function globalSetup(config: FullConfig) {
+async function globalSetup(_config: FullConfig) {
   console.log('🚀 Starting E2E Test Global Setup...');
 
   // Launch browser for setup
@@ -52,7 +52,7 @@ async function globalSetup(config: FullConfig) {
   }
 }
 
-async function createTestUsers(page: any) {
+async function createTestUsers(page: Page) {
   console.log('👤 Creating test user accounts...');
 
   // This would typically involve API calls to create test users
@@ -61,12 +61,12 @@ async function createTestUsers(page: any) {
     await page.goto('http://localhost:3000/get-started');
     await page.waitForLoadState('networkidle');
     console.log('✅ Test user setup complete');
-  } catch (error) {
+  } catch (_error) {
     console.log('⚠️ Test user setup skipped (may not be needed)');
   }
 }
 
-async function setupMockData(page: any) {
+async function setupMockData(page: Page) {
   console.log('📊 Setting up mock data...');
 
   // Set up mock learning paths data
