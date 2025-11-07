@@ -44,11 +44,12 @@ export function LearningTypeProvider({
 
   // Initialize learning type from localStorage on mount (before auth check)
   const getInitialLearningType = (): LearningType => {
+    // Always return default during SSR - actual value will be loaded in useEffect
     if (typeof window === 'undefined') return 'guided';
     try {
       // First try universal key (works for logged out users)
       const universalTypeKey = buildStorageKey(null, 'type');
-      const universalType = window.localStorage.getItem(universalTypeKey);
+      const universalType = window?.localStorage?.getItem(universalTypeKey);
       if (
         universalType === 'guided' ||
         universalType === 'free-style' ||
@@ -84,13 +85,15 @@ export function LearningTypeProvider({
         const keyToLoad = newUserId ? userTypeKey : universalTypeKey;
 
         try {
-          const rawType = window.localStorage.getItem(keyToLoad);
-          if (
-            rawType === 'guided' ||
-            rawType === 'free-style' ||
-            rawType === 'custom'
-          ) {
-            setLearningTypeState(rawType);
+          if (typeof window !== 'undefined' && window.localStorage) {
+            const rawType = window.localStorage.getItem(keyToLoad);
+            if (
+              rawType === 'guided' ||
+              rawType === 'free-style' ||
+              rawType === 'custom'
+            ) {
+              setLearningTypeState(rawType);
+            }
           }
         } catch (_e) {
           // ignore
@@ -99,14 +102,16 @@ export function LearningTypeProvider({
         setUserId(null);
         // Load from universal key when logged out
         try {
-          const universalTypeKey = buildStorageKey(null, 'type');
-          const rawType = window.localStorage.getItem(universalTypeKey);
-          if (
-            rawType === 'guided' ||
-            rawType === 'free-style' ||
-            rawType === 'custom'
-          ) {
-            setLearningTypeState(rawType);
+          if (typeof window !== 'undefined' && window.localStorage) {
+            const universalTypeKey = buildStorageKey(null, 'type');
+            const rawType = window.localStorage.getItem(universalTypeKey);
+            if (
+              rawType === 'guided' ||
+              rawType === 'free-style' ||
+              rawType === 'custom'
+            ) {
+              setLearningTypeState(rawType);
+            }
           }
         } catch (_e) {
           // ignore
@@ -130,13 +135,15 @@ export function LearningTypeProvider({
         const keyToLoad = newUserId ? userTypeKey : universalTypeKey;
 
         try {
-          const rawType = window.localStorage.getItem(keyToLoad);
-          if (
-            rawType === 'guided' ||
-            rawType === 'free-style' ||
-            rawType === 'custom'
-          ) {
-            setLearningTypeState(rawType);
+          if (typeof window !== 'undefined' && window.localStorage) {
+            const rawType = window.localStorage.getItem(keyToLoad);
+            if (
+              rawType === 'guided' ||
+              rawType === 'free-style' ||
+              rawType === 'custom'
+            ) {
+              setLearningTypeState(rawType);
+            }
           }
         } catch (_e) {
           // ignore
@@ -158,14 +165,16 @@ export function LearningTypeProvider({
       // Priority: userId-specific key (if logged in) > universal key (if logged out)
       let rawType: string | null = null;
 
-      if (userId) {
-        // When logged in, try user-specific key first, fallback to universal
-        rawType =
-          window.localStorage.getItem(typeKey) ||
-          window.localStorage.getItem(universalTypeKey);
-      } else {
-        // When logged out, use universal key
-        rawType = window.localStorage.getItem(universalTypeKey);
+      if (typeof window !== 'undefined' && window.localStorage) {
+        if (userId) {
+          // When logged in, try user-specific key first, fallback to universal
+          rawType =
+            window.localStorage.getItem(typeKey) ||
+            window.localStorage.getItem(universalTypeKey);
+        } else {
+          // When logged out, use universal key
+          rawType = window.localStorage.getItem(universalTypeKey);
+        }
       }
 
       if (
@@ -176,7 +185,7 @@ export function LearningTypeProvider({
         setLearningTypeState(rawType);
       }
       const rawSolved =
-        typeof window !== 'undefined'
+        typeof window !== 'undefined' && window.localStorage
           ? window.localStorage.getItem(solvedKey)
           : null;
       if (rawSolved) {
@@ -198,13 +207,15 @@ export function LearningTypeProvider({
       const typeKey = buildStorageKey(userId, 'type');
       const universalTypeKey = buildStorageKey(null, 'type'); // Universal key that persists across logout
 
-      // Save to userId-specific key if logged in
-      if (userId) {
-        window.localStorage.setItem(typeKey, learningType);
-      }
+      if (typeof window !== 'undefined' && window.localStorage) {
+        // Save to userId-specific key if logged in
+        if (userId) {
+          window.localStorage.setItem(typeKey, learningType);
+        }
 
-      // Always save to universal key so it persists after logout
-      window.localStorage.setItem(universalTypeKey, learningType);
+        // Always save to universal key so it persists after logout
+        window.localStorage.setItem(universalTypeKey, learningType);
+      }
     } catch (_e) {
       // ignore
     }
@@ -213,8 +224,13 @@ export function LearningTypeProvider({
   useEffect(() => {
     if (!initializedRef.current) return;
     try {
-      const solvedKey = buildStorageKey(userId, 'solved');
-      window.localStorage.setItem(solvedKey, JSON.stringify(solvedQuestionIds));
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const solvedKey = buildStorageKey(userId, 'solved');
+        window.localStorage.setItem(
+          solvedKey,
+          JSON.stringify(solvedQuestionIds)
+        );
+      }
     } catch (_e) {
       // ignore
     }
