@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// This file uses 'any' types for dynamic update data structures
 import {
   QuestionAudioMapping,
   AudioFileInfo,

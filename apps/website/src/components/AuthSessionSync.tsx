@@ -16,6 +16,7 @@ export default function AuthSessionSync() {
       const session = data?.session;
       if (session) {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           persistSession(session as any);
         } catch (_) {}
         try {
@@ -38,8 +39,12 @@ export default function AuthSessionSync() {
           );
         } catch (_) {}
         try {
-          if (authed && session) persistSession(session as any);
-          else clearSession();
+          if (authed && session) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            persistSession(session as any);
+          } else {
+            clearSession();
+          }
         } catch (_) {}
       }
     );

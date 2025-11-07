@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// This file uses 'any' types for card data and mutation functions
 'use client';
 
 import React, { useState } from 'react';

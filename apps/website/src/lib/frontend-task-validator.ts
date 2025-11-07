@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // v1.0 - Enhanced solution validation system for frontend tasks
+// This file uses 'any' types for test case inputs/outputs which can be of various types
 
 export interface TestCase {
   id: string;

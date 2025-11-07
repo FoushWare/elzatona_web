@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// This file uses 'any' types for error metadata which can contain various dynamic properties
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
