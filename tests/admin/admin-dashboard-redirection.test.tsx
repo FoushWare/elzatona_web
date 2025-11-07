@@ -11,8 +11,12 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useAdminAuth } from '@elzatona/shared-contexts';
-import { AdminAuthProvider } from '@elzatona/shared-contexts';
+import {
+  useAdminAuth,
+  AdminAuthProvider,
+  ThemeProvider,
+} from '@elzatona/shared-contexts';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AdminLoginPage from '@/app/admin/login/page';
 import AdminDashboardPage from '@/app/admin/dashboard/page';
 
