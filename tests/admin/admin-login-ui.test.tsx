@@ -41,8 +41,9 @@ jest.mock('@tanstack/react-query', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
-    QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
-      children,
+    QueryClientProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
     QueryClient: jest.fn(() => ({
       invalidateQueries: jest.fn(),
       setQueryData: jest.fn(),
@@ -73,16 +74,6 @@ jest.mock('next/navigation', () => ({
   usePathname: jest.fn(() => '/admin/login'),
 }));
 
-// Mock AdminAuthContext from shared-contexts
-// Create a mock function that can be configured per test
-const mockUseAdminAuthFn = jest.fn(() => ({
-  isAuthenticated: false,
-  isLoading: false,
-  login: jest.fn(),
-  logout: jest.fn(),
-  user: null,
-}));
-
 // Mock the actual AdminAuthContext file
 jest.mock('../../libs/shared-contexts/src/lib/AdminAuthContext', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -95,43 +86,45 @@ jest.mock('../../libs/shared-contexts/src/lib/AdminAuthContext', () => {
     user: null,
   }));
   return {
-    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
-      children,
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
     useAdminAuth: mockFn,
   };
 });
 
 // Mock the actual ThemeContext file
-jest.mock('../../libs/shared-contexts/src/lib/ThemeContext', () => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const React = require('react');
-  return {
-    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
-    useTheme: jest.fn(() => ({
-      isDarkMode: false,
-      toggleDarkMode: jest.fn(),
-      setDarkMode: jest.fn(),
-      isLoaded: true,
-    })),
-  };
-});
+jest.mock('../../libs/shared-contexts/src/lib/ThemeContext', () => ({
+  ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  useTheme: jest.fn(() => ({
+    isDarkMode: false,
+    toggleDarkMode: jest.fn(),
+    setDarkMode: jest.fn(),
+    isLoaded: true,
+  })),
+}));
 
 // Also mock the package entry point
+// Create a mock function that can be configured per test
+const mockUseAdminAuthFn = jest.fn(() => ({
+  isAuthenticated: false,
+  isLoading: false,
+  login: jest.fn(),
+  logout: jest.fn(),
+  user: null,
+}));
+
 jest.mock('@elzatona/shared-contexts', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
-  const mockAdminAuthFn = jest.fn(() => ({
-    isAuthenticated: false,
-    isLoading: false,
-    login: jest.fn(),
-    logout: jest.fn(),
-    user: null,
-  }));
   return {
-    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
-      children,
-    useAdminAuth: mockAdminAuthFn,
-    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
+    useAdminAuth: mockUseAdminAuthFn,
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
     useTheme: jest.fn(() => ({
       isDarkMode: false,
       toggleDarkMode: jest.fn(),
@@ -145,7 +138,6 @@ global.fetch = jest.fn();
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import { useAdminAuth } from '@elzatona/shared-contexts';
 import AdminLoginPage from '@/app/admin/login/page';
 import { AdminAuthProvider } from '@elzatona/shared-contexts';
 
@@ -159,15 +151,7 @@ interface MockRouter {
   refresh: jest.MockedFunction<() => void>;
 }
 
-interface MockAdminAuth {
-  login: jest.MockedFunction<
-    (email: string, password: string) => Promise<{ success: boolean }>
-  >;
-  logout: jest.MockedFunction<() => void>;
-  user: { id: string; email: string; name: string; role: string } | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-}
+// MockAdminAuth interface removed - not used in tests
 
 describe('Admin Login Page', () => {
   const mockPush = jest.fn();
@@ -363,7 +347,7 @@ describe('Admin Login Page', () => {
         .mockImplementation(
           () => new Promise(resolve => setTimeout(resolve, 100))
         );
-      mockUseAdminAuth.mockReturnValueOnce({
+      mockUseAdminAuthFn.mockReturnValueOnce({
         isAuthenticated: false,
         isLoading: false,
         login: loginMock,
@@ -389,7 +373,7 @@ describe('Admin Login Page', () => {
       const loginMock = jest
         .fn()
         .mockResolvedValue({ success: false, error: 'Invalid credentials' });
-      mockUseAdminAuth.mockReturnValueOnce({
+      mockUseAdminAuthFn.mockReturnValueOnce({
         isAuthenticated: false,
         isLoading: false,
         login: loginMock,
@@ -414,7 +398,7 @@ describe('Admin Login Page', () => {
 
     it('should handle network errors gracefully', async () => {
       const loginMock = jest.fn().mockRejectedValue(new Error('Network error'));
-      mockUseAdminAuth.mockReturnValueOnce({
+      mockUseAdminAuthFn.mockReturnValueOnce({
         isAuthenticated: false,
         isLoading: false,
         login: loginMock,

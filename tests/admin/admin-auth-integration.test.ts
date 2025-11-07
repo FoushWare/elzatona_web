@@ -10,7 +10,8 @@
  * - Token validation
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+// @ts-expect-error - Path alias works at runtime via Jest moduleNameMapper
 import { POST as authPOST } from '@/app/api/admin/auth/route';
 import jwt from 'jsonwebtoken';
 
@@ -51,7 +52,7 @@ async function getResponseData(response: any): Promise<any> {
     if (data && typeof data === 'object' && Object.keys(data).length > 0) {
       return data;
     }
-  } catch (e) {
+  } catch {
     // Continue
   }
   try {
@@ -59,7 +60,7 @@ async function getResponseData(response: any): Promise<any> {
     if (text) {
       return JSON.parse(text);
     }
-  } catch (e) {
+  } catch {
     // Continue
   }
   return {};
@@ -100,7 +101,6 @@ describe('Admin Authentication Integration', () => {
   const bcrypt = require('bcryptjs');
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { createClient } = require('@supabase/supabase-js');
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockSupabaseClient: any;
   let consoleErrorSpy: jest.SpyInstance;
 
@@ -378,7 +378,7 @@ describe('Admin Authentication Integration', () => {
     it('should allow access with valid token', async () => {
       const validToken = jwt.sign(
         {
-          adminId: 'admin_test@example.com',
+          adminId: 'admin_123', // Use ID format consistent with route handler
           email: 'test@example.com',
           role: 'super_admin',
           iat: Math.floor(Date.now() / 1000),
@@ -395,7 +395,7 @@ describe('Admin Authentication Integration', () => {
         iat: number;
       };
 
-      expect(decoded.adminId).toBe('admin_test@example.com');
+      expect(decoded.adminId).toBe('admin_123');
       expect(decoded.email).toBe('test@example.com');
       expect(decoded.role).toBe('super_admin');
     });

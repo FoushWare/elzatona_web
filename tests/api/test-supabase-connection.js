@@ -40,7 +40,7 @@ async function testConnection() {
     console.log(`📊 Found ${data?.length || 0} learning plans`);
 
     // Test RLS status
-    const { data: rlsTest, error: rlsError } = await supabase
+    const { data: _rlsTest, error: rlsError } = await supabase
       .from('learning_plans')
       .select('*')
       .limit(1);

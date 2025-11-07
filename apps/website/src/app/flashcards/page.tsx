@@ -1,6 +1,5 @@
 'use client';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 import React, { useEffect, useState } from 'react';
 import {
   loadFlashcards,

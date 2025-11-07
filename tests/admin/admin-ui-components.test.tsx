@@ -10,7 +10,7 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 // Mock TanStack Query
@@ -63,8 +63,9 @@ jest.mock('@elzatona/shared-contexts', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
-    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
-      children,
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
     useAdminAuth: jest.fn(() => ({
       isAuthenticated: true,
       user: { email: 'admin@test.com' },

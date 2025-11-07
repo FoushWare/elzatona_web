@@ -6,7 +6,7 @@
  */
 
 import 'dotenv/config';
-import bcrypt from 'bcryptjs';
+// bcrypt imported but not used in this test file
 
 console.log('🛡️ Admin Account Test and Creation\n');
 

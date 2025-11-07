@@ -41,7 +41,7 @@ async function testConnection() {
 
   try {
     // Test basic connection
-    const { data, error } = await supabase
+    const { data: _data, error } = await supabase
       .from('_supabase_migrations')
       .select('*')
       .limit(1);
@@ -74,7 +74,7 @@ async function verifySchema() {
       console.log(`\n🔍 Checking table: ${tableName}`);
 
       // Try to query the table
-      const { data, error } = await supabase
+      const { data: _data, error } = await supabase
         .from(tableName)
         .select('*')
         .limit(1);
@@ -194,7 +194,7 @@ async function testRelationships() {
   try {
     // Test learning_cards → categories relationship
     console.log('\n🔍 Testing learning_cards → categories relationship...');
-    const { data: cardData, error: cardError } = await supabase
+    const { data: _cardData, error: cardError } = await supabase
       .from('learning_cards')
       .select(
         `
@@ -220,7 +220,7 @@ async function testRelationships() {
 
     // Test categories → topics relationship
     console.log('\n🔍 Testing categories → topics relationship...');
-    const { data: categoryData, error: categoryError } = await supabase
+    const { data: _categoryData, error: categoryError } = await supabase
       .from('categories')
       .select(
         `
@@ -246,7 +246,7 @@ async function testRelationships() {
 
     // Test topics → questions relationship
     console.log('\n🔍 Testing topics → questions relationship...');
-    const { data: topicData, error: topicError } = await supabase
+    const { data: _topicData, error: topicError } = await supabase
       .from('topics')
       .select(
         `
@@ -272,7 +272,7 @@ async function testRelationships() {
 
     // Test learning_plans → plan_cards relationship
     console.log('\n🔍 Testing learning_plans → plan_cards relationship...');
-    const { data: planData, error: planError } = await supabase
+    const { data: _planData, error: planError } = await supabase
       .from('learning_plans')
       .select(
         `

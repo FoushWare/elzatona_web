@@ -14,6 +14,15 @@ const createJestConfig = nextJest({
 const config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
+  // Performance optimizations
+  maxWorkers: process.env.CI ? '50%' : '25%', // Limit workers to reduce machine load
+  cache: true, // Enable Jest cache for faster subsequent runs
+  cacheDirectory: '<rootDir>/.jest-cache',
+  // Run tests in sequence if SKIP_TESTS is not set and we want to reduce load
+  runInBand:
+    process.env.SKIP_TESTS === 'true'
+      ? false
+      : process.env.JEST_RUN_IN_BAND === 'true',
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {

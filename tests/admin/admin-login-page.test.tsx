@@ -40,8 +40,9 @@ jest.mock('@tanstack/react-query', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
-    QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
-      children,
+    QueryClientProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
     QueryClient: jest.fn(() => ({
       invalidateQueries: jest.fn(),
       setQueryData: jest.fn(),
@@ -69,11 +70,7 @@ jest.mock('@tanstack/react-query', () => {
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import {
-  useAdminAuth,
-  AdminAuthProvider,
-  ThemeProvider,
-} from '@elzatona/shared-contexts';
+import { AdminAuthProvider, ThemeProvider } from '@elzatona/shared-contexts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AdminLoginPage from '@/app/admin/login/page';
 
@@ -96,10 +93,13 @@ jest.mock('@elzatona/shared-contexts', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
-    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
-      children,
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
     useAdminAuth: mockUseAdminAuthFn,
-    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
     useTheme: jest.fn(() => ({
       isDarkMode: false,
       toggleDarkMode: jest.fn(),
@@ -120,19 +120,6 @@ interface MockRouter {
   back: jest.MockedFunction<() => void>;
   forward: jest.MockedFunction<() => void>;
   refresh: jest.MockedFunction<() => void>;
-}
-
-interface MockAdminAuth {
-  login: jest.MockedFunction<
-    (
-      email: string,
-      password: string
-    ) => Promise<{ success: boolean; error?: string }>
-  >;
-  logout: jest.MockedFunction<() => void>;
-  user: { id: string; email: string; name: string; role: string } | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
 }
 
 describe('Admin Login Page', () => {

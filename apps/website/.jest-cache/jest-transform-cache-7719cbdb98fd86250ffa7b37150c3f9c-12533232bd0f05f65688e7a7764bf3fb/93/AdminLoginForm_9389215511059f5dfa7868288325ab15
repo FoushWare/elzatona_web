@@ -1,0 +1,200 @@
+bcfcba7f65d1ca009f76e9d1d9b58d0d
+'use client';
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function() {
+        return AdminLoginForm;
+    }
+});
+const _jsxruntime = require("react/jsx-runtime");
+const _react = /*#__PURE__*/ _interop_require_wildcard(require("react"));
+const _sharedcontexts = require("../../../../../shared-contexts/src");
+const _lucidereact = require("lucide-react");
+function _getRequireWildcardCache(nodeInterop) {
+    if (typeof WeakMap !== "function") return null;
+    var cacheBabelInterop = new WeakMap();
+    var cacheNodeInterop = new WeakMap();
+    return (_getRequireWildcardCache = function(nodeInterop) {
+        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
+    })(nodeInterop);
+}
+function _interop_require_wildcard(obj, nodeInterop) {
+    if (!nodeInterop && obj && obj.__esModule) {
+        return obj;
+    }
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
+        return {
+            default: obj
+        };
+    }
+    var cache = _getRequireWildcardCache(nodeInterop);
+    if (cache && cache.has(obj)) {
+        return cache.get(obj);
+    }
+    var newObj = {
+        __proto__: null
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj){
+        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
+            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+            if (desc && (desc.get || desc.set)) {
+                Object.defineProperty(newObj, key, desc);
+            } else {
+                newObj[key] = obj[key];
+            }
+        }
+    }
+    newObj.default = obj;
+    if (cache) {
+        cache.set(obj, newObj);
+    }
+    return newObj;
+}
+function AdminLoginForm() {
+    const [email, setEmail] = (0, _react.useState)('');
+    const [password, setPassword] = (0, _react.useState)('');
+    const [showPassword, setShowPassword] = (0, _react.useState)(false);
+    const [isLoading, setIsLoading] = (0, _react.useState)(false);
+    const [error, setError] = (0, _react.useState)(null);
+    const { login } = (0, _sharedcontexts.useAdminAuth)();
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        try {
+            const result = await login(email, password);
+            if (!result.success) {
+                setError(result.error || 'Login failed');
+            }
+        } catch (err) {
+            setError('An unexpected error occurred');
+        } finally{
+            setIsLoading(false);
+        }
+    };
+    return /*#__PURE__*/ (0, _jsxruntime.jsxs)("form", {
+        className: "mt-8 space-y-6",
+        onSubmit: handleSubmit,
+        children: [
+            /*#__PURE__*/ (0, _jsxruntime.jsxs)("div", {
+                className: "space-y-4",
+                children: [
+                    /*#__PURE__*/ (0, _jsxruntime.jsxs)("div", {
+                        children: [
+                            /*#__PURE__*/ (0, _jsxruntime.jsx)("label", {
+                                htmlFor: "email",
+                                className: "sr-only",
+                                children: "Email address"
+                            }),
+                            /*#__PURE__*/ (0, _jsxruntime.jsxs)("div", {
+                                className: "relative",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxruntime.jsx)("div", {
+                                        className: "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none",
+                                        children: /*#__PURE__*/ (0, _jsxruntime.jsx)(_lucidereact.Mail, {
+                                            className: "h-5 w-5 text-gray-400"
+                                        })
+                                    }),
+                                    /*#__PURE__*/ (0, _jsxruntime.jsx)("input", {
+                                        id: "email",
+                                        name: "email",
+                                        type: "email",
+                                        autoComplete: "email",
+                                        required: true,
+                                        className: "appearance-none rounded-md relative block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm",
+                                        placeholder: "Email address",
+                                        value: email,
+                                        onChange: (e)=>setEmail(e.target.value)
+                                    })
+                                ]
+                            })
+                        ]
+                    }),
+                    /*#__PURE__*/ (0, _jsxruntime.jsxs)("div", {
+                        children: [
+                            /*#__PURE__*/ (0, _jsxruntime.jsx)("label", {
+                                htmlFor: "password",
+                                className: "sr-only",
+                                children: "Password"
+                            }),
+                            /*#__PURE__*/ (0, _jsxruntime.jsxs)("div", {
+                                className: "relative",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxruntime.jsx)("div", {
+                                        className: "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none",
+                                        children: /*#__PURE__*/ (0, _jsxruntime.jsx)(_lucidereact.Lock, {
+                                            className: "h-5 w-5 text-gray-400"
+                                        })
+                                    }),
+                                    /*#__PURE__*/ (0, _jsxruntime.jsx)("input", {
+                                        id: "password",
+                                        name: "password",
+                                        type: showPassword ? 'text' : 'password',
+                                        autoComplete: "current-password",
+                                        required: true,
+                                        className: "appearance-none rounded-md relative block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm",
+                                        placeholder: "Password",
+                                        value: password,
+                                        onChange: (e)=>setPassword(e.target.value)
+                                    }),
+                                    /*#__PURE__*/ (0, _jsxruntime.jsx)("div", {
+                                        className: "absolute inset-y-0 right-0 pr-3 flex items-center",
+                                        children: /*#__PURE__*/ (0, _jsxruntime.jsx)("button", {
+                                            type: "button",
+                                            className: "text-gray-400 hover:text-gray-500 dark:hover:text-gray-300",
+                                            onClick: ()=>setShowPassword(!showPassword),
+                                            children: showPassword ? /*#__PURE__*/ (0, _jsxruntime.jsx)(_lucidereact.EyeOff, {
+                                                className: "h-5 w-5"
+                                            }) : /*#__PURE__*/ (0, _jsxruntime.jsx)(_lucidereact.Eye, {
+                                                className: "h-5 w-5"
+                                            })
+                                        })
+                                    })
+                                ]
+                            })
+                        ]
+                    })
+                ]
+            }),
+            error && /*#__PURE__*/ (0, _jsxruntime.jsx)("div", {
+                className: "rounded-md bg-red-50 dark:bg-red-900/20 p-4",
+                children: /*#__PURE__*/ (0, _jsxruntime.jsx)("div", {
+                    className: "text-sm text-red-800 dark:text-red-200",
+                    children: error
+                })
+            }),
+            /*#__PURE__*/ (0, _jsxruntime.jsx)("div", {
+                children: /*#__PURE__*/ (0, _jsxruntime.jsxs)("button", {
+                    type: "submit",
+                    disabled: isLoading,
+                    className: "group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200",
+                    children: [
+                        /*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                            className: "absolute left-0 inset-y-0 flex items-center pl-3",
+                            children: isLoading ? /*#__PURE__*/ (0, _jsxruntime.jsx)("div", {
+                                className: "animate-spin rounded-full h-5 w-5 border-b-2 border-white"
+                            }) : /*#__PURE__*/ (0, _jsxruntime.jsx)(_lucidereact.LogIn, {
+                                className: "h-5 w-5 text-blue-500 group-hover:text-blue-400"
+                            })
+                        }),
+                        isLoading ? 'Signing in...' : 'Sign in'
+                    ]
+                })
+            }),
+            /*#__PURE__*/ (0, _jsxruntime.jsx)("div", {
+                className: "text-center",
+                children: /*#__PURE__*/ (0, _jsxruntime.jsx)("p", {
+                    className: "text-sm text-gray-600 dark:text-gray-400",
+                    children: "For demo purposes, use any email and password"
+                })
+            })
+        ]
+    });
+}
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9hLmZvdWFkL1NpZGVQcm9qZWN0cy9FbHphdG9uYS1hbGwvRWx6YXRvbmEtd2ViL2xpYnMvc2hhcmVkLWNvbXBvbmVudHMvc3JjL2xpYi9jb21wb25lbnRzL2FkbWluL0FkbWluTG9naW5Gb3JtLnRzeCJdLCJzb3VyY2VzQ29udGVudCI6WyIndXNlIGNsaWVudCc7XG5cbmltcG9ydCBSZWFjdCwgeyB1c2VTdGF0ZSB9IGZyb20gJ3JlYWN0JztcbmltcG9ydCB7IHVzZUFkbWluQXV0aCB9IGZyb20gJ0BlbHphdG9uYS9zaGFyZWQtY29udGV4dHMnO1xuaW1wb3J0IHsgRXllLCBFeWVPZmYsIExvY2ssIE1haWwsIExvZ0luIH0gZnJvbSAnbHVjaWRlLXJlYWN0JztcblxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gQWRtaW5Mb2dpbkZvcm0oKSB7XG4gIGNvbnN0IFtlbWFpbCwgc2V0RW1haWxdID0gdXNlU3RhdGUoJycpO1xuICBjb25zdCBbcGFzc3dvcmQsIHNldFBhc3N3b3JkXSA9IHVzZVN0YXRlKCcnKTtcbiAgY29uc3QgW3Nob3dQYXNzd29yZCwgc2V0U2hvd1Bhc3N3b3JkXSA9IHVzZVN0YXRlKGZhbHNlKTtcbiAgY29uc3QgW2lzTG9hZGluZywgc2V0SXNMb2FkaW5nXSA9IHVzZVN0YXRlKGZhbHNlKTtcbiAgY29uc3QgW2Vycm9yLCBzZXRFcnJvcl0gPSB1c2VTdGF0ZTxzdHJpbmcgfCBudWxsPihudWxsKTtcblxuICBjb25zdCB7IGxvZ2luIH0gPSB1c2VBZG1pbkF1dGgoKTtcblxuICBjb25zdCBoYW5kbGVTdWJtaXQgPSBhc3luYyAoZTogUmVhY3QuRm9ybUV2ZW50KSA9PiB7XG4gICAgZS5wcmV2ZW50RGVmYXVsdCgpO1xuICAgIHNldElzTG9hZGluZyh0cnVlKTtcbiAgICBzZXRFcnJvcihudWxsKTtcblxuICAgIHRyeSB7XG4gICAgICBjb25zdCByZXN1bHQgPSBhd2FpdCBsb2dpbihlbWFpbCwgcGFzc3dvcmQpO1xuICAgICAgaWYgKCFyZXN1bHQuc3VjY2Vzcykge1xuICAgICAgICBzZXRFcnJvcihyZXN1bHQuZXJyb3IgfHwgJ0xvZ2luIGZhaWxlZCcpO1xuICAgICAgfVxuICAgIH0gY2F0Y2ggKGVycikge1xuICAgICAgc2V0RXJyb3IoJ0FuIHVuZXhwZWN0ZWQgZXJyb3Igb2NjdXJyZWQnKTtcbiAgICB9IGZpbmFsbHkge1xuICAgICAgc2V0SXNMb2FkaW5nKGZhbHNlKTtcbiAgICB9XG4gIH07XG5cbiAgcmV0dXJuIChcbiAgICA8Zm9ybSBjbGFzc05hbWU9J210LTggc3BhY2UteS02JyBvblN1Ym1pdD17aGFuZGxlU3VibWl0fT5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPSdzcGFjZS15LTQnPlxuICAgICAgICA8ZGl2PlxuICAgICAgICAgIDxsYWJlbCBodG1sRm9yPSdlbWFpbCcgY2xhc3NOYW1lPSdzci1vbmx5Jz5cbiAgICAgICAgICAgIEVtYWlsIGFkZHJlc3NcbiAgICAgICAgICA8L2xhYmVsPlxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSdyZWxhdGl2ZSc+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0nYWJzb2x1dGUgaW5zZXQteS0wIGxlZnQtMCBwbC0zIGZsZXggaXRlbXMtY2VudGVyIHBvaW50ZXItZXZlbnRzLW5vbmUnPlxuICAgICAgICAgICAgICA8TWFpbCBjbGFzc05hbWU9J2gtNSB3LTUgdGV4dC1ncmF5LTQwMCcgLz5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPGlucHV0XG4gICAgICAgICAgICAgIGlkPSdlbWFpbCdcbiAgICAgICAgICAgICAgbmFtZT0nZW1haWwnXG4gICAgICAgICAgICAgIHR5cGU9J2VtYWlsJ1xuICAgICAgICAgICAgICBhdXRvQ29tcGxldGU9J2VtYWlsJ1xuICAgICAgICAgICAgICByZXF1aXJlZFxuICAgICAgICAgICAgICBjbGFzc05hbWU9J2FwcGVhcmFuY2Utbm9uZSByb3VuZGVkLW1kIHJlbGF0aXZlIGJsb2NrIHctZnVsbCBwbC0xMCBwci0zIHB5LTMgYm9yZGVyIGJvcmRlci1ncmF5LTMwMCBkYXJrOmJvcmRlci1ncmF5LTYwMCBwbGFjZWhvbGRlci1ncmF5LTUwMCBkYXJrOnBsYWNlaG9sZGVyLWdyYXktNDAwIHRleHQtZ3JheS05MDAgZGFyazp0ZXh0LXdoaXRlIGJnLXdoaXRlIGRhcms6YmctZ3JheS04MDAgZm9jdXM6b3V0bGluZS1ub25lIGZvY3VzOnJpbmctYmx1ZS01MDAgZm9jdXM6Ym9yZGVyLWJsdWUtNTAwIGZvY3VzOnotMTAgc206dGV4dC1zbSdcbiAgICAgICAgICAgICAgcGxhY2Vob2xkZXI9J0VtYWlsIGFkZHJlc3MnXG4gICAgICAgICAgICAgIHZhbHVlPXtlbWFpbH1cbiAgICAgICAgICAgICAgb25DaGFuZ2U9e2UgPT4gc2V0RW1haWwoZS50YXJnZXQudmFsdWUpfVxuICAgICAgICAgICAgLz5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgPC9kaXY+XG4gICAgICAgIDxkaXY+XG4gICAgICAgICAgPGxhYmVsIGh0bWxGb3I9J3Bhc3N3b3JkJyBjbGFzc05hbWU9J3NyLW9ubHknPlxuICAgICAgICAgICAgUGFzc3dvcmRcbiAgICAgICAgICA8L2xhYmVsPlxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSdyZWxhdGl2ZSc+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0nYWJzb2x1dGUgaW5zZXQteS0wIGxlZnQtMCBwbC0zIGZsZXggaXRlbXMtY2VudGVyIHBvaW50ZXItZXZlbnRzLW5vbmUnPlxuICAgICAgICAgICAgICA8TG9jayBjbGFzc05hbWU9J2gtNSB3LTUgdGV4dC1ncmF5LTQwMCcgLz5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPGlucHV0XG4gICAgICAgICAgICAgIGlkPSdwYXNzd29yZCdcbiAgICAgICAgICAgICAgbmFtZT0ncGFzc3dvcmQnXG4gICAgICAgICAgICAgIHR5cGU9e3Nob3dQYXNzd29yZCA/ICd0ZXh0JyA6ICdwYXNzd29yZCd9XG4gICAgICAgICAgICAgIGF1dG9Db21wbGV0ZT0nY3VycmVudC1wYXNzd29yZCdcbiAgICAgICAgICAgICAgcmVxdWlyZWRcbiAgICAgICAgICAgICAgY2xhc3NOYW1lPSdhcHBlYXJhbmNlLW5vbmUgcm91bmRlZC1tZCByZWxhdGl2ZSBibG9jayB3LWZ1bGwgcGwtMTAgcHItMTAgcHktMyBib3JkZXIgYm9yZGVyLWdyYXktMzAwIGRhcms6Ym9yZGVyLWdyYXktNjAwIHBsYWNlaG9sZGVyLWdyYXktNTAwIGRhcms6cGxhY2Vob2xkZXItZ3JheS00MDAgdGV4dC1ncmF5LTkwMCBkYXJrOnRleHQtd2hpdGUgYmctd2hpdGUgZGFyazpiZy1ncmF5LTgwMCBmb2N1czpvdXRsaW5lLW5vbmUgZm9jdXM6cmluZy1ibHVlLTUwMCBmb2N1czpib3JkZXItYmx1ZS01MDAgZm9jdXM6ei0xMCBzbTp0ZXh0LXNtJ1xuICAgICAgICAgICAgICBwbGFjZWhvbGRlcj0nUGFzc3dvcmQnXG4gICAgICAgICAgICAgIHZhbHVlPXtwYXNzd29yZH1cbiAgICAgICAgICAgICAgb25DaGFuZ2U9e2UgPT4gc2V0UGFzc3dvcmQoZS50YXJnZXQudmFsdWUpfVxuICAgICAgICAgICAgLz5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSdhYnNvbHV0ZSBpbnNldC15LTAgcmlnaHQtMCBwci0zIGZsZXggaXRlbXMtY2VudGVyJz5cbiAgICAgICAgICAgICAgPGJ1dHRvblxuICAgICAgICAgICAgICAgIHR5cGU9J2J1dHRvbidcbiAgICAgICAgICAgICAgICBjbGFzc05hbWU9J3RleHQtZ3JheS00MDAgaG92ZXI6dGV4dC1ncmF5LTUwMCBkYXJrOmhvdmVyOnRleHQtZ3JheS0zMDAnXG4gICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gc2V0U2hvd1Bhc3N3b3JkKCFzaG93UGFzc3dvcmQpfVxuICAgICAgICAgICAgICA+XG4gICAgICAgICAgICAgICAge3Nob3dQYXNzd29yZCA/IChcbiAgICAgICAgICAgICAgICAgIDxFeWVPZmYgY2xhc3NOYW1lPSdoLTUgdy01JyAvPlxuICAgICAgICAgICAgICAgICkgOiAoXG4gICAgICAgICAgICAgICAgICA8RXllIGNsYXNzTmFtZT0naC01IHctNScgLz5cbiAgICAgICAgICAgICAgICApfVxuICAgICAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cbiAgICAgIDwvZGl2PlxuXG4gICAgICB7ZXJyb3IgJiYgKFxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ncm91bmRlZC1tZCBiZy1yZWQtNTAgZGFyazpiZy1yZWQtOTAwLzIwIHAtNCc+XG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9J3RleHQtc20gdGV4dC1yZWQtODAwIGRhcms6dGV4dC1yZWQtMjAwJz57ZXJyb3J9PC9kaXY+XG4gICAgICAgIDwvZGl2PlxuICAgICAgKX1cblxuICAgICAgPGRpdj5cbiAgICAgICAgPGJ1dHRvblxuICAgICAgICAgIHR5cGU9J3N1Ym1pdCdcbiAgICAgICAgICBkaXNhYmxlZD17aXNMb2FkaW5nfVxuICAgICAgICAgIGNsYXNzTmFtZT0nZ3JvdXAgcmVsYXRpdmUgdy1mdWxsIGZsZXgganVzdGlmeS1jZW50ZXIgcHktMyBweC00IGJvcmRlciBib3JkZXItdHJhbnNwYXJlbnQgdGV4dC1zbSBmb250LW1lZGl1bSByb3VuZGVkLW1kIHRleHQtd2hpdGUgYmctYmx1ZS02MDAgaG92ZXI6YmctYmx1ZS03MDAgZm9jdXM6b3V0bGluZS1ub25lIGZvY3VzOnJpbmctMiBmb2N1czpyaW5nLW9mZnNldC0yIGZvY3VzOnJpbmctYmx1ZS01MDAgZGlzYWJsZWQ6b3BhY2l0eS01MCBkaXNhYmxlZDpjdXJzb3Itbm90LWFsbG93ZWQgdHJhbnNpdGlvbi1jb2xvcnMgZHVyYXRpb24tMjAwJ1xuICAgICAgICA+XG4gICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSdhYnNvbHV0ZSBsZWZ0LTAgaW5zZXQteS0wIGZsZXggaXRlbXMtY2VudGVyIHBsLTMnPlxuICAgICAgICAgICAge2lzTG9hZGluZyA/IChcbiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9J2FuaW1hdGUtc3BpbiByb3VuZGVkLWZ1bGwgaC01IHctNSBib3JkZXItYi0yIGJvcmRlci13aGl0ZSc+PC9kaXY+XG4gICAgICAgICAgICApIDogKFxuICAgICAgICAgICAgICA8TG9nSW4gY2xhc3NOYW1lPSdoLTUgdy01IHRleHQtYmx1ZS01MDAgZ3JvdXAtaG92ZXI6dGV4dC1ibHVlLTQwMCcgLz5cbiAgICAgICAgICAgICl9XG4gICAgICAgICAgPC9zcGFuPlxuICAgICAgICAgIHtpc0xvYWRpbmcgPyAnU2lnbmluZyBpbi4uLicgOiAnU2lnbiBpbid9XG4gICAgICAgIDwvYnV0dG9uPlxuICAgICAgPC9kaXY+XG5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPSd0ZXh0LWNlbnRlcic+XG4gICAgICAgIDxwIGNsYXNzTmFtZT0ndGV4dC1zbSB0ZXh0LWdyYXktNjAwIGRhcms6dGV4dC1ncmF5LTQwMCc+XG4gICAgICAgICAgRm9yIGRlbW8gcHVycG9zZXMsIHVzZSBhbnkgZW1haWwgYW5kIHBhc3N3b3JkXG4gICAgICAgIDwvcD5cbiAgICAgIDwvZGl2PlxuICAgIDwvZm9ybT5cbiAgKTtcbn1cbiJdLCJuYW1lcyI6WyJBZG1pbkxvZ2luRm9ybSIsImVtYWlsIiwic2V0RW1haWwiLCJ1c2VTdGF0ZSIsInBhc3N3b3JkIiwic2V0UGFzc3dvcmQiLCJzaG93UGFzc3dvcmQiLCJzZXRTaG93UGFzc3dvcmQiLCJpc0xvYWRpbmciLCJzZXRJc0xvYWRpbmciLCJlcnJvciIsInNldEVycm9yIiwibG9naW4iLCJ1c2VBZG1pbkF1dGgiLCJoYW5kbGVTdWJtaXQiLCJlIiwicHJldmVudERlZmF1bHQiLCJyZXN1bHQiLCJzdWNjZXNzIiwiZXJyIiwiZm9ybSIsImNsYXNzTmFtZSIsIm9uU3VibWl0IiwiZGl2IiwibGFiZWwiLCJodG1sRm9yIiwiTWFpbCIsImlucHV0IiwiaWQiLCJuYW1lIiwidHlwZSIsImF1dG9Db21wbGV0ZSIsInJlcXVpcmVkIiwicGxhY2Vob2xkZXIiLCJ2YWx1ZSIsIm9uQ2hhbmdlIiwidGFyZ2V0IiwiTG9jayIsImJ1dHRvbiIsIm9uQ2xpY2siLCJFeWVPZmYiLCJFeWUiLCJkaXNhYmxlZCIsInNwYW4iLCJMb2dJbiIsInAiXSwibWFwcGluZ3MiOiJBQUFBOzs7OzsrQkFNQTs7O2VBQXdCQTs7OzsrREFKUTtnQ0FDSDs2QkFDa0I7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUVoQyxTQUFTQTtJQUN0QixNQUFNLENBQUNDLE9BQU9DLFNBQVMsR0FBR0MsSUFBQUEsZUFBUSxFQUFDO0lBQ25DLE1BQU0sQ0FBQ0MsVUFBVUMsWUFBWSxHQUFHRixJQUFBQSxlQUFRLEVBQUM7SUFDekMsTUFBTSxDQUFDRyxjQUFjQyxnQkFBZ0IsR0FBR0osSUFBQUEsZUFBUSxFQUFDO0lBQ2pELE1BQU0sQ0FBQ0ssV0FBV0MsYUFBYSxHQUFHTixJQUFBQSxlQUFRLEVBQUM7SUFDM0MsTUFBTSxDQUFDTyxPQUFPQyxTQUFTLEdBQUdSLElBQUFBLGVBQVEsRUFBZ0I7SUFFbEQsTUFBTSxFQUFFUyxLQUFLLEVBQUUsR0FBR0MsSUFBQUEsNEJBQVk7SUFFOUIsTUFBTUMsZUFBZSxPQUFPQztRQUMxQkEsRUFBRUMsY0FBYztRQUNoQlAsYUFBYTtRQUNiRSxTQUFTO1FBRVQsSUFBSTtZQUNGLE1BQU1NLFNBQVMsTUFBTUwsTUFBTVgsT0FBT0c7WUFDbEMsSUFBSSxDQUFDYSxPQUFPQyxPQUFPLEVBQUU7Z0JBQ25CUCxTQUFTTSxPQUFPUCxLQUFLLElBQUk7WUFDM0I7UUFDRixFQUFFLE9BQU9TLEtBQUs7WUFDWlIsU0FBUztRQUNYLFNBQVU7WUFDUkYsYUFBYTtRQUNmO0lBQ0Y7SUFFQSxxQkFDRSxzQkFBQ1c7UUFBS0MsV0FBVTtRQUFpQkMsVUFBVVI7OzBCQUN6QyxzQkFBQ1M7Z0JBQUlGLFdBQVU7O2tDQUNiLHNCQUFDRTs7MENBQ0MscUJBQUNDO2dDQUFNQyxTQUFRO2dDQUFRSixXQUFVOzBDQUFVOzswQ0FHM0Msc0JBQUNFO2dDQUFJRixXQUFVOztrREFDYixxQkFBQ0U7d0NBQUlGLFdBQVU7a0RBQ2IsY0FBQSxxQkFBQ0ssaUJBQUk7NENBQUNMLFdBQVU7OztrREFFbEIscUJBQUNNO3dDQUNDQyxJQUFHO3dDQUNIQyxNQUFLO3dDQUNMQyxNQUFLO3dDQUNMQyxjQUFhO3dDQUNiQyxRQUFRO3dDQUNSWCxXQUFVO3dDQUNWWSxhQUFZO3dDQUNaQyxPQUFPakM7d0NBQ1BrQyxVQUFVcEIsQ0FBQUEsSUFBS2IsU0FBU2EsRUFBRXFCLE1BQU0sQ0FBQ0YsS0FBSzs7Ozs7O2tDQUk1QyxzQkFBQ1g7OzBDQUNDLHFCQUFDQztnQ0FBTUMsU0FBUTtnQ0FBV0osV0FBVTswQ0FBVTs7MENBRzlDLHNCQUFDRTtnQ0FBSUYsV0FBVTs7a0RBQ2IscUJBQUNFO3dDQUFJRixXQUFVO2tEQUNiLGNBQUEscUJBQUNnQixpQkFBSTs0Q0FBQ2hCLFdBQVU7OztrREFFbEIscUJBQUNNO3dDQUNDQyxJQUFHO3dDQUNIQyxNQUFLO3dDQUNMQyxNQUFNeEIsZUFBZSxTQUFTO3dDQUM5QnlCLGNBQWE7d0NBQ2JDLFFBQVE7d0NBQ1JYLFdBQVU7d0NBQ1ZZLGFBQVk7d0NBQ1pDLE9BQU85Qjt3Q0FDUCtCLFVBQVVwQixDQUFBQSxJQUFLVixZQUFZVSxFQUFFcUIsTUFBTSxDQUFDRixLQUFLOztrREFFM0MscUJBQUNYO3dDQUFJRixXQUFVO2tEQUNiLGNBQUEscUJBQUNpQjs0Q0FDQ1IsTUFBSzs0Q0FDTFQsV0FBVTs0Q0FDVmtCLFNBQVMsSUFBTWhDLGdCQUFnQixDQUFDRDtzREFFL0JBLDZCQUNDLHFCQUFDa0MsbUJBQU07Z0RBQUNuQixXQUFVOytEQUVsQixxQkFBQ29CLGdCQUFHO2dEQUFDcEIsV0FBVTs7Ozs7Ozs7OztZQVExQlgsdUJBQ0MscUJBQUNhO2dCQUFJRixXQUFVOzBCQUNiLGNBQUEscUJBQUNFO29CQUFJRixXQUFVOzhCQUEwQ1g7OzswQkFJN0QscUJBQUNhOzBCQUNDLGNBQUEsc0JBQUNlO29CQUNDUixNQUFLO29CQUNMWSxVQUFVbEM7b0JBQ1ZhLFdBQVU7O3NDQUVWLHFCQUFDc0I7NEJBQUt0QixXQUFVO3NDQUNiYiwwQkFDQyxxQkFBQ2U7Z0NBQUlGLFdBQVU7K0NBRWYscUJBQUN1QixrQkFBSztnQ0FBQ3ZCLFdBQVU7Ozt3QkFHcEJiLFlBQVksa0JBQWtCOzs7OzBCQUluQyxxQkFBQ2U7Z0JBQUlGLFdBQVU7MEJBQ2IsY0FBQSxxQkFBQ3dCO29CQUFFeEIsV0FBVTs4QkFBMkM7Ozs7O0FBTWhFIn0=
