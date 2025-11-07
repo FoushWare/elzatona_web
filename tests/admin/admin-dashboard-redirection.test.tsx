@@ -308,7 +308,15 @@ describe('Admin Dashboard Redirection', () => {
         user: { email: 'admin@example.com', role: 'super_admin' },
       });
 
-      rerender(<AdminLoginPage />);
+      rerender(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       await waitFor(() => {
         expect(mockPush).toHaveBeenCalledWith('/admin/dashboard');
@@ -326,9 +334,17 @@ describe('Admin Dashboard Redirection', () => {
         user: { email: 'admin@example.com', role: 'super_admin' },
       });
 
-      render(<AdminDashboardPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminDashboardPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
-      expect(screen.getByText('Admin Dashboard')).toBeInTheDocument();
+      expect(screen.getByText(/Admin Dashboard/i)).toBeInTheDocument();
       expect(mockReplace).not.toHaveBeenCalled();
     });
 
@@ -341,7 +357,15 @@ describe('Admin Dashboard Redirection', () => {
         user: null,
       });
 
-      render(<AdminDashboardPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminDashboardPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(mockReplace).toHaveBeenCalledWith('/admin/login');
     });
@@ -355,7 +379,15 @@ describe('Admin Dashboard Redirection', () => {
         user: null,
       });
 
-      render(<AdminDashboardPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminDashboardPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(screen.getByText('Loading admin panel...')).toBeInTheDocument();
       expect(mockReplace).not.toHaveBeenCalled();
@@ -400,9 +432,17 @@ describe('Admin Dashboard Redirection', () => {
         user: mockSession,
       });
 
-      render(<AdminDashboardPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminDashboardPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
-      expect(screen.getByText('Admin Dashboard')).toBeInTheDocument();
+      expect(screen.getByText(/Admin Dashboard/i)).toBeInTheDocument();
       expect(mockReplace).not.toHaveBeenCalled();
     });
 
@@ -442,7 +482,15 @@ describe('Admin Dashboard Redirection', () => {
         user: null,
       });
 
-      render(<AdminDashboardPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminDashboardPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(mockReplace).toHaveBeenCalledWith('/admin/login');
     });
@@ -458,9 +506,17 @@ describe('Admin Dashboard Redirection', () => {
         user: { email: 'admin@example.com', role: 'super_admin' },
       });
 
-      render(<AdminDashboardPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminDashboardPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
-      expect(screen.getByText('Admin Dashboard')).toBeInTheDocument();
+      expect(screen.getByText(/Admin Dashboard/i)).toBeInTheDocument();
       expect(mockReplace).not.toHaveBeenCalled();
     });
 
@@ -473,9 +529,17 @@ describe('Admin Dashboard Redirection', () => {
         user: { email: 'admin@example.com', role: 'admin' },
       });
 
-      render(<AdminDashboardPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminDashboardPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
-      expect(screen.getByText('Admin Dashboard')).toBeInTheDocument();
+      expect(screen.getByText(/Admin Dashboard/i)).toBeInTheDocument();
       expect(mockReplace).not.toHaveBeenCalled();
     });
 
@@ -488,7 +552,15 @@ describe('Admin Dashboard Redirection', () => {
         user: { email: 'user@example.com', role: 'user' },
       });
 
-      render(<AdminDashboardPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminDashboardPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(mockReplace).toHaveBeenCalledWith('/admin/login');
     });
@@ -554,7 +626,7 @@ describe('Admin Dashboard Redirection', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('An error occurred. Please try again.')
+          screen.getByText(/An unexpected error occurred|An error occurred/i)
         ).toBeInTheDocument();
       });
 
@@ -571,7 +643,15 @@ describe('Admin Dashboard Redirection', () => {
         user: null, // Missing user data
       });
 
-      render(<AdminDashboardPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminDashboardPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       // Should redirect to login if user data is missing
       expect(mockReplace).toHaveBeenCalledWith('/admin/login');

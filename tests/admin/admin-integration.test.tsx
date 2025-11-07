@@ -32,15 +32,49 @@ jest.mock('next/navigation', () => ({
   usePathname: () => '/admin/content-management',
 }));
 
-// Mock admin auth context
-jest.mock('@/contexts/AdminAuthContext', () => ({
-  useAdminAuth: () => ({
-    isAuthenticated: true,
-    user: { email: 'admin@test.com' },
-    login: jest.fn(),
-    logout: jest.fn(),
-  }),
+// Set up environment variables
+process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
+process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
+
+// Mock nuqs
+jest.mock('nuqs', () => ({
+  useQueryState: jest.fn(() => [null, jest.fn()]),
+  useQueryStates: jest.fn(() => [{}, jest.fn()]),
+  parseAsString: jest.fn(),
+  parseAsInteger: jest.fn(),
+  createSearchParamsCache: jest.fn(),
 }));
+
+// Mock Supabase
+jest.mock('@supabase/supabase-js', () => ({
+  createClient: jest.fn(() => ({
+    from: jest.fn(() => ({
+      select: jest.fn(() => ({
+        eq: jest.fn().mockResolvedValue({ data: null, error: null }),
+      })),
+    })),
+  })),
+}));
+
+// Mock admin auth context - use correct import path
+jest.mock('@elzatona/shared-contexts', () => {
+  const React = require('react');
+  return {
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    useAdminAuth: jest.fn(() => ({
+      isAuthenticated: true,
+      user: { email: 'admin@test.com' },
+      login: jest.fn(),
+      logout: jest.fn(),
+    })),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    useTheme: jest.fn(() => ({
+      isDarkMode: false,
+      toggleDarkMode: jest.fn(),
+    })),
+  };
+});
 
 describe('Admin Integration Tests', () => {
   const mockUseQuery = require('@tanstack/react-query').useQuery;
