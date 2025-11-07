@@ -43,6 +43,7 @@ export interface PlanFormData {
 }
 
 interface PlanFormProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   plan?: any;
   onSubmit: (data: PlanFormData) => void;
   onCancel: () => void;

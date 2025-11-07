@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Example Usage of Database Abstraction
 // v1.0 - Demonstrates how to use the multi-database support
+// This file uses 'any' types for example database operations
 
 import React from 'react';
 import { DatabaseProvider, useDatabase } from 'database';
