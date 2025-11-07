@@ -33,7 +33,6 @@ import {
   BookOpen,
   BarChart3,
   TrendingUp,
-  Clock,
   ChevronLeft,
   ChevronRight,
   X,
@@ -139,10 +138,24 @@ export default function AdminContentQuestionsPage() {
   const totalPages = Math.ceil(totalCount / pageSize);
 
   // Additional data for forms (cards, topics, categories)
-  const [cardsData, setCardsData] = useState<any>(null);
-  const [topicsData, setTopicsData] = useState<any>(null);
-  const [categoriesData, setCategoriesData] = useState<any>(null);
-  const [categoryCounts, setCategoryCounts] = useState<any[]>([]);
+  const [cardsData, setCardsData] = useState<{
+    data?: Array<{ id: string; title: string }>;
+  } | null>(null);
+  const [topicsData, setTopicsData] = useState<{
+    data?: Array<{ id: string; name: string }>;
+  } | null>(null);
+  const [categoriesData, setCategoriesData] = useState<{
+    data?: Array<{ id: string; name: string }>;
+  } | null>(null);
+  const [categoryCounts, setCategoryCounts] = useState<
+    Array<{
+      id: string;
+      name: string;
+      description?: string;
+      slug: string;
+      questionCount: number;
+    }>
+  >([]);
 
   // Modal states
   const [selectedQuestion, setSelectedQuestion] =
@@ -249,6 +262,7 @@ export default function AdminContentQuestionsPage() {
   const allTopics = topicsData?.data || [];
   const allCategories = categoriesData?.data || [];
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const allTypes = useMemo(() => {
     if (!questions || !Array.isArray(questions)) {
       return [];
@@ -294,7 +308,7 @@ export default function AdminContentQuestionsPage() {
     }
   };
 
-  const handleUpdateQuestion = async (formData: any) => {
+  const handleUpdateQuestion = async (formData: Partial<UnifiedQuestion>) => {
     try {
       // Convert form data to UnifiedQuestion format
       const updatedQuestion: UnifiedQuestion = {
@@ -355,7 +369,10 @@ export default function AdminContentQuestionsPage() {
   };
 
   const getCardTitleById = (cardId: string) => {
-    return cards.find((card: any) => card.id === cardId)?.title || 'N/A';
+    return (
+      cards.find((card: { id: string; title: string }) => card.id === cardId)
+        ?.title || 'N/A'
+    );
   };
 
   if (loading) {
@@ -502,7 +519,7 @@ export default function AdminContentQuestionsPage() {
               </div>
             ) : (
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                {categoryCounts.map((category: any) => {
+                {categoryCounts.map(category => {
                   return (
                     <div
                       key={category.id}
@@ -572,7 +589,7 @@ export default function AdminContentQuestionsPage() {
               setQuestions(results);
               // Server-side search handles pagination, so we don't override totalCount
             }}
-            onFacetsChange={facets => {
+            onFacetsChange={_facets => {
               // Update facets if needed
             }}
             placeholder='Search questions by title, content, tags...'
@@ -1312,7 +1329,7 @@ interface QuestionFormProps {
   initialData?: UnifiedQuestion | undefined;
   onSubmit: (question: Partial<UnifiedQuestion>) => void;
   onCancel: () => void;
-  cards: any[];
+  cards: Array<{ id: string; title: string }>;
   allCategories: string[];
   allTags: string[];
 }
@@ -1619,7 +1636,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               <TrendingUp className='w-12 h-12 mx-auto mb-4 text-gray-400' />
               <p className='text-lg font-medium mb-2'>No options added yet</p>
               <p className='text-sm'>
-                Click "Add Option" to get started with multiple choice answers
+                Click &quot;Add Option&quot; to get started with multiple choice
+                answers
               </p>
             </div>
           )}
