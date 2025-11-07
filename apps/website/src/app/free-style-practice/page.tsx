@@ -43,12 +43,14 @@ interface DatabaseQuestion {
   id: string;
   question?: string; // Transformed from question_text
   question_text?: string; // Raw database field
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: any; // Already parsed JSON or string
   correct_answer?: string | number;
   correctAnswer?: number; // Transformed field
   answer?: string | number; // Alternative transformed field
   explanation?: string;
   difficulty: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tags: any; // Already parsed JSON or string
   topic_id?: string;
   topicId?: string; // Transformed field
