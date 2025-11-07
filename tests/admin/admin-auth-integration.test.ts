@@ -321,7 +321,7 @@ describe('Admin Authentication Integration', () => {
         iat: number;
       };
 
-      expect(decoded.adminId).toBe(mockAdmin.email);
+      expect(decoded.adminId).toBe(mockAdmin.id);
       expect(decoded.email).toBe(mockAdmin.email);
       expect(decoded.role).toBe(mockAdmin.role);
     });
