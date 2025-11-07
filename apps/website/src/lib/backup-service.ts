@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// This file uses 'any' types for backup data structures which can contain various document types
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;

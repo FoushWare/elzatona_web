@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// This file uses 'any' types for Supabase data transformations
 import { supabaseClient } from '@/lib/supabase';
 import type {
   LearningCard,

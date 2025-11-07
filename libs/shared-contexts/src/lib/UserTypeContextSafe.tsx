@@ -1,11 +1,13 @@
 'use client';
 
 // Only create Supabase client if environment variables are available
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let supabase: any = null;
 if (
   process.env['NEXT_PUBLIC_SUPABASE_URL'] &&
   process.env['SUPABASE_SERVICE_ROLE_KEY']
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { createClient } = require('@supabase/supabase-js');
   const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
   const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY'];
