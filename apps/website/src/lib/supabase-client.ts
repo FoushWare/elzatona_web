@@ -39,7 +39,8 @@ export const supabaseClient = isValidConfig
 export const isSupabaseAvailable = () => supabaseClient !== null;
 
 // Mirror auth session to cookie for simple client persistence across reloads
-if (supabaseClient) {
+// Only set up on client side to avoid SSR issues
+if (supabaseClient && typeof window !== 'undefined') {
   supabaseClient.auth.onAuthStateChange((event, session) => {
     try {
       if (typeof document === 'undefined') return;
