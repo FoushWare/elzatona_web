@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 export default function SimpleGuidedPracticePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [plan, setPlan] = useState<any>(null);
 
   const router = useRouter();

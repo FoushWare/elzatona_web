@@ -137,8 +137,10 @@ export default function ResourceCard({
             {/* Category */}
             {category && (
               <div className='flex items-center space-x-1'>
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 <span className='text-sm'>{(category as any)?.icon}</span>
                 <span className='text-xs text-muted-foreground'>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {(category as any)?.name}
                 </span>
               </div>
