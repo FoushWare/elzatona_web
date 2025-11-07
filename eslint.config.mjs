@@ -22,9 +22,14 @@ const eslintConfig = [
       'next-env.d.ts',
       'tests/scripts/**', // Test utility scripts use CommonJS
       'scripts/**', // Build/utility scripts use CommonJS
+      'scripts-backup/**', // Backup scripts use CommonJS
       'setup/**', // Setup scripts use CommonJS
+      'docs/api/**', // API documentation scripts use CommonJS
       'verify-oauth-config.js', // Utility script uses CommonJS
       'setup-oauth-providers.js', // Utility script uses CommonJS
+      'fix-imports.js', // Utility script uses CommonJS
+      'jest.config.js', // Jest config uses CommonJS
+      'jest.preset.js', // Jest preset uses CommonJS
     ],
   },
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
