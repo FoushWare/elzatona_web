@@ -3,16 +3,14 @@ name: Deploy Main Website
 on:
   push:
     branches: [main]
-    # Only deploy on push, not on every commit
-    # Remove this workflow if you prefer Vercel auto-deployments
   workflow_dispatch:
     # Allow manual deployments
-  # Removed pull_request trigger to avoid duplicate preview deployments
-  # Vercel will handle PR preview deployments automatically
 
 jobs:
   deploy-main:
+    name: Deploy to Vercel (Production)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -29,12 +27,16 @@ jobs:
 
       - name: Build application
         run: npm run build
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'build-time-secret-not-used-in-production' }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key' }}
 
       - name: Deploy to Vercel (Main Website)
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: prj_6GYyLnP9ZORWQafpc1Cs1yFBc4wD
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID || 'prj_6GYyLnP9ZORWQafpc1Cs1yFBc4wD' }}
           vercel-args: '--prod'
           working-directory: ./
