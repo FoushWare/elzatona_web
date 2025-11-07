@@ -28,7 +28,7 @@ const eslintConfig = [
       'verify-oauth-config.js', // Utility script uses CommonJS
       'setup-oauth-providers.js', // Utility script uses CommonJS
       'fix-imports.js', // Utility script uses CommonJS
-      'jest.config.js', // Jest config uses CommonJS
+      '**/jest.config.js', // Jest config files use CommonJS (all locations)
       'jest.preset.js', // Jest preset uses CommonJS
     ],
   },
