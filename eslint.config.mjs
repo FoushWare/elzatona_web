@@ -31,6 +31,8 @@ const eslintConfig = [
       '**/jest.config.js', // Jest config files use CommonJS (all locations)
       'jest.preset.js', // Jest preset uses CommonJS
       'apps/admin/src/app/admin/login/page.tsx', // Has build artifact issues - ignore for now
+      'apps/admin/.next/**', // Generated Next.js types
+      'apps/website/.next/**', // Generated Next.js types
     ],
   },
   {

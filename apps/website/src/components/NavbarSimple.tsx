@@ -664,9 +664,11 @@ export const NavbarSimple: React.FC = () => {
                   <>
                     {/* User Profile Section */}
                     <div className='flex items-center space-x-3 px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg'>
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       {(user as any)?.photoURL || (user as any)?.avatar_url ? (
                         <img
                           src={
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             (user as any)?.photoURL || (user as any)?.avatar_url
                           }
                           alt='Profile'
@@ -679,7 +681,9 @@ export const NavbarSimple: React.FC = () => {
                       )}
                       <div className='flex-1 min-w-0'>
                         <p className='text-sm font-medium text-gray-900 dark:text-white truncate'>
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                           {(user as any)?.displayName ||
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             (user as any)?.name ||
                             'User'}
                         </p>

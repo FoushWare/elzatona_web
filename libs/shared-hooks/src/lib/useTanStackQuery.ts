@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// This file uses 'any' types extensively for API responses and dynamic data structures
+// TODO: Replace with proper TypeScript interfaces as types are defined
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { LearningCard } from '@elzatona/shared-types';
 import { UnifiedQuestion } from '@elzatona/shared-types';
