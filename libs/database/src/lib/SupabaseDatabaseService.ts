@@ -325,7 +325,7 @@ export class SupabaseDatabaseService implements IDatabaseService {
     callback: (payload: any) => void,
     filters?: Record<string, any>
   ) {
-    let subscription = this.client
+    const subscription = this.client
       .channel(`${table}_changes`)
       .on(
         'postgres_changes',
