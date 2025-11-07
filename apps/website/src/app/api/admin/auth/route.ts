@@ -10,12 +10,34 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch (jsonError) {
+      // Handle invalid JSON
+      return NextResponse.json(
+        { success: false, error: 'Invalid JSON in request body' },
+        { status: 400 }
+      );
+    }
+
+    const { email, password } = body;
 
     if (!email || !password) {
       return NextResponse.json(
         { success: false, error: 'Email and password are required' },
         { status: 400 }
+      );
+    }
+
+    // Check if JWT_SECRET is set (not using fallback)
+    if (
+      !process.env.JWT_SECRET ||
+      adminConfig.jwt.secret === 'dev-secret-key-change-in-production'
+    ) {
+      return NextResponse.json(
+        { success: false, error: 'Server configuration error' },
+        { status: 500 }
       );
     }
 
