@@ -8,20 +8,27 @@
  * - End-to-end login flow
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { useRouter } from 'next/navigation';
-import { AdminAuthProvider } from '@elzatona/shared-contexts';
-import AdminLoginPage from '@/app/admin/login/page';
+// Set up environment variables before any imports
+process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
+process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
 
-// Mock Next.js router
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
+// Mock nuqs before any imports that use it
+jest.mock('nuqs', () => ({
+  useQueryState: jest.fn(() => [null, jest.fn()]),
+  useQueryStates: jest.fn(() => [{}, jest.fn()]),
+  parseAsString: jest.fn(),
+  parseAsInteger: jest.fn(),
+  createSearchParamsCache: jest.fn(),
 }));
 
-// Mock Supabase client
+// Mock Supabase before any imports
 jest.mock('@supabase/supabase-js', () => ({
   createClient: jest.fn(() => ({
+    from: jest.fn(() => ({
+      select: jest.fn(() => ({
+        eq: jest.fn().mockResolvedValue({ data: null, error: null }),
+      })),
+    })),
     auth: {
       signInWithPassword: jest.fn(),
       signOut: jest.fn(),
@@ -29,6 +36,48 @@ jest.mock('@supabase/supabase-js', () => ({
       onAuthStateChange: jest.fn(),
     },
   })),
+}));
+
+// Mock @tanstack/react-query
+jest.mock('@tanstack/react-query', () => {
+  const React = require('react');
+  return {
+    QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    QueryClient: jest.fn(() => ({
+      invalidateQueries: jest.fn(),
+      setQueryData: jest.fn(),
+      getQueryData: jest.fn(),
+    })),
+    useQueryClient: jest.fn(() => ({
+      invalidateQueries: jest.fn(),
+      setQueryData: jest.fn(),
+      getQueryData: jest.fn(),
+    })),
+    useQuery: jest.fn(() => ({
+      data: null,
+      isLoading: false,
+      error: null,
+    })),
+    useMutation: jest.fn(() => ({
+      mutate: jest.fn(),
+      mutateAsync: jest.fn(),
+      isLoading: false,
+      error: null,
+    })),
+  };
+});
+
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
+import { AdminAuthProvider, ThemeProvider } from '@elzatona/shared-contexts';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import AdminLoginPage from '@/app/admin/login/page';
+
+// Mock Next.js router
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
 }));
 
 // Mock fetch for API calls
@@ -47,6 +96,7 @@ interface MockRouter {
 describe('Admin Login Integration', () => {
   const mockPush = jest.fn();
   const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
+  const queryClient = new QueryClient();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -86,9 +136,13 @@ describe('Admin Login Integration', () => {
   describe('Authentication Flow', () => {
     it('should complete successful login flow', async () => {
       render(
-        <AdminAuthProvider>
-          <AdminLoginPage />
-        </AdminAuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       const emailInput = screen.getByLabelText('Email Address');
@@ -131,9 +185,13 @@ describe('Admin Login Integration', () => {
       });
 
       render(
-        <AdminAuthProvider>
-          <AdminLoginPage />
-        </AdminAuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       const emailInput = screen.getByLabelText('Email Address');
@@ -160,9 +218,13 @@ describe('Admin Login Integration', () => {
       (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
 
       render(
-        <AdminAuthProvider>
-          <AdminLoginPage />
-        </AdminAuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       const emailInput = screen.getByLabelText('Email Address');
@@ -214,9 +276,13 @@ describe('Admin Login Integration', () => {
       }));
 
       render(
-        <AdminAuthProvider>
-          <AdminLoginPage />
-        </AdminAuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       // Should redirect to dashboard
@@ -234,9 +300,13 @@ describe('Admin Login Integration', () => {
       });
 
       render(
-        <AdminAuthProvider>
-          <AdminLoginPage />
-        </AdminAuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       const emailInput = screen.getByLabelText('Email Address');
@@ -279,9 +349,13 @@ describe('Admin Login Integration', () => {
       });
 
       render(
-        <AdminAuthProvider>
-          <AdminLoginPage />
-        </AdminAuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       const emailInput = screen.getByLabelText('Email Address');
@@ -322,9 +396,13 @@ describe('Admin Login Integration', () => {
       });
 
       render(
-        <AdminAuthProvider>
-          <AdminLoginPage />
-        </AdminAuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       const emailInput = screen.getByLabelText('Email Address');
@@ -344,9 +422,13 @@ describe('Admin Login Integration', () => {
   describe('Form State Management', () => {
     it('should maintain form state during authentication', async () => {
       render(
-        <AdminAuthProvider>
-          <AdminLoginPage />
-        </AdminAuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       const emailInput = screen.getByLabelText('Email Address');
@@ -379,9 +461,13 @@ describe('Admin Login Integration', () => {
 
     it('should clear form after successful login', async () => {
       render(
-        <AdminAuthProvider>
-          <AdminLoginPage />
-        </AdminAuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       const emailInput = screen.getByLabelText('Email Address');
@@ -436,9 +522,13 @@ describe('Admin Login Integration', () => {
         });
 
       render(
-        <AdminAuthProvider>
-          <AdminLoginPage />
-        </AdminAuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
       );
 
       const emailInput = screen.getByLabelText('Email Address');

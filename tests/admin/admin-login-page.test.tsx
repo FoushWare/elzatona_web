@@ -10,10 +10,69 @@
  * - Accessibility
  */
 
+// Set up environment variables before any imports
+process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co';
+process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
+
+// Mock nuqs before any imports that use it
+jest.mock('nuqs', () => ({
+  useQueryState: jest.fn(() => [null, jest.fn()]),
+  useQueryStates: jest.fn(() => [{}, jest.fn()]),
+  parseAsString: jest.fn(),
+  parseAsInteger: jest.fn(),
+  createSearchParamsCache: jest.fn(),
+}));
+
+// Mock Supabase before any imports
+jest.mock('@supabase/supabase-js', () => ({
+  createClient: jest.fn(() => ({
+    from: jest.fn(() => ({
+      select: jest.fn(() => ({
+        eq: jest.fn().mockResolvedValue({ data: null, error: null }),
+      })),
+    })),
+  })),
+}));
+
+// Mock @tanstack/react-query
+jest.mock('@tanstack/react-query', () => {
+  const React = require('react');
+  return {
+    QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    QueryClient: jest.fn(() => ({
+      invalidateQueries: jest.fn(),
+      setQueryData: jest.fn(),
+      getQueryData: jest.fn(),
+    })),
+    useQueryClient: jest.fn(() => ({
+      invalidateQueries: jest.fn(),
+      setQueryData: jest.fn(),
+      getQueryData: jest.fn(),
+    })),
+    useQuery: jest.fn(() => ({
+      data: null,
+      isLoading: false,
+      error: null,
+    })),
+    useMutation: jest.fn(() => ({
+      mutate: jest.fn(),
+      mutateAsync: jest.fn(),
+      isLoading: false,
+      error: null,
+    })),
+  };
+});
+
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import { useAdminAuth } from '@elzatona/shared-contexts';
+import {
+  useAdminAuth,
+  AdminAuthProvider,
+  ThemeProvider,
+} from '@elzatona/shared-contexts';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AdminLoginPage from '@/app/admin/login/page';
 
 // Mock Next.js router
@@ -21,10 +80,31 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-// Mock AdminAuthContext
-jest.mock('@elzatona/shared-contexts', () => ({
-  useAdminAuth: jest.fn(),
+// Create a mock function that can be configured per test
+const mockUseAdminAuthFn = jest.fn(() => ({
+  isAuthenticated: false,
+  isLoading: false,
+  login: jest.fn(),
+  logout: jest.fn(),
+  user: null,
 }));
+
+// Mock AdminAuthContext
+jest.mock('@elzatona/shared-contexts', () => {
+  const React = require('react');
+  return {
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
+      children,
+    useAdminAuth: mockUseAdminAuthFn,
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    useTheme: jest.fn(() => ({
+      isDarkMode: false,
+      toggleDarkMode: jest.fn(),
+      setDarkMode: jest.fn(),
+      isLoaded: true,
+    })),
+  };
+});
 
 // Mock fetch for API calls
 global.fetch = jest.fn();
@@ -55,12 +135,18 @@ interface MockAdminAuth {
 describe('Admin Login Page', () => {
   const mockPush = jest.fn();
   const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-  const mockUseAdminAuth = useAdminAuth as jest.MockedFunction<
-    () => MockAdminAuth
-  >;
+  const queryClient = new QueryClient();
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset mock admin auth function to return default values
+    mockUseAdminAuthFn.mockReturnValue({
+      isAuthenticated: false,
+      isLoading: false,
+      login: jest.fn(),
+      logout: jest.fn(),
+      user: null,
+    });
     mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: jest.fn(),
@@ -69,15 +155,6 @@ describe('Admin Login Page', () => {
       forward: jest.fn(),
       refresh: jest.fn(),
     } as MockRouter);
-
-    // Default mock for useAdminAuth
-    mockUseAdminAuth.mockReturnValue({
-      isAuthenticated: false,
-      isLoading: false,
-      login: jest.fn(),
-      logout: jest.fn(),
-      user: null,
-    });
   });
 
   afterEach(() => {
@@ -86,7 +163,15 @@ describe('Admin Login Page', () => {
 
   describe('Page Rendering', () => {
     it('should render login form with all required elements', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(screen.getByText('Admin Login')).toBeInTheDocument();
       expect(
@@ -101,7 +186,15 @@ describe('Admin Login Page', () => {
     });
 
     it('should render admin navbar with correct elements', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(screen.getByText('Admin Access Portal')).toBeInTheDocument();
       expect(
@@ -111,7 +204,7 @@ describe('Admin Login Page', () => {
     });
 
     it('should show loading state when authentication is in progress', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: true,
         login: jest.fn(),
@@ -119,14 +212,22 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(screen.getByText('Loading...')).toBeInTheDocument();
       expect(screen.getByRole('status')).toBeInTheDocument();
     });
 
     it('should redirect authenticated users to dashboard', () => {
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: true,
         isLoading: false,
         login: jest.fn(),
@@ -139,7 +240,15 @@ describe('Admin Login Page', () => {
         },
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(mockPush).toHaveBeenCalledWith('/admin/dashboard');
     });
@@ -147,7 +256,15 @@ describe('Admin Login Page', () => {
 
   describe('Form Validation', () => {
     it('should show validation errors for empty fields', async () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const loginButton = screen.getByRole('button', { name: 'Sign In' });
       fireEvent.click(loginButton);
@@ -165,7 +282,15 @@ describe('Admin Login Page', () => {
     });
 
     it('should validate email format', async () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const loginButton = screen.getByRole('button', { name: 'Sign In' });
@@ -182,7 +307,7 @@ describe('Admin Login Page', () => {
         success: false,
         error: 'Invalid credentials',
       });
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -190,7 +315,15 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -219,7 +352,7 @@ describe('Admin Login Page', () => {
   describe('Form Submission', () => {
     it('should call login function with correct credentials', async () => {
       const mockLogin = jest.fn().mockResolvedValue({ success: true });
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -227,7 +360,15 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -258,7 +399,7 @@ describe('Admin Login Page', () => {
               setTimeout(() => resolve({ success: true }), 100)
             )
         );
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -266,7 +407,15 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -288,7 +437,7 @@ describe('Admin Login Page', () => {
       const mockLogin = jest
         .fn()
         .mockResolvedValue({ success: false, error: 'Invalid credentials' });
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -296,7 +445,15 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -313,7 +470,7 @@ describe('Admin Login Page', () => {
 
     it('should handle network errors gracefully', async () => {
       const mockLogin = jest.fn().mockRejectedValue(new Error('Network error'));
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -321,7 +478,15 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -344,7 +509,7 @@ describe('Admin Login Page', () => {
 
     it('should handle generic login failure', async () => {
       const mockLogin = jest.fn().mockResolvedValue({ success: false });
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -352,7 +517,15 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -371,7 +544,7 @@ describe('Admin Login Page', () => {
   describe('User Interactions', () => {
     it('should submit form on Enter key press', async () => {
       const mockLogin = jest.fn().mockResolvedValue({ success: true });
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -379,7 +552,15 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -401,7 +582,15 @@ describe('Admin Login Page', () => {
     });
 
     it('should update form fields correctly', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -422,7 +611,7 @@ describe('Admin Login Page', () => {
               setTimeout(() => resolve({ success: true }), 100)
             )
         );
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -430,7 +619,15 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -450,7 +647,15 @@ describe('Admin Login Page', () => {
 
   describe('Accessibility', () => {
     it('should have proper ARIA labels and roles', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       expect(screen.getByLabelText('Email Address')).toBeInTheDocument();
       expect(screen.getByLabelText('Password')).toBeInTheDocument();
@@ -461,7 +666,15 @@ describe('Admin Login Page', () => {
     });
 
     it('should be keyboard navigable', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -478,7 +691,15 @@ describe('Admin Login Page', () => {
     });
 
     it('should have proper form structure', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const form = screen.getByRole('form');
       expect(form).toBeInTheDocument();
@@ -497,7 +718,15 @@ describe('Admin Login Page', () => {
     it('should not log sensitive information', () => {
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -518,7 +747,15 @@ describe('Admin Login Page', () => {
     });
 
     it('should prevent XSS attacks in form inputs', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const maliciousInput = '<script>alert("xss")</script>';
@@ -531,7 +768,15 @@ describe('Admin Login Page', () => {
     });
 
     it('should use secure password input type', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const passwordInput = screen.getByLabelText('Password');
       expect(passwordInput).toHaveAttribute('type', 'password');
@@ -540,7 +785,15 @@ describe('Admin Login Page', () => {
 
   describe('Navigation', () => {
     it('should have working back to home link', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const backLink = screen.getByText('← Back to Home');
       expect(backLink).toBeInTheDocument();
@@ -548,7 +801,15 @@ describe('Admin Login Page', () => {
     });
 
     it('should have working back to site link in navbar', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const backToSiteLink = screen.getByText('Back to Site');
       expect(backToSiteLink).toBeInTheDocument();
@@ -558,14 +819,30 @@ describe('Admin Login Page', () => {
 
   describe('Theme Support', () => {
     it('should support dark mode classes', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const container = screen.getByText('Admin Login').closest('div');
       expect(container).toHaveClass('dark:text-white');
     });
 
     it('should have theme toggle button in navbar', () => {
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const themeButton = screen.getByLabelText('Toggle theme');
       expect(themeButton).toBeInTheDocument();
@@ -577,7 +854,7 @@ describe('Admin Login Page', () => {
       const mockLogin = jest
         .fn()
         .mockResolvedValue({ success: false, error: 'Test error message' });
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -585,7 +862,15 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
@@ -607,7 +892,7 @@ describe('Admin Login Page', () => {
         .fn()
         .mockResolvedValueOnce({ success: false, error: 'First error' })
         .mockResolvedValueOnce({ success: true });
-      mockUseAdminAuth.mockReturnValue({
+      mockUseAdminAuthFn.mockReturnValue({
         isAuthenticated: false,
         isLoading: false,
         login: mockLogin,
@@ -615,7 +900,15 @@ describe('Admin Login Page', () => {
         user: null,
       });
 
-      render(<AdminLoginPage />);
+      render(
+        <QueryClientProvider client={queryClient}>
+          <AdminAuthProvider>
+            <ThemeProvider>
+              <AdminLoginPage />
+            </ThemeProvider>
+          </AdminAuthProvider>
+        </QueryClientProvider>
+      );
 
       const emailInput = screen.getByLabelText('Email Address');
       const passwordInput = screen.getByLabelText('Password');
