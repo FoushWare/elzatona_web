@@ -120,7 +120,7 @@ test.describe('Guided Learning Page', () => {
       await page.waitForLoadState('networkidle');
 
       // Check for welcome message (if shown)
-      const welcomeMessage = page.getByText(/Welcome back/i).first();
+      const _welcomeMessage = page.getByText(/Welcome back/i).first();
       // This may or may not be visible depending on implementation
       // Just check page loads without errors
       await expect(page.locator('body')).toBeVisible();
@@ -132,7 +132,7 @@ test.describe('Guided Learning Page', () => {
       await page.goto('/features/guided-learning');
 
       // Check if loading indicator appears (may be too fast to catch)
-      const loadingText = page.getByText(/Loading Learning Plans/i);
+      const _loadingText = page.getByText(/Loading Learning Plans/i);
       // Loading state might be very brief, so we'll just verify page renders
       await expect(page.locator('body')).toBeVisible();
     });
@@ -158,7 +158,7 @@ test.describe('Guided Learning Page', () => {
         }
 
         // Check for duration and questions stats
-        const stats = firstCard
+        const _stats = firstCard
           .getByText(/Days/i)
           .or(firstCard.getByText(/Questions/i));
         // Stats may or may not be visible depending on data
@@ -177,7 +177,7 @@ test.describe('Guided Learning Page', () => {
         const firstCard = planCards.first();
 
         // Check for difficulty badges (Beginner, Intermediate, Advanced)
-        const difficulty = firstCard.getByText(
+        const _difficulty = firstCard.getByText(
           /Beginner|Intermediate|Advanced/i
         );
         // Difficulty badge may or may not be visible
@@ -229,7 +229,7 @@ test.describe('Guided Learning Page', () => {
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(2000);
 
-      const recommendedBadge = page.getByText(/Recommended/i).first();
+      const _recommendedBadge = page.getByText(/Recommended/i).first();
       // Recommended badge may or may not be visible depending on data
       // Just verify page loads
       await expect(page.locator('body')).toBeVisible();
@@ -269,10 +269,10 @@ test.describe('Guided Learning Page', () => {
         const firstCard = planCards.first();
 
         // Get plan name if available for better assertion
-        let planName = '';
+        let _planName = '';
         const nameElement = firstCard.locator('h3').first();
         if ((await nameElement.count()) > 0) {
-          planName = (await nameElement.textContent()) || '';
+          _planName = (await nameElement.textContent()) || '';
         }
 
         // Click on card
@@ -305,7 +305,7 @@ test.describe('Guided Learning Page', () => {
       await page.waitForLoadState('networkidle');
 
       // Check for completion message
-      const completionMessage = page.getByText(/completed.*learning plan/i);
+      const _completionMessage = page.getByText(/completed.*learning plan/i);
       // May or may not be visible depending on implementation
       await expect(page.locator('body')).toBeVisible();
     });
@@ -329,7 +329,7 @@ test.describe('Guided Learning Page', () => {
       await page.waitForTimeout(2000);
 
       // Check for grade badges
-      const gradeBadge = page.getByText(/A|B|C|Excellent|Great|Good/i).first();
+      const _gradeBadge = page.getByText(/A|B|C|Excellent|Great|Good/i).first();
       // Grade badges may or may not be visible
       await expect(page.locator('body')).toBeVisible();
     });
@@ -350,7 +350,7 @@ test.describe('Guided Learning Page', () => {
       await page.waitForTimeout(2000);
 
       // Check for error message
-      const errorMessage = page.getByText(/Error/i).first();
+      const _errorMessage = page.getByText(/Error/i).first();
       // Error message may be displayed
       await expect(page.locator('body')).toBeVisible();
     });
@@ -371,7 +371,7 @@ test.describe('Guided Learning Page', () => {
       await expect(page.locator('body')).toBeVisible();
 
       // Check for fallback message if shown
-      const noPlansMessage = page.getByText(/No learning plans found/i);
+      const _noPlansMessage = page.getByText(/No learning plans found/i);
       // May or may not be visible
     });
   });
@@ -456,7 +456,7 @@ test.describe('Guided Learning Page', () => {
         await expect(ctaButton).toBeVisible();
         // Tab to button and check it's focusable
         await page.keyboard.press('Tab');
-        const focusedElement = page.locator(':focus');
+        const _focusedElement = page.locator(':focus');
         // Button should be focusable
       }
     });

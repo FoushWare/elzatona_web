@@ -2977,7 +2977,7 @@ export default function CustomRoadmapPage() {
                           Options
                         </h3>
                         <div className='space-y-2'>
-                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {}
                           {questionDetails.options.map(
                             (option: any, index: number) => {
                               // Handle both string options and object options (with id, text, isCorrect)
