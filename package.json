@@ -39,7 +39,7 @@
     "test:admin-login": "node tests/scripts/run-admin-login-tests.mjs",
     "test:admin-login:fast": "npx jest tests/admin/admin-login-api.test.ts --verbose",
     "test:admin-login:watch": "npx jest tests/admin/ --watch",
-    "test:admin-login:coverage": "npx jest tests/admin/ --coverage",
+    "test:admin-login:coverage": "cd apps/website && npx jest ../../tests/admin/ --coverage --config jest.config.js",
     "test:admin": "node scripts/run-admin-tests.mjs",
     "test:admin:all": "node scripts/run-admin-tests.mjs all",
     "test:admin:watch": "node scripts/run-admin-tests.mjs watch",
