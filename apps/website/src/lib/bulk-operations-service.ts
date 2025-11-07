@@ -10,6 +10,7 @@ export interface BulkOperation {
   type: 'delete' | 'edit' | 'activate' | 'deactivate';
   targetType: 'questions' | 'categories' | 'topics' | 'cards' | 'plans';
   targetIds: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   operationData?: Record<string, any>;
   status: 'pending' | 'running' | 'completed' | 'failed';
   progress: number;

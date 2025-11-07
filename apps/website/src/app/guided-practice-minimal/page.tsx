@@ -71,6 +71,7 @@ export default function MinimalGuidedPracticePage() {
         <p className='text-lg mb-8'>Total Questions: {plan.totalQuestions}</p>
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {plan.cards?.map((card: any) => (
             <div key={card.id} className='bg-white p-4 rounded shadow'>
               <h3 className='font-semibold mb-2'>{card.title}</h3>

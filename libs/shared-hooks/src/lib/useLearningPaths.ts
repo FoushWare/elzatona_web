@@ -61,6 +61,7 @@ export function useLearningPaths(): UseLearningPathsReturn {
 
       // Map plans to LearningPath shape minimally
       if (Array.isArray(data.plans)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const mapped = data.plans.map((p: any) => ({
           id: p.id,
           name: p.name || 'Plan',

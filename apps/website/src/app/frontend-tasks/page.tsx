@@ -50,6 +50,7 @@ interface FrontendTask {
   hints: string[];
   solution: string;
   starterCode: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   testCases?: any[];
   tags: string[];
   created_at: Date;

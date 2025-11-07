@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Database Service Interface
 // v1.0 - Abstraction for database operations supporting both Firebase and Supabase
+// This file uses 'any' types for database filters which can have various structures
 
 export interface IDatabaseService {
   // Basic CRUD operations

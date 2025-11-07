@@ -23,6 +23,7 @@ interface FreeStyleProgressData {
   lastQuestionIndex: number;
   lastQuestionId?: string;
   answeredQuestions: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   answeredQuestionsData?: Record<string, any>;
   lastUpdated: number;
 }

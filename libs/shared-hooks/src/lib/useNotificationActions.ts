@@ -20,6 +20,7 @@ export function useNotificationActions() {
   );
 
   const notifySystemEvent = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (event: string, details?: any) => {
       // Simple implementation - just log the event
       console.log(`System Event: ${event}`, details);

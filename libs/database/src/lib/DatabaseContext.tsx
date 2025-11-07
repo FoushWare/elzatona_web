@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Database Context for Dependency Injection
 // v1.0 - React context for database service injection
+// This file uses 'any' types for environment variable access and window/process objects
 
 import React, { createContext, useContext, ReactNode } from 'react';
 import { IDatabaseService, DatabaseConfig } from './IDatabaseService';
