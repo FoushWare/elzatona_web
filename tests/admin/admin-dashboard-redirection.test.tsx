@@ -49,6 +49,7 @@ jest.mock('nuqs', () => ({
 
 // Mock @tanstack/react-query
 jest.mock('@tanstack/react-query', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
     QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
@@ -85,6 +86,7 @@ jest.mock('next/navigation', () => ({
 
 // Mock the actual AdminAuthContext file
 jest.mock('../../libs/shared-contexts/src/lib/AdminAuthContext', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   const mockFn = jest.fn(() => ({
     isAuthenticated: false,
@@ -102,6 +104,7 @@ jest.mock('../../libs/shared-contexts/src/lib/AdminAuthContext', () => {
 
 // Mock the actual ThemeContext file
 jest.mock('../../libs/shared-contexts/src/lib/ThemeContext', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
     ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
@@ -124,6 +127,7 @@ const mockUseAdminAuthFn = jest.fn(() => ({
 }));
 
 jest.mock('@elzatona/shared-contexts', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
     AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>

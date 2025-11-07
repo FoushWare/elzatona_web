@@ -59,6 +59,7 @@ jest.mock('@supabase/supabase-js', () => ({
 
 // Mock admin auth context - use correct import path
 jest.mock('@elzatona/shared-contexts', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
     AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
@@ -78,8 +79,11 @@ jest.mock('@elzatona/shared-contexts', () => {
 });
 
 describe('Admin Integration Tests', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mockUseQuery = require('@tanstack/react-query').useQuery;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mockUseMutation = require('@tanstack/react-query').useMutation;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mockQueryClient = require('@tanstack/react-query').useQueryClient();
 
   beforeEach(() => {

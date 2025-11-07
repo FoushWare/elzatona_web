@@ -32,7 +32,9 @@ jest.mock('@supabase/supabase-js', () => ({
 }));
 
 describe('Content Management API Tests', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { createClient } = require('@supabase/supabase-js');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockSupabaseClient: any;
 
   beforeEach(() => {

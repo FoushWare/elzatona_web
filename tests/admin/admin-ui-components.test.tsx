@@ -60,6 +60,7 @@ jest.mock('nuqs', () => ({
 
 // Mock admin auth context - use correct import path
 jest.mock('@elzatona/shared-contexts', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
     AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
@@ -79,7 +80,9 @@ jest.mock('@elzatona/shared-contexts', () => {
 });
 
 describe('Admin UI Component Tests', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mockUseQuery = require('@tanstack/react-query').useQuery;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mockUseMutation = require('@tanstack/react-query').useMutation;
 
   beforeEach(() => {

@@ -37,6 +37,7 @@ jest.mock('@supabase/supabase-js', () => ({
 
 // Mock @tanstack/react-query
 jest.mock('@tanstack/react-query', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
     QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
@@ -92,6 +93,7 @@ const mockUseAdminAuthFn = jest.fn(() => ({
 
 // Mock AdminAuthContext
 jest.mock('@elzatona/shared-contexts', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
     AdminAuthProvider: ({ children }: { children: React.ReactNode }) =>
