@@ -32,7 +32,7 @@ export async function GET(
     }
 
     // Get the plan from Supabase
-    let { data: plan, error: planError } = await supabase
+    const { data: plan, error: planError } = await supabase
       .from('learning_plans')
       .select('*')
       .eq('id', planId)

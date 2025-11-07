@@ -1,0 +1,18 @@
+# Exclude template projects from Nx
+tools/templates/
+
+# Exclude backup directories
+scripts-backup/
+
+# Exclude node_modules
+node_modules/
+
+# Exclude build outputs
+.next/
+dist/
+coverage/
+
+# Exclude temporary files
+*.log
+*.tmp
+

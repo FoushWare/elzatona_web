@@ -19,7 +19,7 @@ let questionsCache: Array<{
   id: string;
   [key: string]: unknown;
 }> | null = null;
-let cacheTimestamp: number = 0;
+const cacheTimestamp: number = 0;
 const CACHE_DURATION = 30000; // 30 seconds
 
 // GET /api/questions/unified - Get questions with filters

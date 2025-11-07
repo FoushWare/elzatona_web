@@ -151,7 +151,6 @@ export default function MyPlansPage() {
     };
 
     checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authIsAuthenticated, user, authIsLoading, router]);
 
   const loadPlans = async () => {

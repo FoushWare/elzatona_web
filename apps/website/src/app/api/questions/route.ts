@@ -280,7 +280,7 @@ export async function GET(request: NextRequest) {
         .filter(q => q !== null && q.question) || []; // Filter out questions without text
 
     // Additional filters that aren't handled by Supabase (already filtered by categoryId above)
-    let filteredQuestions = transformedQuestions;
+    const filteredQuestions = transformedQuestions;
 
     if (cardType && cardType !== 'all') {
       // This would need to be handled by joining with learning_cards table
