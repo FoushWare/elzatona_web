@@ -304,7 +304,7 @@ export class FrontendTaskValidator {
       await new Promise(resolve => setTimeout(resolve, 100));
 
       // Execute test case
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       let actualOutput: any;
 
       switch (testCase.input) {
@@ -398,7 +398,7 @@ export class FrontendTaskValidator {
 
     try {
       const window = iframe.contentWindow!;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const func = (window as any)[functionName];
 
       if (!func) {
@@ -438,7 +438,7 @@ export class FrontendTaskValidator {
       const doc = iframe.contentDocument!;
 
       // Execute test case based on type
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       let actualOutput: any;
 
       switch (testCase.input) {
@@ -481,7 +481,6 @@ export class FrontendTaskValidator {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private compareOutputs(actual: any, expected: any): boolean {
     // Deep comparison for objects and arrays
     if (typeof actual === 'object' && typeof expected === 'object') {

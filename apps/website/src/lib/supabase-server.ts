@@ -43,7 +43,6 @@ export const supabaseOperations = {
   }) {
     if (!supabase) throw new Error('Supabase not initialized');
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let query = (supabase as any).from('learning_cards').select('*');
 
     if (filters?.type) {
@@ -82,7 +81,6 @@ export const supabaseOperations = {
       is_active: cardData.is_active !== false,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return await (supabase as any)
       .from('learning_cards')
       .insert(data)
