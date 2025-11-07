@@ -131,8 +131,11 @@ jest.mock('@/admin.config', () => ({
 }));
 
 describe('Admin Login API', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const bcrypt = require('bcryptjs');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { createClient } = require('@supabase/supabase-js');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockSupabaseClient: any;
 
   beforeEach(() => {

@@ -41,6 +41,7 @@ jest.mock('@supabase/supabase-js', () => ({
 
 // Mock @tanstack/react-query
 jest.mock('@tanstack/react-query', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
   return {
     QueryClientProvider: ({ children }: { children: React.ReactNode }) =>
