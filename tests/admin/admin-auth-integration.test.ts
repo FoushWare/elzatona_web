@@ -98,7 +98,7 @@ describe('Admin Authentication Integration', () => {
   const bcrypt = require('bcryptjs');
   const { createClient } = require('@supabase/supabase-js');
   let mockSupabaseClient: any;
-  let originalConsoleError: typeof console.error;
+  let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -110,13 +110,15 @@ describe('Admin Authentication Integration', () => {
     process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-role-key';
 
     // Suppress console.error for expected error tests
-    originalConsoleError = console.error;
-    console.error = jest.fn();
+    // Use jest.spyOn to properly mock and suppress console.error output
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {
+      // Suppress console.error output during tests
+    });
   });
 
   afterEach(() => {
     // Restore console.error
-    console.error = originalConsoleError;
+    consoleErrorSpy.mockRestore();
     delete process.env.JWT_SECRET;
     delete process.env.NEXT_PUBLIC_SUPABASE_URL;
     delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
