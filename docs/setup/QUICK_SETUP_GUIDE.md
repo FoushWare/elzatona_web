@@ -92,8 +92,9 @@ Your complete `.env.local` should look like this:
 
 ```bash
 # Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s
+# Supabase Configuration (Get from Supabase Dashboard)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 SUPABASE_SERVICE_ROLE_KEY=your-actual-service-role-key
 
 # NextAuth Configuration
@@ -117,7 +118,8 @@ INITIAL_ADMIN_NAME=Super Admin
 INITIAL_ADMIN_ROLE=super_admin
 
 # Firebase Configuration (already in your file)
-NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y
+# Firebase Configuration (Get from Firebase Console)
+NEXT_PUBLIC_FIREBASE_API_KEY=your-firebase-api-key-here
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=fir-demo-project-adffb.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=fir-demo-project-adffb
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=fir-demo-project-adffb.firebasestorage.app

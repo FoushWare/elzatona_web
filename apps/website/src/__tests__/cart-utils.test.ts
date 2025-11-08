@@ -32,7 +32,7 @@ describe('cart utils', () => {
     addToCart(item1);
     addToCart(item2);
     removeFromCart('a');
-    expect(loadCart().map(i => i.id)).toEqual(['b']);
+    expect(loadCart().map((i: CartItem) => i.id)).toEqual(['b']);
     clearCart();
     expect(loadCart()).toEqual([]);
   });
