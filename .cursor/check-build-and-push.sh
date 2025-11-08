@@ -46,7 +46,7 @@ log "${BLUE}Branch: ${BRANCH}${NC}"
 log "${BLUE}Working directory: $(pwd)${NC}\n"
 
 # Step 1: Check for uncommitted changes
-step_header "Step 1/7: Checking Git Status"
+step_header "Step 1/8: Checking Git Status"
 log "Checking for uncommitted changes..."
 if [ -n "$(git status --porcelain)" ]; then
   log "${YELLOW}⚠️  Uncommitted changes detected. Staging all changes...${NC}"
@@ -59,7 +59,7 @@ else
 fi
 
 # Step 2: Run linting and auto-fix
-step_header "Step 2/7: Running Linter with Auto-Fix"
+step_header "Step 2/8: Running Linter with Auto-Fix"
 log "Starting ESLint with auto-fix..."
 log "This may take a while depending on codebase size..."
 log "Command: npm run lint:fix"
@@ -88,7 +88,7 @@ else
 fi
 
 # Step 3: Check TypeScript errors
-step_header "Step 3/7: Checking TypeScript Errors"
+step_header "Step 3/8: Checking TypeScript Errors"
 log "Running TypeScript compiler check (no emit)..."
 log "Command: npx tsc --noEmit"
 log "This may take a while for large projects..."
@@ -111,7 +111,7 @@ else
 fi
 
 # Step 4: Run build check
-step_header "Step 4/7: Running Build Check"
+step_header "Step 4/8: Running Build Check"
 log "Starting build process..."
 log "Command: npm run build"
 log "This is typically the longest step - please be patient..."
@@ -207,7 +207,7 @@ else
 fi
 
 # Step 5: Run tests in batches (much faster than running all at once)
-step_header "Step 5/7: Running Tests in Batches"
+step_header "Step 5/8: Running Tests in Batches"
 log "Using batch testing for faster feedback..."
 log "Running: bash .cursor/run-tests-in-batches.sh"
 
@@ -264,7 +264,7 @@ else
 fi
 
 # Step 6: Check if there are changes to commit
-step_header "Step 6/7: Committing Changes"
+step_header "Step 6/8: Committing Changes"
 log "Checking for changes to commit..."
 
 if [ -n "$(git status --porcelain)" ]; then
@@ -294,8 +294,56 @@ else
   log "Elapsed time: $(get_elapsed_time)\n"
 fi
 
-# Step 7: Push to GitHub
-step_header "Step 7/7: Pushing to GitHub"
+# Step 7: Security Audit Check
+step_header "Step 7/8: Running Security Audit"
+log "Running security checks..."
+log "Checking for exposed secrets and vulnerabilities..."
+
+SECURITY_START=$(date +%s)
+
+# Check for common security issues
+SECURITY_ISSUES=0
+
+# Check for hardcoded secrets in staged files
+log "Scanning for hardcoded secrets..."
+if git diff --cached --name-only | xargs grep -lE "(password|secret|key|token)\s*=\s*['\"][^'\"]+['\"]" 2>/dev/null | grep -v node_modules | head -5; then
+  log "${YELLOW}⚠️  Potential hardcoded secrets found in staged files${NC}"
+  SECURITY_ISSUES=1
+fi
+
+# Check for .env files being committed
+if git diff --cached --name-only | grep -E "\.env$|\.env\.local$|\.env\.production$" 2>/dev/null; then
+  log "${RED}❌ .env files detected in staged changes!${NC}"
+  log "${YELLOW}⚠️  .env files should not be committed. Removing from staging...${NC}"
+  git reset HEAD -- .env .env.local .env.production 2>/dev/null || true
+  SECURITY_ISSUES=1
+fi
+
+# Run npm audit if available
+if command -v npm &> /dev/null; then
+  log "Running npm audit for dependency vulnerabilities..."
+  if npm audit --audit-level=moderate 2>&1 | head -20; then
+    log "${GREEN}✅ No critical dependency vulnerabilities found${NC}"
+  else
+    log "${YELLOW}⚠️  Dependency vulnerabilities detected. Review npm audit output above.${NC}"
+    SECURITY_ISSUES=1
+  fi
+fi
+
+SECURITY_END=$(date +%s)
+SECURITY_DURATION=$((SECURITY_END - SECURITY_START))
+
+if [ $SECURITY_ISSUES -eq 0 ]; then
+  log "${GREEN}✅ Security audit passed (took ${SECURITY_DURATION}s)${NC}"
+else
+  log "${YELLOW}⚠️  Security issues detected (took ${SECURITY_DURATION}s)${NC}"
+  log "${YELLOW}Review the issues above before pushing.${NC}"
+  log "${BLUE}You can continue, but please address security issues.${NC}"
+fi
+log "Elapsed time: $(get_elapsed_time)\n"
+
+# Step 8: Push to GitHub
+step_header "Step 8/8: Pushing to GitHub"
 log "Preparing to push to GitHub..."
 log "Branch: ${BRANCH}"
 log "Remote: origin"

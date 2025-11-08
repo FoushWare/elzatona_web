@@ -22,11 +22,11 @@ All seeding scripts use the Firebase Client SDK with the following configuration
 
 ```typescript
 const firebaseConfig = {
-  apiKey: 'AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y',
-  authDomain: 'fir-demo-project-adffb.firebaseapp.com',
-  projectId: 'fir-demo-project-adffb',
-  storageBucket: 'fir-demo-project-adffb.firebasestorage.app',
-  messagingSenderId: '76366138630',
+  apiKey: 'your-firebase-api-key-here', // Get from Firebase Console
+  authDomain: 'your-project.firebaseapp.com',
+  projectId: 'your-project-id',
+  storageBucket: 'your-project.firebasestorage.app',
+  messagingSenderId: 'your-messaging-sender-id',
   appId: '1:76366138630:web:0f3381c2f5a62e0401e287',
   measurementId: 'G-XZ5VKFGG4Y',
 };

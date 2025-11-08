@@ -23,6 +23,8 @@ Or specify a branch:
 
 This command performs the following steps in sequence:
 
+**Note:** The duplicate `/gh` command has been removed. Use `/gh-push` instead.
+
 ### 1. 🔍 Check for Uncommitted Changes
 
 - Automatically stages all uncommitted changes
@@ -119,6 +121,35 @@ The script attempts to automatically fix common build errors:
   ```
 
 - **Note**: After committing, consider running a [code review](./code-review-checklist.md) before pushing
+
+### 7. 🔒 Security Audit Check
+
+- **Scans for hardcoded secrets** in staged files
+- **Prevents .env files** from being committed (automatically unstages them)
+- **Runs npm audit** to check for dependency vulnerabilities
+- **Reports security issues** but allows continuation (non-blocking)
+- **Provides warnings** for potential security risks
+
+#### Security Checks Performed
+
+##### Hardcoded Secrets Detection
+
+- **Detects**: Common patterns like `password=`, `secret=`, `key=`, `token=` with hardcoded values
+- **Action**: Warns about potential secrets but allows continuation
+- **Recommendation**: Review and move secrets to environment variables
+
+##### .env File Protection
+
+- **Detects**: `.env`, `.env.local`, `.env.production` files in staged changes
+- **Fixes**: Automatically unstages .env files to prevent accidental commits
+- **Action**: Prevents sensitive environment files from being pushed
+
+##### Dependency Vulnerabilities
+
+- **Runs**: `npm audit --audit-level=moderate`
+- **Reports**: Known vulnerabilities in dependencies
+- **Action**: Shows audit results but doesn't block push
+- **Recommendation**: Review and update vulnerable packages
 
 ### 8. 🚀 Push to GitHub
 
