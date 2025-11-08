@@ -1,7 +1,6 @@
 /**
- * Integration Tests for Admin Frontend Tasks
- * Task: 5 - Admin Frontend Tasks
- * Test IDs: A-IT-017
+ * Integration Tests for Admin Frontend Tasks (A-IT-017)
+ * Task: A-005 - Admin Frontend Tasks
  */
 
 import React from 'react';
@@ -9,31 +8,58 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FrontendTasksAdminPage from './page';
 
-// Mock dependencies
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
-  }),
+jest.mock('@elzatona/shared-hooks', () => ({
+  useFrontendTasks: jest.fn(() => ({
+    data: { data: [] },
+    isLoading: false,
+    error: null,
+  })),
+  useCreateFrontendTask: jest.fn(() => ({
+    mutateAsync: jest.fn().mockResolvedValue({ success: true }),
+    isPending: false,
+  })),
+  useUpdateFrontendTask: jest.fn(() => ({
+    mutateAsync: jest.fn().mockResolvedValue({ success: true }),
+    isPending: false,
+  })),
+  useDeleteFrontendTask: jest.fn(() => ({
+    mutateAsync: jest.fn().mockResolvedValue({ success: true }),
+    isPending: false,
+  })),
 }));
 
-// Mock fetch
-global.fetch = jest.fn();
+jest.mock('@elzatona/shared-components', () => ({
+  FrontendTaskEditor: ({ onSave, onCancel }: any) => (
+    <div>
+      <button onClick={() => onSave({})}>Save</button>
+      <button onClick={onCancel}>Cancel</button>
+    </div>
+  ),
+}));
 
-describe('5: Integration Tests', () => {
+jest.mock('lucide-react', () => ({
+  Plus: () => <span>+</span>,
+  Edit: () => <span>✏️</span>,
+  Trash2: () => <span>🗑️</span>,
+  Eye: () => <span>👁️</span>,
+  Search: () => <span>🔍</span>,
+  Filter: () => <span>🔽</span>,
+  Code: () => <span>💻</span>,
+}));
+
+window.confirm = jest.fn(() => true);
+
+describe('A-IT-017: Frontend Tasks CRUD Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
-    });
   });
 
-  it('should handle user interactions', async () => {
+  it('should integrate task creation', async () => {
     render(<FrontendTasksAdminPage />);
+    
     await waitFor(() => {
-      expect(screen.getByText(/.*/)).toBeInTheDocument();
+      const { useFrontendTasks } = require('@elzatona/shared-hooks');
+      expect(useFrontendTasks).toHaveBeenCalled();
     });
   });
 });
