@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifySupabaseToken } from '../../lib/server-auth';
+import { verifySupabaseToken } from '../../../lib/server-auth';
 
 export async function POST(request: NextRequest) {
   try {
