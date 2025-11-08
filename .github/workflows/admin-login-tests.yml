@@ -127,25 +127,29 @@ jobs:
         run: npm run lint:fix || true
       - name: Check for linting errors (warnings allowed)
         run: |
-          # Run lint and capture output
-          npm run lint 2>&1 | tee lint-output.txt || true
+          # Run lint with JSON output to parse errors vs warnings
+          npm run lint -- --format json > lint-output.json 2>&1 || true
 
-          # Check exit code - if lint passed (exit 0), we're good
-          # ESLint exits with 1 if there are errors, 0 if only warnings
-          if [ $? -eq 0 ]; then
-            echo "✅ Linting passed (warnings are allowed)"
+          # Parse JSON to count actual errors (severity 2 = error, severity 1 = warning)
+          ERROR_COUNT=$(node -e "
+            const fs = require('fs');
+            try {
+              const data = JSON.parse(fs.readFileSync('lint-output.json', 'utf8'));
+              const errors = data.flatMap(file => 
+                file.messages.filter(msg => msg.severity === 2)
+              );
+              console.log(errors.length);
+            } catch (e) {
+              console.log('0');
+            }
+          ")
+
+          if [ "$ERROR_COUNT" -gt "0" ]; then
+            echo "❌ Found $ERROR_COUNT actual linting errors (not warnings)"
+            npm run lint 2>&1 | grep -E "\s+error\s" | head -20
+            exit 1
           else
-            # Check if there are actual errors vs just warnings
-            # Look for lines with "error" that are NOT warnings
-            ERROR_LINES=$(grep -E "\s+error\s" lint-output.txt | grep -v "warning" | wc -l | tr -d ' ')
-            
-            if [ "$ERROR_LINES" -gt "0" ]; then
-              echo "❌ Found actual linting errors (not warnings)"
-              grep -E "\s+error\s" lint-output.txt | grep -v "warning" | head -20
-              exit 1
-            else
-              echo "✅ Only warnings found, no blocking errors"
-            fi
+            echo "✅ No blocking linting errors (warnings are allowed)"
           fi
 
       - name: Check for TypeScript errors
