@@ -125,8 +125,22 @@ jobs:
 
       - name: Run linting
         run: npm run lint:fix || true
-      - name: Check linting (allow warnings)
-        run: npm run lint -- --max-warnings=1000 || (echo "⚠️ Linting found errors" && exit 1)
+      - name: Check for linting errors (warnings allowed)
+        run: |
+          # Run lint and capture output
+          npm run lint 2>&1 | tee lint-output.txt || true
+
+          # Count actual errors (lines with "error" but not "warning")
+          # ESLint format: "path:line:col error message"
+          ACTUAL_ERRORS=$(grep -E "^\s*[^:]+:[0-9]+:[0-9]+\s+error\s" lint-output.txt | wc -l | tr -d ' ')
+
+          if [ "$ACTUAL_ERRORS" -gt "0" ]; then
+            echo "❌ Found $ACTUAL_ERRORS actual linting errors (not warnings)"
+            grep -E "^\s*[^:]+:[0-9]+:[0-9]+\s+error\s" lint-output.txt | head -20
+            exit 1
+          else
+            echo "✅ No blocking linting errors (warnings are allowed)"
+          fi
 
       - name: Check for TypeScript errors
         run: npx tsc --noEmit

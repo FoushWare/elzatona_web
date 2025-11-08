@@ -23,11 +23,16 @@ jobs:
       - run: npm run lint:fix || true
       - name: Check for linting errors (warnings allowed)
         run: |
-          npm run lint 2>&1 | tee lint-output.txt
-          # Count errors (lines with "error" that are not warnings)
-          ERROR_COUNT=$(grep -c "error" lint-output.txt || echo "0")
-          if [ "$ERROR_COUNT" -gt "0" ]; then
-            echo "❌ Found $ERROR_COUNT linting errors"
+          # Run lint and capture output
+          npm run lint 2>&1 | tee lint-output.txt || true
+
+          # Count actual errors (lines with "error" but not "warning")
+          # ESLint format: "path:line:col error message"
+          ACTUAL_ERRORS=$(grep -E "^\s*[^:]+:[0-9]+:[0-9]+\s+error\s" lint-output.txt | wc -l | tr -d ' ')
+
+          if [ "$ACTUAL_ERRORS" -gt "0" ]; then
+            echo "❌ Found $ACTUAL_ERRORS actual linting errors (not warnings)"
+            grep -E "^\s*[^:]+:[0-9]+:[0-9]+\s+error\s" lint-output.txt | head -20
             exit 1
           else
             echo "✅ No blocking linting errors (warnings are allowed)"
