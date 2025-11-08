@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { QuestionStats as UnifiedQuestionStats } from '../../../lib/unified-question-schema';
+import { QuestionStats as UnifiedQuestionStats } from './unified-question-schema';
 
 const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
 const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
