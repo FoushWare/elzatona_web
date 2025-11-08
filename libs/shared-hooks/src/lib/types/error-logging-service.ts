@@ -8,4 +8,13 @@ export class ErrorLoggingService {
   ): Promise<void> {
     // Stub implementation
   }
+  static async logPerformance(
+    operation: string,
+    duration: number,
+    success: boolean,
+    context: Record<string, unknown>,
+    metadata?: Record<string, unknown>
+  ): Promise<void> {
+    // Stub implementation
+  }
 }
