@@ -319,4 +319,24 @@ describe('A-UT-010: Error Message Display', () => {
       expect(screen.queryByText(/First error/i)).not.toBeInTheDocument();
     }, { timeout: 1000 });
   });
+
+  it('should handle network errors', async () => {
+    mockLogin.mockRejectedValue(new Error('Network error'));
+    
+    render(<AdminLoginPage />);
+    const emailInput = screen.getByLabelText(/Email Address/i);
+    const passwordInput = screen.getByLabelText(/Password/i);
+    const submitButton = screen.getByRole('button', { name: /Sign In/i });
+    const form = submitButton.closest('form');
+    
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
+      fireEvent.change(passwordInput, { target: { value: 'password123' } });
+      fireEvent.submit(form!);
+    });
+    
+    await waitFor(() => {
+      expect(screen.getByText(/An unexpected error occurred|Login failed/i)).toBeInTheDocument();
+    });
+  });
 });

@@ -1,15 +1,22 @@
 /**
- * Integration Tests for Problem Solving Practice
- * Task: 13 - Problem Solving Practice
- * Test IDs: F-IT-009
+ * Integration Tests for Problem Solving Practice (F-IT-009)
+ * Task: F-006 - Problem Solving Practice
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ProblemSolvingPage from './page';
+import * as sharedContexts from '@elzatona/shared-contexts';
 
-// Mock dependencies
+jest.mock('@elzatona/shared-contexts', () => {
+  const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
+  return {
+    ...actual,
+    useAuth: jest.fn(),
+  };
+});
+
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: jest.fn(),
@@ -18,22 +25,39 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-// Mock fetch
-global.fetch = jest.fn();
+jest.mock('@elzatona/shared-hooks', () => ({
+  useProblemSolvingTasks: jest.fn(() => ({
+    data: { data: [] },
+    isLoading: false,
+    error: null,
+  })),
+}));
 
-describe('13: Integration Tests', () => {
+jest.mock('lucide-react', () => ({
+  Calculator: () => <span>🔢</span>,
+  Play: () => <span>▶️</span>,
+  Target: () => <span>🎯</span>,
+  Clock: () => <span>⏰</span>,
+  CheckCircle: () => <span>✅</span>,
+  Loader2: () => <span>⏳</span>,
+}));
+
+describe('F-IT-009: Problem Solving Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1' },
+      isLoading: false,
     });
   });
 
-  it('should handle user interactions', async () => {
+  it('should integrate with problem solving hooks', async () => {
     render(<ProblemSolvingPage />);
     await waitFor(() => {
-      expect(screen.getByText(/.*/)).toBeInTheDocument();
+      const { useProblemSolvingTasks } = require('@elzatona/shared-hooks');
+      expect(useProblemSolvingTasks).toHaveBeenCalled();
     });
   });
 });

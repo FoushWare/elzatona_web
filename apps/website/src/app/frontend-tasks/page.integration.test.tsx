@@ -1,15 +1,22 @@
 /**
- * Integration Tests for Frontend Tasks Practice
- * Task: 12 - Frontend Tasks Practice
- * Test IDs: F-IT-008
+ * Integration Tests for Frontend Tasks Practice (F-IT-008)
+ * Task: F-005 - Frontend Tasks Practice
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FrontendTasksPage from './page';
+import * as sharedContexts from '@elzatona/shared-contexts';
 
-// Mock dependencies
+jest.mock('@elzatona/shared-contexts', () => {
+  const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
+  return {
+    ...actual,
+    useAuth: jest.fn(),
+  };
+});
+
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: jest.fn(),
@@ -18,22 +25,39 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-// Mock fetch
-global.fetch = jest.fn();
+jest.mock('@elzatona/shared-hooks', () => ({
+  useFrontendTasks: jest.fn(() => ({
+    data: { data: [] },
+    isLoading: false,
+    error: null,
+  })),
+}));
 
-describe('12: Integration Tests', () => {
+jest.mock('lucide-react', () => ({
+  Code: () => <span>💻</span>,
+  Play: () => <span>▶️</span>,
+  Target: () => <span>🎯</span>,
+  Clock: () => <span>⏰</span>,
+  CheckCircle: () => <span>✅</span>,
+  Loader2: () => <span>⏳</span>,
+}));
+
+describe('F-IT-008: Frontend Tasks Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1' },
+      isLoading: false,
     });
   });
 
-  it('should handle user interactions', async () => {
+  it('should integrate with frontend tasks hooks', async () => {
     render(<FrontendTasksPage />);
     await waitFor(() => {
-      expect(screen.getByText(/.*/)).toBeInTheDocument();
+      const { useFrontendTasks } = require('@elzatona/shared-hooks');
+      expect(useFrontendTasks).toHaveBeenCalled();
     });
   });
 });
