@@ -9,4 +9,5 @@ export interface LearningPlanProgress {
   last_accessed: string;
   created_at: string;
   updated_at: string;
+  status?: 'active' | 'completed' | 'paused';
 }

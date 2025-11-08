@@ -54,12 +54,35 @@ export const progressService = {
   async getNewCards(userId: string, maxCards: number): Promise<Flashcard[]> {
     return [];
   },
+  async getUserProgress(userId: string): Promise<FlashcardProgress[]> {
+    return [];
+  },
+  async updateProgress(
+    flashcardId: string,
+    result: 'correct' | 'incorrect',
+    responseTime: number,
+    sessionId: string
+  ): Promise<void> {
+    throw new Error('Not implemented');
+  },
 };
 
 export const sessionService = {
   async createSession(
     session: Omit<FlashcardSession, 'id'>
   ): Promise<FlashcardSession> {
+    throw new Error('Not implemented');
+  },
+  async startSession(userId: string, type: string): Promise<string> {
+    throw new Error('Not implemented');
+  },
+  async endSession(sessionId: string, duration: number): Promise<void> {
+    throw new Error('Not implemented');
+  },
+  async updateSessionStats(
+    sessionId: string,
+    isCorrect: boolean
+  ): Promise<void> {
     throw new Error('Not implemented');
   },
   async updateSession(

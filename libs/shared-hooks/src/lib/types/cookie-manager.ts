@@ -12,4 +12,9 @@ export const cookieManager = {
   ): Promise<void> {
     // Stub implementation
   },
+  async retryAuthCookie(firebaseUser: {
+    getIdToken: () => Promise<string>;
+  }): Promise<boolean> {
+    return false;
+  },
 };

@@ -70,8 +70,41 @@ export const getCategories = async (): Promise<QuestionCategory[]> => {
   return [];
 };
 
-export const getQuestionStats = async () => {
-  return { total: 0, byCategory: {}, byDifficulty: {} };
+export const getQuestionStats = async (): Promise<{
+  totalQuestions: number;
+  questionsByCategory: Record<string, number>;
+  questionsByDifficulty: Record<string, number>;
+  questionsByLearningPath: Record<string, number>;
+  questionsBySection: Record<string, number>;
+  activeQuestions: number;
+  inactiveQuestions: number;
+  averageDifficulty: number;
+  lastUpdated: string;
+  topCategories: Array<{
+    category: string;
+    count: number;
+    percentage: number;
+  }>;
+  recentActivity: Array<{
+    date: string;
+    questionsAdded: number;
+    questionsUpdated: number;
+    questionsDeleted: number;
+  }>;
+}> => {
+  return {
+    totalQuestions: 0,
+    questionsByCategory: {},
+    questionsByDifficulty: {},
+    questionsByLearningPath: {},
+    questionsBySection: {},
+    activeQuestions: 0,
+    inactiveQuestions: 0,
+    averageDifficulty: 0,
+    lastUpdated: new Date().toISOString(),
+    topCategories: [],
+    recentActivity: [],
+  };
 };
 
 export const saveQuestionAttempt = async (attempt: {
@@ -79,22 +112,36 @@ export const saveQuestionAttempt = async (attempt: {
   user_id: string;
   answer: string;
   is_correct: boolean;
+  time_spent?: number;
 }) => {
   // Stub implementation
 };
 
-export const getUserQuestionAttempts = async (userId: string) => {
+export const getUserQuestionAttempts = async (
+  userId: string,
+  questionId?: string
+) => {
   return [];
 };
 
-export const searchQuestions = async (query: string) => {
+export const searchQuestions = async (
+  query: string,
+  filters?: {
+    category?: string;
+    difficulty?: string;
+    tags?: string[];
+  }
+) => {
   return [];
 };
 
-export const getQuizQuestions = async (filters?: {
-  category?: string;
-  difficulty?: string;
-  limit?: number;
-}) => {
+export const getQuizQuestions = async (
+  count: number,
+  filters?: {
+    category?: string;
+    difficulty?: string;
+    tags?: string[];
+  }
+) => {
   return [];
 };

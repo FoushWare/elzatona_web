@@ -8,6 +8,7 @@ import {
   Question,
   QuestionCategory,
   QuestionAttempt,
+  QuestionOption,
   getQuestions,
   getQuestion,
   getRandomQuestions,
