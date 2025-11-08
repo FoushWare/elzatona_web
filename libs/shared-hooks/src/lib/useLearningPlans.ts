@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import { LearningPlanProgress } from '@/types/firestore';
+import { LearningPlanProgress } from './types/firestore';
 
 interface UseLearningPlansReturn {
   plans: LearningPlanProgress[];
@@ -116,7 +116,9 @@ export function useLearningPlans(): UseLearningPlansReturn {
         );
 
         if (currentPlan?.plan_id === plan_id) {
-          setCurrentPlan(prev => (prev ? { ...prev, ...updates } : null));
+          setCurrentPlan((prev: LearningPlanProgress | null) =>
+            prev ? { ...prev, ...updates } : null
+          );
         }
 
         return true;
