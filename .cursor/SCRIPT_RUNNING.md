@@ -44,6 +44,7 @@ git log origin/$(git branch --show-current)..HEAD --oneline
 ## What Will Happen
 
 The script will:
+
 - ✅ Auto-fix linting errors
 - ✅ Check TypeScript types
 - ✅ Build the project
@@ -55,4 +56,3 @@ The script will:
 ---
 
 **The script is running for you right now!** It will complete automatically and push to GitHub when done.
-
