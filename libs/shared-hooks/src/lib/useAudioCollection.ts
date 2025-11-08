@@ -237,7 +237,7 @@ export function useAudioCollection(): UseAudioCollectionReturn {
 
         // Remove from local state
         setAudioMappings(prev =>
-          prev.filter(mapping => mapping.question_id !== question_id)
+          prev.filter(mapping => mapping.questionId !== question_id)
         );
         return true;
       } catch (err) {
