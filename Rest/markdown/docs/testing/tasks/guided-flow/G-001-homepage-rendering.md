@@ -1,5 +1,33 @@
 # Task: Homepage Rendering
 
+## Time Estimation
+
+### Manual Testing
+- **Estimated Time**: 10-15 minutes
+- **Breakdown**:
+  - Navigate and verify page load: 2 minutes
+  - Check homepage elements: 3 minutes
+  - Test "Get Started" button: 2 minutes
+  - Test navigation links: 5-8 minutes (depending on number of links)
+- **Complexity**: Low
+- **Dependencies**: None
+
+### Automated Testing
+- **Estimated Time**: 5-8 minutes (first run), 30-60 seconds (subsequent runs)
+- **Breakdown**:
+  - Unit tests setup and execution: 2-3 minutes
+  - Integration tests setup and execution: 2-3 minutes
+  - E2E test execution: 1-2 minutes
+- **Complexity**: Low-Medium
+- **Dependencies**: Test environment setup
+
+### Total Time
+- **Manual Only**: 10-15 minutes
+- **Automated Only**: 5-8 minutes (first run), 30-60 seconds (subsequent)
+- **Both Manual + Automated**: 15-23 minutes (first run), 10-16 minutes (subsequent)
+
+---
+
 ## Overview
 Test that the homepage renders correctly and navigation elements work properly.
 

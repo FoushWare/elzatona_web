@@ -1,5 +1,37 @@
 # Task: Custom Roadmap Creation
 
+## Time Estimation
+
+### Manual Testing
+- **Estimated Time**: 45-60 minutes
+- **Breakdown**:
+  - Navigate and authenticate: 2 minutes
+  - Test card selection: 5-7 minutes
+  - Test category selection: 5-7 minutes
+  - Test topic selection: 5-7 minutes
+  - Test question selection (3-5 or all): 10-15 minutes
+  - Test plan configuration: 5-7 minutes
+  - Test plan saving: 3-5 minutes
+  - Test validation scenarios: 10-12 minutes
+- **Complexity**: High
+- **Dependencies**: Authentication, API endpoints, test data (cards, categories, topics, questions)
+
+### Automated Testing
+- **Estimated Time**: 15-25 minutes (first run), 2-4 minutes (subsequent runs)
+- **Breakdown**:
+  - Unit tests setup and execution: 5-7 minutes
+  - Integration tests setup and execution: 6-10 minutes (includes API mocking)
+  - E2E tests execution: 4-8 minutes (full flow with multiple selections)
+- **Complexity**: High
+- **Dependencies**: API mocks, test data fixtures, authentication setup
+
+### Total Time
+- **Manual Only**: 45-60 minutes
+- **Automated Only**: 15-25 minutes (first run), 2-4 minutes (subsequent)
+- **Both Manual + Automated**: 60-85 minutes (first run), 47-64 minutes (subsequent)
+
+---
+
 ## Overview
 Test the complete custom roadmap creation flow including card selection, category selection, topic selection, question selection, and plan saving.
 

@@ -1,5 +1,35 @@
 # Task: Get Started Page
 
+## Time Estimation
+
+### Manual Testing
+- **Estimated Time**: 20-30 minutes
+- **Breakdown**:
+  - Navigate to page and verify: 2 minutes
+  - Check flow options: 2 minutes
+  - Test "I need guidance" (unauthenticated): 5-7 minutes (includes sign-up)
+  - Test "I need guidance" (authenticated): 3-4 minutes
+  - Test "Browse practice questions": 2 minutes
+  - Test form validation: 6-10 minutes (multiple validation scenarios)
+- **Complexity**: Medium
+- **Dependencies**: Authentication system, test user accounts
+
+### Automated Testing
+- **Estimated Time**: 8-12 minutes (first run), 1-2 minutes (subsequent runs)
+- **Breakdown**:
+  - Unit tests setup and execution: 3-4 minutes
+  - Integration tests setup and execution: 3-4 minutes (includes auth mocking)
+  - E2E tests execution: 2-4 minutes (includes sign-up flow)
+- **Complexity**: Medium
+- **Dependencies**: Authentication mocks, test data setup
+
+### Total Time
+- **Manual Only**: 20-30 minutes
+- **Automated Only**: 8-12 minutes (first run), 1-2 minutes (subsequent)
+- **Both Manual + Automated**: 28-42 minutes (first run), 21-32 minutes (subsequent)
+
+---
+
 ## Overview
 Test the get-started page flow selection and authentication integration.
 

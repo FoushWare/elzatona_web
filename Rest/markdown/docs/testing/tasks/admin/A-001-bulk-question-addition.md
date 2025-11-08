@@ -1,5 +1,39 @@
 # Task: Admin Bulk Question Addition by Category
 
+## Time Estimation
+
+### Manual Testing
+- **Estimated Time**: 60-90 minutes
+- **Breakdown**:
+  - Clear existing questions: 5-7 minutes
+  - Navigate to bulk addition: 2 minutes
+  - Test HTML category (upload/add questions): 8-12 minutes
+  - Test CSS category (upload/add questions): 8-12 minutes
+  - Test JavaScript category (upload/add questions): 8-12 minutes
+  - Test React category (upload/add questions): 8-12 minutes
+  - Test other categories (Node.js, TypeScript, etc.): 15-20 minutes
+  - Test question validation: 5-7 minutes
+  - Test bulk upload file formats (CSV/JSON): 5-8 minutes
+  - Verify question counts: 2-3 minutes
+- **Complexity**: Very High
+- **Dependencies**: Admin authentication, database access, test question data, file uploads
+
+### Automated Testing
+- **Estimated Time**: 20-35 minutes (first run), 3-6 minutes (subsequent runs)
+- **Breakdown**:
+  - Unit tests setup and execution: 5-8 minutes
+  - Integration tests setup and execution: 8-15 minutes (includes API mocking, file parsing)
+  - E2E tests execution: 7-12 minutes (includes multiple categories, file uploads)
+- **Complexity**: Very High
+- **Dependencies**: Admin auth mocks, database mocks, test files (CSV/JSON), API setup
+
+### Total Time
+- **Manual Only**: 60-90 minutes
+- **Automated Only**: 20-35 minutes (first run), 3-6 minutes (subsequent)
+- **Both Manual + Automated**: 80-125 minutes (first run), 63-96 minutes (subsequent)
+
+---
+
 ## Overview
 Test the admin functionality to add questions in bulk, organized by category (HTML, CSS, JavaScript, React, etc.). This includes clearing existing questions and starting fresh.
 

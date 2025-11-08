@@ -1,5 +1,34 @@
 # Task: My Plans Page
 
+## Time Estimation
+
+### Manual Testing
+- **Estimated Time**: 25-35 minutes
+- **Breakdown**:
+  - Navigate and authenticate: 2 minutes
+  - Test empty state: 2-3 minutes
+  - Test plan list display: 5-7 minutes
+  - Test plan actions (Start, Edit, Delete): 10-15 minutes
+  - Test plan progress tracking: 6-8 minutes
+- **Complexity**: Medium-High
+- **Dependencies**: Authentication, existing custom plans, progress data
+
+### Automated Testing
+- **Estimated Time**: 10-15 minutes (first run), 1.5-3 minutes (subsequent runs)
+- **Breakdown**:
+  - Unit tests setup and execution: 3-4 minutes
+  - Integration tests setup and execution: 4-6 minutes (includes API mocking)
+  - E2E tests execution: 3-5 minutes (includes plan creation and actions)
+- **Complexity**: Medium-High
+- **Dependencies**: API mocks, test plan data, authentication setup
+
+### Total Time
+- **Manual Only**: 25-35 minutes
+- **Automated Only**: 10-15 minutes (first run), 1.5-3 minutes (subsequent)
+- **Both Manual + Automated**: 35-50 minutes (first run), 26.5-38 minutes (subsequent)
+
+---
+
 ## Overview
 Test the "My Plans" page where users can view, edit, start, and delete their custom plans.
 
