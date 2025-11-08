@@ -3,13 +3,14 @@ import jwt from 'jsonwebtoken';
 import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
 // Admin config - using environment variables directly
+// Note: JWT secret is read at runtime to support test environments
 const adminConfig = {
   security: {
     saltRounds: 10,
     sessionTimeout: 24 * 60 * 60 * 1000,
   },
-  jwt: {
-    secret: process.env.JWT_SECRET || 'default-secret',
+  get jwtSecret() {
+    return process.env.JWT_SECRET || 'default-secret';
   },
 };
 
@@ -40,9 +41,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if JWT_SECRET is set (not using fallback)
+    const jwtSecret = adminConfig.jwtSecret;
     if (
       !process.env.JWT_SECRET ||
-      adminConfig.jwt.secret === 'dev-secret-key-change-in-production'
+      jwtSecret === 'dev-secret-key-change-in-production'
     ) {
       return NextResponse.json(
         { success: false, error: 'Server configuration error' },
@@ -96,7 +98,7 @@ export async function POST(request: NextRequest) {
         email: adminData.email,
         role: adminData.role,
       },
-      adminConfig.jwt.secret,
+      jwtSecret,
       { expiresIn: '24h' }
     );
 
@@ -130,8 +132,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Verify JWT token
-    const decoded = jwt.verify(token, adminConfig.jwt.secret) as {
+    // Verify JWT token (read secret at runtime)
+    const jwtSecret = adminConfig.jwtSecret;
+    const decoded = jwt.verify(token, jwtSecret) as {
       adminId: string;
       email: string;
       role: string;
