@@ -18,6 +18,9 @@ This file indexes all test tasks organized by flow type.
 - [F-004: Learning Paths Practice](./freestyle-flow/F-004-learning-paths-practice.md) - ⏳ Pending
 - [F-005: Frontend Tasks Practice](./freestyle-flow/F-005-frontend-tasks-practice.md) - ⏳ Pending
 - [F-006: Problem Solving Practice](./freestyle-flow/F-006-problem-solving-practice.md) - ⏳ Pending
+- [F-007: Flashcards Theme and Difficulty Filtering](./freestyle-flow/F-007-flashcards-theme-difficulty.md)
+- [F-008: Flashcards Practice Modes](./freestyle-flow/F-008-flashcards-practice-modes.md)
+- [F-009: Flashcards CRUD Operations](./freestyle-flow/F-009-flashcards-crud-operations.md)
 
 ## Admin Tasks
 
@@ -37,8 +40,8 @@ This file indexes all test tasks organized by flow type.
 
 ## Test Execution Status
 
-- **Total Tasks**: 20
-- **Created**: 12
+- **Total Tasks**: 23
+- **Created**: 15
 - **Pending**: 8
 
 ## Parallel Execution
