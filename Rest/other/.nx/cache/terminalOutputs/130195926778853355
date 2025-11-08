@@ -1,0 +1,8 @@
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+

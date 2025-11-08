@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.0s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useFlashcardSession.ts:201:28
+Type error: Property 'endSession' does not exist on type '{ createSession(session: Omit<FlashcardSession, "id">): Promise<FlashcardSession>; startSession(userId: string, type: string): Promise<...>; updateSession(id: string, updates: Partial<...>): Promise<...>; }'.
+
+[0m [90m 199 |[39m       )[33m;[39m [90m// minutes[39m
+ [90m 200 |[39m
+[31m[1m>[22m[39m[90m 201 |[39m       [36mawait[39m sessionService[33m.[39mendSession(sessionId[33m,[39m duration)[33m;[39m
+ [90m     |[39m                            [31m[1m^[22m[39m
+ [90m 202 |[39m
+ [90m 203 |[39m       [90m// Reset session state[39m
+ [90m 204 |[39m       setIsSessionActive([36mfalse[39m)[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

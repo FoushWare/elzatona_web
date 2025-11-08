@@ -1,0 +1,88 @@
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all apps/website/src/__tests__/navbar-simple.test.tsx
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  apps/website/src/__tests__/navbar-simple.test.tsx
+
+
+
+> nx run shared-atoms:test apps/website/src/__tests__/navbar-simple.test.tsx  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test apps/website/src/__tests__/navbar-simple.test.tsx  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-components:test apps/website/src/__tests__/navbar-simple.test.tsx  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test apps/website/src/__tests__/navbar-simple.test.tsx  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test apps/website/src/__tests__/navbar-simple.test.tsx  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test apps/website/src/__tests__/navbar-simple.test.tsx  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test apps/website/src/__tests__/navbar-simple.test.tsx  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test apps/website/src/__tests__/navbar-simple.test.tsx  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test apps/website/src/__tests__/navbar-simple.test.tsx  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test apps/website/src/__tests__/navbar-simple.test.tsx
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: spawn pgrep EAGAIN
+    at ChildProcess._handle.onexit (node:internal/child_process:286:19)
+    at onErrorNT (node:internal/child_process:484:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+Emitted 'error' event on ChildProcess instance at:
+    at ChildProcess._handle.onexit (node:internal/child_process:292:12)
+    at onErrorNT (node:internal/child_process:484:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  errno: -35,
+  code: 'EAGAIN',
+  syscall: 'spawn pgrep',
+  path: 'pgrep',
+  spawnargs: [ '-P', 89299 ]
+}
+
+Node.js v24.6.0

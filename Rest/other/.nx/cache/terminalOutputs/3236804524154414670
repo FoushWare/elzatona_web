@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.1s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+./src/app/problem-solving/page.tsx:12:36
+Type error: Cannot find module '../../../types/admin' or its corresponding type declarations.
+
+[0m [90m 10 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+ [90m 11 |[39m [36mimport[39m { [33mPlay[39m[33m,[39m [33mClock[39m[33m,[39m [33mUsers[39m[33m,[39m [33mCode[39m[33m,[39m [33mSearch[39m[33m,[39m [33mFilter[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { [33mProblemSolvingTask[39m } [36mfrom[39m [32m'../../../types/admin'[39m[33m;[39m
+ [90m    |[39m                                    [31m[1m^[22m[39m
+ [90m 13 |[39m
+ [90m 14 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mProblemSolvingPage[39m() {
+ [90m 15 |[39m   [36mconst[39m router [33m=[39m useRouter()[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

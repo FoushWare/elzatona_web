@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.0s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useRoleBasedAccess.ts:20:28
+Type error: Property 'hasPermission' does not exist on type 'typeof UserAuthService'.
+
+[0m [90m 18 |[39m       [33m|[39m [32m'admin'[39m
+ [90m 19 |[39m       [33m|[39m [32m'super_admin'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 20 |[39m     [36mreturn[39m [33mUserAuthService[39m[33m.[39mhasPermission(userRole[33m,[39m requiredRole)[33m;[39m
+ [90m    |[39m                            [31m[1m^[22m[39m
+ [90m 21 |[39m   }[33m;[39m
+ [90m 22 |[39m
+ [90m 23 |[39m   [36mconst[39m isUser [33m=[39m () [33m=>[39m hasRole([32m'user'[39m)[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

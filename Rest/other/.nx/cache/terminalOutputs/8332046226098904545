@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 48s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useAdminAuth.ts:90:45
+Type error: Property 'authenticateAdmin' does not exist on type 'typeof AdminAuthService'.
+
+[0m [90m 88 |[39m
+ [90m 89 |[39m     [36mtry[39m {
+[31m[1m>[22m[39m[90m 90 |[39m       [36mconst[39m result [33m=[39m [36mawait[39m [33mAdminAuthService[39m[33m.[39mauthenticateAdmin(email[33m,[39m password)[33m;[39m
+ [90m    |[39m                                             [31m[1m^[22m[39m
+ [90m 91 |[39m
+ [90m 92 |[39m       [36mif[39m (result[33m.[39msuccess [33m&&[39m result[33m.[39madmin) {
+ [90m 93 |[39m         [90m// Save session to localStorage (only in browser)[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

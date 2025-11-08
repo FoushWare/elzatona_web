@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.2s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useFlashcardSession.ts:228:11
+Type error: Expected 2 arguments, but got 4.
+
+[0m [90m 226 |[39m           currentCard[33m.[39mid[33m,[39m
+ [90m 227 |[39m           isCorrect [33m?[39m [32m'correct'[39m [33m:[39m [32m'incorrect'[39m[33m,[39m
+[31m[1m>[22m[39m[90m 228 |[39m           [35m0[39m[33m,[39m [90m// responseTime - placeholder[39m
+ [90m     |[39m           [31m[1m^[22m[39m
+ [90m 229 |[39m           sessionId
+ [90m 230 |[39m         )[33m;[39m
+ [90m 231 |[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

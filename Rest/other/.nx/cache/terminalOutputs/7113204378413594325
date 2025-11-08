@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 3.8s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+./src/lib/supabase-learning-cards-service.ts:10:8
+Type error: Cannot find module '../../../types/learning-cards' or its corresponding type declarations.
+
+[0m [90m  8 |[39m   [33mCardProgress[39m[33m,[39m
+ [90m  9 |[39m   [33mCardType[39m[33m,[39m
+[31m[1m>[22m[39m[90m 10 |[39m } [36mfrom[39m [32m'../../../types/learning-cards'[39m[33m;[39m
+ [90m    |[39m        [31m[1m^[22m[39m
+ [90m 11 |[39m
+ [90m 12 |[39m [36mexport[39m [36mclass[39m [33mSupabaseLearningCardsService[39m {
+ [90m 13 |[39m   [90m// Learning Cards CRUD operations[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 3.7s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useFlashcardSession.ts:117:51
+Type error: Property 'startSession' does not exist on type '{ createSession(session: Omit<FlashcardSession, "id">): Promise<FlashcardSession>; updateSession(id: string, updates: Partial<FlashcardSession>): Promise<...>; }'.
+
+[0m [90m 115 |[39m
+ [90m 116 |[39m         [90m// Start session in Firebase[39m
+[31m[1m>[22m[39m[90m 117 |[39m         [36mconst[39m newSessionId [33m=[39m [36mawait[39m sessionService[33m.[39mstartSession(user[33m.[39muid[33m,[39m type)[33m;[39m
+ [90m     |[39m                                                   [31m[1m^[22m[39m
+ [90m 118 |[39m         setSessionId(newSessionId)[33m;[39m
+ [90m 119 |[39m         setSessionStartTime([36mnew[39m [33mDate[39m())[33m;[39m
+ [90m 120 |[39m         setIsSessionActive([36mtrue[39m)[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

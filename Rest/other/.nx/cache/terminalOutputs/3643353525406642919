@@ -1,0 +1,1810 @@
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run shared-components:test --listTests
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run website:test --listTests
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-components:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test --listTests  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/navbar-simple.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/unit/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/learning-type-context.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/frontend-problem-solving-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/content-management-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-dashboard-redirection.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-ui.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/simple.test.js
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/cart-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/__tests__/flashcards-utils.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-auth-integration.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/navbar-switching-fix.test.tsx
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-api.test.ts
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-login-page.test.tsx
+
+> nx run auth:test --listTests  [local cache]
+
+
+
+> nx run utils:test --listTests  [local cache]
+
+
+
+> nx run ui:test --listTests  [local cache]
+
+
+
+> nx run database:test --listTests  [local cache]
+
+/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/database/src/lib/__tests__/database-switching.test.ts
+
+> nx run admin:test --listTests
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test --listTests
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all --listTests
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  --listTests=true
+
+
+
+> nx run shared-types:test --listTests  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will b

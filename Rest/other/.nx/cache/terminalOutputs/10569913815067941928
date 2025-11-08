@@ -1,0 +1,1153 @@
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+
+
+> nx run shared-components:test
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run zatona-web:test
+
+
+> nx run auth:test  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test  [local cache]
+
+PASS database libs/database/src/lib/__tests__/database-switching.test.ts
+  Database Switching
+    ✓ should create Firebase service when NEXT_PUBLIC_USE_FIREBASE=true (5 ms)
+    ✓ should create Supabase service when NEXT_PUBLIC_USE_FIREBASE=false (1 ms)
+    ✓ should default to Supabase when NEXT_PUBLIC_USE_FIREBASE is not set (1 ms)
+  Database Service Usage
+    ✓ should handle get operation (1 ms)
+    ✓ should handle add operation
+    ✓ should handle error cases
+  Database Integration
+    ✓ should work with React Context
+
+Test Suites: 1 passed, 1 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        0.387 s
+Ran all test suites.
+
+> nx run admin:test
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run website:test
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+FAIL tests/admin/admin-ui-components.test.tsx (5.241 s)
+  ● Console
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.error
+      Error: Uncaught [Error: useAdminAuth must be used within an AdminAuthProvider]
+          at Object.<anonymous> (tests/admin/admin-ui-components.test.tsx:601:13) {
+        detail: Error: useAdminAuth must be used within an AdminAuthProvider
+            at useAdminAuth (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/shared-contexts/src/lib/AdminAuthContext.tsx:325:11)
+            at AdminDashboard (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/dashboard/page.tsx:98:32)
+            at renderWithHooks (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+            at mountIndeterminateComponent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+            at beginWork (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+            at HTMLUnknownElement.callCallback (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4164:14)
+            at HTMLUnknownElement.callTheUserObjectsOperation (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
+            at innerInvokeEventListeners (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+            at invokeEventListeners (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+            at HTMLUnknownElementImpl._dispatch (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+            at HTMLUnknownElementImpl.dispatchEvent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+            at HTMLUnknownElement.dispatchEvent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+            at Object.invokeGuardedCallbackDev (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+            at invokeGuardedCallback (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+            at beginWork$1 (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27490:7)
+            at performUnitOfWork (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+            at workLoopSync (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+            at renderRootSync (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+            at performConcurrentWorkOnRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:25777:74)
+            at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+            at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+            at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+            at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+            at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+            at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx:601:13)
+            at processTicksAndRejections (node:internal/process/task_queues:105:5),
+        type: 'unhandled exception'
+      }
+
+      599 |       const DashboardPage = (await import('@/app/admin/dashboard/page'))
+      600 |         .default;
+    > 601 |       render(<DashboardPage />);
+          |             ^
+      602 |
+      603 |       await waitFor(() => {
+      604 |         expect(screen.getByText('100')).toBeInTheDocument();
+
+      at VirtualConsole.<anonymous> (../../node_modules/@jest/environment-jsdom-abstract/build/index.js:87:23)
+      at reportException (../../node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:70:28)
+      at innerInvokeEventListeners (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+      at invokeEventListeners (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+      at HTMLUnknownElementImpl._dispatch (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+      at HTMLUnknownElementImpl.dispatchEvent (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+      at HTMLUnknownElement.dispatchEvent (../../node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+      at Object.invokeGuardedCallbackDev (../../node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+      at invokeGuardedCallback (../../node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+      at beginWork$1 (../../node_modules/react-dom/cjs/react-dom.development.js:27490:7)
+      at performUnitOfWork (../../node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+      at workLoopSync (../../node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+      at renderRootSync (../../node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+      at performConcurrentWorkOnRoot (../../node_modules/react-dom/cjs/react-dom.development.js:25777:74)
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:601:13)
+
+    console.error
+      Error: Uncaught [Error: useAdminAuth must be used within an AdminAuthProvider]
+          at Object.<anonymous> (tests/admin/admin-ui-components.test.tsx:601:13) {
+        detail: Error: useAdminAuth must be used within an AdminAuthProvider
+            at useAdminAuth (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/shared-contexts/src/lib/AdminAuthContext.tsx:325:11)
+            at AdminDashboard (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/dashboard/page.tsx:98:32)
+            at renderWithHooks (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+            at mountIndeterminateComponent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+            at beginWork (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+            at HTMLUnknownElement.callCallback (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4164:14)
+            at HTMLUnknownElement.callTheUserObjectsOperation (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
+            at innerInvokeEventListeners (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+            at invokeEventListeners (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+            at HTMLUnknownElementImpl._dispatch (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+            at HTMLUnknownElementImpl.dispatchEvent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+            at HTMLUnknownElement.dispatchEvent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+            at Object.invokeGuardedCallbackDev (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+            at invokeGuardedCallback (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+            at beginWork$1 (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27490:7)
+            at performUnitOfWork (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+            at workLoopSync (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+            at renderRootSync (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+            at recoverFromConcurrentError (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:25889:20)
+            at performConcurrentWorkOnRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:25789:22)
+            at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+            at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+            at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+            at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+            at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+            at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx:601:13)
+            at processTicksAndRejections (node:internal/process/task_queues:105:5),
+        type: 'unhandled exception'
+      }
+
+      599 |       const DashboardPage = (await import('@/app/admin/dashboard/page'))
+      600 |         .default;
+    > 601 |       render(<DashboardPage />);
+          |             ^
+      602 |
+      603 |       await waitFor(() => {
+      604 |         expect(screen.getByText('100')).toBeInTheDocument();
+
+      at VirtualConsole.<anonymous> (../../node_modules/@jest/environment-jsdom-abstract/build/index.js:87:23)
+      at reportException (../../node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:70:28)
+      at innerInvokeEventListeners (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+      at invokeEventListeners (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+      at HTMLUnknownElementImpl._dispatch (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+      at HTMLUnknownElementImpl.dispatchEvent (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+      at HTMLUnknownElement.dispatchEvent (../../node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+      at Object.invokeGuardedCallbackDev (../../node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+      at invokeGuardedCallback (../../node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+      at beginWork$1 (../../node_modules/react-dom/cjs/react-dom.development.js:27490:7)
+      at performUnitOfWork (../../node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+      at workLoopSync (../../node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+      at renderRootSync (../../node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+      at recoverFromConcurrentError (../../node_modules/react-dom/cjs/react-dom.development.js:25889:20)
+      at performConcurrentWorkOnRoot (../../node_modules/react-dom/cjs/react-dom.development.js:25789:22)
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:601:13)
+
+    console.error
+      The above error occurred in the <AdminDashboard> component:
+      
+          at AdminDashboard (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/dashboard/page.tsx:98:32)
+      
+      Consider adding an error boundary to your tree to customize error handling behavior.
+      Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+      599 |       const DashboardPage = (await import('@/app/admin/dashboard/page'))
+      600 |         .default;
+    > 601 |       render(<DashboardPage />);
+          |             ^
+      602 |
+      603 |       await waitFor(() => {
+      604 |         expect(screen.getByText('100')).toBeInTheDocument();
+
+      at logCapturedError (../../node_modules/react-dom/cjs/react-dom.development.js:18704:23)
+      at update.callback (../../node_modules/react-dom/cjs/react-dom.development.js:18737:5)
+      at callCallback (../../node_modules/react-dom/cjs/react-dom.development.js:15036:12)
+      at commitUpdateQueue (../../node_modules/react-dom/cjs/react-dom.development.js:15057:9)
+      at commitLayoutEffectOnFiber (../../node_modules/react-dom/cjs/react-dom.development.js:23430:13)
+      at commitLayoutMountEffects_complete (../../node_modules/react-dom/cjs/react-dom.development.js:24727:9)
+      at commitLayoutEffects_begin (../../node_modules/react-dom/cjs/react-dom.development.js:24713:7)
+      at commitLayoutEffects (../../node_modules/react-dom/cjs/react-dom.development.js:24651:3)
+      at commitRootImpl (../../node_modules/react-dom/cjs/react-dom.development.js:26862:5)
+      at commitRoot (../../node_modules/react-dom/cjs/react-dom.development.js:26721:5)
+      at finishConcurrentRender (../../node_modules/react-dom/cjs/react-dom.development.js:25931:9)
+      at performConcurrentWorkOnRoot (../../node_modules/react-dom/cjs/react-dom.development.js:25848:7)
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:601:13)
+
+    console.error
+      Error: Uncaught [Error: useAdminAuth must be used within an AdminAuthProvider]
+          at Object.<anonymous> (tests/admin/admin-ui-components.test.tsx:629:13) {
+        detail: Error: useAdminAuth must be used within an AdminAuthProvider
+            at useAdminAuth (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/shared-contexts/src/lib/AdminAuthContext.tsx:325:11)
+            at AdminDashboard (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/dashboard/page.tsx:98:32)
+            at renderWithHooks (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+            at mountIndeterminateComponent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+            at beginWork (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+            at HTMLUnknownElement.callCallback (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4164:14)
+            at HTMLUnknownElement.callTheUserObjectsOperation (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
+            at innerInvokeEventListeners (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+            at invokeEventListeners (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+            at HTMLUnknownElementImpl._dispatch (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+            at HTMLUnknownElementImpl.dispatchEvent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+            at HTMLUnknownElement.dispatchEvent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+            at Object.invokeGuardedCallbackDev (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+            at invokeGuardedCallback (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+            at beginWork$1 (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27490:7)
+            at performUnitOfWork (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+            at workLoopSync (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+            at renderRootSync (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+            at performConcurrentWorkOnRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:25777:74)
+            at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+            at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+            at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+            at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+            at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+            at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx:629:13)
+            at processTicksAndRejections (node:internal/process/task_queues:105:5),
+        type: 'unhandled exception'
+      }
+
+      627 |       const DashboardPage = (await import('@/app/admin/dashboard/page'))
+      628 |         .default;
+    > 629 |       render(<DashboardPage />);
+          |             ^
+      630 |
+      631 |       const refreshButton = screen.getByText(/refresh/i);
+      632 |       await userEvent.click(refreshButton);
+
+      at VirtualConsole.<anonymous> (../../node_modules/@jest/environment-jsdom-abstract/build/index.js:87:23)
+      at reportException (../../node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:70:28)
+      at innerInvokeEventListeners (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+      at invokeEventListeners (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+      at HTMLUnknownElementImpl._dispatch (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+      at HTMLUnknownElementImpl.dispatchEvent (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+      at HTMLUnknownElement.dispatchEvent (../../node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+      at Object.invokeGuardedCallbackDev (../../node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+      at invokeGuardedCallback (../../node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+      at beginWork$1 (../../node_modules/react-dom/cjs/react-dom.development.js:27490:7)
+      at performUnitOfWork (../../node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+      at workLoopSync (../../node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+      at renderRootSync (../../node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+      at performConcurrentWorkOnRoot (../../node_modules/react-dom/cjs/react-dom.development.js:25777:74)
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:629:13)
+
+    console.error
+      Error: Uncaught [Error: useAdminAuth must be used within an AdminAuthProvider]
+          at Object.<anonymous> (tests/admin/admin-ui-components.test.tsx:629:13) {
+        detail: Error: useAdminAuth must be used within an AdminAuthProvider
+            at useAdminAuth (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/libs/shared-contexts/src/lib/AdminAuthContext.tsx:325:11)
+            at AdminDashboard (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/dashboard/page.tsx:98:32)
+            at renderWithHooks (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+            at mountIndeterminateComponent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+            at beginWork (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+            at HTMLUnknownElement.callCallback (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4164:14)
+            at HTMLUnknownElement.callTheUserObjectsOperation (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
+            at innerInvokeEventListeners (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+            at invokeEventListeners (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+            at HTMLUnknownElementImpl._dispatch (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+            at HTMLUnknownElementImpl.dispatchEvent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+            at HTMLUnknownElement.dispatchEvent (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+            at Object.invokeGuardedCallbackDev (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+            at invokeGuardedCallback (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+            at beginWork$1 (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27490:7)
+            at performUnitOfWork (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+            at workLoopSync (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+            at renderRootSync (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+            at recoverFromConcurrentError (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:25889:20)
+            at performConcurrentWorkOnRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:25789:22)
+            at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+            at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+            at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+            at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+            at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+            at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-ui-components.test.tsx:629:13)
+            at processTicksAndRejections (node:internal/process/task_queues:105:5),
+        type: 'unhandled exception'
+      }
+
+      627 |       const DashboardPage = (await import('@/app/admin/dashboard/page'))
+      628 |         .default;
+    > 629 |       render(<DashboardPage />);
+          |             ^
+      630 |
+      631 |       const refreshButton = screen.getByText(/refresh/i);
+      632 |       await userEvent.click(refreshButton);
+
+      at VirtualConsole.<anonymous> (../../node_modules/@jest/environment-jsdom-abstract/build/index.js:87:23)
+      at reportException (../../node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:70:28)
+      at innerInvokeEventListeners (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+      at invokeEventListeners (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+      at HTMLUnknownElementImpl._dispatch (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+      at HTMLUnknownElementImpl.dispatchEvent (../../node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+      at HTMLUnknownElement.dispatchEvent (../../node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+      at Object.invokeGuardedCallbackDev (../../node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+      at invokeGuardedCallback (../../node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+      at beginWork$1 (../../node_modules/react-dom/cjs/react-dom.development.js:27490:7)
+      at performUnitOfWork (../../node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+      at workLoopSync (../../node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+      at renderRootSync (../../node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+      at recoverFromConcurrentError (../../node_modules/react-dom/cjs/react-dom.development.js:25889:20)
+      at performConcurrentWorkOnRoot (../../node_modules/react-dom/cjs/react-dom.development.js:25789:22)
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:629:13)
+
+    console.error
+      The above error occurred in the <AdminDashboard> component:
+      
+          at AdminDashboard (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/dashboard/page.tsx:98:32)
+      
+      Consider adding an error boundary to your tree to customize error handling behavior.
+      Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+      627 |       const DashboardPage = (await import('@/app/admin/dashboard/page'))
+      628 |         .default;
+    > 629 |       render(<DashboardPage />);
+          |             ^
+      630 |
+      631 |       const refreshButton = screen.getByText(/refresh/i);
+      632 |       await userEvent.click(refreshButton);
+
+      at logCapturedError (../../node_modules/react-dom/cjs/react-dom.development.js:18704:23)
+      at update.callback (../../node_modules/react-dom/cjs/react-dom.development.js:18737:5)
+      at callCallback (../../node_modules/react-dom/cjs/react-dom.development.js:15036:12)
+      at commitUpdateQueue (../../node_modules/react-dom/cjs/react-dom.development.js:15057:9)
+      at commitLayoutEffectOnFiber (../../node_modules/react-dom/cjs/react-dom.development.js:23430:13)
+      at commitLayoutMountEffects_complete (../../node_modules/react-dom/cjs/react-dom.development.js:24727:9)
+      at commitLayoutEffects_begin (../../node_modules/react-dom/cjs/react-dom.development.js:24713:7)
+      at commitLayoutEffects (../../node_modules/react-dom/cjs/react-dom.development.js:24651:3)
+      at commitRootImpl (../../node_modules/react-dom/cjs/react-dom.development.js:26862:5)
+      at commitRoot (../../node_modules/react-dom/cjs/react-dom.development.js:26721:5)
+      at finishConcurrentRender (../../node_modules/react-dom/cjs/react-dom.development.js:25931:9)
+      at performConcurrentWorkOnRoot (../../node_modules/react-dom/cjs/react-dom.development.js:25848:7)
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:629:13)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+  ● Admin UI Component Tests › Content Management Page › should render content management page with loading state
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content-management/page.tsx:17:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:118:15
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:118:9)
+
+  ● Admin UI Component Tests › Content Management Page › should render content management page with data
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content-management/page.tsx:17:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:185:15
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:185:9)
+
+  ● Admin UI Component Tests › Content Management Page › should handle search functionality
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content-management/page.tsx:17:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:213:15
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:213:9)
+
+  ● Admin UI Component Tests › Content Management Page › should handle filter by card type
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content-management/page.tsx:17:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:245:15
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:245:9)
+
+  ● Admin UI Component Tests › Questions Page › should render questions page with data
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content/questions/page.tsx:15:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:292:36
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:292:30)
+
+  ● Admin UI Component Tests › Questions Page › should handle question creation
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content/questions/page.tsx:15:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:320:36
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:320:30)
+
+  ● Admin UI Component Tests › Questions Page › should handle question editing
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content/questions/page.tsx:15:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:370:36
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:370:30)
+
+  ● Admin UI Component Tests › Questions Page › should handle question deletion
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content/questions/page.tsx:15:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:421:36
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:421:30)
+
+  ● Admin UI Component Tests › Frontend Tasks Page › should render frontend tasks page with data
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/frontend-tasks/page.tsx:17:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:458:15
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:458:9)
+
+  ● Admin UI Component Tests › Frontend Tasks Page › should handle task creation
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/frontend-tasks/page.tsx:17:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:487:15
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:487:9)
+
+  ● Admin UI Component Tests › Problem Solving Page › should render problem solving page with data
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/problem-solving/page.tsx:17:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:530:15
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:530:9)
+
+  ● Admin UI Component Tests › Problem Solving Page › should handle problem creation
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/problem-solving/page.tsx:17:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:559:15
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:559:9)
+
+  ● Admin UI Component Tests › Dashboard Page › should render dashboard with stats
+
+    useAdminAuth must be used within an AdminAuthProvider
+
+      323 |   const context = useContext(AdminAuthContext);
+      324 |   if (context === undefined) {
+    > 325 |     throw new Error('useAdminAuth must be used within an AdminAuthProvider');
+          |           ^
+      326 |   }
+      327 |   return context;
+      328 | }
+
+      at useAdminAuth (../../libs/shared-contexts/src/lib/AdminAuthContext.tsx:325:11)
+      at AdminDashboard (src/app/admin/dashboard/page.tsx:98:32)
+      at renderWithHooks (../../node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+      at mountIndeterminateComponent (../../node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+      at beginWork (../../node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+      at beginWork$1 (../../node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+      at performUnitOfWork (../../node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+      at workLoopSync (../../node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+      at renderRootSync (../../node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+      at recoverFromConcurrentError (../../node_modules/react-dom/cjs/react-dom.development.js:25889:20)
+      at performConcurrentWorkOnRoot (../../node_modules/react-dom/cjs/react-dom.development.js:25789:22)
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:601:13)
+
+  ● Admin UI Component Tests › Dashboard Page › should handle refresh functionality
+
+    useAdminAuth must be used within an AdminAuthProvider
+
+      323 |   const context = useContext(AdminAuthContext);
+      324 |   if (context === undefined) {
+    > 325 |     throw new Error('useAdminAuth must be used within an AdminAuthProvider');
+          |           ^
+      326 |   }
+      327 |   return context;
+      328 | }
+
+      at useAdminAuth (../../libs/shared-contexts/src/lib/AdminAuthContext.tsx:325:11)
+      at AdminDashboard (src/app/admin/dashboard/page.tsx:98:32)
+      at renderWithHooks (../../node_modules/react-dom/cjs/react-dom.development.js:15486:18)
+      at mountIndeterminateComponent (../../node_modules/react-dom/cjs/react-dom.development.js:20103:13)
+      at beginWork (../../node_modules/react-dom/cjs/react-dom.development.js:21626:16)
+      at beginWork$1 (../../node_modules/react-dom/cjs/react-dom.development.js:27465:14)
+      at performUnitOfWork (../../node_modules/react-dom/cjs/react-dom.development.js:26599:12)
+      at workLoopSync (../../node_modules/react-dom/cjs/react-dom.development.js:26505:5)
+      at renderRootSync (../../node_modules/react-dom/cjs/react-dom.development.js:26473:7)
+      at recoverFromConcurrentError (../../node_modules/react-dom/cjs/react-dom.development.js:25889:20)
+      at performConcurrentWorkOnRoot (../../node_modules/react-dom/cjs/react-dom.development.js:25789:22)
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:629:13)
+
+  ● Admin UI Component Tests › Error Handling › should display error messages when API calls fail
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content-management/page.tsx:17:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:647:15
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:647:9)
+
+  ● Admin UI Component Tests › Error Handling › should handle mutation errors
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content/questions/page.tsx:15:27)
+      at ../../tests/admin/admin-ui-components.test.tsx:673:36
+      at Object.<anonymous> (../../tests/admin/admin-ui-components.test.tsx:673:30)
+
+FAIL tests/admin/admin-integration.test.tsx
+  ● Console
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+    console.log
+      ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+    console.log
+      URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+  ● Admin Integration Tests › Complete Card Management Workflow › should create, read, update, and delete a learning card
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content-management/page.tsx:17:27)
+      at ../../tests/admin/admin-integration.test.tsx:131:15
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:131:9)
+
+  ● Admin Integration Tests › Complete Question Management Workflow › should create, read, update, and delete a question
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content/questions/page.tsx:15:27)
+      at ../../tests/admin/admin-integration.test.tsx:252:36
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:252:30)
+
+  ● Admin Integration Tests › Cross-Component Data Consistency › should maintain data consistency between content management and questions pages
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content-management/page.tsx:17:27)
+      at ../../tests/admin/admin-integration.test.tsx:386:15
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:386:9)
+
+  ● Admin Integration Tests › Search and Filter Integration › should maintain search state across different admin pages
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content/questions/page.tsx:15:27)
+      at ../../tests/admin/admin-integration.test.tsx:436:36
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:436:30)
+
+  ● Admin Integration Tests › Bulk Operations Integration › should handle bulk operations across multiple content types
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content/questions/page.tsx:15:27)
+      at ../../tests/admin/admin-integration.test.tsx:487:36
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:487:30)
+
+  ● Admin Integration Tests › Error Recovery Integration › should handle and recover from errors gracefully across components
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content-management/page.tsx:17:27)
+      at ../../tests/admin/admin-integration.test.tsx:521:15
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:521:9)
+
+  ● Admin Integration Tests › Performance Integration › should handle large datasets efficiently
+
+    TypeError: Cannot read properties of undefined (reading 'onAuthStateChange')
+
+      42 | // Only set up on client side to avoid SSR issues
+      43 | if (supabaseClient && typeof window !== 'undefined') {
+    > 44 |   supabaseClient.auth.onAuthStateChange((event, session) => {
+         |                       ^
+      45 |     try {
+      46 |       if (typeof document === 'undefined') return;
+      47 |       if (session?.access_token) {
+
+      at Object.onAuthStateChange (src/lib/supabase-client.ts:44:23)
+      at Object.<anonymous> (../../libs/shared-components/src/lib/common/EnhancedDashboard.tsx:18:25)
+      at Object.<anonymous> (../../libs/shared-components/src/index.ts:171:67)
+      at Object.<anonymous> (src/app/admin/content/questions/page.tsx:15:27)
+      at ../../tests/admin/admin-integration.test.tsx:563:36
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:563:30)
+
+FAIL apps/website/src/__tests__/navbar-simple.test.tsx
+  ● Console
+
+    console.warn
+      Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+      20 |   const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
+      21 |   const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY'];
+    > 22 |   supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+         |              ^
+      23 | }
+      24 |
+      25 | type Language = 'en' | 'ar';
+
+      at new GoTrueClient (../../node_modules/@supabase/auth-js/src/GoTrueClient.ts:272:15)
+      at new SupabaseAuthClient (../../node_modules/@supabase/supabase-js/src/lib/SupabaseAuthClient.ts:6:5)
+      at SupabaseClient._initSupabaseAuthClient (../../node_modules/@supabase/supabase-js/src/SupabaseClient.ts:351:12)
+      at new SupabaseClient (../../node_modules/@supabase/supabase-js/src/SupabaseClient.ts:134:24)
+      at createClient (../../node_modules/@supabase/supabase-js/src/index.ts:46:10)
+      at Object.createClient (../../libs/shared-contexts/src/lib/LanguageContext.tsx:22:14)
+      at Object.<anonymous> (../../libs/shared-contexts/src/lib/shared-contexts.ts:9:14)
+      at Object.<anonymous> (../../libs/shared-contexts/src/index.ts:5:14)
+      at Object.<anonymous> (src/components/AlzatonaLogo.tsx:23:25)
+      at Object.<anonymous> (src/components/NavbarSimple.tsx:25:62)
+      at Object.<anonymous> (src/__tests__/navbar-simple.test.tsx:53:62)
+
+    console.warn
+      Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+      14 |   const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
+      15 |   const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY'];
+    > 16 |   supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+         |              ^
+      17 | }
+      18 |
+      19 | interface MobileMenuContextType {
+
+      at new GoTrueClient (../../node_modules/@supabase/auth-js/src/GoTrueClient.ts:272:15)
+      at new SupabaseAuthClient (../../node_modules/@supabase/supabase-js/src/lib/SupabaseAuthClient.ts:6:5)
+      at SupabaseClient._initSupabaseAuthClient (../../node_modules/@supabase/supabase-js/src/SupabaseClient.ts:351:12)
+      at new SupabaseClient (../../node_modules/@supabase/supabase-js/src/SupabaseClient.ts:134:24)
+      at createClient (../../node_modules/@supabase/supabase-js/src/index.ts:46:10)
+      at Object.createClient (../../libs/shared-contexts/src/lib/MobileMenuContext.tsx:16:14)
+      at Object.<anonymous> (../../libs/shared-contexts/src/lib/shared-contexts.ts:10:14)
+      at Object.<anonymous> (../../libs/shared-contexts/src/index.ts:5:14)
+      at Object.<anonymous> (src/components/AlzatonaLogo.tsx:23:25)
+      at Object.<anonymous> (src/components/NavbarSimple.tsx:25:62)
+      at Object.<anonymous> (src/__tests__/navbar-simple.test.tsx:53:62)
+
+    console.warn
+      Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+      12 |   const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
+      13 |   const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY'];
+    > 14 |   supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+         |              ^
+      15 | }
+      16 | import React, {
+      17 |   useState,
+
+     

@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.8s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+./src/lib/resources.ts:4:35
+Type error: Cannot find module '../../../libs/shared-types/src/lib/resource' or its corresponding type declarations.
+
+[0m [90m 2 |[39m [90m// Import LearningPath directly from resource file to avoid conflict with unified-question-schema[39m
+ [90m 3 |[39m [90m// Using relative path since it's not exported from shared-types index[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m type { [33mLearningPath[39m } [36mfrom[39m [32m'../../../libs/shared-types/src/lib/resource'[39m[33m;[39m
+ [90m   |[39m                                   [31m[1m^[22m[39m
+ [90m 5 |[39m
+ [90m 6 |[39m [36mexport[39m [36mconst[39m resourceCategories[33m:[39m [33mResourceCategoryInfo[39m[] [33m=[39m [
+ [90m 7 |[39m   {[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

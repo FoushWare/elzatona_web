@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.1s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useAudioCollection.ts:240:42
+Type error: Property 'question_id' does not exist on type 'QuestionAudioMapping'. Did you mean 'questionId'?
+
+[0m [90m 238 |[39m         [90m// Remove from local state[39m
+ [90m 239 |[39m         setAudioMappings(prev [33m=>[39m
+[31m[1m>[22m[39m[90m 240 |[39m           prev[33m.[39mfilter(mapping [33m=>[39m mapping[33m.[39mquestion_id [33m!==[39m question_id)
+ [90m     |[39m                                          [31m[1m^[22m[39m
+ [90m 241 |[39m         )[33m;[39m
+ [90m 242 |[39m         [36mreturn[39m [36mtrue[39m[33m;[39m
+ [90m 243 |[39m       } [36mcatch[39m (err) {[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

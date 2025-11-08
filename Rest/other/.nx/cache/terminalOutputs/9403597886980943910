@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.0s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useUserProgress.ts:138:15
+Type error: Expected 3 arguments, but got 2.
+
+[0m [90m 136 |[39m
+ [90m 137 |[39m       [36mtry[39m {
+[31m[1m>[22m[39m[90m 138 |[39m         [36mawait[39m updateQuestionProgress(user[33m.[39muid[33m,[39m attempt)[33m;[39m
+ [90m     |[39m               [31m[1m^[22m[39m
+ [90m 139 |[39m         [36mawait[39m loadUserProgress()[33m;[39m
+ [90m 140 |[39m         [36mawait[39m loadDashboardStats()[33m;[39m
+ [90m 141 |[39m         [36mawait[39m updateUserStreak(user[33m.[39muid)[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

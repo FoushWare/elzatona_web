@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.6s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+./src/app/api/user/preferences/route.ts:11:33
+Type error: Cannot find module '../../types/firestore' or its corresponding type declarations.
+
+[0m [90m  9 |[39m [36mimport[39m { cookies } [36mfrom[39m [32m'next/headers'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { verifySupabaseToken } [36mfrom[39m [32m'../../../../lib/server-auth'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 11 |[39m [36mimport[39m { [33mUserPreferences[39m } [36mfrom[39m [32m'../../types/firestore'[39m[33m;[39m
+ [90m    |[39m                                 [31m[1m^[22m[39m
+ [90m 12 |[39m
+ [90m 13 |[39m [36mexport[39m [36masync[39m [36mfunction[39m [33mGET[39m(request[33m:[39m [33mNextRequest[39m) {
+ [90m 14 |[39m   [36mtry[39m {[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

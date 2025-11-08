@@ -1,0 +1,36 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./src/app/admin/learning-cards/page.tsx
+Module not found: Can't resolve '../../lib/supabase-learning-cards-service'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/admin/learning-cards/page.tsx
+Module not found: Can't resolve '../../types/learning-cards'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/auth/callback/page.tsx
+Module not found: Can't resolve '../../lib/supabase-client'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/auth/callback/page.tsx
+Module not found: Can't resolve '../../lib/auth-session'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/custom-roadmap/page.tsx
+Module not found: Can't resolve '../../../context/LearningTypeContext'
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+> Build failed because of webpack errors
+Build process exited due to code 1  

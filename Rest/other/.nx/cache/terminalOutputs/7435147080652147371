@@ -1,0 +1,36 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./src/app/api/admin/logs/route.ts
+Module not found: Can't resolve '../../../lib/error-logging-service'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/api/auth/[...nextauth]/route.ts
+Module not found: Can't resolve '../../lib/auth-config'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/api/auth/session/route.ts
+Module not found: Can't resolve '../../lib/auth-config'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/api/auth/set-cookie/route.ts
+Module not found: Can't resolve '../../lib/server-auth'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/api/cards/route.ts
+Module not found: Can't resolve '../../lib/supabase-server'
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+> Build failed because of webpack errors
+Build process exited due to code 1  

@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.2s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useQuestions.ts:257:11
+Type error: Object literal may only specify known properties, and 'tags' does not exist in type '{ category?: string | undefined; difficulty?: string | undefined; }'.
+
+[0m [90m 255 |[39m           category[33m:[39m config[33m.[39mcategory[33m,[39m
+ [90m 256 |[39m           difficulty[33m:[39m config[33m.[39mdifficulty[33m,[39m
+[31m[1m>[22m[39m[90m 257 |[39m           tags[33m:[39m config[33m.[39mtags[33m,[39m
+ [90m     |[39m           [31m[1m^[22m[39m
+ [90m 258 |[39m         })[33m;[39m
+ [90m 259 |[39m         setQuestions(quizQuestions)[33m;[39m
+ [90m 260 |[39m         [36mreturn[39m quizQuestions[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

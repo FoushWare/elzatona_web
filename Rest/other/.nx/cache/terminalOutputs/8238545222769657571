@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 3.8s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useAudioCollection.ts:163:11
+Type error: Expected 2 arguments, but got 3.
+
+[0m [90m 161 |[39m           question_id[33m,[39m
+ [90m 162 |[39m           audioType[33m,[39m
+[31m[1m>[22m[39m[90m 163 |[39m           audioInfo
+ [90m     |[39m           [31m[1m^[22m[39m
+ [90m 164 |[39m         )[33m;[39m
+ [90m 165 |[39m
+ [90m 166 |[39m         [36mif[39m ([33m![39mresult[33m.[39msuccess) {[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  
