@@ -38,7 +38,7 @@ import { useAuth } from '@elzatona/shared-contexts';
 import { UserStatistics } from '@elzatona/shared-components';
 import { ErrorBoundary } from '@elzatona/shared-components';
 import { useRouter } from 'next/navigation';
-import { useLearningType } from '../../context/LearningTypeContext';
+import { useLearningType } from '../context/LearningTypeContext';
 
 function HomePageContent() {
   const { userType, setUserType } = useUserType();
