@@ -1,58 +1,74 @@
 /**
- * Unit Tests for Browse Practice Questions
- * Task: 10 - Browse Practice Questions
- * Test IDs: F-UT-008
+ * Unit Tests for Browse Practice Questions (F-UT-008)
+ * Task: F-003 - Browse Practice Questions
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import BrowsePracticeQuestionsPage from './page';
+import * as sharedContexts from '@elzatona/shared-contexts';
 
-// Mock dependencies
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
-  }),
-  usePathname: () => '/browse-practice-questions',
-}));
-
-// Mock shared contexts
 jest.mock('@elzatona/shared-contexts', () => {
   const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
   return {
     ...actual,
-    useAdminAuth: jest.fn(() => ({
-      isAuthenticated: true,
-      isLoading: false,
-      user: { id: '1', email: 'admin@example.com', role: 'super_admin' },
-    })),
+    useAuth: jest.fn(),
   };
 });
 
-// Mock fetch
-global.fetch = jest.fn();
+const mockPush = jest.fn();
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+}));
 
-describe('10: Component Renders', () => {
+Storage.prototype.getItem = jest.fn(() => JSON.stringify([]));
+
+jest.mock('lucide-react', () => ({
+  Code: () => <span>💻</span>,
+  Target: () => <span>🎯</span>,
+  Brain: () => <span>🧠</span>,
+  ArrowRight: () => <span>→</span>,
+  BookOpen: () => <span>📖</span>,
+  Zap: () => <span>⚡</span>,
+  Users: () => <span>👥</span>,
+  Clock: () => <span>⏰</span>,
+  CheckCircle: () => <span>✅</span>,
+  Eye: () => <span>👁️</span>,
+  Play: () => <span>▶️</span>,
+  Star: () => <span>⭐</span>,
+  Award: () => <span>🏆</span>,
+  TrendingUp: () => <span>📈</span>,
+  Calendar: () => <span>📅</span>,
+  Loader2: () => <span>⏳</span>,
+}));
+
+describe('F-UT-008: Component Renders', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1', email: 'user@example.com' },
+      isLoading: false,
     });
   });
 
-  it('should render without errors', () => {
+  it('should render without errors', async () => {
     const { container } = render(<BrowsePracticeQuestionsPage />);
-    expect(container).toBeInTheDocument();
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
   });
 
-  it('should display main content', async () => {
+  it('should display practice options', async () => {
     render(<BrowsePracticeQuestionsPage />);
     await waitFor(() => {
-      expect(screen.getByText(/.*/)).toBeInTheDocument();
+      expect(screen.getByText(/Interview Questions/i)).toBeInTheDocument();
     });
   });
 });
