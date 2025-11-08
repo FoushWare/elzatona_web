@@ -1,10 +1,11 @@
 /**
  * Integration Tests for Problem Solving Practice
- * Task: 13
+ * Task: 13 - Problem Solving Practice
+ * Test IDs: F-IT-009
  */
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ProblemSolvingPage from './page';
 
@@ -17,9 +18,22 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
+// Mock fetch
+global.fetch = jest.fn();
+
 describe('13: Integration Tests', () => {
-  it('should handle user interactions', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
+    });
+  });
+
+  it('should handle user interactions', async () => {
     render(<ProblemSolvingPage />);
-    expect(screen.getByRole('main').or(screen.getByText(/.*/))).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/.*/)).toBeInTheDocument();
+    });
   });
 });

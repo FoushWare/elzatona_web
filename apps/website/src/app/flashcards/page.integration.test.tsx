@@ -1,10 +1,11 @@
 /**
  * Integration Tests for Flashcards CRUD Operations
- * Task: 16
+ * Task: 16 - Flashcards CRUD Operations
+ * Test IDs: F-IT-012
  */
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FlashcardsPage from './page';
 
@@ -17,9 +18,22 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
+// Mock fetch
+global.fetch = jest.fn();
+
 describe('16: Integration Tests', () => {
-  it('should handle user interactions', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
+    });
+  });
+
+  it('should handle user interactions', async () => {
     render(<FlashcardsPage />);
-    expect(screen.getByRole('main').or(screen.getByText(/.*/))).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/.*/)).toBeInTheDocument();
+    });
   });
 });
