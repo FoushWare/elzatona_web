@@ -1,58 +1,106 @@
 /**
- * Unit Tests for My Plans Page
- * Task: 9 - My Plans Page
- * Test IDs: F-UT-006, F-UT-007
+ * Unit Tests for My Plans Page (F-UT-006, F-UT-007)
+ * Task: F-002 - My Plans Page
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import MyPlansPage from './page';
+import * as sharedContexts from '@elzatona/shared-contexts';
 
-// Mock dependencies
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
-  }),
-  usePathname: () => '/my-plans',
-}));
-
-// Mock shared contexts
 jest.mock('@elzatona/shared-contexts', () => {
   const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
   return {
     ...actual,
-    useAdminAuth: jest.fn(() => ({
-      isAuthenticated: true,
-      isLoading: false,
-      user: { id: '1', email: 'admin@example.com', role: 'super_admin' },
-    })),
+    useAuth: jest.fn(),
   };
 });
 
-// Mock fetch
-global.fetch = jest.fn();
+const mockPush = jest.fn();
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+}));
 
-describe('9: Component Renders', () => {
+Storage.prototype.getItem = jest.fn(() => JSON.stringify([]));
+Storage.prototype.setItem = jest.fn();
+
+jest.mock('lucide-react', () => ({
+  BookOpen: () => <span>📖</span>,
+  Plus: () => <span>+</span>,
+  Play: () => <span>▶️</span>,
+  Edit: () => <span>✏️</span>,
+  Trash2: () => <span>🗑️</span>,
+  CheckCircle: () => <span>✅</span>,
+  Clock: () => <span>⏰</span>,
+  Target: () => <span>🎯</span>,
+  Loader2: () => <span>⏳</span>,
+}));
+
+describe('F-UT-006: Component Renders', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1', email: 'user@example.com' },
+      isLoading: false,
     });
   });
 
-  it('should render without errors', () => {
+  it('should render without errors', async () => {
     const { container } = render(<MyPlansPage />);
-    expect(container).toBeInTheDocument();
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
   });
 
-  it('should display main content', async () => {
+  it('should display page title', async () => {
     render(<MyPlansPage />);
     await waitFor(() => {
-      expect(screen.getByText(/.*/)).toBeInTheDocument();
+      expect(screen.getByText(/My Learning Plans/i)).toBeInTheDocument();
+    });
+  });
+});
+
+describe('F-UT-007: Plan Management', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1' },
+      isLoading: false,
+    });
+    
+    Storage.prototype.getItem = jest.fn(() => JSON.stringify([
+      {
+        id: '1',
+        name: 'Test Plan',
+        description: 'Test Description',
+        duration: 30,
+        totalQuestions: 100,
+        dailyQuestions: 5,
+        created_at: new Date().toISOString(),
+      },
+    ]));
+  });
+
+  it('should load plans from localStorage', async () => {
+    render(<MyPlansPage />);
+    await waitFor(() => {
+      expect(Storage.prototype.getItem).toHaveBeenCalledWith('userPlans');
+    });
+  });
+
+  it('should display Create New Plan button', async () => {
+    render(<MyPlansPage />);
+    await waitFor(() => {
+      expect(screen.getByText(/Create New Plan/i)).toBeInTheDocument();
     });
   });
 });
