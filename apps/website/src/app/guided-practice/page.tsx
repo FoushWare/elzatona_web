@@ -20,10 +20,10 @@ import {
   ShoppingCart,
   BarChart3,
 } from 'lucide-react';
-import { addFlashcard, isInFlashcards } from '../../../lib/flashcards';
-import { addToCart } from '../../../lib/cart';
+import { addFlashcard, isInFlashcards } from '../../lib/flashcards';
+import { addToCart } from '../../lib/cart';
 import { useNotifications } from '@/components/NotificationSystem';
-import { useLearningType } from '../../../context/LearningTypeContext';
+import { useLearningType } from '../../context/LearningTypeContext';
 
 interface Question {
   id: string;

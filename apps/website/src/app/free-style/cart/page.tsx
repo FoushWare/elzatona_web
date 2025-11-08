@@ -2,14 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import {
-  loadCart,
-  removeFromCart,
-  clearCart,
-  CartItem,
-} from '../../../lib/cart';
+import { loadCart, removeFromCart, clearCart, CartItem } from '../../lib/cart';
 import { ShoppingCart, Trash2, CheckCircle2, BookOpen } from 'lucide-react';
-import { useLearningType } from '../../../context/LearningTypeContext';
+import { useLearningType } from '../../context/LearningTypeContext';
 
 export default function FreeStyleCartPage() {
   const [items, setItems] = useState<CartItem[]>([]);
