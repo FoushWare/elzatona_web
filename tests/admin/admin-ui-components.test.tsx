@@ -46,18 +46,6 @@ jest.mock('@supabase/supabase-js', () => ({
         eq: jest.fn().mockResolvedValue({ data: null, error: null }),
       })),
     })),
-    auth: {
-      onAuthStateChange: jest.fn(() => ({
-        data: { subscription: null },
-        error: null,
-      })),
-      getSession: jest
-        .fn()
-        .mockResolvedValue({ data: { session: null }, error: null }),
-      getUser: jest
-        .fn()
-        .mockResolvedValue({ data: { user: null }, error: null }),
-    },
   })),
 }));
 

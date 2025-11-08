@@ -138,9 +138,12 @@ describe('Admin Login API', () => {
   const { createClient } = require('@supabase/supabase-js');
 
   let mockSupabaseClient: any;
+  let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Mock console.error globally to suppress error output during tests
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     // Get the mock client instance (same one used by the route handler)
     mockSupabaseClient = createClient();
     // Reset the from mock for each test
@@ -156,6 +159,10 @@ describe('Admin Login API', () => {
     delete process.env.JWT_SECRET;
     delete process.env.NEXT_PUBLIC_SUPABASE_URL;
     delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+    // Restore console.error after each test
+    if (consoleErrorSpy) {
+      consoleErrorSpy.mockRestore();
+    }
   });
 
   describe('POST /api/admin/auth', () => {
