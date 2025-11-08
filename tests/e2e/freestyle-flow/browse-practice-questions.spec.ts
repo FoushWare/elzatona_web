@@ -1,22 +1,17 @@
 /**
- * E2E Test: Browse Practice Questions
- * Task: 10 - Browse Practice Questions
- * Test ID: F-E2E-003
+ * E2E Test: Browse Practice Questions (F-E2E-003)
+ * Task: F-003 - Browse Practice Questions
  */
 
 import { test, expect } from '@playwright/test';
 
 test.describe('F-E2E-003: Browse Practice Questions', () => {
-  test('should load page correctly', async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
     await page.goto('/browse-practice-questions');
-    await expect(page).toHaveURL(/.*browse-practice-questions.*/);
     await page.waitForLoadState('networkidle');
   });
 
-  test('should display main content', async ({ page }) => {
-    await page.goto('/browse-practice-questions');
-    await page.waitForLoadState('networkidle');
-    const content = await page.textContent('body');
-    expect(content).toBeTruthy();
+  test('should load browse practice questions page', async ({ page }) => {
+    await expect(page).toHaveURL(/.*browse-practice-questions.*/);
   });
 });

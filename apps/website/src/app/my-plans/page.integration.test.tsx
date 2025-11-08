@@ -1,39 +1,90 @@
 /**
- * Integration Tests for My Plans Page
- * Task: 9 - My Plans Page
- * Test IDs: F-IT-004, F-IT-005
+ * Integration Tests for My Plans Page (F-IT-004, F-IT-005)
+ * Task: F-002 - My Plans Page
  */
 
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import MyPlansPage from './page';
+import * as sharedContexts from '@elzatona/shared-contexts';
 
-// Mock dependencies
+jest.mock('@elzatona/shared-contexts', () => {
+  const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
+  return {
+    ...actual,
+    useAuth: jest.fn(),
+  };
+});
+
+const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: jest.fn(),
+    push: mockPush,
     replace: jest.fn(),
     prefetch: jest.fn(),
   }),
 }));
 
-// Mock fetch
-global.fetch = jest.fn();
+Storage.prototype.getItem = jest.fn(() => JSON.stringify([
+  {
+    id: '1',
+    name: 'Test Plan',
+    description: 'Test',
+    duration: 30,
+    totalQuestions: 100,
+    dailyQuestions: 5,
+    created_at: new Date().toISOString(),
+    isActive: true,
+  },
+]));
 
-describe('9: Integration Tests', () => {
+jest.mock('lucide-react', () => ({
+  BookOpen: () => <span>📖</span>,
+  Plus: () => <span>+</span>,
+  Play: () => <span>▶️</span>,
+  Edit: () => <span>✏️</span>,
+  Trash2: () => <span>🗑️</span>,
+  CheckCircle: () => <span>✅</span>,
+  Clock: () => <span>⏰</span>,
+  Target: () => <span>🎯</span>,
+  Loader2: () => <span>⏳</span>,
+}));
+
+describe('F-IT-004: Plan Loading Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1' },
+      isLoading: false,
     });
   });
 
-  it('should handle user interactions', async () => {
+  it('should load plans from localStorage', async () => {
     render(<MyPlansPage />);
     await waitFor(() => {
-      expect(screen.getByText(/.*/)).toBeInTheDocument();
+      expect(Storage.prototype.getItem).toHaveBeenCalledWith('userPlans');
+    });
+  });
+});
+
+describe('F-IT-005: Plan Actions Integration', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1' },
+      isLoading: false,
+    });
+  });
+
+  it('should integrate plan navigation', async () => {
+    render(<MyPlansPage />);
+    await waitFor(() => {
+      expect(screen.getByText(/Test Plan/i)).toBeInTheDocument();
     });
   });
 });
