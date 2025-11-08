@@ -1,0 +1,51 @@
+name: Test Batches (Sequential - Fallback)
+
+on:
+  workflow_dispatch:
+    inputs:
+      start_batch:
+        description: 'Start from batch number'
+        required: false
+        default: '1'
+      end_batch:
+        description: 'End at batch number'
+        required: false
+        default: '18'
+
+jobs:
+  test-batches-sequential:
+    name: Run Test Batches Sequentially
+    runs-on: ubuntu-latest
+    timeout-minutes: 60 # Total time limit for all batches
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run all test batches sequentially
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://test.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-anon-key' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'test-service-role-key' }}
+        run: |
+          chmod +x .cursor/run-tests-in-batches.sh
+          bash .cursor/run-tests-in-batches.sh
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-sequential
+          path: |
+            /tmp/batch-*-output.log
+            apps/website/coverage/
+          retention-days: 7

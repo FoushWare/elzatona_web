@@ -1,0 +1,228 @@
+---
+alwaysApply: true
+---
+
+## 📊 **Context & Summaries**
+
+### **Context Management**
+
+- **If reaching 70–80% of context limit, auto-generate a summary artifact** including:
+  - Current status
+  - Technical details (code patterns, architecture decisions)
+  - Outstanding issues
+  - Next steps
+  - Handoff notes
+
+### **Documentation Standards**
+
+- **Maintain clear project status** throughout development
+- **Document architectural decisions** and their rationale
+- **Create handoff notes** for future developers
+
+---
+
+## ✨ **Code Quality Standards**
+
+### **Development Principles**
+
+- **Provide incremental improvements** rather than massive rewrites
+- **Use modular, single-responsibility functions**
+- **Add helpful comments & logs** (with emojis where useful)
+- **Ensure clear variable names** and readable code
+
+### **User Experience**
+
+- **Always provide loading/progress states** for UX
+- **Implement graceful error handling**
+- **Ensure responsive and accessible design**
+
+---
+
+## 🚀 **User Workflow Priorities**
+
+### **Efficiency Focus**
+
+- **Prioritize bulk operations** over single-instance actions
+- **Minimize manual steps**—automate repetitive tasks
+- **Provide detailed feedback** on success/failures
+- **Enable undo/redo** for major operations
+
+### **Automation Mindset**
+
+- **Look for patterns** that can be automated
+- **Create reusable components** and utilities
+- **Implement batch processing** where possible
+
+---
+
+## 🔄 **Version Control Mindset**
+
+### **Code Versioning**
+
+- **Use clear version numbering** in code comments (`// v1.1`)
+- **Document changes between versions**
+- **Maintain backward compatibility** when possible
+
+### **Change Management**
+
+- **Track feature additions** and modifications
+- **Document breaking changes** clearly
+- **Provide migration paths** for updates
+
+---
+
+## 📈 **Success Metrics**
+
+### **Performance Goals**
+
+- **Aim for 80%+ time reduction** in workflows
+- **Achieve 90%+ property preservation rate**
+- **Provide error resilience** and graceful degradation
+
+### **Quality Assurance**
+
+- **Test edge cases** and error scenarios
+- **Validate user workflows** end-to-end
+- **Ensure consistent behavior** across different scenarios
+
+---
+
+## 🛠 **Technical Implementation Guidelines**
+
+### **React Development**
+
+- **Use functional components** with hooks
+- **Implement proper error boundaries**
+- **Follow React best practices** and patterns
+- **Ensure proper cleanup** in useEffect hooks
+
+### **Design System**
+
+- **Maintain consistent component APIs**
+- **Use design tokens** for spacing, colors, typography
+- **Implement responsive design** patterns
+- **Ensure accessibility compliance**
+
+### **Performance Optimization**
+
+- **Implement code splitting** where appropriate
+- **Use React.memo** for expensive components
+- **Optimize bundle size** and loading times
+- **Implement proper caching strategies**
+
+---
+
+## 🔍 **Code Review & Quality Checks**
+
+### **Before Submitting Code**
+
+- **Verify all requirements** are met
+- **Check for edge cases** and error handling
+- **Ensure consistent formatting** and naming
+- **Test user workflows** end-to-end
+
+### **Documentation Requirements**
+
+- **Update relevant documentation** for new features
+- **Add inline comments** for complex logic
+- **Create usage examples** for new components
+- **Document API changes** and breaking modifications
+
+---
+
+## 🚨 **Error Handling & Resilience**
+
+### **Defensive Programming**
+
+- **Always validate inputs** and user data
+- **Implement proper error boundaries** in React
+- **Provide meaningful error messages** to users
+- **Log errors appropriately** for debugging
+
+### **Graceful Degradation**
+
+- **Handle network failures** gracefully
+- **Provide fallback UI** for failed operations
+- **Implement retry mechanisms** where appropriate
+- **Cache critical data** for offline scenarios
+
+---
+
+## 📱 **Mobile & Responsiveness**
+
+### **Responsive Design**
+
+- **Test on multiple screen sizes** during development
+- **Implement mobile-first** design approach
+- **Ensure touch-friendly** interactions
+- **Optimize for mobile performance**
+
+### **Accessibility**
+
+- **Follow WCAG guidelines** for accessibility
+- **Implement proper ARIA labels** and roles
+- **Ensure keyboard navigation** works properly
+- **Test with screen readers** and assistive technologies
+
+---
+
+## 🔧 **Development Workflow**
+
+### **Daily Development**
+
+- **Start with clear requirements** and acceptance criteria
+- **Implement incrementally** with regular testing
+- **Document decisions** and trade-offs
+- **Create reusable patterns** for future use
+
+### **Code Organization**
+
+- **Group related functionality** logically
+- **Use consistent file naming** conventions
+- **Maintain clear separation** of concerns
+- **Implement proper abstraction** layers
+
+---
+
+## 📚 **Learning & Improvement**
+
+### **Continuous Learning**
+
+- **Stay updated** with React and web development best practices
+- **Learn from user feedback** and usage patterns
+- **Experiment with new approaches** in development
+- **Share knowledge** with the development team
+
+### **Code Evolution**
+
+- **Refactor code** when patterns emerge
+- **Improve performance** based on metrics
+- **Enhance user experience** based on feedback
+- **Maintain code quality** over time
+
+---
+
+## 🎉 **Success Celebration**
+
+### **When Goals Are Met**
+
+- **Acknowledge achievements** and milestones
+- **Document successful patterns** for future use
+- **Share learnings** with the team
+- **Plan next improvements** based on success
+
+### **Continuous Improvement**
+
+- **Regularly review** and update these guidelines
+- **Incorporate new best practices** as they emerge
+- **Adapt to changing** project requirements
+- **Maintain high standards** of code quality
+
+---
+
+_These rules are designed to ensure consistent, high-quality development while maintaining efficiency and user experience excellence._ 🚀
+description:
+globs:
+alwaysApply: true
+
+---
