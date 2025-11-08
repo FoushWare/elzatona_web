@@ -1,58 +1,86 @@
 /**
- * Unit Tests for Admin User Management
- * Task: 7 - Admin User Management
- * Test IDs: A-UT-018
+ * Unit Tests for Admin User Management (A-UT-018)
+ * Task: A-007 - Admin User Management
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import AdminUserManagementPage from './page';
-
-// Mock dependencies
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
-  }),
-  usePathname: () => '/admin/users',
-}));
+import UserManagementPage from './page';
+import * as sharedContexts from '@elzatona/shared-contexts';
 
 // Mock shared contexts
 jest.mock('@elzatona/shared-contexts', () => {
   const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
   return {
     ...actual,
-    useAdminAuth: jest.fn(() => ({
-      isAuthenticated: true,
-      isLoading: false,
-      user: { id: '1', email: 'admin@example.com', role: 'super_admin' },
-    })),
+    useAuth: jest.fn(),
+    useAdminAuth: jest.fn(),
   };
 });
 
 // Mock fetch
 global.fetch = jest.fn();
 
-describe('7: Component Renders', () => {
+jest.mock('lucide-react', () => ({
+  Users: () => <span>👥</span>,
+  UserPlus: () => <span>➕</span>,
+  Shield: () => <span>🛡️</span>,
+  Crown: () => <span>👑</span>,
+  Star: () => <span>⭐</span>,
+  Mail: () => <span>📧</span>,
+  Calendar: () => <span>📅</span>,
+  Activity: () => <span>📊</span>,
+  Search: () => <span>🔍</span>,
+  Filter: () => <span>🔽</span>,
+  MoreVertical: () => <span>⋮</span>,
+  Edit: () => <span>✏️</span>,
+  Trash2: () => <span>🗑️</span>,
+  Eye: () => <span>👁️</span>,
+  RefreshCw: () => <span>🔄</span>,
+}));
+
+describe('A-UT-018: Component Renders', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      user: { id: '1', email: 'admin@example.com' },
+    });
+    
+    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+    });
+    
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
-      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
+      json: async () => ({
+        success: true,
+        users: [],
+      }),
     });
   });
 
-  it('should render without errors', () => {
-    const { container } = render(<AdminUserManagementPage />);
-    expect(container).toBeInTheDocument();
+  it('should render without errors', async () => {
+    const { container } = render(<UserManagementPage />);
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
   });
 
-  it('should display main content', async () => {
-    render(<AdminUserManagementPage />);
+  it('should display access denied for non-admin users', () => {
+    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: false,
+    });
+    
+    render(<UserManagementPage />);
+    expect(screen.getByText(/Access Denied/i)).toBeInTheDocument();
+  });
+
+  it('should fetch users on mount', async () => {
+    render(<UserManagementPage />);
     await waitFor(() => {
-      expect(screen.getByText(/.*/)).toBeInTheDocument();
+      expect(global.fetch).toHaveBeenCalledWith('/api/users');
     });
   });
 });
