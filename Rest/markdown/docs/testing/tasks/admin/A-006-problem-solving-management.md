@@ -1,4 +1,11 @@
-# Task: Admin Problem Solving Management
+# Task ID: A-006
+# Title: Admin Problem Solving Management
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the admin problem solving management page including CRUD operations, test cases management, and validation.
+
+# Details:
 
 ## Time Estimation
 
@@ -90,6 +97,8 @@ Test the admin problem solving management page including CRUD operations, test c
    - Verify validation error
    - Test invalid data formats
 
+# Test Strategy:
+
 ## Automated Tests
 
 ### Unit Tests
@@ -166,24 +175,3 @@ Test the admin problem solving management page including CRUD operations, test c
     8. Verify problem removed
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- admin/problem-solving/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- admin/problem-solving/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- problem-solving-*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires admin authentication
-- Tests test cases management
-- No dependencies on other tests
-

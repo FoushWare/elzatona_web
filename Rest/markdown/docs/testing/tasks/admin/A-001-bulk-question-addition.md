@@ -1,4 +1,11 @@
-# Task: Admin Bulk Question Addition by Category
+# Task ID: A-001
+# Title: Admin Bulk Question Addition by Category
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the admin functionality to add questions in bulk, organized by category (HTML, CSS, JavaScript, React, etc.). This includes clearing existing questions and starting fresh.
+
+# Details:
 
 ## Time Estimation
 
@@ -100,6 +107,8 @@ Test the admin functionality to add questions in bulk, organized by category (HT
     - After adding questions, verify counts per category
     - Verify total question count
     - Verify questions appear in frontend
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -309,25 +318,3 @@ Test the admin functionality to add questions in bulk, organized by category (HT
     8. Verify success
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- admin/questions/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- admin/questions/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- bulk-questions-*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires admin authentication
-- Tests database operations
-- Tests file upload functionality
-- Category tests are independent and can run in parallel
-

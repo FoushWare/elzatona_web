@@ -1,4 +1,11 @@
-# Task: Admin Login
+# Task ID: A-002
+# Title: Admin Login
+# Status: pending
+# Dependencies: 
+# Priority: medium
+# Description: Test the admin login flow including authentication, form validation, error handling, and redirect functionality.
+
+# Details:
 
 ## Time Estimation
 
@@ -82,6 +89,8 @@ Test the admin login flow including authentication, form validation, error handl
    - Verify redirect to login page
    - Login again
    - Verify successful authentication
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -208,24 +217,3 @@ Test the admin login flow including authentication, form validation, error handl
     5. Verify can access admin pages
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- admin/login/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- admin/login/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- admin-login*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires admin credentials for E2E tests
-- Tests authentication integration
-- No dependencies on other tests
-

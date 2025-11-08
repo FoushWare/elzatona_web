@@ -1,4 +1,11 @@
-# Task: Homepage Rendering
+# Task ID: G-001
+# Title: Homepage Rendering
+# Status: pending
+# Dependencies: 
+# Priority: low
+# Description: Test that the homepage renders correctly and navigation elements work properly.
+
+# Details:
 
 ## Time Estimation
 
@@ -26,11 +33,6 @@
 - **Automated Only**: 5-8 minutes (first run), 30-60 seconds (subsequent)
 - **Both Manual + Automated**: 15-23 minutes (first run), 10-16 minutes (subsequent)
 
----
-
-## Overview
-Test that the homepage renders correctly and navigation elements work properly.
-
 ## Manual Testing Steps
 
 1. **Navigate to homepage**
@@ -51,9 +53,28 @@ Test that the homepage renders correctly and navigation elements work properly.
    - Click each navigation link
    - Verify correct pages load
 
-## Automated Tests
+## Test Execution Commands
 
-### Unit Tests
+```bash
+# Run unit tests
+npm run test:unit -- page.test.tsx
+
+# Run integration tests
+npm run test:integration -- page.integration.test.tsx
+
+# Run E2E tests
+npm run test:e2e -- homepage-to-guided.spec.ts
+```
+
+## Notes
+
+- All tests can run in parallel
+- No dependencies on other tests
+- Tests are isolated and independent
+
+# Test Strategy:
+
+## Unit Tests
 
 - **G-UT-001**: Test homepage renders correctly
   - **File**: `apps/website/src/app/page.test.tsx`
@@ -82,7 +103,7 @@ Test that the homepage renders correctly and navigation elements work properly.
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
 
-### Integration Tests
+## Integration Tests
 
 - **G-IT-001**: Test "Get Started" button navigates to `/get-started`
   - **File**: `apps/website/src/app/page.integration.test.tsx`
@@ -100,7 +121,7 @@ Test that the homepage renders correctly and navigation elements work properly.
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
 
-### E2E Tests
+## E2E Tests
 
 - **G-E2E-001**: Complete flow from homepage to guided learning
   - **File**: `tests/e2e/guided-flow/homepage-to-guided.spec.ts`
@@ -113,23 +134,3 @@ Test that the homepage renders correctly and navigation elements work properly.
     6. Verify redirect to guided learning page
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- page.test.tsx
-
-# Run integration tests
-npm run test:integration -- page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- homepage-to-guided.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- No dependencies on other tests
-- Tests are isolated and independent
-

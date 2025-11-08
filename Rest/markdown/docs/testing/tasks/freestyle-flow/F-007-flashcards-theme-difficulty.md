@@ -1,4 +1,11 @@
-# Task: Flashcards Theme and Difficulty Filtering
+# Task ID: F-007
+# Title: Flashcards Theme and Difficulty Filtering
+# Status: pending
+# Dependencies: 
+# Priority: medium
+# Description: Test the flashcards filtering functionality by theme (section) and difficulty level, including filter combinations, reset, and persistence.
+
+# Details:
 
 ## Time Estimation
 
@@ -104,6 +111,8 @@ Test the flashcards filtering functionality by theme (section) and difficulty le
    - Add new flashcard (should appear if matches filter)
    - Remove flashcard (should disappear from filtered list)
    - Verify filter updates correctly
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -259,24 +268,3 @@ Test the flashcards filtering functionality by theme (section) and difficulty le
     7. Verify flashcards appear
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- flashcards/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- flashcards/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- flashcards-*-filter.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires flashcards with different sections and difficulties
-- Tests filter logic and UI interactions
-- No dependencies on other tests
-

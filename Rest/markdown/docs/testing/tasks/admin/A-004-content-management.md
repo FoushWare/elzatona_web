@@ -1,4 +1,11 @@
-# Task: Admin Content Management (Unified)
+# Task ID: A-004
+# Title: Admin Content Management (Unified)
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the unified content management page including CRUD operations for cards, plans, categories, topics, and questions, plus bulk operations.
+
+# Details:
 
 ## Time Estimation
 
@@ -98,6 +105,8 @@ Test the unified content management page including CRUD operations for cards, pl
     - Verify error messages display
     - Verify retry options available
     - Test network failure scenarios
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -262,24 +271,3 @@ Test the unified content management page including CRUD operations for cards, pl
     6. Verify items removed
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- admin/content-management/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- admin/content-management/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- content-management-*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires admin authentication
-- Tests complex CRUD operations
-- Tests API integration extensively
-

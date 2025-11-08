@@ -1,4 +1,11 @@
-# Task: Navigation Component
+# Task ID: S-001
+# Title: Navigation Component
+# Status: pending
+# Dependencies: 
+# Priority: medium
+# Description: Test the Navigation component used across the application, including navigation links, dark mode toggle, responsive design, and authentication state handling.
+
+# Details:
 
 ## Time Estimation
 
@@ -80,6 +87,8 @@ Test the Navigation component used across the application, including navigation 
    - Test navigation on admin pages
    - Verify consistent behavior
    - Verify active state correct
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -164,24 +173,3 @@ Test the Navigation component used across the application, including navigation 
     7. Test mobile menu (if applicable)
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- Navigation.test.tsx
-
-# Run integration tests
-npm run test:integration -- Navigation.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- navigation.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Tests router integration
-- Tests theme management
-- No dependencies on other tests
-

@@ -1,4 +1,11 @@
-# Task: Problem Solving Practice
+# Task ID: F-006
+# Title: Problem Solving Practice
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the Problem Solving practice page which displays algorithm and logic problems for practice, including search, filtering, problem selection, and code editor functionality.
+
+# Details:
 
 ## Time Estimation
 
@@ -142,6 +149,8 @@ Test the Problem Solving practice page which displays algorithm and logic proble
     - Verify retry option (if available)
     - Verify graceful degradation
 
+# Test Strategy:
+
 ## Automated Tests
 
 ### Unit Tests
@@ -259,24 +268,3 @@ Test the Problem Solving practice page which displays algorithm and logic proble
     7. Verify view changes
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- problem-solving/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- problem-solving/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- problem-solving*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Tests API integration
-- Tests code editor functionality
-- No dependencies on other tests
-

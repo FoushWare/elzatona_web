@@ -1,4 +1,11 @@
-# Task: Get Started Page
+# Task ID: G-002
+# Title: Get Started Page
+# Status: pending
+# Dependencies: 
+# Priority: medium
+# Description: Test the get-started page flow selection and authentication integration.
+
+# Details:
 
 ## Time Estimation
 
@@ -27,11 +34,6 @@
 - **Manual Only**: 20-30 minutes
 - **Automated Only**: 8-12 minutes (first run), 1-2 minutes (subsequent)
 - **Both Manual + Automated**: 28-42 minutes (first run), 21-32 minutes (subsequent)
-
----
-
-## Overview
-Test the get-started page flow selection and authentication integration.
 
 ## Manual Testing Steps
 
@@ -65,9 +67,28 @@ Test the get-started page flow selection and authentication integration.
    - Test invalid email format
    - Test weak password
 
-## Automated Tests
+## Test Execution Commands
 
-### Unit Tests
+```bash
+# Run unit tests
+npm run test:unit -- get-started/page.test.tsx
+
+# Run integration tests
+npm run test:integration -- get-started/page.integration.test.tsx
+
+# Run E2E tests
+npm run test:e2e -- get-started-*.spec.ts
+```
+
+## Notes
+
+- All tests can run in parallel
+- Authentication tests require mock auth setup
+- No dependencies on other tests
+
+# Test Strategy:
+
+## Unit Tests
 
 - **G-UT-004**: Test "I need guidance" option renders
   - **File**: `apps/website/src/app/get-started/page.test.tsx`
@@ -102,7 +123,7 @@ Test the get-started page flow selection and authentication integration.
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
 
-### Integration Tests
+## Integration Tests
 
 - **G-IT-003**: Test successful sign-in redirects correctly
   - **File**: `apps/website/src/app/get-started/page.integration.test.tsx`
@@ -129,7 +150,7 @@ Test the get-started page flow selection and authentication integration.
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
 
-### E2E Tests
+## E2E Tests
 
 - **G-E2E-002**: Complete guided flow entry (unauthenticated user)
   - **File**: `tests/e2e/guided-flow/get-started-unauthenticated.spec.ts`
@@ -151,23 +172,3 @@ Test the get-started page flow selection and authentication integration.
     4. Verify immediate redirect to `/features/guided-learning` (no popup)
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- get-started/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- get-started/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- get-started-*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Authentication tests require mock auth setup
-- No dependencies on other tests
-
