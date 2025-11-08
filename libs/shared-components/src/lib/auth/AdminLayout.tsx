@@ -1,12 +1,6 @@
 'use client';
 
 import React, { useEffect, ReactNode } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-
 import { useAdminAuth } from '@elzatona/shared-contexts';
 import AdminNavbar from './AdminNavbar';
 import { useRouter } from 'next/navigation';
