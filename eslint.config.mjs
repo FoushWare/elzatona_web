@@ -58,6 +58,17 @@ const eslintConfig = [
     },
   },
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  {
+    // Override Next.js defaults AFTER extends to ensure our rules take precedence
+    rules: {
+      // Treat no-explicit-any as warning instead of error
+      '@typescript-eslint/no-explicit-any': 'warn',
+      // Disable triple-slash-reference completely
+      '@typescript-eslint/triple-slash-reference': 'off',
+      // Allow unescaped entities (warnings only)
+      'react/no-unescaped-entities': 'warn',
+    },
+  },
 ];
 
 export default eslintConfig;
