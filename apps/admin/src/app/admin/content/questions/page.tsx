@@ -260,7 +260,9 @@ export default function AdminContentQuestionsPage() {
 
   const cards = cardsData?.data || [];
   const allTopics = topicsData?.data || [];
-  const allCategories = categoriesData?.data || [];
+  const allCategories = (categoriesData?.data || []).map(
+    (cat: { id: string; name: string }) => cat.name
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const allTypes = useMemo(() => {
