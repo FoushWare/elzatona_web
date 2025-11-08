@@ -31,7 +31,6 @@
     "jest.setup.js",
     "apps/admin/Utils/scripts/**/*",
     "**/*.spec.ts",
-    "**/*.test.ts",
     "**/*.stories.ts",
     "**/*.stories.js"
   ]
