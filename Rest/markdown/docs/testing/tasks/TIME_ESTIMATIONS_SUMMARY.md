@@ -13,6 +13,13 @@ This document provides a quick reference for time estimations across all test ta
 | **F-007: Flashcards Theme/Difficulty Filter** | 30-40 min | 10-15 min | 2-3 min | Medium |
 | **F-008: Flashcards Practice Modes** | 40-50 min | 15-20 min | 3-4 min | Medium-High |
 | **F-009: Flashcards CRUD Operations** | 25-35 min | 12-18 min | 2-3 min | Medium |
+| **F-003: Browse Practice Questions** | 30-40 min | 12-18 min | 2-3 min | Medium |
+| **F-004: Learning Paths Practice** | 40-50 min | 15-22 min | 3-4 min | Medium-High |
+| **F-005: Frontend Tasks Practice** | 45-60 min | 18-25 min | 3-5 min | High |
+| **F-006: Problem Solving Practice** | 45-60 min | 18-25 min | 3-5 min | High |
+| **S-001: Navigation Component** | 20-30 min | 10-15 min | 1-2 min | Low-Medium |
+| **S-002: Question Card Component** | 25-35 min | 12-18 min | 2-3 min | Medium |
+| **S-003: Progress Tracker Component** | 25-35 min | 12-18 min | 2-3 min | Medium |
 | **A-001: Bulk Question Addition** | 60-90 min | 20-35 min | 3-6 min | Very High |
 | **A-002: Admin Login** | 15-20 min | 6-10 min | 1-2 min | Low-Medium |
 | **A-003: Admin Dashboard** | 25-35 min | 10-15 min | 2-3 min | Medium |
@@ -26,24 +33,24 @@ This document provides a quick reference for time estimations across all test ta
 ### All Tasks Combined
 
 **Manual Testing Only:**
-- Total: 475-655 minutes (7.9-10.9 hours)
+- Total: 700-960 minutes (11.7-16 hours)
 
 **Automated Testing Only (First Run):**
-- Total: 168-253 minutes (2.8-4.2 hours)
+- Total: 277-404 minutes (4.6-6.7 hours)
 
 **Automated Testing Only (Subsequent Runs):**
-- Total: 27.5-45.5 minutes
+- Total: 44.5-70.5 minutes
 
 **Both Manual + Automated (First Run):**
-- Total: 643-908 minutes (10.7-15.1 hours)
+- Total: 977-1364 minutes (16.3-22.7 hours)
 
 **Both Manual + Automated (Subsequent):**
-- Total: 502.5-700.5 minutes (8.4-11.7 hours)
+- Total: 744.5-1030.5 minutes (12.4-17.2 hours)
 
 ## Time Savings with Automation
 
-- **First Run**: Saves ~307-402 minutes (5.1-6.7 hours)
-- **Subsequent Runs**: Saves ~447.5-609.5 minutes (7.5-10.2 hours)
+- **First Run**: Saves ~423-556 minutes (7.1-9.3 hours)
+- **Subsequent Runs**: Saves ~655.5-889.5 minutes (10.9-14.8 hours)
 
 ## Detailed Breakdown by Task
 
@@ -126,6 +133,48 @@ This document provides a quick reference for time estimations across all test ta
 - **Savings**: 25-30 min (first), 37-46 min (subsequent)
 
 ### F-009: Flashcards CRUD Operations
+- **Manual**: 25-35 min
+- **Automated (first)**: 12-18 min
+- **Automated (subsequent)**: 2-3 min
+- **Savings**: 13-17 min (first), 23-32 min (subsequent)
+
+### F-003: Browse Practice Questions
+- **Manual**: 30-40 min
+- **Automated (first)**: 12-18 min
+- **Automated (subsequent)**: 2-3 min
+- **Savings**: 18-22 min (first), 28-37 min (subsequent)
+
+### F-004: Learning Paths Practice
+- **Manual**: 40-50 min
+- **Automated (first)**: 15-22 min
+- **Automated (subsequent)**: 3-4 min
+- **Savings**: 25-28 min (first), 37-46 min (subsequent)
+
+### F-005: Frontend Tasks Practice
+- **Manual**: 45-60 min
+- **Automated (first)**: 18-25 min
+- **Automated (subsequent)**: 3-5 min
+- **Savings**: 27-35 min (first), 42-55 min (subsequent)
+
+### F-006: Problem Solving Practice
+- **Manual**: 45-60 min
+- **Automated (first)**: 18-25 min
+- **Automated (subsequent)**: 3-5 min
+- **Savings**: 27-35 min (first), 42-55 min (subsequent)
+
+### S-001: Navigation Component
+- **Manual**: 20-30 min
+- **Automated (first)**: 10-15 min
+- **Automated (subsequent)**: 1-2 min
+- **Savings**: 10-15 min (first), 19-28 min (subsequent)
+
+### S-002: Question Card Component
+- **Manual**: 25-35 min
+- **Automated (first)**: 12-18 min
+- **Automated (subsequent)**: 2-3 min
+- **Savings**: 13-17 min (first), 23-32 min (subsequent)
+
+### S-003: Progress Tracker Component
 - **Manual**: 25-35 min
 - **Automated (first)**: 12-18 min
 - **Automated (subsequent)**: 2-3 min
