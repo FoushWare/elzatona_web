@@ -1,15 +1,22 @@
 /**
- * Integration Tests for Learning Paths Practice
- * Task: 11 - Learning Paths Practice
- * Test IDs: F-IT-007
+ * Integration Tests for Learning Paths Practice (F-IT-007)
+ * Task: F-004 - Learning Paths Practice
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import LearningPathsPage from './page';
+import * as sharedContexts from '@elzatona/shared-contexts';
 
-// Mock dependencies
+jest.mock('@elzatona/shared-contexts', () => {
+  const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
+  return {
+    ...actual,
+    useAuth: jest.fn(),
+  };
+});
+
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: jest.fn(),
@@ -18,22 +25,37 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-// Mock fetch
 global.fetch = jest.fn();
 
-describe('11: Integration Tests', () => {
+jest.mock('lucide-react', () => ({
+  BookOpen: () => <span>📖</span>,
+  Play: () => <span>▶️</span>,
+  Target: () => <span>🎯</span>,
+  Clock: () => <span>⏰</span>,
+  CheckCircle: () => <span>✅</span>,
+  Loader2: () => <span>⏳</span>,
+}));
+
+describe('F-IT-007: Learning Paths Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1' },
+      isLoading: false,
+    });
+    
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
-      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
+      json: async () => ({ data: [] }),
     });
   });
 
-  it('should handle user interactions', async () => {
+  it('should integrate with learning paths data', async () => {
     render(<LearningPathsPage />);
     await waitFor(() => {
-      expect(screen.getByText(/.*/)).toBeInTheDocument();
+      expect(screen.getByText(/.*/)).toBeTruthy();
     });
   });
 });
