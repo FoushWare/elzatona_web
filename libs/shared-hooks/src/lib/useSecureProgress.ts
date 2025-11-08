@@ -121,7 +121,7 @@ export function useSecureProgress(): UseSecureProgressReturn {
               if (!firebaseUser) {
                 throw new Error('No Firebase user available for token refresh');
               }
-              const { cookieManager } = await import('@/lib/cookie-manager');
+              const { cookieManager } = await import('./types/cookie-manager');
               const success = await cookieManager.retryAuthCookie(firebaseUser);
               if (success) {
                 console.log(

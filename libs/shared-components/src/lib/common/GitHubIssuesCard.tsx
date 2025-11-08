@@ -24,7 +24,7 @@ import {
   GitHubIssuesService,
   GitHubIssuesStats,
   GitHubIssue,
-} from '@/lib/github-issues-service';
+} from '../types/github-issues';
 import {
   Github,
   ExternalLink,
@@ -239,7 +239,7 @@ export default function GitHubIssuesCard({ className }: GitHubIssuesCardProps) {
               Open Issues
             </h4>
             <div className='space-y-2 max-h-60 overflow-y-auto'>
-              {issuesStats.openIssues.map(issue => (
+              {issuesStats.openIssues.map((issue: GitHubIssue) => (
                 <div
                   key={issue.id}
                   className='border border-red-200 dark:border-red-800 rounded-lg p-2 sm:p-3'
@@ -279,7 +279,7 @@ export default function GitHubIssuesCard({ className }: GitHubIssuesCardProps) {
               Recently Closed Issues
             </h4>
             <div className='space-y-2 max-h-60 overflow-y-auto'>
-              {issuesStats.closedIssues.map(issue => (
+              {issuesStats.closedIssues.map((issue: GitHubIssue) => (
                 <div
                   key={issue.id}
                   className='border border-green-200 dark:border-green-800 rounded-lg p-2 sm:p-3'

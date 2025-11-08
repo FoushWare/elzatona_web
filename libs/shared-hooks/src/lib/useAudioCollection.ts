@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { AudioCollectionService } from '@/lib/audio-collection-service';
-import { QuestionAudioMapping } from '@/lib/audio-collection-schema';
+import { AudioCollectionService } from './types/audio-collection-service';
+import { QuestionAudioMapping } from './types/audio-collection-schema';
 
 interface AudioInfo {
   localPath: string;

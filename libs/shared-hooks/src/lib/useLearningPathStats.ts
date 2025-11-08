@@ -66,9 +66,9 @@ export function useLearningPathStats(): UseLearningPathStatsReturn {
 
     try {
       // Get all learning paths from the resources
-      const { learningPaths } = await import('@/lib/resources');
+      const { learningPaths } = await import('./types/resources');
 
-      const statsPromises = learningPaths.map(async path => {
+      const statsPromises = learningPaths.map(async (path: { id: string }) => {
         const questionCount = await fetchQuestionCount(path.id);
         return {
           id: path.id,

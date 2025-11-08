@@ -9,7 +9,7 @@ import {
   Flashcard,
   FlashcardProgress,
   FlashcardSession,
-} from '@/lib/supabase-flashcards';
+} from './types/supabase-flashcards';
 
 interface SessionStats {
   cardsReviewed: number;
@@ -135,12 +135,14 @@ export function useFlashcardSession(): UseFlashcardSessionReturn {
           const dueProgress = await progressService.getCardsDueForReview(
             user.uid
           );
-          const dueCardIds = dueProgress.map(p => p.flashcardId);
+          const dueCardIds = dueProgress.map(
+            (p: FlashcardProgress) => p.flashcardId
+          );
           const fetchedCards = await Promise.all(
-            dueCardIds.map(id => flashcardService.getFlashcard(id))
+            dueCardIds.map((id: string) => flashcardService.getFlashcard(id))
           );
           cards = fetchedCards.filter(
-            (card): card is Flashcard => card !== null
+            (card: Flashcard | null): card is Flashcard => card !== null
           );
         } else if (type === 'new') {
           // Get new cards
@@ -150,13 +152,15 @@ export function useFlashcardSession(): UseFlashcardSessionReturn {
           const dueProgress = await progressService.getCardsDueForReview(
             user.uid
           );
-          const dueCardIds = dueProgress.map(p => p.flashcardId);
+          const dueCardIds = dueProgress.map(
+            (p: FlashcardProgress) => p.flashcardId
+          );
           const dueCards = await Promise.all(
-            dueCardIds.map(id => flashcardService.getFlashcard(id))
+            dueCardIds.map((id: string) => flashcardService.getFlashcard(id))
           );
           const validDueCards = dueCards.filter(
-            card => card !== null
-          ) as Flashcard[];
+            (card: Flashcard | null): card is Flashcard => card !== null
+          );
 
           const newCards = await progressService.getNewCards(
             user.uid,

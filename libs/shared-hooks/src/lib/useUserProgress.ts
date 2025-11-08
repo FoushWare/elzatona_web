@@ -16,7 +16,7 @@ import {
   getDashboardStats,
   getContinueWhereLeftOff,
   updateUserPreferences,
-} from '@/lib/supabase-progress';
+} from './types/supabase-progress';
 
 export interface ContinueData {
   recentPath?: {

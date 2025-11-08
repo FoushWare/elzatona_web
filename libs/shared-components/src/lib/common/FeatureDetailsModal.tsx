@@ -10,7 +10,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 // Using a custom modal implementation since dialog component doesn't exist
 import { Badge } from '@elzatona/shared-components';
 import { Button } from '@elzatona/shared-components';
-import { WebsiteFeature } from '@/lib/website-features';
+import { WebsiteFeature } from '../types/website-features';
 import {
   X,
   ExternalLink,
@@ -226,7 +226,7 @@ export default function FeatureDetailsModal({
                 Deployment
               </h5>
               <div className='flex flex-wrap gap-1'>
-                {deployment.map((dep, index) => (
+                {deployment.map((dep: string, index: number) => (
                   <Badge key={index} variant='outline' className='text-xs'>
                     {dep}
                   </Badge>
@@ -428,7 +428,7 @@ export default function FeatureDetailsModal({
                   Dependencies
                 </h4>
                 <div className='flex flex-wrap gap-2'>
-                  {feature.dependencies.map((dep, index) => (
+                  {feature.dependencies.map((dep: string, index: number) => (
                     <Badge key={index} variant='outline'>
                       {dep}
                     </Badge>
@@ -445,7 +445,7 @@ export default function FeatureDetailsModal({
                   Next Steps
                 </h4>
                 <ol className='space-y-2'>
-                  {feature.nextSteps.map((step, index) => (
+                  {feature.nextSteps.map((step: string, index: number) => (
                     <li key={index} className='flex items-start gap-2'>
                       <span className='bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full flex-shrink-0 mt-0.5'>
                         {index + 1}
