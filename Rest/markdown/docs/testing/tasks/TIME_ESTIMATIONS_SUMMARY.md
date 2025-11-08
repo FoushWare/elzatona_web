@@ -11,30 +11,36 @@ This document provides a quick reference for time estimations across all test ta
 | **F-001: Custom Roadmap Creation** | 45-60 min | 15-25 min | 2-4 min | High |
 | **F-002: My Plans Page** | 25-35 min | 10-15 min | 1.5-3 min | Medium-High |
 | **A-001: Bulk Question Addition** | 60-90 min | 20-35 min | 3-6 min | Very High |
+| **A-002: Admin Login** | 15-20 min | 6-10 min | 1-2 min | Low-Medium |
+| **A-003: Admin Dashboard** | 25-35 min | 10-15 min | 2-3 min | Medium |
+| **A-004: Content Management** | 60-90 min | 25-40 min | 4-7 min | Very High |
+| **A-005: Frontend Tasks Management** | 40-55 min | 15-25 min | 3-5 min | High |
+| **A-006: Problem Solving Management** | 40-55 min | 15-25 min | 3-5 min | High |
+| **A-007: User Management** | 30-45 min | 12-20 min | 2-4 min | Medium-High |
 
 ## Total Time Estimates
 
 ### All Tasks Combined
 
 **Manual Testing Only:**
-- Total: 160-230 minutes (2.7-3.8 hours)
+- Total: 380-530 minutes (6.3-8.8 hours)
 
 **Automated Testing Only (First Run):**
-- Total: 58-95 minutes (1-1.6 hours)
+- Total: 131-200 minutes (2.2-3.3 hours)
 
 **Automated Testing Only (Subsequent Runs):**
-- Total: 8.5-16.5 minutes
+- Total: 20.5-35.5 minutes
 
 **Both Manual + Automated (First Run):**
-- Total: 218-325 minutes (3.6-5.4 hours)
+- Total: 511-730 minutes (8.5-12.2 hours)
 
 **Both Manual + Automated (Subsequent):**
-- Total: 168.5-246.5 minutes (2.8-4.1 hours)
+- Total: 400.5-565.5 minutes (6.7-9.4 hours)
 
 ## Time Savings with Automation
 
-- **First Run**: Saves ~102-135 minutes (1.7-2.3 hours)
-- **Subsequent Runs**: Saves ~151.5-213.5 minutes (2.5-3.6 hours)
+- **First Run**: Saves ~249-330 minutes (4.2-5.5 hours)
+- **Subsequent Runs**: Saves ~359.5-494.5 minutes (6-8.2 hours)
 
 ## Detailed Breakdown by Task
 
@@ -67,6 +73,42 @@ This document provides a quick reference for time estimations across all test ta
 - **Automated (first)**: 20-35 min
 - **Automated (subsequent)**: 3-6 min
 - **Savings**: 40-55 min (first), 57-84 min (subsequent)
+
+### A-002: Admin Login
+- **Manual**: 15-20 min
+- **Automated (first)**: 6-10 min
+- **Automated (subsequent)**: 1-2 min
+- **Savings**: 9-10 min (first), 14-18 min (subsequent)
+
+### A-003: Admin Dashboard
+- **Manual**: 25-35 min
+- **Automated (first)**: 10-15 min
+- **Automated (subsequent)**: 2-3 min
+- **Savings**: 15-20 min (first), 23-32 min (subsequent)
+
+### A-004: Content Management
+- **Manual**: 60-90 min
+- **Automated (first)**: 25-40 min
+- **Automated (subsequent)**: 4-7 min
+- **Savings**: 35-50 min (first), 56-83 min (subsequent)
+
+### A-005: Frontend Tasks Management
+- **Manual**: 40-55 min
+- **Automated (first)**: 15-25 min
+- **Automated (subsequent)**: 3-5 min
+- **Savings**: 25-30 min (first), 37-50 min (subsequent)
+
+### A-006: Problem Solving Management
+- **Manual**: 40-55 min
+- **Automated (first)**: 15-25 min
+- **Automated (subsequent)**: 3-5 min
+- **Savings**: 25-30 min (first), 37-50 min (subsequent)
+
+### A-007: User Management
+- **Manual**: 30-45 min
+- **Automated (first)**: 12-20 min
+- **Automated (subsequent)**: 2-4 min
+- **Savings**: 18-25 min (first), 28-41 min (subsequent)
 
 ## Recommendations
 
