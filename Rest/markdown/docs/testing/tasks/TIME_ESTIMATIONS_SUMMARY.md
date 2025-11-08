@@ -10,6 +10,9 @@ This document provides a quick reference for time estimations across all test ta
 | **G-002: Get Started Page** | 20-30 min | 8-12 min | 1-2 min | Medium |
 | **F-001: Custom Roadmap Creation** | 45-60 min | 15-25 min | 2-4 min | High |
 | **F-002: My Plans Page** | 25-35 min | 10-15 min | 1.5-3 min | Medium-High |
+| **F-007: Flashcards Theme/Difficulty Filter** | 30-40 min | 10-15 min | 2-3 min | Medium |
+| **F-008: Flashcards Practice Modes** | 40-50 min | 15-20 min | 3-4 min | Medium-High |
+| **F-009: Flashcards CRUD Operations** | 25-35 min | 12-18 min | 2-3 min | Medium |
 | **A-001: Bulk Question Addition** | 60-90 min | 20-35 min | 3-6 min | Very High |
 | **A-002: Admin Login** | 15-20 min | 6-10 min | 1-2 min | Low-Medium |
 | **A-003: Admin Dashboard** | 25-35 min | 10-15 min | 2-3 min | Medium |
@@ -23,24 +26,24 @@ This document provides a quick reference for time estimations across all test ta
 ### All Tasks Combined
 
 **Manual Testing Only:**
-- Total: 380-530 minutes (6.3-8.8 hours)
+- Total: 475-655 minutes (7.9-10.9 hours)
 
 **Automated Testing Only (First Run):**
-- Total: 131-200 minutes (2.2-3.3 hours)
+- Total: 168-253 minutes (2.8-4.2 hours)
 
 **Automated Testing Only (Subsequent Runs):**
-- Total: 20.5-35.5 minutes
+- Total: 27.5-45.5 minutes
 
 **Both Manual + Automated (First Run):**
-- Total: 511-730 minutes (8.5-12.2 hours)
+- Total: 643-908 minutes (10.7-15.1 hours)
 
 **Both Manual + Automated (Subsequent):**
-- Total: 400.5-565.5 minutes (6.7-9.4 hours)
+- Total: 502.5-700.5 minutes (8.4-11.7 hours)
 
 ## Time Savings with Automation
 
-- **First Run**: Saves ~249-330 minutes (4.2-5.5 hours)
-- **Subsequent Runs**: Saves ~359.5-494.5 minutes (6-8.2 hours)
+- **First Run**: Saves ~307-402 minutes (5.1-6.7 hours)
+- **Subsequent Runs**: Saves ~447.5-609.5 minutes (7.5-10.2 hours)
 
 ## Detailed Breakdown by Task
 
@@ -109,6 +112,24 @@ This document provides a quick reference for time estimations across all test ta
 - **Automated (first)**: 12-20 min
 - **Automated (subsequent)**: 2-4 min
 - **Savings**: 18-25 min (first), 28-41 min (subsequent)
+
+### F-007: Flashcards Theme/Difficulty Filter
+- **Manual**: 30-40 min
+- **Automated (first)**: 10-15 min
+- **Automated (subsequent)**: 2-3 min
+- **Savings**: 20-25 min (first), 28-37 min (subsequent)
+
+### F-008: Flashcards Practice Modes
+- **Manual**: 40-50 min
+- **Automated (first)**: 15-20 min
+- **Automated (subsequent)**: 3-4 min
+- **Savings**: 25-30 min (first), 37-46 min (subsequent)
+
+### F-009: Flashcards CRUD Operations
+- **Manual**: 25-35 min
+- **Automated (first)**: 12-18 min
+- **Automated (subsequent)**: 2-3 min
+- **Savings**: 13-17 min (first), 23-32 min (subsequent)
 
 ## Recommendations
 
