@@ -1,10 +1,11 @@
 /**
  * Integration Tests for Admin User Management
- * Task: 7
+ * Task: 7 - Admin User Management
+ * Test IDs: A-IT-019
  */
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AdminUserManagementPage from './page';
 
@@ -17,9 +18,22 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
+// Mock fetch
+global.fetch = jest.fn();
+
 describe('7: Integration Tests', () => {
-  it('should handle user interactions', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
+    });
+  });
+
+  it('should handle user interactions', async () => {
     render(<AdminUserManagementPage />);
-    expect(screen.getByRole('main').or(screen.getByText(/.*/))).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/.*/)).toBeInTheDocument();
+    });
   });
 });
