@@ -72,7 +72,13 @@ jest.mock('@tanstack/react-query', () => {
 });
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import { AdminAuthProvider, ThemeProvider } from '@elzatona/shared-contexts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -98,15 +104,37 @@ interface MockRouter {
 }
 
 describe('Admin Login Integration', () => {
+  const mockReplace = jest.fn();
   const mockPush = jest.fn();
   const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
   const queryClient = new QueryClient();
 
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // Mock localStorage
+    const localStorageMock = (() => {
+      let store: Record<string, string> = {};
+      return {
+        getItem: (key: string) => store[key] || null,
+        setItem: (key: string, value: string) => {
+          store[key] = value.toString();
+        },
+        removeItem: (key: string) => {
+          delete store[key];
+        },
+        clear: () => {
+          store = {};
+        },
+      };
+    })();
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+    });
+
     mockUseRouter.mockReturnValue({
       push: mockPush,
-      replace: jest.fn(),
+      replace: mockReplace,
       prefetch: jest.fn(),
       back: jest.fn(),
       forward: jest.fn(),
@@ -154,27 +182,33 @@ describe('Admin Login Integration', () => {
       const loginButton = screen.getByRole('button', { name: 'Sign In' });
 
       // Fill in credentials
-      fireEvent.change(emailInput, {
-        target: { value: 'afouadsoftwareengineer@gmail.com' },
-      });
-      fireEvent.change(passwordInput, {
-        target: { value: 'ZatonaFoushware$8888' },
+      await act(async () => {
+        fireEvent.change(emailInput, {
+          target: { value: 'afouadsoftwareengineer@gmail.com' },
+        });
+        fireEvent.change(passwordInput, {
+          target: { value: 'ZatonaFoushware$8888' },
+        });
       });
 
       // Submit form
-      fireEvent.click(loginButton);
+      await act(async () => {
+        fireEvent.click(loginButton);
+      });
 
       // Wait for loading state
       await waitFor(() => {
         expect(screen.getByText('Signing In...')).toBeInTheDocument();
       });
 
-      // Wait for successful login
+      // Wait for successful login and redirect
+      // Note: AdminAuthContext uses router.replace, not router.push
+      // The redirect happens in a useEffect after isAuthenticated becomes true
       await waitFor(
         () => {
-          expect(mockPush).toHaveBeenCalledWith('/admin/dashboard');
+          expect(mockReplace).toHaveBeenCalledWith('/admin/dashboard');
         },
-        { timeout: 3000 }
+        { timeout: 5000 }
       );
     });
 
@@ -290,7 +324,8 @@ describe('Admin Login Integration', () => {
       );
 
       // Should redirect to dashboard
-      expect(mockPush).toHaveBeenCalledWith('/admin/dashboard');
+      // Note: AdminAuthContext uses router.replace, not router.push
+      expect(mockReplace).toHaveBeenCalledWith('/admin/dashboard');
     });
 
     it('should handle session expiration gracefully', async () => {
@@ -375,7 +410,7 @@ describe('Admin Login Integration', () => {
       fireEvent.click(loginButton);
 
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/admin/dashboard');
+        expect(mockReplace).toHaveBeenCalledWith('/admin/dashboard');
       });
     });
 
@@ -489,7 +524,7 @@ describe('Admin Login Integration', () => {
 
       // Wait for successful login and redirect
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/admin/dashboard');
+        expect(mockReplace).toHaveBeenCalledWith('/admin/dashboard');
       });
 
       // Form should be cleared after successful login
@@ -558,7 +593,7 @@ describe('Admin Login Integration', () => {
       fireEvent.click(loginButton);
 
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/admin/dashboard');
+        expect(mockReplace).toHaveBeenCalledWith('/admin/dashboard');
       });
     });
   });
