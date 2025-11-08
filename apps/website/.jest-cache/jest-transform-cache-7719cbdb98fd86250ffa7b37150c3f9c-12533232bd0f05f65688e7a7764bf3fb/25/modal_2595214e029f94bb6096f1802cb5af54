@@ -1,0 +1,69 @@
+16ff72e384f44ba19335ebeca2d21d09
+// Generic Modal Component
+// v1.0 - Reusable modal for forms
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+Object.defineProperty(exports, "Modal", {
+    enumerable: true,
+    get: function() {
+        return Modal;
+    }
+});
+const _jsxruntime = require("react/jsx-runtime");
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _lucidereact = require("lucide-react");
+const _sharedcomponents = require("../..");
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Modal = ({ isOpen, onClose, title, children, size = 'md' })=>{
+    if (!isOpen) return null;
+    const sizeClasses = {
+        sm: 'max-w-md',
+        md: 'max-w-lg',
+        lg: 'max-w-2xl',
+        xl: 'max-w-4xl'
+    };
+    return /*#__PURE__*/ (0, _jsxruntime.jsxs)("div", {
+        className: "fixed inset-0 z-50 flex items-center justify-center",
+        children: [
+            /*#__PURE__*/ (0, _jsxruntime.jsx)("div", {
+                className: "absolute inset-0 bg-black/50 backdrop-blur-sm",
+                onClick: onClose
+            }),
+            /*#__PURE__*/ (0, _jsxruntime.jsxs)(_sharedcomponents.Card, {
+                className: `relative w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden`,
+                children: [
+                    /*#__PURE__*/ (0, _jsxruntime.jsxs)(_sharedcomponents.CardHeader, {
+                        className: "flex flex-row items-center justify-between space-y-0 pb-4",
+                        children: [
+                            /*#__PURE__*/ (0, _jsxruntime.jsx)(_sharedcomponents.CardTitle, {
+                                className: "text-lg font-semibold",
+                                children: title
+                            }),
+                            /*#__PURE__*/ (0, _jsxruntime.jsx)(_sharedcomponents.Button, {
+                                variant: "ghost",
+                                size: "sm",
+                                onClick: onClose,
+                                className: "h-8 w-8 p-0",
+                                children: /*#__PURE__*/ (0, _jsxruntime.jsx)(_lucidereact.X, {
+                                    className: "h-4 w-4"
+                                })
+                            })
+                        ]
+                    }),
+                    /*#__PURE__*/ (0, _jsxruntime.jsx)(_sharedcomponents.CardContent, {
+                        className: "overflow-y-auto max-h-[calc(90vh-80px)]",
+                        children: children
+                    })
+                ]
+            })
+        ]
+    });
+};
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9hLmZvdWFkL1NpZGVQcm9qZWN0cy9FbHphdG9uYS1hbGwvRWx6YXRvbmEtd2ViL2xpYnMvc2hhcmVkLWNvbXBvbmVudHMvc3JjL2xpYi91aS9tb2RhbC50c3giXSwic291cmNlc0NvbnRlbnQiOlsiLy8gR2VuZXJpYyBNb2RhbCBDb21wb25lbnRcbi8vIHYxLjAgLSBSZXVzYWJsZSBtb2RhbCBmb3IgZm9ybXNcblxuaW1wb3J0IFJlYWN0LCB7IFJlYWN0Tm9kZSB9IGZyb20gJ3JlYWN0JztcbmltcG9ydCB7IFggfSBmcm9tICdsdWNpZGUtcmVhY3QnO1xuaW1wb3J0IHsgQnV0dG9uIH0gZnJvbSAnQGVsemF0b25hL3NoYXJlZC1jb21wb25lbnRzJztcbmltcG9ydCB7XG4gIENhcmQsXG4gIENhcmRDb250ZW50LFxuICBDYXJkSGVhZGVyLFxuICBDYXJkVGl0bGUsXG59IGZyb20gJ0BlbHphdG9uYS9zaGFyZWQtY29tcG9uZW50cyc7XG5cbmludGVyZmFjZSBNb2RhbFByb3BzIHtcbiAgaXNPcGVuOiBib29sZWFuO1xuICBvbkNsb3NlOiAoKSA9PiB2b2lkO1xuICB0aXRsZTogc3RyaW5nO1xuICBjaGlsZHJlbjogUmVhY3QuUmVhY3ROb2RlO1xuICBzaXplPzogJ3NtJyB8ICdtZCcgfCAnbGcnIHwgJ3hsJztcbn1cblxuZXhwb3J0IGNvbnN0IE1vZGFsOiBSZWFjdC5GQzxNb2RhbFByb3BzPiA9ICh7XG4gIGlzT3BlbixcbiAgb25DbG9zZSxcbiAgdGl0bGUsXG4gIGNoaWxkcmVuLFxuICBzaXplID0gJ21kJyxcbn0pID0+IHtcbiAgaWYgKCFpc09wZW4pIHJldHVybiBudWxsO1xuXG4gIGNvbnN0IHNpemVDbGFzc2VzID0ge1xuICAgIHNtOiAnbWF4LXctbWQnLFxuICAgIG1kOiAnbWF4LXctbGcnLFxuICAgIGxnOiAnbWF4LXctMnhsJyxcbiAgICB4bDogJ21heC13LTR4bCcsXG4gIH07XG5cbiAgcmV0dXJuIChcbiAgICA8ZGl2IGNsYXNzTmFtZT0nZml4ZWQgaW5zZXQtMCB6LTUwIGZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyJz5cbiAgICAgIHsvKiBCYWNrZHJvcCAqL31cbiAgICAgIDxkaXZcbiAgICAgICAgY2xhc3NOYW1lPSdhYnNvbHV0ZSBpbnNldC0wIGJnLWJsYWNrLzUwIGJhY2tkcm9wLWJsdXItc20nXG4gICAgICAgIG9uQ2xpY2s9e29uQ2xvc2V9XG4gICAgICAvPlxuXG4gICAgICB7LyogTW9kYWwgKi99XG4gICAgICA8Q2FyZFxuICAgICAgICBjbGFzc05hbWU9e2ByZWxhdGl2ZSB3LWZ1bGwgJHtzaXplQ2xhc3Nlc1tzaXplXX0gbWF4LWgtWzkwdmhdIG92ZXJmbG93LWhpZGRlbmB9XG4gICAgICA+XG4gICAgICAgIDxDYXJkSGVhZGVyIGNsYXNzTmFtZT0nZmxleCBmbGV4LXJvdyBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIHNwYWNlLXktMCBwYi00Jz5cbiAgICAgICAgICA8Q2FyZFRpdGxlIGNsYXNzTmFtZT0ndGV4dC1sZyBmb250LXNlbWlib2xkJz57dGl0bGV9PC9DYXJkVGl0bGU+XG4gICAgICAgICAgPEJ1dHRvblxuICAgICAgICAgICAgdmFyaWFudD0nZ2hvc3QnXG4gICAgICAgICAgICBzaXplPSdzbSdcbiAgICAgICAgICAgIG9uQ2xpY2s9e29uQ2xvc2V9XG4gICAgICAgICAgICBjbGFzc05hbWU9J2gtOCB3LTggcC0wJ1xuICAgICAgICAgID5cbiAgICAgICAgICAgIDxYIGNsYXNzTmFtZT0naC00IHctNCcgLz5cbiAgICAgICAgICA8L0J1dHRvbj5cbiAgICAgICAgPC9DYXJkSGVhZGVyPlxuXG4gICAgICAgIDxDYXJkQ29udGVudCBjbGFzc05hbWU9J292ZXJmbG93LXktYXV0byBtYXgtaC1bY2FsYyg5MHZoLTgwcHgpXSc+XG4gICAgICAgICAge2NoaWxkcmVufVxuICAgICAgICA8L0NhcmRDb250ZW50PlxuICAgICAgPC9DYXJkPlxuICAgIDwvZGl2PlxuICApO1xufTtcbiJdLCJuYW1lcyI6WyJNb2RhbCIsImlzT3BlbiIsIm9uQ2xvc2UiLCJ0aXRsZSIsImNoaWxkcmVuIiwic2l6ZSIsInNpemVDbGFzc2VzIiwic20iLCJtZCIsImxnIiwieGwiLCJkaXYiLCJjbGFzc05hbWUiLCJvbkNsaWNrIiwiQ2FyZCIsIkNhcmRIZWFkZXIiLCJDYXJkVGl0bGUiLCJCdXR0b24iLCJ2YXJpYW50IiwiWCIsIkNhcmRDb250ZW50Il0sIm1hcHBpbmdzIjoiQUFBQSwwQkFBMEI7QUFDMUIsa0NBQWtDOzs7OzsrQkFvQnJCQTs7O2VBQUFBOzs7OzhEQWxCb0I7NkJBQ2Y7a0NBQ0s7Ozs7OztBQWdCaEIsTUFBTUEsUUFBOEIsQ0FBQyxFQUMxQ0MsTUFBTSxFQUNOQyxPQUFPLEVBQ1BDLEtBQUssRUFDTEMsUUFBUSxFQUNSQyxPQUFPLElBQUksRUFDWjtJQUNDLElBQUksQ0FBQ0osUUFBUSxPQUFPO0lBRXBCLE1BQU1LLGNBQWM7UUFDbEJDLElBQUk7UUFDSkMsSUFBSTtRQUNKQyxJQUFJO1FBQ0pDLElBQUk7SUFDTjtJQUVBLHFCQUNFLHNCQUFDQztRQUFJQyxXQUFVOzswQkFFYixxQkFBQ0Q7Z0JBQ0NDLFdBQVU7Z0JBQ1ZDLFNBQVNYOzswQkFJWCxzQkFBQ1ksc0JBQUk7Z0JBQ0hGLFdBQVcsQ0FBQyxnQkFBZ0IsRUFBRU4sV0FBVyxDQUFDRCxLQUFLLENBQUMsNkJBQTZCLENBQUM7O2tDQUU5RSxzQkFBQ1UsNEJBQVU7d0JBQUNILFdBQVU7OzBDQUNwQixxQkFBQ0ksMkJBQVM7Z0NBQUNKLFdBQVU7MENBQXlCVDs7MENBQzlDLHFCQUFDYyx3QkFBTTtnQ0FDTEMsU0FBUTtnQ0FDUmIsTUFBSztnQ0FDTFEsU0FBU1g7Z0NBQ1RVLFdBQVU7MENBRVYsY0FBQSxxQkFBQ08sY0FBQztvQ0FBQ1AsV0FBVTs7Ozs7a0NBSWpCLHFCQUFDUSw2QkFBVzt3QkFBQ1IsV0FBVTtrQ0FDcEJSOzs7Ozs7QUFLWCJ9
