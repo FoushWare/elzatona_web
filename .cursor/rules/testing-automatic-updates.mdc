@@ -1,0 +1,283 @@
+---
+description: Automatic test updates when working on features or bugs
+globs: **/*.test.{ts,tsx,js,jsx}, **/*.spec.{ts,tsx,js,jsx}, **/*.integration.test.{ts,tsx,js,jsx}, Rest/markdown/docs/testing/**/*.md
+alwaysApply: true
+---
+
+# Testing Rules for Automatic Updates
+
+## Overview
+
+This rule ensures that tests are automatically updated when working on features or bugs, and that new features include comprehensive test plans.
+
+## When Working on Features
+
+### 1. **Before Starting Development**
+
+- **Check existing test tasks**: Review `Rest/markdown/docs/testing/tasks/TASK_INDEX.md` to see if tests exist for the feature
+- **If tests exist**: Review the test task file to understand test requirements
+- **If tests don't exist**: Create a new test task file following the pattern in `Rest/markdown/docs/testing/tasks/`
+
+### 2. **During Development**
+
+- **Update test tasks**: As you implement features, update the corresponding test task file with:
+  - Implementation notes
+  - Edge cases discovered
+  - API changes
+  - Component changes
+- **Write tests alongside code**: Follow TDD principles when possible
+- **Update test specifications**: Modify test assertions if requirements change
+
+### 3. **After Feature Completion**
+
+- **Implement all test levels**: Ensure Unit, Integration, and E2E tests are written
+- **Update test task status**: Mark tests as implemented in the task file
+- **Update TASK_INDEX.md**: Update the status of the test task
+- **Run all tests**: Verify all tests pass before marking feature complete
+
+## When Working on Bugs
+
+### 1. **Before Fixing**
+
+- **Identify affected tests**: Check which tests cover the buggy functionality
+- **Review test task**: Look at the relevant test task file to understand test coverage
+- **Reproduce in tests**: Write a failing test that reproduces the bug
+
+### 2. **During Fix**
+
+- **Fix the bug**: Implement the fix
+- **Update tests**: Ensure the failing test now passes
+- **Add regression tests**: Add tests to prevent the bug from recurring
+- **Update test task**: Add notes about the bug and fix to the test task file
+
+### 3. **After Fix**
+
+- **Verify all tests pass**: Run the full test suite
+- **Update test documentation**: Document the bug fix in the test task file
+- **Check related tests**: Ensure related functionality still works
+
+## When Creating New Features
+
+### 1. **Feature Planning Phase**
+
+- **Create test task file**: Before implementing, create a test task file in `Rest/markdown/docs/testing/tasks/`
+- **Define test strategy**: Include Unit, Integration, and E2E test specifications
+- **Estimate test time**: Add time estimations for manual and automated testing
+- **Update TASK_INDEX.md**: Add the new test task to the index
+
+### 2. **Feature Implementation Phase**
+
+- **Follow test task**: Use the test task file as a guide for implementation
+- **Write tests incrementally**: Write tests as you implement features
+- **Update test task**: Add implementation notes and discoveries
+
+### 3. **Feature Completion Phase**
+
+- **Complete all tests**: Ensure all test levels are implemented
+- **Update test status**: Mark tests as complete in the task file
+- **Update comprehensive test plan**: Update `COMPREHENSIVE_TEST_PLAN.md` if needed
+
+## Test Task File Structure
+
+Each test task file should follow this structure:
+
+```markdown
+# Task: [Feature Name]
+
+## Time Estimation
+- Manual Testing: X-Y minutes
+- Automated Testing: X-Y minutes (first run), X-Y minutes (subsequent)
+
+## Overview
+Brief description of what is being tested
+
+## Manual Testing Steps
+1. Step 1
+2. Step 2
+...
+
+## Automated Tests
+
+### Unit Tests
+- **UT-XXX**: Test description
+  - File: path/to/test.file
+  - Assertions: ...
+  - Status: ⏳ Pending / ✅ Implemented
+
+### Integration Tests
+- **IT-XXX**: Test description
+  - File: path/to/test.file
+  - Assertions: ...
+  - Status: ⏳ Pending / ✅ Implemented
+
+### E2E Tests
+- **E2E-XXX**: Test description
+  - File: path/to/test.file
+  - Steps: ...
+  - Status: ⏳ Pending / ✅ Implemented
+```
+
+## Automatic Test Update Triggers
+
+### Code Changes That Require Test Updates
+
+1. **Component Changes**
+   - Props added/removed → Update component tests
+   - State management changes → Update integration tests
+   - UI changes → Update E2E tests
+
+2. **API Changes**
+   - New endpoints → Add API tests
+   - Changed responses → Update integration tests
+   - Error handling changes → Update error tests
+
+3. **Route Changes**
+   - New routes → Add navigation tests
+   - Route parameter changes → Update route tests
+   - Redirect changes → Update redirect tests
+
+4. **Feature Additions**
+   - New features → Create new test tasks
+   - Feature modifications → Update existing test tasks
+   - Feature removals → Mark tests as deprecated
+
+5. **Bug Fixes**
+   - Bug fixes → Add regression tests
+   - Edge case fixes → Update edge case tests
+   - Error handling fixes → Update error tests
+
+## Test Update Workflow
+
+### Step 1: Identify Affected Tests
+
+```bash
+# Search for related test files
+grep -r "feature-name" Rest/markdown/docs/testing/tasks/
+grep -r "ComponentName" **/*.test.{ts,tsx}
+```
+
+### Step 2: Review Test Task
+
+- Open the relevant test task file
+- Review test specifications
+- Identify what needs updating
+
+### Step 3: Update Tests
+
+- Update test files
+- Update test task file with notes
+- Update TASK_INDEX.md if status changes
+
+### Step 4: Verify Tests
+
+```bash
+# Run affected tests
+npm run test:unit -- path/to/test.file
+npm run test:integration -- path/to/test.file
+npm run test:e2e -- path/to/test.spec.ts
+```
+
+## Test Maintenance Guidelines
+
+### Regular Maintenance
+
+- **Weekly**: Review pending tests in TASK_INDEX.md
+- **Monthly**: Update time estimations based on actual test times
+- **Quarterly**: Review and update comprehensive test plan
+
+### Test Quality Checks
+
+- **Coverage**: Ensure all features have test coverage
+- **Completeness**: Ensure all test levels (Unit, Integration, E2E) are implemented
+- **Currency**: Ensure tests reflect current implementation
+- **Parallel Execution**: Ensure all tests can run in parallel
+
+## AI Assistant Guidelines
+
+When working with the AI assistant:
+
+1. **Always mention test updates**: When requesting feature changes, mention that tests should be updated
+2. **Reference test tasks**: Reference specific test task files when discussing features
+3. **Request test creation**: When creating new features, request test task creation
+4. **Verify test status**: After changes, verify test status in TASK_INDEX.md
+
+## Examples
+
+### Example 1: Adding a New Feature
+
+```
+User: "Add a new filter to the flashcards page"
+
+AI should:
+1. Check if test task exists for flashcards (F-007)
+2. Review the test task file
+3. Suggest updating the test task to include the new filter
+4. Update test specifications
+5. Implement the feature with tests
+```
+
+### Example 2: Fixing a Bug
+
+```
+User: "Fix the navigation link not working on mobile"
+
+AI should:
+1. Identify affected test (S-001: Navigation Component)
+2. Review the test task file
+3. Add a failing test that reproduces the bug
+4. Fix the bug
+5. Verify the test passes
+6. Update the test task with bug fix notes
+```
+
+### Example 3: Updating a Component
+
+```
+User: "Update the QuestionCard to show difficulty badge"
+
+AI should:
+1. Identify affected test (S-002: Question Card Component)
+2. Review the test task file
+3. Update test specifications to include difficulty badge
+4. Update component tests
+5. Update the test task file
+```
+
+## File Locations
+
+- **Test Tasks**: `Rest/markdown/docs/testing/tasks/`
+- **Test Index**: `Rest/markdown/docs/testing/tasks/TASK_INDEX.md`
+- **Comprehensive Plan**: `Rest/markdown/docs/testing/COMPREHENSIVE_TEST_PLAN.md`
+- **Time Estimations**: `Rest/markdown/docs/testing/tasks/TIME_ESTIMATIONS_SUMMARY.md`
+- **Test Files**: `**/*.test.{ts,tsx}`, `**/*.spec.{ts,tsx}`, `**/*.integration.test.{ts,tsx}`
+
+## Status Indicators
+
+- ✅ **Implemented**: Test is written and passing
+- ⏳ **Pending**: Test is planned but not yet implemented
+- 🔄 **In Progress**: Test is being developed
+- ❌ **Failing**: Test exists but is currently failing
+- ⏸️ **Skipped**: Test is temporarily skipped
+- 🗑️ **Deprecated**: Test is no longer relevant
+
+## Quick Reference Commands
+
+```bash
+# List all test tasks
+cat Rest/markdown/docs/testing/tasks/TASK_INDEX.md
+
+# Find test task for a feature
+grep -r "feature-name" Rest/markdown/docs/testing/tasks/
+
+# Run all tests
+npm run test:unit && npm run test:integration && npm run test:e2e
+
+# Run tests for a specific flow
+npm run test:unit:freestyle-flow
+npm run test:integration:admin
+npm run test:e2e:guided-flow
+```
+
+---
+
+**Remember**: Tests are not just for verification—they are documentation, regression prevention, and design tools. Keep them updated and comprehensive!
