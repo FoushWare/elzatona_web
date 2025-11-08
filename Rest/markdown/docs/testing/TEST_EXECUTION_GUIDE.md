@@ -60,7 +60,7 @@ npm run test:all
 
 #### Run All Unit Tests
 ```bash
-# Run all unit tests
+# Run all unit tests (from project root)
 npm run test:unit
 
 # Run in watch mode (auto-rerun on file changes)
@@ -68,18 +68,29 @@ npm run test:unit -- --watch
 
 # Run with coverage report
 npm run test:unit -- --coverage
+
+# Run from apps/website directory (alternative)
+cd apps/website && npx jest --maxWorkers=50%
 ```
 
 #### Run Specific Unit Test Files
 ```bash
-# Run tests for a specific page/component
+# Run tests for a specific page/component (from project root)
 npm run test:unit -- apps/website/src/app/admin/login/page.test.tsx
+
+# Or run from apps/website directory
+cd apps/website && npx jest src/app/admin/login/page.test.tsx
 
 # Run tests matching a pattern
 npm run test:unit -- --testNamePattern="Admin Login"
 
 # Run tests in a specific directory
 npm run test:unit -- apps/website/src/app/admin/
+
+# Run tests for a specific category
+npm run test:unit:admin
+npm run test:unit:freestyle-flow
+npm run test:unit:shared-components
 ```
 
 #### Run Tests for Specific Tasks
@@ -213,7 +224,7 @@ npm run test:unit -- --updateSnapshot
 
 #### Run All Integration Tests
 ```bash
-# Run all integration tests
+# Run all integration tests (from project root)
 npm run test:integration
 
 # Run in watch mode
@@ -221,15 +232,26 @@ npm run test:integration -- --watch
 
 # Run with coverage
 npm run test:integration -- --coverage
+
+# Run from apps/website directory (alternative)
+cd apps/website && npx jest --testPathPattern=integration --maxWorkers=50%
 ```
 
 #### Run Specific Integration Test Files
 ```bash
-# Run tests for a specific page
+# Run tests for a specific page (from project root)
 npm run test:integration -- apps/website/src/app/admin/login/page.integration.test.tsx
+
+# Or run from apps/website directory
+cd apps/website && npx jest src/app/admin/login/page.integration.test.tsx
 
 # Run all admin integration tests
 npm run test:integration -- apps/website/src/app/admin/
+
+# Run tests for a specific category
+npm run test:integration:admin
+npm run test:integration:freestyle-flow
+npm run test:integration:shared-components
 ```
 
 #### Run Tests for Specific Tasks
@@ -311,27 +333,39 @@ npm run test:integration -- --testNamePattern="API Integration"
 ### Prerequisites
 ```bash
 # Install Playwright browsers (first time only)
-npx playwright install
+npm run test:e2e:install
+# Or: npx playwright install
 
 # Or install specific browser
 npx playwright install chromium
+npx playwright install firefox
+npx playwright install webkit
 ```
 
 ### Basic Commands
 
 #### Run All E2E Tests
 ```bash
-# Run all E2E tests
+# Run all E2E tests (starts dev server automatically)
 npm run test:e2e
 
 # Run in headed mode (see browser)
-npm run test:e2e -- --headed
+npm run test:e2e:headed
+# Or: npm run test:e2e -- --headed
 
-# Run in UI mode (interactive)
-npm run test:e2e -- --ui
+# Run in UI mode (interactive - recommended for debugging)
+npm run test:e2e:ui
+# Or: npm run test:e2e -- --ui
+
+# Run in debug mode (step through tests)
+npm run test:e2e:debug
+# Or: npm run test:e2e -- --debug
 
 # Run with specific browser
-npm run test:e2e -- --project=chromium
+npm run test:e2e:chromium
+npm run test:e2e:firefox
+npm run test:e2e:webkit
+npm run test:e2e:mobile
 ```
 
 #### Run Specific E2E Test Files
