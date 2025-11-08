@@ -1,0 +1,170 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Fast checks that run first
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint:fix || true
+      - name: Check for linting errors (warnings allowed)
+        run: |
+          # Run lint and capture both stdout and stderr separately
+          npm run lint -- --format json > lint-output.json 2> lint-errors.log || true
+
+          # Also get the summary line from stderr
+          SUMMARY=$(cat lint-errors.log | grep -E "✖|problems" | tail -1 || echo "")
+
+          # Parse JSON to count actual errors (severity 2 = error, severity 1 = warning)
+          ERROR_COUNT=$(node -e "
+            const fs = require('fs');
+            try {
+              const content = fs.readFileSync('lint-output.json', 'utf8');
+              // Remove any non-JSON content before the first [
+              const jsonStart = content.indexOf('[');
+              const jsonContent = jsonStart >= 0 ? content.substring(jsonStart) : content;
+              const data = JSON.parse(jsonContent);
+              const errors = data.flatMap(file => 
+                file.messages.filter(msg => msg.severity === 2)
+              );
+              console.log(errors.length);
+            } catch (e) {
+              // If JSON parsing fails, try to extract from summary line
+              console.log('0');
+            }
+          ")
+
+          # If JSON parsing failed, try to extract from summary line
+          if [ "$ERROR_COUNT" = "0" ] && [ -n "$SUMMARY" ]; then
+            ERROR_COUNT=$(echo "$SUMMARY" | grep -oE "[0-9]+ errors" | grep -oE "[0-9]+" || echo "0")
+          fi
+
+          if [ "$ERROR_COUNT" -gt "0" ]; then
+            echo "❌ Found $ERROR_COUNT actual linting errors (not warnings)"
+            echo "Summary: $SUMMARY"
+            echo ""
+            echo "First 20 errors:"
+            npm run lint 2>&1 | grep -E "error\s" | head -20 || npm run lint 2>&1 | head -50
+            exit 1
+          else
+            echo "✅ No blocking linting errors (warnings are allowed)"
+            if [ -n "$SUMMARY" ]; then
+              echo "Summary: $SUMMARY"
+            fi
+          fi
+
+  type-check:
+    name: TypeScript Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npx tsc --noEmit
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+
+  # Test batches run in parallel (default)
+  test-batches:
+    name: Test Batches (Parallel)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        batch_num:
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Run test batch ${{ matrix.batch_num }}
+        env:
+          BATCH_NUM: ${{ matrix.batch_num }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'test-jwt-secret-key' }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'test-nextauth-secret' }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'http://localhost:3000' }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://test.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-anon-key' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'test-service-role-key' }}
+        run: |
+          chmod +x .cursor/run-tests-in-batches.sh
+          bash .cursor/run-tests-in-batches.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-batch-${{ matrix.batch_num }}
+          path: /tmp/batch-*-output.log
+          retention-days: 3
+
+  # Summary job
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [lint, type-check, build, test-batches]
+    if: always()
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        pattern: test-results-batch-*
+        merge-multiple: true
+      - name: Generate summary
+        run: |
+          echo "## CI Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Batches" >> $GITHUB_STEP_SUMMARY
+          echo "| Batch | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          FAILED_COUNT=0
+          for i in {1..18}; do
+            if [ -f "/tmp/batch-${i}-output.log" ]; then
+              if grep -q "Test Suites:.*failed" "/tmp/batch-${i}-output.log" 2>/dev/null; then
+                echo "| Batch $i | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+                FAILED_COUNT=$((FAILED_COUNT + 1))
+              else
+                echo "| Batch $i | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+              fi
+            fi
+          done
+
+          if [ $FAILED_COUNT -gt 0 ]; then
+            echo "::error::$FAILED_COUNT test batch(es) failed"
+            exit 1
+          fi

@@ -1,0 +1,108 @@
+name: Test Batches (Parallel)
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  # Matrix job that runs each batch in parallel
+  test-batch:
+    name: Test Batch ${{ matrix.batch_num }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10 # Each batch should complete in < 10 minutes
+
+    strategy:
+      fail-fast: false # Continue running other batches even if one fails
+      matrix:
+        batch_num:
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run test batch ${{ matrix.batch_num }}
+        env:
+          BATCH_NUM: ${{ matrix.batch_num }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://test.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-anon-key' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'test-service-role-key' }}
+        run: |
+          chmod +x .cursor/run-tests-in-batches.sh
+          bash .cursor/run-tests-in-batches.sh
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-batch-${{ matrix.batch_num }}
+          path: |
+            /tmp/batch-*-output.log
+            apps/website/coverage/
+          retention-days: 7
+
+  # Summary job that runs after all batches complete
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: test-batch
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all test results
+        uses: actions/download-artifact@v4
+        pattern: test-results-batch-*
+        merge-multiple: true
+
+      - name: Generate test summary
+        run: |
+          echo "## Test Batch Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Batch | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          for i in {1..18}; do
+            if [ -f "/tmp/batch-${i}-output.log" ]; then
+              if grep -q "Test Suites:.*failed" "/tmp/batch-${i}-output.log"; then
+                echo "| Batch $i | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "| Batch $i | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+              fi
+            else
+              echo "| Batch $i | ⏸️  Skipped |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+      - name: Check for failures
+        run: |
+          FAILED=0
+          for i in {1..18}; do
+            if [ -f "/tmp/batch-${i}-output.log" ]; then
+              if grep -q "Test Suites:.*failed" "/tmp/batch-${i}-output.log"; then
+                echo "❌ Batch $i failed"
+                FAILED=1
+              fi
+            fi
+          done
+
+          if [ $FAILED -eq 1 ]; then
+            echo "Some test batches failed. Check individual batch jobs for details."
+            exit 1
+          else
+            echo "✅ All test batches passed!"
+          fi
