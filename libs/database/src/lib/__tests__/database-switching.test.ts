@@ -128,6 +128,7 @@ describe('Database Integration', () => {
     // This would test the DatabaseProvider and useDatabase hook
     // In a real test environment, you'd render a component that uses the hook
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { DatabaseProvider, useDatabase } = require('../DatabaseContext');
 
     expect(DatabaseProvider).toBeDefined();
