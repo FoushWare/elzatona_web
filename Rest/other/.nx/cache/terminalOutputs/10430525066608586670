@@ -1,0 +1,92 @@
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+
+
+> nx run shared-types:test  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-atoms:test  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-components:test
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run admin:test
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run auth:test  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test  [local cache]
+
+PASS database libs/database/src/lib/__tests__/database-switching.test.ts
+  Database Switching
+    ✓ should create Firebase service when NEXT_PUBLIC_USE_FIREBASE=true (5 ms)
+    ✓ should create Supabase service when NEXT_PUBLIC_USE_FIREBASE=false (1 ms)
+    ✓ should default to Supabase when NEXT_PUBLIC_USE_FIREBASE is not set (1 ms)
+  Database Service Usage
+    ✓ should handle get operation (1 ms)
+    ✓ should handle add operation
+    ✓ should handle error cases
+  Database Integration
+    ✓ should work with React Context
+
+Test Suites: 1 passed, 1 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        0.387 s
+Ran all test suites.
+
+> nx run website:test
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+

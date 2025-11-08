@@ -1,0 +1,38 @@
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".

@@ -1,0 +1,1631 @@
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 ms)
+    Session Management
+      ✓ should create valid session after successful login (1 ms)
+      ✓ should handle expired tokens (16 ms)
+      ✓ should handle invalid tokens
+    Logout Flow
+      ✓ should clear session on logout
+    Route Protection
+      ✓ should protect admin routes without valid token
+      ✓ should allow access with valid token
+    Error Handling
+      ✓ should handle database connection errors
+      ✓ should handle malformed requests (1 ms)
+      ✓ should handle missing environment variables (1 ms)
+    Security Tests
+      ✓ should not expose sensitive information in error messages
+      ✓ should rate limit login attempts (3 ms)
+      ✓ should validate token signature
+    Performance Tests
+      ✓ should handle concurrent login requests (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.353 s, estimated 1 s
+Ran all test suites matching tests/admin/admin-auth-integration.test.ts with tests matching "should".
+
+> nx run shared-components:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-contexts:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-hooks:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run auth:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run database:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run utils:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run ui:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+No tests found, exiting with code 0
+
+> nx run admin:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   > Couldn't find any `pages` or `app` directory. Please create one under the project root
+
+Pass --verbose to see the stacktrace.
+
+
+> nx run zatona-web:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+> zatona-web@1.0.0 test
+> nx run-many --target=test --all tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login
+
+
+ NX   Running target test for 12 projects:
+
+- shared-components
+- shared-contexts
+- shared-atoms
+- shared-hooks
+- shared-types
+- database
+- website
+- admin
+- utils
+- auth
+- ui
+- zatona-web
+
+With additional flags:
+  tests/admin/admin-auth-integration.test.ts create valid session after successful login
+  --testNamePattern=should
+
+
+
+> nx run shared-atoms:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run shared-types:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+ DEPRECATED  "cache.dir" is deprecated, use Vite's "cacheDir" instead if you want to change the cache director. Note caches will be written to "cacheDir/vitest"
+
+> nx run website:test tests/admin/admin-auth-integration.test.ts --testNamePattern=should create valid session after successful login  [local cache]
+
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+PASS tests/admin/admin-auth-integration.test.ts
+  Admin Authentication Integration
+    Complete Login Flow
+      ✓ should complete full authentication flow successfully (7 ms)
+      ✓ should handle authentication failure gracefully (1 m
