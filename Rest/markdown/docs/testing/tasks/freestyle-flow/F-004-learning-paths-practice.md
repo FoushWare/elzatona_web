@@ -1,4 +1,11 @@
-# Task: Learning Paths Practice
+# Task ID: F-004
+# Title: Learning Paths Practice
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the Learning Paths page which displays available learning paths (categories → topics → questions) for practice, including search, filtering, and path selection.
+
+# Details:
 
 ## Time Estimation
 
@@ -110,6 +117,8 @@ Test the Learning Paths page which displays available learning paths (categories
     - Verify retry option (if available)
     - Verify graceful degradation
 
+# Test Strategy:
+
 ## Automated Tests
 
 ### Unit Tests
@@ -216,24 +225,3 @@ Test the Learning Paths page which displays available learning paths (categories
     7. Verify all paths shown
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- learning-paths/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- learning-paths/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- learning-paths*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Tests API integration
-- Tests search and filtering
-- No dependencies on other tests
-

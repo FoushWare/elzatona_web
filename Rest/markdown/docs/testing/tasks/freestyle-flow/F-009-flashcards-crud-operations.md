@@ -1,4 +1,11 @@
-# Task: Flashcards CRUD Operations
+# Task ID: F-009
+# Title: Flashcards CRUD Operations
+# Status: pending
+# Dependencies: 
+# Priority: medium
+# Description: Test the CRUD (Create, Read, Update, Delete) operations for flashcards including adding, viewing, removing, and persistence.
+
+# Details:
 
 ## Time Estimation
 
@@ -104,6 +111,8 @@ Test the CRUD (Create, Read, Update, Delete) operations for flashcards including
     - Verify empty state shown
     - Add flashcards
     - Verify loaded correctly
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -238,24 +247,3 @@ Test the CRUD (Create, Read, Update, Delete) operations for flashcards including
     4. Verify only one instance exists
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- flashcards*.test.tsx
-
-# Run integration tests
-npm run test:integration -- flashcards/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- flashcards-crud*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Tests localStorage or backend storage
-- Tests API integration
-- No dependencies on other tests
-

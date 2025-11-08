@@ -1,4 +1,11 @@
-# Task: Custom Roadmap Creation
+# Task ID: F-001
+# Title: Custom Roadmap Creation
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the complete custom roadmap creation flow including card selection, category selection, topic selection, question selection, and plan saving.
+
+# Details:
 
 ## Time Estimation
 
@@ -29,11 +36,6 @@
 - **Manual Only**: 45-60 minutes
 - **Automated Only**: 15-25 minutes (first run), 2-4 minutes (subsequent)
 - **Both Manual + Automated**: 60-85 minutes (first run), 47-64 minutes (subsequent)
-
----
-
-## Overview
-Test the complete custom roadmap creation flow including card selection, category selection, topic selection, question selection, and plan saving.
 
 ## Manual Testing Steps
 
@@ -85,9 +87,29 @@ Test the complete custom roadmap creation flow including card selection, categor
    - Try to save without plan name
    - Verify error message
 
-## Automated Tests
+## Test Execution Commands
 
-### Unit Tests
+```bash
+# Run unit tests
+npm run test:unit -- custom-roadmap/page.test.tsx
+
+# Run integration tests
+npm run test:integration -- custom-roadmap/page.integration.test.tsx
+
+# Run E2E tests
+npm run test:e2e -- custom-roadmap-*.spec.ts
+```
+
+## Notes
+
+- All tests can run in parallel
+- Requires authentication setup
+- Tests API integration with backend
+- No dependencies on other tests
+
+# Test Strategy:
+
+## Unit Tests
 
 - **F-UT-001**: Test custom roadmap page renders
   - **File**: `apps/website/src/app/custom-roadmap/page.test.tsx`
@@ -155,7 +177,7 @@ Test the complete custom roadmap creation flow including card selection, categor
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
 
-### Integration Tests
+## Integration Tests
 
 - **F-IT-001**: Test cards fetched from API
   - **File**: `apps/website/src/app/custom-roadmap/page.integration.test.tsx`
@@ -210,7 +232,7 @@ Test the complete custom roadmap creation flow including card selection, categor
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
 
-### E2E Tests
+## E2E Tests
 
 - **F-E2E-001**: Complete custom roadmap creation flow
   - **File**: `tests/e2e/freestyle-flow/custom-roadmap-creation.spec.ts`
@@ -255,24 +277,3 @@ Test the complete custom roadmap creation flow including card selection, categor
     8. Verify save succeeds
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- custom-roadmap/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- custom-roadmap/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- custom-roadmap-*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires authentication setup
-- Tests API integration with backend
-- No dependencies on other tests
-

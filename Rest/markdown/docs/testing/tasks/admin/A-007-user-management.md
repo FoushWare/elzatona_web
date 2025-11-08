@@ -1,4 +1,11 @@
-# Task: Admin User Management
+# Task ID: A-007
+# Title: Admin User Management
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the admin user management page including user CRUD operations, role management, and user search/filter functionality.
+
+# Details:
 
 ## Time Estimation
 
@@ -93,6 +100,8 @@ Test the admin user management page including user CRUD operations, role managem
    - Verify status updated
    - Verify inactive user cannot login
    - Verify active user can login
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -197,24 +206,3 @@ Test the admin user management page including user CRUD operations, role managem
     11. Verify admin access
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- admin/users/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- admin/users/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- user-management-*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires admin authentication
-- Tests user roles and permissions
-- No dependencies on other tests
-

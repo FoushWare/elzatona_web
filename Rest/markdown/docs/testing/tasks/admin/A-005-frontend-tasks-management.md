@@ -1,4 +1,11 @@
-# Task: Admin Frontend Tasks Management
+# Task ID: A-005
+# Title: Admin Frontend Tasks Management
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the admin frontend tasks management page including CRUD operations, task details, validation, and search/filter functionality.
+
+# Details:
 
 ## Time Estimation
 
@@ -100,6 +107,8 @@ Test the admin frontend tasks management page including CRUD operations, task de
    - Test filter by status
    - Clear filters
    - Verify all tasks shown
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -219,24 +228,3 @@ Test the admin frontend tasks management page including CRUD operations, task de
     7. Verify all tasks shown
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- admin/frontend-tasks/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- admin/frontend-tasks/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- frontend-tasks-*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires admin authentication
-- Tests code editor integration (if applicable)
-- No dependencies on other tests
-
