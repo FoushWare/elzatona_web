@@ -14,7 +14,7 @@ import { AuthProvider } from '@elzatona/shared-contexts';
 import NavbarSimple from '../../../components/NavbarSimple';
 import { NotificationProvider } from '@/components/NotificationSystem';
 import AuthSessionSync from '@/components/AuthSessionSync';
-import { LearningTypeProvider } from '../../../context/LearningTypeContext';
+import { LearningTypeProvider } from '../../context/LearningTypeContext';
 
 // Force dynamic rendering to prevent static generation issues with auth context
 export const dynamic = 'force-dynamic';
