@@ -2,8 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useMemo, useState, useEffect } from 'react';
-import enTranslations from '@/translations/en.json';
-import arTranslations from '@/translations/ar.json';
+import { enTranslations, arTranslations } from './types/translations';
 
 const translations = {
   en: enTranslations,

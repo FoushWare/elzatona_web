@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import { ErrorLoggingService } from '@/lib/error-logging-service';
+import { ErrorLoggingService } from './types/error-logging-service';
 
 export function usePerformanceMonitoring() {
   const timers = useRef<Map<string, number>>(new Map());
