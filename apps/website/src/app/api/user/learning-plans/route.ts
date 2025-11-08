@@ -8,7 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { cookies } from 'next/headers';
 import { verifySupabaseToken } from '../../../../lib/server-auth';
-import { LearningPlanProgress } from '../../types/firestore';
+import { LearningPlanProgress } from '../../../../types/firestore';
 
 export async function GET(request: NextRequest) {
   try {
