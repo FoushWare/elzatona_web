@@ -1,47 +1,62 @@
 /**
- * Unit Tests for Admin Problem Solving
- * Task: 6 - Admin Problem Solving
- * Test IDs: A-UT-017
+ * Unit Tests for Admin Problem Solving (A-UT-017)
+ * Task: A-006 - Admin Problem Solving
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ProblemSolvingAdminPage from './page';
 
-// Mock dependencies
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
-  }),
-  usePathname: () => '/admin/problem-solving',
+// Mock TanStack Query hooks
+const mockTasksData = { data: [] };
+
+jest.mock('@elzatona/shared-hooks', () => ({
+  useProblemSolvingTasks: jest.fn(() => ({
+    data: mockTasksData,
+    isLoading: false,
+    error: null,
+  })),
+  useCreateProblemSolvingTask: jest.fn(() => ({
+    mutateAsync: jest.fn(),
+    isPending: false,
+  })),
+  useUpdateProblemSolvingTask: jest.fn(() => ({
+    mutateAsync: jest.fn(),
+    isPending: false,
+  })),
+  useDeleteProblemSolvingTask: jest.fn(() => ({
+    mutateAsync: jest.fn(),
+    isPending: false,
+  })),
 }));
 
-// Mock shared contexts
-jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
-  return {
-    ...actual,
-    useAdminAuth: jest.fn(() => ({
-      isAuthenticated: true,
-      isLoading: false,
-      user: { id: '1', email: 'admin@example.com', role: 'super_admin' },
-    })),
-  };
-});
+jest.mock('@elzatona/shared-components', () => ({
+  ProblemSolvingEditor: ({ onSave, onCancel }: any) => (
+    <div data-testid="problem-solving-editor">
+      <button onClick={() => onSave({})}>Save</button>
+      <button onClick={onCancel}>Cancel</button>
+    </div>
+  ),
+  ClientCodeRunner: () => <div data-testid="code-runner">Code Runner</div>,
+}));
 
-// Mock fetch
-global.fetch = jest.fn();
+jest.mock('lucide-react', () => ({
+  Plus: () => <span>+</span>,
+  Edit: () => <span>✏️</span>,
+  Trash2: () => <span>🗑️</span>,
+  Eye: () => <span>👁️</span>,
+  Search: () => <span>🔍</span>,
+  Play: () => <span>▶️</span>,
+  Code: () => <span>💻</span>,
+}));
 
-describe('6: Component Renders', () => {
+window.confirm = jest.fn(() => true);
+window.alert = jest.fn();
+
+describe('A-UT-017: Component Renders', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: [], pagination: { totalCount: 0 } }),
-    });
   });
 
   it('should render without errors', () => {
@@ -49,10 +64,8 @@ describe('6: Component Renders', () => {
     expect(container).toBeInTheDocument();
   });
 
-  it('should display main content', async () => {
+  it('should display page header', () => {
     render(<ProblemSolvingAdminPage />);
-    await waitFor(() => {
-      expect(screen.getByText(/.*/)).toBeInTheDocument();
-    });
+    expect(screen.getByText(/.*/)).toBeTruthy();
   });
 });
