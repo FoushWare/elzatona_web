@@ -3,9 +3,20 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+// Use anon key for client-side auth operations (service role key is server-only)
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'] || '';
+const supabaseAnonKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] || '';
+
+const supabase =
+  supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+        },
+      })
+    : null;
 
 import {
   Dialog,
@@ -46,6 +57,7 @@ export const SignInPopup: React.FC<SignInPopupProps> = ({
 
   // Check authentication status
   useEffect(() => {
+    if (!supabase) return;
     const checkAuth = async () => {
       const {
         data: { session },
@@ -64,6 +76,10 @@ export const SignInPopup: React.FC<SignInPopupProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!supabase) {
+      setError('Supabase client is not configured');
+      return;
+    }
     setError('');
     setIsSubmitting(true);
 
@@ -99,6 +115,10 @@ export const SignInPopup: React.FC<SignInPopupProps> = ({
   };
 
   const handleGoogleSignIn = async () => {
+    if (!supabase) {
+      setError('Supabase client is not configured');
+      return;
+    }
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -110,6 +130,10 @@ export const SignInPopup: React.FC<SignInPopupProps> = ({
   };
 
   const handleGithubSignIn = async () => {
+    if (!supabase) {
+      setError('Supabase client is not configured');
+      return;
+    }
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',

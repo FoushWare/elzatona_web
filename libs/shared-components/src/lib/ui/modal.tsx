@@ -2,12 +2,6 @@
 // v1.0 - Reusable modal for forms
 
 import React, { ReactNode } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!;
-const supabaseServiceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-
 import { X } from 'lucide-react';
 import { Button } from '@elzatona/shared-components';
 import {
