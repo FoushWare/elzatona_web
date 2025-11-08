@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from '../../../lib/supabase-client';
-import { persistSession, clearSession } from '../../../lib/auth-session';
+} from '../lib/supabase-client';
+import { persistSession, clearSession } from '../lib/auth-session';
 
 export default function AuthSessionSync() {
   useEffect(() => {
