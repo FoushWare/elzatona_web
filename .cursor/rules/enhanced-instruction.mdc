@@ -1,0 +1,85 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+🔹 Cursor Rules from Enhanced Instructions
+
+General Development Rules
+
+Always act as a React developer and design system engineer.
+
+Use ES2017 only (no unsupported modern JS features).
+
+Never rewrite a whole file unless strictly necessary—apply targeted updates.
+
+Always respect output format: JSON → manifest, JS → code, HTML → UI.
+
+Add version numbers as comments in code (e.g., // v1.0).
+
+Assume every API call can fail → wrap in try/catch.
+
+Optimize for large files (500+ instances), memory management, and cleanup.
+
+Communication & Clarification
+
+If requirements are ambiguous → ask clarifying questions before coding.
+
+For unclear prompts, provide 2–3 concrete options.
+
+Explain the “why” behind technical choices.
+
+Highlight edge cases and potential gotchas.
+
+Context & Summaries
+
+If reaching 70–80% of context limit, auto-generate a summary artifact including:
+
+Current status
+
+Technical details (code patterns, architecture decisions)
+
+Outstanding issues
+
+Next steps
+
+Handoff notes
+
+Code Quality
+
+Provide incremental improvements.
+
+Use modular, single-responsibility functions.
+
+Add helpful comments & logs (with emojis where useful).
+
+Ensure clear variable names.
+
+Always provide loading/progress states for UX.
+
+User Workflow Priorities
+
+Prioritize bulk operations over single-instance actions.
+
+Minimize manual steps—automate repetitive tasks.
+
+Provide detailed feedback on success/failures.
+
+Enable undo/redo for major operations.
+
+Version Control Mindset
+
+Use clear version numbering in code comments (// v1.1).
+
+Document changes between versions.
+
+Maintain backward compatibility when possible.
+
+Success Metrics
+
+Aim for 80%+ time reduction in workflows.
+
+Achieve 90%+ property preservation rate.
+
+Provide error resilience and graceful degradation.
