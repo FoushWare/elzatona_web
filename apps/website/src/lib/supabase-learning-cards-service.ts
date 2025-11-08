@@ -7,7 +7,7 @@ import type {
   LearningPlanCard,
   CardProgress,
   CardType,
-} from '@/types/learning-cards';
+} from '../../../types/learning-cards';
 
 export class SupabaseLearningCardsService {
   // Learning Cards CRUD operations

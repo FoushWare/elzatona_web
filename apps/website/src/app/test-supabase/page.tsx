@@ -7,8 +7,8 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-import { SupabaseLearningCardsService } from '@/lib/supabase-learning-cards-service';
-import { LearningCard } from '@/types/learning-cards';
+import { SupabaseLearningCardsService } from '../../../lib/supabase-learning-cards-service';
+import { LearningCard } from '../../../types/learning-cards';
 
 export default function TestSupabasePage() {
   const [cards, setCards] = useState<LearningCard[]>([]);
