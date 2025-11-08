@@ -18,7 +18,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import Link from 'next/link';
-import { addFlashcard, isInFlashcards } from '../../../lib/flashcards';
+import { addFlashcard, isInFlashcards } from '../../lib/flashcards';
 
 interface Question {
   id: string;
