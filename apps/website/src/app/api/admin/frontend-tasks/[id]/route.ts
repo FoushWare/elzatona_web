@@ -5,7 +5,7 @@ import {
   FrontendTask,
   FrontendTaskFormData,
   ApiResponse,
-} from '../../../../types/admin';
+} from '../../../../../types/admin';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
