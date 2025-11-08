@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@elzatona/shared-contexts';
-import { useLearningType } from '../../context/LearningTypeContext';
+import { useLearningType } from '../../../context/LearningTypeContext';
 
 // Conditional Supabase client creation with fallback values
 let supabase = null;
