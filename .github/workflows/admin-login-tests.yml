@@ -127,29 +127,48 @@ jobs:
         run: npm run lint:fix || true
       - name: Check for linting errors (warnings allowed)
         run: |
-          # Run lint with JSON output to parse errors vs warnings
-          npm run lint -- --format json > lint-output.json 2>&1 || true
+          # Run lint and capture both stdout and stderr separately
+          npm run lint -- --format json > lint-output.json 2> lint-errors.log || true
+
+          # Also get the summary line from stderr
+          SUMMARY=$(cat lint-errors.log | grep -E "✖|problems" | tail -1 || echo "")
 
           # Parse JSON to count actual errors (severity 2 = error, severity 1 = warning)
           ERROR_COUNT=$(node -e "
             const fs = require('fs');
             try {
-              const data = JSON.parse(fs.readFileSync('lint-output.json', 'utf8'));
+              const content = fs.readFileSync('lint-output.json', 'utf8');
+              // Remove any non-JSON content before the first [
+              const jsonStart = content.indexOf('[');
+              const jsonContent = jsonStart >= 0 ? content.substring(jsonStart) : content;
+              const data = JSON.parse(jsonContent);
               const errors = data.flatMap(file => 
                 file.messages.filter(msg => msg.severity === 2)
               );
               console.log(errors.length);
             } catch (e) {
+              // If JSON parsing fails, try to extract from summary line
               console.log('0');
             }
           ")
 
+          # If JSON parsing failed, try to extract from summary line
+          if [ "$ERROR_COUNT" = "0" ] && [ -n "$SUMMARY" ]; then
+            ERROR_COUNT=$(echo "$SUMMARY" | grep -oE "[0-9]+ errors" | grep -oE "[0-9]+" || echo "0")
+          fi
+
           if [ "$ERROR_COUNT" -gt "0" ]; then
             echo "❌ Found $ERROR_COUNT actual linting errors (not warnings)"
-            npm run lint 2>&1 | grep -E "\s+error\s" | head -20
+            echo "Summary: $SUMMARY"
+            echo ""
+            echo "First 20 errors:"
+            npm run lint 2>&1 | grep -E "error\s" | head -20 || npm run lint 2>&1 | head -50
             exit 1
           else
             echo "✅ No blocking linting errors (warnings are allowed)"
+            if [ -n "$SUMMARY" ]; then
+              echo "Summary: $SUMMARY"
+            fi
           fi
 
       - name: Check for TypeScript errors
