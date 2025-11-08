@@ -1,0 +1,217 @@
+# Test Implementation PRD
+
+## Overview
+Implement comprehensive testing for the Elzatona Web application based on the test task specifications in `Rest/markdown/docs/testing/tasks/`. This includes manual testing procedures and automated test implementation (Unit, Integration, and E2E tests) for all features across Guided Flow, Freestyle Flow, Admin, and Shared Components.
+
+## Objectives
+1. Perform manual testing for each test task following the specified procedures
+2. Implement automated tests (Unit, Integration, E2E) as specified in each test task
+3. Ensure all tests can run in parallel
+4. Update test task status as tests are implemented
+5. Maintain test documentation and coverage
+
+## Test Implementation Tasks
+
+### Guided Flow Tests (2 tasks)
+
+#### G-001: Homepage Rendering
+- Perform manual testing: Navigate to homepage, verify rendering, test "Get Started" button, test navigation links
+- Implement unit tests: G-UT-001, G-UT-002, G-UT-003
+- Implement integration tests: G-IT-001, G-IT-002
+- Implement E2E test: G-E2E-001
+- Estimated time: Manual 10-15 min, Automated 5-8 min (first run)
+
+#### G-002: Get Started Page
+- Perform manual testing: Test flow options, test authentication integration, test form validation
+- Implement unit tests: G-UT-004, G-UT-005, G-UT-006, G-UT-007
+- Implement integration tests: G-IT-003, G-IT-004, G-IT-005
+- Implement E2E tests: G-E2E-002, G-E2E-003
+- Estimated time: Manual 20-30 min, Automated 8-12 min (first run)
+
+### Freestyle Flow Tests (9 tasks)
+
+#### F-001: Custom Roadmap Creation
+- Perform manual testing: Test card/category/topic/question selection, test plan configuration and saving
+- Implement unit tests: F-UT-001 through F-UT-007
+- Implement integration tests: F-IT-001 through F-IT-006
+- Implement E2E tests: F-E2E-001, F-E2E-002, F-E2E-003
+- Estimated time: Manual 45-60 min, Automated 15-25 min (first run)
+
+#### F-002: My Plans Page
+- Perform manual testing: Test plan list display, test plan actions (Start, Edit, Delete), test progress tracking
+- Implement unit tests: F-UT-008 through F-UT-012
+- Implement integration tests: F-IT-007 through F-IT-011
+- Implement E2E tests: F-E2E-004, F-E2E-005, F-E2E-006
+- Estimated time: Manual 25-35 min, Automated 10-15 min (first run)
+
+#### F-003: Browse Practice Questions
+- Perform manual testing: Test page rendering, test practice options navigation, test statistics display
+- Implement unit tests: F-UT-031, F-UT-032, F-UT-033
+- Implement integration tests: F-IT-025 through F-IT-028
+- Implement E2E test: F-E2E-017
+- Estimated time: Manual 30-40 min, Automated 12-18 min (first run)
+
+#### F-004: Learning Paths Practice
+- Perform manual testing: Test learning paths display, test search and filtering, test path selection
+- Implement unit tests: F-UT-034 through F-UT-037
+- Implement integration tests: F-IT-029 through F-IT-032
+- Implement E2E tests: F-E2E-018, F-E2E-019
+- Estimated time: Manual 40-50 min, Automated 15-22 min (first run)
+
+#### F-005: Frontend Tasks Practice
+- Perform manual testing: Test tasks display, test search and filtering, test task selection and code editor
+- Implement unit tests: F-UT-038 through F-UT-042
+- Implement integration tests: F-IT-033 through F-IT-036
+- Implement E2E tests: F-E2E-020, F-E2E-021
+- Estimated time: Manual 45-60 min, Automated 18-25 min (first run)
+
+#### F-006: Problem Solving Practice
+- Perform manual testing: Test problems display, test search and filtering, test problem selection and code editor
+- Implement unit tests: F-UT-043 through F-UT-047
+- Implement integration tests: F-IT-037 through F-IT-040
+- Implement E2E tests: F-E2E-022, F-E2E-023
+- Estimated time: Manual 45-60 min, Automated 18-25 min (first run)
+
+#### F-007: Flashcards Theme and Difficulty Filtering
+- Perform manual testing: Test section/theme filter, test difficulty filter, test combined filters
+- Implement unit tests: F-UT-013 through F-UT-017
+- Implement integration tests: F-IT-012 through F-IT-016
+- Implement E2E tests: F-E2E-007, F-E2E-008, F-E2E-009, F-E2E-010
+- Estimated time: Manual 30-40 min, Automated 10-15 min (first run)
+
+#### F-008: Flashcards Practice Modes
+- Perform manual testing: Test list mode, test flip mode, test quiz mode, test mode switching
+- Implement unit tests: F-UT-018 through F-UT-024
+- Implement integration tests: F-IT-017 through F-IT-020
+- Implement E2E tests: F-E2E-011, F-E2E-012, F-E2E-013
+- Estimated time: Manual 40-50 min, Automated 15-20 min (first run)
+
+#### F-009: Flashcards CRUD Operations
+- Perform manual testing: Test add flashcard, test remove flashcard, test view flashcard, test persistence
+- Implement unit tests: F-UT-025 through F-UT-030
+- Implement integration tests: F-IT-021 through F-IT-024
+- Implement E2E tests: F-E2E-014, F-E2E-015, F-E2E-016
+- Estimated time: Manual 25-35 min, Automated 12-18 min (first run)
+
+### Admin Tests (7 tasks)
+
+#### A-001: Bulk Question Addition by Category
+- Perform manual testing: Clear existing questions, test bulk addition by category (HTML, CSS, JS, React, etc.), test file uploads
+- Implement unit tests: A-UT-001 through A-UT-005
+- Implement integration tests: A-IT-001 through A-IT-005
+- Implement E2E tests: A-E2E-001, A-E2E-002, A-E2E-003
+- Estimated time: Manual 60-90 min, Automated 20-35 min (first run)
+
+#### A-002: Admin Login
+- Perform manual testing: Test login form, test successful login, test invalid credentials, test session persistence
+- Implement unit tests: A-UT-006 through A-UT-010
+- Implement integration tests: A-IT-010 through A-IT-013
+- Implement E2E tests: A-E2E-007, A-E2E-008, A-E2E-009
+- Estimated time: Manual 15-20 min, Automated 6-10 min (first run)
+
+#### A-003: Admin Dashboard
+- Perform manual testing: Test dashboard rendering, test statistics display, test navigation, test quick actions
+- Implement unit tests: A-UT-011 through A-UT-015
+- Implement integration tests: A-IT-014 through A-IT-018
+- Implement E2E tests: A-E2E-010, A-E2E-011
+- Estimated time: Manual 25-35 min, Automated 10-15 min (first run)
+
+#### A-004: Content Management (Unified)
+- Perform manual testing: Test CRUD operations for cards, plans, categories, topics, questions
+- Implement unit tests: A-UT-016 through A-UT-025
+- Implement integration tests: A-IT-019 through A-IT-028
+- Implement E2E tests: A-E2E-012, A-E2E-013, A-E2E-014, A-E2E-015
+- Estimated time: Manual 60-90 min, Automated 25-40 min (first run)
+
+#### A-005: Frontend Tasks Management
+- Perform manual testing: Test CRUD operations for frontend tasks, test code editor integration
+- Implement unit tests: A-UT-026 through A-UT-030
+- Implement integration tests: A-IT-029 through A-IT-033
+- Implement E2E tests: A-E2E-016, A-E2E-017
+- Estimated time: Manual 40-55 min, Automated 15-25 min (first run)
+
+#### A-006: Problem Solving Management
+- Perform manual testing: Test CRUD operations for problem solving tasks, test test cases management
+- Implement unit tests: A-UT-031 through A-UT-035
+- Implement integration tests: A-IT-034 through A-IT-038
+- Implement E2E tests: A-E2E-018, A-E2E-019
+- Estimated time: Manual 40-55 min, Automated 15-25 min (first run)
+
+#### A-007: User Management
+- Perform manual testing: Test user list, test user details, test user actions, test role management
+- Implement unit tests: A-UT-036 through A-UT-040
+- Implement integration tests: A-IT-039 through A-IT-043
+- Implement E2E tests: A-E2E-020, A-E2E-021
+- Estimated time: Manual 30-45 min, Automated 12-20 min (first run)
+
+### Shared Components Tests (3 tasks)
+
+#### S-001: Navigation Component
+- Perform manual testing: Test navigation links, test dark mode toggle, test responsive design, test authentication state
+- Implement unit tests: S-UT-001 through S-UT-004
+- Implement integration tests: S-IT-001 through S-IT-003
+- Implement E2E test: S-E2E-001
+- Estimated time: Manual 20-30 min, Automated 10-15 min (first run)
+
+#### S-002: Question Card Component
+- Perform manual testing: Test question display, test answer options, test answer submission, test different question types
+- Implement unit tests: S-UT-005 through S-UT-009
+- Implement integration tests: S-IT-004 through S-IT-006
+- Implement E2E test: S-E2E-002
+- Estimated time: Manual 25-35 min, Automated 12-18 min (first run)
+
+#### S-003: Progress Tracker Component
+- Perform manual testing: Test progress display, test progress updates, test different progress types, test visual indicators
+- Implement unit tests: S-UT-010 through S-UT-014
+- Implement integration tests: S-IT-007 through S-IT-009
+- Implement E2E test: S-E2E-003
+- Estimated time: Manual 25-35 min, Automated 12-18 min (first run)
+
+## Implementation Requirements
+
+### Test Structure
+- All tests should be organized in the following structure:
+  - Unit tests: `apps/website/src/**/*.test.tsx` or `libs/**/*.test.tsx`
+  - Integration tests: `apps/website/src/**/*.integration.test.tsx` or `libs/**/*.integration.test.tsx`
+  - E2E tests: `tests/e2e/**/*.spec.ts`
+
+### Test Execution
+- All tests must be able to run in parallel
+- Use Jest for unit and integration tests
+- Use Playwright for E2E tests
+- Configure test scripts in package.json for easy execution
+
+### Test Documentation
+- Update test task status in task files as tests are implemented
+- Mark test status as "✅ Implemented" when complete
+- Update TASK_INDEX.md with implementation status
+
+### Quality Standards
+- Follow existing test patterns in the codebase
+- Ensure proper mocking for API calls and external dependencies
+- Include proper error handling tests
+- Test edge cases and error scenarios
+- Ensure tests are maintainable and well-documented
+
+## Success Criteria
+1. All 30 test tasks have manual testing completed
+2. All unit tests implemented and passing
+3. All integration tests implemented and passing
+4. All E2E tests implemented and passing
+5. All tests can run in parallel without conflicts
+6. Test coverage meets project standards
+7. All test task files updated with implementation status
+
+## Dependencies
+- Test task files in `Rest/markdown/docs/testing/tasks/`
+- Existing test infrastructure (Jest, Playwright)
+- Test utilities and mocks
+- API endpoints and backend services
+
+## Timeline
+- Start with Guided Flow tests (simplest)
+- Then Shared Components tests
+- Then Freestyle Flow tests
+- Finally Admin tests (most complex)
+- Estimated total time: 11.7-16 hours manual + 4.6-6.7 hours automated (first run)
+
