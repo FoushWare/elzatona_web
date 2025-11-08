@@ -27,12 +27,12 @@ import {
   BookOpen,
   Loader2,
 } from 'lucide-react';
-import { SupabaseLearningCardsService } from '@/lib/supabase-learning-cards-service';
-import { CARD_TYPES } from '@/types/learning-cards';
+import { SupabaseLearningCardsService } from '../../lib/supabase-learning-cards-service';
+import { CARD_TYPES } from '../../types/learning-cards';
 import type {
   LearningCard,
   LearningCardFormData,
-} from '@/types/learning-cards';
+} from '../../types/learning-cards';
 
 export default function LearningCardsAdminPage() {
   const router = useRouter();

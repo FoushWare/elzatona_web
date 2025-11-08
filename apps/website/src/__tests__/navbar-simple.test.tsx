@@ -2,7 +2,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import NavbarSimple from '@/components/NavbarSimple';
+import NavbarSimple from '../components/NavbarSimple';
 
 // Mock shared contexts used by NavbarSimple
 jest.mock('@elzatona/shared-contexts', () => ({

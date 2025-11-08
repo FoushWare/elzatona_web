@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { UserAuthService } from '@/lib/user-auth';
+import { UserAuthService } from '../../lib/user-auth';
 
 export async function GET(request: NextRequest) {
   try {

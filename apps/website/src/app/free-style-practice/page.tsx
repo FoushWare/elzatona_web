@@ -23,8 +23,12 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { useUserType, useAuth } from '@elzatona/shared-contexts';
-import { addFlashcard, isInFlashcards, FlashcardItem } from '@/lib/flashcards';
-import { addToCart, CartItem } from '@/lib/cart';
+import {
+  addFlashcard,
+  isInFlashcards,
+  FlashcardItem,
+} from '../../../lib/flashcards';
+import { addToCart, CartItem } from '../../../lib/cart';
 
 interface Question {
   id: string;

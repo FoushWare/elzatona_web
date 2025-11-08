@@ -16,7 +16,7 @@ import {
 import { Button } from '@elzatona/shared-components';
 import { Badge } from '@elzatona/shared-components';
 import { Plus, Edit, Trash2, Loader2, Eye } from 'lucide-react';
-import { UnifiedQuestion } from '@/lib/unified-question-schema';
+import { UnifiedQuestion } from '../../lib/unified-question-schema';
 
 type Question = UnifiedQuestion;
 

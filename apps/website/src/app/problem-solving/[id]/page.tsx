@@ -21,7 +21,7 @@ import {
   Eye,
   EyeOff,
 } from 'lucide-react';
-import { ProblemSolvingTask } from '@/types/admin';
+import { ProblemSolvingTask } from '../../../types/admin';
 import { ClientCodeRunner } from '@elzatona/shared-components';
 
 export default function ProblemSolvingTaskPage() {

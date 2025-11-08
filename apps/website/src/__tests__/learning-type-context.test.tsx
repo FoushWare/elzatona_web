@@ -18,7 +18,7 @@ jest.mock('@/lib/supabase-client', () => ({
 import {
   LearningTypeProvider,
   useLearningType,
-} from '@/context/LearningTypeContext';
+} from '../context/LearningTypeContext';
 
 function Consumer() {
   const { learningType, setLearningType } = useLearningType();

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { UserAuthService } from '@/lib/user-auth';
+import { UserAuthService } from '../../../lib/user-auth';
 
 export interface AuthMiddlewareOptions {
   requiredRole?: 'user' | 'premium_user' | 'admin' | 'super_admin';

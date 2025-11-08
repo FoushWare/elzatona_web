@@ -7,8 +7,8 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { cookies } from 'next/headers';
-import { verifySupabaseToken } from '@/lib/server-auth';
-import { UserPreferences } from '@/types/firestore';
+import { verifySupabaseToken } from '../../lib/server-auth';
+import { UserPreferences } from '../../types/firestore';
 
 export async function GET(request: NextRequest) {
   try {
