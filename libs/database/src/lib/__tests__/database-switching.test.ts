@@ -75,20 +75,23 @@ describe('Database Service Usage', () => {
       add: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
-    };
+      query: jest.fn(),
+      querySingle: jest.fn(),
+      batchAdd: jest.fn(),
+      batchUpdate: jest.fn(),
+      batchDelete: jest.fn(),
+      count: jest.fn(),
+      exists: jest.fn(),
+    } as IDatabaseService;
   });
 
   test('should handle get operation', async () => {
     const mockData = { id: '1', name: 'Test User' };
-    (mockService.get as jest.Mock).mockResolvedValue({
-      data: mockData,
-      error: null,
-    });
+    (mockService.get as jest.Mock).mockResolvedValue(mockData);
 
     const result = await mockService.get('users', '1');
 
-    expect(result.data).toEqual(mockData);
-    expect(result.error).toBeNull();
+    expect(result).toEqual(mockData);
     expect(mockService.get).toHaveBeenCalledWith('users', '1');
   });
 
@@ -96,29 +99,20 @@ describe('Database Service Usage', () => {
     const newUser = { name: 'New User', email: 'new@example.com' };
     const createdUser = { id: '2', ...newUser };
 
-    (mockService.add as jest.Mock).mockResolvedValue({
-      data: createdUser,
-      error: null,
-    });
+    (mockService.add as jest.Mock).mockResolvedValue(createdUser);
 
     const result = await mockService.add('users', newUser);
 
-    expect(result.data).toEqual(createdUser);
-    expect(result.error).toBeNull();
+    expect(result).toEqual(createdUser);
     expect(mockService.add).toHaveBeenCalledWith('users', newUser);
   });
 
   test('should handle error cases', async () => {
-    const errorMessage = 'Database connection failed';
-    (mockService.get as jest.Mock).mockResolvedValue({
-      data: null,
-      error: errorMessage,
-    });
+    (mockService.get as jest.Mock).mockResolvedValue(null);
 
     const result = await mockService.get('users', '1');
 
-    expect(result.data).toBeNull();
-    expect(result.error).toBe(errorMessage);
+    expect(result).toBeNull();
   });
 });
 

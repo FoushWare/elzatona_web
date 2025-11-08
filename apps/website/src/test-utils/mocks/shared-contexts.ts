@@ -30,3 +30,7 @@ const defaultAdminAuth = {
 };
 
 export const useAdminAuth = jest.fn(() => defaultAdminAuth);
+
+// Theme provider mocks
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) =>
+  React.createElement(React.Fragment, null, children);

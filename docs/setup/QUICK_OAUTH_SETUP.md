@@ -97,9 +97,11 @@ curl http://localhost:3001/api/auth/providers
 
 ```bash
 # Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDY2MDQxOCwiZXhwIjoyMDc2MjM2NDE4fQ.BH3xSC7yk5DqX5bTgyedOyC45fNg1_vBcV04X_tkYLQ
+# Supabase Configuration (Get from Supabase Dashboard)
+# Go to: https://supabase.com/dashboard → Your Project → Settings → API
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key-here
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
 
 # NextAuth Configuration
 NEXTAUTH_SECRET=elzatona-nextauth-secret-2024-production-ready
@@ -115,12 +117,13 @@ GITHUB_CLIENT_SECRET=your-github-client-secret-here
 JWT_SECRET=your-super-secret-jwt-key-change-in-production
 JWT_EXPIRES_IN=24h
 INITIAL_ADMIN_EMAIL=admin@example.com
-INITIAL_ADMIN_PASSWORD=admin123
+INITIAL_ADMIN_PASSWORD=your-secure-admin-password
 INITIAL_ADMIN_NAME=Super Admin
 INITIAL_ADMIN_ROLE=super_admin
 
 # Firebase Configuration
-NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y
+# Firebase Configuration (Get from Firebase Console)
+NEXT_PUBLIC_FIREBASE_API_KEY=your-firebase-api-key-here
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=fir-demo-project-adffb.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=fir-demo-project-adffb
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=fir-demo-project-adffb.firebasestorage.app

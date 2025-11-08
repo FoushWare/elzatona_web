@@ -11,39 +11,43 @@ import path from 'path';
 console.log('🔧 Complete Environment Configuration Setup\n');
 
 // Complete environment template
-const completeEnvTemplate = `# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s
+const completeEnvTemplate = `# Supabase Configuration (Get from Supabase Dashboard)
+# Go to: https://supabase.com/dashboard → Your Project → Settings → API
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
 
 # NextAuth Configuration
-NEXTAUTH_SECRET=elzatona-nextauth-secret-2024-production-ready
+NEXTAUTH_SECRET=your-nextauth-secret-change-in-production
 NEXTAUTH_URL=http://localhost:3001
 
 # Google OAuth (Get from Google Cloud Console)
+# Go to: https://console.cloud.google.com/ → APIs & Services → Credentials
 GOOGLE_CLIENT_ID=your-google-client-id-here
 GOOGLE_CLIENT_SECRET=your-google-client-secret-here
 
 # GitHub OAuth (Get from GitHub Developer Settings)
+# Go to: https://github.com/settings/developers → OAuth Apps
 GITHUB_CLIENT_ID=your-github-client-id-here
 GITHUB_CLIENT_SECRET=your-github-client-secret-here
 
 # Admin Configuration
-JWT_SECRET=elzatona-super-secret-jwt-key-2024-production-ready
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
 JWT_EXPIRES_IN=24h
-INITIAL_ADMIN_EMAIL=admin@elzatona.com
-INITIAL_ADMIN_PASSWORD=ElzatonaAdmin2024!
+INITIAL_ADMIN_EMAIL=admin@example.com
+INITIAL_ADMIN_PASSWORD=your-secure-admin-password
 INITIAL_ADMIN_NAME=Super Admin
 INITIAL_ADMIN_ROLE=super_admin
 
-# Firebase Configuration (Your existing Firebase project)
-NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=fir-demo-project-adffb.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=fir-demo-project-adffb
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=fir-demo-project-adffb.firebasestorage.app
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=76366138630
-NEXT_PUBLIC_FIREBASE_APP_ID=1:76366138630:web:0f3381c2f5a62e0401e287
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XZ5VKFGG4Y
+# Firebase Configuration (Get from Firebase Console)
+# Go to: https://console.firebase.google.com/ → Project Settings → General
+NEXT_PUBLIC_FIREBASE_API_KEY=your-firebase-api-key-here
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your-measurement-id
 
 # Security Configuration
 BCRYPT_SALT_ROUNDS=12
@@ -104,9 +108,8 @@ if (fs.existsSync(envPath)) {
 console.log('\n🚀 Next Steps to Complete Setup:\n');
 
 console.log('1. 🔑 GET SUPABASE SERVICE ROLE KEY:');
-console.log(
-  '   • Go to: https://supabase.com/dashboard/project/hpnewqkvpnthpohvxcmq'
-);
+console.log('   • Go to: https://supabase.com/dashboard');
+console.log('   • Select your project');
 console.log('   • Go to Settings → API');
 console.log('   • Copy the "service_role" key');
 console.log('   • Replace "your-service-role-key-here" in .env.local\n');
