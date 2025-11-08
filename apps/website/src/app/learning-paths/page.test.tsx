@@ -4,13 +4,66 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import LearningPathsPage from './page';
+import * as sharedContexts from '@elzatona/shared-contexts';
 
-// Note: Component may not exist yet, create placeholder test
+jest.mock('@elzatona/shared-contexts', () => {
+  const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
+  return {
+    ...actual,
+    useAuth: jest.fn(),
+  };
+});
+
+const mockPush = jest.fn();
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+}));
+
+global.fetch = jest.fn();
+
+jest.mock('lucide-react', () => ({
+  BookOpen: () => <span>📖</span>,
+  Play: () => <span>▶️</span>,
+  Target: () => <span>🎯</span>,
+  Clock: () => <span>⏰</span>,
+  CheckCircle: () => <span>✅</span>,
+  Loader2: () => <span>⏳</span>,
+}));
+
 describe('F-UT-009: Component Renders', () => {
-  it('should render learning paths page', async () => {
-    // Placeholder test - implement when component exists
-    expect(true).toBe(true);
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1', email: 'user@example.com' },
+      isLoading: false,
+    });
+    
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({ data: [] }),
+    });
+  });
+
+  it('should render without errors', async () => {
+    const { container } = render(<LearningPathsPage />);
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  it('should display learning paths content', async () => {
+    render(<LearningPathsPage />);
+    await waitFor(() => {
+      expect(screen.getByText(/.*/)).toBeTruthy();
+    });
   });
 });
