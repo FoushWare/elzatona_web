@@ -2,7 +2,7 @@
 // v2.0 - Enhanced topic management
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseOperations } from '../../lib/supabase-server';
+import { supabaseOperations } from '../../../lib/supabase-server';
 
 // GET /api/topics - Get all topics
 export async function GET() {

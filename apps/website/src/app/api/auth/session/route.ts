@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../../lib/auth-config';
+import { authOptions } from '../../../../lib/auth-config';
 
 interface UserWithId {
   id?: string;
