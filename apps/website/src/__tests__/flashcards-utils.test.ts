@@ -6,7 +6,7 @@ import {
   removeFlashcard,
   isInFlashcards,
   type FlashcardItem,
-} from '../../../lib/flashcards';
+} from '@/lib/flashcards';
 
 describe('flashcards utils', () => {
   beforeEach(() => {

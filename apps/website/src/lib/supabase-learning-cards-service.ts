@@ -28,7 +28,7 @@ export class SupabaseLearningCardsService {
 
       // Transform Supabase data to match LearningCard interface
       return (
-        cards?.map(card => ({
+        cards?.map((card: any) => ({
           id: card.id,
           title: card.title,
           type: card.type as CardType,
@@ -67,7 +67,7 @@ export class SupabaseLearningCardsService {
         throw new Error(error.message);
       }
 
-      const foundCard = card?.find(c => c.id === card_id);
+      const foundCard = card?.find((c: any) => c.id === card_id);
       if (!foundCard) {
         return null;
       }
@@ -268,7 +268,7 @@ export class SupabaseLearningCardsService {
 
       // Transform Supabase data to match LearningCard interface
       return (
-        cards?.map(card => ({
+        cards?.map((card: any) => ({
           id: card.id,
           title: card.title,
           type: card.type as CardType,

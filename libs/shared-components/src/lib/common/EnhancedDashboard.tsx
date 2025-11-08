@@ -24,10 +24,12 @@ const useUserProgress = () => ({
 import { useAuth } from '@elzatona/shared-contexts';
 
 // Import Supabase client (available in both website and admin apps)
+// Note: This import path assumes this component is used in apps/website
+// For proper architecture, supabaseClient should be injected or moved to shared location
 import {
   supabaseClient as supabase,
   isSupabaseAvailable,
-} from '@/lib/supabase-client';
+} from '../../../../../apps/website/src/lib/supabase-client';
 
 import {
   BookOpen,

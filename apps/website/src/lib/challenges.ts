@@ -3,7 +3,7 @@ import {
   Category,
   Difficulty,
   ChallengeFilters,
-} from '@/types/challenge';
+} from '@elzatona/shared-types';
 
 // Sample challenges data - this will be replaced with Firebase data
 export const sampleChallenges: Challenge[] = [

@@ -9,7 +9,9 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { Bookmark, BookmarkCheck, X } from 'lucide-react';
 
-import { flashcardService } from '@/lib/supabase-flashcards';
+// Note: This import path assumes this component is used in apps/website
+// For proper architecture, flashcardService should be injected or moved to shared location
+import { flashcardService } from '../../../../../apps/website/src/lib/supabase-flashcards';
 import { useAuth } from '@elzatona/shared-contexts';
 
 interface AddToFlashcardProps {

@@ -1,4 +1,5 @@
-import { StudyPlan } from '@/types/studyPlans';
+// Import StudyPlan directly since it's not exported from shared-types index
+import type { StudyPlan } from '../../../../libs/shared-types/src/lib/studyPlans';
 
 export const studyPlans: StudyPlan[] = [
   {

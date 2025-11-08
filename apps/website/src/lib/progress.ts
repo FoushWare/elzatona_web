@@ -3,7 +3,7 @@ import {
   LearningGoal,
   ProgressStats,
   LearningRecommendation,
-} from '@/types/progress';
+} from '@elzatona/shared-types';
 
 // Sample learning items covering frontend development topics
 export const sampleLearningItems: LearningItem[] = [
@@ -450,13 +450,27 @@ export const getLearningRecommendations = (
 
   // Sort by priority and difficulty (high priority + beginner first)
   const sortedItems = incompleteItems.sort((a, b) => {
-    const priorityOrder = { high: 3, medium: 2, low: 1 };
-    const difficultyOrder = { beginner: 1, intermediate: 2, advanced: 3 };
+    const priorityOrder: Record<'high' | 'medium' | 'low', number> = {
+      high: 3,
+      medium: 2,
+      low: 1,
+    };
+    const difficultyOrder: Record<
+      'beginner' | 'intermediate' | 'advanced',
+      number
+    > = { beginner: 1, intermediate: 2, advanced: 3 };
 
-    const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority];
+    const priorityDiff =
+      priorityOrder[b.priority as 'high' | 'medium' | 'low'] -
+      priorityOrder[a.priority as 'high' | 'medium' | 'low'];
     if (priorityDiff !== 0) return priorityDiff;
 
-    return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+    return (
+      difficultyOrder[
+        a.difficulty as 'beginner' | 'intermediate' | 'advanced'
+      ] -
+      difficultyOrder[b.difficulty as 'beginner' | 'intermediate' | 'advanced']
+    );
   });
 
   return sortedItems.slice(0, 5).map(item => ({
