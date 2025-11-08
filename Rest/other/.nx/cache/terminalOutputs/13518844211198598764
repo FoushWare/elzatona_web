@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 3.8s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useFlashcardSession.ts:93:50
+Type error: Property 'getUserProgress' does not exist on type '{ getCardsDueForReview(userId: string): Promise<FlashcardProgress[]>; getNewCards(userId: string, maxCards: number): Promise<Flashcard[]>; }'.
+
+[0m [90m 91 |[39m
+ [90m 92 |[39m       [90m// Load total cards studied[39m
+[31m[1m>[22m[39m[90m 93 |[39m       [36mconst[39m userProgress [33m=[39m [36mawait[39m progressService[33m.[39mgetUserProgress(user[33m.[39muid)[33m;[39m
+ [90m    |[39m                                                  [31m[1m^[22m[39m
+ [90m 94 |[39m       setTotalCardsStudied(userProgress[33m.[39mlength)[33m;[39m
+ [90m 95 |[39m     } [36mcatch[39m (err) {
+ [90m 96 |[39m       setError([0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  
