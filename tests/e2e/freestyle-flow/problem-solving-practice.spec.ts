@@ -1,21 +1,22 @@
 /**
- * E2E Test: Problem Solving Practice
- * Task: 13 - Problem Solving Practice
- * Test ID: F-E2E-006
+ * E2E Test: Problem Solving Practice (F-E2E-006)
+ * Task: F-006 - Problem Solving Practice
  */
 
 import { test, expect } from '@playwright/test';
 
 test.describe('F-E2E-006: Problem Solving Practice', () => {
-  test('should load page correctly', async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
     await page.goto('/problem-solving');
-    await expect(page).toHaveURL(/.*problem-solving.*/);
     await page.waitForLoadState('networkidle');
   });
 
-  test('should display main content', async ({ page }) => {
-    await page.goto('/problem-solving');
-    await page.waitForLoadState('networkidle');
+  test('should load problem solving page', async ({ page }) => {
+    await expect(page).toHaveURL(/.*problem-solving.*/);
+  });
+
+  test('should display problem solving content', async ({ page }) => {
+    await page.waitForTimeout(2000);
     const content = await page.textContent('body');
     expect(content).toBeTruthy();
   });
