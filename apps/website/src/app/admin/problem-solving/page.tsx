@@ -18,7 +18,7 @@ import {
 import {
   ProblemSolvingTask,
   ProblemSolvingTaskFormData,
-} from '../../../../types/admin';
+} from '../../../types/admin';
 import {
   useProblemSolvingTasks,
   useCreateProblemSolvingTask,
