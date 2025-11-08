@@ -9,7 +9,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 import { useRouter } from 'next/navigation';
 import { Play, Clock, Users, Code, Search, Filter } from 'lucide-react';
-import { ProblemSolvingTask } from '../../../types/admin';
+import { ProblemSolvingTask } from '../../types/admin';
 
 export default function ProblemSolvingPage() {
   const router = useRouter();
