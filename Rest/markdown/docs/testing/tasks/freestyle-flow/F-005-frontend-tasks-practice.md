@@ -1,4 +1,11 @@
-# Task: Frontend Tasks Practice
+# Task ID: F-005
+# Title: Frontend Tasks Practice
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the Frontend Tasks practice page which displays coding challenges/tasks for frontend development practice, including search, filtering, task selection, and code editor functionality.
+
+# Details:
 
 ## Time Estimation
 
@@ -140,6 +147,8 @@ Test the Frontend Tasks practice page which displays coding challenges/tasks for
     - Verify retry option (if available)
     - Verify graceful degradation
 
+# Test Strategy:
+
 ## Automated Tests
 
 ### Unit Tests
@@ -256,24 +265,3 @@ Test the Frontend Tasks practice page which displays coding challenges/tasks for
     7. Verify view changes
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- frontend-tasks/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- frontend-tasks/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- frontend-tasks*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Tests API integration
-- Tests code editor functionality
-- No dependencies on other tests
-

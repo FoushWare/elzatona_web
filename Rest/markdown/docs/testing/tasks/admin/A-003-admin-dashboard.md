@@ -1,4 +1,11 @@
-# Task: Admin Dashboard
+# Task ID: A-003
+# Title: Admin Dashboard
+# Status: pending
+# Dependencies: 
+# Priority: medium
+# Description: Test the admin dashboard including stats display, navigation, quick actions, and system health monitoring.
+
+# Details:
 
 ## Time Estimation
 
@@ -90,6 +97,8 @@ Test the admin dashboard including stats display, navigation, quick actions, and
    - Verify error message displays
    - Verify retry option available
    - Reconnect and verify stats load
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -202,24 +211,3 @@ Test the admin dashboard including stats display, navigation, quick actions, and
     6. Verify no errors
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- admin/dashboard/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- admin/dashboard/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- admin-dashboard*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires admin authentication
-- Tests API integration
-- No dependencies on other tests
-
