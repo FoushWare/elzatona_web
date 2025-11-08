@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.1s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+./src/app/problem-solving/[id]/page.tsx:24:36
+Type error: Cannot find module '../../../../../types/admin' or its corresponding type declarations.
+
+[0m [90m 22 |[39m   [33mEyeOff[39m[33m,[39m
+ [90m 23 |[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 24 |[39m [36mimport[39m { [33mProblemSolvingTask[39m } [36mfrom[39m [32m'../../../../../types/admin'[39m[33m;[39m
+ [90m    |[39m                                    [31m[1m^[22m[39m
+ [90m 25 |[39m [36mimport[39m { [33mClientCodeRunner[39m } [36mfrom[39m [32m'@elzatona/shared-components'[39m[33m;[39m
+ [90m 26 |[39m
+ [90m 27 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mProblemSolvingTaskPage[39m() {[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

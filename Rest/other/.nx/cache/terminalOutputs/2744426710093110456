@@ -1,0 +1,36 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./src/app/custom-practice/[planId]/page.tsx
+Module not found: Can't resolve '../../lib/flashcards'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/features/guided-learning/page.tsx
+Module not found: Can't resolve '../../context/LearningTypeContext'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/free-style/cart/page.tsx
+Module not found: Can't resolve '../../lib/cart'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/free-style/cart/page.tsx
+Module not found: Can't resolve '../../context/LearningTypeContext'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/page.tsx
+Module not found: Can't resolve '../../context/LearningTypeContext'
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+> Build failed because of webpack errors
+Build process exited due to code 1  

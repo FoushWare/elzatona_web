@@ -1,0 +1,23 @@
+   ▲ Next.js 15.5.1
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.2s
+   Skipping linting
+   Checking validity of types ...
+Failed to compile.
+
+../../libs/shared-hooks/src/lib/useLearningPlans.ts:208:48
+Type error: Property 'status' does not exist on type 'LearningPlanProgress'.
+
+[0m [90m 206 |[39m         [90m// Find active plan[39m
+ [90m 207 |[39m         [36mconst[39m activePlan [33m=[39m result[33m.[39mplans[33m.[39mfind(
+[31m[1m>[22m[39m[90m 208 |[39m           (plan[33m:[39m [33mLearningPlanProgress[39m) [33m=>[39m plan[33m.[39mstatus [33m===[39m [32m'active'[39m
+ [90m     |[39m                                                [31m[1m^[22m[39m
+ [90m 209 |[39m         )[33m;[39m
+ [90m 210 |[39m         setCurrentPlan(activePlan [33m||[39m [36mnull[39m)[33m;[39m
+ [90m 211 |[39m       }[0m
+Next.js build worker exited with code: 1 and signal: null
+Build process exited due to code 1  

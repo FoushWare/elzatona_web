@@ -1,0 +1,21 @@
+{
+  "run": {
+    "command": "nx build website",
+    "startTime": "2025-11-08T21:50:35.415Z",
+    "endTime": "2025-11-08T21:50:35.708Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "website:build:production",
+      "target": "build",
+      "projectName": "website",
+      "hash": "8707960663499129398",
+      "startTime": "2025-11-08T21:50:35.451Z",
+      "endTime": "2025-11-08T21:50:35.707Z",
+      "params": "",
+      "cacheStatus": "local-cache-hit",
+      "status": 0
+    }
+  ]
+}

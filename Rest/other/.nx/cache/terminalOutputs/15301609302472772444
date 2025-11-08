@@ -1,0 +1,1255 @@
+● Validation Warning:
+
+  Unknown option "coverageProvider" with value "v8" was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+  console.log
+    ✅ Supabase client configured successfully
+
+      at Object.log (src/lib/supabase-client.ts:23:11)
+
+  console.log
+    URL: https://test.supabase.co
+
+      at Object.log (src/lib/supabase-client.ts:24:11)
+
+  console.log
+    TanStack Query Status: {
+      cardsLoading: false,
+      cardsError: null,
+      cardsData: { count: undefined, dataLength: 0 },
+      plansLoading: false,
+      plansError: null,
+      plansData: { count: undefined, dataLength: 0 },
+      categoriesLoading: false,
+      categoriesError: null,
+      categoriesData: { count: undefined, dataLength: 0 },
+      topicsLoading: false,
+      topicsError: null,
+      topicsData: { count: undefined, dataLength: 0 },
+      questionsLoading: false,
+      questionsError: null,
+      questionsData: { count: 0, dataLength: 0 }
+    }
+
+      at log (src/app/admin/content-management/page.tsx:308:11)
+
+  console.error
+    Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+    
+    When testing, code that resolves suspended data should be wrapped into act(...):
+    
+    act(() => {
+      /* finish loading suspended data */
+    });
+    /* assert on the output */
+    
+    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+      at printWarning (../../node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (../../node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfSuspenseResolutionNotWrappedWithActDEV (../../node_modules/react-dom/cjs/react-dom.development.js:27643:7)
+      at pingSuspendedRoot (../../node_modules/react-dom/cjs/react-dom.development.js:27228:3)
+
+  console.error
+    Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+    
+    When testing, code that resolves suspended data should be wrapped into act(...):
+    
+    act(() => {
+      /* finish loading suspended data */
+    });
+    /* assert on the output */
+    
+    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+      at printWarning (../../node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (../../node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfSuspenseResolutionNotWrappedWithActDEV (../../node_modules/react-dom/cjs/react-dom.development.js:27643:7)
+      at pingSuspendedRoot (../../node_modules/react-dom/cjs/react-dom.development.js:27228:3)
+
+  console.error
+    Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+    
+    When testing, code that resolves suspended data should be wrapped into act(...):
+    
+    act(() => {
+      /* finish loading suspended data */
+    });
+    /* assert on the output */
+    
+    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+      at printWarning (../../node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (../../node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfSuspenseResolutionNotWrappedWithActDEV (../../node_modules/react-dom/cjs/react-dom.development.js:27643:7)
+      at pingSuspendedRoot (../../node_modules/react-dom/cjs/react-dom.development.js:27228:3)
+
+  console.error
+    Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+    
+    When testing, code that resolves suspended data should be wrapped into act(...):
+    
+    act(() => {
+      /* finish loading suspended data */
+    });
+    /* assert on the output */
+    
+    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+      at printWarning (../../node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (../../node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfSuspenseResolutionNotWrappedWithActDEV (../../node_modules/react-dom/cjs/react-dom.development.js:27643:7)
+      at pingSuspendedRoot (../../node_modules/react-dom/cjs/react-dom.development.js:27228:3)
+
+  console.error
+    Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+    
+    When testing, code that resolves suspended data should be wrapped into act(...):
+    
+    act(() => {
+      /* finish loading suspended data */
+    });
+    /* assert on the output */
+    
+    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+      at printWarning (../../node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (../../node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfSuspenseResolutionNotWrappedWithActDEV (../../node_modules/react-dom/cjs/react-dom.development.js:27643:7)
+      at pingSuspendedRoot (../../node_modules/react-dom/cjs/react-dom.development.js:27228:3)
+
+  console.log
+    🔍 Fetching questions... { currentPage: 1, pageSize: 10 }
+
+      at log (src/app/admin/content/questions/page.tsx:81:17)
+
+  console.error
+    ❌ Error: ReferenceError: fetch is not defined
+        at fetchQuestions (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:85:26)
+        at fetchQuestions (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:109:5)
+        at commitHookEffectListMount (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+        at commitPassiveMountOnFiber (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+        at commitPassiveMountEffects_complete (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+        at commitPassiveMountEffects_begin (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+        at commitPassiveMountEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+        at flushPassiveEffectsImpl (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+        at flushPassiveEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+        at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+        at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+        at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+        at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+        at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:254:13)
+
+      101 |         console.log('✅ Questions loaded:', result.data?.length || 0);
+      102 |       } catch (err) {
+    > 103 |         console.error('❌ Error:', err);
+          |                 ^
+      104 |         setError(err instanceof Error ? err.message : 'Unknown error');
+      105 |         setLoading(false);
+      106 |       }
+
+      at error (src/app/admin/content/questions/page.tsx:103:17)
+      at fetchQuestions (src/app/admin/content/questions/page.tsx:109:5)
+      at commitHookEffectListMount (../../node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+      at commitPassiveMountOnFiber (../../node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+      at commitPassiveMountEffects_complete (../../node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+      at commitPassiveMountEffects_begin (../../node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+      at commitPassiveMountEffects (../../node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+      at flushPassiveEffectsImpl (../../node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+      at flushPassiveEffects (../../node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+      at ../../node_modules/react-dom/cjs/react-dom.development.js:26808:9
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:254:13)
+
+  console.error
+    Error fetching cards: ReferenceError: fetch is not defined
+        at fetchCards (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:116:26)
+        at fetchCards (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:125:5)
+        at commitHookEffectListMount (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+        at commitPassiveMountOnFiber (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+        at commitPassiveMountEffects_complete (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+        at commitPassiveMountEffects_begin (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+        at commitPassiveMountEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+        at flushPassiveEffectsImpl (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+        at flushPassiveEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+        at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+        at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+        at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+        at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+        at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:254:13)
+
+      120 |         }
+      121 |       } catch (error) {
+    > 122 |         console.error('Error fetching cards:', error);
+          |                 ^
+      123 |       }
+      124 |     };
+      125 |     fetchCards();
+
+      at error (src/app/admin/content/questions/page.tsx:122:17)
+      at fetchCards (src/app/admin/content/questions/page.tsx:125:5)
+      at commitHookEffectListMount (../../node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+      at commitPassiveMountOnFiber (../../node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+      at commitPassiveMountEffects_complete (../../node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+      at commitPassiveMountEffects_begin (../../node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+      at commitPassiveMountEffects (../../node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+      at flushPassiveEffectsImpl (../../node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+      at flushPassiveEffects (../../node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+      at ../../node_modules/react-dom/cjs/react-dom.development.js:26808:9
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:254:13)
+
+  console.log
+    TanStack Query Status: {
+      cardsLoading: false,
+      cardsError: null,
+      cardsData: { count: undefined, dataLength: 0 },
+      plansLoading: false,
+      plansError: null,
+      plansData: { count: undefined, dataLength: 1 },
+      categoriesLoading: false,
+      categoriesError: null,
+      categoriesData: { count: undefined, dataLength: 1 },
+      topicsLoading: false,
+      topicsError: null,
+      topicsData: { count: undefined, dataLength: 1 },
+      questionsLoading: false,
+      questionsError: null,
+      questionsData: { count: 0, dataLength: 0 }
+    }
+
+      at log (src/app/admin/content-management/page.tsx:308:11)
+
+  console.log
+    TanStack Query Status: {
+      cardsLoading: false,
+      cardsError: null,
+      cardsData: { count: undefined, dataLength: 0 },
+      plansLoading: false,
+      plansError: null,
+      plansData: { count: undefined, dataLength: 0 },
+      categoriesLoading: false,
+      categoriesError: null,
+      categoriesData: { count: undefined, dataLength: 0 },
+      topicsLoading: false,
+      topicsError: null,
+      topicsData: { count: undefined, dataLength: 0 },
+      questionsLoading: false,
+      questionsError: null,
+      questionsData: { count: 0, dataLength: 0 }
+    }
+
+      at log (src/app/admin/content-management/page.tsx:308:11)
+
+  console.log
+    🔄 Force refreshing all queries on mount...
+
+      at log (src/app/admin/content-management/page.tsx:348:13)
+
+  console.log
+    🚀 Component mounted, checking initial data...
+
+      at log (src/app/admin/content-management/page.tsx:358:13)
+
+  console.log
+    🔍 Fetching questions... { currentPage: 1, pageSize: 10 }
+
+      at log (src/app/admin/content/questions/page.tsx:81:17)
+
+  console.error
+    ❌ Error: ReferenceError: fetch is not defined
+        at fetchQuestions (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:85:26)
+        at fetchQuestions (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:109:5)
+        at commitHookEffectListMount (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+        at commitPassiveMountOnFiber (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+        at commitPassiveMountEffects_complete (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+        at commitPassiveMountEffects_begin (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+        at commitPassiveMountEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+        at flushPassiveEffectsImpl (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+        at flushPassiveEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+        at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+        at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+        at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+        at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+        at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:438:13)
+
+      101 |         console.log('✅ Questions loaded:', result.data?.length || 0);
+      102 |       } catch (err) {
+    > 103 |         console.error('❌ Error:', err);
+          |                 ^
+      104 |         setError(err instanceof Error ? err.message : 'Unknown error');
+      105 |         setLoading(false);
+      106 |       }
+
+      at error (src/app/admin/content/questions/page.tsx:103:17)
+      at fetchQuestions (src/app/admin/content/questions/page.tsx:109:5)
+      at commitHookEffectListMount (../../node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+      at commitPassiveMountOnFiber (../../node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+      at commitPassiveMountEffects_complete (../../node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+      at commitPassiveMountEffects_begin (../../node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+      at commitPassiveMountEffects (../../node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+      at flushPassiveEffectsImpl (../../node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+      at flushPassiveEffects (../../node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+      at ../../node_modules/react-dom/cjs/react-dom.development.js:26808:9
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:438:13)
+
+  console.error
+    Error fetching cards: ReferenceError: fetch is not defined
+        at fetchCards (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:116:26)
+        at fetchCards (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:125:5)
+        at commitHookEffectListMount (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+        at commitPassiveMountOnFiber (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+        at commitPassiveMountEffects_complete (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+        at commitPassiveMountEffects_begin (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+        at commitPassiveMountEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+        at flushPassiveEffectsImpl (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+        at flushPassiveEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+        at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+        at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+        at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+        at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+        at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:438:13)
+
+      120 |         }
+      121 |       } catch (error) {
+    > 122 |         console.error('Error fetching cards:', error);
+          |                 ^
+      123 |       }
+      124 |     };
+      125 |     fetchCards();
+
+      at error (src/app/admin/content/questions/page.tsx:122:17)
+      at fetchCards (src/app/admin/content/questions/page.tsx:125:5)
+      at commitHookEffectListMount (../../node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+      at commitPassiveMountOnFiber (../../node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+      at commitPassiveMountEffects_complete (../../node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+      at commitPassiveMountEffects_begin (../../node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+      at commitPassiveMountEffects (../../node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+      at flushPassiveEffectsImpl (../../node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+      at flushPassiveEffects (../../node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+      at ../../node_modules/react-dom/cjs/react-dom.development.js:26808:9
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:438:13)
+
+  console.log
+    🔍 Fetching questions... { currentPage: 1, pageSize: 10 }
+
+      at log (src/app/admin/content/questions/page.tsx:81:17)
+
+  console.error
+    ❌ Error: ReferenceError: fetch is not defined
+        at fetchQuestions (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:85:26)
+        at fetchQuestions (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:109:5)
+        at commitHookEffectListMount (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+        at commitPassiveMountOnFiber (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+        at commitPassiveMountEffects_complete (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+        at commitPassiveMountEffects_begin (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+        at commitPassiveMountEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+        at flushPassiveEffectsImpl (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+        at flushPassiveEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+        at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+        at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+        at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+        at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+        at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:489:13)
+
+      101 |         console.log('✅ Questions loaded:', result.data?.length || 0);
+      102 |       } catch (err) {
+    > 103 |         console.error('❌ Error:', err);
+          |                 ^
+      104 |         setError(err instanceof Error ? err.message : 'Unknown error');
+      105 |         setLoading(false);
+      106 |       }
+
+      at error (src/app/admin/content/questions/page.tsx:103:17)
+      at fetchQuestions (src/app/admin/content/questions/page.tsx:109:5)
+      at commitHookEffectListMount (../../node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+      at commitPassiveMountOnFiber (../../node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+      at commitPassiveMountEffects_complete (../../node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+      at commitPassiveMountEffects_begin (../../node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+      at commitPassiveMountEffects (../../node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+      at flushPassiveEffectsImpl (../../node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+      at flushPassiveEffects (../../node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+      at ../../node_modules/react-dom/cjs/react-dom.development.js:26808:9
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:489:13)
+
+  console.error
+    Error fetching cards: ReferenceError: fetch is not defined
+        at fetchCards (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:116:26)
+        at fetchCards (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:125:5)
+        at commitHookEffectListMount (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+        at commitPassiveMountOnFiber (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+        at commitPassiveMountEffects_complete (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+        at commitPassiveMountEffects_begin (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+        at commitPassiveMountEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+        at flushPassiveEffectsImpl (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+        at flushPassiveEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+        at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+        at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+        at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+        at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+        at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:489:13)
+
+      120 |         }
+      121 |       } catch (error) {
+    > 122 |         console.error('Error fetching cards:', error);
+          |                 ^
+      123 |       }
+      124 |     };
+      125 |     fetchCards();
+
+      at error (src/app/admin/content/questions/page.tsx:122:17)
+      at fetchCards (src/app/admin/content/questions/page.tsx:125:5)
+      at commitHookEffectListMount (../../node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+      at commitPassiveMountOnFiber (../../node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+      at commitPassiveMountEffects_complete (../../node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+      at commitPassiveMountEffects_begin (../../node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+      at commitPassiveMountEffects (../../node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+      at flushPassiveEffectsImpl (../../node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+      at flushPassiveEffects (../../node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+      at ../../node_modules/react-dom/cjs/react-dom.development.js:26808:9
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:489:13)
+
+  console.log
+    TanStack Query Status: {
+      cardsLoading: false,
+      cardsError: Error: Network error
+          at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:517:16)
+          at Promise.finally.completed (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at _runTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-runner/build/index.js:275:16)
+          at runTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-runner/build/index.js:343:7),
+      cardsData: null,
+      plansLoading: false,
+      plansError: Error: Network error
+          at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:517:16)
+          at Promise.finally.completed (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at _runTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-runner/build/index.js:275:16)
+          at runTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-runner/build/index.js:343:7),
+      plansData: null,
+      categoriesLoading: false,
+      categoriesError: Error: Network error
+          at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:517:16)
+          at Promise.finally.completed (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at _runTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-runner/build/index.js:275:16)
+          at runTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-runner/build/index.js:343:7),
+      categoriesData: null,
+      topicsLoading: false,
+      topicsError: Error: Network error
+          at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:517:16)
+          at Promise.finally.completed (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at _runTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-runner/build/index.js:275:16)
+          at runTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-runner/build/index.js:343:7),
+      topicsData: null,
+      questionsLoading: false,
+      questionsError: Error: Network error
+          at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:517:16)
+          at Promise.finally.completed (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at _runTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-runner/build/index.js:275:16)
+          at runTest (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/jest-runner/build/index.js:343:7),
+      questionsData: null
+    }
+
+      at log (src/app/admin/content-management/page.tsx:308:11)
+
+  console.log
+    🔄 Force refreshing all queries on mount...
+
+      at log (src/app/admin/content-management/page.tsx:348:13)
+
+  console.log
+    🚀 Component mounted, checking initial data...
+
+      at log (src/app/admin/content-management/page.tsx:358:13)
+
+  console.log
+    🔍 Fetching questions... { currentPage: 1, pageSize: 10 }
+
+      at log (src/app/admin/content/questions/page.tsx:81:17)
+
+  console.error
+    ❌ Error: ReferenceError: fetch is not defined
+        at fetchQuestions (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:85:26)
+        at fetchQuestions (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:109:5)
+        at commitHookEffectListMount (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+        at commitPassiveMountOnFiber (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+        at commitPassiveMountEffects_complete (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+        at commitPassiveMountEffects_begin (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+        at commitPassiveMountEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+        at flushPassiveEffectsImpl (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+        at flushPassiveEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+        at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+        at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+        at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+        at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+        at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:565:13)
+
+      101 |         console.log('✅ Questions loaded:', result.data?.length || 0);
+      102 |       } catch (err) {
+    > 103 |         console.error('❌ Error:', err);
+          |                 ^
+      104 |         setError(err instanceof Error ? err.message : 'Unknown error');
+      105 |         setLoading(false);
+      106 |       }
+
+      at error (src/app/admin/content/questions/page.tsx:103:17)
+      at fetchQuestions (src/app/admin/content/questions/page.tsx:109:5)
+      at commitHookEffectListMount (../../node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+      at commitPassiveMountOnFiber (../../node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+      at commitPassiveMountEffects_complete (../../node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+      at commitPassiveMountEffects_begin (../../node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+      at commitPassiveMountEffects (../../node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+      at flushPassiveEffectsImpl (../../node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+      at flushPassiveEffects (../../node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+      at ../../node_modules/react-dom/cjs/react-dom.development.js:26808:9
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:565:13)
+
+  console.error
+    Error fetching cards: ReferenceError: fetch is not defined
+        at fetchCards (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:116:26)
+        at fetchCards (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/apps/website/src/app/admin/content/questions/page.tsx:125:5)
+        at commitHookEffectListMount (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+        at commitPassiveMountOnFiber (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+        at commitPassiveMountEffects_complete (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+        at commitPassiveMountEffects_begin (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+        at commitPassiveMountEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+        at flushPassiveEffectsImpl (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+        at flushPassiveEffects (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react-dom/cjs/react-dom.development.js:26808:9
+        at flushActQueue (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2667:24)
+        at act (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/react/cjs/react.development.js:2582:11)
+        at /Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+        at renderRoot (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+        at render (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+        at Object.<anonymous> (/Users/a.fouad/SideProjects/Elzatona-all/Elzatona-web/tests/admin/admin-integration.test.tsx:565:13)
+
+      120 |         }
+      121 |       } catch (error) {
+    > 122 |         console.error('Error fetching cards:', error);
+          |                 ^
+      123 |       }
+      124 |     };
+      125 |     fetchCards();
+
+      at error (src/app/admin/content/questions/page.tsx:122:17)
+      at fetchCards (src/app/admin/content/questions/page.tsx:125:5)
+      at commitHookEffectListMount (../../node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+      at commitPassiveMountOnFiber (../../node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+      at commitPassiveMountEffects_complete (../../node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+      at commitPassiveMountEffects_begin (../../node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+      at commitPassiveMountEffects (../../node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+      at flushPassiveEffectsImpl (../../node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+      at flushPassiveEffects (../../node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+      at ../../node_modules/react-dom/cjs/react-dom.development.js:26808:9
+      at flushActQueue (../../node_modules/react/cjs/react.development.js:2667:24)
+      at act (../../node_modules/react/cjs/react.development.js:2582:11)
+      at ../../node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (../../node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (../../node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:565:13)
+
+FAIL tests/admin/admin-integration.test.tsx
+  Admin Integration Tests
+    Complete Card Management Workflow
+      ✕ should create, read, update, and delete a learning card (184 ms)
+    Complete Question Management Workflow
+      ✕ should create, read, update, and delete a question (16 ms)
+    Cross-Component Data Consistency
+      ✕ should maintain data consistency between content management and questions pages (1022 ms)
+    Search and Filter Integration
+      ✕ should maintain search state across different admin pages (6 ms)
+    Bulk Operations Integration
+      ✕ should handle bulk operations across multiple content types (31 ms)
+    Error Recovery Integration
+      ✕ should handle and recover from errors gracefully across components (1006 ms)
+    Performance Integration
+      ✕ should handle large datasets efficiently (1016 ms)
+
+  ● Admin Integration Tests › Complete Card Management Workflow › should create, read, update, and delete a learning card
+
+    TestingLibraryElementError: Unable to find an element with the text: /add card/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div />[39m
+    [36m</body>[39m
+
+      134 |
+      135 |       // Step 1: Create a new card
+    > 136 |       const addCardButton = screen.getByText(/add card/i);
+          |                                    ^
+      137 |       await userEvent.click(addCardButton);
+      138 |
+      139 |       await waitFor(() => {
+
+      at Object.getElementError (../../node_modules/@testing-library/dom/dist/config.js:37:19)
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.getByText (../../tests/admin/admin-integration.test.tsx:136:36)
+
+  ● Admin Integration Tests › Complete Question Management Workflow › should create, read, update, and delete a question
+
+    TestingLibraryElementError: Unable to find an element with the text: /add question/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-4xl font-bold text-gray-900 dark:text-white mb-8"[39m
+            [36m>[39m
+              [0mQuestion Management[0m
+            [36m</h1>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center justify-center h-64"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"text-center p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg"[39m
+              [36m>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"font-semibold mb-2"[39m
+                [36m>[39m
+                  [0mError loading questions:[0m
+                [36m</p>[39m
+                [36m<p>[39m
+                  [0mfetch is not defined[0m
+                [36m</p>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 mt-4"[39m
+                [36m>[39m
+                  [0mRetry[0m
+                [36m</button>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      255 |
+      256 |       // Step 1: Create a new question
+    > 257 |       const addQuestionButton = screen.getByText(/add question/i);
+          |                                        ^
+      258 |       await userEvent.click(addQuestionButton);
+      259 |
+      260 |       await waitFor(() => {
+
+      at Object.getElementError (../../node_modules/@testing-library/dom/dist/config.js:37:19)
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.getByText (../../tests/admin/admin-integration.test.tsx:257:40)
+
+  ● Admin Integration Tests › Cross-Component Data Consistency › should maintain data consistency between content management and questions pages
+
+    Unable to find an element with the text: Core Technologies. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"container mx-auto p-6"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mb-8"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-3xl font-bold text-gray-900 dark:text-white mb-2"[39m
+            [36m>[39m
+              [0m🎯 Unified Learning Management[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-gray-600 dark:text-gray-400"[39m
+            [36m>[39m
+              [0mComprehensive admin interface for managing learning cards, plans, categories, topics, and questions[0m
+            [36m</p>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"grid grid-cols-2 md:grid-cols-5 gap-4 mb-8"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"rounded-xl border bg-card text-card-foreground shadow"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"p-4"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex items-center"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"lucide lucide-layers h-8 w-8 mr-3"[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mheight[39m=[32m"24"[39m
+                    [33mstroke[39m=[32m"currentColor"[39m
+                    [33mstroke-linecap[39m=[32m"round"[39m
+                    [33mstroke-linejoin[39m=[32m"round"[39m
+                    [33mstroke-width[39m=[32m"2"[39m
+                    [33mstyle[39m=[32m"color: rgb(59, 130, 246);"[39m
+                    [33mviewBox[39m=[32m"0 0 24 24"[39m
+                    [33mwidth[39m=[32m"24"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [36m>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"[39m
+                    [36m/>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"[39m
+                    [36m/>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"[39m
+                    [36m/>[39m
+                  [36m</svg>[39m
+                  [36m<div>[39m
+                    [36m<p[39m
+                      [33mclass[39m=[32m"text-sm font-medium text-gray-600 dark:text-gray-400"[39m
+                    [36m>[39m
+                      [0mCards[0m
+                    [36m</p>[39m
+                    [36m<p[39m
+                      [33mclass[39m=[32m"text-2xl font-bold text-gray-900 dark:text-white"[39m
+                    [36m>[39m
+                      [0m0[0m
+                    [36m</p>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"rounded-xl border bg-card text-card-foreground shadow"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"p-4"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex items-center"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"lucide lucide-users h-8 w-8 mr-3"[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mheight[39m=[32m"24"[39m
+                    [33mstroke[39m=[32m"currentColor"[39m
+                    [33mstroke-linecap[39m=[32m"round"[39m
+                    [33mstroke-linejoin[39m=[32m"round"[39m
+                    [33mstroke-width[39m=[32m"2"[39m
+                    [33mstyle[39m=[32m"color: rgb(16, 185, 129);"[39m
+                    [33mviewBox[39m=[32m"0 0 24 24"[39m
+                    [33mwidth[39m=[32m"24"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [36m>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"[39m
+                    [36m/>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M16 3.128a4 4 0 0 1 0 7.744"[39m
+                    [36m/>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M22 21v-2a4 4 0 0 0-3-3.87"[39m
+                    [36m/>[39m
+                    [36m<circle[39m
+                      [33mcx[39m=[32m"9"[39m
+                      [33mcy[39m=[32m"7"[39m
+                      [33mr[39m=[32m"4"[39m
+                    [36m/>[39m
+                  [36m</svg>[39m
+                  [36m<div>[39m
+                    [36m<p[39m
+                      [33mclass[39m=[32m"text-sm font-medium text-gray-600 dark:text-gray-400"[39m
+                    [36m>[39m
+                      [0mPlans[0m
+                    [36m</p>[39m
+                    [36m<p[39m
+                      [33mclass[39m=[32m"text-2xl font-bold text-gray-900 dark:text-white"[39m
+                    [36m>[39m
+                      [0m0[0m
+                    [36m</p>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"rounded-xl border bg-card text-card-foreground shadow"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"p-4"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"flex items-center"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"lucide lucide-book-open h-8 w-8 mr-3"[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mheight[39m=[32m"24"[39m
+                    [33mstroke[39m=[32m"currentColor"[39m
+                    [33mstroke-linecap[39m=[32m"round"[39m
+                    [33mstroke-linejoin[39m=[32m"round"[39m
+                    [33mstroke-width[39m=[32m"2"[39m
+                    [33mstyle[39m=[32m"color: rgb(139, 92, 246);"[39m
+                    [33mviewBox[39m=[32m"0 0 24 24"[39m
+                    [33mwidth[39m=[32m"24"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [36m>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M12 7v14"[39m
+                    [36m/>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"[39m
+                    [36m/>[39m
+                  [36m</svg>[39m
+                  [36m<div>[39m
+                    [36m<p[39m
+                      [33mclass[39m=[32m"text-sm font-medium text-gray-600 dark:text-gray-400"[...
+
+      388 |       render(<ContentManagementPage />);
+      389 |
+    > 390 |       await waitFor(() => {
+          |                    ^
+      391 |         expect(screen.getByText('Core Technologies')).toBeInTheDocument();
+      392 |       });
+      393 |
+
+      at waitForWrapper (../../node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:390:20)
+
+  ● Admin Integration Tests › Search and Filter Integration › should maintain search state across different admin pages
+
+    TestingLibraryElementError: Unable to find an element with the placeholder text of: /search questions/i
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-4xl font-bold text-gray-900 dark:text-white mb-8"[39m
+            [36m>[39m
+              [0mQuestion Management[0m
+            [36m</h1>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center justify-center h-64"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"text-center p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg"[39m
+              [36m>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"font-semibold mb-2"[39m
+                [36m>[39m
+                  [0mError loading questions:[0m
+                [36m</p>[39m
+                [36m<p>[39m
+                  [0mfetch is not defined[0m
+                [36m</p>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 mt-4"[39m
+                [36m>[39m
+                  [0mRetry[0m
+                [36m</button>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      439 |
+      440 |       // Search for React questions
+    > 441 |       const searchInput = screen.getByPlaceholderText(/search questions/i);
+          |                                  ^
+      442 |       await userEvent.type(searchInput, 'React');
+      443 |
+      444 |       await waitFor(() => {
+
+      at Object.getElementError (../../node_modules/@testing-library/dom/dist/config.js:37:19)
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at Object.getByPlaceholderText (../../tests/admin/admin-integration.test.tsx:441:34)
+
+  ● Admin Integration Tests › Bulk Operations Integration › should handle bulk operations across multiple content types
+
+    TestingLibraryElementError: Unable to find an accessible element with the role "checkbox"
+
+    Here are the accessible roles:
+
+      heading:
+
+      Name "Question Management":
+      [36m<h1[39m
+        [33mclass[39m=[32m"text-4xl font-bold text-gray-900 dark:text-white mb-8"[39m
+      [36m/>[39m
+
+      --------------------------------------------------
+      paragraph:
+
+      Name "":
+      [36m<p[39m
+        [33mclass[39m=[32m"font-semibold mb-2"[39m
+      [36m/>[39m
+
+      Name "":
+      [36m<p />[39m
+
+      --------------------------------------------------
+      button:
+
+      Name "Retry":
+      [36m<button[39m
+        [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 mt-4"[39m
+      [36m/>[39m
+
+      --------------------------------------------------
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-4xl font-bold text-gray-900 dark:text-white mb-8"[39m
+            [36m>[39m
+              [0mQuestion Management[0m
+            [36m</h1>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center justify-center h-64"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"text-center p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg"[39m
+              [36m>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"font-semibold mb-2"[39m
+                [36m>[39m
+                  [0mError loading questions:[0m
+                [36m</p>[39m
+                [36m<p>[39m
+                  [0mfetch is not defined[0m
+                [36m</p>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 mt-4"[39m
+                [36m>[39m
+                  [0mRetry[0m
+                [36m</button>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      490 |
+      491 |       // Select multiple questions
+    > 492 |       const checkboxes = screen.getAllByRole('checkbox');
+          |                                 ^
+      493 |       await userEvent.click(checkboxes[1]); // Select second question
+      494 |       await userEvent.click(checkboxes[2]); // Select third question
+      495 |
+
+      at Object.getElementError (../../node_modules/@testing-library/dom/dist/config.js:37:19)
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at ../../node_modules/@testing-library/dom/dist/query-helpers.js:109:15
+      at Object.getAllByRole (../../tests/admin/admin-integration.test.tsx:492:33)
+
+  ● Admin Integration Tests › Error Recovery Integration › should handle and recover from errors gracefully across components
+
+    Found multiple elements with the text: /error/i
+
+    Here are the matching elements:
+
+    Ignored nodes: comments, script, style
+    [36m<h2[39m
+      [33mclass[39m=[32m"text-xl font-semibold text-gray-900 dark:text-white mb-2"[39m
+    [36m>[39m
+      [0mError Loading Data[0m
+    [36m</h2>[39m
+
+    Ignored nodes: comments, script, style
+    [36m<p[39m
+      [33mclass[39m=[32m"text-gray-600 dark:text-gray-400 mb-4"[39m
+    [36m>[39m
+      [0mThere was an error loading the admin data. Please try refreshing the page.[0m
+    [36m</p>[39m
+
+    Ignored nodes: comments, script, style
+    [36m<p>[39m
+      [0mCards Error: [0m
+      [0mNetwork error[0m
+    [36m</p>[39m
+
+    Ignored nodes: comments, script, style
+    [36m<p>[39m
+      [0mPlans Error: [0m
+      [0mNetwork error[0m
+    [36m</p>[39m
+
+    Ignored nodes: comments, script, style
+    [36m<p>[39m
+      [0mCategories Error: [0m
+      [0mNetwork error[0m
+    [36m</p>[39m
+
+    Ignored nodes: comments, script, style
+    [36m<p>[39m
+      [0mTopics Error: [0m
+      [0mNetwork error[0m
+    [36m</p>[39m
+
+    Ignored nodes: comments, script, style
+    [36m<p>[39m
+      [0mQuestions Error: [0m
+      [0mNetwork error[0m
+    [36m</p>[39m
+
+    (If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"container mx-auto p-6"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center justify-center h-64"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"text-center"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"text-red-500 text-6xl mb-4"[39m
+              [36m>[39m
+                [0m⚠️[0m
+              [36m</div>[39m
+              [36m<h2[39m
+                [33mclass[39m=[32m"text-xl font-semibold text-gray-900 dark:text-white mb-2"[39m
+              [36m>[39m
+                [0mError Loading Data[0m
+              [36m</h2>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-gray-600 dark:text-gray-400 mb-4"[39m
+              [36m>[39m
+                [0mThere was an error loading the admin data. Please try refreshing the page.[0m
+              [36m</p>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"[39m
+              [36m>[39m
+                [0mRefresh Page[0m
+              [36m</button>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"mt-4 text-sm text-gray-500"[39m
+              [36m>[39m
+                [36m<p>[39m
+                  [0mCards Error: [0m
+                  [0mNetwork error[0m
+                [36m</p>[39m
+                [36m<p>[39m
+                  [0mPlans Error: [0m
+                  [0mNetwork error[0m
+                [36m</p>[39m
+                [36m<p>[39m
+                  [0mCategories Error: [0m
+                  [0mNetwork error[0m
+                [36m</p>[39m
+                [36m<p>[39m
+                  [0mTopics Error: [0m
+                  [0mNetwork error[0m
+                [36m</p>[39m
+                [36m<p>[39m
+                  [0mQuestions Error: [0m
+                  [0mNetwork error[0m
+                [36m</p>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      523 |       render(<ContentManagementPage />);
+      524 |
+    > 525 |       await waitFor(() => {
+          |                    ^
+      526 |         expect(screen.getByText(/error/i)).toBeInTheDocument();
+      527 |       });
+      528 |
+
+      at waitForWrapper (../../node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:525:20)
+
+  ● Admin Integration Tests › Performance Integration › should handle large datasets efficiently
+
+    Unable to find an element with the text: Item 0. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-4xl font-bold text-gray-900 dark:text-white mb-8"[39m
+            [36m>[39m
+              [0mQuestion Management[0m
+            [36m</h1>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center justify-center h-64"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"text-center p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg"[39m
+              [36m>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"font-semibold mb-2"[39m
+                [36m>[39m
+                  [0mError loading questions:[0m
+                [36m</p>[39m
+                [36m<p>[39m
+                  [0mfetch is not defined[0m
+                [36m</p>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 mt-4"[39m
+                [36m>[39m
+                  [0mRetry[0m
+                [36m</button>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+      565 |       render(<QuestionsPage />);
+      566 |
+    > 567 |       await waitFor(() => {
+          |                    ^
+      568 |         expect(screen.getByText('Item 0')).toBeInTheDocument();
+      569 |       });
+      570 |
+
+      at waitForWrapper (../../node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+      at Object.<anonymous> (../../tests/admin/admin-integration.test.tsx:567:20)
+
+Test Suites: 1 failed, 1 total
+Tests:       7 failed, 7 total
+Snapshots:   0 total
+Time:        3.827 s, estimated 4 s
+Ran all test suites matching ../../tests/admin/admin-integration.test.tsx.
