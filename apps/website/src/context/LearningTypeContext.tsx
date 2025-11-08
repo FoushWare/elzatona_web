@@ -10,7 +10,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { supabaseClient } from '@/lib/supabase-client';
+import { supabaseClient } from '../../../lib/supabase-client';
 
 export type LearningType = 'guided' | 'free-style' | 'custom';
 

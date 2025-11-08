@@ -5,7 +5,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-import { LearningCard } from '@/types/learning-cards';
+import { LearningCard } from '../../types/learning-cards';
 
 // GET /api/admin/learning-cards - Get all learning cards
 export async function GET() {

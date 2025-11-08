@@ -2,7 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
-import { adminConfig } from '@/admin.config';
+// Admin config - using environment variables directly
+const adminConfig = {
+  security: {
+    saltRounds: 10,
+    sessionTimeout: 24 * 60 * 60 * 1000,
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET || 'default-secret',
+  },
+};
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
