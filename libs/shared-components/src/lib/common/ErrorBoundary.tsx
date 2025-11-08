@@ -5,6 +5,7 @@ import React, { Component, ReactNode, ErrorInfo } from 'react';
 // Conditional Supabase client creation with fallback values
 let supabase = null;
 try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { createClient } = require('@supabase/supabase-js');
   const supabaseUrl =
     process.env['NEXT_PUBLIC_SUPABASE_URL'] ||
