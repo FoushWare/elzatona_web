@@ -39,6 +39,13 @@
         "SUPABASE_REGION": "us-east-1",
         "SUPABASE_ACCESS_TOKEN": "sbp_02fa87fd2f5fe474ab07cbd1640e7f756092fb6d"
       }
+    },
+    "Github MCP": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github@latest"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "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"
+      }
     }
   }
 }
