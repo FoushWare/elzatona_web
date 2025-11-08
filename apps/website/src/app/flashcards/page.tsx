@@ -5,7 +5,7 @@ import {
   loadFlashcards,
   removeFlashcard,
   FlashcardItem,
-} from '../../../lib/flashcards';
+} from '../../lib/flashcards';
 import {
   BookOpen,
   Trash2,

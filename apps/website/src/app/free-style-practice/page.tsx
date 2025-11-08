@@ -27,8 +27,8 @@ import {
   addFlashcard,
   isInFlashcards,
   FlashcardItem,
-} from '../../../lib/flashcards';
-import { addToCart, CartItem } from '../../../lib/cart';
+} from '../../lib/flashcards';
+import { addToCart, CartItem } from '../../lib/cart';
 
 interface Question {
   id: string;
