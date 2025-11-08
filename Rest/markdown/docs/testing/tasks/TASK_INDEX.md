@@ -22,9 +22,12 @@ This file indexes all test tasks organized by flow type.
 ## Admin Tasks
 
 - [A-001: Bulk Question Addition by Category](./admin/A-001-bulk-question-addition.md)
-- [A-002: Admin Authentication](./admin/A-002-admin-authentication.md) - ⏳ Pending
-- [A-003: Question Management](./admin/A-003-question-management.md) - ⏳ Pending
-- [A-004: Plan Management](./admin/A-004-plan-management.md) - ⏳ Pending
+- [A-002: Admin Login](./admin/A-002-admin-login.md)
+- [A-003: Admin Dashboard](./admin/A-003-admin-dashboard.md)
+- [A-004: Content Management (Unified)](./admin/A-004-content-management.md)
+- [A-005: Frontend Tasks Management](./admin/A-005-frontend-tasks-management.md)
+- [A-006: Problem Solving Management](./admin/A-006-problem-solving-management.md)
+- [A-007: User Management](./admin/A-007-user-management.md)
 
 ## Shared Components Tasks
 
@@ -34,9 +37,9 @@ This file indexes all test tasks organized by flow type.
 
 ## Test Execution Status
 
-- **Total Tasks**: 16
-- **Created**: 5
-- **Pending**: 11
+- **Total Tasks**: 20
+- **Created**: 12
+- **Pending**: 8
 
 ## Parallel Execution
 
