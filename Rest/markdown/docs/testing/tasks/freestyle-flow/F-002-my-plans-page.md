@@ -1,4 +1,11 @@
-# Task: My Plans Page
+# Task ID: F-002
+# Title: My Plans Page
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the "My Plans" page where users can view, edit, start, and delete their custom plans.
+
+# Details:
 
 ## Time Estimation
 
@@ -68,6 +75,8 @@ Test the "My Plans" page where users can view, edit, start, and delete their cus
    - Verify progress updated
    - Verify current day shown
    - Verify completion percentage
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -203,24 +212,3 @@ Test the "My Plans" page where users can view, edit, start, and delete their cus
     7. Verify success message
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- my-plans/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- my-plans/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- my-plans-*.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires authentication setup
-- Tests API integration
-- No dependencies on other tests
-

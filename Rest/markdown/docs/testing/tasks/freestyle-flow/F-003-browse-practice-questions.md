@@ -1,4 +1,11 @@
-# Task: Browse Practice Questions Page
+# Task ID: F-003
+# Title: Browse Practice Questions Page
+# Status: pending
+# Dependencies: 
+# Priority: medium
+# Description: Test the Browse Practice Questions page which serves as the main entry point for freestyle learning, offering three practice options: Interview Questions, Frontend Tasks, and Problem Solving.
+
+# Details:
 
 ## Time Estimation
 
@@ -91,6 +98,8 @@ Test the Browse Practice Questions page which serves as the main entry point for
    - Verify back navigation works
    - Verify browser back button works
 
+# Test Strategy:
+
 ## Automated Tests
 
 ### Unit Tests
@@ -173,23 +182,3 @@ Test the Browse Practice Questions page which serves as the main entry point for
     10. Verify navigation to problem solving
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- browse-practice-questions/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- browse-practice-questions/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- browse-practice-questions.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Tests navigation and routing
-- No dependencies on other tests
-

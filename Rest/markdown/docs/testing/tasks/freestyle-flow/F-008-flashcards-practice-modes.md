@@ -1,4 +1,11 @@
-# Task: Flashcards Practice Modes (List, Flip, Quiz)
+# Task ID: F-008
+# Title: Flashcards Practice Modes (List, Flip, Quiz)
+# Status: pending
+# Dependencies: 
+# Priority: high
+# Description: Test the three practice modes (List, Flip, Quiz) for flashcards including mode switching, card navigation, shuffle, and progress tracking.
+
+# Details:
 
 ## Time Estimation
 
@@ -120,6 +127,8 @@ Test the three practice modes (List, Flip, Quiz) for flashcards including mode s
    - Complete session
    - Verify final score displayed
    - Verify accuracy percentage shown
+
+# Test Strategy:
 
 ## Automated Tests
 
@@ -273,25 +282,3 @@ Test the three practice modes (List, Flip, Quiz) for flashcards including mode s
     8. Verify all modes work correctly
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- flashcards/page.test.tsx
-
-# Run integration tests
-npm run test:integration -- flashcards/page.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- flashcards-*-mode.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Requires flashcards data
-- Tests multiple practice modes
-- Tests user interactions and animations
-- No dependencies on other tests
-

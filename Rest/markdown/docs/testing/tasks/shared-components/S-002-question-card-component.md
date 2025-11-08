@@ -1,4 +1,11 @@
-# Task: Question Card Component
+# Task ID: S-002
+# Title: Question Card Component
+# Status: pending
+# Dependencies: 
+# Priority: medium
+# Description: Test the Question Card component used to display questions across the application, including question text, answer options, interactions, and different question types.
+
+# Details:
 
 ## Time Estimation
 
@@ -93,6 +100,8 @@ Test the Question Card component used to display questions across the applicatio
    - Test ARIA labels
    - Test focus management
 
+# Test Strategy:
+
 ## Automated Tests
 
 ### Unit Tests
@@ -186,24 +195,3 @@ Test the Question Card component used to display questions across the applicatio
     7. Verify next question loaded
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
-
-## Test Execution
-
-```bash
-# Run unit tests
-npm run test:unit -- QuestionCard.test.tsx
-
-# Run integration tests
-npm run test:integration -- QuestionCard.integration.test.tsx
-
-# Run E2E tests
-npm run test:e2e -- question-card.spec.ts
-```
-
-## Notes
-
-- All tests can run in parallel
-- Tests question rendering
-- Tests answer handling
-- No dependencies on other tests
-
