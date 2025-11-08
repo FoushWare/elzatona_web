@@ -10,9 +10,7 @@ export class AudioCollectionService {
   static async getAudioMappings(): Promise<QuestionAudioMapping[]> {
     return [];
   }
-  static async getAudioMapping(
-    questionId: string
-  ): Promise<{
+  static async getAudioMapping(questionId: string): Promise<{
     success: boolean;
     mapping?: QuestionAudioMapping | null;
     error?: string;
