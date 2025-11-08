@@ -3,7 +3,7 @@
 ## Step 1: Get Your Supabase Service Role Key
 
 1. **Go to Supabase Dashboard**: https://supabase.com/dashboard
-2. **Select your project**: `hpnewqkvpnthpohvxcmq`
+2. **Select your project** (or create a new one)
 3. **Click "Settings"** in the left sidebar
 4. **Click "API"** in the settings menu
 5. **Scroll down to "Project API keys"**
@@ -20,19 +20,21 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 Your `.env.local` should look like this:
 
 ```bash
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=SUPABASE_SERVICE_ROLE_KEY_REDACTED
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
+# Supabase Configuration (Get from Supabase Dashboard)
+# Go to: https://supabase.com/dashboard → Your Project → Settings → API
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key-here
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
 
-# Existing Firebase Configuration (keep for migration period)
-NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyBXlcfcdyIqoeJOb2gXcxpRSmQO7lEP82Y
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=fir-demo-project-adffb.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=fir-demo-project-adffb
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=fir-demo-project-adffb.firebasestorage.app
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=76366138630
-NEXT_PUBLIC_FIREBASE_APP_ID=1:76366138630:web:0f3381c2f5a62e0401e287
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XZ5VKFGG4Y
+# Firebase Configuration (Get from Firebase Console)
+# Go to: https://console.firebase.google.com/ → Project Settings → General
+NEXT_PUBLIC_FIREBASE_API_KEY=your-firebase-api-key-here
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your-measurement-id
 
 # Admin Configuration
 JWT_SECRET=your-super-secret-jwt-key-change-in-production

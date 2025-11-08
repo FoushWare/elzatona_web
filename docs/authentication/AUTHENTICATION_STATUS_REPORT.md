@@ -73,10 +73,11 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 GITHUB_CLIENT_ID=your-github-client-id
 GITHUB_CLIENT_SECRET=your-github-client-secret
 
-# Supabase Configuration (Your existing project)
-NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=SUPABASE_SERVICE_ROLE_KEY_REDACTED
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+# Supabase Configuration (Get from Supabase Dashboard)
+# Go to: https://supabase.com/dashboard → Your Project → Settings → API
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key-here
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
 ```
 
 ---

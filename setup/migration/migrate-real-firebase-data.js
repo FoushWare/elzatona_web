@@ -7,10 +7,12 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-// Supabase configuration
-const SUPABASE_URL = 'https://hpnewqkvpnthpohvxcmq.supabase.co';
+// Supabase configuration - Get from environment variables or Supabase Dashboard
+// Go to: https://supabase.com/dashboard → Your Project → Settings → API
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
 const SUPABASE_ANON_KEY =
-  'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-supabase-anon-key-here';
 
 // Initialize Supabase client
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

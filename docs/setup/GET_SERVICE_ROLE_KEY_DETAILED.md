@@ -5,7 +5,8 @@
 ### **What you have (Anon Key):**
 
 ```
-SUPABASE_SERVICE_ROLE_KEY_REDACTED
+your-supabase-anon-key-here
+(Get this from Supabase Dashboard → Settings → API)
 ```
 
 ### **What you need (Service Role Key):**
@@ -21,7 +22,8 @@ SUPABASE_SERVICE_ROLE_KEY_REDACTED
 
 ### **Step 1: Go to Supabase Dashboard**
 
-**Direct Link:** https://supabase.com/dashboard/project/hpnewqkvpnthpohvxcmq
+**Go to:** https://supabase.com/dashboard
+**Select your project** (or create a new one)
 
 ### **Step 2: Navigate to API Settings**
 
@@ -95,8 +97,8 @@ Your `.env.local` should have BOTH keys:
 
 ```bash
 # Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=SUPABASE_SERVICE_ROLE_KEY_REDACTED
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 SUPABASE_SERVICE_ROLE_KEY=your-actual-service-role-key-here
 
 # NextAuth Configuration

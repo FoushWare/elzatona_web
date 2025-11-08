@@ -29,12 +29,13 @@ Both admin login and social media login systems are **fully implemented and work
 Add these lines to your existing `.env.local` file:
 
 ```bash
-# Supabase Configuration (Add these)
-NEXT_PUBLIC_SUPABASE_URL=https://hpnewqkvpnthpohvxcmq.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=SUPABASE_SERVICE_ROLE_KEY_REDACTED
+# Supabase Configuration (Get from Supabase Dashboard)
+# Go to: https://supabase.com/dashboard → Your Project → Settings → API
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key-here
 
 # NextAuth Configuration (Add these)
-NEXTAUTH_SECRET=elzatona-nextauth-secret-2024-production-ready
+NEXTAUTH_SECRET=your-nextauth-secret-here
 NEXTAUTH_URL=http://localhost:3001
 
 # OAuth Credentials (Get these from OAuth providers)
