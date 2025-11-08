@@ -2,8 +2,23 @@
   "extends": "next/core-web-vitals",
   "rules": {
     "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
     "react/no-unescaped-entities": "warn",
-    "@typescript-eslint/no-unsafe-function-type": "warn"
-  }
+    "@typescript-eslint/no-unsafe-function-type": "warn",
+    "@typescript-eslint/triple-slash-reference": "off"
+  },
+  "ignorePatterns": [
+    ".next/**",
+    "**/.next/**",
+    "**/.next/types/**",
+    "apps/**/.next/**",
+    "**/routes.d.ts"
+  ]
 }
