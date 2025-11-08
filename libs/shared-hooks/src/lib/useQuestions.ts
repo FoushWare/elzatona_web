@@ -17,7 +17,7 @@ import {
   getUserQuestionAttempts,
   searchQuestions,
   getQuizQuestions,
-} from '@/lib/supabase-questions';
+} from './types/supabase-questions';
 
 interface QuestionFilters {
   category?: string;
@@ -199,7 +199,7 @@ export const useQuestions = (): UseQuestionsReturn => {
         // Check if the selected answer is correct based on the options
         const isCorrect =
           question.options?.some(
-            option =>
+            (option: QuestionOption) =>
               option.id === selectedAnswer.toString() && option.isCorrect
           ) || false;
 

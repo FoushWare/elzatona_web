@@ -1,5 +1,5 @@
 import { useAuth } from '@elzatona/shared-contexts';
-import { UserAuthService } from '@/lib/user-auth';
+import { UserAuthService } from './types/user-auth';
 
 export function useRoleBasedAccess() {
   const { user, isAuthenticated } = useAuth();
