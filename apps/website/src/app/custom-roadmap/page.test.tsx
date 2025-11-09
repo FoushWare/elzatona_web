@@ -193,6 +193,46 @@ describe('F-UT-004: Question Selection', () => {
   });
 });
 
+describe('F-UT-SNAPSHOT: Custom Roadmap Creation Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1' },
+      isLoading: false,
+    });
+    
+    (sharedContexts.useUserType as jest.Mock).mockReturnValue({
+      userType: 'self-directed',
+      setUserType: jest.fn(),
+    });
+    
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({ data: [] }),
+    });
+  });
+
+  it('should match custom roadmap page snapshot', async () => {
+    const { container } = render(<CustomRoadmapPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+
+  it('should match custom roadmap page snapshot (unauthenticated)', () => {
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: false,
+      user: null,
+      isLoading: false,
+    });
+    
+    const { container } = render(<CustomRoadmapPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});
+
 describe('F-UT-005: Plan Saving', () => {
   beforeEach(() => {
     jest.clearAllMocks();
