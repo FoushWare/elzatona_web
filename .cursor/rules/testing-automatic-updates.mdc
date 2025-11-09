@@ -1,60 +1,122 @@
 ---
-description: Automatic test updates when working on features or bugs
-globs: **/*.test.{ts,tsx,js,jsx}, **/*.spec.{ts,tsx,js,jsx}, **/*.integration.test.{ts,tsx,js,jsx}, Rest/markdown/docs/testing/**/*.md
+description: Automatic test updates when working on features or bugs - MANDATORY CHECKLIST INCLUDED
+globs: **/*.test.{ts,tsx,js,jsx}, **/*.spec.{ts,tsx,js,jsx}, **/*.integration.test.{ts,tsx,js,jsx}, **/__snapshots__/**/*.snap, Rest/markdown/docs/testing/**/*.md
 alwaysApply: true
 ---
 
 # Testing Rules for Automatic Updates
 
+## ⚠️ MANDATORY CHECKLIST - READ THIS FIRST
+
+**EVERY time you work on ANY code change (feature, bug fix, refactor, etc.), you MUST complete this checklist:**
+
+### ✅ **MANDATORY TEST UPDATE CHECKLIST**
+
+- [ ] **1. Identify affected test files**
+  - [ ] Find unit test files (`*.test.tsx`, `*.test.ts`)
+  - [ ] Find integration test files (`*.integration.test.tsx`)
+  - [ ] Find E2E test files (`*.spec.ts`, `*.spec.tsx`)
+  - [ ] Find snapshot test files (`__snapshots__/*.snap`)
+
+- [ ] **2. Update Unit Tests**
+  - [ ] Update existing unit tests if component/function changed
+  - [ ] Add new unit tests for new functionality
+  - [ ] Remove/update obsolete tests
+  - [ ] Verify all unit tests pass: `npm run test:unit`
+
+- [ ] **3. Update Integration Tests**
+  - [ ] Update integration tests if API/flow changed
+  - [ ] Add new integration tests for new flows
+  - [ ] Test API interactions and data flow
+  - [ ] Verify all integration tests pass: `npm run test:integration`
+
+- [ ] **4. Update E2E Tests**
+  - [ ] Update E2E tests if user flow changed
+  - [ ] Add new E2E tests for new user flows
+  - [ ] Test complete user journeys
+  - [ ] Verify all E2E tests pass: `npm run test:e2e`
+
+- [ ] **5. Update Snapshot Tests** ⚠️ **REQUIRED**
+  - [ ] Update snapshots if UI/structure changed: `npm run test:unit -- --updateSnapshot`
+  - [ ] Review snapshot changes carefully (don't blindly accept)
+  - [ ] Add new snapshot tests for new components/pages
+  - [ ] Test different states (loading, error, empty, populated)
+  - [ ] Verify snapshots match expected UI: `npm run test:unit`
+
+- [ ] **6. Update Test Documentation**
+  - [ ] Update test task file in `Rest/markdown/docs/testing/tasks/`
+  - [ ] Update `TASK_INDEX.md` if test status changed
+  - [ ] Document any new test cases or edge cases discovered
+  - [ ] Update time estimations if needed
+
+- [ ] **7. Final Verification**
+  - [ ] Run ALL tests: `npm run test:unit && npm run test:integration && npm run test:e2e`
+  - [ ] All tests pass ✅
+  - [ ] All snapshots are up to date ✅
+  - [ ] Test documentation is updated ✅
+  - [ ] Ready to commit ✅
+
+---
+
 ## Overview
 
-This rule ensures that tests are automatically updated when working on features or bugs, and that new features include comprehensive test plans.
+This rule ensures that tests (Unit, Integration, E2E, and **Snapshot**) are automatically updated when working on features or bugs, and that new features include comprehensive test plans.
+
+**⚠️ CRITICAL**: This checklist is MANDATORY for ALL code changes. No exceptions.
 
 ## When Working on Features
 
-### 1. **Before Starting Development**
+### 1. **Before Starting Development** ✅
 
-- **Check existing test tasks**: Review `Rest/markdown/docs/testing/tasks/TASK_INDEX.md` to see if tests exist for the feature
-- **If tests exist**: Review the test task file to understand test requirements
-- **If tests don't exist**: Create a new test task file following the pattern in `Rest/markdown/docs/testing/tasks/`
+- [ ] **Check existing test tasks**: Review `Rest/markdown/docs/testing/tasks/TASK_INDEX.md` to see if tests exist for the feature
+- [ ] **If tests exist**: Review the test task file to understand test requirements
+- [ ] **If tests don't exist**: Create a new test task file following the pattern in `Rest/markdown/docs/testing/tasks/`
+- [ ] **Identify test files**: Find all related test files (unit, integration, E2E, snapshot)
 
-### 2. **During Development**
+### 2. **During Development** ✅
 
-- **Update test tasks**: As you implement features, update the corresponding test task file with:
+- [ ] **Update test tasks**: As you implement features, update the corresponding test task file with:
   - Implementation notes
   - Edge cases discovered
   - API changes
   - Component changes
-- **Write tests alongside code**: Follow TDD principles when possible
-- **Update test specifications**: Modify test assertions if requirements change
+- [ ] **Write tests alongside code**: Follow TDD principles when possible
+- [ ] **Update test specifications**: Modify test assertions if requirements change
+- [ ] **Update snapshots incrementally**: Update snapshots as UI changes occur
 
-### 3. **After Feature Completion**
+### 3. **After Feature Completion** ✅
 
-- **Implement all test levels**: Ensure Unit, Integration, and E2E tests are written
-- **Update test task status**: Mark tests as implemented in the task file
-- **Update TASK_INDEX.md**: Update the status of the test task
-- **Run all tests**: Verify all tests pass before marking feature complete
+- [ ] **Implement all test levels**: Ensure Unit, Integration, and E2E tests are written
+- [ ] **Update snapshot tests**: Add/update snapshots for all component states
+- [ ] **Update test task status**: Mark tests as implemented in the task file
+- [ ] **Update TASK_INDEX.md**: Update the status of the test task
+- [ ] **Run all tests**: Verify all tests pass before marking feature complete
+- [ ] **Update snapshots**: Run `npm run test:unit -- --updateSnapshot` if UI changed
 
 ## When Working on Bugs
 
-### 1. **Before Fixing**
+### 1. **Before Fixing** ✅
 
-- **Identify affected tests**: Check which tests cover the buggy functionality
-- **Review test task**: Look at the relevant test task file to understand test coverage
-- **Reproduce in tests**: Write a failing test that reproduces the bug
+- [ ] **Identify affected tests**: Check which tests cover the buggy functionality
+- [ ] **Review test task**: Look at the relevant test task file to understand test coverage
+- [ ] **Reproduce in tests**: Write a failing test that reproduces the bug
+- [ ] **Check snapshots**: Review snapshot tests that might be affected
 
-### 2. **During Fix**
+### 2. **During Fix** ✅
 
-- **Fix the bug**: Implement the fix
-- **Update tests**: Ensure the failing test now passes
-- **Add regression tests**: Add tests to prevent the bug from recurring
-- **Update test task**: Add notes about the bug and fix to the test task file
+- [ ] **Fix the bug**: Implement the fix
+- [ ] **Update tests**: Ensure the failing test now passes
+- [ ] **Add regression tests**: Add tests to prevent the bug from recurring
+- [ ] **Update snapshots**: Update snapshots if UI/structure changed due to fix
+- [ ] **Update test task**: Add notes about the bug and fix to the test task file
 
-### 3. **After Fix**
+### 3. **After Fix** ✅
 
-- **Verify all tests pass**: Run the full test suite
-- **Update test documentation**: Document the bug fix in the test task file
-- **Check related tests**: Ensure related functionality still works
+- [ ] **Verify all tests pass**: Run the full test suite (unit, integration, E2E)
+- [ ] **Verify snapshots**: Run snapshot tests and update if needed
+- [ ] **Update test documentation**: Document the bug fix in the test task file
+- [ ] **Check related tests**: Ensure related functionality still works
+- [ ] **Update snapshots**: Run `npm run test:unit -- --updateSnapshot` if UI changed
 
 ## When Creating New Features
 
@@ -119,62 +181,91 @@ Brief description of what is being tested
 
 ## Automatic Test Update Triggers
 
-### Code Changes That Require Test Updates
+### Code Changes That Require Test Updates ⚠️ **MANDATORY**
 
-1. **Component Changes**
-   - Props added/removed → Update component tests
-   - State management changes → Update integration tests
-   - UI changes → Update E2E tests
+1. **Component Changes** → **Update ALL test types**
+   - Props added/removed → Update component tests + **snapshots**
+   - State management changes → Update integration tests + **snapshots**
+   - UI changes → Update E2E tests + **snapshots**
+   - Styling changes → **Update snapshots** (if visual output changed)
 
-2. **API Changes**
+2. **API Changes** → **Update Integration & E2E tests**
    - New endpoints → Add API tests
-   - Changed responses → Update integration tests
-   - Error handling changes → Update error tests
+   - Changed responses → Update integration tests + **snapshots** (if UI affected)
+   - Error handling changes → Update error tests + **snapshots**
 
-3. **Route Changes**
-   - New routes → Add navigation tests
-   - Route parameter changes → Update route tests
-   - Redirect changes → Update redirect tests
+3. **Route Changes** → **Update E2E & Integration tests**
+   - New routes → Add navigation tests + **snapshots**
+   - Route parameter changes → Update route tests + **snapshots**
+   - Redirect changes → Update redirect tests + **snapshots**
 
-4. **Feature Additions**
-   - New features → Create new test tasks
-   - Feature modifications → Update existing test tasks
+4. **Feature Additions** → **Create ALL test types**
+   - New features → Create new test tasks (Unit, Integration, E2E, **Snapshot**)
+   - Feature modifications → Update existing test tasks + **snapshots**
    - Feature removals → Mark tests as deprecated
 
-5. **Bug Fixes**
-   - Bug fixes → Add regression tests
-   - Edge case fixes → Update edge case tests
-   - Error handling fixes → Update error tests
+5. **Bug Fixes** → **Update ALL test types**
+   - Bug fixes → Add regression tests + **update snapshots**
+   - Edge case fixes → Update edge case tests + **snapshots**
+   - Error handling fixes → Update error tests + **snapshots**
 
-## Test Update Workflow
+6. **UI/Visual Changes** → **MANDATORY Snapshot Updates**
+   - Layout changes → **Update snapshots**
+   - Styling changes → **Update snapshots**
+   - Component structure changes → **Update snapshots**
+   - New UI states → **Add snapshot tests**
 
-### Step 1: Identify Affected Tests
+## Test Update Workflow (MANDATORY)
+
+### Step 1: Identify Affected Tests ✅
 
 ```bash
 # Search for related test files
 grep -r "feature-name" Rest/markdown/docs/testing/tasks/
 grep -r "ComponentName" **/*.test.{ts,tsx}
+grep -r "ComponentName" **/*.integration.test.{ts,tsx}
+grep -r "ComponentName" **/*.spec.{ts,tsx}
+grep -r "ComponentName" **/__snapshots__/**/*.snap
 ```
 
-### Step 2: Review Test Task
+### Step 2: Review Test Task ✅
 
-- Open the relevant test task file
-- Review test specifications
-- Identify what needs updating
+- [ ] Open the relevant test task file
+- [ ] Review test specifications
+- [ ] Identify what needs updating (Unit, Integration, E2E, **Snapshot**)
 
-### Step 3: Update Tests
+### Step 3: Update Tests ✅
 
-- Update test files
-- Update test task file with notes
-- Update TASK_INDEX.md if status changes
+- [ ] Update unit test files
+- [ ] Update integration test files
+- [ ] Update E2E test files
+- [ ] **Update snapshot tests** (if UI/structure changed)
+- [ ] Update test task file with notes
+- [ ] Update TASK_INDEX.md if status changes
 
-### Step 4: Verify Tests
+### Step 4: Update Snapshots ✅ **REQUIRED**
+
+```bash
+# Update snapshots for specific test file
+npm run test:unit -- path/to/test.file --updateSnapshot
+
+# Update all snapshots
+npm run test:unit -- --updateSnapshot
+
+# Review snapshot changes before committing
+git diff **/__snapshots__/**/*.snap
+```
+
+### Step 5: Verify Tests ✅
 
 ```bash
 # Run affected tests
 npm run test:unit -- path/to/test.file
 npm run test:integration -- path/to/test.file
 npm run test:e2e -- path/to/test.spec.ts
+
+# Run all tests (including snapshots)
+npm run test:unit && npm run test:integration && npm run test:e2e
 ```
 
 ## Test Maintenance Guidelines
@@ -197,9 +288,50 @@ npm run test:e2e -- path/to/test.spec.ts
 When working with the AI assistant:
 
 1. **Always mention test updates**: When requesting feature changes, mention that tests should be updated
-2. **Reference test tasks**: Reference specific test task files when discussing features
-3. **Request test creation**: When creating new features, request test task creation
-4. **Verify test status**: After changes, verify test status in TASK_INDEX.md
+2. **Always mention snapshot updates**: When requesting UI/structure changes, mention that snapshots should be updated
+3. **Reference test tasks**: Reference specific test task files when discussing features
+4. **Request test creation**: When creating new features, request test task creation (including snapshots)
+5. **Verify test status**: After changes, verify test status in TASK_INDEX.md
+6. **Run checklist**: Always follow the mandatory checklist above
+
+## Snapshot Testing Guidelines ⚠️ **NEW - REQUIRED**
+
+### When to Update Snapshots
+
+- ✅ **UI Changes**: Any visual/styling changes require snapshot updates
+- ✅ **Component Structure**: Changes to component structure require snapshot updates
+- ✅ **New Components**: New components require new snapshot tests
+- ✅ **State Changes**: Different component states should have snapshots
+- ✅ **Bug Fixes**: UI bug fixes may require snapshot updates
+
+### Snapshot Test Locations
+
+- Unit test files: `**/*.test.{ts,tsx}` (snapshot tests in same file)
+- Snapshot files: `**/__snapshots__/**/*.snap` (auto-generated by Jest)
+
+### Snapshot Update Commands
+
+```bash
+# Update snapshots for a specific test file
+npm run test:unit -- apps/website/src/app/page.test.tsx --updateSnapshot
+
+# Update all snapshots
+npm run test:unit -- --updateSnapshot
+
+# Review snapshot changes
+git diff **/__snapshots__/**/*.snap
+
+# Run tests without updating snapshots (to see failures)
+npm run test:unit -- --no-updateSnapshot
+```
+
+### Snapshot Test Best Practices
+
+- ✅ **Review changes carefully**: Don't blindly accept all snapshot changes
+- ✅ **Test multiple states**: Create snapshots for default, loading, error, empty, populated states
+- ✅ **Commit snapshots**: Snapshot files should be committed to Git
+- ✅ **Update intentionally**: Only update snapshots when UI changes are intentional
+- ❌ **Don't ignore failures**: Snapshot failures indicate UI changes that need review
 
 ## Examples
 
@@ -209,11 +341,14 @@ When working with the AI assistant:
 User: "Add a new filter to the flashcards page"
 
 AI should:
-1. Check if test task exists for flashcards (F-007)
-2. Review the test task file
-3. Suggest updating the test task to include the new filter
-4. Update test specifications
-5. Implement the feature with tests
+1. ✅ Check if test task exists for flashcards (F-007)
+2. ✅ Review the test task file
+3. ✅ Suggest updating the test task to include the new filter
+4. ✅ Update test specifications (Unit, Integration, E2E)
+5. ✅ **Add/update snapshot tests for the new filter UI**
+6. ✅ Implement the feature with tests
+7. ✅ Run all tests including snapshots
+8. ✅ Update snapshots: `npm run test:unit -- --updateSnapshot`
 ```
 
 ### Example 2: Fixing a Bug
@@ -222,12 +357,13 @@ AI should:
 User: "Fix the navigation link not working on mobile"
 
 AI should:
-1. Identify affected test (S-001: Navigation Component)
-2. Review the test task file
-3. Add a failing test that reproduces the bug
-4. Fix the bug
-5. Verify the test passes
-6. Update the test task with bug fix notes
+1. ✅ Identify affected test (S-001: Navigation Component)
+2. ✅ Review the test task file
+3. ✅ Add a failing test that reproduces the bug
+4. ✅ Fix the bug
+5. ✅ Verify the test passes
+6. ✅ **Update snapshots if UI changed**
+7. ✅ Update the test task with bug fix notes
 ```
 
 ### Example 3: Updating a Component
@@ -236,11 +372,27 @@ AI should:
 User: "Update the QuestionCard to show difficulty badge"
 
 AI should:
-1. Identify affected test (S-002: Question Card Component)
-2. Review the test task file
-3. Update test specifications to include difficulty badge
-4. Update component tests
-5. Update the test task file
+1. ✅ Identify affected test (S-002: Question Card Component)
+2. ✅ Review the test task file
+3. ✅ Update test specifications to include difficulty badge
+4. ✅ Update component tests (Unit, Integration, E2E)
+5. ✅ **Update snapshot tests** (UI changed - badge added)
+6. ✅ Run: `npm run test:unit -- apps/website/src/components/QuestionDisplay.test.tsx --updateSnapshot`
+7. ✅ Update the test task file
+```
+
+### Example 4: UI/Styling Changes
+
+```
+User: "Change the button color from blue to red"
+
+AI should:
+1. ✅ Identify affected components and test files
+2. ✅ Update component code
+3. ✅ **MANDATORY: Update snapshot tests** (visual change)
+4. ✅ Run: `npm run test:unit -- --updateSnapshot`
+5. ✅ Review snapshot changes to ensure they're correct
+6. ✅ Verify all tests pass
 ```
 
 ## File Locations
@@ -276,8 +428,34 @@ npm run test:unit && npm run test:integration && npm run test:e2e
 npm run test:unit:freestyle-flow
 npm run test:integration:admin
 npm run test:e2e:guided-flow
+
+# SNAPSHOT COMMANDS (REQUIRED FOR UI CHANGES)
+# Update snapshots for specific test
+npm run test:unit -- path/to/test.file --updateSnapshot
+
+# Update all snapshots
+npm run test:unit -- --updateSnapshot
+
+# Review snapshot changes
+git diff **/__snapshots__/**/*.snap
+
+# Run tests without updating (to see failures)
+npm run test:unit -- --no-updateSnapshot
 ```
 
 ---
 
-**Remember**: Tests are not just for verification—they are documentation, regression prevention, and design tools. Keep them updated and comprehensive!
+## 🚨 **CRITICAL REMINDERS**
+
+1. **EVERY code change requires test updates** - No exceptions
+2. **UI changes REQUIRE snapshot updates** - Mandatory
+3. **Follow the checklist** - It's there for a reason
+4. **Run all tests before committing** - Don't skip this
+5. **Review snapshot changes** - Don't blindly accept all changes
+6. **Update test documentation** - Keep it current
+
+---
+
+**Remember**: Tests (Unit, Integration, E2E, and **Snapshots**) are not just for verification—they are documentation, regression prevention, and design tools. Keep them updated and comprehensive!
+
+**⚠️ This checklist is MANDATORY. Always complete it before committing any code changes.**

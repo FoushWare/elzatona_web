@@ -22,6 +22,14 @@ Assume every API call can fail → wrap in try/catch.
 
 Optimize for large files (500+ instances), memory management, and cleanup.
 
+⚠️ **MANDATORY TEST UPDATES**: Every code change (feature, bug fix, refactor) MUST include:
+- Unit test updates
+- Integration test updates  
+- E2E test updates
+- Snapshot test updates (if UI/structure changed)
+- Test documentation updates
+See [testing-automatic-updates.mdc](mdc:.cursor/rules/testing-automatic-updates.mdc) for the complete checklist.
+
 Communication & Clarification
 
 If requirements are ambiguous → ask clarifying questions before coding.
