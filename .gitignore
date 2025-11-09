@@ -156,3 +156,6 @@ temp/
 .github/instructions/nx.instructions.md
 # MCP server configuration (contains sensitive tokens)
 .cursor/mcp.json
+
+# Jest cache
+**/.jest-cache/
