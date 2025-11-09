@@ -104,3 +104,36 @@ describe('F-UT-007: Plan Management', () => {
     });
   });
 });
+
+describe('F-UT-SNAPSHOT: My Plans Page Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1' },
+      isLoading: false,
+    });
+    
+    Storage.prototype.getItem = jest.fn(() => JSON.stringify([]));
+  });
+
+  it('should match my plans page snapshot (empty state)', async () => {
+    const { container } = render(<MyPlansPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+
+  it('should match my plans page snapshot (with plans)', async () => {
+    Storage.prototype.getItem = jest.fn(() => JSON.stringify([
+      { id: '1', name: 'Test Plan 1' },
+      { id: '2', name: 'Test Plan 2' },
+    ]));
+    
+    const { container } = render(<MyPlansPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+});

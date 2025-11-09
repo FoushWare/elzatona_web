@@ -75,3 +75,22 @@ describe('A-UT-016: Component Renders', () => {
     expect(screen.getByText(/.*/)).toBeTruthy();
   });
 });
+
+describe('A-UT-SNAPSHOT: Admin Frontend Tasks Snapshot Tests', () => {
+  it('should match admin frontend tasks page snapshot', () => {
+    const { container } = render(<FrontendTasksAdminPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match admin frontend tasks page snapshot (loading state)', () => {
+    const { useFrontendTasks } = require('@elzatona/shared-hooks');
+    useFrontendTasks.mockReturnValue({
+      data: null,
+      isLoading: true,
+      error: null,
+    });
+    
+    const { container } = render(<FrontendTasksAdminPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});

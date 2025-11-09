@@ -84,3 +84,50 @@ describe('A-UT-018: Component Renders', () => {
     });
   });
 });
+
+describe('A-UT-SNAPSHOT: Admin User Management Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      user: { id: '1', email: 'admin@example.com' },
+    });
+    
+    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+    });
+    
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        success: true,
+        users: [],
+      }),
+    });
+  });
+
+  it('should match admin user management page snapshot', async () => {
+    const { container } = render(<UserManagementPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+
+  it('should match admin user management page snapshot (with users)', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        success: true,
+        users: [
+          { id: '1', email: 'user1@example.com', role: 'user' },
+          { id: '2', email: 'user2@example.com', role: 'admin' },
+        ],
+      }),
+    });
+    
+    const { container } = render(<UserManagementPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+});

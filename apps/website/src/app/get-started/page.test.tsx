@@ -216,3 +216,44 @@ describe('G-UT-007: Page Structure Renders', () => {
   });
 });
 
+describe('G-UT-SNAPSHOT: Get Started Page Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+    
+    (sharedContexts.useUserType as jest.Mock).mockReturnValue({
+      userType: null,
+      setUserType: jest.fn(),
+    });
+    
+    mockUseRouter.mockReturnValue({
+      push: mockPush,
+      replace: jest.fn(),
+      prefetch: jest.fn(),
+    });
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
+  it('should match get started page snapshot', () => {
+    const { container } = render(<GetStartedPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match snapshot with loading transition', () => {
+    const { container, rerender } = render(<GetStartedPage />);
+    
+    const guidedOption = screen.getByText(/I need guidance/i).closest('div[class*="cursor-pointer"]');
+    if (guidedOption) {
+      fireEvent.click(guidedOption);
+      jest.advanceTimersByTime(300);
+    }
+    
+    rerender(<GetStartedPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});
+
