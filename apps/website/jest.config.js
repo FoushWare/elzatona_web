@@ -28,7 +28,7 @@ const config = {
       '<rootDir>/src/test-utils/mocks/shared-contexts.ts',
     '^@elzatona/shared-components$':
       '<rootDir>/../../libs/shared-components/src/index.ts',
-    '^lucide-react$': '<rootDir>/src/test-utils/mocks/lucide-react.ts',
+    '^lucide-react$': '<rootDir>/src/test-utils/mocks/lucide-react.tsx',
   },
   // Include tests from root tests directory, but exclude e2e tests (Playwright)
   // Note: testPathIgnorePatterns handles the exclusion, so we keep testMatch simple
