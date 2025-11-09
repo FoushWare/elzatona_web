@@ -146,3 +146,31 @@ describe('S-UT-014: useProgressTracking Hook', () => {
   });
 });
 
+describe('S-UT-SNAPSHOT: Progress Tracker Snapshot Tests', () => {
+  it('should match progress tracker snapshot (question tracking)', () => {
+    const { container } = render(
+      <ProgressTracker questionId="test-1" difficulty="medium" />
+    );
+    // Component returns null, but we can snapshot the container
+    expect(container).toMatchSnapshot();
+  });
+
+  it('should match progress tracker snapshot (challenge tracking)', () => {
+    const { container } = render(
+      <ProgressTracker challengeId="test-challenge-1" />
+    );
+    expect(container).toMatchSnapshot();
+  });
+
+  it('should match progress tracker snapshot (learning path tracking)', () => {
+    const { container } = render(
+      <ProgressTracker 
+        learningPathId="test-path-1" 
+        learningPathName="Test Path"
+        sectionId="section-1"
+      />
+    );
+    expect(container).toMatchSnapshot();
+  });
+});
+

@@ -162,3 +162,23 @@ describe('A-UT-013: Refresh Functionality', () => {
     expect(mockRefetch).toHaveBeenCalled();
   });
 });
+
+describe('A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+      user: {
+        id: '1',
+        email: 'admin@example.com',
+        role: 'super_admin',
+        name: 'Admin User',
+      },
+    });
+  });
+
+  it('should match admin dashboard snapshot (with stats)', () => {
+    const { container } = render(<AdminDashboard />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});

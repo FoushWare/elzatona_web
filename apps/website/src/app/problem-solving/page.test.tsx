@@ -68,3 +68,22 @@ describe('F-UT-011: Component Renders', () => {
     });
   });
 });
+
+describe('F-UT-SNAPSHOT: Problem Solving Practice Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1' },
+      isLoading: false,
+    });
+  });
+
+  it('should match problem solving page snapshot', async () => {
+    const { container } = render(<ProblemSolvingPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+});

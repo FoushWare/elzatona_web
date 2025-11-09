@@ -198,3 +198,64 @@ describe('G-UT-003: Navigation Links Render Correctly', () => {
   });
 });
 
+describe('G-UT-SNAPSHOT: Homepage Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useUserType as jest.Mock).mockReturnValue({
+      userType: null,
+      setUserType: jest.fn(),
+    });
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: false,
+      user: null,
+    });
+    
+    mockUseRouter.mockReturnValue({
+      push: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn(),
+    });
+    
+    Storage.prototype.getItem = jest.fn(() => null);
+  });
+
+  it('should match homepage snapshot (unauthenticated)', () => {
+    const { container } = render(<HomePage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match homepage snapshot (authenticated, guided user)', () => {
+    (sharedContexts.useUserType as jest.Mock).mockReturnValue({
+      userType: 'guided',
+      setUserType: jest.fn(),
+    });
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1', email: 'test@example.com' },
+    });
+    
+    Storage.prototype.getItem = jest.fn(() => JSON.stringify([{ id: '1', name: 'Test Plan' }]));
+    
+    const { container } = render(<HomePage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match homepage snapshot (authenticated, self-directed user)', () => {
+    (sharedContexts.useUserType as jest.Mock).mockReturnValue({
+      userType: 'self-directed',
+      setUserType: jest.fn(),
+    });
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1', email: 'test@example.com' },
+    });
+    
+    const { container } = render(<HomePage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});
+

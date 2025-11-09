@@ -211,3 +211,22 @@ describe('A-UT-015: Content Sections', () => {
   });
 });
 
+describe('A-UT-SNAPSHOT: Admin Content Management Snapshot Tests', () => {
+  it('should match content management page snapshot', () => {
+    const { container } = render(<UnifiedAdminPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match content management page snapshot (loading state)', () => {
+    const { useCards } = require('@elzatona/shared-hooks');
+    useCards.mockReturnValue({
+      data: null,
+      isLoading: true,
+      error: null,
+    });
+    
+    const { container } = render(<UnifiedAdminPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});
+

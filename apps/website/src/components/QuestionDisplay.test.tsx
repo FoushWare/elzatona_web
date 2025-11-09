@@ -266,3 +266,53 @@ describe('S-UT-009: Different Question Types', () => {
   });
 });
 
+describe('S-UT-SNAPSHOT: Question Display Snapshot Tests', () => {
+  it('should match question card snapshot (no selection)', () => {
+    const { container } = render(
+      <QuestionDisplay
+        question={mockQuestion}
+        selectedAnswer={null}
+        onAnswerSelect={jest.fn()}
+      />
+    );
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match question card snapshot (with selection)', () => {
+    const { container } = render(
+      <QuestionDisplay
+        question={mockQuestion}
+        selectedAnswer={0}
+        onAnswerSelect={jest.fn()}
+      />
+    );
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match question card snapshot (with explanation, correct)', () => {
+    const { container } = render(
+      <QuestionDisplay
+        question={mockQuestion}
+        selectedAnswer={0}
+        onAnswerSelect={jest.fn()}
+        showExplanation={true}
+        isCorrect={true}
+      />
+    );
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match question card snapshot (with explanation, incorrect)', () => {
+    const { container } = render(
+      <QuestionDisplay
+        question={mockQuestion}
+        selectedAnswer={1}
+        onAnswerSelect={jest.fn()}
+        showExplanation={true}
+        isCorrect={false}
+      />
+    );
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});
+

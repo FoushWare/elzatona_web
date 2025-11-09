@@ -340,3 +340,47 @@ describe('A-UT-010: Error Message Display', () => {
     });
   });
 });
+
+describe('A-UT-SNAPSHOT: Admin Login Page Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: false,
+      isLoading: false,
+      login: mockLogin,
+      logout: jest.fn(),
+      user: null,
+    });
+  });
+
+  it('should match admin login page snapshot (default state)', () => {
+    const { container } = render(<AdminLoginPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match admin login page snapshot (loading state)', () => {
+    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: false,
+      isLoading: true,
+      login: mockLogin,
+      logout: jest.fn(),
+      user: null,
+    });
+    
+    const { container } = render(<AdminLoginPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match admin login page snapshot (with form values)', () => {
+    const { container } = render(<AdminLoginPage />);
+    
+    const emailInput = screen.getByLabelText(/Email Address/i);
+    const passwordInput = screen.getByLabelText(/Password/i);
+    
+    fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});

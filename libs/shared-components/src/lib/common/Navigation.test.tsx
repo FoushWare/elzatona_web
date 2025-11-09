@@ -156,3 +156,23 @@ describe('S-UT-004: Logo and Branding', () => {
   });
 });
 
+describe('S-UT-SNAPSHOT: Navigation Component Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (document.documentElement.classList.contains as jest.Mock).mockReturnValue(false);
+  });
+
+  it('should match navigation snapshot (light mode)', () => {
+    const { container } = render(<Navigation />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match navigation snapshot (dark mode)', () => {
+    (document.documentElement.classList.contains as jest.Mock).mockReturnValue(true);
+    localStorageMock.getItem.mockReturnValue('dark');
+    
+    const { container } = render(<Navigation />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});
+

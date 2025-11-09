@@ -72,3 +72,33 @@ describe('F-UT-008: Component Renders', () => {
     });
   });
 });
+
+describe('F-UT-SNAPSHOT: Browse Practice Questions Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1', email: 'user@example.com' },
+      isLoading: false,
+    });
+  });
+
+  it('should match browse practice questions page snapshot', async () => {
+    const { container } = render(<BrowsePracticeQuestionsPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+
+  it('should match browse practice questions page snapshot (unauthenticated)', () => {
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: false,
+      user: null,
+      isLoading: false,
+    });
+    
+    const { container } = render(<BrowsePracticeQuestionsPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});

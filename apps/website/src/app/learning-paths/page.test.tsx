@@ -67,3 +67,44 @@ describe('F-UT-009: Component Renders', () => {
     });
   });
 });
+
+describe('F-UT-SNAPSHOT: Learning Paths Practice Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1', email: 'user@example.com' },
+      isLoading: false,
+    });
+    
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({ data: [] }),
+    });
+  });
+
+  it('should match learning paths page snapshot', async () => {
+    const { container } = render(<LearningPathsPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+
+  it('should match learning paths page snapshot (with categories)', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: [
+          { id: '1', name: 'HTML', topics: [] },
+          { id: '2', name: 'CSS', topics: [] },
+        ],
+      }),
+    });
+    
+    const { container } = render(<LearningPathsPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+});

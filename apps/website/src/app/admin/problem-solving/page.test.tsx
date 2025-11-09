@@ -69,3 +69,22 @@ describe('A-UT-017: Component Renders', () => {
     expect(screen.getByText(/.*/)).toBeTruthy();
   });
 });
+
+describe('A-UT-SNAPSHOT: Admin Problem Solving Snapshot Tests', () => {
+  it('should match admin problem solving page snapshot', () => {
+    const { container } = render(<ProblemSolvingAdminPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match admin problem solving page snapshot (loading state)', () => {
+    const { useProblemSolvingTasks } = require('@elzatona/shared-hooks');
+    useProblemSolvingTasks.mockReturnValue({
+      data: null,
+      isLoading: true,
+      error: null,
+    });
+    
+    const { container } = render(<ProblemSolvingAdminPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});
