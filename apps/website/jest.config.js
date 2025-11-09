@@ -55,11 +55,6 @@ const config = {
   transformIgnorePatterns: [
     'node_modules/(?!(nuqs|@supabase/supabase-js|@tanstack|@react-hook-form|lucide-react|@radix-ui|@radix-ui/react-select)/)',
   ],
-  // Mock problematic ESM modules
-  moduleNameMapper: {
-    ...config.moduleNameMapper,
-    '^lucide-react$': '<rootDir>/src/test-utils/mocks/lucide-react.ts',
-  },
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
