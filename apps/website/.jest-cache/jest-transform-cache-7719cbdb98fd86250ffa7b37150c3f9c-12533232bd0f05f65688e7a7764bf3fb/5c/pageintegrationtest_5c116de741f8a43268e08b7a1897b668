@@ -1,0 +1,97 @@
+05f881e7bafc31d5c695777898c2296c
+/**
+ * Integration Tests for Admin Frontend Tasks (A-IT-017)
+ * Task: A-005 - Admin Frontend Tasks
+ */ "use strict";
+jest.mock('@elzatona/shared-hooks', ()=>({
+        useFrontendTasks: jest.fn(()=>({
+                data: {
+                    data: []
+                },
+                isLoading: false,
+                error: null
+            })),
+        useCreateFrontendTask: jest.fn(()=>({
+                mutateAsync: jest.fn().mockResolvedValue({
+                    success: true
+                }),
+                isPending: false
+            })),
+        useUpdateFrontendTask: jest.fn(()=>({
+                mutateAsync: jest.fn().mockResolvedValue({
+                    success: true
+                }),
+                isPending: false
+            })),
+        useDeleteFrontendTask: jest.fn(()=>({
+                mutateAsync: jest.fn().mockResolvedValue({
+                    success: true
+                }),
+                isPending: false
+            }))
+    }));
+jest.mock('@elzatona/shared-components', ()=>({
+        FrontendTaskEditor: ({ onSave, onCancel })=>/*#__PURE__*/ (0, _jsxruntime.jsxs)("div", {
+                children: [
+                    /*#__PURE__*/ (0, _jsxruntime.jsx)("button", {
+                        onClick: ()=>onSave({}),
+                        children: "Save"
+                    }),
+                    /*#__PURE__*/ (0, _jsxruntime.jsx)("button", {
+                        onClick: onCancel,
+                        children: "Cancel"
+                    })
+                ]
+            })
+    }));
+jest.mock('lucide-react', ()=>({
+        Plus: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "+"
+            }),
+        Edit: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "✏️"
+            }),
+        Trash2: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "\uD83D\uDDD1️"
+            }),
+        Eye: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "\uD83D\uDC41️"
+            }),
+        Search: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "\uD83D\uDD0D"
+            }),
+        Filter: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "\uD83D\uDD3D"
+            }),
+        Code: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "\uD83D\uDCBB"
+            })
+    }));
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+const _jsxruntime = require("react/jsx-runtime");
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _react1 = require("@testing-library/react");
+require("@testing-library/jest-dom");
+const _page = /*#__PURE__*/ _interop_require_default(require("./page"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+window.confirm = jest.fn(()=>true);
+describe('A-IT-017: Frontend Tasks CRUD Integration', ()=>{
+    beforeEach(()=>{
+        jest.clearAllMocks();
+    });
+    it('should integrate task creation', async ()=>{
+        (0, _react1.render)(/*#__PURE__*/ (0, _jsxruntime.jsx)(_page.default, {}));
+        await (0, _react1.waitFor)(()=>{
+            const { useFrontendTasks } = require('@elzatona/shared-hooks');
+            expect(useFrontendTasks).toHaveBeenCalled();
+        });
+    });
+});
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9hLmZvdWFkL1NpZGVQcm9qZWN0cy9FbHphdG9uYS1hbGwvRWx6YXRvbmEtd2ViL2FwcHMvd2Vic2l0ZS9zcmMvYXBwL2FkbWluL2Zyb250ZW5kLXRhc2tzL3BhZ2UuaW50ZWdyYXRpb24udGVzdC50c3giXSwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBJbnRlZ3JhdGlvbiBUZXN0cyBmb3IgQWRtaW4gRnJvbnRlbmQgVGFza3MgKEEtSVQtMDE3KVxuICogVGFzazogQS0wMDUgLSBBZG1pbiBGcm9udGVuZCBUYXNrc1xuICovXG5cbmltcG9ydCBSZWFjdCBmcm9tICdyZWFjdCc7XG5pbXBvcnQgeyByZW5kZXIsIHNjcmVlbiwgZmlyZUV2ZW50LCB3YWl0Rm9yIH0gZnJvbSAnQHRlc3RpbmctbGlicmFyeS9yZWFjdCc7XG5pbXBvcnQgJ0B0ZXN0aW5nLWxpYnJhcnkvamVzdC1kb20nO1xuaW1wb3J0IEZyb250ZW5kVGFza3NBZG1pblBhZ2UgZnJvbSAnLi9wYWdlJztcblxuamVzdC5tb2NrKCdAZWx6YXRvbmEvc2hhcmVkLWhvb2tzJywgKCkgPT4gKHtcbiAgdXNlRnJvbnRlbmRUYXNrczogamVzdC5mbigoKSA9PiAoe1xuICAgIGRhdGE6IHsgZGF0YTogW10gfSxcbiAgICBpc0xvYWRpbmc6IGZhbHNlLFxuICAgIGVycm9yOiBudWxsLFxuICB9KSksXG4gIHVzZUNyZWF0ZUZyb250ZW5kVGFzazogamVzdC5mbigoKSA9PiAoe1xuICAgIG11dGF0ZUFzeW5jOiBqZXN0LmZuKCkubW9ja1Jlc29sdmVkVmFsdWUoeyBzdWNjZXNzOiB0cnVlIH0pLFxuICAgIGlzUGVuZGluZzogZmFsc2UsXG4gIH0pKSxcbiAgdXNlVXBkYXRlRnJvbnRlbmRUYXNrOiBqZXN0LmZuKCgpID0+ICh7XG4gICAgbXV0YXRlQXN5bmM6IGplc3QuZm4oKS5tb2NrUmVzb2x2ZWRWYWx1ZSh7IHN1Y2Nlc3M6IHRydWUgfSksXG4gICAgaXNQZW5kaW5nOiBmYWxzZSxcbiAgfSkpLFxuICB1c2VEZWxldGVGcm9udGVuZFRhc2s6IGplc3QuZm4oKCkgPT4gKHtcbiAgICBtdXRhdGVBc3luYzogamVzdC5mbigpLm1vY2tSZXNvbHZlZFZhbHVlKHsgc3VjY2VzczogdHJ1ZSB9KSxcbiAgICBpc1BlbmRpbmc6IGZhbHNlLFxuICB9KSksXG59KSk7XG5cbmplc3QubW9jaygnQGVsemF0b25hL3NoYXJlZC1jb21wb25lbnRzJywgKCkgPT4gKHtcbiAgRnJvbnRlbmRUYXNrRWRpdG9yOiAoeyBvblNhdmUsIG9uQ2FuY2VsIH06IGFueSkgPT4gKFxuICAgIDxkaXY+XG4gICAgICA8YnV0dG9uIG9uQ2xpY2s9eygpID0+IG9uU2F2ZSh7fSl9PlNhdmU8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gb25DbGljaz17b25DYW5jZWx9PkNhbmNlbDwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICApLFxufSkpO1xuXG5qZXN0Lm1vY2soJ2x1Y2lkZS1yZWFjdCcsICgpID0+ICh7XG4gIFBsdXM6ICgpID0+IDxzcGFuPis8L3NwYW4+LFxuICBFZGl0OiAoKSA9PiA8c3Bhbj7inI/vuI88L3NwYW4+LFxuICBUcmFzaDI6ICgpID0+IDxzcGFuPvCfl5HvuI88L3NwYW4+LFxuICBFeWU6ICgpID0+IDxzcGFuPvCfkYHvuI88L3NwYW4+LFxuICBTZWFyY2g6ICgpID0+IDxzcGFuPvCflI08L3NwYW4+LFxuICBGaWx0ZXI6ICgpID0+IDxzcGFuPvCflL08L3NwYW4+LFxuICBDb2RlOiAoKSA9PiA8c3Bhbj7wn5K7PC9zcGFuPixcbn0pKTtcblxud2luZG93LmNvbmZpcm0gPSBqZXN0LmZuKCgpID0+IHRydWUpO1xuXG5kZXNjcmliZSgnQS1JVC0wMTc6IEZyb250ZW5kIFRhc2tzIENSVUQgSW50ZWdyYXRpb24nLCAoKSA9PiB7XG4gIGJlZm9yZUVhY2goKCkgPT4ge1xuICAgIGplc3QuY2xlYXJBbGxNb2NrcygpO1xuICB9KTtcblxuICBpdCgnc2hvdWxkIGludGVncmF0ZSB0YXNrIGNyZWF0aW9uJywgYXN5bmMgKCkgPT4ge1xuICAgIHJlbmRlcig8RnJvbnRlbmRUYXNrc0FkbWluUGFnZSAvPik7XG4gICAgXG4gICAgYXdhaXQgd2FpdEZvcigoKSA9PiB7XG4gICAgICBjb25zdCB7IHVzZUZyb250ZW5kVGFza3MgfSA9IHJlcXVpcmUoJ0BlbHphdG9uYS9zaGFyZWQtaG9va3MnKTtcbiAgICAgIGV4cGVjdCh1c2VGcm9udGVuZFRhc2tzKS50b0hhdmVCZWVuQ2FsbGVkKCk7XG4gICAgfSk7XG4gIH0pO1xufSk7XG4iXSwibmFtZXMiOlsiamVzdCIsIm1vY2siLCJ1c2VGcm9udGVuZFRhc2tzIiwiZm4iLCJkYXRhIiwiaXNMb2FkaW5nIiwiZXJyb3IiLCJ1c2VDcmVhdGVGcm9udGVuZFRhc2siLCJtdXRhdGVBc3luYyIsIm1vY2tSZXNvbHZlZFZhbHVlIiwic3VjY2VzcyIsImlzUGVuZGluZyIsInVzZVVwZGF0ZUZyb250ZW5kVGFzayIsInVzZURlbGV0ZUZyb250ZW5kVGFzayIsIkZyb250ZW5kVGFza0VkaXRvciIsIm9uU2F2ZSIsIm9uQ2FuY2VsIiwiZGl2IiwiYnV0dG9uIiwib25DbGljayIsIlBsdXMiLCJzcGFuIiwiRWRpdCIsIlRyYXNoMiIsIkV5ZSIsIlNlYXJjaCIsIkZpbHRlciIsIkNvZGUiLCJ3aW5kb3ciLCJjb25maXJtIiwiZGVzY3JpYmUiLCJiZWZvcmVFYWNoIiwiY2xlYXJBbGxNb2NrcyIsIml0IiwicmVuZGVyIiwiRnJvbnRlbmRUYXNrc0FkbWluUGFnZSIsIndhaXRGb3IiLCJyZXF1aXJlIiwiZXhwZWN0IiwidG9IYXZlQmVlbkNhbGxlZCJdLCJtYXBwaW5ncyI6IkFBQUE7OztDQUdDO0FBT0RBLEtBQUtDLElBQUksQ0FBQywwQkFBMEIsSUFBTyxDQUFBO1FBQ3pDQyxrQkFBa0JGLEtBQUtHLEVBQUUsQ0FBQyxJQUFPLENBQUE7Z0JBQy9CQyxNQUFNO29CQUFFQSxNQUFNLEVBQUU7Z0JBQUM7Z0JBQ2pCQyxXQUFXO2dCQUNYQyxPQUFPO1lBQ1QsQ0FBQTtRQUNBQyx1QkFBdUJQLEtBQUtHLEVBQUUsQ0FBQyxJQUFPLENBQUE7Z0JBQ3BDSyxhQUFhUixLQUFLRyxFQUFFLEdBQUdNLGlCQUFpQixDQUFDO29CQUFFQyxTQUFTO2dCQUFLO2dCQUN6REMsV0FBVztZQUNiLENBQUE7UUFDQUMsdUJBQXVCWixLQUFLRyxFQUFFLENBQUMsSUFBTyxDQUFBO2dCQUNwQ0ssYUFBYVIsS0FBS0csRUFBRSxHQUFHTSxpQkFBaUIsQ0FBQztvQkFBRUMsU0FBUztnQkFBSztnQkFDekRDLFdBQVc7WUFDYixDQUFBO1FBQ0FFLHVCQUF1QmIsS0FBS0csRUFBRSxDQUFDLElBQU8sQ0FBQTtnQkFDcENLLGFBQWFSLEtBQUtHLEVBQUUsR0FBR00saUJBQWlCLENBQUM7b0JBQUVDLFNBQVM7Z0JBQUs7Z0JBQ3pEQyxXQUFXO1lBQ2IsQ0FBQTtJQUNGLENBQUE7QUFFQVgsS0FBS0MsSUFBSSxDQUFDLCtCQUErQixJQUFPLENBQUE7UUFDOUNhLG9CQUFvQixDQUFDLEVBQUVDLE1BQU0sRUFBRUMsUUFBUSxFQUFPLGlCQUM1QyxzQkFBQ0M7O2tDQUNDLHFCQUFDQzt3QkFBT0MsU0FBUyxJQUFNSixPQUFPLENBQUM7a0NBQUk7O2tDQUNuQyxxQkFBQ0c7d0JBQU9DLFNBQVNIO2tDQUFVOzs7O0lBR2pDLENBQUE7QUFFQWhCLEtBQUtDLElBQUksQ0FBQyxnQkFBZ0IsSUFBTyxDQUFBO1FBQy9CbUIsTUFBTSxrQkFBTSxxQkFBQ0M7MEJBQUs7O1FBQ2xCQyxNQUFNLGtCQUFNLHFCQUFDRDswQkFBSzs7UUFDbEJFLFFBQVEsa0JBQU0scUJBQUNGOzBCQUFLOztRQUNwQkcsS0FBSyxrQkFBTSxxQkFBQ0g7MEJBQUs7O1FBQ2pCSSxRQUFRLGtCQUFNLHFCQUFDSjswQkFBSzs7UUFDcEJLLFFBQVEsa0JBQU0scUJBQUNMOzBCQUFLOztRQUNwQk0sTUFBTSxrQkFBTSxxQkFBQ047MEJBQUs7O0lBQ3BCLENBQUE7Ozs7OzhEQTFDa0I7d0JBQ2lDO1FBQzVDOzZEQUM0Qjs7Ozs7O0FBeUNuQ08sT0FBT0MsT0FBTyxHQUFHN0IsS0FBS0csRUFBRSxDQUFDLElBQU07QUFFL0IyQixTQUFTLDZDQUE2QztJQUNwREMsV0FBVztRQUNUL0IsS0FBS2dDLGFBQWE7SUFDcEI7SUFFQUMsR0FBRyxrQ0FBa0M7UUFDbkNDLElBQUFBLGNBQU0sZ0JBQUMscUJBQUNDLGFBQXNCO1FBRTlCLE1BQU1DLElBQUFBLGVBQU8sRUFBQztZQUNaLE1BQU0sRUFBRWxDLGdCQUFnQixFQUFFLEdBQUdtQyxRQUFRO1lBQ3JDQyxPQUFPcEMsa0JBQWtCcUMsZ0JBQWdCO1FBQzNDO0lBQ0Y7QUFDRiJ9
