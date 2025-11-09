@@ -1,0 +1,121 @@
+918be1f02fc65a93fe38640644bbda15
+/**
+ * Integration Tests for Learning Paths Practice (F-IT-007)
+ * Task: F-004 - Learning Paths Practice
+ */ "use strict";
+jest.mock('@elzatona/shared-contexts', ()=>{
+    const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
+    return {
+        ...actual,
+        useAuth: jest.fn()
+    };
+});
+jest.mock('next/navigation', ()=>({
+        useRouter: ()=>({
+                push: jest.fn(),
+                replace: jest.fn(),
+                prefetch: jest.fn()
+            })
+    }));
+jest.mock('lucide-react', ()=>({
+        BookOpen: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "\uD83D\uDCD6"
+            }),
+        Play: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "▶️"
+            }),
+        Target: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "\uD83C\uDFAF"
+            }),
+        Clock: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "⏰"
+            }),
+        CheckCircle: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "✅"
+            }),
+        Loader2: ()=>/*#__PURE__*/ (0, _jsxruntime.jsx)("span", {
+                children: "⏳"
+            })
+    }));
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+const _jsxruntime = require("react/jsx-runtime");
+const _react = /*#__PURE__*/ _interop_require_default(require("react"));
+const _react1 = require("@testing-library/react");
+require("@testing-library/jest-dom");
+const _page = /*#__PURE__*/ _interop_require_default(require("./page"));
+const _sharedcontexts = /*#__PURE__*/ _interop_require_wildcard(require("../../../../../libs/shared-contexts/src"));
+function _interop_require_default(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache(nodeInterop) {
+    if (typeof WeakMap !== "function") return null;
+    var cacheBabelInterop = new WeakMap();
+    var cacheNodeInterop = new WeakMap();
+    return (_getRequireWildcardCache = function(nodeInterop) {
+        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
+    })(nodeInterop);
+}
+function _interop_require_wildcard(obj, nodeInterop) {
+    if (!nodeInterop && obj && obj.__esModule) {
+        return obj;
+    }
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
+        return {
+            default: obj
+        };
+    }
+    var cache = _getRequireWildcardCache(nodeInterop);
+    if (cache && cache.has(obj)) {
+        return cache.get(obj);
+    }
+    var newObj = {
+        __proto__: null
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj){
+        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
+            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+            if (desc && (desc.get || desc.set)) {
+                Object.defineProperty(newObj, key, desc);
+            } else {
+                newObj[key] = obj[key];
+            }
+        }
+    }
+    newObj.default = obj;
+    if (cache) {
+        cache.set(obj, newObj);
+    }
+    return newObj;
+}
+global.fetch = jest.fn();
+describe('F-IT-007: Learning Paths Integration', ()=>{
+    beforeEach(()=>{
+        jest.clearAllMocks();
+        _sharedcontexts.useAuth.mockReturnValue({
+            isAuthenticated: true,
+            user: {
+                id: '1'
+            },
+            isLoading: false
+        });
+        global.fetch.mockResolvedValue({
+            ok: true,
+            json: async ()=>({
+                    data: []
+                })
+        });
+    });
+    it('should integrate with learning paths data', async ()=>{
+        (0, _react1.render)(/*#__PURE__*/ (0, _jsxruntime.jsx)(_page.default, {}));
+        await (0, _react1.waitFor)(()=>{
+            expect(_react1.screen.getByText(/.*/)).toBeTruthy();
+        });
+    });
+});
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9hLmZvdWFkL1NpZGVQcm9qZWN0cy9FbHphdG9uYS1hbGwvRWx6YXRvbmEtd2ViL2FwcHMvd2Vic2l0ZS9zcmMvYXBwL2xlYXJuaW5nLXBhdGhzL3BhZ2UuaW50ZWdyYXRpb24udGVzdC50c3giXSwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBJbnRlZ3JhdGlvbiBUZXN0cyBmb3IgTGVhcm5pbmcgUGF0aHMgUHJhY3RpY2UgKEYtSVQtMDA3KVxuICogVGFzazogRi0wMDQgLSBMZWFybmluZyBQYXRocyBQcmFjdGljZVxuICovXG5cbmltcG9ydCBSZWFjdCBmcm9tICdyZWFjdCc7XG5pbXBvcnQgeyByZW5kZXIsIHNjcmVlbiwgd2FpdEZvciB9IGZyb20gJ0B0ZXN0aW5nLWxpYnJhcnkvcmVhY3QnO1xuaW1wb3J0ICdAdGVzdGluZy1saWJyYXJ5L2plc3QtZG9tJztcbmltcG9ydCBMZWFybmluZ1BhdGhzUGFnZSBmcm9tICcuL3BhZ2UnO1xuaW1wb3J0ICogYXMgc2hhcmVkQ29udGV4dHMgZnJvbSAnQGVsemF0b25hL3NoYXJlZC1jb250ZXh0cyc7XG5cbmplc3QubW9jaygnQGVsemF0b25hL3NoYXJlZC1jb250ZXh0cycsICgpID0+IHtcbiAgY29uc3QgYWN0dWFsID0gamVzdC5yZXF1aXJlQWN0dWFsKCcuLi8uLi8uLi8uLi90ZXN0LXV0aWxzL21vY2tzL3NoYXJlZC1jb250ZXh0cycpO1xuICByZXR1cm4ge1xuICAgIC4uLmFjdHVhbCxcbiAgICB1c2VBdXRoOiBqZXN0LmZuKCksXG4gIH07XG59KTtcblxuamVzdC5tb2NrKCduZXh0L25hdmlnYXRpb24nLCAoKSA9PiAoe1xuICB1c2VSb3V0ZXI6ICgpID0+ICh7XG4gICAgcHVzaDogamVzdC5mbigpLFxuICAgIHJlcGxhY2U6IGplc3QuZm4oKSxcbiAgICBwcmVmZXRjaDogamVzdC5mbigpLFxuICB9KSxcbn0pKTtcblxuZ2xvYmFsLmZldGNoID0gamVzdC5mbigpO1xuXG5qZXN0Lm1vY2soJ2x1Y2lkZS1yZWFjdCcsICgpID0+ICh7XG4gIEJvb2tPcGVuOiAoKSA9PiA8c3Bhbj7wn5OWPC9zcGFuPixcbiAgUGxheTogKCkgPT4gPHNwYW4+4pa277iPPC9zcGFuPixcbiAgVGFyZ2V0OiAoKSA9PiA8c3Bhbj7wn46vPC9zcGFuPixcbiAgQ2xvY2s6ICgpID0+IDxzcGFuPuKPsDwvc3Bhbj4sXG4gIENoZWNrQ2lyY2xlOiAoKSA9PiA8c3Bhbj7inIU8L3NwYW4+LFxuICBMb2FkZXIyOiAoKSA9PiA8c3Bhbj7ij7M8L3NwYW4+LFxufSkpO1xuXG5kZXNjcmliZSgnRi1JVC0wMDc6IExlYXJuaW5nIFBhdGhzIEludGVncmF0aW9uJywgKCkgPT4ge1xuICBiZWZvcmVFYWNoKCgpID0+IHtcbiAgICBqZXN0LmNsZWFyQWxsTW9ja3MoKTtcbiAgICBcbiAgICAoc2hhcmVkQ29udGV4dHMudXNlQXV0aCBhcyBqZXN0Lk1vY2spLm1vY2tSZXR1cm5WYWx1ZSh7XG4gICAgICBpc0F1dGhlbnRpY2F0ZWQ6IHRydWUsXG4gICAgICB1c2VyOiB7IGlkOiAnMScgfSxcbiAgICAgIGlzTG9hZGluZzogZmFsc2UsXG4gICAgfSk7XG4gICAgXG4gICAgKGdsb2JhbC5mZXRjaCBhcyBqZXN0Lk1vY2spLm1vY2tSZXNvbHZlZFZhbHVlKHtcbiAgICAgIG9rOiB0cnVlLFxuICAgICAganNvbjogYXN5bmMgKCkgPT4gKHsgZGF0YTogW10gfSksXG4gICAgfSk7XG4gIH0pO1xuXG4gIGl0KCdzaG91bGQgaW50ZWdyYXRlIHdpdGggbGVhcm5pbmcgcGF0aHMgZGF0YScsIGFzeW5jICgpID0+IHtcbiAgICByZW5kZXIoPExlYXJuaW5nUGF0aHNQYWdlIC8+KTtcbiAgICBhd2FpdCB3YWl0Rm9yKCgpID0+IHtcbiAgICAgIGV4cGVjdChzY3JlZW4uZ2V0QnlUZXh0KC8uKi8pKS50b0JlVHJ1dGh5KCk7XG4gICAgfSk7XG4gIH0pO1xufSk7XG4iXSwibmFtZXMiOlsiamVzdCIsIm1vY2siLCJhY3R1YWwiLCJyZXF1aXJlQWN0dWFsIiwidXNlQXV0aCIsImZuIiwidXNlUm91dGVyIiwicHVzaCIsInJlcGxhY2UiLCJwcmVmZXRjaCIsIkJvb2tPcGVuIiwic3BhbiIsIlBsYXkiLCJUYXJnZXQiLCJDbG9jayIsIkNoZWNrQ2lyY2xlIiwiTG9hZGVyMiIsImdsb2JhbCIsImZldGNoIiwiZGVzY3JpYmUiLCJiZWZvcmVFYWNoIiwiY2xlYXJBbGxNb2NrcyIsInNoYXJlZENvbnRleHRzIiwibW9ja1JldHVyblZhbHVlIiwiaXNBdXRoZW50aWNhdGVkIiwidXNlciIsImlkIiwiaXNMb2FkaW5nIiwibW9ja1Jlc29sdmVkVmFsdWUiLCJvayIsImpzb24iLCJkYXRhIiwiaXQiLCJyZW5kZXIiLCJMZWFybmluZ1BhdGhzUGFnZSIsIndhaXRGb3IiLCJleHBlY3QiLCJzY3JlZW4iLCJnZXRCeVRleHQiLCJ0b0JlVHJ1dGh5Il0sIm1hcHBpbmdzIjoiQUFBQTs7O0NBR0M7QUFRREEsS0FBS0MsSUFBSSxDQUFDLDZCQUE2QjtJQUNyQyxNQUFNQyxTQUFTRixLQUFLRyxhQUFhLENBQUM7SUFDbEMsT0FBTztRQUNMLEdBQUdELE1BQU07UUFDVEUsU0FBU0osS0FBS0ssRUFBRTtJQUNsQjtBQUNGO0FBRUFMLEtBQUtDLElBQUksQ0FBQyxtQkFBbUIsSUFBTyxDQUFBO1FBQ2xDSyxXQUFXLElBQU8sQ0FBQTtnQkFDaEJDLE1BQU1QLEtBQUtLLEVBQUU7Z0JBQ2JHLFNBQVNSLEtBQUtLLEVBQUU7Z0JBQ2hCSSxVQUFVVCxLQUFLSyxFQUFFO1lBQ25CLENBQUE7SUFDRixDQUFBO0FBSUFMLEtBQUtDLElBQUksQ0FBQyxnQkFBZ0IsSUFBTyxDQUFBO1FBQy9CUyxVQUFVLGtCQUFNLHFCQUFDQzswQkFBSzs7UUFDdEJDLE1BQU0sa0JBQU0scUJBQUNEOzBCQUFLOztRQUNsQkUsUUFBUSxrQkFBTSxxQkFBQ0Y7MEJBQUs7O1FBQ3BCRyxPQUFPLGtCQUFNLHFCQUFDSDswQkFBSzs7UUFDbkJJLGFBQWEsa0JBQU0scUJBQUNKOzBCQUFLOztRQUN6QkssU0FBUyxrQkFBTSxxQkFBQ0w7MEJBQUs7O0lBQ3ZCLENBQUE7Ozs7OzhEQS9Ca0I7d0JBQ3NCO1FBQ2pDOzZEQUN1Qjt3RUFDRTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFrQmhDTSxPQUFPQyxLQUFLLEdBQUdsQixLQUFLSyxFQUFFO0FBV3RCYyxTQUFTLHdDQUF3QztJQUMvQ0MsV0FBVztRQUNUcEIsS0FBS3FCLGFBQWE7UUFFakJDLGdCQUFlbEIsT0FBTyxDQUFlbUIsZUFBZSxDQUFDO1lBQ3BEQyxpQkFBaUI7WUFDakJDLE1BQU07Z0JBQUVDLElBQUk7WUFBSTtZQUNoQkMsV0FBVztRQUNiO1FBRUNWLE9BQU9DLEtBQUssQ0FBZVUsaUJBQWlCLENBQUM7WUFDNUNDLElBQUk7WUFDSkMsTUFBTSxVQUFhLENBQUE7b0JBQUVDLE1BQU0sRUFBRTtnQkFBQyxDQUFBO1FBQ2hDO0lBQ0Y7SUFFQUMsR0FBRyw2Q0FBNkM7UUFDOUNDLElBQUFBLGNBQU0sZ0JBQUMscUJBQUNDLGFBQWlCO1FBQ3pCLE1BQU1DLElBQUFBLGVBQU8sRUFBQztZQUNaQyxPQUFPQyxjQUFNLENBQUNDLFNBQVMsQ0FBQyxPQUFPQyxVQUFVO1FBQzNDO0lBQ0Y7QUFDRiJ9
