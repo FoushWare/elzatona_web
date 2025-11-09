@@ -28,6 +28,7 @@ const config = {
       '<rootDir>/src/test-utils/mocks/shared-contexts.ts',
     '^@elzatona/shared-components$':
       '<rootDir>/../../libs/shared-components/src/index.ts',
+    '^lucide-react$': '<rootDir>/src/test-utils/mocks/lucide-react.ts',
   },
   // Include tests from root tests directory, but exclude e2e tests (Playwright)
   // Note: testPathIgnorePatterns handles the exclusion, so we keep testMatch simple
@@ -52,8 +53,13 @@ const config = {
   // Transform ESM modules - allow nuqs and other ESM packages
   // Need to include the full path for nuqs submodules
   transformIgnorePatterns: [
-    'node_modules/(?!(nuqs|@supabase/supabase-js|@tanstack|@react-hook-form|lucide-react|@radix-ui)/)',
+    'node_modules/(?!(nuqs|@supabase/supabase-js|@tanstack|@react-hook-form|lucide-react|@radix-ui|@radix-ui/react-select)/)',
   ],
+  // Mock problematic ESM modules
+  moduleNameMapper: {
+    ...config.moduleNameMapper,
+    '^lucide-react$': '<rootDir>/src/test-utils/mocks/lucide-react.ts',
+  },
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
