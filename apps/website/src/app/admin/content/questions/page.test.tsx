@@ -359,3 +359,74 @@ describe('A-UT-006: Error Handling', () => {
     }, { timeout: 200 });
   });
 });
+
+describe('A-UT-SNAPSHOT: Admin Bulk Question Addition Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: [],
+        pagination: { totalCount: 0 },
+      }),
+    });
+  });
+
+  it('should match admin questions page snapshot (empty state)', async () => {
+    const { container } = render(<AdminContentQuestionsPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+
+  it('should match admin questions page snapshot (with questions)', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: [
+          {
+            id: '1',
+            title: 'Test Question 1',
+            content: 'Test content',
+            category: 'HTML',
+            difficulty: 'beginner',
+            type: 'multiple-choice',
+          },
+          {
+            id: '2',
+            title: 'Test Question 2',
+            content: 'Test content 2',
+            category: 'CSS',
+            difficulty: 'intermediate',
+            type: 'multiple-choice',
+          },
+        ],
+        pagination: { totalCount: 2 },
+      }),
+    });
+    
+    const { container } = render(<AdminContentQuestionsPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+
+  it('should match admin questions page snapshot (loading state)', () => {
+    (global.fetch as jest.Mock).mockImplementation(() => new Promise(() => {}));
+    const { container } = render(<AdminContentQuestionsPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match admin questions page snapshot (error state)', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: async () => ({ error: 'Server error' }),
+    });
+    
+    const { container } = render(<AdminContentQuestionsPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+});

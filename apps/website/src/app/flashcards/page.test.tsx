@@ -102,3 +102,37 @@ describe('F-UT-014: CRUD Operations', () => {
     expect(removeFlashcard).toBeDefined();
   });
 });
+
+describe('F-UT-SNAPSHOT: Flashcards Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should match flashcards page snapshot (list mode)', () => {
+    const { container } = render(<FlashcardsPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match flashcards page snapshot (with flashcards)', () => {
+    const { loadFlashcards } = require('../../lib/flashcards');
+    loadFlashcards.mockReturnValue([
+      {
+        id: '1',
+        question: 'Test Question 1',
+        answer: 'Test Answer 1',
+        section: 'HTML',
+        difficulty: 'easy',
+      },
+      {
+        id: '2',
+        question: 'Test Question 2',
+        answer: 'Test Answer 2',
+        section: 'CSS',
+        difficulty: 'medium',
+      },
+    ]);
+    
+    const { container } = render(<FlashcardsPage />);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+});

@@ -68,3 +68,22 @@ describe('F-UT-010: Component Renders', () => {
     });
   });
 });
+
+describe('F-UT-SNAPSHOT: Frontend Tasks Practice Snapshot Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    (sharedContexts.useAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: '1' },
+      isLoading: false,
+    });
+  });
+
+  it('should match frontend tasks page snapshot', async () => {
+    const { container } = render(<FrontendTasksPage />);
+    await waitFor(() => {
+      expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+});
