@@ -66,6 +66,8 @@
     "test:unit:freestyle-flow": "NODE_OPTIONS=--max-old-space-size=1024 jest --config=apps/website/jest.config.js --testPathPatterns=freestyle-flow --maxWorkers=2",
     "test:unit:admin": "NODE_OPTIONS=--max-old-space-size=1024 jest --config=apps/website/jest.config.js --testPathPatterns=admin --maxWorkers=2",
     "test:unit:shared-components": "NODE_OPTIONS=--max-old-space-size=1024 jest --config=apps/website/jest.config.js --testPathPatterns=shared-components --maxWorkers=2",
+    "test:admin-navbar": "NODE_OPTIONS=--max-old-space-size=1024 jest --config=apps/website/jest.config.js --testPathPatterns=AdminNavbar --maxWorkers=2",
+    "test:admin-navbar:watch": "NODE_OPTIONS=--max-old-space-size=1024 jest --config=apps/website/jest.config.js --testPathPatterns=AdminNavbar --watch --maxWorkers=2",
     "test:integration": "NODE_OPTIONS=--max-old-space-size=1024 jest --config=apps/website/jest.config.js --testPathPatterns=integration --maxWorkers=2",
     "test:integration:guided-flow": "NODE_OPTIONS=--max-old-space-size=1024 jest --config=apps/website/jest.config.js --testPathPatterns='(guided-flow|integration)' --maxWorkers=2",
     "test:integration:freestyle-flow": "NODE_OPTIONS=--max-old-space-size=1024 jest --config=apps/website/jest.config.js --testPathPatterns='(freestyle-flow|integration)' --maxWorkers=2",
