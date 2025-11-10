@@ -121,6 +121,12 @@ global.ResizeObserver = class ResizeObserver {
   unobserve() {}
 };
 
+// Mock window.scrollTo (not implemented in jsdom)
+Object.defineProperty(window, 'scrollTo', {
+  writable: true,
+  value: jest.fn(),
+});
+
 // Suppress console warnings in tests
 const originalWarn = console.warn;
 const originalError = console.error;
