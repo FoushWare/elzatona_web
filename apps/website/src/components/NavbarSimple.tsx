@@ -330,6 +330,11 @@ export const NavbarSimple: React.FC = () => {
   // Persist last-known auth state across reloads to prevent flicker
   // (No beforeunload cleanup to keep navbar-auth-state available on refresh)
 
+  // Hide navbar on admin routes (admin has its own navbar)
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <>
       <nav

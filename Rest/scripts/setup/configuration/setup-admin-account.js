@@ -11,9 +11,16 @@ console.log('🛡️ Initializing Admin Account...\n');
 
 async function initializeAdmin() {
   try {
+   const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
+    if (!adminPassword) {
+      console.error('❌ Missing INITIAL_ADMIN_PASSWORD in environment variables');
+      console.error('Please set INITIAL_ADMIN_PASSWORD in your .env.local file');
+      process.exit(1);
+    }
+
     const adminData = {
       email: process.env.INITIAL_ADMIN_EMAIL || 'admin@elzatona.com',
-      password: process.env.INITIAL_ADMIN_PASSWORD || 'ElzatonaAdmin2024!',
+      password: adminPassword,
       name: process.env.INITIAL_ADMIN_NAME || 'Super Admin',
       role: process.env.INITIAL_ADMIN_ROLE || 'super_admin',
     };
@@ -68,9 +75,15 @@ async function testAdminLogin() {
   try {
     console.log('🧪 Testing admin login...');
 
+    const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
+    if (!adminPassword) {
+      console.error('❌ Missing INITIAL_ADMIN_PASSWORD in environment variables');
+      return;
+    }
+
     const loginData = {
       email: process.env.INITIAL_ADMIN_EMAIL || 'admin@elzatona.com',
-      password: process.env.INITIAL_ADMIN_PASSWORD || 'ElzatonaAdmin2024!',
+      password: adminPassword,
     };
 
     const response = await fetch('http://localhost:3001/api/admin/auth', {

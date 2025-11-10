@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['@heroicons/react', 'lucide-react'],
+    // Enable Turbopack for faster, more memory-efficient builds
+    turbo: {
+      // Reduce memory usage by limiting cache size
+      resolveAlias: {
+        // Optimize imports
+      },
+    },
   },
 
   // Transpile Firebase packages for better compatibility
@@ -71,7 +78,28 @@ const nextConfig: NextConfig = {
       use: 'ignore-loader',
     });
 
-    // Optimize bundle size
+    // Memory-efficient webpack configuration for development
+    if (dev) {
+      // Reduce memory usage in development
+      config.cache = {
+        type: 'filesystem',
+        buildDependencies: {
+          config: [__filename],
+        },
+        // Limit cache size to reduce memory footprint
+        maxMemoryGenerations: 1,
+      };
+      
+      // Reduce parallelism to save memory
+      config.optimization = {
+        ...config.optimization,
+        removeAvailableModules: false,
+        removeEmptyChunks: false,
+        splitChunks: false,
+      };
+    }
+
+    // Optimize bundle size for production
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
         chunks: 'all',

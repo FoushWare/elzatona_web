@@ -7,14 +7,16 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AdminDashboard from './page';
-import * as sharedContexts from '@elzatona/shared-contexts';
+import { useAdminAuth } from '@elzatona/shared-contexts';
 
 // Mock shared contexts
 jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
+  const actual = jest.requireActual('@elzatona/shared-contexts');
   return {
     ...actual,
     useAdminAuth: jest.fn(),
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    NotificationProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   };
 });
 
@@ -75,7 +77,7 @@ describe('A-UT-011: Dashboard Renders', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       user: {
         id: '1',
         email: 'admin@example.com',
@@ -106,7 +108,7 @@ describe('A-UT-012: Stats Display', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       user: {
         id: '1',
         email: 'admin@example.com',
@@ -121,15 +123,28 @@ describe('A-UT-012: Stats Display', () => {
     expect(screen.getByText(/Total Questions/i)).toBeInTheDocument();
   });
 
-  it('should display categories stat', () => {
+  it('should display learning cards stat', () => {
     render(<AdminDashboard />);
-    expect(screen.getByText(/Categories/i)).toBeInTheDocument();
+    // Learning Cards appears multiple times, check that it exists
+    expect(screen.getAllByText(/Learning Cards/i).length).toBeGreaterThan(0);
+  });
+
+  it('should display learning plans stat', () => {
+    render(<AdminDashboard />);
+    expect(screen.getByText(/Learning Plans/i)).toBeInTheDocument();
+  });
+
+  it('should display total tasks stat', () => {
+    render(<AdminDashboard />);
+    expect(screen.getByText(/Total Tasks/i)).toBeInTheDocument();
   });
 
   it('should display admin menu items', () => {
     render(<AdminDashboard />);
-    expect(screen.getByText(/Questions/i)).toBeInTheDocument();
-    expect(screen.getByText(/Content Management/i)).toBeInTheDocument();
+    // Check for quick actions that are actually displayed
+    expect(screen.getByText(/Add New Question/i)).toBeInTheDocument();
+    expect(screen.getByText(/Create Frontend Task/i)).toBeInTheDocument();
+    expect(screen.getByText(/Add Problem Solving/i)).toBeInTheDocument();
   });
 });
 
@@ -138,7 +153,7 @@ describe('A-UT-013: Refresh Functionality', () => {
     jest.clearAllMocks();
     mockRefetch.mockClear();
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       user: {
         id: '1',
         email: 'admin@example.com',
@@ -167,7 +182,7 @@ describe('A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       user: {
         id: '1',
         email: 'admin@example.com',
