@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`S-UT-SNAPSHOT: Progress Tracker Snapshot Tests > should match progress tracker snapshot (challenge tracking) 1`] = `<div />`;
+
+exports[`S-UT-SNAPSHOT: Progress Tracker Snapshot Tests > should match progress tracker snapshot (learning path tracking) 1`] = `<div />`;
+
+exports[`S-UT-SNAPSHOT: Progress Tracker Snapshot Tests > should match progress tracker snapshot (question tracking) 1`] = `<div />`;
