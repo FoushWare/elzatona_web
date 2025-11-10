@@ -7,6 +7,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import AdminNavbar from './AdminNavbar';
+import * as sharedContexts from '@elzatona/shared-contexts';
 
 // Mock Next.js
 jest.mock('next/link', () => {
@@ -361,22 +362,24 @@ describe('A-UT-015: AdminNavbar Theme Toggle', () => {
   });
 
   it('should show sun icon in dark mode', () => {
-    const { useTheme } = require('@elzatona/shared-contexts');
-    useTheme.mockReturnValue({
+    jest.mocked(sharedContexts.useTheme).mockReturnValue({
       isDarkMode: true,
       toggleDarkMode: mockToggleDarkMode,
-    });
+      setDarkMode: jest.fn(),
+      isLoaded: true,
+    } as any);
 
     render(<AdminNavbar />);
     expect(screen.getByTestId('sun-icon')).toBeInTheDocument();
   });
 
   it('should show moon icon in light mode', () => {
-    const { useTheme } = require('@elzatona/shared-contexts');
-    useTheme.mockReturnValue({
+    jest.mocked(sharedContexts.useTheme).mockReturnValue({
       isDarkMode: false,
       toggleDarkMode: mockToggleDarkMode,
-    });
+      setDarkMode: jest.fn(),
+      isLoaded: true,
+    } as any);
 
     render(<AdminNavbar />);
     expect(screen.getByTestId('moon-icon')).toBeInTheDocument();
