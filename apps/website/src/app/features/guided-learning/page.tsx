@@ -4,25 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@elzatona/shared-contexts';
 import { useLearningType } from '../../../context/LearningTypeContext';
 
-// Conditional Supabase client creation with fallback values
-let supabase = null;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { createClient } = require('@supabase/supabase-js');
-  const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-  const supabaseServiceRoleKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder_key';
-
-  if (
-    supabaseUrl !== 'https://placeholder.supabase.co' &&
-    supabaseServiceRoleKey !== 'placeholder_key'
-  ) {
-    supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-  }
-} catch (error) {
-  console.warn('Supabase client creation failed:', error);
-}
+// Note: This page uses API routes and hooks, not direct supabase client
 
 import { useRouter } from 'next/navigation';
 import {

@@ -1,9 +1,14 @@
 // Simple script to reset admin password
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = 'https://hpnewqkvpnthpohvxcmq.supabase.co';
-const supabaseServiceKey =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyOTEyNzQ0MCwiZXhwIjoyMDQ0NjkzNDQwfQ.8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error('❌ Missing Supabase environment variables');
+  console.error('Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY');
+  process.exit(1);
+}
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
@@ -16,8 +21,15 @@ async function resetAdminPassword() {
   try {
     console.log('🔐 Resetting admin password...');
 
-    const email = 'afouadsoftwareengineer@gmail.com';
-    const newPassword = 'ZatonaFoushware$8888';
+    const email = process.env.ADMIN_EMAIL;
+    const newPassword = process.env.ADMIN_PASSWORD;
+
+    if (!email || !newPassword) {
+      console.error('❌ Missing admin credentials in environment variables');
+      console.error('Required: ADMIN_EMAIL, ADMIN_PASSWORD');
+      console.error('Please set these in your .env.local file');
+      process.exit(1);
+    }
 
     // Update user password using admin API
     const { data, error } = await supabase.auth.admin.updateUserById(

@@ -225,38 +225,49 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
       setError(null);
 
       try {
-        console.log('🔐 Attempting Supabase login for:', email);
+        console.log('🔐 Attempting admin login for:', email);
 
-        // TEMPORARY: Mock authentication for testing dropdown functionality
-        if (
-          email === 'afouadsoftwareengineer@gmail.com' &&
-          password === 'ZatonaFoushware$8888'
-        ) {
-          console.log('✅ Mock admin login successful (temporary)');
+        // Call the admin authentication API
+        const response = await fetch('/api/admin/auth', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
 
-          const mockSession: AdminSession = {
-            id: 'mock-admin-id',
-            email: email,
-            role: 'super_admin',
-            name: 'Admin User',
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours from now
+        const data = await response.json();
+
+        if (data.success && data.admin) {
+          console.log('✅ Admin login successful');
+
+          const session: AdminSession = {
+            id: data.admin.id,
+            email: data.admin.email,
+            role: data.admin.role,
+            name: data.admin.name || 'Admin User',
+            expiresAt: data.admin.expiresAt,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           };
 
-          setUser(mockSession);
+          setUser(session);
           setIsAuthenticated(true);
           setIsLoading(false);
 
           // Store session in localStorage for persistence
-          localStorage.setItem('admin_session', JSON.stringify(mockSession));
+          localStorage.setItem('admin_session', JSON.stringify(session));
+
+          // Redirect to admin dashboard
+          router.push('/admin/dashboard');
 
           return { success: true };
+        } else {
+          const errorMessage = data.error || 'Invalid credentials';
+          console.error('❌ Login failed:', errorMessage);
+          setError(errorMessage);
+          return { success: false, error: errorMessage };
         }
-
-        // If not mock authentication, show error
-        setError('Invalid credentials. Please try again.');
-        return { success: false, error: 'Invalid credentials' };
       } catch (error) {
         const errorMessage = 'An unexpected error occurred during login';
         console.error('Login error:', error);
