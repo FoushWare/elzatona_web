@@ -57,10 +57,16 @@ CREATE POLICY "Service role can manage admins" ON admins FOR ALL USING (
 
     console.log('🔄 Step 2: Creating admin user...');
 
-    const adminEmail = 'admin@elzatona.com';
-    const adminPassword = 'ElzatonaAdmin2024!';
+    const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@elzatona.com';
+    const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
     const adminName = 'Super Admin';
     const adminRole = 'super_admin';
+
+    if (!adminPassword) {
+      console.error('❌ Missing INITIAL_ADMIN_PASSWORD in environment variables');
+      console.error('Please set INITIAL_ADMIN_PASSWORD in your .env.local file');
+      return;
+    }
 
     // Create user in Supabase Auth
     const { data: authData, error: authError } =

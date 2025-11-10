@@ -29,7 +29,19 @@ const defaultAdminAuth = {
   user: null,
 };
 
-export const useAdminAuth = jest.fn(() => defaultAdminAuth);
+export const useAdminAuth = jest.fn(() => defaultAdminAuth) as jest.MockedFunction<() => typeof defaultAdminAuth>;
+
+// Notification context mocks
+export const NotificationProvider = ({ children }: { children: React.ReactNode }) => children;
+export const useNotifications = jest.fn(() => ({
+  notifications: [],
+  unreadCount: 0,
+  isLoading: false,
+  error: null,
+  markAsRead: jest.fn(),
+  markAllAsRead: jest.fn(),
+  refreshNotifications: jest.fn(),
+}));
 
 // Theme provider mocks
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) =>

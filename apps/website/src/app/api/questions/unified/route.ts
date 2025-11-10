@@ -4,15 +4,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+// Validate environment variables
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-});
+  if (!supabaseUrl || !supabaseServiceRoleKey) {
+    throw new Error(
+      'Supabase configuration is missing. Please set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in your environment variables.'
+    );
+  }
+
+  return createClient(supabaseUrl, supabaseServiceRoleKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+}
 
 // Simple in-memory cache for questions (resets on server restart)
 let questionsCache: Array<{
@@ -25,6 +34,9 @@ const CACHE_DURATION = 30000; // 30 seconds
 // GET /api/questions/unified - Get questions with filters
 export async function GET(request: NextRequest) {
   try {
+    // Get Supabase client with validation
+    const supabase = getSupabaseClient();
+
     const { searchParams } = new URL(request.url);
 
     // Pagination parameters
@@ -143,8 +155,12 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching questions:', error);
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : 'Failed to fetch questions';
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch questions' },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }
@@ -153,6 +169,9 @@ export async function GET(request: NextRequest) {
 // POST /api/questions/unified - Create questions (bulk import or single)
 export async function POST(request: NextRequest) {
   try {
+    // Get Supabase client with validation
+    const supabase = getSupabaseClient();
+
     const body = await request.json();
     const { questions, isBulkImport = false } = body;
 
@@ -217,6 +236,9 @@ export async function POST(request: NextRequest) {
 // PUT /api/questions/unified - Update a question
 export async function PUT(request: NextRequest) {
   try {
+    // Get Supabase client with validation
+    const supabase = getSupabaseClient();
+
     const body = await request.json();
     const { id, ...updateData } = body;
 
@@ -258,6 +280,9 @@ export async function PUT(request: NextRequest) {
 // DELETE /api/questions/unified - Delete a question
 export async function DELETE(request: NextRequest) {
   try {
+    // Get Supabase client with validation
+    const supabase = getSupabaseClient();
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
