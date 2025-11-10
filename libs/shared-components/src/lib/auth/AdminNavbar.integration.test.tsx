@@ -1,0 +1,342 @@
+/**
+ * Integration Tests for AdminNavbar Component
+ * Tests: A-IT-014, A-IT-015, A-IT-016
+ * Task: Admin Navbar Component Integration Testing
+ */
+
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import AdminNavbar from './AdminNavbar';
+
+// Mock Next.js
+jest.mock('next/link', () => {
+  return ({ children, href }: { children: React.ReactNode; href: string }) => {
+    return <a href={href}>{children}</a>;
+  };
+});
+
+const mockPush = jest.fn();
+const mockReplace = jest.fn();
+
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+    replace: mockReplace,
+    pathname: '/admin/dashboard',
+  }),
+  usePathname: () => '/admin/dashboard',
+}));
+
+// Mock shared contexts
+const mockToggleDarkMode = jest.fn();
+const mockLogout = jest.fn();
+
+jest.mock('@elzatona/shared-contexts', () => ({
+  useTheme: jest.fn(() => ({
+    isDarkMode: false,
+    toggleDarkMode: mockToggleDarkMode,
+  })),
+  useAdminAuth: jest.fn(() => ({
+    isAuthenticated: true,
+    user: {
+      id: '1',
+      email: 'admin@example.com',
+      role: 'super_admin',
+      name: 'Admin User',
+    },
+    logout: mockLogout,
+  })),
+}));
+
+// Mock NotificationDropdown
+jest.mock('../common/NotificationDropdown', () => ({
+  NotificationDropdown: () => <div data-testid="notification-dropdown">Notifications</div>,
+}));
+
+// Mock AlzatonaLogo
+jest.mock('../common/AlzatonaLogo', () => {
+  return function AlzatonaLogo() {
+    return <div data-testid="alzatona-logo">Logo</div>;
+  };
+});
+
+// Mock lucide-react icons
+jest.mock('lucide-react', () => ({
+  Menu: () => <div data-testid="menu-icon">Menu</div>,
+  X: () => <div data-testid="x-icon">X</div>,
+  Sun: () => <div data-testid="sun-icon">Sun</div>,
+  Moon: () => <div data-testid="moon-icon">Moon</div>,
+  User: () => <div data-testid="user-icon">User</div>,
+  LogOut: () => <div data-testid="logout-icon">Logout</div>,
+  Settings: () => <div data-testid="settings-icon">Settings</div>,
+  BarChart3: () => <div data-testid="barchart-icon">BarChart</div>,
+  Shield: () => <div data-testid="shield-icon">Shield</div>,
+  ChevronDown: () => <div data-testid="chevron-icon">Chevron</div>,
+  HelpCircle: () => <div data-testid="help-icon">Help</div>,
+  Code: () => <div data-testid="code-icon">Code</div>,
+  Calculator: () => <div data-testid="calculator-icon">Calculator</div>,
+}));
+
+// Mock window.scrollY and scroll events
+Object.defineProperty(window, 'scrollY', {
+  writable: true,
+  value: 0,
+});
+
+Object.defineProperty(document.body, 'style', {
+  writable: true,
+  value: {},
+});
+
+describe('A-IT-014: AdminNavbar Dropdown Integration', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    window.scrollY = 0;
+    Object.assign(document.body.style, {});
+    // Set large screen viewport for dropdown tests (dropdown only shows on lg+)
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1024,
+    });
+  });
+
+  it('should open and close admin dropdown with all interactions on large screens', async () => {
+    render(<AdminNavbar />);
+    
+    // Open dropdown (only visible on large screens, centered)
+    const adminMenuButton = screen.getByText('Admin Menu').closest('button');
+    fireEvent.click(adminMenuButton!);
+    
+    // Verify dropdown is open
+    expect(screen.getByText('Dashboard')).toBeInTheDocument();
+    expect(screen.getByText('Questions')).toBeInTheDocument();
+    expect(screen.getByText('Quick navigation')).toBeInTheDocument();
+    
+    // Click on a menu item
+    const dashboardLink = screen.getByText('Dashboard').closest('a');
+    fireEvent.click(dashboardLink!);
+    
+    // Dropdown should close after navigation
+    await waitFor(() => {
+      expect(screen.queryByText('Dashboard')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle multiple dropdown opens and closes on large screens', async () => {
+    render(<AdminNavbar />);
+    const adminMenuButton = screen.getByText('Admin Menu').closest('button');
+    
+    // Open and close multiple times
+    for (let i = 0; i < 3; i++) {
+      fireEvent.click(adminMenuButton!);
+      expect(screen.getByText('Dashboard')).toBeInTheDocument();
+      
+      // Close by clicking outside
+      fireEvent.click(document.body);
+      
+      await waitFor(() => {
+        expect(screen.queryByText('Dashboard')).not.toBeInTheDocument();
+      });
+    }
+  });
+});
+
+describe('A-IT-015: AdminNavbar Mobile Menu Integration', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    window.scrollY = 0;
+    Object.assign(document.body.style, {});
+  });
+
+  it('should open mobile menu and prevent body scroll', () => {
+    render(<AdminNavbar />);
+    const menuButton = screen.getByLabelText(/open menu/i);
+    
+    fireEvent.click(menuButton);
+    
+    // Menu should be open with "Admin Menu" text
+    expect(screen.getByText('Admin Menu')).toBeInTheDocument();
+    expect(screen.getByLabelText('Close menu')).toBeInTheDocument();
+    
+    // Body scroll should be prevented
+    expect(document.body.style.overflow).toBe('hidden');
+  });
+
+  it('should close mobile menu and restore body scroll', async () => {
+    render(<AdminNavbar />);
+    const menuButton = screen.getByLabelText(/open menu/i);
+    
+    // Open menu
+    fireEvent.click(menuButton);
+    expect(document.body.style.overflow).toBe('hidden');
+    
+    // Close menu
+    const closeButton = screen.getByLabelText('Close menu');
+    fireEvent.click(closeButton);
+    
+    // Body scroll should be restored
+    await waitFor(() => {
+      expect(document.body.style.overflow).toBe('');
+    });
+  });
+
+  it('should close mobile menu when clicking backdrop', async () => {
+    render(<AdminNavbar />);
+    const menuButton = screen.getByLabelText(/open menu/i);
+    
+    // Open menu
+    fireEvent.click(menuButton);
+    expect(screen.getByText('Admin Menu')).toBeInTheDocument();
+    
+    // Click backdrop (simulate clicking outside)
+    fireEvent.click(document.body);
+    
+    // Menu should close
+    await waitFor(() => {
+      expect(screen.queryByText('Admin Menu')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should show logout button in mobile menu', () => {
+    render(<AdminNavbar />);
+    const menuButton = screen.getByLabelText(/open menu/i);
+    
+    // Open mobile menu
+    fireEvent.click(menuButton);
+    
+    // Logout button should be visible
+    expect(screen.getByText('Logout')).toBeInTheDocument();
+    expect(screen.getByText('Sign out of your account')).toBeInTheDocument();
+  });
+
+  it('should logout and close menu when clicking logout in mobile menu', async () => {
+    render(<AdminNavbar />);
+    const menuButton = screen.getByLabelText(/open menu/i);
+    
+    // Open mobile menu
+    fireEvent.click(menuButton);
+    expect(screen.getByText('Logout')).toBeInTheDocument();
+    
+    // Click logout button
+    const logoutButton = screen.getByText('Logout').closest('button');
+    fireEvent.click(logoutButton!);
+    
+    // Should call logout
+    expect(mockLogout).toHaveBeenCalled();
+    
+    // Menu should close
+    await waitFor(() => {
+      expect(screen.queryByText('Admin Menu')).not.toBeInTheDocument();
+    });
+  });
+});
+
+describe('A-IT-016: AdminNavbar User Menu Integration', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should open user dropdown and navigate to profile', () => {
+    render(<AdminNavbar />);
+    const userButton = screen.getByTestId('user-icon').closest('button');
+    
+    // Open user dropdown
+    fireEvent.click(userButton!);
+    
+    // Verify dropdown content
+    expect(screen.getByText('Profile')).toBeInTheDocument();
+    expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+    
+    // Click profile link
+    const profileLink = screen.getByText('Profile').closest('a');
+    fireEvent.click(profileLink!);
+    
+    // Should navigate to profile
+    expect(profileLink).toHaveAttribute('href', '/admin/profile');
+  });
+
+  it('should handle logout flow', () => {
+    render(<AdminNavbar />);
+    const userButton = screen.getByTestId('user-icon').closest('button');
+    
+    // Open user dropdown
+    fireEvent.click(userButton!);
+    
+    // Click logout
+    const logoutButton = screen.getByText('Logout');
+    fireEvent.click(logoutButton);
+    
+    // Should call logout function
+    expect(mockLogout).toHaveBeenCalled();
+  });
+});
+
+describe('A-IT-017: AdminNavbar Scroll Behavior', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    window.scrollY = 0;
+    Object.assign(document.body.style, {});
+  });
+
+  it('should update navbar style on scroll', () => {
+    render(<AdminNavbar />);
+    
+    // Simulate scroll
+    window.scrollY = 100;
+    fireEvent.scroll(window);
+    
+    // Navbar should update its appearance (scrolled state)
+    // This is tested by checking if the navbar has scrolled classes
+    const navbar = document.querySelector('nav');
+    expect(navbar).toBeInTheDocument();
+  });
+
+  it('should prevent scroll when mobile menu is open', () => {
+    render(<AdminNavbar />);
+    const menuButton = screen.getByLabelText(/open menu/i);
+    
+    // Open menu
+    fireEvent.click(menuButton);
+    
+    // Body should have fixed position and overflow hidden
+    expect(document.body.style.position).toBe('fixed');
+    expect(document.body.style.overflow).toBe('hidden');
+  });
+});
+
+describe('A-IT-018: AdminNavbar Theme Integration', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should toggle between light and dark mode', () => {
+    const { useTheme } = require('@elzatona/shared-contexts');
+    
+    // Start in light mode
+    useTheme.mockReturnValue({
+      isDarkMode: false,
+      toggleDarkMode: mockToggleDarkMode,
+    });
+
+    const { rerender } = render(<AdminNavbar />);
+    expect(screen.getByTestId('moon-icon')).toBeInTheDocument();
+    
+    // Toggle to dark mode
+    const themeButton = screen.getByRole('button', { name: /toggle theme/i });
+    fireEvent.click(themeButton);
+    
+    expect(mockToggleDarkMode).toHaveBeenCalled();
+    
+    // Switch to dark mode
+    useTheme.mockReturnValue({
+      isDarkMode: true,
+      toggleDarkMode: mockToggleDarkMode,
+    });
+    
+    rerender(<AdminNavbar />);
+    expect(screen.getByTestId('sun-icon')).toBeInTheDocument();
+  });
+});
+

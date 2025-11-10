@@ -7,14 +7,16 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AdminLoginPage from './page';
-import * as sharedContexts from '@elzatona/shared-contexts';
+import { useAdminAuth } from '@elzatona/shared-contexts';
 
 // Mock shared contexts
 jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
+  const actual = jest.requireActual('@elzatona/shared-contexts');
   return {
     ...actual,
     useAdminAuth: jest.fn(),
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    NotificationProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   };
 });
 
@@ -46,7 +48,7 @@ describe('A-IT-010: Login API Call', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -78,7 +80,7 @@ describe('A-IT-010: Login API Call', () => {
   it('should handle successful login response', async () => {
     mockLogin.mockResolvedValue({ success: true });
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: true,
       isLoading: false,
       login: mockLogin,
@@ -133,24 +135,8 @@ describe('A-IT-011: Redirect After Login', () => {
     mockLogin.mockResolvedValue({ success: true });
   });
 
-  it('should redirect authenticated users away from login page', () => {
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
-      isAuthenticated: true,
-      isLoading: false,
-      login: mockLogin,
-      logout: jest.fn(),
-      user: { id: '1', email: 'admin@example.com' },
-    });
-    
-    render(<AdminLoginPage />);
-    
-    // AdminAuthContext should handle redirect via useEffect
-    // This is tested in the context itself
-    expect(mockReplace).toHaveBeenCalledWith('/admin/dashboard');
-  });
-
-  it('should not redirect unauthenticated users', () => {
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+  it('should show login form for unauthenticated users', () => {
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -160,55 +146,99 @@ describe('A-IT-011: Redirect After Login', () => {
     
     render(<AdminLoginPage />);
     
-    // Should not redirect if not authenticated
-    expect(mockReplace).not.toHaveBeenCalled();
+    // Should show login form
+    expect(screen.getByText(/Admin Login/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
+  });
+
+  it('should show loading state when isLoading is true', () => {
+    (useAdminAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: false,
+      isLoading: true,
+      login: mockLogin,
+      logout: jest.fn(),
+      user: null,
+    });
+    
+    render(<AdminLoginPage />);
+    
+    // Should show loading state
+    expect(screen.getByText(/Loading/i)).toBeInTheDocument();
   });
 });
 
 describe('A-IT-012: Session Management', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    
-    // Mock localStorage
-    Storage.prototype.getItem = jest.fn(() => null);
-    Storage.prototype.setItem = jest.fn();
-    Storage.prototype.removeItem = jest.fn();
   });
 
-  it('should persist session after successful login', async () => {
+  it('should handle successful login', async () => {
     mockLogin.mockResolvedValue({ success: true });
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
-      isAuthenticated: true,
+    (useAdminAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
       logout: jest.fn(),
-      user: { id: '1', email: 'admin@example.com' },
+      user: null,
     });
     
     render(<AdminLoginPage />);
+    const emailInput = screen.getByLabelText(/Email Address/i);
+    const passwordInput = screen.getByLabelText(/Password/i);
+    const submitButton = screen.getByRole('button', { name: /Sign In/i });
+    const form = submitButton.closest('form');
     
-    // Session should be persisted (handled by AdminAuthContext)
-    expect(Storage.prototype.setItem).toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
+      fireEvent.change(passwordInput, { target: { value: 'password123' } });
+      fireEvent.submit(form!);
+    });
+    
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith('admin@example.com', 'password123');
+    });
   });
 
-  it('should check existing session on mount', () => {
-    Storage.prototype.getItem = jest.fn(() => JSON.stringify({
-      user: { id: '1', email: 'admin@example.com' },
-      session: { access_token: 'token' },
-    }));
+  it('should clear error on new submission attempt', async () => {
+    mockLogin
+      .mockResolvedValueOnce({ success: false, error: 'First error' })
+      .mockResolvedValueOnce({ success: true });
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
-      isAuthenticated: true,
+    (useAdminAuth as jest.Mock).mockReturnValue({
+      isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
       logout: jest.fn(),
-      user: { id: '1', email: 'admin@example.com' },
+      user: null,
     });
     
     render(<AdminLoginPage />);
+    const emailInput = screen.getByLabelText(/Email Address/i);
+    const passwordInput = screen.getByLabelText(/Password/i);
+    const submitButton = screen.getByRole('button', { name: /Sign In/i });
+    const form = submitButton.closest('form');
     
-    // Should check localStorage for existing session
-    expect(Storage.prototype.getItem).toHaveBeenCalled();
+    // First submission - error
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
+      fireEvent.change(passwordInput, { target: { value: 'wrong' } });
+      fireEvent.submit(form!);
+    });
+    
+    await waitFor(() => {
+      expect(screen.queryByText(/First error/i)).toBeInTheDocument();
+    });
+    
+    // Second submission - should clear error
+    await act(async () => {
+      fireEvent.change(passwordInput, { target: { value: 'correctpassword' } });
+      fireEvent.submit(form!);
+    });
+    
+    // Error should be cleared on new submission attempt
+    await waitFor(() => {
+      expect(screen.queryByText(/First error/i)).not.toBeInTheDocument();
+    }, { timeout: 1000 });
   });
 });

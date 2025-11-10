@@ -40,10 +40,16 @@ async function manageAdminAccounts() {
 
     // Create a new admin account
     console.log('\n🔄 Creating new admin account...');
-    const adminEmail = 'admin@elzatona.com';
-    const adminPassword = 'ElzatonaAdmin2024!';
+    const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@elzatona.com';
+    const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
     const adminName = 'Super Admin';
     const adminRole = 'super_admin';
+
+    if (!adminPassword) {
+      console.error('❌ Missing INITIAL_ADMIN_PASSWORD in environment variables');
+      console.error('Please set INITIAL_ADMIN_PASSWORD in your .env.local file');
+      return;
+    }
 
     // Hash the password
     const saltRounds = 12;

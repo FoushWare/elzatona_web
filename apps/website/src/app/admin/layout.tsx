@@ -1,7 +1,11 @@
 'use client';
 
 import React, { ReactNode } from 'react';
-import { AdminAuthProvider, useAdminAuth } from '@elzatona/shared-contexts';
+import {
+  AdminAuthProvider,
+  useAdminAuth,
+  NotificationProvider,
+} from '@elzatona/shared-contexts';
 import {
   AdminNavbar,
   NotificationContainer,
@@ -77,6 +81,16 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   );
 }
 
+// Wrapper component to access user from AdminAuthProvider
+function AdminLayoutWithNotifications({ children }: AdminLayoutProps) {
+  const { user } = useAdminAuth();
+  return (
+    <NotificationProvider adminId={user?.id}>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </NotificationProvider>
+  );
+}
+
 export default function AdminLayout({ children }: AdminLayoutProps) {
   // TEMPORARY: Skip AdminAuthProvider for testing
   const pathname = usePathname();
@@ -91,18 +105,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   if (skipAuthForTesting) {
     return (
       <AdminAuthProvider>
-        <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
-          <AdminNavbar />
-          <main className='pt-16'>{children}</main>
-          <NotificationContainer />
-        </div>
+        <NotificationProvider>
+          <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
+            <AdminNavbar />
+            <main className='pt-16'>{children}</main>
+            <NotificationContainer />
+          </div>
+        </NotificationProvider>
       </AdminAuthProvider>
     );
   }
 
   return (
     <AdminAuthProvider>
-      <AdminLayoutContent>{children}</AdminLayoutContent>
+      <AdminLayoutWithNotifications>{children}</AdminLayoutWithNotifications>
     </AdminAuthProvider>
   );
 }

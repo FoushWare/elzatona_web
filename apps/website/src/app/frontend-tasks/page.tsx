@@ -4,11 +4,7 @@ import React, { useState, useEffect, ReactNode } from 'react';
 
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = 'force-dynamic';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+// Note: This page uses hooks/API routes, not direct supabase client
 
 import { useRouter } from 'next/navigation';
 import {

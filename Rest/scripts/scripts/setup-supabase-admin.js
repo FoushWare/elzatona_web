@@ -19,10 +19,16 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 async function setupAdminAccount() {
   try {
     console.log('📋 Admin Account Details:');
-    const adminEmail = 'admin@elzatona.com';
-    const adminPassword = 'ElzatonaAdmin2024!';
+    const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@elzatona.com';
+    const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
     const adminName = 'Super Admin';
     const adminRole = 'super_admin';
+
+    if (!adminPassword) {
+      console.error('❌ Missing INITIAL_ADMIN_PASSWORD in environment variables');
+      console.error('Please set INITIAL_ADMIN_PASSWORD in your .env.local file');
+      process.exit(1);
+    }
 
     console.log(`   Email: ${adminEmail}`);
     console.log(`   Password: ${adminPassword}`);

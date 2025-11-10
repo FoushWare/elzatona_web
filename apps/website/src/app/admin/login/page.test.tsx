@@ -7,14 +7,16 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AdminLoginPage from './page';
-import * as sharedContexts from '@elzatona/shared-contexts';
+import { useAdminAuth } from '@elzatona/shared-contexts';
 
 // Mock shared contexts
 jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
+  const actual = jest.requireActual('@elzatona/shared-contexts');
   return {
     ...actual,
     useAdminAuth: jest.fn(),
+    AdminAuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    NotificationProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   };
 });
 
@@ -47,7 +49,7 @@ describe('A-UT-006: Admin Login Page Renders', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -100,7 +102,7 @@ describe('A-UT-007: Form Inputs Handle Changes', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -150,7 +152,7 @@ describe('A-UT-008: Form Validation', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -210,7 +212,7 @@ describe('A-UT-009: Loading State', () => {
   });
 
   it('should show loading state during submission', async () => {
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -237,7 +239,7 @@ describe('A-UT-009: Loading State', () => {
   });
 
   it('should show loading spinner when isLoading is true', () => {
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: true,
       login: mockLogin,
@@ -254,7 +256,7 @@ describe('A-UT-010: Error Message Display', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -345,7 +347,7 @@ describe('A-UT-SNAPSHOT: Admin Login Page Snapshot Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: false,
       login: mockLogin,
@@ -360,7 +362,7 @@ describe('A-UT-SNAPSHOT: Admin Login Page Snapshot Tests', () => {
   });
 
   it('should match admin login page snapshot (loading state)', () => {
-    (sharedContexts.useAdminAuth as jest.Mock).mockReturnValue({
+    (useAdminAuth as jest.Mock).mockReturnValue({
       isAuthenticated: false,
       isLoading: true,
       login: mockLogin,

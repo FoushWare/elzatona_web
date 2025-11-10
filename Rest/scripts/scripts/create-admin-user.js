@@ -23,8 +23,15 @@ async function createAdminUser() {
   try {
     console.log('🔐 Creating admin user...');
 
-    const email = 'afouadsoftwareengineer@gmail.com';
-    const password = 'ZatonaFoushware$8888';
+    const email = process.env.ADMIN_EMAIL;
+    const password = process.env.ADMIN_PASSWORD;
+
+    if (!email || !password) {
+      console.error('❌ Missing admin credentials in environment variables');
+      console.error('Required: ADMIN_EMAIL, ADMIN_PASSWORD');
+      console.error('Please set these in your .env.local file');
+      process.exit(1);
+    }
 
     // Create user using Supabase Admin API
     const { data: authData, error: authError } =

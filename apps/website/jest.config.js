@@ -14,8 +14,9 @@ const createJestConfig = nextJest({
 const config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
-  // Performance optimizations
-  maxWorkers: process.env.CI ? '50%' : '25%', // Limit workers to reduce machine load
+  // Performance optimizations - Use fixed worker count to reduce memory usage
+  // Fixed to 2 workers instead of percentage to prevent memory issues on 8GB RAM systems
+  maxWorkers: process.env.CI ? 2 : 2, // Fixed limit to reduce memory footprint
   cache: true, // Enable Jest cache for faster subsequent runs
   cacheDirectory: '<rootDir>/.jest-cache',
   // Run tests in sequence if SKIP_TESTS is not set and we want to reduce load
@@ -25,9 +26,11 @@ const config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@elzatona/shared-contexts$':
-      '<rootDir>/src/test-utils/mocks/shared-contexts.ts',
+      '<rootDir>/../../libs/shared-contexts/src/index.ts',
     '^@elzatona/shared-components$':
       '<rootDir>/../../libs/shared-components/src/index.ts',
+    '^@elzatona/shared-hooks$':
+      '<rootDir>/../../libs/shared-hooks/src/index.ts',
     '^lucide-react$': '<rootDir>/src/test-utils/mocks/lucide-react.tsx',
   },
   // Include tests from root tests directory, but exclude e2e tests (Playwright)

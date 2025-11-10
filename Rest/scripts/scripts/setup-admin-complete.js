@@ -88,10 +88,17 @@ async function setupCompleteAdmin() {
 
     console.log('\n🔄 Step 2: Creating admin user in Supabase Auth...');
 
-    const adminEmail = 'afouadsoftwareengineer@gmail.com';
-    const adminPassword = 'ZatonaFoushware$8888';
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.ADMIN_PASSWORD;
     const adminName = 'Super Admin';
     const adminRole = 'super_admin';
+
+    if (!adminEmail || !adminPassword) {
+      console.error('❌ Missing admin credentials in environment variables');
+      console.error('Required: ADMIN_EMAIL, ADMIN_PASSWORD');
+      console.error('Please set these in your .env.local file');
+      return;
+    }
 
     // Check if user already exists
     const { data: existingUsers, error: listError } =
