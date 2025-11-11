@@ -1,0 +1,182 @@
+const fs = require('fs');
+const path = require('path');
+
+const questionsFile = path.join(__dirname, '../../final-questions-v01/performance-patterns-questions.json');
+
+const newQuestions = [
+  {
+    "id": "performance-patterns-dynamic-import-15",
+    "title": "When is the EmojiPicker component actually loaded in the dynamic import example?",
+    "content": "EmojiPicker is loaded only when the user clicks on the emoji icon, triggering the lazy import.",
+    "type": "mcq",
+    "category": "Performance Patterns",
+    "topic": "Lazy Loading Behavior",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-11-11T18:50:32.188Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "performance-patterns",
+      "lazy-loading-behavior",
+      null,
+      "intermediate"
+    ],
+    "explanation": "The lazy import ensures that the module is fetched and executed only upon user interaction with the emoji button.",
+    "points": 10,
+    "options": [
+      {
+        "0": "W",
+        "1": "h",
+        "2": "e",
+        "3": "n",
+        "4": " ",
+        "5": "t",
+        "6": "h",
+        "7": "e",
+        "8": " ",
+        "9": "a",
+        "10": "p",
+        "11": "p",
+        "12": " ",
+        "13": "s",
+        "14": "t",
+        "15": "a",
+        "16": "r",
+        "17": "t",
+        "18": "s",
+        "explanation": ""
+      },
+      {
+        "0": "W",
+        "1": "h",
+        "2": "e",
+        "3": "n",
+        "4": " ",
+        "5": "t",
+        "6": "h",
+        "7": "e",
+        "8": " ",
+        "9": "p",
+        "10": "a",
+        "11": "g",
+        "12": "e",
+        "13": " ",
+        "14": "i",
+        "15": "s",
+        "16": " ",
+        "17": "r",
+        "18": "e",
+        "19": "l",
+        "20": "o",
+        "21": "a",
+        "22": "d",
+        "23": "e",
+        "24": "d",
+        "explanation": ""
+      },
+      {
+        "0": "O",
+        "1": "n",
+        "2": "l",
+        "3": "y",
+        "4": " ",
+        "5": "w",
+        "6": "h",
+        "7": "e",
+        "8": "n",
+        "9": " ",
+        "10": "t",
+        "11": "h",
+        "12": "e",
+        "13": " ",
+        "14": "e",
+        "15": "m",
+        "16": "o",
+        "17": "j",
+        "18": "i",
+        "19": " ",
+        "20": "b",
+        "21": "u",
+        "22": "t",
+        "23": "t",
+        "24": "o",
+        "25": "n",
+        "26": " ",
+        "27": "i",
+        "28": "s",
+        "29": " ",
+        "30": "c",
+        "31": "l",
+        "32": "i",
+        "33": "c",
+        "34": "k",
+        "35": "e",
+        "36": "d",
+        "explanation": ""
+      },
+      {
+        "0": "I",
+        "1": "m",
+        "2": "m",
+        "3": "e",
+        "4": "d",
+        "5": "i",
+        "6": "a",
+        "7": "t",
+        "8": "e",
+        "9": "l",
+        "10": "y",
+        "11": " ",
+        "12": "a",
+        "13": "f",
+        "14": "t",
+        "15": "e",
+        "16": "r",
+        "17": " ",
+        "18": "r",
+        "19": "e",
+        "20": "n",
+        "21": "d",
+        "22": "e",
+        "23": "r",
+        "24": "i",
+        "25": "n",
+        "26": "g",
+        "27": " ",
+        "28": "C",
+        "29": "h",
+        "30": "a",
+        "31": "t",
+        "32": "I",
+        "33": "n",
+        "34": "p",
+        "35": "u",
+        "36": "t",
+        "explanation": ""
+      }
+    ],
+    "sampleAnswers": [
+      "Only when the emoji button is clicked"
+    ],
+    "hints": [],
+    "metadata": {}
+  }
+];
+
+// Read existing questions
+let existingQuestions = [];
+if (fs.existsSync(questionsFile)) {
+  existingQuestions = JSON.parse(fs.readFileSync(questionsFile, 'utf8'));
+}
+
+// Add new questions
+existingQuestions.push(...newQuestions);
+
+// Write back
+fs.writeFileSync(questionsFile, JSON.stringify(existingQuestions, null, 2));
+
+console.log(`✅ Added ${newQuestions.length} questions for Lazy Loading Behavior (Batch 1)`);
+console.log(`📝 Total questions: ${existingQuestions.length}`);
