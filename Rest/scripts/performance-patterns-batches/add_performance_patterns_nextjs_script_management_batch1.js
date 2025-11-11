@@ -1,0 +1,201 @@
+const fs = require('fs');
+const path = require('path');
+
+const questionsFile = path.join(__dirname, '../../final-questions-v01/performance-patterns-questions.json');
+
+const newQuestions = [
+  {
+    "id": "performance-patterns-loading-sequence-9",
+    "title": "Lazy-Onload Scripts",
+    "content": "When should you use the 'Lazy-Onload' priority for third-party scripts in Next.js?",
+    "type": "multiple-choice",
+    "category": "Performance Patterns",
+    "topic": "Next.js Script Management",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-11-11T18:50:32.218Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "performance-patterns",
+      "next.js-script-management",
+      null,
+      "intermediate"
+    ],
+    "explanation": "'Lazy-Onload' should be used for non-critical third-party scripts like social widgets that can load after all main content.",
+    "points": 10,
+    "options": [
+      {
+        "0": "F",
+        "1": "o",
+        "2": "r",
+        "3": " ",
+        "4": "c",
+        "5": "r",
+        "6": "i",
+        "7": "t",
+        "8": "i",
+        "9": "c",
+        "10": "a",
+        "11": "l",
+        "12": " ",
+        "13": "p",
+        "14": "o",
+        "15": "l",
+        "16": "y",
+        "17": "f",
+        "18": "i",
+        "19": "l",
+        "20": "l",
+        "21": "s",
+        "22": " ",
+        "23": "a",
+        "24": "n",
+        "25": "d",
+        "26": " ",
+        "27": "s",
+        "28": "e",
+        "29": "c",
+        "30": "u",
+        "31": "r",
+        "32": "i",
+        "33": "t",
+        "34": "y",
+        "35": " ",
+        "36": "s",
+        "37": "c",
+        "38": "r",
+        "39": "i",
+        "40": "p",
+        "41": "t",
+        "42": "s",
+        "explanation": ""
+      },
+      {
+        "0": "F",
+        "1": "o",
+        "2": "r",
+        "3": " ",
+        "4": "s",
+        "5": "o",
+        "6": "c",
+        "7": "i",
+        "8": "a",
+        "9": "l",
+        "10": " ",
+        "11": "w",
+        "12": "i",
+        "13": "d",
+        "14": "g",
+        "15": "e",
+        "16": "t",
+        "17": "s",
+        "18": " ",
+        "19": "a",
+        "20": "n",
+        "21": "d",
+        "22": " ",
+        "23": "f",
+        "24": "e",
+        "25": "e",
+        "26": "d",
+        "27": "b",
+        "28": "a",
+        "29": "c",
+        "30": "k",
+        "31": " ",
+        "32": "s",
+        "33": "c",
+        "34": "r",
+        "35": "i",
+        "36": "p",
+        "37": "t",
+        "38": "s",
+        "explanation": ""
+      },
+      {
+        "0": "F",
+        "1": "o",
+        "2": "r",
+        "3": " ",
+        "4": "h",
+        "5": "y",
+        "6": "d",
+        "7": "r",
+        "8": "a",
+        "9": "t",
+        "10": "i",
+        "11": "o",
+        "12": "n",
+        "13": "-",
+        "14": "r",
+        "15": "e",
+        "16": "l",
+        "17": "a",
+        "18": "t",
+        "19": "e",
+        "20": "d",
+        "21": " ",
+        "22": "s",
+        "23": "c",
+        "24": "r",
+        "25": "i",
+        "26": "p",
+        "27": "t",
+        "28": "s",
+        "explanation": ""
+      },
+      {
+        "0": "F",
+        "1": "o",
+        "2": "r",
+        "3": " ",
+        "4": "c",
+        "5": "r",
+        "6": "i",
+        "7": "t",
+        "8": "i",
+        "9": "c",
+        "10": "a",
+        "11": "l",
+        "12": " ",
+        "13": "f",
+        "14": "o",
+        "15": "n",
+        "16": "t",
+        "17": "s",
+        "18": " ",
+        "19": "a",
+        "20": "n",
+        "21": "d",
+        "22": " ",
+        "23": "C",
+        "24": "S",
+        "25": "S",
+        "explanation": ""
+      }
+    ],
+    "sampleAnswers": [
+      "For social widgets and feedback scripts"
+    ],
+    "hints": [],
+    "metadata": {}
+  }
+];
+
+// Read existing questions
+let existingQuestions = [];
+if (fs.existsSync(questionsFile)) {
+  existingQuestions = JSON.parse(fs.readFileSync(questionsFile, 'utf8'));
+}
+
+// Add new questions
+existingQuestions.push(...newQuestions);
+
+// Write back
+fs.writeFileSync(questionsFile, JSON.stringify(existingQuestions, null, 2));
+
+console.log(`✅ Added ${newQuestions.length} questions for Next.js Script Management (Batch 1)`);
+console.log(`📝 Total questions: ${existingQuestions.length}`);

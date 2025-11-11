@@ -1,0 +1,190 @@
+const fs = require('fs');
+const path = require('path');
+
+const questionsFile = path.join(__dirname, '../../final-questions-v01/performance-patterns-questions.json');
+
+const newQuestions = [
+  {
+    "id": "performance-patterns-import-on-interaction-2",
+    "title": "Which user actions typically trigger Import On Interaction?",
+    "content": "The pattern can be triggered when a user clicks, scrolls into view, or when the browser is idle.",
+    "type": "mcq",
+    "category": "Performance Patterns",
+    "topic": "User Interaction Events",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-11-11T18:50:32.201Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "performance-patterns",
+      "user-interaction-events",
+      null,
+      "intermediate"
+    ],
+    "explanation": "The pattern optimizes performance by waiting for direct user interactions or idle time before loading heavy resources.",
+    "points": 10,
+    "options": [
+      {
+        "0": "O",
+        "1": "n",
+        "2": "l",
+        "3": "y",
+        "4": " ",
+        "5": "w",
+        "6": "h",
+        "7": "e",
+        "8": "n",
+        "9": " ",
+        "10": "a",
+        "11": " ",
+        "12": "u",
+        "13": "s",
+        "14": "e",
+        "15": "r",
+        "16": " ",
+        "17": "r",
+        "18": "e",
+        "19": "f",
+        "20": "r",
+        "21": "e",
+        "22": "s",
+        "23": "h",
+        "24": "e",
+        "25": "s",
+        "26": " ",
+        "27": "t",
+        "28": "h",
+        "29": "e",
+        "30": " ",
+        "31": "p",
+        "32": "a",
+        "33": "g",
+        "34": "e",
+        "explanation": ""
+      },
+      {
+        "0": "O",
+        "1": "n",
+        "2": " ",
+        "3": "u",
+        "4": "s",
+        "5": "e",
+        "6": "r",
+        "7": " ",
+        "8": "c",
+        "9": "l",
+        "10": "i",
+        "11": "c",
+        "12": "k",
+        "13": ",",
+        "14": " ",
+        "15": "s",
+        "16": "c",
+        "17": "r",
+        "18": "o",
+        "19": "l",
+        "20": "l",
+        "21": ",",
+        "22": " ",
+        "23": "o",
+        "24": "r",
+        "25": " ",
+        "26": "i",
+        "27": "d",
+        "28": "l",
+        "29": "e",
+        "30": " ",
+        "31": "t",
+        "32": "i",
+        "33": "m",
+        "34": "e",
+        "explanation": ""
+      },
+      {
+        "0": "W",
+        "1": "h",
+        "2": "e",
+        "3": "n",
+        "4": " ",
+        "5": "d",
+        "6": "a",
+        "7": "t",
+        "8": "a",
+        "9": " ",
+        "10": "f",
+        "11": "e",
+        "12": "t",
+        "13": "c",
+        "14": "h",
+        "15": "i",
+        "16": "n",
+        "17": "g",
+        "18": " ",
+        "19": "c",
+        "20": "o",
+        "21": "m",
+        "22": "p",
+        "23": "l",
+        "24": "e",
+        "25": "t",
+        "26": "e",
+        "27": "s",
+        "explanation": ""
+      },
+      {
+        "0": "D",
+        "1": "u",
+        "2": "r",
+        "3": "i",
+        "4": "n",
+        "5": "g",
+        "6": " ",
+        "7": "s",
+        "8": "e",
+        "9": "r",
+        "10": "v",
+        "11": "e",
+        "12": "r",
+        "13": "-",
+        "14": "s",
+        "15": "i",
+        "16": "d",
+        "17": "e",
+        "18": " ",
+        "19": "r",
+        "20": "e",
+        "21": "n",
+        "22": "d",
+        "23": "e",
+        "24": "r",
+        "25": "i",
+        "26": "n",
+        "27": "g",
+        "explanation": ""
+      }
+    ],
+    "sampleAnswers": [
+      "On user click, scroll, or idle time"
+    ],
+    "hints": [],
+    "metadata": {}
+  }
+];
+
+// Read existing questions
+let existingQuestions = [];
+if (fs.existsSync(questionsFile)) {
+  existingQuestions = JSON.parse(fs.readFileSync(questionsFile, 'utf8'));
+}
+
+// Add new questions
+existingQuestions.push(...newQuestions);
+
+// Write back
+fs.writeFileSync(questionsFile, JSON.stringify(existingQuestions, null, 2));
+
+console.log(`✅ Added ${newQuestions.length} questions for User Interaction Events (Batch 1)`);
+console.log(`📝 Total questions: ${existingQuestions.length}`);

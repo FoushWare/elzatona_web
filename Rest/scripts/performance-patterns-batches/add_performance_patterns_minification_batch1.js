@@ -1,0 +1,198 @@
+const fs = require('fs');
+const path = require('path');
+
+const questionsFile = path.join(__dirname, '../../final-questions-v01/performance-patterns-questions.json');
+
+const newQuestions = [
+  {
+    "id": "performance-patterns-compression-6",
+    "title": "What does minification do before compression?",
+    "content": "Minification removes unnecessary syntax like spaces, comments, and line breaks to reduce file size.",
+    "type": "mcq",
+    "category": "Performance Patterns",
+    "topic": "Minification",
+    "difficulty": "intermediate",
+    "learningCardId": "system-design",
+    "isActive": true,
+    "createdAt": "2025-10-10T00:00:00Z",
+    "updatedAt": "2025-11-11T18:50:32.172Z",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "tags": [
+      "performance-patterns",
+      "minification",
+      null,
+      "intermediate"
+    ],
+    "explanation": "Minification optimizes code before compression, enabling smaller payloads without changing functionality.",
+    "points": 10,
+    "options": [
+      {
+        "0": "A",
+        "1": "d",
+        "2": "d",
+        "3": "s",
+        "4": " ",
+        "5": "w",
+        "6": "h",
+        "7": "i",
+        "8": "t",
+        "9": "e",
+        "10": "s",
+        "11": "p",
+        "12": "a",
+        "13": "c",
+        "14": "e",
+        "15": " ",
+        "16": "f",
+        "17": "o",
+        "18": "r",
+        "19": " ",
+        "20": "r",
+        "21": "e",
+        "22": "a",
+        "23": "d",
+        "24": "a",
+        "25": "b",
+        "26": "i",
+        "27": "l",
+        "28": "i",
+        "29": "t",
+        "30": "y",
+        "explanation": ""
+      },
+      {
+        "0": "R",
+        "1": "e",
+        "2": "m",
+        "3": "o",
+        "4": "v",
+        "5": "e",
+        "6": "s",
+        "7": " ",
+        "8": "u",
+        "9": "n",
+        "10": "n",
+        "11": "e",
+        "12": "c",
+        "13": "e",
+        "14": "s",
+        "15": "s",
+        "16": "a",
+        "17": "r",
+        "18": "y",
+        "19": " ",
+        "20": "s",
+        "21": "y",
+        "22": "n",
+        "23": "t",
+        "24": "a",
+        "25": "x",
+        "26": " ",
+        "27": "t",
+        "28": "o",
+        "29": " ",
+        "30": "s",
+        "31": "h",
+        "32": "r",
+        "33": "i",
+        "34": "n",
+        "35": "k",
+        "36": " ",
+        "37": "f",
+        "38": "i",
+        "39": "l",
+        "40": "e",
+        "41": " ",
+        "42": "s",
+        "43": "i",
+        "44": "z",
+        "45": "e",
+        "explanation": ""
+      },
+      {
+        "0": "C",
+        "1": "o",
+        "2": "m",
+        "3": "b",
+        "4": "i",
+        "5": "n",
+        "6": "e",
+        "7": "s",
+        "8": " ",
+        "9": "m",
+        "10": "u",
+        "11": "l",
+        "12": "t",
+        "13": "i",
+        "14": "p",
+        "15": "l",
+        "16": "e",
+        "17": " ",
+        "18": "f",
+        "19": "i",
+        "20": "l",
+        "21": "e",
+        "22": "s",
+        "23": " ",
+        "24": "i",
+        "25": "n",
+        "26": "t",
+        "27": "o",
+        "28": " ",
+        "29": "o",
+        "30": "n",
+        "31": "e",
+        "explanation": ""
+      },
+      {
+        "0": "E",
+        "1": "n",
+        "2": "c",
+        "3": "r",
+        "4": "y",
+        "5": "p",
+        "6": "t",
+        "7": "s",
+        "8": " ",
+        "9": "J",
+        "10": "a",
+        "11": "v",
+        "12": "a",
+        "13": "S",
+        "14": "c",
+        "15": "r",
+        "16": "i",
+        "17": "p",
+        "18": "t",
+        "19": " ",
+        "20": "f",
+        "21": "i",
+        "22": "l",
+        "23": "e",
+        "24": "s",
+        "explanation": ""
+      }
+    ],
+    "sampleAnswers": [
+      "Removes unnecessary syntax to shrink file size"
+    ],
+    "hints": [],
+    "metadata": {}
+  }
+];
+
+// Read existing questions
+let existingQuestions = [];
+if (fs.existsSync(questionsFile)) {
+  existingQuestions = JSON.parse(fs.readFileSync(questionsFile, 'utf8'));
+}
+
+// Add new questions
+existingQuestions.push(...newQuestions);
+
+// Write back
+fs.writeFileSync(questionsFile, JSON.stringify(existingQuestions, null, 2));
+
+console.log(`✅ Added ${newQuestions.length} questions for Minification (Batch 1)`);
+console.log(`📝 Total questions: ${existingQuestions.length}`);
