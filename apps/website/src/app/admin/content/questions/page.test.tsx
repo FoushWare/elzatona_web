@@ -245,7 +245,9 @@ describe('A-UT-004: Pagination', () => {
   it('should display pagination controls', async () => {
     render(<AdminContentQuestionsPage />);
     await waitFor(() => {
-      expect(screen.getByText(/Page/i)).toBeInTheDocument();
+      // Use getAllByText since "Page" appears multiple times, then check first occurrence
+      const pageTexts = screen.getAllByText(/Page/i);
+      expect(pageTexts.length).toBeGreaterThan(0);
     });
   });
 
@@ -260,8 +262,12 @@ describe('A-UT-004: Pagination', () => {
   it('should disable previous button on first page', async () => {
     render(<AdminContentQuestionsPage />);
     await waitFor(() => {
-      // Previous button should be disabled on page 1
-      expect(screen.getByText(/Page/i)).toBeInTheDocument();
+      // Previous button should be disabled on page 1 - check for pagination text
+      const pageTexts = screen.getAllByText(/Page/i);
+      expect(pageTexts.length).toBeGreaterThan(0);
+      // Verify we're on page 1 by checking for "Page 1 of" text (may appear multiple times)
+      const page1Texts = screen.getAllByText(/Page 1 of/i);
+      expect(page1Texts.length).toBeGreaterThan(0);
     });
   });
 });
@@ -343,8 +349,8 @@ describe('A-UT-006: Error Handling', () => {
     });
     render(<AdminContentQuestionsPage />);
     await waitFor(() => {
-      // Should handle empty response
-      expect(screen.getByText(/.*/)).toBeTruthy();
+      // Should handle empty response - check for page title or empty state
+      expect(screen.getByText(/Question Management/i)).toBeInTheDocument();
     });
   });
 
@@ -354,8 +360,8 @@ describe('A-UT-006: Error Handling', () => {
     );
     render(<AdminContentQuestionsPage />);
     await waitFor(() => {
-      // Should handle timeout
-      expect(screen.getByText(/.*/)).toBeTruthy();
+      // Should handle timeout - check for error message
+      expect(screen.getByText(/Error loading questions/i)).toBeInTheDocument();
     }, { timeout: 200 });
   });
 });

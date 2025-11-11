@@ -34,7 +34,9 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     (pathname?.includes('/admin/content/questions') ||
       pathname?.includes('/admin/enhanced-structure') ||
       pathname?.includes('/admin/content-management') ||
-      pathname?.includes('/admin/dashboard'));
+      pathname?.includes('/admin/dashboard') ||
+      pathname?.includes('/admin/frontend-tasks') ||
+      pathname?.includes('/admin/problem-solving'));
 
   // For login page and admin root page, render immediately without waiting for auth check
   if (isLoginPage || isAdminRootPage) {
@@ -100,7 +102,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     (pathname?.includes('/admin/content/questions') ||
       pathname?.includes('/admin/enhanced-structure') ||
       pathname?.includes('/admin/content-management') ||
-      pathname?.includes('/admin/dashboard'));
+      pathname?.includes('/admin/dashboard') ||
+      pathname?.includes('/admin/frontend-tasks') ||
+      pathname?.includes('/admin/problem-solving'));
 
   if (skipAuthForTesting) {
     return (

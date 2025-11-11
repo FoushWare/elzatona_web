@@ -14,13 +14,20 @@ const createJestConfig = nextJest({
 const config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
-  // Performance optimizations - Use fixed worker count to reduce memory usage
-  // Fixed to 2 workers instead of percentage to prevent memory issues on 8GB RAM systems
-  maxWorkers: process.env.CI ? 2 : 2, // Fixed limit to reduce memory footprint
-  cache: true, // Enable Jest cache for faster subsequent runs
+  // Performance optimizations for 8GB RAM Mac M2
+  // Use 1 worker for low memory systems, 2 for normal use
+  maxWorkers: process.env.JEST_MAX_WORKERS 
+    ? parseInt(process.env.JEST_MAX_WORKERS) 
+    : process.env.CI ? 1 : 1, // Default to 1 worker for 8GB RAM
+  // Memory optimizations
+  workerIdleMemoryLimit: '512MB', // Kill workers that exceed this memory
+  // Cache settings - disable if memory is tight
+  cache: process.env.JEST_NO_CACHE !== 'true',
   cacheDirectory: '<rootDir>/.jest-cache',
-  // Run tests in sequence if SKIP_TESTS is not set and we want to reduce load
+  // Run tests in sequence for very low memory situations
   ...(process.env.JEST_RUN_IN_BAND === 'true' ? { runInBand: true } : {}),
+  // Log heap usage for debugging
+  logHeapUsage: process.env.JEST_LOG_HEAP === 'true',
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
