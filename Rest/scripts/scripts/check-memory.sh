@@ -89,3 +89,4 @@ echo "   - Close browser tabs and other apps when memory is tight"
 echo "   - Restart dev server if memory usage keeps growing"
 echo ""
 
+
