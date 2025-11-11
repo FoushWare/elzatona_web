@@ -203,6 +203,18 @@ export default function FrontendTasksAdminPage() {
             </div>
           </div>
 
+          {/* Error Display */}
+          {tasksError && (
+            <div className='bg-red-900 border border-red-700 rounded-lg p-4 mb-6'>
+              <p className='text-red-200 font-medium'>Error loading tasks:</p>
+              <p className='text-red-300 text-sm mt-1'>
+                {tasksError instanceof Error
+                  ? tasksError.message
+                  : 'An unknown error occurred'}
+              </p>
+            </div>
+          )}
+
           {/* Tasks Table */}
           <div className='bg-gray-800 rounded-lg overflow-hidden'>
             {loading ? (
@@ -211,7 +223,9 @@ export default function FrontendTasksAdminPage() {
               </div>
             ) : filteredTasks.length === 0 ? (
               <div className='p-8 text-center text-gray-400'>
-                No tasks found
+                {tasks.length === 0
+                  ? 'No tasks found. Create your first task!'
+                  : 'No tasks match your filters'}
               </div>
             ) : (
               <div className='overflow-x-auto'>
