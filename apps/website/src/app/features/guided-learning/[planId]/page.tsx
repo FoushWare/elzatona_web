@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   CheckCircle,
@@ -10,6 +10,7 @@ import {
   ArrowRight,
   Loader2,
   XCircle,
+  BookOpen,
 } from 'lucide-react';
 
 interface Question {
@@ -80,12 +81,22 @@ interface Progress {
 
 export default function PlanDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const planId = params?.planId as string;
 
   const [plan, setPlan] = useState<Plan | null>(null);
   const [progress, setProgress] = useState<Progress | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Handle starting a card or category
+  const handleStartCard = (cardId: string) => {
+    router.push(`/guided-practice?plan=${planId}&card=${cardId}`);
+  };
+
+  const handleStartCategory = (categoryId: string) => {
+    router.push(`/guided-practice?plan=${planId}&category=${categoryId}`);
+  };
 
   // Fetch plan data
   useEffect(() => {
@@ -389,12 +400,13 @@ export default function PlanDetailPage() {
             return (
               <div
                 key={card.id}
-                className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border-2 transition-all duration-300 ${
+                className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border-2 transition-all duration-300 cursor-pointer hover:shadow-2xl hover:scale-[1.02] ${
                   isCompleted
                     ? 'border-green-500/50 bg-green-50/50 dark:bg-green-900/20'
-                    : 'border-white/20 dark:border-gray-700/20'
+                    : 'border-white/20 dark:border-gray-700/20 hover:border-indigo-300 dark:hover:border-indigo-600'
                 }`}
                 data-testid='guided-card'
+                onClick={() => handleStartCard(card.id)}
               >
                 <div className='flex items-center justify-between mb-4'>
                   <div className='flex items-center space-x-4'>
@@ -408,7 +420,7 @@ export default function PlanDetailPage() {
                       {isCompleted ? (
                         <CheckCircle className='w-6 h-6' />
                       ) : (
-                        card.icon
+                        <Play className='w-6 h-6' />
                       )}
                     </div>
                     <div>
@@ -437,6 +449,12 @@ export default function PlanDetailPage() {
                     <div className='text-sm text-gray-500 dark:text-gray-400'>
                       ({cardProgress.percentage}%)
                     </div>
+                    {!isCompleted && (
+                      <div className='mt-2 flex items-center justify-end gap-1 text-xs text-indigo-600 dark:text-indigo-400'>
+                        <Play className='w-3 h-3' />
+                        <span>Start</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -463,12 +481,16 @@ export default function PlanDetailPage() {
                     return (
                       <div
                         key={category.id}
-                        className={`p-4 rounded-xl border transition-all duration-300 ${
+                        className={`p-4 rounded-xl border transition-all duration-300 cursor-pointer hover:shadow-lg hover:scale-105 ${
                           categoryIsCompleted
                             ? 'border-green-500/50 bg-green-50/50 dark:bg-green-900/20'
-                            : 'border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-700/50'
+                            : 'border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-700/50 hover:border-indigo-300 dark:hover:border-indigo-600'
                         }`}
                         data-testid='guided-category'
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent card click
+                          handleStartCategory(category.id);
+                        }}
                       >
                         <div className='flex items-center justify-between mb-2'>
                           <h4 className='font-semibold text-gray-900 dark:text-white flex items-center space-x-2'>
@@ -497,8 +519,16 @@ export default function PlanDetailPage() {
                           ></div>
                         </div>
 
+                        <div className='flex items-center justify-between'>
                         <div className='text-xs text-gray-500 dark:text-gray-400'>
                           {categoryProgress.percentage}% complete
+                          </div>
+                          {!categoryIsCompleted && (
+                            <div className='flex items-center gap-1 text-xs text-indigo-600 dark:text-indigo-400'>
+                              <Play className='w-3 h-3' />
+                              <span>Start</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     );

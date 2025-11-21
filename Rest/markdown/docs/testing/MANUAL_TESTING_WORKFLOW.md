@@ -1817,9 +1817,9 @@ npm run test:e2e:headed -- tests/e2e/guided-flow/get-started-authenticated.spec.
 - **`get-started-*.spec.ts`**: Contains tests for the get-started page, which is part of the homepage flow but tested separately.
 
 **Test Coverage Summary:**
-- ✅ **Unit Tests**: 5 test suites covering rendering, personalized content, learning style cards, conditional rendering, and active plan detection. All tests now properly handle localStorage dependencies with helper functions (`setupLocalStorage`, `clearLocalStorage`) and test edge cases (invalid JSON, missing keys, empty strings).
-- ✅ **Integration Tests**: 5 test suites covering navigation flows, learning style selection, user type changes, active plan detection, and authentication state. Tests verify localStorage persistence and state changes during interactions.
-- ✅ **E2E Tests**: Comprehensive coverage across 6 main test suites plus additional flow tests in `complete-guided-flow.spec.ts`. All tests include localStorage cleanup before and after each test, with robust error handling and comprehensive scenarios for invalid data handling and persistence across page reloads.
+- ✅ **Unit Tests**: 5 test suites covering rendering, personalized content, learning style cards, conditional rendering, and active plan detection. All tests now properly handle localStorage dependencies with helper functions (`setupLocalStorage`, `clearLocalStorage`) and test edge cases (invalid JSON, missing keys, empty strings). **Updated to reflect UserTypeContext defaulting to 'guided' for unauthenticated users.**
+- ✅ **Integration Tests**: 5 test suites covering navigation flows, learning style selection, user type changes, active plan detection, and authentication state. Tests verify localStorage persistence and state changes during interactions. **Updated to reflect default 'guided' behavior and "Choose Learning Plan" button for unauthenticated users.**
+- ✅ **E2E Tests**: Comprehensive coverage across 6 main test suites plus additional flow tests in `complete-guided-flow.spec.ts`. All tests include localStorage cleanup before and after each test, with robust error handling and comprehensive scenarios for invalid data handling and persistence across page reloads. **Updated to reflect that unauthenticated users default to 'guided' and see "Choose Learning Plan" button (not "Get Started").**
 
 **Detailed E2E Test Coverage (`homepage-to-guided.spec.ts`):**
 
@@ -1834,8 +1834,8 @@ npm run test:e2e:headed -- tests/e2e/guided-flow/get-started-authenticated.spec.
    - ✅ `should navigate to browse practice questions when Free Style Learning card is clicked` - Tests Free Style Learning card click, navigation to `/browse-practice-questions`, and localStorage persistence
 
 3. **G-E2E-003: Personalized Content Display** (6 tests)
-   - ✅ `should show default content when no userType is set` - Tests default content when localStorage is cleared (note: UserTypeContext defaults to 'guided', so content shows "Master Frontend Development", "Choose Learning Plan" button, and final CTA section may not appear)
-   - ✅ `should show guided content when userType is "guided"` - Verifies guided content appears with "Master Frontend Development" title, default subtitle, and "Choose Learning Plan" button (not "Get Started")
+   - ✅ `should show guided content when no userType is set (default for unauthenticated users)` - Tests default content when localStorage is cleared (note: UserTypeContext defaults to 'guided', so content shows "Master Frontend Development", "Choose Learning Plan" button, and final CTA section does NOT appear - this is the expected default behavior)
+   - ✅ `should show guided content when userType is "guided" (default for unauthenticated users)` - Verifies guided content appears with "Master Frontend Development" title, default subtitle, and "Choose Learning Plan" button (not "Get Started"). This is the default state for unauthenticated users.
    - ✅ `should show self-directed content when userType is "self-directed"` - Verifies self-directed content appears with correct title and subtitle
    - ✅ `should show active plan content when guided user has active plan` - Tests "Continue [Plan Name]" content with plan details
    - ✅ `should handle invalid active plan JSON gracefully` - Tests error handling for invalid JSON, verifies data is removed from localStorage and default content appears
@@ -1865,12 +1865,21 @@ npm run test:e2e:headed -- tests/e2e/guided-flow/get-started-authenticated.spec.
    - ✅ `should handle rapid clicking on get-started options` - Tests rapid clicking behavior (should not cause issues)
    - ✅ `should display correct content for guided vs self-directed selection` - Tests both guided and self-directed paths in sequence
 
-**⚠️ Important: localStorage Dependencies**
+**⚠️ Important: localStorage Dependencies & Default Behavior**
 The homepage depends on several localStorage keys to display personalized content:
 - `userType` - 'guided' or 'self-directed' (set by UserTypeContext)
+  - **DEFAULT**: UserTypeContext defaults to `'guided'` for unauthenticated users
+  - This means unauthenticated users will ALWAYS see guided content by default
+  - Final CTA section only appears when `userType` is explicitly `null` (rare)
 - `active-guided-plan` - JSON string with plan data: `{id, name, totalQuestions, estimatedTime}`
 - `learning-preferences:type` - 'guided' or 'free-style' (set by LearningTypeContext for logged-out users)
 - `learning-type:type` - Alternative key used for compatibility (fallback in tests)
+
+**Key Behavior for Unauthenticated Users:**
+- **Default State**: `userType` = `'guided'` (UserTypeContext default)
+- **CTA Button**: "Choose Learning Plan" (not "Get Started")
+- **Final CTA Section**: Does NOT appear (only shows when `userType` is `null`)
+- **Content**: "Master Frontend Development" with "Choose Learning Plan" button
 
 **All automated tests now:**
 - ✅ Set up localStorage before each test
@@ -1878,6 +1887,9 @@ The homepage depends on several localStorage keys to display personalized conten
 - ✅ Test various localStorage combinations
 - ✅ Handle edge cases (invalid JSON, missing keys, empty strings)
 - ✅ Verify localStorage persistence across interactions
+- ✅ **Reflect UserTypeContext defaulting to 'guided' for unauthenticated users**
+- ✅ **Verify "Choose Learning Plan" button appears (not "Get Started") for guided users**
+- ✅ **Verify final CTA section does NOT appear for unauthenticated users (default 'guided' state)**
 
 #### Step 2: Manual Testing - COMPREHENSIVE CHECKLIST
 
@@ -1892,32 +1904,38 @@ The homepage depends on several localStorage keys to display personalized conten
 🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑🚦🚦🚦🚦🚦🚦🫷🫷🫷🫷🫷🫷🫷🫷🫷🫸🫸🫸🫸🫸🫸 stop...
 
 **🎯 Personalized Content Based on UserType:**
-3. **Default Content (No UserType)**:
-   - [X] **Note**: When localStorage is cleared, `UserTypeContext` defaults to `'guided'`, so you will see "Master Frontend Development" content (same as guided users without active plan)
-   - [X] **To see true default content with final CTA**: Ensure `userType` is explicitly removed: `localStorage.removeItem('userType')` (not just `localStorage.clear()`)
-   - [X] If default content appears (with final CTA):
+3. **Default Content for Unauthenticated Users (Most Common Case)**:
+   - [X] **IMPORTANT**: UserTypeContext defaults to `'guided'` for unauthenticated users
+   - [X] **This is the DEFAULT behavior** - unauthenticated users will ALWAYS see guided content
+   - [X] When localStorage is cleared or empty, UserTypeContext automatically sets `userType` to `'guided'`
+   - [X] **Expected Content (Default for Unauthenticated Users)**:
      - [X] Title: "Master Frontend Development" is visible
      - [X] Subtitle: "The complete platform to ace your frontend interviews" is visible
-     - [X] CTA Button: "Get Started" button visible and links to `/get-started`
-     - [X] Final CTA Section: "Ready to Ace Your Interviews? 🚀" section visible
-     - [X] "Start Learning Now" button visible (links to `/get-started`)
-     - [X] "Explore Learning Paths" button visible (links to `/learn`)
-   - [X] If guided content appears (default behavior when UserTypeContext defaults to 'guided'):
-     - [X] Title: "Master Frontend Development" is visible (same as default)
-     - [X] Subtitle: "The complete platform to ace your frontend interviews" is visible (same as default)
-     - [X] CTA Button: "Choose Learning Plan" button visible
-     - [X] Final CTA Section: Should NOT be visible (hidden when userType is set)
+     - [X] CTA Button: "Choose Learning Plan" button visible and links to `/get-started`
+     - [X] Final CTA Section: Should NOT be visible (only shows when `userType` is explicitly `null`, which is rare)
+     - [X] User Type Specific Section: Guided learning section visible with indigo/purple gradient
+   - [X] **Rare Case - userType is null** (requires explicit removal):
+     - [X] To see final CTA section: Explicitly set `userType` to `null` (this is rare and not the default)
+     - [X] If final CTA appears:
+       - [X] Title: "Master Frontend Development" is visible
+       - [X] Subtitle: "The complete platform to ace your frontend interviews" is visible
+       - [X] CTA Button: "Get Started" button visible and links to `/get-started`
+       - [X] Final CTA Section: "Ready to Ace Your Interviews? 🚀" section visible
+       - [X] "Start Learning Now" button visible (links to `/get-started`)
+       - [X] "Explore Learning Paths" button visible (links to `/learn`)
 
-4. **Guided User Content (No Active Plan)**:
+4. **Guided User Content (No Active Plan) - DEFAULT for Unauthenticated Users**:
+   - [X] **This is the DEFAULT state** for unauthenticated users (UserTypeContext defaults to 'guided')
    - [X] **Clear localStorage first**: `localStorage.clear()` (to start fresh)
-   - [X] Set userType to "guided" in localStorage: `localStorage.setItem('userType', 'guided')`
-   - [X] **Verify localStorage**: Check DevTools Application tab → `userType` should be `'guided'`
+   - [X] **Note**: Even after clearing, UserTypeContext will default to `'guided'` automatically
+   - [X] **Verify localStorage**: Check DevTools Application tab → `userType` should be `'guided'` (set automatically by UserTypeContext)
    - [X] Refresh page
    - [X] **Wait 1-2 seconds** for useEffect to process localStorage
-   - [X] Title: "Master Frontend Development" is visible (appears in both hero and final section)
+   - [X] Title: "Master Frontend Development" is visible (appears in both hero and user type section)
    - [X] Subtitle: "The complete platform to ace your frontend interviews" is visible
    - [X] CTA Button: "Choose Learning Plan" button visible and links to `/get-started`
-   - [X] Final CTA Section: Should NOT be visible (hidden when userType is set)
+   - [X] **"Get Started" button should NOT appear** (only appears when `userType` is `null`)
+   - [X] Final CTA Section: Should NOT be visible (only shows when `userType` is explicitly `null`)
    - [X] User Type Specific Section: Guided learning section visible with indigo/purple gradient
    - [X] **Verify localStorage persistence**: Reload page → Content should still be guided
 
@@ -2025,8 +2043,11 @@ The homepage depends on several localStorage keys to display personalized conten
     - [ ] Click "View My Roadmap" button
     - [ ] Verify redirects to `/browse-practice-questions`
 
-14. **Final CTA Section Navigation** (only visible when userType is null):
-    - [ ] Clear userType: `localStorage.removeItem('userType')`
+14. **Final CTA Section Navigation** (only visible when userType is explicitly null - RARE CASE):
+    - [ ] **Note**: This is a RARE case since UserTypeContext defaults to 'guided'
+    - [ ] **To see final CTA**: You must explicitly set `userType` to `null` (not just clear localStorage)
+    - [ ] Set userType to null: `localStorage.setItem('userType', 'null')` or use a custom script
+    - [ ] **Alternative**: Use browser console to manually set `userType` to `null` in the context
     - [ ] Refresh page
     - [ ] Verify "Ready to Ace Your Interviews? 🚀" section is visible
     - [ ] Click "Start Learning Now" button
@@ -2034,6 +2055,7 @@ The homepage depends on several localStorage keys to display personalized conten
     - [ ] Go back to homepage
     - [ ] Click "Explore Learning Paths" button
     - [ ] Verify redirects to `/learn`
+    - [ ] **Note**: After this, UserTypeContext will likely default back to 'guided' on next page load
 
 **📊 User Statistics Display:**
 15. **Statistics Component**:
@@ -2138,13 +2160,15 @@ The homepage depends on several localStorage keys to display personalized conten
 **🔄 User Type Changes & localStorage State Management:**
 23. **Dynamic Content Updates**:
    - [ ] **Start fresh**: Clear localStorage: `localStorage.clear()`
-   - [ ] **No userType**: Refresh page → Verify default content appears
-   - [ ] **Set to guided**: `localStorage.setItem('userType', 'guided')` → Refresh → Verify content changes to guided
+   - [ ] **Default state (no userType)**: Refresh page → Verify guided content appears (UserTypeContext defaults to 'guided')
+   - [ ] **Verify localStorage**: Check `localStorage.getItem('userType')` → Should be `'guided'` (set automatically by UserTypeContext)
+   - [ ] **Set to guided explicitly**: `localStorage.setItem('userType', 'guided')` → Refresh → Verify content is guided
    - [ ] **Verify localStorage**: Check `localStorage.getItem('userType')` → Should be `'guided'`
    - [ ] **Set to self-directed**: `localStorage.setItem('userType', 'self-directed')` → Refresh → Verify content changes to self-directed
    - [ ] **Verify localStorage**: Check `localStorage.getItem('userType')` → Should be `'self-directed'`
-   - [ ] **Clear userType**: `localStorage.removeItem('userType')` → Refresh → Verify content returns to default
-   - [ ] **Verify localStorage**: Check `localStorage.getItem('userType')` → Should be `null`
+   - [ ] **Clear userType**: `localStorage.removeItem('userType')` → Refresh → Verify content returns to guided (default)
+   - [ ] **Verify localStorage**: Check `localStorage.getItem('userType')` → Should be `'guided'` (UserTypeContext sets it automatically)
+   - [ ] **Note**: Final CTA section only appears when `userType` is explicitly `null` (rare case, not the default)
    - [ ] Verify final CTA section appears/disappears correctly based on userType state
 
 **📡 Network & Console:**
@@ -2216,26 +2240,31 @@ The homepage depends on several localStorage keys to display personalized conten
 29. **Complete User Flow Test with localStorage Verification**:
    - [ ] **Step 1**: Clear all localStorage: `localStorage.clear()`
    - [ ] **Step 2**: Navigate to homepage
-   - [ ] **Step 3**: Verify default content appears (no userType set)
-   - [ ] **Step 4**: Click "Guided Learning" card
-   - [ ] **Step 5**: Verify localStorage was set:
+   - [ ] **Step 3**: Verify guided content appears (UserTypeContext defaults to 'guided')
+     - [ ] Title: "Master Frontend Development"
+     - [ ] CTA Button: "Choose Learning Plan" (not "Get Started")
+     - [ ] Final CTA Section: Should NOT be visible
+   - [ ] **Step 4**: Verify localStorage was set automatically:
+     - [ ] Check `localStorage.getItem('userType')` → Should be `'guided'` (set by UserTypeContext)
+   - [ ] **Step 5**: Click "Guided Learning" card (should already be selected/highlighted)
+   - [ ] **Step 6**: Verify localStorage was updated:
      - [ ] Check `localStorage.getItem('userType')` → Should be `'guided'`
      - [ ] Check `localStorage.getItem('learning-preferences:type')` → Should be `'guided'` (primary key)
      - [ ] Check `localStorage.getItem('learning-type:type')` → May also be `'guided'` (fallback key)
-   - [ ] **Step 6**: Verify navigation to guided learning page occurred
-   - [ ] **Step 7**: Go back to homepage
-   - [ ] **Step 8**: Verify userType persisted (guided content should appear)
-   - [ ] **Step 9**: Set active plan in localStorage (see step 21)
-   - [ ] **Step 10**: Refresh page → Verify "Continue [Plan Name]" appears
-   - [ ] **Step 11**: Click "Free Style Learning" card
-   - [ ] **Step 12**: Verify localStorage was updated:
+   - [ ] **Step 7**: Verify navigation to guided learning page occurred
+   - [ ] **Step 8**: Go back to homepage
+   - [ ] **Step 9**: Verify userType persisted (guided content should appear)
+   - [ ] **Step 10**: Set active plan in localStorage (see step 21)
+   - [ ] **Step 11**: Refresh page → Verify "Continue [Plan Name]" appears
+   - [ ] **Step 12**: Click "Free Style Learning" card
+   - [ ] **Step 13**: Verify localStorage was updated:
      - [ ] Check `localStorage.getItem('userType')` → Should be `'self-directed'`
      - [ ] Check `localStorage.getItem('learning-preferences:type')` → Should be `'free-style'` (primary key)
      - [ ] Check `localStorage.getItem('learning-type:type')` → May also be `'free-style'` (fallback key)
-   - [ ] **Step 13**: Verify navigation to browse practice questions occurred
-   - [ ] **Step 14**: Go back to homepage
-   - [ ] **Step 15**: Verify userType updated (self-directed content should appear)
-   - [ ] **Step 16**: Verify active plan was cleared (self-directed users don't use active plans)
+   - [ ] **Step 14**: Verify navigation to browse practice questions occurred
+   - [ ] **Step 15**: Go back to homepage
+   - [ ] **Step 16**: Verify userType updated (self-directed content should appear)
+   - [ ] **Step 17**: Verify active plan was cleared (self-directed users don't use active plans)
 
 #### Step 3: Compare Results
 - [ ] Automated tests pass (all test suites)
