@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { UserAuthService } from '../../../lib/user-auth';
+import { sanitizeInputServer } from '../../../lib/utils/sanitize-server';
+import { validateAndSanitize, registerSchema, loginSchema } from '../../../lib/utils/validation';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, name, role } = await request.json();
+    const body = await request.json();
+    const { email, password, name, role } = body;
 
     if (!email || !password) {
       return NextResponse.json(
@@ -14,11 +17,26 @@ export async function POST(request: NextRequest) {
 
     // If name is provided, this is a registration request
     if (name) {
-      const result = await UserAuthService.registerUser(
+      // Validate and sanitize registration data
+      const validationResult = validateAndSanitize(registerSchema, {
         email,
         password,
         name,
-        role || 'user'
+        role: role || 'user',
+      });
+
+      if (!validationResult.success) {
+        return NextResponse.json(
+          { success: false, error: validationResult.error },
+          { status: 400 }
+        );
+      }
+
+      const result = await UserAuthService.registerUser(
+        validationResult.data.email,
+        validationResult.data.password,
+        validationResult.data.name,
+        validationResult.data.role
       );
 
       if (result.success) {
@@ -35,7 +53,23 @@ export async function POST(request: NextRequest) {
       }
     } else {
       // This is a login request
-      const result = await UserAuthService.authenticateUser(email, password);
+      // Validate and sanitize login data
+      const validationResult = validateAndSanitize(loginSchema, {
+        email,
+        password,
+      });
+
+      if (!validationResult.success) {
+        return NextResponse.json(
+          { success: false, error: validationResult.error },
+          { status: 400 }
+        );
+      }
+
+      const result = await UserAuthService.authenticateUser(
+        validationResult.data.email,
+        validationResult.data.password
+      );
 
       if (result.success) {
         return NextResponse.json({

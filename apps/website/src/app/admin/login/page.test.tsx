@@ -3,11 +3,37 @@
  * Task: A-002 - Admin Login
  */
 
+// Load environment variables from .env.local
+import { config } from 'dotenv';
+import { resolve } from 'path';
+config({ path: resolve(process.cwd(), '.env.local'), override: true });
+
+// Map existing env vars to ADMIN_EMAIL/ADMIN_PASSWORD if they don't exist
+// Priority: ADMIN_EMAIL > ADMAIN_EMAIL (typo fallback) > INITIAL_ADMIN_EMAIL > TEST_ADMIN_EMAIL
+if (!process.env.ADMIN_EMAIL) {
+  process.env.ADMIN_EMAIL = process.env.ADMAIN_EMAIL || process.env.INITIAL_ADMIN_EMAIL || process.env.TEST_ADMIN_EMAIL || '';
+}
+if (!process.env.ADMIN_PASSWORD) {
+  process.env.ADMIN_PASSWORD = process.env.INITIAL_ADMIN_PASSWORD || process.env.TEST_ADMIN_PASSWORD || '';
+}
+
+// Trim whitespace from environment variables (important for .env.local files)
+if (process.env.ADMIN_EMAIL) {
+  process.env.ADMIN_EMAIL = process.env.ADMIN_EMAIL.trim();
+}
+if (process.env.ADMIN_PASSWORD) {
+  process.env.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD.trim();
+}
+
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AdminLoginPage from './page';
 import { useAdminAuth } from '@elzatona/shared-contexts';
+
+// Get credentials from environment variables
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 
 // Mock shared contexts
 jest.mock('@elzatona/shared-contexts', () => {
@@ -116,10 +142,10 @@ describe('A-UT-007: Form Inputs Handle Changes', () => {
     const emailInput = screen.getByLabelText(/Email Address/i) as HTMLInputElement;
     
     await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
+      fireEvent.change(emailInput, { target: { value: ADMIN_EMAIL } });
     });
     
-    expect(emailInput.value).toBe('admin@example.com');
+    expect(emailInput.value).toBe(ADMIN_EMAIL);
   });
 
   it('should update password input on change', async () => {
@@ -127,10 +153,10 @@ describe('A-UT-007: Form Inputs Handle Changes', () => {
     const passwordInput = screen.getByLabelText(/Password/i) as HTMLInputElement;
     
     await act(async () => {
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
+      fireEvent.change(passwordInput, { target: { value: ADMIN_PASSWORD } });
     });
     
-    expect(passwordInput.value).toBe('password123');
+    expect(passwordInput.value).toBe(ADMIN_PASSWORD);
   });
 
   it('should update state correctly on input changes', async () => {
@@ -196,7 +222,7 @@ describe('A-UT-008: Form Validation', () => {
     
     await act(async () => {
       fireEvent.change(screen.getByLabelText(/Email Address/i), { 
-        target: { value: 'admin@example.com' } 
+        target: { value: ADMIN_EMAIL } 
       });
       fireEvent.submit(form!);
     });
@@ -227,8 +253,8 @@ describe('A-UT-009: Loading State', () => {
     const form = submitButton.closest('form');
     
     await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
+      fireEvent.change(emailInput, { target: { value: ADMIN_EMAIL } });
+      fireEvent.change(passwordInput, { target: { value: ADMIN_PASSWORD } });
       fireEvent.submit(form!);
     });
     
@@ -278,7 +304,7 @@ describe('A-UT-010: Error Message Display', () => {
     const form = submitButton.closest('form');
     
     await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
+      fireEvent.change(emailInput, { target: { value: ADMIN_EMAIL } });
       fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
       fireEvent.submit(form!);
     });
@@ -301,7 +327,7 @@ describe('A-UT-010: Error Message Display', () => {
     
     // First submission - error
     await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
+      fireEvent.change(emailInput, { target: { value: ADMIN_EMAIL } });
       fireEvent.change(passwordInput, { target: { value: 'wrong' } });
       fireEvent.submit(form!);
     });
@@ -332,8 +358,8 @@ describe('A-UT-010: Error Message Display', () => {
     const form = submitButton.closest('form');
     
     await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
+      fireEvent.change(emailInput, { target: { value: ADMIN_EMAIL } });
+      fireEvent.change(passwordInput, { target: { value: ADMIN_PASSWORD } });
       fireEvent.submit(form!);
     });
     
@@ -380,8 +406,13 @@ describe('A-UT-SNAPSHOT: Admin Login Page Snapshot Tests', () => {
     const emailInput = screen.getByLabelText(/Email Address/i);
     const passwordInput = screen.getByLabelText(/Password/i);
     
-    fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    // Use mock credentials for snapshots to avoid committing real credentials
+    // This is a security best practice - snapshots should never contain real credentials
+    const MOCK_EMAIL = 'test-admin@example.com';
+    const MOCK_PASSWORD = 'test-password-123';
+    
+    fireEvent.change(emailInput, { target: { value: MOCK_EMAIL } });
+    fireEvent.change(passwordInput, { target: { value: MOCK_PASSWORD } });
     
     expect(container.firstChild).toMatchSnapshot();
   });

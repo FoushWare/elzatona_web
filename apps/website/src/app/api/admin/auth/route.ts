@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
+import { getSupabaseConfig, logApiConfig } from '@/lib/utils/api-config';
+
+// Log API configuration on module load (for debugging)
+logApiConfig('Admin Auth API');
+
 // Admin config - using environment variables directly
 // Note: JWT secret is read at runtime to support test environments
 const adminConfig = {
@@ -14,9 +19,17 @@ const adminConfig = {
   },
 };
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+// Get Supabase client using centralized configuration
+// This ensures the correct environment (test/production) is used
+function getSupabaseClient() {
+  const config = getSupabaseConfig();
+  return createClient(config.url, config.serviceRoleKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,12 +65,43 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get Supabase client (uses correct environment config)
+    const supabase = getSupabaseClient();
+    const config = getSupabaseConfig();
+    
+    // Debug logging for test environment
+    if (process.env.APP_ENV === 'test' || process.env.NEXT_PUBLIC_APP_ENV === 'test') {
+      console.log('[Admin Auth API] 🧪 TEST MODE');
+      console.log('[Admin Auth API] 📋 Supabase URL:', config.url);
+      console.log('[Admin Auth API] 🔑 Service Role Key Project:', config.serviceRoleKey ? (() => {
+        try {
+          const parts = config.serviceRoleKey.split('.');
+          const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+          return payload.ref;
+        } catch {
+          return 'unknown';
+        }
+      })() : 'missing');
+      console.log('[Admin Auth API] 🔍 Looking for admin email:', email);
+    }
+    
     // Query admin from Supabase
     const { data: adminData, error } = await supabase
       .from('admin_users')
       .select('*')
       .eq('email', email)
       .single();
+    
+    // Debug logging for test environment
+    if (process.env.APP_ENV === 'test' || process.env.NEXT_PUBLIC_APP_ENV === 'test') {
+      if (error) {
+        console.log('[Admin Auth API] ❌ Database error:', error.message, error.code);
+      } else if (!adminData) {
+        console.log('[Admin Auth API] ⚠️  No admin found with email:', email);
+      } else {
+        console.log('[Admin Auth API] ✅ Admin found:', adminData.email, 'Active:', adminData.is_active);
+      }
+    }
 
     if (error || !adminData) {
       return NextResponse.json(

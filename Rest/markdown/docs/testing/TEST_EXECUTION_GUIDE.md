@@ -165,6 +165,11 @@ npm run test:unit -- apps/website/src/components/QuestionDisplay.test.tsx
 
 # Progress Tracker
 npm run test:unit -- libs/shared-components/src/lib/common/ProgressTracker.test.tsx
+
+# UI Components (New - using Vitest)
+nx test shared-components -- button.test.tsx
+nx test shared-components -- input.test.tsx
+nx test shared-components -- select.test.tsx
 ```
 
 ### Unit Test Options
@@ -455,6 +460,54 @@ npm run test:e2e -- tests/e2e/shared-components/progress-tracker.spec.ts
 npm run test:e2e -- tests/e2e/shared-components/question-card.spec.ts
 ```
 
+### Shared Components Library Testing (New)
+
+The shared components library (`libs/shared-components`) uses **Vitest** for testing (not Jest).
+
+#### Run All Shared Components Tests
+```bash
+# Run all tests in the shared-components library
+nx test shared-components
+
+# Run in watch mode
+nx test shared-components --watch
+
+# Run with coverage
+nx test shared-components --coverage
+```
+
+#### Run Specific Component Tests
+```bash
+# Button component
+nx test shared-components -- button.test.tsx
+
+# Input component
+nx test shared-components -- input.test.tsx
+
+# Select component
+nx test shared-components -- select.test.tsx
+```
+
+#### Storybook for Shared Components
+```bash
+# Start Storybook development server (port 4400)
+nx storybook shared-components
+
+# Build Storybook for production
+nx build-storybook shared-components
+```
+
+#### UI Component Test Coverage
+- ✅ **Button** - Variants, sizes, interactions, disabled states
+- ✅ **Input** - Types, validation, events, disabled states
+- ✅ **Select** - Dropdown behavior, selection, disabled states
+- ⏳ Dialog (to be added)
+- ⏳ Checkbox (to be added)
+- ⏳ Label (to be added)
+- ⏳ Textarea (to be added)
+- ⏳ Card (to be added)
+- ⏳ Badge (to be added)
+
 ### E2E Test Options
 
 ```bash
@@ -462,7 +515,9 @@ npm run test:e2e -- tests/e2e/shared-components/question-card.spec.ts
 npm run test:e2e -- --debug
 
 # Run with slow motion (see actions clearly)
-npm run test:e2e -- --slowMo=1000
+# Note: Configure slowMo in playwright.config.ts use section:
+# use: { slowMo: 1000 }
+npm run test:e2e -- --headed
 
 # Run with specific timeout
 npm run test:e2e -- --timeout=60000
@@ -499,7 +554,8 @@ npm run test:e2e -- --codegen
 
 5. **Use slow motion** to see each step:
    ```bash
-   npm run test:e2e -- tests/e2e/admin/admin-login.spec.ts --headed --slowMo=2000
+   # Note: Configure slowMo in playwright.config.ts use section first
+   npm run test:e2e -- tests/e2e/admin/admin-login.spec.ts --headed
    ```
 
 ---
@@ -698,7 +754,8 @@ npm run test:unit -- apps/website/src/app/admin/login/page.test.tsx --verbose
 npm run test:integration -- apps/website/src/app/admin/login/page.integration.test.tsx --verbose
 
 # E2E tests (watch it run)
-npm run test:e2e -- tests/e2e/admin/admin-login.spec.ts --headed --slowMo=1000
+npm run test:e2e -- tests/e2e/admin/admin-login.spec.ts --headed
+# Note: To add slow motion, configure slowMo in playwright.config.ts
 ```
 
 **Step 2: Manual Testing**
@@ -877,8 +934,9 @@ node --inspect-brk node_modules/.bin/jest apps/website/src/app/admin/login/page.
 
 ### E2E Test Debugging
 ```bash
-# Run with headed mode and slow motion
-npm run test:e2e -- tests/e2e/admin/admin-login.spec.ts --headed --slowMo=2000
+# Run with headed mode (slow motion configured in playwright.config.ts)
+npm run test:e2e -- tests/e2e/admin/admin-login.spec.ts --headed
+# Note: Configure slowMo in playwright.config.ts use section for slow motion
 
 # Use Playwright Inspector
 npm run test:e2e -- tests/e2e/admin/admin-login.spec.ts --debug

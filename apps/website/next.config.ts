@@ -1,4 +1,44 @@
 import type { NextConfig } from 'next';
+import { config } from 'dotenv';
+import { resolve } from 'path';
+import { existsSync } from 'fs';
+
+// CRITICAL: Load environment-specific files BEFORE Next.js loads .env.local
+// This ensures NEXT_PUBLIC_ variables are set correctly
+// Next.js loads .env.local automatically, so we need to override it early
+
+const projectRoot = process.cwd();
+
+// Load .env.test.local FIRST if APP_ENV is test (highest priority)
+if (process.env.APP_ENV === 'test' || process.env.NEXT_PUBLIC_APP_ENV === 'test') {
+  const envTestLocal = resolve(projectRoot, '.env.test.local');
+  
+  if (existsSync(envTestLocal)) {
+    // Load with override: true to ensure test vars take precedence
+    config({ path: envTestLocal, override: true });
+    console.log('[Next.js Config] ✅ Loaded .env.test.local for test environment (overriding all other env files)');
+    
+    // Also set NEXT_PUBLIC_APP_ENV to ensure it's available
+    if (!process.env.NEXT_PUBLIC_APP_ENV) {
+      process.env.NEXT_PUBLIC_APP_ENV = 'test';
+    }
+  }
+}
+
+// Load .env.dev.local if APP_ENV is development
+if (process.env.APP_ENV === 'development' || process.env.NEXT_PUBLIC_APP_ENV === 'development') {
+  const envDevLocal = resolve(projectRoot, '.env.dev.local');
+  
+  if (existsSync(envDevLocal)) {
+    config({ path: envDevLocal, override: true });
+    console.log('[Next.js Config] ✅ Loaded .env.dev.local for development environment (overriding .env.local)');
+    
+    // Also set NEXT_PUBLIC_APP_ENV to ensure it's available
+    if (!process.env.NEXT_PUBLIC_APP_ENV) {
+      process.env.NEXT_PUBLIC_APP_ENV = 'development';
+    }
+  }
+}
 
 const nextConfig: NextConfig = {
   // ESLint configuration - temporarily disable during builds
