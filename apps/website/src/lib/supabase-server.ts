@@ -6,10 +6,12 @@ import { createClient } from '@supabase/supabase-js';
 // Supabase configuration
 const supabaseUrl =
   process.env['NEXT_PUBLIC_SUPABASE_URL'] ||
-  'https://hpnewqkvpnthpohvxcmq.supabase.co';
+  'https://kiycimlsatwfqxtfprlr.supabase.co';
+// Use anon key as fallback if service role key is not available
 const supabaseServiceRoleKey =
   process.env['SUPABASE_SERVICE_ROLE_KEY'] ||
-  'YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MDY2MDQxOCwiZXhwIjoyMDc2MjM2NDE4fQ.process.env.SUPABASE_SERVICE_ROLE_KEY';
+  process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] ||
+  'YOUR_SUPABASE_KEY_HERE.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpeWNpbWxzYXR3ZnF4dGZwcmxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyMzc3ODQsImV4cCI6MjA3ODgxMzc4NH0.bDQhRHzNH09BE8w9qdRXjtl7bGdGO3JslrmkffhqXAc';
 
 // Initialize Supabase client (server-side with service role key)
 let supabase: ReturnType<typeof createClient> | null = null;
