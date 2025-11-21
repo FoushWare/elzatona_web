@@ -8,6 +8,12 @@
  * - Active plan detection and display
  * - Learning style selection cards
  * - Animations and conditional rendering
+ * 
+ * IMPORTANT: UserTypeContext defaults to 'guided' for unauthenticated users.
+ * This means:
+ * - Default state (no localStorage) = userType: 'guided' (not null)
+ * - Final CTA section only shows when userType is explicitly null (rare)
+ * - "Choose Learning Plan" button appears for guided users (not "Get Started")
  */
 
 import React from 'react';
@@ -95,9 +101,9 @@ describe('G-UT-001: Homepage Renders Correctly', () => {
     // Clear localStorage before each test
     clearLocalStorage();
     
-    // Default mocks
+    // Default mocks - UserTypeContext defaults to 'guided' for unauthenticated users
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
-      userType: null,
+      userType: 'guided', // Default for unauthenticated users
       setUserType: jest.fn(),
     });
     
@@ -138,15 +144,19 @@ describe('G-UT-001: Homepage Renders Correctly', () => {
   it('should render all required elements', () => {
     render(<HomePage />);
     
-    // Check for main title (default content)
+    // Check for main title (guided content - default for unauthenticated users)
     expect(screen.getByText(/Master Frontend Development/i)).toBeInTheDocument();
     
     // Check for subtitle
     expect(screen.getByText(/The complete platform to ace your frontend interviews/i)).toBeInTheDocument();
     
-    // Check for CTA button
-    const ctaButton = screen.getByRole('link', { name: /Get Started/i });
+    // Check for CTA button - "Choose Learning Plan" (not "Get Started") for guided users
+    const ctaButton = screen.getByRole('link', { name: /Choose Learning Plan/i });
     expect(ctaButton).toBeInTheDocument();
+    expect(ctaButton).toHaveAttribute('href', '/get-started');
+    
+    // Final CTA section should NOT appear (only shows when userType is null)
+    expect(screen.queryByText(/Ready to Ace Your Interviews\? 🚀/i)).not.toBeInTheDocument();
     
     // Check for UserStatistics component (may not have test-id, check for content instead)
     // UserStatistics shows stats like "Active Learners", "Success Rate", etc.
@@ -202,7 +212,9 @@ describe('G-UT-002: Personalized Content Based on UserType', () => {
     clearLocalStorage();
   });
 
-  it('should show default content when userType is null', () => {
+  it('should show default content when userType is null (rare case)', () => {
+    // Note: This is a rare case since UserTypeContext defaults to 'guided'
+    // This test verifies the fallback behavior when userType is explicitly null
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
       userType: null,
       setUserType: jest.fn(),
@@ -213,11 +225,16 @@ describe('G-UT-002: Personalized Content Based on UserType', () => {
     expect(screen.getByText(/Master Frontend Development/i)).toBeInTheDocument();
     expect(screen.getByText(/The complete platform to ace your frontend interviews/i)).toBeInTheDocument();
     
+    // When userType is null, "Get Started" button appears
     const ctaButton = screen.getByRole('link', { name: /Get Started/i });
     expect(ctaButton).toHaveAttribute('href', '/get-started');
+    
+    // Final CTA section should appear when userType is null
+    expect(screen.getByText(/Ready to Ace Your Interviews\? 🚀/i)).toBeInTheDocument();
   });
 
-  it('should show guided content when userType is "guided" without active plan', () => {
+  it('should show guided content when userType is "guided" without active plan (default for unauthenticated)', () => {
+    // This is the default state for unauthenticated users
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
       userType: 'guided',
       setUserType: jest.fn(),
@@ -232,9 +249,9 @@ describe('G-UT-002: Personalized Content Based on UserType', () => {
     render(<HomePage />);
     
     // Wait for useEffect to complete
-    jest.advanceTimersByTime(1000);
+    jest.advanceTimersByTime(2000);
     
-    // Use getAllByText since text appears in both hero and final section
+    // Use getAllByText since text appears in both hero and user type section
     const titles = screen.getAllByText(/Master Frontend Development/i);
     expect(titles.length).toBeGreaterThan(0);
     // Subtitle appears in both hero and user type section
@@ -249,6 +266,9 @@ describe('G-UT-002: Personalized Content Based on UserType', () => {
     // "Get Started" button should NOT appear when userType is "guided"
     const getStartedButtons = screen.queryAllByRole('link', { name: /Get Started/i });
     expect(getStartedButtons.length).toBe(0);
+    
+    // Final CTA section should NOT appear when userType is "guided"
+    expect(screen.queryByText(/Ready to Ace Your Interviews\? 🚀/i)).not.toBeInTheDocument();
   });
 
   it('should show guided content with active plan when userType is "guided" and plan exists', () => {
@@ -444,12 +464,19 @@ describe('G-UT-004: Conditional Rendering Based on UserType', () => {
     
     render(<HomePage />);
     
-    // Should NOT show final CTA section
+    jest.advanceTimersByTime(2000);
+    
+    // Should NOT show final CTA section (only shows when userType is null)
     expect(screen.queryByText(/Ready to Ace Your Interviews\? 🚀/i)).not.toBeInTheDocument();
     
-    // Should show guided-specific content section (use getAllByText since it appears in hero and section)
-    const titles = screen.getAllByText(/Start Your Learning Path/i);
+    // Should show guided-specific content section
+    // "Master Frontend Development" appears in both hero and user type section
+    const titles = screen.getAllByText(/Master Frontend Development/i);
     expect(titles.length).toBeGreaterThan(0);
+    
+    // "Choose Learning Plan" button should appear
+    const ctaButtons = screen.getAllByRole('link', { name: /Choose Learning Plan/i });
+    expect(ctaButtons.length).toBeGreaterThan(0);
   });
 });
 
@@ -529,7 +556,7 @@ describe('G-UT-005: Active Plan Detection', () => {
     jest.advanceTimersByTime(1000);
     
     // Should show default guided content (no active plan)
-    const titles = screen.getAllByText(/Start Your Learning Path/i);
+    const titles = screen.getAllByText(/Master Frontend Development/i);
     expect(titles.length).toBeGreaterThan(0);
     
     // Should have logged error
@@ -566,10 +593,10 @@ describe('G-UT-005: Active Plan Detection', () => {
     render(<HomePage />);
     
     // Wait for useEffect to complete
-    jest.advanceTimersByTime(1000);
+    jest.advanceTimersByTime(2000);
     
     // Should show default guided content
-    const titles = screen.getAllByText(/Start Your Learning Path/i);
+    const titles = screen.getAllByText(/Master Frontend Development/i);
     expect(titles.length).toBeGreaterThan(0);
   });
   
@@ -583,10 +610,10 @@ describe('G-UT-005: Active Plan Detection', () => {
     render(<HomePage />);
     
     // Wait for useEffect to complete
-    jest.advanceTimersByTime(1000);
+    jest.advanceTimersByTime(2000);
     
     // Should show default guided content
-    const titles = screen.getAllByText(/Start Your Learning Path/i);
+    const titles = screen.getAllByText(/Master Frontend Development/i);
     expect(titles.length).toBeGreaterThan(0);
   });
 });
@@ -621,7 +648,26 @@ describe('G-UT-SNAPSHOT: Homepage Snapshot Tests', () => {
     clearLocalStorage();
   });
 
-  it('should match homepage snapshot (unauthenticated, no userType)', () => {
+  it('should match homepage snapshot (unauthenticated, default guided - most common case)', () => {
+    // UserTypeContext defaults to 'guided' for unauthenticated users
+    (sharedContexts.useUserType as jest.Mock).mockReturnValue({
+      userType: 'guided', // Default for unauthenticated users
+      setUserType: jest.fn(),
+    });
+    
+    // Setup localStorage with guided userType (default behavior)
+    setupLocalStorage({
+      'userType': 'guided',
+    });
+    
+    const { container } = render(<HomePage />);
+    // Advance timers to complete all animations (500ms initial + 1400ms user type section)
+    jest.advanceTimersByTime(2000);
+    expect(container.firstChild).toMatchSnapshot();
+  });
+
+  it('should match homepage snapshot (unauthenticated, userType null - rare case)', () => {
+    // This is a rare case since UserTypeContext defaults to 'guided'
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
       userType: null,
       setUserType: jest.fn(),

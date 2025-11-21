@@ -118,6 +118,17 @@ const nextConfig: NextConfig = {
       use: 'ignore-loader',
     });
 
+    // Monaco Editor webpack configuration
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@monaco-editor/react': '@monaco-editor/react',
+      };
+      
+      // Ignore Monaco Editor on server side
+      config.plugins = config.plugins || [];
+    }
+
     // Memory-efficient webpack configuration for development
     if (dev) {
       // Reduce memory usage in development
@@ -187,6 +198,18 @@ const nextConfig: NextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://cdn.jsdelivr.net",
+              "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+              "font-src 'self' data: https://cdn.jsdelivr.net",
+              "img-src 'self' data: https: blob:",
+              "connect-src 'self' https://cdn.jsdelivr.net",
+              "worker-src 'self' blob:",
+            ].join('; '),
           },
         ],
       },
