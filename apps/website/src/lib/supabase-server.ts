@@ -6,9 +6,11 @@ import { createClient } from '@supabase/supabase-js';
 // Supabase configuration
 const supabaseUrl =
   process.env['NEXT_PUBLIC_SUPABASE_URL'] ||
-  'https://hpnewqkvpnthpohvxcmq.supabase.co';
+  'https://kiycimlsatwfqxtfprlr.supabase.co';
+// Use anon key as fallback if service role key is not available
 const supabaseServiceRoleKey =
   process.env['SUPABASE_SERVICE_ROLE_KEY'] ||
+  process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] ||
   'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
 
 // Initialize Supabase client (server-side with service role key)

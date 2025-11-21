@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 function createSupabaseClient() {
   const supabaseUrl =
     process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    'https://hpnewqkvpnthpohvxcmq.supabase.co';
+    'https://kiycimlsatwfqxtfprlr.supabase.co';
   const supabaseAnonKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     'SUPABASE_SERVICE_ROLE_KEY_REDACTED';
@@ -21,6 +21,9 @@ function createSupabaseClient() {
 export async function GET(request: NextRequest) {
   try {
     console.log('🔍 API Debug: Starting GET /api/plans');
+    console.log('🔍 API Debug: NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 40) + '...');
+    console.log('🔍 API Debug: NEXT_PUBLIC_SUPABASE_ANON_KEY exists:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+    console.log('🔍 API Debug: Anon key starts with:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.substring(0, 20) + '...');
 
     const supabase = createSupabaseClient();
     console.log('🔍 API Debug: Supabase client created');
