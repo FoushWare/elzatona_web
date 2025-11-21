@@ -1,9 +1,12 @@
 // Categories API Route
-// v1.0 - Category management for topics and questions
+// v1.1 - Category management for topics and questions
+// Added input sanitization for security
 
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseOperations } from '../../../lib/supabase-server';
 import { createClient } from '@supabase/supabase-js';
+import { sanitizeObjectServer } from '../../../lib/utils/sanitize-server';
+import { validateAndSanitize, categorySchema } from '../../../lib/utils/validation';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -70,26 +73,31 @@ export async function POST(request: NextRequest) {
   try {
     const categoryData = await request.json();
 
-    // Validate required fields
-    if (!categoryData.name || categoryData.name.trim() === '') {
+    // Validate and sanitize category data
+    const validationResult = validateAndSanitize(categorySchema, categoryData);
+    
+    if (!validationResult.success) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Category name is required',
+          error: validationResult.error,
         },
         { status: 400 }
       );
     }
 
+    // Sanitize the validated data
+    const sanitizedData = sanitizeObjectServer(validationResult.data as any);
+
     // Transform data to match Supabase schema
     const supabaseCategoryData = {
-      name: categoryData.name,
-      description: categoryData.description || '',
+      name: sanitizedData.name,
+      description: sanitizedData.description || '',
       slug:
-        categoryData.slug ||
-        categoryData.name.toLowerCase().replace(/\s+/g, '-'),
-      icon: categoryData.icon || '📁',
-      color: categoryData.color || '#3B82F6',
+        sanitizedData.slug ||
+        sanitizedData.name.toLowerCase().replace(/\s+/g, '-'),
+      icon: categoryData.icon || '📁', // Icon is not sanitized as it's an emoji/symbol
+      color: categoryData.color || '#3B82F6', // Color is validated by format
       order_index: categoryData.orderIndex || categoryData.order_index || 0,
       is_active: categoryData.isActive !== false,
     };

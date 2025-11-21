@@ -19,6 +19,8 @@ import {
   ArrowRight,
   RefreshCw,
   Users,
+  Tag,
+  Folder,
 } from 'lucide-react';
 import { useAdminStats } from '@elzatona/shared-hooks';
 
@@ -165,7 +167,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Enhanced System Overview Stats */}
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8'>
           <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 group'>
             <div className='flex items-center justify-between'>
               <div className='flex items-center'>
@@ -245,6 +247,62 @@ export default function AdminDashboard() {
                 <div className='flex items-center text-purple-500 text-sm'>
                   <Activity className='h-4 w-4 mr-1' />
                   <span>Plans</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 group'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center'>
+                <div className='p-3 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-xl group-hover:scale-110 transition-transform duration-200'>
+                  <Tag className='h-6 w-6 text-white' />
+                </div>
+                <div className='ml-4'>
+                  <div className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+                    Topics
+                  </div>
+                  <div className='text-3xl font-bold text-gray-900 dark:text-white'>
+                    {loading ? (
+                      <div className='animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-12 rounded'></div>
+                    ) : (
+                      (stats?.topics || 0).toLocaleString()
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className='text-right'>
+                <div className='flex items-center text-indigo-500 text-sm'>
+                  <Tag className='h-4 w-4 mr-1' />
+                  <span>Topics</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 group'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center'>
+                <div className='p-3 bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl group-hover:scale-110 transition-transform duration-200'>
+                  <Folder className='h-6 w-6 text-white' />
+                </div>
+                <div className='ml-4'>
+                  <div className='text-sm font-medium text-gray-600 dark:text-gray-400'>
+                    Categories
+                  </div>
+                  <div className='text-3xl font-bold text-gray-900 dark:text-white'>
+                    {loading ? (
+                      <div className='animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-12 rounded'></div>
+                    ) : (
+                      (stats?.categories || 0).toLocaleString()
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className='text-right'>
+                <div className='flex items-center text-pink-500 text-sm'>
+                  <Folder className='h-4 w-4 mr-1' />
+                  <span>Categories</span>
                 </div>
               </div>
             </div>

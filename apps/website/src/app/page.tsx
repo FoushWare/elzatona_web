@@ -74,8 +74,8 @@ function HomePageContent() {
         };
       } else {
         return {
-          title: 'Start Your Learning Path',
-          subtitle: 'Choose a structured learning plan to begin your journey',
+          title: 'Master Frontend Development',
+          subtitle: 'The complete platform to ace your frontend interviews',
           cta: 'Choose Learning Plan',
           ctaLink: '/get-started',
           icon: <Map className='w-6 h-6' />,

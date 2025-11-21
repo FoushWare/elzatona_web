@@ -50,7 +50,7 @@ exports[`A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests should match admin dashbo
       </div>
     </div>
     <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
     >
       <div
         class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 group"
@@ -188,6 +188,100 @@ exports[`A-UT-SNAPSHOT: Admin Dashboard Snapshot Tests should match admin dashbo
               </span>
               <span>
                 Plans
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 group"
+      >
+        <div
+          class="flex items-center justify-between"
+        >
+          <div
+            class="flex items-center"
+          >
+            <div
+              class="p-3 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-xl group-hover:scale-110 transition-transform duration-200"
+            >
+              <span>
+                🏷️
+              </span>
+            </div>
+            <div
+              class="ml-4"
+            >
+              <div
+                class="text-sm font-medium text-gray-600 dark:text-gray-400"
+              >
+                Topics
+              </div>
+              <div
+                class="text-3xl font-bold text-gray-900 dark:text-white"
+              >
+                50
+              </div>
+            </div>
+          </div>
+          <div
+            class="text-right"
+          >
+            <div
+              class="flex items-center text-indigo-500 text-sm"
+            >
+              <span>
+                🏷️
+              </span>
+              <span>
+                Topics
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 group"
+      >
+        <div
+          class="flex items-center justify-between"
+        >
+          <div
+            class="flex items-center"
+          >
+            <div
+              class="p-3 bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl group-hover:scale-110 transition-transform duration-200"
+            >
+              <span>
+                📁
+              </span>
+            </div>
+            <div
+              class="ml-4"
+            >
+              <div
+                class="text-sm font-medium text-gray-600 dark:text-gray-400"
+              >
+                Categories
+              </div>
+              <div
+                class="text-3xl font-bold text-gray-900 dark:text-white"
+              >
+                10
+              </div>
+            </div>
+          </div>
+          <div
+            class="text-right"
+          >
+            <div
+              class="flex items-center text-pink-500 text-sm"
+            >
+              <span>
+                📁
+              </span>
+              <span>
+                Categories
               </span>
             </div>
           </div>

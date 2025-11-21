@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseOperations } from '../../../lib/supabase-server';
 import { createClient } from '@supabase/supabase-js';
+import { sanitizeObjectServer, sanitizeRichContent } from '../../../lib/utils/sanitize-server';
+import { validateAndSanitize, learningCardSchema } from '../../../lib/utils/validation';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -156,13 +158,35 @@ export async function POST(request: NextRequest) {
   try {
     const cardData = await request.json();
 
+    // Validate and sanitize card data
+    const validationResult = validateAndSanitize(learningCardSchema, {
+      title: cardData.name || cardData.title,
+      description: cardData.description,
+      type: cardData.type,
+    });
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { success: false, error: validationResult.error },
+        { status: 400 }
+      );
+    }
+
+    // Sanitize the validated data
+    const sanitizedData = sanitizeObjectServer(validationResult.data as any);
+
+    // Sanitize description if present
+    if (sanitizedData.description) {
+      sanitizedData.description = sanitizeRichContent(sanitizedData.description);
+    }
+
     // Transform data to match Supabase schema
     const supabaseCardData = {
-      title: cardData.name || cardData.title,
-      type: cardData.type,
-      description: cardData.description,
-      color: cardData.color || '#3B82F6',
-      icon: cardData.icon || 'code',
+      title: sanitizedData.title,
+      type: sanitizedData.type,
+      description: sanitizedData.description || '',
+      color: cardData.color || '#3B82F6', // Color is validated by format
+      icon: cardData.icon || 'code', // Icon is not sanitized as it's a symbol
       order_index: cardData.order || cardData.order_index || 0,
       is_active: cardData.isActive !== false,
     };

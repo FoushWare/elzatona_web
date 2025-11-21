@@ -11,7 +11,7 @@ import * as sharedContexts from '@elzatona/shared-contexts';
 
 // Mock shared contexts
 jest.mock('@elzatona/shared-contexts', () => {
-  const actual = jest.requireActual('../../../../test-utils/mocks/shared-contexts');
+  const actual = jest.requireActual('../../../test-utils/mocks/shared-contexts');
   return {
     ...actual,
     useAuth: jest.fn(),
@@ -119,8 +119,22 @@ describe('A-UT-SNAPSHOT: Admin User Management Snapshot Tests', () => {
       json: async () => ({
         success: true,
         users: [
-          { id: '1', email: 'user1@example.com', role: 'user' },
-          { id: '2', email: 'user2@example.com', role: 'admin' },
+          {
+            id: '1',
+            email: 'user1@example.com',
+            name: 'User One',
+            role: 'user',
+            is_active: true,
+            created_at: '2024-01-01',
+          },
+          {
+            id: '2',
+            email: 'user2@example.com',
+            name: 'User Two',
+            role: 'admin',
+            is_active: true,
+            created_at: '2024-01-02',
+          },
         ],
       }),
     });

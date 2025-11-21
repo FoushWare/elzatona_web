@@ -241,6 +241,41 @@ npm run test:integration -- libs/shared-components/src/lib/common/ProgressTracke
 npm run test:e2e:headed -- tests/e2e/shared-components/progress-tracker.spec.ts
 ```
 
+### UI Components Library (New - Vitest)
+
+**All UI Component Tests**
+```bash
+# Run all shared components tests
+nx test shared-components
+
+# Run in watch mode
+nx test shared-components --watch
+
+# Run with coverage
+nx test shared-components --coverage
+```
+
+**Specific Component Tests**
+```bash
+# Button component
+nx test shared-components -- button.test.tsx
+
+# Input component
+nx test shared-components -- input.test.tsx
+
+# Select component
+nx test shared-components -- select.test.tsx
+```
+
+**Storybook**
+```bash
+# Start Storybook (port 4400)
+nx storybook shared-components
+
+# Build Storybook
+nx build-storybook shared-components
+```
+
 ---
 
 ## 🔧 Useful Options
@@ -275,7 +310,9 @@ npm run test:e2e:headed -- tests/e2e/shared-components/progress-tracker.spec.ts
 --debug
 
 # Slow motion (see actions)
---slowMo=1000
+# Note: Playwright doesn't support --slowMo CLI flag
+# Configure slowMo in playwright.config.ts use section instead:
+# use: { slowMo: 1000 }
 
 # Specific browser
 --project=chromium

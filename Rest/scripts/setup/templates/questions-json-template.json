@@ -167,5 +167,35 @@
         "isCorrect": false
       }
     ]
+  },
+  {
+    "id": "advanced-code-example",
+    "title": "Advanced code question example",
+    "content": "Implement a debounce function that accepts a function and a delay, and returns a debounced version of the function.",
+    "type": "code",
+    "category": "JavaScript Core",
+    "subcategory": "Advanced Patterns",
+    "difficulty": "advanced",
+    "learningPath": "Advanced JavaScript Patterns",
+    "topic": "Debouncing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdBy": "admin",
+    "tags": ["javascript", "debounce", "advanced", "patterns"],
+    "explanation": "A debounce function delays the execution of a function until after a specified time has passed since it was last invoked. This is useful for optimizing performance in scenarios like search inputs or window resize events.",
+    "points": 15,
+    "timeLimit": 900,
+    "codeTemplate": "function debounce(func, delay) {\n  // Your implementation here\n  \n}",
+    "testCases": [
+      {
+        "input": "debounce(() => console.log('test'), 100)",
+        "expectedOutput": "Function that delays execution",
+        "description": "Should return a function that delays execution"
+      }
+    ],
+    "sampleAnswers": [
+      "function debounce(func, delay) { let timeoutId; return function(...args) { clearTimeout(timeoutId); timeoutId = setTimeout(() => func.apply(this, args), delay); }; }"
+    ]
   }
 ]

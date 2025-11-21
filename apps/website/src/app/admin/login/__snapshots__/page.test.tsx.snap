@@ -165,7 +165,7 @@ exports[`A-UT-SNAPSHOT: Admin Login Page Snapshot Tests should match admin login
               placeholder="Enter your email"
               required=""
               type="email"
-              value="admin@example.com"
+              value="test-admin@example.com"
             />
           </div>
           <div>
@@ -181,7 +181,7 @@ exports[`A-UT-SNAPSHOT: Admin Login Page Snapshot Tests should match admin login
               placeholder="Enter your password"
               required=""
               type="password"
-              value="password123"
+              value="test-password-123"
             />
           </div>
           <button

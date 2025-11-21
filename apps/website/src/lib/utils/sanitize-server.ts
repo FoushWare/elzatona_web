@@ -1,0 +1,157 @@
+/**
+ * Backend Sanitization Utilities
+ * Uses xss library to sanitize user inputs in API routes
+ */
+
+import xss from 'xss';
+
+/**
+ * XSS filter options - strict configuration
+ */
+const xssOptions: xss.IFilterXSSOptions = {
+  whiteList: {
+    // Allow only safe HTML tags
+    p: [],
+    br: [],
+    strong: [],
+    em: [],
+    u: [],
+    h1: [],
+    h2: [],
+    h3: [],
+    h4: [],
+    h5: [],
+    h6: [],
+    ul: [],
+    ol: [],
+    li: [],
+    a: ['href', 'target', 'rel'],
+    code: [],
+    pre: [],
+    blockquote: [],
+  },
+  stripIgnoreTag: true, // Remove tags not in whitelist
+  stripIgnoreTagBody: ['script'], // Remove script tag content
+  onTagAttr: (tag: string, name: string, value: string) => {
+    // Only allow safe attributes
+    if (name === 'href' && tag === 'a') {
+      // Validate URLs
+      if (value.startsWith('http://') || value.startsWith('https://')) {
+        return `${name}="${xss.escapeAttrValue(value)}"`;
+      }
+      return '';
+    }
+    if (name === 'target' && value === '_blank') {
+      return `${name}="${value}"`;
+    }
+    if (name === 'rel' && value === 'noopener noreferrer') {
+      return `${name}="${value}"`;
+    }
+    return '';
+  },
+};
+
+/**
+ * Sanitize HTML string on the server
+ * @param html - HTML string to sanitize
+ * @returns Sanitized HTML string
+ */
+export function sanitizeHTMLServer(html: string): string {
+  if (!html || typeof html !== 'string') {
+    return '';
+  }
+
+  const filter = new xss.FilterXSS(xssOptions);
+  return filter.process(html);
+}
+
+/**
+ * Sanitize plain text (removes all HTML)
+ * @param text - Text to sanitize
+ * @returns Plain text without HTML
+ */
+export function sanitizeTextServer(text: string): string {
+  if (!text || typeof text !== 'string') {
+    return '';
+  }
+
+  const filter = new xss.FilterXSS({
+    whiteList: {},
+    stripIgnoreTag: true,
+  });
+
+  return filter.process(text);
+}
+
+/**
+ * Sanitize user input for form fields
+ * Removes potentially dangerous characters and HTML
+ * @param input - User input string
+ * @returns Sanitized string
+ */
+export function sanitizeInputServer(input: string): string {
+  if (!input || typeof input !== 'string') {
+    return '';
+  }
+
+  // Remove null bytes and control characters
+  let sanitized = input.replace(/[\x00-\x1F\x7F]/g, '');
+
+  // Trim whitespace
+  sanitized = sanitized.trim();
+
+  // Remove HTML tags
+  sanitized = sanitizeTextServer(sanitized);
+
+  return sanitized;
+}
+
+/**
+ * Sanitize object with string values recursively
+ * @param obj - Object to sanitize
+ * @returns Sanitized object
+ */
+export function sanitizeObjectServer<T extends Record<string, any>>(obj: T): T {
+  if (!obj || typeof obj !== 'object') {
+    return obj;
+  }
+
+  const sanitized = { ...obj };
+
+  for (const key in sanitized) {
+    if (typeof sanitized[key] === 'string') {
+      sanitized[key] = sanitizeInputServer(sanitized[key]) as T[typeof key];
+    } else if (Array.isArray(sanitized[key])) {
+      sanitized[key] = sanitized[key].map((item: any) =>
+        typeof item === 'string' ? sanitizeInputServer(item) : item
+      ) as T[typeof key];
+    } else if (
+      sanitized[key] &&
+      typeof sanitized[key] === 'object' &&
+      !(sanitized[key] instanceof Date) &&
+      !Array.isArray(sanitized[key])
+    ) {
+      sanitized[key] = sanitizeObjectServer(sanitized[key]) as T[typeof key];
+    }
+  }
+
+  return sanitized;
+}
+
+/**
+ * Sanitize specific fields that may contain HTML (like explanations, descriptions)
+ * @param html - HTML content to sanitize
+ * @returns Sanitized HTML
+ */
+export function sanitizeRichContent(html: string): string {
+  if (!html || typeof html !== 'string') {
+    return '';
+  }
+
+  return sanitizeHTMLServer(html);
+}
+
+
+
+
+

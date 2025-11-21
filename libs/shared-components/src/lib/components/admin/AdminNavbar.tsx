@@ -116,36 +116,60 @@ export default function AdminNavbar() {
   if (isLoginPage) {
     return (
       <nav
-        className='fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gradient-to-r from-red-600 to-red-800 shadow-lg'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 shadow-lg backdrop-blur-sm ${
+          isClient && isDarkMode ? 'bg-red-700' : 'bg-red-600'
+        }`}
         suppressHydrationWarning
       >
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex justify-between items-center h-20'>
+          <div className='flex justify-between items-center h-20 gap-4'>
             {/* Logo */}
             <Link
               href='/'
-              className='flex items-center space-x-2 transition-colors duration-200 text-white hover:text-red-100'
+              className={`flex items-center space-x-2 transition-colors duration-200 flex-shrink-0 ${
+                isClient && isDarkMode
+                  ? 'text-white hover:text-red-100'
+                  : 'text-white hover:text-red-50'
+              }`}
+              aria-label='Go to home page'
             >
               <AlzatonaLogo size='sm' showText={false} forceDarkMode={false} />
             </Link>
 
-            {/* Center Title */}
-            <div className='flex-1 text-center'>
-              <h1 className='text-xl font-bold text-white'>
+            {/* Center Title - Hidden on mobile, visible on tablet+ */}
+            <div className='flex-1 text-center hidden md:block min-w-0'>
+              <h1
+                className={`text-lg sm:text-xl font-bold truncate ${
+                  isClient && isDarkMode
+                    ? 'text-white drop-shadow-sm'
+                    : 'text-white drop-shadow-md'
+                }`}
+              >
                 Admin Access Portal
               </h1>
-              <p className='text-sm text-red-100'>
+              <p
+                className={`text-xs sm:text-sm font-medium truncate ${
+                  isClient && isDarkMode
+                    ? 'text-red-50 drop-shadow-sm'
+                    : 'text-red-100 drop-shadow-sm'
+                }`}
+              >
                 Secure Authentication Required
               </p>
             </div>
 
             {/* Right Side Actions */}
-            <div className='flex items-center space-x-4'>
+            <div className='flex items-center space-x-2 sm:space-x-4 flex-shrink-0'>
               {/* Theme Toggle */}
               <button
                 onClick={toggleDarkMode}
-                className='p-2 rounded-lg transition-colors duration-200 bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                className={`p-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md hover:scale-105 active:scale-95 ${
+                  isClient && isDarkMode
+                    ? 'bg-white/25 text-white hover:bg-white/35 border border-white/40'
+                    : 'bg-white/30 text-white hover:bg-white/40 border border-white/50'
+                }`}
                 aria-label='Toggle theme'
+                title={isClient && isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
                 suppressHydrationWarning
               >
                 {isClient && isDarkMode ? (
@@ -158,9 +182,20 @@ export default function AdminNavbar() {
               {/* Back to Main Site */}
               <Link
                 href='/'
-                className='px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 text-center bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                className={`px-3 sm:px-4 py-2 rounded-lg font-semibold transition-all duration-200 hover:scale-105 active:scale-95 text-center shadow-sm hover:shadow-md whitespace-nowrap ${
+                  isClient && isDarkMode
+                    ? 'bg-white/25 text-white hover:bg-white/35 border border-white/40'
+                    : 'bg-white/30 text-white hover:bg-white/40 border border-white/50'
+                }`}
+                aria-label='Back to main site'
               >
-                <span className='text-sm'>Back to Site</span>
+                <span
+                  className={`text-xs sm:text-sm font-medium tracking-wide ${
+                    isClient && isDarkMode ? 'drop-shadow-sm' : 'drop-shadow-md'
+                  }`}
+                >
+                  Back to Site
+                </span>
               </Link>
             </div>
           </div>

@@ -1,13 +1,46 @@
 import '@testing-library/jest-dom';
+import { config } from 'dotenv';
+import { resolve } from 'path';
+
+// Load test-specific environment variables
+// Priority: .env.test.local > .env.test > .env.local > defaults
+const projectRoot = process.cwd();
+const envFiles = [
+  resolve(projectRoot, '.env.test.local'), // Highest priority - test overrides
+  resolve(projectRoot, '.env.test'),        // Test-specific defaults
+  resolve(projectRoot, '.env.local'),       // Fallback to dev (for backwards compatibility)
+];
+
+// Load environment files in priority order
+for (const envFile of envFiles) {
+  try {
+    config({ path: envFile, override: false }); // Don't override, respect priority
+  } catch (error) {
+    // File doesn't exist, that's okay
+  }
+}
+
+// FORCE TEST ENVIRONMENT for all tests
+// This ensures tests ALWAYS use test database, regardless of other settings
+process.env.APP_ENV = 'test';
+process.env.NEXT_PUBLIC_APP_ENV = 'test';
+process.env.NODE_ENV = 'test';
 
 // Set up environment variables before any module imports
 // This ensures supabase-client.ts and other modules have access to these values
+// Use test-specific values if available, otherwise fall back to safe defaults
 process.env.NEXT_PUBLIC_SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://test.supabase.co';
 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-anon-key';
 process.env.SUPABASE_SERVICE_ROLE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY || 'test-service-role-key';
+
+// Log which environment is being used (for debugging)
+if (process.env.DEBUG_TEST_ENV === 'true') {
+  console.log('[Jest Setup] Using Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 30) + '...');
+  console.log('[Jest Setup] Test environment files loaded');
+}
 
 // Polyfill for Web APIs needed by Next.js in Node.js test environment
 // Next.js requires these globals to be available

@@ -3,11 +3,37 @@
  * Task: A-002 - Admin Login
  */
 
+// Load environment variables from .env.local
+import { config } from 'dotenv';
+import { resolve } from 'path';
+config({ path: resolve(process.cwd(), '.env.local'), override: true });
+
+// Map existing env vars to ADMIN_EMAIL/ADMIN_PASSWORD if they don't exist
+// Priority: ADMIN_EMAIL > ADMAIN_EMAIL (typo fallback) > INITIAL_ADMIN_EMAIL > TEST_ADMIN_EMAIL
+if (!process.env.ADMIN_EMAIL) {
+  process.env.ADMIN_EMAIL = process.env.ADMAIN_EMAIL || process.env.INITIAL_ADMIN_EMAIL || process.env.TEST_ADMIN_EMAIL || '';
+}
+if (!process.env.ADMIN_PASSWORD) {
+  process.env.ADMIN_PASSWORD = process.env.INITIAL_ADMIN_PASSWORD || process.env.TEST_ADMIN_PASSWORD || '';
+}
+
+// Trim whitespace from environment variables (important for .env.local files)
+if (process.env.ADMIN_EMAIL) {
+  process.env.ADMIN_EMAIL = process.env.ADMIN_EMAIL.trim();
+}
+if (process.env.ADMIN_PASSWORD) {
+  process.env.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD.trim();
+}
+
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AdminLoginPage from './page';
 import { useAdminAuth } from '@elzatona/shared-contexts';
+
+// Get credentials from environment variables (no hardcoded fallbacks)
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 
 // Mock shared contexts
 jest.mock('@elzatona/shared-contexts', () => {
@@ -67,13 +93,13 @@ describe('A-IT-010: Login API Call', () => {
     const form = submitButton.closest('form');
     
     await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
+      fireEvent.change(emailInput, { target: { value: ADMIN_EMAIL } });
+      fireEvent.change(passwordInput, { target: { value: ADMIN_PASSWORD } });
       fireEvent.submit(form!);
     });
     
     await waitFor(() => {
-      expect(mockLogin).toHaveBeenCalledWith('admin@example.com', 'password123');
+      expect(mockLogin).toHaveBeenCalledWith(ADMIN_EMAIL, ADMIN_PASSWORD);
     });
   });
 
@@ -85,7 +111,7 @@ describe('A-IT-010: Login API Call', () => {
       isLoading: false,
       login: mockLogin,
       logout: jest.fn(),
-      user: { id: '1', email: 'admin@example.com', role: 'super_admin' },
+      user: { id: '1', email: ADMIN_EMAIL, role: 'super_admin' },
     });
     
     render(<AdminLoginPage />);
@@ -95,8 +121,8 @@ describe('A-IT-010: Login API Call', () => {
     const form = submitButton.closest('form');
     
     await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
+      fireEvent.change(emailInput, { target: { value: ADMIN_EMAIL } });
+      fireEvent.change(passwordInput, { target: { value: ADMIN_PASSWORD } });
       fireEvent.submit(form!);
     });
     
@@ -190,13 +216,13 @@ describe('A-IT-012: Session Management', () => {
     const form = submitButton.closest('form');
     
     await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
+      fireEvent.change(emailInput, { target: { value: ADMIN_EMAIL } });
+      fireEvent.change(passwordInput, { target: { value: ADMIN_PASSWORD } });
       fireEvent.submit(form!);
     });
     
     await waitFor(() => {
-      expect(mockLogin).toHaveBeenCalledWith('admin@example.com', 'password123');
+      expect(mockLogin).toHaveBeenCalledWith(ADMIN_EMAIL, ADMIN_PASSWORD);
     });
   });
 
@@ -221,7 +247,7 @@ describe('A-IT-012: Session Management', () => {
     
     // First submission - error
     await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
+      fireEvent.change(emailInput, { target: { value: ADMIN_EMAIL } });
       fireEvent.change(passwordInput, { target: { value: 'wrong' } });
       fireEvent.submit(form!);
     });
@@ -230,9 +256,9 @@ describe('A-IT-012: Session Management', () => {
       expect(screen.queryByText(/First error/i)).toBeInTheDocument();
     });
     
-    // Second submission - should clear error
+    // Second submission - should clear error (use correct password from env)
     await act(async () => {
-      fireEvent.change(passwordInput, { target: { value: 'correctpassword' } });
+      fireEvent.change(passwordInput, { target: { value: ADMIN_PASSWORD } });
       fireEvent.submit(form!);
     });
     

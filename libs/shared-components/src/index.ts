@@ -54,4 +54,5 @@ export {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
 } from './lib/ui/dialog';

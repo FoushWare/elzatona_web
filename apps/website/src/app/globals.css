@@ -78,6 +78,161 @@ html.light {
     --chart-5: 27 87% 67%;
   }
 
+  /* Dialog visibility fix - ensure content is visible when open */
+  [data-state='open'][role='dialog'],
+  [data-state='open'][data-radix-dialog-content],
+  div[data-state='open'][role='dialog'],
+  [data-radix-portal] [data-state='open'][role='dialog'] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: grid !important;
+    pointer-events: auto !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  
+  /* Force visibility for all dialog content when open - more specific */
+  [data-radix-portal] > div[data-state='open'] {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure dialog content has proper background and is always visible when open */
+  [role='dialog'][data-state='open'],
+  [data-radix-dialog-content][data-state='open'] {
+    background-color: white !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: grid !important;
+  }
+  
+  .dark [role='dialog'][data-state='open'],
+  .dark [data-radix-dialog-content][data-state='open'] {
+    background-color: rgb(17 24 39) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: grid !important;
+  }
+  
+  /* Override any animation that might hide the content */
+  [data-state='open'] {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Select dropdown visibility fix - ensure content is visible when open */
+  [data-radix-select-content],
+  [data-radix-select-content][data-state='open'],
+  [data-radix-select-content][data-state='closed'] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    pointer-events: auto !important;
+    z-index: 110 !important;
+    background-color: white !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Force SelectContent to match trigger width when using popper position */
+  [data-radix-select-content] {
+    width: var(--radix-select-trigger-width) !important;
+    min-width: var(--radix-select-trigger-width) !important;
+    max-width: var(--radix-select-trigger-width) !important;
+  }
+
+  /* Ensure the viewport also matches width */
+  [data-radix-select-viewport] {
+    width: 100% !important;
+    min-width: var(--radix-select-trigger-width) !important;
+  }
+
+  /* Dark mode select content background */
+  .dark [data-radix-select-content],
+  .dark [data-radix-select-content][data-state='open'],
+  .dark [data-radix-select-content][data-state='closed'] {
+    background-color: rgb(17 24 39) !important; /* gray-900 */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Ensure SelectContent appears above Dialog */
+  [data-radix-portal] [data-radix-select-content],
+  [data-radix-portal] [data-radix-select-content][data-state='open'] {
+    z-index: 110 !important;
+    background-color: white !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Dark mode select portal background */
+  .dark [data-radix-portal] [data-radix-select-content],
+  .dark [data-radix-portal] [data-radix-select-content][data-state='open'] {
+    background-color: rgb(17 24 39) !important; /* gray-900 */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Select viewport background - ensure no transparency */
+  [data-radix-select-viewport] {
+    background-color: white !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .dark [data-radix-select-viewport] {
+    background-color: rgb(17 24 39) !important; /* gray-900 */
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Select items background - ensure solid background */
+  [data-radix-select-item] {
+    background-color: transparent !important;
+    opacity: 1 !important;
+  }
+
+  [data-radix-select-item]:hover {
+    background-color: rgb(249 250 251) !important; /* gray-50 */
+    opacity: 1 !important;
+  }
+
+  .dark [data-radix-select-item]:hover {
+    background-color: rgb(31 41 55) !important; /* gray-800 */
+    opacity: 1 !important;
+  }
+
+  [data-radix-select-item][data-highlighted],
+  [data-radix-select-item][data-state='checked'] {
+    background-color: rgb(239 246 255) !important; /* blue-50 */
+    opacity: 1 !important;
+  }
+
+  .dark [data-radix-select-item][data-highlighted],
+  .dark [data-radix-select-item][data-state='checked'] {
+    background-color: rgb(30 58 138 / 0.2) !important; /* blue-900/20 */
+    opacity: 1 !important;
+  }
+
+  /* Force all select content children to be opaque */
+  [data-radix-select-content] * {
+    opacity: 1 !important;
+  }
+
+  /* Ensure text is visible */
+  [data-radix-select-content],
+  [data-radix-select-content] * {
+    color: rgb(17 24 39) !important; /* gray-900 */
+  }
+
+  .dark [data-radix-select-content],
+  .dark [data-radix-select-content] * {
+    color: rgb(243 244 246) !important; /* gray-100 */
+  }
+
   .dark {
     /* Enhanced Dark Mode Colors */
     --background: 0 0% 3.9%;
@@ -318,7 +473,8 @@ html.light {
   /* Enhanced Dropdown Styling */
   .dropdown-menu {
     @apply bg-background border border-border shadow-lg rounded-md;
-    backdrop-filter: blur(12px);
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   .dropdown-item {

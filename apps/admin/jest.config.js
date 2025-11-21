@@ -9,6 +9,14 @@ const createJestConfig = nextJest({
 const config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
+  // Performance optimizations for 8GB RAM Mac M2
+  maxWorkers: process.env.JEST_MAX_WORKERS 
+    ? parseInt(process.env.JEST_MAX_WORKERS) 
+    : 1, // Default to 1 worker for 8GB RAM
+  workerIdleMemoryLimit: '512MB', // Kill workers that exceed this memory
+  cache: process.env.JEST_NO_CACHE !== 'true',
+  cacheDirectory: '<rootDir>/.jest-cache',
+  ...(process.env.JEST_RUN_IN_BAND === 'true' ? { runInBand: true } : {}),
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 };

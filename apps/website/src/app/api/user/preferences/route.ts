@@ -9,6 +9,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 import { cookies } from 'next/headers';
 import { verifySupabaseToken } from '../../../../lib/server-auth';
 import { UserPreferences } from '../../../../types/firestore';
+import { sanitizeObjectServer } from '../../../../lib/utils/sanitize-server';
 
 export async function GET(request: NextRequest) {
   try {
@@ -88,11 +89,14 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    // Sanitize preferences data
+    const sanitizedPreferences = sanitizeObjectServer(preferences);
+
     // Update user preferences in Supabase
     const { error } = await supabase
       .from('users')
       .update({
-        preferences: preferences,
+        preferences: sanitizedPreferences,
         updated_at: new Date().toISOString(),
       })
       .eq('id', decodedToken.id);
