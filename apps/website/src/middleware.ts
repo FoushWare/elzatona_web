@@ -25,11 +25,12 @@ export function middleware(request: NextRequest) {
   // Add Content Security Policy headers
   const cspHeader = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live",
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com data:",
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://cdn.jsdelivr.net",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net",
+    "font-src 'self' https://fonts.gstatic.com data: https://cdn.jsdelivr.net",
     "img-src 'self' data: https: blob:",
-    "connect-src 'self' https://*.supabase.co https://*.vercel.app wss://*.supabase.co",
+    "connect-src 'self' https://*.supabase.co https://*.vercel.app wss://*.supabase.co https://cdn.jsdelivr.net",
+    "worker-src 'self' blob:",
     "frame-src 'self' https://vercel.live",
     "object-src 'none'",
     "base-uri 'self'",

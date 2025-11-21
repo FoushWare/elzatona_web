@@ -3,11 +3,14 @@
  * Task: G-001, G-002 - Complete flow from homepage through guided learning
  * 
  * Tests the complete user journey:
- * 1. Homepage → Get Started
+ * 1. Homepage → Choose Learning Plan (default for unauthenticated users)
  * 2. Get Started → Select "I need guidance"
  * 3. Navigate to Guided Learning page
  * 4. Select a learning plan
  * 5. Navigate to plan details/practice
+ * 
+ * IMPORTANT: UserTypeContext defaults to 'guided' for unauthenticated users.
+ * This means the homepage CTA button is "Choose Learning Plan" (not "Get Started").
  */
 
 import { test, expect } from '@playwright/test';
@@ -22,8 +25,9 @@ test.describe('G-E2E-004: Complete Guided Flow', () => {
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1500); // Additional wait for React hydration and context initialization
     
-    // Clear localStorage and explicitly remove userType to ensure "Get Started" button appears
-    // If userType defaults to 'guided', the button will be "Choose Learning Plan" instead
+    // Clear localStorage - UserTypeContext will default to 'guided' for unauthenticated users
+    // This means the homepage will show "Choose Learning Plan" button (not "Get Started")
+    // This is the expected default behavior for unauthenticated users
     // Use a helper function that checks for page context availability
     const clearLocalStorage = async () => {
       try {

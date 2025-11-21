@@ -8,6 +8,12 @@
  * - Learning style selection interactions
  * - localStorage interactions
  * - Active plan management
+ * 
+ * IMPORTANT: UserTypeContext defaults to 'guided' for unauthenticated users.
+ * This means:
+ * - Default state (no localStorage) = userType: 'guided' (not null)
+ * - Final CTA section only shows when userType is explicitly null (rare)
+ * - "Choose Learning Plan" button appears for guided users (not "Get Started")
  */
 
 import React from 'react';
@@ -123,21 +129,59 @@ describe('G-IT-001: Navigation Flows', () => {
     clearLocalStorage();
   });
 
-  it('should navigate to /get-started when default CTA button is clicked', () => {
+  it('should navigate to /get-started when "Choose Learning Plan" button is clicked (default guided state)', () => {
+    // Default state for unauthenticated users is 'guided'
+    render(<HomePage />);
+    jest.advanceTimersByTime(2000);
+    
+    // "Choose Learning Plan" button appears for guided users (default)
+    const choosePlanLink = screen.getByRole('link', { name: /Choose Learning Plan/i });
+    expect(choosePlanLink).toHaveAttribute('href', '/get-started');
+    
+    // "Get Started" button should NOT appear when userType is "guided"
+    const getStartedButtons = screen.queryAllByRole('link', { name: /Get Started/i });
+    expect(getStartedButtons.length).toBe(0);
+    
+    // Final CTA section should NOT appear (only shows when userType is null)
+    expect(screen.queryByText(/Ready to Ace Your Interviews\? 🚀/i)).not.toBeInTheDocument();
+  });
+
+  it('should navigate to /get-started when "Get Started" button is clicked (userType null - rare case)', () => {
+    // This is a rare case since UserTypeContext defaults to 'guided'
+    (sharedContexts.useUserType as jest.Mock).mockReturnValue({
+      userType: null,
+      setUserType: jest.fn(),
+    });
+    
     render(<HomePage />);
     
     const getStartedLink = screen.getByRole('link', { name: /Get Started/i });
     expect(getStartedLink).toHaveAttribute('href', '/get-started');
+    
+    // Final CTA section should appear when userType is null
+    expect(screen.getByText(/Ready to Ace Your Interviews\? 🚀/i)).toBeInTheDocument();
   });
 
-  it('should navigate to /get-started when "Start Learning Now" is clicked', () => {
+  it('should navigate to /get-started when "Start Learning Now" is clicked (userType null - rare case)', () => {
+    // This is a rare case since UserTypeContext defaults to 'guided'
+    (sharedContexts.useUserType as jest.Mock).mockReturnValue({
+      userType: null,
+      setUserType: jest.fn(),
+    });
+    
     render(<HomePage />);
     
     const startLearningLink = screen.getByRole('link', { name: /Start Learning Now/i });
     expect(startLearningLink).toHaveAttribute('href', '/get-started');
   });
 
-  it('should navigate to /learn when "Explore Learning Paths" is clicked', () => {
+  it('should navigate to /learn when "Explore Learning Paths" is clicked (userType null - rare case)', () => {
+    // This is a rare case since UserTypeContext defaults to 'guided'
+    (sharedContexts.useUserType as jest.Mock).mockReturnValue({
+      userType: null,
+      setUserType: jest.fn(),
+    });
+    
     render(<HomePage />);
     
     const learnLink = screen.getByRole('link', { name: /Explore Learning Paths/i });
@@ -217,8 +261,9 @@ describe('G-IT-002: Learning Style Selection Interactions', () => {
     clearLocalStorage();
     
     mockSetUserType = jest.fn();
+    // UserTypeContext defaults to 'guided' for unauthenticated users
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
-      userType: null,
+      userType: 'guided', // Default for unauthenticated users
       setUserType: mockSetUserType,
     });
     
@@ -332,15 +377,17 @@ describe('G-IT-003: User Type Changes and Content Updates', () => {
     // Setup localStorage without userType
     setupLocalStorage({});
     
-    const { rerender } = render(<HomePage />);
-    
-    // Initial state - no user type
+    // Initial state - userType is null (rare case)
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
       userType: null,
       setUserType: mockSetUserType,
     });
     
+    const { rerender } = render(<HomePage />);
+    
     expect(screen.getByText(/Master Frontend Development/i)).toBeInTheDocument();
+    // Final CTA section should appear when userType is null
+    expect(screen.getByText(/Ready to Ace Your Interviews\? 🚀/i)).toBeInTheDocument();
     
     // Change to guided user and update localStorage
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
@@ -353,11 +400,13 @@ describe('G-IT-003: User Type Changes and Content Updates', () => {
     });
     
     rerender(<HomePage />);
-    jest.advanceTimersByTime(1000);
+    jest.advanceTimersByTime(2000);
     
     await waitFor(() => {
       const titles = screen.getAllByText(/Master Frontend Development/i);
       expect(titles.length).toBeGreaterThan(0);
+      // Final CTA section should NOT appear when userType is "guided"
+      expect(screen.queryByText(/Ready to Ace Your Interviews\? 🚀/i)).not.toBeInTheDocument();
     });
   });
 
@@ -505,9 +554,9 @@ describe('G-IT-004: Active Plan Detection and Display', () => {
     });
     
     const { unmount } = render(<HomePage />);
-    jest.advanceTimersByTime(1000);
+    jest.advanceTimersByTime(2000);
     
-    const titles = screen.getAllByText(/Start Your Learning Path/i);
+    const titles = screen.getAllByText(/Master Frontend Development/i);
     expect(titles.length).toBeGreaterThan(0);
     
     // Simulate adding active plan to localStorage
@@ -574,9 +623,10 @@ describe('G-IT-005: Authentication State Integration', () => {
     clearLocalStorage();
   });
 
-  it('should show default content for unauthenticated users', () => {
+  it('should show guided content for unauthenticated users (default behavior)', () => {
+    // UserTypeContext defaults to 'guided' for unauthenticated users
     (sharedContexts.useUserType as jest.Mock).mockReturnValue({
-      userType: null,
+      userType: 'guided', // Default for unauthenticated users
       setUserType: jest.fn(),
     });
     
@@ -585,10 +635,26 @@ describe('G-IT-005: Authentication State Integration', () => {
       user: null,
     });
     
-    render(<HomePage />);
+    // Setup localStorage with guided userType (default behavior)
+    setupLocalStorage({
+      'userType': 'guided',
+    });
     
-    expect(screen.getByText(/Master Frontend Development/i)).toBeInTheDocument();
-    expect(screen.getByText(/The complete platform to ace your frontend interviews/i)).toBeInTheDocument();
+    render(<HomePage />);
+    jest.advanceTimersByTime(2000);
+    
+    // Should show guided content
+    const titles = screen.getAllByText(/Master Frontend Development/i);
+    expect(titles.length).toBeGreaterThan(0);
+    const subtitles = screen.getAllByText(/The complete platform to ace your frontend interviews/i);
+    expect(subtitles.length).toBeGreaterThan(0);
+    
+    // Should show "Choose Learning Plan" button (not "Get Started")
+    const ctaButtons = screen.getAllByRole('link', { name: /Choose Learning Plan/i });
+    expect(ctaButtons.length).toBeGreaterThan(0);
+    
+    // Final CTA section should NOT appear (only shows when userType is null)
+    expect(screen.queryByText(/Ready to Ace Your Interviews\? 🚀/i)).not.toBeInTheDocument();
   });
 
   it('should show personalized content for authenticated guided users', () => {
@@ -608,9 +674,9 @@ describe('G-IT-005: Authentication State Integration', () => {
     });
     
     render(<HomePage />);
-    jest.advanceTimersByTime(1000);
+    jest.advanceTimersByTime(2000);
     
-    const titles = screen.getAllByText(/Start Your Learning Path/i);
+    const titles = screen.getAllByText(/Master Frontend Development/i);
     expect(titles.length).toBeGreaterThan(0);
   });
 
