@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`S-UT-SNAPSHOT: Navigation Component Snapshot Tests should match navigation snapshot (dark mode) 1`] = `
+<nav
+  class="bg-white dark:bg-gray-900 shadow-lg"
+>
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+  >
+    <div
+      class="flex justify-between h-16"
+    >
+      <div
+        class="flex items-center"
+      >
+        <a
+          href="/"
+        >
+          <div
+            class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3"
+          >
+            <span
+              class="text-white font-bold text-sm"
+            >
+              E
+            </span>
+          </div>
+          <span
+            class="text-xl font-bold text-gray-900 dark:text-white"
+          >
+            Elzatona
+          </span>
+        </a>
+      </div>
+      <div
+        class="flex items-center space-x-4"
+      >
+        <a
+          href="/features/guided-learning"
+        >
+          Guided Learning
+        </a>
+        <a
+          href="/practice"
+        >
+          Practice
+        </a>
+        <a
+          href="/questions"
+        >
+          Questions
+        </a>
+        <a
+          href="/resources"
+        >
+          Resources
+        </a>
+        <button
+          aria-label="Toggle dark mode"
+          class="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+        >
+          <svg
+            class="w-5 h-5 text-gray-700 dark:text-gray-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+`;
+
+exports[`S-UT-SNAPSHOT: Navigation Component Snapshot Tests should match navigation snapshot (light mode) 1`] = `
+<nav
+  class="bg-white dark:bg-gray-900 shadow-lg"
+>
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+  >
+    <div
+      class="flex justify-between h-16"
+    >
+      <div
+        class="flex items-center"
+      >
+        <a
+          href="/"
+        >
+          <div
+            class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3"
+          >
+            <span
+              class="text-white font-bold text-sm"
+            >
+              E
+            </span>
+          </div>
+          <span
+            class="text-xl font-bold text-gray-900 dark:text-white"
+          >
+            Elzatona
+          </span>
+        </a>
+      </div>
+      <div
+        class="flex items-center space-x-4"
+      >
+        <a
+          href="/features/guided-learning"
+        >
+          Guided Learning
+        </a>
+        <a
+          href="/practice"
+        >
+          Practice
+        </a>
+        <a
+          href="/questions"
+        >
+          Questions
+        </a>
+        <a
+          href="/resources"
+        >
+          Resources
+        </a>
+        <button
+          aria-label="Toggle dark mode"
+          class="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+        >
+          <svg
+            class="w-5 h-5 text-gray-700 dark:text-gray-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+`;

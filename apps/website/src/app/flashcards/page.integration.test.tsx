@@ -50,7 +50,7 @@ describe('F-IT-010: Filtering Integration', () => {
   it('should integrate theme and difficulty filtering', () => {
     render(<FlashcardsPage />);
     // Filtering should work
-    expect(screen.getByText(/.*/)).toBeTruthy();
+    expect(screen.getByText('Flashcards')).toBeInTheDocument();
   });
 });
 
@@ -62,7 +62,7 @@ describe('F-IT-011: Practice Modes Integration', () => {
   it('should integrate practice mode switching', () => {
     render(<FlashcardsPage />);
     // Mode switching should work
-    expect(screen.getByText(/.*/)).toBeTruthy();
+    expect(screen.getByText('Flashcards')).toBeInTheDocument();
   });
 });
 

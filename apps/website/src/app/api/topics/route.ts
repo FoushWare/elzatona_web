@@ -1,8 +1,10 @@
 // Topics API Route
-// v2.0 - Enhanced topic management
+// v2.1 - Enhanced topic management with input sanitization
 
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseOperations } from '../../../lib/supabase-server';
+import { sanitizeObjectServer } from '../../../lib/utils/sanitize-server';
+import { validateAndSanitize, topicSchema } from '../../../lib/utils/validation';
 
 // GET /api/topics - Get all topics
 export async function GET() {
@@ -60,28 +62,30 @@ export async function POST(request: NextRequest) {
     const topicData = await request.json();
     console.log('🔄 API: Creating topic with data:', topicData);
 
-    // Validate required fields
-    const requiredFields = ['name', 'description'];
-    for (const field of requiredFields) {
-      if (!topicData[field]) {
-        console.error('❌ API: Missing required field:', field);
-        return NextResponse.json(
-          {
-            success: false,
-            error: `Missing required field: ${field}`,
-          },
-          { status: 400 }
-        );
-      }
+    // Validate and sanitize topic data
+    const validationResult = validateAndSanitize(topicSchema, topicData);
+    
+    if (!validationResult.success) {
+      console.error('❌ API: Validation failed:', validationResult.error);
+      return NextResponse.json(
+        {
+          success: false,
+          error: validationResult.error,
+        },
+        { status: 400 }
+      );
     }
+
+    // Sanitize the validated data
+    const sanitizedData = sanitizeObjectServer(validationResult.data as any);
 
     console.log('✅ API: All required fields present, creating topic...');
 
     // Transform data to match Supabase schema
     const supabaseTopicData = {
-      name: topicData.name,
-      description: topicData.description,
-      category_id: topicData.category || topicData.categoryId || null,
+      name: sanitizedData.name,
+      description: sanitizedData.description || '',
+      category_id: sanitizedData.categoryId,
       order_index: topicData.orderIndex || 0,
       is_active: topicData.isActive !== false,
     };
