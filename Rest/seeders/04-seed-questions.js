@@ -20,23 +20,178 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Question files mapping
-const questionFiles = {
-  'HTML': 'html-questions.json',
-  'CSS': 'css-questions.json',
-  'JavaScript': 'javascript-questions.json',
-  'React': 'react-questions.json',
-  'Next.js': 'nextjs-questions.json',
-  'Design Patterns': 'design-patterns-questions.json',
-  'Performance Patterns': 'performance-patterns-questions.json',
-  'Rendering Patterns': 'rendering-patterns-questions.json',
-  'Security': 'security-questions.json',
-  'System Design': 'system-design-questions.json',
-  'Frontend Tasks': 'frontend-tasks-questions.json',
-  'Problem Solving': 'problem-solving-questions.json'
+const BATCH_SIZE = 50; // Process questions in batches
+
+// Category name mapping from filename
+const categoryNameMap = {
+  'html-questions.json': 'HTML',
+  'css-questions.json': 'CSS',
+  'javascript-questions.json': 'JavaScript',
+  'react-questions.json': 'React',
+  'nextjs-questions.json': 'Next.js',
+  'design-patterns-questions.json': 'Design Patterns',
+  'performance-patterns-questions.json': 'Performance Patterns',
+  'rendering-patterns-questions.json': 'Rendering Patterns',
+  'security-questions.json': 'Security',
+  'system-design-questions.json': 'System Design',
+  'frontend-tasks-questions.json': 'Frontend Tasks',
+  'problem-solving-questions.json': 'Problem Solving'
 };
 
-const BATCH_SIZE = 50; // Process questions in batches
+/**
+ * Auto-discover all question files in final-questions-v01
+ */
+function discoverQuestionFiles() {
+  const questionsDir = path.join(__dirname, '../final-questions-v01');
+  const questionFiles = [];
+  
+  // Files to exclude
+  const excludeFiles = ['topics.json', 'reference.md'];
+  const excludeDirs = ['topics', 'javascript', 'react']; // Exclude nested dirs for now
+  
+  function scanDirectory(dir, relativePath = '') {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      const relativeFilePath = relativePath ? path.join(relativePath, entry.name) : entry.name;
+      
+      if (entry.isDirectory()) {
+        // Skip excluded directories
+        if (!excludeDirs.includes(entry.name)) {
+          scanDirectory(fullPath, relativeFilePath);
+        }
+      } else if (entry.isFile()) {
+        // Look for *-questions.json files
+        if (entry.name.endsWith('-questions.json') && !excludeFiles.includes(entry.name)) {
+          const categoryName = categoryNameMap[entry.name] || extractCategoryFromFilename(entry.name);
+          questionFiles.push({
+            categoryName,
+            fileName: entry.name,
+            filePath: fullPath,
+            relativePath: relativeFilePath
+          });
+        }
+      }
+    }
+  }
+  
+  scanDirectory(questionsDir);
+  
+  return questionFiles;
+}
+
+/**
+ * Extract category name from filename
+ * e.g., "html-questions.json" -> "HTML"
+ */
+function extractCategoryFromFilename(filename) {
+  // Remove -questions.json suffix
+  let category = filename.replace(/-questions\.json$/, '');
+  
+  // Convert kebab-case to Title Case
+  category = category
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+  
+  return category;
+}
+
+/**
+ * Detect question format and normalize to standard format
+ */
+function normalizeQuestion(question, index, categoryName) {
+  // Check if it's already in standard format (has id, title, content, type, category)
+  if (question.id && question.title && question.content !== undefined && question.type) {
+    return question; // Already in standard format
+  }
+  
+  // Check if it's in parsed format (has num, title, code, options, correctAnswer, explanation)
+  if (question.num !== undefined && question.title && (question.code !== undefined || question.explanation !== undefined)) {
+    // Convert parsed format to standard format
+    const id = question.id || `${categoryName.toLowerCase().replace(/\s+/g, '-')}-${String(index + 1).padStart(3, '0')}-${question.num || index + 1}`;
+    
+    // Format content with code examples
+    let content = question.explanation || question.title;
+    if (question.code) {
+      const codeHtml = `<pre><code>${escapeHtml(question.code)}</code></pre>`;
+      content = question.explanation ? `${codeHtml}\n\n${question.explanation}` : codeHtml;
+    }
+    
+    // Convert options format if present
+    let options = null;
+    if (question.options && typeof question.options === 'object') {
+      // Check if it's in {A: "...", B: "..."} format
+      if (question.options.A || question.options.B) {
+        options = Object.entries(question.options).map(([key, text], idx) => ({
+          id: `o${idx + 1}`,
+          text: String(text),
+          isCorrect: key === question.correctAnswer,
+          explanation: ''
+        }));
+      } else if (Array.isArray(question.options)) {
+        // Already in array format
+        options = question.options;
+      }
+    }
+    
+    return {
+      id,
+      title: question.title,
+      content: content || question.title,
+      type: options ? 'multiple-choice' : 'open-ended',
+      category: categoryName,
+      topic: question.topic || question.section || null,
+      difficulty: question.difficulty || 'intermediate',
+      learningCardId: question.learningCardId || 'framework-questions',
+      isActive: question.isActive !== false,
+      explanation: question.explanation || '',
+      points: question.points || 10,
+      options: options,
+      hints: question.hints || [],
+      tags: question.tags || [categoryName.toLowerCase()],
+      metadata: {
+        ...(question.metadata || {}),
+        source: question.metadata?.source || 'parsed',
+        originalNum: question.num || index + 1
+      }
+    };
+  }
+  
+  // Unknown format - try to create minimal standard format
+  console.warn(`  ⚠️  Unknown question format at index ${index}, attempting to normalize...`);
+  return {
+    id: question.id || `${categoryName.toLowerCase().replace(/\s+/g, '-')}-${String(index + 1).padStart(3, '0')}`,
+    title: question.title || `Question ${index + 1}`,
+    content: question.content || question.explanation || question.title || '',
+    type: question.type || (question.options ? 'multiple-choice' : 'open-ended'),
+    category: categoryName,
+    topic: question.topic || null,
+    difficulty: question.difficulty || 'intermediate',
+    learningCardId: question.learningCardId || 'framework-questions',
+    isActive: question.isActive !== false,
+    explanation: question.explanation || '',
+    points: question.points || 10,
+    options: question.options || null,
+    hints: question.hints || [],
+    tags: question.tags || [categoryName.toLowerCase()],
+    metadata: question.metadata || {}
+  };
+}
+
+/**
+ * Escape HTML special characters
+ */
+function escapeHtml(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
 async function seedQuestions() {
   console.log('🔄 Seeding Questions...\n');
@@ -75,18 +230,42 @@ async function seedQuestions() {
   let totalUpdated = 0;
   let totalErrors = 0;
 
-  for (const [categoryName, fileName] of Object.entries(questionFiles)) {
-    const filePath = path.join(__dirname, '../final-questions-v01', fileName);
+  // Auto-discover question files
+  const questionFiles = discoverQuestionFiles();
+  console.log(`\n🔍 Discovered ${questionFiles.length} question files:\n`);
+  questionFiles.forEach(file => {
+    console.log(`  📄 ${file.fileName} → ${file.categoryName}`);
+  });
+
+  for (const fileInfo of questionFiles) {
+    const { categoryName, fileName, filePath } = fileInfo;
     
     if (!fs.existsSync(filePath)) {
-      console.log(`  ⚠️  File not found: ${fileName}`);
+      console.log(`\n  ⚠️  File not found: ${fileName}`);
       continue;
     }
 
-    console.log(`\n📖 Processing ${categoryName}...`);
+    console.log(`\n📖 Processing ${categoryName} (${fileName})...`);
     
     try {
-      const questions = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      let questions = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      
+      // Handle empty files
+      if (!questions || (Array.isArray(questions) && questions.length === 0)) {
+        console.log(`  ⚠️  File is empty, skipping...`);
+        continue;
+      }
+      
+      // Ensure questions is an array
+      if (!Array.isArray(questions)) {
+        console.log(`  ⚠️  File does not contain an array, skipping...`);
+        continue;
+      }
+      
+      // Normalize questions to standard format
+      console.log(`  🔄 Normalizing ${questions.length} questions...`);
+      questions = questions.map((q, index) => normalizeQuestion(q, index, categoryName));
+      
       const categoryId = categoryMap[categoryName];
       const learningCardId = questions[0]?.learningCardId ? cardMap[questions[0].learningCardId] : null;
 
@@ -158,7 +337,8 @@ async function seedQuestions() {
             const metadata = {
               ...(question.metadata || {}),
               original_id: question.id || null,
-              source_file: fileName
+              source_file: fileName,
+              category: categoryName
             };
 
             const questionData = {

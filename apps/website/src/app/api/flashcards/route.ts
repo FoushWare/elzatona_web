@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { sanitizeObjectServer, sanitizeRichContent } from '../../../lib/utils/sanitize-server';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -49,16 +50,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const now = new Date();
-    const nextReview = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 1 day from now
-
-    const flashcard: Omit<Flashcard, 'id'> = {
+    // Sanitize all string inputs
+    const sanitizedData = sanitizeObjectServer({
       userId,
-      question_id: questionId,
+      questionId,
       question,
       answer,
       explanation: explanation || '',
       category: category || 'General',
+      tags: Array.isArray(tags) ? tags.map((tag: any) => typeof tag === 'string' ? sanitizeObjectServer({ tag }).tag : tag) : [],
+    });
+
+    // Sanitize rich content fields
+    const sanitizedQuestion = sanitizeRichContent(sanitizedData.question);
+    const sanitizedAnswer = sanitizeRichContent(sanitizedData.answer);
+    const sanitizedExplanation = sanitizedData.explanation ? sanitizeRichContent(sanitizedData.explanation) : '';
+
+    const now = new Date();
+    const nextReview = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 1 day from now
+
+    const flashcard: Omit<Flashcard, 'id'> = {
+      userId: sanitizedData.userId,
+      question_id: sanitizedData.questionId,
+      question: sanitizedQuestion,
+      answer: sanitizedAnswer,
+      explanation: sanitizedExplanation,
+      category: sanitizedData.category,
       difficulty,
       status: 'new',
       interval: 1, // Start with 1 day
@@ -68,7 +85,7 @@ export async function POST(request: NextRequest) {
       nextReview: nextReview.toISOString(),
       created_at: now.toISOString(),
       updated_at: now.toISOString(),
-      tags,
+      tags: sanitizedData.tags,
       source,
     };
 

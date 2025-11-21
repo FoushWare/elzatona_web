@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { UserAuthService } from '../../../lib/user-auth';
+import { sanitizeObjectServer } from '../../../lib/utils/sanitize-server';
 
 export async function GET(request: NextRequest) {
   try {
@@ -27,7 +28,8 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { userId, preferences, progress } = await request.json();
+    const body = await request.json();
+    const { userId, preferences, progress } = body;
 
     if (!userId) {
       return NextResponse.json(
@@ -36,17 +38,24 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    // Sanitize user ID
+    const sanitizedUserId = sanitizeObjectServer({ userId }).userId;
+
     let success = false;
 
     if (preferences) {
+      // Sanitize preferences object
+      const sanitizedPreferences = sanitizeObjectServer(preferences);
       success = await UserAuthService.updateUserPreferences(
-        userId,
-        preferences
+        sanitizedUserId,
+        sanitizedPreferences
       );
     }
 
     if (progress) {
-      success = await UserAuthService.updateUserProgress(userId, progress);
+      // Sanitize progress object
+      const sanitizedProgress = sanitizeObjectServer(progress);
+      success = await UserAuthService.updateUserProgress(sanitizedUserId, sanitizedProgress);
     }
 
     if (success) {

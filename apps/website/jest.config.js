@@ -39,6 +39,8 @@ const config = {
     '^@elzatona/shared-hooks$':
       '<rootDir>/../../libs/shared-hooks/src/index.ts',
     '^lucide-react$': '<rootDir>/src/test-utils/mocks/lucide-react.tsx',
+    // Mock nuqs to avoid ESM issues in tests
+    '^nuqs$': '<rootDir>/src/test-utils/mocks/nuqs.ts',
   },
   // Include tests from root tests directory, but exclude e2e tests (Playwright)
   // Note: testPathIgnorePatterns handles the exclusion, so we keep testMatch simple

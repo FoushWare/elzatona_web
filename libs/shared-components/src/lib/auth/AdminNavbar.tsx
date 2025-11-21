@@ -140,12 +140,12 @@ export default function AdminNavbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-[101] transition-all duration-300 ${
         isOpen
-          ? 'bg-red-600 dark:bg-red-800 shadow-xl'
+          ? 'bg-red-600 dark:bg-red-800 shadow-xl border-b-2 border-red-700 dark:border-red-900'
           : isScrolled
-            ? 'bg-gray-100 dark:bg-gray-900/98 backdrop-blur-lg shadow-xl border-b-2 border-gray-300 dark:border-gray-700'
+            ? 'bg-gray-100 dark:bg-gray-800/95 backdrop-blur-lg shadow-xl border-b-2 border-gray-300 dark:border-gray-600'
             : isDarkMode
-              ? 'bg-gradient-to-r from-red-600 to-red-800'
-              : 'bg-red-600'
+              ? 'bg-gradient-to-r from-red-600 to-red-800 border-b-2 border-red-700/50 shadow-lg'
+              : 'bg-red-600 border-b-2 border-red-700/30'
       }`}
     >
       <div className='w-full px-4 sm:px-6 lg:px-8'>
@@ -175,7 +175,7 @@ export default function AdminNavbar() {
                 }}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                   isScrolled
-                    ? 'text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'text-gray-700 dark:text-white hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
                     : 'text-white hover:text-red-100 hover:bg-red-700/50'
                 }`}
               >
@@ -239,7 +239,7 @@ export default function AdminNavbar() {
                 isOpen
                   ? 'text-white hover:text-red-100 hover:bg-red-700/50'
                   : isScrolled
-                    ? 'text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'text-gray-700 dark:text-white hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
                     : 'text-white hover:text-red-100 hover:bg-red-700/50'
               }`}
               title='Toggle theme'
@@ -263,7 +263,7 @@ export default function AdminNavbar() {
                     isOpen
                       ? 'text-white hover:text-red-100 hover:bg-red-700/50'
                       : isScrolled
-                        ? 'text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                        ? 'text-gray-700 dark:text-white hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
                         : 'text-white hover:text-red-100 hover:bg-red-700/50'
                   }`}
                 >
@@ -327,7 +327,7 @@ export default function AdminNavbar() {
                 isOpen
                   ? 'bg-white text-red-600 hover:bg-white/90 shadow-lg'
                   : isScrolled
-                    ? 'text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'text-gray-700 dark:text-white hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
                     : 'text-white hover:text-red-100 hover:bg-red-700/50'
               }`}
               aria-label={isOpen ? 'Close menu' : 'Open menu'}

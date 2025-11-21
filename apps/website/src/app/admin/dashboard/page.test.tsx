@@ -53,6 +53,8 @@ jest.mock('lucide-react', () => ({
   Calculator: () => <span>🔢</span>,
   BarChart3: () => <span>📊</span>,
   FolderOpen: () => <span>📁</span>,
+  Folder: () => <span>📁</span>,
+  Tag: () => <span>🏷️</span>,
   Users: () => <span>👥</span>,
   Database: () => <span>🗄️</span>,
   TrendingUp: () => <span>📈</span>,
@@ -132,6 +134,16 @@ describe('A-UT-012: Stats Display', () => {
   it('should display learning plans stat', () => {
     render(<AdminDashboard />);
     expect(screen.getByText(/Learning Plans/i)).toBeInTheDocument();
+  });
+
+  it('should display topics stat', () => {
+    render(<AdminDashboard />);
+    expect(screen.getByText(/^Topics$/i)).toBeInTheDocument();
+  });
+
+  it('should display categories stat', () => {
+    render(<AdminDashboard />);
+    expect(screen.getByText(/^Categories$/i)).toBeInTheDocument();
   });
 
   it('should display total tasks stat', () => {
