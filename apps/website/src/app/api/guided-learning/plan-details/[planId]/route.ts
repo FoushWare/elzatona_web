@@ -272,9 +272,12 @@ export async function GET(
       })) || []
     );
 
-    // Ensure options are properly parsed and structured
+    // Enrich questions with topic information
     if (questions && questions.length > 0) {
       questions = questions.map(q => {
+        // Find topic information
+        const topic = topics.find(t => t.id === q.topic_id);
+        
         // Parse options if it's a string or ensure it's an array
         let parsedOptions = q.options;
 
@@ -288,10 +291,21 @@ export async function GET(
           }
         }
 
-        // Return question with properly parsed options
+        // Return question with properly parsed options and enriched with topic info
         return {
           ...q,
           options: parsedOptions,
+          // Add topic information
+          topic_name: topic?.name || null,
+          topic_description: topic?.description || null,
+          // Ensure hints is an array (could be null or empty)
+          hints: Array.isArray(q.hints) ? q.hints : (q.hints ? [q.hints] : null),
+          // Ensure constraints is an array (could be null or empty)
+          constraints: Array.isArray(q.constraints) ? q.constraints : (q.constraints ? [q.constraints] : null),
+          // Ensure tags is an array (could be null or empty)
+          tags: Array.isArray(q.tags) ? q.tags : (q.tags ? [q.tags] : null),
+          // Include language from database (defaults to 'javascript' if null)
+          language: q.language || 'javascript',
         };
       });
 

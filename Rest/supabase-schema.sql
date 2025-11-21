@@ -64,6 +64,7 @@ CREATE TABLE questions (
   answer TEXT,
   explanation TEXT,
   hints TEXT[],
+  constraints TEXT[], -- Array of constraint strings for problem-solving questions
   time_limit INTEGER, -- in seconds
   points INTEGER DEFAULT 10,
   tags TEXT[],
@@ -73,6 +74,9 @@ CREATE TABLE questions (
   -- Code template and test cases
   code_template TEXT,
   test_cases JSONB,
+  language VARCHAR(50) DEFAULT 'javascript', -- Programming language for code questions
+  -- LeetCode-style examples (input/output with explanations)
+  examples JSONB DEFAULT '[]'::jsonb,
   -- Sample answers for open-ended questions
   sample_answers TEXT[],
   -- Statistics

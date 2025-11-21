@@ -1,5 +1,5 @@
 /**
- * E2E Tests for Homepage (G-E2E-001, G-E2E-002, G-E2E-003, G-E2E-004, G-E2E-005)
+ * E2E Tests for Homepage (G-E2E-001, G-E2E-002, G-E2E-003, G-E2E-004, G-E2E-005, G-E2E-006)
  * Task 17: Homepage Rendering
  * 
  * Tests cover:
@@ -8,6 +8,13 @@
  * - Personalized content display
  * - Active plan detection
  * - User type persistence
+ * 
+ * IMPORTANT: UserTypeContext defaults to 'guided' for unauthenticated users.
+ * This means:
+ * - Default state (no localStorage) = userType: 'guided' (not null)
+ * - Final CTA section only shows when userType is explicitly null (rare)
+ * - "Choose Learning Plan" button appears for guided users (not "Get Started")
+ * - Unauthenticated users will ALWAYS see guided content by default
  */
 
 import { test, expect } from '@playwright/test';
@@ -190,25 +197,25 @@ test.describe('G-E2E-003: Personalized Content Display', () => {
     });
   });
 
-  test('should show default content when no userType is set', async ({ page }) => {
-    // Clear localStorage - but note: UserTypeContext defaults to 'guided' when localStorage is empty
-    // So we'll actually see guided content, not the final CTA section
+  test('should show guided content when no userType is set (default for unauthenticated users)', async ({ page }) => {
+    // IMPORTANT: UserTypeContext defaults to 'guided' when localStorage is empty
+    // This is the DEFAULT behavior for unauthenticated users
+    // They will ALWAYS see guided content, not the final CTA section
     await page.evaluate(() => {
       localStorage.clear();
-      // Remove userType to prevent context from defaulting to 'guided'
+      // Even if we remove userType, UserTypeContext will default to 'guided'
       localStorage.removeItem('userType');
     });
     
     await page.goto('/');
     await page.waitForTimeout(2000); // Wait for animations and context initialization
     
-    // When localStorage is cleared, UserTypeContext defaults to 'guided'
-    // Guided users now see "Master Frontend Development" (same as default content)
+    // UserTypeContext defaults to 'guided', so unauthenticated users see guided content
     // Check for "Master Frontend Development" heading - wait longer for context to initialize
     const heading = page.getByRole('heading', { name: /Master Frontend Development/i }).first();
     await expect(heading).toBeVisible({ timeout: 15000 });
     
-    // Should show default subtitle for guided users
+    // Should show subtitle for guided users
     const subtitle = page.getByText(/The complete platform to ace your frontend interviews/i).first();
     await expect(subtitle).toBeVisible({ timeout: 15000 });
     
@@ -222,10 +229,9 @@ test.describe('G-E2E-003: Personalized Content Display', () => {
     const getStartedCount = await getStartedButtons.count();
     expect(getStartedCount).toBe(0);
     
-    // Should NOT show final CTA section (only shows when userType is null/undefined, but context defaults to 'guided')
+    // Should NOT show final CTA section (only shows when userType is explicitly null, which is rare)
     // The final CTA section only renders when !userType (see page.tsx line 440)
-    // Since UserTypeContext always defaults to 'guided', userType is always truthy, so CTA never shows
-    // Wait a bit more to ensure all animations and rendering complete
+    // Since UserTypeContext always defaults to 'guided', userType is always truthy, so CTA never shows for unauthenticated users
     await page.waitForTimeout(500);
     
     const ctaSection = page.locator('section.final-cta-section');
@@ -238,11 +244,12 @@ test.describe('G-E2E-003: Personalized Content Display', () => {
     expect(readyTextCount).toBe(0);
   });
 
-  test('should show guided content when userType is "guided"', async ({ page }) => {
+  test('should show guided content when userType is "guided" (default for unauthenticated users)', async ({ page }) => {
+    // This is the default state for unauthenticated users
     // Setup localStorage with guided userType
     await page.evaluate(() => {
       localStorage.setItem('userType', 'guided');
-      localStorage.setItem('learning-type:type', 'guided');
+      localStorage.setItem('learning-preferences:type', 'guided');
     });
     
     await page.goto('/');
@@ -262,7 +269,7 @@ test.describe('G-E2E-003: Personalized Content Display', () => {
     const getStartedCount = await getStartedButtons.count();
     expect(getStartedCount).toBe(0);
     
-    // Should NOT show final CTA section
+    // Should NOT show final CTA section (only shows when userType is null)
     await expect(page.getByText(/Ready to Ace Your Interviews\? 🚀/i)).not.toBeVisible();
   });
 
