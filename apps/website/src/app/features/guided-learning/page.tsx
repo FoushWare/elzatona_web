@@ -275,24 +275,17 @@ export default function GuidedLearningPage() {
     };
   }, [authIsAuthenticated, user]);
 
-  // Filter to only show day-based plans (1-Day, 2-Day, 3-Day, 4-Day, 5-Day, 6-Day, 7-Day)
+  // Filter to only show day-based plans (1-Day, 2-Days, 3-Days, 5-Days, 7-Days, 14-Days, 30-Days)
   const templates = allTemplates
     .filter(plan => {
-      const dayBasedPlans = [
-        '1-Day Interview Prep',
-        '2-Day Interview Prep',
-        '3-Day Interview Prep',
-        '4-Day Interview Prep',
-        '5-Day Interview Prep',
-        '6-Day Interview Prep',
-        '7-Day Interview Prep',
-      ];
-      return dayBasedPlans.includes(plan.name);
+      // Match plans with names like "1-Day Plan", "2-Days Plan", "3-Days Plan", etc.
+      const dayBasedPattern = /^\d+-(Day|Days) Plan$/i;
+      return dayBasedPattern.test(plan.name);
     })
     .sort((a, b) => {
-      // Extract day number from plan name (e.g., "1-Day Interview Prep" -> 1)
+      // Extract day number from plan name (e.g., "1-Day Plan" -> 1, "2-Days Plan" -> 2)
       const getDayNumber = (plan_name: string) => {
-        const match = plan_name.match(/(\d+)-Day Interview Prep/);
+        const match = plan_name.match(/(\d+)-(Day|Days) Plan/i);
         return match ? parseInt(match[1], 10) : 0;
       };
 

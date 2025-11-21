@@ -3,10 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl =
   process.env['NEXT_PUBLIC_SUPABASE_URL'] ||
-  'https://hpnewqkvpnthpohvxcmq.supabase.co';
+  'https://kiycimlsatwfqxtfprlr.supabase.co';
 const supabaseAnonKey =
   process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpeWNpbWxzYXR3ZnF4dGZwcmxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyMzc3ODQsImV4cCI6MjA3ODgxMzc4NH0.bDQhRHzNH09BE8w9qdRXjtl7bGdGO3JslrmkffhqXAc';
 
 // Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

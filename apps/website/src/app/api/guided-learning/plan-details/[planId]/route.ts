@@ -10,10 +10,10 @@ export async function GET(
     // Use environment variables for Supabase credentials with fallback
     const supabaseUrl =
       process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      'https://hpnewqkvpnthpohvxcmq.supabase.co';
+      'https://kiycimlsatwfqxtfprlr.supabase.co';
     const supabaseAnonKey =
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbmV3cWt2cG50aHBvaHZ4Y21xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2NjA0MTgsImV4cCI6MjA3NjIzNjQxOH0.UMmriJb5HRr9W_56GilNNDWksvlFEb1V9c_PuBK-H3s';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpeWNpbWxzYXR3ZnF4dGZwcmxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyMzc3ODQsImV4cCI6MjA3ODgxMzc4NH0.bDQhRHzNH09BE8w9qdRXjtl7bGdGO3JslrmkffhqXAc';
 
     console.log('🔍 Plan Details API Debug: Using Supabase URL:', supabaseUrl);
     console.log(
@@ -45,26 +45,53 @@ export async function GET(
       );
     }
 
-    // Get cards with their relationships using Supabase joins
-    const { data: cards, error: cardsError } = await supabase
-      .from('learning_cards')
-      .select(
-        `
-        *,
-        categories (
-          *,
-          topics (
-            *,
-            questions (*)
-          )
-        )
-      `
-      )
-      .order('created_at', { ascending: true });
+    // Get cards linked to this specific plan via plan_cards table
+    const { data: planCardsData, error: planCardsError } = await supabase
+      .from('plan_cards')
+      .select('card_id')
+      .eq('plan_id', planId);
+
+    console.log('🔍 Plan Details Debug: plan_cards query result:', {
+      planCardsData,
+      planCardsError: planCardsError?.message || null,
+      planCardsCount: planCardsData?.length || 0,
+      planId,
+    });
+
+    if (planCardsError) {
+      console.error('Error fetching plan cards:', planCardsError);
+    }
+
+    const planCardIds = (planCardsData || []).map(pc => pc.card_id);
+    console.log('🔍 Plan Details Debug: Plan card IDs:', planCardIds);
+
+    // Get cards that are linked to this plan
+    let cards;
+    let cardsError = null;
+
+    if (planCardIds.length > 0) {
+      const { data: cardsData, error: cardsErr } = await supabase
+        .from('learning_cards')
+        .select('*')
+        .in('id', planCardIds)
+        .order('created_at', { ascending: true });
+      
+      cards = cardsData;
+      cardsError = cardsErr;
+    } else {
+      // No cards linked to this plan - return empty array
+      cards = [];
+      console.warn('⚠️ Plan Details Debug: No cards linked to this plan');
+    }
 
     if (cardsError) {
       console.error('Error fetching cards:', cardsError);
     }
+
+    console.log('🔍 Plan Details Debug: Cards for this plan:', {
+      cardsCount: cards?.length || 0,
+      cardIds: cards?.map(c => c.id) || [],
+    });
 
     // Always use separate queries for better control
     console.log('Using separate queries for better data control...');
@@ -125,10 +152,31 @@ export async function GET(
     });
 
     // Get all questions first (no joins - questions table has topic_id directly)
-    const { data: allQuestionsData, error: allQuestionsError } = await supabase
-      .from('questions')
-      .select('*')
-      .order('created_at', { ascending: false });
+    // Fetch all pages to get all questions (Supabase has a default limit)
+    let allQuestionsData: any[] = [];
+    let allQuestionsError = null;
+    let page = 0;
+    const pageSize = 1000;
+    let hasMore = true;
+
+    while (hasMore) {
+      const { data, error } = await supabase
+        .from('questions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .range(page * pageSize, (page + 1) * pageSize - 1);
+
+      if (error) {
+        allQuestionsError = error;
+        hasMore = false;
+      } else if (data && data.length > 0) {
+        allQuestionsData = [...allQuestionsData, ...data];
+        hasMore = data.length === pageSize;
+        page++;
+      } else {
+        hasMore = false;
+      }
+    }
 
     if (allQuestionsError) {
       console.error('Error fetching all questions:', allQuestionsError);
@@ -287,14 +335,21 @@ export async function GET(
     });
 
     // Build the hierarchy using plan_questions data
-    // Group questions by their topic_id and find their category_id
+    // Group questions by their topic_id from plan_questions (not from question itself)
     const questionsByTopic = new Map();
     const questionsByCategory = new Map();
 
-    (questions || []).forEach(question => {
-      if (question.topic_id) {
-        const topicId = question.topic_id;
+    // Create a map of question_id -> topic_id from plan_questions
+    const questionToTopicMap = new Map();
+    (planQuestionsData || []).forEach(pq => {
+      questionToTopicMap.set(pq.question_id, pq.topic_id);
+    });
 
+    (questions || []).forEach(question => {
+      // Use topic_id from plan_questions, fallback to question.topic_id
+      const topicId = questionToTopicMap.get(question.id) || question.topic_id;
+
+      if (topicId) {
         // Find the topic to get its category_id
         const topic = topics.find(t => t.id === topicId);
         const categoryId = topic?.category_id;
