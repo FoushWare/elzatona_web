@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
@@ -25,6 +25,7 @@ import { addToCart } from '../../lib/cart';
 import { useNotifications } from '@/components/NotificationSystem';
 import { useLearningType } from '../../context/LearningTypeContext';
 import ProblemSolvingQuestion from '@/components/ProblemSolvingQuestion';
+import CodeEditor from '@/components/CodeEditor';
 
 interface Question {
   id: string;
@@ -107,9 +108,259 @@ interface Progress {
   lastUpdated: string;
 }
 
+// Utility function to clean and normalize text from database
+// This handles HTML entities, malformed patterns, and other issues
+const cleanOptionText = (text: string): string => {
+  if (!text || typeof text !== 'string') return text || '';
+
+  // Helper function to decode HTML entities
+  const decodeHtmlEntities = (text: string): string => {
+    if (!text) return '';
+    
+    // Comprehensive HTML entity decoding
+    const entityMap: Record<string, string> = {
+      '&lt;': '<',
+      '&gt;': '>',
+      '&amp;': '&',
+      '&quot;': '"',
+      '&#39;': "'",
+      '&#x27;': "'",
+      '&#x2F;': '/',
+      '&nbsp;': ' ',
+      '&#160;': ' ',
+      '&apos;': "'",
+    };
+    
+    // Replace named entities
+    let decoded = text;
+    for (const [entity, char] of Object.entries(entityMap)) {
+      decoded = decoded.replace(new RegExp(entity, 'gi'), char);
+    }
+    
+    // Replace numeric entities (decimal)
+    decoded = decoded.replace(/&#(\d+);/g, (match, dec) => {
+      return String.fromCharCode(parseInt(dec, 10));
+    });
+    
+    // Replace numeric entities (hexadecimal)
+    decoded = decoded.replace(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
+      return String.fromCharCode(parseInt(hex, 16));
+    });
+    
+    // If client-side, use DOM API as fallback
+    if (typeof window !== 'undefined') {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = decoded;
+        decoded = textarea.value;
+      } catch (e) {
+        // Fallback to string replacement if DOM API fails
+      }
+    }
+    
+    return decoded;
+  };
+
+  // Step 1: Decode HTML entities first
+  let cleaned = decodeHtmlEntities(text);
+  
+  // Step 2: Fix common malformed HTML tags before processing
+  cleaned = cleaned
+    .replace(/<article\$1>/gi, '<article>')
+    .replace(/<sectionn>/gi, '<section>')
+    .replace(/<articl\b/gi, '<article')
+    .replace(/<\/articl>/gi, '</article>')
+    .replace(/<sectio\b/gi, '<section')
+    .replace(/<\/sectio>/gi, '</section>')
+    .replace(/<nav\b/gi, '<nav')
+    .replace(/<\/nav>/gi, '</nav>')
+    .replace(/<head\b/gi, '<header')
+    .replace(/<\/head>/gi, '</header>')
+    .replace(/<foot\b/gi, '<footer')
+    .replace(/<\/foot>/gi, '</footer>')
+    .replace(/<mai\b/gi, '<main')
+    .replace(/<\/mai>/gi, '</main>');
+  
+  // Step 3: Convert HTML tags to inline code format for display (but not if already in backticks)
+  // This makes tags like <article> display as `article` in the UI
+  cleaned = cleaned.replace(/([^`])<([a-zA-Z][a-zA-Z0-9]*)([^>]*)>([^`])/g, (match, before, tag, attrs, after) => {
+    // Skip if it's a code/pre tag (will be handled separately)
+    if (tag.toLowerCase() === 'code' || tag.toLowerCase() === 'pre') return match;
+    return `${before}\`<${tag}${attrs}>\`${after}`;
+  });
+  cleaned = cleaned.replace(/([^`])<\/([a-zA-Z][a-zA-Z0-9]*)>([^`])/g, (match, before, tag, after) => {
+    return `${before}\`</${tag}>\`${after}`;
+  });
+  
+  // Step 4: Replace HTML <code> tags with backticks for consistent processing
+  cleaned = cleaned.replace(/<code[^>]*>([^<]+)<\/code>/gi, (match, codeContent) => {
+    const decoded = decodeHtmlEntities(codeContent);
+    return `\`${decoded.trim()}\``;
+  });
+  
+  // Step 5: Remove any remaining HTML tags (but preserve backtick-wrapped content)
+  cleaned = cleaned.replace(/<[^>]+>/g, '');
+  
+  // Step 4: Fix common malformed patterns from HTML parsing issues
+  // First, handle the specific e> artifact pattern (from </code> tags)
+  // This must come before other replacements
+  cleaned = cleaned.replace(/(\w+)e>/g, '$1');
+  
+  // Apply multiple passes to catch all variations
+  for (let i = 0; i < 3; i++) {
+    cleaned = cleaned
+      // Fix NaN patterns (most specific first) - handle all variations
+      // These patterns handle cases where HTML tags were partially removed
+      .replace(/NaNe>NaN/gi, 'NaN')
+      .replace(/NaNe>/gi, 'NaN')
+      .replace(/NaN>/gi, 'NaN')
+      .replace(/NaN\s*e>/gi, 'NaN')
+      .replace(/NaN\s*>/gi, 'NaN')
+      // More aggressive: any word followed by e> is likely a tag artifact
+      .replace(/(NaN)\s*e\s*>/gi, '$1')
+      .replace(/(NaN)\s*>/gi, '$1')
+      // Fix method name patterns
+      .replace(/diameterameter/g, 'diameter')
+      .replace(/perimeterimeter/g, 'perimeter')
+      .replace(/consoleonsole\.log/g, 'console.log')
+      .replace(/console\.loge>/g, 'console.log')
+      .replace(/console\.log>/g, 'console.log')
+      .replace(/console\.loge\.log/g, 'console.log')
+      .replace(/console\.log\.log/g, 'console.log')
+      // Fix general patterns like "somethinge>something" - more aggressive
+      .replace(/([a-zA-Z]+)e>([a-zA-Z]+)/g, '$1$2') // worde>word -> wordword
+      .replace(/([a-zA-Z]+)e>/g, '$1') // worde> -> word
+      .replace(/([a-zA-Z]+)>([a-zA-Z]+)/g, '$1 $2') // word>word -> word word
+      .replace(/([a-zA-Z]+)>/g, '$1') // word> -> word
+      // Fix patterns where > appears after words with spaces
+      .replace(/(\w+)\s*>\s*(\w+)/g, '$1 $2')
+      .replace(/(\w+)\s*>/g, '$1')
+      // Remove any remaining > characters that are not part of comparisons
+      .replace(/([a-zA-Z0-9])\s*>\s*([a-zA-Z0-9])/g, '$1 $2') // Only if not a comparison operator
+      // Clean up any remaining entity artifacts
+      .replace(/&[a-z]+;/gi, (match) => {
+        const entityMap: Record<string, string> = {
+          '&lt;': '<',
+          '&gt;': '>',
+          '&amp;': '&',
+          '&quot;': '"',
+          '&#39;': "'",
+          '&apos;': "'",
+          '&nbsp;': ' ',
+        };
+        return entityMap[match.toLowerCase()] || match;
+      });
+  }
+  
+  // Fix duplicated text patterns (e.g., "Number"mber", "Array"rray", "object"ject", "NaN"NaN")
+  // Pattern 1: "Word"word" where word is a suffix of Word
+  cleaned = cleaned.replace(/"([A-Za-z]+)"([a-z]+)"/g, (match, word, suffix) => {
+    // Check if suffix is actually the end of word
+    if (word.toLowerCase().endsWith(suffix.toLowerCase())) {
+      return `"${word}"`;
+    }
+    return match; // Don't change if it's not a duplicate
+  });
+  
+  // Pattern 2: "Word"Word" - full word duplication after quote
+  cleaned = cleaned.replace(/"([A-Za-z]+)"\1"/g, '"$1"');
+  
+  // Pattern 3: "Word"partial" where partial matches the end of Word (case-insensitive)
+  cleaned = cleaned.replace(/"([A-Za-z]+)"([a-z]{2,})"/gi, (match, word, partial) => {
+    const wordLower = word.toLowerCase();
+    const partialLower = partial.toLowerCase();
+    // Check if partial is the end of word (at least 2 characters to avoid false positives)
+    if (wordLower.endsWith(partialLower) && partialLower.length >= 2) {
+      return `"${word}"`;
+    }
+    return match;
+  });
+  
+  // Pattern 4: Handle cases where the duplication happens without quotes in between
+  // e.g., Number"mber" -> Number"
+  cleaned = cleaned.replace(/([A-Za-z]+)"([a-z]{2,})"/g, (match, word, suffix) => {
+    const wordLower = word.toLowerCase();
+    const suffixLower = suffix.toLowerCase();
+    if (wordLower.endsWith(suffixLower) && suffixLower.length >= 2) {
+      return `"${word}"`;
+    }
+    return match;
+  });
+  
+  // Pattern 5: Fix specific known patterns
+  cleaned = cleaned
+    .replace(/"Number"mber"/gi, '"Number"')
+    .replace(/"Array"rray"/gi, '"Array"')
+    .replace(/"object"ject"/gi, '"object"')
+    .replace(/"NaN"NaN"/gi, '"NaN"')
+    .replace(/"String"ring"/gi, '"String"')
+    .replace(/"Boolean"oolean"/gi, '"Boolean"')
+    .replace(/"undefined"efined"/gi, '"undefined"')
+    .replace(/"function"unction"/gi, '"function"');
+  
+  // Final cleanup: remove any remaining > characters that are clearly artifacts
+  cleaned = cleaned
+    .replace(/\s+>\s+/g, ' ') // space>space -> space
+    .replace(/([a-zA-Z0-9])>\s*([a-zA-Z0-9])/g, '$1 $2') // word>word -> word word (but preserve < and > in code)
+    .trim();
+
+  return cleaned;
+};
+
 // Component to render text with inline code snippets
 const OptionText = ({ text }: { text: string }) => {
   if (!text) return null;
+
+  // Clean the text first using our utility
+  let cleanedText = cleanOptionText(text);
+  
+  // Remove ALL quotes from quoted strings in the display (but keep quotes in code blocks)
+  // Handle multiple quoted strings like "two" "one" → two one
+  // First, check if there are code blocks - if so, preserve quotes in those
+  if (cleanedText.includes('`')) {
+    // Split by code blocks, process text parts, keep code blocks as-is
+    const parts: string[] = [];
+    const codeBlockRegex = /`([^`]+)`/g;
+    let lastIndex = 0;
+    let match;
+    
+    while ((match = codeBlockRegex.exec(cleanedText)) !== null) {
+      // Add text before code block (with quotes removed)
+      if (match.index > lastIndex) {
+        const textPart = cleanedText.substring(lastIndex, match.index);
+        // Remove quotes from individual quoted strings in this text part
+        const cleanedPart = textPart
+          .replace(/"([^"]*)"/g, '$1')  // Remove double quotes around words: "text" → text
+          .replace(/'([^']*)'/g, '$1'); // Remove single quotes around words: 'text' → text
+        parts.push(cleanedPart);
+      }
+      // Add code block as-is (preserve quotes in code)
+      parts.push(match[0]);
+      lastIndex = match.index + match[0].length;
+    }
+    
+    // Add remaining text after last code block
+    if (lastIndex < cleanedText.length) {
+      const textPart = cleanedText.substring(lastIndex);
+      const cleanedPart = textPart
+        .replace(/"([^"]*)"/g, '$1')
+        .replace(/'([^']*)'/g, '$1');
+      parts.push(cleanedPart);
+    }
+    
+    cleanedText = parts.join('');
+  } else {
+    // No code blocks - remove all quotes from quoted strings
+    // Pattern: "word" or 'word' - remove the quotes but keep the content
+    // This handles cases like "two" "one" → two one
+    cleanedText = cleanedText
+      .replace(/"([^"]*)"/g, '$1')  // Remove double quotes: "text" → text
+      .replace(/'([^']*)'/g, '$1')  // Remove single quotes: 'text' → text
+      .trim();
+  }
+
+  // Use the cleaned text
+  let processedText = cleanedText;
 
   // Parse inline code snippets (backticks)
   const parts: Array<{ type: 'text' | 'code'; content: string }> = [];
@@ -117,10 +368,10 @@ const OptionText = ({ text }: { text: string }) => {
   let lastIndex = 0;
   let match;
 
-  while ((match = inlineCodeRegex.exec(text)) !== null) {
+  while ((match = inlineCodeRegex.exec(processedText)) !== null) {
     // Add text before code
     if (match.index > lastIndex) {
-      const textContent = text.substring(lastIndex, match.index);
+      const textContent = processedText.substring(lastIndex, match.index);
       if (textContent) {
         parts.push({ type: 'text', content: textContent });
       }
@@ -132,8 +383,8 @@ const OptionText = ({ text }: { text: string }) => {
   }
 
   // Add remaining text
-  if (lastIndex < text.length) {
-    const textContent = text.substring(lastIndex);
+  if (lastIndex < processedText.length) {
+    const textContent = processedText.substring(lastIndex);
     if (textContent) {
       parts.push({ type: 'text', content: textContent });
     }
@@ -141,7 +392,7 @@ const OptionText = ({ text }: { text: string }) => {
 
   // If no code snippets found, render as plain text
   if (parts.length === 0) {
-    return <span>{text}</span>;
+    return <span className='flex-1 text-left'>{processedText}</span>;
   }
 
   return (
@@ -151,9 +402,9 @@ const OptionText = ({ text }: { text: string }) => {
           return (
             <code
               key={index}
-              className='px-2 py-1 mx-0.5 rounded-md font-mono text-sm sm:text-base shadow-sm border'
+              className='px-2 py-1 mx-0.5 rounded-md font-mono text-base sm:text-lg lg:text-xl shadow-sm border'
               style={{ 
-                background: 'linear-gradient(to bottom right, #1f2937, #111827)', 
+                background: 'linear-gradient(to bottom right, #1f2937, #111827)',
                 color: '#f3f4f6',
                 borderColor: '#374151'
               }}
@@ -169,63 +420,1012 @@ const OptionText = ({ text }: { text: string }) => {
   );
 };
 
+// Utility function to clean question titles (converts <code> tags to backticks)
+const cleanQuestionTitle = (title: string): string => {
+  if (!title || typeof title !== 'string') return title || '';
+  
+  // Helper function to decode HTML entities
+  const decodeHtmlEntities = (text: string): string => {
+    if (!text) return '';
+    const entityMap: Record<string, string> = {
+      '&lt;': '<', '&gt;': '>', '&amp;': '&', '&quot;': '"',
+      '&#39;': "'", '&#x27;': "'", '&#x2F;': '/', '&nbsp;': ' ',
+      '&#160;': ' ', '&apos;': "'",
+    };
+    let decoded = text;
+    for (const [entity, char] of Object.entries(entityMap)) {
+      decoded = decoded.replace(new RegExp(entity, 'gi'), char);
+    }
+    decoded = decoded.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+    decoded = decoded.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+    if (typeof window !== 'undefined') {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = decoded;
+        decoded = textarea.value;
+      } catch (e) {}
+    }
+    return decoded;
+  };
+  
+  let cleaned = decodeHtmlEntities(title);
+  
+  // Convert inline <code> tags to backticks
+  cleaned = cleaned.replace(/<code[^>]*>([^<]+)<\/code>/gi, (_, codeContent) => {
+    return `\`${decodeHtmlEntities(codeContent).trim()}\``;
+  });
+  
+  // Remove any remaining HTML tags
+  cleaned = cleaned.replace(/<[^>]+>/g, '');
+  
+  // Clean up artifacts
+  cleaned = cleaned
+    .replace(/e>e>e>/g, '')
+    .replace(/e>e>/g, '')
+    .replace(/^e>+/g, '')
+    .replace(/e>+$/g, '')
+    .replace(/(\w+)e>/g, '$1')
+    .replace(/e>(\w+)/g, '$1')
+    .replace(/\s*e>\s*/g, ' ')
+    .trim();
+  
+  return cleaned;
+};
+
+// Helper function to determine if content is valid code or should be rendered as text
+// Uses a scoring system to make intelligent decisions
+const isValidCode = (content: string): { isValid: boolean; score: number; reasons: string[] } => {
+  if (!content || typeof content !== 'string' || content.trim().length === 0) {
+    return { isValid: false, score: 0, reasons: ['Empty or invalid content'] };
+  }
+
+  let score = 0;
+  const reasons: string[] = [];
+  const trimmed = content.trim();
+
+  // ============================================
+  // CODE INDICATORS (Positive Points)
+  // ============================================
+  
+  // Strong code keywords (high weight)
+  const strongKeywords = [
+    /\b(class|function|const|let|var|import|export|return|async|await)\b/,
+    /\b(if|else|for|while|switch|case|break|continue|try|catch|finally|throw)\b/,
+    /\b(console\.(log|error|warn|info|debug|trace))\b/,
+    /\b(setTimeout|setInterval|Promise|async|await)\b/,
+    /\b(this\.|Math\.|Array\.|Object\.|String\.|Number\.)\b/,
+    /\b(=>|=>|\.then\(|\.catch\(|\.finally\()/,
+  ];
+  
+  strongKeywords.forEach((pattern) => {
+    if (pattern.test(trimmed)) {
+      score += 3;
+      reasons.push(`Strong code keyword found`);
+    }
+  });
+
+  // Code structure patterns (medium weight)
+  const structurePatterns = [
+    /\{\s*[\s\S]*\s*\}/, // Object/block with braces
+    /\[\s*[\s\S]*\s*\]/, // Array brackets
+    /\(\s*[\s\S]*\s*\)\s*\{/, // Function call with block
+    /=\s*\{/, // Object assignment
+    /=\s*\[/, // Array assignment
+    /:\s*function/, // Method definition
+    /:\s*\(/, // Arrow function
+  ];
+  
+  structurePatterns.forEach(() => {
+    score += 2;
+    reasons.push('Code structure pattern found');
+  });
+
+  // Code operators and syntax (medium weight)
+  const operatorPatterns = [
+    /[=<>!]+/, // Assignment/comparison operators
+    /[+\-*/%]/, // Arithmetic operators
+    /&&|\|\||!/, // Logical operators
+    /\.\w+\(/, // Method calls
+    /\.\w+\s*=/, // Property assignment
+    /;\s*$/, // Semicolon at end of line
+  ];
+  
+  const operatorMatches = operatorPatterns.filter(p => p.test(trimmed)).length;
+  if (operatorMatches > 0) {
+    score += operatorMatches;
+    reasons.push(`${operatorMatches} code operator(s) found`);
+  }
+
+  // Multiple lines with indentation (strong indicator)
+  const lines = trimmed.split('\n');
+  const hasMultipleLines = lines.length > 1;
+  const hasIndentation = lines.some(line => /^\s{2,}/.test(line));
+  const hasConsistentIndentation = lines.filter(line => line.trim().length > 0).length > 2 && 
+                                   lines.filter(line => /^\s{2,}/.test(line)).length > 1;
+  
+  if (hasMultipleLines) {
+    score += 2;
+    reasons.push('Multiple lines detected');
+  }
+  if (hasIndentation) {
+    score += 3;
+    reasons.push('Indentation detected');
+  }
+  if (hasConsistentIndentation) {
+    score += 2;
+    reasons.push('Consistent indentation pattern');
+  }
+
+  // Code-specific patterns (high weight)
+  if (/for\s*\(/.test(trimmed) || /while\s*\(/.test(trimmed) || /if\s*\(/.test(trimmed)) {
+    score += 4;
+    reasons.push('Control flow statement found');
+  }
+  
+  if (/function\s+\w+/.test(trimmed) || /const\s+\w+\s*=\s*\(/.test(trimmed) || /let\s+\w+\s*=\s*\(/.test(trimmed)) {
+    score += 4;
+    reasons.push('Function definition found');
+  }
+  
+  if (/class\s+\w+/.test(trimmed)) {
+    score += 5;
+    reasons.push('Class definition found');
+  }
+
+  // ============================================
+  // TEXT INDICATORS (Negative Points)
+  // ============================================
+  
+  // Common text patterns (reduce score)
+  const textPatterns = [
+    /^[A-Z][^.!?]*[.!?]\s*$/, // Sentence structure
+    /\b(the|a|an|is|are|was|were|be|been|being)\b/i, // Common words
+    /\b(explain|describe|what|when|where|why|how)\b/i, // Question words
+    /[.!?]\s+[A-Z]/, // Multiple sentences
+    /\b(should|would|could|might|may)\b/i, // Modal verbs
+  ];
+  
+  const textMatches = textPatterns.filter(p => p.test(trimmed)).length;
+  if (textMatches > 2) {
+    score -= textMatches;
+    reasons.push(`${textMatches} text pattern(s) found (reducing score)`);
+  }
+
+  // Very long sentences without code structure (likely text)
+  const avgLineLength = lines.reduce((sum, line) => sum + line.length, 0) / lines.length;
+  const hasCodeStructure = (
+    (trimmed.includes('{') && trimmed.includes('}')) ||
+    (trimmed.includes('(') && trimmed.includes(')')) ||
+    (trimmed.includes('[') && trimmed.includes(']')) ||
+    /function|class|const|let|var/.test(trimmed)
+  );
+  
+  if (avgLineLength > 80 && !hasCodeStructure) {
+    score -= 2;
+    reasons.push('Long lines without code structure (likely text)');
+  }
+
+  // High word-to-symbol ratio (likely text)
+  const wordCount = trimmed.split(/\s+/).length;
+  const symbolCount = (trimmed.match(/[{}();=<>[\]]/g) || []).length;
+  if (wordCount > 0 && symbolCount / wordCount < 0.1 && wordCount > 10) {
+    score -= 3;
+    reasons.push('High word-to-symbol ratio (likely text)');
+  }
+
+  // ============================================
+  // FINAL DECISION
+  // ============================================
+  
+  // Minimum score threshold for code
+  const MIN_CODE_SCORE = 5;
+  const isValid = score >= MIN_CODE_SCORE;
+
+  return {
+    isValid,
+    score,
+    reasons,
+  };
+};
+
 // Component to render question content with code blocks
 const QuestionContent = ({ content }: { content: string }) => {
   if (!content) return null;
 
+  // Step 0: IMMEDIATELY fix malformed HTML patterns before any processing
+  // This must be the first thing we do
+  let fixedContent = content;
+  for (let i = 0; i < 3; i++) {
+    fixedContent = fixedContent
+      // Fix malformed opening tags
+      .replace(/<pr<cod<cod/gi, '<pre><code>')
+      .replace(/<pr<code<code/gi, '<pre><code>')
+      .replace(/<pr<codee<code/gi, '<pre><code>')
+      .replace(/<pr<codee<cod/gi, '<pre><code>')
+      .replace(/<pr<code<cod/gi, '<pre><code>')
+      .replace(/<pr<codee/gi, '<pre><code>')
+      .replace(/<pr<code/gi, '<pre><code>')
+      .replace(/<pr<cod/gi, '<pre><code>')
+      .replace(/<pr<co/gi, '<pre><code>')
+      .replace(/<pr</gi, '<pre>')
+      // Fix malformed closing tags
+      .replace(/<\/cod<\/cod<\/pr/gi, '</code></pre>')
+      .replace(/<\/code<\/code<\/pr/gi, '</code></pre>')
+      .replace(/<\/codee<\/codee<\/pree/gi, '</code></pre>')
+      .replace(/<\/cod<\/cod<\/pree/gi, '</code></pre>')
+      .replace(/<\/code<\/code<\/pree/gi, '</code></pre>')
+      .replace(/<\/codee<\/pree/gi, '</code></pre>')
+      .replace(/<\/cod<\/pree/gi, '</code></pre>')
+      .replace(/<\/code<\/pree/gi, '</code></pre>')
+      .replace(/<\/code><\/pre>e>/gi, '</code></pre>')
+      .replace(/<\/code><\/pre>\s*e>/gi, '</code></pre>')
+      .replace(/<\/pree/gi, '</pre>')
+      .replace(/<\/codee/gi, '</code>')
+      .replace(/<\/cod/gi, '</code>')
+      // Fix efor -> for
+      .replace(/efor\s*\(/gi, 'for (')
+      .replace(/efor\s+/gi, 'for ')
+      // Fix econsole -> console
+      .replace(/econsole\./gi, 'console.')
+      .replace(/econsole\.log/gi, 'console.log')
+      // Fix patterns where code tags are merged with content
+      .replace(/<cod([a-zA-Z])/gi, '<code>$1')
+      .replace(/<code([a-zA-Z])/gi, '<code>$1')
+      // Fix patterns where closing tags are merged
+      .replace(/([a-zA-Z])<\/cod/gi, '$1</code>')
+      .replace(/([a-zA-Z])<\/code/gi, '$1</code>');
+  }
+
   // Parse content to extract code blocks and text
   const parts: Array<{ type: 'text' | 'code'; content: string; language?: string }> = [];
-  const codeBlockRegex = /```(\w+)?\n?([\s\S]*?)```/g;
-  let lastIndex = 0;
-  let match;
+  
+  // Helper function to decode HTML entities (works in both server and client)
+  const decodeHtmlEntities = (text: string): string => {
+    if (!text) return '';
+    
+    // Comprehensive HTML entity decoding
+    const entityMap: Record<string, string> = {
+      '&lt;': '<',
+      '&gt;': '>',
+      '&amp;': '&',
+      '&quot;': '"',
+      '&#39;': "'",
+      '&#x27;': "'",
+      '&#x2F;': '/',
+      '&nbsp;': ' ',
+      '&#160;': ' ',
+      '&apos;': "'",
+      '&#x60;': '`',
+      '&#96;': '`',
+    };
+    
+    // Replace named entities
+    let decoded = text;
+    for (const [entity, char] of Object.entries(entityMap)) {
+      decoded = decoded.replace(new RegExp(entity, 'gi'), char);
+    }
+    
+    // Replace numeric entities (decimal)
+    decoded = decoded.replace(/&#(\d+);/g, (match, dec) => {
+      return String.fromCharCode(parseInt(dec, 10));
+    });
+    
+    // Replace numeric entities (hexadecimal)
+    decoded = decoded.replace(/&#x([0-9a-fA-F]+);/g, (match, hex) => {
+      return String.fromCharCode(parseInt(hex, 16));
+    });
+    
+    // If client-side, use DOM API as fallback for any remaining entities
+    if (typeof window !== 'undefined') {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = decoded;
+        decoded = textarea.value;
+      } catch (e) {
+        // Fallback to string replacement if DOM API fails
+      }
+    }
+    
+    return decoded;
+  };
 
-  while ((match = codeBlockRegex.exec(content)) !== null) {
+  // Helper function to clean HTML and extract text
+  const cleanHtml = (html: string): string => {
+    // First decode HTML entities
+    let cleaned = decodeHtmlEntities(html);
+    // Remove all HTML tags
+    cleaned = cleaned.replace(/<[^>]+>/g, '');
+    // Clean up whitespace
+    cleaned = cleaned.replace(/\s+/g, ' ').trim();
+    return cleaned;
+  };
+
+  // Helper function to format and normalize code content
+  // Intelligently adds indentation based on code structure (braces, blocks, etc.)
+  const formatCodeContent = (code: string): string => {
+    if (!code) return '';
+    
+    // Normalize line endings
+    let formatted = code.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    
+    // Remove excessive leading/trailing whitespace from entire block
+    formatted = formatted.trim();
+    
+    // Split into lines for processing
+    const lines = formatted.split('\n').map(line => line.trimEnd());
+    
+    if (lines.length === 0) return '';
+    
+    // Check if code already has indentation
+    const hasExistingIndent = lines.some(line => line.trim().length > 0 && /^\s/.test(line));
+    
+    // If code has no indentation, add it based on structure
+    if (!hasExistingIndent) {
+      let indentLevel = 0;
+      
+      formatted = lines.map((line, index) => {
+        const trimmed = line.trim();
+        
+        // Skip empty lines
+        if (trimmed.length === 0) return '';
+        
+        // Count braces/brackets to determine net change
+        const openBraces = (trimmed.match(/{/g) || []).length;
+        const closeBraces = (trimmed.match(/}/g) || []).length;
+        const openBrackets = (trimmed.match(/\[/g) || []).length;
+        const closeBrackets = (trimmed.match(/\]/g) || []).length;
+        
+        // Net change: positive = more opens, negative = more closes
+        const netBraces = openBraces - closeBraces;
+        const netBrackets = openBrackets - closeBrackets;
+        
+        // Decrease indent for closing braces/brackets at the start of line
+        if (trimmed.match(/^[}\]\)]/)) {
+          indentLevel = Math.max(0, indentLevel - 1);
+        }
+        
+        // Add indentation for current line
+        const indent = '  '.repeat(indentLevel);
+        const result = indent + trimmed;
+        
+        // Increase indent if line ends with opening brace/bracket
+        // This means the next line should be indented
+        if (trimmed.match(/[{\[\(]\s*$/)) {
+          indentLevel++;
+        }
+        // Also increase if there are more opens than closes (unclosed braces/brackets)
+        else if (netBraces > 0 || netBrackets > 0) {
+          indentLevel += Math.max(netBraces, netBrackets);
+        }
+        
+        return result;
+      }).join('\n');
+    } else {
+      // Code already has indentation - normalize it
+      const indentations = lines
+        .filter(line => line.trim().length > 0)
+        .map(line => {
+          const match = line.match(/^(\s*)/);
+          return match ? match[1].length : 0;
+        });
+      
+      if (indentations.length > 0) {
+        const minIndent = Math.min(...indentations);
+        
+        // Normalize indentation: preserve relative indentation but use consistent spacing
+        formatted = lines.map(line => {
+          if (line.trim().length === 0) return '';
+          
+          // Count leading whitespace (tabs and spaces)
+          const leadingWhitespace = line.match(/^(\s*)/)?.[1] || '';
+          const indentCount = leadingWhitespace
+            .split('')
+            .reduce((count, char) => count + (char === '\t' ? 2 : 1), 0);
+          
+          // Calculate relative indent level (subtract minimum indent)
+          const relativeIndent = Math.max(0, indentCount - minIndent);
+          
+          // Use 2 spaces per indent level for consistency
+          const normalizedIndent = '  '.repeat(Math.floor(relativeIndent / 2) + (relativeIndent % 2));
+          
+          // Get content without leading whitespace
+          const content = line.trimStart();
+          
+          return normalizedIndent + content;
+        }).join('\n');
+      }
+    }
+    
+    // Remove excessive blank lines (more than 2 consecutive)
+    formatted = formatted.replace(/\n{3,}/g, '\n\n');
+    
+    return formatted;
+  };
+
+  // Helper function to extract and format code from HTML code blocks (handles nested tags)
+  // Updated to handle both cleaned database content and raw HTML
+  const extractCodeFromHtml = (html: string): string => {
+    if (!html) return '';
+    
+    let code = html;
+    
+    // Step 1: Check if content is already cleaned (starts with code, not HTML tags)
+    // If it's already clean code, just normalize it
+    if (!html.includes('<pre') && !html.includes('<code') && !html.includes('&lt;')) {
+      // Already clean code - just normalize
+      code = decodeHtmlEntities(html);
+      code = formatCodeContent(code);
+      return code;
+    }
+    
+    // Step 2: Find the outermost <pre><code> or <code> block using proper tag matching
+    // This handles nested tags correctly by finding the matching closing tag
+    const findMatchingCloseTag = (html: string, openTag: string, closeTag: string, startIndex: number): number => {
+      let depth = 0;
+      let i = startIndex;
+      
+      while (i < html.length) {
+        const openMatch = html.indexOf(openTag, i);
+        const closeMatch = html.indexOf(closeTag, i);
+        
+        if (closeMatch === -1) return -1; // No closing tag found
+        
+        if (openMatch !== -1 && openMatch < closeMatch) {
+          // Found an opening tag before the closing tag
+          depth++;
+          i = openMatch + openTag.length;
+        } else {
+          // Found a closing tag
+          if (depth === 0) {
+            return closeMatch; // This is the matching closing tag
+          }
+          depth--;
+          i = closeMatch + closeTag.length;
+        }
+      }
+      
+      return -1; // No matching closing tag found
+    };
+    
+    // Step 1: Fix malformed HTML patterns BEFORE trying to extract
+    // Handle patterns like <pr<cod<cod, </cod</cod</pr, etc.
+    let fixedHtml = html
+      // Fix malformed opening tags
+      .replace(/<pr<cod<cod/gi, '<pre><code>')
+      .replace(/<pr<code<code/gi, '<pre><code>')
+      .replace(/<pr<codee<code/gi, '<pre><code>')
+      .replace(/<pr<codee<cod/gi, '<pre><code>')
+      .replace(/<pr<code<cod/gi, '<pre><code>')
+      .replace(/<pr<codee/gi, '<pre><code>')
+      .replace(/<pr<code/gi, '<pre><code>')
+      .replace(/<pr<cod/gi, '<pre><code>')
+      .replace(/<pr<co/gi, '<pre><code>')
+      .replace(/<pr</gi, '<pre>')
+      // Fix malformed closing tags
+      .replace(/<\/cod<\/cod<\/pr/gi, '</code></pre>')
+      .replace(/<\/code<\/code<\/pr/gi, '</code></pre>')
+      .replace(/<\/codee<\/codee<\/pree/gi, '</code></pre>')
+      .replace(/<\/cod<\/cod<\/pree/gi, '</code></pre>')
+      .replace(/<\/code<\/code<\/pree/gi, '</code></pre>')
+      .replace(/<\/codee<\/pree/gi, '</code></pre>')
+      .replace(/<\/cod<\/pree/gi, '</code></pre>')
+      .replace(/<\/code<\/pree/gi, '</code></pre>')
+      .replace(/<\/pree/gi, '</pre>')
+      .replace(/<\/codee/gi, '</code>')
+      .replace(/<\/cod/gi, '</code>')
+      // Fix patterns where code tags are merged with content
+      .replace(/<cod([a-zA-Z])/gi, '<code>$1')
+      .replace(/<code([a-zA-Z])/gi, '<code>$1')
+      // Fix patterns where closing tags are merged
+      .replace(/([a-zA-Z])<\/cod/gi, '$1</code>')
+      .replace(/([a-zA-Z])<\/code/gi, '$1</code>');
+
+    // Try <pre><code> first (most common format from database)
+    const preStart = fixedHtml.indexOf('<pre');
+    if (preStart !== -1) {
+      const codeStart = fixedHtml.indexOf('<code', preStart);
+      if (codeStart !== -1) {
+        const contentStart = fixedHtml.indexOf('>', codeStart) + 1;
+        // Find the matching </code> tag (handles nested tags)
+        const codeEnd = findMatchingCloseTag(fixedHtml, '<code', '</code>', codeStart + '<code'.length);
+        if (codeEnd > contentStart) {
+          code = fixedHtml.substring(contentStart, codeEnd);
+        }
+      }
+    } else {
+      // Try just <code>
+      const codeStart = fixedHtml.indexOf('<code');
+      if (codeStart !== -1) {
+        const contentStart = fixedHtml.indexOf('>', codeStart) + 1;
+        // Find the matching </code> tag (handles nested tags)
+        const codeEnd = findMatchingCloseTag(fixedHtml, '<code', '</code>', codeStart + '<code'.length);
+        if (codeEnd > contentStart) {
+          code = fixedHtml.substring(contentStart, codeEnd);
+        }
+      }
+    }
+    
+    // Step 3: Decode HTML entities FIRST (before removing tags)
+    // This is critical because entities like &lt; and &gt; need to be decoded
+    // before we remove tags, otherwise we might lose content
+    code = decodeHtmlEntities(code);
+    
+    // Step 4: Recursively remove ALL HTML tags (including nested code tags)
+    // IMPORTANT: We need to be careful not to remove content that looks like tags
+    // Do this in a loop to handle deeply nested tags
+    let previousCode = '';
+    let iterations = 0;
+    const maxIterations = 20;
+    
+    while (code !== previousCode && iterations < maxIterations) {
+      previousCode = code;
+      // Decode entities first in each iteration
+      code = decodeHtmlEntities(code);
+      // Then remove all HTML tags, but use a more precise pattern
+      // Only match actual HTML tags: <tag>, </tag>, or <tag attr="value">
+      // Does NOT match: i < 3 (because there's no tag name after <)
+      // The pattern: < or </, followed by a letter (tag name), then optional attributes, then >
+      code = code.replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, '');
+      iterations++;
+    }
+    
+    // Step 5: Final entity decode pass to ensure everything is decoded
+    code = decodeHtmlEntities(code);
+    
+    // Step 6: Clean up common HTML artifacts and malformed patterns
+    // Fix console.log artifacts from HTML encoding issues
+    // Multiple passes to catch all variations
+    for (let pass = 0; pass < 3; pass++) {
+      code = code
+        // Remove e> artifacts FIRST (most aggressive - handles e>e>, e>e>e>, etc.)
+        .replace(/e>e>e>/g, '') // Remove triple e>
+        .replace(/e>e>/g, '') // Remove double e>
+        .replace(/^e>+/g, '') // Remove e> at start (one or more)
+        .replace(/e>+$/g, '') // Remove e> at end (one or more)
+        .replace(/(\w+)e>/g, '$1') // Remove e> after words
+        .replace(/e>(\w+)/g, '$1') // Remove e> before words
+        .replace(/\s*e>\s*/g, ' ') // Remove standalone e> with spaces
+        // Fix malformed console.log patterns (order matters - most specific first)
+        .replace(/consoleonsole\.loge>\.log/g, 'console.log')
+        .replace(/consoleonsole\.log/g, 'console.log')
+        .replace(/console\.loge>\.log/g, 'console.log')
+        .replace(/console\.loge>/g, 'console.log')
+        .replace(/console\.log>/g, 'console.log')
+        .replace(/console\.loge\.log/g, 'console.log')
+        .replace(/console\.log\.log/g, 'console.log')
+        .replace(/(\w+)onsole\.log/g, 'console.log')
+        .replace(/console\.log([^a-zA-Z])/g, 'console.log$1')
+        // Fix method name patterns (diameterameter, perimeterimeter, etc.)
+        .replace(/diameterameter/g, 'diameter')
+        .replace(/perimeterimeter/g, 'perimeter')
+        .replace(/newColorwColor/g, 'newColor')
+        .replace(/(\w+)ameter/g, '$1') // Fix patterns like "somethingameter"
+        .replace(/(\w+)imeter/g, '$1') // Fix patterns like "somethingimeter"
+        // Fix NaN patterns
+        .replace(/NaNe>NaN/g, 'NaN')
+        .replace(/NaNe>/g, 'NaN')
+        .replace(/NaN>/g, 'NaN')
+        // Fix any remaining entity issues (double-check after decoding)
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&apos;/g, "'")
+        .replace(/&nbsp;/g, ' ')
+        // Fix common patterns where entities break code structure
+        .replace(/(\w+)\s*&lt;\s*(\d+)\s*&gt;/g, '$1 < $2 >') // Fix "i &lt; 3 &gt;"
+        .replace(/(\w+)\s*&lt;\s*(\d+)/g, '$1 < $2') // Fix "i &lt; 3"
+        .replace(/(\d+)\s*&gt;/g, '$1 >') // Fix "3 &gt;"
+        // Remove any remaining HTML-like artifacts (but be careful not to remove code)
+        // Only remove if it looks like an actual HTML tag (starts with a letter after <)
+        .replace(/<\/?[a-zA-Z][a-zA-Z0-9]*(?:\s+[^>]*)?>/gi, '')
+        // Remove standalone > characters that are clearly artifacts
+        .replace(/^>\s*/g, '')
+        .replace(/\s*>$/g, '')
+        .replace(/\s+>\s+/g, ' ');
+    }
+    
+    // Step 7: Final aggressive cleanup pass for any remaining artifacts
+    for (let i = 0; i < 2; i++) {
+      code = code
+        // Remove any remaining e> artifacts
+        .replace(/e>e>e>/g, '')
+        .replace(/e>e>/g, '')
+        .replace(/^e>+/g, '')
+        .replace(/e>+$/g, '')
+        .replace(/(\w+)e>/g, '$1')
+        .replace(/e>(\w+)/g, '$1')
+        .replace(/\s*e>\s*/g, ' ')
+        // Remove malformed closing tags that might have leaked through
+        .replace(/<\/cod<\/pr/gi, '')
+        .replace(/<\/code<\/pr/gi, '')
+        .replace(/<\/pr/gi, '')
+        .replace(/<\/cod/gi, '')
+        // Remove standalone > characters
+        .replace(/^>\s*/g, '')
+        .replace(/\s*>$/g, '')
+        .replace(/\s+>\s+/g, ' ');
+    }
+    
+    // Step 8: Normalize and format the code
+    code = formatCodeContent(code);
+    
+    return code;
+  };
+
+  // First, replace ALL inline <code> tags (single words/short phrases) with backticks
+  // This prevents them from being treated as code blocks
+  // We'll do this by processing the content and replacing short <code> tags
+  let processedContent = fixedContent;
+  
+  // Replace short inline <code> tags with backticks (not inside <pre>)
+  // Pattern: <code>content</code> where content is 1-50 characters and not inside <pre>
+  processedContent = processedContent.replace(/<code[^>]*>([^<]{1,50})<\/code>/gi, (match, codeContent, offset) => {
+    // Check if this is inside a <pre> tag
+    const beforeMatch = fixedContent.substring(0, offset);
+    const lastPreOpen = beforeMatch.lastIndexOf('<pre');
+    const lastPreClose = beforeMatch.lastIndexOf('</pre>');
+    
+    // If there's an open <pre> without a closing </pre> before this match, it's inside <pre>
+    if (lastPreOpen > lastPreClose) {
+      return match; // Keep as is, will be handled by code block extraction
+    }
+    
+    // Replace with backtick format for inline code
+    return `\`${codeContent.trim()}\``;
+  });
+  
+  // Now parse HTML code blocks - also match malformed patterns
+  // Match both proper <pre><code> blocks and malformed patterns like <pr<cod
+  // Use a more flexible regex that catches malformed patterns
+  const htmlCodeBlockRegex = /<pre[^>]*><code[^>]*>[\s\S]*?<\/code><\/pre>|<pr<cod[^>]*>[\s\S]*?<\/cod<\/pr|<pr<code[^>]*>[\s\S]*?<\/code<\/pr|<code[^>]*>[\s\S]{20,}?<\/code>/gi;
+  let htmlMatches: Array<{ index: number; content: string; fullMatch: string }> = [];
+  let htmlMatch;
+  
+  // Reset regex lastIndex
+  htmlCodeBlockRegex.lastIndex = 0;
+  
+  // Use fixed content for matching to get correct indices
+  while ((htmlMatch = htmlCodeBlockRegex.exec(fixedContent)) !== null) {
+    // Fix the match if it's malformed before extracting
+    let matchContent = htmlMatch[0];
+    // Fix any remaining malformed patterns in the match
+    matchContent = matchContent
+      .replace(/<pr<cod/gi, '<pre><code>')
+      .replace(/<pr<code/gi, '<pre><code>')
+      .replace(/<\/cod<\/pr/gi, '</code></pre>')
+      .replace(/<\/code<\/pr/gi, '</code></pre>');
+    
+    const extractedCode = extractCodeFromHtml(matchContent);
+    if (extractedCode) {
+      htmlMatches.push({
+        index: htmlMatch.index,
+        content: extractedCode,
+        fullMatch: htmlMatch[0],
+      });
+    }
+  }
+  
+  // Also try to match malformed patterns that might not have been caught
+  // Look for patterns like <pr<cod...content... without proper closing
+  const malformedPattern = /<pr<cod[^>]*>([\s\S]*?)(?:<\/cod<\/pr|$)/gi;
+  let malformedMatch;
+  malformedPattern.lastIndex = 0;
+  
+  while ((malformedMatch = malformedPattern.exec(fixedContent)) !== null) {
+    // Check if this match was already captured by the previous regex
+    const alreadyCaptured = htmlMatches.some(m => 
+      Math.abs(m.index - malformedMatch.index) < 10
+    );
+    
+    if (!alreadyCaptured && malformedMatch[1]) {
+      // Extract code from malformed pattern
+      let code = malformedMatch[1];
+      // Clean up the code
+      code = decodeHtmlEntities(code);
+      code = code.replace(/<[^>]+>/g, '');
+      // Clean malformed patterns
+      for (let i = 0; i < 3; i++) {
+        code = code
+          .replace(/e>e>e>/g, '')
+          .replace(/e>e>/g, '')
+          .replace(/^e>+/g, '')
+          .replace(/e>+$/g, '')
+          .replace(/(\w+)e>/g, '$1')
+          .replace(/consoleonsole\.log/g, 'console.log')
+          .replace(/console\.loge>/g, 'console.log')
+          .replace(/diameterameter/g, 'diameter')
+          .replace(/perimeterimeter/g, 'perimeter')
+          .replace(/newColorwColor/g, 'newColor')
+          .replace(/NaNe>/g, 'NaN');
+      }
+      code = formatCodeContent(code);
+      
+      if (code.trim()) {
+        htmlMatches.push({
+          index: malformedMatch.index,
+          content: code,
+          fullMatch: malformedMatch[0],
+        });
+      }
+    }
+  }
+  
+  // Sort matches by index
+  htmlMatches.sort((a, b) => a.index - b.index);
+
+  // Then, try to parse markdown code blocks (```)
+  const markdownCodeBlockRegex = /```(\w+)?\n?([\s\S]*?)```/g;
+  let markdownMatches: Array<{ index: number; content: string; language?: string; fullMatch: string }> = [];
+  let mdMatch;
+  
+  // Reset regex lastIndex
+  markdownCodeBlockRegex.lastIndex = 0;
+  
+  while ((mdMatch = markdownCodeBlockRegex.exec(fixedContent)) !== null) {
+    markdownMatches.push({
+      index: mdMatch.index,
+      content: mdMatch[2].trim(),
+      language: mdMatch[1] || 'javascript',
+      fullMatch: mdMatch[0],
+    });
+  }
+
+  // Combine and sort all matches by index
+  const allMatches = [
+    ...htmlMatches.map(m => ({ ...m, type: 'html' as const, language: 'javascript' as string })),
+    ...markdownMatches.map(m => ({ ...m, type: 'markdown' as const })),
+  ].sort((a, b) => a.index - b.index);
+
+  let lastIndex = 0;
+
+  // Process all matches - use fixed content for indices, but process text with inline code conversion
+  for (const match of allMatches) {
     // Add text before code block
     if (match.index > lastIndex) {
-      const textContent = content.substring(lastIndex, match.index).trim();
-      if (textContent) {
-        parts.push({ type: 'text', content: textContent });
+      const textContent = fixedContent.substring(lastIndex, match.index);
+      if (textContent.trim()) {
+        // Clean up HTML in text content
+        let cleanText = decodeHtmlEntities(textContent);
+        // Replace inline <code> tags with backticks (for short inline code)
+        cleanText = cleanText.replace(/<code[^>]*>([^<]{1,30})<\/code>/gi, '`$1`');
+        // Remove remaining HTML tags (including any malformed ones)
+        cleanText = cleanText.replace(/<[^>]+>/g, '');
+        // Aggressively remove any remaining malformed patterns
+        for (let i = 0; i < 3; i++) {
+          cleanText = cleanText
+            // Remove malformed opening patterns
+            .replace(/<pr<cod?/gi, '')
+            .replace(/<pr</gi, '')
+            .replace(/<pr/gi, '')
+            // Remove malformed closing patterns
+            .replace(/<\/cod?<\/pr/gi, '')
+            .replace(/<\/cod?/gi, '')
+            .replace(/<\/pr/gi, '')
+            .replace(/<\/cod/gi, '')
+            // Remove e> artifacts
+            .replace(/e>e>e>/g, '')
+            .replace(/e>e>/g, '')
+            .replace(/^e>+/g, '')
+            .replace(/e>+$/g, '')
+            .replace(/(\w+)e>/g, '$1')
+            .replace(/e>(\w+)/g, '$1')
+            .replace(/\s*e>\s*/g, ' ')
+            // Remove standalone > characters
+            .replace(/^>\s*/g, '')
+            .replace(/\s*>$/g, '')
+            .replace(/\s+>\s+/g, ' ');
+        }
+        // Clean up whitespace but preserve line breaks
+        cleanText = cleanText.replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n\n').trim();
+        if (cleanText) {
+          parts.push({ type: 'text', content: cleanText });
+        }
       }
     }
 
-    // Add code block
-    const language = match[1] || 'javascript';
-    const code = match[2].trim();
-    parts.push({ type: 'code', content: code, language });
+    // Add code block - format and normalize
+    if (match.content) {
+      // Final cleanup pass on code content before formatting
+      let cleanCode = match.content;
+      for (let i = 0; i < 2; i++) {
+        cleanCode = cleanCode
+          // Remove any remaining e> artifacts
+          .replace(/e>e>e>/g, '')
+          .replace(/e>e>/g, '')
+          .replace(/^e>+/g, '')
+          .replace(/e>+$/g, '')
+          .replace(/(\w+)e>/g, '$1')
+          .replace(/e>(\w+)/g, '$1')
+          .replace(/\s*e>\s*/g, ' ')
+          // Remove malformed closing tags
+          .replace(/<\/cod<\/pr/gi, '')
+          .replace(/<\/code<\/pr/gi, '')
+          .replace(/<\/pr/gi, '')
+          .replace(/<\/cod/gi, '')
+          // Remove standalone > characters
+          .replace(/^>\s*/g, '')
+          .replace(/\s*>$/g, '')
+          .replace(/\s+>\s+/g, ' ');
+      }
+      const formattedCode = formatCodeContent(cleanCode);
+      parts.push({ type: 'code', content: formattedCode, language: match.language || 'javascript' });
+    }
 
-    lastIndex = match.index + match[0].length;
+    lastIndex = match.index + match.fullMatch.length;
   }
 
   // Add remaining text
-  if (lastIndex < content.length) {
-    const textContent = content.substring(lastIndex).trim();
-    if (textContent) {
-      parts.push({ type: 'text', content: textContent });
+  if (lastIndex < fixedContent.length) {
+    const textContent = fixedContent.substring(lastIndex);
+    if (textContent.trim()) {
+      // Clean up HTML in remaining text
+      let cleanText = decodeHtmlEntities(textContent);
+      // Replace inline <code> tags with backticks (for short inline code)
+      cleanText = cleanText.replace(/<code[^>]*>([^<]{1,30})<\/code>/gi, '`$1`');
+      // Remove remaining HTML tags (including any malformed ones)
+      cleanText = cleanText.replace(/<[^>]+>/g, '');
+      // Aggressively remove any remaining malformed patterns
+      for (let i = 0; i < 3; i++) {
+        cleanText = cleanText
+          // Remove malformed opening patterns
+          .replace(/<pr<cod?/gi, '')
+          .replace(/<pr</gi, '')
+          .replace(/<pr/gi, '')
+          // Remove malformed closing patterns
+          .replace(/<\/cod?<\/pr/gi, '')
+          .replace(/<\/cod?/gi, '')
+          .replace(/<\/pr/gi, '')
+          .replace(/<\/cod/gi, '')
+          // Remove e> artifacts
+          .replace(/e>e>e>/g, '')
+          .replace(/e>e>/g, '')
+          .replace(/^e>+/g, '')
+          .replace(/e>+$/g, '')
+          .replace(/(\w+)e>/g, '$1')
+          .replace(/e>(\w+)/g, '$1')
+          .replace(/\s*e>\s*/g, ' ')
+          // Remove standalone > characters
+          .replace(/^>\s*/g, '')
+          .replace(/\s*>$/g, '')
+          .replace(/\s+>\s+/g, ' ');
+      }
+      // Clean up whitespace but preserve line breaks
+      cleanText = cleanText.replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n\n').trim();
+      if (cleanText) {
+        parts.push({ type: 'text', content: cleanText });
+      }
     }
   }
 
-  // If no code blocks found, render as plain text
+  // If no code blocks found, check if the entire content is code
   if (parts.length === 0) {
+    // Clean the content thoroughly before rendering
+    let cleanContent = fixedContent;
+    
+    // Multiple passes for aggressive cleaning
+    for (let i = 0; i < 3; i++) {
+      cleanContent = cleanContent
+        // Fix malformed patterns first
+        .replace(/<pr<cod/gi, '')
+        .replace(/<\/cod<\/pr/gi, '')
+        .replace(/<pr</gi, '')
+        .replace(/<\/cod/gi, '')
+        .replace(/<\/pr/gi, '')
+        .replace(/<pr/gi, '')
+        // Remove all HTML tags
+        .replace(/<[^>]+>/g, '')
+        // Remove e> artifacts
+        .replace(/e>e>e>/g, '')
+        .replace(/e>e>/g, '')
+        .replace(/^e>+/g, '')
+        .replace(/e>+$/g, '')
+        .replace(/(\w+)e>/g, '$1')
+        .replace(/e>(\w+)/g, '$1')
+        .replace(/\s*e>\s*/g, ' ')
+        // Remove standalone > characters
+        .replace(/^>\s*/g, '')
+        .replace(/\s*>$/g, '')
+        .replace(/\s+>\s+/g, ' ');
+    }
+    
+    // Decode entities
+    cleanContent = cleanContent
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&')
+      .trim();
+    
+    // Use the intelligent code detection algorithm
+    const codeValidation = isValidCode(cleanContent);
+    
+    // If it's valid code, render it as a code block
+    if (codeValidation.isValid && cleanContent.length > 10) {
+      const formattedCode = formatCodeContent(cleanContent);
+      return (
+        <div className='relative group' style={{ backgroundColor: '#111827' }}>
+          {/* Code block header */}
+          <div className='flex items-center justify-end px-4 py-2.5 rounded-t-xl border-b-2 shadow-sm' style={{ background: 'linear-gradient(to right, #1f2937, #111827)', borderColor: '#374151' }}>
+            <span className='text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded-md' style={{ color: '#e5e7eb', backgroundColor: 'rgba(55, 65, 81, 0.5)' }}>
+              javascript
+            </span>
+          </div>
+          {/* Code block content - Always dark background for readability */}
+          <div className='relative overflow-hidden rounded-b-xl border-x-2 border-b-2 shadow-lg' style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
+            <pre 
+              className='overflow-x-auto relative z-10' 
+              style={{ 
+                backgroundColor: '#111827', 
+                margin: 0, 
+                padding: '1.5rem 1.75rem',
+                color: '#f3f4f6',
+                fontSize: '0.875rem',
+                lineHeight: '1.8',
+                fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Monaco", "Courier New", monospace',
+                overflowX: 'auto',
+                whiteSpace: 'pre',
+                tabSize: 2,
+                WebkitTabSize: 2,
+                MozTabSize: 2,
+                WebkitFontSmoothing: 'antialiased',
+                MozOsxFontSmoothing: 'grayscale',
+                letterSpacing: '0.01em'
+              }}
+            >
+              <code 
+                style={{ 
+                  color: '#f3f4f6', 
+                  display: 'block', 
+                  backgroundColor: 'transparent',
+                  fontFamily: 'inherit',
+                  whiteSpace: 'pre',
+                  margin: 0,
+                  padding: 0,
+                  fontSize: 'inherit',
+                  lineHeight: 'inherit',
+                  tabSize: 2,
+                  WebkitTabSize: 2,
+                  MozTabSize: 2,
+                  wordBreak: 'normal',
+                  overflowWrap: 'normal',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                {formattedCode}
+              </code>
+            </pre>
+            {/* Subtle gradient overlay for depth */}
+            <div className='absolute inset-0 pointer-events-none rounded-b-xl z-0' style={{ background: 'linear-gradient(to bottom, transparent, transparent, rgba(17, 24, 39, 0.2))' }}></div>
+          </div>
+        </div>
+      );
+    }
+    
+    // Otherwise render as plain text
     return (
-      <p className='text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap'>
-        {content}
+      <p 
+        className='text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-5'
+        style={{ 
+          lineHeight: '1.75',
+          wordSpacing: '0.05em',
+          letterSpacing: '0.01em'
+        }}
+      >
+        {cleanContent}
       </p>
     );
   }
 
   return (
-    <div className='space-y-4 sm:space-y-5'>
+    <div className='space-y-5 sm:space-y-6'>
       {parts.map((part, index) => {
         if (part.type === 'code') {
           return (
-            <div key={index} className='relative group' style={{ backgroundColor: '#111827' }}>
-              {/* Code block header with macOS-style window controls */}
-              <div className='flex items-center justify-between px-4 py-2.5 rounded-t-xl border-b-2 shadow-sm' style={{ background: 'linear-gradient(to right, #1f2937, #111827)', borderColor: '#374151' }}>
-                <div className='flex items-center gap-2'>
-                  <div className='w-3 h-3 rounded-full bg-red-500 shadow-sm hover:bg-red-600 transition-colors'></div>
-                  <div className='w-3 h-3 rounded-full bg-yellow-500 shadow-sm hover:bg-yellow-600 transition-colors'></div>
-                  <div className='w-3 h-3 rounded-full bg-green-500 shadow-sm hover:bg-green-600 transition-colors'></div>
-                </div>
+            <div key={index} className='relative group my-4 sm:my-6' style={{ backgroundColor: '#111827' }}>
+              {/* Code block header */}
+              <div className='flex items-center justify-end px-4 py-2.5 rounded-t-xl border-b-2 shadow-sm' style={{ background: 'linear-gradient(to right, #1f2937, #111827)', borderColor: '#374151' }}>
                 <span className='text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded-md' style={{ color: '#e5e7eb', backgroundColor: 'rgba(55, 65, 81, 0.5)' }}>
                   {part.language || 'code'}
                 </span>
@@ -237,13 +1437,19 @@ const QuestionContent = ({ content }: { content: string }) => {
                   style={{ 
                     backgroundColor: '#111827', 
                     margin: 0, 
-                    padding: '1rem 1.25rem',
+                    padding: '1.5rem 1.75rem',
                     color: '#f3f4f6',
                     fontSize: '0.875rem',
-                    lineHeight: '1.5',
-                    fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
+                    lineHeight: '1.8',
+                    fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Monaco", "Courier New", monospace',
                     overflowX: 'auto',
-                    whiteSpace: 'pre'
+                    whiteSpace: 'pre',
+                    tabSize: 2,
+                    WebkitTabSize: 2,
+                    MozTabSize: 2,
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                    letterSpacing: '0.01em'
                   }}
                 >
                   <code 
@@ -256,7 +1462,13 @@ const QuestionContent = ({ content }: { content: string }) => {
                       margin: 0,
                       padding: 0,
                       fontSize: 'inherit',
-                      lineHeight: 'inherit'
+                      lineHeight: 'inherit',
+                      tabSize: 2,
+                      WebkitTabSize: 2,
+                      MozTabSize: 2,
+                      wordBreak: 'normal',
+                      overflowWrap: 'normal',
+                      letterSpacing: '0.01em'
                     }}
                   >
                     {part.content}
@@ -268,12 +1480,61 @@ const QuestionContent = ({ content }: { content: string }) => {
             </div>
           );
         } else {
+          // Process text to handle inline code (backticks)
+          const textParts: Array<{ type: 'text' | 'code'; content: string }> = [];
+          const inlineCodeRegex = /`([^`]+)`/g;
+          let lastIndex = 0;
+          let match;
+          
+          while ((match = inlineCodeRegex.exec(part.content)) !== null) {
+            // Add text before inline code
+            if (match.index > lastIndex) {
+              const textBefore = part.content.substring(lastIndex, match.index);
+              if (textBefore) {
+                textParts.push({ type: 'text', content: textBefore });
+              }
+            }
+            // Add inline code
+            textParts.push({ type: 'code', content: match[1] });
+            lastIndex = match.index + match[0].length;
+          }
+          
+          // Add remaining text
+          if (lastIndex < part.content.length) {
+            const remainingText = part.content.substring(lastIndex);
+            if (remainingText) {
+              textParts.push({ type: 'text', content: remainingText });
+            }
+          }
+          
+          // If no inline code found, just use the original text
+          if (textParts.length === 0) {
+            textParts.push({ type: 'text', content: part.content });
+          }
+          
           return (
             <p
               key={index}
-              className='text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap'
+              className='text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap mb-4 sm:mb-5'
+              style={{ 
+                lineHeight: '1.75',
+                wordSpacing: '0.05em',
+                letterSpacing: '0.01em'
+              }}
             >
-              {part.content}
+              {textParts.map((textPart, textIndex) => {
+                if (textPart.type === 'code') {
+                  return (
+                    <code
+                      key={textIndex}
+                      className='px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded text-sm font-mono'
+                    >
+                      {textPart.content}
+                    </code>
+                  );
+                }
+                return <span key={textIndex}>{decodeHtmlEntities(textPart.content)}</span>;
+              })}
             </p>
           );
         }
@@ -282,7 +1543,7 @@ const QuestionContent = ({ content }: { content: string }) => {
   );
 };
 
-export default function GuidedPracticePage() {
+function GuidedPracticePageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { addNotification } = useNotifications();
@@ -297,13 +1558,16 @@ export default function GuidedPracticePage() {
   useEffect(() => {
     setLearningType('guided');
   }, [setLearningType]);
+  
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(null);
+  const [shuffledOptions, setShuffledOptions] = useState<Array<{ id: string; text: string; isCorrect: boolean }>>([]);
   const [showExplanation, setShowExplanation] = useState(false);
+  const explanationRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<Progress | null>(null);
@@ -434,14 +1698,15 @@ export default function GuidedPracticePage() {
   };
 
   const markQuestionCompleted = (questionId: string) => {
+    try {
     // Always get the latest progress from localStorage to avoid stale state
-    const latestProgress = loadProgress();
+      let latestProgress = loadProgress();
+      
+      // Initialize progress if it doesn't exist
     if (!latestProgress) {
-      console.error(
-        '❌ No progress found when marking question completed:',
-        questionId
-      );
-      return;
+        console.log('📝 Initializing progress for question completion');
+        latestProgress = initializeProgress();
+        saveProgress(latestProgress);
     }
 
     // Prevent duplicates
@@ -462,6 +1727,9 @@ export default function GuidedPracticePage() {
       lastUpdated: new Date().toISOString(),
     };
     saveProgress(updatedProgress);
+    } catch (error) {
+      console.error('❌ Error in markQuestionCompleted:', error);
+    }
   };
 
   const markTopicCompleted = (topicId: string) => {
@@ -534,13 +1802,20 @@ export default function GuidedPracticePage() {
         );
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch plan data: ${response.status}`);
+          const errorText = await response.text();
+          console.error('❌ API Error Response:', {
+            status: response.status,
+            statusText: response.statusText,
+            body: errorText,
+          });
+          throw new Error(`Failed to fetch plan data: ${response.status} - ${errorText.substring(0, 200)}`);
         }
 
         const data = await response.json();
 
         if (!data.success) {
-          throw new Error('API returned success: false');
+          console.error('❌ API returned success: false', data);
+          throw new Error(data.error || 'API returned success: false');
         }
 
         setPlan(data.data);
@@ -605,8 +1880,10 @@ export default function GuidedPracticePage() {
               total: completedCount,
               percentage,
             });
+            setIsLoading(false);
           } else {
             resumeFromProgress(data.data, savedProgress);
+            setIsLoading(false);
           }
         } else {
           const newProgress = initializeProgress();
@@ -618,11 +1895,20 @@ export default function GuidedPracticePage() {
             planId,
           });
           findFirstQuestion(data.data);
+          setIsLoading(false);
         }
       } catch (error) {
-        console.error('Error fetching plan data:', error);
-        setError('Failed to load plan data');
-      } finally {
+        console.error('❌ Error fetching plan data:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Failed to load plan data';
+        const errorStack = error instanceof Error ? error.stack : undefined;
+        console.error('❌ Error details:', {
+          message: errorMessage,
+          stack: errorStack,
+          planId,
+          categoryId,
+          cardId,
+        });
+        setError(errorMessage);
         setIsLoading(false);
       }
     };
@@ -691,6 +1977,25 @@ export default function GuidedPracticePage() {
               setCurrentTopicIndex(currentPosition.topicIndex);
               setCurrentCategoryIndex(currentPosition.categoryIndex);
               setCurrentCardIndex(currentPosition.cardIndex);
+              
+              // Ensure current position is saved (in case it wasn't saved before)
+              const latestProgress = loadProgress();
+              if (latestProgress) {
+                const updatedProgress = {
+                  ...latestProgress,
+                  currentPosition: {
+                    cardIndex: currentPosition.cardIndex,
+                    categoryIndex: currentPosition.categoryIndex,
+                    topicIndex: currentPosition.topicIndex,
+                    questionIndex: currentPosition.questionIndex,
+                  },
+                  lastUpdated: new Date().toISOString(),
+                };
+                saveProgress(updatedProgress);
+                console.log('💾 Confirmed saved position for resume:', currentPosition);
+              }
+              
+              setIsLoading(false);
               return;
             }
           }
@@ -701,6 +2006,8 @@ export default function GuidedPracticePage() {
     // If we can't resume from saved position, find next incomplete question
     console.log('⚠️ Cannot resume from saved position, finding first question with filters');
     findNextIncompleteQuestion(planData, savedProgress);
+    // Note: findNextIncompleteQuestion will set loading to false when it finds a question
+    // findFirstQuestion (called as fallback) will also set loading to false
   };
 
   const findFirstQuestion = (planData: Plan) => {
@@ -952,12 +2259,37 @@ export default function GuidedPracticePage() {
       setCurrentTopicIndex(foundTopicIndex);
       setCurrentCategoryIndex(foundCategoryIndex);
       setCurrentCardIndex(foundCardIndex);
+      
+      // Save current position to progress so we can resume on refresh
+      const latestProgress = loadProgress();
+      if (latestProgress) {
+        const updatedProgress = {
+          ...latestProgress,
+          currentPosition: {
+            cardIndex: foundCardIndex,
+            categoryIndex: foundCategoryIndex,
+            topicIndex: foundTopicIndex,
+            questionIndex: foundQuestionIndex,
+          },
+          lastUpdated: new Date().toISOString(),
+        };
+        saveProgress(updatedProgress);
+        console.log('💾 Saved current position for resume:', {
+          cardIndex: foundCardIndex,
+          categoryIndex: foundCategoryIndex,
+          topicIndex: foundTopicIndex,
+          questionIndex: foundQuestionIndex,
+        });
+      }
+      
+      setIsLoading(false);
     } else {
       console.warn('⚠️ No question with options found in plan data', {
         cardId,
         categoryId,
         totalCards: planData.cards.length,
       });
+      setIsLoading(false);
     }
   };
 
@@ -986,6 +2318,7 @@ export default function GuidedPracticePage() {
         });
       } else {
         console.warn('⚠️ No card found containing categoryId:', categoryId);
+        setIsLoading(false);
         return;
       }
     } else if (cardId) {
@@ -997,6 +2330,7 @@ export default function GuidedPracticePage() {
       });
       if (cardsToSearch.length === 0) {
         console.warn('⚠️ No cards found matching cardId:', cardId);
+        setIsLoading(false);
         return;
       }
     }
@@ -1083,39 +2417,115 @@ export default function GuidedPracticePage() {
       setCurrentTopicIndex(foundTopicIndex);
       setCurrentCategoryIndex(foundCategoryIndex);
       setCurrentCardIndex(foundCardIndex);
+      
+      // Save current position to progress so we can resume on refresh
+      const latestProgress = loadProgress();
+      if (latestProgress) {
+        const updatedProgress = {
+          ...latestProgress,
+          currentPosition: {
+            cardIndex: foundCardIndex,
+            categoryIndex: foundCategoryIndex,
+            topicIndex: foundTopicIndex,
+            questionIndex: foundQuestionIndex,
+          },
+          lastUpdated: new Date().toISOString(),
+        };
+        saveProgress(updatedProgress);
+        console.log('💾 Saved current position for resume:', {
+          cardIndex: foundCardIndex,
+          categoryIndex: foundCategoryIndex,
+          topicIndex: foundTopicIndex,
+          questionIndex: foundQuestionIndex,
+        });
+      }
+      
+      setIsLoading(false);
     }
     // Fallback: if no next incomplete question found, start from first available
     else {
       findFirstQuestion(planData);
+      // findFirstQuestion will set loading to false
     }
   };
 
-  const handleAnswerSelect = (answer: string) => {
+  const handleAnswerSelect = (answer: string | { text: string }) => {
+    try {
     if (currentAnswer) return; // Already answered
-    setCurrentAnswer(answer);
+      if (!currentQuestion) {
+        console.error('❌ Cannot select answer: currentQuestion is null');
+        addNotification({
+          type: 'error',
+          title: 'Error',
+          message: 'Question not found. Please refresh the page.',
+        });
+        return;
+      }
+
+      // Normalize answer - handle both string and object formats
+      const answerText = typeof answer === 'string' ? answer : answer.text;
+      
+      if (!answerText) {
+        console.error('❌ Invalid answer format:', answer);
+        addNotification({
+          type: 'error',
+          title: 'Error',
+          message: 'Invalid answer format. Please try again.',
+        });
+        return;
+      }
+
+      setCurrentAnswer(answerText);
     setShowExplanation(true);
 
-    // Mark question as completed
-    if (currentQuestion) {
       console.log('📝 Answer selected for question:', {
         questionId: currentQuestion.id,
         questionTitle: currentQuestion.title,
-        answer,
+        answer: answerText,
       });
 
+      // Mark question as completed - ensure progress is initialized first
+      try {
+        // Initialize progress if it doesn't exist
+        let latestProgress = loadProgress();
+        if (!latestProgress) {
+          latestProgress = initializeProgress();
+          saveProgress(latestProgress);
+        }
       markQuestionCompleted(currentQuestion.id);
+      } catch (error) {
+        console.error('❌ Error marking question as completed:', error);
+        // Don't show error to user for this - it's not critical
+      }
 
       // Track correct answers for scoring - get latest progress after marking completed
-      const latestProgress = loadProgress();
-      const correct = isCorrectAnswer(answer);
+      let latestProgress: Progress | null = null;
+      try {
+        latestProgress = loadProgress();
+      } catch (error) {
+        console.error('❌ Error loading progress:', error);
+        // Initialize progress if loading fails
+        latestProgress = initializeProgress();
+        saveProgress(latestProgress);
+      }
+
+      let correct = false;
+      try {
+        correct = isCorrectAnswer(answerText);
+      } catch (error) {
+        console.error('❌ Error checking answer correctness:', error);
+        // If we can't check correctness, assume incorrect
+        correct = false;
+      }
 
       console.log('🎯 Answer correctness:', {
         questionId: currentQuestion.id,
         isCorrect: correct,
-        selectedAnswer: answer,
+        selectedAnswer: answerText,
       });
 
       if (latestProgress) {
+        try {
         if (
           correct &&
           !latestProgress.correctAnswers.includes(currentQuestion.id)
@@ -1129,6 +2539,10 @@ export default function GuidedPracticePage() {
             lastUpdated: new Date().toISOString(),
           };
           saveProgress(updatedProgress);
+          }
+        } catch (error) {
+          console.error('❌ Error saving progress:', error);
+          // Don't show error to user - progress will sync later
         }
       }
 
@@ -1138,13 +2552,28 @@ export default function GuidedPracticePage() {
           addFlashcard({
             id: currentQuestion.id,
             question:
-                        currentQuestion.title || currentQuestion.content || '',
-            section: currentCategory?.name,
-            difficulty: currentQuestion.difficulty,
+              currentQuestion.title || currentQuestion.content || '',
+            section: currentCategory?.name || 'Unknown',
+            difficulty: currentQuestion.difficulty || 'intermediate',
             addedAt: Date.now(),
           });
           setInFlashcards(true);
-        } catch (_) {}
+        } catch (error) {
+          console.error('❌ Error adding to flashcards:', error);
+          // Don't show error to user - flashcard addition is not critical
+        }
+      }
+    } catch (error) {
+      console.error('❌ Error in handleAnswerSelect:', error);
+      // Only show error notification if it's a critical error
+      try {
+        addNotification({
+          type: 'error',
+          title: 'Error',
+          message: 'An error occurred while processing your answer. Please try again.',
+        });
+      } catch (notifError) {
+        console.error('❌ Error showing notification:', notifError);
       }
     }
   };
@@ -1433,25 +2862,383 @@ export default function GuidedPracticePage() {
 
   const getOptionLetter = (index: number) => String.fromCharCode(65 + index);
 
+  // Shuffle options deterministically based on question ID
+  // This ensures the same question always has the same order (consistent UX)
+  // but different questions have different orders (prevents always selecting "A")
+  const shuffleOptions = React.useCallback((options: Array<{ id: string; text: string; isCorrect: boolean }>, questionId: string): Array<{ id: string; text: string; isCorrect: boolean }> => {
+    if (!options || options.length === 0) return [];
+    
+    // Create a simple hash from question ID for deterministic shuffling
+    let hash = 0;
+    for (let i = 0; i < questionId.length; i++) {
+      const char = questionId.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    
+    // Use seeded random for deterministic shuffle
+    const seededRandom = (seed: number) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
+    
+    // Fisher-Yates shuffle with seed
+    const shuffled = [...options];
+    let seed = Math.abs(hash);
+    
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      seed = (seed * 9301 + 49297) % 233280; // Linear congruential generator
+      const j = Math.floor(seededRandom(seed) * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
+    return shuffled;
+  }, []);
+
+  // Shuffle options whenever the question changes
+  useEffect(() => {
+    if (currentQuestion && currentQuestion.id && currentQuestion.options && Array.isArray(currentQuestion.options) && currentQuestion.options.length > 0) {
+      try {
+        const shuffled = shuffleOptions(currentQuestion.options, currentQuestion.id);
+        setShuffledOptions(shuffled);
+        // Reset answer when question changes
+        setCurrentAnswer(null);
+        setShowExplanation(false);
+      } catch (error) {
+        console.error('Error shuffling options:', error);
+        // Fallback to original order if shuffling fails
+        setShuffledOptions(currentQuestion.options);
+      }
+    } else {
+      setShuffledOptions([]);
+    }
+  }, [currentQuestion?.id, shuffleOptions]); // Only shuffle when question ID changes
+
+  // Scroll to explanation when it becomes visible
+  useEffect(() => {
+    if (showExplanation && explanationRef.current) {
+      // Small delay to ensure the explanation is rendered
+      setTimeout(() => {
+        explanationRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start',
+          inline: 'nearest'
+        });
+      }, 100);
+    }
+  }, [showExplanation]);
+
+  // Helper function to extract code from HTML for code editor preview
+  const extractCodeForEditor = (html: string): string => {
+    if (!html || typeof html !== 'string') return '';
+    
+    try {
+      // First, fix malformed opening tags like <pr<cod -> <pre><code>
+      // Handle case where <pr<cod is immediately followed by code (no space)
+      // Pattern: <pr<codfor -> <pre><code>for
+      // Also handle: <pr<codfor -> <pre><code>for (with word boundary)
+      let fixedHtml = html
+        .replace(/<pr<cod([a-zA-Z])/gi, '<pre><code>$1') // <pr<codfor -> <pre><code>for
+        .replace(/<pr<cod([a-zA-Z])/gi, '<pre><code>$1') // Handle again for edge cases
+        .replace(/<pr<cod\s/gi, '<pre><code>') // <pr<cod followed by space
+        .replace(/<pr<cod/gi, '<pre><code>')
+        .replace(/<pr<code/gi, '<pre><code>')
+        .replace(/<pr<co/gi, '<pre><code>')
+        .replace(/<pr</gi, '<pre>');
+      
+      // Fix malformed closing tags like </cod</pr -> </code></pre>
+      fixedHtml = fixedHtml
+        .replace(/<\/cod<\/pr/gi, '</code></pre>')
+        .replace(/<\/code<\/pr/gi, '</code></pre>')
+        .replace(/<\/cod<\/pre/gi, '</code></pre>')
+        .replace(/<\/cod</gi, '</code>');
+      
+      console.log('🔍 Fixed HTML:', fixedHtml.substring(0, 200));
+      
+      // Try extracting from <pre><code> blocks first
+      // Handle both proper closing tags and malformed ones like </cod</pr
+      const preCodeRegex = /<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/i;
+      const preCodeMatch = fixedHtml.match(preCodeRegex);
+      if (preCodeMatch && preCodeMatch[1]) {
+        let code = preCodeMatch[1];
+        console.log('🔍 Raw code before processing:', {
+          raw: code.substring(0, 200),
+          hasLt: code.includes('<'),
+          hasGt: code.includes('>'),
+          hasLtEntity: code.includes('&lt;'),
+          hasGtEntity: code.includes('&gt;')
+        });
+        
+        // Decode HTML entities FIRST - this is critical!
+        // If the content has &lt; and &gt;, decode them to < and >
+        code = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
+        // Decode numeric entities
+        code = code.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+        code = code.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+        
+        // CRITICAL: Don't remove < and > characters - they're part of the code!
+        // The previous regex /<[^>]+>/g was removing code like "i < 3" because it matched "< 3"
+        // We should NOT remove any HTML tags here because the code is already extracted from <pre><code>
+        // If there are any remaining HTML tags, they're likely artifacts, but we need to be careful
+        // Only remove obvious HTML tag patterns that couldn't be code
+        // But preserve all < and > that are likely code operators or comparisons
+        // Actually, since we're extracting from <pre><code>, there shouldn't be HTML tags in the code
+        // So we can skip this step entirely or be very conservative
+        // CRITICAL: Convert escaped newlines to actual newlines
+        // The database stores \n as literal backslash + n, so we need to convert it
+        // Handle \\\\n first (if double-escaped in the string)
+        code = code.replace(/\\\\n/g, '\n');
+        // Then handle \n (single backslash + n) - this is what's in the database
+        code = code.replace(/\\n/g, '\n');
+        // Handle HTML entity newlines
+        code = code.replace(/&#10;/g, '\n');
+        code = code.replace(/&#x0a;/gi, '\n');
+        // Handle literal \r\n
+        code = code.replace(/\\r\\n/g, '\n');
+        code = code.replace(/\\r/g, '\n');
+        
+        // Remove any trailing closing tag artifacts
+        code = code.replace(/<\/code><\/pre>.*$/i, '');
+        code = code.replace(/<\/cod.*$/i, '');
+        
+        console.log('🔍 Extracted code from <pre><code>:', {
+          length: code.length,
+          preview: code.substring(0, 200),
+          hasNewlines: code.includes('\n'),
+          newlineCount: code.split('\n').length,
+          rawPreview: preCodeMatch[1].substring(0, 100),
+          lines: code.split('\n').slice(0, 10)
+        });
+        return code.trim();
+      }
+      
+      // Also try to extract from <pre><code> with malformed closing tags like </cod</pr
+      const preCodeMalformedRegex = /<pre[^>]*><code[^>]*>([\s\S]*?)<\/cod/i;
+      const preCodeMalformedMatch = fixedHtml.match(preCodeMalformedRegex);
+      if (preCodeMalformedMatch && preCodeMalformedMatch[1]) {
+        let code = preCodeMalformedMatch[1];
+        console.log('🔍 Raw extracted from malformed <pre><code>:', {
+          rawLength: code.length,
+          rawPreview: code.substring(0, 200),
+          hasBackslashN: code.includes('\\n')
+        });
+        
+        // Same cleaning as above
+        code = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
+        code = code.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+        code = code.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+        // CRITICAL: DO NOT use /<[^>]+>/g - it removes code like "i < 3"!
+        // Only remove obvious HTML tags, preserve all < and > for code operators
+        code = code.replace(/<\/?(?:div|span|p|br|hr|img|a|strong|em|b|i|u|h[1-6]|ul|ol|li|table|tr|td|th|thead|tbody|tfoot)[^>]*>/gi, '');
+        
+        // CRITICAL: Convert escaped newlines to actual newlines
+        // Handle \\n (double backslash + n) first
+        code = code.replace(/\\\\n/g, '\n');
+        // Handle \n (single backslash + n)
+        code = code.replace(/\\n/g, '\n');
+        code = code.replace(/&#10;/g, '\n');
+        code = code.replace(/&#x0a;/gi, '\n');
+        code = code.replace(/\\r\\n/g, '\n');
+        code = code.replace(/\\r/g, '\n');
+        
+        // Remove any trailing closing tag artifacts
+        code = code.replace(/<\/cod.*$/i, '');
+        
+        console.log('🔍 Processed code from malformed <pre><code>:', {
+          length: code.length,
+          preview: code.substring(0, 200),
+          hasNewlines: code.includes('\n'),
+          newlineCount: code.split('\n').length,
+          lines: code.split('\n').slice(0, 10)
+        });
+        return code.trim();
+      }
+      
+      // Try extracting from markdown code blocks (handle both ```javascript and ```)
+      // Use matchAll to find all code blocks and get the largest one
+      const markdownCodeRegex = /```(?:javascript|js|typescript|ts|python|py|java)?\s*\n?([\s\S]*?)```/gi;
+      const markdownMatches = Array.from(fixedHtml.matchAll(markdownCodeRegex));
+      if (markdownMatches && markdownMatches.length > 0) {
+        // Find the largest code block (most likely the main code)
+        let largestCode = '';
+        for (const match of markdownMatches) {
+          if (match[1] && match[1].length > largestCode.length) {
+            largestCode = match[1];
+          }
+        }
+        if (largestCode) {
+          let code = largestCode;
+          // Decode HTML entities first
+          code = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
+          code = code.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+          code = code.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+          // Remove any HTML tags
+          code = code.replace(/<[^>]+>/g, '');
+          // Fix escaped newlines
+          code = code.replace(/\\n/g, '\n');
+          code = code.replace(/\\\\n/g, '\n');
+          code = code.replace(/&#10;/g, '\n');
+          code = code.replace(/&#x0a;/gi, '\n');
+          console.log('🔍 Extracted code from markdown:', {
+            length: code.length,
+            preview: code.substring(0, 150),
+            hasNewlines: code.includes('\n'),
+            blockCount: markdownMatches.length
+          });
+          return code.trim();
+        }
+      }
+      
+      // Try extracting from <code> blocks
+      const codeRegex = /<code[^>]*>([\s\S]*?)<\/code>/i;
+      const codeMatch = fixedHtml.match(codeRegex);
+      if (codeMatch && codeMatch[1]) {
+        let code = codeMatch[1];
+        // Decode HTML entities
+        code = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
+        code = code.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+        code = code.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+        code = code.replace(/<[^>]+>/g, '');
+        // Fix escaped newlines
+        code = code.replace(/\\n/g, '\n');
+        code = code.replace(/\\\\n/g, '\n');
+        console.log('🔍 Extracted code from <code>:', code.substring(0, 100));
+        return code.trim();
+      }
+    } catch (error) {
+      console.error('Error extracting code:', error);
+      return '';
+    }
+    
+    // If no code tags found, check if the entire content or a large portion is code-like
+    // Use fixedHtml if it was created, otherwise use original html
+    const htmlToProcess = typeof fixedHtml !== 'undefined' ? fixedHtml : html;
+    
+    // Also try to extract from content that has markdown code blocks mixed with text
+    // Look for markdown code blocks even if they're not at the start
+    const allMarkdownBlocks = htmlToProcess.match(/```[\s\S]*?```/gi);
+    if (allMarkdownBlocks && allMarkdownBlocks.length > 0) {
+      // Get the largest code block
+      let largestBlock = '';
+      for (const block of allMarkdownBlocks) {
+        const codeMatch = block.match(/```(?:javascript|js|typescript|ts|python|py|java)?\s*\n?([\s\S]*?)```/i);
+        if (codeMatch && codeMatch[1] && codeMatch[1].length > largestBlock.length) {
+          largestBlock = codeMatch[1];
+        }
+      }
+      if (largestBlock) {
+        let code = largestBlock;
+        // Decode and clean
+        code = code.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+        code = code.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+        code = code.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+        code = code.replace(/<[^>]+>/g, '');
+        code = code.replace(/\\n/g, '\n');
+        code = code.replace(/\\\\n/g, '\n');
+        console.log('🔍 Extracted code from markdown block in content:', {
+          length: code.length,
+          preview: code.substring(0, 150)
+        });
+        if (code.trim().length > 10) {
+          return code.trim();
+        }
+      }
+    }
+    
+    // Remove HTML tags first to get plain text
+    let plainText = htmlToProcess.replace(/<[^>]+>/g, ' ');
+    // Decode HTML entities
+    plainText = plainText.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
+    plainText = plainText.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+    plainText = plainText.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+    // Fix escaped newlines
+    plainText = plainText.replace(/\\n/g, '\n');
+    plainText = plainText.replace(/\\\\n/g, '\n');
+    plainText = plainText.trim();
+    
+    // Check if plain text looks like code (has code patterns and multiple lines)
+    const codePatterns = [
+      /console\.log/,
+      /setTimeout/,
+      /setInterval/,
+      /for\s*\(/,
+      /while\s*\(/,
+      /if\s*\(/,
+      /this\.\w+/,
+      /Math\.\w+/,
+      /\w+\(\)/,
+      /return\s+/,
+      /const\s+\w+\s*=/,
+      /let\s+\w+\s*=/,
+      /var\s+\w+\s*=/,
+      /function\s+\w+/,
+      /class\s+\w+/,
+      /\{\s*[\s\S]*\s*\}/,
+      /\[\s*[\s\S]*\s*\]/,
+    ];
+    
+    const hasCodePattern = codePatterns.some(pattern => pattern.test(plainText));
+    const hasMultipleLines = plainText.split('\n').length > 1;
+    const hasCodeStructure = (plainText.includes('{') && plainText.includes('}')) || 
+                            (plainText.includes('(') && plainText.includes(')')) ||
+                            (plainText.includes('[') && plainText.includes(']'));
+    
+    // If it looks like code, return it (lowered threshold to catch shorter code blocks)
+    if (hasCodePattern && (hasMultipleLines || hasCodeStructure) && plainText.length > 10) {
+      return plainText;
+    }
+    
+    return '';
+  };
+
   const isCorrectAnswer = (option: string) => {
     if (!currentQuestion) return false;
 
-    // If currentQuestion has options array, find the option by text and check its id
+    // Clean the input option text for comparison
+    const cleanedOption = cleanOptionText(option);
+
+    // If currentQuestion has options array, find the option by text
     if (currentQuestion.options && Array.isArray(currentQuestion.options)) {
+      // Find the option object by comparing cleaned text
       const optionObj = currentQuestion.options.find(
-        opt => opt.text === option
+        opt => cleanOptionText(opt.text) === cleanedOption
       );
+      
       if (optionObj) {
-        // Compare option id (e.g., "c") with correct_answer (e.g., "c")
-        return (
-          optionObj.id?.toLowerCase() ===
-          String(currentQuestion.correct_answer || '').toLowerCase()
-        );
+        // First, check if the option has an isCorrect field (most reliable)
+        if (typeof optionObj.isCorrect === 'boolean') {
+          return optionObj.isCorrect;
+        }
+        
+        // Fallback: Compare option id (e.g., "o2", "A") with correct_answer if it's an ID
+        const optionId = optionObj.id?.toLowerCase();
+        const correctAnswer = String(currentQuestion.correct_answer || '').toLowerCase();
+        
+        // If correct_answer matches the option ID, it's correct
+        if (optionId === correctAnswer) {
+          return true;
+        }
+        
+        // Fallback: Compare cleaned option text with cleaned correct_answer
+        const cleanedCorrectAnswer = cleanOptionText(String(currentQuestion.correct_answer || ''));
+        if (cleanedOption === cleanedCorrectAnswer) {
+          return true;
+        }
+      }
+      
+      // Also check if correct_answer matches any option's text directly (using cleaned text)
+      const cleanedCorrectAnswer = cleanOptionText(String(currentQuestion.correct_answer || ''));
+      const correctOption = currentQuestion.options.find(
+        opt => cleanOptionText(opt.text) === cleanedCorrectAnswer
+      );
+      if (correctOption && cleanOptionText(correctOption.text) === cleanedOption) {
+        return true;
       }
     }
 
-    // Fallback: direct comparison (for backwards compatibility)
-    return option === currentQuestion.correct_answer;
+    // Fallback: direct text comparison using cleaned text (for backwards compatibility)
+    const cleanedCorrectAnswer = cleanOptionText(String(currentQuestion.correct_answer || ''));
+    return cleanedOption === cleanedCorrectAnswer;
   };
 
   // Reflect flashcard state when question changes
@@ -1922,35 +3709,6 @@ export default function GuidedPracticePage() {
                   <h1 className='text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1 sm:mb-2'>
                   {plan.name}
                 </h1>
-                  <p className='text-xs sm:text-sm truncate sm:whitespace-normal'>
-                    <span className='hidden sm:inline'>
-                      <span className='px-2 py-1 rounded-md bg-gradient-to-r from-indigo-100 to-indigo-200 dark:from-indigo-900/40 dark:to-indigo-900/30 text-indigo-800 dark:text-indigo-200 border border-indigo-300/60 dark:border-indigo-700/60 font-semibold'>{currentCard?.icon} {currentCard?.title}</span>
-                      {/* Only show category if it's different from card title */}
-                      {currentCategory?.name && currentCategory.name !== currentCard?.title && (
-                        <>
-                          <span className='mx-2 text-indigo-500 dark:text-indigo-400 font-bold'>→</span>
-                          <span className='px-2 py-1 rounded-md bg-gradient-to-r from-purple-100 to-purple-200 dark:from-purple-900/40 dark:to-purple-900/30 text-purple-800 dark:text-purple-200 border border-purple-300/60 dark:border-purple-700/60 font-semibold'>{currentCategory?.name}</span>
-                        </>
-                      )}
-                      {/* Show topic if it exists */}
-                      {currentTopic?.name && (
-                        <>
-                          <span className='mx-2 text-purple-500 dark:text-purple-400 font-bold'>→</span>
-                          <span className='px-2 py-1 rounded-md bg-gradient-to-r from-pink-100 to-pink-200 dark:from-pink-900/40 dark:to-pink-900/30 text-pink-800 dark:text-pink-200 border border-pink-300/60 dark:border-pink-700/60 font-semibold'>{currentTopic?.name}</span>
-                        </>
-                      )}
-                    </span>
-                    <span className='sm:hidden'>
-                      <span className='px-2 py-1 rounded-md bg-gradient-to-r from-indigo-100 to-indigo-200 dark:from-indigo-900/40 dark:to-indigo-900/30 text-indigo-800 dark:text-indigo-200 border border-indigo-300/60 dark:border-indigo-700/60 font-semibold'>{currentCard?.icon} {currentCard?.title}</span>
-                      {/* Only show category if it's different from card title */}
-                      {currentCategory?.name && currentCategory.name !== currentCard?.title && (
-                        <>
-                          <span className='mx-2 text-indigo-500 dark:text-indigo-400 font-bold'>→</span>
-                          <span className='px-2 py-1 rounded-md bg-gradient-to-r from-purple-100 to-purple-200 dark:from-purple-900/40 dark:to-purple-900/30 text-purple-800 dark:text-purple-200 border border-purple-300/60 dark:border-purple-700/60 font-semibold'>{currentCategory?.name}</span>
-                        </>
-                      )}
-                    </span>
-                </p>
               </div>
                 <div className='text-left sm:text-right flex-shrink-0'>
                   <div className='text-xs sm:text-sm text-gray-500 dark:text-gray-400'>
@@ -2069,58 +3827,138 @@ export default function GuidedPracticePage() {
                       </span>
                       <span className='px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600'>
                         {currentQuestion.type}
-                      </span>
-                    </div>
+              </span>
+            </div>
                   </div>
-                  <button
-                    title={
-                      inFlashcards ? 'Added to Flashcards' : 'Add to Flashcards'
-                    }
-                    onClick={() => {
-                      if (!currentQuestion) return;
-                      if (inFlashcards) return;
-                      try {
-                        addFlashcard({
-                          id: currentQuestion.id,
-                          question:
-                            currentQuestion.title ||
-                            currentQuestion.content ||
+              <button
+                title={
+                  inFlashcards ? 'Added to Flashcards' : 'Add to Flashcards'
+                }
+                onClick={() => {
+                  if (!currentQuestion) return;
+                  if (inFlashcards) return;
+                  try {
+                    addFlashcard({
+                      id: currentQuestion.id,
+                      question:
+                        currentQuestion.title ||
+                        currentQuestion.content ||
                             '',
-                          section: currentCategory?.name,
-                          difficulty: currentQuestion.difficulty,
-                          addedAt: Date.now(),
+                      section: currentCategory?.name,
+                      difficulty: currentQuestion.difficulty,
+                      addedAt: Date.now(),
+                    });
+                    setInFlashcards(true);
+                        addNotification({
+                          type: 'success',
+                          title: 'Added to flashcards',
+                          message: 'Question has been added to your flashcards',
                         });
-                        setInFlashcards(true);
-                        addNotification('Added to flashcards', 'success');
-                      } catch (_) {}
-                    }}
+                  } catch (_) {}
+                }}
                     className={`p-2.5 sm:p-3 rounded-xl border-2 transition-all duration-200 flex-shrink-0 shadow-sm hover:shadow-md transform hover:scale-105 ${
-                      inFlashcards
+                  inFlashcards
                         ? 'border-green-500 dark:border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
                         : 'border-indigo-300 dark:border-indigo-700 bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30'
-                    }`}
-                  >
-                    {inFlashcards ? (
+                }`}
+              >
+                {inFlashcards ? (
                       <BookmarkCheck className='w-5 h-5 sm:w-6 sm:h-6' />
-                    ) : (
+                ) : (
                       <BookmarkPlus className='w-5 h-5 sm:w-6 sm:h-6' />
-                    )}
-                  </button>
-                </div>
+                )}
+              </button>
+            </div>
 
-                <h2 className='text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight'>
-                  {currentQuestion.title}
+                <h2 className='text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight'>
+                  <QuestionContent content={cleanQuestionTitle(currentQuestion.title)} />
                 </h2>
 
-                <div className='prose dark:prose-invert max-w-none prose-sm sm:prose-base lg:prose-lg'>
-                  <QuestionContent content={currentQuestion.content} />
-                </div>
-              </div>
+                {/* Check if content has significant code - if so, show in editor instead of QuestionContent */}
+                {currentQuestion?.content ? (() => {
+                  // Extract code from content (this function tries multiple methods)
+                  let extractedCode = '';
+                  try {
+                    if (currentQuestion.content) {
+                      extractedCode = extractCodeForEditor(currentQuestion.content);
+                      console.log('🔍 Code extraction result:', {
+                        hasCode: !!extractedCode,
+                        codeLength: extractedCode.length,
+                        preview: extractedCode.substring(0, 100),
+                        fullContent: currentQuestion.content.substring(0, 200)
+                      });
+                    }
+                  } catch (error) {
+                    console.error('Error extracting code for editor:', error);
+                    extractedCode = '';
+                  }
+                  
+                  // Use the intelligent code detection algorithm
+                  const codeValidation = isValidCode(extractedCode);
+                  
+                  console.log('🔍 Code validation result:', {
+                    isValid: codeValidation.isValid,
+                    score: codeValidation.score,
+                    reasons: codeValidation.reasons,
+                    extractedCodeLength: extractedCode.length,
+                    extractedCodePreview: extractedCode.substring(0, 150),
+                  });
+                  
+                  // Decision: Show editor if code is valid AND has minimum length
+                  const shouldShowEditor = codeValidation.isValid && extractedCode.length > 10;
+                  
+                  console.log('🔍 Final decision - shouldShowEditor:', {
+                    shouldShowEditor,
+                    isValid: codeValidation.isValid,
+                    score: codeValidation.score,
+                    extractedCodeLength: extractedCode.length,
+                    extractedCodePreview: extractedCode.substring(0, 100),
+                    reasons: codeValidation.reasons
+                  });
+                  
+                  if (shouldShowEditor) {
+                    // Detect language from code
+                    let detectedLanguage = 'javascript';
+                    if (extractedCode.includes('class ') && (extractedCode.includes('constructor') || extractedCode.includes('static '))) {
+                      detectedLanguage = 'javascript';
+                    } else if (extractedCode.includes('def ') || (extractedCode.includes('import ') && extractedCode.includes('print'))) {
+                      detectedLanguage = 'python';
+                    } else if (extractedCode.includes('public class') || extractedCode.includes('public static')) {
+                      detectedLanguage = 'java';
+                    } else if (extractedCode.includes('interface ') || extractedCode.includes('type ') || extractedCode.includes(': string')) {
+                      detectedLanguage = 'typescript';
+                    }
+                    
+                    // Show ONLY the code editor when code is detected
+                    return (
+                      <div className='mb-6 sm:mb-8'>
+                        <div className='my-4 sm:my-6'>
+                          <CodeEditor
+                            code={extractedCode}
+                            language={detectedLanguage}
+                            readOnly={true}
+                            height='400px'
+                            theme='vs-dark'
+                            hideActionButtons={true}
+                          />
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    // No significant code, show content normally
+                    return (
+                      <div className='prose dark:prose-invert max-w-none prose-sm sm:prose-base lg:prose-lg'>
+                        <QuestionContent content={currentQuestion.content} />
+                      </div>
+                    );
+                  }
+                })() : null}
+          </div>
 
           {/* Answer Options */}
-          {currentQuestion.options && currentQuestion.options.length > 0 ? (
+          {shuffledOptions && shuffledOptions.length > 0 ? (
             <div className='space-y-3 sm:space-y-4'>
-              {currentQuestion.options.map((option, index) => {
+              {shuffledOptions.map((option, index) => {
                 const optionId = option.id || `option-${index}`;
                 const optionLetter = getOptionLetter(index);
                 const isCorrect = currentAnswer && isCorrectAnswer(option.text);
@@ -2166,7 +4004,7 @@ export default function GuidedPracticePage() {
                         <div className='flex-shrink-0 animate-in fade-in slide-in-from-right-2 duration-300'>
                           <XCircle className='w-6 h-6 sm:w-7 sm:h-7 text-red-600 dark:text-red-400' />
                         </div>
-                      )}
+                        )}
                     </div>
                   </button>
                 );
@@ -2174,8 +4012,8 @@ export default function GuidedPracticePage() {
             </div>
           ) : currentQuestion.type === 'true-false' ? (
             <div className='space-y-3 sm:space-y-4'>
-              {(currentQuestion.options && currentQuestion.options.length > 0
-                ? currentQuestion.options.map(opt => opt.text.toLowerCase())
+              {(shuffledOptions && shuffledOptions.length > 0
+                ? shuffledOptions.map(opt => opt.text.toLowerCase())
                 : ['true', 'false']
               ).map(option => {
                 const isCorrect = currentAnswer && isCorrectAnswer(option);
@@ -2183,10 +4021,10 @@ export default function GuidedPracticePage() {
                 const isWrong = isSelected && !isCorrect;
 
                 return (
-                  <button
-                    key={option}
-                    onClick={() => handleAnswerSelect(option)}
-                    disabled={!!currentAnswer}
+                <button
+                  key={option}
+                    onClick={() => handleAnswerSelect(String(option))}
+                  disabled={!!currentAnswer}
                     className={`w-full text-left p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 transform ${
                       !currentAnswer
                         ? 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-indigo-500 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:shadow-xl hover:shadow-indigo-200/50 dark:hover:shadow-indigo-900/30 hover:scale-[1.02] active:scale-[0.98] text-gray-900 dark:text-gray-100'
@@ -2205,10 +4043,10 @@ export default function GuidedPracticePage() {
                             : isWrong
                               ? 'bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50'
                               : 'bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/60 dark:to-purple-800/60 text-indigo-700 dark:text-indigo-200'
-                        }`}
-                      >
-                        {option === 'true' ? 'T' : 'F'}
-                      </div>
+                      }`}
+                    >
+                      {option === 'true' ? 'T' : 'F'}
+                    </div>
                       <span className='flex-1 capitalize text-base sm:text-lg font-semibold text-left'>{option}</span>
                       {isCorrect && (
                         <div className='flex-shrink-0 animate-in fade-in slide-in-from-right-2 duration-300'>
@@ -2220,8 +4058,8 @@ export default function GuidedPracticePage() {
                           <XCircle className='w-6 h-6 sm:w-7 sm:h-7 text-red-600 dark:text-red-400' />
                         </div>
                       )}
-                    </div>
-                  </button>
+                  </div>
+                </button>
                 );
               })}
             </div>
@@ -2249,35 +4087,37 @@ export default function GuidedPracticePage() {
             </div>
           )}
 
-          {/* Explanation - Only show for non-code questions */}
-          {currentQuestion.type !== 'code' && showExplanation && currentQuestion.explanation && (
-            <div className='mt-6 sm:mt-8 p-5 sm:p-6 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-900/30 dark:via-indigo-900/30 dark:to-purple-900/30 border-2 border-blue-300 dark:border-blue-700 rounded-xl sm:rounded-2xl shadow-xl shadow-blue-200/50 dark:shadow-blue-900/30 animate-in fade-in slide-in-from-bottom-4 duration-500'>
-              <div className='flex items-center space-x-3 mb-3'>
-                <div className='p-2.5 bg-blue-500 dark:bg-blue-600 rounded-lg shadow-md'>
-                  <Info className='w-5 h-5 sm:w-6 sm:h-6 text-white' />
-                </div>
-                <p className='text-base sm:text-lg font-bold text-blue-900 dark:text-blue-100'>
+              {/* Explanation - Only show for non-code questions */}
+              {currentQuestion.type !== 'code' && showExplanation && currentQuestion.explanation && (
+                <div 
+                  ref={explanationRef}
+                  className='mt-6 sm:mt-8 p-5 sm:p-6 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-900/30 dark:via-indigo-900/30 dark:to-purple-900/30 border-2 border-blue-300 dark:border-blue-700 rounded-xl sm:rounded-2xl shadow-xl shadow-blue-200/50 dark:shadow-blue-900/30 animate-in fade-in slide-in-from-bottom-4 duration-500'>
+                  <div className='flex items-center space-x-3 mb-4'>
+                    <div className='p-2.5 bg-blue-500 dark:bg-blue-600 rounded-lg shadow-md'>
+                      <Info className='w-5 h-5 sm:w-6 sm:h-6 text-white' />
+                    </div>
+                    <p className='text-base sm:text-lg font-bold text-blue-900 dark:text-blue-100'>
                   Explanation
                 </p>
               </div>
-              <p className='text-sm sm:text-base text-blue-800 dark:text-blue-200 leading-relaxed pl-1'>
-                {currentQuestion.explanation}
-              </p>
+                  <div className='text-sm sm:text-base text-blue-800 dark:text-blue-200 leading-relaxed pl-1'>
+                    <QuestionContent content={currentQuestion.explanation} />
+                  </div>
             </div>
           )}
 
-          {/* Next Question Button - Only show for non-code questions */}
-          {currentQuestion.type !== 'code' && currentAnswer && (
-            <div className='mt-6 sm:mt-8 text-center animate-in fade-in slide-in-from-bottom-4 duration-500'>
+              {/* Next Question Button - Only show for non-code questions */}
+              {currentQuestion.type !== 'code' && currentAnswer && (
+                <div className='mt-6 sm:mt-8 text-center animate-in fade-in slide-in-from-bottom-4 duration-500'>
               <button
                 onClick={proceedToNext}
-                className='group inline-flex items-center space-x-3 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 hover:from-green-600 hover:via-emerald-600 hover:to-green-700 text-white rounded-xl sm:rounded-2xl text-base sm:text-lg font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/50 transform hover:scale-105 active:scale-95'
+                    className='group inline-flex items-center space-x-3 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 hover:from-green-600 hover:via-emerald-600 hover:to-green-700 text-white rounded-xl sm:rounded-2xl text-base sm:text-lg font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/50 transform hover:scale-105 active:scale-95'
               >
                 <span>Next Question</span>
-                <ArrowRight className='w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform duration-300' />
+                    <ArrowRight className='w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform duration-300' />
               </button>
             </div>
-          )}
+              )}
             </>
           )}
         </div>
@@ -2304,5 +4144,24 @@ export default function GuidedPracticePage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function GuidedPracticePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 pt-24 pb-8 flex items-center justify-center'>
+          <div className='text-center'>
+            <Loader2 className='w-8 h-8 animate-spin text-blue-600 mx-auto mb-4' />
+            <p className='text-gray-600 dark:text-gray-400'>
+              Loading practice session...
+            </p>
+          </div>
+        </div>
+      }
+    >
+      <GuidedPracticePageContent />
+    </Suspense>
   );
 }

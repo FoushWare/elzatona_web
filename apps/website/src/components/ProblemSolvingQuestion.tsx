@@ -73,13 +73,128 @@ export default function ProblemSolvingQuestion({
   const [isResizingHorizontal, setIsResizingHorizontal] = useState(false);
   const [isResizingVertical, setIsResizingVertical] = useState(false);
   
-  // UI State - Always use code_template from database
+  // Helper function to extract code blocks from question content
+  const extractCodeFromContent = (content: string): string => {
+    if (!content) return '';
+    
+    // Helper to decode HTML entities
+    const decodeHtmlEntities = (text: string): string => {
+      if (!text) return '';
+      const entityMap: Record<string, string> = {
+        '&lt;': '<', '&gt;': '>', '&amp;': '&', '&quot;': '"',
+        '&#39;': "'", '&#x27;': "'", '&#x2F;': '/', '&nbsp;': ' ',
+        '&#160;': ' ', '&apos;': "'",
+      };
+      let decoded = text;
+      for (const [entity, char] of Object.entries(entityMap)) {
+        decoded = decoded.replace(new RegExp(entity, 'gi'), char);
+      }
+      decoded = decoded.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+      decoded = decoded.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+      return decoded;
+    };
+
+    // Try to extract from <pre><code> blocks first
+    const preCodeRegex = /<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi;
+    const preCodeMatch = preCodeRegex.exec(content);
+    if (preCodeMatch && preCodeMatch[1]) {
+      let code = preCodeMatch[1];
+      // Decode entities and remove HTML tags
+      code = decodeHtmlEntities(code);
+      code = code.replace(/<[^>]+>/g, '');
+      // Clean up malformed patterns - multiple passes for thorough cleaning
+      for (let i = 0; i < 3; i++) {
+        code = code
+          // Remove e> artifacts (most common issue)
+          .replace(/e>e>/g, '') // Remove double e>
+          .replace(/e>e>e>/g, '') // Remove triple e>
+          .replace(/^e>+/g, '') // Remove e> at start
+          .replace(/e>+$/g, '') // Remove e> at end
+          .replace(/(\w+)e>/g, '$1') // Remove e> after words
+          .replace(/e>(\w+)/g, '$1') // Remove e> before words
+          // Fix console.log patterns
+          .replace(/consoleonsole\.log/g, 'console.log')
+          .replace(/console\.loge>/g, 'console.log')
+          .replace(/console\.log>/g, 'console.log')
+          // Fix method name patterns
+          .replace(/diameterameter/g, 'diameter')
+          .replace(/perimeterimeter/g, 'perimeter')
+          .replace(/newColorwColor/g, 'newColor')
+          // Fix NaN patterns
+          .replace(/NaNe>/g, 'NaN')
+          .replace(/NaN>/g, 'NaN')
+          // Remove any remaining standalone e> or > characters
+          .replace(/\s*e>\s*/g, ' ')
+          .replace(/\s*>\s*/g, ' ')
+          .replace(/^>\s*/g, '')
+          .replace(/\s*>$/g, '');
+      }
+      code = code.trim();
+      if (code) return code;
+    }
+
+    // Try to extract from markdown code blocks
+    const markdownCodeRegex = /```(?:javascript|js|typescript|ts)?\n?([\s\S]*?)```/gi;
+    const mdMatch = markdownCodeRegex.exec(content);
+    if (mdMatch && mdMatch[1]) {
+      return mdMatch[1].trim();
+    }
+
+    // Try to extract from standalone <code> blocks (longer ones, 20+ chars)
+    const codeBlockRegex = /<code[^>]*>([\s\S]{20,}?)<\/code>/gi;
+    const codeMatch = codeBlockRegex.exec(content);
+    if (codeMatch && codeMatch[1]) {
+      let code = codeMatch[1];
+      code = decodeHtmlEntities(code);
+      code = code.replace(/<[^>]+>/g, '');
+      // Clean up malformed patterns - multiple passes for thorough cleaning
+      for (let i = 0; i < 3; i++) {
+        code = code
+          // Remove e> artifacts (most common issue)
+          .replace(/e>e>/g, '') // Remove double e>
+          .replace(/e>e>e>/g, '') // Remove triple e>
+          .replace(/^e>+/g, '') // Remove e> at start
+          .replace(/e>+$/g, '') // Remove e> at end
+          .replace(/(\w+)e>/g, '$1') // Remove e> after words
+          .replace(/e>(\w+)/g, '$1') // Remove e> before words
+          // Fix console.log patterns
+          .replace(/consoleonsole\.log/g, 'console.log')
+          .replace(/console\.loge>/g, 'console.log')
+          .replace(/console\.log>/g, 'console.log')
+          // Fix method name patterns
+          .replace(/diameterameter/g, 'diameter')
+          .replace(/perimeterimeter/g, 'perimeter')
+          .replace(/newColorwColor/g, 'newColor')
+          // Fix NaN patterns
+          .replace(/NaNe>/g, 'NaN')
+          .replace(/NaN>/g, 'NaN')
+          // Remove any remaining standalone e> or > characters
+          .replace(/\s*e>\s*/g, ' ')
+          .replace(/\s*>\s*/g, ' ')
+          .replace(/^>\s*/g, '')
+          .replace(/\s*>$/g, '');
+      }
+      code = code.trim();
+      if (code) return code;
+    }
+
+    return '';
+  };
+
+  // UI State - Use code_template from database, or extract from content
   const [code, setCode] = useState(() => {
-    // Always use code_template from database - no fallback
+    // Priority 1: Use code_template from database
     if (question.code_template) {
       return question.code_template;
     }
-    // If no template, return empty string (should not happen if DB is properly seeded)
+    // Priority 2: Extract code from question content
+    if (question.content) {
+      const extractedCode = extractCodeFromContent(question.content);
+      if (extractedCode) {
+        return extractedCode;
+      }
+    }
+    // Priority 3: Empty if no code found
     return '';
   });
   
@@ -110,13 +225,21 @@ export default function ProblemSolvingQuestion({
   } | null>(null);
   const [isRunning, setIsRunning] = useState(false);
 
-  // Update code when question changes - always use database value
+  // Update code when question changes - extract from content if no template
   useEffect(() => {
-    // Always use code_template from database - no fallback generation
+    // Priority 1: Use code_template from database
     if (question.code_template) {
       setCode(question.code_template);
+    } else if (question.content) {
+      // Priority 2: Extract code from question content
+      const extractedCode = extractCodeFromContent(question.content);
+      if (extractedCode) {
+        setCode(extractedCode);
+      } else {
+        // Priority 3: Empty if no code found
+        setCode('');
+      }
     } else {
-      // If no template in DB, set empty (should be populated in database)
       setCode('');
     }
     setTestResults([]);
@@ -128,7 +251,7 @@ export default function ProblemSolvingQuestion({
     setCustomTestCases([]);
     setEditingTestCaseIndex(null);
     setEditingTestCaseData(null);
-  }, [question.id, question.code_template]);
+  }, [question.id, question.code_template, question.content]);
 
   // Parse test cases
   const parseTestCases = (): TestCase[] => {
