@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import {
   loadFlashcards,
   removeFlashcard,
@@ -23,6 +24,7 @@ import {
   Eye,
   EyeOff,
   Loader2,
+  LayoutDashboard,
 } from 'lucide-react';
 
 type PracticeMode = 'list' | 'flip' | 'quiz';
@@ -627,6 +629,16 @@ export default function FlashcardsPage() {
           <p className='text-gray-600 dark:text-gray-400 mt-2'>
             Review questions you saved from practice.
           </p>
+          {/* Dashboard Navigation Button */}
+          <div className='mt-6 flex justify-center'>
+            <Link
+              href='/dashboard'
+              className='inline-flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95'
+            >
+              <LayoutDashboard className='w-5 h-5' />
+              <span>Go to Dashboard</span>
+            </Link>
+          </div>
         </div>
 
         {items.length === 0 ? (

@@ -253,26 +253,28 @@ export default function GuidedLearningPage() {
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', handleStorageChange);
 
-    // Also listen for custom events (for same-tab auth changes)
-    const handleAuthChange = () => {
-      console.log('🔄 Auth: Auth state changed event, rechecking auth');
-      checkAuth();
-    };
+      // Also listen for custom events (for same-tab auth changes)
+      const handleAuthChange = () => {
+        console.log('🔄 Auth: Auth state changed event, rechecking auth');
+        checkAuth();
+      };
 
-    window.addEventListener('auth-state-changed', handleAuthChange);
+      window.addEventListener('auth-state-changed', handleAuthChange);
 
-    // Poll for changes (in case event listeners don't fire)
-    const pollInterval = setInterval(() => {
-      checkAuth();
-    }, 1000); // Check every second
+      // Poll for changes (in case event listeners don't fire)
+      const pollInterval = setInterval(() => {
+        checkAuth();
+      }, 1000); // Check every second
 
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('auth-state-changed', handleAuthChange);
-      clearInterval(pollInterval);
-    };
+      return () => {
+        window.removeEventListener('storage', handleStorageChange);
+        window.removeEventListener('auth-state-changed', handleAuthChange);
+        clearInterval(pollInterval);
+      };
+    }
   }, [authIsAuthenticated, user]);
 
   // Filter to only show day-based plans (1-Day, 2-Days, 3-Days, 5-Days, 7-Days, 14-Days, 30-Days)
@@ -297,35 +299,59 @@ export default function GuidedLearningPage() {
     const loadTemplates = async () => {
       try {
         setTemplatesLoading(true);
-        const response = await fetch('/api/plans');
+        setTemplatesError(null);
+        
+        const response = await fetch('/api/plans', {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
         console.log('🔍 Frontend Debug: API Response status:', response.status);
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log('🔍 Frontend Debug: API Response data:', data);
-          console.log(
-            '🔍 Frontend Debug: Plans received:',
-            data.data?.length || 0
-          );
-          setAllTemplates(data.data || []);
-        } else {
+        if (!response.ok) {
           const errorText = await response.text();
           console.error(
             '❌ Frontend Debug: API Error:',
             response.status,
             errorText
           );
-          setTemplatesError('Failed to load templates');
+          setTemplatesError(`Failed to load templates (${response.status})`);
+          setAllTemplates([]);
+          return;
+        }
+
+        const data = await response.json();
+        console.log('🔍 Frontend Debug: API Response data:', data);
+        console.log(
+          '🔍 Frontend Debug: Plans received:',
+          data.data?.length || 0
+        );
+        
+        if (data.success && Array.isArray(data.data)) {
+          setAllTemplates(data.data);
+        } else if (Array.isArray(data)) {
+          // Fallback: if data is directly an array
+          setAllTemplates(data);
+        } else {
+          console.warn('⚠️ Unexpected API response format:', data);
+          setAllTemplates([]);
         }
       } catch (error) {
-        setTemplatesError('Error loading templates');
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         console.error('Error loading templates:', error);
+        setTemplatesError(`Error loading templates: ${errorMessage}`);
+        setAllTemplates([]);
       } finally {
         setTemplatesLoading(false);
       }
     };
 
-    loadTemplates();
+    // Only load if we're in the browser
+    if (typeof window !== 'undefined') {
+      loadTemplates();
+    }
   }, []);
 
   // Debug logging

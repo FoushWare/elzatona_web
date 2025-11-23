@@ -76,8 +76,8 @@ function HomePageContent() {
         return {
           title: 'Master Frontend Development',
           subtitle: 'The complete platform to ace your frontend interviews',
-          cta: 'Choose Learning Plan',
-          ctaLink: '/get-started',
+          cta: 'View Learning Plans',
+          ctaLink: '/features/guided-learning',
           icon: <Map className='w-6 h-6' />,
           color: 'indigo',
         };
