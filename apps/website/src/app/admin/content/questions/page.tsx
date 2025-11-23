@@ -853,10 +853,7 @@ export default function AdminContentQuestionsPage() {
           setIsBulkUploadModalOpen(false);
           setBulkUploadSuccess(null);
           setBulkUploadError(null);
-          setFile(null);
-          setPreviewQuestions([]);
-          setTotalQuestionsCount(0);
-          setShowPreview(false);
+          // Note: setFile, setPreviewQuestions, etc. are handled inside BulkUploadForm component
         }, 1500);
       }
     } catch (error) {
