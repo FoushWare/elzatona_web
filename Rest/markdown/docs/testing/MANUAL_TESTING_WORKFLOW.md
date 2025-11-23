@@ -2582,6 +2582,129 @@ npm run test:e2e:headed -- tests/e2e/guided-flow/complete-guided-flow.spec.ts
    - [ ] Verify plan cards stack properly
    - [ ] Verify text is readable
 
+**Task G-006: Guided Practice Page (localStorage Dependent - Not Logged In)**
+
+#### Step 1: Run Automated Tests
+```bash
+# Unit tests
+npm run test:unit -- apps/website/src/app/guided-practice/page.test.tsx
+
+# Integration tests
+npm run test:integration -- apps/website/src/app/guided-practice/page.integration.test.tsx
+
+# E2E tests
+npm run test:e2e:headed -- tests/e2e/guided-flow/guided-practice-localStorage.spec.ts
+```
+
+#### Step 2: Manual Testing (Not Logged In - localStorage Only)
+1. **Clear localStorage and Navigate**:
+   - Open DevTools → Application → Local Storage → Clear all
+   - Navigate to `/guided-practice?plan={planId}` (replace with actual planId)
+   - Verify page loads without requiring authentication
+   - Verify loading state appears initially
+
+2. **Test localStorage Initialization**:
+   - Open DevTools → Application → Local Storage
+   - Verify key `guided-practice-progress-{planId}` is created
+   - Click on the key to view its value
+   - Verify JSON structure contains:
+     - `planId`: matches the plan ID from URL
+     - `completedQuestions`: empty array `[]`
+     - `completedTopics`: empty array `[]`
+     - `completedCategories`: empty array `[]`
+     - `completedCards`: empty array `[]`
+     - `correctAnswers`: empty array `[]`
+     - `currentPosition`: object with `{ cardIndex: 0, categoryIndex: 0, topicIndex: 0, questionIndex: 0 }`
+     - `lastUpdated`: ISO timestamp string
+
+3. **Test First Question Display**:
+   - Verify first question loads correctly
+   - Verify question title is displayed
+   - Verify question content is displayed
+   - Verify answer options are displayed (if multiple choice)
+   - Verify code blocks render in CodeEditor (if question has code)
+   - Verify current position is saved to localStorage (check `currentPosition` in localStorage)
+
+4. **Test Answer Selection**:
+   - Select an answer option
+   - Verify explanation appears below the question
+   - Open localStorage and verify:
+     - `completedQuestions` array includes the question ID
+     - `lastUpdated` timestamp is updated
+   - If answer is correct:
+     - Verify `correctAnswers` array includes the question ID
+   - If answer is wrong:
+     - Verify flashcard is added to localStorage (check `flashcards` key)
+     - Verify "Added to flashcards" message appears
+
+5. **Test Progress to Next Question**:
+   - Click "Next Question" button
+   - Verify next question loads
+   - Open localStorage and verify:
+     - `currentPosition` is updated with new indices
+     - `lastUpdated` timestamp is updated
+     - Previous question ID remains in `completedQuestions`
+
+6. **Test Browser Refresh/Resume (CRITICAL)**:
+   - Answer first question
+   - Proceed to second question
+   - Note the current question ID or title
+   - Refresh the browser (F5 or Cmd+R)
+   - **VERIFY**: Page resumes at the same question (NOT from beginning)
+   - **VERIFY**: Progress is preserved in localStorage
+   - **VERIFY**: `currentPosition` matches the question before refresh
+   - **VERIFY**: `completedQuestions` includes the first question ID
+
+7. **Test Navigation with Filters**:
+   - Navigate to `/guided-practice?plan={planId}&card={cardId}`
+   - Verify only questions from specified card are shown
+   - Verify progress is saved (check localStorage)
+   - Navigate to `/guided-practice?plan={planId}&category={categoryId}`
+   - Verify only questions from specified category are shown
+   - Verify progress is saved separately per plan
+
+8. **Test Multiple Plans Progress Isolation**:
+   - Start practice on Plan A: `/guided-practice?plan={planAId}`
+   - Answer 2 questions
+   - Check localStorage: `guided-practice-progress-{planAId}` has 2 completed questions
+   - Navigate to Plan B: `/guided-practice?plan={planBId}`
+   - Answer 1 question
+   - Check localStorage: `guided-practice-progress-{planBId}` has 1 completed question
+   - Navigate back to Plan A
+   - **VERIFY**: Plan A progress preserved (2 questions completed)
+   - **VERIFY**: Plan B progress preserved (1 question completed)
+
+9. **Test Completion Flow**:
+   - Complete all questions in a plan (or use a small test plan)
+   - Verify completion screen appears
+   - Verify final score is calculated correctly
+   - Open localStorage and verify:
+     - `completed-guided-plans` array includes the planId
+     - `plan-grades` object includes `{ planId: percentage }`
+   - Verify score matches: `(correctAnswers.length / completedQuestions.length) * 100`
+
+10. **Test localStorage Error Handling**:
+    - Disable localStorage: DevTools → Application → Local Storage → Right-click → Clear
+    - Try to navigate to practice page
+    - Verify graceful error handling (no crashes)
+    - Verify user can still use the page (with limited functionality)
+    - Re-enable localStorage
+    - Verify normal functionality restored
+
+11. **Test Code Editor Rendering**:
+    - Find a question with code block
+    - Verify code renders in CodeEditor component (not as plain text)
+    - Verify code has proper 2-space indentation
+    - Verify code is formatted correctly
+    - Verify no duplicate code/text content
+    - Verify code syntax highlighting works
+
+12. **Test Code Formatting**:
+    - Verify code blocks have proper spacing
+    - Verify code indentation is consistent (2 spaces)
+    - Verify code operators (`<`, `>`, `=`, etc.) are preserved
+    - Verify no malformed code artifacts (`esetTimeout`, `ereturn`, etc.)
+
 ### Freestyle Flow Tasks
 
 **Task 8: Custom Roadmap**
