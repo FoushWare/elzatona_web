@@ -87,6 +87,7 @@ export default function CodeEditor({
   const [showThemeMenu, setShowThemeMenu] = useState(false);
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
   const outputRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<any>(null);
 
   useEffect(() => {
     setEditorValue(code);
@@ -286,6 +287,26 @@ export default function CodeEditor({
     onChange?.(code);
   };
 
+  const handleFormat = async () => {
+    if (!editorRef.current || readOnly) return;
+    
+    try {
+      // Get the format action from Monaco Editor
+      const formatAction = editorRef.current.getAction('editor.action.formatDocument');
+      if (formatAction) {
+        await formatAction.run();
+        // Update the editor value after formatting
+        const formattedValue = editorRef.current.getValue();
+        setEditorValue(formattedValue);
+        onChange?.(formattedValue);
+      } else {
+        console.warn('Format action not available for this language');
+      }
+    } catch (error) {
+      console.error('Error formatting code:', error);
+    }
+  };
+
   return (
     <div className='flex flex-col gap-2 sm:gap-4 h-full'>
       {/* Toolbar - Top Row: Language, Reset, Copy, Font Size, Theme */}
@@ -462,8 +483,17 @@ export default function CodeEditor({
             fontSize: fontSize,
             lineNumbers: 'on',
             roundedSelection: true,
-            scrollBeyondLastLine: false,
+            scrollBeyondLastLine: true,
             automaticLayout: true,
+            scrollbar: {
+              alwaysConsumeMouseWheel: false,
+              vertical: 'auto',
+              horizontal: 'auto',
+              verticalScrollbarSize: 10,
+              horizontalScrollbarSize: 10,
+              useShadows: true,
+              handleMouseWheel: true,
+            },
             tabSize: 2,
             indentSize: 2,
             insertSpaces: true,
@@ -480,8 +510,8 @@ export default function CodeEditor({
             cursorBlinking: 'smooth',
             cursorSmoothCaretAnimation: 'on',
             smoothScrolling: true,
-            formatOnPaste: true,
-            formatOnType: true,
+            formatOnPaste: language === 'javascript' || language === 'typescript' || language === 'js' || language === 'ts',
+            formatOnType: language === 'javascript' || language === 'typescript' || language === 'js' || language === 'ts',
             suggestOnTriggerCharacters: true,
             quickSuggestions: {
               other: true,
@@ -565,19 +595,53 @@ export default function CodeEditor({
             },
             wordBasedSuggestions: 'matchingDocuments',
           }}
-          onMount={(editor, monaco) => {
+          onMount={async (editor, monaco) => {
             // Configure Monaco if needed
             try {
               if (monaco && editor) {
                 console.log('✅ Monaco Editor initialized successfully');
                 
+                // Store editor reference for formatting
+                editorRef.current = editor;
+                
+                // Format code automatically on mount (even for readonly)
+                // This ensures code is properly formatted when displayed
+                if ((language === 'javascript' || language === 'typescript' || language === 'js' || language === 'ts') && editorValue) {
+                  try {
+                    // Get the format action
+                    const formatAction = editor.getAction('editor.action.formatDocument');
+                    if (formatAction && formatAction.isSupported()) {
+                      // Format the document
+                      await formatAction.run();
+                      // Update the value after formatting
+                      const formattedValue = editor.getValue();
+                      setEditorValue(formattedValue);
+                      onChange?.(formattedValue);
+                      console.log('✅ Code automatically formatted on mount');
+                    }
+                  } catch (formatError) {
+                    console.warn('⚠️ Could not auto-format code:', formatError);
+                  }
+                }
+                
                 // Add keyboard shortcuts
                 try {
+                  // Cmd/Ctrl + Enter to run code
                   editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
                     if (!readOnly && !isRunning) {
                       runCode(editorValue, language);
                     }
                   });
+                  
+                  // Shift + Alt/Option + F to format document (VSCode standard)
+                  editor.addCommand(
+                    monaco.KeyMod.Shift | monaco.KeyMod.Alt | monaco.KeyCode.KeyF,
+                    async () => {
+                      if (!readOnly) {
+                        await handleFormat();
+                      }
+                    }
+                  );
                 } catch (cmdError) {
                   console.warn('Could not add keyboard shortcut:', cmdError);
                 }
@@ -588,7 +652,7 @@ export default function CodeEditor({
               console.error('Error configuring Monaco Editor:', error);
             }
           }}
-          beforeMount={(monaco) => {
+          beforeMount={async (monaco) => {
             // Configure Monaco before mounting
             if (monaco) {
               console.log('🔧 Configuring Monaco Editor before mount...');
@@ -604,6 +668,104 @@ export default function CodeEditor({
                   console.log('✅ Using bundled Monaco Editor (no CDN required)');
                 }
               }
+
+              // Configure Prettier formatter for JavaScript and TypeScript
+              // Note: This requires prettier/standalone and parsers to be available
+              // If not available, Monaco will use its built-in formatter
+              const setupPrettierFormatter = async () => {
+                try {
+                  // Try to dynamically import Prettier standalone and parsers
+                  // These need to be installed: prettier, prettier/standalone, prettier/parser-typescript, prettier/parser-babel
+                  const prettierModule = await import('prettier/standalone').catch(() => null);
+                  const typescriptParserModule = await import('prettier/parser-typescript').catch(() => null);
+                  const babelParserModule = await import('prettier/parser-babel').catch(() => null);
+
+                  if (!prettierModule || !typescriptParserModule || !babelParserModule) {
+                    console.warn('⚠️ Prettier standalone/parsers not available, using Monaco built-in formatter');
+                    return;
+                  }
+
+                  const prettier = prettierModule.default || prettierModule;
+                  const typescriptParser = typescriptParserModule.default || typescriptParserModule;
+                  const babelParser = babelParserModule.default || babelParserModule;
+
+                  // Prettier configuration matching .prettierrc
+                  const prettierConfig = {
+                    trailingComma: 'es5' as const,
+                    tabWidth: 2,
+                    semi: true,
+                    singleQuote: true,
+                    printWidth: 80,
+                    endOfLine: 'lf' as const,
+                    arrowParens: 'avoid' as const,
+                    bracketSpacing: true,
+                    bracketSameLine: false,
+                    quoteProps: 'as-needed' as const,
+                    jsxSingleQuote: true,
+                    proseWrap: 'preserve' as const,
+                    htmlWhitespaceSensitivity: 'css' as const,
+                    embeddedLanguageFormatting: 'auto' as const,
+                  };
+
+                  // Register Prettier formatter for JavaScript
+                  monaco.languages.registerDocumentFormattingEditProvider('javascript', {
+                    async provideDocumentFormattingEdits(model) {
+                      try {
+                        const text = model.getValue();
+                        const formatted = await prettier.format(text, {
+                          ...prettierConfig,
+                          parser: 'babel',
+                          plugins: [babelParser],
+                        });
+                        return [
+                          {
+                            range: model.getFullModelRange(),
+                            text: formatted,
+                          },
+                        ];
+                      } catch (error) {
+                        console.error('Prettier formatting error (JS):', error);
+                        // Fallback to Monaco's built-in formatter
+                        return [];
+                      }
+                    },
+                  });
+
+                  // Register Prettier formatter for TypeScript
+                  monaco.languages.registerDocumentFormattingEditProvider('typescript', {
+                    async provideDocumentFormattingEdits(model) {
+                      try {
+                        const text = model.getValue();
+                        const formatted = await prettier.format(text, {
+                          ...prettierConfig,
+                          parser: 'typescript',
+                          plugins: [typescriptParser],
+                        });
+                        return [
+                          {
+                            range: model.getFullModelRange(),
+                            text: formatted,
+                          },
+                        ];
+                      } catch (error) {
+                        console.error('Prettier formatting error (TS):', error);
+                        // Fallback to Monaco's built-in formatter
+                        return [];
+                      }
+                    },
+                  });
+
+                  console.log('✅ Prettier formatter configured for JavaScript and TypeScript');
+                } catch (error) {
+                  console.warn('⚠️ Could not load Prettier, using Monaco built-in formatter:', error);
+                  // Fallback to Monaco's built-in formatter (already configured)
+                }
+              };
+
+              // Setup Prettier formatter (non-blocking)
+              setupPrettierFormatter().catch(() => {
+                // Silently fail - Monaco's built-in formatter will be used
+              });
               
               // Define custom themes
               monaco.editor.defineTheme('github-dark', {
