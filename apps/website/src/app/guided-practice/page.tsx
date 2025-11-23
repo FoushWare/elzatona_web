@@ -628,6 +628,156 @@ const isValidCode = (content: string): { isValid: boolean; score: number; reason
   };
 };
 
+// Helper function to format and normalize code content
+// Intelligently adds indentation based on code structure (braces, blocks, classes, methods, etc.)
+// Moved outside QuestionContent so it can be used by GuidedPracticePageContent
+const formatCodeContent = (code: string): string => {
+  if (!code) return '';
+  
+  // Normalize line endings
+  let formatted = code.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  
+  // Remove excessive leading/trailing whitespace from entire block
+  formatted = formatted.trim();
+  
+  // Split into lines for processing
+  const lines = formatted.split('\n').map(line => line.trimEnd());
+  
+  if (lines.length === 0) return '';
+  
+  // Check if code already has indentation
+  const hasExistingIndent = lines.some(line => line.trim().length > 0 && /^\s/.test(line));
+  
+  // If code has no indentation, add it based on structure
+  if (!hasExistingIndent) {
+    let indentLevel = 0;
+    let inClass = false;
+    let inMethod = false;
+    
+    formatted = lines.map((line, index) => {
+      const trimmed = line.trim();
+      
+      // Skip empty lines
+      if (trimmed.length === 0) return '';
+      
+      // Detect class declaration
+      if (/^(class|interface|type)\s+\w+/.test(trimmed)) {
+        inClass = true;
+        const indent = '  '.repeat(indentLevel);
+        // Check if class has opening brace on same line
+        if (trimmed.match(/[{\[\(]\s*$/)) {
+          indentLevel++;
+        } else {
+          indentLevel++;
+        }
+        return indent + trimmed;
+      }
+      
+      // Detect static methods, regular methods, or constructors
+      if (inClass && (
+        /^(static\s+)?\w+\s*\(/.test(trimmed) || // method declaration (static or regular)
+        /^constructor\s*\(/.test(trimmed) || // constructor
+        /^get\s+\w+\s*\(/.test(trimmed) || // getter
+        /^set\s+\w+\s*\(/.test(trimmed) // setter
+      )) {
+        inMethod = true;
+        const indent = '  '.repeat(indentLevel);
+        // Check if method has opening brace on same line
+        if (trimmed.match(/[{\[\(]\s*$/)) {
+          indentLevel++;
+        } else {
+          indentLevel++;
+        }
+        return indent + trimmed;
+      }
+      
+      // Count braces/brackets to determine net change
+      const openBraces = (trimmed.match(/{/g) || []).length;
+      const closeBraces = (trimmed.match(/}/g) || []).length;
+      const openBrackets = (trimmed.match(/\[/g) || []).length;
+      const closeBrackets = (trimmed.match(/\]/g) || []).length;
+      const openParens = (trimmed.match(/\(/g) || []).length;
+      const closeParens = (trimmed.match(/\)/g) || []).length;
+      
+      // Net change: positive = more opens, negative = more closes
+      const netBraces = openBraces - closeBraces;
+      const netBrackets = openBrackets - closeBrackets;
+      const netParens = openParens - closeParens;
+      
+      // Decrease indent for closing braces/brackets/parens at the start of line
+      if (trimmed.match(/^[}\]\)]/)) {
+        indentLevel = Math.max(0, indentLevel - 1);
+        // If we're closing a class or method, reset flags
+        if (closeBraces > 0) {
+          // Check if this is the end of a method or the class itself
+          const nextNonEmptyLine = lines.slice(index + 1).find(l => l.trim().length > 0);
+          if (!nextNonEmptyLine || /^(class|interface|type|const|let|var|function|export)/.test(nextNonEmptyLine.trim())) {
+            inClass = false;
+            inMethod = false;
+          } else if (inMethod) {
+            inMethod = false;
+          }
+        }
+      }
+      
+      // Add indentation for current line
+      const indent = '  '.repeat(indentLevel);
+      const result = indent + trimmed;
+      
+      // Increase indent if line ends with opening brace/bracket/paren
+      // This means the next line should be indented
+      if (trimmed.match(/[{\[\(]\s*$/)) {
+        indentLevel++;
+      }
+      // Also increase if there are more opens than closes (unclosed braces/brackets/parens)
+      else if (netBraces > 0 || netBrackets > 0 || netParens > 0) {
+        indentLevel += Math.max(netBraces, netBrackets, netParens);
+      }
+      
+      return result;
+    }).join('\n');
+  } else {
+    // Code already has indentation - normalize it
+    const indentations = lines
+      .filter(line => line.trim().length > 0)
+      .map(line => {
+        const match = line.match(/^(\s*)/);
+        return match ? match[1].length : 0;
+      });
+    
+    if (indentations.length > 0) {
+      const minIndent = Math.min(...indentations);
+      
+      // Normalize indentation: preserve relative indentation but use consistent spacing
+      formatted = lines.map(line => {
+        if (line.trim().length === 0) return '';
+        
+        // Count leading whitespace (tabs and spaces)
+        const leadingWhitespace = line.match(/^(\s*)/)?.[1] || '';
+        const indentCount = leadingWhitespace
+          .split('')
+          .reduce((count, char) => count + (char === '\t' ? 2 : 1), 0);
+        
+        // Calculate relative indent level (subtract minimum indent)
+        const relativeIndent = Math.max(0, indentCount - minIndent);
+        
+        // Use 2 spaces per indent level for consistency
+        const normalizedIndent = '  '.repeat(Math.floor(relativeIndent / 2) + (relativeIndent % 2));
+        
+        // Get content without leading whitespace
+        const content = line.trimStart();
+        
+        return normalizedIndent + content;
+      }).join('\n');
+    }
+  }
+  
+  // Remove excessive blank lines (more than 2 consecutive)
+  formatted = formatted.replace(/\n{3,}/g, '\n\n');
+  
+  return formatted;
+};
+
 // Component to render question content with code blocks
 const QuestionContent = ({ content }: { content: string }) => {
   if (!content) return null;
@@ -738,108 +888,6 @@ const QuestionContent = ({ content }: { content: string }) => {
     // Clean up whitespace
     cleaned = cleaned.replace(/\s+/g, ' ').trim();
     return cleaned;
-  };
-
-  // Helper function to format and normalize code content
-  // Intelligently adds indentation based on code structure (braces, blocks, etc.)
-  const formatCodeContent = (code: string): string => {
-    if (!code) return '';
-    
-    // Normalize line endings
-    let formatted = code.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-    
-    // Remove excessive leading/trailing whitespace from entire block
-    formatted = formatted.trim();
-    
-    // Split into lines for processing
-    const lines = formatted.split('\n').map(line => line.trimEnd());
-    
-    if (lines.length === 0) return '';
-    
-    // Check if code already has indentation
-    const hasExistingIndent = lines.some(line => line.trim().length > 0 && /^\s/.test(line));
-    
-    // If code has no indentation, add it based on structure
-    if (!hasExistingIndent) {
-      let indentLevel = 0;
-      
-      formatted = lines.map((line, index) => {
-        const trimmed = line.trim();
-        
-        // Skip empty lines
-        if (trimmed.length === 0) return '';
-        
-        // Count braces/brackets to determine net change
-        const openBraces = (trimmed.match(/{/g) || []).length;
-        const closeBraces = (trimmed.match(/}/g) || []).length;
-        const openBrackets = (trimmed.match(/\[/g) || []).length;
-        const closeBrackets = (trimmed.match(/\]/g) || []).length;
-        
-        // Net change: positive = more opens, negative = more closes
-        const netBraces = openBraces - closeBraces;
-        const netBrackets = openBrackets - closeBrackets;
-        
-        // Decrease indent for closing braces/brackets at the start of line
-        if (trimmed.match(/^[}\]\)]/)) {
-          indentLevel = Math.max(0, indentLevel - 1);
-        }
-        
-        // Add indentation for current line
-        const indent = '  '.repeat(indentLevel);
-        const result = indent + trimmed;
-        
-        // Increase indent if line ends with opening brace/bracket
-        // This means the next line should be indented
-        if (trimmed.match(/[{\[\(]\s*$/)) {
-          indentLevel++;
-        }
-        // Also increase if there are more opens than closes (unclosed braces/brackets)
-        else if (netBraces > 0 || netBrackets > 0) {
-          indentLevel += Math.max(netBraces, netBrackets);
-        }
-        
-        return result;
-      }).join('\n');
-    } else {
-      // Code already has indentation - normalize it
-      const indentations = lines
-        .filter(line => line.trim().length > 0)
-        .map(line => {
-          const match = line.match(/^(\s*)/);
-          return match ? match[1].length : 0;
-        });
-      
-      if (indentations.length > 0) {
-        const minIndent = Math.min(...indentations);
-        
-        // Normalize indentation: preserve relative indentation but use consistent spacing
-        formatted = lines.map(line => {
-          if (line.trim().length === 0) return '';
-          
-          // Count leading whitespace (tabs and spaces)
-          const leadingWhitespace = line.match(/^(\s*)/)?.[1] || '';
-          const indentCount = leadingWhitespace
-            .split('')
-            .reduce((count, char) => count + (char === '\t' ? 2 : 1), 0);
-          
-          // Calculate relative indent level (subtract minimum indent)
-          const relativeIndent = Math.max(0, indentCount - minIndent);
-          
-          // Use 2 spaces per indent level for consistency
-          const normalizedIndent = '  '.repeat(Math.floor(relativeIndent / 2) + (relativeIndent % 2));
-          
-          // Get content without leading whitespace
-          const content = line.trimStart();
-          
-          return normalizedIndent + content;
-        }).join('\n');
-      }
-    }
-    
-    // Remove excessive blank lines (more than 2 consecutive)
-    formatted = formatted.replace(/\n{3,}/g, '\n\n');
-    
-    return formatted;
   };
 
   // Helper function to extract and format code from HTML code blocks (handles nested tags)
@@ -3929,18 +3977,68 @@ function GuidedPracticePageContent() {
                       detectedLanguage = 'typescript';
                     }
                     
-                    // Show ONLY the code editor when code is detected
+                    // Show formatted code in a simple, scrollable code block
+                    // Format the code with proper indentation
+                    const formattedCode = formatCodeContent(extractedCode);
+                    
                     return (
                       <div className='mb-6 sm:mb-8'>
-                        <div className='my-4 sm:my-6'>
-                          <CodeEditor
-                            code={extractedCode}
-                            language={detectedLanguage}
-                            readOnly={true}
-                            height='400px'
-                            theme='vs-dark'
-                            hideActionButtons={true}
-                          />
+                        <div className='relative group my-4 sm:my-6' style={{ backgroundColor: '#111827' }}>
+                          {/* Code block header */}
+                          <div className='flex items-center justify-between px-4 py-2.5 rounded-t-xl border-b-2 shadow-sm' style={{ background: 'linear-gradient(to right, #1f2937, #111827)', borderColor: '#374151' }}>
+                            <span className='text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded-md' style={{ color: '#e5e7eb', backgroundColor: 'rgba(55, 65, 81, 0.5)' }}>
+                              {detectedLanguage}
+                            </span>
+                          </div>
+                          {/* Code block content - Simple pre/code that doesn't interfere with page scrolling */}
+                          <div className='relative overflow-visible rounded-b-xl border-x-2 border-b-2 shadow-lg' style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
+                            <pre 
+                              className='overflow-x-auto overflow-y-visible' 
+                              style={{ 
+                                backgroundColor: '#111827', 
+                                margin: 0, 
+                                padding: '1.5rem 1.75rem',
+                                color: '#f3f4f6',
+                                fontSize: '0.875rem',
+                                lineHeight: '1.8',
+                                fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", "Consolas", "Monaco", "Courier New", monospace',
+                                overflowX: 'auto',
+                                overflowY: 'visible',
+                                whiteSpace: 'pre',
+                                tabSize: 2,
+                                WebkitTabSize: 2,
+                                MozTabSize: 2,
+                                WebkitFontSmoothing: 'antialiased',
+                                MozOsxFontSmoothing: 'grayscale',
+                                letterSpacing: '0.01em',
+                                maxHeight: 'none',
+                                position: 'relative',
+                                zIndex: 1,
+                              }}
+                            >
+                              <code 
+                                style={{ 
+                                  color: '#f3f4f6', 
+                                  display: 'block', 
+                                  backgroundColor: 'transparent',
+                                  fontFamily: 'inherit',
+                                  whiteSpace: 'pre',
+                                  margin: 0,
+                                  padding: 0,
+                                  fontSize: 'inherit',
+                                  lineHeight: 'inherit',
+                                  tabSize: 2,
+                                  WebkitTabSize: 2,
+                                  MozTabSize: 2,
+                                  wordBreak: 'normal',
+                                  overflowWrap: 'normal',
+                                  letterSpacing: '0.01em'
+                                }}
+                              >
+                                {formattedCode}
+                              </code>
+                            </pre>
+                          </div>
                         </div>
                       </div>
                     );

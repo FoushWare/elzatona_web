@@ -581,7 +581,7 @@ export async function GET(
 
     /**
      * Format code content with proper indentation
-     * Intelligently adds indentation based on code structure (braces, blocks, etc.)
+     * Intelligently adds indentation based on code structure (braces, blocks, classes, methods, etc.)
      */
     const formatCodeContent = (code: string): string => {
       if (!code || typeof code !== 'string') return code || '';
@@ -603,12 +603,40 @@ export async function GET(
       // If code has no indentation, add it based on structure
       if (!hasExistingIndent) {
         let indentLevel = 0;
+        let inClass = false;
+        let inMethod = false;
+        let inConstructor = false;
         
-        formatted = lines.map((line) => {
+        formatted = lines.map((line, index) => {
           const trimmed = line.trim();
           
           // Skip empty lines
           if (trimmed.length === 0) return '';
+          
+          // Detect class declaration
+          if (/^(class|interface|type)\s+\w+/.test(trimmed)) {
+            inClass = true;
+            const indent = '  '.repeat(indentLevel);
+            indentLevel++;
+            return indent + trimmed;
+          }
+          
+          // Detect static methods, regular methods, or constructors
+          if (inClass && (
+            /^(static\s+)?\w+\s*\(/.test(trimmed) || // method declaration
+            /^constructor\s*\(/.test(trimmed) || // constructor
+            /^get\s+\w+\s*\(/.test(trimmed) || // getter
+            /^set\s+\w+\s*\(/.test(trimmed) // setter
+          )) {
+            inMethod = true;
+            inConstructor = /^constructor\s*\(/.test(trimmed);
+            const indent = '  '.repeat(indentLevel);
+            // Check if method has opening brace on same line
+            if (trimmed.match(/[{\[\(]\s*$/)) {
+              indentLevel++;
+            }
+            return indent + trimmed;
+          }
           
           // Count braces/brackets to determine net change
           const openBraces = (trimmed.match(/{/g) || []).length;
@@ -626,6 +654,19 @@ export async function GET(
           // Decrease indent for closing braces/brackets/parens at the start of line
           if (trimmed.match(/^[}\]\)]/)) {
             indentLevel = Math.max(0, indentLevel - 1);
+            // If we're closing a class, method, or constructor, reset flags
+            if (closeBraces > 0 && inClass) {
+              // Check if this is the end of a method or the class itself
+              const nextNonEmptyLine = lines.slice(index + 1).find(l => l.trim().length > 0);
+              if (!nextNonEmptyLine || /^(class|interface|type|const|let|var|function)/.test(nextNonEmptyLine.trim())) {
+                inClass = false;
+                inMethod = false;
+                inConstructor = false;
+              } else if (inMethod) {
+                inMethod = false;
+                inConstructor = false;
+              }
+            }
           }
           
           // Add indentation for current line

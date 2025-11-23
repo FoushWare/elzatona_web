@@ -9,6 +9,7 @@ This file indexes all test tasks organized by flow type.
 - [G-003: Guided Learning Plans Page](./guided-flow/G-003-guided-learning-plans.md) - ⏳ Pending
 - [G-004: Individual Plan Page](./guided-flow/G-004-individual-plan-page.md) - ⏳ Pending
 - [G-005: Guided Learning Cards Page](./guided-flow/G-005-guided-learning-cards.md) - ⏳ Pending
+- [G-006: Guided Practice Page (localStorage Dependent)](./guided-flow/G-006-guided-practice-localStorage.md) - ⏳ Pending
 
 ## Freestyle Flow Tasks
 
@@ -42,9 +43,10 @@ This file indexes all test tasks organized by flow type.
 
 ## Test Execution Status
 
-- **Total Tasks**: 23
-- **Implemented**: 23 (100%)
-- **Status**: ✅ **ALL COMPLETE** - Ready for execution
+- **Total Tasks**: 24
+- **Implemented**: 23 (96%)
+- **Pending**: 1 (G-006: Guided Practice localStorage)
+- **Status**: ✅ **MOSTLY COMPLETE** - Ready for execution
 - **Edge Cases**: ✅ 113+ additional edge case tests added
 - **Total Test Cases**: 230+
 - **UI Component Tests**: ✅ 25 tests (Button, Input, Select)
