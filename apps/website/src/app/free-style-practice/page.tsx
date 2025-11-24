@@ -18,7 +18,6 @@ import {
   Star,
   BookmarkPlus,
   BookmarkCheck,
-  ShoppingCart,
   Trophy,
   BarChart3,
 } from 'lucide-react';
@@ -28,7 +27,6 @@ import {
   isInFlashcards,
   FlashcardItem,
 } from '../../lib/flashcards';
-import { addToCart, CartItem } from '../../lib/cart';
 
 interface Question {
   id: string;
@@ -71,6 +69,75 @@ interface FilterOptions {
   categories: string[];
   topics: string[];
 }
+
+// Helper function to format text with code detection
+const formatTextWithCode = (text: string) => {
+  if (!text) return text;
+  
+  // Check if the entire text is code (starts with {, [, `, or common code patterns)
+  const trimmedText = text.trim();
+  const isEntirelyCode = /^[`{\[].*[`}\]]$|^(undefined|ReferenceError|TypeError|SyntaxError|true|false|null)$/i.test(trimmedText);
+  
+  if (isEntirelyCode) {
+    return (
+      <code className='px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded text-sm font-mono inline-block'>
+        {text}
+      </code>
+    );
+  }
+  
+  // Detect code patterns: objects {}, arrays [], backticks, code-like syntax, or emoji objects
+  // Pattern matches: backticks, objects with properties, arrays, JS keywords, function calls, emoji objects
+  const codePattern = /(`[^`]+`|{[^}]+}|\[[^\]]+\]|const\s+\w+|let\s+\w+|var\s+\w+|function\s*\w*|=>|\.\w+\(\)|undefined|ReferenceError|TypeError|SyntaxError)/g;
+  
+  // Check if text contains code patterns
+  const hasCode = codePattern.test(text);
+  
+  if (!hasCode) {
+    return <span>{text}</span>;
+  }
+  
+  // Split text into parts and format code sections
+  const parts: (string | JSX.Element)[] = [];
+  let lastIndex = 0;
+  let match;
+  let keyCounter = 0;
+  
+  // Reset regex
+  codePattern.lastIndex = 0;
+  
+  while ((match = codePattern.exec(text)) !== null) {
+    // Add text before code
+    if (match.index > lastIndex) {
+      const textBefore = text.substring(lastIndex, match.index);
+      if (textBefore) {
+        parts.push(textBefore);
+      }
+    }
+    
+    // Add formatted code
+    parts.push(
+      <code
+        key={`code-${keyCounter++}`}
+        className='px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded text-sm font-mono'
+      >
+        {match[0]}
+      </code>
+    );
+    
+    lastIndex = match.index + match[0].length;
+  }
+  
+  // Add remaining text
+  if (lastIndex < text.length) {
+    const remainingText = text.substring(lastIndex);
+    if (remainingText) {
+      parts.push(remainingText);
+    }
+  }
+  
+  return <span>{parts}</span>;
+};
 
 export default function FreeStylePracticePage() {
   const { userType } = useUserType();
@@ -225,6 +292,21 @@ export default function FreeStylePracticePage() {
           console.log(
             '📌 Filtering questions by URL/resolved topic ID:',
             topicIdToUse
+          );
+        } else if (urlSubtopic) {
+          // If we have a subtopic slug but no resolved topic ID yet, pass it to the API
+          // The API route can handle resolving the subtopic slug to a topic ID
+          params.append('subtopic', urlSubtopic);
+          console.log(
+            '📌 Filtering questions by subtopic slug (API will resolve):',
+            urlSubtopic
+          );
+        } else if (urlTopic && !isValidUUID(urlTopic)) {
+          // If urlTopic is not a UUID, treat it as a slug and pass as subtopic
+          params.append('subtopic', urlTopic);
+          console.log(
+            '📌 Filtering questions by topic slug (API will resolve):',
+            urlTopic
           );
         }
       }
@@ -2425,30 +2507,11 @@ export default function FreeStylePracticePage() {
                     <BookmarkPlus className='w-4 h-4' />
                   )}
                 </button>
-
-                {/* Add to Plan (cart) */}
-                <button
-                  title='Add to Plan'
-                  onClick={() => {
-                    if (!currentQuestion) return;
-                    const item: CartItem = {
-                      id: currentQuestion.id,
-                      question: currentQuestion.question,
-                      section: currentQuestion.section,
-                      difficulty: currentQuestion.difficulty,
-                      addedAt: Date.now(),
-                    };
-                    addToCart(item);
-                  }}
-                  className='ml-1 p-2 rounded-md border border-gray-200 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800'
-                >
-                  <ShoppingCart className='w-4 h-4' />
-                </button>
               </div>
             </div>
 
             <h3 className='text-xl font-semibold text-gray-900 dark:text-white mb-6'>
-              {currentQuestion.question}
+              {formatTextWithCode(currentQuestion.question)}
             </h3>
 
             <div className='space-y-3 mb-6'>
@@ -2493,8 +2556,8 @@ export default function FreeStylePracticePage() {
                           <XCircle className='w-4 h-4 text-white' />
                         )}
                     </div>
-                    <span className='text-gray-900 dark:text-white'>
-                      {option}
+                    <span className='text-gray-900 dark:text-white flex-1 break-words'>
+                      {formatTextWithCode(option)}
                     </span>
                   </div>
                 </button>
@@ -2521,7 +2584,9 @@ export default function FreeStylePracticePage() {
                     The correct answer is{' '}
                     <span className='font-semibold text-gray-900 dark:text-white'>
                       {String.fromCharCode(65 + currentQuestion.correctAnswer)}:{' '}
-                      {currentQuestion.options[currentQuestion.correctAnswer]}
+                      {formatTextWithCode(
+                        currentQuestion.options[currentQuestion.correctAnswer]
+                      )}
                     </span>
                   </p>
                 </div>
@@ -2670,7 +2735,7 @@ export default function FreeStylePracticePage() {
         )}
 
         {/* Session Stats */}
-        <div className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 dark:border-gray-700/20 mb-6'>
+        <div className='bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 dark:border-gray-700/20 mt-12 mb-6'>
           <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center'>
             <TrendingUp className='w-5 h-5 mr-2 text-green-500' />
             Session Statistics
