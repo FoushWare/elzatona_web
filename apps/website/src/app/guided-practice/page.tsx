@@ -19,6 +19,10 @@ import {
   BookmarkCheck,
   ShoppingCart,
   BarChart3,
+  Video,
+  FileText,
+  GraduationCap,
+  ExternalLink,
 } from 'lucide-react';
 import { addFlashcard, isInFlashcards } from '../../lib/flashcards';
 import { addToCart } from '../../lib/cart';
@@ -26,6 +30,15 @@ import { useNotifications } from '@/components/NotificationSystem';
 import { useLearningType } from '../../context/LearningTypeContext';
 import ProblemSolvingQuestion from '@/components/ProblemSolvingQuestion';
 import CodeEditor from '@/components/CodeEditor';
+
+interface Resource {
+  type: 'video' | 'course' | 'article';
+  title: string;
+  url: string;
+  description?: string;
+  duration?: string;
+  author?: string;
+}
 
 interface Question {
   id: string;
@@ -48,6 +61,7 @@ interface Question {
     explanation?: string;
   }> | string;
   hints?: string[] | null;
+  resources?: Resource[] | null;
   constraints?: string[] | null;
   tags?: string[] | null;
   language?: string;
@@ -576,19 +590,34 @@ const isValidCode = (content: string): { isValid: boolean; score: number; reason
   // TEXT INDICATORS (Negative Points)
   // ============================================
   
-  // Common text patterns (reduce score)
+  // Common text patterns (reduce score) - IMPROVED to catch more text patterns
   const textPatterns = [
     /^[A-Z][^.!?]*[.!?]\s*$/, // Sentence structure
     /\b(the|a|an|is|are|was|were|be|been|being)\b/i, // Common words
-    /\b(explain|describe|what|when|where|why|how)\b/i, // Question words
+    /\b(explain|describe|what|when|where|why|how|requires|enables|creates|scales)\b/i, // Question/explanation words
     /[.!?]\s+[A-Z]/, // Multiple sentences
     /\b(should|would|could|might|may)\b/i, // Modal verbs
+    /\b(requires|enables|allows|provides|offers|supports)\b/i, // Descriptive verbs
+    /\b(typography|responsive|viewport|fluid|sizing|scaling|purpose)\b/i, // Common CSS/text terms
   ];
   
   const textMatches = textPatterns.filter(p => p.test(trimmed)).length;
   if (textMatches > 2) {
-    score -= textMatches;
+    score -= textMatches * 2; // Increased penalty for text patterns
     reasons.push(`${textMatches} text pattern(s) found (reducing score)`);
+  }
+  
+  // Strong text indicators - if content contains explanation/question language, heavily penalize
+  const strongTextIndicators = [
+    /\b(explain|describe|what|how|why|when|where)\b/i,
+    /\b(requires|enables|allows|provides|offers|supports|creates)\b/i,
+    /\b(typography|responsive|viewport|fluid|sizing|scaling|purpose)\b/i,
+  ];
+  
+  const strongTextMatches = strongTextIndicators.filter(p => p.test(trimmed)).length;
+  if (strongTextMatches >= 2) {
+    score -= 5; // Heavy penalty for explanation/question text
+    reasons.push(`${strongTextMatches} strong text indicators found (heavy penalty)`);
   }
 
   // Very long sentences without code structure (likely text)
@@ -823,7 +852,10 @@ const QuestionContent = ({ content }: { content: string }) => {
       .replace(/<code([a-zA-Z])/gi, '<code>$1')
       // Fix patterns where closing tags are merged
       .replace(/([a-zA-Z])<\/cod/gi, '$1</code>')
-      .replace(/([a-zA-Z])<\/code/gi, '$1</code>');
+      .replace(/([a-zA-Z])<\/code/gi, '$1</code>')
+      // Fix malformed <cod patterns with numbers/units (e.g., <cod1rem -> <code>1rem</code>)
+      .replace(/<cod(\d+[a-zA-Z]+)/gi, '<code>$1</code>')
+      .replace(/<cod(\d+)/gi, '<code>$1</code>');
   }
 
   // Parse content to extract code blocks and text
@@ -966,7 +998,10 @@ const QuestionContent = ({ content }: { content: string }) => {
       .replace(/<code([a-zA-Z])/gi, '<code>$1')
       // Fix patterns where closing tags are merged
       .replace(/([a-zA-Z])<\/cod/gi, '$1</code>')
-      .replace(/([a-zA-Z])<\/code/gi, '$1</code>');
+      .replace(/([a-zA-Z])<\/code/gi, '$1</code>')
+      // Fix malformed <cod patterns with numbers/units (e.g., <cod1rem -> <code>1rem</code>)
+      .replace(/<cod(\d+[a-zA-Z]+)/gi, '<code>$1</code>')
+      .replace(/<cod(\d+)/gi, '<code>$1</code>');
 
     // Try <pre><code> first (most common format from database)
     const preStart = fixedHtml.indexOf('<pre');
@@ -2005,26 +2040,34 @@ function GuidedPracticePageContent() {
           ) {
             const question = topic.questions[currentPosition.questionIndex];
 
-            // Check if this question is already completed and has options (for multiple choice) or is a code question
+            // Check if this question has options (for multiple choice) or is a code question
             const hasOptions = question.options &&
               Array.isArray(question.options) &&
               question.options.length > 0;
             const isCodeQuestion = question.type === 'code';
             
-            if (
-              !savedProgress.completedQuestions.includes(question.id) &&
-              (hasOptions || isCodeQuestion)
-            ) {
+            // Always resume from saved position if the question is valid (regardless of completion status)
+            // This allows users to see the explanation and proceed to next question even if already answered
+            if (hasOptions || isCodeQuestion) {
+              const isCompleted = savedProgress.completedQuestions.includes(question.id);
               console.log('✅ Resuming from saved position:', {
                 cardTitle: card.title,
                 categoryName: category.name,
                 questionTitle: question.title?.substring(0, 50),
+                isCompleted,
               });
               setCurrentQuestion(question);
               setCurrentQuestionIndex(currentPosition.questionIndex);
               setCurrentTopicIndex(currentPosition.topicIndex);
               setCurrentCategoryIndex(currentPosition.categoryIndex);
               setCurrentCardIndex(currentPosition.cardIndex);
+              
+              // If the question was already answered, show the explanation automatically
+              if (isCompleted && question.type !== 'code') {
+                // Find the answer that was selected (if we can determine it)
+                // For now, just show the explanation
+                setShowExplanation(true);
+              }
               
               // Ensure current position is saved (in case it wasn't saved before)
               const latestProgress = loadProgress();
@@ -3989,7 +4032,7 @@ function GuidedPracticePageContent() {
                             <span className='text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded-md' style={{ color: '#e5e7eb', backgroundColor: 'rgba(55, 65, 81, 0.5)' }}>
                               {detectedLanguage}
                             </span>
-                          </div>
+            </div>
                           {/* Code block content - Simple pre/code that doesn't interfere with page scrolling */}
                           <div className='relative overflow-visible rounded-b-xl border-x-2 border-b-2 shadow-lg' style={{ backgroundColor: '#111827', borderColor: '#374151' }}>
                             <pre 
@@ -4203,6 +4246,108 @@ function GuidedPracticePageContent() {
                   </div>
             </div>
           )}
+
+              {/* Resources - Show after explanation if available */}
+              {currentQuestion.type !== 'code' && showExplanation && currentQuestion.resources && Array.isArray(currentQuestion.resources) && currentQuestion.resources.length > 0 && (
+                <div className='mt-6 sm:mt-8 p-5 sm:p-6 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-purple-900/30 dark:via-pink-900/30 dark:to-orange-900/30 border-2 border-purple-300 dark:border-purple-700 rounded-xl sm:rounded-2xl shadow-xl shadow-purple-200/50 dark:shadow-purple-900/30 animate-in fade-in slide-in-from-bottom-4 duration-500'>
+                  <div className='flex items-center space-x-3 mb-4'>
+                    <div className='p-2.5 bg-purple-500 dark:bg-purple-600 rounded-lg shadow-md'>
+                      <BookOpen className='w-5 h-5 sm:w-6 sm:h-6 text-white' />
+                    </div>
+                    <p className='text-base sm:text-lg font-bold text-purple-900 dark:text-purple-100'>
+                      Learning Resources
+                    </p>
+                  </div>
+                  <div className='space-y-3 sm:space-y-4'>
+                    {currentQuestion.resources.map((resource, index) => {
+                      const getIcon = () => {
+                        switch (resource.type) {
+                          case 'video':
+                            return <Video className='w-5 h-5 sm:w-6 sm:h-6' />;
+                          case 'course':
+                            return <GraduationCap className='w-5 h-5 sm:w-6 sm:h-6' />;
+                          case 'article':
+                            return <FileText className='w-5 h-5 sm:w-6 sm:h-6' />;
+                          default:
+                            return <BookOpen className='w-5 h-5 sm:w-6 sm:h-6' />;
+                        }
+                      };
+
+                      const getTypeColor = () => {
+                        switch (resource.type) {
+                          case 'video':
+                            return 'from-red-500 to-pink-600 dark:from-red-600 dark:to-pink-700';
+                          case 'course':
+                            return 'from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700';
+                          case 'article':
+                            return 'from-green-500 to-emerald-600 dark:from-green-600 dark:to-emerald-700';
+                          default:
+                            return 'from-purple-500 to-indigo-600 dark:from-purple-600 dark:to-indigo-700';
+                        }
+                      };
+
+                      const getTypeLabel = () => {
+                        switch (resource.type) {
+                          case 'video':
+                            return 'Video';
+                          case 'course':
+                            return 'Course';
+                          case 'article':
+                            return 'Article';
+                          default:
+                            return 'Resource';
+                        }
+                      };
+
+                      return (
+                        <a
+                          key={index}
+                          href={resource.url}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='group block p-4 sm:p-5 bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl border-2 border-purple-200 dark:border-purple-800 hover:border-purple-400 dark:hover:border-purple-600 transition-all duration-300 hover:shadow-lg hover:shadow-purple-200/50 dark:hover:shadow-purple-900/30 transform hover:scale-[1.02] active:scale-[0.98]'
+                        >
+                          <div className='flex items-start space-x-4'>
+                            <div className={`p-2.5 sm:p-3 rounded-lg bg-gradient-to-br ${getTypeColor()} text-white shadow-md flex-shrink-0`}>
+                              {getIcon()}
+                            </div>
+                            <div className='flex-1 min-w-0'>
+                              <div className='flex items-center space-x-2 mb-1'>
+                                <span className='text-xs sm:text-sm font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400'>
+                                  {getTypeLabel()}
+                                </span>
+                                <ExternalLink className='w-3 h-3 sm:w-4 sm:h-4 text-purple-500 dark:text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity' />
+                              </div>
+                              <h4 className='text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100 mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors'>
+                                {resource.title}
+                              </h4>
+                              {resource.description && (
+                                <p className='text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2'>
+                                  {resource.description}
+                                </p>
+                              )}
+                              <div className='flex items-center space-x-3 text-xs sm:text-sm text-gray-500 dark:text-gray-500'>
+                                {resource.duration && (
+                                  <div className='flex items-center space-x-1'>
+                                    <Clock className='w-3 h-3 sm:w-4 sm:h-4' />
+                                    <span>{resource.duration}</span>
+                                  </div>
+                                )}
+                                {resource.author && (
+                                  <div className='flex items-center space-x-1'>
+                                    <span className='text-gray-400 dark:text-gray-500'>by</span>
+                                    <span className='font-medium'>{resource.author}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* Next Question Button - Only show for non-code questions */}
               {currentQuestion.type !== 'code' && currentAnswer && (

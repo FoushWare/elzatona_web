@@ -10,7 +10,7 @@
 ## Time Estimation
 
 ### Manual Testing
-- **Estimated Time**: 30-45 minutes
+- **Estimated Time**: 35-50 minutes
 - **Breakdown**:
   - Navigate to page and verify: 3 minutes
   - Test localStorage initialization: 5 minutes
@@ -19,22 +19,23 @@
   - Test browser refresh/resume: 5-7 minutes
   - Test answer selection and scoring: 5-7 minutes
   - Test completion flow: 3-5 minutes
+  - Test learning resources display: 5-7 minutes ⭐ NEW
 - **Complexity**: High
-- **Dependencies**: Test plan data, localStorage access
+- **Dependencies**: Test plan data, localStorage access, questions with resources
 
 ### Automated Testing
-- **Estimated Time**: 15-20 minutes (first run), 3-5 minutes (subsequent runs)
+- **Estimated Time**: 18-25 minutes (first run), 4-6 minutes (subsequent runs)
 - **Breakdown**:
-  - Unit tests setup and execution: 5-6 minutes
-  - Integration tests setup and execution: 5-7 minutes (includes localStorage mocking)
-  - E2E tests execution: 5-7 minutes (includes localStorage operations)
+  - Unit tests setup and execution: 6-7 minutes (includes resources tests) ⭐ UPDATED
+  - Integration tests setup and execution: 6-8 minutes (includes localStorage mocking and resources) ⭐ UPDATED
+  - E2E tests execution: 6-10 minutes (includes localStorage operations and resources) ⭐ UPDATED
 - **Complexity**: High
-- **Dependencies**: localStorage mocks, test plan data, question data
+- **Dependencies**: localStorage mocks, test plan data, question data, questions with resources
 
 ### Total Time
-- **Manual Only**: 30-45 minutes
-- **Automated Only**: 15-20 minutes (first run), 3-5 minutes (subsequent)
-- **Both Manual + Automated**: 45-65 minutes (first run), 33-50 minutes (subsequent)
+- **Manual Only**: 35-50 minutes ⭐ UPDATED
+- **Automated Only**: 18-25 minutes (first run), 4-6 minutes (subsequent) ⭐ UPDATED
+- **Both Manual + Automated**: 53-75 minutes (first run), 39-56 minutes (subsequent) ⭐ UPDATED
 
 ## Manual Testing Steps
 
@@ -113,6 +114,18 @@
     - Verify Plan B has separate progress
     - Switch back to Plan A
     - Verify Plan A progress is restored
+
+11. **Test learning resources display** ⭐ NEW
+    - Find a question with resources (videos, courses, or articles)
+    - Answer the question to show the explanation
+    - Verify resources section appears after the explanation
+    - Verify resource types display correctly (video, course, article)
+    - Verify resource details (title, URL, description, duration, author)
+    - Click resource link → Verify opens in new tab
+    - Verify resources NOT shown when question has no resources
+    - Verify resources NOT shown for code questions
+    - Verify resources NOT shown before explanation is shown
+    - Verify multiple resources display in list format
 
 ## Test Execution Commands
 
@@ -241,6 +254,20 @@ npm run test:e2e -- tests/e2e/guided-flow/guided-practice-localStorage.spec.ts
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
 
+- **G-UT-030**: Test resources component rendering
+  - **File**: `apps/website/src/app/guided-practice/page.test.tsx`
+  - **Assertions**:
+    - Resources component renders when resources array exists and is not empty
+    - Resources component does NOT render when resources is null
+    - Resources component does NOT render when resources array is empty
+    - Resources component does NOT render for code questions
+    - Resources component does NOT render before explanation is shown
+    - Each resource type displays correct icon (Video, GraduationCap, FileText)
+    - Resource title, URL, description, duration, and author are displayed correctly
+    - Resource links have target="_blank" and rel="noopener noreferrer"
+  - **Status**: ⏳ Pending
+  - **Can Run Parallel**: ✅ Yes
+
 ## Integration Tests
 
 - **G-IT-015**: Test plan data fetch and progress initialization
@@ -310,6 +337,20 @@ npm run test:e2e -- tests/e2e/guided-flow/guided-practice-localStorage.spec.ts
     - categoryId filter restricts questions to specific category
     - Progress respects filters
     - Resume respects filters
+  - **Status**: ⏳ Pending
+  - **Can Run Parallel**: ✅ Yes
+
+- **G-IT-022**: Test resources display and interaction
+  - **File**: `apps/website/src/app/guided-practice/page.integration.test.tsx`
+  - **Assertions**:
+    - Resources section appears after explanation when resources exist
+    - Resources section does NOT appear when resources is null/empty
+    - Resources section does NOT appear for code questions
+    - Resources section does NOT appear before explanation is shown
+    - Resource types display with correct icons (video, course, article)
+    - Resource URLs open in new tab
+    - Multiple resources display in list format
+    - Resource metadata (description, duration, author) displays correctly
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
 
@@ -403,6 +444,22 @@ npm run test:e2e -- tests/e2e/guided-flow/guided-practice-localStorage.spec.ts
     4. Verify code has proper indentation
     5. Verify code is formatted correctly
     6. Verify no duplicate code/text content
+  - **Status**: ⏳ Pending
+  - **Can Run Parallel**: ✅ Yes
+
+- **G-E2E-017**: Test learning resources display
+  - **File**: `tests/e2e/guided-flow/guided-practice-localStorage.spec.ts`
+  - **Steps**:
+    1. Navigate to practice page
+    2. Find question with resources (videos, courses, or articles)
+    3. Answer the question to show explanation
+    4. Verify resources section appears after explanation
+    5. Verify resource types display correctly (video, course, article)
+    6. Verify resource details (title, URL, description, duration, author)
+    7. Click resource → Verify opens in new tab
+    8. Verify resources not shown when question has no resources
+    9. Verify resources not shown for code questions
+    10. Verify multiple resources display correctly
   - **Status**: ⏳ Pending
   - **Can Run Parallel**: ✅ Yes
 
