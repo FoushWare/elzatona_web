@@ -913,8 +913,8 @@ export default function AdminContentQuestionsPage() {
 
       {/* View Question Modal */}
       <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-        <DialogContent className='!max-w-6xl max-h-[90vh] overflow-y-auto mx-auto'>
-          <DialogHeader className='pb-4 border-b'>
+        <DialogContent className='!max-w-6xl max-h-[95vh] overflow-hidden flex flex-col mx-auto my-4'>
+          <DialogHeader className='pb-4 border-b flex-shrink-0'>
             <div className='flex items-center justify-between'>
               <div>
                 <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
@@ -935,7 +935,7 @@ export default function AdminContentQuestionsPage() {
               </Button>
             </div>
           </DialogHeader>
-          <div className='flex-1 overflow-y-auto p-1'>
+          <div className='flex-1 overflow-y-auto min-h-0 p-1'>
             {selectedQuestion && (
               <>
                 {/* Header Section */}
@@ -1251,8 +1251,8 @@ export default function AdminContentQuestionsPage() {
 
       {/* Edit Question Modal */}
       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <DialogContent className='!max-w-6xl max-h-[90vh] overflow-y-auto mx-auto'>
-          <DialogHeader className='pb-4 border-b'>
+        <DialogContent className='!max-w-6xl max-h-[95vh] overflow-hidden flex flex-col mx-auto my-4'>
+          <DialogHeader className='pb-4 border-b flex-shrink-0'>
             <div className='flex items-center justify-between'>
               <div>
                 <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
@@ -1273,7 +1273,7 @@ export default function AdminContentQuestionsPage() {
               </Button>
             </div>
           </DialogHeader>
-          <div className='flex-1 overflow-y-auto'>
+          <div className='flex-1 overflow-y-auto min-h-0 px-1'>
             {selectedQuestion && (
               <QuestionForm
                 initialData={selectedQuestion}
@@ -1290,8 +1290,8 @@ export default function AdminContentQuestionsPage() {
 
       {/* Create Question Modal */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-        <DialogContent className='!max-w-6xl max-h-[90vh] overflow-y-auto mx-auto'>
-          <DialogHeader className='pb-4 border-b'>
+        <DialogContent className='!max-w-6xl max-h-[95vh] overflow-hidden flex flex-col mx-auto my-4'>
+          <DialogHeader className='pb-4 border-b flex-shrink-0'>
             <div className='flex items-center justify-between'>
               <div>
                 <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
@@ -1312,7 +1312,7 @@ export default function AdminContentQuestionsPage() {
               </Button>
             </div>
           </DialogHeader>
-          <div className='flex-1 overflow-y-auto'>
+          <div className='flex-1 overflow-y-auto min-h-0 px-1'>
             <QuestionForm
               onSubmit={handleCreateQuestion}
               onCancel={() => setIsCreateModalOpen(false)}
@@ -1393,7 +1393,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   const difficulties = ['beginner', 'intermediate', 'advanced'];
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-8 p-1'>
+    <form onSubmit={handleSubmit} className='space-y-8 p-4'>
       {/* Header Section */}
       <div className='bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-lg border'>
         <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
