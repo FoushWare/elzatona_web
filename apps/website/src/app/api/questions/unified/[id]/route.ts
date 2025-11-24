@@ -196,8 +196,31 @@ export async function PUT(
       updated_at: _updated_at, // We set this ourselves
       id: _id, // Don't include id in update
       sampleAnswers, // Frontend-only field
+      resources, // Keep resources - it's a valid database field
       ...dbUpdate
     } = sanitizedUpdate;
+
+    // Handle resources field - validate it's an array or null
+    if ('resources' in sanitizedUpdate) {
+      if (sanitizedUpdate.resources === null || sanitizedUpdate.resources === undefined || sanitizedUpdate.resources === '') {
+        dbUpdate.resources = null;
+      } else if (Array.isArray(sanitizedUpdate.resources)) {
+        // Validate each resource object
+        const validResources = sanitizedUpdate.resources.filter((resource: any) => {
+          return (
+            resource &&
+            typeof resource === 'object' &&
+            ['video', 'course', 'article'].includes(resource.type) &&
+            typeof resource.title === 'string' &&
+            typeof resource.url === 'string'
+          );
+        });
+        dbUpdate.resources = validResources.length > 0 ? validResources : null;
+      } else {
+        console.warn('⚠️ Invalid resources format - must be array or null. Setting to null.');
+        dbUpdate.resources = null;
+      }
+    }
 
     // Ensure content field exists if title is provided
     if (!dbUpdate.content && dbUpdate.title) {

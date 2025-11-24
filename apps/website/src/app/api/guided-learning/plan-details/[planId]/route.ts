@@ -892,7 +892,10 @@ export async function GET(
           .replace(/<cod([a-zA-Z])/gi, '<code>$1')
           .replace(/<code([a-zA-Z])/gi, '<code>$1')
           .replace(/([a-zA-Z])<\/cod/gi, '$1</code>')
-          .replace(/([a-zA-Z])<\/code/gi, '$1</code>');
+          .replace(/([a-zA-Z])<\/code/gi, '$1</code>')
+          // Fix malformed <cod patterns with numbers/units (e.g., <cod1rem -> <code>1rem</code>)
+          .replace(/<cod(\d+[a-zA-Z]+)/gi, '<code>$1</code>')
+          .replace(/<cod(\d+)/gi, '<code>$1</code>');
       }
       
       // ============================================
@@ -1173,6 +1176,8 @@ export async function GET(
           tags: Array.isArray(q.tags) ? q.tags : (q.tags ? [q.tags] : null),
           // Include language from database (defaults to 'javascript' if null)
           language: q.language || 'javascript',
+          // Include resources if they exist (nullable field)
+          resources: q.resources || null,
         };
         } catch (questionError) {
           console.error(`❌ Error processing question ${q?.id || 'unknown'}:`, questionError);

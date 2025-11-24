@@ -502,6 +502,27 @@ export async function POST(request: NextRequest) {
           tags = sanitizedQuestion.tags;
         }
         
+        // Handle resources if provided
+        let resources = null;
+        if (sanitizedQuestion.resources !== undefined && sanitizedQuestion.resources !== null) {
+          if (Array.isArray(sanitizedQuestion.resources)) {
+            // Validate each resource object
+            const validResources = sanitizedQuestion.resources.filter((resource: any) => {
+              return (
+                resource &&
+                typeof resource === 'object' &&
+                ['video', 'course', 'article'].includes(resource.type) &&
+                typeof resource.title === 'string' &&
+                typeof resource.url === 'string'
+              );
+            });
+            resources = validResources.length > 0 ? validResources : null;
+          } else {
+            console.warn('⚠️ Invalid resources format - must be array or null. Setting to null.');
+            resources = null;
+          }
+        }
+        
         const questionWithTimestamps: any = {
           ...dbQuestion,
           category_id: categoryId || null,
@@ -520,6 +541,9 @@ export async function POST(request: NextRequest) {
         }
         if (tags !== null) {
           questionWithTimestamps.tags = tags;
+        }
+        if (resources !== null) {
+          questionWithTimestamps.resources = resources;
         }
         
         // Handle options - only add if present and is an array with items
@@ -732,8 +756,31 @@ export async function PUT(request: NextRequest) {
       topic,
       learningCardId: _learningCardId,
       learning_card_id: _learning_card_id,
+      resources, // Keep resources - it's a valid database field
       ...dbUpdate
     } = sanitizedUpdate;
+
+    // Handle resources field - validate it's an array or null
+    if ('resources' in sanitizedUpdate) {
+      if (sanitizedUpdate.resources === null || sanitizedUpdate.resources === undefined || sanitizedUpdate.resources === '') {
+        dbUpdate.resources = null;
+      } else if (Array.isArray(sanitizedUpdate.resources)) {
+        // Validate each resource object
+        const validResources = sanitizedUpdate.resources.filter((resource: any) => {
+          return (
+            resource &&
+            typeof resource === 'object' &&
+            ['video', 'course', 'article'].includes(resource.type) &&
+            typeof resource.title === 'string' &&
+            typeof resource.url === 'string'
+          );
+        });
+        dbUpdate.resources = validResources.length > 0 ? validResources : null;
+      } else {
+        console.warn('⚠️ Invalid resources format - must be array or null. Setting to null.');
+        dbUpdate.resources = null;
+      }
+    }
 
     // Ensure content field exists if title is provided
     if (!dbUpdate.content && dbUpdate.title) {
