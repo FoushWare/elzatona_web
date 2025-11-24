@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Card,
   CardContent,
@@ -37,6 +37,8 @@ import {
   ChevronRight,
   X,
   HelpCircle,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { AdvancedSearch } from '@elzatona/shared-components';
 
@@ -163,6 +165,10 @@ export default function AdminContentQuestionsPage() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  // Form refs for modal submission
+  const createFormRef = useRef<HTMLFormElement>(null);
+  const editFormRef = useRef<HTMLFormElement>(null);
 
   // Fetch questions
   useEffect(() => {
@@ -913,29 +919,27 @@ export default function AdminContentQuestionsPage() {
 
       {/* View Question Modal */}
       <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-        <DialogContent className='!max-w-6xl max-h-[95vh] overflow-hidden flex flex-col mx-auto my-4'>
-          <DialogHeader className='pb-4 border-b flex-shrink-0'>
+        <DialogContent className='!max-w-6xl h-[95vh] max-h-[95vh] flex flex-col mx-auto my-4 p-0 overflow-hidden'>
+          <DialogHeader className='px-6 pt-6 pb-4 border-b flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 z-10'>
             <div className='flex items-center justify-between'>
-              <div>
-                <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
-                  <Eye className='w-6 h-6 text-blue-600' />
-                  Question Details
-                </DialogTitle>
-                <DialogDescription className='text-gray-600 dark:text-gray-400'>
-                  View and analyze question information
-                </DialogDescription>
-              </div>
+              <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
+                <Eye className='w-6 h-6 text-blue-600' />
+                Question Details
+              </DialogTitle>
               <Button
-                variant='outline'
+                variant='ghost'
                 size='sm'
                 onClick={() => setIsViewModalOpen(false)}
-                className='ml-auto'
+                className='h-8 w-8 p-0'
               >
                 <X className='w-4 h-4' />
               </Button>
             </div>
+            <DialogDescription className='text-gray-600 dark:text-gray-400 mt-2'>
+              View and analyze question information
+            </DialogDescription>
           </DialogHeader>
-          <div className='flex-1 overflow-y-auto min-h-0 p-1'>
+          <div className='flex-1 overflow-y-auto overflow-x-hidden min-h-0 px-6 py-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800'>
             {selectedQuestion && (
               <>
                 {/* Header Section */}
@@ -1241,8 +1245,12 @@ export default function AdminContentQuestionsPage() {
               </>
             )}
           </div>
-          <DialogFooter className='flex-shrink-0 border-t pt-4'>
-            <Button variant='outline' onClick={() => setIsViewModalOpen(false)}>
+          <DialogFooter className='px-6 py-4 border-t flex-shrink-0 sticky bottom-0 bg-gray-50 dark:bg-gray-900/50 z-10'>
+            <Button
+              variant='outline'
+              onClick={() => setIsViewModalOpen(false)}
+              type='button'
+            >
               Close
             </Button>
           </DialogFooter>
@@ -1251,31 +1259,30 @@ export default function AdminContentQuestionsPage() {
 
       {/* Edit Question Modal */}
       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <DialogContent className='!max-w-6xl max-h-[95vh] overflow-hidden flex flex-col mx-auto my-4'>
-          <DialogHeader className='pb-4 border-b flex-shrink-0'>
+        <DialogContent className='!max-w-6xl h-[95vh] max-h-[95vh] flex flex-col mx-auto my-4 p-0 overflow-hidden'>
+          <DialogHeader className='px-6 pt-6 pb-4 border-b flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 z-10'>
             <div className='flex items-center justify-between'>
-              <div>
-                <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
-                  <Edit className='w-6 h-6 text-green-600' />
-                  Edit Question
-                </DialogTitle>
-                <DialogDescription className='text-gray-600 dark:text-gray-400'>
-                  Modify question details and options
-                </DialogDescription>
-              </div>
+              <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
+                <Edit className='w-6 h-6 text-green-600' />
+                Edit Question
+              </DialogTitle>
               <Button
-                variant='outline'
+                variant='ghost'
                 size='sm'
                 onClick={() => setIsEditModalOpen(false)}
-                className='ml-auto'
+                className='h-8 w-8 p-0'
               >
                 <X className='w-4 h-4' />
               </Button>
             </div>
+            <DialogDescription className='text-gray-600 dark:text-gray-400 mt-2'>
+              Modify question details and options
+            </DialogDescription>
           </DialogHeader>
-          <div className='flex-1 overflow-y-auto min-h-0 px-1'>
+          <div className='flex-1 overflow-y-auto overflow-x-hidden min-h-0 px-6 py-4'>
             {selectedQuestion && (
               <QuestionForm
+                ref={editFormRef}
                 initialData={selectedQuestion}
                 onSubmit={handleUpdateQuestion}
                 onCancel={() => setIsEditModalOpen(false)}
@@ -1285,35 +1292,55 @@ export default function AdminContentQuestionsPage() {
               />
             )}
           </div>
+          <DialogFooter className='px-6 py-4 border-t flex-shrink-0 sticky bottom-0 bg-gray-50 dark:bg-gray-900/50 z-10'>
+            <Button
+              variant='outline'
+              onClick={() => setIsEditModalOpen(false)}
+              type='button'
+            >
+              Cancel
+            </Button>
+            <Button
+              type='submit'
+              onClick={(e) => {
+                e.preventDefault();
+                if (editFormRef.current) {
+                  editFormRef.current.requestSubmit();
+                }
+              }}
+              className='bg-blue-600 hover:bg-blue-700'
+            >
+              Update Question
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Create Question Modal */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-        <DialogContent className='!max-w-6xl max-h-[95vh] overflow-hidden flex flex-col mx-auto my-4'>
-          <DialogHeader className='pb-4 border-b flex-shrink-0'>
+        <DialogContent className='!max-w-6xl h-[95vh] max-h-[95vh] flex flex-col mx-auto my-4 p-0 overflow-hidden'>
+          <DialogHeader className='px-6 pt-6 pb-4 border-b flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 z-10'>
             <div className='flex items-center justify-between'>
-              <div>
-                <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
-                  <Plus className='w-6 h-6 text-blue-600' />
-                  Create New Question
-                </DialogTitle>
-                <DialogDescription className='text-gray-600 dark:text-gray-400'>
-                  Add a new question to the database
-                </DialogDescription>
-              </div>
+              <DialogTitle className='text-2xl font-bold flex items-center gap-2'>
+                <Plus className='w-6 h-6 text-blue-600' />
+                Add Question
+              </DialogTitle>
               <Button
-                variant='outline'
+                variant='ghost'
                 size='sm'
                 onClick={() => setIsCreateModalOpen(false)}
-                className='ml-auto'
+                className='h-8 w-8 p-0'
               >
                 <X className='w-4 h-4' />
               </Button>
             </div>
+            <DialogDescription className='text-gray-600 dark:text-gray-400 mt-2'>
+              Add a new question to the database
+            </DialogDescription>
           </DialogHeader>
-          <div className='flex-1 overflow-y-auto min-h-0 px-1'>
+          <div className='flex-1 overflow-y-auto overflow-x-hidden min-h-0 px-6 py-4'>
             <QuestionForm
+              ref={createFormRef}
               onSubmit={handleCreateQuestion}
               onCancel={() => setIsCreateModalOpen(false)}
               cards={cards}
@@ -1321,6 +1348,27 @@ export default function AdminContentQuestionsPage() {
               allTags={[]}
             />
           </div>
+          <DialogFooter className='px-6 py-4 border-t flex-shrink-0 sticky bottom-0 bg-gray-50 dark:bg-gray-900/50 z-10'>
+            <Button
+              variant='outline'
+              onClick={() => setIsCreateModalOpen(false)}
+              type='button'
+            >
+              Cancel
+            </Button>
+            <Button
+              type='submit'
+              onClick={(e) => {
+                e.preventDefault();
+                if (createFormRef.current) {
+                  createFormRef.current.requestSubmit();
+                }
+              }}
+              className='bg-blue-600 hover:bg-blue-700'
+            >
+              Create Question
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
@@ -1336,14 +1384,10 @@ interface QuestionFormProps {
   allTags: string[];
 }
 
-const QuestionForm: React.FC<QuestionFormProps> = ({
-  initialData,
-  onSubmit,
-  onCancel,
-  cards,
-  allCategories,
-  allTags,
-}) => {
+const QuestionForm = React.forwardRef<
+  HTMLFormElement,
+  QuestionFormProps
+>(({ initialData, onSubmit, onCancel, cards, allCategories, allTags }, ref) => {
   const [formData, setFormData] = useState<Partial<UnifiedQuestion>>(
     initialData || {
       title: '',
@@ -1357,14 +1401,24 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       points: 1,
     }
   );
+  
+  // State for showing/hiding collapsible sections
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [showResources, setShowResources] = useState(false);
 
   useEffect(() => {
     if (initialData) {
       setFormData({
         ...initialData,
+        content: initialData.content || '',
+        title: initialData.title || '',
         options: initialData.options || [],
         tags: initialData.tags || [],
+        explanation: initialData.explanation || '',
       });
+      // Show explanation/resources if they have content
+      setShowExplanation(!!initialData.explanation);
+      setShowResources(!!(initialData as any).resources);
     }
   }, [initialData]);
 
@@ -1380,6 +1434,23 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     }));
   };
 
+  const handleResourcesChange = (value: string) => {
+    try {
+      // Try to parse as JSON
+      const parsed = value ? JSON.parse(value) : null;
+      setFormData(prev => ({
+        ...prev,
+        resources: parsed,
+      }));
+    } catch (error) {
+      // If invalid JSON, store as string and let validation handle it
+      setFormData(prev => ({
+        ...prev,
+        resources: value as any,
+      }));
+    }
+  };
+
   const handleSelectChange = (name: keyof UnifiedQuestion, value: string) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
@@ -1393,7 +1464,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   const difficulties = ['beginner', 'intermediate', 'advanced'];
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-8 p-4'>
+    <form ref={ref} onSubmit={handleSubmit} className='space-y-6 pb-4'>
       {/* Header Section */}
       <div className='bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-lg border'>
         <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>
@@ -1522,19 +1593,22 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           Question Content
         </h4>
         <div>
-          <Label htmlFor='content' className='text-sm font-medium'>
-            Content
+          <Label htmlFor='content' className='text-sm font-medium mb-2 block'>
+            Content <span className='text-red-500'>*</span>
           </Label>
           <Textarea
             id='content'
             name='content'
             value={formData.content || ''}
             onChange={handleChange}
-            rows={5}
+            rows={6}
             required
-            className='mt-1'
+            className='mt-1 w-full resize-y'
             placeholder='Enter the question content...'
           />
+          <p className='text-xs text-gray-500 dark:text-gray-400 mt-2'>
+            This is the main question text that users will see.
+          </p>
         </div>
       </div>
 
@@ -1646,32 +1720,109 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         </div>
       )}
 
-      {/* Answer/Explanation Section */}
+      {/* Answer/Explanation Section - Collapsible */}
       <div className='bg-white dark:bg-gray-800 p-6 rounded-lg border shadow-sm'>
-        <h4 className='text-lg font-semibold mb-4 flex items-center gap-2'>
-          <HelpCircle className='w-5 h-5 text-orange-600' />
-          {formData.type === 'multiple-choice'
-            ? 'Explanation'
-            : 'Correct Answer'}
-        </h4>
-        <div>
-          <Label htmlFor='explanation' className='text-sm font-medium'>
-            {formData.type === 'multiple-choice' ? 'Explanation' : 'Answer'}
-          </Label>
-          <Textarea
-            id='explanation'
-            name='explanation'
-            value={formData.explanation || ''}
-            onChange={handleChange}
-            rows={4}
-            className='mt-1'
-            placeholder={
-              formData.type === 'multiple-choice'
-                ? 'Enter explanation for the correct answer...'
-                : 'Enter the correct answer...'
-            }
-          />
+        <div className='flex items-center justify-between mb-4'>
+          <h4 className='text-lg font-semibold flex items-center gap-2'>
+            <HelpCircle className='w-5 h-5 text-orange-600' />
+            {formData.type === 'multiple-choice'
+              ? 'Explanation'
+              : 'Correct Answer'}
+          </h4>
+          <Button
+            type='button'
+            variant='outline'
+            size='sm'
+            onClick={() => setShowExplanation(!showExplanation)}
+            className='flex items-center gap-2'
+          >
+            {showExplanation ? (
+              <>
+                <ChevronUp className='w-4 h-4' />
+                Hide
+              </>
+            ) : (
+              <>
+                <ChevronDown className='w-4 h-4' />
+                Show Explanation
+              </>
+            )}
+          </Button>
         </div>
+        {showExplanation && (
+          <div>
+            <Label htmlFor='explanation' className='text-sm font-medium'>
+              {formData.type === 'multiple-choice' ? 'Explanation' : 'Answer'}
+            </Label>
+            <Textarea
+              id='explanation'
+              name='explanation'
+              value={formData.explanation || ''}
+              onChange={handleChange}
+              rows={4}
+              className='mt-1'
+              placeholder={
+                formData.type === 'multiple-choice'
+                  ? 'Enter explanation for the correct answer...'
+                  : 'Enter the correct answer...'
+              }
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Learning Resources Section - Collapsible */}
+      <div className='bg-white dark:bg-gray-800 p-6 rounded-lg border shadow-sm'>
+        <div className='flex items-center justify-between mb-4'>
+          <h4 className='text-lg font-semibold flex items-center gap-2'>
+            <BookOpen className='w-5 h-5 text-blue-600' />
+            Learning Resources (Optional)
+          </h4>
+          <Button
+            type='button'
+            variant='outline'
+            size='sm'
+            onClick={() => setShowResources(!showResources)}
+            className='flex items-center gap-2'
+          >
+            {showResources ? (
+              <>
+                <ChevronUp className='w-4 h-4' />
+                Hide
+              </>
+            ) : (
+              <>
+                <ChevronDown className='w-4 h-4' />
+                Show Resources
+              </>
+            )}
+          </Button>
+        </div>
+        {showResources && (
+          <div>
+            <Label htmlFor='resources' className='text-sm font-medium'>
+              Resources (JSON Format)
+            </Label>
+            <Textarea
+              id='resources'
+              name='resources'
+              value={
+                typeof (formData as any).resources === 'string'
+                  ? (formData as any).resources
+                  : JSON.stringify((formData as any).resources || [], null, 2)
+              }
+              onChange={e => handleResourcesChange(e.target.value)}
+              rows={8}
+              className='mt-1 font-mono text-sm'
+              placeholder={`[\n  {\n    "type": "video",\n    "title": "Video Title",\n    "url": "https://example.com/video",\n    "description": "Video description",\n    "duration": "10:30"\n  },\n  {\n    "type": "article",\n    "title": "Article Title",\n    "url": "https://example.com/article",\n    "description": "Article description"\n  }\n]`}
+            />
+            <p className='text-xs text-gray-500 dark:text-gray-400 mt-2'>
+              Enter resources as a JSON array. Each resource should have: type
+              (video/course/article), title, url, and optionally description,
+              duration, author.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Metadata Section */}
@@ -1695,14 +1846,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         </div>
       </div>
 
-      <div className='pt-6 border-t flex justify-end space-x-3'>
-        <Button variant='outline' onClick={onCancel} type='button'>
-          Cancel
-        </Button>
-        <Button type='submit' className='bg-blue-600 hover:bg-blue-700'>
-          {initialData ? 'Update Question' : 'Create Question'}
-        </Button>
-      </div>
     </form>
   );
-};
+});
+
+QuestionForm.displayName = 'QuestionForm';
