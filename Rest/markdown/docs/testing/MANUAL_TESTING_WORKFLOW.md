@@ -2705,6 +2705,47 @@ npm run test:e2e:headed -- tests/e2e/guided-flow/guided-practice-localStorage.sp
     - Verify code operators (`<`, `>`, `=`, etc.) are preserved
     - Verify no malformed code artifacts (`esetTimeout`, `ereturn`, etc.)
 
+13. **Test Learning Resources Display**:
+    - Find a question with resources (videos, courses, or articles)
+    - Answer the question to show the explanation
+    - **Verify Resources Section Appears**:
+      - [ ] Resources section appears after the explanation
+      - [ ] Section has purple/pink/orange gradient background
+      - [ ] "Learning Resources" heading is visible with BookOpen icon
+      - [ ] Resources are displayed in a list format
+    - **Verify Resource Types Display Correctly**:
+      - [ ] **Video resources**: Show Video icon with red/pink gradient
+      - [ ] **Course resources**: Show GraduationCap icon with blue/indigo gradient
+      - [ ] **Article resources**: Show FileText icon with green/emerald gradient
+      - [ ] Each resource shows correct type label (Video, Course, Article)
+    - **Verify Resource Details**:
+      - [ ] Resource title is displayed and clickable
+      - [ ] Resource URL opens in new tab (target="_blank")
+      - [ ] External link icon appears on hover
+      - [ ] Description is shown (if provided)
+      - [ ] Duration is shown (if provided) with Clock icon
+      - [ ] Author is shown (if provided)
+    - **Verify Resource Interactions**:
+      - [ ] Click resource card → Opens URL in new tab
+      - [ ] Hover over resource → Card scales up slightly and shows shadow
+      - [ ] External link icon appears on hover
+      - [ ] Resource cards are responsive (mobile/tablet/desktop)
+    - **Verify Resources Not Shown When**:
+      - [ ] Question has no resources → Resources section does NOT appear
+      - [ ] Resources array is empty → Resources section does NOT appear
+      - [ ] Resources is null → Resources section does NOT appear
+      - [ ] Question is code type → Resources section does NOT appear (only shown for non-code questions)
+      - [ ] Explanation is not shown → Resources section does NOT appear (only shown after explanation)
+    - **Verify Multiple Resources**:
+      - [ ] Multiple resources display in a vertical list
+      - [ ] Each resource is properly spaced
+      - [ ] All resources are clickable and functional
+    - **Verify Theme Adaptation**:
+      - [ ] Resources section adapts to light/dark theme
+      - [ ] Resource cards have proper contrast in both themes
+      - [ ] Text is readable in both themes
+      - [ ] Icons are visible in both themes
+
 ### Freestyle Flow Tasks
 
 **Task 8: Custom Roadmap**

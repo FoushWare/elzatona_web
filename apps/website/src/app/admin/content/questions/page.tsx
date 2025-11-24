@@ -1827,6 +1827,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       points: 1,
       timeLimit: 60,
       explanation: '',
+      resources: null,
     }
   );
 
@@ -1858,6 +1859,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         sampleAnswers: initialData.sampleAnswers || [],
         tags: initialData.tags || [],
         explanation: initialData.explanation || '',
+        resources: (initialData as any).resources || null,
         category: categoryName,
         topic: topicName,
         learningCardId: learningCardId,
@@ -2228,6 +2230,48 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           placeholder='Provide an explanation for the correct answer...'
           className='border-gray-300 dark:border-gray-600'
         />
+      </div>
+
+      {/* Resources */}
+      <div>
+        <Label htmlFor='resources'>
+          Learning Resources <span className='text-gray-500 dark:text-gray-400 text-xs font-normal'>(Optional)</span>
+        </Label>
+        <Textarea
+          id='resources'
+          name='resources'
+          value={
+            formData.resources
+              ? JSON.stringify(formData.resources, null, 2)
+              : ''
+          }
+          onChange={e => {
+            if (disabled) return;
+            try {
+              const value = e.target.value.trim();
+              if (!value) {
+                setFormData((prev: any) => ({ ...prev, resources: null }));
+                return;
+              }
+              const parsed = JSON.parse(value);
+              if (Array.isArray(parsed)) {
+                setFormData((prev: any) => ({ ...prev, resources: parsed }));
+              } else {
+                console.error('Resources must be an array');
+              }
+            } catch (err) {
+              // Invalid JSON - keep the text but don't update resources
+              console.error('Invalid JSON for resources:', err);
+            }
+          }}
+          rows={8}
+          disabled={disabled}
+          placeholder={`[\n  {\n    "type": "video",\n    "title": "CSS clamp() Tutorial",\n    "url": "https://youtube.com/watch?v=...",\n    "description": "Learn clamp() in 10 minutes",\n    "duration": "10:30",\n    "author": "Web Dev Simplified"\n  }\n]`}
+          className='border-gray-300 dark:border-gray-600 font-mono text-sm'
+        />
+        <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
+          Enter a JSON array of resource objects. Each resource should have: type (video/course/article), title, url, and optionally description, duration, author.
+        </p>
       </div>
 
       <div className='flex items-center space-x-2'>
